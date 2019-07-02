@@ -57,8 +57,7 @@
     <div class="row">
         <div class="col">
             
-            @permission((config('constants.LIST_ORDER_ACCESS')))
-            <div class="m-portlet m-portlet--head-solid-bg m-portlet--accent m-portlet--collapsed m-portlet--head-sm" m-portlet="true" id="order-portlet">
+            <div class="m-portlet m-portlet--creative m-portlet--bordered-semi profileMenuPage profileMenuPage-filmVaJozve">
                 <div class="m-portlet__head">
                     <div class="m-portlet__head-caption">
                         <div class="m-portlet__head-title">
@@ -66,34 +65,17 @@
                                 <i class="fa fa-cogs"></i>
                             </span>
                             <h3 class="m-portlet__head-text">
-                                مدیریت سفارش های بسته شده
+                                تسویه حساب
                             </h3>
                         </div>
                     </div>
-                    <div class="m-portlet__head-tools">
-                        <ul class="m-portlet__nav">
-                            <li class="m-portlet__nav-item">
-                                <a href="#" m-portlet-tool="reload" class="m-portlet__nav-link m-portlet__nav-link--icon reload"><i class="la la-refresh"></i></a>
-                            </li>
-                            <li class="m-portlet__nav-item">
-                                <a href="#" m-portlet-tool="toggle" class="m-portlet__nav-link m-portlet__nav-link--icon"><i class="la la-angle-down"></i></a>
-                            </li>
-                            <li class="m-portlet__nav-item">
-                                <a href="#" m-portlet-tool="fullscreen" class="m-portlet__nav-link m-portlet__nav-link--icon"><i class="la la-expand"></i></a>
-                            </li>
-                            <li class="m-portlet__nav-item">
-                                <a href="#" m-portlet-tool="remove" class="m-portlet__nav-link m-portlet__nav-link--icon"><i class="la la-close"></i></a>
-                            </li>
-                        </ul>
-                    </div>
+
                 </div>
                 <div class="m-portlet__body">
     
                     <div class="form-group">
                         <div class="row">
                             <div class="col">
-                
-                
                                 <div class="m-divider m--margin-top-50">
                                     <span></span>
                                     <span>انتخاب محصول</span>
@@ -119,25 +101,43 @@
                             </div>
                         </div>
                     </div>
+
                     <div class="form-group">
                         <div class="row">
-                            <label class="col-md-2 bold control-label">فیلتر تاریخ: </label>
+                            <div class="col">
+                                <div class="m-divider m--margin-top-50">
+                                    <span></span>
+                                    <span>وضعیت تسویه</span>
+                                    <span></span>
+                                </div>
+                                <select class="mt-multiselect btn btn-default a--full-width"
+                                        {{--                                  multiple="multiple"--}}
+                                        data-label="left"
+                                        data-width="100%"
+                                        data-filter="true"
+                                        data-height="200"
+                                        id="checkoutStatus"
+                                        name="checkoutStatus"
+                                        title="همه">
+                                    @foreach($checkoutStatuses as $key => $checkoutStatus)
+                                        <option value="{{$key}}" class="bold">
+                                            {{$checkoutStatus}}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="form-group">
+                        <div class="row">
+                            <label class="col-md-2 bold control-label">فیلتر تاریخ ثبت نهایی سفارش: </label>
                             <div class="col-md-10">
                                 @include('admin.filters.timeFilter.createdAt' , ["id" => "dateFilter"])
                             </div>
                         </div>
                     </div>
-
-{{--                    <div class="form-group">--}}
-{{--                        <div class="row">--}}
-{{--                                <label class = "control-label" style = "float: right;">--}}
-{{--                                    <label class = "mt-checkbox mt-checkbox-outline">--}}
-{{--                                        @include("admin.filters.checkoutStatusFilter" , ["dropdownId"=>"checkoutStatus" , "checkboxId"=>"checkoutStatusEnable"])--}}
-{{--                                        <span class = "bg-grey-cararra"></span>--}}
-{{--                                    </label>--}}
-{{--                                </label>--}}
-{{--                        </div>--}}
-{{--                    </div>--}}
 
                     <div class="form-group">
                         <div class="row">
@@ -169,8 +169,6 @@
                     
                 </div>
             </div>
-            @endpermission
-        
         </div>
     </div>
 @endsection
@@ -238,6 +236,7 @@
                         till: $('#dateFilterCreatedTillAlt').val(),
                         dateFilterEnable: dateFilterEnable,
                         checkoutEnable : checkoutEnable,
+                        checkoutStatus:$('#checkoutStatus').val(),
                     },
                     dataType: 'json',
                     success: function (data) {

@@ -3171,6 +3171,7 @@ class BotsController extends Controller
     public function salesReportBot(Request $request){
         $timeFilterEnable = $request->dateFilterEnable;
         $checkoutEnable = $request->checkoutEnable;
+        $checkoutStatus = $request->checkoutStatus;
         $product = $request->get('product_id');
         if(!isset($product)){
             return response()->json(['message'=>'Product not found'],Response::HTTP_BAD_REQUEST);
@@ -3197,7 +3198,15 @@ class BotsController extends Controller
             $till = Carbon::createFromFormat('Y-n-j H:i:s', explode(' ' , $request->till)[0].' 23:59:59');
         }
 
-        $orderproducts = OrderproductRepo::getPurchasedOrderproducts([$product] , $since , $till , OrderproductRepo::NOT_CHECKEDOUT_ORDERPRODUCT)
+        if($checkoutStatus == 0){
+            $chechoutFilter = 'all';
+        }elseif($checkoutStatus == 1){
+            $chechoutFilter = OrderproductRepo::NOT_CHECKEDOUT_ORDERPRODUCT;
+        }else{
+            $chechoutFilter = OrderproductRepo::CHECKEDOUT_ORDERPRODUCT;
+        }
+
+        $orderproducts = OrderproductRepo::getPurchasedOrderproducts([$product] , $since , $till , $chechoutFilter)
             ->with(['order', 'order.transactions' , 'order.normalOrderproducts'])
             ->get();
 
