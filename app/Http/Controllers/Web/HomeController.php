@@ -1190,7 +1190,9 @@ class HomeController extends Controller
         $now = Carbon::now('Asia/Tehran');
         $start = Carbon::parse('2019-07-02 20:00:00','Asia/Tehran');
         $finish = Carbon::parse('2019-07-02 22:00:00','Asia/Tehran');
-
+        $fullVideo = [];
+        $poster = asset('/acm/image/dlc/dlc_sabeti.jpg');
+        
         if($user->hasRole('admin'))
         {
             if($now->isBefore($start) || $now->between($start, $finish)) {
@@ -1201,14 +1203,35 @@ class HomeController extends Controller
         }else{
             if($now->isBefore($start)) {
                 $live = 'off';
+                $message = 'پخش آنلاین امشب (۱۱ خرداد) ساعت 20:00 آغاز خواهد شد';
             }elseif($now->between($start, $finish)){
                 $live = 'on';
+                $message = '';
             }else{
+                $fullVideo = [
+                    [
+                        'src' => 'https://cdn.sanatisharif.ir/media/528/HD_720p/528066seve.mp4',
+                        'res' => '720p',
+                        'label' => 'کیفیت عالی',
+                    ],
+                    [
+                        'src' => 'https://cdn.sanatisharif.ir/media/528/hq/528066seve.mp4',
+                        'res' => '480p',
+                        'label' => 'کیفیت بالا',
+                    ],
+                    [
+                        'src' => 'https://cdn.sanatisharif.ir/media/528/240p/528066seve.mp4',
+                        'res' => '240p',
+                        'label' => 'کیفیت متوسط',
+                    ]
+                ];
+                $message = 'پخش آنلاید به اتمام رسیده است.<br> می توانید فیلم ضبط شده را '.
+                '<button type="button" class="btn m-btn--pill m-btn--air m-btn m-btn--gradient-from-info m-btn--gradient-to-accent animated infinite heartBeat">دانلود کنید</button>';
                 $live = 'finished';
             }
         }
-
-        return view('pages.liveView' , compact('product' , 'live'));
+        
+        return view('pages.liveView' , compact('product' , 'live', 'message', 'poster', 'fullVideo'));
     }
 
     private function getLastUpdatedByLernito(): array
