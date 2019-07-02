@@ -9,6 +9,9 @@ use Illuminate\Database\Eloquent\Builder;
 
 class OrderproductRepo
 {
+    const NOT_CHECKEDOUT_ORDERPRODUCT = 'unchecked';
+    const CHECKEDOUT_ORDERPRODUCT = 'checked';
+
     public static function refreshOrderproductTmpPrice( Orderproduct $orderproduct , int $tmpFinal , int $tmpExtraCost): bool
     {
         return $orderproduct->update([
@@ -30,7 +33,7 @@ class OrderproductRepo
             ->where('orderproducttype_id', config('constants.ORDER_PRODUCT_TYPE_DEFAULT'))
             ->whereHas('order', function ($q) use ($since , $till) {
                 $q->whereIn('orderstatus_id', [config('constants.ORDER_STATUS_CLOSED') , config('constants.ORDER_STATUS_POSTED')])
-                    ->where('paymentstatus_id', config('constants.PAYMENT_STATUS_PAID'));
+                    ->whereIn('paymentstatus_id', [config('constants.PAYMENT_STATUS_PAID') , config('constants.PAYMENT_STATUS_VERIFIED_INDEBTED')]);
 
                 if(isset($since))
                     $q->where('completed_at' , '>=' , $since);
@@ -48,6 +51,6 @@ class OrderproductRepo
             });
         }
 
-        return  $orderproducts->with(['order', 'order.transactions' , 'order.normalOrderproducts']);
+        return  $orderproducts;
     }
 }

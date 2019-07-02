@@ -192,6 +192,10 @@
                     state: "success",
                 });
 
+                var dateFilterEnable = null;
+                if($('#dateFilterCreatedTimeEnable').is(':checked')){
+                    dateFilterEnable = 1;
+                }
                 
                 $.ajax({
                     url: ajaxActionUrl,
@@ -199,7 +203,8 @@
                     data: {
                         product_id: $('#productId').val(),
                         since: $('#dateFilterCreatedSinceAlt').val(),
-                        till: $('#dateFilterCreatedTillAlt').val()
+                        till: $('#dateFilterCreatedTillAlt').val(),
+                        dateFilterEnable: dateFilterEnable,
                     },
                     dataType: 'json',
                     success: function (data) {
@@ -232,6 +237,17 @@
 
                 
                 
+            });
+
+            $(document).on('click', '#dateFilterCreatedTimeEnable', function(){
+                if($('#dateFilterCreatedTimeEnable').is(':checked'))
+                {
+                    $('#dateFilterCreatedSince').enable();
+                    $('#dateFilterCreatedTill').enable();
+                }else{
+                    $('#dateFilterCreatedSince').enable(false);
+                    $('#dateFilterCreatedTill').enable(false);
+                }
             });
         });
     </script>
