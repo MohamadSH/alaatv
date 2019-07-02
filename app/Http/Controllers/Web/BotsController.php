@@ -3177,19 +3177,6 @@ class BotsController extends Controller
             return response()->json(['message'=>'Product not found'],Response::HTTP_BAD_REQUEST);
         }
 
-//        $orderproducts =  Orderproduct::whereIn('product_id', [$product])
-//            ->where(function ($q2){
-//                $q2->where('checkoutstatus_id' , config('constants.ORDERPRODUCT_CHECKOUT_STATUS_UNPAID'))
-//                    ->orWhereNull('checkoutstatus_id');
-//            })
-//            ->where('orderproducttype_id', config('constants.ORDER_PRODUCT_TYPE_DEFAULT'))
-//            ->whereHas('order', function ($q) {
-//                $q->whereIn('orderstatus_id', [config('constants.ORDER_STATUS_CLOSED') , config('constants.ORDER_STATUS_POSTED')])
-//                    ->whereIn('paymentstatus_id', [config('constants.PAYMENT_STATUS_PAID') , config('constants.PAYMENT_STATUS_VERIFIED_INDEBTED')]);
-//            })
-//            ->with(['order', 'order.transactions' , 'order.normalOrderproducts'])
-//            ->get();
-
         $since = null;
         $till = null ;
         if($timeFilterEnable)

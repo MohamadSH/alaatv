@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Web;
 
 use App\Bon;
+use App\Repositories\OrderproductRepo;
 use App\User;
 use App\Order;
 use App\Product;
@@ -12,6 +13,7 @@ use App\Attributevalue;
 use App\Checkoutstatus;
 use App\Websitesetting;
 use App\Traits\OrderCommon;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Traits\ProductCommon;
 use Illuminate\Http\Response;
@@ -33,7 +35,57 @@ class OrderproductController extends Controller
     use ProductCommon;
     
     protected $response;
-    
+
+    function index(Request $request){
+        $timeFilterEnable = $request->dateFilterEnable;
+        $checkoutEnable = $request->checkoutEnable;
+        $checkoutStatus = $request->checkoutStatus;
+        $product = $request->get('product_id');
+        if(!isset($product)){
+            return response()->json(['message'=>'Product not found'],Response::HTTP_BAD_REQUEST);
+        }
+
+        $since = null;
+        $till = null ;
+        if($timeFilterEnable)
+        {
+            $since = Carbon::createFromFormat('Y-n-j H:i:s', explode(' ' , $request->since)[0].' 00:00:00');
+            $till = Carbon::createFromFormat('Y-n-j H:i:s', explode(' ' , $request->till)[0].' 23:59:59');
+        }
+
+        if($checkoutStatus == 0){
+            $chechoutFilter = 'all';
+        }elseif($checkoutStatus == 1){
+            $chechoutFilter = OrderproductRepo::NOT_CHECKEDOUT_ORDERPRODUCT;
+        }else{
+            $chechoutFilter = OrderproductRepo::CHECKEDOUT_ORDERPRODUCT;
+        }
+
+        $orderproducts = OrderproductRepo::getPurchasedOrderproducts([$product] , $since , $till , $chechoutFilter)
+            ->with(['order', 'order.transactions' , 'order.normalOrderproducts']);
+
+        $totalSale = 0;
+        $toCalculate = $orderproducts->get();
+        $totalNubmer = $toCalculate->count();
+        foreach ($toCalculate as $orderproduct) {
+            $toAdd = $orderproduct->shared_cost_of_transaction ;
+            $totalSale += $toAdd;
+        }
+
+        $checkoutResult = false;
+        if($checkoutEnable){
+            $checkoutResult = Orderproduct::whereIn('id' , $toCalculate->pluck('id')->toArray())->update(['checkoutstatus_id' => config('constants.ORDERPRODUCT_CHECKOUT_STATUS_PAID')]);
+        }
+
+        $orderproducts = $orderproducts->paginate(20, ['*'], 'orderproducts');
+        return response()->json([
+            'orderproducts' => $orderproducts,
+            'totalNumber'   => $totalNubmer,
+            'totalSale'     => number_format((int)$totalSale),
+            'checkoutResult'    =>  $checkoutResult,
+        ]);
+    }
+
     function __construct(Websitesetting $setting, Response $response)
     {
         $this->response = $response;
