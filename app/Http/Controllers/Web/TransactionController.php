@@ -127,54 +127,7 @@ class TransactionController extends Controller
                     });
                 });
             }
-            
-            $productsId                            = $request->get('products');
-            $transactionOrderproductCost           = collect();
-            $transactionOrderproductTotalCost      = 0;
-            $transactionOrderproductTotalExtraCost = 0;
-            if (isset($productsId) && !in_array(0, $productsId)) {
-                $products = Product::whereIn('id', $productsId)->get();
-                foreach ($products as $product) {
-                    if ($product->producttype_id != config("constants.PRODUCT_TYPE_SIMPLE")) {
-                            $productsId = array_merge($productsId,
-                                $product->getAllChildren()
-                                        ->pluck("id")
-                                        ->toArray());
-                    }
-                }
-                if ($request->has("checkoutStatusEnable")) {
-                    $checkoutStatuses = $request->get("checkoutStatuses");
-                    if (in_array(0, $checkoutStatuses)) {
-                        $transactions = $transactions->whereIn('order_id',
-                            Orderproduct::whereNull("checkoutstatus_id")
-                                ->whereIn('product_id', $productsId)
-                                ->pluck('order_id'));
-                    }
-                    else {
-                        $transactions = $transactions->whereIn('order_id',
-                            Orderproduct::whereIn("checkoutstatus_id", $checkoutStatuses)
-                                ->whereIn('product_id', $productsId)
-                                ->pluck('order_id'));
-                    }
-                }
-                else {
-                    $transactions = $transactions->whereIn('order_id', Orderproduct::whereIn('product_id', $productsId)->pluck('order_id'));
-                }
-            } else {
-                if ($request->has("checkoutStatusEnable")) {
-                    $checkoutStatuses = $request->get("checkoutStatuses");
-                    if (in_array(0, $checkoutStatuses)) {
-                        $transactions = $transactions->whereIn('order_id', Orderproduct::whereNull("checkoutstatus_id")
-                            ->pluck('order_id'));
-                    }
-                    else {
-                        $transactions = $transactions->whereIn('order_id',
-                            Orderproduct::whereIn("checkoutstatus_id", $checkoutStatuses)
-                                ->pluck('order_id'));
-                    }
-                }
-            }
-            
+
             $extraAttributevaluesId = $request->get('extraAttributes');
             if (isset($extraAttributevaluesId)) {
                 $transactions = $transactions->whereIn('order_id',
@@ -218,125 +171,6 @@ class TransactionController extends Controller
             
             $transactions = $transactions->get();
             
-            if (isset($productsId) && !in_array(0, $productsId)) {
-                $checkedOrderproducts = [];
-                foreach ($transactions as $transaction) {
-                    if ($request->has("checkoutStatusEnable")) {
-                        $checkoutStatuses = $request->get("checkoutStatuses");
-                        if (in_array(0, $checkoutStatuses)) {
-                            $transactionOrderproducts = $transaction->order->normalOrderproducts()
-                                ->where(function ($q) use ($productsId) {
-                                    $q->whereIn("product_id", $productsId)
-                                        ->whereNull("checkoutstatus_id");
-                                })->get();
-                        }
-                        else{
-                            $transactionOrderproducts = $transaction->order->normalOrderproducts()
-                                ->where(function ($q) use ($productsId) {
-                                    $q->whereIn("product_id", $productsId);
-                                })->get();
-                        }
-                    }
-                    else{
-                        $transactionOrderproducts = $transaction->order->normalOrderproducts()
-                            ->whereIn("product_id", $productsId)->get();
-                    }
-                    
-                    $cost      = 0;
-                    $extraCost = 0;
-                    if ($transactionOrderproducts->isNotEmpty()) {
-                        $orderDiscount              = $transaction->order->discount;
-                        $donateProducts             = [
-                            Product::CUSTOM_DONATE_PRODUCT,
-                            Product::DONATE_PRODUCT_5_HEZAR,
-                        ];
-                        $numOfOrderproducts         = $transaction->order->normalOrderproducts()
-                            ->whereNotIn("product_id",
-                                $donateProducts)
-                            ->count();
-                        $orderDiscountPerItem       = $orderDiscount / $numOfOrderproducts;
-                        $orderSuccessfulTransaction = $transaction->order->transactions;
-                        
-                        //ToDo : Main wallet
-                        $giftPaymentMethods = [config("constants.PAYMENT_METHOD_WALLET")];
-                        $orderChunk         = 1; //For wallet
-                        if (isset($paymentMethodsId)) {
-                            $paymentMethodsDiff = array_diff($giftPaymentMethods, $paymentMethodsId);
-                            if (empty($paymentMethodsDiff)) {
-                                $paymentMethodsDiffReverse = array_diff($paymentMethodsId, $giftPaymentMethods);
-                                if (empty($paymentMethodsDiffReverse)) {
-                                    $orderChunk = $numOfOrderproducts;
-                                }
-                            }
-                        }
-                        
-                        $orderWalletTransactionSum = 0;
-                        if (!empty($paymentMethodsDiff)) {
-                            $orderWalletTransactionSum = $orderSuccessfulTransaction
-                                ->where('paymentmethod_id',
-                                    config('constants.PAYMENT_METHOD_WALLET'))
-                                ->whereIn('transactionstatus_id', [
-                                    config('constants.TRANSACTION_STATUS_SUCCESSFUL'),
-                                    config('constants.TRANSACTION_STATUS_SUSPENDED'),
-                                ])
-                                ->where('cost', '>', 0);
-                        }
-                        
-                        if (isset($transactionStatusFilter)) {
-                            $orderSuccessfulTransaction = $orderSuccessfulTransaction->whereIn("transactionstatus_id",
-                                $transactionStatusFilter);
-                        }
-                        
-                        if (isset($paymentMethodsId)) {
-                            $orderSuccessfulTransaction = $orderSuccessfulTransaction->whereIn("paymentmethod_id",
-                                $paymentMethodsId);
-                        }
-                        
-                        $orderSuccessfulTransactionPaidSum = $orderSuccessfulTransaction->where("cost", ">", 0)
-                            ->sum("cost");
-                        
-                        $orderSuccessfulTransactionRefundSum = $orderSuccessfulTransaction->where("cost", "<", 0)
-                            ->sum("cost");
-                        
-                        $orderRefundPerItem    = $orderSuccessfulTransactionRefundSum / $numOfOrderproducts; // it is a negative number
-                        $orderWalletUsePerItem = $orderWalletTransactionSum / $numOfOrderproducts;
-                        
-                        foreach ($transactionOrderproducts as $orderproduct) {
-                            if (in_array($orderproduct->id, $checkedOrderproducts)) {
-                                continue;
-                            }
-                            $orderproductCost = (int) ($orderproduct->obtainOrderproductCost(false)["final"]);
-                            
-                            $orderproductCost = $orderproductCost - $orderDiscountPerItem;
-                            $orderproductCost = $orderproductCost + $orderRefundPerItem;
-                            if (($orderSuccessfulTransactionPaidSum / $orderChunk) > $orderproductCost) {
-                                $orderproductCost                  = $orderproductCost - $orderWalletUsePerItem;
-                                $cost                              += $orderproductCost;
-                                $orderSuccessfulTransactionPaidSum = $orderSuccessfulTransactionPaidSum - $orderproductCost;
-                            }
-                            else {
-                                $cost                              += ($orderSuccessfulTransactionPaidSum / $numOfOrderproducts);
-                                $orderSuccessfulTransactionPaidSum = 0;
-                            }
-                            
-                            if (isset($extraAttributevaluesId)) {
-                                $extraCost = $orderproduct->getExtraCost($extraAttributevaluesId);
-                            } else {
-                                $extraCost = $orderproduct->getExtraCost();
-                            }
-                            
-                            array_push($checkedOrderproducts, $orderproduct->id);
-                        }
-                    }
-                    $transactionOrderproductCost->put($transaction->id, [
-                        "cost"      => $cost,
-                        "extraCost" => $extraCost,
-                    ]);
-                }
-                $transactionOrderproductTotalCost      = number_format($transactionOrderproductCost->sum("cost"));
-                $transactionOrderproductTotalExtraCost = number_format($transactionOrderproductCost->sum("extraCost"));
-            }
-            
             $totaolCost = number_format($transactions->sum("cost"));
             
             return json_encode([
@@ -344,8 +178,6 @@ class TransactionController extends Controller
                     compact('transactions', "transactionOrderproductCost"))
                     ->render(),
                 "totalCost"                  => $totaolCost,
-                "orderproductTotalCost"      => $transactionOrderproductTotalCost,
-                "orderproductTotalExtraCost" => $transactionOrderproductTotalExtraCost,
             ], JSON_UNESCAPED_UNICODE);
         } catch (\Exception    $e) {
             $message = "unexpected error";
