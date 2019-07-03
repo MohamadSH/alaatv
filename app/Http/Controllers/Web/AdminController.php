@@ -982,7 +982,7 @@ class AdminController extends Controller
     public function adminSalesReport(Request $request) {
         $pageName = 'adminSalesReport';
         $products   = Product::orderBy('created_at' , 'desc')->get();
-        $ajaxActionUrl = 'salesReportBot';
+        $ajaxActionUrl = action('Web\OrderproductController@index');
         $checkoutStatuses       = Checkoutstatus::pluck('displayName', 'id')->toArray();
         $checkoutStatuses[0]   = 'همه';
         $checkoutStatuses       = array_sort_recursive($checkoutStatuses);

@@ -36,10 +36,12 @@ class OrderproductController extends Controller
     
     protected $response;
 
-    function index(Request $request){
-        $timeFilterEnable = $request->dateFilterEnable;
-        $checkoutEnable = $request->checkoutEnable;
-        $checkoutStatus = $request->checkoutStatus;
+    public function index(Request $request){
+        $timeFilterEnable = $request->get('dateFilterEnable');
+        $checkoutEnable = $request->get('checkoutEnable');
+        $checkoutStatus = $request->get('checkoutStatus');
+        $pageNumber = ($request->get('page' , 0) - 1);
+
         $product = $request->get('product_id');
         if(!isset($product)){
             return response()->json(['message'=>'Product not found'],Response::HTTP_BAD_REQUEST);
@@ -54,7 +56,7 @@ class OrderproductController extends Controller
         }
 
         if($checkoutStatus == 0){
-            $chechoutFilter = 'all';
+            $chechoutFilter = OrderproductRepo::CHECKOUT_ALL;
         }elseif($checkoutStatus == 1){
             $chechoutFilter = OrderproductRepo::NOT_CHECKEDOUT_ORDERPRODUCT;
         }else{
@@ -62,22 +64,31 @@ class OrderproductController extends Controller
         }
 
         $orderproducts = OrderproductRepo::getPurchasedOrderproducts([$product] , $since , $till , $chechoutFilter)
-            ->with(['order', 'order.transactions' , 'order.normalOrderproducts']);
+            ->with(['order', 'order.transactions' , 'order.normalOrderproducts'])->get();
+
+        $totalNubmer = $orderproducts->count();
+
+        if($pageNumber > 1)
+        {
+            $orderproducts->chunk(20)[$pageNumber];
+            return response()->json([
+                'orderproducts' => $orderproducts,
+                'totalNumber'   => $totalNubmer,
+            ]);
+        }
 
         $totalSale = 0;
-        $toCalculate = $orderproducts->get();
-        $totalNubmer = $toCalculate->count();
-        foreach ($toCalculate as $orderproduct) {
+        foreach ($orderproducts as $orderproduct) {
             $toAdd = $orderproduct->shared_cost_of_transaction ;
             $totalSale += $toAdd;
         }
 
         $checkoutResult = false;
         if($checkoutEnable){
-            $checkoutResult = Orderproduct::whereIn('id' , $toCalculate->pluck('id')->toArray())->update(['checkoutstatus_id' => config('constants.ORDERPRODUCT_CHECKOUT_STATUS_PAID')]);
+            $checkoutResult = Orderproduct::whereIn('id' , $orderproducts->pluck('id')->toArray())->update(['checkoutstatus_id' => config('constants.ORDERPRODUCT_CHECKOUT_STATUS_PAID')]);
         }
 
-        $orderproducts = $orderproducts->paginate(20, ['*'], 'orderproducts');
+        $orderproducts = $orderproducts->chunk(20)[max($pageNumber , 0)];
         return response()->json([
             'orderproducts' => $orderproducts,
             'totalNumber'   => $totalNubmer,
