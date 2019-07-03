@@ -143,7 +143,7 @@
                         <div class="row">
                                 <label class = "control-label" style = "float: right;">
                                     <label class = "mt-checkbox mt-checkbox-outline">
-                                        فیلتر شده ها را تسویه حساب کن
+                                        در هنگام فیلتر تسویه کن
                                         <input type = "checkbox" id = "checkoutEnable" value = "1" name = "checkoutEnable">
                                         <span class = "bg-grey-cararra"></span>
                                     </label>
