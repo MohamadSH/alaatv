@@ -229,7 +229,7 @@
 
                 $.ajax({
                     url: ajaxActionUrl,
-                    type: 'POST',
+                    type: 'GET',
                     data: {
                         product_id: $('#productId').val(),
                         since: $('#dateFilterCreatedSinceAlt').val(),
@@ -243,8 +243,14 @@
                         if (data.totalNumber != null && data.totalNumber != undefined) {
 
                             $('.reportOfFilter').fadeIn();
-                            $('.report1').html('تعداد کل: ' + data.totalNumber);
-                            $('.report2').html('فروش کل(تومان): ' + data.totalSale);
+                            if(data.totalNumber != null && data.totalNumber != undefined )
+                            {
+                                $('.report1').html('تعداد کل: ' + data.totalNumber);
+                            }
+                            if(data.totalSale != null && data.totalSale != undefined )
+                            {
+                                $('.report2').html('فروش کل(تومان): ' + data.totalSale);
+                            }
 
                             if(data.checkoutResult == null || data.checkoutResult== undefined )
                             {

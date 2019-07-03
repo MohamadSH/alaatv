@@ -11,6 +11,7 @@ class OrderproductRepo
 {
     const NOT_CHECKEDOUT_ORDERPRODUCT = 'unchecked';
     const CHECKEDOUT_ORDERPRODUCT = 'checked';
+    const CHECKOUT_ALL = 'all';
 
     public static function refreshOrderproductTmpPrice( Orderproduct $orderproduct , int $tmpFinal , int $tmpExtraCost): bool
     {
