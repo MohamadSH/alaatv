@@ -285,7 +285,14 @@
                             <span class="m-menu__link-text"> سفارش ها</span>
                         </a>
                     </li>
-                    @endpermission
+                    <li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1">
+                        <a href="{{ action("Web\AdminController@adminSalesReport") }}" class="m-menu__link ">
+                            <span class="m-menu__item-here"></span>
+                            <i class="m-menu__link-icon flaticon-network"></i>
+                            <span class="m-menu__link-text"> گزارش فروش</span>
+                        </a>
+                    </li>
+                @endpermission
     
                     @permission((config('constants.PRODUCT_ADMIN_PANEL_ACCESS')))
                     <li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1">

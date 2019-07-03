@@ -418,16 +418,6 @@
                         <div class="form-body m--padding-15" style="background: #e7ecf1">
                             <div class="form-group">
                                 <div class="row">
-                                    <div class="col-md-6">
-                                        @include('admin.filters.productsFilter', ["id" => "transactionProduct" , "everyProduct"=>1])
-                                    </div>
-                                    <div class="col-md-4">
-                                        @include("admin.filters.extraValueFilter" , ["id"=>"transactionExtraAttributes"])
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="row">
                                     <div class="col-md-3">
                                         @include('admin.filters.orderstatusFilter' , ["id"=>"transactionOrderStatuses"])
                                     </div>
@@ -439,11 +429,11 @@
                                             @include("admin.filters.transactionStatusFilter" , ["selectType"=>"dropdown"])
                                         </div>
                                     </div>
-                                    <div class="col-md-3">
-                                        <div class="row">
-                                            @include("admin.filters.checkoutStatusFilter" , ["dropdownId"=>"transactionCheckoutStatus" , "checkboxId"=>"transactionCheckoutStatusEnable"])
-                                        </div>
-                                    </div>
+{{--                                    <div class="col-md-3">--}}
+{{--                                        <div class="row">--}}
+{{--                                            @include("admin.filters.checkoutStatusFilter" , ["dropdownId"=>"transactionCheckoutStatus" , "checkboxId"=>"transactionCheckoutStatusEnable"])--}}
+{{--                                        </div>--}}
+{{--                                    </div>--}}
                                 </div>
                             </div>
                             <div class="form-group">
@@ -499,13 +489,8 @@
                     @permission((config('constants.SHOW_TRANSACTION_TOTAL_COST_ACCESS')))
                     <span class="m-badge m-badge--success m-badge--wide m-badge--rounded Transaction_Total_Report">مجموع مبالغ تراکنشها : <span id="totalCost"></span>تومان</span>
                     @endpermission
-                    @permission((config('constants.SHOW_TRANSACTION_TOTAL_FILTERED_COST_ACCESS')))
-                    <span class="m-badge m-badge--success m-badge--wide m-badge--rounded Transaction_Total_Report">مجموع مبالغ فیلتر شده ها : <span id="totalFilteredCost"></span> تومان</span>
-                    <span class="m-badge m-badge--success m-badge--wide m-badge--rounded Transaction_Total_Report">مجموع مبالغ آیتم های اضافه : <span id="totalFilteredExtraCost"></span> تومان</span><br>
-                    @endpermission
-                    <a target="_blank" href="{{action("Web\TransactionController@getUnverifiedTransactions")}}" class="btn btn-lg m-btn--pill m-btn--air btn-danger active m--margin-10">لیست تراکنشهای ثبت نشده</a>
-                    <div class="table-toolbar">
-                    </div>
+                    <a target="_blank" href="{{action("Web\TransactionController@getUnverifiedTransactions")}}" class="btn btn-lg m-btn--pill m-btn--air btn-danger active m--margin-10">لیست تراکنشهای تایید نشده زرین پال</a>
+                    <div class="table-toolbar"></div>
 
                     <!--begin::Modal-->
                     <div class="modal fade" id="completeTransactionInfo" tabindex="-1" role="dialog" aria-labelledby="completeTransactionInfoLabel" aria-hidden="true">
