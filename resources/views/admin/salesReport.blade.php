@@ -118,7 +118,7 @@
                                         data-height="200"
                                         id="checkoutStatus"
                                         name="checkoutStatus"
-                                        title="همه">
+                                        title="وضعیت تسویه">
                                     @foreach($checkoutStatuses as $key => $checkoutStatus)
                                         <option value="{{$key}}" class="bold">
                                             {{$checkoutStatus}}
