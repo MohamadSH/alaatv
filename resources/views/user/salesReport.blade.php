@@ -79,93 +79,92 @@
                                 <div class="col-12 col-md-6">
         
                                     <!--begin::New Orders-->
-                                    <div class="m-widget24">
-                                        <div class="m-widget24__item">
-                                            <h4 class="m-widget24__title">
-                                                فروش امروز:
-                                            </h4><br>
-                                            <span class="m-widget24__desc">
-                                                {{number_format($todaySum)}}
-                                                 تومان
-                                            </span>
-                                            <span class="m-widget24__stats m--font-danger">
-                                                تعداد:
-                                                {{$todayCount}}
-                                            </span>
-                                            <div class="m--space-10"></div>
-                                            {{--<div class="progress m-progress--sm">
-                                                <div class="progress-bar m--bg-danger" role="progressbar" style="width: {{$todayRate}}%;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
-                                            </div>
-                                            <span class="m-widget24__change">
-                                                نسبت به دیگران
-                                            </span>
-                                            <span class="m-widget24__number">
-                                                {{$todayRate}}
-                                            </span>--}}
-                                        </div>
-                                    </div>
+{{--                                    <div class="m-widget24">--}}
+{{--                                        <div class="m-widget24__item">--}}
+{{--                                            <h4 class="m-widget24__title">--}}
+{{--                                                فروش امروز:--}}
+{{--                                            </h4><br>--}}
+{{--                                            <span class="m-widget24__desc">--}}
+{{--                                                {{number_format($todaySum)}}--}}
+{{--                                                 تومان--}}
+{{--                                            </span>--}}
+{{--                                            <span class="m-widget24__stats m--font-danger">--}}
+{{--                                                تعداد:--}}
+{{--                                                {{$todayCount}}--}}
+{{--                                            </span>--}}
+{{--                                            <div class="m--space-10"></div>--}}
+{{--                                            --}}{{--<div class="progress m-progress--sm">--}}
+{{--                                                <div class="progress-bar m--bg-danger" role="progressbar" style="width: {{$todayRate}}%;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>--}}
+{{--                                            </div>--}}
+{{--                                            <span class="m-widget24__change">--}}
+{{--                                                نسبت به دیگران--}}
+{{--                                            </span>--}}
+{{--                                            <span class="m-widget24__number">--}}
+{{--                                                {{$todayRate}}--}}
+{{--                                            </span>--}}
+{{--                                        </div>--}}
+{{--                                    </div>--}}
         
                                     <!--end::New Orders-->
                                 </div>
                                 <div class="col-12 col-md-6">
-        
                                     <!--begin::New Orders-->
-                                    <div class="m-widget24">
-                                        <div class="m-widget24__item">
-                                            <h4 class="m-widget24__title">
-                                                فروش هفته:
-                                            </h4><br>
-                                            <span class="m-widget24__desc">
-                                                {{number_format($thisWeekSum)}}
-                                                تومان
-                                            </span>
-                                            <span class="m-widget24__stats m--font-info">
-                                                تعداد:
-                                                {{$thisWeekCount}}
-                                            </span>
-                                            <div class="m--space-10"></div>
-                                            {{--<div class="progress m-progress--sm">
-                                                <div class="progress-bar m--bg-info" role="progressbar" style="width: {{$thisWeekRate}}%;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
-                                            </div>
-                                            <span class="m-widget24__change">
-                                                نسبت به دیگران
-                                            </span>
-                                            <span class="m-widget24__number">
-                                                {{$thisWeekRate}}
-                                            </span>--}}
-                                        </div>
-                                    </div>
+{{--                                    <div class="m-widget24">--}}
+{{--                                        <div class="m-widget24__item">--}}
+{{--                                            <h4 class="m-widget24__title">--}}
+{{--                                                فروش هفته:--}}
+{{--                                            </h4><br>--}}
+{{--                                            <span class="m-widget24__desc">--}}
+{{--                                                {{number_format($thisWeekSum)}}--}}
+{{--                                                تومان--}}
+{{--                                            </span>--}}
+{{--                                            <span class="m-widget24__stats m--font-info">--}}
+{{--                                                تعداد:--}}
+{{--                                                {{$thisWeekCount}}--}}
+{{--                                            </span>--}}
+{{--                                            <div class="m--space-10"></div>--}}
+{{--                                            <div class="progress m-progress--sm">--}}
+{{--                                                <div class="progress-bar m--bg-info" role="progressbar" style="width: {{$thisWeekRate}}%;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>--}}
+{{--                                            </div>--}}
+{{--                                            <span class="m-widget24__change">--}}
+{{--                                                نسبت به دیگران--}}
+{{--                                            </span>--}}
+{{--                                            <span class="m-widget24__number">--}}
+{{--                                                {{$thisWeekRate}}--}}
+{{--                                            </span>--}}
+{{--                                        </div>--}}
+{{--                                    </div>--}}
         
                                     <!--end::New Orders-->
                                 </div>
                                 <div class="col-12 col-md-6">
-        
+
                                     <!--begin::New Users-->
-                                    <div class="m-widget24">
-                                        <div class="m-widget24__item">
-                                            <h4 class="m-widget24__title">
-                                                فروش این ماه:
-                                            </h4><br>
-                                            <span class="m-widget24__desc">
-                                                {{number_format($thisMonthSum)}}
-                                                تومان
-                                            </span>
-                                            <span class="m-widget24__stats m--font-success">
-                                                تعداد:
-                                                {{$thisMonthCount}}
-                                            </span>
-                                            <div class="m--space-10"></div>
-                                            {{--<div class="progress m-progress--sm">
-                                                <div class="progress-bar m--bg-success" role="progressbar" style="width: {{$thisMonthRate}}%;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
-                                            </div>
-                                            <span class="m-widget24__change">
-                                                نسبت به دیگران
-                                            </span>
-                                            <span class="m-widget24__number">
-                                                {{$thisMonthRate}}
-                                            </span>--}}
-                                        </div>
-                                    </div>
+{{--                                    <div class="m-widget24">--}}
+{{--                                        <div class="m-widget24__item">--}}
+{{--                                            <h4 class="m-widget24__title">--}}
+{{--                                                فروش این ماه:--}}
+{{--                                            </h4><br>--}}
+{{--                                            <span class="m-widget24__desc">--}}
+{{--                                                {{number_format($thisMonthSum)}}--}}
+{{--                                                تومان--}}
+{{--                                            </span>--}}
+{{--                                            <span class="m-widget24__stats m--font-success">--}}
+{{--                                                تعداد:--}}
+{{--                                                {{$thisMonthCount}}--}}
+{{--                                            </span>--}}
+{{--                                            <div class="m--space-10"></div>--}}
+{{--                                            --}}{{--<div class="progress m-progress--sm">--}}
+{{--                                                <div class="progress-bar m--bg-success" role="progressbar" style="width: {{$thisMonthRate}}%;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>--}}
+{{--                                            </div>--}}
+{{--                                            <span class="m-widget24__change">--}}
+{{--                                                نسبت به دیگران--}}
+{{--                                            </span>--}}
+{{--                                            <span class="m-widget24__number">--}}
+{{--                                                {{$thisMonthRate}}--}}
+{{--                                            </span>--}}
+{{--                                        </div>--}}
+{{--                                    </div>--}}
         
                                     <!--end::New Users-->
                                 </div>
@@ -210,6 +209,8 @@
                                 </div>
                             </div>
                         </div>
+                        <h5 style="text-align:center ; color:red">تاریخ قرار داد شما به اتمام رسیده است</h5>
+                        <div class="m--space-30"></div>
                         <h5 style="direction:ltr">ساعت : {{$now}}</h5>
                         <h5>به دلیل کش سرورها، آمار ها حداکثر دارای 5 دقیقه تاخیر هستند.</h5>
 
