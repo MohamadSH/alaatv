@@ -82,7 +82,7 @@
                                     <span></span>
                                 </div>
                                 <select class="mt-multiselect btn btn-default a--full-width"
-                                        {{--                                                multiple="multiple"--}}
+                                        multiple="multiple"
                                         data-label="left"
                                         data-width="100%"
                                         data-filter="true"
