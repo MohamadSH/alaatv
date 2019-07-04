@@ -41,11 +41,7 @@ class OrderproductController extends Controller
         $checkoutEnable = $request->get('checkoutEnable');
         $checkoutStatus = $request->get('checkoutStatus');
         $pageNumber = ($request->get('page' , 0) - 1);
-
-        $product = $request->get('product_id');
-        if(!isset($product)){
-            return response()->json(['message'=>'Product not found'],Response::HTTP_BAD_REQUEST);
-        }
+        $product = $request->get('product_id',0);
 
         $since = null;
         $till = null ;
@@ -63,7 +59,10 @@ class OrderproductController extends Controller
             $chechoutFilter = OrderproductRepo::CHECKEDOUT_ORDERPRODUCT;
         }
 
-        $orderproducts = OrderproductRepo::getPurchasedOrderproducts([$product] , $since , $till , $chechoutFilter)
+        $products = [$product];
+        if($product == 0)
+            $products = [];
+        $orderproducts = OrderproductRepo::getPurchasedOrderproducts( $products , $since , $till , $chechoutFilter)
             ->with(['order', 'order.transactions' , 'order.normalOrderproducts'])->get();
 
         $totalNubmer = $orderproducts->count();

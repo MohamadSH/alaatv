@@ -28,10 +28,9 @@ class OrderproductRepo
         ]);
     }
 
-    public static function getPurchasedOrderproducts(array $productIds , string $since=null , string $till=null , string $checkoutMode='all' ):Builder
+    public static function getPurchasedOrderproducts(array $productIds=[] , string $since=null , string $till=null , string $checkoutMode='all' ):Builder
     {
-        $orderproducts = Orderproduct::whereIn('product_id', $productIds)
-            ->where('orderproducttype_id', config('constants.ORDER_PRODUCT_TYPE_DEFAULT'))
+        $orderproducts = Orderproduct::where('orderproducttype_id', config('constants.ORDER_PRODUCT_TYPE_DEFAULT'))
             ->whereHas('order', function ($q) use ($since , $till) {
                 $q->whereIn('orderstatus_id', [config('constants.ORDER_STATUS_CLOSED') , config('constants.ORDER_STATUS_POSTED')])
                     ->whereIn('paymentstatus_id', [config('constants.PAYMENT_STATUS_PAID') , config('constants.PAYMENT_STATUS_VERIFIED_INDEBTED')]);
@@ -42,6 +41,9 @@ class OrderproductRepo
                 if(isset($till))
                     $q->where('completed_at' , '<=' , $till);
             });
+
+        if(!empty($productIds))
+            $orderproducts->whereIn('product_id', $productIds);
 
         if($checkoutMode == 'checked'){
             $orderproducts->where('checkoutstatus_id' , config('constants.ORDERPRODUCT_CHECKOUT_STATUS_PAID'));
