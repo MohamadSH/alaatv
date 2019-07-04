@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Web;
 
 use App\Bon;
+use App\Events\FillTmpShareOfOrder;
 use App\User;
 use App\Order;
 use App\Wallet;
@@ -82,6 +83,8 @@ class OfflinePaymentController extends Controller
                 'orderId'     => $order->id,
                 'paidPrice'   => 1,
             ]);
+
+        event(new FillTmpShareOfOrder($order));
         return redirect()->route('showOnlinePaymentStatus', [
             'status'        => 'successful',
             'paymentMethod' => $paymentMethod,
