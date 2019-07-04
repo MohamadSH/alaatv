@@ -41,7 +41,7 @@ class OrderproductController extends Controller
         $checkoutEnable = $request->get('checkoutEnable');
         $checkoutStatus = $request->get('checkoutStatus');
         $pageNumber = ($request->get('page' , 0) - 1);
-        $productIds = $request->get('product_id');
+        $productIds = $request->get('product_id',[]);
 
         $since = null;
         $till = null ;
