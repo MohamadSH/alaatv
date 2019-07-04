@@ -19,6 +19,9 @@ class EventServiceProvider extends ServiceProvider
         'App\Events\MobileVerified'                  => [
             'App\Listeners\MobileVerifiedListener',
         ],
+        'App\Events\FillTmpShareOfOrder'                  => [
+            'App\Listeners\FillTmpShareOfOrderListener',
+        ],
         'App\Events\FreeInternetAccept'              => [
             'App\Listeners\FreeInternetAcceptListener',
         ],
