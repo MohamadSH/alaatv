@@ -41,7 +41,7 @@ class OrderproductController extends Controller
         $checkoutEnable = $request->get('checkoutEnable');
         $checkoutStatus = $request->get('checkoutStatus');
         $pageNumber = ($request->get('page' , 0) - 1);
-        $product = $request->get('product_id',0);
+        $productIds = $request->get('product_id');
 
         $since = null;
         $till = null ;
@@ -59,10 +59,9 @@ class OrderproductController extends Controller
             $chechoutFilter = OrderproductRepo::CHECKEDOUT_ORDERPRODUCT;
         }
 
-        $products = [$product];
-        if($product == 0)
-            $products = [];
-        $orderproducts = OrderproductRepo::getPurchasedOrderproducts( $products , $since , $till , $chechoutFilter)
+        if(in_array(0,$productIds))
+            $productIds = [];
+        $orderproducts = OrderproductRepo::getPurchasedOrderproducts( $productIds , $since , $till , $chechoutFilter)
             ->with(['order', 'order.transactions' , 'order.normalOrderproducts'])->get();
 
         $totalNubmer = $orderproducts->count();
