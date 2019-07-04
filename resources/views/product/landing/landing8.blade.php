@@ -162,16 +162,16 @@
                                         
                                     </div>
                                     <div class="col-md-8 order-1 order-sm-1 order-md-2 order-lg-2 mainItems">
-                                        <div class="row justify-content-center">
-                                            <div class="col text-center">
-                                                <div class="m-divider m--margin-bottom-30">
-                                                    <span></span>
-                                                    <span>تا شروع کنکور</span>
-                                                    <span></span>
-                                                </div>
-                                                <div class="konkourTimer"></div>
-                                            </div>
-                                        </div>
+{{--                                        <div class="row justify-content-center">--}}
+{{--                                            <div class="col text-center">--}}
+{{--                                                <div class="m-divider m--margin-bottom-30">--}}
+{{--                                                    <span></span>--}}
+{{--                                                    <span>تا شروع کنکور</span>--}}
+{{--                                                    <span></span>--}}
+{{--                                                </div>--}}
+{{--                                                <div class="konkourTimer"></div>--}}
+{{--                                            </div>--}}
+{{--                                        </div>--}}
                                         
                                         <div class="row justify-content-center">
                                             <div class="col m--margin-bottom-10">
