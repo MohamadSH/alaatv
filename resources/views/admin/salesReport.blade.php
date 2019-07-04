@@ -90,6 +90,10 @@
                                         id="productId"
                                         name="productId"
                                         title="انتخاب دسته">
+                                    <option value="0"
+                                            class="bold">
+                                        هر محصولی
+                                    </option>
                                     @foreach($products as $product)
                                         <option value="{{$product->id}}"
                                                 class="bold">
