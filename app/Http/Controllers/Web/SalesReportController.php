@@ -330,7 +330,7 @@ class SalesReportController extends Controller
             $key   = 'salesReport:calculateOrderproductPrice:'.$orderproduct->cacheKey();
             $toAdd = Cache::tags(['salesReport'])
                 ->remember($key, config('constants.CACHE_600'), function () use ($orderproduct) {
-                    return $orderproduct->shared_cost_of_transaction ;
+                    return $orderproduct->getSharedCostOfTransaction() ;
                 });
     
             $sum += $toAdd;
