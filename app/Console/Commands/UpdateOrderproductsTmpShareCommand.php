@@ -54,9 +54,7 @@ class UpdateOrderproductsTmpShareCommand extends Command
         if ($this->confirm('Found '.$orderproducts->count().' orderproducts , Do you want to proceed?', true)) {
             $bar = $this->output->createProgressBar($orderproducts->count());
             foreach ($orderproducts as $orderproduct) {
-                $finalPrice = $orderproduct->tmp_final_cost;
-
-                $orderproduct->setShareCost($finalPrice);
+                $orderproduct->setShareCost();
                 $bar->advance();
             }
             $bar->finish();
