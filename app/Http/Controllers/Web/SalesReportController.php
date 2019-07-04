@@ -212,7 +212,7 @@ class SalesReportController extends Controller
         return Cache::tags(['salesReport'])->remember('sr:getPurchasedOrderproducts:'.md5(implode(',', $products)),
             config('constants.CACHE_5'),
             static function () use ($products) {
-                return OrderproductRepo::getPurchasedOrderproducts($products)
+                return OrderproductRepo::getPurchasedOrderproducts($products , null , '2019-07-03 23:59')
                     ->with(['order', 'order.transactions' , 'order.normalOrderproducts'])
                     ->get();
             });
