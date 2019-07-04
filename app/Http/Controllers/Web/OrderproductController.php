@@ -77,7 +77,7 @@ class OrderproductController extends Controller
 
         $totalSale = 0;
         foreach ($orderproducts as $orderproduct) {
-            $toAdd = $orderproduct->shared_cost_of_transaction ;
+            $toAdd = $orderproduct->getSharedCostOfTransaction() ;
             $totalSale += $toAdd;
         }
 
