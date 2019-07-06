@@ -59,9 +59,9 @@ class Lottery extends BaseModel
         $prizeName = "";
         $amount    = 0;
         $memorial  = "";
-        if ($this->id == 5) {
+        if ($this->id == 6) {
             if ($rank == 1) {//nafare aval
-                $prizeName = "یک دستگاه پلی استیشن 4";
+                $prizeName = "یک دستگاه موبایل سامسونگ s9";
             }
             //            else
             //            {

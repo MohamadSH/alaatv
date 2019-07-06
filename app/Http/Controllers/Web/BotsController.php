@@ -1966,87 +1966,154 @@ class BotsController extends Controller
                 }*/
         // /** Points for Hamayesh Talai lottery */
 
-        if($request->has('5khordad'))
-        {
-            /** Points for Eide Fetr lottery */
-            $transactions = Transaction::whereHas("order", function ($q) {
-                $q->whereIn("orderstatus_id", [config("constants.ORDER_STATUS_CLOSED") , config('constants.ORDER_STATUS_POSTED')])
-                    ->whereIn("paymentstatus_id", [config("constants.PAYMENT_STATUS_PAID") , config('constants.PAYMENT_STATUS_VERIFIED_INDEBTED')])
-                    ->whereHas('orderproducts' , function ($q2){
-                        $q2->whereNotIn('product_id' , [Product::CUSTOM_DONATE_PRODUCT , Product::DONATE_PRODUCT_5_HEZAR , Product::ASIATECH_PRODUCT]) ;
-                    });
-            })
-                ->where("created_at" , '>=', "2019-05-15 19:30:00") // 16 ordibehesht 98 saat 12 tehran
-                ->where('created_at' , '<=', "2019-05-26 19:29:59") // 5 khordad 98 saat 23:59
-                ->where("transactionstatus_id", config("constants.TRANSACTION_STATUS_SUCCESSFUL"))
-                ->where('paymentmethod_id' , '<>' , config('constants.PAYMENT_METHOD_WALLET'))
-                ->where("cost", ">", 0)
-                ->get();
-            $pointMultiply = 3;// 5 khordad 98
-        }elseif($request->has('10khordad')){
-
-            $transactions = Transaction::whereHas("order", function ($q) {
-                $q->whereIn("orderstatus_id", [config("constants.ORDER_STATUS_CLOSED") , config('constants.ORDER_STATUS_POSTED')])
-                    ->whereIn("paymentstatus_id", [config("constants.PAYMENT_STATUS_PAID") , config('constants.PAYMENT_STATUS_VERIFIED_INDEBTED')])
-                    ->whereHas('orderproducts' , function ($q2){
-                        $q2->whereNotIn('product_id' , [Product::CUSTOM_DONATE_PRODUCT , Product::DONATE_PRODUCT_5_HEZAR , Product::ASIATECH_PRODUCT]) ;
-                    });
-            })
-                ->where("created_at" , '>=', "2019-05-26 19:30:00") // 5 khordad 98 saat 12 tehran
-                ->where('created_at' , '<=', "2019-05-31 19:29:59") // 10 khordad 98 saat 23:59
-                ->where("transactionstatus_id", config("constants.TRANSACTION_STATUS_SUCCESSFUL"))
-                ->where('paymentmethod_id' , '<>' , config('constants.PAYMENT_METHOD_WALLET'))
-                ->where("cost", ">", 0)
-                ->get();
-            $pointMultiply = 2;// 10 khordad 98
-        }elseif($request->has('19khordad')){
-            $transactions = Transaction::whereHas("order", function ($q) {
-                $q->whereIn("orderstatus_id", [config("constants.ORDER_STATUS_CLOSED") , config('constants.ORDER_STATUS_POSTED')])
-                    ->whereIn("paymentstatus_id", [config("constants.PAYMENT_STATUS_PAID") , config('constants.PAYMENT_STATUS_VERIFIED_INDEBTED')])
-                    ->whereHas('orderproducts' , function ($q2){
-                        $q2->whereNotIn('product_id' , [Product::CUSTOM_DONATE_PRODUCT , Product::DONATE_PRODUCT_5_HEZAR , Product::ASIATECH_PRODUCT]) ;
-                    });
-            })
-                ->where("created_at" , '>=', "2019-05-31 19:30:00") // 10 khordad 98 saat 12 tehran
-                ->where('created_at' , '<=', "2019-06-09 07:00:00") // 19 khordad 98 saat 11:30
-                ->where("transactionstatus_id", config("constants.TRANSACTION_STATUS_SUCCESSFUL"))
-                ->where('paymentmethod_id' , '<>' , config('constants.PAYMENT_METHOD_WALLET'))
-                ->where("cost", ">", 0)
-                ->get();
-            $pointMultiply = 1;// 19 khordad 98
-        }else{
-            dd('Bad Request');
-        }
-
-
-        $users          = collect();
-        $amountUnit     = 50000;
         $successCounter = 0;
         $failedCounter  = 0;
         $warningCounter = 0;
+        $users          = collect();
 
-        foreach ($transactions as $transaction) {
-            $user = $transaction->order->user;
-            if (isset($user)) {
-                $userRecord = $users->where("user_id", $user->id)->first();
+        if($request->has('15tir')){
+            $transactions = Transaction::whereHas("order", function ($q) {
+                $q->whereIn("orderstatus_id", [config("constants.ORDER_STATUS_CLOSED") , config('constants.ORDER_STATUS_POSTED')])
+                    ->whereIn("paymentstatus_id", [config("constants.PAYMENT_STATUS_PAID") , config('constants.PAYMENT_STATUS_VERIFIED_INDEBTED')])
+                    ->whereHas('orderproducts' , function ($q2){
+                        $q2->whereNotIn('product_id' , [Product::CUSTOM_DONATE_PRODUCT , Product::DONATE_PRODUCT_5_HEZAR , Product::ASIATECH_PRODUCT]) ;
+                    });
+            })
+            ->where("created_at" , '>=', "2019-06-10 19:30:00") // 20 khordad 98 saat 12 shab tehran
+            ->where('created_at' , '<=', "2019-07-03 19:30:00") // 12 tir 98 saat 12 shab
+            ->where("transactionstatus_id", config("constants.TRANSACTION_STATUS_SUCCESSFUL"))
+            ->where('paymentmethod_id' , '<>' , config('constants.PAYMENT_METHOD_WALLET'))
+            ->where("cost", ">", 0)
+            ->get();
 
-                if (isset($userRecord)) {
-                    $userRecord["totalAmount"] += $transaction->cost;
-                    $point                     = (int) ($userRecord["totalAmount"] / $amountUnit);
-                    $userRecord["point"]       = $point * $pointMultiply;
+            $pointMultiply = 1;
+            $amountUnit     = 50000;
+            foreach ($transactions as $transaction) {
+                $user = $transaction->order->user;
+                if (isset($user)) {
+                    $userRecord = $users->where("user_id", $user->id)->first();
+
+                    if (isset($userRecord)) {
+                        $userRecord["totalAmount"] += $transaction->cost;
+                        $point                     = (int) ($userRecord["totalAmount"] / $amountUnit);
+                        $userRecord["point"]       = $point * $pointMultiply;
+                    } else {
+                        $point = (int) ($transaction->cost / $amountUnit);
+                        $users->push([
+                            "user_id"     => $user->id,
+                            "totalAmount" => $transaction->cost,
+                            "point"       => $point * $pointMultiply,
+                        ]);
+                    }
                 } else {
-                    $point = (int) ($transaction->cost / $amountUnit);
-                    $users->push([
-                        "user_id"     => $user->id,
-                        "totalAmount" => $transaction->cost,
-                        "point"       => $point * $pointMultiply,
-                    ]);
+                    dump("Warning: User was not found for transaction ".$transaction->id);
+                    $warningCounter++;
                 }
-            } else {
-                dump("Warning: User was not found for transaction ".$transaction->id);
-                $warningCounter++;
+            }
+        }elseif($request->has('riyazi')){
+            // riyazi [318]
+
+            $riyaziComplete = User::whereHas('orderproducts' , function ($q){
+                $q->whereHas('order' , function ($q2){
+                    $q2->whereIn("orderstatus_id", [config("constants.ORDER_STATUS_CLOSED") , config('constants.ORDER_STATUS_POSTED')])
+                        ->whereIn("paymentstatus_id", [config("constants.PAYMENT_STATUS_PAID")]);
+                })
+                    ->where('product_id' , 298);
+            })->whereHas('orderproducts' , function ($q){
+                $q->whereHas('order' , function ($q2){
+                    $q2->whereIn("orderstatus_id", [config("constants.ORDER_STATUS_CLOSED") , config('constants.ORDER_STATUS_POSTED')])
+                        ->whereIn("paymentstatus_id", [config("constants.PAYMENT_STATUS_PAID")]);
+                })
+                    ->where('product_id' , 312);
+            })->whereHas('orderproducts' , function ($q){
+                $q->whereHas('order' , function ($q2){
+                    $q2->whereIn("orderstatus_id", [config("constants.ORDER_STATUS_CLOSED") , config('constants.ORDER_STATUS_POSTED')])
+                        ->whereIn("paymentstatus_id", [config("constants.PAYMENT_STATUS_PAID")]);
+                })
+                    ->where('product_id' , 308);
+            })->whereHas('orderproducts' , function ($q){
+                $q->whereHas('order' , function ($q2){
+                    $q2->whereIn("orderstatus_id", [config("constants.ORDER_STATUS_CLOSED") , config('constants.ORDER_STATUS_POSTED')])
+                        ->whereIn("paymentstatus_id", [config("constants.PAYMENT_STATUS_PAID")]);
+                })
+                    ->where('product_id' , 306);
+            })->whereHas('orderproducts' , function ($q){
+                $q->whereHas('order' , function ($q2){
+                    $q2->whereIn("orderstatus_id", [config("constants.ORDER_STATUS_CLOSED") , config('constants.ORDER_STATUS_POSTED')])
+                        ->whereIn("paymentstatus_id", [config("constants.PAYMENT_STATUS_PAID")]);
+                })
+                    ->where('product_id' , 302);
+            })->whereHas('orderproducts' , function ($q){
+                $q->whereHas('order' , function ($q2){
+                    $q2->whereIn("orderstatus_id", [config("constants.ORDER_STATUS_CLOSED") , config('constants.ORDER_STATUS_POSTED')])
+                        ->whereIn("paymentstatus_id", [config("constants.PAYMENT_STATUS_PAID")]);
+                })
+                    ->where('product_id' , 342);
+            })->whereHas('orderproducts' , function ($q){
+                $q->whereHas('order' , function ($q2){
+                    $q2->whereIn("orderstatus_id", [config("constants.ORDER_STATUS_CLOSED") , config('constants.ORDER_STATUS_POSTED')])
+                        ->whereIn("paymentstatus_id", [config("constants.PAYMENT_STATUS_PAID")]);
+                })
+                    ->where('product_id' , 318);
+            })->get();
+
+            foreach ($riyaziComplete as $user) {
+                $users->push([
+                    "user_id"     => $user->id,
+                    "totalAmount" => 0,
+                    "point"       => 1,
+                ]);
+            }
+        }elseif($request->has('tajrobi')){
+            // tajrobi [328 ,322,316] zist[326]
+            $tajrobiComplete = User::whereHas('orderproducts' , function ($q){
+                $q->where('product_id' , 298)
+                    ->whereHas('order' , function ($q2){
+                        $q2->whereIn("orderstatus_id", [config("constants.ORDER_STATUS_CLOSED") , config('constants.ORDER_STATUS_POSTED')])
+                            ->whereIn("paymentstatus_id", [config("constants.PAYMENT_STATUS_PAID")]);
+                    });
+            })->whereHas('orderproducts' , function ($q){
+                $q->where('product_id' , 312)
+                    ->whereHas('order' , function ($q2){
+                        $q2->whereIn("orderstatus_id", [config("constants.ORDER_STATUS_CLOSED") , config('constants.ORDER_STATUS_POSTED')])
+                            ->whereIn("paymentstatus_id", [config("constants.PAYMENT_STATUS_PAID")]);
+                    });
+            })->whereHas('orderproducts' , function ($q){
+                $q->where('product_id' , 308)
+                    ->whereHas('order' , function ($q2){
+                        $q2->whereIn("orderstatus_id", [config("constants.ORDER_STATUS_CLOSED") , config('constants.ORDER_STATUS_POSTED')])
+                            ->whereIn("paymentstatus_id", [config("constants.PAYMENT_STATUS_PAID")]);
+                    });
+            })->whereHas('orderproducts' , function ($q){
+                $q->where('product_id' , 306)
+                    ->whereHas('order' , function ($q2){
+                        $q2->whereIn("orderstatus_id", [config("constants.ORDER_STATUS_CLOSED") , config('constants.ORDER_STATUS_POSTED')])
+                            ->whereIn("paymentstatus_id", [config("constants.PAYMENT_STATUS_PAID")]);
+                    });
+            })->whereHas('orderproducts' , function ($q){
+                $q->where('product_id' , 302)
+                    ->whereHas('order' , function ($q2){
+                        $q2->whereIn("orderstatus_id", [config("constants.ORDER_STATUS_CLOSED") , config('constants.ORDER_STATUS_POSTED')])
+                            ->whereIn("paymentstatus_id", [config("constants.PAYMENT_STATUS_PAID")]);
+                    });
+            })->whereHas('orderproducts' , function ($q){
+                $q->whereIn('product_id' , [322,316,328])
+                    ->whereHas('order' , function ($q2){
+                        $q2->whereIn("orderstatus_id", [config("constants.ORDER_STATUS_CLOSED") , config('constants.ORDER_STATUS_POSTED')])
+                            ->whereIn("paymentstatus_id", [config("constants.PAYMENT_STATUS_PAID")]);
+                    });
+            })->get();
+
+
+            foreach ($tajrobiComplete as $user) {
+                $users->push([
+                    "user_id"     => $user->id,
+                    "totalAmount" => 0,
+                    "point"       => 1,
+                ]);
             }
         }
+
         
         $users = $users->where("point"  , ">" , 0);
 //        dump($users->count());
@@ -2081,6 +2148,8 @@ class BotsController extends Controller
                 }
             }
         }*/
+
+
         $bonName = config("constants.BON2");
         $bon     = Bon::where("name", $bonName)->first();
         if (!isset($bon)) {
@@ -2088,6 +2157,7 @@ class BotsController extends Controller
         }
         
         dump("Number of available users: ".$users->count());
+
         foreach ($users as $userPoint) {
             $userId = $userPoint["user_id"];
             $points = $userPoint["point"];
