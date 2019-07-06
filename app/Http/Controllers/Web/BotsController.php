@@ -2016,43 +2016,77 @@ class BotsController extends Controller
             $riyaziComplete = User::whereHas('orderproducts' , function ($q){
                 $q->whereHas('order' , function ($q2){
                     $q2->whereIn("orderstatus_id", [config("constants.ORDER_STATUS_CLOSED") , config('constants.ORDER_STATUS_POSTED')])
-                        ->whereIn("paymentstatus_id", [config("constants.PAYMENT_STATUS_PAID")]);
-                })
-                    ->where('product_id' , 298);
+                        ->whereIn("paymentstatus_id", [config("constants.PAYMENT_STATUS_PAID")])
+                    ->whereHas('transactions' , function ($q3){
+                        $q3->where("transactionstatus_id", config("constants.TRANSACTION_STATUS_SUCCESSFUL"))
+                            ->where('paymentmethod_id' , '<>' , config('constants.PAYMENT_METHOD_WALLET'))
+                            ->where("cost", ">", 0);
+                    });
+                })->where('product_id' , 298);
             })->whereHas('orderproducts' , function ($q){
                 $q->whereHas('order' , function ($q2){
                     $q2->whereIn("orderstatus_id", [config("constants.ORDER_STATUS_CLOSED") , config('constants.ORDER_STATUS_POSTED')])
-                        ->whereIn("paymentstatus_id", [config("constants.PAYMENT_STATUS_PAID")]);
+                        ->whereIn("paymentstatus_id", [config("constants.PAYMENT_STATUS_PAID")])
+                        ->whereHas('transactions' , function ($q3){
+                            $q3->where("transactionstatus_id", config("constants.TRANSACTION_STATUS_SUCCESSFUL"))
+                                ->where('paymentmethod_id' , '<>' , config('constants.PAYMENT_METHOD_WALLET'))
+                                ->where("cost", ">", 0);
+                        });
                 })
                     ->where('product_id' , 312);
             })->whereHas('orderproducts' , function ($q){
                 $q->whereHas('order' , function ($q2){
                     $q2->whereIn("orderstatus_id", [config("constants.ORDER_STATUS_CLOSED") , config('constants.ORDER_STATUS_POSTED')])
-                        ->whereIn("paymentstatus_id", [config("constants.PAYMENT_STATUS_PAID")]);
+                        ->whereIn("paymentstatus_id", [config("constants.PAYMENT_STATUS_PAID")])
+                        ->whereHas('transactions' , function ($q3){
+                            $q3->where("transactionstatus_id", config("constants.TRANSACTION_STATUS_SUCCESSFUL"))
+                                ->where('paymentmethod_id' , '<>' , config('constants.PAYMENT_METHOD_WALLET'))
+                                ->where("cost", ">", 0);
+                        });
                 })
                     ->where('product_id' , 308);
             })->whereHas('orderproducts' , function ($q){
                 $q->whereHas('order' , function ($q2){
                     $q2->whereIn("orderstatus_id", [config("constants.ORDER_STATUS_CLOSED") , config('constants.ORDER_STATUS_POSTED')])
-                        ->whereIn("paymentstatus_id", [config("constants.PAYMENT_STATUS_PAID")]);
+                        ->whereIn("paymentstatus_id", [config("constants.PAYMENT_STATUS_PAID")])
+                        ->whereHas('transactions' , function ($q3){
+                            $q3->where("transactionstatus_id", config("constants.TRANSACTION_STATUS_SUCCESSFUL"))
+                                ->where('paymentmethod_id' , '<>' , config('constants.PAYMENT_METHOD_WALLET'))
+                                ->where("cost", ">", 0);
+                        });
                 })
                     ->where('product_id' , 306);
             })->whereHas('orderproducts' , function ($q){
                 $q->whereHas('order' , function ($q2){
                     $q2->whereIn("orderstatus_id", [config("constants.ORDER_STATUS_CLOSED") , config('constants.ORDER_STATUS_POSTED')])
-                        ->whereIn("paymentstatus_id", [config("constants.PAYMENT_STATUS_PAID")]);
+                        ->whereIn("paymentstatus_id", [config("constants.PAYMENT_STATUS_PAID")])
+                        ->whereHas('transactions' , function ($q3){
+                            $q3->where("transactionstatus_id", config("constants.TRANSACTION_STATUS_SUCCESSFUL"))
+                                ->where('paymentmethod_id' , '<>' , config('constants.PAYMENT_METHOD_WALLET'))
+                                ->where("cost", ">", 0);
+                        });
                 })
                     ->where('product_id' , 302);
             })->whereHas('orderproducts' , function ($q){
                 $q->whereHas('order' , function ($q2){
                     $q2->whereIn("orderstatus_id", [config("constants.ORDER_STATUS_CLOSED") , config('constants.ORDER_STATUS_POSTED')])
-                        ->whereIn("paymentstatus_id", [config("constants.PAYMENT_STATUS_PAID")]);
+                        ->whereIn("paymentstatus_id", [config("constants.PAYMENT_STATUS_PAID")])
+                        ->whereHas('transactions' , function ($q3){
+                            $q3->where("transactionstatus_id", config("constants.TRANSACTION_STATUS_SUCCESSFUL"))
+                                ->where('paymentmethod_id' , '<>' , config('constants.PAYMENT_METHOD_WALLET'))
+                                ->where("cost", ">", 0);
+                        });
                 })
                     ->where('product_id' , 342);
             })->whereHas('orderproducts' , function ($q){
                 $q->whereHas('order' , function ($q2){
                     $q2->whereIn("orderstatus_id", [config("constants.ORDER_STATUS_CLOSED") , config('constants.ORDER_STATUS_POSTED')])
-                        ->whereIn("paymentstatus_id", [config("constants.PAYMENT_STATUS_PAID")]);
+                        ->whereIn("paymentstatus_id", [config("constants.PAYMENT_STATUS_PAID")])
+                        ->whereHas('transactions' , function ($q3){
+                            $q3->where("transactionstatus_id", config("constants.TRANSACTION_STATUS_SUCCESSFUL"))
+                                ->where('paymentmethod_id' , '<>' , config('constants.PAYMENT_METHOD_WALLET'))
+                                ->where("cost", ">", 0);
+                        });
                 })
                     ->where('product_id' , 318);
             })->get();
@@ -2070,37 +2104,67 @@ class BotsController extends Controller
                 $q->where('product_id' , 298)
                     ->whereHas('order' , function ($q2){
                         $q2->whereIn("orderstatus_id", [config("constants.ORDER_STATUS_CLOSED") , config('constants.ORDER_STATUS_POSTED')])
-                            ->whereIn("paymentstatus_id", [config("constants.PAYMENT_STATUS_PAID")]);
+                            ->whereIn("paymentstatus_id", [config("constants.PAYMENT_STATUS_PAID")])
+                            ->whereHas('transactions' , function ($q3){
+                                $q3->where("transactionstatus_id", config("constants.TRANSACTION_STATUS_SUCCESSFUL"))
+                                    ->where('paymentmethod_id' , '<>' , config('constants.PAYMENT_METHOD_WALLET'))
+                                    ->where("cost", ">", 0);
+                            });
                     });
             })->whereHas('orderproducts' , function ($q){
                 $q->where('product_id' , 312)
                     ->whereHas('order' , function ($q2){
                         $q2->whereIn("orderstatus_id", [config("constants.ORDER_STATUS_CLOSED") , config('constants.ORDER_STATUS_POSTED')])
-                            ->whereIn("paymentstatus_id", [config("constants.PAYMENT_STATUS_PAID")]);
+                            ->whereIn("paymentstatus_id", [config("constants.PAYMENT_STATUS_PAID")])
+                            ->whereHas('transactions' , function ($q3){
+                                $q3->where("transactionstatus_id", config("constants.TRANSACTION_STATUS_SUCCESSFUL"))
+                                    ->where('paymentmethod_id' , '<>' , config('constants.PAYMENT_METHOD_WALLET'))
+                                    ->where("cost", ">", 0);
+                            });
                     });
             })->whereHas('orderproducts' , function ($q){
                 $q->where('product_id' , 308)
                     ->whereHas('order' , function ($q2){
                         $q2->whereIn("orderstatus_id", [config("constants.ORDER_STATUS_CLOSED") , config('constants.ORDER_STATUS_POSTED')])
-                            ->whereIn("paymentstatus_id", [config("constants.PAYMENT_STATUS_PAID")]);
+                            ->whereIn("paymentstatus_id", [config("constants.PAYMENT_STATUS_PAID")])
+                            ->whereHas('transactions' , function ($q3){
+                                $q3->where("transactionstatus_id", config("constants.TRANSACTION_STATUS_SUCCESSFUL"))
+                                    ->where('paymentmethod_id' , '<>' , config('constants.PAYMENT_METHOD_WALLET'))
+                                    ->where("cost", ">", 0);
+                            });
                     });
             })->whereHas('orderproducts' , function ($q){
                 $q->where('product_id' , 306)
                     ->whereHas('order' , function ($q2){
                         $q2->whereIn("orderstatus_id", [config("constants.ORDER_STATUS_CLOSED") , config('constants.ORDER_STATUS_POSTED')])
-                            ->whereIn("paymentstatus_id", [config("constants.PAYMENT_STATUS_PAID")]);
+                            ->whereIn("paymentstatus_id", [config("constants.PAYMENT_STATUS_PAID")])
+                            ->whereHas('transactions' , function ($q3){
+                                $q3->where("transactionstatus_id", config("constants.TRANSACTION_STATUS_SUCCESSFUL"))
+                                    ->where('paymentmethod_id' , '<>' , config('constants.PAYMENT_METHOD_WALLET'))
+                                    ->where("cost", ">", 0);
+                            });
                     });
             })->whereHas('orderproducts' , function ($q){
                 $q->where('product_id' , 302)
                     ->whereHas('order' , function ($q2){
                         $q2->whereIn("orderstatus_id", [config("constants.ORDER_STATUS_CLOSED") , config('constants.ORDER_STATUS_POSTED')])
-                            ->whereIn("paymentstatus_id", [config("constants.PAYMENT_STATUS_PAID")]);
+                            ->whereIn("paymentstatus_id", [config("constants.PAYMENT_STATUS_PAID")])
+                            ->whereHas('transactions' , function ($q3){
+                                $q3->where("transactionstatus_id", config("constants.TRANSACTION_STATUS_SUCCESSFUL"))
+                                    ->where('paymentmethod_id' , '<>' , config('constants.PAYMENT_METHOD_WALLET'))
+                                    ->where("cost", ">", 0);
+                            });
                     });
             })->whereHas('orderproducts' , function ($q){
                 $q->whereIn('product_id' , [322,316,328])
                     ->whereHas('order' , function ($q2){
                         $q2->whereIn("orderstatus_id", [config("constants.ORDER_STATUS_CLOSED") , config('constants.ORDER_STATUS_POSTED')])
-                            ->whereIn("paymentstatus_id", [config("constants.PAYMENT_STATUS_PAID")]);
+                            ->whereIn("paymentstatus_id", [config("constants.PAYMENT_STATUS_PAID")])
+                            ->whereHas('transactions' , function ($q3){
+                                $q3->where("transactionstatus_id", config("constants.TRANSACTION_STATUS_SUCCESSFUL"))
+                                    ->where('paymentmethod_id' , '<>' , config('constants.PAYMENT_METHOD_WALLET'))
+                                    ->where("cost", ">", 0);
+                            });
                     });
             })->get();
 
@@ -2116,8 +2180,8 @@ class BotsController extends Controller
 
         
         $users = $users->where("point"  , ">" , 0);
-//        dump($users->count());
-//        dd("STOP points");
+        dump($users->count());
+        dd("STOP points");
         /** Extra point */
         /*$userbons = Userbon::where("bon_id" , 2)
                             ->where("created_at" , ">" , "2018-05-24 00:00:00")
