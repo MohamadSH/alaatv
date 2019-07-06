@@ -206,7 +206,14 @@
                                         <span class="m-menu__link-text">قرعه کشی عید فطر 98</span>
                                     </a>
                                 </li>
-
+                                <li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1">
+                                    <a target="_blank" href="{{ action("Web\AdminController@adminLottery" , ["lottery"=>"konkur98"]) }}" class="m-menu__link ">
+                                        <i class="m-menu__link-bullet m-menu__link-bullet--dot">
+                                            <span></span>
+                                        </i>
+                                        <span class="m-menu__link-text">قرعه کشی کنکور 98</span>
+                                    </a>
+                                </li>
                             </ul>
                         </div>
                     </li>
