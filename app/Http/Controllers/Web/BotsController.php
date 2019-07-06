@@ -2180,8 +2180,8 @@ class BotsController extends Controller
 
         
         $users = $users->where("point"  , ">" , 0);
-        dump($users->count());
-        dd("STOP points");
+//        dump($users->count());
+//        dd("STOP points");
         /** Extra point */
         /*$userbons = Userbon::where("bon_id" , 2)
                             ->where("created_at" , ">" , "2018-05-24 00:00:00")
