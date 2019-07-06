@@ -61,12 +61,12 @@ class LotteryController extends Controller
             
             $participantArray = [];
             foreach ($participants as $participant) {
-                if (in_array($participant->user->id, $participantArray)) {
-                    continue;
-                }
-                else {
-                    array_push($participantArray, $participant->user->id);
-                }
+//                if (in_array($participant->user->id, $participantArray)) {
+//                    continue;
+//                }
+//                else {
+//                    array_push($participantArray, $participant->user->id);
+//                }
                 
                 $points = $participant->totalNumber - $participant->usedNumber;
                 for ($i = $points; $i > 0; $i--) {
