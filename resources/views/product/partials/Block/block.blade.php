@@ -67,6 +67,9 @@
                     </div>
                 </div>
                 <div class="m-portlet__body m-portlet__body--no-padding">
+                    <div class="a--owl-carousel-init-loading">
+                        <img src="/acm/extra/loader.gif" alt="loading">
+                    </div>
                     <!--begin::Widget 30-->
                     <div class="m-widget30">
                         <div class="m-widget_head">

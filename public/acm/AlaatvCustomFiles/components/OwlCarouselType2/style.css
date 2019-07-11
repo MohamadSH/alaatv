@@ -284,7 +284,13 @@
     background: white;
     margin-bottom: 0;
 }
-
+.a--owl-carousel-init-loading {
+    display: flex;
+    justify-content: center;
+}
+.a--owl-carousel-init-loading img {
+    width: 200px;
+}
 
 
 

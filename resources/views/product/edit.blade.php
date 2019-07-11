@@ -405,6 +405,6 @@
             $("#productFileOrder").val(lastOrder);
         });
     </script>
-    <script src="public/acm/AlaatvCustomFiles/js/admin-product.js" type="text/javascript"></script>
+    <script src="public/acm/AlaatvCustomFiles/js/admin/page-productAdmin.js" type="text/javascript"></script>
 @endsection
 @endpermission

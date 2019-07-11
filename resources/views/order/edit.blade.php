@@ -1074,8 +1074,8 @@
     <script src="/acm/AlaatvCustomFiles/components/alaa_old/scripts/ui-confirmations.min.js" type="text/javascript"></script>
     <script src="/acm/AlaatvCustomFiles/components/alaa_old/scripts/makeSelect2Single.js" type="text/javascript"></script>
     
-    {{--<script src="/acm/AlaatvCustomFiles/js/admin-indexOrder.js" type="text/javascript"></script>--}}
-    {{--<script src="/acm/AlaatvCustomFiles/js/admin-makeDataTable.js" type="text/javascript"></script>--}}
+    {{--<script src="/acm/AlaatvCustomFiles/js/admin/page-ordersAdmin.js" type="text/javascript"></script>--}}
+    {{--<script src="/acm/AlaatvCustomFiles/js/admin/makeDataTable.js" type="text/javascript"></script>--}}
     {{--<script src="/acm/AlaatvCustomFiles/js/admin-makeMultiSelect.js" type="text/javascript"></script>--}}
     
     

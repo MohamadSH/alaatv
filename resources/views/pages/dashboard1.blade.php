@@ -65,7 +65,7 @@
                                 </button>
                                 <br>
                                 <span class="m--font-light">
-                                    <img data-src="{{ asset('/acm/extra/alaa-logo-small.gif') }}" width="20" class="lazy-image">
+                                    <img data-src="{{ asset('/acm/extra/alaa-logo-small.gif') }}" width="20" class="lazy-image" alt="alaa">
 				                </span>
                                 <div class="m--space-10"></div>
                             </div>
@@ -85,7 +85,7 @@
                                 </button>
                                 <br>
                                 <span class="m--font-light">
-                                    <img data-src="{{ asset('/acm/extra/alaa-logo-small.gif') }}" width="20" class="lazy-image">
+                                    <img data-src="{{ asset('/acm/extra/alaa-logo-small.gif') }}" width="20" class="lazy-image" alt="alaa">
 				                </span>
                                 <div class="m--space-10"></div>
                             </div>

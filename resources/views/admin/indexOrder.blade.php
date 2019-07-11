@@ -1,17 +1,9 @@
 @permission((config('constants.LIST_ORDER_ACCESS')))
+
 @extends('app',['pageName'=>$pageName])
 
 @section('page-css')
-    <link href="/acm/AlaatvCustomFiles/components/alaa_old/plugins/datatables/datatables.min.css" rel="stylesheet" type="text/css"/>
-    <link href="/acm/AlaatvCustomFiles/components/alaa_old/plugins/datatables/plugins/bootstrap/datatables.bootstrap-rtl.css" rel="stylesheet" type="text/css"/>
-    {{--<link href="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-modal/css/bootstrap-modal-bs3patch.css" rel="stylesheet" type="text/css"/>--}}
-    {{--<link href="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-modal/css/bootstrap-modal.css" rel="stylesheet" type="text/css"/>--}}
-    <link href="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-fileinput/bootstrap-fileinput.css" rel="stylesheet" type="text/css"/>
-    <link href="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-toastr/toastr-rtl.min.css" rel="stylesheet" type="text/css"/>
-    <link href="/acm/AlaatvCustomFiles/components/alaa_old/plugins/jquery-multi-select/css/multi-select-rtl.css" rel="stylesheet" type="text/css"/>
-    <link href="/acm/extra/persian-datepicker/dist/css/persian-datepicker-0.4.5.min.css" rel="stylesheet" type="text/css"/>
-    <link href="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-multiselect/css/bootstrap-multiselect.css" rel="stylesheet" type="text/css"/>
-    <link href="/acm/AlaatvCustomFiles/components/alaa_old/font/glyphicons-halflings/glyphicons-halflings.css" rel="stylesheet" type="text/css"/>
+    <link href="{{ mix('/css/admin-all.css') }}" rel="stylesheet" type="text/css"/>
     <style>
         .transactionItem {
             box-shadow: 0px 0px 10px 0px #A4AFFC;
@@ -727,28 +719,8 @@
 @endsection
 
 @section('page-js')
-
-    <script src="/acm/AlaatvCustomFiles/components/alaa_old/scripts/datatable.min.js" type="text/javascript"></script>
-    <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/datatables/datatables.min.js" type="text/javascript"></script>
-    <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js" type="text/javascript"></script>
-    <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-modal/js/bootstrap-modalmanager.js" type="text/javascript"></script>
-    {{--<script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-modal/js/bootstrap-modal.js" type="text/javascript"></script>--}}
-    <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-fileinput/bootstrap-fileinput.js" type="text/javascript"></script>
-    <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-toastr/toastr.min.js" type="text/javascript"></script>
-    <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-select/js/bootstrap-select.min.js" type="text/javascript"></script>
-    <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/jquery-multi-select/js/jquery.multi-select.js" type="text/javascript"></script>
-    <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/select2/js/select2.full.min.js" type="text/javascript"></script>
-    <script src="/acm/extra/persian-datepicker/lib/persian-date.js" type="text/javascript"></script>
-
-    {{--<script src="/acm/AlaatvCustomFiles/components/alaa_old/scripts/ui-extended-modals.min.js" type="text/javascript"></script>--}}
-    <script src="/acm/AlaatvCustomFiles/components/alaa_old/scripts/ui-toastr.min.js" type="text/javascript"></script>
-    <script src="/acm/AlaatvCustomFiles/components/alaa_old/scripts/components-multi-select.min.js" type="text/javascript"></script>
-    <script src="/acm/extra/persian-datepicker/dist/js/persian-datepicker-0.4.5.min.js" type="text/javascript"></script>
-    <script src="/acm/AlaatvCustomFiles/components/alaa_old/scripts/components-bootstrap-multiselect.min.js" type="text/javascript"></script>
-
-    <script src="/acm/AlaatvCustomFiles/js/admin-makeDataTable.js" type="text/javascript"></script>
-    <script src="/acm/AlaatvCustomFiles/js/admin-makeMultiSelect.js" type="text/javascript"></script>
     
+    <script src="{{ mix('/js/admin-all.js') }}" type="text/javascript"></script>
     <script type="text/javascript">
         @permission((config('constants.LIST_ORDER_ACCESS')));
         function makeDataTable_loadWithAjax_orders(dontLoadAjax) {
@@ -796,22 +768,6 @@
                             '                <div id="ajax-modal" class="modal fade" tabindex="-1"></div>\n' +
                             '            </div>';
                     },
-                    // function ( api, rowIdx, columns ) {
-                    //     return 'hi';
-                    //     // var data = $.map( columns, function ( col, i ) {
-                    //     //     return col.hidden ?
-                    //     //         '<tr data-dt-row="'+col.rowIndex+'" data-dt-column="'+col.columnIndex+'">'+
-                    //     //         '<td>'+col.title+':'+'</td> '+
-                    //     //         '<td>'+col.data+'</td>'+
-                    //     //         '</tr>' :
-                    //     //         '';
-                    //     // } ).join('');
-                    //     //
-                    //     // return data ?
-                    //     //     $('<table/>').append( data ) :
-                    //     //     false;
-                    // }
-
                 },
                 {
                     "data": null,
@@ -1212,12 +1168,6 @@
                 console.log(json);
                 json.recordsTotal = json.total;
                 json.recordsFiltered = json.total;
-                // for (let index in json.data) {
-                //     if(!isNaN(index)) {
-                //         json.data[index]['full_name'] =
-                //     }
-                // }
-                //
                 return JSON.stringify( json ); // return JSON string
             };
             let ajaxData = function (data) {
@@ -1229,8 +1179,6 @@
                 delete data.columns;
                 let $form = $("#filterOrderForm");
                 let formData = getFormData($form);
-                // let formData = $form.serializeArray();
-                /* Merge defaults and options, without modifying defaults */
                 data = $.extend({}, data, formData);
                 return data;
             };
@@ -1250,75 +1198,31 @@
         }
         @endpermission;
     </script>
-    <script src="/acm/AlaatvCustomFiles/js/admin-indexOrder.js" type="text/javascript"></script>
+    <script src="/acm/AlaatvCustomFiles/js/admin/page-ordersAdmin.js" type="text/javascript"></script>
 
     <script type="text/javascript">
-        //should run at first
-
-        // $('#order_table > thead > tr').children('th:first').removeClass().addClass("none");
-        $("#order_table thead tr th").each(function () {
-            if (!$(this).hasClass("none")) {
-                thText = $(this).text().trim();
-                $("#orderTableColumnFilter > option").each(function () {
-                    if ($(this).val() === thText) {
-                        $(this).prop("selected", true);
-                    }
-                });
-            }
-        });
-
-        $('#transaction_table > thead > tr').children('th:first').removeClass().addClass("none");
-        $("#transaction_table thead tr th").each(function () {
-            if (!$(this).hasClass("none")) {
-                thText = $(this).text().trim();
-                $("#transactionTableColumnFilter > option").each(function () {
-                    if ($(this).val() === thText) {
-                        $(this).prop("selected", true);
-                    }
-                });
-            }
-        });
-
-        $("#userBon_table thead tr th").each(function () {
-            if (!$(this).hasClass("none")) {
-                thText = $(this).text().trim();
-                $("#userBonTableColumnFilter > option").each(function () {
-                    if ($(this).val() === thText) {
-                        $(this).prop("selected", true);
-                    }
-                });
-            }
-        });
-
-        $(document).on("click", "#orderSpecialFilterEnable", function () {
-            if ($("#orderProduct option:selected").length === 0) {
-                alert("لطفا ابتدا محصولی را انتخاب کنید");
-                $(this).attr('checked', false);
-            }
-        });
-
         /**
          * Start up jquery
          */
         jQuery(document).ready(function () {
             // $("#loadingAjax").click();
-        @permission((config('constants.LIST_ORDER_ACCESS')));
-//            $("#order-portlet .reload").trigger("click");
-            var newDataTable = $("#order_table").DataTable();
-            newDataTable.destroy();
-            // makeDataTable("order_table");
-            makeDataTable_loadWithAjax_orders(true);
-            $("#order-expand").trigger("click");
-            $("#order_table > tbody .dataTables_empty").text("برای نمایش اطلاعات ابتدا فیلتر کنید").addClass("m--font-danger bold");
-        @endpermission;
-        @permission((config('constants.LIST_TRANSACTION_ACCESS')));
-            $("#transaction-portlet .reload").trigger("click");
-            $("#transaction-expand").trigger("click");
-        @endpermission;
-        @permission((config('constants.LIST_USER_BON_ACCESS')));
-            $("#userBon-portlet .reload").trigger("click");
-            $("#userBon-expand").trigger("click");
-        @endpermission
+            @permission((config('constants.LIST_ORDER_ACCESS')));
+                // $("#order-portlet .reload").trigger("click");
+                var newDataTable = $("#order_table").DataTable();
+                newDataTable.destroy();
+                // makeDataTable("order_table");
+                makeDataTable_loadWithAjax_orders(true);
+                $("#order-expand").trigger("click");
+                $("#order_table > tbody .dataTables_empty").text("برای نمایش اطلاعات ابتدا فیلتر کنید").addClass("m--font-danger bold");
+            @endpermission;
+            @permission((config('constants.LIST_TRANSACTION_ACCESS')));
+                $("#transaction-portlet .reload").trigger("click");
+                $("#transaction-expand").trigger("click");
+            @endpermission;
+            @permission((config('constants.LIST_USER_BON_ACCESS')));
+                $("#userBon-portlet .reload").trigger("click");
+                $("#userBon-expand").trigger("click");
+            @endpermission
 
         });
     </script>

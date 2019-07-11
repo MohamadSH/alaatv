@@ -30,57 +30,6 @@ var SnippetLogin = function() {
         window.location.replace(path);
     };
 
-    //== Private Functions
-
-    var displaySignUpForm = function() {
-        login.removeClass('m-login--forget-password');
-        login.removeClass('m-login--signin');
-
-        login.addClass('m-login--signup');
-        mUtil.animateClass(login.find('.m-login__signup')[0], 'flipInX animated');
-    };
-
-    var displaySignInForm = function() {
-        login.removeClass('m-login--forget-password');
-        login.removeClass('m-login--signup');
-
-        login.addClass('m-login--signin');
-        mUtil.animateClass(login.find('.m-login__signin')[0], 'flipInX animated');
-        //login.find('.m-login__signin').animateClass('flipInX animated');
-    };
-
-    var displayForgetPasswordForm = function() {
-        login.removeClass('m-login--signin');
-        login.removeClass('m-login--signup');
-
-        login.addClass('m-login--forget-password');
-        //login.find('.m-login__forget-password').animateClass('flipInX animated');
-        mUtil.animateClass(login.find('.m-login__forget-password')[0], 'flipInX animated');
-
-    };
-
-    var handleFormSwitch = function() {
-        $('#m_login_forget_password').click(function(e) {
-            e.preventDefault();
-            displayForgetPasswordForm();
-        });
-
-        $('#m_login_forget_password_cancel').click(function(e) {
-            e.preventDefault();
-            displaySignInForm();
-        });
-
-        $('#m_login_signup').click(function(e) {
-            e.preventDefault();
-            displaySignUpForm();
-        });
-
-        $('#m_login_signup_cancel').click(function(e) {
-            e.preventDefault();
-            displaySignInForm();
-        });
-    };
-
     var handleSignInFormSubmit = function() {
         $('#m_login_signin_submit').click(function(e) {
             e.preventDefault();
@@ -104,30 +53,46 @@ var SnippetLogin = function() {
                 return;
             }
 
-            btn.addClass('m-loader m-loader--right m-loader--light').attr('disabled', true);
+            // btn.addClass('m-loader m-loader--right m-loader--light').attr('disabled', true);
 
-            form.ajaxSubmit({
-                url: form.attr('action'),
-                success: function(response, status, xhr, $form) {
-                	// similate 2s delay
-                	setTimeout(function() {
-	                    btn.removeClass('m-loader m-loader--right m-loader--light').attr('disabled', false);
-	                    // showErrorMsg(form, 'danger', 'Incorrect username or password. Please try again.');
-                        if(response.status === 1){
-                            redirect(response.redirectTo);
+            let $form = $('form.m-login__form');
+
+            console.log('clicked');
+            console.log('url: ', $form.attr('action'));
+            mApp.block('#m_login_signin_submit', {
+                type: "loader",
+                state: "success",
+            });
+
+            $.ajax({
+                type: $form.attr('method'),
+                url : $form.attr('action'),
+                dataType: 'json',
+                data: {
+                    mobile: $form.find('input[name="mobile"]').val(),
+                    password: $form.find('input[name="password"]').val(),
+                },
+                success: function (data) {
+                    console.log('success data: ', data);
+                    setTimeout(function() {
+                        mApp.unblock('#m_login_signin_submit');
+                        if(data.status === 1){
+                            redirect(data.redirectTo);
                         }
-
                     }, 2000);
                 },
-                error:function (data) {
-                    var errors = data.responseJSON.errors; // An array with all errors.
+                error: function (data) {
+                    console.log('error data: ', data);
                     // console.log(errors);
                     // similate 2s delay
                     setTimeout(function() {
-                        btn.removeClass('m-loader m-loader--right m-loader--light').attr('disabled', false);
+
+                        mApp.unblock('#m_login_signin_submit');
+                        // btn.removeClass('m-loader m-loader--right m-loader--light').attr('disabled', false);
 
                         showErrorMsg(form, 'danger', 'خطا در ورود اطلاعات!');
-                        console.debug(errors.nationalCode);
+                        // console.debug(errors.nationalCode);
+                        var errors = data.responseJSON.errors; // An array with all errors.
                         if(typeof errors.nationalCode !== 'undefined'){
                             showValidationError(nCodeDiv,errors.nationalCode[0]);
                         }
@@ -136,106 +101,7 @@ var SnippetLogin = function() {
                         }
                     }, 2000);
                 }
-            });
-        });
-    };
 
-    var handleSignUpFormSubmit = function() {
-        $('#m_login_signup_submit').click(function(e) {
-            e.preventDefault();
-
-            var btn = $(this);
-            var form = $(this).closest('form');
-
-            form.validate({
-                rules: {
-                    fullname: {
-                        required: true
-                    },
-                    email: {
-                        required: true,
-                        email: true
-                    },
-                    password: {
-                        required: true
-                    },
-                    rpassword: {
-                        required: true
-                    },
-                    agree: {
-                        required: true
-                    }
-                }
-            });
-
-            if (!form.valid()) {
-                return;
-            }
-
-            btn.addClass('m-loader m-loader--right m-loader--light').attr('disabled', true);
-
-            form.ajaxSubmit({
-                url: form.attr('action'),
-                success: function(response, status, xhr, $form) {
-                	// similate 2s delay
-                	setTimeout(function() {
-	                    btn.removeClass('m-loader m-loader--right m-loader--light').attr('disabled', false);
-	                    form.clearForm();
-	                    form.validate().resetForm();
-
-	                    // display signup form
-	                    displaySignInForm();
-	                    var signInForm = login.find('.m-login__signin form');
-	                    signInForm.clearForm();
-	                    signInForm.validate().resetForm();
-
-	                    showErrorMsg(signInForm, 'success', 'Thank you. To complete your registration please check your email.');
-	                }, 2000);
-                }
-            });
-        });
-    };
-
-    var handleForgetPasswordFormSubmit = function() {
-        $('#m_login_forget_password_submit').click(function(e) {
-            e.preventDefault();
-
-            var btn = $(this);
-            var form = $(this).closest('form');
-
-            form.validate({
-                rules: {
-                    email: {
-                        required: true,
-                        email: true
-                    }
-                }
-            });
-
-            if (!form.valid()) {
-                return;
-            }
-
-            btn.addClass('m-loader m-loader--right m-loader--light').attr('disabled', true);
-
-            form.ajaxSubmit({
-                url: form.attr('action'),
-                success: function(response, status, xhr, $form) { 
-                	// similate 2s delay
-                	setTimeout(function() {
-                		btn.removeClass('m-loader m-loader--right m-loader--light').attr('disabled', false); // remove 
-	                    form.clearForm(); // clear form
-	                    form.validate().resetForm(); // reset validation states
-
-	                    // display signup form
-	                    displaySignInForm();
-	                    var signInForm = login.find('.m-login__signin form');
-	                    signInForm.clearForm();
-	                    signInForm.validate().resetForm();
-
-	                    showErrorMsg(signInForm, 'success', 'Cool! Password recovery instruction has been sent to your email.');
-                	}, 2000);
-                }
             });
         });
     };
@@ -244,10 +110,7 @@ var SnippetLogin = function() {
     return {
         // public functions
         init: function() {
-            handleFormSwitch();
             handleSignInFormSubmit();
-            handleSignUpFormSubmit();
-            handleForgetPasswordFormSubmit();
         }
     };
 }();

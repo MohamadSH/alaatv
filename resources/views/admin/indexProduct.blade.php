@@ -1,17 +1,9 @@
 @permission(config('constants.PRODUCT_ADMIN_PANEL_ACCESS'))@extends('app',['pageName'=>$pageName])
 
 @section('page-css')
-    <link href="/acm/AlaatvCustomFiles/components/alaa_old/plugins/datatables/datatables.min.css" rel="stylesheet" type="text/css"/>
-    <link href="/acm/AlaatvCustomFiles/components/alaa_old/plugins/datatables/plugins/bootstrap/datatables.bootstrap-rtl.css" rel="stylesheet" type="text/css"/>
-    {{--<link href="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-modal/css/bootstrap-modal-bs3patch.css" rel="stylesheet" type="text/css"/>--}}
-    {{--<link href="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-modal/css/bootstrap-modal.css" rel="stylesheet" type="text/css"/>--}}
-    <link href="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-fileinput/bootstrap-fileinput.css" rel="stylesheet" type="text/css"/>
-    <link href="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-toastr/toastr-rtl.min.css" rel="stylesheet" type="text/css"/>
-    <link href="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-summernote/summernote.css" rel="stylesheet" type="text/css"/>
-    <link href="/acm/AlaatvCustomFiles/components/alaa_old/plugins/jquery-multi-select/css/multi-select-rtl.css" rel="stylesheet" type="text/css"/>
-    <link href="/acm/AlaatvCustomFiles/components/alaa_old/plugins/jplayer/dist/skin/blue.monday/css/jplayer.blue.monday.min.css" rel="stylesheet" type="text/css"/>
-    <link href="/acm/extra/persian-datepicker/dist/css/persian-datepicker-0.4.5.min.css" rel="stylesheet" type="text/css"/>
-    <link href="/acm/AlaatvCustomFiles/components/alaa_old/font/glyphicons-halflings/glyphicons-halflings.css" rel="stylesheet" type="text/css"/>
+    
+    <link href="{{ mix('/css/admin-all.css') }}" rel="stylesheet" type="text/css"/>
+    <link href="{{ asset('/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-summernote/summernote.css') }}" rel="stylesheet" type="text/css"/>
 @endsection
 
 @section('pageBar')
@@ -30,18 +22,127 @@
 
 @section('content')
     <div class="row">
-        {{--Ajax modal loaded after inserting content--}}
-        <div id="ajax-modal" class="modal fade" tabindex="-1"></div>
-    {{--Ajax modal for panel startup --}}
-    <!-- /.modal -->
-
-        <div class="col-md-12">
-            {{--<div class="note note-info">--}}
-            {{--<h4 class="block"><strong>توجه!</strong></h4>--}}
-            {{--@role(('admin'))<p>ادمین محترم‌، لیست بنهای تخصیص داده شده به کاربران به این صفحه اضافه شده است! همچنین افزودن بنهای محصول بعد از تایید سفارش نیز در اصلاح سفارشهای تایید نشده اضافه شده است.</p>@endrole--}}
-            {{--<strong class="m--font-danger"> اگر این بار اول است که از تاریخ ۳ اسفند به بعد از این پنل استفاده می کنید ، لطفا کش بروزر خود را خالی نمایید . با تشکر</strong>--}}
-            {{--</div>--}}
+        <div class="col">
+            
             @permission((config('constants.LIST_PRODUCT_ACCESS')))
+            
+            <div class="modals-product-list">
+    
+                @permission((config('constants.COPY_PRODUCT_ACCESS')))
+                <!--begin::Modal-->
+                <div class="modal fade" id="copyProductModal" tabindex="-1" role="dialog" aria-labelledby="copyProductModalModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-lg" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="copyProductModalModalLabel"></h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <h4 class="modal-title">آیا برای کپی مطمئن هستید؟</h4>
+                                <input type="hidden" id="productIdForCopy" value="">
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">خیر</button>
+                                <button type="button" class="btn btn-primary" onclick="copyProductInModal()">بله</button>
+                                <img class="d-none" id="copy-product-loading-image" src="{{config('constants.FILTER_LOADING_GIF')}}" alt="loading" height="25px" width="25px">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--end::Modal-->
+                @endpermission
+    
+                @permission((config('constants.REMOVE_PRODUCT_ACCESS')))
+                <!--begin::Modal-->
+                <div class="modal fade" id="removeProductModal" tabindex="-1" role="dialog" aria-labelledby="removeProductModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-lg" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="removeProductModalLabel"></h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <h4 class="modal-title">آیا مطمئن هستید؟</h4>
+                                <input type="hidden" id="product-removeLink" value="removeLink">
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">خیر</button>
+                                <button type="submit" class="btn btn-primary btnRemoveProductInModal" onclick="removeProduct()">بله</button>
+                                <img class="d-none" id="remove-product-loading-image" src="{{config('constants.FILTER_LOADING_GIF')}}" alt="loading" height="25px" width="25px">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--end::Modal-->
+                @endpermission
+    
+    
+                @permission((config('constants.INSERT_PRODUCT_ACCESS')))
+                <!--begin::Modal-->
+                <div class="modal fade" id="responsive-product" tabindex="-1" role="dialog" aria-labelledby="responsive-productModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-lg" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="responsive-productModalLabel">افزودن محصول جدید</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            {!! Form::open(['files'=>true,'method' => 'POST','action' => ['Web\ProductController@store'], 'class'=>'nobottommargin' , 'id'=>'productForm']) !!}
+                            <div class="modal-body">
+                                @include('product.form')
+                            </div>
+                            {!! Form::close() !!}
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">بستن</button>
+                                <button type="button" class="btn btn-primary" id="productForm-submit">ذخیره</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--end::Modal-->
+                @endpermission
+                
+                <!--begin::Modal-->
+                <div class="modal fade" id="showProductPhotoInModal" tabindex="-1" role="dialog" aria-labelledby="showProductPhotoInModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-lg" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="showProductPhotoInModalLabel"></h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <img src="" alt="" class="a--full-width">
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">بستن</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--end::Modal-->
+    
+                <!--begin::Modal-->
+                <div class="modal fade" id="static-longDescription" tabindex="-1" role="dialog" aria-hidden="true">
+                    <div class="modal-dialog modal-lg" role="document">
+                        <div class="modal-content">
+                            <div class="modal-body">
+                
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">بستن</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--end::Modal-->
+            </div>
             <!-- BEGIN PRODUCT TABLE PORTLET-->
             <div class="m-portlet m-portlet--head-solid-bg m-portlet--accent m-portlet--collapsed m-portlet--head-sm" m-portlet="true" id="product-portlet">
                 <div class="m-portlet__head">
@@ -82,135 +183,16 @@
                     </div>
                 </div>
                 <div class="m-portlet__body">
-                    <div class="table-toolbar">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="btn-group">
-                                    @permission((config('constants.INSERT_PRODUCT_ACCESS')))
-                                    <a id="sample_editable_4_new" class="btn btn-info m-btn m-btn--icon m-btn--wide" data-toggle="modal" href="#responsive-product" data-target="#responsive-product">
-                                        <i class="fa fa-plus"></i>
-                                        افزودن محصول
-                                    </a>
-                                    <!--begin::Modal-->
-                                    <div class="modal fade" id="responsive-product" tabindex="-1" role="dialog" aria-labelledby="responsive-productModalLabel" aria-hidden="true">
-                                        <div class="modal-dialog modal-lg" role="document">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h5 class="modal-title" id="responsive-productModalLabel">افزودن محصول جدید</h5>
-                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                        <span aria-hidden="true">&times;</span>
-                                                    </button>
-                                                </div>
-                                                {!! Form::open(['files'=>true,'method' => 'POST','action' => ['Web\ProductController@store'], 'class'=>'nobottommargin' , 'id'=>'productForm']) !!}
-                                                <div class="modal-body">
-                                                    <div class="row">
-                                                        @include('product.form')
-                                                    </div>
-                                                </div>
-                                                {!! Form::close() !!}
-                                                <div class="modal-footer">
-                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">بستن</button>
-                                                    <button type="button" class="btn btn-primary" id="productForm-submit">ذخیره</button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!--end::Modal-->
-                                    @endpermission
-                                </div>
-                            </div>
+                    <div class="row">
+                        <div class="col">
+                            @permission((config('constants.INSERT_PRODUCT_ACCESS')))
+                            <a id="sample_editable_4_new" class="btn btn-info m-btn m-btn--icon m-btn--wide" data-toggle="modal" href="#responsive-product" data-target="#responsive-product">
+                                <i class="fa fa-plus"></i>
+                                افزودن محصول
+                            </a>
+                            @endpermission
                         </div>
                     </div>
-                    @permission((config('constants.COPY_PRODUCT_ACCESS')))
-                    <!--begin::Modal-->
-                    <div class="modal fade" id="copyProductModal" tabindex="-1" role="dialog" aria-labelledby="copyProductModalModalLabel" aria-hidden="true">
-                        <div class="modal-dialog modal-lg" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="copyProductModalModalLabel"></h5>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>
-                                <div class="modal-body">
-                                    <h4 class="modal-title">آیا برای کپی مطمئن هستید؟</h4>
-                                    <input type="hidden" id="productIdForCopy" value="">
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">خیر</button>
-                                    <button type="button" class="btn btn-primary" onclick="copyProductInModal()">بله</button>
-                                    <img class="d-none" id="copy-product-loading-image" src="{{config('constants.FILTER_LOADING_GIF')}}" alt="loading" height="25px" width="25px">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!--end::Modal-->
-                    @endpermission
-    
-    
-                    @permission((config('constants.REMOVE_PRODUCT_ACCESS')))
-                    <!--begin::Modal-->
-                    <div class="modal fade" id="removeProductModal" tabindex="-1" role="dialog" aria-labelledby="removeProductModalLabel" aria-hidden="true">
-                        <div class="modal-dialog modal-lg" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="removeProductModalLabel"></h5>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>
-                                <div class="modal-body">
-                                    <h4 class="modal-title">آیا مطمئن هستید؟</h4>
-                                    <input type="hidden" id="product-removeLink" value="removeLink">
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">خیر</button>
-                                    <button type="submit" class="btn btn-primary btnRemoveProductInModal" onclick="removeProduct()">بله</button>
-                                    <img class="d-none" id="remove-product-loading-image" src="{{config('constants.FILTER_LOADING_GIF')}}" alt="loading" height="25px" width="25px">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!--end::Modal-->
-                    @endpermission
-                    
-                    <!--begin::Modal-->
-                    <div class="modal fade" id="showProductPhotoInModal" tabindex="-1" role="dialog" aria-labelledby="showProductPhotoInModalLabel" aria-hidden="true">
-                        <div class="modal-dialog modal-lg" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="showProductPhotoInModalLabel"></h5>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>
-                                <div class="modal-body">
-                                    <img src="" alt="" class="a--full-width">
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">بستن</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!--end::Modal-->
-    
-    
-                    <!--begin::Modal-->
-                    <div class="modal fade" id="static-longDescription" tabindex="-1" role="dialog" aria-hidden="true">
-                        <div class="modal-dialog modal-lg" role="document">
-                            <div class="modal-content">
-                                <div class="modal-body">
-                                
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">بستن</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!--end::Modal-->
-            
                     <table class="table table-striped table-bordered table-hover dt-responsive" width="100%" id="product_table">
                         <thead>
                             <tr>
@@ -353,7 +335,8 @@
                     </table>
                 </div>
             </div>
-            <!-- END SAMPLE TABLE PORTLET-->@endpermission
+            <!-- END SAMPLE TABLE PORTLET-->
+            @endpermission
 
             @permission((config('constants.LIST_ATTRIBUTE_ACCESS')))
             <!-- BEGIN ASSIGNMENT TABLE PORTLET-->
@@ -454,7 +437,8 @@
                     </table>
                 </div>
             </div>
-            <!-- END SAMPLE TABLE PORTLET-->@endpermission
+            <!-- END SAMPLE TABLE PORTLET-->
+            @endpermission
 
             @permission((config('constants.LIST_ATTRIBUTESET_ACCESS')))
             <!-- BEGIN ASSIGNMENT TABLE PORTLET-->
@@ -553,29 +537,16 @@
                     </table>
                 </div>
             </div>
-            <!-- END SAMPLE TABLE PORTLET-->@endpermission
+            <!-- END SAMPLE TABLE PORTLET-->
+            @endpermission
+            
         </div>
     </div>
 @endsection
 
 @section('page-js')
-    <script src="/acm/AlaatvCustomFiles/components/alaa_old/scripts/datatable.min.js" type="text/javascript"></script>
-    <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/datatables/datatables.min.js" type="text/javascript"></script>
-    <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js" type="text/javascript"></script>
-    <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-modal/js/bootstrap-modalmanager.js" type="text/javascript"></script>
-    {{--<script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-modal/js/bootstrap-modal.js" type="text/javascript"></script>--}}
-    <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-fileinput/bootstrap-fileinput.js" type="text/javascript"></script>
-    <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-toastr/toastr.min.js" type="text/javascript"></script>
-    <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-summernote/summernote.min.js" type="text/javascript"></script>
-    <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-select/js/bootstrap-select.min.js" type="text/javascript"></script>
-    <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/jquery-multi-select/js/jquery.multi-select.js" type="text/javascript"></script>
-    <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/select2/js/select2.full.min.js" type="text/javascript"></script>
-    <script src="/acm/extra/persian-datepicker/lib/persian-date.js" type="text/javascript"></script>
-    {{--<script src="/acm/AlaatvCustomFiles/components/alaa_old/scripts/ui-extended-modals.min.js" type="text/javascript"></script>--}}
-    <script src="/acm/AlaatvCustomFiles/components/alaa_old/scripts/ui-toastr.min.js" type="text/javascript"></script>
-    <script src="/acm/AlaatvCustomFiles/components/alaa_old/scripts/components-editors.js" type="text/javascript"></script>
-    <script src="/acm/AlaatvCustomFiles/components/alaa_old/scripts/components-multi-select.min.js" type="text/javascript"></script>
-    <script src="/acm/extra/persian-datepicker/dist/js/persian-datepicker-0.4.5.min.js" type="text/javascript"></script>
+    <script src="{{ mix('/js/admin-all.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-summernote/summernote.min.js') }}" type="text/javascript"></script>
 
     <script type="text/javascript">
         @permission(config('constants.LIST_PRODUCT_ACCESS'))
@@ -757,96 +728,46 @@
         }
         @endpermission
     </script>
-    <script src="/acm/AlaatvCustomFiles/js/admin-indexProduct.js" type="text/javascript"></script>
-    
-    <script src="/acm/AlaatvCustomFiles/js/admin-makeDataTable.js" type="text/javascript"></script>
-    <script src="/acm/AlaatvCustomFiles/js/admin-coupon.js" type="text/javascript"></script>
-    <script src="/acm/AlaatvCustomFiles/js/admin-product.js" type="text/javascript"></script>
+
+    <script src="/acm/AlaatvCustomFiles/js/admin/page-productAdmin.js" type="text/javascript"></script>
+
     <script type="text/javascript">
-        /**
-         * Start up jquery
-         */
-        function showLongDescription(LongDescriptionId) {
-            let txtLongDescription = $('#txtLongDescription-'+LongDescriptionId).html();
-            $('#static-longDescription .modal-body').html(txtLongDescription);
-            $('#static-longDescription').modal('show');
-        }
-        function showCopyProductModal(productId, productName) {
-            $('#productIdForCopy').val(productId);
-            $('#copyProductModalModalLabel').html(productName);
-            $('#copyProductModal').modal('show');
-        }
-        
         jQuery(document).ready(function () {
-
-            $(document).on('click', '.imgShowProductPhoto', function () {
-               let src = $(this).attr('src');
-               let alt = $(this).attr('src');
-               let name = $(this).data('product-name');
-               $('#showProductPhotoInModalLabel').html(name);
-               $('#showProductPhotoInModal .modal-body img').attr('src', src);
-               $('#showProductPhotoInModal .modal-body img').attr('alt', alt);
-               $('#showProductPhotoInModal').modal('show');
-            });
-
-            $(document).on('click', '.btnDeleteOrder', function (e) {
-                e.preventDefault();
-                let removeLink = $(this).attr('remove-link');
-                let name = $(this).data('product-name');
-
-               $('#removeProductModalLabel').html(name);
-               $('#product-removeLink').val(removeLink);
-               $('#removeProductModal').modal('show');
-            });
-            /*
-             validdSince
-             */
-            $("#couponValidSince").persianDatepicker({
-                altField: '#couponValidSinceAlt',
-                altFormat: "YYYY MM DD",
-                observer: true,
-                format: 'YYYY/MM/DD',
-                altFieldFormatter: function (unixDate) {
-                    var d = new Date(unixDate).toISOString();
-                    return d;
-                }
-            });
-
-            /*
-             validUntil
-             */
-            $("#couponValidUntil").persianDatepicker({
-                altField: '#couponValidUntilAlt',
-                altFormat: "YYYY MM DD",
-                observer: true,
-                format: 'YYYY/MM/DD',
-                altFieldFormatter: function (unixDate) {
-                    var d = new Date(unixDate).toISOString();
-                    return d;
-                }
-            });
-
-        @permission(config('constants.LIST_PRODUCT_ACCESS'));
-            $("#product-portlet .reload").trigger("click");
-            $("#product-expand").trigger("click");
-            $('#productShortDescriptionSummerNote').summernote({height: 200});
-            $('#productLongDescriptionSummerNote').summernote({height: 200});
-        @endpermission;
-        @permission(config('constants.LIST_COUPON_ACCESS'));
-            $("#coupon-portlet .reload").trigger("click");
-            $("#coupon-expand").trigger("click");
-        @endpermission;
-        @permission(config('constants.LIST_ATTRIBUTE_ACCESS'));
-            $("#attribute-portlet .reload").trigger("click");
-            $("#attribute-expand").trigger("click");
-        @endpermission;
-        @permission(config('constants.LIST_ATTRIBUTESET_ACCESS'));
-            $("#attributeset-portlet .reload").trigger("click");
-            $("#attributeset-expand").trigger("click");
-        @endpermission
-
+            @permission(config('constants.LIST_PRODUCT_ACCESS'));
+                $("#product-portlet .reload").trigger("click");
+                $("#product-expand").trigger("click");
+                $('#productShortDescriptionSummerNote').summernote({
+                        lang: 'fa-IR',
+                        height: 200,
+                        popover: {
+                            image: [],
+                            link: [],
+                            air: []
+                        }
+                    });
+                $('#productLongDescriptionSummerNote').summernote({
+                    lang: 'fa-IR',
+                    height: 200,
+                    popover: {
+                        image: [],
+                        link: [],
+                        air: []
+                    }
+                });
+            @endpermission;
+            @permission(config('constants.LIST_COUPON_ACCESS'));
+                $("#coupon-portlet .reload").trigger("click");
+                $("#coupon-expand").trigger("click");
+            @endpermission;
+            @permission(config('constants.LIST_ATTRIBUTE_ACCESS'));
+                $("#attribute-portlet .reload").trigger("click");
+                $("#attribute-expand").trigger("click");
+            @endpermission;
+            @permission(config('constants.LIST_ATTRIBUTESET_ACCESS'));
+                $("#attributeset-portlet .reload").trigger("click");
+                $("#attributeset-expand").trigger("click");
+            @endpermission
         });
-
     </script>
 @endsection
 @endpermission

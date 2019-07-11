@@ -67,6 +67,19 @@ var LazyLoad = function () {
         });
     }
 
+    function throttle(minimumInterval, callback) {
+        var timeout = null;
+        return function () {
+            var that = this, args = arguments;
+            if(timeout === null) {
+                timeout = setTimeout(function () {
+                    timeout = null;
+                }, minimumInterval);
+                callback.apply(that, args);
+            }
+        };
+    }
+
     return {
 
         image: function () {

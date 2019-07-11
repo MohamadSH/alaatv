@@ -8,6 +8,7 @@
             $.fn.OwlCarouselType2.carouselElement = $this;
             let countOfChild = $this.find('.carousel').length;
             $this.find('.a--owl-carousel-type-2').owlCarousel($.fn.OwlCarouselType2.owlCarouselOptions.OwlCarousel);
+            $this.find('.a--owl-carousel-init-loading').fadeOut();
 
             $.fn.OwlCarouselType2.showAlaaOwlCarouselItemDetail();
 
@@ -133,7 +134,9 @@
     };
 
     $.fn.OwlCarouselType2.switchToGridView = function ($OwlCarouselType2) {
-        $.fn.OwlCarouselType2.getGridViewWarper($OwlCarouselType2).fadeIn();
+        $.fn.OwlCarouselType2.getGridViewWarper($OwlCarouselType2).css("display", "flex")
+            .hide()
+            .fadeIn();
         if ($.fn.OwlCarouselType2.getGridViewWarper($OwlCarouselType2).length === 0) {
             $OwlCarouselType2.find('.a--owl-carousel-type-2').after('<div class="m-widget_head-owlcarousel-items a--owl-carousel-type-2 owl-carousel row a--owl-carousel-type-2-gridViewWarper"></div>');
         }
@@ -150,7 +153,9 @@
             $.fn.OwlCarouselType2.getGridViewWarper($OwlCarouselType2).append('<div class="'+$.fn.OwlCarouselType2.owlCarouselOptions.grid.columnClass+'">' + $(this)[0].outerHTML + '</div>');
         });
         $OwlCarouselType2.find('.a--owl-carousel-type-2').fadeOut();
-        $.fn.OwlCarouselType2.getGridViewWarper($OwlCarouselType2).fadeIn();
+        $.fn.OwlCarouselType2.getGridViewWarper($OwlCarouselType2).css("display", "flex")
+            .hide()
+            .fadeIn();
 
     };
 
