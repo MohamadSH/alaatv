@@ -88,5 +88,8 @@
         @endforeach
         ];
     </script>
-    <script src="{{ mix('/js/page-landing9.js') }}"></script>
+{{--    <script src="{{ mix('/js/page-landing9.js') }}"></script>--}}
+    <script src="{{ asset('/acm/AlaatvCustomFiles/components/OwlCarouselType2/js.js') }}?v=10"></script>
+    <script src="{{ asset('/acm/AlaatvCustomFiles/components/aSticky/aSticky.js') }}?v=10"></script>
+    <script src="{{ asset('/acm/AlaatvCustomFiles/js/page-product-landing9.js') }}?v=10"></script>
 @endsection

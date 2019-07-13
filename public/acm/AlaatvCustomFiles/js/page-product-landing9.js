@@ -33,7 +33,7 @@ $(document).ready(function () {
                     LazyLoad.image();
                 }
             },
-            defaultView: 'OwlCarousel', // OwlCarousel or grid
+            defaultView: 'grid', // OwlCarousel or grid
             childCountHideOwlCarousel: 4
         });
     });
