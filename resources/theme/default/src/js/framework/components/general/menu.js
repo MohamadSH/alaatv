@@ -121,10 +121,10 @@ var mMenu = function(elementId, options) {
             //== General link click
             the.eventHandlers['event_6'] = mUtil.on(element, '.m-menu__item:not(.m-menu__item--submenu) > .m-menu__link:not(.m-menu__toggle):not(.m-menu__link--toggle-skip)', 'click', Plugin.handleLinkClick);
 
-            //== Init scrollable menu
-            if (the.options.scroll && the.options.scroll.height) {
-                Plugin.scrollerInit();
-            }
+            // //== Init scrollable menu
+            // if (the.options.scroll && the.options.scroll.height) {
+            //     Plugin.scrollerInit();
+            // }
         },
 
         /**
@@ -145,16 +145,16 @@ var mMenu = function(elementId, options) {
             mUtil.off(element, 'click', the.eventHandlers['event_6']);
         },
 
-        /**
-         * Init scroll menu
-         *
-        */
-        scrollerInit: function() {
-            if ( the.options.scroll && the.options.scroll.height ) {
-                mUtil.scrollerDestroy(element);
-                mUtil.scrollerInit(element, {disableForMobile: true, resetHeightOnDestroy: true, handleWindowResize: true, height: the.options.scroll.height});
-            }            
-        },
+        // /**
+        //  * Init scroll menu
+        //  *
+        // */
+        // scrollerInit: function() {
+        //     if ( the.options.scroll && the.options.scroll.height ) {
+        //         mUtil.scrollerDestroy(element);
+        //         mUtil.scrollerInit(element, {disableForMobile: true, resetHeightOnDestroy: true, handleWindowResize: true, height: the.options.scroll.height});
+        //     }
+        // },
 
         /**
          * Update scroll menu
@@ -223,8 +223,7 @@ var mMenu = function(elementId, options) {
         handleLinkClick: function(e) {
             if ( Plugin.eventTrigger('linkClick', this) === false ) {
                 e.preventDefault();
-            };
-
+            }
             if ( Plugin.getSubmenuMode(this) === 'dropdown' || Plugin.isConditionalSubmenuDropdown() ) {
                 Plugin.handleSubmenuDropdownClose(e, this);
             }

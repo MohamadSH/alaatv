@@ -65,65 +65,26 @@ function lazyLoadBlocks() {
     });
 }
 
-function loadCarousels() {
 
+//execute callback immediately and at most one time on the minimumInterval,
+//ignore block attempts
+var throttle = function (minimumInterval, callback) {
+    var timeout = null;
+    return function () {
+        var that = this, args = arguments;
+        if(timeout === null) {
+            timeout = setTimeout(function () {
+                timeout = null;
+            }, minimumInterval);
+            callback.apply(that, args);
+        }
+    };
+};
+
+function loadCarousels() {
+    document.addEventListener('touchmove', throttle(50, lazyLoadBlocks), false);
     window.addEventListener('scroll', throttle(50, lazyLoadBlocks));
     window.addEventListener('resize', throttle(50, lazyLoadBlocks));
-
-    // const dasboardLessons = document.querySelectorAll('.dasboardLessons');
-    //
-    // observer = new IntersectionObserver((entries) => {
-    //     entries.forEach(entry => {
-    //         if (entry.intersectionRatio > 0 &&parseInt($(entry.target).attr('a-lazyload')) !== 1) {
-    //
-    //             console.log('$(entry.target).attr(a-lazyload): ', $(entry.target).attr('a-lazyload'));
-    //
-    //             $(entry.target).OwlCarouselType2({
-    //                 OwlCarousel: {
-    //                     center: false,
-    //                     loop: false,
-    //                     responsive: {
-    //                         0: {
-    //                             items: 1
-    //                         },
-    //                         400: {
-    //                             items: 2
-    //                         },
-    //                         600: {
-    //                             items: 3
-    //                         },
-    //                         800: {
-    //                             items: 4
-    //                         },
-    //                         1000: {
-    //                             items: 4
-    //                         }
-    //                     },
-    //                     btnSwfitchEvent: function() {
-    //                         LazyLoad.image();
-    //                     }
-    //                 },
-    //                 grid: {
-    //                     columnClass: 'col-12 col-sm-6 col-md-3 gridItem',
-    //                     btnSwfitchEvent: function() {
-    //                         LazyLoad.image();
-    //                     }
-    //                 },
-    //                 defaultView: 'OwlCarousel', // OwlCarousel or grid
-    //                 childCountHideOwlCarousel: 4
-    //             });
-    //
-    //             $(entry.target).attr('a-lazyload', 1);
-    //             console.log('$(entry.target): ', $(entry.target));
-    //         } else {
-    //
-    //         }
-    //     });
-    // });
-    //
-    // dasboardLessons.forEach(block => {
-    //     observer.observe(block);
-    // });
 }
 function loadStickeHeader() {
     for (let section in sections) {
@@ -136,5 +97,5 @@ function loadStickeHeader() {
 }
 $(document).ready(function () {
     loadCarousels();
-    loadStickeHeader()
+    loadStickeHeader();
 });

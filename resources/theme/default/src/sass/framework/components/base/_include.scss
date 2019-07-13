@@ -8,37 +8,37 @@
 //== Helpers
 @import "helpers/helpers";
 
-//== Animations
-@import "animations/animations";
+////== Animations
+//@import "animations/animations";
 
-//== Base Container
-@import "container/container";
+////== Base Container
+//@import "container/container";
 
 //== Stack Layout
-@import "stack/stack";
+@import "stack/stack"; // (need)
 
 //== Grid Layout
-@import "grid/grid";
+@import "grid/grid"; // (just used in login page)
 
 // Vertical Menu
-@import "menu/ver/helpers";
-@import "menu/ver/extend";
-@import "menu/ver/base";
+@import "menu/ver/helpers"; // (need)
+//@import "menu/ver/extend";
+@import "menu/ver/base"; // (need)
 
 // Horizontal Menu
-@import "menu/hor/helpers";
-@import "menu/hor/extend";
-@import "menu/hor/base";
+@import "menu/hor/helpers"; // (need)
+//@import "menu/hor/extend";
+@import "menu/hor/base"; // (need)
 
 //== Dropoff
-@import "dropoff/dropoff";
+//@import "dropoff/dropoff";
 
 //== Arrows
-@import "arrows/mixins";
+//@import "arrows/mixins";
 
 //== Offcanvas
-@import "offcanvas/offcanvas";
+@import "offcanvas/offcanvas"; // (need)
 
-//== Page Loaders
-@import "page-loader/base";
-@import "page-loader/brand";
+////== Page Loaders
+//@import "page-loader/base";
+//@import "page-loader/brand";

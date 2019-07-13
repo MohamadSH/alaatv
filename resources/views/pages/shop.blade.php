@@ -178,6 +178,6 @@
             @endforeach
         ];
     </script>
-    <script src="{{ mix('/js/page-shop.js') }}"></script>
+    <script src="{{ mix('/js/page-shop.js') }}" defer></script>
 @endsection
 

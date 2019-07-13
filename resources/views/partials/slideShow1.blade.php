@@ -33,7 +33,7 @@
                                    @endif
                                    data-gtm-eec-promotion-position="{{ $key }}">
                             @endif
-                                    <img src="/acm/extra/loader.gif" alt="loading" class="loadingSlideshow">
+                                    <div class="lds-roller loadingSlideshow"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
                                     <img class="d-block w-100 imageSlideOfSlideshow lazy-image"
                                          data-src="{{ $slide->url }}"
                                          alt="عکس اسلاید @if(isset($slide->title[0])) {{ $slide->title }} @endif "
@@ -45,14 +45,14 @@
                                          data-height="500"
                                          @endif>
                                     @if(isset($slide->title[0]) && isset($slide->shortDescription[0]))
-                                    <div class="carousel-caption d-none d-md-block">
-                                        @if(isset($slide->title[0]))
-                                            <h4 class="bold">{{ $slide->title  }}</h4>
-                                        @endif
-                                        @if(isset($slide->shortDescription[0]))
-                                            <p class="bold">{{ $slide->shortDescription  }}</p>
-                                        @endif
-                                    </div>
+                                        <div class="carousel-caption d-none d-md-block">
+                                            @if(isset($slide->title[0]))
+                                                <h4 class="bold">{{ $slide->title  }}</h4>
+                                            @endif
+                                            @if(isset($slide->shortDescription[0]))
+                                                <p class="bold">{{ $slide->shortDescription  }}</p>
+                                            @endif
+                                        </div>
                                     @endif
                             @if(isset($slide->link) && strlen($slide->link)>0)
                                 </a>

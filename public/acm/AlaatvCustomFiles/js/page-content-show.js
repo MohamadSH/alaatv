@@ -142,9 +142,10 @@ jQuery(document).ready( function() {
 
                         toastr.success(successMessage);
 
-                        setTimeout(function () {
-                            window.location.replace('/checkout/review');
-                        }, 1000);
+                        window.location.replace('/checkout/review');
+                        // setTimeout(function () {
+                        //     window.location.replace('/checkout/review');
+                        // }, 1000);
 
                     },
                     //The status for when the user is not authorized for making the request

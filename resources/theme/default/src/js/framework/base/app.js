@@ -109,21 +109,21 @@ var mApp = function() {
         });
     };
 
-    /**
-    * Initializes scrollable contents
-    */
-    var initScrollers = function() {
-        $('[data-scrollable="true"]').each(function(){
-            var el = $(this);
-            mUtil.scrollerInit(this, {disableForMobile: true, handleWindowResize: true, height: function() {
-                if (mUtil.isInResponsiveRange('tablet-and-mobile') && el.data('mobile-height')) {
-                    return el.data('mobile-height');
-                } else {
-                    return el.data('height');
-                }
-            }});
-        });
-    };
+    // /**
+    // * Initializes scrollable contents
+    // */
+    // var initScrollers = function() {
+    //     $('[data-scrollable="true"]').each(function(){
+    //         var el = $(this);
+    //         mUtil.scrollerInit(this, {disableForMobile: true, handleWindowResize: true, height: function() {
+    //             if (mUtil.isInResponsiveRange('tablet-and-mobile') && el.data('mobile-height')) {
+    //                 return el.data('mobile-height');
+    //             } else {
+    //                 return el.data('height');
+    //             }
+    //         }});
+    //     });
+    // };
 
     /**
     * Initializes bootstrap alerts
@@ -213,7 +213,7 @@ var mApp = function() {
         */
         initComponents: function() {
             // hideTouchWarning();
-            initScrollers();
+            // initScrollers();
             initTooltips();
             initPopovers();
             initAlerts();

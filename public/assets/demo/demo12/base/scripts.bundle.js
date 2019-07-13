@@ -1,2655 +1,5932 @@
-this.Element && function (t) {
-    t.matches = t.matches || t.matchesSelector || t.webkitMatchesSelector || t.msMatchesSelector || function (t) {
-        for (var e = (this.parentNode || this.document).querySelectorAll(t), a = -1; e[++a] && e[a] != this;) ;
-        return !!e[a]
-    }
-}(Element.prototype), this.Element && function (t) {
-    t.closest = t.closest || function (t) {
-        for (var e = this; e.matches && !e.matches(t);) e = e.parentNode;
-        return e.matches ? e : null
-    }
-}(Element.prototype), this.Element && function (t) {
-    t.matches = t.matches || t.matchesSelector || t.webkitMatchesSelector || t.msMatchesSelector || function (t) {
-        for (var e = (this.parentNode || this.document).querySelectorAll(t), a = -1; e[++a] && e[a] != this;) ;
-        return !!e[a]
-    }
-}(Element.prototype), function () {
-    for (var t = 0, e = ["webkit", "moz"], a = 0; a < e.length && !window.requestAnimationFrame; ++a) window.requestAnimationFrame = window[e[a] + "RequestAnimationFrame"], window.cancelAnimationFrame = window[e[a] + "CancelAnimationFrame"] || window[e[a] + "CancelRequestAnimationFrame"];
-    window.requestAnimationFrame || (window.requestAnimationFrame = function (e) {
-        var a = (new Date).getTime(), n = Math.max(0, 16 - (a - t)), o = window.setTimeout(function () {
-            e(a + n)
-        }, n);
-        return t = a + n, o
-    }), window.cancelAnimationFrame || (window.cancelAnimationFrame = function (t) {
-        clearTimeout(t)
-    })
-}(), [Element.prototype, Document.prototype, DocumentFragment.prototype].forEach(function (t) {
-    t.hasOwnProperty("prepend") || Object.defineProperty(t, "prepend", {
-        configurable: !0,
-        enumerable: !0,
-        writable: !0,
-        value: function () {
-            var t = Array.prototype.slice.call(arguments), e = document.createDocumentFragment();
-            t.forEach(function (t) {
-                var a = t instanceof Node;
-                e.appendChild(a ? t : document.createTextNode(String(t)))
-            }), this.insertBefore(e, this.firstChild)
+/**
+ * @class mUtil  Metronic base utilize class that privides helper functions
+ */
+//== Polyfill
+// matches polyfill
+this.Element && function(ElementPrototype) {
+    ElementPrototype.matches = ElementPrototype.matches ||
+        ElementPrototype.matchesSelector ||
+        ElementPrototype.webkitMatchesSelector ||
+        ElementPrototype.msMatchesSelector ||
+        function(selector) {
+            var node = this,
+                nodes = (node.parentNode || node.document).querySelectorAll(selector),
+                i = -1;
+            while (nodes[++i] && nodes[i] != node);
+            return !!nodes[i];
         }
-    })
-}), window.mUtilElementDataStore = {}, window.mUtilElementDataStoreID = 0, window.mUtilDelegatedEventHandlers = {};
-var mUtil = function () {
-    var t = [], e = {sm: 544, md: 768, lg: 1024, xl: 1200}, a = function () {
-        var e = !1;
-        window.addEventListener("resize", function () {
-            clearTimeout(e), e = setTimeout(function () {
-                !function () {
-                    for (var e = 0; e < t.length; e++) t[e].call()
-                }()
-            }, 250)
-        })
+}(Element.prototype);
+
+// closest polyfill
+this.Element && function(ElementPrototype) {
+    ElementPrototype.closest = ElementPrototype.closest ||
+        function(selector) {
+            var el = this;
+            while (el.matches && !el.matches(selector)) el = el.parentNode;
+            return el.matches ? el : null;
+        }
+}(Element.prototype);
+
+
+// matches polyfill
+this.Element && function(ElementPrototype) {
+    ElementPrototype.matches = ElementPrototype.matches ||
+        ElementPrototype.matchesSelector ||
+        ElementPrototype.webkitMatchesSelector ||
+        ElementPrototype.msMatchesSelector ||
+        function(selector) {
+            var node = this,
+                nodes = (node.parentNode || node.document).querySelectorAll(selector),
+                i = -1;
+            while (nodes[++i] && nodes[i] != node);
+            return !!nodes[i];
+        }
+}(Element.prototype);
+
+//
+// requestAnimationFrame polyfill by Erik Möller.
+//  With fixes from Paul Irish and Tino Zijdel
+//
+//  http://paulirish.com/2011/requestanimationframe-for-smart-animating/
+//  http://my.opera.com/emoller/blog/2011/12/20/requestanimationframe-for-smart-er-animating
+//
+//  MIT license
+//
+(function() {
+    var lastTime = 0;
+    var vendors = ['webkit', 'moz'];
+    for (var x = 0; x < vendors.length && !window.requestAnimationFrame; ++x) {
+        window.requestAnimationFrame = window[vendors[x] + 'RequestAnimationFrame'];
+        window.cancelAnimationFrame =
+            window[vendors[x] + 'CancelAnimationFrame'] || window[vendors[x] + 'CancelRequestAnimationFrame'];
+    }
+
+    if (!window.requestAnimationFrame)
+        window.requestAnimationFrame = function(callback) {
+            var currTime = new Date().getTime();
+            var timeToCall = Math.max(0, 16 - (currTime - lastTime));
+            var id = window.setTimeout(function() {
+                callback(currTime + timeToCall);
+            }, timeToCall);
+            lastTime = currTime + timeToCall;
+            return id;
+        };
+
+    if (!window.cancelAnimationFrame)
+        window.cancelAnimationFrame = function(id) {
+            clearTimeout(id);
+        };
+}());
+
+// Source: https://github.com/jserz/js_piece/blob/master/DOM/ParentNode/prepend()/prepend().md
+(function(arr) {
+    arr.forEach(function(item) {
+        if (item.hasOwnProperty('prepend')) {
+            return;
+        }
+        Object.defineProperty(item, 'prepend', {
+            configurable: true,
+            enumerable: true,
+            writable: true,
+            value: function prepend() {
+                var argArr = Array.prototype.slice.call(arguments),
+                    docFrag = document.createDocumentFragment();
+
+                argArr.forEach(function(argItem) {
+                    var isNode = argItem instanceof Node;
+                    docFrag.appendChild(isNode ? argItem : document.createTextNode(String(argItem)));
+                });
+
+                this.insertBefore(docFrag, this.firstChild);
+            }
+        });
+    });
+})([Element.prototype, Document.prototype, DocumentFragment.prototype]);
+
+//== Global variables 
+window.mUtilElementDataStore = {};
+window.mUtilElementDataStoreID = 0;
+window.mUtilDelegatedEventHandlers = {};
+
+var mUtil = function() {
+
+    var resizeHandlers = [];
+
+    /** @type {object} breakpoints The device width breakpoints **/
+    var breakpoints = {
+        sm: 544, // Small screen / phone           
+        md: 768, // Medium screen / tablet            
+        lg: 1024, // Large screen / desktop        
+        xl: 1200 // Extra large screen / wide desktop
     };
+
+    /**
+     * Handle window resize event with some 
+     * delay to attach event handlers upon resize complete 
+     */
+    var _windowResizeHandler = function() {
+        var _runResizeHandlers = function() {
+            // reinitialize other subscribed elements
+            for (var i = 0; i < resizeHandlers.length; i++) {
+                var each = resizeHandlers[i];
+                each.call();
+            }
+        };
+
+        var timeout = false; // holder for timeout id
+        var delay = 250; // delay after event is "complete" to run callback
+
+        window.addEventListener('resize', function() {
+            clearTimeout(timeout);
+            timeout = setTimeout(function() {
+                _runResizeHandlers();
+            }, delay); // wait 50ms until window resize finishes.
+        });
+    };
+
     return {
-        init: function (t) {
-            t && t.breakpoints && (e = t.breakpoints), a()
-        }, addResizeHandler: function (e) {
-            t.push(e)
-        }, removeResizeHandler: function (e) {
-            for (var a = 0; a < t.length; a++) e === t[a] && delete t[a]
-        }, runResizeHandlers: function () {
-            _runResizeHandlers()
-        }, resize: function () {
-            if ("function" == typeof Event) window.dispatchEvent(new Event("resize")); else {
-                var t = window.document.createEvent("UIEvents");
-                t.initUIEvent("resize", !0, !1, window, 0), window.dispatchEvent(t)
+        /**
+         * Class main initializer.
+         * @param {object} options.
+         * @returns null
+         */
+        //main function to initiate the theme
+        init: function(options) {
+            if (options && options.breakpoints) {
+                breakpoints = options.breakpoints;
             }
-        }, getURLParam: function (t) {
-            var e, a, n = window.location.search.substring(1).split("&");
-            for (e = 0; e < n.length; e++) if ((a = n[e].split("="))[0] == t) return unescape(a[1]);
-            return null
-        }, isMobileDevice: function () {
-            return this.getViewPort().width < this.getBreakpoint("lg")
-        }, isDesktopDevice: function () {
-            return !mUtil.isMobileDevice()
-        }, getViewPort: function () {
-            var t = window, e = "inner";
-            return "innerWidth" in window || (e = "client", t = document.documentElement || document.body), {
-                width: t[e + "Width"],
-                height: t[e + "Height"]
+
+            _windowResizeHandler();
+        },
+
+        /**
+         * Adds window resize event handler.
+         * @param {function} callback function.
+         */
+        addResizeHandler: function(callback) {
+            resizeHandlers.push(callback);
+        },
+
+        /**
+         * Removes window resize event handler.
+         * @param {function} callback function.
+         */
+        removeResizeHandler: function(callback) {
+            for (var i = 0; i < resizeHandlers.length; i++) {
+                if (callback === resizeHandlers[i]) {
+                    delete resizeHandlers[i];
+                }
             }
-        }, isInResponsiveRange: function (t) {
-            var e = this.getViewPort().width;
-            return "general" == t || ("desktop" == t && e >= this.getBreakpoint("lg") + 1 || ("tablet" == t && e >= this.getBreakpoint("md") + 1 && e < this.getBreakpoint("lg") || ("mobile" == t && e <= this.getBreakpoint("md") || ("desktop-and-tablet" == t && e >= this.getBreakpoint("md") + 1 || ("tablet-and-mobile" == t && e <= this.getBreakpoint("lg") || "minimal-desktop-and-below" == t && e <= this.getBreakpoint("xl"))))))
-        }, getUniqueID: function (t) {
-            return t + Math.floor(Math.random() * (new Date).getTime())
-        }, getBreakpoint: function (t) {
-            return e[t]
-        }, isset: function (t, e) {
-            var a;
-            if (-1 !== (e = e || "").indexOf("[")) throw new Error("Unsupported object path notation.");
-            e = e.split(".");
+        },
+
+        /**
+         * Trigger window resize handlers.
+         */
+        runResizeHandlers: function() {
+            _runResizeHandlers();
+        },
+
+        resize: function() {
+            if (typeof(Event) === 'function') {
+                // modern browsers
+                window.dispatchEvent(new Event('resize'));
+            } else {
+                // for IE and other old browsers
+                // causes deprecation warning on modern browsers
+                var evt = window.document.createEvent('UIEvents'); 
+                evt.initUIEvent('resize', true, false, window, 0); 
+                window.dispatchEvent(evt);
+            }
+        },
+
+        /**
+         * Get GET parameter value from URL.
+         * @param {string} paramName Parameter name.
+         * @returns {string}  
+         */
+        getURLParam: function(paramName) {
+            var searchString = window.location.search.substring(1),
+                i, val, params = searchString.split("&");
+
+            for (i = 0; i < params.length; i++) {
+                val = params[i].split("=");
+                if (val[0] == paramName) {
+                    return unescape(val[1]);
+                }
+            }
+
+            return null;
+        },
+
+        /**
+         * Checks whether current device is mobile touch.
+         * @returns {boolean}  
+         */
+        isMobileDevice: function() {
+            return (this.getViewPort().width < this.getBreakpoint('lg') ? true : false);
+        },
+
+        /**
+         * Checks whether current device is desktop.
+         * @returns {boolean}  
+         */
+        isDesktopDevice: function() {
+            return mUtil.isMobileDevice() ? false : true;
+        },
+
+        /**
+         * Gets browser window viewport size. Ref:
+         * http://andylangton.co.uk/articles/javascript/get-viewport-size-javascript/
+         * @returns {object}  
+         */
+        getViewPort: function() {
+            var e = window,
+                a = 'inner';
+            if (!('innerWidth' in window)) {
+                a = 'client';
+                e = document.documentElement || document.body;
+            }
+
+            return {
+                width: e[a + 'Width'],
+                height: e[a + 'Height']
+            };
+        },
+
+        /**
+         * Checks whether given device mode is currently activated.
+         * @param {string} mode Responsive mode name(e.g: desktop,
+         *     desktop-and-tablet, tablet, tablet-and-mobile, mobile)
+         * @returns {boolean}  
+         */
+        isInResponsiveRange: function(mode) {
+            var breakpoint = this.getViewPort().width;
+
+            if (mode == 'general') {
+                return true;
+            } else if (mode == 'desktop' && breakpoint >= (this.getBreakpoint('lg') + 1)) {
+                return true;
+            } else if (mode == 'tablet' && (breakpoint >= (this.getBreakpoint('md') + 1) && breakpoint < this.getBreakpoint('lg'))) {
+                return true;
+            } else if (mode == 'mobile' && breakpoint <= this.getBreakpoint('md')) {
+                return true;
+            } else if (mode == 'desktop-and-tablet' && breakpoint >= (this.getBreakpoint('md') + 1)) {
+                return true;
+            } else if (mode == 'tablet-and-mobile' && breakpoint <= this.getBreakpoint('lg')) {
+                return true;
+            } else if (mode == 'minimal-desktop-and-below' && breakpoint <= this.getBreakpoint('xl')) {
+                return true;
+            }
+
+            return false;
+        },
+
+        /**
+         * Generates unique ID for give prefix.
+         * @param {string} prefix Prefix for generated ID
+         * @returns {boolean}  
+         */
+        getUniqueID: function(prefix) {
+            return prefix + Math.floor(Math.random() * (new Date()).getTime());
+        },
+
+        /**
+         * Gets window width for give breakpoint mode.
+         * @param {string} mode Responsive mode name(e.g: xl, lg, md, sm)
+         * @returns {number}  
+         */
+        getBreakpoint: function(mode) {
+            return breakpoints[mode];
+        },
+
+        /**
+         * Checks whether object has property matchs given key path.
+         * @param {object} obj Object contains values paired with given key path
+         * @param {string} keys Keys path seperated with dots
+         * @returns {object}  
+         */
+        isset: function(obj, keys) {
+            var stone;
+
+            keys = keys || '';
+
+            if (keys.indexOf('[') !== -1) {
+                throw new Error('Unsupported object path notation.');
+            }
+
+            keys = keys.split('.');
+
             do {
-                if (void 0 === t) return !1;
-                if (a = e.shift(), !t.hasOwnProperty(a)) return !1;
-                t = t[a]
-            } while (e.length);
-            return !0
-        }, getHighestZindex: function (t) {
-            for (var e, a, n = mUtil.get(t); n && n !== document;) {
-                if (("absolute" === (e = mUtil.css(n, "position")) || "relative" === e || "fixed" === e) && (a = parseInt(mUtil.css(n, "z-index")), !isNaN(a) && 0 !== a)) return a;
-                n = n.parentNode
-            }
-            return null
-        }, hasFixedPositionedParent: function (t) {
-            for (; t && t !== document;) {
-                if (position = mUtil.css(t, "position"), "fixed" === position) return !0;
-                t = t.parentNode
-            }
-            return !1
-        }, sleep: function (t) {
-            for (var e = (new Date).getTime(), a = 0; a < 1e7 && !((new Date).getTime() - e > t); a++) ;
-        }, getRandomInt: function (t, e) {
-            return Math.floor(Math.random() * (e - t + 1)) + t
-        }, isAngularVersion: function () {
-            return void 0 !== window.Zone
-        }, deepExtend: function (t) {
-            t = t || {};
-            for (var e = 1; e < arguments.length; e++) {
-                var a = arguments[e];
-                if (a) for (var n in a) a.hasOwnProperty(n) && ("object" == typeof a[n] ? t[n] = mUtil.deepExtend(t[n], a[n]) : t[n] = a[n])
-            }
-            return t
-        }, extend: function (t) {
-            t = t || {};
-            for (var e = 1; e < arguments.length; e++) if (arguments[e]) for (var a in arguments[e]) arguments[e].hasOwnProperty(a) && (t[a] = arguments[e][a]);
-            return t
-        }, get: function (t) {
-            var e;
-            return t === document ? document : t && 1 === t.nodeType ? t : (e = document.getElementById(t)) ? e : (e = document.getElementsByTagName(t)) ? e[0] : (e = document.getElementsByClassName(t)) ? e[0] : null
-        }, getByClass: function (t) {
-            var e;
-            return (e = document.getElementsByClassName(t)) ? e[0] : null
-        }, hasClasses: function (t, e) {
-            if (t) {
-                for (var a = e.split(" "), n = 0; n < a.length; n++) if (0 == mUtil.hasClass(t, mUtil.trim(a[n]))) return !1;
-                return !0
-            }
-        }, hasClass: function (t, e) {
-            if (t) return t.classList ? t.classList.contains(e) : new RegExp("\\b" + e + "\\b").test(t.className)
-        }, addClass: function (t, e) {
-            if (t && void 0 !== e) {
-                var a = e.split(" ");
-                if (t.classList) for (var n = 0; n < a.length; n++) a[n] && a[n].length > 0 && t.classList.add(mUtil.trim(a[n])); else if (!mUtil.hasClass(t, e)) for (n = 0; n < a.length; n++) t.className += " " + mUtil.trim(a[n])
-            }
-        }, removeClass: function (t, e) {
-            if (t && void 0 !== e) {
-                var a = e.split(" ");
-                if (t.classList) for (var n = 0; n < a.length; n++) t.classList.remove(mUtil.trim(a[n])); else if (mUtil.hasClass(t, e)) for (n = 0; n < a.length; n++) t.className = t.className.replace(new RegExp("\\b" + mUtil.trim(a[n]) + "\\b", "g"), "")
-            }
-        }, triggerCustomEvent: function (t, e, a) {
-            if (window.CustomEvent) var n = new CustomEvent(e, {detail: a}); else (n = document.createEvent("CustomEvent")).initCustomEvent(e, !0, !0, a);
-            t.dispatchEvent(n)
-        }, trim: function (t) {
-            return t.trim()
-        }, eventTriggered: function (t) {
-            return !!t.currentTarget.dataset.triggered || (t.currentTarget.dataset.triggered = !0, !1)
-        }, remove: function (t) {
-            t && t.parentNode && t.parentNode.removeChild(t)
-        }, find: function (t, e) {
-            if (t = mUtil.get(t)) return t.querySelector(e)
-        }, findAll: function (t, e) {
-            if (t = mUtil.get(t)) return t.querySelectorAll(e)
-        }, insertAfter: function (t, e) {
-            return e.parentNode.insertBefore(t, e.nextSibling)
-        }, parents: function (t, e) {
-            function a(t, e) {
-                for (var a = 0, n = t.length; a < n; a++) if (t[a] == e) return !0;
-                return !1
-            }
+                if (obj === undefined) {
+                    return false;
+                }
 
-            return function (t, e) {
-                for (var n = document.querySelectorAll(e), o = t.parentNode; o && !a(n, o);) o = o.parentNode;
-                return o
-            }(t, e)
-        }, children: function (t, e, a) {
-            if (t && t.childNodes) {
-                for (var n = [], o = 0, i = t.childNodes.length; o < i; ++o) 1 == t.childNodes[o].nodeType && mUtil.matches(t.childNodes[o], e, a) && n.push(t.childNodes[o]);
-                return n
-            }
-        }, child: function (t, e, a) {
-            var n = mUtil.children(t, e, a);
-            return n ? n[0] : null
-        }, matches: function (t, e, a) {
-            var n = Element.prototype,
-                o = n.matches || n.webkitMatchesSelector || n.mozMatchesSelector || n.msMatchesSelector || function (t) {
-                    return -1 !== [].indexOf.call(document.querySelectorAll(t), this)
-                };
-            return !(!t || !t.tagName) && o.call(t, e)
-        }, data: function (t) {
-            return t = mUtil.get(t), {
-                set: function (e, a) {
-                    void 0 === t.customDataTag && (mUtilElementDataStoreID++, t.customDataTag = mUtilElementDataStoreID), void 0 === mUtilElementDataStore[t.customDataTag] && (mUtilElementDataStore[t.customDataTag] = {}), mUtilElementDataStore[t.customDataTag][e] = a
-                }, get: function (e) {
-                    return this.has(e) ? mUtilElementDataStore[t.customDataTag][e] : null
-                }, has: function (e) {
-                    return !(!mUtilElementDataStore[t.customDataTag] || !mUtilElementDataStore[t.customDataTag][e])
-                }, remove: function (e) {
-                    this.has(e) && delete mUtilElementDataStore[t.customDataTag][e]
-                }
-            }
-        }, outerWidth: function (t, e) {
-            if (!0 === e) {
-                var a = parseFloat(t.offsetWidth);
-                return a += parseFloat(mUtil.css(t, "margin-left")) + parseFloat(mUtil.css(t, "margin-right")), parseFloat(a)
-            }
-            return a = parseFloat(t.offsetWidth)
-        }, offset: function (t) {
-            var e, a;
-            if (t = mUtil.get(t)) return t.getClientRects().length ? (e = t.getBoundingClientRect(), a = t.ownerDocument.defaultView, {
-                top: e.top + a.pageYOffset,
-                left: e.left + a.pageXOffset
-            }) : {top: 0, left: 0}
-        }, height: function (t) {
-            return mUtil.css(t, "height")
-        }, visible: function (t) {
-            return !(0 === t.offsetWidth && 0 === t.offsetHeight)
-        }, attr: function (t, e, a) {
-            if (null != (t = mUtil.get(t))) return void 0 === a ? t.getAttribute(e) : void t.setAttribute(e, a)
-        }, hasAttr: function (t, e) {
-            if (null != (t = mUtil.get(t))) return !!t.getAttribute(e)
-        }, removeAttr: function (t, e) {
-            null != (t = mUtil.get(t)) && t.removeAttribute(e)
-        }, animate: function (t, e, a, n, o, i) {
-            var l = {};
-            if (l.linear = function (t, e, a, n) {
-                return a * t / n + e
-            }, o = l.linear, "number" == typeof t && "number" == typeof e && "number" == typeof a && "function" == typeof n) {
-                "function" != typeof i && (i = function () {
-                });
-                var r = window.requestAnimationFrame || function (t) {
-                    window.setTimeout(t, 20)
-                }, s = e - t;
-                n(t);
-                var d = window.performance && window.performance.now ? window.performance.now() : +new Date;
-                r(function l(c) {
-                    var m = (c || +new Date) - d;
-                    m >= 0 && n(o(m, t, s, a)), m >= 0 && m >= a ? (n(e), i()) : r(l)
-                })
-            }
-        }, actualCss: function (t, e, a) {
-            var n;
-            if (t instanceof HTMLElement != !1) return t.getAttribute("m-hidden-" + e) && !1 !== a ? parseFloat(t.getAttribute("m-hidden-" + e)) : (t.style.cssText = "position: absolute; visibility: hidden; display: block;", "width" == e ? n = t.offsetWidth : "height" == e && (n = t.offsetHeight), t.style.cssText = "", t.setAttribute("m-hidden-" + e, n), parseFloat(n))
-        }, actualHeight: function (t, e) {
-            return mUtil.actualCss(t, "height", e)
-        }, actualWidth: function (t, e) {
-            return mUtil.actualCss(t, "width", e)
-        }, getScroll: function (t, e) {
-            return e = "scroll" + e, t == window || t == document ? self["scrollTop" == e ? "pageYOffset" : "pageXOffset"] || browserSupportsBoxModel && document.documentElement[e] || document.body[e] : t[e]
-        }, css: function (t, e, a) {
-            if (t = mUtil.get(t)) if (void 0 !== a) t.style[e] = a; else {
-                var n = (t.ownerDocument || document).defaultView;
-                if (n && n.getComputedStyle) return e = e.replace(/([A-Z])/g, "-$1").toLowerCase(), n.getComputedStyle(t, null).getPropertyValue(e);
-                if (t.currentStyle) return e = e.replace(/\-(\w)/g, function (t, e) {
-                    return e.toUpperCase()
-                }), a = t.currentStyle[e], /^\d+(em|pt|%|ex)?$/i.test(a) ? function (e) {
-                    var a = t.style.left, n = t.runtimeStyle.left;
-                    return t.runtimeStyle.left = t.currentStyle.left, t.style.left = e || 0, e = t.style.pixelLeft + "px", t.style.left = a, t.runtimeStyle.left = n, e
-                }(a) : a
-            }
-        }, slide: function (t, e, a, n, o) {
-            if (!(!t || "up" == e && !1 === mUtil.visible(t) || "down" == e && !0 === mUtil.visible(t))) {
-                a = a || 600;
-                var i = mUtil.actualHeight(t), l = !1, r = !1;
-                mUtil.css(t, "padding-top") && !0 !== mUtil.data(t).has("slide-padding-top") && mUtil.data(t).set("slide-padding-top", mUtil.css(t, "padding-top")), mUtil.css(t, "padding-bottom") && !0 !== mUtil.data(t).has("slide-padding-bottom") && mUtil.data(t).set("slide-padding-bottom", mUtil.css(t, "padding-bottom")), mUtil.data(t).has("slide-padding-top") && (l = parseInt(mUtil.data(t).get("slide-padding-top"))), mUtil.data(t).has("slide-padding-bottom") && (r = parseInt(mUtil.data(t).get("slide-padding-bottom"))), "up" == e ? (t.style.cssText = "display: block; overflow: hidden;", l && mUtil.animate(0, l, a, function (e) {
-                    t.style.paddingTop = l - e + "px"
-                }, "linear"), r && mUtil.animate(0, r, a, function (e) {
-                    t.style.paddingBottom = r - e + "px"
-                }, "linear"), mUtil.animate(0, i, a, function (e) {
-                    t.style.height = i - e + "px"
-                }, "linear", function () {
-                    n(), t.style.height = "", t.style.display = "none"
-                })) : "down" == e && (t.style.cssText = "display: block; overflow: hidden;", l && mUtil.animate(0, l, a, function (e) {
-                    t.style.paddingTop = e + "px"
-                }, "linear", function () {
-                    t.style.paddingTop = ""
-                }), r && mUtil.animate(0, r, a, function (e) {
-                    t.style.paddingBottom = e + "px"
-                }, "linear", function () {
-                    t.style.paddingBottom = ""
-                }), mUtil.animate(0, i, a, function (e) {
-                    t.style.height = e + "px"
-                }, "linear", function () {
-                    n(), t.style.height = "", t.style.display = "", t.style.overflow = ""
-                }))
-            }
-        }, slideUp: function (t, e, a) {
-            mUtil.slide(t, "up", e, a)
-        }, slideDown: function (t, e, a) {
-            mUtil.slide(t, "down", e, a)
-        }, show: function (t, e) {
-            t.style.display = e || "block"
-        }, hide: function (t) {
-            t.style.display = "none"
-        }, addEvent: function (t, e, a, n) {
-            void 0 !== (t = mUtil.get(t)) && t.addEventListener(e, a)
-        }, removeEvent: function (t, e, a) {
-            (t = mUtil.get(t)).removeEventListener(e, a)
-        }, on: function (t, e, a, n) {
-            if (e) {
-                var o = mUtil.getUniqueID("event");
-                return mUtilDelegatedEventHandlers[o] = function (a) {
-                    for (var o = t.querySelectorAll(e), i = a.target; i && i !== t;) {
-                        for (var l = 0, r = o.length; l < r; l++) i === o[l] && n.call(i, a);
-                        i = i.parentNode
-                    }
-                }, mUtil.addEvent(t, a, mUtilDelegatedEventHandlers[o]), o
-            }
-        }, off: function (t, e, a) {
-            t && mUtilDelegatedEventHandlers[a] && (mUtil.removeEvent(t, e, mUtilDelegatedEventHandlers[a]), delete mUtilDelegatedEventHandlers[a])
-        }, one: function (t, e, a) {
-            (t = mUtil.get(t)).addEventListener(e, function (t) {
-                return t.target.removeEventListener(t.type, arguments.callee), a(t)
-            })
-        }, hash: function (t) {
-            var e, a = 0;
-            if (0 === t.length) return a;
-            for (e = 0; e < t.length; e++) a = (a << 5) - a + t.charCodeAt(e), a |= 0;
-            return a
-        }, animateClass: function (t, e, a) {
-            mUtil.addClass(t, "animated " + e), mUtil.one(t, "webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend", function () {
-                mUtil.removeClass(t, "animated " + e)
-            }), a && mUtil.one(t.animationEnd, a)
-        }, animateDelay: function (t, e) {
-            for (var a = ["webkit-", "moz-", "ms-", "o-", ""], n = 0; n < a.length; n++) mUtil.css(t, a[n] + "animation-delay", e)
-        }, animateDuration: function (t, e) {
-            for (var a = ["webkit-", "moz-", "ms-", "o-", ""], n = 0; n < a.length; n++) mUtil.css(t, a[n] + "animation-duration", e)
-        }, scrollTo: function (t, e, a) {
-            a = a || 500;
-            var n, o, i = (t = mUtil.get(t)) ? mUtil.offset(t).top : 0,
-                l = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
-            i > l ? (n = i, o = l) : (n = l, o = i), e && (o += e), mUtil.animate(n, o, a, function (t) {
-                document.documentElement.scrollTop = t, document.body.parentNode.scrollTop = t, document.body.scrollTop = t
-            })
-        }, scrollTop: function (t, e) {
-            mUtil.scrollTo(null, t, e)
-        }, isArray: function (t) {
-            return t && Array.isArray(t)
-        }, ready: function (t) {
-            (document.attachEvent ? "complete" === document.readyState : "loading" !== document.readyState) ? t() : document.addEventListener("DOMContentLoaded", t)
-        }, isEmpty: function (t) {
-            for (var e in t) if (t.hasOwnProperty(e)) return !1;
-            return !0
-        }, numberString: function (t) {
-            for (var e = (t += "").split("."), a = e[0], n = e.length > 1 ? "." + e[1] : "", o = /(\d+)(\d{3})/; o.test(a);) a = a.replace(o, "$1,$2");
-            return a + n
-        }, detectIE: function () {
-            var t = window.navigator.userAgent, e = t.indexOf("MSIE ");
-            if (e > 0) return parseInt(t.substring(e + 5, t.indexOf(".", e)), 10);
-            if (t.indexOf("Trident/") > 0) {
-                var a = t.indexOf("rv:");
-                return parseInt(t.substring(a + 3, t.indexOf(".", a)), 10)
-            }
-            var n = t.indexOf("Edge/");
-            return n > 0 && parseInt(t.substring(n + 5, t.indexOf(".", n)), 10)
-        }, isRTL: function () {
-            return "rtl" == mUtil.attr(mUtil.get("html"), "direction")
-        }, scrollerInit: function (t, e) {
-            function a() {
-                var a, n;
-                n = e.height instanceof Function ? parseInt(e.height.call()) : parseInt(e.height), e.disableForMobile && mUtil.isInResponsiveRange("tablet-and-mobile") ? (a = mUtil.data(t).get("ps")) ? (e.resetHeightOnDestroy ? mUtil.css(t, "height", "auto") : (mUtil.css(t, "overflow", "auto"), n > 0 && mUtil.css(t, "height", n + "px")), a.destroy(), a = mUtil.data(t).remove("ps")) : n > 0 && (mUtil.css(t, "overflow", "auto"), mUtil.css(t, "height", n + "px")) : (n > 0 && mUtil.css(t, "height", n + "px"), mUtil.css(t, "overflow", "hidden"), (a = mUtil.data(t).get("ps")) ? a.update() : (mUtil.addClass(t, "m-scroller"), a = new PerfectScrollbar(t, {
-                    wheelSpeed: .5,
-                    swipeEasing: !0,
-                    wheelPropagation: !1,
-                    minScrollbarLength: 40,
-                    suppressScrollX: !mUtil.isRTL()
-                }), mUtil.data(t).set("ps", a)))
-            }
+                stone = keys.shift();
 
-            a(), e.handleWindowResize && mUtil.addResizeHandler(function () {
-                a()
-            })
-        }, scrollerUpdate: function (t) {
-            var e;
-            (e = mUtil.data(t).get("ps")) && e.update()
-        }, scrollersUpdate: function (t) {
-            for (var e = mUtil.findAll(t, ".ps"), a = 0, n = e.length; a < n; a++) mUtil.scrollerUpdate(e[a])
-        }, scrollerTop: function (t) {
-            mUtil.data(t).get("ps") && (t.scrollTop = 0)
-        }, scrollerDestroy: function (t) {
-            var e;
-            (e = mUtil.data(t).get("ps")) && (e.destroy(), e = mUtil.data(t).remove("ps"))
-        }
-    }
-}();
-mUtil.ready(function () {
-    mUtil.init()
-});
-var mApp = function () {
-    var t = {
-        brand: "#716aca",
-        metal: "#c4c5d6",
-        light: "#ffffff",
-        accent: "#00c5dc",
-        primary: "#5867dd",
-        success: "#34bfa3",
-        info: "#36a3f7",
-        warning: "#ffb822",
-        danger: "#f4516c",
-        focus: "#9816f4"
-    }, e = function (t) {
-        var e = t.data("skin") ? "m-tooltip--skin-" + t.data("skin") : "",
-            a = "auto" == t.data("width") ? "m-tooltop--auto-width" : "",
-            n = t.data("trigger") ? t.data("trigger") : "hover";
-        t.data("placement") && t.data("placement");
-        t.tooltip({
-            trigger: n,
-            template: '<div class="m-tooltip ' + e + " " + a + ' tooltip" role="tooltip">                <div class="arrow"></div>                <div class="tooltip-inner"></div>            </div>'
-        })
-    }, a = function () {
-        $('[data-toggle="m-tooltip"]').each(function () {
-            e($(this))
-        })
-    }, n = function (t) {
-        var e = t.data("skin") ? "m-popover--skin-" + t.data("skin") : "",
-            a = t.data("trigger") ? t.data("trigger") : "hover";
-        t.popover({
-            trigger: a,
-            template: '            <div class="m-popover ' + e + ' popover" role="tooltip">                <div class="arrow"></div>                <h3 class="popover-header"></h3>                <div class="popover-body"></div>            </div>'
-        })
-    }, o = function () {
-        $('[data-toggle="m-popover"]').each(function () {
-            n($(this))
-        })
-    }, i = function (t, e) {
-        t = $(t), new mPortlet(t[0], e)
-    }, l = function () {
-        $('[m-portlet="true"]').each(function () {
-            var t = $(this);
-            !0 !== t.data("portlet-initialized") && (i(t, {}), t.data("portlet-initialized", !0))
-        })
-    }, r = function () {
-        $("[data-tab-target]").each(function () {
-            1 != $(this).data("tabs-initialized") && ($(this).click(function (t) {
-                t.preventDefault();
-                var e = $(this), a = e.closest('[data-tabs="true"]'), n = $(a.data("tabs-contents")),
-                    o = $(e.data("tab-target"));
-                a.find(".m-tabs__item.m-tabs__item--active").removeClass("m-tabs__item--active"), e.addClass("m-tabs__item--active"), n.find(".m-tabs-content__item.m-tabs-content__item--active").removeClass("m-tabs-content__item--active"), o.addClass("m-tabs-content__item--active")
-            }), $(this).data("tabs-initialized", !0))
-        })
-    };
-    return {
-        init: function (e) {
-            e && e.colors && (t = e.colors), mApp.initComponents()
-        }, initComponents: function () {
-            $('[data-scrollable="true"]').each(function () {
-                var t = $(this);
-                mUtil.scrollerInit(this, {
-                    disableForMobile: !0, handleWindowResize: !0, height: function () {
-                        return mUtil.isInResponsiveRange("tablet-and-mobile") && t.data("mobile-height") ? t.data("mobile-height") : t.data("height")
-                    }
-                })
-            }), a(), o(), $("body").on("click", "[data-close=alert]", function () {
-                $(this).closest(".alert").hide()
-            }), l(), $(".custom-file-input").on("change", function () {
-                var t = $(this).val();
-                $(this).next(".custom-file-label").addClass("selected").html(t)
-            }), r()
-        }, initCustomTabs: function () {
-            r()
-        }, initTooltips: function () {
-            a()
-        }, initTooltip: function (t) {
-            e(t)
-        }, initPopovers: function () {
-            o()
-        }, initPopover: function (t) {
-            n(t)
-        }, initPortlet: function (t, e) {
-            i(t, e)
-        }, initPortlets: function () {
-            l()
-        }, block: function (t, e) {
-            var a, n, o, i = $(t);
-            if ("spinner" == (e = $.extend(!0, {
-                opacity: .03,
-                overlayColor: "#000000",
-                state: "brand",
-                type: "loader",
-                size: "lg",
-                centerX: !0,
-                centerY: !0,
-                message: "",
-                shadow: !0,
-                width: "auto"
-            }, e)).type ? o = '<div class="m-spinner ' + (a = e.skin ? "m-spinner--skin-" + e.skin : "") + " " + (n = e.state ? "m-spinner--" + e.state : "") + '"></div' : (a = e.skin ? "m-loader--skin-" + e.skin : "", n = e.state ? "m-loader--" + e.state : "", size = e.size ? "m-loader--" + e.size : "", o = '<div class="m-loader ' + a + " " + n + " " + size + '"></div'), e.message && e.message.length > 0) {
-                var l = "m-blockui " + (!1 === e.shadow ? "m-blockui-no-shadow" : "");
-                html = '<div class="' + l + '"><span>' + e.message + "</span><span>" + o + "</span></div>";
-                i = document.createElement("div");
-                mUtil.get("body").prepend(i), mUtil.addClass(i, l), i.innerHTML = "<span>" + e.message + "</span><span>" + o + "</span>", e.width = mUtil.actualWidth(i) + 10, mUtil.remove(i), "body" == t && (html = '<div class="' + l + '" style="margin-left:-' + e.width / 2 + 'px;"><span>' + e.message + "</span><span>" + o + "</span></div>")
-            } else html = o;
-            var r = {
-                message: html,
-                centerY: e.centerY,
-                centerX: e.centerX,
-                css: {top: "30%", left: "50%", border: "0", padding: "0", backgroundColor: "none", width: e.width},
-                overlayCSS: {backgroundColor: e.overlayColor, opacity: e.opacity, cursor: "wait", zIndex: "10"},
-                onUnblock: function () {
-                    i && i[0] && (mUtil.css(i[0], "position", ""), mUtil.css(i[0], "zoom", ""))
+                if (!obj.hasOwnProperty(stone)) {
+                    return false;
                 }
-            };
-            "body" == t ? (r.css.top = "50%", $.blockUI(r)) : (i = $(t)).block(r)
-        }, unblock: function (t) {
-            t && "body" != t ? $(t).unblock() : $.unblockUI()
-        }, blockPage: function (t) {
-            return mApp.block("body", t)
-        }, unblockPage: function () {
-            return mApp.unblock("body")
-        }, progress: function (t, e) {
-            var a = "m-loader m-loader--" + (e && e.skin ? e.skin : "light") + " m-loader--" + (e && e.alignment ? e.alignment : "right") + " m-loader--" + (e && e.size ? "m-spinner--" + e.size : "");
-            mApp.unprogress(t), $(t).addClass(a), $(t).data("progress-classes", a)
-        }, unprogress: function (t) {
-            $(t).removeClass($(t).data("progress-classes"))
-        }, getColor: function (e) {
-            return t[e]
-        }
-    }
-}();
-$(document).ready(function () {
-    mApp.init({})
-}), function (t) {
-    var e = mUtil, a = mApp;
-    if (void 0 === e) throw new Error("Util class is required and must be included before mDatatable");
-    t.fn.mDatatable = function (n) {
-        if (0 !== t(this).length) {
-            var o = this;
-            o.debug = !1, o.API = {record: null, value: null, params: null};
-            var i = {
-                isInit: !1, offset: 110, stateId: "meta", ajaxParams: {}, init: function (e) {
-                    var a = !1;
-                    return null === e.data.source && (i.extractTable(), a = !0), i.setupBaseDOM.call(), i.setupDOM(o.table), i.spinnerCallback(!0), i.setDataSourceQuery(i.getOption("data.source.read.params.query")), t(o).on("m-datatable--on-layout-updated", i.afterRender), o.debug && i.stateRemove(i.stateId), t.each(i.getOption("extensions"), function (e, a) {
-                        "function" == typeof t.fn.mDatatable[e] && new t.fn.mDatatable[e](o, a)
-                    }), "remote" !== e.data.type && "local" !== e.data.type || ((!1 === e.data.saveState || !1 === e.data.saveState.cookie && !1 === e.data.saveState.webstorage) && i.stateRemove(i.stateId), "local" === e.data.type && "object" == typeof e.data.source && (o.dataSet = o.originalDataSet = i.dataMapCallback(e.data.source)), i.dataRender()), a || (i.setHeadTitle(), i.getOption("layout.footer") && i.setHeadTitle(o.tableFoot)), void 0 !== e.layout.header && !1 === e.layout.header && t(o.table).find("thead").remove(), void 0 !== e.layout.footer && !1 === e.layout.footer && t(o.table).find("tfoot").remove(), null !== e.data.type && "local" !== e.data.type || (i.setupCellField.call(), i.setupTemplateCell.call(), i.setupSubDatatable.call(), i.setupSystemColumn.call(), i.redraw()), t(window).resize(i.fullRender), t(o).height(""), t(i.getOption("search.input")).on("keyup", function (e) {
-                        i.getOption("search.onEnter") && 13 !== e.which || i.search(t(this).val())
-                    }), o
-                }, extractTable: function () {
-                    var a = [], i = t(o).find("tr:first-child th").get().map(function (e, o) {
-                        var i = t(e).data("field");
-                        void 0 === i && (i = t(e).text().trim());
-                        var l = {field: i, title: i};
-                        for (var r in n.columns) n.columns[r].field === i && (l = t.extend(!0, {}, n.columns[r], l));
-                        return a.push(l), i
-                    });
-                    n.columns = a;
-                    var l = [], r = [];
-                    t(o).find("tr").each(function () {
-                        t(this).find("td").length && l.push(t(this).prop("attributes"));
-                        var a = {};
-                        t(this).find("td").each(function (t, e) {
-                            a[i[t]] = e.innerHTML.trim()
-                        }), e.isEmpty(a) || r.push(a)
-                    }), n.data.attr.rowProps = l, n.data.source = r
-                }, layoutUpdate: function () {
-                    i.setupSubDatatable.call(), i.setupSystemColumn.call(), i.setupHover.call(), void 0 === n.detail && 1 === i.getDepth() && i.lockTable.call(), i.columnHide.call(), i.resetScroll(), i.isInit || (t(o).trigger("m-datatable--on-init", {
-                        table: t(o.wrap).attr("id"),
-                        options: n
-                    }), i.isInit = !0), t(o).trigger("m-datatable--on-layout-updated", {table: t(o.wrap).attr("id")})
-                }, lockTable: function () {
-                    var e = {
-                        lockEnabled: !1, init: function () {
-                            e.lockEnabled = i.lockEnabledColumns(), 0 === e.lockEnabled.left.length && 0 === e.lockEnabled.right.length || e.enable()
-                        }, enable: function () {
-                            t(o.table).find("thead,tbody,tfoot").each(function () {
-                                var a = this;
-                                0 === t(this).find(".m-datatable__lock").length && t(this).ready(function () {
-                                    !function (a) {
-                                        if (t(a).find(".m-datatable__lock").length > 0) i.log("Locked container already exist in: ", a); else if (0 !== t(a).find(".m-datatable__row").length) {
-                                            var n = t("<div/>").addClass("m-datatable__lock m-datatable__lock--left"),
-                                                l = t("<div/>").addClass("m-datatable__lock m-datatable__lock--scroll"),
-                                                r = t("<div/>").addClass("m-datatable__lock m-datatable__lock--right");
-                                            t(a).find(".m-datatable__row").each(function () {
-                                                var e = t("<tr/>").addClass("m-datatable__row").appendTo(n),
-                                                    a = t("<tr/>").addClass("m-datatable__row").appendTo(l),
-                                                    o = t("<tr/>").addClass("m-datatable__row").appendTo(r);
-                                                t(this).find(".m-datatable__cell").each(function () {
-                                                    var n = t(this).data("locked");
-                                                    void 0 !== n ? (void 0 === n.left && !0 !== n || t(this).appendTo(e), void 0 !== n.right && t(this).appendTo(o)) : t(this).appendTo(a)
-                                                }), t(this).remove()
-                                            }), e.lockEnabled.left.length > 0 && (t(o.wrap).addClass("m-datatable--lock"), t(n).appendTo(a)), (e.lockEnabled.left.length > 0 || e.lockEnabled.right.length > 0) && t(l).appendTo(a), e.lockEnabled.right.length > 0 && (t(o.wrap).addClass("m-datatable--lock"), t(r).appendTo(a))
-                                        } else i.log("No row exist in: ", a)
-                                    }(a)
-                                })
-                            })
-                        }
-                    };
-                    return e.init(), e
-                }, fullRender: function () {
-                    i.isLocked() && (t(o.tableHead).empty(), i.setHeadTitle(), i.getOption("layout.footer") && (t(o.tableFoot).empty(), i.setHeadTitle(o.tableFoot)), i.spinnerCallback(!0), t(o.wrap).removeClass("m-datatable--loaded"), i.insertData())
-                }, lockEnabledColumns: function () {
-                    var a = t(window).width(), o = n.columns, i = {left: [], right: []};
-                    return t.each(o, function (t, n) {
-                        void 0 !== n.locked && (void 0 !== n.locked.left && e.getBreakpoint(n.locked.left) <= a && i.left.push(n.locked.left), void 0 !== n.locked.right && e.getBreakpoint(n.locked.right) <= a && i.right.push(n.locked.right))
-                    }), i
-                }, afterRender: function (e, a) {
-                    a.table == t(o.wrap).attr("id") && t(o).ready(function () {
-                        i.isLocked() || (i.redraw(), i.getOption("rows.autoHide") && (i.autoHide(), t(o.table).find(".m-datatable__row").css("height", ""))), i.rowEvenOdd.call(), i.isLocked() && i.redraw(), t(o.tableBody).css("visibility", ""), t(o.wrap).addClass("m-datatable--loaded"), i.scrollbar.call(), i.spinnerCallback(!1), i.sorting.call()
-                    })
-                }, hoverTimer: 0, isScrolling: !1, setupHover: function () {
-                    t(window).scroll(function (t) {
-                        clearTimeout(i.hoverTimer), i.isScrolling = !0
-                    }), t(o.tableBody).find(".m-datatable__cell").off("mouseenter", "mouseleave").on("mouseenter", function () {
-                        if (i.hoverTimer = setTimeout(function () {
-                            i.isScrolling = !1
-                        }, 200), !i.isScrolling) {
-                            var e = t(this).closest(".m-datatable__row").addClass("m-datatable__row--hover"),
-                                a = t(e).index() + 1;
-                            t(e).closest(".m-datatable__lock").parent().find(".m-datatable__row:nth-child(" + a + ")").addClass("m-datatable__row--hover")
-                        }
-                    }).on("mouseleave", function () {
-                        var e = t(this).closest(".m-datatable__row").removeClass("m-datatable__row--hover"),
-                            a = t(e).index() + 1;
-                        t(e).closest(".m-datatable__lock").parent().find(".m-datatable__row:nth-child(" + a + ")").removeClass("m-datatable__row--hover")
-                    })
-                }, adjustLockContainer: function () {
-                    if (!i.isLocked()) return 0;
-                    var e = t(o.tableHead).width(), a = t(o.tableHead).find(".m-datatable__lock--left").width(),
-                        n = t(o.tableHead).find(".m-datatable__lock--right").width();
-                    void 0 === a && (a = 0), void 0 === n && (n = 0);
-                    var l = Math.floor(e - a - n);
-                    return t(o.table).find(".m-datatable__lock--scroll").css("width", l), l
-                }, dragResize: function () {
-                    var e, a, n = !1, i = void 0;
-                    t(o.tableHead).find(".m-datatable__cell").mousedown(function (o) {
-                        i = t(this), n = !0, e = o.pageX, a = t(this).width(), t(i).addClass("m-datatable__cell--resizing")
-                    }).mousemove(function (l) {
-                        if (n) {
-                            var r = t(i).index(), s = t(o.tableBody), d = t(i).closest(".m-datatable__lock");
-                            if (d) {
-                                var c = t(d).index();
-                                s = t(o.tableBody).find(".m-datatable__lock").eq(c)
-                            }
-                            t(s).find(".m-datatable__row").each(function (n, o) {
-                                t(o).find(".m-datatable__cell").eq(r).width(a + (l.pageX - e)).children().width(a + (l.pageX - e))
-                            }), t(i).children().css("width", a + (l.pageX - e))
-                        }
-                    }).mouseup(function () {
-                        t(i).removeClass("m-datatable__cell--resizing"), n = !1
-                    }), t(document).mouseup(function () {
-                        t(i).removeClass("m-datatable__cell--resizing"), n = !1
-                    })
-                }, initHeight: function () {
-                    if (n.layout.height && n.layout.scroll) {
-                        var e = t(o.tableHead).find(".m-datatable__row").height(),
-                            a = t(o.tableFoot).find(".m-datatable__row").height(), i = n.layout.height;
-                        e > 0 && (i -= e), a > 0 && (i -= a), t(o.tableBody).css("max-height", i), t(o.tableBody).find(".m-datatable__lock--scroll").css("height", i)
-                    }
-                }, setupBaseDOM: function () {
-                    o.initialDatatable = t(o).clone(), "TABLE" === t(o).prop("tagName") ? (o.table = t(o).removeClass("m-datatable").addClass("m-datatable__table"), 0 === t(o.table).parents(".m-datatable").length && (o.table.wrap(t("<div/>").addClass("m-datatable").addClass("m-datatable--" + n.layout.theme)), o.wrap = t(o.table).parent())) : (o.wrap = t(o).addClass("m-datatable").addClass("m-datatable--" + n.layout.theme), o.table = t("<table/>").addClass("m-datatable__table").appendTo(o)), void 0 !== n.layout.class && t(o.wrap).addClass(n.layout.class), t(o.table).removeClass("m-datatable--destroyed").css("display", "block"), void 0 === t(o).attr("id") && (i.setOption("data.saveState", !1), t(o.table).attr("id", e.getUniqueID("m-datatable--"))), i.getOption("layout.minHeight") && t(o.table).css("min-height", i.getOption("layout.minHeight")), i.getOption("layout.height") && t(o.table).css("max-height", i.getOption("layout.height")), null === n.data.type && t(o.table).css("width", "").css("display", ""), o.tableHead = t(o.table).find("thead"), 0 === t(o.tableHead).length && (o.tableHead = t("<thead/>").prependTo(o.table)), o.tableBody = t(o.table).find("tbody"), 0 === t(o.tableBody).length && (o.tableBody = t("<tbody/>").appendTo(o.table)), void 0 !== n.layout.footer && n.layout.footer && (o.tableFoot = t(o.table).find("tfoot"), 0 === t(o.tableFoot).length && (o.tableFoot = t("<tfoot/>").appendTo(o.table)))
-                }, setupCellField: function (e) {
-                    void 0 === e && (e = t(o.table).children());
-                    var a = n.columns;
-                    t.each(e, function (e, n) {
-                        t(n).find(".m-datatable__row").each(function (e, n) {
-                            t(n).find(".m-datatable__cell").each(function (e, n) {
-                                void 0 !== a[e] && t(n).data(a[e])
-                            })
-                        })
-                    })
-                }, setupTemplateCell: function (e) {
-                    void 0 === e && (e = o.tableBody);
-                    var a = n.columns;
-                    t(e).find(".m-datatable__row").each(function (e, n) {
-                        var l = t(n).data("obj") || {}, r = i.getOption("rows.callback");
-                        "function" == typeof r && r(t(n), l, e);
-                        var s = i.getOption("rows.beforeTemplate");
-                        "function" == typeof s && s(t(n), l, e), void 0 === l && (l = {}, t(n).find(".m-datatable__cell").each(function (e, n) {
-                            var o = t.grep(a, function (e, a) {
-                                return t(n).data("field") === e.field
-                            })[0];
-                            void 0 !== o && (l[o.field] = t(n).text())
-                        })), t(n).find(".m-datatable__cell").each(function (n, r) {
-                            var s = t.grep(a, function (e, a) {
-                                return t(r).data("field") === e.field
-                            })[0];
-                            if (void 0 !== s && void 0 !== s.template) {
-                                var d = "";
-                                "string" == typeof s.template && (d = i.dataPlaceholder(s.template, l)), "function" == typeof s.template && (d = s.template(l, e, o));
-                                var c = document.createElement("span");
-                                c.innerHTML = d, t(r).html(c), void 0 !== s.overflow && (t(c).css("overflow", s.overflow), t(c).css("position", "relative"))
-                            }
-                        });
-                        var d = i.getOption("rows.afterTemplate");
-                        "function" == typeof d && d(t(n), l, e)
-                    })
-                }, setupSystemColumn: function () {
-                    if (o.dataSet = o.dataSet || [], 0 !== o.dataSet.length) {
-                        var e = n.columns;
-                        t(o.tableBody).find(".m-datatable__row").each(function (a, n) {
-                            t(n).find(".m-datatable__cell").each(function (a, n) {
-                                var o = t.grep(e, function (e, a) {
-                                    return t(n).data("field") === e.field
-                                })[0];
-                                if (void 0 !== o) {
-                                    var l = t(n).text();
-                                    if (void 0 !== o.selector && !1 !== o.selector) {
-                                        if (t(n).find('.m-checkbox [type="checkbox"]').length > 0) return;
-                                        t(n).addClass("m-datatable__cell--check");
-                                        var r = t("<label/>").addClass("m-checkbox m-checkbox--single").append(t("<input/>").attr("type", "checkbox").attr("value", l).on("click", function () {
-                                            t(this).is(":checked") ? i.setActive(this) : i.setInactive(this)
-                                        })).append("&nbsp;<span></span>");
-                                        void 0 !== o.selector.class && t(r).addClass(o.selector.class), t(n).children().html(r)
-                                    }
-                                    if (void 0 !== o.subtable && o.subtable) {
-                                        if (t(n).find(".m-datatable__toggle-subtable").length > 0) return;
-                                        t(n).children().html(t("<a/>").addClass("m-datatable__toggle-subtable").attr("href", "#").attr("data-value", l).append(t("<i/>").addClass(i.getOption("layout.icons.rowDetail.collapse"))))
-                                    }
-                                }
-                            })
-                        });
-                        var a = function (a) {
-                            var n = t.grep(e, function (t, e) {
-                                return void 0 !== t.selector && !1 !== t.selector
-                            })[0];
-                            if (void 0 !== n && void 0 !== n.selector && !1 !== n.selector) {
-                                var o = t(a).find('[data-field="' + n.field + '"]');
-                                if (t(o).find('.m-checkbox [type="checkbox"]').length > 0) return;
-                                t(o).addClass("m-datatable__cell--check");
-                                var l = t("<label/>").addClass("m-checkbox m-checkbox--single m-checkbox--all").append(t("<input/>").attr("type", "checkbox").on("click", function () {
-                                    t(this).is(":checked") ? i.setActiveAll(!0) : i.setActiveAll(!1)
-                                })).append("&nbsp;<span></span>");
-                                void 0 !== n.selector.class && t(l).addClass(n.selector.class), t(o).children().html(l)
-                            }
-                        };
-                        n.layout.header && a(t(o.tableHead).find(".m-datatable__row").first()), n.layout.footer && a(t(o.tableFoot).find(".m-datatable__row").first())
-                    }
-                }, adjustCellsWidth: function () {
-                    var e = t(o.tableHead).width(),
-                        a = t(o.tableHead).find(".m-datatable__row:first-child").find(".m-datatable__cell:visible").length;
-                    if (a > 0) {
-                        e -= 20 * a;
-                        var n = Math.floor(e / a);
-                        n <= i.offset && (n = i.offset), t(o.table).find(".m-datatable__row").find(".m-datatable__cell:visible").each(function (e, a) {
-                            var o = n, i = t(a).data("width");
-                            void 0 !== i && (o = i), t(a).children().css("width", parseInt(o))
-                        })
-                    }
-                    return o
-                }, adjustCellsHeight: function () {
-                    t.each(t(o.table).children(), function (e, a) {
-                        for (var n = t(a).find(".m-datatable__row").first().parent().find(".m-datatable__row").length, o = 1; o <= n; o++) {
-                            var i = t(a).find(".m-datatable__row:nth-child(" + o + ")");
-                            if (t(i).length > 0) {
-                                var l = Math.max.apply(null, t(i).map(function () {
-                                    return t(this).height()
-                                }).get());
-                                t(i).css("height", Math.ceil(parseInt(l)))
-                            }
-                        }
-                    })
-                }, setupDOM: function (e) {
-                    t(e).find("> thead").addClass("m-datatable__head"), t(e).find("> tbody").addClass("m-datatable__body"), t(e).find("> tfoot").addClass("m-datatable__foot"), t(e).find("tr").addClass("m-datatable__row"), t(e).find("tr > th, tr > td").addClass("m-datatable__cell"), t(e).find("tr > th, tr > td").each(function (e, a) {
-                        0 === t(a).find("span").length && t(a).wrapInner(t("<span/>").css("width", i.offset))
-                    })
-                }, scrollbar: function () {
-                    var a = {
-                        scrollable: null,
-                        tableLocked: null,
-                        mcsOptions: {
-                            scrollInertia: 0,
-                            autoDraggerLength: !0,
-                            autoHideScrollbar: !0,
-                            autoExpandScrollbar: !1,
-                            alwaysShowScrollbar: 0,
-                            mouseWheel: {scrollAmount: 120, preventDefault: !1},
-                            advanced: {updateOnContentResize: !0, autoExpandHorizontalScroll: !0},
-                            theme: "minimal-dark"
-                        },
-                        init: function () {
-                            var l = e.getViewPort().width;
-                            if (n.layout.scroll) {
-                                t(o.wrap).addClass("m-datatable--scroll");
-                                var r = t(o.tableBody).find(".m-datatable__lock--scroll");
-                                t(r).find(".m-datatable__row").length > 0 && t(r).length > 0 ? (a.scrollHead = t(o.tableHead).find("> .m-datatable__lock--scroll > .m-datatable__row"), a.scrollFoot = t(o.tableFoot).find("> .m-datatable__lock--scroll > .m-datatable__row"), a.tableLocked = t(o.tableBody).find(".m-datatable__lock:not(.m-datatable__lock--scroll)"), i.getOption("layout.customScrollbar") && 10 != e.detectIE() && l > e.getBreakpoint("lg") ? a.initCustomScrollbar(r[0]) : a.initDefaultScrollbar(r)) : t(o.tableBody).find(".m-datatable__row").length > 0 && (a.scrollHead = t(o.tableHead).find("> .m-datatable__row"), a.scrollFoot = t(o.tableFoot).find("> .m-datatable__row"), i.getOption("layout.customScrollbar") && 10 != e.detectIE() && l > e.getBreakpoint("lg") ? a.initCustomScrollbar(o.tableBody) : a.initDefaultScrollbar(o.tableBody))
-                            } else t(o.table).css("overflow-x", "auto")
-                        },
-                        initDefaultScrollbar: function (e) {
-                            t(e).css("overflow", "auto").off().on("scroll", a.onScrolling)
-                        },
-                        onScrolling: function (e) {
-                            var n = t(this).scrollLeft(), o = t(this).scrollTop();
-                            t(a.scrollHead).css("left", -n), t(a.scrollFoot).css("left", -n), t(a.tableLocked).each(function (e, a) {
-                                t(a).css("top", -o)
-                            })
-                        },
-                        initCustomScrollbar: function (e) {
-                            a.scrollable = e, i.initScrollbar(e), t(e).off().on("scroll", a.onScrolling)
-                        }
-                    };
-                    return a.init(), a
-                }, initScrollbar: function (a, n) {
-                    if (t(o.tableBody).css("overflow", ""), e.hasClass(a, "ps")) t(a).data("ps").update(); else {
-                        var i = new PerfectScrollbar(a);
-                        t(a).data("ps", i)
-                    }
-                }, setHeadTitle: function (a) {
-                    void 0 === a && (a = o.tableHead), a = t(a)[0];
-                    var l = n.columns, r = a.getElementsByTagName("tr")[0], s = a.getElementsByTagName("td");
-                    void 0 === r && (r = document.createElement("tr"), a.appendChild(r)), t.each(l, function (a, n) {
-                        var i = s[a];
-                        if (void 0 === i && (i = document.createElement("th"), r.appendChild(i)), void 0 !== n.title && (i.innerHTML = n.title, i.setAttribute("data-field", n.field), e.addClass(i, n.class), t(i).data(n)), void 0 !== n.attr && t.each(n.attr, function (t, e) {
-                            i.setAttribute(t, e)
-                        }), void 0 !== n.textAlign) {
-                            var l = void 0 !== o.textAlign[n.textAlign] ? o.textAlign[n.textAlign] : "";
-                            e.addClass(i, l)
-                        }
-                    }), i.setupDOM(a)
-                }, dataRender: function (e) {
-                    t(o.table).siblings(".m-datatable__pager").removeClass("m-datatable--paging-loaded");
-                    var a = function () {
-                        o.dataSet = o.dataSet || [], i.localDataUpdate();
-                        var e = i.getDataSourceParam("pagination");
-                        0 === e.perpage && (e.perpage = n.data.pageSize || 10), e.total = o.dataSet.length;
-                        var a = Math.max(e.perpage * (e.page - 1), 0), l = Math.min(a + e.perpage, e.total);
-                        return o.dataSet = t(o.dataSet).slice(a, l), e
-                    }, l = function (e) {
-                        var l = function (e, a) {
-                            t(e.pager).hasClass("m-datatable--paging-loaded") || (t(e.pager).remove(), e.init(a)), t(e.pager).off().on("m-datatable--on-goto-page", function (n) {
-                                t(e.pager).remove(), e.init(a)
-                            });
-                            var n = Math.max(a.perpage * (a.page - 1), 0), l = Math.min(n + a.perpage, a.total);
-                            i.localDataUpdate(), o.dataSet = t(o.dataSet).slice(n, l), i.insertData()
-                        };
-                        if (t(o.wrap).removeClass("m-datatable--error"), n.pagination) if (n.data.serverPaging && "local" !== n.data.type) {
-                            var r = i.getObject("meta", e || null);
-                            null !== r ? i.paging(r) : i.paging(a(), l)
-                        } else i.paging(a(), l); else i.localDataUpdate();
-                        i.insertData()
-                    };
-                    "local" === n.data.type || !1 === n.data.serverSorting && "sort" === e || !1 === n.data.serverFiltering && "search" === e ? l() : i.getData().done(l)
-                }, insertData: function () {
-                    o.dataSet = o.dataSet || [];
-                    var a = i.getDataSourceParam(), l = a.pagination, r = (Math.max(l.page, 1) - 1) * l.perpage,
-                        s = Math.min(l.page, l.pages) * l.perpage, d = {};
-                    void 0 !== n.data.attr.rowProps && n.data.attr.rowProps.length && (d = n.data.attr.rowProps.slice(r, s));
-                    var c = document.createElement("tbody");
-                    c.style.visibility = "hidden";
-                    var m = n.columns.length;
-                    if (t.each(o.dataSet, function (l, r) {
-                        var s = document.createElement("tr");
-                        s.setAttribute("data-row", l), t(s).data("obj", r), void 0 !== d[l] && t.each(d[l], function () {
-                            s.setAttribute(this.name, this.value)
-                        });
-                        for (var u = 0; u < m; u += 1) {
-                            var p = n.columns[u], f = [];
-                            if (i.getObject("sort.field", a) === p.field && f.push("m-datatable__cell--sorted"), void 0 !== p.textAlign) {
-                                var g = void 0 !== o.textAlign[p.textAlign] ? o.textAlign[p.textAlign] : "";
-                                f.push(g)
-                            }
-                            void 0 !== p.class && f.push(p.class);
-                            var h = document.createElement("td");
-                            e.addClass(h, f.join(" ")), h.setAttribute("data-field", p.field), h.innerHTML = i.getObject(p.field, r), s.appendChild(h)
-                        }
-                        c.appendChild(s)
-                    }), 0 === o.dataSet.length) {
-                        var u = document.createElement("span");
-                        e.addClass(u, "m-datatable--error"), u.innerHTML = i.getOption("translate.records.noRecords"), c.appendChild(u), t(o.wrap).addClass("m-datatable--error m-datatable--loaded"), i.spinnerCallback(!1)
-                    }
-                    t(o.tableBody).replaceWith(c), o.tableBody = c, i.setupDOM(o.table), i.setupCellField([o.tableBody]), i.setupTemplateCell(o.tableBody), i.layoutUpdate()
-                }, updateTableComponents: function () {
-                    o.tableHead = t(o.table).children("thead"), o.tableBody = t(o.table).children("tbody"), o.tableFoot = t(o.table).children("tfoot")
-                }, getData: function () {
-                    i.spinnerCallback(!0);
-                    var e = {
-                        dataType: "json",
-                        method: "GET",
-                        data: {},
-                        timeout: i.getOption("data.source.read.timeout") || 3e4
-                    };
-                    if ("local" === n.data.type && (e.url = n.data.source), "remote" === n.data.type) {
-                        e.url = i.getOption("data.source.read.url"), "string" != typeof e.url && (e.url = i.getOption("data.source.read")), "string" != typeof e.url && (e.url = i.getOption("data.source")), e.headers = i.getOption("data.source.read.headers"), e.method = i.getOption("data.source.read.method") || "POST";
-                        var a = i.getDataSourceParam();
-                        i.getOption("data.serverPaging") || delete a.pagination, i.getOption("data.serverSorting") || delete a.sort, e.data = t.extend({}, e.data, a, i.getOption("data.source.read.params"))
-                    }
-                    return t.ajax(e).done(function (e, a, n) {
-                        o.lastResponse = e, o.dataSet = o.originalDataSet = i.dataMapCallback(e), i.setAutoColumns(), t(o).trigger("m-datatable--on-ajax-done", [o.dataSet])
-                    }).fail(function (e, a, n) {
-                        t(o).trigger("m-datatable--on-ajax-fail", [e]), t(o.tableBody).html(t("<span/>").addClass("m-datatable--error").html(i.getOption("translate.records.noRecords"))), t(o.wrap).addClass("m-datatable--error m-datatable--loaded"), i.spinnerCallback(!1)
-                    }).always(function () {
-                    })
-                }, paging: function (a, n) {
-                    var l = {
-                        meta: null,
-                        pager: null,
-                        paginateEvent: null,
-                        pagerLayout: {pagination: null, info: null},
-                        callback: null,
-                        init: function (e) {
-                            l.meta = e, l.meta.page = parseInt(l.meta.page), l.meta.pages = parseInt(l.meta.pages), l.meta.perpage = parseInt(l.meta.perpage), l.meta.total = parseInt(l.meta.total), l.meta.pages = Math.max(Math.ceil(l.meta.total / l.meta.perpage), 1), l.meta.page > l.meta.pages && (l.meta.page = l.meta.pages), l.paginateEvent = i.getTablePrefix(), l.pager = t(o.table).siblings(".m-datatable__pager"), t(l.pager).hasClass("m-datatable--paging-loaded") || (t(l.pager).remove(), 0 !== l.meta.pages && (i.setDataSourceParam("pagination", {
-                                page: l.meta.page,
-                                pages: l.meta.pages,
-                                perpage: l.meta.perpage,
-                                total: l.meta.total
-                            }), l.callback = l.serverCallback, "function" == typeof n && (l.callback = n), l.addPaginateEvent(), l.populate(), l.meta.page = Math.max(l.meta.page || 1, l.meta.page), t(o).trigger(l.paginateEvent, l.meta), l.pagingBreakpoint.call(), t(window).resize(l.pagingBreakpoint)))
-                        },
-                        serverCallback: function (t, e) {
-                            i.dataRender()
-                        },
-                        populate: function () {
-                            var e = i.getOption("layout.icons.pagination"),
-                                a = i.getOption("translate.toolbar.pagination.items.default");
-                            l.pager = t("<div/>").addClass("m-datatable__pager m-datatable--paging-loaded clearfix");
-                            var n = t("<ul/>").addClass("m-datatable__pager-nav");
-                            l.pagerLayout.pagination = n, t("<li/>").append(t("<a/>").attr("title", a.first).addClass("m-datatable__pager-link m-datatable__pager-link--first").append(t("<i/>").addClass(e.first)).on("click", l.gotoMorePage).attr("data-page", 1)).appendTo(n), t("<li/>").append(t("<a/>").attr("title", a.prev).addClass("m-datatable__pager-link m-datatable__pager-link--prev").append(t("<i/>").addClass(e.prev)).on("click", l.gotoMorePage)).appendTo(n), t("<li/>").append(t("<a/>").attr("title", a.more).addClass("m-datatable__pager-link m-datatable__pager-link--more-prev").html(t("<i/>").addClass(e.more)).on("click", l.gotoMorePage)).appendTo(n), t("<li/>").append(t("<input/>").attr("type", "text").addClass("m-pager-input form-control").attr("title", a.input).on("keyup", function () {
-                                t(this).attr("data-page", Math.abs(t(this).val()))
-                            }).on("keypress", function (t) {
-                                13 === t.which && l.gotoMorePage(t)
-                            })).appendTo(n);
-                            var r = i.getOption("toolbar.items.pagination.pages.desktop.pagesNumber"),
-                                s = Math.ceil(l.meta.page / r) * r, d = s - r;
-                            s > l.meta.pages && (s = l.meta.pages);
-                            for (var c = d; c < s; c++) {
-                                var m = c + 1;
-                                t("<li/>").append(t("<a/>").addClass("m-datatable__pager-link m-datatable__pager-link-number").text(m).attr("data-page", m).attr("title", m).on("click", l.gotoPage)).appendTo(n)
-                            }
-                            t("<li/>").append(t("<a/>").attr("title", a.more).addClass("m-datatable__pager-link m-datatable__pager-link--more-next").html(t("<i/>").addClass(e.more)).on("click", l.gotoMorePage)).appendTo(n), t("<li/>").append(t("<a/>").attr("title", a.next).addClass("m-datatable__pager-link m-datatable__pager-link--next").append(t("<i/>").addClass(e.next)).on("click", l.gotoMorePage)).appendTo(n), t("<li/>").append(t("<a/>").attr("title", a.last).addClass("m-datatable__pager-link m-datatable__pager-link--last").append(t("<i/>").addClass(e.last)).on("click", l.gotoMorePage).attr("data-page", l.meta.pages)).appendTo(n), i.getOption("toolbar.items.info") && (l.pagerLayout.info = t("<div/>").addClass("m-datatable__pager-info").append(t("<span/>").addClass("m-datatable__pager-detail"))), t.each(i.getOption("toolbar.layout"), function (e, a) {
-                                t(l.pagerLayout[a]).appendTo(l.pager)
-                            });
-                            var u = t("<select/>").addClass("selectpicker m-datatable__pager-size").attr("title", i.getOption("translate.toolbar.pagination.items.default.select")).attr("data-width", "70px").val(l.meta.perpage).on("change", l.updatePerpage).prependTo(l.pagerLayout.info),
-                                p = i.getOption("toolbar.items.pagination.pageSizeSelect");
-                            0 == p.length && (p = [10, 20, 30, 50, 100]), t.each(p, function (e, a) {
-                                var n = a;
-                                -1 === a && (n = "All"), t("<option/>").attr("value", a).html(n).appendTo(u)
-                            }), t(o).ready(function () {
-                                t(".selectpicker").selectpicker().siblings(".dropdown-toggle").attr("title", i.getOption("translate.toolbar.pagination.items.default.select"))
-                            }), l.paste()
-                        },
-                        paste: function () {
-                            t.each(t.unique(i.getOption("toolbar.placement")), function (e, a) {
-                                "bottom" === a && t(l.pager).clone(!0).insertAfter(o.table), "top" === a && t(l.pager).clone(!0).addClass("m-datatable__pager--top").insertBefore(o.table)
-                            })
-                        },
-                        gotoMorePage: function (e) {
-                            if (e.preventDefault(), "disabled" === t(this).attr("disabled")) return !1;
-                            var a = t(this).attr("data-page");
-                            return void 0 === a && (a = t(e.target).attr("data-page")), l.openPage(parseInt(a)), !1
-                        },
-                        gotoPage: function (e) {
-                            e.preventDefault(), t(this).hasClass("m-datatable__pager-link--active") || l.openPage(parseInt(t(this).data("page")))
-                        },
-                        openPage: function (e) {
-                            l.meta.page = parseInt(e), t(o).trigger(l.paginateEvent, l.meta), l.callback(l, l.meta), t(l.pager).trigger("m-datatable--on-goto-page", l.meta)
-                        },
-                        updatePerpage: function (e) {
-                            e.preventDefault(), l.pager = t(o.table).siblings(".m-datatable__pager").removeClass("m-datatable--paging-loaded"), e.originalEvent && (l.meta.perpage = parseInt(t(this).val())), t(l.pager).find("select.m-datatable__pager-size").val(l.meta.perpage).attr("data-selected", l.meta.perpage), i.setDataSourceParam("pagination", {
-                                page: l.meta.page,
-                                pages: l.meta.pages,
-                                perpage: l.meta.perpage,
-                                total: l.meta.total
-                            }), t(l.pager).trigger("m-datatable--on-update-perpage", l.meta), t(o).trigger(l.paginateEvent, l.meta), l.callback(l, l.meta), l.updateInfo.call()
-                        },
-                        addPaginateEvent: function (e) {
-                            t(o).off(l.paginateEvent).on(l.paginateEvent, function (e, a) {
-                                i.spinnerCallback(!0), l.pager = t(o.table).siblings(".m-datatable__pager");
-                                var n = t(l.pager).find(".m-datatable__pager-nav");
-                                t(n).find(".m-datatable__pager-link--active").removeClass("m-datatable__pager-link--active"), t(n).find('.m-datatable__pager-link-number[data-page="' + a.page + '"]').addClass("m-datatable__pager-link--active"), t(n).find(".m-datatable__pager-link--prev").attr("data-page", Math.max(a.page - 1, 1)), t(n).find(".m-datatable__pager-link--next").attr("data-page", Math.min(a.page + 1, a.pages)), t(l.pager).each(function () {
-                                    t(this).find('.m-pager-input[type="text"]').prop("value", a.page)
-                                }), t(l.pager).find(".m-datatable__pager-nav").show(), a.pages <= 1 && t(l.pager).find(".m-datatable__pager-nav").hide(), i.setDataSourceParam("pagination", {
-                                    page: l.meta.page,
-                                    pages: l.meta.pages,
-                                    perpage: l.meta.perpage,
-                                    total: l.meta.total
-                                }), t(l.pager).find("select.m-datatable__pager-size").val(a.perpage).attr("data-selected", a.perpage), t(o.table).find('.m-checkbox > [type="checkbox"]').prop("checked", !1), t(o.table).find(".m-datatable__row--active").removeClass("m-datatable__row--active"), l.updateInfo.call(), l.pagingBreakpoint.call()
-                            })
-                        },
-                        updateInfo: function () {
-                            var e = Math.max(l.meta.perpage * (l.meta.page - 1) + 1, 1),
-                                a = Math.min(e + l.meta.perpage - 1, l.meta.total);
-                            t(l.pager).find(".m-datatable__pager-info").find(".m-datatable__pager-detail").html(i.dataPlaceholder(i.getOption("translate.toolbar.pagination.items.info"), {
-                                start: e,
-                                end: -1 === l.meta.perpage ? l.meta.total : a,
-                                pageSize: -1 === l.meta.perpage || l.meta.perpage >= l.meta.total ? l.meta.total : l.meta.perpage,
-                                total: l.meta.total
-                            }))
-                        },
-                        pagingBreakpoint: function () {
-                            var a = t(o.table).siblings(".m-datatable__pager").find(".m-datatable__pager-nav");
-                            if (0 !== t(a).length) {
-                                var n = i.getCurrentPage(), r = t(a).find(".m-pager-input").closest("li");
-                                t(a).find("li").show(), t.each(i.getOption("toolbar.items.pagination.pages"), function (o, s) {
-                                    if (e.isInResponsiveRange(o)) {
-                                        switch (o) {
-                                            case"desktop":
-                                            case"tablet":
-                                                Math.ceil(n / s.pagesNumber), s.pagesNumber, s.pagesNumber;
-                                                t(r).hide(), l.meta = i.getDataSourceParam("pagination"), l.paginationUpdate();
-                                                break;
-                                            case"mobile":
-                                                t(r).show(), t(a).find(".m-datatable__pager-link--more-prev").closest("li").hide(), t(a).find(".m-datatable__pager-link--more-next").closest("li").hide(), t(a).find(".m-datatable__pager-link-number").closest("li").hide()
-                                        }
-                                        return !1
-                                    }
-                                })
-                            }
-                        },
-                        paginationUpdate: function () {
-                            var e = t(o.table).siblings(".m-datatable__pager").find(".m-datatable__pager-nav"),
-                                a = t(e).find(".m-datatable__pager-link--more-prev"),
-                                n = t(e).find(".m-datatable__pager-link--more-next"),
-                                r = t(e).find(".m-datatable__pager-link--first"),
-                                s = t(e).find(".m-datatable__pager-link--prev"),
-                                d = t(e).find(".m-datatable__pager-link--next"),
-                                c = t(e).find(".m-datatable__pager-link--last"),
-                                m = t(e).find(".m-datatable__pager-link-number"),
-                                u = Math.max(t(m).first().data("page") - 1, 1);
-                            t(a).each(function (e, a) {
-                                t(a).attr("data-page", u)
-                            }), 1 === u ? t(a).parent().hide() : t(a).parent().show();
-                            var p = Math.min(t(m).last().data("page") + 1, l.meta.pages);
-                            t(n).each(function (e, a) {
-                                t(n).attr("data-page", p).show()
-                            }), p === l.meta.pages && p === t(m).last().data("page") ? t(n).parent().hide() : t(n).parent().show(), 1 === l.meta.page ? (t(r).attr("disabled", !0).addClass("m-datatable__pager-link--disabled"), t(s).attr("disabled", !0).addClass("m-datatable__pager-link--disabled")) : (t(r).removeAttr("disabled").removeClass("m-datatable__pager-link--disabled"), t(s).removeAttr("disabled").removeClass("m-datatable__pager-link--disabled")), l.meta.page === l.meta.pages ? (t(d).attr("disabled", !0).addClass("m-datatable__pager-link--disabled"), t(c).attr("disabled", !0).addClass("m-datatable__pager-link--disabled")) : (t(d).removeAttr("disabled").removeClass("m-datatable__pager-link--disabled"), t(c).removeAttr("disabled").removeClass("m-datatable__pager-link--disabled"));
-                            var f = i.getOption("toolbar.items.pagination.navigation");
-                            f.first || t(r).remove(), f.prev || t(s).remove(), f.next || t(d).remove(), f.last || t(c).remove()
-                        }
-                    };
-                    return l.init(a), l
-                }, columnHide: function () {
-                    var a = e.getViewPort().width;
-                    t.each(n.columns, function (n, i) {
-                        if (void 0 !== i.responsive) {
-                            var l = i.field, r = t.grep(t(o.table).find(".m-datatable__cell"), function (e, a) {
-                                return l === t(e).data("field")
-                            });
-                            e.getBreakpoint(i.responsive.hidden) >= a ? t(r).hide() : t(r).show(), e.getBreakpoint(i.responsive.visible) <= a ? t(r).show() : t(r).hide()
-                        }
-                    })
-                }, setupSubDatatable: function () {
-                    var e = i.getOption("detail.content");
-                    if ("function" == typeof e && !(t(o.table).find(".m-datatable__subtable").length > 0)) {
-                        t(o.wrap).addClass("m-datatable--subtable"), n.columns[0].subtable = !0;
-                        var a = function (a) {
-                            a.preventDefault();
-                            var l = t(this).closest(".m-datatable__row"), r = t(l).next(".m-datatable__row-subtable");
-                            0 === t(r).length && (r = t("<tr/>").addClass("m-datatable__row-subtable m-datatable__row-loading").hide().append(t("<td/>").addClass("m-datatable__subtable").attr("colspan", i.getTotalColumns())), t(l).after(r), t(l).hasClass("m-datatable__row--even") && t(r).addClass("m-datatable__row-subtable--even")), t(r).toggle();
-                            var s = t(r).find(".m-datatable__subtable"),
-                                d = t(this).closest("[data-field]:first-child").find(".m-datatable__toggle-subtable").data("value"),
-                                c = t(this).find("i").removeAttr("class");
-                            t(l).hasClass("m-datatable__row--subtable-expanded") ? (t(c).addClass(i.getOption("layout.icons.rowDetail.collapse")), t(l).removeClass("m-datatable__row--subtable-expanded"), t(o).trigger("m-datatable--on-collapse-subtable", [l])) : (t(c).addClass(i.getOption("layout.icons.rowDetail.expand")), t(l).addClass("m-datatable__row--subtable-expanded"), t(o).trigger("m-datatable--on-expand-subtable", [l])), 0 === t(s).find(".m-datatable").length && (t.map(o.dataSet, function (t, e) {
-                                return d === t[n.columns[0].field] && (a.data = t, !0)
-                            }), a.detailCell = s, a.parentRow = l, a.subTable = s, e(a), t(s).children(".m-datatable").on("m-datatable--on-init", function (e) {
-                                t(r).removeClass("m-datatable__row-loading")
-                            }), "local" === i.getOption("data.type") && t(r).removeClass("m-datatable__row-loading"))
-                        }, l = n.columns;
-                        t(o.tableBody).find(".m-datatable__row").each(function (e, n) {
-                            t(n).find(".m-datatable__cell").each(function (e, n) {
-                                var o = t.grep(l, function (e, a) {
-                                    return t(n).data("field") === e.field
-                                })[0];
-                                if (void 0 !== o) {
-                                    var r = t(n).text();
-                                    if (void 0 !== o.subtable && o.subtable) {
-                                        if (t(n).find(".m-datatable__toggle-subtable").length > 0) return;
-                                        t(n).html(t("<a/>").addClass("m-datatable__toggle-subtable").attr("href", "#").attr("data-value", r).attr("title", i.getOption("detail.title")).on("click", a).append(t("<i/>").css("width", t(n).data("width")).addClass(i.getOption("layout.icons.rowDetail.collapse"))))
-                                    }
-                                }
-                            })
-                        })
-                    }
-                }, dataMapCallback: function (t) {
-                    var e = t;
-                    return "function" == typeof i.getOption("data.source.read.map") ? i.getOption("data.source.read.map")(t) : (void 0 !== t && void 0 !== t.data && (e = t.data), e)
-                }, isSpinning: !1, spinnerCallback: function (t) {
-                    if (t) {
-                        if (!i.isSpinning) {
-                            var e = i.getOption("layout.spinner");
-                            void 0 !== e.message && !0 === e.message && (e.message = i.getOption("translate.records.processing")), i.isSpinning = !0, void 0 !== a && a.block(o, e)
-                        }
-                    } else i.isSpinning = !1, void 0 !== a && a.unblock(o)
-                }, sortCallback: function (e, a, n) {
-                    var o = n.type || "string", i = n.format || "", l = n.field;
-                    return t(e).sort(function (t, e) {
-                        var n = t[l], r = e[l];
-                        switch (o) {
-                            case"date":
-                                if ("undefined" == typeof moment) throw new Error("Moment.js is required.");
-                                var s = moment(n, i).diff(moment(r, i));
-                                return "asc" === a ? s > 0 ? 1 : s < 0 ? -1 : 0 : s < 0 ? 1 : s > 0 ? -1 : 0;
-                            case"number":
-                                return isNaN(parseFloat(n)) && null != n && (n = Number(n.replace(/[^0-9\.-]+/g, ""))), isNaN(parseFloat(r)) && null != r && (r = Number(r.replace(/[^0-9\.-]+/g, ""))), n = parseFloat(n), r = parseFloat(r), "asc" === a ? n > r ? 1 : n < r ? -1 : 0 : n < r ? 1 : n > r ? -1 : 0;
-                            case"string":
-                            default:
-                                return "asc" === a ? n > r ? 1 : n < r ? -1 : 0 : n < r ? 1 : n > r ? -1 : 0
-                        }
-                    })
-                }, log: function (t, e) {
-                    void 0 === e && (e = ""), o.debug && console.log(t, e)
-                }, autoHide: function () {
-                    t(o.table).find(".m-datatable__cell").show(), t(o.tableBody).each(function () {
-                        for (; t(this)[0].offsetWidth < t(this)[0].scrollWidth;) t(o.table).find(".m-datatable__row").each(function (e) {
-                            var a = t(this).find(".m-datatable__cell").not(":hidden").last();
-                            t(a).hide()
-                        }), i.adjustCellsWidth.call()
-                    });
-                    var e = function (e) {
-                        e.preventDefault();
-                        var a = t(this).closest(".m-datatable__row"), o = t(a).next();
-                        if (t(o).hasClass("m-datatable__row-detail")) t(this).find("i").removeClass(i.getOption("layout.icons.rowDetail.expand")).addClass(i.getOption("layout.icons.rowDetail.collapse")), t(o).remove(); else {
-                            t(this).find("i").removeClass(i.getOption("layout.icons.rowDetail.collapse")).addClass(i.getOption("layout.icons.rowDetail.expand"));
-                            var l = t(a).find(".m-datatable__cell:hidden").clone().show();
-                            o = t("<tr/>").addClass("m-datatable__row-detail").insertAfter(a);
-                            var r = t("<td/>").addClass("m-datatable__detail").attr("colspan", i.getTotalColumns()).appendTo(o),
-                                s = t("<table/>");
-                            t(l).each(function () {
-                                var e = t(this).data("field"), a = t.grep(n.columns, function (t, a) {
-                                    return e === t.field
-                                })[0];
-                                t(s).append(t('<tr class="m-datatable__row"></tr>').append(t('<td class="m-datatable__cell"></td>').append(t("<span/>").css("width", i.offset).append(a.title))).append(this))
-                            }), t(r).append(s)
-                        }
-                    };
-                    t(o.tableBody).find(".m-datatable__row").each(function () {
-                        t(this).prepend(t("<td/>").addClass("m-datatable__cell m-datatable__toggle--detail").append(t("<a/>").addClass("m-datatable__toggle-detail").attr("href", "").on("click", e).append(t("<i/>").css("width", "21px").addClass(i.getOption("layout.icons.rowDetail.collapse"))))), 0 === t(o.tableHead).find(".m-datatable__toggle-detail").length ? (t(o.tableHead).find(".m-datatable__row").first().prepend('<th class="m-datatable__cell m-datatable__toggle-detail"><span style="width: 21px"></span></th>'), t(o.tableFoot).find(".m-datatable__row").first().prepend('<th class="m-datatable__cell m-datatable__toggle-detail"><span style="width: 21px"></span></th>')) : t(o.tableHead).find(".m-datatable__toggle-detail").find("span").css("width", "21px")
-                    })
-                }, hoverColumn: function () {
-                    t(o.tableBody).on("mouseenter", ".m-datatable__cell", function () {
-                        var e = t(i.cell(this).nodes()).index();
-                        t(i.cells().nodes()).removeClass("m-datatable__cell--hover"), t(i.column(e).nodes()).addClass("m-datatable__cell--hover")
-                    })
-                }, setAutoColumns: function () {
-                    i.getOption("data.autoColumns") && (t.each(o.dataSet[0], function (e, a) {
-                        0 === t.grep(n.columns, function (t, a) {
-                            return e === t.field
-                        }).length && n.columns.push({field: e, title: e})
-                    }), t(o.tableHead).find(".m-datatable__row").remove(), i.setHeadTitle(), i.getOption("layout.footer") && (t(o.tableFoot).find(".m-datatable__row").remove(), i.setHeadTitle(o.tableFoot)))
-                }, isLocked: function () {
-                    return e.hasClass(o.wrap[0], "m-datatable--lock") || !1
-                }, getExtraSpace: function (e) {
-                    return parseInt(t(e).css("paddingRight")) + parseInt(t(e).css("paddingLeft")) + (parseInt(t(e).css("marginRight")) + parseInt(t(e).css("marginLeft"))) + Math.ceil(t(e).css("border-right-width").replace("px", ""))
-                }, dataPlaceholder: function (e, a) {
-                    var n = e;
-                    return t.each(a, function (t, e) {
-                        n = n.replace("{{" + t + "}}", e)
-                    }), n
-                }, getTableId: function (e) {
-                    void 0 === e && (e = "");
-                    var a = t(o).attr("id");
-                    return void 0 === a && (a = t(o).attr("class").split(" ")[0]), a + e
-                }, getTablePrefix: function (t) {
-                    return void 0 !== t && (t = "-" + t), i.getTableId() + "-" + i.getDepth() + t
-                }, getDepth: function () {
-                    var e = 0, a = o.table;
-                    do {
-                        a = t(a).parents(".m-datatable__table"), e++
-                    } while (t(a).length > 0);
-                    return e
-                }, stateKeep: function (t, e) {
-                    t = i.getTablePrefix(t), !1 !== i.getOption("data.saveState") && (i.getOption("data.saveState.webstorage") && localStorage && localStorage.setItem(t, JSON.stringify(e)), i.getOption("data.saveState.cookie") && Cookies.set(t, JSON.stringify(e)))
-                }, stateGet: function (t, e) {
-                    if (t = i.getTablePrefix(t), !1 !== i.getOption("data.saveState")) {
-                        var a = null;
-                        return null != (a = i.getOption("data.saveState.webstorage") && localStorage ? localStorage.getItem(t) : Cookies.get(t)) ? JSON.parse(a) : void 0
-                    }
-                }, stateUpdate: function (e, a) {
-                    var n = i.stateGet(e);
-                    null == n && (n = {}), i.stateKeep(e, t.extend({}, n, a))
-                }, stateRemove: function (t) {
-                    t = i.getTablePrefix(t), localStorage && localStorage.removeItem(t), Cookies.remove(t)
-                }, getTotalColumns: function (e) {
-                    return void 0 === e && (e = o.tableBody), t(e).find(".m-datatable__row").first().find(".m-datatable__cell").length
-                }, getOneRow: function (e, a, n) {
-                    void 0 === n && (n = !0);
-                    var o = t(e).find(".m-datatable__row:not(.m-datatable__row-detail):nth-child(" + a + ")");
-                    return n && (o = o.find(".m-datatable__cell")), o
-                }, hasOverflowY: function (e) {
-                    var a = t(e).find(".m-datatable__row"), n = 0;
-                    return a.length > 0 && (t(a).each(function (e, a) {
-                        n += Math.floor(t(a).innerHeight())
-                    }), n > t(e).innerHeight())
-                }, sortColumn: function (e, a, n) {
-                    void 0 === a && (a = "asc"), void 0 === n && (n = !1);
-                    var i = t(e).index(), l = t(o.tableBody).find(".m-datatable__row"),
-                        r = t(e).closest(".m-datatable__lock").index();
-                    -1 !== r && (l = t(o.tableBody).find(".m-datatable__lock:nth-child(" + (r + 1) + ")").find(".m-datatable__row"));
-                    var s = t(l).parent();
-                    t(l).sort(function (e, o) {
-                        var l = t(e).find("td:nth-child(" + i + ")").text(),
-                            r = t(o).find("td:nth-child(" + i + ")").text();
-                        return n && (l = parseInt(l), r = parseInt(r)), "asc" === a ? l > r ? 1 : l < r ? -1 : 0 : l < r ? 1 : l > r ? -1 : 0
-                    }).appendTo(s)
-                }, sorting: function () {
-                    var e = {
-                        init: function () {
-                            n.sortable && (t(o.tableHead).find(".m-datatable__cell:not(.m-datatable__cell--check)").addClass("m-datatable__cell--sort").off("click").on("click", e.sortClick), e.setIcon())
-                        }, setIcon: function () {
-                            var e = i.getDataSourceParam("sort");
-                            if (!t.isEmptyObject(e)) {
-                                var a = t(o.tableHead).find('.m-datatable__cell[data-field="' + e.field + '"]').attr("data-sort", e.sort),
-                                    n = t(a).find("span"), l = t(n).find("i"), r = i.getOption("layout.icons.sort");
-                                t(l).length > 0 ? t(l).removeAttr("class").addClass(r[e.sort]) : t(n).append(t("<i/>").addClass(r[e.sort]))
-                            }
-                        }, sortClick: function (a) {
-                            var l = i.getDataSourceParam("sort"), r = t(this).data("field"), s = i.getColumnByField(r);
-                            if ((void 0 === s.sortable || !1 !== s.sortable) && (t(o.tableHead).find(".m-datatable__cell > span > i").remove(), n.sortable)) {
-                                i.spinnerCallback(!0);
-                                var d = "desc";
-                                i.getObject("field", l) === r && (d = i.getObject("sort", l)), l = {
-                                    field: r,
-                                    sort: d = void 0 === d || "desc" === d ? "asc" : "desc"
-                                }, i.setDataSourceParam("sort", l), e.setIcon(), setTimeout(function () {
-                                    i.dataRender("sort"), t(o).trigger("m-datatable--on-sort", l)
-                                }, 300)
-                            }
-                        }
-                    };
-                    e.init()
-                }, localDataUpdate: function () {
-                    var e = i.getDataSourceParam();
-                    void 0 === o.originalDataSet && (o.originalDataSet = o.dataSet);
-                    var a = i.getObject("sort.field", e), n = i.getObject("sort.sort", e), l = i.getColumnByField(a);
-                    if (void 0 !== l && !0 !== i.getOption("data.serverSorting") ? "function" == typeof l.sortCallback ? o.dataSet = l.sortCallback(o.originalDataSet, n, l) : o.dataSet = i.sortCallback(o.originalDataSet, n, l) : o.dataSet = o.originalDataSet, "object" == typeof e.query && !i.getOption("data.serverFiltering")) {
-                        e.query = e.query || {};
-                        var r = function (t) {
-                            for (var e in t) if (t.hasOwnProperty(e)) if ("string" == typeof t[e]) {
-                                if (t[e].toLowerCase() == s || -1 !== t[e].toLowerCase().indexOf(s)) return !0
-                            } else if ("number" == typeof t[e]) {
-                                if (t[e] === s) return !0
-                            } else if ("object" == typeof t[e]) return r(t[e]);
-                            return !1
-                        }, s = t(i.getOption("search.input")).val();
-                        void 0 !== s && "" !== s && (s = s.toLowerCase(), o.dataSet = t.grep(o.dataSet, r), delete e.query[i.getGeneralSearchKey()]), t.each(e.query, function (t, a) {
-                            "" === a && delete e.query[t]
-                        }), o.dataSet = i.filterArray(o.dataSet, e.query), o.dataSet = o.dataSet.filter(function () {
-                            return !0
-                        })
-                    }
-                    return o.dataSet
-                }, filterArray: function (e, a, n) {
-                    if ("object" != typeof e) return [];
-                    if (void 0 === n && (n = "AND"), "object" != typeof a) return e;
-                    if (n = n.toUpperCase(), -1 === t.inArray(n, ["AND", "OR", "NOT"])) return [];
-                    var o = Object.keys(a).length, i = [];
-                    return t.each(e, function (e, l) {
-                        var r = l, s = 0;
-                        t.each(a, function (t, e) {
-                            if (e = e instanceof Array ? e : [e], r.hasOwnProperty(t)) {
-                                var a = r[t].toString().toLowerCase();
-                                e.forEach(function (t, e) {
-                                    t.toString().toLowerCase() != a && -1 === a.indexOf(t.toString().toLowerCase()) || s++
-                                })
-                            }
-                        }), ("AND" == n && s == o || "OR" == n && s > 0 || "NOT" == n && 0 == s) && (i[e] = l)
-                    }), e = i
-                }, resetScroll: function () {
-                    void 0 === n.detail && 1 === i.getDepth() && (t(o.table).find(".m-datatable__row").css("left", 0), t(o.table).find(".m-datatable__lock").css("top", 0), t(o.tableBody).scrollTop(0))
-                }, getColumnByField: function (e) {
-                    var a;
-                    if (void 0 !== e) return t.each(n.columns, function (t, n) {
-                        if (e === n.field) return a = n, !1
-                    }), a
-                }, getDefaultSortColumn: function () {
-                    var e;
-                    return t.each(n.columns, function (a, n) {
-                        if (void 0 !== n.sortable && -1 !== t.inArray(n.sortable, ["asc", "desc"])) return e = {
-                            sort: n.sortable,
-                            field: n.field
-                        }, !1
-                    }), e
-                }, getHiddenDimensions: function (e, a) {
-                    var n = {position: "absolute", visibility: "hidden", display: "block"},
-                        o = {width: 0, height: 0, innerWidth: 0, innerHeight: 0, outerWidth: 0, outerHeight: 0},
-                        i = t(e).parents().addBack().not(":visible");
-                    a = "boolean" == typeof a && a;
-                    var l = [];
-                    return i.each(function () {
-                        var t = {};
-                        for (var e in n) t[e] = this.style[e], this.style[e] = n[e];
-                        l.push(t)
-                    }), o.width = t(e).width(), o.outerWidth = t(e).outerWidth(a), o.innerWidth = t(e).innerWidth(), o.height = t(e).height(), o.innerHeight = t(e).innerHeight(), o.outerHeight = t(e).outerHeight(a), i.each(function (t) {
-                        var e = l[t];
-                        for (var a in n) this.style[a] = e[a]
-                    }), o
-                }, getGeneralSearchKey: function () {
-                    var e = t(i.getOption("search.input"));
-                    return t(e).prop("name") || t(e).prop("id")
-                }, getObject: function (t, e) {
-                    return t.split(".").reduce(function (t, e) {
-                        return null !== t && void 0 !== t[e] ? t[e] : null
-                    }, e)
-                }, extendObj: function (t, e, a) {
-                    var n = e.split("."), o = 0;
-                    return function t(e) {
-                        var i = n[o++];
-                        void 0 !== e[i] && null !== e[i] ? "object" != typeof e[i] && "function" != typeof e[i] && (e[i] = {}) : e[i] = {}, o === n.length ? e[i] = a : t(e[i])
-                    }(t), t
-                }, rowEvenOdd: function () {
-                    t(o.tableBody).find(".m-datatable__row").removeClass("m-datatable__row--even"), t(o.wrap).hasClass("m-datatable--subtable") ? t(o.tableBody).find(".m-datatable__row:not(.m-datatable__row-detail):even").addClass("m-datatable__row--even") : t(o.tableBody).find(".m-datatable__row:nth-child(even)").addClass("m-datatable__row--even")
-                }, timer: 0, redraw: function () {
-                    return i.adjustCellsWidth.call(), i.isLocked() && (i.scrollbar(), i.resetScroll(), i.adjustCellsHeight.call()), i.adjustLockContainer.call(), i.initHeight.call(), o
-                }, load: function () {
-                    return i.reload(), o
-                }, reload: function () {
-                    return function (t, e) {
-                        clearTimeout(i.timer), i.timer = setTimeout(t, e)
-                    }(function () {
-                        n.data.serverFiltering || i.localDataUpdate(), i.dataRender(), t(o).trigger("m-datatable--on-reloaded")
-                    }, i.getOption("search.delay")), o
-                }, getRecord: function (e) {
-                    return void 0 === o.tableBody && (o.tableBody = t(o.table).children("tbody")), t(o.tableBody).find(".m-datatable__cell:first-child").each(function (a, n) {
-                        if (e == t(n).text()) {
-                            var l = t(n).closest(".m-datatable__row").index() + 1;
-                            return o.API.record = o.API.value = i.getOneRow(o.tableBody, l), o
-                        }
-                    }), o
-                }, getColumn: function (e) {
-                    return i.setSelectedRecords(), o.API.value = t(o.API.record).find('[data-field="' + e + '"]'), o
-                }, destroy: function () {
-                    t(o).parent().find(".m-datatable__pager").remove();
-                    var e = t(o.initialDatatable).addClass("m-datatable--destroyed").show();
-                    return t(o).replaceWith(e), t(o = e).trigger("m-datatable--on-destroy"), i.isInit = !1, e = null
-                }, sort: function (e, a) {
-                    a = void 0 === a ? "asc" : a, i.spinnerCallback(!0);
-                    var n = {field: e, sort: a};
-                    return i.setDataSourceParam("sort", n), setTimeout(function () {
-                        i.dataRender("sort"), t(o).trigger("m-datatable--on-sort", n), t(o.tableHead).find(".m-datatable__cell > span > i").remove()
-                    }, 300), o
-                }, getValue: function () {
-                    return t(o.API.value).text()
-                }, setActive: function (e) {
-                    "string" == typeof e && (e = t(o.tableBody).find('.m-checkbox--single > [type="checkbox"][value="' + e + '"]')), t(e).prop("checked", !0);
-                    var a = t(e).closest(".m-datatable__row").addClass("m-datatable__row--active"),
-                        n = t(a).index() + 1;
-                    t(a).closest(".m-datatable__lock").parent().find(".m-datatable__row:nth-child(" + n + ")").addClass("m-datatable__row--active");
-                    var i = [];
-                    t(a).each(function (e, a) {
-                        var n = t(a).find('.m-checkbox--single:not(.m-checkbox--all) > [type="checkbox"]').val();
-                        void 0 !== n && i.push(n)
-                    }), t(o).trigger("m-datatable--on-check", [i])
-                }, setInactive: function (e) {
-                    "string" == typeof e && (e = t(o.tableBody).find('.m-checkbox--single > [type="checkbox"][value="' + e + '"]')), t(e).prop("checked", !1);
-                    var a = t(e).closest(".m-datatable__row").removeClass("m-datatable__row--active"),
-                        n = t(a).index() + 1;
-                    t(a).closest(".m-datatable__lock").parent().find(".m-datatable__row:nth-child(" + n + ")").removeClass("m-datatable__row--active");
-                    var i = [];
-                    t(a).each(function (e, a) {
-                        var n = t(a).find('.m-checkbox--single:not(.m-checkbox--all) > [type="checkbox"]').val();
-                        void 0 !== n && i.push(n)
-                    }), t(o).trigger("m-datatable--on-uncheck", [i])
-                }, setActiveAll: function (e) {
-                    var a = t(o.table).find("> tbody, > thead").find("> tr:not(.m-datatable__row-subtable)").find('.m-datatable__cell--check [type="checkbox"]');
-                    e ? i.setActive(a) : i.setInactive(a)
-                }, setSelectedRecords: function () {
-                    return o.API.record = t(o.tableBody).find(".m-datatable__row--active"), o
-                }, getSelectedRecords: function () {
-                    return i.setSelectedRecords(), o.API.record = o.rows(".m-datatable__row--active").nodes(), o.API.record
-                }, getOption: function (t) {
-                    return i.getObject(t, n)
-                }, setOption: function (t, e) {
-                    n = i.extendObj(n, t, e)
-                }, search: function (e, a) {
-                    void 0 !== a && (a = t.makeArray(a)), o = function () {
-                        var o = i.getDataSourceQuery();
-                        if (void 0 === a && void 0 !== e) {
-                            var l = i.getGeneralSearchKey();
-                            o[l] = e
-                        }
-                        "object" == typeof a && (t.each(a, function (t, a) {
-                            o[a] = e
-                        }), t.each(o, function (e, a) {
-                            ("" === a || t.isEmptyObject(a)) && delete o[e]
-                        })), i.setDataSourceQuery(o), n.data.serverFiltering || i.localDataUpdate(), i.dataRender("search")
-                    }, l = i.getOption("search.delay"), clearTimeout(i.timer), i.timer = setTimeout(o, l);
-                    var o, l
-                }, setDataSourceParam: function (e, a) {
-                    o.API.params = t.extend({}, {
-                        pagination: {page: 1, perpage: i.getOption("data.pageSize")},
-                        sort: i.getDefaultSortColumn(),
-                        query: {}
-                    }, o.API.params, i.stateGet(i.stateId)), o.API.params = i.extendObj(o.API.params, e, a), i.stateKeep(i.stateId, o.API.params)
-                }, getDataSourceParam: function (e) {
-                    return o.API.params = t.extend({}, {
-                        pagination: {page: 1, perpage: i.getOption("data.pageSize")},
-                        sort: i.getDefaultSortColumn(),
-                        query: {}
-                    }, o.API.params, i.stateGet(i.stateId)), "string" == typeof e ? i.getObject(e, o.API.params) : o.API.params
-                }, getDataSourceQuery: function () {
-                    return i.getDataSourceParam("query") || {}
-                }, setDataSourceQuery: function (t) {
-                    i.setDataSourceParam("query", t)
-                }, getCurrentPage: function () {
-                    return t(o.table).siblings(".m-datatable__pager").last().find(".m-datatable__pager-nav").find(".m-datatable__pager-link.m-datatable__pager-link--active").data("page") || 1
-                }, getPageSize: function () {
-                    return t(o.table).siblings(".m-datatable__pager").last().find("select.m-datatable__pager-size").val() || 10
-                }, getTotalRows: function () {
-                    return o.API.params.pagination.total
-                }, getDataSet: function () {
-                    return o.originalDataSet
-                }, hideColumn: function (e) {
-                    t.map(n.columns, function (t) {
-                        return e === t.field && (t.responsive = {hidden: "xl"}), t
-                    });
-                    var a = t.grep(t(o.table).find(".m-datatable__cell"), function (a, n) {
-                        return e === t(a).data("field")
-                    });
-                    t(a).hide()
-                }, showColumn: function (e) {
-                    t.map(n.columns, function (t) {
-                        return e === t.field && delete t.responsive, t
-                    });
-                    var a = t.grep(t(o.table).find(".m-datatable__cell"), function (a, n) {
-                        return e === t(a).data("field")
-                    });
-                    t(a).show()
-                }, nodeTr: [], nodeTd: [], nodeCols: [], recentNode: [], table: function () {
-                    return o.table
-                }, row: function (e) {
-                    return i.rows(e), i.nodeTr = i.recentNode = t(i.nodeTr).first(), o
-                }, rows: function (e) {
-                    return i.nodeTr = i.recentNode = t(o.tableBody).find(e).filter(".m-datatable__row"), o
-                }, column: function (e) {
-                    return i.nodeCols = i.recentNode = t(o.tableBody).find(".m-datatable__cell:nth-child(" + (e + 1) + ")"), o
-                }, columns: function (e) {
-                    var a = o.table;
-                    i.nodeTr === i.recentNode && (a = i.nodeTr);
-                    var n = t(a).find('.m-datatable__cell[data-field="' + e + '"]');
-                    return n.length > 0 ? i.nodeCols = i.recentNode = n : i.nodeCols = i.recentNode = t(a).find(e).filter(".m-datatable__cell"), o
-                }, cell: function (e) {
-                    return i.cells(e), i.nodeTd = i.recentNode = t(i.nodeTd).first(), o
-                }, cells: function (e) {
-                    var a = t(o.tableBody).find(".m-datatable__cell");
-                    return void 0 !== e && (a = t(a).filter(e)), i.nodeTd = i.recentNode = a, o
-                }, remove: function () {
-                    return t(i.nodeTr.length) && i.nodeTr === i.recentNode && t(i.nodeTr).remove(), i.layoutUpdate(), o
-                }, visible: function (e) {
-                    if (t(i.recentNode.length)) {
-                        var a = i.lockEnabledColumns();
-                        if (i.recentNode === i.nodeCols) {
-                            var o = i.recentNode.index();
-                            if (i.isLocked()) {
-                                var l = t(i.recentNode).closest(".m-datatable__lock--scroll").length;
-                                l ? o += a.left.length + 1 : t(i.recentNode).closest(".m-datatable__lock--right").length && (o += a.left.length + l + 1)
-                            }
-                        }
-                        e ? (i.recentNode === i.nodeCols && delete n.columns[o].responsive, t(i.recentNode).show()) : (i.recentNode === i.nodeCols && i.setOption("columns." + o + ".responsive", {hidden: "xl"}), t(i.recentNode).hide()), i.redraw()
-                    }
-                }, nodes: function () {
-                    return i.recentNode
-                }, dataset: function () {
-                    return o
-                }
-            };
-            if (t.each(i, function (t, e) {
-                o[t] = e
-            }), void 0 !== n) if ("string" == typeof n) {
-                var l = n;
-                void 0 !== (o = t(this).data("mDatatable")) && (n = o.options, i[l].apply(this, Array.prototype.slice.call(arguments, 1)))
-            } else o.data("mDatatable") || t(this).hasClass("m-datatable--loaded") || (o.dataSet = null, o.textAlign = {
-                left: "m-datatable__cell--left",
-                center: "m-datatable__cell--center",
-                right: "m-datatable__cell--right"
-            }, n = t.extend(!0, {}, t.fn.mDatatable.defaults, n), o.options = n, i.init.apply(this, [n]), t(o.wrap).data("mDatatable", o)); else void 0 === (o = t(this).data("mDatatable")) && t.error("mDatatable not initialized"), n = o.options;
-            return o
-        }
-        console.log("No mDatatable element exist.")
-    }, t.fn.mDatatable.defaults = {
-        data: {
-            type: "local",
-            source: null,
-            pageSize: 10,
-            saveState: {cookie: !1, webstorage: !0},
-            serverPaging: !1,
-            serverFiltering: !1,
-            serverSorting: !1,
-            autoColumns: !1,
-            attr: {rowProps: []}
+
+                obj = obj[stone];
+
+            } while (keys.length);
+
+            return true;
         },
-        layout: {
-            theme: "default",
-            class: "m-datatable--brand",
-            scroll: !1,
-            height: null,
-            minHeight: 300,
-            footer: !1,
-            header: !0,
-            customScrollbar: !0,
-            spinner: {overlayColor: "#000000", opacity: 0, type: "loader", state: "brand", message: !0},
-            icons: {
-                sort: {asc: "la la-arrow-up", desc: "la la-arrow-down"},
-                pagination: {
-                    next: "la la-angle-right",
-                    prev: "la la-angle-left",
-                    first: "la la-angle-double-left",
-                    last: "la la-angle-double-right",
-                    more: "la la-ellipsis-h"
+
+        /**
+         * Gets highest z-index of the given element parents
+         * @param {object} el jQuery element object
+         * @returns {number}  
+         */
+        getHighestZindex: function(el) {
+            var elem = mUtil.get(el),
+                position, value;
+
+            while (elem && elem !== document) {
+                // Ignore z-index if position is set to a value where z-index is ignored by the browser
+                // This makes behavior of this function consistent across browsers
+                // WebKit always returns auto if the element is positioned
+                position = mUtil.css(elem, 'position');
+
+                if (position === "absolute" || position === "relative" || position === "fixed") {
+                    // IE returns 0 when zIndex is not specified
+                    // other browsers return a string
+                    // we ignore the case of nested elements with an explicit value of 0
+                    // <div style="z-index: -10;"><div style="z-index: 0;"></div></div>
+                    value = parseInt(mUtil.css(elem, 'z-index'));
+
+                    if (!isNaN(value) && value !== 0) {
+                        return value;
+                    }
+                }
+
+                elem = elem.parentNode;
+            }
+
+            return null;
+        },
+
+        /**
+         * Checks whether the element has any parent with fixed positionfreg
+         * @param {object} el jQuery element object
+         * @returns {boolean}  
+         */
+        hasFixedPositionedParent: function(el) {
+            while (el && el !== document) {
+                position = mUtil.css(el, 'position');
+
+                if (position === "fixed") {
+                    return true;
+                }
+
+                el = el.parentNode;
+            }
+
+            return false;
+        },
+
+        /**
+         * Simulates delay
+         */
+        sleep: function(milliseconds) {
+            var start = new Date().getTime();
+            for (var i = 0; i < 1e7; i++) {
+                if ((new Date().getTime() - start) > milliseconds) {
+                    break;
+                }
+            }
+        },
+
+        /**
+         * Gets randomly generated integer value within given min and max range
+         * @param {number} min Range start value
+         * @param {number} min Range end value
+         * @returns {number}  
+         */
+        getRandomInt: function(min, max) {
+            return Math.floor(Math.random() * (max - min + 1)) + min;
+        },
+
+        /**
+         * Checks whether Angular library is included
+         * @returns {boolean}  
+         */
+        isAngularVersion: function() {
+            return window.Zone !== undefined ? true : false;
+        },
+
+        //== jQuery Workarounds
+
+        //== Deep extend:  $.extend(true, {}, objA, objB);
+        deepExtend: function(out) {
+            out = out || {};
+
+            for (var i = 1; i < arguments.length; i++) {
+                var obj = arguments[i];
+
+                if (!obj)
+                    continue;
+
+                for (var key in obj) {
+                    if (obj.hasOwnProperty(key)) {
+                        if (typeof obj[key] === 'object')
+                            out[key] = mUtil.deepExtend(out[key], obj[key]);
+                        else
+                            out[key] = obj[key];
+                    }
+                }
+            }
+
+            return out;
+        },
+
+        //== extend:  $.extend({}, objA, objB); 
+        extend: function(out) {
+            out = out || {};
+
+            for (var i = 1; i < arguments.length; i++) {
+                if (!arguments[i])
+                    continue;
+
+                for (var key in arguments[i]) {
+                    if (arguments[i].hasOwnProperty(key))
+                        out[key] = arguments[i][key];
+                }
+            }
+
+            return out;
+        },
+
+        get: function(query) {
+            var el;
+
+            if (query === document) {
+                return document;
+            }
+
+            if (!!(query && query.nodeType === 1)) {
+                return query;
+            }
+
+            if (el = document.getElementById(query)) {
+                return el;
+            } else if (el = document.getElementsByTagName(query)) {
+                return el[0];
+            } else if (el = document.getElementsByClassName(query)) {
+                return el[0];
+            } else {
+                return null;
+            }
+        },
+
+        getByClass: function(query) {
+            var el;
+            
+            if (el = document.getElementsByClassName(query)) {
+                return el[0];
+            } else {
+                return null;
+            }
+        },
+
+        /**
+         * Checks whether the element has given classes
+         * @param {object} el jQuery element object
+         * @param {string} Classes string
+         * @returns {boolean}  
+         */
+        hasClasses: function(el, classes) {
+            if (!el) {
+                return;
+            }
+
+            var classesArr = classes.split(" ");
+
+            for (var i = 0; i < classesArr.length; i++) {
+                if (mUtil.hasClass(el, mUtil.trim(classesArr[i])) == false) {
+                    return false;
+                }
+            }
+
+            return true;
+        },
+
+        hasClass: function(el, className) {
+            if (!el) {
+                return;
+            }
+
+            return el.classList ? el.classList.contains(className) : new RegExp('\\b' + className + '\\b').test(el.className);
+        },
+
+        addClass: function(el, className) {
+            if (!el || typeof className === 'undefined') {
+                return;
+            }
+
+            var classNames = className.split(' ');
+
+            if (el.classList) {
+                for (var i = 0; i < classNames.length; i++) {
+                    if (classNames[i] && classNames[i].length > 0) {
+                        el.classList.add(mUtil.trim(classNames[i]));
+                    }
+                }
+            } else if (!mUtil.hasClass(el, className)) {
+                for (var i = 0; i < classNames.length; i++) {
+                    el.className += ' ' + mUtil.trim(classNames[i]);
+                }
+            }
+        },
+
+        removeClass: function(el, className) {
+            if (!el || typeof className === 'undefined') {
+                return;
+            }
+
+            var classNames = className.split(' ');
+
+            if (el.classList) {
+                for (var i = 0; i < classNames.length; i++) {
+                    el.classList.remove(mUtil.trim(classNames[i]));
+                }
+            } else if (mUtil.hasClass(el, className)) {
+                for (var i = 0; i < classNames.length; i++) {
+                    el.className = el.className.replace(new RegExp('\\b' + mUtil.trim(classNames[i]) + '\\b', 'g'), '');
+                }
+            }
+        },
+
+        triggerCustomEvent: function(el, eventName, data) {
+            if (window.CustomEvent) {
+                var event = new CustomEvent(eventName, {
+                    detail: data
+                });
+            } else {
+                var event = document.createEvent('CustomEvent');
+                event.initCustomEvent(eventName, true, true, data);
+            }
+
+            el.dispatchEvent(event);
+        },
+
+        trim: function(string) {
+            return string.trim();
+        },
+
+        eventTriggered: function(e) {
+            if (e.currentTarget.dataset.triggered) {
+                return true;
+            } else {
+                e.currentTarget.dataset.triggered = true;
+
+                return false;
+            }
+        },
+
+        remove: function(el) {
+            if (el && el.parentNode) {
+                el.parentNode.removeChild(el);
+            }
+        },
+
+        find: function(parent, query) {
+            parent = mUtil.get(parent);
+            if (parent) {
+                return parent.querySelector(query);
+            }            
+        },
+
+        findAll: function(parent, query) {
+            parent = mUtil.get(parent);
+            if (parent) {
+                return parent.querySelectorAll(query);
+            } 
+        },
+
+        insertAfter: function(el, referenceNode) {
+            return referenceNode.parentNode.insertBefore(el, referenceNode.nextSibling);
+        },
+
+        parents: function(el, query) {
+            function collectionHas(a, b) { //helper function (see below)
+                for (var i = 0, len = a.length; i < len; i++) {
+                    if (a[i] == b) return true;
+                }
+
+                return false;
+            }
+
+            function findParentBySelector(el, selector) {
+                var all = document.querySelectorAll(selector);
+                var cur = el.parentNode;
+
+                while (cur && !collectionHas(all, cur)) { //keep going up until you find a match
+                    cur = cur.parentNode; //go up
+                }
+
+                return cur; //will return null if not found
+            }
+
+            return findParentBySelector(el, query);
+        },
+
+        children: function(el, selector, log) {
+            if (!el || !el.childNodes) {
+                return;
+            }
+
+            var result = [],
+                i = 0,
+                l = el.childNodes.length;
+
+            for (var i; i < l; ++i) {
+                if (el.childNodes[i].nodeType == 1 && mUtil.matches(el.childNodes[i], selector, log)) {
+                    result.push(el.childNodes[i]);
+                }
+            }
+
+            return result;
+        },
+
+        child: function(el, selector, log) {
+            var children = mUtil.children(el, selector, log);
+
+            return children ? children[0] : null;
+        },
+
+        matches: function(el, selector, log) {
+            var p = Element.prototype;
+            var f = p.matches || p.webkitMatchesSelector || p.mozMatchesSelector || p.msMatchesSelector || function(s) {
+                return [].indexOf.call(document.querySelectorAll(s), this) !== -1;
+            };
+
+            if (el && el.tagName) {
+                return f.call(el, selector);
+            } else {
+                return false;
+            }
+        },
+
+        data: function(element) {
+            element = mUtil.get(element);
+
+            return {
+                set: function(name, data) {
+                    if (element.customDataTag === undefined) {
+                        mUtilElementDataStoreID++;
+                        element.customDataTag = mUtilElementDataStoreID;
+                    }
+
+                    if (mUtilElementDataStore[element.customDataTag] === undefined) {
+                        mUtilElementDataStore[element.customDataTag] = {};
+                    }
+
+                    mUtilElementDataStore[element.customDataTag][name] = data;
                 },
-                rowDetail: {expand: "fa fa-caret-down", collapse: "fa fa-caret-right"}
+
+                get: function(name) {
+                    return this.has(name) ? mUtilElementDataStore[element.customDataTag][name] : null;
+                },
+
+                has: function(name) {
+                    return (mUtilElementDataStore[element.customDataTag] && mUtilElementDataStore[element.customDataTag][name]) ? true : false;
+                },
+
+                remove: function(name) {
+                    if (this.has(name)) {
+                        delete mUtilElementDataStore[element.customDataTag][name];
+                    }
+                }
+            };
+        },
+
+        outerWidth: function(el, margin) {
+            var width;
+
+            if (margin === true) {
+                var width = parseFloat(el.offsetWidth);
+                width += parseFloat(mUtil.css(el, 'margin-left')) + parseFloat(mUtil.css(el, 'margin-right'));
+
+                return parseFloat(width);
+            } else {
+                var width = parseFloat(el.offsetWidth);
+
+                return width;
             }
         },
-        sortable: !0,
-        resizable: !1,
-        filterable: !1,
-        pagination: !0,
-        editable: !1,
-        columns: [],
-        search: {onEnter: !1, input: null, delay: 400},
-        rows: {
-            callback: function () {
-            }, beforeTemplate: function () {
-            }, afterTemplate: function () {
-            }, autoHide: !1
+
+        offset: function(elem) {
+            var rect, win;
+            elem = mUtil.get(elem);
+
+            if ( !elem ) {
+                return;
+            }
+
+            // Return zeros for disconnected and hidden (display: none) elements (gh-2310)
+            // Support: IE <=11 only
+            // Running getBoundingClientRect on a
+            // disconnected node in IE throws an error
+
+            if ( !elem.getClientRects().length ) {
+                return { top: 0, left: 0 };
+            }
+
+            // Get document-relative position by adding viewport scroll to viewport-relative gBCR
+            rect = elem.getBoundingClientRect();
+            win = elem.ownerDocument.defaultView;
+
+            return {
+                top: rect.top + win.pageYOffset,
+                left: rect.left + win.pageXOffset
+            };
         },
-        toolbar: {
-            layout: ["pagination", "info"],
-            placement: ["bottom"],
-            items: {
-                pagination: {
-                    type: "default",
-                    pages: {
-                        desktop: {layout: "default", pagesNumber: 6},
-                        tablet: {layout: "default", pagesNumber: 3},
-                        mobile: {layout: "compact"}
-                    },
-                    navigation: {prev: !0, next: !0, first: !0, last: !0},
-                    pageSizeSelect: []
-                }, info: !0
+
+        height: function(el) {
+            return mUtil.css(el, 'height');
+        },
+
+        visible: function(el) {
+            return !(el.offsetWidth === 0 && el.offsetHeight === 0);
+        },
+
+        attr: function(el, name, value) {
+            el = mUtil.get(el);
+
+            if (el == undefined) {
+                return;
+            }
+
+            if (value !== undefined) {
+                el.setAttribute(name, value);
+            } else {
+                return el.getAttribute(name);
             }
         },
-        translate: {
-            records: {processing: "Please wait...", noRecords: "No records found"},
-            toolbar: {
-                pagination: {
-                    items: {
-                        default: {
-                            first: "First",
-                            prev: "Previous",
-                            next: "Next",
-                            last: "Last",
-                            more: "More pages",
-                            input: "Page number",
-                            select: "Select page size"
-                        }, info: "Displaying {{start}} - {{end}} of {{total}} records"
+
+        hasAttr: function(el, name) {
+            el = mUtil.get(el);
+
+            if (el == undefined) {
+                return;
+            }
+
+            return el.getAttribute(name) ? true : false;
+        },
+
+        removeAttr: function(el, name) {
+            el = mUtil.get(el);
+
+            if (el == undefined) {
+                return;
+            }
+
+            el.removeAttribute(name);
+        },
+
+        animate: function(from, to, duration, update, easing, done) {
+            /**
+             * TinyAnimate.easings
+             *  Adapted from jQuery Easing
+             */
+            var easings = {};
+            var easing;
+
+            easings.linear = function(t, b, c, d) {
+                return c * t / d + b;
+            };
+
+            easing = easings.linear;
+
+            // Early bail out if called incorrectly
+            if (typeof from !== 'number' ||
+                typeof to !== 'number' ||
+                typeof duration !== 'number' ||
+                typeof update !== 'function') {
+                return;
+            }
+
+            // Create mock done() function if necessary
+            if (typeof done !== 'function') {
+                done = function() {};
+            }
+
+            // Pick implementation (requestAnimationFrame | setTimeout)
+            var rAF = window.requestAnimationFrame || function(callback) {
+                window.setTimeout(callback, 1000 / 50);
+            };
+
+            // Animation loop
+            var canceled = false;
+            var change = to - from;
+
+            function loop(timestamp) {
+                var time = (timestamp || +new Date()) - start;
+
+                if (time >= 0) {
+                    update(easing(time, from, change, duration));
+                }
+                if (time >= 0 && time >= duration) {
+                    update(to);
+                    done();
+                } else {
+                    rAF(loop);
+                }
+            }
+
+            update(from);
+
+            // Start animation loop
+            var start = window.performance && window.performance.now ? window.performance.now() : +new Date();
+
+            rAF(loop);
+        },
+
+        actualCss: function(el, prop, cache) {
+            if (el instanceof HTMLElement === false) {
+                return;
+            }
+
+            if (!el.getAttribute('m-hidden-' + prop) || cache === false) {
+                var value;
+
+                // the element is hidden so:
+                // making the el block so we can meassure its height but still be hidden
+                el.style.cssText = 'position: absolute; visibility: hidden; display: block;';
+
+                if (prop == 'width') {
+                    value = el.offsetWidth;
+                } else if (prop == 'height') {
+                    value = el.offsetHeight;
+                }
+
+                el.style.cssText = '';
+
+                // store it in cache
+                el.setAttribute('m-hidden-' + prop, value);
+
+                return parseFloat(value);
+            } else {
+                // store it in cache
+                return parseFloat(el.getAttribute('m-hidden-' + prop));
+            }
+        },
+
+        actualHeight: function(el, cache) {
+            return mUtil.actualCss(el, 'height', cache);
+        },
+
+        actualWidth: function(el, cache) {
+            return mUtil.actualCss(el, 'width', cache);
+        },
+
+        getScroll: function(element, method) {
+            // The passed in `method` value should be 'Top' or 'Left'
+            method = 'scroll' + method;
+            return (element == window || element == document) ? (
+                self[(method == 'scrollTop') ? 'pageYOffset' : 'pageXOffset'] ||
+                (browserSupportsBoxModel && document.documentElement[method]) ||
+                document.body[method]
+            ) : element[method];
+        },
+
+        css: function(el, styleProp, value) {
+            el = mUtil.get(el);
+
+            if (!el) {
+                return;
+            }
+
+            if (value !== undefined) {
+                el.style[styleProp] = value;
+            } else {
+                var value, defaultView = (el.ownerDocument || document).defaultView;
+                // W3C standard way:
+                if (defaultView && defaultView.getComputedStyle) {
+                    // sanitize property name to css notation
+                    // (hyphen separated words eg. font-Size)
+                    styleProp = styleProp.replace(/([A-Z])/g, "-$1").toLowerCase();
+                    return defaultView.getComputedStyle(el, null).getPropertyValue(styleProp);
+                } else if (el.currentStyle) { // IE
+                    // sanitize property name to camelCase
+                    styleProp = styleProp.replace(/\-(\w)/g, function(str, letter) {
+                        return letter.toUpperCase();
+                    });
+                    value = el.currentStyle[styleProp];
+                    // convert other units to pixels on IE
+                    if (/^\d+(em|pt|%|ex)?$/i.test(value)) {
+                        return (function(value) {
+                            var oldLeft = el.style.left,
+                                oldRsLeft = el.runtimeStyle.left;
+                            el.runtimeStyle.left = el.currentStyle.left;
+                            el.style.left = value || 0;
+                            value = el.style.pixelLeft + "px";
+                            el.style.left = oldLeft;
+                            el.runtimeStyle.left = oldRsLeft;
+                            return value;
+                        })(value);
+                    }
+                    return value;
+                }
+            }
+        },
+
+        slide: function(el, dir, speed, callback, recalcMaxHeight) {
+            if (!el || (dir == 'up' && mUtil.visible(el) === false) || (dir == 'down' && mUtil.visible(el) === true)) {
+                return;
+            }
+
+            speed = (speed ? speed : 600);
+            var calcHeight = mUtil.actualHeight(el);
+            var calcPaddingTop = false;
+            var calcPaddingBottom = false;
+
+            if (mUtil.css(el, 'padding-top') && mUtil.data(el).has('slide-padding-top') !== true) {
+                mUtil.data(el).set('slide-padding-top', mUtil.css(el, 'padding-top'));
+            }
+
+            if (mUtil.css(el, 'padding-bottom') && mUtil.data(el).has('slide-padding-bottom') !== true) {
+                mUtil.data(el).set('slide-padding-bottom', mUtil.css(el, 'padding-bottom'));
+            }
+
+            if (mUtil.data(el).has('slide-padding-top')) {
+                calcPaddingTop = parseInt(mUtil.data(el).get('slide-padding-top'));
+            }
+
+            if (mUtil.data(el).has('slide-padding-bottom')) {
+                calcPaddingBottom = parseInt(mUtil.data(el).get('slide-padding-bottom'));
+            }
+
+            if (dir == 'up') { // up          
+                el.style.cssText = 'display: block; overflow: hidden;';
+
+                if (calcPaddingTop) {
+                    mUtil.animate(0, calcPaddingTop, speed, function(value) {
+                        el.style.paddingTop = (calcPaddingTop - value) + 'px';
+                    }, 'linear');
+                }
+
+                if (calcPaddingBottom) {
+                    mUtil.animate(0, calcPaddingBottom, speed, function(value) {
+                        el.style.paddingBottom = (calcPaddingBottom - value) + 'px';
+                    }, 'linear');
+                }
+
+                mUtil.animate(0, calcHeight, speed, function(value) {
+                    el.style.height = (calcHeight - value) + 'px';
+                }, 'linear', function() {
+                    callback();
+                    el.style.height = '';
+                    el.style.display = 'none';
+                });
+
+
+            } else if (dir == 'down') { // down
+                el.style.cssText = 'display: block; overflow: hidden;';
+
+                if (calcPaddingTop) {
+                    mUtil.animate(0, calcPaddingTop, speed, function(value) {
+                        el.style.paddingTop = value + 'px';
+                    }, 'linear', function() {
+                        el.style.paddingTop = '';
+                    });
+                }
+
+                if (calcPaddingBottom) {
+                    mUtil.animate(0, calcPaddingBottom, speed, function(value) {
+                        el.style.paddingBottom = value + 'px';
+                    }, 'linear', function() {
+                        el.style.paddingBottom = '';
+                    });
+                }
+
+                mUtil.animate(0, calcHeight, speed, function(value) {
+                    el.style.height = value + 'px';
+                }, 'linear', function() {
+                    callback();
+                    el.style.height = '';
+                    el.style.display = '';
+                    el.style.overflow = '';
+                });
+            }
+        },
+
+        slideUp: function(el, speed, callback) {
+            mUtil.slide(el, 'up', speed, callback);
+        },
+
+        slideDown: function(el, speed, callback) {
+            mUtil.slide(el, 'down', speed, callback);
+        },
+
+        show: function(el, display) {
+            el.style.display = (display ? display : 'block');
+        },
+
+        hide: function(el) {
+            el.style.display = 'none';
+        },
+
+        addEvent: function(el, type, handler, one) {
+            el = mUtil.get(el);
+            if (typeof el !== 'undefined') {
+                el.addEventListener(type, handler);
+            }
+        },
+
+        removeEvent: function(el, type, handler) {
+            el = mUtil.get(el);
+            el.removeEventListener(type, handler);
+        },
+
+        on: function(element, selector, event, handler) {
+            if (!selector) {
+                return;
+            }
+
+            var eventId = mUtil.getUniqueID('event');
+
+            mUtilDelegatedEventHandlers[eventId] = function(e) {
+                var targets = element.querySelectorAll(selector);
+                var target = e.target;
+
+                while (target && target !== element) {
+                    for (var i = 0, j = targets.length; i < j; i++) {
+                        if (target === targets[i]) {
+                            handler.call(target, e);
+                        }
+                    }
+
+                    target = target.parentNode;
+                }
+            };
+
+            mUtil.addEvent(element, event, mUtilDelegatedEventHandlers[eventId]);
+
+            return eventId;
+        },
+
+        off: function(element, event, eventId) {
+            if (!element || !mUtilDelegatedEventHandlers[eventId]) {
+                return;
+            }
+
+            mUtil.removeEvent(element, event, mUtilDelegatedEventHandlers[eventId]);
+
+            delete mUtilDelegatedEventHandlers[eventId];
+        },
+
+        one: function onetime(el, type, callback) {
+            el = mUtil.get(el);
+
+            el.addEventListener(type, function(e) {
+                // remove event
+                e.target.removeEventListener(e.type, arguments.callee);
+                // call handler
+                return callback(e);
+            });
+        },
+
+        hash: function(str) {
+            var hash = 0,
+                i, chr;
+
+            if (str.length === 0) return hash;
+            for (i = 0; i < str.length; i++) {
+                chr = str.charCodeAt(i);
+                hash = ((hash << 5) - hash) + chr;
+                hash |= 0; // Convert to 32bit integer
+            }
+
+            return hash;
+        },
+
+        animateClass: function(el, animationName, callback) {
+            var animationEnd = 'webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend';
+
+            mUtil.addClass(el, 'animated ' + animationName);
+
+            mUtil.one(el, animationEnd, function() {
+                mUtil.removeClass(el, 'animated ' + animationName);
+            });
+
+            if (callback) {
+                mUtil.one(el.animationEnd, callback);
+            }
+        },
+
+        animateDelay: function(el, value) {
+            var vendors = ['webkit-', 'moz-', 'ms-', 'o-', ''];
+            for (var i = 0; i < vendors.length; i++) {
+                mUtil.css(el, vendors[i] + 'animation-delay', value);
+            }
+        },
+
+        animateDuration: function(el, value) {
+            var vendors = ['webkit-', 'moz-', 'ms-', 'o-', ''];
+            for (var i = 0; i < vendors.length; i++) {
+                mUtil.css(el, vendors[i] + 'animation-duration', value);
+            }
+        },
+
+        scrollTo: function(target, offset, duration) {
+            var duration = duration ? duration : 500;
+            var target = mUtil.get(target);
+            var targetPos = target ? mUtil.offset(target).top : 0;
+            var scrollPos = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
+            var from, to;
+
+            if (targetPos > scrollPos) {
+                from = targetPos;
+                to = scrollPos;
+            } else {
+                from = scrollPos;
+                to = targetPos;
+            }
+
+            if (offset) {
+                to += offset;
+            }
+
+            mUtil.animate(from, to, duration, function(value) {
+                document.documentElement.scrollTop = value;
+                document.body.parentNode.scrollTop = value;
+                document.body.scrollTop = value;
+            }); //, easing, done
+        },
+
+        scrollTop: function(offset, duration) {
+            mUtil.scrollTo(null, offset, duration);
+        },
+
+        isArray: function(obj) {
+            return obj && Array.isArray(obj);
+        },
+
+        ready: function(callback) {
+            if (document.attachEvent ? document.readyState === "complete" : document.readyState !== "loading") {
+                callback();
+            } else {
+                document.addEventListener('DOMContentLoaded', callback);
+            }
+        },
+
+        isEmpty: function(obj) {
+            for (var prop in obj) {
+                if (obj.hasOwnProperty(prop)) {
+                    return false;
+                }
+            }
+
+            return true;
+        },
+
+        numberString: function(nStr) {
+            nStr += '';
+            var x = nStr.split('.');
+            var x1 = x[0];
+            var x2 = x.length > 1 ? '.' + x[1] : '';
+            var rgx = /(\d+)(\d{3})/;
+            while (rgx.test(x1)) {
+                x1 = x1.replace(rgx, '$1' + ',' + '$2');
+            }
+            return x1 + x2;
+        },
+
+        detectIE: function() {
+            var ua = window.navigator.userAgent;
+
+            // Test values; Uncomment to check result …
+
+            // IE 10
+            // ua = 'Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.2; Trident/6.0)';
+
+            // IE 11
+            // ua = 'Mozilla/5.0 (Windows NT 6.3; Trident/7.0; rv:11.0) like Gecko';
+
+            // Edge 12 (Spartan)
+            // ua = 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.71 Safari/537.36 Edge/12.0';
+
+            // Edge 13
+            // ua = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/46.0.2486.0 Safari/537.36 Edge/13.10586';
+
+            var msie = ua.indexOf('MSIE ');
+            if (msie > 0) {
+                // IE 10 or older => return version number
+                return parseInt(ua.substring(msie + 5, ua.indexOf('.', msie)), 10);
+            }
+
+            var trident = ua.indexOf('Trident/');
+            if (trident > 0) {
+                // IE 11 => return version number
+                var rv = ua.indexOf('rv:');
+                return parseInt(ua.substring(rv + 3, ua.indexOf('.', rv)), 10);
+            }
+
+            var edge = ua.indexOf('Edge/');
+            if (edge > 0) {
+                // Edge (IE 12+) => return version number
+                return parseInt(ua.substring(edge + 5, ua.indexOf('.', edge)), 10);
+            }
+
+            // other browser
+            return false;
+        },
+
+        isRTL: function() {
+            return (mUtil.attr(mUtil.get('html'), 'direction') == 'rtl');
+        },
+
+        // //== Scroller
+        // scrollerInit: function(element, options) {
+        //     //== Define init function
+        //     function init() {
+        //         var ps;
+        //         var height;
+        //
+        //         if (options.height instanceof Function) {
+        //             height = parseInt(options.height.call());
+        //         } else {
+        //             height = parseInt(options.height);
+        //         }
+        //
+        //         //== Destroy scroll on table and mobile modes
+        //         if (options.disableForMobile && mUtil.isInResponsiveRange('tablet-and-mobile')) {
+        //             if (ps = mUtil.data(element).get('ps')) {
+        //                 if (options.resetHeightOnDestroy) {
+        //                     mUtil.css(element, 'height', 'auto');
+        //                 } else {
+        //                     mUtil.css(element, 'overflow', 'auto');
+        //                     if (height > 0) {
+        //                         mUtil.css(element, 'height', height + 'px');
+        //                     }
+        //                 }
+        //
+        //                 ps.destroy();
+        //                 ps = mUtil.data(element).remove('ps');
+        //             } else if (height > 0){
+        //                 mUtil.css(element, 'overflow', 'auto');
+        //                 mUtil.css(element, 'height', height + 'px');
+        //             }
+        //
+        //             return;
+        //         }
+        //
+        //         if (height > 0) {
+        //             mUtil.css(element, 'height', height + 'px');
+        //         }
+        //
+        //         mUtil.css(element, 'overflow', 'hidden');
+        //
+        //         //== Init scroll
+        //         if (ps = mUtil.data(element).get('ps')) {
+        //             ps.update();
+        //         } else {
+        //             mUtil.addClass(element, 'm-scroller');
+        //             ps = new PerfectScrollbar(element, {
+        //                 wheelSpeed: 0.5,
+        //                 swipeEasing: true,
+        //                 wheelPropagation: false,
+        //                 minScrollbarLength: 40,
+        //                 suppressScrollX: mUtil.isRTL() ? false : true
+        //             });
+        //
+        //             mUtil.data(element).set('ps', ps);
+        //         }
+        //     }
+        //
+        //     //== Init
+        //     init();
+        //
+        //     //== Handle window resize
+        //     if (options.handleWindowResize) {
+        //         mUtil.addResizeHandler(function() {
+        //             init();
+        //         });
+        //     }
+        // },
+
+        scrollerUpdate: function(element) {
+            var ps;
+            if (ps = mUtil.data(element).get('ps')) {
+                ps.update();
+            }
+        },
+
+        scrollersUpdate: function(parent) {
+            var scrollers = mUtil.findAll(parent, '.ps');
+            for (var i = 0, len = scrollers.length; i < len; i++) {
+                mUtil.scrollerUpdate(scrollers[i]);
+            }
+        },
+
+        scrollerTop: function(element) {
+            var ps;
+            if (ps = mUtil.data(element).get('ps')) {
+                element.scrollTop = 0;
+            }
+        },
+
+        scrollerDestroy: function(element) {
+            var ps;
+            if (ps = mUtil.data(element).get('ps')) {
+                ps.destroy();
+                ps = mUtil.data(element).remove('ps');
+            }
+        }
+    }
+}();
+
+//== Initialize mUtil class on document ready
+mUtil.ready(function() {
+    mUtil.init();
+});
+/**
+ * @class mApp  Metronic App class
+ */
+
+var mApp = function() {
+
+    /** @type {object} colors State colors **/
+    var colors = {
+        brand:      '#716aca',
+        metal:      '#c4c5d6',
+        light:      '#ffffff',
+        accent:     '#00c5dc',
+        primary:    '#5867dd',
+        success:    '#34bfa3',
+        info:       '#36a3f7',
+        warning:    '#ffb822',
+        danger:     '#f4516c',
+        focus:      '#9816f4'
+    };
+
+    /**
+    * Initializes bootstrap tooltip
+    */
+    var initTooltip = function(el) {
+        var skin = el.data('skin') ? 'm-tooltip--skin-' + el.data('skin') : '';
+        var width = el.data('width') == 'auto' ? 'm-tooltop--auto-width' : '';
+        var triggerValue = el.data('trigger') ? el.data('trigger') : 'hover';
+        var placement = el.data('placement') ? el.data('placement') : 'left';
+                    
+        el.tooltip({
+            trigger: triggerValue,
+            template: '<div class="m-tooltip ' + skin + ' ' + width + ' tooltip" role="tooltip">\
+                <div class="arrow"></div>\
+                <div class="tooltip-inner"></div>\
+            </div>'
+        });
+    };
+    
+    /**
+    * Initializes bootstrap tooltips
+    */
+    var initTooltips = function() {
+        // init bootstrap tooltips
+        $('[data-toggle="m-tooltip"]').each(function() {
+            initTooltip($(this));
+        });
+    };
+
+    /**
+    * Initializes bootstrap popover
+    */
+    var initPopover = function(el) {
+        var skin = el.data('skin') ? 'm-popover--skin-' + el.data('skin') : '';
+        var triggerValue = el.data('trigger') ? el.data('trigger') : 'hover';
+            
+        el.popover({
+            trigger: triggerValue,
+            template: '\
+            <div class="m-popover ' + skin + ' popover" role="tooltip">\
+                <div class="arrow"></div>\
+                <h3 class="popover-header"></h3>\
+                <div class="popover-body"></div>\
+            </div>'
+        });
+    };
+
+    /**
+    * Initializes bootstrap popovers
+    */
+    var initPopovers = function() {
+        // init bootstrap popover
+        $('[data-toggle="m-popover"]').each(function() {
+            initPopover($(this));
+        });
+    };
+
+    /**
+    * Initializes bootstrap file input
+    */
+    var initFileInput = function() {
+        // init bootstrap popover
+        $('.custom-file-input').on('change',function(){
+            var fileName = $(this).val();
+            $(this).next('.custom-file-label').addClass("selected").html(fileName);
+        });
+    };
+
+    /**
+    * Initializes metronic portlet
+    */
+    var initPortlet = function(el, options) {
+        // init portlet tools
+        var el = $(el);
+        var portlet = new mPortlet(el[0], options);
+    };
+
+    /**
+    * Initializes metronic portlets
+    */
+    var initPortlets = function() {
+        // init portlet tools
+        $('[m-portlet="true"]').each(function() {
+            var el = $(this);
+
+            if ( el.data('portlet-initialized') !== true ) {
+                initPortlet(el, {});
+                el.data('portlet-initialized', true);
+            }
+        });
+    };
+
+    // /**
+    // * Initializes scrollable contents
+    // */
+    // var initScrollers = function() {
+    //     $('[data-scrollable="true"]').each(function(){
+    //         var el = $(this);
+    //         mUtil.scrollerInit(this, {disableForMobile: true, handleWindowResize: true, height: function() {
+    //             if (mUtil.isInResponsiveRange('tablet-and-mobile') && el.data('mobile-height')) {
+    //                 return el.data('mobile-height');
+    //             } else {
+    //                 return el.data('height');
+    //             }
+    //         }});
+    //     });
+    // };
+
+    /**
+    * Initializes bootstrap alerts
+    */
+    var initAlerts = function() {
+        // init bootstrap popover
+        $('body').on('click', '[data-close=alert]', function() {
+            $(this).closest('.alert').hide();
+        });
+    };
+
+    /**
+    * Initializes Metronic custom tabs
+    */
+    var initCustomTabs = function() {
+        // init bootstrap popover
+        $('[data-tab-target]').each(function() {
+            if ($(this).data('tabs-initialized') == true ) {
+                return;
+            }
+
+            $(this).click(function(e) {
+                e.preventDefault();
+                
+                var tab = $(this);
+                var tabs = tab.closest('[data-tabs="true"]');
+                var contents = $( tabs.data('tabs-contents') );
+                var content = $( tab.data('tab-target') );
+
+                tabs.find('.m-tabs__item.m-tabs__item--active').removeClass('m-tabs__item--active');
+                tab.addClass('m-tabs__item--active');
+
+                contents.find('.m-tabs-content__item.m-tabs-content__item--active').removeClass('m-tabs-content__item--active');
+                content.addClass('m-tabs-content__item--active');         
+            });
+
+            $(this).data('tabs-initialized', true);
+        });
+    };
+
+	var hideTouchWarning = function() {
+		jQuery.event.special.touchstart = {
+			setup: function(_, ns, handle) {
+				if (typeof this === 'function')
+					if (ns.includes('noPreventDefault')) {
+						this.addEventListener('touchstart', handle, {passive: false});
+					} else {
+						this.addEventListener('touchstart', handle, {passive: true});
+					}
+			},
+		};
+		jQuery.event.special.touchmove = {
+			setup: function(_, ns, handle) {
+				if (typeof this === 'function')
+					if (ns.includes('noPreventDefault')) {
+						this.addEventListener('touchmove', handle, {passive: false});
+					} else {
+						this.addEventListener('touchmove', handle, {passive: true});
+					}
+			},
+		};
+		jQuery.event.special.wheel = {
+			setup: function(_, ns, handle) {
+				if (typeof this === 'function')
+					if (ns.includes('noPreventDefault')) {
+						this.addEventListener('wheel', handle, {passive: false});
+					} else {
+						this.addEventListener('wheel', handle, {passive: true});
+					}
+			},
+		};
+	};
+
+    return {
+        /**
+        * Main class initializer
+        */
+        init: function(options) {
+            if (options && options.colors) {
+                colors = options.colors;
+            }
+            mApp.initComponents();
+        },
+
+        /**
+        * Initializes components
+        */
+        initComponents: function() {
+            // hideTouchWarning();
+            // initScrollers();
+            initTooltips();
+            initPopovers();
+            initAlerts();
+            initPortlets();
+            initFileInput();
+            initCustomTabs();
+        },
+
+
+        /**
+        * Init custom tabs
+        */
+        initCustomTabs: function() {
+            initCustomTabs();
+        },
+
+        /**
+        * 
+        * @param {object} el jQuery element object
+        */
+        // wrJangoer function to scroll(focus) to an element
+        initTooltips: function() {
+            initTooltips();
+        },
+
+        /**
+        * 
+        * @param {object} el jQuery element object
+        */
+        // wrJangoer function to scroll(focus) to an element
+        initTooltip: function(el) {
+            initTooltip(el);
+        },
+
+        /**
+        * 
+        * @param {object} el jQuery element object
+        */
+        // wrJangoer function to scroll(focus) to an element
+        initPopovers: function() {
+            initPopovers();
+        },
+
+        /**
+        * 
+        * @param {object} el jQuery element object
+        */
+        // wrJangoer function to scroll(focus) to an element
+        initPopover: function(el) {
+            initPopover(el);
+        },
+
+        /**
+        * 
+        * @param {object} el jQuery element object
+        */
+        // function to init portlet
+        initPortlet: function(el, options) {
+            initPortlet(el, options);
+        },
+
+        /**
+        * 
+        * @param {object} el jQuery element object
+        */
+        // function to init portlets
+        initPortlets: function() {
+            initPortlets();
+        },
+
+        /**
+        * Blocks element with loading indiciator using http://malsup.com/jquery/block/
+        * @param {object} target jQuery element object
+        * @param {object} options 
+        */
+        block: function(target, options) {
+            var el = $(target);
+
+            options = $.extend(true, {
+                opacity: 0.03,
+                overlayColor: '#000000',
+                state: 'brand',
+                type: 'loader',
+                size: 'lg',
+                centerX: true,
+                centerY: true,
+                message: '',
+                shadow: true,
+                width: 'auto'
+            }, options);
+
+            var skin;
+            var state;
+            var loading;
+
+            if (options.type == 'spinner') {
+                skin = options.skin ? 'm-spinner--skin-' + options.skin : '';
+                state = options.state ? 'm-spinner--' + options.state : '';
+                loading = '<div class="m-spinner ' + skin + ' ' + state + '"></div';
+            } else {
+                skin = options.skin ? 'm-loader--skin-' + options.skin : '';
+                state = options.state ? 'm-loader--' + options.state : '';
+                size = options.size ? 'm-loader--' + options.size : '';
+                loading = '<div class="m-loader ' + skin + ' ' + state + ' ' + size + '"></div';
+            }
+
+            if (options.message && options.message.length > 0) {
+                var classes = 'm-blockui ' + (options.shadow === false ? 'm-blockui-no-shadow' : '');
+
+                html = '<div class="' + classes + '"><span>' + options.message + '</span><span>' + loading + '</span></div>';
+
+                var el = document.createElement('div');
+                mUtil.get('body').prepend(el);
+                mUtil.addClass(el, classes);
+                el.innerHTML = '<span>' + options.message + '</span><span>' + loading + '</span>';
+                options.width = mUtil.actualWidth(el) + 10;
+                mUtil.remove(el);
+
+                if (target == 'body') {
+                    html = '<div class="' + classes + '" style="margin-left:-'+ (options.width / 2) +'px;"><span>' + options.message + '</span><span>' + loading + '</span></div>';
+                }
+            } else {
+                html = loading;
+            }
+
+            var params = {
+                message: html,
+                centerY: options.centerY,
+                centerX: options.centerX,
+                css: {
+                    top: '30%',
+                    left: '50%',
+                    border: '0',
+                    padding: '0',
+                    backgroundColor: 'none',
+                    width: options.width
+                },
+                overlayCSS: {
+                    backgroundColor: options.overlayColor,
+                    opacity: options.opacity,
+                    cursor: 'wait',
+                    zIndex: '10'
+                },
+                onUnblock: function() {
+                    if (el && el[0]) {
+                        mUtil.css(el[0], 'position', '');
+                        mUtil.css(el[0], 'zoom', '');
+                    }                    
+                }
+            };
+
+            if (target == 'body') {
+                params.css.top = '50%';
+                $.blockUI(params);
+            } else {
+                var el = $(target);
+                el.block(params);
+            }
+        },
+
+        /**
+        * Un-blocks the blocked element 
+        * @param {object} target jQuery element object
+        */
+        unblock: function(target) {
+            if (target && target != 'body') {
+                $(target).unblock();
+            } else {
+                $.unblockUI();
+            }
+        },
+
+        /**
+        * Blocks the page body element with loading indicator
+        * @param {object} options 
+        */
+        blockPage: function(options) {
+            return mApp.block('body', options);
+        },
+
+        /**
+        * Un-blocks the blocked page body element
+        */
+        unblockPage: function() {
+            return mApp.unblock('body');
+        },
+
+        /**
+        * Enable loader progress for button and other elements
+        * @param {object} target jQuery element object
+        * @param {object} options
+        */
+        progress: function(target, options) {
+            var skin = (options && options.skin) ? options.skin : 'light';
+            var alignment = (options && options.alignment) ? options.alignment : 'right'; 
+            var size = (options && options.size) ? 'm-spinner--' + options.size : ''; 
+            var classes = 'm-loader ' + 'm-loader--' + skin + ' m-loader--' + alignment + ' m-loader--' + size;
+
+            mApp.unprogress(target);
+            
+            $(target).addClass(classes);
+            $(target).data('progress-classes', classes);
+        },
+
+        /**
+        * Disable loader progress for button and other elements
+        * @param {object} target jQuery element object
+        */
+        unprogress: function(target) {
+            $(target).removeClass($(target).data('progress-classes'));
+        },
+
+        /**
+        * Gets state color's hex code by color name
+        * @param {string} name Color name
+        * @returns {string}  
+        */
+        getColor: function(name) {
+            return colors[name];
+        }
+    };
+}();
+
+//== Initialize mApp class on document ready
+$(document).ready(function() {
+    mApp.init({});
+});
+// plugin setup
+var mWizard = function(elementId, options) {
+    //== Main object
+    var the = this;
+    var init = false;
+
+    //== Get element object
+    var element = mUtil.get(elementId);
+    var body = mUtil.get('body');
+
+    if (!element) {
+        return; 
+    }
+
+    //== Default options
+    var defaultOptions = {
+        startStep: 1,
+        manualStepForward: false
+    };
+
+    ////////////////////////////
+    // ** Private Methods  ** //
+    ////////////////////////////
+
+    var Plugin = {
+        /**
+         * Construct
+         */
+
+        construct: function(options) {
+            if (mUtil.data(element).has('wizard')) {
+                the = mUtil.data(element).get('wizard');
+            } else {
+                // reset menu
+                Plugin.init(options);
+
+                // build menu
+                Plugin.build();
+
+                mUtil.data(element).set('wizard', the);
+            }
+
+            return the;
+        },
+
+        /**
+         * Init wizard
+         */
+        init: function(options) {
+            the.element = element;
+            the.events = [];
+
+            // merge default and user defined options
+            the.options = mUtil.deepExtend({}, defaultOptions, options);
+
+            //== Elements
+            the.steps = mUtil.findAll(element, '.m-wizard__step');
+
+            the.progress = mUtil.find(element, '.m-wizard__progress .progress-bar');
+            the.btnSubmit = mUtil.find(element, '[data-wizard-action="submit"]');
+            the.btnNext = mUtil.find(element, '[data-wizard-action="next"]');
+            the.btnPrev = mUtil.find(element, '[data-wizard-action="prev"]');
+            the.btnLast = mUtil.find(element, '[data-wizard-action="last"]');
+            the.btnFirst = mUtil.find(element, '[data-wizard-action="first"]');
+
+            //== Variables
+            the.events = [];
+            the.currentStep = 1;
+            the.stopped = false;
+            the.totalSteps = the.steps.length;
+
+            //== Init current step
+            if (the.options.startStep > 1) {
+                Plugin.goTo(the.options.startStep);
+            }
+
+            //== Init UI
+            Plugin.updateUI();
+        },
+
+        /**
+         * Build Form Wizard
+         */
+        build: function() {
+            //== Next button event handler
+            mUtil.addEvent(the.btnNext, 'click', function(e) {
+                e.preventDefault();
+                Plugin.goNext();
+            });
+
+            //== Prev button event handler
+            mUtil.addEvent(the.btnPrev, 'click', function(e) {
+                e.preventDefault();
+                Plugin.goPrev();
+            });
+
+            //== First button event handler
+            mUtil.addEvent(the.btnFirst, 'click', function(e) {
+                e.preventDefault();
+                Plugin.goFirst();
+            });
+
+            //== Last button event handler
+            mUtil.addEvent(the.btnLast, 'click', function(e) {
+                e.preventDefault();
+                Plugin.goLast();
+            });
+
+            mUtil.on(element, '.m-wizard__step a.m-wizard__step-number', 'click', function() {
+                var step = this.closest('.m-wizard__step');
+                var steps = mUtil.parents(this, '.m-wizard__steps');
+                var find = mUtil.findAll(steps, '.m-wizard__step');
+                var num;
+
+                for (var i = 0, j = find.length; i < j; i++) {
+                    if (step === find[i]) {
+                        num = (i + 1);
+                        break;
+                    }
+                }
+
+                if (num) {
+                    if (the.options.manualStepForward === false) {
+                        if (num < the.currentStep) {
+                            Plugin.goTo(num);
+                        }
+                    } else {
+                        Plugin.goTo(num);
+                    }                    
+                }
+            });
+        },
+
+        /**
+         * Handles wizard click wizard
+         */
+        goTo: function(number) {
+            //== Skip if this step is already shown
+            if (number === the.currentStep || number > the.totalSteps || number < 0) {
+                return;
+            }
+
+            //== Validate step number
+            if (number) {
+                number = parseInt(number);
+            } else {
+                number = Plugin.getNextStep();
+            }
+
+            //== Before next and prev events
+            var callback;
+
+            if (number > the.currentStep) {
+                callback = Plugin.eventTrigger('beforeNext');
+            } else {
+                callback = Plugin.eventTrigger('beforePrev');
+            }
+            
+            //== Skip if stopped
+            if (the.stopped === true) {
+                the.stopped = false;
+                return;
+            }
+
+            //== Continue if no exit
+            if (callback !== false) {
+                //== Before change
+                Plugin.eventTrigger('beforeChange');
+
+                //== Set current step 
+                the.currentStep = number;
+
+                //== Update UI
+                Plugin.updateUI();
+
+                //== Trigger change event
+                Plugin.eventTrigger('change');
+            }
+
+            //== After next and prev events
+            if (number > the.startStep) {
+                Plugin.eventTrigger('afterNext');
+            } else {
+                Plugin.eventTrigger('afterPrev');
+            }
+
+            return the;
+        },
+
+        /**
+         * Set step class
+         */
+        setStepClass: function() {
+            if (Plugin.isLastStep()) {
+                mUtil.addClass(element, 'm-wizard--step-last');
+            } else {
+                mUtil.removeClass(element, 'm-wizard--step-last');
+            }
+
+            if (Plugin.isFirstStep()) {
+                mUtil.addClass(element, 'm-wizard--step-first');
+            } else {
+                mUtil.removeClass(element, 'm-wizard--step-first');
+            }
+
+            if (Plugin.isBetweenStep()) {
+                mUtil.addClass(element, 'm-wizard--step-between');
+            } else {
+                mUtil.removeClass(element, 'm-wizard--step-between');
+            }
+        },
+
+        updateUI: function(argument) {
+            //== Update progress bar
+            Plugin.updateProgress();
+
+            //== Show current target content
+            Plugin.handleTarget();
+
+            //== Set classes
+            Plugin.setStepClass();
+
+            //== Apply nav step classes
+            for (var i = 0, j = the.steps.length; i < j; i++) {
+                mUtil.removeClass(the.steps[i], 'm-wizard__step--current m-wizard__step--done');
+            }
+
+            for (var i = 1; i < the.currentStep; i++) {
+                mUtil.addClass(the.steps[i - 1], 'm-wizard__step--done');
+            }
+            
+            mUtil.addClass(the.steps[the.currentStep - 1], 'm-wizard__step--current');
+        },
+
+        /**
+         * Cancel
+         */
+        stop: function() {
+            the.stopped = true;
+        },
+
+        /**
+         * Resume
+         */
+        start: function() {
+            the.stopped = false;
+        },
+
+        /**
+         * Check last step
+         */
+        isLastStep: function() {
+            return the.currentStep === the.totalSteps;
+        },
+
+        /**
+         * Check first step
+         */
+        isFirstStep: function() {
+            return the.currentStep === 1;
+        },
+
+        /**
+         * Check between step
+         */
+        isBetweenStep: function() {
+            return Plugin.isLastStep() === false && Plugin.isFirstStep() === false;
+        },
+
+        /**
+         * Go to the next step
+         */
+        goNext: function() {
+            return Plugin.goTo(Plugin.getNextStep());
+        },
+
+        /**
+         * Go to the prev step
+         */
+        goPrev: function() {
+            return Plugin.goTo(Plugin.getPrevStep());
+        },
+
+        /**
+         * Go to the last step
+         */
+        goLast: function() {
+            return Plugin.goTo(the.totalSteps);
+        },
+
+        /**
+         * Go to the first step
+         */
+        goFirst: function() {
+            return Plugin.goTo(1);
+        },
+
+        /**
+         * Set progress
+         */
+        updateProgress: function() {
+            //== Calculate progress position
+            if (!the.progress) {
+                return;
+            }
+
+            //== Update progress
+            if (mUtil.hasClass(element, 'm-wizard--1')) {
+                var width = 100 * ((the.currentStep - 1) / (the.totalSteps));
+                var number = mUtil.find(element, '.m-wizard__step-number');
+                var offset = parseInt(mUtil.css(number, 'width'));
+                mUtil.css(the.progress, 'width', 'calc(' + width + '% + ' + (offset / 2) + 'px)');
+            } else if (mUtil.hasClass(element, 'm-wizard--2')) {
+                if (the.currentStep === 1) {
+                    //return;
+                }
+
+                var progress = (the.currentStep - 1) * (100 * (1 / (the.totalSteps - 1)));
+
+                if (mUtil.isInResponsiveRange('minimal-desktop-and-below')) {
+                    mUtil.css(the.progress, 'height', progress + '%');
+                } else {
+                    mUtil.css(the.progress, 'width', progress + '%');
+                }
+            } else {
+                var width = 100 * ((the.currentStep) / (the.totalSteps));
+                mUtil.css(the.progress, 'width', width + '%');
+            }
+        },
+
+        /**
+         * Show/hide target content
+         */
+        handleTarget: function() {
+            var step = the.steps[the.currentStep - 1];
+            var target = mUtil.get(mUtil.attr(step, 'm-wizard-target'));
+            var current = mUtil.find(element, '.m-wizard__form-step--current');
+            
+            mUtil.removeClass(current, 'm-wizard__form-step--current');
+            mUtil.addClass(target, 'm-wizard__form-step--current');
+        },
+
+        /**
+         * Get next step
+         */
+        getNextStep: function() {
+            if (the.totalSteps >= (the.currentStep + 1)) {
+                return the.currentStep + 1;
+            } else {
+                return the.totalSteps;
+            }
+        },
+
+        /**
+         * Get prev step
+         */
+        getPrevStep: function() {
+            if ((the.currentStep - 1) >= 1) {
+                return the.currentStep - 1;
+            } else {
+                return 1;
+            }
+        },
+
+        /**
+         * Trigger events
+         */
+        eventTrigger: function(name) {
+            //mUtil.triggerCustomEvent(name);
+            for (i = 0; i < the.events.length; i++) {
+                var event = the.events[i];
+                if (event.name == name) {
+                    if (event.one == true) {
+                        if (event.fired == false) {
+                            the.events[i].fired = true;
+                            event.handler.call(this, the);
+                        }
+                    } else {
+                        event.handler.call(this, the);
                     }
                 }
             }
         },
-        extensions: {}
-    }
-}(jQuery);
-var mDropdown = function (t, e) {
-    var a = this, n = mUtil.get(t), o = mUtil.get("body");
-    if (n) {
-        var i = {
-            toggle: "click",
-            hoverTimeout: 300,
-            skin: "light",
-            height: "auto",
-            maxHeight: !1,
-            minHeight: !1,
-            persistent: !1,
-            mobileOverlay: !0
-        }, l = {
-            construct: function (t) {
-                return mUtil.data(n).has("dropdown") ? a = mUtil.data(n).get("dropdown") : (l.init(t), l.setup(), mUtil.data(n).set("dropdown", a)), a
-            }, init: function (t) {
-                a.options = mUtil.deepExtend({}, i, t), a.events = [], a.eventHandlers = {}, a.open = !1, a.layout = {}, a.layout.close = mUtil.find(n, ".m-dropdown__close"), a.layout.toggle = mUtil.find(n, ".m-dropdown__toggle"), a.layout.arrow = mUtil.find(n, ".m-dropdown__arrow"), a.layout.wrapper = mUtil.find(n, ".m-dropdown__wrapper"), a.layout.defaultDropPos = mUtil.hasClass(n, "m-dropdown--up") ? "up" : "down", a.layout.currentDropPos = a.layout.defaultDropPos, "hover" == mUtil.attr(n, "m-dropdown-toggle") && (a.options.toggle = "hover")
-            }, setup: function () {
-                a.options.placement && mUtil.addClass(n, "m-dropdown--" + a.options.placement), a.options.align && mUtil.addClass(n, "m-dropdown--align-" + a.options.align), a.options.width && mUtil.css(a.layout.wrapper, "width", a.options.width + "px"), "1" == mUtil.attr(n, "m-dropdown-persistent") && (a.options.persistent = !0), "hover" == a.options.toggle && mUtil.addEvent(n, "mouseout", l.hideMouseout), l.setZindex()
-            }, toggle: function () {
-                return a.open ? l.hide() : l.show()
-            }, setContent: function (t) {
-                t = mUtil.find(n, ".m-dropdown__content").innerHTML = t;
-                return a
-            }, show: function () {
-                if ("hover" == a.options.toggle && mUtil.hasAttr(n, "hover")) return l.clearHovered(), a;
-                if (a.open) return a;
-                if (a.layout.arrow && l.adjustArrowPos(), l.eventTrigger("beforeShow"), l.hideOpened(), mUtil.addClass(n, "m-dropdown--open"), mUtil.isMobileDevice() && a.options.mobileOverlay) {
-                    var t = mUtil.css(n, "z-index") - 1, e = mUtil.insertAfter(document.createElement("DIV"), n);
-                    mUtil.addClass(e, "m-dropdown__dropoff"), mUtil.css(e, "z-index", t), mUtil.data(e).set("dropdown", n), mUtil.data(n).set("dropoff", e), mUtil.addEvent(e, "click", function (t) {
-                        l.hide(), mUtil.remove(this), t.preventDefault()
-                    })
-                }
-                return n.focus(), n.setAttribute("aria-expanded", "true"), a.open = !0, mUtil.scrollersUpdate(n), l.eventTrigger("afterShow"), a
-            }, clearHovered: function () {
-                var t = mUtil.attr(n, "timeout");
-                mUtil.removeAttr(n, "hover"), mUtil.removeAttr(n, "timeout"), clearTimeout(t)
-            }, hideHovered: function (t) {
-                if (!0 === t) {
-                    if (!1 === l.eventTrigger("beforeHide")) return;
-                    l.clearHovered(), mUtil.removeClass(n, "m-dropdown--open"), a.open = !1, l.eventTrigger("afterHide")
-                } else {
-                    if (!0 === mUtil.hasAttr(n, "hover")) return;
-                    if (!1 === l.eventTrigger("beforeHide")) return;
-                    var e = setTimeout(function () {
-                        mUtil.attr(n, "hover") && (l.clearHovered(), mUtil.removeClass(n, "m-dropdown--open"), a.open = !1, l.eventTrigger("afterHide"))
-                    }, a.options.hoverTimeout);
-                    mUtil.attr(n, "hover", "1"), mUtil.attr(n, "timeout", e)
-                }
-            }, hideClicked: function () {
-                !1 !== l.eventTrigger("beforeHide") && (mUtil.removeClass(n, "m-dropdown--open"), mUtil.data(n).remove("dropoff"), a.open = !1, l.eventTrigger("afterHide"))
-            }, hide: function (t) {
-                return !1 === a.open ? a : (mUtil.isDesktopDevice() && "hover" == a.options.toggle ? l.hideHovered(t) : l.hideClicked(), "down" == a.layout.defaultDropPos && "up" == a.layout.currentDropPos && (mUtil.removeClass(n, "m-dropdown--up"), a.layout.arrow.prependTo(a.layout.wrapper), a.layout.currentDropPos = "down"), a)
-            }, hideMouseout: function () {
-                mUtil.isDesktopDevice() && l.hide()
-            }, hideOpened: function () {
-                for (var t = mUtil.findAll(o, ".m-dropdown.m-dropdown--open"), e = 0, a = t.length; e < a; e++) {
-                    var n = t[e];
-                    mUtil.data(n).get("dropdown").hide(!0)
-                }
-            }, adjustArrowPos: function () {
-                var t = mUtil.outerWidth(n),
-                    e = mUtil.hasClass(a.layout.arrow, "m-dropdown__arrow--right") ? "right" : "left", o = 0;
-                a.layout.arrow && (mUtil.isInResponsiveRange("mobile") && mUtil.hasClass(n, "m-dropdown--mobile-full-width") ? (o = mUtil.offset(n).left + t / 2 - Math.abs(parseInt(mUtil.css(a.layout.arrow, "width")) / 2) - parseInt(mUtil.css(a.layout.wrapper, "left")), mUtil.css(a.layout.arrow, "right", "auto"), mUtil.css(a.layout.arrow, "left", o + "px"), mUtil.css(a.layout.arrow, "margin-left", "auto"), mUtil.css(a.layout.arrow, "margin-right", "auto")) : mUtil.hasClass(a.layout.arrow, "m-dropdown__arrow--adjust") && (o = t / 2 - Math.abs(parseInt(mUtil.css(a.layout.arrow, "width")) / 2), mUtil.hasClass(n, "m-dropdown--align-push") && (o += 20), "right" == e ? mUtil.isRTL() ? (mUtil.css(a.layout.arrow, "right", "auto"), mUtil.css(a.layout.arrow, "left", o + "px")) : (mUtil.css(a.layout.arrow, "left", "auto"), mUtil.css(a.layout.arrow, "right", o + "px")) : mUtil.isRTL() ? (mUtil.css(a.layout.arrow, "left", "auto"), mUtil.css(a.layout.arrow, "right", o + "px")) : (mUtil.css(a.layout.arrow, "right", "auto"), mUtil.css(a.layout.arrow, "left", o + "px"))))
-            }, setZindex: function () {
-                var t = 101, e = mUtil.getHighestZindex(n);
-                e >= t && (t = e + 1), mUtil.css(a.layout.wrapper, "z-index", t)
-            }, isPersistent: function () {
-                return a.options.persistent
-            }, isShown: function () {
-                return a.open
-            }, eventTrigger: function (t, e) {
-                for (var n = 0; n < a.events.length; n++) {
-                    var o = a.events[n];
-                    o.name == t && (1 == o.one ? 0 == o.fired && (a.events[n].fired = !0, o.handler.call(this, a, e)) : o.handler.call(this, a, e))
-                }
-            }, addEvent: function (t, e, n) {
-                a.events.push({name: t, handler: e, one: n, fired: !1})
-            }
-        };
-        return a.setDefaults = function (t) {
-            i = t
-        }, a.show = function () {
-            return l.show()
-        }, a.hide = function () {
-            return l.hide()
-        }, a.toggle = function () {
-            return l.toggle()
-        }, a.isPersistent = function () {
-            return l.isPersistent()
-        }, a.isShown = function () {
-            return l.isShown()
-        }, a.setContent = function (t) {
-            return l.setContent(t)
-        }, a.on = function (t, e) {
-            return l.addEvent(t, e)
-        }, a.one = function (t, e) {
-            return l.addEvent(t, e, !0)
-        }, l.construct.apply(a, [e]), !0, a
-    }
+
+        addEvent: function(name, handler, one) {
+            the.events.push({
+                name: name,
+                handler: handler,
+                one: one,
+                fired: false
+            });
+
+            return the;
+        }
+    };
+
+    //////////////////////////
+    // ** Public Methods ** //
+    //////////////////////////
+
+    /**
+     * Set default options 
+     */
+
+    the.setDefaults = function(options) {
+        defaultOptions = options;
+    };
+
+    /**
+     * Go to the next step 
+     */
+    the.goNext = function() {
+        return Plugin.goNext();
+    };
+
+    /**
+     * Go to the prev step 
+     */
+    the.goPrev = function() {
+        return Plugin.goPrev();
+    };
+
+    /**
+     * Go to the last step 
+     */
+    the.goLast = function() {
+        return Plugin.goLast();
+    };
+
+    /**
+     * Cancel step 
+     */
+    the.stop = function() {
+        return Plugin.stop();
+    };
+
+    /**
+     * Resume step 
+     */
+    the.start = function() {
+        return Plugin.start();
+    };
+
+    /**
+     * Go to the first step 
+     */
+    the.goFirst = function() {
+        return Plugin.goFirst();
+    };
+
+    /**
+     * Go to a step
+     */
+    the.goTo = function(number) {
+        return Plugin.goTo(number);
+    };
+
+    /**
+     * Get current step number 
+     */
+    the.getStep = function() {
+        return the.currentStep;
+    };
+
+    /**
+     * Check last step 
+     */
+    the.isLastStep = function() {
+        return Plugin.isLastStep();
+    };
+
+    /**
+     * Check first step 
+     */
+    the.isFirstStep = function() {
+        return Plugin.isFirstStep();
+    };
+    
+    /**
+     * Attach event
+     */
+    the.on = function(name, handler) {
+        return Plugin.addEvent(name, handler);
+    };
+
+    /**
+     * Attach event that will be fired once
+     */
+    the.one = function(name, handler) {
+        return Plugin.addEvent(name, handler, true);
+    };
+
+    //== Construct plugin
+    Plugin.construct.apply(the, [options]);
+
+    return the;
 };
-mUtil.on(document, '[m-dropdown-toggle="click"] .m-dropdown__toggle', "click", function (t) {
-    var e = this.closest(".m-dropdown");
-    e && ((mUtil.data(e).has("dropdown") ? mUtil.data(e).get("dropdown") : new mDropdown(e)).toggle(), t.preventDefault())
-}), mUtil.on(document, '[m-dropdown-toggle="hover"] .m-dropdown__toggle', "click", function (t) {
-    if (mUtil.isDesktopDevice()) "#" == mUtil.attr(this, "href") && t.preventDefault(); else if (mUtil.isMobileDevice()) {
-        var e = this.closest(".m-dropdown");
-        e && ((mUtil.data(e).has("dropdown") ? mUtil.data(e).get("dropdown") : new mDropdown(e)).toggle(), t.preventDefault())
+var mDropdown = function(elementId, options) {
+    //== Main object
+    var the = this;
+    var init = false;
+
+    //== Get element object
+    var element = mUtil.get(elementId);
+    var body = mUtil.get('body');
+
+    if (!element) {
+        return;
     }
-}), mUtil.on(document, '[m-dropdown-toggle="hover"]', "mouseover", function (t) {
+
+    //== Default options
+    var defaultOptions = {
+        toggle: 'click',
+        hoverTimeout: 300,
+        skin: 'light',
+        height: 'auto',
+        maxHeight: false,
+        minHeight: false,
+        persistent: false,
+        mobileOverlay: true
+    };
+
+    ////////////////////////////
+    // ** Private Methods  ** //
+    ////////////////////////////
+
+    var Plugin = {
+        /**
+         * Run plugin
+         * @returns {mdropdown}
+         */
+        construct: function(options) {
+            if (mUtil.data(element).has('dropdown')) {
+                the = mUtil.data(element).get('dropdown');
+            } else {
+                // reset dropdown
+                Plugin.init(options);
+
+                Plugin.setup();
+
+                mUtil.data(element).set('dropdown', the);
+            }
+
+            return the;
+        },
+
+        /**
+         * Handles subdropdown click toggle
+         * @returns {mdropdown}
+         */
+        init: function(options) {
+            // merge default and user defined options
+            the.options = mUtil.deepExtend({}, defaultOptions, options);
+            the.events = [];
+            the.eventHandlers = {};
+            the.open = false;
+            
+            the.layout = {};
+            the.layout.close = mUtil.find(element, '.m-dropdown__close');
+            the.layout.toggle = mUtil.find(element, '.m-dropdown__toggle');
+            the.layout.arrow = mUtil.find(element, '.m-dropdown__arrow');
+            the.layout.wrapper = mUtil.find(element, '.m-dropdown__wrapper');
+            the.layout.defaultDropPos = mUtil.hasClass(element, 'm-dropdown--up') ? 'up' : 'down';
+            the.layout.currentDropPos = the.layout.defaultDropPos;
+
+            if (mUtil.attr(element, 'm-dropdown-toggle') == "hover") {
+                the.options.toggle = 'hover';
+            }
+        },
+
+        /**
+         * Setup dropdown
+         */
+        setup: function() {
+            if (the.options.placement) {
+                mUtil.addClass(element, 'm-dropdown--' + the.options.placement);
+            }
+
+            if (the.options.align) {
+                mUtil.addClass(element, 'm-dropdown--align-' + the.options.align);
+            }
+
+            if (the.options.width) {
+                mUtil.css(the.layout.wrapper, 'width', the.options.width + 'px');
+            }
+
+            if (mUtil.attr(element, 'm-dropdown-persistent') == '1') {
+                the.options.persistent = true;
+            }
+
+            if (the.options.toggle == 'hover') {    
+                mUtil.addEvent(element, 'mouseout', Plugin.hideMouseout);
+            } 
+
+            // set zindex
+            Plugin.setZindex();
+        },
+
+        /**
+         * Toggle dropdown
+         */
+        toggle: function() {
+            if (the.open) {
+                return Plugin.hide();
+            } else {
+                return Plugin.show();
+            }
+        },
+
+        /**
+         * Set content
+         */
+        setContent: function(content) {
+            var content = mUtil.find(element, '.m-dropdown__content').innerHTML = content;
+
+            return the;
+        },
+
+        /**
+         * Show dropdown
+         */
+        show: function() {
+            if (the.options.toggle == 'hover' && mUtil.hasAttr(element, 'hover')) {
+                Plugin.clearHovered();
+                return the;
+            }
+
+            if (the.open) {
+                return the;
+            }
+
+            if (the.layout.arrow) {
+                Plugin.adjustArrowPos();
+            }
+
+            Plugin.eventTrigger('beforeShow');
+
+            Plugin.hideOpened();
+
+            mUtil.addClass(element, 'm-dropdown--open');
+
+            if (mUtil.isMobileDevice() && the.options.mobileOverlay) {
+                var zIndex = mUtil.css(element, 'z-index') - 1;
+
+                var dropdownoff = mUtil.insertAfter(document.createElement('DIV'), element );
+
+                mUtil.addClass(dropdownoff, 'm-dropdown__dropoff');
+                mUtil.css(dropdownoff, 'z-index', zIndex);
+                mUtil.data(dropdownoff).set('dropdown', element);
+                mUtil.data(element).set('dropoff', dropdownoff);
+
+                mUtil.addEvent(dropdownoff, 'click', function(e) {
+                    Plugin.hide();
+                    mUtil.remove(this);
+                    e.preventDefault();
+                });
+            }
+
+            element.focus();
+            element.setAttribute('aria-expanded', 'true');
+            the.open = true;
+
+            //== Update scrollers
+            mUtil.scrollersUpdate(element);
+
+            Plugin.eventTrigger('afterShow');
+
+            return the;
+        },
+
+        /**
+         * Clear dropdown hover
+         */
+        clearHovered: function() {
+            var timeout = mUtil.attr(element, 'timeout');
+
+            mUtil.removeAttr(element, 'hover');            
+            mUtil.removeAttr(element, 'timeout');
+
+            clearTimeout(timeout);
+        },
+
+        /**
+         * Hide hovered dropdown
+         */
+        hideHovered: function(force) {
+            if (force === true) {
+                if (Plugin.eventTrigger('beforeHide') === false) {
+                    return;
+                }
+
+                Plugin.clearHovered();
+                mUtil.removeClass(element, 'm-dropdown--open');
+                the.open = false;
+                Plugin.eventTrigger('afterHide');
+            } else {
+                if (mUtil.hasAttr(element, 'hover') === true) {
+                    return;
+                }
+
+                if (Plugin.eventTrigger('beforeHide') === false) {
+                    return;
+                }
+
+                var timeout = setTimeout(function() {
+                    if (mUtil.attr(element, 'hover')) {
+                        Plugin.clearHovered();
+                        mUtil.removeClass(element, 'm-dropdown--open');
+                        the.open = false;
+                        Plugin.eventTrigger('afterHide');
+                    }
+                }, the.options.hoverTimeout);
+
+                mUtil.attr(element, 'hover', '1');            
+                mUtil.attr(element, 'timeout', timeout);
+            }
+        },
+
+        /**
+         * Hide clicked dropdown
+         */
+        hideClicked: function() {
+            if (Plugin.eventTrigger('beforeHide') === false) {
+                return;
+            }
+
+            mUtil.removeClass(element, 'm-dropdown--open');
+            mUtil.data(element).remove('dropoff');
+            the.open = false;
+            Plugin.eventTrigger('afterHide');
+        },
+
+        /**
+         * Hide dropdown
+         */
+        hide: function(force) {
+            if (the.open === false) {
+                return the;
+            }
+
+            if (mUtil.isDesktopDevice() && the.options.toggle == 'hover') {
+                Plugin.hideHovered(force);
+            } else {
+                Plugin.hideClicked();
+            }
+
+            if (the.layout.defaultDropPos == 'down' && the.layout.currentDropPos == 'up') {
+                mUtil.removeClass(element, 'm-dropdown--up');
+                the.layout.arrow.prependTo(the.layout.wrapper);
+                the.layout.currentDropPos = 'down';
+            }
+
+            return the;
+        },
+
+        /**
+         * Hide on mouseout
+         */
+        hideMouseout: function() {
+            if (mUtil.isDesktopDevice()) {
+                Plugin.hide();
+            }
+        },
+
+        /**
+         * Hide opened dropdowns
+         */
+        hideOpened: function() {
+            var query = mUtil.findAll(body, '.m-dropdown.m-dropdown--open');
+            
+            for (var i = 0, j = query.length; i < j; i++) {
+                var dropdown = query[i];
+                mUtil.data(dropdown).get('dropdown').hide(true);
+            }
+        },
+
+        /**
+         * Adjust dropdown arrow positions
+         */
+        adjustArrowPos: function() {
+            var width = mUtil.outerWidth(element); // ?
+
+            var alignment = mUtil.hasClass(the.layout.arrow, 'm-dropdown__arrow--right') ? 'right' : 'left';
+            var pos = 0;
+
+            if (the.layout.arrow) {
+                if ( mUtil.isInResponsiveRange('mobile') && mUtil.hasClass(element, 'm-dropdown--mobile-full-width') ) {
+                    pos = mUtil.offset(element).left + (width / 2) - Math.abs( parseInt(mUtil.css(the.layout.arrow, 'width')) / 2) - parseInt(mUtil.css(the.layout.wrapper, 'left'));
+                    
+                    mUtil.css(the.layout.arrow, 'right', 'auto');
+                    mUtil.css(the.layout.arrow, 'left', pos + 'px');
+                    
+                    mUtil.css(the.layout.arrow, 'margin-left', 'auto');
+                    mUtil.css(the.layout.arrow, 'margin-right', 'auto');
+                } else if (mUtil.hasClass(the.layout.arrow, 'm-dropdown__arrow--adjust')) {
+                    pos = width / 2 - Math.abs( parseInt(mUtil.css(the.layout.arrow, 'width')) / 2);
+                    if (mUtil.hasClass(element, 'm-dropdown--align-push')) {
+                        pos = pos + 20;
+                    }
+
+                    if (alignment == 'right') {
+                        if (mUtil.isRTL()) {
+                            mUtil.css(the.layout.arrow, 'right', 'auto');
+                            mUtil.css(the.layout.arrow, 'left', pos + 'px');
+                        } else {
+                            mUtil.css(the.layout.arrow, 'left', 'auto');
+                            mUtil.css(the.layout.arrow, 'right', pos + 'px');
+                        }
+                    } else {
+                        if (mUtil.isRTL()) {
+                            mUtil.css(the.layout.arrow, 'left', 'auto');
+                            mUtil.css(the.layout.arrow, 'right', pos + 'px');
+                        } else {
+                            mUtil.css(the.layout.arrow, 'right', 'auto');
+                            mUtil.css(the.layout.arrow, 'left', pos + 'px');
+                        }                       
+                    }
+                }
+            }
+        },
+
+        /**
+         * Get zindex
+         */
+        setZindex: function() {
+            var zIndex = 101; //mUtil.css(the.layout.wrapper, 'z-index');
+            var newZindex = mUtil.getHighestZindex(element);
+            if (newZindex >= zIndex) {
+                zIndex = newZindex + 1;
+            }
+            
+            mUtil.css(the.layout.wrapper, 'z-index', zIndex);
+        },
+
+        /**
+         * Check persistent
+         */
+        isPersistent: function() {
+            return the.options.persistent;
+        },
+
+        /**
+         * Check persistent
+         */
+        isShown: function() {
+            return the.open;
+        },
+
+        /**
+         * Trigger events
+         */
+        eventTrigger: function(name, args) {
+            for (var i = 0; i < the.events.length; i++) {
+                var event = the.events[i];
+                if (event.name == name) {
+                    if (event.one == true) {
+                        if (event.fired == false) {
+                            the.events[i].fired = true;
+                            event.handler.call(this, the, args);
+                        }
+                    } else {
+                        event.handler.call(this, the, args);
+                    }
+                }
+            }
+        },
+
+        addEvent: function(name, handler, one) {
+            the.events.push({
+                name: name,
+                handler: handler,
+                one: one,
+                fired: false
+            });
+        }
+    };
+
+    //////////////////////////
+    // ** Public Methods ** //
+    //////////////////////////
+
+    /**
+     * Set default options 
+     */
+
+    the.setDefaults = function(options) {
+        defaultOptions = options;
+    };
+
+    /**
+     * Show dropdown
+     * @returns {mDropdown}
+     */
+    the.show = function() {
+        return Plugin.show();
+    };
+
+    /**
+     * Hide dropdown
+     * @returns {mDropdown}
+     */
+    the.hide = function() {
+        return Plugin.hide();
+    };
+
+    /**
+     * Toggle dropdown
+     * @returns {mDropdown}
+     */
+    the.toggle = function() {
+        return Plugin.toggle();
+    };
+
+    /**
+     * Toggle dropdown
+     * @returns {mDropdown}
+     */
+    the.isPersistent = function() {
+        return Plugin.isPersistent();
+    };
+
+    /**
+     * Check shown state
+     * @returns {mDropdown}
+     */
+    the.isShown = function() {
+        return Plugin.isShown();
+    };
+
+    /**
+     * Set dropdown content
+     * @returns {mDropdown}
+     */
+    the.setContent = function(content) {
+        return Plugin.setContent(content);
+    };
+
+    /**
+     * Register event
+     */
+    the.on = function(name, handler) {
+        return Plugin.addEvent(name, handler);
+    };
+
+    /**
+     * Register event
+     */
+    the.one = function(name, handler) {
+        return Plugin.addEvent(name, handler, true);
+    };
+
+    ///////////////////////////////
+    // ** Plugin Construction ** //
+    ///////////////////////////////
+
+    //== Run plugin
+    Plugin.construct.apply(the, [options]);
+
+    //== Init done
+    init = true;
+
+    // Return plugin instance
+    return the;
+};
+
+//== Plugin global lazy initialization
+mUtil.on(document, '[m-dropdown-toggle="click"] .m-dropdown__toggle', 'click', function(e) {
+    var element = this.closest('.m-dropdown');  
+    var dropdown;
+
+    if (element) {
+        if (mUtil.data(element).has('dropdown')) {
+            dropdown = mUtil.data(element).get('dropdown');
+        } else {                 
+            dropdown = new mDropdown(element);
+        }             
+
+        dropdown.toggle();
+
+        e.preventDefault();
+    } 
+});
+
+mUtil.on(document, '[m-dropdown-toggle="hover"] .m-dropdown__toggle', 'click', function(e) {
     if (mUtil.isDesktopDevice()) {
-        this && ((mUtil.data(this).has("dropdown") ? mUtil.data(this).get("dropdown") : new mDropdown(this)).show(), t.preventDefault())
-    }
-}), document.addEventListener("click", function (t) {
-    var e, a = mUtil.get("body"), n = t.target;
-    if (e = a.querySelectorAll(".m-dropdown.m-dropdown--open")) for (var o = 0, i = e.length; o < i; o++) {
-        var l = e[o];
-        if (!1 === mUtil.data(l).has("dropdown")) return;
-        var r = mUtil.data(l).get("dropdown"), s = mUtil.find(l, ".m-dropdown__toggle");
-        mUtil.hasClass(l, "m-dropdown--disable-close") && (t.preventDefault(), t.stopPropagation()), s && n !== s && !1 === s.contains(n) && !1 === n.contains(s) ? !1 === r.isPersistent() && r.hide() : !1 === l.contains(n) && r.hide()
+        if (mUtil.attr(this, 'href') == '#') {
+            e.preventDefault();
+        }
+    } else if (mUtil.isMobileDevice()) {
+        var element = this.closest('.m-dropdown');
+        var dropdown;
+
+        if (element) {
+            if (mUtil.data(element).has('dropdown')) {
+                dropdown = mUtil.data(element).get('dropdown');
+            } else {                        
+                dropdown = new mDropdown(element);
+            }  
+
+            dropdown.toggle();
+
+            e.preventDefault();
+        }
     }
 });
-var mHeader = function (t, e) {
-    var a = this, n = mUtil.get(t), o = mUtil.get("body");
-    if (void 0 !== n) {
-        var i = {classic: !1, offset: {mobile: 150, desktop: 200}, minimize: {mobile: !1, desktop: !1}}, l = {
-            construct: function (t) {
-                return mUtil.data(n).has("header") ? a = mUtil.data(n).get("header") : (l.init(t), l.build(), mUtil.data(n).set("header", a)), a
-            }, init: function (t) {
-                a.events = [], a.options = mUtil.deepExtend({}, i, t)
-            }, build: function () {
-                var t = 0;
-                !1 === a.options.minimize.mobile && !1 === a.options.minimize.desktop || window.addEventListener("scroll", function () {
-                    var e, n, i, l = 0;
-                    mUtil.isInResponsiveRange("desktop") ? (l = a.options.offset.desktop, e = a.options.minimize.desktop.on, n = a.options.minimize.desktop.off) : mUtil.isInResponsiveRange("tablet-and-mobile") && (l = a.options.offset.mobile, e = a.options.minimize.mobile.on, n = a.options.minimize.mobile.off), i = window.pageYOffset, mUtil.isInResponsiveRange("tablet-and-mobile") && a.options.classic && a.options.classic.mobile || mUtil.isInResponsiveRange("desktop") && a.options.classic && a.options.classic.desktop ? i > l ? (mUtil.addClass(o, e), mUtil.removeClass(o, n)) : (mUtil.addClass(o, n), mUtil.removeClass(o, e)) : (i > l && t < i ? (mUtil.addClass(o, e), mUtil.removeClass(o, n)) : (mUtil.addClass(o, n), mUtil.removeClass(o, e)), t = i)
-                })
-            }, eventTrigger: function (t, e) {
-                for (var n = 0; n < a.events.length; n++) {
-                    var o = a.events[n];
-                    o.name == t && (1 == o.one ? 0 == o.fired && (a.events[n].fired = !0, o.handler.call(this, a, e)) : o.handler.call(this, a, e))
-                }
-            }, addEvent: function (t, e, n) {
-                a.events.push({name: t, handler: e, one: n, fired: !1})
-            }
-        };
-        return a.setDefaults = function (t) {
-            i = t
-        }, a.on = function (t, e) {
-            return l.addEvent(t, e)
-        }, l.construct.apply(a, [e]), !0, a
+
+mUtil.on(document, '[m-dropdown-toggle="hover"]', 'mouseover', function(e) {
+    if (mUtil.isDesktopDevice()) {
+        var element = this;
+        var dropdown;
+
+        if (element) {
+            if (mUtil.data(element).has('dropdown')) {
+                dropdown = mUtil.data(element).get('dropdown');
+            } else {                        
+                dropdown = new mDropdown(element);
+            }              
+
+            dropdown.show();
+
+            e.preventDefault();
+        }
     }
-}, mMenu = function (t, e) {
-    var a = this, n = !1, o = mUtil.get(t), i = mUtil.get("body");
-    if (o) {
-        var l = {
-            accordion: {slideSpeed: 200, autoScroll: !1, autoScrollSpeed: 1200, expandAll: !0},
-            dropdown: {timeout: 500}
-        }, r = {
-            construct: function (t) {
-                return mUtil.data(o).has("menu") ? a = mUtil.data(o).get("menu") : (r.init(t), r.reset(), r.build(), mUtil.data(o).set("menu", a)), a
-            }, init: function (t) {
-                a.events = [], a.eventHandlers = {}, a.options = mUtil.deepExtend({}, l, t), a.pauseDropdownHoverTime = 0, a.uid = mUtil.getUniqueID()
-            }, update: function (t) {
-                a.options = mUtil.deepExtend({}, l, t), a.pauseDropdownHoverTime = 0, r.reset(), a.eventHandlers = {}, r.build(), mUtil.data(o).set("menu", a)
-            }, reload: function () {
-                r.reset(), r.build()
-            }, build: function () {
-                a.eventHandlers.event_1 = mUtil.on(o, ".m-menu__toggle", "click", r.handleSubmenuAccordion), ("dropdown" === r.getSubmenuMode() || r.isConditionalSubmenuDropdown()) && (a.eventHandlers.event_2 = mUtil.on(o, '[m-menu-submenu-toggle="hover"]', "mouseover", r.handleSubmenuDrodownHoverEnter), a.eventHandlers.event_3 = mUtil.on(o, '[m-menu-submenu-toggle="hover"]', "mouseout", r.handleSubmenuDrodownHoverExit), a.eventHandlers.event_4 = mUtil.on(o, '[m-menu-submenu-toggle="click"] > .m-menu__toggle, [m-menu-submenu-toggle="click"] > .m-menu__link .m-menu__toggle', "click", r.handleSubmenuDropdownClick), a.eventHandlers.event_5 = mUtil.on(o, '[m-menu-submenu-toggle="tab"] > .m-menu__toggle, [m-menu-submenu-toggle="tab"] > .m-menu__link .m-menu__toggle', "click", r.handleSubmenuDropdownTabClick)), a.eventHandlers.event_6 = mUtil.on(o, ".m-menu__item:not(.m-menu__item--submenu) > .m-menu__link:not(.m-menu__toggle):not(.m-menu__link--toggle-skip)", "click", r.handleLinkClick), a.options.scroll && a.options.scroll.height && r.scrollerInit()
-            }, reset: function () {
-                mUtil.off(o, "click", a.eventHandlers.event_1), mUtil.off(o, "mouseover", a.eventHandlers.event_2), mUtil.off(o, "mouseout", a.eventHandlers.event_3), mUtil.off(o, "click", a.eventHandlers.event_4), mUtil.off(o, "click", a.eventHandlers.event_5), mUtil.off(o, "click", a.eventHandlers.event_6)
-            }, scrollerInit: function () {
-                a.options.scroll && a.options.scroll.height && (mUtil.scrollerDestroy(o), mUtil.scrollerInit(o, {
-                    disableForMobile: !0,
-                    resetHeightOnDestroy: !0,
-                    handleWindowResize: !0,
-                    height: a.options.scroll.height
-                }))
-            }, scrollerUpdate: function () {
-                a.options.scroll && a.options.scroll.height ? mUtil.scrollerUpdate(o) : mUtil.scrollerDestroy(o)
-            }, scrollerTop: function () {
-                a.options.scroll && a.options.scroll.height && mUtil.scrollerTop(o)
-            }, getSubmenuMode: function (t) {
-                return mUtil.isInResponsiveRange("desktop") ? t && mUtil.hasAttr(t, "m-menu-submenu-toggle") ? mUtil.attr(t, "m-menu-submenu-toggle") : mUtil.isset(a.options.submenu, "desktop.state.body") ? mUtil.hasClass(i, a.options.submenu.desktop.state.body) ? a.options.submenu.desktop.state.mode : a.options.submenu.desktop.default : mUtil.isset(a.options.submenu, "desktop") ? a.options.submenu.desktop : void 0 : mUtil.isInResponsiveRange("tablet") && mUtil.isset(a.options.submenu, "tablet") ? a.options.submenu.tablet : !(!mUtil.isInResponsiveRange("mobile") || !mUtil.isset(a.options.submenu, "mobile")) && a.options.submenu.mobile
-            }, isConditionalSubmenuDropdown: function () {
-                return !(!mUtil.isInResponsiveRange("desktop") || !mUtil.isset(a.options.submenu, "desktop.state.body"))
-            }, handleLinkClick: function (t) {
-                !1 === r.eventTrigger("linkClick", this) && t.preventDefault(), ("dropdown" === r.getSubmenuMode(this) || r.isConditionalSubmenuDropdown()) && r.handleSubmenuDropdownClose(t, this)
-            }, handleSubmenuDrodownHoverEnter: function (t) {
-                if ("accordion" !== r.getSubmenuMode(this) && !1 !== a.resumeDropdownHover()) {
-                    "1" == this.getAttribute("data-hover") && (this.removeAttribute("data-hover"), clearTimeout(this.getAttribute("data-timeout")), this.removeAttribute("data-timeout")), r.showSubmenuDropdown(this)
+});
+
+document.addEventListener("click", function(e) {
+    var query;
+    var body = mUtil.get('body');
+    var target = e.target;
+
+    //== Handle dropdown close
+    if (query = body.querySelectorAll('.m-dropdown.m-dropdown--open')) {
+        for (var i = 0, len = query.length; i < len; i++) {
+            var element = query[i];
+            if (mUtil.data(element).has('dropdown') === false) {
+                return;
+            }
+
+            var the = mUtil.data(element).get('dropdown');
+            var toggle = mUtil.find(element, '.m-dropdown__toggle');
+
+            if (mUtil.hasClass(element, 'm-dropdown--disable-close')) {
+                e.preventDefault();
+                e.stopPropagation();
+                //return;
+            }
+
+            if (toggle && target !== toggle && toggle.contains(target) === false && target.contains(toggle) === false) {
+                if (the.isPersistent() === false) {
+                    the.hide();
+                } 
+            } else if (element.contains(target) === false) {
+                the.hide();
+            }
+        }
+    }
+});
+var mHeader = function(elementId, options) {
+    //== Main object
+    var the = this;
+    var init = false;
+
+    //== Get element object
+    var element = mUtil.get(elementId);
+    var body = mUtil.get('body');
+
+    if (element === undefined) {
+        return;
+    }
+
+    //== Default options
+    var defaultOptions = {
+        classic: false,
+        offset: {
+            mobile: 150,
+            desktop: 200
+        },
+        minimize: {
+            mobile: false,
+            desktop: false
+        }
+    };
+
+    ////////////////////////////
+    // ** Private Methods  ** //
+    ////////////////////////////
+
+    var Plugin = {
+        /**
+         * Run plugin
+         * @returns {mHeader}
+         */
+        construct: function(options) {
+            if (mUtil.data(element).has('header')) {
+                the = mUtil.data(element).get('header');
+            } else {
+                // reset header
+                Plugin.init(options);
+
+                // build header
+                Plugin.build();
+
+                mUtil.data(element).set('header', the);
+            }
+
+            return the;
+        },
+
+        /**
+         * Handles subheader click toggle
+         * @returns {mHeader}
+         */
+        init: function(options) {
+            the.events = [];
+
+            // merge default and user defined options
+            the.options = mUtil.deepExtend({}, defaultOptions, options);
+        },
+
+        /**
+         * Reset header
+         * @returns {mHeader}
+         */
+        build: function() {
+            var lastScrollTop = 0;
+
+            if (the.options.minimize.mobile === false && the.options.minimize.desktop === false) {
+                return;
+            }
+
+            window.addEventListener('scroll', function() {
+                var offset = 0, on, off, st;
+
+                if (mUtil.isInResponsiveRange('desktop')) {
+                    offset = the.options.offset.desktop;
+                    on = the.options.minimize.desktop.on;
+                    off = the.options.minimize.desktop.off;
+                } else if (mUtil.isInResponsiveRange('tablet-and-mobile')) {
+                    offset = the.options.offset.mobile;
+                    on = the.options.minimize.mobile.on;
+                    off = the.options.minimize.mobile.off;
                 }
-            }, handleSubmenuDrodownHoverExit: function (t) {
-                if (!1 !== a.resumeDropdownHover() && "accordion" !== r.getSubmenuMode(this)) {
-                    var e = this, n = a.options.dropdown.timeout, o = setTimeout(function () {
-                        "1" == e.getAttribute("data-hover") && r.hideSubmenuDropdown(e, !0)
-                    }, n);
-                    e.setAttribute("data-hover", "1"), e.setAttribute("data-timeout", o)
+
+                st = window.pageYOffset;
+
+                if (
+                    (mUtil.isInResponsiveRange('tablet-and-mobile') && the.options.classic && the.options.classic.mobile) ||
+                    (mUtil.isInResponsiveRange('desktop') && the.options.classic && the.options.classic.desktop)
+
+                ) {
+                    if (st > offset) { // down scroll mode
+                        mUtil.addClass(body, on);
+                        mUtil.removeClass(body, off);
+                    } else { // back scroll mode
+                        mUtil.addClass(body, off);
+                        mUtil.removeClass(body, on);
+                    }
+                } else {
+                    if (st > offset && lastScrollTop < st) { // down scroll mode
+                        mUtil.addClass(body, on);
+                        mUtil.removeClass(body, off);
+                    } else { // back scroll mode
+                        mUtil.addClass(body, off);
+                        mUtil.removeClass(body, on);
+                    }
+
+                    lastScrollTop = st;
                 }
-            }, handleSubmenuDropdownClick: function (t) {
-                if ("accordion" !== r.getSubmenuMode(this)) {
-                    var e = this.closest(".m-menu__item");
-                    "accordion" != e.getAttribute("m-menu-submenu-mode") && (!1 === mUtil.hasClass(e, "m-menu__item--hover") ? (mUtil.addClass(e, "m-menu__item--open-dropdown"), r.showSubmenuDropdown(e)) : (mUtil.removeClass(e, "m-menu__item--open-dropdown"), r.hideSubmenuDropdown(e, !0)), t.preventDefault())
+            });
+        },
+
+        /**
+         * Trigger events
+         */
+        eventTrigger: function(name, args) {
+            for (var i = 0; i < the.events.length; i++) {
+                var event = the.events[i];
+                if (event.name == name) {
+                    if (event.one == true) {
+                        if (event.fired == false) {
+                            the.events[i].fired = true;
+                            event.handler.call(this, the, args);
+                        }
+                    } else {
+                        event.handler.call(this, the, args);
+                    }
                 }
-            }, handleSubmenuDropdownTabClick: function (t) {
-                if ("accordion" !== r.getSubmenuMode(this)) {
-                    var e = this.closest(".m-menu__item");
-                    "accordion" != e.getAttribute("m-menu-submenu-mode") && (0 == mUtil.hasClass(e, "m-menu__item--hover") && (mUtil.addClass(e, "m-menu__item--open-dropdown"), r.showSubmenuDropdown(e)), t.preventDefault())
+            }
+        },
+
+        addEvent: function(name, handler, one) {
+            the.events.push({
+                name: name,
+                handler: handler,
+                one: one,
+                fired: false
+            });
+        }
+    };
+
+    //////////////////////////
+    // ** Public Methods ** //
+    //////////////////////////
+
+    /**
+     * Set default options 
+     */
+
+    the.setDefaults = function(options) {
+        defaultOptions = options;
+    };
+
+    /**
+     * Register event
+     */
+    the.on = function(name, handler) {
+        return Plugin.addEvent(name, handler);
+    };
+
+    ///////////////////////////////
+    // ** Plugin Construction ** //
+    ///////////////////////////////
+
+    //== Run plugin
+    Plugin.construct.apply(the, [options]);
+
+    //== Init done
+    init = true;
+
+    // Return plugin instance
+    return the;
+};
+var mMenu = function(elementId, options) {
+    //== Main object
+    var the = this;
+    var init = false;
+
+    //== Get element object
+    var element = mUtil.get(elementId);
+    var body = mUtil.get('body');  
+
+    if (!element) {
+        return;
+    }
+
+    //== Default options
+    var defaultOptions = {       
+        // accordion submenu mode
+        accordion: {
+            slideSpeed: 200, // accordion toggle slide speed in milliseconds
+            autoScroll: false, // enable auto scrolling(focus) to the clicked menu item
+            autoScrollSpeed: 1200,
+            expandAll: true // allow having multiple expanded accordions in the menu
+        },
+
+        // dropdown submenu mode
+        dropdown: {
+            timeout: 500 // timeout in milliseconds to show and hide the hoverable submenu dropdown
+        }
+    };
+
+    ////////////////////////////
+    // ** Private Methods  ** //
+    ////////////////////////////
+
+    var Plugin = {
+        /**
+         * Run plugin
+         * @returns {mMenu}
+         */
+        construct: function(options) {
+            if (mUtil.data(element).has('menu')) {
+                the = mUtil.data(element).get('menu');
+            } else {
+                // reset menu
+                Plugin.init(options);
+
+                // reset menu
+                Plugin.reset();
+
+                // build menu
+                Plugin.build();
+
+                mUtil.data(element).set('menu', the);
+            }
+
+            return the;
+        },
+
+        /**
+         * Handles submenu click toggle
+         * @returns {mMenu}
+         */
+        init: function(options) {
+            the.events = [];
+
+            the.eventHandlers = {};
+
+            // merge default and user defined options
+            the.options = mUtil.deepExtend({}, defaultOptions, options);
+
+            // pause menu
+            the.pauseDropdownHoverTime = 0;
+
+            the.uid = mUtil.getUniqueID();
+        },
+
+        update: function(options) {
+            // merge default and user defined options
+            the.options = mUtil.deepExtend({}, defaultOptions, options);
+
+            // pause menu
+            the.pauseDropdownHoverTime = 0;
+
+             // reset menu
+            Plugin.reset();
+
+            the.eventHandlers = {};
+
+            // build menu
+            Plugin.build();
+
+            mUtil.data(element).set('menu', the);
+        },
+
+        reload: function() {
+             // reset menu
+            Plugin.reset();
+
+            // build menu
+            Plugin.build();
+        },
+
+        /**
+         * Reset menu
+         * @returns {mMenu}
+         */
+        build: function() {
+            //== General accordion submenu toggle
+            the.eventHandlers['event_1'] = mUtil.on( element, '.m-menu__toggle', 'click', Plugin.handleSubmenuAccordion);
+
+            //== Dropdown mode(hoverable)
+            if (Plugin.getSubmenuMode() === 'dropdown' || Plugin.isConditionalSubmenuDropdown()) {
+                // dropdown submenu - hover toggle
+                the.eventHandlers['event_2'] = mUtil.on( element, '[m-menu-submenu-toggle="hover"]', 'mouseover', Plugin.handleSubmenuDrodownHoverEnter);
+                the.eventHandlers['event_3'] = mUtil.on( element, '[m-menu-submenu-toggle="hover"]', 'mouseout', Plugin.handleSubmenuDrodownHoverExit);
+
+                // dropdown submenu - click toggle
+                the.eventHandlers['event_4'] = mUtil.on( element, '[m-menu-submenu-toggle="click"] > .m-menu__toggle, [m-menu-submenu-toggle="click"] > .m-menu__link .m-menu__toggle', 'click', Plugin.handleSubmenuDropdownClick);
+                the.eventHandlers['event_5'] = mUtil.on( element, '[m-menu-submenu-toggle="tab"] > .m-menu__toggle, [m-menu-submenu-toggle="tab"] > .m-menu__link .m-menu__toggle', 'click', Plugin.handleSubmenuDropdownTabClick);
+            }
+
+            //== General link click
+            the.eventHandlers['event_6'] = mUtil.on(element, '.m-menu__item:not(.m-menu__item--submenu) > .m-menu__link:not(.m-menu__toggle):not(.m-menu__link--toggle-skip)', 'click', Plugin.handleLinkClick);
+
+            // //== Init scrollable menu
+            // if (the.options.scroll && the.options.scroll.height) {
+            //     Plugin.scrollerInit();
+            // }
+        },
+
+        /**
+         * Reset menu
+         * @returns {mMenu}
+         */
+        reset: function() { 
+            mUtil.off( element, 'click', the.eventHandlers['event_1']);
+
+            // dropdown submenu - hover toggle
+            mUtil.off( element, 'mouseover', the.eventHandlers['event_2']);
+            mUtil.off( element, 'mouseout', the.eventHandlers['event_3']);
+
+            // dropdown submenu - click toggle
+            mUtil.off( element, 'click', the.eventHandlers['event_4']);
+            mUtil.off( element, 'click', the.eventHandlers['event_5']);
+            
+            mUtil.off(element, 'click', the.eventHandlers['event_6']);
+        },
+
+        // /**
+        //  * Init scroll menu
+        //  *
+        // */
+        // scrollerInit: function() {
+        //     if ( the.options.scroll && the.options.scroll.height ) {
+        //         mUtil.scrollerDestroy(element);
+        //         mUtil.scrollerInit(element, {disableForMobile: true, resetHeightOnDestroy: true, handleWindowResize: true, height: the.options.scroll.height});
+        //     }
+        // },
+
+        /**
+         * Update scroll menu
+        */
+        scrollerUpdate: function() {
+            if ( the.options.scroll && the.options.scroll.height ) {
+                mUtil.scrollerUpdate(element);
+            } else {
+                mUtil.scrollerDestroy(element);
+            }
+        },
+
+        /**
+         * Scroll top
+        */
+        scrollerTop: function() {
+            if ( the.options.scroll && the.options.scroll.height ) {
+                mUtil.scrollerTop(element);
+            }
+        },
+
+        /**
+         * Get submenu mode for current breakpoint and menu state
+         * @returns {mMenu}
+         */
+        getSubmenuMode: function(el) {
+            if ( mUtil.isInResponsiveRange('desktop') ) {
+                if (el && mUtil.hasAttr(el, 'm-menu-submenu-toggle')) {
+                    return mUtil.attr(el, 'm-menu-submenu-toggle');
                 }
-            }, handleSubmenuDropdownClose: function (t, e) {
-                if ("accordion" !== r.getSubmenuMode(e)) {
-                    var a = o.querySelectorAll(".m-menu__item.m-menu__item--submenu.m-menu__item--hover:not(.m-menu__item--tabs)");
-                    if (a.length > 0 && !1 === mUtil.hasClass(e, "m-menu__toggle") && 0 === e.querySelectorAll(".m-menu__toggle").length) for (var n = 0, i = a.length; n < i; n++) r.hideSubmenuDropdown(a[0], !0)
+
+                if ( mUtil.isset(the.options.submenu, 'desktop.state.body') ) {
+                    if ( mUtil.hasClass(body, the.options.submenu.desktop.state.body) ) {
+                        return the.options.submenu.desktop.state.mode;
+                    } else {
+                        return the.options.submenu.desktop.default;
+                    }
+                } else if ( mUtil.isset(the.options.submenu, 'desktop') ) {
+                    return the.options.submenu.desktop;
                 }
-            }, handleSubmenuAccordion: function (t, e) {
-                var n, o = e || this;
-                if ("dropdown" === r.getSubmenuMode(e) && (n = o.closest(".m-menu__item")) && "accordion" != n.getAttribute("m-menu-submenu-mode")) t.preventDefault(); else {
-                    var i = o.closest(".m-menu__item"), l = mUtil.child(i, ".m-menu__submenu, .m-menu__inner");
-                    if (!mUtil.hasClass(o.closest(".m-menu__item"), "m-menu__item--open-always") && i && l) {
-                        t.preventDefault();
-                        var s = a.options.accordion.slideSpeed;
-                        if (!1 === mUtil.hasClass(i, "m-menu__item--open")) {
-                            if (!1 === a.options.accordion.expandAll) {
-                                var d = o.closest(".m-menu__nav, .m-menu__subnav"),
-                                    c = mUtil.children(d, ".m-menu__item.m-menu__item--open.m-menu__item--submenu:not(.m-menu__item--expanded):not(.m-menu__item--open-always)");
-                                if (d && c) for (var m = 0, u = c.length; m < u; m++) {
-                                    var p = c[0], f = mUtil.child(p, ".m-menu__submenu");
-                                    f && mUtil.slideUp(f, s, function () {
-                                        r.scrollerUpdate(), mUtil.removeClass(p, "m-menu__item--open")
-                                    })
+            } else if ( mUtil.isInResponsiveRange('tablet') && mUtil.isset(the.options.submenu, 'tablet') ) {
+                return the.options.submenu.tablet;
+            } else if ( mUtil.isInResponsiveRange('mobile') && mUtil.isset(the.options.submenu, 'mobile') ) {
+                return the.options.submenu.mobile;
+            } else {
+                return false;
+            }
+        },
+
+        /**
+         * Get submenu mode for current breakpoint and menu state
+         * @returns {mMenu}
+         */
+        isConditionalSubmenuDropdown: function() {
+            if ( mUtil.isInResponsiveRange('desktop') && mUtil.isset(the.options.submenu, 'desktop.state.body') ) {
+                return true;
+            } else {
+                return false;
+            }
+        },
+
+        /**
+         * Handles menu link click
+         * @returns {mMenu}
+         */
+        handleLinkClick: function(e) {
+            if ( Plugin.eventTrigger('linkClick', this) === false ) {
+                e.preventDefault();
+            }
+            if ( Plugin.getSubmenuMode(this) === 'dropdown' || Plugin.isConditionalSubmenuDropdown() ) {
+                Plugin.handleSubmenuDropdownClose(e, this);
+            }
+        },
+
+        /**
+         * Handles submenu hover toggle
+         * @returns {mMenu}
+         */
+        handleSubmenuDrodownHoverEnter: function(e) {
+            if ( Plugin.getSubmenuMode(this) === 'accordion' ) {
+                return;
+            }
+
+            if ( the.resumeDropdownHover() === false ) {
+                return;
+            }
+
+            var item = this;
+
+            if ( item.getAttribute('data-hover') == '1' ) {
+                item.removeAttribute('data-hover');
+                clearTimeout( item.getAttribute('data-timeout') );
+                item.removeAttribute('data-timeout');
+                //Plugin.hideSubmenuDropdown(item, false);
+            }
+
+            Plugin.showSubmenuDropdown(item);
+        },
+
+        /**
+         * Handles submenu hover toggle
+         * @returns {mMenu}
+         */
+        handleSubmenuDrodownHoverExit: function(e) {
+            if ( the.resumeDropdownHover() === false ) {
+                return;
+            }
+
+            if ( Plugin.getSubmenuMode(this) === 'accordion' ) {
+                return;
+            }
+
+            var item = this;
+            var time = the.options.dropdown.timeout;
+
+            var timeout = setTimeout(function() {
+                if ( item.getAttribute('data-hover') == '1' ) {
+                    Plugin.hideSubmenuDropdown(item, true);
+                } 
+            }, time);
+
+            item.setAttribute('data-hover', '1');
+            item.setAttribute('data-timeout', timeout);  
+        },
+
+        /**
+         * Handles submenu click toggle
+         * @returns {mMenu}
+         */
+        handleSubmenuDropdownClick: function(e) {
+            if ( Plugin.getSubmenuMode(this) === 'accordion' ) {
+                return;
+            }
+ 
+            var item = this.closest('.m-menu__item'); 
+
+            if ( item.getAttribute('m-menu-submenu-mode') == 'accordion' ) {
+                return;
+            }
+
+            if ( mUtil.hasClass(item, 'm-menu__item--hover') === false ) {
+                mUtil.addClass(item, 'm-menu__item--open-dropdown');
+                Plugin.showSubmenuDropdown(item);
+            } else {
+                mUtil.removeClass(item, 'm-menu__item--open-dropdown' );
+                Plugin.hideSubmenuDropdown(item, true);
+            }
+
+            e.preventDefault();
+        },
+
+        /**
+         * Handles tab click toggle
+         * @returns {mMenu}
+         */
+        handleSubmenuDropdownTabClick: function(e) {
+            if (Plugin.getSubmenuMode(this) === 'accordion') {
+                return;
+            }
+
+            var item = this.closest('.m-menu__item');
+
+            if (item.getAttribute('m-menu-submenu-mode') == 'accordion') {
+                return;
+            }
+
+            if (mUtil.hasClass(item, 'm-menu__item--hover') == false) {
+                mUtil.addClass(item, 'm-menu__item--open-dropdown');
+                Plugin.showSubmenuDropdown(item);
+            }
+
+            e.preventDefault();
+        },
+
+        /**
+         * Handles submenu dropdown close on link click
+         * @returns {mMenu}
+         */
+        handleSubmenuDropdownClose: function(e, el) {
+            // exit if its not submenu dropdown mode
+            if (Plugin.getSubmenuMode(el) === 'accordion') {
+                return;
+            }
+
+            var shown = element.querySelectorAll('.m-menu__item.m-menu__item--submenu.m-menu__item--hover:not(.m-menu__item--tabs)');
+
+            // check if currently clicked link's parent item ha
+            if (shown.length > 0 && mUtil.hasClass(el, 'm-menu__toggle') === false && el.querySelectorAll('.m-menu__toggle').length === 0) {
+                // close opened dropdown menus
+                for (var i = 0, len = shown.length; i < len; i++) {
+                    Plugin.hideSubmenuDropdown(shown[0], true);
+                }
+            }
+        },
+
+        /**
+         * helper functions
+         * @returns {mMenu}
+         */
+        handleSubmenuAccordion: function(e, el) {
+            var query;
+            var item = el ? el : this;
+
+            if ( Plugin.getSubmenuMode(el) === 'dropdown' && (query = item.closest('.m-menu__item') ) ) {
+                if (query.getAttribute('m-menu-submenu-mode') != 'accordion' ) {
+                    e.preventDefault();
+                    return;
+                }
+            }
+
+            var li = item.closest('.m-menu__item');
+            var submenu = mUtil.child(li, '.m-menu__submenu, .m-menu__inner');
+
+            if (mUtil.hasClass(item.closest('.m-menu__item'), 'm-menu__item--open-always')) {
+                return;
+            }
+
+            if ( li && submenu ) {
+                e.preventDefault();
+                var speed = the.options.accordion.slideSpeed;
+                var hasClosables = false;
+
+                if ( mUtil.hasClass(li, 'm-menu__item--open') === false ) {
+                    // hide other accordions                    
+                    if ( the.options.accordion.expandAll === false ) {
+                        var subnav = item.closest('.m-menu__nav, .m-menu__subnav');
+                        var closables = mUtil.children(subnav, '.m-menu__item.m-menu__item--open.m-menu__item--submenu:not(.m-menu__item--expanded):not(.m-menu__item--open-always)');
+
+                        if ( subnav && closables ) {
+                            for (var i = 0, len = closables.length; i < len; i++) {
+                                var el_ = closables[0];
+                                var submenu_ = mUtil.child(el_, '.m-menu__submenu');
+                                if ( submenu_ ) {
+                                    mUtil.slideUp(submenu_, speed, function() {
+                                        Plugin.scrollerUpdate();
+                                        mUtil.removeClass(el_, 'm-menu__item--open');
+                                    });                    
                                 }
                             }
-                            mUtil.slideDown(l, s, function () {
-                                r.scrollToItem(o), r.scrollerUpdate(), r.eventTrigger("submenuToggle", l)
-                            }), mUtil.addClass(i, "m-menu__item--open")
-                        } else mUtil.slideUp(l, s, function () {
-                            r.scrollToItem(o), r.eventTrigger("submenuToggle", l)
-                        }), mUtil.removeClass(i, "m-menu__item--open")
+                        }
                     }
-                }
-            }, scrollToItem: function (t) {
-                mUtil.isInResponsiveRange("desktop") && a.options.accordion.autoScroll && "1" !== o.getAttribute("m-menu-scrollable") && mUtil.scrollTo(t, a.options.accordion.autoScrollSpeed)
-            }, hideSubmenuDropdown: function (t, e) {
-                e && (mUtil.removeClass(t, "m-menu__item--hover"), mUtil.removeClass(t, "m-menu__item--active-tab")), t.removeAttribute("data-hover"), t.getAttribute("m-menu-dropdown-toggle-class") && mUtil.removeClass(i, t.getAttribute("m-menu-dropdown-toggle-class"));
-                var a = t.getAttribute("data-timeout");
-                t.removeAttribute("data-timeout"), clearTimeout(a)
-            }, showSubmenuDropdown: function (t) {
-                var e = o.querySelectorAll(".m-menu__item--submenu.m-menu__item--hover, .m-menu__item--submenu.m-menu__item--active-tab");
-                if (e) for (var a = 0, n = e.length; a < n; a++) {
-                    var l = e[a];
-                    t !== l && !1 === l.contains(t) && !1 === t.contains(l) && r.hideSubmenuDropdown(l, !0)
-                }
-                r.adjustSubmenuDropdownArrowPos(t), mUtil.addClass(t, "m-menu__item--hover"), t.getAttribute("m-menu-dropdown-toggle-class") && mUtil.addClass(i, t.getAttribute("m-menu-dropdown-toggle-class"))
-            }, createSubmenuDropdownClickDropoff: function (t) {
-                var e, a = (e = mUtil.child(t, ".m-menu__submenu") ? mUtil.css(e, "z-index") : 0) - 1,
-                    n = document.createElement('<div class="m-menu__dropoff" style="background: transparent; position: fixed; top: 0; bottom: 0; left: 0; right: 0; z-index: ' + a + '"></div>');
-                i.appendChild(n), mUtil.addEvent(n, "click", function (e) {
-                    e.stopPropagation(), e.preventDefault(), mUtil.remove(this), r.hideSubmenuDropdown(t, !0)
-                })
-            }, adjustSubmenuDropdownArrowPos: function (t) {
-                var e = mUtil.child(t, ".m-menu__submenu"), a = mUtil.child(e, ".m-menu__arrow.m-menu__arrow--adjust");
-                mUtil.child(e, ".m-menu__subnav");
-                if (a) {
-                    var n = 0;
-                    mUtil.child(t, ".m-menu__link");
-                    mUtil.hasClass(e, "m-menu__submenu--classic") || mUtil.hasClass(e, "m-menu__submenu--fixed") ? (mUtil.hasClass(e, "m-menu__submenu--right") ? (n = mUtil.outerWidth(t) / 2, mUtil.hasClass(e, "m-menu__submenu--pull") && (mUtil.isRTL() ? n += Math.abs(parseFloat(mUtil.css(e, "margin-left"))) : n += Math.abs(parseFloat(mUtil.css(e, "margin-right")))), n = parseInt(mUtil.css(e, "width")) - n) : mUtil.hasClass(e, "m-menu__submenu--left") && (n = mUtil.outerWidth(t) / 2, mUtil.hasClass(e, "m-menu__submenu--pull") && (mUtil.isRTL() ? n += Math.abs(parseFloat(mUtil.css(e, "margin-right"))) : n += Math.abs(parseFloat(mUtil.css(e, "margin-left"))))), mUtil.isRTL() ? mUtil.css(a, "right", n + "px") : mUtil.css(a, "left", n + "px")) : (mUtil.hasClass(e, "m-menu__submenu--center") || mUtil.hasClass(e, "m-menu__submenu--full")) && (n = mUtil.offset(t).left - (mUtil.getViewPort().width - parseInt(mUtil.css(e, "width"))) / 2, n += mUtil.outerWidth(t) / 2, mUtil.css(a, "left", n + "px"), mUtil.isRTL() && mUtil.css(a, "right", "auto"))
-                }
-            }, pauseDropdownHover: function (t) {
-                var e = new Date;
-                a.pauseDropdownHoverTime = e.getTime() + t
-            }, resumeDropdownHover: function () {
-                return (new Date).getTime() > a.pauseDropdownHoverTime
-            }, resetActiveItem: function (t) {
-                for (var e, n, i = 0, l = (e = o.querySelectorAll(".m-menu__item--active")).length; i < l; i++) {
-                    var r = e[0];
-                    mUtil.removeClass(r, "m-menu__item--active"), mUtil.hide(mUtil.child(r, ".m-menu__submenu"));
-                    for (var s = 0, d = (n = mUtil.parents(r, ".m-menu__item--submenu")).length; s < d; s++) {
-                        var c = n[i];
-                        mUtil.removeClass(c, "m-menu__item--open"), mUtil.hide(mUtil.child(c, ".m-menu__submenu"))
-                    }
-                }
-                if (!1 === a.options.accordion.expandAll && (e = o.querySelectorAll(".m-menu__item--open"))) for (i = 0, l = e.length; i < l; i++) mUtil.removeClass(n[0], "m-menu__item--open")
-            }, setActiveItem: function (t) {
-                r.resetActiveItem(), mUtil.addClass(t, "m-menu__item--active");
-                for (var e = mUtil.parents(t, ".m-menu__item--submenu"), a = 0, n = e.length; a < n; a++) mUtil.addClass(e[a], "m-menu__item--open")
-            }, getBreadcrumbs: function (t) {
-                var e, a = [], n = mUtil.child(t, ".m-menu__link");
-                a.push({
-                    text: e = mUtil.child(n, ".m-menu__link-text") ? e.innerHTML : "",
-                    title: n.getAttribute("title"),
-                    href: n.getAttribute("href")
-                });
-                for (var o = mUtil.parents(t, ".m-menu__item--submenu"), i = 0, l = o.length; i < l; i++) {
-                    var r = mUtil.child(o[i], ".m-menu__link");
-                    a.push({
-                        text: e = mUtil.child(r, ".m-menu__link-text") ? e.innerHTML : "",
-                        title: r.getAttribute("title"),
-                        href: r.getAttribute("href")
-                    })
-                }
-                return a.reverse()
-            }, getPageTitle: function (t) {
-                var e;
-                return mUtil.child(t, ".m-menu__link-text") ? e.innerHTML : ""
-            }, eventTrigger: function (t, e) {
-                for (var n = 0; n < a.events.length; n++) {
-                    var o = a.events[n];
-                    o.name == t && (1 == o.one ? 0 == o.fired && (a.events[n].fired = !0, o.handler.call(this, a, e)) : o.handler.call(this, a, e))
-                }
-            }, addEvent: function (t, e, n) {
-                a.events.push({name: t, handler: e, one: n, fired: !1})
-            }, removeEvent: function (t) {
-                a.events[t] && delete a.events[t]
-            }
-        };
-        return a.setDefaults = function (t) {
-            l = t
-        }, a.scrollerUpdate = function () {
-            return r.scrollerUpdate()
-        }, a.scrollerTop = function () {
-            return r.scrollerTop()
-        }, a.setActiveItem = function (t) {
-            return r.setActiveItem(t)
-        }, a.reload = function () {
-            return r.reload()
-        }, a.update = function (t) {
-            return r.update(t)
-        }, a.getBreadcrumbs = function (t) {
-            return r.getBreadcrumbs(t)
-        }, a.getPageTitle = function (t) {
-            return r.getPageTitle(t)
-        }, a.getSubmenuMode = function (t) {
-            return r.getSubmenuMode(t)
-        }, a.hideDropdown = function (t) {
-            r.hideSubmenuDropdown(t, !0)
-        }, a.pauseDropdownHover = function (t) {
-            r.pauseDropdownHover(t)
-        }, a.resumeDropdownHover = function () {
-            return r.resumeDropdownHover()
-        }, a.on = function (t, e) {
-            return r.addEvent(t, e)
-        }, a.off = function (t) {
-            return r.removeEvent(t)
-        }, a.one = function (t, e) {
-            return r.addEvent(t, e, !0)
-        }, r.construct.apply(a, [e]), mUtil.addResizeHandler(function () {
-            n && a.reload()
-        }), n = !0, a
-    }
-};
-document.addEventListener("click", function (t) {
-    var e;
-    if (e = mUtil.get("body").querySelectorAll('.m-menu__nav .m-menu__item.m-menu__item--submenu.m-menu__item--hover:not(.m-menu__item--tabs)[m-menu-submenu-toggle="click"]')) for (var a = 0, n = e.length; a < n; a++) {
-        var o = e[a].closest(".m-menu__nav").parentNode;
-        if (o) {
-            var i, l = mUtil.data(o).get("menu");
-            if (!l) break;
-            if (!l || "dropdown" !== l.getSubmenuMode()) break;
-            if (t.target !== o && !1 === o.contains(t.target)) if (i = o.querySelectorAll('.m-menu__item--submenu.m-menu__item--hover:not(.m-menu__item--tabs)[m-menu-submenu-toggle="click"]')) for (var r = 0, s = i.length; r < s; r++) l.hideDropdown(i[r])
-        }
-    }
-});
-var mOffcanvas = function (t, e) {
-    var a = this, n = mUtil.get(t), o = mUtil.get("body");
-    if (n) {
-        var i = {}, l = {
-            construct: function (t) {
-                return mUtil.data(n).has("offcanvas") ? a = mUtil.data(n).get("offcanvas") : (l.init(t), l.build(), mUtil.data(n).set("offcanvas", a)), a
-            }, init: function (t) {
-                a.events = [], a.options = mUtil.deepExtend({}, i, t), a.overlay, a.classBase = a.options.baseClass, a.classShown = a.classBase + "--on", a.classOverlay = a.classBase + "-overlay", a.state = mUtil.hasClass(n, a.classShown) ? "shown" : "hidden"
-            }, build: function () {
-                if (a.options.toggleBy) if ("string" == typeof a.options.toggleBy) mUtil.addEvent(a.options.toggleBy, "click", l.toggle); else if (a.options.toggleBy && a.options.toggleBy[0] && a.options.toggleBy[0].target) for (var t in a.options.toggleBy) mUtil.addEvent(a.options.toggleBy[t].target, "click", l.toggle); else a.options.toggleBy && a.options.toggleBy.target && mUtil.addEvent(a.options.toggleBy.target, "click", l.toggle);
-                var e = mUtil.get(a.options.closeBy);
-                e && mUtil.addEvent(e, "click", l.hide)
-            }, toggle: function () {
-                l.eventTrigger("toggle"), "shown" == a.state ? l.hide(this) : l.show(this)
-            }, show: function (t) {
-                "shown" != a.state && (l.eventTrigger("beforeShow"), l.togglerClass(t, "show"), mUtil.addClass(o, a.classShown), mUtil.addClass(n, a.classShown), a.state = "shown", a.options.overlay && (a.overlay = mUtil.insertAfter(document.createElement("DIV"), n), mUtil.addClass(a.overlay, a.classOverlay), mUtil.addEvent(a.overlay, "click", function (e) {
-                    e.stopPropagation(), e.preventDefault(), l.hide(t)
-                })), l.eventTrigger("afterShow"))
-            }, hide: function (t) {
-                "hidden" != a.state && (l.eventTrigger("beforeHide"), l.togglerClass(t, "hide"), mUtil.removeClass(o, a.classShown), mUtil.removeClass(n, a.classShown), a.state = "hidden", a.options.overlay && a.overlay && mUtil.remove(a.overlay), l.eventTrigger("afterHide"))
-            }, togglerClass: function (t, e) {
-                var n, o = mUtil.attr(t, "id");
-                if (a.options.toggleBy && a.options.toggleBy[0] && a.options.toggleBy[0].target) for (var i in a.options.toggleBy) a.options.toggleBy[i].target === o && (n = a.options.toggleBy[i]); else a.options.toggleBy && a.options.toggleBy.target && (n = a.options.toggleBy);
-                if (n) {
-                    var l = mUtil.get(n.target);
-                    "show" === e && mUtil.addClass(l, n.state), "hide" === e && mUtil.removeClass(l, n.state)
-                }
-            }, eventTrigger: function (t, e) {
-                for (var n = 0; n < a.events.length; n++) {
-                    var o = a.events[n];
-                    o.name == t && (1 == o.one ? 0 == o.fired && (a.events[n].fired = !0, o.handler.call(this, a, e)) : o.handler.call(this, a, e))
-                }
-            }, addEvent: function (t, e, n) {
-                a.events.push({name: t, handler: e, one: n, fired: !1})
-            }
-        };
-        return a.setDefaults = function (t) {
-            i = t
-        }, a.hide = function () {
-            return l.hide()
-        }, a.show = function () {
-            return l.show()
-        }, a.on = function (t, e) {
-            return l.addEvent(t, e)
-        }, a.one = function (t, e) {
-            return l.addEvent(t, e, !0)
-        }, l.construct.apply(a, [e]), !0, a
-    }
-},
-    mPortlet = function (t, e) {
-    var a = this, n = mUtil.get(t), o = mUtil.get("body");
-    if (n) {
-        var l = {
-            bodyToggleSpeed: 400,
-            tooltips: !0,
-            tools: {
-                toggle: {collapse: "جمع کردن", expand: "باز کردن"},
-                reload: "بارگیری مجدد",
-                remove: "حذف",
-                fullscreen: {on: "تمام صفحه", off: "خروج از تمام صفحه"}
-            },
-            sticky: {offset: 300, zIndex: 98}
-        }, r = {
-            construct: function (t) {
-                return mUtil.data(n).has("portlet") ? a = mUtil.data(n).get("portlet") : (r.init(t), r.build(), mUtil.data(n).set("portlet", a)), a
-            }, init: function (t) {
-                a.element = n, a.events = [], a.options = mUtil.deepExtend({}, l, t), a.head = mUtil.child(n, ".m-portlet__head"), a.foot = mUtil.child(n, ".m-portlet__foot"), mUtil.child(n, ".m-portlet__body") ? a.body = mUtil.child(n, ".m-portlet__body") : 0 !== mUtil.child(n, ".m-form").length && (a.body = mUtil.child(n, ".m-form"))
-            }, build: function () {
-                var t = mUtil.find(a.head, "[m-portlet-tool=remove]");
-                t && mUtil.addEvent(t, "click", function (t) {
-                    t.preventDefault(), r.remove()
-                });
-                var e = mUtil.find(a.head, "[m-portlet-tool=reload]");
-                e && mUtil.addEvent(e, "click", function (t) {
-                    t.preventDefault(), r.reload()
-                });
-                var n = mUtil.find(a.head, "[m-portlet-tool=toggle]");
-                n && mUtil.addEvent(n, "click", function (t) {
-                    t.preventDefault(), r.toggle()
-                });
-                var o = mUtil.find(a.head, "[m-portlet-tool=fullscreen]");
-                o && mUtil.addEvent(o, "click", function (t) {
-                    t.preventDefault(), r.fullscreen()
-                }), r.setupTooltips()
-            }, onScrollSticky: function () {
-                window.pageYOffset > a.options.sticky.offset ? !1 === mUtil.hasClass(o, "m-portlet--sticky") && (r.eventTrigger("stickyOn"), mUtil.addClass(o, "m-portlet--sticky"), mUtil.addClass(n, "m-portlet--sticky"), r.updateSticky()) : mUtil.hasClass(o, "m-portlet--sticky") && (r.eventTrigger("stickyOff"), mUtil.removeClass(o, "m-portlet--sticky"), mUtil.removeClass(n, "m-portlet--sticky"), r.resetSticky())
-            }, initSticky: function () {
-                a.head && window.addEventListener("scroll", r.onScrollSticky)
-            }, updateSticky: function () {
-                var t, e, n;
-                a.head && (mUtil.hasClass(o, "m-portlet--sticky") && (t = a.options.sticky.position.top instanceof Function ? parseInt(a.options.sticky.position.top.call()) : parseInt(a.options.sticky.position.top), e = a.options.sticky.position.left instanceof Function ? parseInt(a.options.sticky.position.left.call()) : parseInt(a.options.sticky.position.left), n = a.options.sticky.position.right instanceof Function ? parseInt(a.options.sticky.position.right.call()) : parseInt(a.options.sticky.position.right), mUtil.css(a.head, "z-index", a.options.sticky.zIndex), mUtil.css(a.head, "top", t + "px"), mUtil.isRTL() ? (mUtil.css(a.head, "left", n + "px"), mUtil.css(a.head, "right", e + "px")) : (mUtil.css(a.head, "left", e + "px"), mUtil.css(a.head, "right", n + "px"))))
-            }, resetSticky: function () {
-                a.head && !1 === mUtil.hasClass(o, "m-portlet--sticky") && (mUtil.css(a.head, "z-index", ""), mUtil.css(a.head, "top", ""), mUtil.css(a.head, "left", ""), mUtil.css(a.head, "right", ""))
-            }, destroySticky: function () {
-                a.head && (r.resetSticky(), window.removeEventListener("scroll", r.onScrollSticky))
-            }, remove: function () {
-                !1 !== r.eventTrigger("beforeRemove") && (mUtil.hasClass(o, "m-portlet--fullscreen") && mUtil.hasClass(n, "m-portlet--fullscreen") && r.fullscreen("off"), r.removeTooltips(), mUtil.remove(n), r.eventTrigger("afterRemove"))
-            }, setContent: function (t) {
-                t && (a.body.innerHTML = t)
-            }, getBody: function () {
-                return a.body
-            }, getSelf: function () {
-                return n
-            }, setupTooltips: function () {
-                if (a.options.tooltips) {
-                    var t = mUtil.hasClass(n, "m-portlet--collapse") || mUtil.hasClass(n, "m-portlet--collapsed"),
-                        e = mUtil.hasClass(o, "m-portlet--fullscreen") && mUtil.hasClass(n, "m-portlet--fullscreen"),
-                        i = mUtil.find(a.head, "[m-portlet-tool=remove]");
-                    if (i) {
-                        var l = e ? "bottom" : "top", r = new Tooltip(i, {
-                            title: a.options.tools.remove,
-                            placement: l,
-                            offset: e ? "0,10px,0,0" : "0,5px",
-                            trigger: "hover",
-                            template: '<div class="m-tooltip m-tooltip--portlet tooltip bs-tooltip-' + l + '" role="tooltip">                            <div class="tooltip-arrow arrow"></div>                            <div class="tooltip-inner"></div>                        </div>'
-                        });
-                        mUtil.data(i).set("tooltip", r)
-                    }
-                    var s = mUtil.find(a.head, "[m-portlet-tool=reload]");
-                    if (s) {
-                        l = e ? "bottom" : "top", r = new Tooltip(s, {
-                            title: a.options.tools.reload,
-                            placement: l,
-                            offset: e ? "0,10px,0,0" : "0,5px",
-                            trigger: "hover",
-                            template: '<div class="m-tooltip m-tooltip--portlet tooltip bs-tooltip-' + l + '" role="tooltip">                            <div class="tooltip-arrow arrow"></div>                            <div class="tooltip-inner"></div>                        </div>'
-                        });
-                        mUtil.data(s).set("tooltip", r)
-                    }
-                    var d = mUtil.find(a.head, "[m-portlet-tool=toggle]");
-                    if (d) {
-                        l = e ? "bottom" : "top", r = new Tooltip(d, {
-                            title: t ? a.options.tools.toggle.expand : a.options.tools.toggle.collapse,
-                            placement: l,
-                            offset: e ? "0,10px,0,0" : "0,5px",
-                            trigger: "hover",
-                            template: '<div class="m-tooltip m-tooltip--portlet tooltip bs-tooltip-' + l + '" role="tooltip">                            <div class="tooltip-arrow arrow"></div>                            <div class="tooltip-inner"></div>                        </div>'
-                        });
-                        mUtil.data(d).set("tooltip", r)
-                    }
-                    var c = mUtil.find(a.head, "[m-portlet-tool=fullscreen]");
-                    if (c) {
-                        l = e ? "bottom" : "top", r = new Tooltip(c, {
-                            title: e ? a.options.tools.fullscreen.off : a.options.tools.fullscreen.on,
-                            placement: l,
-                            offset: e ? "0,10px,0,0" : "0,5px",
-                            trigger: "hover",
-                            template: '<div class="m-tooltip m-tooltip--portlet tooltip bs-tooltip-' + l + '" role="tooltip">                            <div class="tooltip-arrow arrow"></div>                            <div class="tooltip-inner"></div>                        </div>'
-                        });
-                        mUtil.data(c).set("tooltip", r)
-                    }
-                }
-            }, removeTooltips: function () {
-                if (a.options.tooltips) {
-                    var t = mUtil.find(a.head, "[m-portlet-tool=remove]");
-                    t && mUtil.data(t).has("tooltip") && mUtil.data(t).get("tooltip").dispose();
-                    var e = mUtil.find(a.head, "[m-portlet-tool=reload]");
-                    e && mUtil.data(e).has("tooltip") && mUtil.data(e).get("tooltip").dispose();
-                    var n = mUtil.find(a.head, "[m-portlet-tool=toggle]");
-                    n && mUtil.data(n).has("tooltip") && mUtil.data(n).get("tooltip").dispose();
-                    var o = mUtil.find(a.head, "[m-portlet-tool=fullscreen]");
-                    o && mUtil.data(o).has("tooltip") && mUtil.data(o).get("tooltip").dispose()
-                }
-            }, reload: function () {
-                r.eventTrigger("reload")
-            }, toggle: function () {
-                mUtil.hasClass(n, "m-portlet--collapse") || mUtil.hasClass(n, "m-portlet--collapsed") ? r.expand() : r.collapse()
-            }, collapse: function () {
-                if (!1 !== r.eventTrigger("beforeCollapse")) {
-                    mUtil.slideUp(a.body, a.options.bodyToggleSpeed, function () {
-                        r.eventTrigger("afterCollapse")
-                    }), mUtil.addClass(n, "m-portlet--collapse");
-                    var t = mUtil.find(a.head, "[m-portlet-tool=toggle]");
-                    t && mUtil.data(t).has("tooltip") && mUtil.data(t).get("tooltip").updateTitleContent(a.options.tools.toggle.expand)
-                }
-            }, expand: function () {
-                if (!1 !== r.eventTrigger("beforeExpand")) {
-                    mUtil.slideDown(a.body, a.options.bodyToggleSpeed, function () {
-                        r.eventTrigger("afterExpand")
-                    }), mUtil.removeClass(n, "m-portlet--collapse"), mUtil.removeClass(n, "m-portlet--collapsed");
-                    var t = mUtil.find(a.head, "[m-portlet-tool=toggle]");
-                    t && mUtil.data(t).has("tooltip") && mUtil.data(t).get("tooltip").updateTitleContent(a.options.tools.toggle.collapse)
-                }
-            }, fullscreen: function (t) {
-                if ("off" === t || mUtil.hasClass(o, "m-portlet--fullscreen") && mUtil.hasClass(n, "m-portlet--fullscreen")) r.eventTrigger("beforeFullscreenOff"), mUtil.removeClass(o, "m-portlet--fullscreen"), mUtil.removeClass(n, "m-portlet--fullscreen"), r.removeTooltips(), r.setupTooltips(), a.foot && (mUtil.css(a.body, "margin-bottom", ""), mUtil.css(a.foot, "margin-top", "")), r.eventTrigger("afterFullscreenOff"); else {
-                    if (r.eventTrigger("beforeFullscreenOn"), mUtil.addClass(n, "m-portlet--fullscreen"), mUtil.addClass(o, "m-portlet--fullscreen"), r.removeTooltips(), r.setupTooltips(), a.foot) {
-                        var e = parseInt(mUtil.css(a.foot, "height")),
-                            i = parseInt(mUtil.css(a.foot, "height")) + parseInt(mUtil.css(a.head, "height"));
-                        mUtil.css(a.body, "margin-bottom", e + "px"), mUtil.css(a.foot, "margin-top", "-" + i + "px")
-                    }
-                    r.eventTrigger("afterFullscreenOn")
-                }
-            }, eventTrigger: function (t) {
-                for (i = 0; i < a.events.length; i++) {
-                    var e = a.events[i];
-                    e.name == t && (1 == e.one ? 0 == e.fired && (a.events[i].fired = !0, e.handler.call(this, a)) : e.handler.call(this, a))
-                }
-            }, addEvent: function (t, e, n) {
-                return a.events.push({name: t, handler: e, one: n, fired: !1}), a
-            }
-        };
-        return a.setDefaults = function (t) {
-            l = t
-        }, a.remove = function () {
-            return r.remove(html)
-        }, a.initSticky = function () {
-            return r.initSticky()
-        }, a.updateSticky = function () {
-            return r.updateSticky()
-        }, a.resetSticky = function () {
-            return r.resetSticky()
-        }, a.destroySticky = function () {
-            return r.destroySticky()
-        }, a.reload = function () {
-            return r.reload()
-        }, a.setContent = function (t) {
-            return r.setContent(t)
-        }, a.toggle = function () {
-            return r.toggle()
-        }, a.collapse = function () {
-            return r.collapse()
-        }, a.expand = function () {
-            return r.expand()
-        }, a.fullscreen = function () {
-            return r.fullscreen("on")
-        }, a.unFullscreen = function () {
-            return r.fullscreen("off")
-        }, a.getBody = function () {
-            return r.getBody()
-        }, a.getSelf = function () {
-            return r.getSelf()
-        }, a.on = function (t, e) {
-            return r.addEvent(t, e)
-        }, a.one = function (t, e) {
-            return r.addEvent(t, e, !0)
-        }, r.construct.apply(a, [e]), a
-    }
-}, mQuicksearch = function (t, e) {
-    var a = this, n = mUtil.get(t), o = mUtil.get("body");
-    if (n) {
-        var l = {
-            mode: "default",
-            minLength: 1,
-            maxHeight: 300,
-            requestTimeout: 200,
-            inputTarget: "m_quicksearch_input",
-            iconCloseTarget: "m_quicksearch_close",
-            iconCancelTarget: "m_quicksearch_cancel",
-            iconSearchTarget: "m_quicksearch_search",
-            spinnerClass: "m-loader m-loader--skin-light m-loader--right",
-            hasResultClass: "m-list-search--has-result",
-            templates: {error: '<div class="m-search-results m-search-results--skin-light"><span class="m-search-result__message">{{message}}</div></div>'}
-        }, r = {
-            construct: function (t) {
-                return mUtil.data(n).has("quicksearch") ? a = mUtil.data(n).get("quicksearch") : (r.init(t), r.build(), mUtil.data(n).set("quicksearch", a)), a
-            }, init: function (t) {
-                a.element = n, a.events = [], a.options = mUtil.deepExtend({}, l, t), a.query = "", a.form = mUtil.find(n, "form"), a.input = mUtil.get(a.options.inputTarget), a.iconClose = mUtil.get(a.options.iconCloseTarget), "default" == a.options.mode && (a.iconSearch = mUtil.get(a.options.iconSearchTarget), a.iconCancel = mUtil.get(a.options.iconCancelTarget)), a.dropdown = new mDropdown(n, {mobileOverlay: !1}), a.cancelTimeout, a.processing = !1, a.requestTimeout = !1
-            }, build: function () {
-                mUtil.addEvent(a.input, "keyup", r.search), mUtil.find(n, "form").onkeypress = function (t) {
-                    13 == (t.charCode || t.keyCode || 0) && t.preventDefault()
-                }, "default" == a.options.mode ? (mUtil.addEvent(a.input, "focus", r.showDropdown), mUtil.addEvent(a.iconCancel, "click", r.handleCancel), mUtil.addEvent(a.iconSearch, "click", function () {
-                    mUtil.isInResponsiveRange("tablet-and-mobile") && (mUtil.addClass(o, "m-header-search--mobile-expanded"), a.input.focus())
-                }), mUtil.addEvent(a.iconClose, "click", function () {
-                    mUtil.isInResponsiveRange("tablet-and-mobile") && (mUtil.removeClass(o, "m-header-search--mobile-expanded"), r.closeDropdown())
-                })) : "dropdown" == a.options.mode && (a.dropdown.on("afterShow", function () {
-                    a.input.focus()
-                }), mUtil.addEvent(a.iconClose, "click", r.closeDropdown))
-            }, showProgress: function () {
-                return a.processing = !0, mUtil.addClass(a.form, a.options.spinnerClass), r.handleCancelIconVisibility("off"), a
-            }, hideProgress: function () {
-                return a.processing = !1, mUtil.removeClass(a.form, a.options.spinnerClass), r.handleCancelIconVisibility("on"), mUtil.addClass(n, a.options.hasResultClass), a
-            }, search: function (t) {
-                if (a.query = a.input.value, 0 === a.query.length && (r.handleCancelIconVisibility("on"), mUtil.removeClass(n, a.options.hasResultClass), mUtil.removeClass(a.form, a.options.spinnerClass)), !(a.query.length < a.options.minLength || 1 == a.processing)) return a.requestTimeout && clearTimeout(a.requestTimeout), a.requestTimeout = !1, a.requestTimeout = setTimeout(function () {
-                    r.eventTrigger("search")
-                }, a.options.requestTimeout), a
-            }, handleCancelIconVisibility: function (t) {
-                "on" == t ? 0 === a.input.value.length ? (a.iconCancel && mUtil.css(a.iconCancel, "visibility", "hidden"), a.iconClose && mUtil.css(a.iconClose, "visibility", "visible")) : (clearTimeout(a.cancelTimeout), a.cancelTimeout = setTimeout(function () {
-                    a.iconCancel && mUtil.css(a.iconCancel, "visibility", "visible"), a.iconClose && mUtil.css(a.iconClose, "visibility", "visible")
-                }, 500)) : (a.iconCancel && mUtil.css(a.iconCancel, "visibility", "hidden"), a.iconClose && mUtil.css(a.iconClose, "visibility", "hidden"))
-            }, handleCancel: function (t) {
-                a.input.value = "", mUtil.css(a.iconCancel, "visibility", "hidden"), mUtil.removeClass(n, a.options.hasResultClass), r.closeDropdown()
-            }, closeDropdown: function () {
-                a.dropdown.hide()
-            }, showDropdown: function (t) {
-                0 == a.dropdown.isShown() && a.input.value.length > a.options.minLength && 0 == a.processing && (console.log("show!!!"), a.dropdown.show(), t && (t.preventDefault(), t.stopPropagation()))
-            }, eventTrigger: function (t) {
-                for (i = 0; i < a.events.length; i++) {
-                    var e = a.events[i];
-                    e.name == t && (1 == e.one ? 0 == e.fired && (a.events[i].fired = !0, e.handler.call(this, a)) : e.handler.call(this, a))
-                }
-            }, addEvent: function (t, e, n) {
-                return a.events.push({name: t, handler: e, one: n, fired: !1}), a
-            }
-        };
-        return a.setDefaults = function (t) {
-            l = t
-        }, a.search = function () {
-            return r.handleSearch()
-        }, a.showResult = function (t) {
-            return a.dropdown.setContent(t), r.showDropdown(), a
-        }, a.showError = function (t) {
-            var e = a.options.templates.error.replace("{{message}}", t);
-            return a.dropdown.setContent(e), r.showDropdown(), a
-        }, a.showProgress = function () {
-            return r.showProgress()
-        }, a.hideProgress = function () {
-            return r.hideProgress()
-        }, a.search = function () {
-            return r.search()
-        }, a.on = function (t, e) {
-            return r.addEvent(t, e)
-        }, a.one = function (t, e) {
-            return r.addEvent(t, e, !0)
-        }, r.construct.apply(a, [e]), a
-    }
-}, mScrollTop = function (t, e) {
-    var a = this, n = mUtil.get(t), o = mUtil.get("body");
-    if (n) {
-        var i = {offset: 300, speed: 600}, l = {
-            construct: function (t) {
-                return mUtil.data(n).has("scrolltop") ? a = mUtil.data(n).get("scrolltop") : (l.init(t), l.build(), mUtil.data(n).set("scrolltop", a)), a
-            }, init: function (t) {
-                a.events = [], a.options = mUtil.deepExtend({}, i, t)
-            }, build: function () {
-                navigator.userAgent.match(/iPhone|iPad|iPod/i) ? (window.addEventListener("touchend", function () {
-                    l.handle()
-                }), window.addEventListener("touchcancel", function () {
-                    l.handle()
-                }), window.addEventListener("touchleave", function () {
-                    l.handle()
-                })) : window.addEventListener("scroll", function () {
-                    l.handle()
-                }), mUtil.addEvent(n, "click", l.scroll)
-            }, handle: function () {
-                window.pageYOffset > a.options.offset ? mUtil.addClass(o, "m-scroll-top--shown") : mUtil.removeClass(o, "m-scroll-top--shown")
-            }, scroll: function (t) {
-                t.preventDefault(), mUtil.scrollTop(0, a.options.speed)
-            }, eventTrigger: function (t, e) {
-                for (var n = 0; n < a.events.length; n++) {
-                    var o = a.events[n];
-                    o.name == t && (1 == o.one ? 0 == o.fired && (a.events[n].fired = !0, o.handler.call(this, a, e)) : o.handler.call(this, a, e))
-                }
-            }, addEvent: function (t, e, n) {
-                a.events.push({name: t, handler: e, one: n, fired: !1})
-            }
-        };
-        return a.setDefaults = function (t) {
-            i = t
-        }, a.on = function (t, e) {
-            return l.addEvent(t, e)
-        }, a.one = function (t, e) {
-            return l.addEvent(t, e, !0)
-        }, l.construct.apply(a, [e]), !0, a
-    }
-}, mToggle = function (t, e) {
-    var a = this, n = mUtil.get(t);
-    mUtil.get("body");
-    if (n) {
-        var o = {togglerState: "", targetState: ""}, l = {
-            construct: function (t) {
-                return mUtil.data(n).has("toggle") ? a = mUtil.data(n).get("toggle") : (l.init(t), l.build(), mUtil.data(n).set("toggle", a)), a
-            }, init: function (t) {
-                a.element = n, a.events = [], a.options = mUtil.deepExtend({}, o, t), a.target = mUtil.get(a.options.target), a.targetState = a.options.targetState, a.togglerState = a.options.togglerState, a.state = mUtil.hasClasses(a.target, a.targetState) ? "on" : "off"
-            }, build: function () {
-                mUtil.addEvent(n, "mouseup", l.toggle)
-            }, toggle: function () {
-                return l.eventTrigger("beforeToggle"), "off" == a.state ? l.toggleOn() : l.toggleOff(), a
-            }, toggleOn: function () {
-                return l.eventTrigger("beforeOn"), mUtil.addClass(a.target, a.targetState), a.togglerState && mUtil.addClass(n, a.togglerState), a.state = "on", l.eventTrigger("afterOn"), l.eventTrigger("toggle"), a
-            }, toggleOff: function () {
-                return l.eventTrigger("beforeOff"), mUtil.removeClass(a.target, a.targetState), a.togglerState && mUtil.removeClass(n, a.togglerState), a.state = "off", l.eventTrigger("afterOff"), l.eventTrigger("toggle"), a
-            }, eventTrigger: function (t) {
-                for (i = 0; i < a.events.length; i++) {
-                    var e = a.events[i];
-                    e.name == t && (1 == e.one ? 0 == e.fired && (a.events[i].fired = !0, e.handler.call(this, a)) : e.handler.call(this, a))
-                }
-            }, addEvent: function (t, e, n) {
-                return a.events.push({name: t, handler: e, one: n, fired: !1}), a
-            }
-        };
-        return a.setDefaults = function (t) {
-            o = t
-        }, a.getState = function () {
-            return a.state
-        }, a.toggle = function () {
-            return l.toggle()
-        }, a.toggleOn = function () {
-            return l.toggleOn()
-        }, a.toggle = function () {
-            return l.toggleOff()
-        }, a.on = function (t, e) {
-            return l.addEvent(t, e)
-        }, a.one = function (t, e) {
-            return l.addEvent(t, e, !0)
-        }, l.construct.apply(a, [e]), a
-    }
-}, mWizard = function (t, e) {
-    var a = this, n = mUtil.get(t);
-    mUtil.get("body");
-    if (n) {
-        var o = {startStep: 1, manualStepForward: !1}, l = {
-            construct: function (t) {
-                return mUtil.data(n).has("wizard") ? a = mUtil.data(n).get("wizard") : (l.init(t), l.build(), mUtil.data(n).set("wizard", a)), a
-            }, init: function (t) {
-                a.element = n, a.events = [], a.options = mUtil.deepExtend({}, o, t), a.steps = mUtil.findAll(n, ".m-wizard__step"), a.progress = mUtil.find(n, ".m-wizard__progress .progress-bar"), a.btnSubmit = mUtil.find(n, '[data-wizard-action="submit"]'), a.btnNext = mUtil.find(n, '[data-wizard-action="next"]'), a.btnPrev = mUtil.find(n, '[data-wizard-action="prev"]'), a.btnLast = mUtil.find(n, '[data-wizard-action="last"]'), a.btnFirst = mUtil.find(n, '[data-wizard-action="first"]'), a.events = [], a.currentStep = 1, a.stopped = !1, a.totalSteps = a.steps.length, a.options.startStep > 1 && l.goTo(a.options.startStep), l.updateUI()
-            }, build: function () {
-                mUtil.addEvent(a.btnNext, "click", function (t) {
-                    t.preventDefault(), l.goNext()
-                }), mUtil.addEvent(a.btnPrev, "click", function (t) {
-                    t.preventDefault(), l.goPrev()
-                }), mUtil.addEvent(a.btnFirst, "click", function (t) {
-                    t.preventDefault(), l.goFirst()
-                }), mUtil.addEvent(a.btnLast, "click", function (t) {
-                    t.preventDefault(), l.goLast()
-                }), mUtil.on(n, ".m-wizard__step a.m-wizard__step-number", "click", function () {
-                    for (var t, e = this.closest(".m-wizard__step"), n = mUtil.parents(this, ".m-wizard__steps"), o = mUtil.findAll(n, ".m-wizard__step"), i = 0, r = o.length; i < r; i++) if (e === o[i]) {
-                        t = i + 1;
-                        break
-                    }
-                    t && (!1 === a.options.manualStepForward ? t < a.currentStep && l.goTo(t) : l.goTo(t))
-                })
-            }, goTo: function (t) {
-                if (!(t === a.currentStep || t > a.totalSteps || t < 0)) {
-                    var e;
-                    if (e = (t = t ? parseInt(t) : l.getNextStep()) > a.currentStep ? l.eventTrigger("beforeNext") : l.eventTrigger("beforePrev"), !0 !== a.stopped) return !1 !== e && (l.eventTrigger("beforeChange"), a.currentStep = t, l.updateUI(), l.eventTrigger("change")), t > a.startStep ? l.eventTrigger("afterNext") : l.eventTrigger("afterPrev"), a;
-                    a.stopped = !1
-                }
-            }, setStepClass: function () {
-                l.isLastStep() ? mUtil.addClass(n, "m-wizard--step-last") : mUtil.removeClass(n, "m-wizard--step-last"), l.isFirstStep() ? mUtil.addClass(n, "m-wizard--step-first") : mUtil.removeClass(n, "m-wizard--step-first"), l.isBetweenStep() ? mUtil.addClass(n, "m-wizard--step-between") : mUtil.removeClass(n, "m-wizard--step-between")
-            }, updateUI: function (t) {
-                l.updateProgress(), l.handleTarget(), l.setStepClass();
-                for (var e = 0, n = a.steps.length; e < n; e++) mUtil.removeClass(a.steps[e], "m-wizard__step--current m-wizard__step--done");
-                for (e = 1; e < a.currentStep; e++) mUtil.addClass(a.steps[e - 1], "m-wizard__step--done");
-                mUtil.addClass(a.steps[a.currentStep - 1], "m-wizard__step--current")
-            }, stop: function () {
-                a.stopped = !0
-            }, start: function () {
-                a.stopped = !1
-            }, isLastStep: function () {
-                return a.currentStep === a.totalSteps
-            }, isFirstStep: function () {
-                return 1 === a.currentStep
-            }, isBetweenStep: function () {
-                return !1 === l.isLastStep() && !1 === l.isFirstStep()
-            }, goNext: function () {
-                return l.goTo(l.getNextStep())
-            }, goPrev: function () {
-                return l.goTo(l.getPrevStep())
-            }, goLast: function () {
-                return l.goTo(a.totalSteps)
-            }, goFirst: function () {
-                return l.goTo(1)
-            }, updateProgress: function () {
-                if (a.progress) if (mUtil.hasClass(n, "m-wizard--1")) {
-                    var t = (a.currentStep - 1) / a.totalSteps * 100, e = mUtil.find(n, ".m-wizard__step-number"),
-                        o = parseInt(mUtil.css(e, "width"));
-                    mUtil.css(a.progress, "width", "calc(" + t + "% + " + o / 2 + "px)")
-                } else if (mUtil.hasClass(n, "m-wizard--2")) {
-                    a.currentStep;
-                    var i = (a.currentStep - 1) * (1 / (a.totalSteps - 1) * 100);
-                    mUtil.isInResponsiveRange("minimal-desktop-and-below") ? mUtil.css(a.progress, "height", i + "%") : mUtil.css(a.progress, "width", i + "%")
+
+                    mUtil.slideDown(submenu, speed, function() {
+                        Plugin.scrollToItem(item);
+                        Plugin.scrollerUpdate();
+                        
+                        Plugin.eventTrigger('submenuToggle', submenu);
+                    });
+                
+                    mUtil.addClass(li, 'm-menu__item--open');
+
                 } else {
-                    t = a.currentStep / a.totalSteps * 100;
-                    mUtil.css(a.progress, "width", t + "%")
+                    mUtil.slideUp(submenu, speed, function() {
+                        Plugin.scrollToItem(item);
+                        Plugin.eventTrigger('submenuToggle', submenu);
+                    });
+
+                    mUtil.removeClass(li, 'm-menu__item--open');       
                 }
-            }, handleTarget: function () {
-                var t = a.steps[a.currentStep - 1], e = mUtil.get(mUtil.attr(t, "m-wizard-target")),
-                    o = mUtil.find(n, ".m-wizard__form-step--current");
-                mUtil.removeClass(o, "m-wizard__form-step--current"), mUtil.addClass(e, "m-wizard__form-step--current")
-            }, getNextStep: function () {
-                return a.totalSteps >= a.currentStep + 1 ? a.currentStep + 1 : a.totalSteps
-            }, getPrevStep: function () {
-                return a.currentStep - 1 >= 1 ? a.currentStep - 1 : 1
-            }, eventTrigger: function (t) {
-                for (i = 0; i < a.events.length; i++) {
-                    var e = a.events[i];
-                    e.name == t && (1 == e.one ? 0 == e.fired && (a.events[i].fired = !0, e.handler.call(this, a)) : e.handler.call(this, a))
-                }
-            }, addEvent: function (t, e, n) {
-                return a.events.push({name: t, handler: e, one: n, fired: !1}), a
             }
-        };
-        return a.setDefaults = function (t) {
-            o = t
-        }, a.goNext = function () {
-            return l.goNext()
-        }, a.goPrev = function () {
-            return l.goPrev()
-        }, a.goLast = function () {
-            return l.goLast()
-        }, a.stop = function () {
-            return l.stop()
-        }, a.start = function () {
-            return l.start()
-        }, a.goFirst = function () {
-            return l.goFirst()
-        }, a.goTo = function (t) {
-            return l.goTo(t)
-        }, a.getStep = function () {
-            return a.currentStep
-        }, a.isLastStep = function () {
-            return l.isLastStep()
-        }, a.isFirstStep = function () {
-            return l.isFirstStep()
-        }, a.on = function (t, e) {
-            return l.addEvent(t, e)
-        }, a.one = function (t, e) {
-            return l.addEvent(t, e, !0)
-        }, l.construct.apply(a, [e]), a
-    }
-};
-!function (t) {
-    t.fn.mDatatable = t.fn.mDatatable || {}, t.fn.mDatatable.checkbox = function (e, a) {
-        var n = {
-            selectedAllRows: !1, selectedRows: [], unselectedRows: [], init: function () {
-                n.selectorEnabled() && (e.setDataSourceParam(a.vars.selectedAllRows, !1), e.stateRemove("checkbox"), a.vars.requestIds && e.setDataSourceParam(a.vars.requestIds, !0), t(e).on("m-datatable--on-reloaded", function () {
-                    e.stateRemove("checkbox"), e.setDataSourceParam(a.vars.selectedAllRows, !1), n.selectedAllRows = !1, n.selectedRows = [], n.unselectedRows = []
-                }), n.selectedAllRows = e.getDataSourceParam(a.vars.selectedAllRows), t(e).on("m-datatable--on-layout-updated", function (a, o) {
-                    o.table == t(e.wrap).attr("id") && e.ready(function () {
-                        n.initVars(), n.initEvent(), n.initSelect()
-                    })
-                }), t(e).on("m-datatable--on-check", function (a, o) {
-                    o.forEach(function (t) {
-                        n.selectedRows.push(t), n.unselectedRows = n.remove(n.unselectedRows, t)
-                    });
-                    var i = {};
-                    i.selectedRows = t.unique(n.selectedRows), i.unselectedRows = t.unique(n.unselectedRows), e.stateKeep("checkbox", i)
-                }), t(e).on("m-datatable--on-uncheck", function (a, o) {
-                    o.forEach(function (t) {
-                        n.unselectedRows.push(t), n.selectedRows = n.remove(n.selectedRows, t)
-                    });
-                    var i = {};
-                    i.selectedRows = t.unique(n.selectedRows), i.unselectedRows = t.unique(n.unselectedRows), e.stateKeep("checkbox", i)
-                }))
-            }, initEvent: function () {
-                t(e.tableHead).find('.m-checkbox--all > [type="checkbox"]').click(function (o) {
-                    if (n.selectedRows = n.unselectedRows = [], e.stateRemove("checkbox"), t(this).is(":checked") ? n.selectedAllRows = !0 : n.selectedAllRows = !1, !a.vars.requestIds) {
-                        t(this).is(":checked") && (n.selectedRows = t.makeArray(t(e.tableBody).find('.m-checkbox--single > [type="checkbox"]').map(function (e, a) {
-                            return t(a).val()
-                        })));
-                        var i = {};
-                        i.selectedRows = t.unique(n.selectedRows), e.stateKeep("checkbox", i)
+        },
+
+        /**
+         * scroll to item function
+         * @returns {mMenu}
+         */
+        scrollToItem: function(item) {
+            // handle auto scroll for accordion submenus
+            if ( mUtil.isInResponsiveRange('desktop') && the.options.accordion.autoScroll && element.getAttribute('m-menu-scrollable') !== '1' ) {
+                mUtil.scrollTo(item, the.options.accordion.autoScrollSpeed);
+            }
+        },
+
+        /**
+         * helper functions
+         * @returns {mMenu}
+         */
+        hideSubmenuDropdown: function(item, classAlso) {
+            // remove submenu activation class
+            if ( classAlso ) {
+                mUtil.removeClass(item, 'm-menu__item--hover');
+                mUtil.removeClass(item, 'm-menu__item--active-tab');
+            }
+
+            // clear timeout
+            item.removeAttribute('data-hover');
+
+            if ( item.getAttribute('m-menu-dropdown-toggle-class') ) {
+                mUtil.removeClass(body, item.getAttribute('m-menu-dropdown-toggle-class'));
+            }
+
+            var timeout = item.getAttribute('data-timeout');
+            item.removeAttribute('data-timeout');
+            clearTimeout(timeout);
+        },
+
+        /**
+         * helper functions
+         * @returns {mMenu}
+         */
+        showSubmenuDropdown: function(item) {
+            // close active submenus
+            var list = element.querySelectorAll('.m-menu__item--submenu.m-menu__item--hover, .m-menu__item--submenu.m-menu__item--active-tab');
+
+            if ( list ) {
+                for (var i = 0, len = list.length; i < len; i++) {
+                    var el = list[i];
+                    if ( item !== el && el.contains(item) === false && item.contains(el) === false ) {
+                        Plugin.hideSubmenuDropdown(el, true);
                     }
-                    e.setDataSourceParam(a.vars.selectedAllRows, n.selectedAllRows), t(e).trigger("m-datatable--on-click-checkbox", [t(this)])
-                }), t(e.tableBody).find('.m-checkbox--single > [type="checkbox"]').click(function (o) {
-                    var i = t(this).val();
-                    t(this).is(":checked") ? (n.selectedRows.push(i), n.unselectedRows = n.remove(n.unselectedRows, i)) : (n.unselectedRows.push(i), n.selectedRows = n.remove(n.selectedRows, i)), !a.vars.requestIds && n.selectedRows.length < 1 && t(e.tableHead).find('.m-checkbox--all > [type="checkbox"]').prop("checked", !1);
-                    var l = {};
-                    l.selectedRows = t.unique(n.selectedRows), l.unselectedRows = t.unique(n.unselectedRows), e.stateKeep("checkbox", l), t(e).trigger("m-datatable--on-click-checkbox", [t(this)])
-                })
-            }, initSelect: function () {
-                n.selectedAllRows && a.vars.requestIds ? (e.hasClass("m-datatable--error") || t(e.tableHead).find('.m-checkbox--all > [type="checkbox"]').prop("checked", !0), e.setActiveAll(!0), n.unselectedRows.forEach(function (t) {
-                    e.setInactive(t)
-                })) : (n.selectedRows.forEach(function (t) {
-                    e.setActive(t)
-                }), !e.hasClass("m-datatable--error") && t(e.tableBody).find('.m-checkbox--single > [type="checkbox"]').not(":checked").length < 1 && t(e.tableHead).find('.m-checkbox--all > [type="checkbox"]').prop("checked", !0))
-            }, selectorEnabled: function () {
-                return t.grep(e.options.columns, function (t, e) {
-                    return t.selector || !1
-                })[0]
-            }, initVars: function () {
-                var t = e.stateGet("checkbox");
-                void 0 !== t && (n.selectedRows = t.selectedRows || [], n.unselectedRows = t.unselectedRows || [])
-            }, getSelectedId: function (t) {
-                if (n.initVars(), n.selectedAllRows && a.vars.requestIds) {
-                    void 0 === t && (t = a.vars.rowIds);
-                    var o = e.getObject(t, e.lastResponse) || [];
-                    return o.length > 0 && n.unselectedRows.forEach(function (t) {
-                        o = n.remove(o, parseInt(t))
-                    }), o
                 }
-                return n.selectedRows
-            }, remove: function (t, e) {
-                return t.filter(function (t) {
-                    return t !== e
-                })
+            } 
+
+            // adjust submenu position
+            Plugin.adjustSubmenuDropdownArrowPos(item);
+
+            // add submenu activation class
+            mUtil.addClass(item, 'm-menu__item--hover');
+            
+            if ( item.getAttribute('m-menu-dropdown-toggle-class') ) {
+                mUtil.addClass(body, item.getAttribute('m-menu-dropdown-toggle-class'));
             }
-        };
-        return e.checkbox = function () {
-            return n
-        }, "object" == typeof a && (a = t.extend(!0, {}, t.fn.mDatatable.checkbox.default, a), n.init.apply(this, [a])), e
-    }, t.fn.mDatatable.checkbox.default = {
-        vars: {
-            selectedAllRows: "selectedAllRows",
-            requestIds: "requestIds",
-            rowIds: "meta.rowIds"
+        },
+
+        /**
+         * Handles submenu slide toggle
+         * @returns {mMenu}
+         */
+        createSubmenuDropdownClickDropoff: function(el) {
+            var query;
+            var zIndex = (query = mUtil.child(el, '.m-menu__submenu') ? mUtil.css(query, 'z-index') : 0) - 1;
+
+            var dropoff = document.createElement('<div class="m-menu__dropoff" style="background: transparent; position: fixed; top: 0; bottom: 0; left: 0; right: 0; z-index: ' + zIndex + '"></div>');
+
+            body.appendChild(dropoff);
+
+            mUtil.addEvent(dropoff, 'click', function(e) {
+                e.stopPropagation();
+                e.preventDefault();
+                mUtil.remove(this);
+                Plugin.hideSubmenuDropdown(el, true);
+            });
+        },
+
+        /**
+         * Handles submenu click toggle
+         * @returns {mMenu}
+         */
+        adjustSubmenuDropdownArrowPos: function(item) {
+            var submenu = mUtil.child(item, '.m-menu__submenu');
+            var arrow = mUtil.child( submenu, '.m-menu__arrow.m-menu__arrow--adjust');
+            var subnav = mUtil.child( submenu, '.m-menu__subnav');
+
+            if ( arrow ) { 
+                var pos = 0; 
+                var link = mUtil.child(item, '.m-menu__link');
+
+                if ( mUtil.hasClass(submenu, 'm-menu__submenu--classic') || mUtil.hasClass(submenu, 'm-menu__submenu--fixed') ) {
+                    if ( mUtil.hasClass(submenu, 'm-menu__submenu--right')) {
+                        pos = mUtil.outerWidth(item) / 2;
+                        if (mUtil.hasClass(submenu, 'm-menu__submenu--pull')) {
+                            if (mUtil.isRTL()) {
+                                pos = pos + Math.abs( parseFloat(mUtil.css(submenu, 'margin-left')) );
+                            } else {
+                                pos = pos + Math.abs( parseFloat(mUtil.css(submenu, 'margin-right')) );
+                            }
+                        }
+                        pos = parseInt(mUtil.css(submenu, 'width')) - pos;
+                    } else if ( mUtil.hasClass(submenu, 'm-menu__submenu--left') ) {
+                        pos = mUtil.outerWidth(item) / 2;
+                        if ( mUtil.hasClass(submenu, 'm-menu__submenu--pull')) {
+                            if (mUtil.isRTL()) {
+                                pos = pos + Math.abs( parseFloat(mUtil.css(submenu, 'margin-right')) );
+                            } else {
+                                pos = pos + Math.abs( parseFloat(mUtil.css(submenu, 'margin-left')) );
+                            }
+                        }
+                    }
+
+                    if (mUtil.isRTL()) {
+                        mUtil.css(arrow, 'right', pos + 'px');  
+                    } else {
+                        mUtil.css(arrow, 'left', pos + 'px');  
+                    }
+                } else {
+                    if ( mUtil.hasClass(submenu, 'm-menu__submenu--center') || mUtil.hasClass(submenu, 'm-menu__submenu--full') ) {
+                        pos = mUtil.offset(item).left - ((mUtil.getViewPort().width - parseInt(mUtil.css(submenu, 'width'))) / 2);
+                        pos = pos + (mUtil.outerWidth(item) / 2);
+
+                        mUtil.css(arrow, 'left', pos + 'px');
+                        if (mUtil.isRTL()) {
+                            mUtil.css(arrow, 'right', 'auto');
+                        }                        
+                    }
+                }
+            }
+        },
+
+        /**
+         * Handles submenu hover toggle
+         * @returns {mMenu}
+         */
+        pauseDropdownHover: function(time) {
+            var date = new Date();
+
+            the.pauseDropdownHoverTime = date.getTime() + time;
+        },
+
+        /**
+         * Handles submenu hover toggle
+         * @returns {mMenu}
+         */
+        resumeDropdownHover: function() {
+            var date = new Date();
+
+            return (date.getTime() > the.pauseDropdownHoverTime ? true : false);
+        },
+
+        /**
+         * Reset menu's current active item
+         * @returns {mMenu}
+         */
+        resetActiveItem: function(item) {
+            var list;
+            var parents;
+
+            list = element.querySelectorAll('.m-menu__item--active');
+            
+            for (var i = 0, len = list.length; i < len; i++) {
+                var el = list[0];
+                mUtil.removeClass(el, 'm-menu__item--active');
+                mUtil.hide( mUtil.child(el, '.m-menu__submenu') );
+                parents = mUtil.parents(el, '.m-menu__item--submenu');
+
+                for (var i_ = 0, len_ = parents.length; i_ < len_; i_++) {
+                    var el_ = parents[i];
+                    mUtil.removeClass(el_, 'm-menu__item--open');
+                    mUtil.hide( mUtil.child(el_, '.m-menu__submenu') );
+                }
+            }
+
+            // close open submenus
+            if ( the.options.accordion.expandAll === false ) {
+                if ( list = element.querySelectorAll('.m-menu__item--open') ) {
+                    for (var i = 0, len = list.length; i < len; i++) {
+                        mUtil.removeClass(parents[0], 'm-menu__item--open');
+                    }
+                }
+            }
+        },
+
+        /**
+         * Sets menu's active item
+         * @returns {mMenu}
+         */
+        setActiveItem: function(item) {
+            // reset current active item
+            Plugin.resetActiveItem();
+
+            mUtil.addClass(item, 'm-menu__item--active');
+            
+            var parents = mUtil.parents(item, '.m-menu__item--submenu');
+            for (var i = 0, len = parents.length; i < len; i++) {
+                mUtil.addClass(parents[i], 'm-menu__item--open');
+            }
+        },
+
+        /**
+         * Returns page breadcrumbs for the menu's active item
+         * @returns {mMenu}
+         */
+        getBreadcrumbs: function(item) {
+            var query;
+            var breadcrumbs = [];
+            var link = mUtil.child(item, '.m-menu__link');
+
+            breadcrumbs.push({
+                text: (query = mUtil.child(link, '.m-menu__link-text') ? query.innerHTML : ''),
+                title: link.getAttribute('title'),
+                href: link.getAttribute('href')
+            });
+
+            var parents = mUtil.parents(item, '.m-menu__item--submenu');
+            for (var i = 0, len = parents.length; i < len; i++) {
+                var submenuLink = mUtil.child(parents[i], '.m-menu__link');
+
+                breadcrumbs.push({
+                    text: (query = mUtil.child(submenuLink, '.m-menu__link-text') ? query.innerHTML : ''),
+                    title: submenuLink.getAttribute('title'),
+                    href: submenuLink.getAttribute('href')
+                });
+            }
+
+            return  breadcrumbs.reverse();
+        },
+
+        /**
+         * Returns page title for the menu's active item
+         * @returns {mMenu}
+         */
+        getPageTitle: function(item) {
+            var query;
+
+            return (query = mUtil.child(item, '.m-menu__link-text') ? query.innerHTML : '');
+        },
+
+        /**
+         * Trigger events
+         */
+        eventTrigger: function(name, args) {
+            for (var i = 0; i < the.events.length; i++ ) {
+                var event = the.events[i];
+                if ( event.name == name ) {
+                    if ( event.one == true ) {
+                        if ( event.fired == false ) {
+                            the.events[i].fired = true;
+                            event.handler.call(this, the, args);
+                        }
+                    } else {
+                        event.handler.call(this, the, args);
+                    }
+                }
+            }
+        },
+
+        addEvent: function(name, handler, one) {
+            the.events.push({
+                name: name,
+                handler: handler,
+                one: one,
+                fired: false
+            });
+        },
+
+        removeEvent: function(name) {
+            if (the.events[name]) {
+                delete the.events[name];
+            }
         }
+    };
+
+    //////////////////////////
+    // ** Public Methods ** //
+    //////////////////////////
+
+    /**
+     * Set default options 
+     */
+
+    the.setDefaults = function(options) {
+        defaultOptions = options;
+    };
+
+    /**
+     * Set active menu item
+     */
+    the.scrollerUpdate = function() {
+        return Plugin.scrollerUpdate();
+    };
+
+    /**
+     * Set active menu item
+     */
+    the.scrollerTop = function() {
+        return Plugin.scrollerTop();
+    };
+
+    /**
+     * Set active menu item
+     */
+    the.setActiveItem = function(item) {
+        return Plugin.setActiveItem(item);
+    };
+
+    the.reload = function() {
+        return Plugin.reload();
+    };
+
+    the.update = function(options) {
+        return Plugin.update(options);
+    };
+
+    /**
+     * Set breadcrumb for menu item
+     */
+    the.getBreadcrumbs = function(item) {
+        return Plugin.getBreadcrumbs(item);
+    };
+
+    /**
+     * Set page title for menu item
+     */
+    the.getPageTitle = function(item) {
+        return Plugin.getPageTitle(item);
+    };
+
+    /**
+     * Get submenu mode
+     */
+    the.getSubmenuMode = function(el) {
+        return Plugin.getSubmenuMode(el);
+    };
+
+    /**
+     * Hide dropdown submenu
+     * @returns {jQuery}
+     */
+    the.hideDropdown = function(item) {
+        Plugin.hideSubmenuDropdown(item, true);
+    };
+
+    /**
+     * Disable menu for given time
+     * @returns {jQuery}
+     */
+    the.pauseDropdownHover = function(time) {
+        Plugin.pauseDropdownHover(time);
+    };
+
+    /**
+     * Disable menu for given time
+     * @returns {jQuery}
+     */
+    the.resumeDropdownHover = function() {
+        return Plugin.resumeDropdownHover();
+    };
+
+    /**
+     * Register event
+     */
+    the.on = function(name, handler) {
+        return Plugin.addEvent(name, handler);
+    };
+
+    the.off = function(name) {
+        return Plugin.removeEvent(name);
+    };
+
+    the.one = function(name, handler) {
+        return Plugin.addEvent(name, handler, true);
+    };
+
+    ///////////////////////////////
+    // ** Plugin Construction ** //
+    ///////////////////////////////
+
+    //== Run plugin
+    Plugin.construct.apply(the, [options]);
+
+    //== Handle plugin on window resize
+    mUtil.addResizeHandler(function() {
+        if (init) {
+            the.reload();
+        }  
+    });
+
+    //== Init done
+    init = true;
+
+    // Return plugin instance
+    return the;
+};
+
+// Plugin global lazy initialization
+document.addEventListener("click", function (e) {
+    var body = mUtil.get('body');
+    var query;
+    if ( query = body.querySelectorAll('.m-menu__nav .m-menu__item.m-menu__item--submenu.m-menu__item--hover:not(.m-menu__item--tabs)[m-menu-submenu-toggle="click"]') ) {
+        for (var i = 0, len = query.length; i < len; i++) {
+            var element = query[i].closest('.m-menu__nav').parentNode;
+
+            if ( element ) {
+                var the = mUtil.data(element).get('menu');
+
+                if ( !the ) {
+                    break;
+                }
+
+                if ( !the || the.getSubmenuMode() !== 'dropdown' ) {
+                    break;
+                }
+
+                if ( e.target !== element && element.contains(e.target) === false ) {
+                    var items;
+                    if ( items = element.querySelectorAll('.m-menu__item--submenu.m-menu__item--hover:not(.m-menu__item--tabs)[m-menu-submenu-toggle="click"]') ) {
+                        for (var j = 0, cnt = items.length; j < cnt; j++) {
+                            the.hideDropdown(items[j]);
+                        }
+                    }
+                }
+            }            
+        }
+    } 
+});
+var mOffcanvas = function(elementId, options) {
+    //== Main object
+    var the = this;
+    var init = false;
+
+    //== Get element object
+    var element = mUtil.get(elementId);
+    var body = mUtil.get('body');
+
+    if (!element) {
+        return;
     }
-}(jQuery);
-var mLayout = function () {
-    var t, e, a, n, o, i, l = function () {
-        0 !== $("#m_aside_left_hide_toggle").length && (l = new mToggle("m_aside_left_hide_toggle", {
-            target: "body",
-            targetState: "m-aside-left--hide",
-            togglerState: "m-brand__toggler--active"
-        })).on("toggle", function (a) {
-            t.pauseDropdownHover(800), e.pauseDropdownHover(800), Cookies.set("sidebar_hide_state", a.getState())
-        })
-    }, r = function () {
-        return new mPortlet("main_portlet", {
+
+    //== Default options
+    var defaultOptions = {};
+
+    ////////////////////////////
+    // ** Private Methods  ** //
+    ////////////////////////////
+
+    var Plugin = {
+        /**
+         * Run plugin
+         * @returns {moffcanvas}
+         */
+        construct: function(options) {
+            if (mUtil.data(element).has('offcanvas')) {
+                the = mUtil.data(element).get('offcanvas');
+            } else {
+                // reset offcanvas
+                Plugin.init(options);
+                
+                // build offcanvas
+                Plugin.build();
+
+                mUtil.data(element).set('offcanvas', the);
+            }
+
+            return the;
+        },
+
+        /**
+         * Handles suboffcanvas click toggle
+         * @returns {moffcanvas}
+         */
+        init: function(options) {
+            the.events = [];
+
+            // merge default and user defined options
+            the.options = mUtil.deepExtend({}, defaultOptions, options);
+            the.overlay;
+
+            the.classBase = the.options.baseClass;
+            the.classShown = the.classBase + '--on';
+            the.classOverlay = the.classBase + '-overlay';
+
+            the.state = mUtil.hasClass(element, the.classShown) ? 'shown' : 'hidden';
+        },
+
+        build: function() {
+            //== offcanvas toggle
+            if (the.options.toggleBy) {
+                if (typeof the.options.toggleBy === 'string') { 
+                    mUtil.addEvent( the.options.toggleBy, 'click', Plugin.toggle); 
+                } else if (the.options.toggleBy && the.options.toggleBy[0] && the.options.toggleBy[0].target) {
+                    for (var i in the.options.toggleBy) { 
+                        mUtil.addEvent( the.options.toggleBy[i].target, 'click', Plugin.toggle); 
+                    }
+                } else if (the.options.toggleBy && the.options.toggleBy.target) {
+                    mUtil.addEvent( the.options.toggleBy.target, 'click', Plugin.toggle); 
+                } 
+            }
+
+            //== offcanvas close
+            var closeBy = mUtil.get(the.options.closeBy);
+            if (closeBy) {
+                mUtil.addEvent(closeBy, 'click', Plugin.hide);
+            }
+        },
+
+
+        /**
+         * Handles offcanvas toggle
+         */
+        toggle: function () {
+            Plugin.eventTrigger('toggle'); 
+
+            if (the.state == 'shown') {
+                Plugin.hide(this);
+            } else {
+                Plugin.show(this);
+            }
+        },
+
+        /**
+         * Handles offcanvas show
+         */
+        show: function(target) {
+            if (the.state == 'shown') {
+                return;
+            }
+
+            Plugin.eventTrigger('beforeShow');
+
+            Plugin.togglerClass(target, 'show');
+
+            //== Offcanvas panel
+            mUtil.addClass(body, the.classShown);
+            mUtil.addClass(element, the.classShown);
+
+            the.state = 'shown';
+
+            if (the.options.overlay) {
+                the.overlay = mUtil.insertAfter(document.createElement('DIV') , element );
+                mUtil.addClass(the.overlay, the.classOverlay);
+                mUtil.addEvent(the.overlay, 'click', function(e) {
+                    e.stopPropagation();
+                    e.preventDefault();
+                    Plugin.hide(target);       
+                });
+            }
+
+            Plugin.eventTrigger('afterShow');
+        },
+
+        /**
+         * Handles offcanvas hide
+         */
+        hide: function(target) {
+            if (the.state == 'hidden') {
+                return;
+            }
+
+            Plugin.eventTrigger('beforeHide');
+
+            Plugin.togglerClass(target, 'hide');
+
+            mUtil.removeClass(body, the.classShown);
+            mUtil.removeClass(element, the.classShown);
+
+            the.state = 'hidden';
+
+            if (the.options.overlay && the.overlay) {
+                mUtil.remove(the.overlay);
+            }
+
+            Plugin.eventTrigger('afterHide');
+        },
+
+        /**
+         * Handles toggler class
+         */
+        togglerClass: function(target, mode) {
+            //== Toggler
+            var id = mUtil.attr(target, 'id');
+            var toggleBy;
+
+            if (the.options.toggleBy && the.options.toggleBy[0] && the.options.toggleBy[0].target) {
+                for (var i in the.options.toggleBy) {
+                    if (the.options.toggleBy[i].target === id) {
+                        toggleBy = the.options.toggleBy[i];
+                    }        
+                }
+            } else if (the.options.toggleBy && the.options.toggleBy.target) {
+                toggleBy = the.options.toggleBy;
+            }
+
+            if (toggleBy) {                
+                var el = mUtil.get(toggleBy.target);
+                
+                if (mode === 'show') {
+                    mUtil.addClass(el, toggleBy.state);
+                }
+
+                if (mode === 'hide') {
+                    mUtil.removeClass(el, toggleBy.state);
+                }
+            }
+        },
+
+        /**
+         * Trigger events
+         */
+        eventTrigger: function(name, args) {
+            for (var i = 0; i < the.events.length; i++) {
+                var event = the.events[i];
+                if (event.name == name) {
+                    if (event.one == true) {
+                        if (event.fired == false) {
+                            the.events[i].fired = true;
+                            event.handler.call(this, the, args);
+                        }
+                    } else {
+                        event.handler.call(this, the, args);
+                    }
+                }
+            }
+        },
+
+        addEvent: function(name, handler, one) {
+            the.events.push({
+                name: name,
+                handler: handler,
+                one: one,
+                fired: false
+            });
+        }
+    };
+
+    //////////////////////////
+    // ** Public Methods ** //
+    //////////////////////////
+
+    /**
+     * Set default options 
+     */
+
+    the.setDefaults = function(options) {
+        defaultOptions = options;
+    };
+
+    /**
+     * Hide 
+     */
+    the.hide = function() {
+        return Plugin.hide();
+    };
+
+    /**
+     * Show 
+     */
+    the.show = function() {
+        return Plugin.show();
+    };
+
+    /**
+     * Get suboffcanvas mode
+     */
+    the.on = function(name, handler) {
+        return Plugin.addEvent(name, handler);
+    };
+
+    /**
+     * Set offcanvas content
+     * @returns {mOffcanvas}
+     */
+    the.one = function(name, handler) {
+        return Plugin.addEvent(name, handler, true);
+    };
+
+    ///////////////////////////////
+    // ** Plugin Construction ** //
+    ///////////////////////////////
+
+    //== Run plugin
+    Plugin.construct.apply(the, [options]);
+
+    //== Init done
+    init = true;
+
+    // Return plugin instance
+    return the;
+};
+// plugin setup
+var mPortlet = function(elementId, options) {
+    //== Main object
+    var the = this;
+    var init = false;
+
+    //== Get element object
+    var element = mUtil.get(elementId);
+    var body = mUtil.get('body');
+
+    if (!element) {
+        return;
+    }
+
+    //== Default options
+    var defaultOptions = {
+        bodyToggleSpeed: 400,
+        tooltips: true,
+        tools: {
+            toggle: {
+                collapse: 'Collapse',
+                expand: 'Expand'
+            },
+            reload: 'Reload',
+            remove: 'Remove',
+            fullscreen: {
+                on: 'Fullscreen',
+                off: 'Exit Fullscreen'
+            }
+        },
+        sticky: {
+            offset: 300,
+            zIndex: 98
+        }
+    };
+
+    ////////////////////////////
+    // ** Private Methods  ** //
+    ////////////////////////////
+
+    var Plugin = {
+        /**
+         * Construct
+         */
+
+        construct: function(options) {
+            if (mUtil.data(element).has('portlet')) {
+                the = mUtil.data(element).get('portlet');
+            } else {
+                // reset menu
+                Plugin.init(options);
+
+                // build menu
+                Plugin.build();
+
+                mUtil.data(element).set('portlet', the);
+            }
+
+            return the;
+        },
+
+        /**
+         * Init portlet
+         */
+        init: function(options) {
+            the.element = element;
+            the.events = [];
+
+            // merge default and user defined options
+            the.options = mUtil.deepExtend({}, defaultOptions, options);
+            the.head = mUtil.child(element, '.m-portlet__head');
+            the.foot = mUtil.child(element, '.m-portlet__foot');
+
+            if (mUtil.child(element, '.m-portlet__body')) {
+                the.body = mUtil.child(element, '.m-portlet__body');
+            } else if (mUtil.child(element, '.m-form').length !== 0) {
+                the.body = mUtil.child(element, '.m-form');
+            }
+        },
+
+        /**
+         * Build Form Wizard
+         */
+        build: function() {
+            //== Remove
+            var remove = mUtil.find(the.head, '[m-portlet-tool=remove]');
+            if (remove) {
+                mUtil.addEvent(remove, 'click', function(e) {
+                    e.preventDefault();
+                    Plugin.remove();
+                });
+            }
+
+            //== Reload
+            var reload = mUtil.find(the.head, '[m-portlet-tool=reload]');
+            if (reload) {
+                mUtil.addEvent(reload, 'click', function(e) {
+                    e.preventDefault();
+                    Plugin.reload();
+                });
+            }
+
+            //== Toggle
+            var toggle = mUtil.find(the.head, '[m-portlet-tool=toggle]');
+            if (toggle) {
+                mUtil.addEvent(toggle, 'click', function(e) {
+                    e.preventDefault();
+                    Plugin.toggle();
+                });
+            }
+
+            //== Fullscreen
+            var fullscreen = mUtil.find(the.head, '[m-portlet-tool=fullscreen]');
+            if (fullscreen) {
+                mUtil.addEvent(fullscreen, 'click', function(e) {
+                    e.preventDefault();
+                    Plugin.fullscreen();
+                });
+            }
+
+            Plugin.setupTooltips();
+        },
+
+        /**
+         * Window scroll handle event for sticky portlet
+         */
+        onScrollSticky: function() {
+            var st = window.pageYOffset;
+            var offset = the.options.sticky.offset;
+
+
+            if (st > offset) {
+                if (mUtil.hasClass(body, 'm-portlet--sticky') === false) {
+                    Plugin.eventTrigger('stickyOn');
+
+                    mUtil.addClass(body, 'm-portlet--sticky');
+                    mUtil.addClass(element, 'm-portlet--sticky');
+
+                    Plugin.updateSticky();
+                }
+            } else { // back scroll mode
+                if (mUtil.hasClass(body, 'm-portlet--sticky')) {
+                    Plugin.eventTrigger('stickyOff');
+
+                    mUtil.removeClass(body, 'm-portlet--sticky');
+                    mUtil.removeClass(element, 'm-portlet--sticky');
+
+                    Plugin.resetSticky();
+                }
+            }
+        },
+
+        /**
+         * Init sticky portlet
+         */
+        initSticky: function() {
+            if (!the.head) {
+                return;
+            }
+
+            window.addEventListener('scroll', Plugin.onScrollSticky);
+        },
+
+        /**
+         * Update sticky portlet positions
+         */
+        updateSticky: function() {
+            if (!the.head) {
+                return;
+            }
+
+            var top;
+
+            if (mUtil.hasClass(body, 'm-portlet--sticky')) {
+                if (the.options.sticky.position.top instanceof Function) {
+                    top = parseInt(the.options.sticky.position.top.call());
+                } else {
+                    top = parseInt(the.options.sticky.position.top);
+                }
+
+                var left;
+                if (the.options.sticky.position.left instanceof Function) {
+                    left = parseInt(the.options.sticky.position.left.call());
+                } else {
+                    left = parseInt(the.options.sticky.position.left);
+                }
+
+                var right;
+                if (the.options.sticky.position.right instanceof Function) {
+                    right = parseInt(the.options.sticky.position.right.call());
+                } else {
+                    right = parseInt(the.options.sticky.position.right);
+                }
+
+                mUtil.css(the.head, 'z-index', the.options.sticky.zIndex);
+                mUtil.css(the.head, 'top', top + 'px');
+
+                if (mUtil.isRTL()) {
+                    mUtil.css(the.head, 'left', right + 'px');
+                    mUtil.css(the.head, 'right',left  + 'px');
+                } else {
+                    mUtil.css(the.head, 'left', left + 'px');
+                    mUtil.css(the.head, 'right', right + 'px');
+                }
+                
+            }
+        },
+
+        /**
+         * Reset sticky portlet positions
+         */
+        resetSticky: function() {
+            if (!the.head) {
+                return;
+            }
+
+            if (mUtil.hasClass(body, 'm-portlet--sticky') === false) {
+                mUtil.css(the.head, 'z-index', '');
+                mUtil.css(the.head, 'top', '');
+                mUtil.css(the.head, 'left', '');
+                mUtil.css(the.head, 'right', '');
+            }
+        },
+
+        /**
+         * Destroy sticky portlet
+         */
+        destroySticky: function() {
+            if (!the.head) {
+                return;
+            }
+
+            Plugin.resetSticky();
+
+            window.removeEventListener('scroll', Plugin.onScrollSticky);
+        },
+
+        /**
+         * Remove portlet
+         */
+        remove: function() {
+            if (Plugin.eventTrigger('beforeRemove') === false) {
+                return;
+            }
+
+            if (mUtil.hasClass(body, 'm-portlet--fullscreen') && mUtil.hasClass(element, 'm-portlet--fullscreen')) {
+                Plugin.fullscreen('off');
+            }
+
+            Plugin.removeTooltips();
+
+            mUtil.remove(element);
+
+            Plugin.eventTrigger('afterRemove');
+        },
+
+        /**
+         * Set content
+         */
+        setContent: function(html) {
+            if (html) {
+                the.body.innerHTML = html;
+            }
+        },
+
+        /**
+         * Get body
+         */
+        getBody: function() {
+            return the.body;
+        },
+
+        /**
+         * Get self
+         */
+        getSelf: function() {
+            return element;
+        },
+
+        /**
+         * Setup tooltips
+         */
+        setupTooltips: function() {
+            if (the.options.tooltips) {
+                var collapsed = mUtil.hasClass(element, 'm-portlet--collapse') || mUtil.hasClass(element, 'm-portlet--collapsed');
+                var fullscreenOn = mUtil.hasClass(body, 'm-portlet--fullscreen') && mUtil.hasClass(element, 'm-portlet--fullscreen');
+
+                //== Remove
+                var remove = mUtil.find(the.head, '[m-portlet-tool=remove]');
+                if (remove) {
+                    var placement = (fullscreenOn ? 'bottom' : 'top');
+                    var tip = new Tooltip(remove, {
+                        title: the.options.tools.remove,
+                        placement: placement,
+                        offset: (fullscreenOn ? '0,10px,0,0' : '0,5px'),
+                        trigger: 'hover',
+                        template: '<div class="m-tooltip m-tooltip--portlet tooltip bs-tooltip-' + placement + '" role="tooltip">\
+                            <div class="tooltip-arrow arrow"></div>\
+                            <div class="tooltip-inner"></div>\
+                        </div>'
+                    });
+
+                    mUtil.data(remove).set('tooltip', tip);
+                }
+
+                //== Reload
+                var reload = mUtil.find(the.head, '[m-portlet-tool=reload]');
+                if (reload) {
+                    var placement = (fullscreenOn ? 'bottom' : 'top');
+                    var tip = new Tooltip(reload, {
+                        title: the.options.tools.reload,
+                        placement: placement,
+                        offset: (fullscreenOn ? '0,10px,0,0' : '0,5px'),
+                        trigger: 'hover',
+                        template: '<div class="m-tooltip m-tooltip--portlet tooltip bs-tooltip-' + placement + '" role="tooltip">\
+                            <div class="tooltip-arrow arrow"></div>\
+                            <div class="tooltip-inner"></div>\
+                        </div>'
+                    });
+
+                    mUtil.data(reload).set('tooltip', tip);
+                }
+
+                //== Toggle
+                var toggle = mUtil.find(the.head, '[m-portlet-tool=toggle]');
+                if (toggle) {
+                    var placement = (fullscreenOn ? 'bottom' : 'top');
+                    var tip = new Tooltip(toggle, {
+                        title: (collapsed ? the.options.tools.toggle.expand : the.options.tools.toggle.collapse),
+                        placement: placement,
+                        offset: (fullscreenOn ? '0,10px,0,0' : '0,5px'),
+                        trigger: 'hover',
+                        template: '<div class="m-tooltip m-tooltip--portlet tooltip bs-tooltip-' + placement + '" role="tooltip">\
+                            <div class="tooltip-arrow arrow"></div>\
+                            <div class="tooltip-inner"></div>\
+                        </div>'
+                    });
+
+                    mUtil.data(toggle).set('tooltip', tip);
+                }
+
+                //== Fullscreen
+                var fullscreen = mUtil.find(the.head, '[m-portlet-tool=fullscreen]');
+                if (fullscreen) {
+                    var placement = (fullscreenOn ? 'bottom' : 'top');
+                    var tip = new Tooltip(fullscreen, {
+                        title: (fullscreenOn ? the.options.tools.fullscreen.off : the.options.tools.fullscreen.on),
+                        placement: placement,
+                        offset: (fullscreenOn ? '0,10px,0,0' : '0,5px'),
+                        trigger: 'hover',
+                        template: '<div class="m-tooltip m-tooltip--portlet tooltip bs-tooltip-' + placement + '" role="tooltip">\
+                            <div class="tooltip-arrow arrow"></div>\
+                            <div class="tooltip-inner"></div>\
+                        </div>'
+                    });
+
+                    mUtil.data(fullscreen).set('tooltip', tip);
+                }
+            }
+        },
+
+        /**
+         * Setup tooltips
+         */
+        removeTooltips: function() {
+            if (the.options.tooltips) {
+                //== Remove
+                var remove = mUtil.find(the.head, '[m-portlet-tool=remove]');
+                if (remove && mUtil.data(remove).has('tooltip')) {
+                    mUtil.data(remove).get('tooltip').dispose();
+                }
+
+                //== Reload
+                var reload = mUtil.find(the.head, '[m-portlet-tool=reload]');
+                if (reload && mUtil.data(reload).has('tooltip')) {
+                    mUtil.data(reload).get('tooltip').dispose();
+                }
+
+                //== Toggle
+                var toggle = mUtil.find(the.head, '[m-portlet-tool=toggle]');
+                if (toggle && mUtil.data(toggle).has('tooltip')) {
+                    mUtil.data(toggle).get('tooltip').dispose();
+                }
+
+                //== Fullscreen
+                var fullscreen = mUtil.find(the.head, '[m-portlet-tool=fullscreen]');
+                if (fullscreen && mUtil.data(fullscreen).has('tooltip')) {
+                    mUtil.data(fullscreen).get('tooltip').dispose();
+                }
+            }
+        },
+
+        /**
+         * Reload
+         */
+        reload: function() {
+            Plugin.eventTrigger('reload');
+        },
+
+        /**
+         * Toggle
+         */
+        toggle: function() {
+            if (mUtil.hasClass(element, 'm-portlet--collapse') || mUtil.hasClass(element, 'm-portlet--collapsed')) {
+                Plugin.expand();
+            } else {
+                Plugin.collapse();
+            }
+        },
+
+        /**
+         * Collapse
+         */
+        collapse: function() {
+            if (Plugin.eventTrigger('beforeCollapse') === false) {
+                return;
+            }
+
+            mUtil.slideUp(the.body, the.options.bodyToggleSpeed, function() {
+                Plugin.eventTrigger('afterCollapse');
+            });
+
+            mUtil.addClass(element, 'm-portlet--collapse');
+
+            var toggle = mUtil.find(the.head, '[m-portlet-tool=toggle]');
+            if (toggle && mUtil.data(toggle).has('tooltip')) {
+                // mUtil.data(toggle).get('tooltip').updateTitleContent(the.options.tools.toggle.expand);
+            }
+        },
+
+        /**
+         * Expand
+         */
+        expand: function() {
+            if (Plugin.eventTrigger('beforeExpand') === false) {
+                return;
+            }
+
+            mUtil.slideDown(the.body, the.options.bodyToggleSpeed, function() {
+                Plugin.eventTrigger('afterExpand');
+            });
+
+            mUtil.removeClass(element, 'm-portlet--collapse');
+            mUtil.removeClass(element, 'm-portlet--collapsed');
+
+            var toggle = mUtil.find(the.head, '[m-portlet-tool=toggle]');
+            if (toggle && mUtil.data(toggle).has('tooltip')) {
+                // mUtil.data(toggle).get('tooltip').updateTitleContent(the.options.tools.toggle.collapse);
+            }
+        },
+
+        /**
+         * Toggle
+         */
+        fullscreen: function(mode) {
+            var d = {};
+            var speed = 300;
+
+            if (mode === 'off' || (mUtil.hasClass(body, 'm-portlet--fullscreen') && mUtil.hasClass(element, 'm-portlet--fullscreen'))) {
+                Plugin.eventTrigger('beforeFullscreenOff');
+
+                mUtil.removeClass(body, 'm-portlet--fullscreen');
+                mUtil.removeClass(element, 'm-portlet--fullscreen');
+
+                Plugin.removeTooltips();
+                Plugin.setupTooltips();
+
+                if (the.foot) {
+                    mUtil.css(the.body, 'margin-bottom', '');
+                    mUtil.css(the.foot, 'margin-top', '');
+                }
+
+                Plugin.eventTrigger('afterFullscreenOff');
+            } else {
+                Plugin.eventTrigger('beforeFullscreenOn');
+
+                mUtil.addClass(element, 'm-portlet--fullscreen');
+                mUtil.addClass(body, 'm-portlet--fullscreen');
+
+                Plugin.removeTooltips();
+                Plugin.setupTooltips();
+
+
+                if (the.foot) {
+                    var height1 = parseInt(mUtil.css(the.foot, 'height'));
+                    var height2 = parseInt(mUtil.css(the.foot, 'height')) + parseInt(mUtil.css(the.head, 'height'));
+                    mUtil.css(the.body, 'margin-bottom', height1 + 'px');
+                    mUtil.css(the.foot, 'margin-top', '-' + height2 + 'px');
+                }
+
+                Plugin.eventTrigger('afterFullscreenOn');
+            }
+        },
+
+        /**
+         * Trigger events
+         */
+        eventTrigger: function(name) {
+            //mUtil.triggerCustomEvent(name);
+            for (i = 0; i < the.events.length; i++) {
+                var event = the.events[i];
+                if (event.name == name) {
+                    if (event.one == true) {
+                        if (event.fired == false) {
+                            the.events[i].fired = true;
+                            event.handler.call(this, the);
+                        }
+                    } else {
+                        event.handler.call(this, the);
+                    }
+                }
+            }
+        },
+
+        addEvent: function(name, handler, one) {
+            the.events.push({
+                name: name,
+                handler: handler,
+                one: one,
+                fired: false
+            });
+
+            return the;
+        }
+    };
+
+    //////////////////////////
+    // ** Public Methods ** //
+    //////////////////////////
+
+    /**
+     * Set default options 
+     */
+
+    the.setDefaults = function(options) {
+        defaultOptions = options;
+    };
+
+    /**
+     * Remove portlet
+     * @returns {mPortlet}
+     */
+    the.remove = function() {
+        return Plugin.remove(html);
+    };
+
+    /**
+     * Init sticky portlet
+     * @returns {mPortlet}
+     */
+    the.initSticky = function() {
+        return Plugin.initSticky();
+    };
+
+    /**
+     * Update sticky portlet scroll event
+     * @returns {mPortlet}
+     */
+    the.updateSticky = function() {
+        return Plugin.updateSticky();
+    };
+
+    /**
+     * Reset sticky portlet positions
+     * @returns {mPortlet}
+     */
+    the.resetSticky = function() {
+        return Plugin.resetSticky();
+    };
+
+    /**
+     * Destroy sticky portlet scroll event
+     * @returns {mPortlet}
+     */
+    the.destroySticky = function() {
+        return Plugin.destroySticky();
+    };
+
+    /**
+     * Reload portlet
+     * @returns {mPortlet}
+     */
+    the.reload = function() {
+        return Plugin.reload();
+    };
+
+    /**
+     * Set portlet content
+     * @returns {mPortlet}
+     */
+    the.setContent = function(html) {
+        return Plugin.setContent(html);
+    };
+
+    /**
+     * Toggle portlet
+     * @returns {mPortlet}
+     */
+    the.toggle = function() {
+        return Plugin.toggle();
+    };
+
+    /**
+     * Collapse portlet
+     * @returns {mPortlet}
+     */
+    the.collapse = function() {
+        return Plugin.collapse();
+    };
+
+    /**
+     * Expand portlet
+     * @returns {mPortlet}
+     */
+    the.expand = function() {
+        return Plugin.expand();
+    };
+
+    /**
+     * Fullscreen portlet
+     * @returns {mPortlet}
+     */
+    the.fullscreen = function() {
+        return Plugin.fullscreen('on');
+    };
+
+    /**
+     * Fullscreen portlet
+     * @returns {mPortlet}
+     */
+    the.unFullscreen = function() {
+        return Plugin.fullscreen('off');
+    };
+
+    /**
+     * Get portletbody 
+     * @returns {jQuery}
+     */
+    the.getBody = function() {
+        return Plugin.getBody();
+    };
+
+    /**
+     * Get portletbody 
+     * @returns {jQuery}
+     */
+    the.getSelf = function() {
+        return Plugin.getSelf();
+    };
+
+    /**
+     * Attach event
+     */
+    the.on = function(name, handler) {
+        return Plugin.addEvent(name, handler);
+    };
+
+    /**
+     * Attach event that will be fired once
+     */
+    the.one = function(name, handler) {
+        return Plugin.addEvent(name, handler, true);
+    };
+
+    //== Construct plugin
+    Plugin.construct.apply(the, [options]);
+
+    return the;
+};
+// plugin setup
+var mQuicksearch = function(elementId, options) {
+    //== Main object
+    var the = this;
+    var init = false;
+
+    //== Get element object
+    var element = mUtil.get(elementId);
+    var body = mUtil.get('body');  
+
+    if (!element) {
+        return;
+    }
+
+    //== Default options
+    var defaultOptions = {
+        mode: 'default', //'default/dropdown'
+        minLength: 1,
+        maxHeight: 300,
+        requestTimeout: 200, // ajax request fire timeout in milliseconds 
+        inputTarget: 'm_quicksearch_input',
+        iconCloseTarget: 'm_quicksearch_close',
+        iconCancelTarget: 'm_quicksearch_cancel',
+        iconSearchTarget: 'm_quicksearch_search',
+        
+        spinnerClass: 'm-loader m-loader--skin-light m-loader--right',
+        hasResultClass: 'm-list-search--has-result',
+        
+        templates: {
+            error: '<div class="m-search-results m-search-results--skin-light"><span class="m-search-result__message">{{message}}</div></div>'
+        }
+    };
+
+    ////////////////////////////
+    // ** Private Methods  ** //
+    ////////////////////////////
+
+    var Plugin = {
+        /**
+         * Construct
+         */
+
+        construct: function(options) {
+            if (mUtil.data(element).has('quicksearch')) {
+                the = mUtil.data(element).get('quicksearch');
+            } else {
+                // reset menu
+                Plugin.init(options);
+
+                // build menu
+                Plugin.build();
+
+                mUtil.data(element).set('quicksearch', the);
+            }
+
+            return the;
+        },
+
+        init: function(options) {
+            the.element = element;
+            the.events = [];
+
+            // merge default and user defined options
+            the.options = mUtil.deepExtend({}, defaultOptions, options);
+
+            // search query
+            the.query = '';
+
+            // form
+            the.form = mUtil.find(element, 'form');
+
+            // input element
+            the.input = mUtil.get(the.options.inputTarget);
+
+            // close icon
+            the.iconClose = mUtil.get(the.options.iconCloseTarget);
+
+            if (the.options.mode == 'default') {
+                // search icon
+                the.iconSearch = mUtil.get(the.options.iconSearchTarget);
+
+                // cancel icon
+                the.iconCancel = mUtil.get(the.options.iconCancelTarget);
+            }
+
+            // dropdown
+            the.dropdown = new mDropdown(element, {
+                mobileOverlay: false
+            });
+
+            // cancel search timeout
+            the.cancelTimeout;
+
+            // ajax processing state
+            the.processing = false;
+
+            // ajax request fire timeout
+            the.requestTimeout = false;
+        },
+
+        /**
+         * Build plugin
+         */
+        build: function() {
+            // attach input keyup handler
+            mUtil.addEvent(the.input, 'keyup', Plugin.search);
+
+            // Prevent enter click
+            mUtil.find(element, "form").onkeypress = function(e) {
+                var key = e.charCode || e.keyCode || 0;     
+                if (key == 13) {
+                    e.preventDefault();
+                }
+            };
+
+            if (the.options.mode == 'default') {
+                mUtil.addEvent(the.input, 'focus', Plugin.showDropdown);
+                mUtil.addEvent(the.iconCancel, 'click', Plugin.handleCancel);
+
+                mUtil.addEvent(the.iconSearch, 'click', function() {
+                    if (mUtil.isInResponsiveRange('tablet-and-mobile')) {
+                        mUtil.addClass(body, 'm-header-search--mobile-expanded');
+                        the.input.focus();
+                    }
+                });
+
+                mUtil.addEvent(the.iconClose, 'click', function() {
+                    if (mUtil.isInResponsiveRange('tablet-and-mobile')) {
+                        mUtil.removeClass(body, 'm-header-search--mobile-expanded');
+                        Plugin.closeDropdown();
+                    }
+                });
+            } else if (the.options.mode == 'dropdown') {
+                the.dropdown.on('afterShow', function() {
+                    the.input.focus();
+                });
+
+                mUtil.addEvent(the.iconClose, 'click', Plugin.closeDropdown);
+            }
+        },
+
+        showProgress: function() {
+            the.processing = true;
+            mUtil.addClass(the.form, the.options.spinnerClass);
+            Plugin.handleCancelIconVisibility('off');
+
+            return the;
+        },
+
+        hideProgress: function() {
+            the.processing = false;
+            mUtil.removeClass(the.form, the.options.spinnerClass);
+            Plugin.handleCancelIconVisibility('on');
+            mUtil.addClass(element, the.options.hasResultClass);
+
+            return the;
+        },
+
+        /**
+         * Search handler
+         */
+        search: function(e) {
+            the.query = the.input.value;
+
+            if (the.query.length === 0) {
+                Plugin.handleCancelIconVisibility('on');
+                mUtil.removeClass(element, the.options.hasResultClass);
+                mUtil.removeClass(the.form, the.options.spinnerClass);
+            }
+
+            if (the.query.length < the.options.minLength || the.processing == true) {
+                return;
+            }
+
+            if (the.requestTimeout) {
+                clearTimeout(the.requestTimeout);
+            }
+
+            the.requestTimeout = false;
+
+            the.requestTimeout = setTimeout(function() {
+                Plugin.eventTrigger('search');
+            }, the.options.requestTimeout);            
+
+            return the;
+        },
+
+        /**
+         * Handle cancel icon visibility
+         */
+        handleCancelIconVisibility: function(status) {
+            if (status == 'on') {
+                if (the.input.value.length === 0) {
+                    if (the.iconCancel) mUtil.css(the.iconCancel, 'visibility', 'hidden');
+                    if (the.iconClose) mUtil.css(the.iconClose, 'visibility', 'visible');
+                } else {
+                    clearTimeout(the.cancelTimeout);
+                    the.cancelTimeout = setTimeout(function() {
+                        if (the.iconCancel) mUtil.css(the.iconCancel, 'visibility', 'visible');
+                        if (the.iconClose) mUtil.css(the.iconClose, 'visibility', 'visible');
+                    }, 500);
+                }
+            } else {
+                if (the.iconCancel) mUtil.css(the.iconCancel, 'visibility', 'hidden');
+                if (the.iconClose) mUtil.css(the.iconClose, 'visibility', 'hidden');
+            }
+        },
+
+        /**
+         * Cancel handler
+         */
+        handleCancel: function(e) {
+            the.input.value = '';
+            mUtil.css(the.iconCancel, 'visibility', 'hidden');
+            mUtil.removeClass(element, the.options.hasResultClass);
+
+            Plugin.closeDropdown();
+        },
+
+        /**
+         * Cancel handler
+         */
+        closeDropdown: function() {
+            the.dropdown.hide();
+        },
+
+        /**
+         * Show dropdown
+         */
+        showDropdown: function(e) {
+            if (the.dropdown.isShown() == false && the.input.value.length > the.options.minLength && the.processing == false) {
+                console.log('show!!!');
+                the.dropdown.show();
+                if (e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                }                
+            }
+        },
+
+        /**
+         * Trigger events
+         */
+        eventTrigger: function(name) {
+            //mUtil.triggerCustomEvent(name);
+            for (i = 0; i < the.events.length; i++) {
+                var event = the.events[i];
+                if (event.name == name) {
+                    if (event.one == true) {
+                        if (event.fired == false) {
+                            the.events[i].fired = true;
+                            event.handler.call(this, the);
+                        }
+                    } else {
+                        event.handler.call(this, the);
+                    }
+                }
+            }
+        },
+
+        addEvent: function(name, handler, one) {
+            the.events.push({
+                name: name,
+                handler: handler,
+                one: one,
+                fired: false
+            });
+
+            return the;
+        }
+    };
+
+    //////////////////////////
+    // ** Public Methods ** //
+    //////////////////////////
+
+    /**
+     * Set default options 
+     */
+
+    the.setDefaults = function(options) {
+        defaultOptions = options;
+    };
+
+    /**
+     * quicksearch off 
+     */
+    the.search = function() {
+        return Plugin.handleSearch();
+    };
+
+    the.showResult = function(res) {
+        the.dropdown.setContent(res);
+        Plugin.showDropdown();
+
+        return the;
+    };
+
+    the.showError = function(text) {
+        var msg = the.options.templates.error.replace('{{message}}', text);
+        the.dropdown.setContent(msg);
+        Plugin.showDropdown();
+
+        return the;
+    };
+
+    /**
+     *  
+     */
+    the.showProgress = function() {
+        return Plugin.showProgress();
+    };
+
+    the.hideProgress = function() {
+        return Plugin.hideProgress();
+    };
+
+    /**
+     * quicksearch off 
+     */
+    the.search = function() {
+        return Plugin.search();
+    };
+
+    /**
+     * Attach event
+     * @returns {mQuicksearch}
+     */
+    the.on = function(name, handler) {
+        return Plugin.addEvent(name, handler);
+    };
+
+    /**
+     * Attach event that will be fired once
+     * @returns {mQuicksearch}
+     */
+    the.one = function(name, handler) {
+        return Plugin.addEvent(name, handler, true);
+    };
+
+    //== Construct plugin
+    Plugin.construct.apply(the, [options]);
+
+    return the;
+};
+var mScrollTop = function(elementId, options) {
+    //== Main object
+    var the = this;
+    var init = false;
+
+    //== Get element object
+    var element = mUtil.get(elementId);
+    var body = mUtil.get('body');
+
+    if (!element) {
+        return;
+    }
+
+    //== Default options
+    var defaultOptions = {
+        offset: 300,
+        speed: 600
+    };
+
+    ////////////////////////////
+    // ** Private Methods  ** //
+    ////////////////////////////
+
+    var Plugin = {
+        /**
+         * Run plugin
+         * @returns {mscrolltop}
+         */
+        construct: function(options) {
+            if (mUtil.data(element).has('scrolltop')) {
+                the = mUtil.data(element).get('scrolltop');
+            } else {
+                // reset scrolltop
+                Plugin.init(options);
+
+                // build scrolltop
+                Plugin.build();
+
+                mUtil.data(element).set('scrolltop', the);
+            }
+
+            return the;
+        },
+
+        /**
+         * Handles subscrolltop click toggle
+         * @returns {mscrolltop}
+         */
+        init: function(options) {
+            the.events = [];
+
+            // merge default and user defined options
+            the.options = mUtil.deepExtend({}, defaultOptions, options);
+        },
+
+        build: function() {
+            // handle window scroll
+            if (navigator.userAgent.match(/iPhone|iPad|iPod/i)) {
+                window.addEventListener('touchend', function() {
+                    Plugin.handle();
+                });
+
+                window.addEventListener('touchcancel', function() {
+                    Plugin.handle();
+                });
+
+                window.addEventListener('touchleave', function() {
+                    Plugin.handle();
+                });
+            } else {
+                window.addEventListener('scroll', function() { 
+                    Plugin.handle();
+                });
+            }
+
+            // handle button click 
+            mUtil.addEvent(element, 'click', Plugin.scroll);
+        },
+
+        /**
+         * Handles scrolltop click scrollTop
+         */
+        handle: function() {
+            var pos = window.pageYOffset; // current vertical position
+            if (pos > the.options.offset) {
+                mUtil.addClass(body, 'm-scroll-top--shown');
+            } else {
+                mUtil.removeClass(body, 'm-scroll-top--shown');
+            }
+        },
+
+        /**
+         * Handles scrolltop click scrollTop
+         */
+        scroll: function(e) {
+            e.preventDefault();
+
+            mUtil.scrollTop(0, the.options.speed);
+        },
+
+
+        /**
+         * Trigger events
+         */
+        eventTrigger: function(name, args) {
+            for (var i = 0; i < the.events.length; i++) {
+                var event = the.events[i];
+                if (event.name == name) {
+                    if (event.one == true) {
+                        if (event.fired == false) {
+                            the.events[i].fired = true;
+                            event.handler.call(this, the, args);
+                        }
+                    } else {
+                        event.handler.call(this, the, args);
+                    }
+                }
+            }
+        },
+
+        addEvent: function(name, handler, one) {
+            the.events.push({
+                name: name,
+                handler: handler,
+                one: one,
+                fired: false
+            });
+        }
+    };
+
+    //////////////////////////
+    // ** Public Methods ** //
+    //////////////////////////
+
+    /**
+     * Set default options 
+     */
+
+    the.setDefaults = function(options) {
+        defaultOptions = options;
+    };
+
+    /**
+     * Get subscrolltop mode
+     */
+    the.on = function(name, handler) {
+        return Plugin.addEvent(name, handler);
+    };
+
+    /**
+     * Set scrolltop content
+     * @returns {mscrolltop}
+     */
+    the.one = function(name, handler) {
+        return Plugin.addEvent(name, handler, true);
+    };
+
+    ///////////////////////////////
+    // ** Plugin Construction ** //
+    ///////////////////////////////
+
+    //== Run plugin
+    Plugin.construct.apply(the, [options]);
+
+    //== Init done
+    init = true;
+
+    // Return plugin instance
+    return the;
+};
+// plugin setup
+var mToggle = function(elementId, options) {
+    //== Main object
+    var the = this;
+    var init = false;
+
+    //== Get element object
+    var element = mUtil.get(elementId);
+    var body = mUtil.get('body');  
+
+    if (!element) {
+        return;
+    }
+
+    //== Default options
+    var defaultOptions = {
+        togglerState: '',
+        targetState: ''
+    };    
+
+    ////////////////////////////
+    // ** Private Methods  ** //
+    ////////////////////////////
+
+    var Plugin = {
+        /**
+         * Construct
+         */
+
+        construct: function(options) {
+            if (mUtil.data(element).has('toggle')) {
+                the = mUtil.data(element).get('toggle');
+            } else {
+                // reset menu
+                Plugin.init(options);
+
+                // build menu
+                Plugin.build();
+
+                mUtil.data(element).set('toggle', the);
+            }
+
+            return the;
+        },
+
+        /**
+         * Handles subtoggle click toggle
+         */
+        init: function(options) {
+            the.element = element;
+            the.events = [];
+
+            // merge default and user defined options
+            the.options = mUtil.deepExtend({}, defaultOptions, options);
+
+            the.target = mUtil.get(the.options.target);
+            the.targetState = the.options.targetState;
+            the.togglerState = the.options.togglerState;
+
+            the.state = mUtil.hasClasses(the.target, the.targetState) ? 'on' : 'off';
+        },
+
+        /**
+         * Setup toggle
+         */
+        build: function() {
+            mUtil.addEvent(element, 'mouseup', Plugin.toggle);
+        },
+        
+        /**
+         * Handles offcanvas click toggle
+         */
+        toggle: function() {
+            Plugin.eventTrigger('beforeToggle');
+            
+            if (the.state == 'off') {
+                Plugin.toggleOn();
+            } else {
+                Plugin.toggleOff();
+            }
+
+            return the;
+        },
+
+        /**
+         * Handles toggle click toggle
+         */
+        toggleOn: function() {
+            Plugin.eventTrigger('beforeOn');
+
+            mUtil.addClass(the.target, the.targetState);
+
+            if (the.togglerState) {
+                mUtil.addClass(element, the.togglerState);
+            }
+
+            the.state = 'on';
+
+            Plugin.eventTrigger('afterOn');
+
+            Plugin.eventTrigger('toggle');
+
+            return the;
+        },
+
+        /**
+         * Handles toggle click toggle
+         */
+        toggleOff: function() {
+            Plugin.eventTrigger('beforeOff');
+
+            mUtil.removeClass(the.target, the.targetState);
+
+            if (the.togglerState) {
+                mUtil.removeClass(element, the.togglerState);
+            }
+
+            the.state = 'off';
+
+            Plugin.eventTrigger('afterOff');
+
+            Plugin.eventTrigger('toggle');
+
+            return the;
+        },
+
+        /**
+         * Trigger events
+         */
+        eventTrigger: function(name) {
+            for (i = 0; i < the.events.length; i++) {
+                var event = the.events[i];
+
+                if (event.name == name) {
+                    if (event.one == true) {
+                        if (event.fired == false) {
+                            the.events[i].fired = true;                            
+                            event.handler.call(this, the);
+                        }
+                    } else {
+                        event.handler.call(this, the);
+                    }
+                }
+            }
+        },
+
+        addEvent: function(name, handler, one) {
+            the.events.push({
+                name: name,
+                handler: handler,
+                one: one,
+                fired: false
+            });
+
+            return the;
+        }
+    };
+
+    //////////////////////////
+    // ** Public Methods ** //
+    //////////////////////////
+
+    /**
+     * Set default options 
+     */
+
+    the.setDefaults = function(options) {
+        defaultOptions = options;
+    };
+
+    /**
+     * Get toggle state 
+     */
+    the.getState = function() {
+        return the.state;
+    };
+
+    /**
+     * Toggle 
+     */
+    the.toggle = function() {
+        return Plugin.toggle();
+    };
+
+    /**
+     * Toggle on 
+     */
+    the.toggleOn = function() {
+        return Plugin.toggleOn();
+    };
+
+    /**
+     * Toggle off 
+     */
+    the.toggle = function() {
+        return Plugin.toggleOff();
+    };
+
+    /**
+     * Attach event
+     * @returns {mToggle}
+     */
+    the.on = function(name, handler) {
+        return Plugin.addEvent(name, handler);
+    };
+
+    /**
+     * Attach event that will be fired once
+     * @returns {mToggle}
+     */
+    the.one = function(name, handler) {
+        return Plugin.addEvent(name, handler, true);
+    };
+
+    //== Construct plugin
+    Plugin.construct.apply(the, [options]);
+
+    return the;
+};
+var mLayout = function() {
+    var header;
+    var horMenu;
+    var asideMenu;
+    var asideMenuOffcanvas;
+    var horMenuOffcanvas;
+    var asideLeftToggle;
+    var asideLeftHide;
+    var scrollTop;
+    var quicksearch;
+    var mainPortlet;
+
+    //== Header
+    var initStickyHeader = function() {
+        var tmp;
+        var headerEl = mUtil.get('m_header');
+        var options = {
+            offset: {},
+            minimize:{}       
+        };
+
+        if (mUtil.attr(headerEl, 'm-minimize-mobile') == 'hide') {
+            options.minimize.mobile = {};
+            options.minimize.mobile.on = 'm-header--hide';
+            options.minimize.mobile.off = 'm-header--show';
+        } else {
+            options.minimize.mobile = false;
+        }
+
+        if (mUtil.attr(headerEl, 'm-minimize') == 'hide') {
+            options.minimize.desktop = {};
+            options.minimize.desktop.on = 'm-header--hide';
+            options.minimize.desktop.off = 'm-header--show';
+        } else {
+            options.minimize.desktop = false;
+        }
+
+        if (tmp = mUtil.attr(headerEl, 'm-minimize-offset')) {
+            options.offset.desktop = tmp;
+        }
+
+        if (tmp = mUtil.attr(headerEl, 'm-minimize-mobile-offset')) {
+            options.offset.mobile = tmp;
+        }        
+
+        header = new mHeader('m_header', options);
+    };
+
+    //== Hor menu
+    var initHorMenu = function() { 
+        // init aside left offcanvas
+        horMenuOffcanvas = new mOffcanvas('m_header_menu', {
+            overlay: true,
+            baseClass: 'm-aside-header-menu-mobile',
+            closeBy: 'm_aside_header_menu_mobile_close_btn',
+            toggleBy: {
+                target: 'm_aside_header_menu_mobile_toggle',
+                state: 'm-brand__toggler--active'
+            }            
+        });
+        
+        horMenu = new mMenu('m_header_menu', {
+            submenu: {
+                desktop: 'dropdown',
+                tablet: 'accordion',
+                mobile: 'accordion'
+            },
+            accordion: {   
+                slideSpeed: 200,  // accordion toggle slide speed in milliseconds
+                expandAll: false   // allow having multiple expanded accordions in the menu
+            }
+        });
+    };
+
+    //== Aside menu
+    var initLeftAsideMenu = function() {
+        //== Init aside menu
+        var menu = mUtil.get('m_ver_menu');
+        var menuDesktopMode = (mUtil.attr(menu, 'm-menu-dropdown') === '1' ? 'dropdown' : 'accordion');
+
+        var scroll;
+        if ( mUtil.attr(menu, 'm-menu-scrollable') === '1' ) {
+            scroll = {
+                height: function() {
+                    if (mUtil.isInResponsiveRange('desktop')) {
+                        return mUtil.getViewPort().height - parseInt(mUtil.css('m_header', 'height'));
+                    }
+                }
+            };
+        }
+
+        asideMenu = new mMenu('m_ver_menu', {
+            // vertical scroll
+            scroll: scroll,
+
+            // submenu setup
+            submenu: {
+                desktop: {
+                    // by default the menu mode set to accordion in desktop mode
+                    default: menuDesktopMode,
+                    // whenever body has this class switch the menu mode to dropdown
+                    state: {
+                        body: 'm-aside-left--minimize',  
+                        mode: 'dropdown'
+                    }
+                },
+                tablet: 'accordion', // menu set to accordion in tablet mode
+                mobile: 'accordion'  // menu set to accordion in mobile mode
+            },
+
+            //accordion setup
+            accordion: {
+                autoScroll: false, // enable auto scrolling(focus) to the clicked menu item
+                expandAll: false   // allow having multiple expanded accordions in the menu
+            }            
+        });
+    };
+
+    //== Aside
+    var initLeftAside = function() {
+        // init aside left offcanvas
+        var body = mUtil.get('body');
+        var asideLeft = mUtil.get('m_aside_left');
+        var asideOffcanvasClass = mUtil.hasClass(asideLeft, 'm-aside-left--offcanvas-default') ? 'm-aside-left--offcanvas-default' : 'm-aside-left';
+
+        asideMenuOffcanvas = new mOffcanvas('m_aside_left', {
+            baseClass: asideOffcanvasClass,
+            overlay: true,
+            closeBy: 'm_aside_left_close_btn',
+            toggleBy: {
+                target: 'm_aside_left_offcanvas_toggle',
+                state: 'm-brand__toggler--active'                
+            }            
+        });     
+
+        //== Handle minimzied aside hover
+        if (mUtil.hasClass(body, 'm-aside-left--fixed')) {
+            var insideTm;
+            var outsideTm;
+
+            mUtil.addEvent(asideLeft, 'mouseenter', function() {
+                if (outsideTm) {
+                    clearTimeout(outsideTm);
+                    outsideTm = null;
+                }                    
+
+                insideTm = setTimeout(function() {
+                    if (mUtil.hasClass(body, 'm-aside-left--minimize') && mUtil.isInResponsiveRange('desktop')) {
+                        mUtil.removeClass(body, 'm-aside-left--minimize');
+                        mUtil.addClass(body, 'm-aside-left--minimize-hover');
+                        asideMenu.scrollerUpdate();
+                        asideMenu.scrollerTop();
+                    }
+                }, 300);
+            });
+
+            mUtil.addEvent(asideLeft, 'mouseleave', function() {
+                if (insideTm) {
+                    clearTimeout(insideTm);
+                    insideTm = null;
+                }
+                    
+                outsideTm = setTimeout(function() {
+                    if (mUtil.hasClass(body, 'm-aside-left--minimize-hover') && mUtil.isInResponsiveRange('desktop')) {
+                        mUtil.removeClass(body, 'm-aside-left--minimize-hover');
+                        mUtil.addClass(body, 'm-aside-left--minimize');
+                        asideMenu.scrollerUpdate();
+                        asideMenu.scrollerTop();
+                    }
+                }, 500);
+            }); 
+        } 
+    };
+
+    //== Sidebar toggle
+    var initLeftAsideToggle = function() {
+        if ($('#m_aside_left_minimize_toggle').length === 0 ) {
+            return;
+        }
+
+        asideLeftToggle = new mToggle('m_aside_left_minimize_toggle', {
+            target: 'body',
+            targetState: 'm-brand--minimize m-aside-left--minimize',
+            togglerState: 'm-brand__toggler--active'
+        });
+
+        asideLeftToggle.on('toggle', function(toggle) {
+            if (mUtil.get('main_portlet')) {
+                mainPortlet.updateSticky();
+            }
+
+            horMenu.pauseDropdownHover(800);
+            asideMenu.pauseDropdownHover(800);
+
+            //== Remember state in cookie
+            // Cookies.set('sidebar_toggle_state', toggle.getState());
+            // to set default minimized left aside use this cookie value in your 
+            // server side code and add "m-brand--minimize m-aside-left--minimize" classes to 
+            // the body tag in order to initialize the minimized left aside mode during page loading.
+        });
+    };
+
+    //== Sidebar hide
+    var initLeftAsideHide = function() {
+        if ($('#m_aside_left_hide_toggle').length === 0 ) {
+            return;
+        }
+
+        initLeftAsideHide = new mToggle('m_aside_left_hide_toggle', {
+            target: 'body',
+            targetState: 'm-aside-left--hide',
+            togglerState: 'm-brand__toggler--active'
+        });
+
+        initLeftAsideHide.on('toggle', function(toggle) {
+            horMenu.pauseDropdownHover(800);
+            asideMenu.pauseDropdownHover(800);
+
+            //== Remember state in cookie
+            // Cookies.set('sidebar_hide_state', toggle.getState());
+            // to set default minimized left aside use this cookie value in your 
+            // server side code and add "m-brand--minimize m-aside-left--minimize" classes to 
+            // the body tag in order to initialize the minimized left aside mode during page loading.
+        });
+    };
+
+    //== Topbar
+    var initTopbar = function() {
+        $('#m_aside_header_topbar_mobile_toggle').click(function() {
+            $('body').toggleClass('m-topbar--on');
+        });           
+    };
+
+    //== Quicksearch
+    var initQuicksearch = function() {
+        if ($('#m_quicksearch').length === 0 ) {
+            return;
+        }
+
+        quicksearch = new mQuicksearch('m_quicksearch', {
+            mode: mUtil.attr( 'm_quicksearch', 'm-quicksearch-mode' ), // quick search type
+            minLength: 1
+        });    
+
+        //<div class="m-search-results m-search-results--skin-light"><span class="m-search-result__message">Something went wrong</div></div>
+
+        quicksearch.on('search', function(the) {
+            the.showResult = function(res) {
+
+                the.dropdown.setContent(res);
+                Plugin.showDropdown();
+
+                return the;
+            };
+
+            the.showProgress();  
+                      
+            $.ajax({
+                url: '/c',
+                data: {q: the.query, contentOnly:1},
+                dataType: 'json',
+                success: function(res) {
+                    the.hideProgress();
+                    the.showResult(res);                     
+                },
+                error: function(res) {
+                    the.hideProgress();
+                    the.showError('ارتباط با سرور برقرار نشد، لطفا بعدا امتحان کنید.');
+                }
+            });
+        });  
+    };
+
+    //== Scrolltop
+    var initScrollTop = function() {
+        var scrollTop = new mScrollTop('m_scroll_top', {
+            offset: 300,
+            speed: 600
+        });
+    };
+
+    //== Main portlet(sticky portlet)
+    var createMainPortlet = function() {
+        return new mPortlet('main_portlet', {
             sticky: {
-                offset: parseInt(mUtil.css(mUtil.get("m_header"), "height")) + parseInt(mUtil.css(mUtil.get("a_top_section"), "height")),
+                offset: parseInt(mUtil.css( mUtil.get('m_header'), 'height')) + parseInt(mUtil.css( mUtil.get('a_top_section'), 'height')),
                 zIndex: 90,
                 position: {
-                    top: function () {
-                        return parseInt(mUtil.css(mUtil.get("m_header"), "height"))
-                    }, left: function () {
-                        var t = parseInt(mUtil.css(mUtil.getByClass("m-content"), "paddingLeft"));
-                        return mUtil.isInResponsiveRange("desktop") && (mUtil.hasClass(mUtil.get("body"), "m-aside-left--minimize") ? t += 78 : t += 255), t
-                    }, right: function () {
-                        return parseInt(mUtil.css(mUtil.getByClass("m-content"), "paddingRight"))
+                    top: function() {
+                        return parseInt(mUtil.css( mUtil.get('m_header'), 'height') );
+                    },
+                    left: function() {
+                        var left = parseInt(mUtil.css( mUtil.getByClass('m-content'), 'paddingLeft'));
+
+                        if (mUtil.isInResponsiveRange('desktop')) {
+                            //left += parseInt(mUtil.css(mUtil.get('m_aside_left'), 'width') );
+                            if (mUtil.hasClass(mUtil.get('body'), 'm-aside-left--minimize')) {
+                                left += 78; // need to use hardcoded width of the minimize aside
+                            } else {
+                                left += 255; // need to use hardcoded width of the aside
+                            }
+                        }
+
+                        return left;
+                    },
+                    right: function() {
+                        return parseInt(mUtil.css( mUtil.getByClass('m-content'), 'paddingRight') );
                     }
                 }
             }
-        })
+        });
     };
+
     return {
-        init: function () {
-            this.initHeader(), this.initAside(), this.initMainPortlet()
-        }, initMainPortlet: function () {
-            mUtil.get("main_portlet") && ((i = r()).initSticky(), mUtil.addResizeHandler(function () {
-                i.updateSticky()
-            }))
-        }, resetMainPortlet: function () {
-            i.destroySticky(), (i = r()).initSticky()
-        }, initHeader: function () {
-            var e, a, o;
-            a = mUtil.get("m_header"), o = {
-                offset: {},
-                minimize: {}
-            }, "hide" == mUtil.attr(a, "m-minimize-mobile") ? (o.minimize.mobile = {}, o.minimize.mobile.on = "m-header--hide", o.minimize.mobile.off = "m-header--show") : o.minimize.mobile = !1, "hide" == mUtil.attr(a, "m-minimize") ? (o.minimize.desktop = {}, o.minimize.desktop.on = "m-header--hide", o.minimize.desktop.off = "m-header--show") : o.minimize.desktop = !1, (e = mUtil.attr(a, "m-minimize-offset")) && (o.offset.desktop = e), (e = mUtil.attr(a, "m-minimize-mobile-offset")) && (o.offset.mobile = e), new mHeader("m_header", o), n = new mOffcanvas("m_header_menu", {
-                overlay: !0,
-                baseClass: "m-aside-header-menu-mobile",
-                closeBy: "m_aside_header_menu_mobile_close_btn",
-                toggleBy: {target: "m_aside_header_menu_mobile_toggle", state: "m-brand__toggler--active"}
-            }), t = new mMenu("m_header_menu", {
-                submenu: {
-                    desktop: "dropdown",
-                    tablet: "accordion",
-                    mobile: "accordion"
-                }, accordion: {slideSpeed: 200, expandAll: !1}
-            }), $("#m_aside_header_topbar_mobile_toggle").click(function () {
-                $("body").toggleClass("m-topbar--on")
-            }), 0 !== $("#m_quicksearch").length && new mQuicksearch("m_quicksearch", {
-                mode: mUtil.attr("m_quicksearch", "m-quicksearch-mode"),
-                minLength: 1
-            }).on("search", function (t) {
-                t.showResult = function (e) {
-                    return t.dropdown.setContent(e), Plugin.showDropdown(), t
-                }, t.showProgress(), $.ajax({
-                    url: "/c",
-                    data: {q: t.query, contentOnly: 1},
-                    dataType: "json",
-                    success: function (e) {
-                        t.hideProgress(), t.showResult(e)
-                    },
-                    error: function (e) {
-                        t.hideProgress(), t.showError("ارتباط با سرور برقرار نشد، لطفا بعدا امتحان کنید.")
-                    }
-                })
-            }), new mScrollTop("m_scroll_top", {offset: 300, speed: 600})
-        }, initAside: function () {
-            var n, r, s, d, c, m, u, p;
-            s = mUtil.get("body"), d = mUtil.get("m_aside_left"), c = mUtil.hasClass(d, "m-aside-left--offcanvas-default") ? "m-aside-left--offcanvas-default" : "m-aside-left", a = new mOffcanvas("m_aside_left", {
-                baseClass: c,
-                overlay: !0,
-                closeBy: "m_aside_left_close_btn",
-                toggleBy: {target: "m_aside_left_offcanvas_toggle", state: "m-brand__toggler--active"}
-            }), mUtil.hasClass(s, "m-aside-left--fixed") && (mUtil.addEvent(d, "mouseenter", function () {
-                r && (clearTimeout(r), r = null), n = setTimeout(function () {
-                    mUtil.hasClass(s, "m-aside-left--minimize") && mUtil.isInResponsiveRange("desktop") && (mUtil.removeClass(s, "m-aside-left--minimize"), mUtil.addClass(s, "m-aside-left--minimize-hover"), e.scrollerUpdate(), e.scrollerTop())
-                }, 300)
-            }), mUtil.addEvent(d, "mouseleave", function () {
-                n && (clearTimeout(n), n = null), r = setTimeout(function () {
-                    mUtil.hasClass(s, "m-aside-left--minimize-hover") && mUtil.isInResponsiveRange("desktop") && (mUtil.removeClass(s, "m-aside-left--minimize-hover"), mUtil.addClass(s, "m-aside-left--minimize"), e.scrollerUpdate(), e.scrollerTop())
-                }, 500)
-            })), u = mUtil.get("m_ver_menu"), p = "1" === mUtil.attr(u, "m-menu-dropdown") ? "dropdown" : "accordion", "1" === mUtil.attr(u, "m-menu-scrollable") && (m = {
-                height: function () {
-                    if (mUtil.isInResponsiveRange("desktop")) return mUtil.getViewPort().height - parseInt(mUtil.css("m_header", "height"))
+        init: function() {  
+            this.initHeader();
+            this.initAside();
+            this.initMainPortlet();
+        },
+        initMainPortlet: function() {
+            if (!mUtil.get('main_portlet')) {
+                return;
+            }
+
+            mainPortlet = createMainPortlet();
+            mainPortlet.initSticky();
+
+            mUtil.addResizeHandler(function(){
+                mainPortlet.updateSticky();
+            });
+        },
+
+        resetMainPortlet: function() {
+            mainPortlet.destroySticky();
+            mainPortlet = createMainPortlet();
+            mainPortlet.initSticky();
+        },
+
+        initHeader: function() {
+            initStickyHeader();
+            initHorMenu();
+            initTopbar();
+            initQuicksearch();
+            initScrollTop();
+        },
+
+        initAside: function() {
+            initLeftAside();
+            initLeftAsideMenu();            
+            initLeftAsideToggle();
+            initLeftAsideHide();
+
+            this.onLeftSidebarToggle(function(e) {
+                //== Update sticky portlet
+                if (mainPortlet) {
+                    mainPortlet.updateSticky();
                 }
-            }), e = new mMenu("m_ver_menu", {
-                scroll: m,
-                submenu: {
-                    desktop: {default: p, state: {body: "m-aside-left--minimize", mode: "dropdown"}},
-                    tablet: "accordion",
-                    mobile: "accordion"
-                },
-                accordion: {autoScroll: !1, expandAll: !1}
-            }), 0 !== $("#m_aside_left_minimize_toggle").length && (o = new mToggle("m_aside_left_minimize_toggle", {
-                target: "body",
-                targetState: "m-brand--minimize m-aside-left--minimize",
-                togglerState: "m-brand__toggler--active"
-            })).on("toggle", function (a) {
-                mUtil.get("main_portlet") && i.updateSticky(), t.pauseDropdownHover(800), e.pauseDropdownHover(800), Cookies.set("sidebar_toggle_state", a.getState())
-            }), l(), this.onLeftSidebarToggle(function (t) {
-                i && i.updateSticky();
-                var e = $(".m-datatable");
-                $(e).each(function () {
-                    $(this).mDatatable("redraw")
-                })
-            })
-        }, getAsideMenu: function () {
-            return e
-        }, onLeftSidebarToggle: function (t) {
-            o && o.on("toggle", t)
-        }, closeMobileAsideMenuOffcanvas: function () {
-            mUtil.isMobileDevice() && a.hide()
-        }, closeMobileHorMenuOffcanvas: function () {
-            mUtil.isMobileDevice() && n.hide()
+
+                var datatables = $('.m-datatable');
+
+                $(datatables).each(function() {
+                    $(this).mDatatable('redraw');
+                });
+            });
+        },
+
+        getAsideMenu: function() {
+            return asideMenu;
+        },
+
+        onLeftSidebarToggle: function(handler) {
+            if (asideLeftToggle) {
+                asideLeftToggle.on('toggle', handler);
+            }            
+        },
+
+        closeMobileAsideMenuOffcanvas: function() {
+            if (mUtil.isMobileDevice()) {
+                asideMenuOffcanvas.hide();
+            }
+        },
+
+        closeMobileHorMenuOffcanvas: function() {
+            if (mUtil.isMobileDevice()) {
+                horMenuOffcanvas.hide();
+            }
         }
-    }
+    };
 }();
-$(document).ready(function () {
-    !1 === mUtil.isAngularVersion() && mLayout.init()
-});
-var mQuickSidebar = function () {
-    var t = $("#m_quick_sidebar"), e = $("#m_quick_sidebar_tabs"), a = t.find(".m-quick-sidebar__content"),
-        n = function () {
-            var a, n, o, i;
-            a = mUtil.find(mUtil.get("m_quick_sidebar_tabs_messenger"), ".m-messenger__messages"), n = $("#m_quick_sidebar_tabs_messenger .m-messenger__form"), mUtil.scrollerInit(a, {
-                disableForMobile: !0,
-                resetHeightOnDestroy: !1,
-                handleWindowResize: !0,
-                height: function () {
-                    return t.outerHeight(!0) - e.outerHeight(!0) - n.outerHeight(!0) - 120
-                }
-            }), (o = mUtil.find(mUtil.get("m_quick_sidebar_tabs_settings"), ".m-list-settings")) && mUtil.scrollerInit(o, {
-                disableForMobile: !0,
-                resetHeightOnDestroy: !1,
-                handleWindowResize: !0,
-                height: function () {
-                    return mUtil.getViewPort().height - e.outerHeight(!0) - 60
-                }
-            }), (i = mUtil.find(mUtil.get("m_quick_sidebar_tabs_logs"), ".m-list-timeline")) && mUtil.scrollerInit(i, {
-                disableForMobile: !0,
-                resetHeightOnDestroy: !1,
-                handleWindowResize: !0,
-                height: function () {
-                    return mUtil.getViewPort().height - e.outerHeight(!0) - 60
-                }
-            })
-        };
-    return {
-        init: function () {
-            0 !== t.length && new mOffcanvas("m_quick_sidebar", {
-                overlay: !0,
-                baseClass: "m-quick-sidebar",
-                closeBy: "m_quick_sidebar_close",
-                toggleBy: "m_quick_sidebar_toggle"
-            }).one("afterShow", function () {
-                mApp.block(t), setTimeout(function () {
-                    mApp.unblock(t), a.removeClass("m--hide"), n()
-                }, 1e3)
-            })
-        }
+
+$(document).ready(function() {
+    if (mUtil.isAngularVersion() === false) {
+        mLayout.init();
     }
-}();
-$(document).ready(function () {
-    mQuickSidebar.init()
 });

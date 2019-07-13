@@ -44,7 +44,7 @@ var mLayout = function() {
         }
 
         header = new mHeader('m_header', options);
-    }
+    };
 
     //== Hor menu
     var initHorMenu = function() {
@@ -70,7 +70,7 @@ var mLayout = function() {
                 expandAll: false // allow having multiple expanded accordions in the menu
             }
         });
-    }
+    };
 
     //== Aside menu
     var initLeftAsideMenu = function() {
@@ -114,7 +114,7 @@ var mLayout = function() {
                 expandAll: false // allow having multiple expanded accordions in the menu
             }
         });
-    }
+    };
 
     //== Aside
     var initLeftAside = function() {
@@ -170,7 +170,7 @@ var mLayout = function() {
                 }, 500);
             });
         }
-    }
+    };
 
     //== Sidebar toggle
     var initLeftAsideToggle = function() {
@@ -193,7 +193,7 @@ var mLayout = function() {
             asideMenu.pauseDropdownHover(800);
 
             //== Remember state in cookie
-            Cookies.set('sidebar_toggle_state', toggle.getState());
+            // Cookies.set('sidebar_toggle_state', toggle.getState());
             // to set default minimized left aside use this cookie value in your 
             // server side code and add "m-brand--minimize m-aside-left--minimize" classes to 
             // the body tag in order to initialize the minimized left aside mode during page loading.
@@ -205,7 +205,7 @@ var mLayout = function() {
                 mUtil.removeClass(body, 'm-aside-left--minimize-hover');
             }
         });
-    }
+    };
 
     //== Sidebar hide
     var initLeftAsideHide = function() {
@@ -224,12 +224,12 @@ var mLayout = function() {
             asideMenu.pauseDropdownHover(800);
 
             //== Remember state in cookie
-            Cookies.set('sidebar_hide_state', toggle.getState());
+            // Cookies.set('sidebar_hide_state', toggle.getState());
             // to set default minimized left aside use this cookie value in your 
             // server side code and add "m-brand--minimize m-aside-left--minimize" classes to 
             // the body tag in order to initialize the minimized left aside mode during page loading.
         });
-    }
+    };
 
     //== Topbar
     var initTopbar = function() {
@@ -249,7 +249,7 @@ var mLayout = function() {
             $('#m_topbar_notification_icon .m-nav__link-badge').removeClass('m-animate-blink');
         }, 6000);
         */
-    }
+    };
 
     //== Quicksearch
     var initQuicksearch = function() {
@@ -283,7 +283,7 @@ var mLayout = function() {
                 }
             });
         });
-    }
+    };
 
     //== Scrolltop
     var initScrollTop = function() {
@@ -291,7 +291,7 @@ var mLayout = function() {
             offset: 300,
             speed: 600
         });
-    }
+    };
 
     //== Main portlet(sticky portlet)
     var createMainPortlet = function() {
@@ -323,7 +323,7 @@ var mLayout = function() {
                 }
             }
         });
-    }
+    };
 
     return {
         init: function() {
