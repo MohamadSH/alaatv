@@ -3,7 +3,8 @@
 @extends('app',['pageName'=>'admin'])
 
 @section('page-css')
-    <link href = "/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-fileinput/bootstrap-fileinput.css" rel = "stylesheet" type = "text/css"/>
+    <link href="{{ mix('/css/admin-all.css') }}" rel="stylesheet" type="text/css"/>
+    <link href = "" rel = "stylesheet" type = "text/css"/>
     <link href = "/acm/AlaatvCustomFiles/components/alaa_old/plugins/jquery-multi-select/css/multi-select-rtl.css" rel = "stylesheet" type = "text/css"/>
     <link href = "/acm/extra/persian-datepicker/dist/css/persian-datepicker-0.4.5.min.css" rel = "stylesheet" type = "text/css"/>
 @endsection
@@ -75,7 +76,7 @@
     <script src = "/acm/extra/persian-datepicker/lib/persian-date.js" type = "text/javascript"></script>
     <script src = "/acm/AlaatvCustomFiles/components/alaa_old/scripts/components-multi-select.min.js" type = "text/javascript"></script>
     <script src = "/acm/extra/persian-datepicker/dist/js/persian-datepicker-0.4.5.min.js" type = "text/javascript"></script>
-    <script src = "/acm/AlaatvCustomFiles/js/admin-coupon.js" type = "text/javascript"></script>
+    <script src = "/acm/AlaatvCustomFiles/js/admin/page-productAdmin.js" type = "text/javascript"></script>
     <script type = "text/javascript">
         /**
          * Start up jquery

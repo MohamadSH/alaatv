@@ -1,7 +1,7 @@
 @permission((Config::get('constants.SHOW_PERMISSION_ACCESS')))@extends('app',['pageName'=>'admin'])
 
 @section('page-css')
-    <link href = "/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-fileinput/bootstrap-fileinput.css" rel = "stylesheet" type = "text/css"/>
+    <link href="{{ mix('/css/admin-all.css') }}" rel="stylesheet" type="text/css"/>
 @endsection
 
 @section('pageBar')
@@ -56,7 +56,7 @@
 @endsection
 
 @section('page-js')
-    <script src = "/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-fileinput/bootstrap-fileinput.js" type = "text/javascript"></script>
+    <script src="{{ mix('/js/admin-all.js') }}" type="text/javascript"></script>
 @endsection
 
 @endpermission

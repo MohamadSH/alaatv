@@ -87,7 +87,6 @@ function loadCarousels() {
                 });
 
                 $(entry.target).attr('data-isinit', 1);
-                console.log('$(entry.target): ', $(entry.target));
             } else {
 
             }

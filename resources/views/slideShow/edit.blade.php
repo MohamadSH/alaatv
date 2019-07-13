@@ -1,8 +1,8 @@
 @permission((Config::get('constants.EDIT_SLIDESHOW_ACCESS')))@extends('app' , ['pageName'=> 'admin'])
 
 @section('page-css')
-    <link href = "/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-fileinput/bootstrap-fileinput.css" rel = "stylesheet" type = "text/css"/>
-    <link href = "/acm/AlaatvCustomFiles/components/alaa_old/css/profile-rtl.css" rel = "stylesheet" type = "text/css"/>
+    <link href="{{ mix('/css/admin-all.css') }}" rel="stylesheet" type="text/css"/>
+{{--    <link href = "/acm/AlaatvCustomFiles/components/alaa_old/css/profile-rtl.css" rel = "stylesheet" type = "text/css"/>--}}
 @endsection
 
 @section('pageBar')
@@ -59,11 +59,7 @@
 @endsection
 
 @section('page-js')
-    <script src = "/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-fileinput/bootstrap-fileinput.js" type = "text/javascript"></script>
-    <script src = "/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-select/js/bootstrap-select.min.js" type = "text/javascript"></script>
-    <script src = "/acm/AlaatvCustomFiles/components/alaa_old/plugins/jquery-multi-select/js/jquery.multi-select.js" type = "text/javascript"></script>
-    <script src = "/acm/AlaatvCustomFiles/components/alaa_old/plugins/select2/js/select2.full.min.js" type = "text/javascript"></script>
-    <script src = "/acm/AlaatvCustomFiles/components/alaa_old/scripts/components-multi-select.min.js" type = "text/javascript"></script>
+    <script src="{{ mix('/js/admin-all.js') }}" type="text/javascript"></script>
 @endsection
 
 @endpermission

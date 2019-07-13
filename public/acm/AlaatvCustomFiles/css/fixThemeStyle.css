@@ -109,6 +109,20 @@ select.form-control {
     width: 285px;
 }
 
+.btn.dropdown-toggle::after, .nav-link.dropdown-toggle::after {
+    content: "";
+}
+.note-editor.note-frame.panel {
+    direction: ltr;
+}
+.note-editor .note-editable {
+    padding-top: 25px;
+}
+
+#m_aside_left {
+    overflow: auto;
+}
+
 /*media query*/
 @media only screen and (max-width: 767.98px) {
     .m-body .m-content {
