@@ -74,9 +74,9 @@
                                                     </div>
                                                     <div class="lessonsTimesWraper-footer">
                                                         <div class="lessonsTimesWraper-footer-slogan animated infinite pulse">
-                                                            قرعه کشی
+                                                            ۸۰ درصد
                                                             <br>
-                                                            Galaxy S9
+                                                            کنکور
                                                         </div>
                                                     </div>
                                                 </div>
@@ -113,7 +113,8 @@
                                         </div>
     
                                         <div class="m-portlet m-portlet--creative m-portlet--first m-portlet--bordered-semi m--margin-top-50">
-                                            <div class="m-portlet__head">
+                                            <div class="m-portlet__head">قرعه کشی
+
                                                 <div class="m-portlet__head-caption">
                                                     <div class="m-portlet__head-title">
                                                         <h2 class="m-portlet__head-label m-portlet__head-label--info">
@@ -210,9 +211,9 @@
                                                     </div>
                                                     <div class="lessonsTimesWraper-footer">
                                                         <div class="lessonsTimesWraper-footer-slogan animated infinite heartBeat">
-                                                            قرعه کشی
+                                                            ۸۰ درصد
                                                             <br>
-                                                            Galaxy S9
+                                                            کنکور
                                                         </div>
                                                     </div>
                                                 </div>
