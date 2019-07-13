@@ -1,12 +1,9 @@
 @permission((config('constants.SHOW_TRANSACTION_ACCESS')))
 
-
 @extends('app' , ['pageName' => 'admin'])
 
-
 @section('page-css')
-    <link href = "/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-fileinput/bootstrap-fileinput.css" rel = "stylesheet" type = "text/css"/>
-    <link href = "/acm/extra/persian-datepicker/dist/css/persian-datepicker-0.4.5.min.css" rel = "stylesheet" type = "text/css"/>
+    <link href="{{ mix('/css/admin-all.css') }}" rel="stylesheet" type="text/css"/>
     <style>
         h2.m-portlet__head-label.m-portlet__head-label--success {
             white-space: nowrap;
@@ -109,10 +106,8 @@
 
 
 @section('page-js')
-    <script src = "/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-fileinput/bootstrap-fileinput.js" type = "text/javascript"></script>
-    <script src = "/acm/extra/persian-datepicker/lib/persian-date.js" type = "text/javascript"></script>
-    <script src = "/acm/extra/persian-datepicker/dist/js/persian-datepicker-0.4.5.min.js" type = "text/javascript"></script>
-
+    
+    <script src="{{ mix('/js/admin-all.js') }}" type="text/javascript"></script>
     <script type = "text/javascript">
         jQuery(document).ready(function () {
             $('#transactionDeadlineAtEnable').change(function () {

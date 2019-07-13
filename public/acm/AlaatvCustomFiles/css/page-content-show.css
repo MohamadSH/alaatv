@@ -55,6 +55,11 @@
     z-index: 1;
 }
 
+#playListScroller {
+    height: 360px;
+    overflow: auto;
+}
+
 /*media query*/
 @media only screen and (max-width: 1100px) and (min-width: 992px) {
     .a-widget5 .a-widget5__item .a-widget5__content .a-widget5__pic,

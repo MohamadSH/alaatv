@@ -2,12 +2,12 @@
 //** Content Components
 //
 
-//== Toggler Button
+////== Toggler Button
 @import "toggler/mixins";
 
-//== Datatable
-@import "datatable/datatable";
-@import "datatable/datatable.net";
+////== Datatable
+//@import "datatable/datatable";
+//@import "datatable/datatable.net";
 
 //== Navigation menu
 @import "nav/nav";
@@ -41,7 +41,7 @@
 
 //== Lists
 @import "lists/search";
-@import "lists/timeline";
+//@import "lists/timeline";
 @import "lists/settings";
 @import "lists/badge";
 @import "lists/pics";
@@ -51,15 +51,15 @@
 @import "cards/profile";
 
 //== Messenger
-@import "messenger/messenger";
+//@import "messenger/messenger";
 
 //== Portlets
 @import "portlets/portlets";
 
 //== Timeline
-@import "timeline/timeline-1";
-@import "timeline/timeline-2";
-@import "timeline/timeline-3";
+//@import "timeline/timeline-1";
+//@import "timeline/timeline-2";
+//@import "timeline/timeline-3";
 
 //== Widgets
 @import "widgets/widget1";
@@ -87,16 +87,16 @@
 @import "widgets/widget22";
 @import "widgets/widget23";
 @import "widgets/widget24";
-@import "widgets/widget25"; 
+@import "widgets/widget25";
 @import "widgets/widget26";
 @import "widgets/widget27";
 @import "widgets/widget28";
-@import "widgets/widget29";  
-@import "widgets/widget30"; 
+@import "widgets/widget29";
+@import "widgets/widget30";
 
 //== Demo
-@import "demo/icon";
-@import "demo/demo";
+//@import "demo/icon";
+//@import "demo/demo";
 //== Forms
 @import "forms/checkbox-radio";
 @import "forms/input";
@@ -105,15 +105,15 @@
 @import "forms/option";
 
 //== Table
-@import "table/table";
+//@import "table/table";
 
 //== Wizard
-@import "wizard/wizard-base";
-@import "wizard/wizard-1";
-@import "wizard/wizard-2";
-@import "wizard/wizard-3";
-@import "wizard/wizard-4";
-@import "wizard/wizard-5";
+//@import "wizard/wizard-base";
+//@import "wizard/wizard-1";
+//@import "wizard/wizard-2";
+//@import "wizard/wizard-3";
+//@import "wizard/wizard-4";
+//@import "wizard/wizard-5";
 
 //== Accordion
 @import "accordion/accordion";

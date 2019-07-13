@@ -2085,9 +2085,9 @@
         if (Plugin.getOption('data.saveState.webstorage') && localStorage) {
           localStorage.setItem(key, JSON.stringify(value));
         }
-        if (Plugin.getOption('data.saveState.cookie')) {
-          Cookies.set(key, JSON.stringify(value));
-        }
+        // if (Plugin.getOption('data.saveState.cookie')) {
+        //   Cookies.set(key, JSON.stringify(value));
+        // }
       },
 
       /**
@@ -2102,7 +2102,7 @@
         if (Plugin.getOption('data.saveState.webstorage') && localStorage) {
           value = localStorage.getItem(key);
         } else {
-          value = Cookies.get(key);
+          // value = Cookies.get(key);
         }
         if (typeof value !== 'undefined' && value !== null) {
           return JSON.parse(value);
@@ -2129,7 +2129,7 @@
         if (localStorage) {
           localStorage.removeItem(key);
         }
-        Cookies.remove(key);
+        // Cookies.remove(key);
       },
 
       /**

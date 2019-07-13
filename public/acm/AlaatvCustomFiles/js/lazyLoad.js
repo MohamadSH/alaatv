@@ -33,7 +33,7 @@ var LazyLoad = function () {
                 // let windowWidth = $( window ).width();
                 let carouselMainSlideShowWidth = $('#carouselMainSlideShow').width();
                 let minHeight = (carouselMainSlideShowWidth * dataHeight) / dataWidth;
-                $(this).parents('.carousel-item').css({'min-height':minHeight+'px'});
+                $(this).parents('.carousel-item').css({'min-height':minHeight+'px', 'max-height':minHeight+'px'});
             }
         });
     }
@@ -65,6 +65,19 @@ var LazyLoad = function () {
                 $(this).attr('a-lazyload', 1);
             }
         });
+    }
+
+    function throttle(minimumInterval, callback) {
+        var timeout = null;
+        return function () {
+            var that = this, args = arguments;
+            if(timeout === null) {
+                timeout = setTimeout(function () {
+                    timeout = null;
+                }, minimumInterval);
+                callback.apply(that, args);
+            }
+        };
     }
 
     return {

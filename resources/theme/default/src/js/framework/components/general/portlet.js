@@ -424,7 +424,7 @@ var mPortlet = function(elementId, options) {
 
             var toggle = mUtil.find(the.head, '[m-portlet-tool=toggle]');
             if (toggle && mUtil.data(toggle).has('tooltip')) {
-                mUtil.data(toggle).get('tooltip').updateTitleContent(the.options.tools.toggle.expand);
+                // mUtil.data(toggle).get('tooltip').updateTitleContent(the.options.tools.toggle.expand);
             }
         },
 
@@ -445,7 +445,7 @@ var mPortlet = function(elementId, options) {
 
             var toggle = mUtil.find(the.head, '[m-portlet-tool=toggle]');
             if (toggle && mUtil.data(toggle).has('tooltip')) {
-                mUtil.data(toggle).get('tooltip').updateTitleContent(the.options.tools.toggle.collapse);
+                // mUtil.data(toggle).get('tooltip').updateTitleContent(the.options.tools.toggle.collapse);
             }
         },
 

@@ -284,8 +284,20 @@
     background: white;
     margin-bottom: 0;
 }
+.a--owl-carousel-init-loading {
+    display: flex;
+    justify-content: center;
+}
+.a--owl-carousel-init-loading .lds-roller {
+    width: 200px;
+    height: 200px;
+}
 
 
+
+.owl-carousel .owl-item.active .owl-lazy.main-photo-forLoading {
+    min-height: 150px;
+}
 
 
 /*content-carousel*/

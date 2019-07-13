@@ -67,6 +67,9 @@
                     </div>
                 </div>
                 <div class="m-portlet__body m-portlet__body--no-padding">
+                    <div class="a--owl-carousel-init-loading">
+                        <div class="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+                    </div>
                     <!--begin::Widget 30-->
                     <div class="m-widget30">
                         <div class="m-widget_head">

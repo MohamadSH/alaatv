@@ -1,16 +1,9 @@
-@permission((config('constants.REPORT_ADMIN_PANEL_ACCESS')))@extends('app',['pageName'=>$pageName])
+@permission((config('constants.REPORT_ADMIN_PANEL_ACCESS')))
+
+@extends('app',['pageName'=>$pageName])
 
 @section('page-css')
-    <link href = "/acm/AlaatvCustomFiles/components/alaa_old/plugins/datatables/datatables.min.css" rel = "stylesheet" type = "text/css"/>
-    <link href = "/acm/AlaatvCustomFiles/components/alaa_old/plugins/datatables/plugins/bootstrap/datatables.bootstrap-rtl.css" rel = "stylesheet" type = "text/css"/>
-    {{--<link href="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-modal/css/bootstrap-modal-bs3patch.css" rel="stylesheet" type="text/css"/>--}}
-    {{--<link href="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-modal/css/bootstrap-modal.css" rel="stylesheet" type="text/css"/>--}}
-    <link href = "/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-fileinput/bootstrap-fileinput.css" rel = "stylesheet" type = "text/css"/>
-    <link href = "/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-toastr/toastr-rtl.min.css" rel = "stylesheet" type = "text/css"/>
-    <link href = "/acm/AlaatvCustomFiles/components/alaa_old/plugins/jquery-multi-select/css/multi-select-rtl.css" rel = "stylesheet" type = "text/css"/>
-    <link href = "/acm/extra/persian-datepicker/dist/css/persian-datepicker-0.4.5.min.css" rel = "stylesheet" type = "text/css"/>
-    <link href = "/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-multiselect/css/bootstrap-multiselect.css" rel = "stylesheet" type = "text/css"/>
-    <link href = "/acm/AlaatvCustomFiles/components/alaa_old/font/glyphicons-halflings/glyphicons-halflings.css" rel = "stylesheet" type = "text/css"/>
+    <link href="{{ mix('/css/admin-all.css') }}" rel="stylesheet" type="text/css"/>
 @endsection
 
 @section('pageBar')
@@ -29,12 +22,7 @@
 
 @section('content')
     <div class = "row">
-        {{--Ajax modal loaded after inserting content--}}
-        <div id = "ajax-modal" class = "modal fade" tabindex = "-1"></div>
-    {{--Ajax modal for panel startup --}}
-
-    <!-- /.modal -->
-        <div class = "col-12">
+        <div class = "col">
 
             {{--<div class="note note-info">--}}
             {{--<h4 class="block"><strong>توجه!</strong></h4>--}}
@@ -242,38 +230,10 @@
 @endsection
 
 @section('page-js')
-    <script src = "/acm/AlaatvCustomFiles/components/alaa_old/scripts/datatable.min.js" type = "text/javascript"></script>
-    <script src = "/acm/AlaatvCustomFiles/components/alaa_old/plugins/datatables/datatables.min.js" type = "text/javascript"></script>
-    <script src = "/acm/AlaatvCustomFiles/components/alaa_old/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js" type = "text/javascript"></script>
-    <script src = "/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-modal/js/bootstrap-modalmanager.js" type = "text/javascript"></script>
-    {{--<script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-modal/js/bootstrap-modal.js" type="text/javascript"></script>--}}
-    <script src = "/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-fileinput/bootstrap-fileinput.js" type = "text/javascript"></script>
-    <script src = "/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-toastr/toastr.min.js" type = "text/javascript"></script>
-    <script src = "/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-select/js/bootstrap-select.min.js" type = "text/javascript"></script>
-    <script src = "/acm/AlaatvCustomFiles/components/alaa_old/plugins/jquery-multi-select/js/jquery.multi-select.js" type = "text/javascript"></script>
-    <script src = "/acm/AlaatvCustomFiles/components/alaa_old/plugins/select2/js/select2.full.min.js" type = "text/javascript"></script>
-    <script src = "/acm/extra/persian-datepicker/lib/persian-date.js" type = "text/javascript"></script>
-    {{--<script src="/acm/AlaatvCustomFiles/components/alaa_old/scripts/ui-extended-modals.min.js" type="text/javascript"></script>--}}
-    <script src = "/acm/AlaatvCustomFiles/components/alaa_old/scripts/ui-toastr.min.js" type = "text/javascript"></script>
-    <script src = "/acm/AlaatvCustomFiles/components/alaa_old/scripts/components-multi-select.min.js" type = "text/javascript"></script>
-    <script src = "/acm/extra/persian-datepicker/dist/js/persian-datepicker-0.4.5.min.js" type = "text/javascript"></script>
-    <script src = "/acm/AlaatvCustomFiles/js/admin-indexReport.js" type = "text/javascript"></script>
-    <script src = "/acm/AlaatvCustomFiles/js/admin-makeDataTable.js" type = "text/javascript"></script>
-    <script src = "/acm/AlaatvCustomFiles/js/admin-makeMultiSelect.js" type = "text/javascript"></script>
+    <script src="{{ mix('/js/admin-all.js') }}" type="text/javascript"></script>
+    <script src = "{{ asset('/acm/AlaatvCustomFiles/js/admin/page-report.js') }}" type = "text/javascript"></script>
 
     <script type = "text/javascript">
-        //should run at first
-        $("#report_table thead tr th").each(function () {
-            if (!$(this).hasClass("none")) {
-                thText = $(this).text().trim();
-                $("#reportTableColumnFilter > option").each(function () {
-                    if ($(this).val() === thText) {
-                        $(this).prop("selected", true);
-                    }
-                });
-            }
-        });
-
         /**
          * Start up jquery
          */

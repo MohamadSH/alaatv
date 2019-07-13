@@ -7,59 +7,59 @@ var mQuickSidebar = function() {
         var messages = mUtil.find( mUtil.get('m_quick_sidebar_tabs_messenger'),  '.m-messenger__messages'); 
         var form = $('#m_quick_sidebar_tabs_messenger .m-messenger__form');
 
-        mUtil.scrollerInit(messages, {
-            disableForMobile: true, 
-            resetHeightOnDestroy: false, 
-            handleWindowResize: true, 
-            height: function() {
-                var height = topbarAside.outerHeight(true) - 
-                    topbarAsideTabs.outerHeight(true) - 
-                    form.outerHeight(true) - 120;
-
-                return height;                    
-            }
-        });
-    }
+        // mUtil.scrollerInit(messages, {
+        //     disableForMobile: true,
+        //     resetHeightOnDestroy: false,
+        //     handleWindowResize: true,
+        //     height: function() {
+        //         var height = topbarAside.outerHeight(true) -
+        //             topbarAsideTabs.outerHeight(true) -
+        //             form.outerHeight(true) - 120;
+        //
+        //         return height;
+        //     }
+        // });
+    };
 
     var initSettings = function() { 
         var settings = mUtil.find( mUtil.get('m_quick_sidebar_tabs_settings'),  '.m-list-settings'); 
 
         if (!settings) {
-            return;
+
         }
 
-        mUtil.scrollerInit(settings, {
-            disableForMobile: true, 
-            resetHeightOnDestroy: false, 
-            handleWindowResize: true, 
-            height: function() {
-                return mUtil.getViewPort().height - topbarAsideTabs.outerHeight(true) - 60;            
-            }
-        });
-    }
+        // mUtil.scrollerInit(settings, {
+        //     disableForMobile: true,
+        //     resetHeightOnDestroy: false,
+        //     handleWindowResize: true,
+        //     height: function() {
+        //         return mUtil.getViewPort().height - topbarAsideTabs.outerHeight(true) - 60;
+        //     }
+        // });
+    };
 
     var initLogs = function() {
         var logs = mUtil.find( mUtil.get('m_quick_sidebar_tabs_logs'),  '.m-list-timeline'); 
 
         if (!logs) {
-            return;
+
         }
 
-        mUtil.scrollerInit(logs, {
-            disableForMobile: true, 
-            resetHeightOnDestroy: false, 
-            handleWindowResize: true, 
-            height: function() {
-                return mUtil.getViewPort().height - topbarAsideTabs.outerHeight(true) - 60;            
-            }
-        });
-    }
+        // mUtil.scrollerInit(logs, {
+        //     disableForMobile: true,
+        //     resetHeightOnDestroy: false,
+        //     handleWindowResize: true,
+        //     height: function() {
+        //         return mUtil.getViewPort().height - topbarAsideTabs.outerHeight(true) - 60;
+        //     }
+        // });
+    };
 
     var initOffcanvasTabs = function() {
         initMessages();
         initSettings();
         initLogs();
-    }
+    };
 
     var initOffcanvas = function() {
         var topbarAsideObj = new mOffcanvas('m_quick_sidebar', {
@@ -81,7 +81,7 @@ var mQuickSidebar = function() {
                 initOffcanvasTabs();
             }, 1000);                         
         });
-    }
+    };
 
     return {     
         init: function() {  
