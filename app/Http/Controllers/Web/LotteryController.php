@@ -30,6 +30,7 @@ class LotteryController extends Controller
      */
     public function holdLottery(Request $request)
     {
+        dd('Access denied');
         try {
             // Setup
             $lotteryName = "";
@@ -61,13 +62,6 @@ class LotteryController extends Controller
             
             $participantArray = [];
             foreach ($participants as $participant) {
-                if (in_array($participant->user->id, $participantArray)) {
-                    continue;
-                }
-                else {
-                    array_push($participantArray, $participant->user->id);
-                }
-                
                 $points = $participant->totalNumber - $participant->usedNumber;
                 for ($i = $points; $i > 0; $i--) {
                     $card = new IdCard();
@@ -167,6 +161,7 @@ class LotteryController extends Controller
      */
     public function givePrizes(Request $request)
     {
+        dd('Access denied');
         try {
             $lotteryName = "";
             if ($request->has("lottery")) {

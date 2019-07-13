@@ -48,13 +48,13 @@ class UpdateOrderproductsTmpShareCommand extends Command
             $orderproducts = $orderproducts->get();
         }else{
             // Process new orderproducts with no cache
-            $orderproducts = $orderproducts->whereNull('tmp_share_order')->get();
+            $orderproducts = $orderproducts->whereNull('tmp_share_order')->orWhere('tmp_share_order' , 0)->get();
         }
 
         if ($this->confirm('Found '.$orderproducts->count().' orderproducts , Do you want to proceed?', true)) {
             $bar = $this->output->createProgressBar($orderproducts->count());
             foreach ($orderproducts as $orderproduct) {
-                $shareOfOrder = $orderproduct->tmp_share_order;
+                $orderproduct->setShareCost();
                 $bar->advance();
             }
             $bar->finish();

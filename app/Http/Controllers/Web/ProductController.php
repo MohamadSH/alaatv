@@ -1286,7 +1286,7 @@ class ProductController extends Controller
             ]), '100', '100', null));
         
         $blocks        = new BlockCollection();
-        $blocksIdArray = [10, 16, 6];
+        $blocksIdArray = [10];
         foreach ($blocksIdArray as $blockId) {
             $block = Block::find($blockId);
             if (isset($block)) {
@@ -1317,7 +1317,7 @@ class ProductController extends Controller
             ]), '100', '100', null));
         
         $blocks        = new BlockCollection();
-        $blocksIdArray = [6, 16, 10];
+        $blocksIdArray = [6];
         foreach ($blocksIdArray as $blockId) {
             $block = Block::find($blockId);
             if (isset($block)) {

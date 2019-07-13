@@ -2,6 +2,7 @@
 
 namespace App\PaymentModule\Controllers;
 
+use App\Events\FillTmpShareOfOrder;
 use App\Order;
 use AlaaTV\Gateways\Money;
 use App\PaymentModule\Responses;
@@ -75,7 +76,7 @@ class PaymentVerifierController extends Controller
             </a>';
             $responseMessages[] = 'یک سفارش پرداخت نشده به لیست سفارش های شما افزوده شده است که می توانید با رفتن به صفحه '.$myOrdersPage.' آن را پرداخت کنید';
         }
-    
+
         setcookie('cartItems', '', time() - 3600, '/');
     
         /*
@@ -90,8 +91,8 @@ class PaymentVerifierController extends Controller
                 'orderId'     => $myOrder->id,
                 'paidPrice'   => $money->tomans(),
             ]);
-        
-        
+
+        event(new FillTmpShareOfOrder($myOrder));
         return redirect()->route('showOnlinePaymentStatus', [
             'status'        => $is_successful_payment ? 'successful' : 'failed',
             'paymentMethod' => $paymentMethod,

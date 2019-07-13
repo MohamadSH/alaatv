@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Web;
 
 use App\Bon;
+use App\Repositories\OrderproductRepo;
 use App\User;
 use App\Order;
 use App\Product;
@@ -12,6 +13,7 @@ use App\Attributevalue;
 use App\Checkoutstatus;
 use App\Websitesetting;
 use App\Traits\OrderCommon;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Traits\ProductCommon;
 use Illuminate\Http\Response;
@@ -33,7 +35,66 @@ class OrderproductController extends Controller
     use ProductCommon;
     
     protected $response;
-    
+
+    public function index(Request $request){
+        $timeFilterEnable = $request->get('dateFilterEnable');
+        $checkoutEnable = $request->get('checkoutEnable');
+        $checkoutStatus = $request->get('checkoutStatus');
+        $pageNumber = ($request->get('page' , 0) - 1);
+        $productIds = $request->get('product_id',[]);
+
+        $since = null;
+        $till = null ;
+        if($timeFilterEnable)
+        {
+            $since = Carbon::createFromFormat('Y-n-j H:i:s', explode(' ' , $request->since)[0].' 00:00:00');
+            $till = Carbon::createFromFormat('Y-n-j H:i:s', explode(' ' , $request->till)[0].' 23:59:59');
+        }
+
+        if($checkoutStatus == 0){
+            $chechoutFilter = OrderproductRepo::CHECKOUT_ALL;
+        }elseif($checkoutStatus == 1){
+            $chechoutFilter = OrderproductRepo::NOT_CHECKEDOUT_ORDERPRODUCT;
+        }else{
+            $chechoutFilter = OrderproductRepo::CHECKEDOUT_ORDERPRODUCT;
+        }
+
+        if(in_array(0,$productIds))
+            $productIds = [];
+        $orderproducts = OrderproductRepo::getPurchasedOrderproducts( $productIds , $since , $till , $chechoutFilter)
+            ->with(['order', 'order.transactions' , 'order.normalOrderproducts'])->get();
+
+        $totalNubmer = $orderproducts->count();
+
+        if($pageNumber > 1)
+        {
+            $orderproducts->chunk(20)[$pageNumber];
+            return response()->json([
+                'orderproducts' => $orderproducts,
+                'totalNumber'   => $totalNubmer,
+            ]);
+        }
+
+        $totalSale = 0;
+        foreach ($orderproducts as $orderproduct) {
+            $toAdd = $orderproduct->getSharedCostOfTransaction() ;
+            $totalSale += $toAdd;
+        }
+
+        $checkoutResult = false;
+        if($checkoutEnable){
+            $checkoutResult = Orderproduct::whereIn('id' , $orderproducts->pluck('id')->toArray())->update(['checkoutstatus_id' => config('constants.ORDERPRODUCT_CHECKOUT_STATUS_PAID')]);
+        }
+
+        $orderproducts = $orderproducts->chunk(20)[max($pageNumber , 0)];
+        return response()->json([
+            'orderproducts' => $orderproducts,
+            'totalNumber'   => $totalNubmer,
+            'totalSale'     => number_format((int)$totalSale),
+            'checkoutResult'    =>  $checkoutResult,
+        ]);
+    }
+
     function __construct(Websitesetting $setting, Response $response)
     {
         $this->response = $response;

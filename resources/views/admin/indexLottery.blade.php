@@ -30,14 +30,14 @@
             <div class = "m-portlet m-portlet--mobile m-portlet--body-progress-">
                 <div class = "m-portlet__body">
                     <span class = "bold" style = "font-size: larger"></span>&nbsp;&nbsp;
-                    <a class = "btn btn-default" href = "{{action("Web\BotsController@pointBot")}}?19khordad" {{($pointsGiven)?"disabled":""}} target = "_blank">
-                        اهدای امتیاز تک امتیازی ها
+                    <a class = "btn btn-default" href = "{{action("Web\BotsController@pointBot")}}?15tir" {{($pointsGiven)?"disabled":""}} target = "_blank">
+                        اهدای امتیاز
                     </a>
-                    <a class = "btn btn-default" href = "{{action("Web\BotsController@pointBot")}}?10khordad" {{($pointsGiven)?"disabled":""}} target = "_blank">
-                        اهدای امتیاز دو امتیازی ها
+                    <a class = "btn btn-default" href = "{{action("Web\BotsController@pointBot")}}?riyazi" {{($pointsGiven)?"disabled":""}} target = "_blank">
+                        اهدای امتیاز اضافه ریاضی
                     </a>
-                    <a class = "btn btn-default" href = "{{action("Web\BotsController@pointBot")}}?5khordad" {{($pointsGiven)?"disabled":""}} target = "_blank">
-                        اهدای امتیاز سه امتیازی ها
+                    <a class = "btn btn-default" href = "{{action("Web\BotsController@pointBot")}}?tajrobi" {{($pointsGiven)?"disabled":""}} target = "_blank">
+                        اهدای امتیاز اضافه تجربی
                     </a>
                     <span class = "m--font-danger bold">{{($pointsGiven)?"اهدا شده است":""}}</span>
                     <hr>

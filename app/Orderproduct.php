@@ -651,8 +651,15 @@ class Orderproduct extends BaseModel
      * @param $donateOrderproductSum
      * @return float|int
      */
-    public function setShareCost( $finalPrice )
+    public function setShareCost()
     {
+        if(isset($this->tmp_final_cost))
+        {
+            $finalPrice = $this->tmp_final_cost;
+        }else{
+            [$finalPrice , $extraCost] = $this->setTmpFinalCost();
+        }
+
         $myOrder = $this->order;
 
         if(!isset($myOrder))
@@ -669,40 +676,21 @@ class Orderproduct extends BaseModel
         $donateOrderproductSum = $myOrder->getDonateSum();
 
         $shareOfOrder =   ($orderPrice['totalCost'] == 0 || $orderPrice['totalCost'] == $donateOrderproductSum) ? 0 : (double)$finalPrice / ($orderPrice['totalCost'] - $donateOrderproductSum);
-//        $shareOfOrder = $orderPrice['totalCost'] == 0 ? 0 : (double)$finalPrice /  ($orderPrice['totalCost']-$donateOrderproductSum);
         OrderproductRepo::refreshOrderproductTmpShare($this, $shareOfOrder);
 
         return $shareOfOrder;
     }
 
-    public function getTmpFinalCostAttribute($value){
-        if (isset($value)) {
-            $finalPrice = $value;
-        } else {
-            [$finalPrice , $extraCost] = $this->setTmpFinalCost();
-        }
-
-        return $finalPrice;
-    }
-
-    public function getTmpShareOrderAttribute($value){
-        if(isset($value))
-        {
-            $shareOfOrder =  $value;
-        }else {
-            $finalPrice = $this->tmp_final_cost;
-
-            $shareOfOrder = $this->setShareCost($finalPrice);
-        }
-
-        return $shareOfOrder;
-    }
-
-    public function getSharedCostOfTransactionAttribute(){
+    public function getSharedCostOfTransaction(){
         $myOrder = $this->order;
         $donateOrderproductSum = $myOrder->getDonateSum();
 
-        $shareOfOrder = $this->tmp_share_order;
+        if(isset($this->tmp_share_order))
+        {
+            $shareOfOrder = $this->tmp_share_order;
+        }else{
+            $shareOfOrder = $this->setShareCost();
+        }
 
         return $shareOfOrder * ($myOrder->none_wallet_successful_transactions->sum('cost') - $donateOrderproductSum);
     }

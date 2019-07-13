@@ -73,7 +73,7 @@
                                     <span></span>
                                 </div>
                                 <select class="mt-multiselect btn btn-default a--full-width"
-                                        {{--                                                multiple="multiple"--}}
+                                        multiple="multiple"
                                         data-label="left"
                                         data-width="100%"
                                         data-filter="true"
@@ -81,6 +81,10 @@
                                         id="productId"
                                         name="productId"
                                         title="انتخاب دسته">
+                                    <option value="0"
+                                            class="bold">
+                                        هر محصولی
+                                    </option>
                                     @foreach($products as $product)
                                         <option value="{{$product->id}}"
                                                 class="bold">
@@ -109,7 +113,7 @@
                                         data-height="200"
                                         id="checkoutStatus"
                                         name="checkoutStatus"
-                                        title="همه">
+                                        title="وضعیت تسویه">
                                     @foreach($checkoutStatuses as $key => $checkoutStatus)
                                         <option value="{{$key}}" class="bold">
                                             {{$checkoutStatus}}
@@ -134,7 +138,7 @@
                         <div class="row">
                                 <label class = "control-label" style = "float: right;">
                                     <label class = "mt-checkbox mt-checkbox-outline">
-                                        فیلتر شده ها را تسویه حساب کن
+                                        در هنگام فیلتر تسویه کن
                                         <input type = "checkbox" id = "checkoutEnable" value = "1" name = "checkoutEnable">
                                         <span class = "bg-grey-cararra"></span>
                                     </label>

@@ -74,9 +74,9 @@
                                                     </div>
                                                     <div class="lessonsTimesWraper-footer">
                                                         <div class="lessonsTimesWraper-footer-slogan animated infinite pulse">
-                                                            قرعه کشی
+                                                            ۸۰ درصد
                                                             <br>
-                                                            Galaxy S9
+                                                            کنکور
                                                         </div>
                                                     </div>
                                                 </div>
@@ -113,7 +113,8 @@
                                         </div>
     
                                         <div class="m-portlet m-portlet--creative m-portlet--first m-portlet--bordered-semi m--margin-top-50">
-                                            <div class="m-portlet__head">
+                                            <div class="m-portlet__head">قرعه کشی
+
                                                 <div class="m-portlet__head-caption">
                                                     <div class="m-portlet__head-title">
                                                         <h2 class="m-portlet__head-label m-portlet__head-label--info">
@@ -162,16 +163,16 @@
                                         
                                     </div>
                                     <div class="col-md-8 order-1 order-sm-1 order-md-2 order-lg-2 mainItems">
-                                        <div class="row justify-content-center">
-                                            <div class="col text-center">
-                                                <div class="m-divider m--margin-bottom-30">
-                                                    <span></span>
-                                                    <span>تا شروع کنکور</span>
-                                                    <span></span>
-                                                </div>
-                                                <div class="konkourTimer"></div>
-                                            </div>
-                                        </div>
+{{--                                        <div class="row justify-content-center">--}}
+{{--                                            <div class="col text-center">--}}
+{{--                                                <div class="m-divider m--margin-bottom-30">--}}
+{{--                                                    <span></span>--}}
+{{--                                                    <span>تا شروع کنکور</span>--}}
+{{--                                                    <span></span>--}}
+{{--                                                </div>--}}
+{{--                                                <div class="konkourTimer"></div>--}}
+{{--                                            </div>--}}
+{{--                                        </div>--}}
                                         
                                         <div class="row justify-content-center">
                                             <div class="col m--margin-bottom-10">
@@ -210,9 +211,9 @@
                                                     </div>
                                                     <div class="lessonsTimesWraper-footer">
                                                         <div class="lessonsTimesWraper-footer-slogan animated infinite heartBeat">
-                                                            قرعه کشی
+                                                            ۸۰ درصد
                                                             <br>
-                                                            Galaxy S9
+                                                            کنکور
                                                         </div>
                                                     </div>
                                                 </div>
