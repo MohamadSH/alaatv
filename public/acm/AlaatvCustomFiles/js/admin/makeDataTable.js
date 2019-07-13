@@ -439,10 +439,10 @@ var TableDatatablesManaged = function () {
     };
 
 }();
-if (typeof App === 'undefined' || App.isAngularJsApp() === false) {
+// if (typeof App === 'undefined' || App.isAngularJsApp() === false) {
     jQuery(document).ready(function() {
         TableDatatablesManaged.init();
         $("#sms_table > tbody .dataTables_empty").text("برای نمایش اطلاعات ابتدا فیلتر کنید").addClass("font-red bold");
     });
-}
+// }
 

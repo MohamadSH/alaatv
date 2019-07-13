@@ -33,7 +33,7 @@ var LazyLoad = function () {
                 // let windowWidth = $( window ).width();
                 let carouselMainSlideShowWidth = $('#carouselMainSlideShow').width();
                 let minHeight = (carouselMainSlideShowWidth * dataHeight) / dataWidth;
-                $(this).parents('.carousel-item').css({'min-height':minHeight+'px'});
+                $(this).parents('.carousel-item').css({'min-height':minHeight+'px', 'max-height':minHeight+'px'});
             }
         });
     }

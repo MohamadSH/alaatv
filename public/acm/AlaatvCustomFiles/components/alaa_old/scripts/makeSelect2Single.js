@@ -109,7 +109,7 @@ var ComponentsSelect2 = function() {
             $("#select2-multiple-input-lg, #select2-single-input-lg").next(".select2-container--bootstrap").addClass("input-lg");
             $(this).removeClass("btn-primary btn-outline").prop("disabled", true);
         });
-    }
+    };
 
     return {
         //main function to initiate the module
@@ -120,8 +120,8 @@ var ComponentsSelect2 = function() {
 
 }();
 
-if (App.isAngularJsApp() === false) {
+// if (App.isAngularJsApp() === false) {
     jQuery(document).ready(function() {
         ComponentsSelect2.init();
     });
-}
+// }

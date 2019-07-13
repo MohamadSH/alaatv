@@ -113,41 +113,6 @@
             }
         },
         "demo": {
-            "default": {
-                "base": {
-                    "src": {
-                        "styles": [
-                            "{$config.path.src}/sass/demo/default/style.scss"
-                        ],
-                        "scripts": [
-                            "{$config.path.src}/js/framework/base/util.js",
-                            "{$config.path.src}/js/framework/base/app.js",
-                            "{$config.path.src}/js/framework/components/general/**/*.js",
-                            "{$config.path.src}/js/demo/default/base/**/*.js",
-                            "{$config.path.src}/js/app/base/**/*.js",
-                            "{$config.path.src}/js/snippets/base/**/*.js"
-                        ]
-                    },
-                    "bundle": {
-                        "styles": "{$config.output}/demo/default/base/style.bundle.css",
-                        "scripts": "{$config.output}/demo/default/base/scripts.bundle.js"
-                    }
-                },
-                "custom": {
-                    "src": {
-                        "scripts": [
-                            "{$config.path.src}/js/demo/default/custom/**/*.js"
-                        ],
-                        "media": [
-                            "{$config.path.src}/media/demo/default/**/*.*"
-                        ]
-                    },
-                    "output": {
-                        "scripts": "{$config.output}/demo/default/custom/",
-                        "media": "{$config.output}/demo/default/media/"
-                    }
-                }
-            },
             "demo12": {
                 "base": {
                     "src": {

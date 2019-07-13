@@ -1,8 +1,6 @@
 @ability(config('constants.ROLE_ADMIN'),config('constants.ADMIN_PANEL_ACCESS'))@extends("app",["pageName"=>$pageName])
 
 @section('page-css')
-{{--    <link href="/acm/AlaatvCustomFiles/components/alaa_old/plugins/datatables/dataTables.bootstrap4.css" rel="stylesheet" type="text/css"/>--}}
-
     <link href="{{ mix('/css/admin-all.css') }}" rel="stylesheet" type="text/css"/>
     <style>
         .multiselect-native-select, .mt-multiselect {
