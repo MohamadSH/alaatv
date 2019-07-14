@@ -205,7 +205,7 @@
                                     <div class="m-widget3__item">
                                         <div class="m-widget3__header">
                                             <div class="m-widget3__user-img">
-                                                <img class="m-widget3__img" src="{{ $content->author->photo }}"
+                                                <img class="m-widget3__img lazy-image" data-src="{{ $content->author->photo }}"
                                                      alt="{{ $author }}">
                                             </div>
                                             <div class="m-widget3__info">
@@ -265,7 +265,7 @@
                                                 <div class="m-widget4">
                                                     <div class="m-widget4__item">
                                                         <div class="m-widget4__img m-widget4__img--icon">
-                                                            <img src="/assets/app/media/img/files/mp4.svg" alt="mp4">
+                                                            <img data-src="/assets/app/media/img/files/mp4.svg" alt="mp4" class="lazy-image">
                                                         </div>
                                                         <div class="m-widget4__info">
                                                             <a href="{{ $file->link }}?download=1" class="m-link">
@@ -296,7 +296,7 @@
                                                    data-gtm-eec-promotion-name="قرعه کشی گوشی"
                                                    data-gtm-eec-promotion-creative="جلوی لینک های مستقیم دانلود این فیلم"
                                                    data-gtm-eec-promotion-position="0">
-                                                    <img src="{{ asset('/acm/extra/ads/gif/300-250.gif') }}" class="a--full-width">
+                                                    <img data-src="{{ asset('/acm/extra/ads/gif/300-250.gif') }}" class="a--full-width lazy-image">
                                                     {{--                            <img src="{{ asset('/acm/extra/ads/gif/300-250.gif') }}" class="a--full-width">--}}
                                                 </a>
                                             </div>
@@ -334,8 +334,8 @@
                                 <div class="m-widget5__item">
                                     <div class="m-widget5__content">
                                         <div class="m-widget5__pic">
-                                            <img class="m-widget7__img img-fluid"
-                                                 src="/assets/app/media/img/files/pdf.svg" alt="pdf">
+                                            <img class="m-widget7__img img-fluid lazy-image"
+                                                 data-src="/assets/app/media/img/files/pdf.svg" alt="pdf">
                                         </div>
                                         <div class="m-widget5__section">
                                             <h4 class="m-widget5__title">
@@ -501,7 +501,7 @@
                                 <div class="m-widget4">
                                     <div class="m-widget4__item">
                                         <div class="m-widget4__img m-widget4__img--icon">
-                                            <img src="/assets/app/media/img/files/pdf.svg" alt="pdf">
+                                            <img data-src="/assets/app/media/img/files/pdf.svg" alt="pdf" class="lazy-image">
                                         </div>
                                         <div class="m-widget4__info">
                                             <a href="{{ action("Web\ContentController@show" , $item["content"]) }}"
@@ -540,7 +540,7 @@
                            data-gtm-eec-promotion-name="قرعه کشی گوشی"
                            data-gtm-eec-promotion-creative="سمت چپ صفحه بالای لیست کانتنت های مشابه"
                            data-gtm-eec-promotion-position="0">
-                            <img src="{{ asset('/acm/extra/ads/gif/970-90(1).gif') }}" class="a--full-width">
+                            <img data-src="{{ asset('/acm/extra/ads/gif/970-90(1).gif') }}" class="a--full-width lazy-image">
                         </a>
                     </div>
                 </div>
@@ -575,9 +575,9 @@
                                         <div class="a-widget5__content  {{ $item["content"]->id == $content->id ? 'm--bg-info' : '' }}">
                                             <div class="a-widget5__pic">
                                                 <a class="m-link"
-                                                   href="{{action("Web\ContentController@show" , $item["content"])}}">
-                                                    <img class="m-widget7__img a--full-width"
-                                                         src="{{ isset($item["thumbnail"]) ? $item["thumbnail"]."?w=210&h=118":'' }}"
+                                                   href="{{action("Web\ContentController@show" , $item["content"])}}?w=800&h=450">
+                                                    <img class="m-widget7__img a--full-width lazy-image"
+                                                         data-src="{{ isset($item["thumbnail"]) ? $item["thumbnail"]."?w=210&h=118":'' }}"
                                                          alt="{{ $item["content"]->name }}">
                                                 </a>
                                             </div>
@@ -623,8 +623,8 @@
                        data-gtm-eec-promotion-name="همایش طلایی ریاضی تجربی کنکور"
                        data-gtm-eec-promotion-creative="سمت چپ صفحه پایین لیست کانتنت های مشابه"
                        data-gtm-eec-promotion-position="0">
-                        <img src="https://cdn.alaatv.com/upload/riaziTajrobiKonkurNabakhte.gif" alt="همایش طلایی ریاضی تجربی کنکور"
-                             class="m--img-centered a--full-width"/>
+                        <img data-src="https://cdn.alaatv.com/upload/riaziTajrobiKonkurNabakhte.gif" alt="همایش طلایی ریاضی تجربی کنکور"
+                             class="m--img-centered a--full-width lazy-image"/>
                     </a>
                 </div>
             </div>
@@ -670,8 +670,8 @@
                                              data-position="{{ $productKey }}"
                                              data-gtm-eec-list=" محصولاتی که شامل این محتوا هستند - {{ $content->displayName }} ">
                                             <a href="{{ $product->url }}">
-                                                <img class="a--owl-carousel-type-2-item-image"
-                                                     src="{{ $product->photo }}" alt="{{ $product->name }}">
+                                                <img class="a--owl-carousel-type-2-item-image owl-lazy lazy-image"
+                                                     data-src="{{ $product->photo }}" alt="{{ $product->name }}">
                                             </a>
                                             <br>
                                             <a href="{{ $product->url }}" target="_blank"
@@ -710,6 +710,6 @@
             @endif
         ];
     </script>
-    <script src="{{ mix("/js/content-show.js") }}" type="text/javascript"></script>
+    <script src="{{ mix("/js/content-show.js") }}" type="text/javascript" defer></script>
 @endsection
 
