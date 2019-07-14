@@ -262,6 +262,7 @@ mix.styles([
 // ---------------------------------------------------------------------------------- content-show
 mix.styles([
         'public/acm/AlaatvCustomFiles/components/ribbon/style.css',
+        'node_modules/block-ui/jquery.blockUI.js',
         'node_modules/owl.carousel/dist/assets/owl.carousel.css',
         'node_modules/owl.carousel/dist/assets/owl.theme.default.css',
         'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/style.css',
