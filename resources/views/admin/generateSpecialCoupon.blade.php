@@ -1,10 +1,7 @@
 @extends('app')
 
 @section('page-css')
-    <link href = "/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-fileinput/bootstrap-fileinput.css" rel = "stylesheet" type = "text/css"/>
-    <link href = "/acm/AlaatvCustomFiles/components/alaa_old/plugins/select2/css/select2.min.css" rel = "stylesheet" type = "text/css"/>
-    <link href = "/acm/AlaatvCustomFiles/components/alaa_old/plugins/select2/css/select2-bootstrap.min.css" rel = "stylesheet" type = "text/css"/>
-    <link href = "/acm/extra/persian-datepicker/dist/css/persian-datepicker-0.4.5.min.css" rel = "stylesheet" type = "text/css"/>
+    <link href="{{ mix('/css/admin-all.css') }}" rel="stylesheet" type="text/css"/>
 @endsection
 
 @section('pageBar')
@@ -124,12 +121,7 @@
 @endsection
 
 @section('page-js')
-    <script src = "/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-fileinput/bootstrap-fileinput.js" type = "text/javascript"></script>
-    <script src = "/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-select/js/bootstrap-select.min.js" type = "text/javascript"></script>
-    <script src = "/acm/AlaatvCustomFiles/components/alaa_old/plugins/select2/js/select2.full.min.js" type = "text/javascript"></script>
-    <script src = "/acm/extra/persian-datepicker/lib/persian-date.js" type = "text/javascript"></script>
-    <script src = "/acm/AlaatvCustomFiles/components/alaa_old/plugins/jquery-inputmask/jquery.inputmask.bundle.min.js" type = "text/javascript"></script>
-    <script src = "/acm/extra/persian-datepicker/dist/js/persian-datepicker-0.4.5.min.js" type = "text/javascript"></script>
+    <script src="{{ mix('/js/admin-all.js') }}" type="text/javascript"></script>
     <script>
         $(document).ready(function () {
 

@@ -194,7 +194,7 @@ mLayout = function() {
             asideMenu.pauseDropdownHover(800);
 
             //== Remember state in cookie
-            Cookies.set('sidebar_toggle_state', toggle.getState());
+            // Cookies.set('sidebar_toggle_state', toggle.getState());
             // to set default minimized left aside use this cookie value in your
             // server side code and add "m-brand--minimize m-aside-left--minimize" classes to
             // the body tag in order to initialize the minimized left aside mode during page loading.
@@ -218,7 +218,7 @@ mLayout = function() {
             asideMenu.pauseDropdownHover(800);
 
             //== Remember state in cookie
-            Cookies.set('sidebar_hide_state', toggle.getState());
+            // Cookies.set('sidebar_hide_state', toggle.getState());
             // to set default minimized left aside use this cookie value in your
             // server side code and add "m-brand--minimize m-aside-left--minimize" classes to
             // the body tag in order to initialize the minimized left aside mode during page loading.

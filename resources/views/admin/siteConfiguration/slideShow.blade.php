@@ -1,8 +1,7 @@
 @permission((Config::get('constants.LIST_SLIDESHOW_ACCESS')))@extends('app' , ['pageName'=> 'admin'])
 
 @section('page-css')
-    <link href = "/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-fileinput/bootstrap-fileinput.css" rel = "stylesheet" type = "text/css"/>
-    <link href = "/acm/AlaatvCustomFiles/components/alaa_old/css/profile-rtl.css" rel = "stylesheet" type = "text/css"/>
+    <link href="{{ mix('/css/admin-all.css') }}" rel="stylesheet" type="text/css"/>
 @endsection
 
 @section('pageBar')
@@ -188,26 +187,13 @@
 @endsection
 
 @section('page-js')
-    <script src = "/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-fileinput/bootstrap-fileinput.js" type = "text/javascript"></script>
-    <script src = "/acm/AlaatvCustomFiles/components/alaa_old/plugins/jquery.sparkline.min.js" type = "text/javascript"></script>
-    <script src = "/acm/AlaatvCustomFiles/components/alaa_old/scripts/app.js" type = "text/javascript"></script>
+    <script src="{{ mix('/js/admin-all.js') }}" type="text/javascript"></script>
     <script type = "application/javascript">
         $(document).ready(function () {
             @if(session()->has("success"))
             $("#successMessage > span").text("{{session()->pull("success")}}");
             $("#successMessage").show();
             @endif
-        });
-
-        /**
-         * Set token for ajax request
-         */
-        $(function () {
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': window.Laravel.csrfToken,
-                }
-            });
         });
 
         $(document).on("click", ".deleteSlide", function () {

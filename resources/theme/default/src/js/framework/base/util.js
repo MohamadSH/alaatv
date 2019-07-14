@@ -1061,7 +1061,7 @@ var mUtil = function() {
 
                     target = target.parentNode;
                 }
-            }
+            };
 
             mUtil.addEvent(element, event, mUtilDelegatedEventHandlers[eventId]);
 
@@ -1239,74 +1239,74 @@ var mUtil = function() {
             return (mUtil.attr(mUtil.get('html'), 'direction') == 'rtl');
         },
 
-        //== Scroller
-        scrollerInit: function(element, options) {
-            //== Define init function
-            function init() {
-                var ps;
-                var height;
-
-                if (options.height instanceof Function) {
-                    height = parseInt(options.height.call());
-                } else {
-                    height = parseInt(options.height);
-                }
-
-                //== Destroy scroll on table and mobile modes
-                if (options.disableForMobile && mUtil.isInResponsiveRange('tablet-and-mobile')) {
-                    if (ps = mUtil.data(element).get('ps')) {
-                        if (options.resetHeightOnDestroy) {
-                            mUtil.css(element, 'height', 'auto');
-                        } else {
-                            mUtil.css(element, 'overflow', 'auto');
-                            if (height > 0) {
-                                mUtil.css(element, 'height', height + 'px');
-                            }
-                        }
-
-                        ps.destroy();
-                        ps = mUtil.data(element).remove('ps');
-                    } else if (height > 0){
-                        mUtil.css(element, 'overflow', 'auto');
-                        mUtil.css(element, 'height', height + 'px');
-                    }
-
-                    return;
-                }
-
-                if (height > 0) {
-                    mUtil.css(element, 'height', height + 'px');
-                }
-
-                mUtil.css(element, 'overflow', 'hidden');
-
-                //== Init scroll
-                if (ps = mUtil.data(element).get('ps')) {
-                    ps.update();
-                } else {
-                    mUtil.addClass(element, 'm-scroller');
-                    ps = new PerfectScrollbar(element, {
-                        wheelSpeed: 0.5,
-                        swipeEasing: true,
-                        wheelPropagation: false,
-                        minScrollbarLength: 40,
-                        suppressScrollX: mUtil.isRTL() ? false : true
-                    });
-
-                    mUtil.data(element).set('ps', ps);
-                }
-            }
-
-            //== Init
-            init();
-
-            //== Handle window resize
-            if (options.handleWindowResize) {
-                mUtil.addResizeHandler(function() {
-                    init();
-                });
-            }
-        },
+        // //== Scroller
+        // scrollerInit: function(element, options) {
+        //     //== Define init function
+        //     function init() {
+        //         var ps;
+        //         var height;
+        //
+        //         if (options.height instanceof Function) {
+        //             height = parseInt(options.height.call());
+        //         } else {
+        //             height = parseInt(options.height);
+        //         }
+        //
+        //         //== Destroy scroll on table and mobile modes
+        //         if (options.disableForMobile && mUtil.isInResponsiveRange('tablet-and-mobile')) {
+        //             if (ps = mUtil.data(element).get('ps')) {
+        //                 if (options.resetHeightOnDestroy) {
+        //                     mUtil.css(element, 'height', 'auto');
+        //                 } else {
+        //                     mUtil.css(element, 'overflow', 'auto');
+        //                     if (height > 0) {
+        //                         mUtil.css(element, 'height', height + 'px');
+        //                     }
+        //                 }
+        //
+        //                 ps.destroy();
+        //                 ps = mUtil.data(element).remove('ps');
+        //             } else if (height > 0){
+        //                 mUtil.css(element, 'overflow', 'auto');
+        //                 mUtil.css(element, 'height', height + 'px');
+        //             }
+        //
+        //             return;
+        //         }
+        //
+        //         if (height > 0) {
+        //             mUtil.css(element, 'height', height + 'px');
+        //         }
+        //
+        //         mUtil.css(element, 'overflow', 'hidden');
+        //
+        //         //== Init scroll
+        //         if (ps = mUtil.data(element).get('ps')) {
+        //             ps.update();
+        //         } else {
+        //             mUtil.addClass(element, 'm-scroller');
+        //             ps = new PerfectScrollbar(element, {
+        //                 wheelSpeed: 0.5,
+        //                 swipeEasing: true,
+        //                 wheelPropagation: false,
+        //                 minScrollbarLength: 40,
+        //                 suppressScrollX: mUtil.isRTL() ? false : true
+        //             });
+        //
+        //             mUtil.data(element).set('ps', ps);
+        //         }
+        //     }
+        //
+        //     //== Init
+        //     init();
+        //
+        //     //== Handle window resize
+        //     if (options.handleWindowResize) {
+        //         mUtil.addResizeHandler(function() {
+        //             init();
+        //         });
+        //     }
+        // },
 
         scrollerUpdate: function(element) {
             var ps;

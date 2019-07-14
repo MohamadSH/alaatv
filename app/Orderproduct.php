@@ -4,6 +4,11 @@ namespace App;
 
 use App\Repositories\OrderproductRepo;
 use App\Traits\ProductCommon;
+use Carbon\Carbon;
+use Eloquent;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Facades\Cache;
 use App\Collection\OrderproductCollection;
 use App\Classes\Checkout\Alaa\OrderproductCheckout;
@@ -23,50 +28,50 @@ use App\Classes\Checkout\Alaa\OrderproductCheckout;
  *           سبد(به درصد)
  * @property int                                                                 $discountAmount      تخفیف این آیتم
  *           سبد(مبلغ)
- * @property int                                                                 $includedInCoupon    مشخص کننده اینکه
+ * @property int                              $includedInCoupon    مشخص کننده اینکه
  *           آیا این آیتم مشمول کپن بوده یا نه(در صورت کپن داشتن سفارش)
- * @property int                                                                 $quantity            تعداد سفارش داده
+ * @property int                              $quantity            تعداد سفارش داده
  *           شده
- * @property \Carbon\Carbon|null                                                 $created_at
- * @property \Carbon\Carbon|null                                                 $updated_at
- * @property \Carbon\Carbon|null                                                 $deleted_at
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Attributevalue[] $attributevalues
- * @property-read \App\Checkoutstatus|null                                       $checkoutstatus
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Orderproduct[]   $children
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Userbon[]        $insertedUserbons
- * @property-read \App\Order                                                     $order
- * @property-read \App\Orderproducttype|null                                     $orderproducttype
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Orderproduct[]   $parents
- * @property-read \App\Product                                                   $product
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Userbon[]        $userbons
+ * @property Carbon|null              $created_at
+ * @property Carbon|null              $updated_at
+ * @property Carbon|null              $deleted_at
+ * @property-read Collection|Attributevalue[] $attributevalues
+ * @property-read Checkoutstatus|null         $checkoutstatus
+ * @property-read Collection|Orderproduct[]   $children
+ * @property-read Collection|Userbon[]        $insertedUserbons
+ * @property-read Order                       $order
+ * @property-read Orderproducttype|null       $orderproducttype
+ * @property-read Collection|Orderproduct[]   $parents
+ * @property-read Product                     $product
+ * @property-read Collection|Userbon[]        $userbons
  * @method static bool|null forceDelete()
- * @method static \Illuminate\Database\Query\Builder|\App\Orderproduct onlyTrashed()
+ * @method static \Illuminate\Database\Query\Builder|Orderproduct onlyTrashed()
  * @method static bool|null restore()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Orderproduct whereCheckoutstatusId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Orderproduct whereCost($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Orderproduct whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Orderproduct whereDeletedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Orderproduct whereDiscountAmount($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Orderproduct whereDiscountPercentage($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Orderproduct whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Orderproduct whereIncludedInCoupon($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Orderproduct whereOrderId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Orderproduct whereOrderproducttypeId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Orderproduct whereProductId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Orderproduct whereQuantity($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Orderproduct whereUpdatedAt($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Orderproduct withTrashed()
- * @method static \Illuminate\Database\Query\Builder|\App\Orderproduct withoutTrashed()
- * @mixin \Eloquent
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Orderproduct newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Orderproduct newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Orderproduct query()
- * @property-read float|int                                                      $discount_percentage
- * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel disableCache()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel withCacheCooldownSeconds($seconds)
- * @property-read mixed                                                          $orderproducttype_info
- * @property-read mixed                                                          $bons
- * @property-read mixed                                                          $grand_id
+ * @method static Builder|Orderproduct whereCheckoutstatusId($value)
+ * @method static Builder|Orderproduct whereCost($value)
+ * @method static Builder|Orderproduct whereCreatedAt($value)
+ * @method static Builder|Orderproduct whereDeletedAt($value)
+ * @method static Builder|Orderproduct whereDiscountAmount($value)
+ * @method static Builder|Orderproduct whereDiscountPercentage($value)
+ * @method static Builder|Orderproduct whereId($value)
+ * @method static Builder|Orderproduct whereIncludedInCoupon($value)
+ * @method static Builder|Orderproduct whereOrderId($value)
+ * @method static Builder|Orderproduct whereOrderproducttypeId($value)
+ * @method static Builder|Orderproduct whereProductId($value)
+ * @method static Builder|Orderproduct whereQuantity($value)
+ * @method static Builder|Orderproduct whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Query\Builder|Orderproduct withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|Orderproduct withoutTrashed()
+ * @mixin Eloquent
+ * @method static Builder|Orderproduct newModelQuery()
+ * @method static Builder|Orderproduct newQuery()
+ * @method static Builder|Orderproduct query()
+ * @property-read float|int                        $discount_percentage
+ * @method static Builder|BaseModel disableCache()
+ * @method static Builder|BaseModel withCacheCooldownSeconds($seconds)
+ * @property-read mixed                            $orderproducttype_info
+ * @property-read mixed                            $bons
+ * @property-read mixed                            $grand_id
  * @property-read mixed                                                          $grand_product
  * @property-read mixed                                                          $photo
  * @property-read mixed                                                          $price
@@ -286,7 +291,7 @@ class Orderproduct extends BaseModel
     }
     
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany|Orderproduct|Collection
+     * @return BelongsToMany|Orderproduct|Collection
      */
     public function parents()
     {
@@ -303,7 +308,7 @@ class Orderproduct extends BaseModel
      *
      * @param  array  $models
      *
-     * @return \Illuminate\Database\Eloquent\Collection
+     * @return Collection
      */
     public function newCollection(array $models = [])
     {
@@ -393,7 +398,7 @@ class Orderproduct extends BaseModel
     }
     
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany|Attributevalue|Collection
+     * @return BelongsToMany|Attributevalue|Collection
      */
     public function attributevalues()
     {
@@ -431,7 +436,7 @@ class Orderproduct extends BaseModel
     }
     
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     * @return BelongsToMany
      */
     public function userbons()
     {
@@ -499,7 +504,7 @@ class Orderproduct extends BaseModel
     
         return Cache::tags(['orderproduct'])
             ->remember($key, config('constants.CACHE_60'), function () use ($orderproduct) {
-                return optional($this->product->grand)->setVisible([
+                return optional(optional($this->product)->grand)->setVisible([
                     'id',
                     'name',
                     'photo',
@@ -603,9 +608,10 @@ class Orderproduct extends BaseModel
         $orderproduct = $this;
         $key          = 'orderproduct:photo:'.$orderproduct->cacheKey();
     
+//        dd($this->id);
         return Cache::tags(['orderproduct'])
             ->remember($key, config('constants.CACHE_60'), function () use ($orderproduct) {
-                return optional($this->product->grand)->photo;
+                return optional(optional($this->product)->grand)->photo;
             });
     }
 

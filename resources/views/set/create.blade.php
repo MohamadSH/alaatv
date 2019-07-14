@@ -94,6 +94,6 @@
 
         });
     </script>
-    <script src="/acm/AlaatvCustomFiles/js/admin-product.js" type="text/javascript"></script>
+    <script src="/acm/AlaatvCustomFiles/js/admin/page-productAdmin.js" type="text/javascript"></script>
 @endsection
 @endpermission

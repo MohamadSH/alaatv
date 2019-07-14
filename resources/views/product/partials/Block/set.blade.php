@@ -8,7 +8,7 @@
                         <i class="fa fa-play"></i> / <i class="fa fa-cloud-download-alt"></i>
                     </a>
                     <a href="{{ $set->url }}">
-                        <img data-src="{{ $set->photo }}?w=253&h=142" alt="{{ $set->small_name }}" class="a--full-width owl-lazy lazy-image"/>
+                        <img data-src="{{ $set->photo }}?w=253&h=142" alt="{{ $set->small_name }}" class="a--full-width owl-lazy lazy-image main-photo-forLoading"/>
                     </a>
                     <div class="m-widget19__shadow"></div>
                 </div>

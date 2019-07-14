@@ -1,7 +1,7 @@
 @extends('app')
 
 @section('page-css')
-    <link href = "/acm/AlaatvCustomFiles/components/alaa_old/font/glyphicons-halflings/glyphicons-halflings.css" rel = "stylesheet" type = "text/css"/>
+    <link href="{{ mix('/css/admin-all.css') }}" rel="stylesheet" type="text/css"/>
     <style>
         .mt-repeater-cell .d-table .d-table-cell {
             vertical-align: top;
@@ -324,23 +324,6 @@
 @endsection
 
 @section('page-js')
-    <script src = "/acm/AlaatvCustomFiles/components/alaa_old/scripts/datatable.min.js" type = "text/javascript"></script>
-    <script src = "/acm/AlaatvCustomFiles/components/alaa_old/plugins/datatables/datatables.min.js" type = "text/javascript"></script>
-    <script src = "/acm/AlaatvCustomFiles/components/alaa_old/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js" type = "text/javascript"></script>
-    <script src = "/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js" type = "text/javascript"></script>
-    <script src = "/acm/AlaatvCustomFiles/components/alaa_old/plugins/jquery-repeater/jquery.repeater.min.js" type = "text/javascript"></script>
-    <script src = "/acm/AlaatvCustomFiles/components/alaa_old/scripts/form-repeater.js" type = "text/javascript"></script>
-    <script src = "/acm/AlaatvCustomFiles/js/admin-makeDataTable.js" type = "text/javascript"></script>
-    <script type = "text/javascript">
-        /**
-         * Start up jquery
-         */
-        jQuery(document).ready(function () {
-//            $("#order-portlet .reload").trigger("click");
-            var newDataTable = $("#order_table").DataTable();
-            newDataTable.destroy();
-            makeDataTable("order_table");
-            $("#order-expand").trigger("click");
-        });
-    </script>
+    <script src="{{ mix('/js/admin-all.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('/acm/AlaatvCustomFiles/js/admin/page-teleMarketingAdminPanel.js') }}" type="text/javascript"></script>
 @endsection

@@ -1,0 +1,38 @@
+
+.m-portlet.m-portlet--creative .m-portlet__head-label {
+  white-space: nowrap;
+}
+.m-portlet.m-portlet--accent.m-portlet--head-solid-bg .m-portlet.m-portlet--creative .m-portlet__head,
+.m-portlet.m-portlet--info.m-portlet--head-solid-bg .m-portlet.m-portlet--creative .m-portlet__head {
+  background-color: white;
+  border-color: white;
+}
+.m-portlet.m-portlet--accent.m-portlet--head-solid-bg .m-portlet.m-portlet--creative .m-portlet__head .m-portlet__head-text,
+.m-portlet.m-portlet--info.m-portlet--head-solid-bg .m-portlet.m-portlet--creative .m-portlet__head .m-portlet__head-text {
+  color: #575962;
+}
+
+.highcharts-container , .highcharts-container * {
+  font-family: IRANSans;
+}
+.highcharts-label.highcharts-tooltip {
+  text-align: right;
+}
+.highcharts-anchor {
+  display: none;
+}
+
+.highcharts-data-label .highcharts-text-outline {
+  display: none;
+}
+#mapContainer .highcharts-background {
+  fill: #f2f3f8;
+}
+
+.topReport .totalReportInNumber {
+  display: flex;
+  align-items: center;
+}
+.topReport .totalReportInNumber > .m-portlet {
+  display: table;
+}

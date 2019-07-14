@@ -15,10 +15,10 @@
 @import "../../framework/components/general/config";
 
 //== 3: Bootstrap Include
-@import "../../framework/vendors/bootstrap/bootstrap.scss";
+@import "../../framework/vendors/bootstrap/bootstrap.scss"; // 288kb
 
 //== 4: Framework Components
-@import "../../framework/include";
+@import "../../framework/include"; // 770kb
 
 //== 5: Snippets
 @import "../../snippets/include";
@@ -32,25 +32,25 @@
 @import "header/_config";
 @import "aside/_config";
 @import "menu-header/_config";
-@import "menu-aside/_config";   
+@import "menu-aside/_config";
 @import "footer/_config";
 
 //== 7: Demo Layout
 @import "base/page";
 @import "base/body";
 
-@import "header/brand";
-@import "header/header";
-@import "header/topbar";
-@import "header/search";
+@import "header/brand"; // (need)
+@import "header/header"; // (need)
+@import "header/topbar"; // (need)
+@import "header/search"; // (need)
 
-@import "aside/aside-left";
-@import "aside/aside-right";
+@import "aside/aside-left"; // (need)
+//@import "aside/aside-right";
 @import "aside/aside-header-menu-mobile";
 
 @import "menu-header/menu";
 @import "menu-aside/menu";
 
-@import "subheader/default";
+//@import "subheader/default";
 
 @import "footer/default";

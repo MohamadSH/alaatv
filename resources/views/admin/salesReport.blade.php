@@ -2,16 +2,7 @@
 @extends('app',['pageName'=>$pageName])
 
 @section('page-css')
-    <link href="/acm/AlaatvCustomFiles/components/alaa_old/plugins/datatables/datatables.min.css" rel="stylesheet" type="text/css"/>
-    <link href="/acm/AlaatvCustomFiles/components/alaa_old/plugins/datatables/plugins/bootstrap/datatables.bootstrap-rtl.css" rel="stylesheet" type="text/css"/>
-    {{--<link href="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-modal/css/bootstrap-modal-bs3patch.css" rel="stylesheet" type="text/css"/>--}}
-    {{--<link href="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-modal/css/bootstrap-modal.css" rel="stylesheet" type="text/css"/>--}}
-    <link href="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-fileinput/bootstrap-fileinput.css" rel="stylesheet" type="text/css"/>
-    <link href="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-toastr/toastr-rtl.min.css" rel="stylesheet" type="text/css"/>
-    <link href="/acm/AlaatvCustomFiles/components/alaa_old/plugins/jquery-multi-select/css/multi-select-rtl.css" rel="stylesheet" type="text/css"/>
-    <link href="/acm/extra/persian-datepicker/dist/css/persian-datepicker-0.4.5.min.css" rel="stylesheet" type="text/css"/>
-    <link href="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-multiselect/css/bootstrap-multiselect.css" rel="stylesheet" type="text/css"/>
-    <link href="/acm/AlaatvCustomFiles/components/alaa_old/font/glyphicons-halflings/glyphicons-halflings.css" rel="stylesheet" type="text/css"/>
+    <link href="{{ mix('/css/admin-all.css') }}" rel="stylesheet" type="text/css"/>
     <style>
         .transactionItem {
             box-shadow: 0px 0px 10px 0px #A4AFFC;
@@ -178,132 +169,10 @@
 @endsection
 
 @section('page-js')
-    
-    <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-toastr/toastr.min.js" type="text/javascript"></script>
-    <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-select/js/bootstrap-select.min.js" type="text/javascript"></script>
-    <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/jquery-multi-select/js/jquery.multi-select.js" type="text/javascript"></script>
-    <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/select2/js/select2.full.min.js" type="text/javascript"></script>
-    <script src="/acm/extra/persian-datepicker/lib/persian-date.js" type="text/javascript"></script>
-    
-    {{--<script src="/acm/AlaatvCustomFiles/components/alaa_old/scripts/ui-extended-modals.min.js" type="text/javascript"></script>--}}
-    <script src="/acm/AlaatvCustomFiles/components/alaa_old/scripts/ui-toastr.min.js" type="text/javascript"></script>
-{{--    <script src="/acm/AlaatvCustomFiles/components/alaa_old/scripts/components-multi-select.min.js" type="text/javascript"></script>--}}
-    <script src="/acm/extra/persian-datepicker/dist/js/persian-datepicker-0.4.5.min.js" type="text/javascript"></script>
-    <script src="/acm/AlaatvCustomFiles/components/alaa_old/scripts/components-bootstrap-multiselect.min.js" type="text/javascript"></script>
-    
-    <script src="/acm/AlaatvCustomFiles/js/admin-makeMultiSelect.js" type="text/javascript"></script>
-    <script src="/acm/AlaatvCustomFiles/js/admin-customInitComponent.js" type="text/javascript"></script>
-    
-    
     <script type="text/javascript">
         var ajaxActionUrl = '{{ $ajaxActionUrl }}';
-        /**
-         * Start up jquery
-         */
-        $(document).ready(function () {
-
-            CustomInit.persianDatepicker('#dateFilterCreatedSince', '#dateFilterCreatedSinceAlt', true);
-            CustomInit.persianDatepicker('#dateFilterCreatedTill', '#dateFilterCreatedTillAlt', true);
-            
-            $('.reportOfFilter').fadeOut();
-            $('.report1').html('');
-            $('.report2').html('');
-            
-            $(document).on('click', '.btnFilter', function(){
-
-
-                $('.reportOfFilter').fadeOut();
-                $('.report1').html('');
-                $('.report2').html('');
-                
-                mApp.block('.btnFilter', {
-                    type: "loader",
-                    state: "success",
-                });
-
-                var dateFilterEnable = 0;
-                if($('#dateFilterCreatedTimeEnable').is(':checked')){
-                    dateFilterEnable = 1;
-                }
-
-                var checkoutEnable = 0;
-                if($('#checkoutEnable').is(':checked')){
-                    checkoutEnable = 1;
-                }
-
-                $.ajax({
-                    url: ajaxActionUrl,
-                    type: 'GET',
-                    data: {
-                        product_id: $('#productId').val(),
-                        since: $('#dateFilterCreatedSinceAlt').val(),
-                        till: $('#dateFilterCreatedTillAlt').val(),
-                        dateFilterEnable: dateFilterEnable,
-                        checkoutEnable : checkoutEnable,
-                        checkoutStatus:$('#checkoutStatus').val(),
-                    },
-                    dataType: 'json',
-                    success: function (data) {
-                        if (data.totalNumber != null && data.totalNumber != undefined) {
-
-                            $('.reportOfFilter').fadeIn();
-                            if(data.totalNumber != null && data.totalNumber != undefined )
-                            {
-                                $('.report1').html('تعداد کل: ' + data.totalNumber);
-                            }
-                            if(data.totalSale != null && data.totalSale != undefined )
-                            {
-                                $('.report2').html('فروش کل(تومان): ' + data.totalSale);
-                            }
-
-                            if(data.checkoutResult == null || data.checkoutResult== undefined )
-                            {
-                                $('.report3').html('وضعیت تسویه نامشخص');
-                            }
-                            else if(data.checkoutResult)
-                            {
-                                $('.report3').html('تسویه با موفقیت انجام شد');
-                            }else{
-                                $('.report3').html('تسویه ای انجام نشد');
-                            }
-
-                        } else {
-
-                            toastr.error('خطای سیستمی رخ داده است.');
-                        }
-                        mApp.unblock('.btnFilter');
-                    },
-                    error: function (jqXHR, textStatus, errorThrown) {
-
-                        let message = '';
-                        if (jqXHR.responseJSON.message === 'The given data was invalid.') {
-                            message = getErrorMessage(jqXHR.responseJSON.errors);
-                        } else {
-                            message = 'خطای سیستمی رخ داده است.';
-                        }
-
-                        toastr.warning(message);
-                        
-                        mApp.unblock('.btnFilter');
-                    }
-                });
-
-                
-                
-            });
-
-            $(document).on('click', '#dateFilterCreatedTimeEnable', function(){
-                if($('#dateFilterCreatedTimeEnable').is(':checked'))
-                {
-                    $('#dateFilterCreatedSince').enable();
-                    $('#dateFilterCreatedTill').enable();
-                }else{
-                    $('#dateFilterCreatedSince').enable(false);
-                    $('#dateFilterCreatedTill').enable(false);
-                }
-            });
-        });
     </script>
-
-@endsection
+    <script src="{{ mix('/js/admin-all.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('/acm/AlaatvCustomFiles/js/admin/page-sales-report.js') }}" type="text/javascript"></script>
+    @endsection
 @endability
