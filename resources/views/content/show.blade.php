@@ -72,7 +72,7 @@
                             <div class="a--video-wraper">
                                 <video id="video-{{ $content->id }}"
                                        class="video-js vjs-fluid vjs-default-skin vjs-big-play-centered" controls
-                                       preload="auto" height='360' width="640" poster='{{ $content->thumbnail }}'>
+                                       preload="none" height='360' width="640" poster='{{ $content->thumbnail }}'>
                                     @if($user_can_see_content)
                                         @foreach($content->getVideos() as $source)
                                             <source src="{{ $source->link }}" type='video/mp4' res="{{ $source->res }}"
@@ -290,15 +290,15 @@
                                         
                                         <div class="row">
                                             <div class="col-md-6 text-center m--margin-bottom-5">
-                                                <a href="{{ route('landing.8') }}"
-                                                   class="gtm-eec-promotion-click scrollSensitiveOnScreen"
-                                                   data-gtm-eec-promotion-id="contentShowPage-rightSide-1"
-                                                   data-gtm-eec-promotion-name="قرعه کشی گوشی"
-                                                   data-gtm-eec-promotion-creative="جلوی لینک های مستقیم دانلود این فیلم"
-                                                   data-gtm-eec-promotion-position="0">
-                                                    <img data-src="{{ asset('/acm/extra/ads/gif/300-250.gif') }}" class="a--full-width lazy-image">
-                                                    {{--                            <img src="{{ asset('/acm/extra/ads/gif/300-250.gif') }}" class="a--full-width">--}}
-                                                </a>
+{{--                                                <a href="{{ route('landing.8') }}"--}}
+{{--                                                   class="gtm-eec-promotion-click scrollSensitiveOnScreen"--}}
+{{--                                                   data-gtm-eec-promotion-id="contentShowPage-rightSide-1"--}}
+{{--                                                   data-gtm-eec-promotion-name="قرعه کشی گوشی"--}}
+{{--                                                   data-gtm-eec-promotion-creative="جلوی لینک های مستقیم دانلود این فیلم"--}}
+{{--                                                   data-gtm-eec-promotion-position="0">--}}
+{{--                                                    <img data-src="{{ asset('/acm/extra/ads/gif/300-250.gif') }}" class="a--full-width lazy-image">--}}
+{{--                                                    --}}{{--                            <img src="{{ asset('/acm/extra/ads/gif/300-250.gif') }}" class="a--full-width">--}}
+{{--                                                </a>--}}
                                             </div>
                                             <div class="col-md-6 text-center m--margin-bottom-5">
 {{--                                                <a href="{{ route('landing.5') }}"--}}
@@ -616,16 +616,16 @@
 {{--                        <img src="http://uupload.ir/files/u8r8_banner-1.gif" alt="همایش طلایی شیمی کنکور"--}}
 {{--                             class="m--img-centered a--full-width"/>--}}
 {{--                    </a>--}}
-                    <a href="https://alaatv.com/product/312"
-                       data-tooltip-content="همایش طلایی ریاضی تجربی کنکور"
-                       class="gtm-eec-promotion-click scrollSensitiveOnScreen"
-                       data-gtm-eec-promotion-id="contentShowPage-leftSide-1"
-                       data-gtm-eec-promotion-name="همایش طلایی ریاضی تجربی کنکور"
-                       data-gtm-eec-promotion-creative="سمت چپ صفحه پایین لیست کانتنت های مشابه"
-                       data-gtm-eec-promotion-position="0">
-                        <img data-src="https://cdn.alaatv.com/upload/riaziTajrobiKonkurNabakhte.gif" alt="همایش طلایی ریاضی تجربی کنکور"
-                             class="m--img-centered a--full-width lazy-image"/>
-                    </a>
+{{--                    <a href="https://alaatv.com/product/312"--}}
+{{--                       data-tooltip-content="همایش طلایی ریاضی تجربی کنکور"--}}
+{{--                       class="gtm-eec-promotion-click scrollSensitiveOnScreen"--}}
+{{--                       data-gtm-eec-promotion-id="contentShowPage-leftSide-1"--}}
+{{--                       data-gtm-eec-promotion-name="همایش طلایی ریاضی تجربی کنکور"--}}
+{{--                       data-gtm-eec-promotion-creative="سمت چپ صفحه پایین لیست کانتنت های مشابه"--}}
+{{--                       data-gtm-eec-promotion-position="0">--}}
+{{--                        <img data-src="https://cdn.alaatv.com/upload/riaziTajrobiKonkurNabakhte.gif" alt="همایش طلایی ریاضی تجربی کنکور"--}}
+{{--                             class="m--img-centered a--full-width lazy-image"/>--}}
+{{--                    </a>--}}
                 </div>
             </div>
         @endif

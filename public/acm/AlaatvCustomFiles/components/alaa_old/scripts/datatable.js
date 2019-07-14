@@ -83,23 +83,23 @@ var Datatable = function() {
                             $.each(ajaxParams, function(key, value) {
                                 data[key] = value;
                             });
-                            App.blockUI({
-                                message: tableOptions.loadingMessage,
-                                target: tableContainer,
+                            mApp.block(tableContainer, {
                                 overlayColor: 'none',
                                 cenrerY: true,
-                                boxed: true
+                                boxed: true,
+                                message: tableOptions.loadingMessage,
                             });
                         },
                         "dataSrc": function(res) { // Manipulate the data returned from the server
                             if (res.customActionMessage) {
-                                App.alert({
-                                    type: (res.customActionStatus == 'OK' ? 'success' : 'danger'),
-                                    icon: (res.customActionStatus == 'OK' ? 'check' : 'warning'),
-                                    message: res.customActionMessage,
-                                    container: tableWrapper,
-                                    place: 'prepend'
-                                });
+                                alert(res.customActionMessage);
+                                // App.alert({
+                                //     type: (res.customActionStatus == 'OK' ? 'success' : 'danger'),
+                                //     icon: (res.customActionStatus == 'OK' ? 'check' : 'warning'),
+                                //     message: res.customActionMessage,
+                                //     container: tableWrapper,
+                                //     place: 'prepend'
+                                // });
                             }
 
                             if (res.customActionStatus) {
@@ -116,7 +116,8 @@ var Datatable = function() {
                                 tableOptions.onSuccess.call(undefined, the, res);
                             }
 
-                            App.unblockUI(tableContainer);
+                            mApp.unblock(tableContainer);
+                            // App.unblockUI(tableContainer);
 
                             return res.data;
                         },
@@ -125,15 +126,18 @@ var Datatable = function() {
                                 tableOptions.onError.call(undefined, the);
                             }
 
-                            App.alert({
-                                type: 'danger',
-                                icon: 'warning',
-                                message: tableOptions.dataTable.language.metronicAjaxRequestGeneralError,
-                                container: tableWrapper,
-                                place: 'prepend'
-                            });
+                            alert(tableOptions.dataTable.language.metronicAjaxRequestGeneralError);
 
-                            App.unblockUI(tableContainer);
+                            // App.alert({
+                            //     type: 'danger',
+                            //     icon: 'warning',
+                            //     message: tableOptions.dataTable.language.metronicAjaxRequestGeneralError,
+                            //     container: tableWrapper,
+                            //     place: 'prepend'
+                            // });
+
+                            mApp.unblock(tableContainer);
+                            // App.unblockUI(tableContainer);
                         }
                     },
 

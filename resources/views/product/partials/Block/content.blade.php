@@ -1,6 +1,11 @@
 <div class="m-widget_head-owlcarousel-item carousel" data-position="{{ $contentKey }}">
     <a href="{{ $content->url }}" >
-        <img class="a--owl-carousel-type-2-item-image owl-lazy lazy-image main-photo-forLoading" data-src="{{ $content->thumbnail }}">
+        <img class="a--owl-carousel-type-2-item-image owl-lazy lazy-image main-photo-forLoading"
+             @if(isset($imageDimension))
+             data-src="{{ $content->thumbnail }}{{ $imageDimension }}"
+             @else
+             data-src="{{ $content->thumbnail }}"
+             @endif >
     </a>
     <div class="a--owl-carousel-type-2-item-title">
         @if($content->price['base']>0)

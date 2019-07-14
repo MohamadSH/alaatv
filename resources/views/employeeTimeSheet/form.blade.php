@@ -184,18 +184,22 @@
                         <div class = "icheck-inline">
                             <label>
                                 {!! Form::checkbox('timeSheetLock', '1', (isset($employeetimesheet) )? $employeetimesheet->getOriginal("timeSheetLock") : null ,  ['value' => '1'  , 'class'=>'icheck' ,'data-checkbox'=>'icheckbox_line-red' , 'data-label'=>'قفل کردن'  ]) !!}
+                                قفل کردن
                             </label>
                             <label>
                                 {!! Form::checkbox('isExtraDay', '1', (isset($isExtra))? $isExtra : null,  ['value' => '1'  , 'class'=>'icheck' ,'data-checkbox'=>'icheckbox_line-orange' , 'data-label'=>'به عنوان روز خاص ثبت شود' ]) !!}
+                                به عنوان روز خاص ثبت شود
                             </label>
                             {{--@permission((config('constants.INSERT_EMPLOPYEE_WORK_SHEET')))--}}
                             <label>
                                 {!! Form::checkbox('isPaid', '1', (isset($employeetimesheet) )? $employeetimesheet->getOriginal("isPaid") : null,  ['value' => '1'  , 'class'=>'icheck' ,'data-checkbox'=>'icheckbox_line-blue' , 'data-label'=>'تسویه شده' , (isset($employeetimesheet) )? "" : "checked"  ]) !!}
+                                تسویه شده
                             </label>
                             {{--@endpermission--}}
                             @permission((config('constants.EDIT_EMPLOPYEE_WORK_SHEET')))
                             <label>
                                 {!! Form::checkbox('overtime_confirmation', '1', (isset($employeetimesheet) )? $employeetimesheet->getOriginal('overtime_confirmation') : null,  ['value' => '1'  , 'class'=>'icheck' ,'data-checkbox'=>'icheckbox_line-green' , 'data-label'=>'تاییدیه اضافه کاری' , (isset($employeetimesheet) )? "" : "checked"  ]) !!}
+                                تاییدیه اضافه کاری
                             </label>
                             @endpermission
                         </div>
