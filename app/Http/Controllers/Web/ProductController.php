@@ -1151,12 +1151,7 @@ class ProductController extends Controller
                 'type'              => $reshteIdArray[$value->id],
                 'price'             => $price,
                 'priceWithDiscount' => $priceWithDiscount,
-                'image'             => route('image', [
-                    'category' => '4',
-                    'w'        => '256',
-                    'h'        => '256',
-                    'filename' => $value->image,
-                ]),
+                'image'             => $value->photo.'?w=400&h=400',
                 'name'              => $value->name,
                 'link'              => action('Web\ProductController@show', $value->id)
                 //                'link'              => null,
