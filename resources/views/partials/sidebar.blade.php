@@ -299,7 +299,17 @@
                             <span class="m-menu__link-text"> گزارش فروش</span>
                         </a>
                     </li>
-                @endpermission
+                    @endpermission
+
+                    @permission((config('constants.LIST_BLOCK_ACCESS')))
+                    <li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1">
+                        <a href="{{ action("Web\AdminController@adminBlock") }}" class="m-menu__link ">
+                            <span class="m-menu__item-here"></span>
+                            <i class="m-menu__link-icon flaticon-network"></i>
+                            <span class="m-menu__link-text"> بلوک ها</span>
+                        </a>
+                    </li>
+                    @endpermission
     
                     @permission((config('constants.PRODUCT_ADMIN_PANEL_ACCESS')))
                     <li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1">
