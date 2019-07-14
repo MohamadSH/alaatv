@@ -762,8 +762,14 @@ class AdminController extends Controller
     public function adminGenerateRandomCoupon(Request $request)
     {
         $productCollection = $products = $this->makeProductCollection();
+        $childrenCollection = collect();
+        /** @var Product $product */
+        foreach ($productCollection as $product) {
+            $children = $product->getAllChildren();
+            $childrenCollection->put( $product->id , $children);
+        }
 
-        return view('admin.generateSpecialCoupon', compact('productCollection'));
+        return view('admin.generateSpecialCoupon', compact('productCollection' , 'childrenCollection'));
     }
 
     public function registerUserAndGiveOrderproduct(\App\Http\Requests\Request $request)
