@@ -264,6 +264,7 @@ mix.styles([
 
 // ---------------------------------------------------------------------------------- content-show
 mix.styles([
+        'node_modules/toastr/build/toastr.css',
         'public/acm/AlaatvCustomFiles/components/ribbon/style.css',
         'node_modules/block-ui/jquery.blockUI.js',
         'node_modules/owl.carousel/dist/assets/owl.carousel.css',
@@ -280,6 +281,7 @@ mix.styles([
     'public/css/content-show.css'
 ).version()
 .babel([
+        'node_modules/toastr/build/toastr.min.js',
         'node_modules/block-ui/jquery.blockUI.js',
         'node_modules/owl.carousel/dist/owl.carousel.js',
         'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/js.js',
