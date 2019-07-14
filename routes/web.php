@@ -123,17 +123,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('productAdmin', 'Web\AdminController@adminProduct');
     Route::get('contentAdmin', 'Web\AdminController@adminContent');
     Route::get('blockAdmin', 'Web\AdminController@adminBlock')->name('blockAdmin');
-    Route::get('blockAdmin/list', 'Web\BlockController@adminIndex');
-    Route::get('blockAdmin/detach/{block}/{type}/{id}', 'Web\BlockController@detachFromBlock');
-    Route::resource('blockAdmin', 'Web\BlockController',
-        [
-            'except' => ['index'],
-            'names' => [
-                'edit' => 'blockAdmin.edit'
-            ]
-        ]
-    );
-    
+    Route::get('block/detach/{block}/{type}/{id}', 'Web\BlockController@detachFromBlock');
+
     Route::get('sales-report', 'Web\AdminController@adminSalesReport')->name('admin.salesReport');
     
     Route::get('ordersAdmin', 'Web\AdminController@adminOrder');

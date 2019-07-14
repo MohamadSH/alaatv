@@ -73,6 +73,7 @@ class AdminController extends Controller
         $this->middleware('permission:'.config('constants.LIST_ORDER_ACCESS'), ['only' => 'adminOrder']);
         $this->middleware('permission:'.config('constants.SMS_ADMIN_PANEL_ACCESS'), ['only' => 'adminSMS']);
         $this->middleware('permission:'.config('constants.REPORT_ADMIN_PANEL_ACCESS'), ['only' => 'adminReport']);
+        $this->middleware('permission:'.config('constants.LIST_BLOCK_ACCESS'), ['only' => 'adminBlock']);
         $this->middleware('ability:'.config('constants.ROLE_ADMIN').','.config('constants.TELEMARKETING_PANEL_ACCESS'),
             ['only' => 'adminTeleMarketing']);
         $this->middleware('permission:'.config('constants.INSERT_COUPON_ACCESS'),
@@ -960,7 +961,6 @@ class AdminController extends Controller
 
     public function adminBlock(Request $request)
     {
-        //ToDo : put in view composer
         $blockTypes = [
             [
                 'value' => '1',
@@ -976,7 +976,7 @@ class AdminController extends Controller
             ]
         ];
         $pageName = 'indexBlock';
-        return view('admin.indexBlock', compact(['pageName', 'blockTypes']));
+        return view('admin.indexBlock', compact('pageName', 'blockTypes'));
     }
 
     public function adminSalesReport(Request $request) {

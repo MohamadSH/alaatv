@@ -832,7 +832,7 @@ class UserController extends Controller
         
         $user = new User();
         try {
-            $this->fillContentFromRequest($data, $authenticatedUser, config('constants.INSERT_USER_ACCESS'), $user);
+            $this->fillUserFromRequest($data, $authenticatedUser, config('constants.INSERT_USER_ACCESS'), $user);
         } catch (FileNotFoundException $e) {
             return [
                 "error" => true,
@@ -890,7 +890,7 @@ class UserController extends Controller
      * @return void
      * @throws FileNotFoundException
      */
-    private function fillContentFromRequest(array $inputData, User $authenticatedUser, string $moderatorPermission, User &$user): void
+    private function fillUserFromRequest(array $inputData, User $authenticatedUser, string $moderatorPermission, User &$user): void
     {
         if ($authenticatedUser->can($moderatorPermission)) {
             // Checks both if $inputData has password index and it is not null
@@ -2093,7 +2093,7 @@ class UserController extends Controller
             return response(['message'=>'User profile is locked'] , Response::HTTP_LOCKED);
         
         try {
-            $this->fillContentFromRequest($request->all(), $authenticatedUser, config('constants.EDIT_USER_ACCESS'),
+            $this->fillUserFromRequest($request->all(), $authenticatedUser, config('constants.EDIT_USER_ACCESS'),
                 $user);
         } catch (FileNotFoundException $e) {
             return response([
