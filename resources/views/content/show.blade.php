@@ -671,7 +671,7 @@
                                              data-gtm-eec-list=" محصولاتی که شامل این محتوا هستند - {{ $content->displayName }} ">
                                             <a href="{{ $product->url }}">
                                                 <img class="a--owl-carousel-type-2-item-image owl-lazy lazy-image"
-                                                     data-src="{{ $product->photo }}" alt="{{ $product->name }}">
+                                                     data-src="{{ $product->photo }}?w=400&h=400" alt="{{ $product->name }}">
                                             </a>
                                             <br>
                                             <a href="{{ $product->url }}" target="_blank"
