@@ -276,11 +276,18 @@
                             <span class="m-menu__link-text">کاربران</span>
                         </a>
                     </li>
+{{--                    <li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1">--}}
+{{--                        <a href="{{ action("Web\AdminController@specialAddUser") }}" class="m-menu__link ">--}}
+{{--                            <span class="m-menu__item-here"></span>--}}
+{{--                            <i class="m-menu__link-icon flaticon-network"></i>--}}
+{{--                            <span class="m-menu__link-text">درج کاربر با سفارش</span>--}}
+{{--                        </a>--}}
+{{--                    </li>--}}
                     <li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1">
-                        <a href="{{ action("Web\AdminController@specialAddUser") }}" class="m-menu__link ">
+                        <a href="{{ action("Web\AdminController@adminGenerateRandomCoupon") }}" class="m-menu__link ">
                             <span class="m-menu__item-here"></span>
                             <i class="m-menu__link-icon flaticon-network"></i>
-                            <span class="m-menu__link-text">درج کاربر با سفارش</span>
+                            <span class="m-menu__link-text">تولید کپن تصادفی</span>
                         </a>
                     </li>
                     @endability
