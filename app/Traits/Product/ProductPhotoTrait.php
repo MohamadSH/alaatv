@@ -8,9 +8,11 @@
 
 namespace App\Traits\Product;
 
+use App\Adapter\AlaaSftpAdapter;
 use App\Productphoto;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
+use Storage;
 
 trait ProductPhotoTrait
 {
@@ -44,6 +46,11 @@ trait ProductPhotoTrait
     
     public function getPhotoAttribute()
     {
+        /** @var AlaaSftpAdapter $diskAdapter */
+        $diskAdapter = Storage::disk('alaaCdnSFTP')->getAdapter();
+        $imageUrl =  $diskAdapter->getUrl($this->image);
+        return isset($imageUrl)?$imageUrl :'/acm/image/255x255.png';
+
         $productImage = $this->image;
         $productImage = (isset($productImage[0]) ? route('image', [
             'category' => '4',

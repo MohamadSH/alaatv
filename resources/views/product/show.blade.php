@@ -71,7 +71,7 @@
                             <div class="row">
                                 <div class="col-lg-3">
                                     <div class="m--margin-bottom-45">
-                                        <img src="{{$product->photo}}" alt="عکس محصول@if(isset($product->name)) {{$product->name}} @endif" class="img-fluid m--marginless a--full-width"/>
+                                        <img src="{{$product->photo}}?w=400&h=400" alt="عکس محصول@if(isset($product->name)) {{$product->name}} @endif" class="img-fluid m--marginless a--full-width"/>
                                         @if(isset($product->bons->first()->pivot->bonPlus))
                                             <div class="m-alert m-alert--icon m-alert--air m-alert--square alert alert-success alert-dismissible fade show" role="alert">
                                                 <div class="m-alert__icon">

@@ -29,7 +29,7 @@
        data-gtm-eec-product-variant="-"
        data-gtm-eec-product-position="{{ $productKey }}"
        data-gtm-eec-product-list="{{ $block->title }}">
-        <img class="a--owl-carousel-type-2-item-image owl-lazy lazy-image main-photo-forLoading" data-src="{{ $product->photo }}?w=253&h=142" alt="{{ $product->name }}">
+        <img class="a--owl-carousel-type-2-item-image owl-lazy lazy-image main-photo-forLoading" data-src="{{ $product->photo }}?w=400&h=400" alt="{{ $product->name }}">
     </a>
     <div class="m--font-primary a--owl-carousel-type-2-item-title">
         @include('product.partials.price', ['price'=>$product->price])
