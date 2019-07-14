@@ -11,9 +11,9 @@ var SnippetContentShow = function(){
             player.nuevo({
                 // logotitle:"آموزش مجازی آلاء",
                 // logo:"https://sanatisharif.ir/image/11/135/67/logo-150x22_20180430222256.png",
-                logocontrolbar: '/acm/extra/Alaa-logo.gif',
+                logocontrolbar: 'https://cdn.alaatv.com/upload/alaa-logo-small.png',
                 // logoposition:"RT", // logo position (LT - top left, RT - top right)
-                logourl:'//sanatisharif.ir',
+                logourl:'//alaatv.com',
 
                 shareTitle: contentDisplayName,
                 shareUrl: contentUrl,
