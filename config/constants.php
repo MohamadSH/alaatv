@@ -177,6 +177,10 @@ return [
     'EDIT_CONTENT_SET_ACCESS'                     => 'editContentset',
     'REMOVE_CONTENT_SET_ACCESS'                   => 'removeContentset',
     'SHOW_SALES_REPORT'                           => 'showSalesReport',
+    'LIST_BLOCK_ACCESS'                           => 'listBlock',
+    'INSERT_BLOCK_ACCESS'                         => 'insertBlock',
+    'EDIT_BLOCK_ACCESS'                           => 'editBlock',
+    'REMOVE_BLOCK_ACCESS'                         => 'removeBlock',
 
 
     //Technician

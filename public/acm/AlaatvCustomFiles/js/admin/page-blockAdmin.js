@@ -124,7 +124,7 @@ function makeDataTable_loadWithAjax_blocks(dontLoadAjax) {
         mApp.unblock('#block_table_wrapper');
         return json.data;
     };
-    let url = '/blockAdmin/list';
+    let url = '/block';
     if (dontLoadAjax) {
         url = null;
     } else {

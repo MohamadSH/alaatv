@@ -54,6 +54,7 @@ use Iatstuti\Database\Support\CascadeSoftDeletes;
  * @method static Builder|BaseModel withCacheCooldownSeconds($seconds)
  * @property mixed                                                     $offer
  * @property-read mixed                                                $cache_cooldown_seconds
+ * @property mixed customUrl
  */
 class Block extends BaseModel
 {
