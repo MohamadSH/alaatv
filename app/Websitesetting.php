@@ -2,6 +2,8 @@
 
 namespace App;
 
+use Storage;
+
 /**
  * App\Websitesetting
  *
@@ -40,5 +42,11 @@ class Websitesetting extends BaseModel
     public function getSettingAttribute($value)
     {
         return json_decode($value);
+    }
+
+    public function getSiteLogoUrlAttribute(){
+        $setting = $this->setting;
+        $diskAdapter = Storage::disk('alaaCdnSFTP')->getAdapter();
+        return   $diskAdapter->getUrl(optional($setting->site)->siteLogo);
     }
 }
