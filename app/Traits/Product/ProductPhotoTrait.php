@@ -51,15 +51,15 @@ trait ProductPhotoTrait
         $imageUrl =  $diskAdapter->getUrl($this->image);
         return isset($imageUrl)?$imageUrl :'/acm/image/255x255.png';
 
-        $productImage = $this->image;
-        $productImage = (isset($productImage[0]) ? route('image', [
-            'category' => '4',
-            'w'        => '256',
-            'h'        => '256',
-            'filename' => $productImage,
-        ]) : '/acm/image/255x255.png');
-        
-        return $productImage;
+//        $productImage = $this->image;
+//        $productImage = (isset($productImage[0]) ? route('image', [
+//            'category' => '4',
+//            'w'        => '256',
+//            'h'        => '256',
+//            'filename' => $productImage,
+//        ]) : '/acm/image/255x255.png');
+//
+//        return $productImage;
     }
     
     /**
