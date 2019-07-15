@@ -2,6 +2,8 @@
 
 namespace App;
 
+use Storage;
+
 /**
  * App\Productphoto
  *
@@ -92,11 +94,15 @@ class Productphoto extends BaseModel
     
     public function url($w, $h)
     {
-        return route('image', [
-            'category' => '4',
-            'w'        => $w,
-            'h'        => $h,
-            'filename' => $this->file,
-        ]);
+        $diskAdapter = Storage::disk('alaaCdnSFTP')->getAdapter();
+        $imageUrl =  $diskAdapter->getUrl($this->file);
+        return isset($imageUrl)?$imageUrl :'/acm/image/255x255.png';
+
+//        return route('image', [
+//            'category' => '4',
+//            'w'        => $w,
+//            'h'        => $h,
+//            'filename' => $this->file,
+//        ]);
     }
 }
