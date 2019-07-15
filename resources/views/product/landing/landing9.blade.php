@@ -15,8 +15,8 @@
                 <div class="m-portlet__body">
                     <div class="m-widget27 m-portlet-fit--sides">
                         <div class="m-widget27__container">
-                            <div class="container-fluid m--padding-right-40 m--padding-left-40">
-                                
+                            {{--<div class="container-fluid m--padding-right-40 m--padding-left-40">
+
                                 <div class="row">
                                     <div class="col text-center">
                                         <h3 class="text-center">
@@ -36,28 +36,28 @@
                                             </span>
                                             <span></span>
                                         </div>
-            
+
                                         <p class="text-center">
                                             <br>
                                             در هر رشته ای و در هر سهمیه ای
                                             <br>
                                             هر هزینه ای که از 26 اردیبهشت تا 18 خرداد 98 در سایت آلاء برای خرید محصولات یا همایش ها پرداخت کرده اید به عنوان بورس و هدیه آلاء به شما برگردد.
                                         </p>
-            
+
                                         <div class="m--font-boldest text-center">با استعداد و تلاش خودتون، اولین مزد زحماتتون رو از ما بگیرید.</div>
-            
+
                                         <h5 class="m--margin-top-35 text-center d-none">با آلاء مستحکم در مسیر موفقیت خواهید بود.</h5>
-            
+
                                         <div class="alert alert-warning text-center m--margin-top-20" role="alert">
                                             <strong>
                                                 آلاء با تمام بضاعت خودش، مخاطبین وفادارش رو با بهترین توانایی هاشون به میدان کنکور میفرسته.
                                             </strong>
                                         </div>
-        
+
                                     </div>
                                 </div>
-                                
-                            </div>
+
+                            </div>--}}
                             
     
                             @foreach($blocks as $blockKey=>$block)
