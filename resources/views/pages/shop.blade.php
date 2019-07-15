@@ -38,7 +38,7 @@
                                 </button>
                                 <br>
                                 <span class="m--font-light">
-                                    <img src="{{ asset('/acm/extra/alaa-logo-small.gif') }}" width="20">
+                                    <img src="https://cdn.alaatv.com/upload/alaa-logo-small.png" width="20">
 				                </span>
                                 <div class="m--space-10"></div>
                             </div>
@@ -59,7 +59,7 @@
                                 </button>
                                 <br>
                                 <span class="m--font-light">
-                                    <img src="{{ asset('/acm/extra/alaa-logo-small.gif') }}" width="20">
+                                    <img src="https://cdn.alaatv.com/upload/alaa-logo-small.png" width="20">
 				                </span>
                                 <div class="m--space-10"></div>
                             </div>
@@ -80,7 +80,7 @@
                                 </button>
                                 <br>
                                 <span class="m--font-light">
-                                    <img src="{{ asset('/acm/extra/alaa-logo-small.gif') }}" width="20">
+                                    <img src="https://cdn.alaatv.com/upload/alaa-logo-small.png" width="20">
 				                </span>
                                 <div class="m--space-10"></div>
                             </div>
@@ -101,7 +101,7 @@
                                 </button>
                                 <br>
                                 <span class="m--font-light">
-                                    <img src="{{ asset('/acm/extra/alaa-logo-small.gif') }}" width="20">
+                                    <img src="https://cdn.alaatv.com/upload/alaa-logo-small.png" width="20">
 				                </span>
                                 <div class="m--space-10"></div>
                             </div>
@@ -121,7 +121,7 @@
                                 </button>
                                 <br>
                                 <span class="m--font-light">
-                                    <img src="{{ asset('/acm/extra/alaa-logo-small.gif') }}" width="20">
+                                    <img src="https://cdn.alaatv.com/upload/alaa-logo-small.png" width="20">
 				                </span>
                                 <div class="m--space-10"></div>
                             </div>

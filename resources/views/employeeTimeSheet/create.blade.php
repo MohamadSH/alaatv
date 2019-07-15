@@ -2,6 +2,7 @@
 
 @section('page-css')
     <link href="{{ mix('/css/admin-all.css') }}" rel="stylesheet" type="text/css"/>
+{{--    <link href="{{ asset('/acm/AlaatvCustomFiles/components/alaa_old/plugins/icheck/skins/all.css') }}" rel="stylesheet" type="text/css"/>--}}
     <style>
         .datepicker-header {
             direction: ltr;
@@ -223,17 +224,103 @@
             </div>
         </div>
     </div>
+    
 @endsection
 
 @section('page-js')
     <script src="{{ mix('/js/admin-all.js') }}" type="text/javascript"></script>
+    
+    
+    
+    
+{{--    <script src="/acm/AlaatvCustomFiles/components/alaa_old/scripts/datatable.min.js" type="text/javascript"></script>--}}
+{{--    <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/datatables/datatables.min.js" type="text/javascript"></script>--}}
+{{--    <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js" type="text/javascript"></script>--}}
+{{--    <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-fileinput/bootstrap-fileinput.js" type="text/javascript"></script>--}}
+{{--    <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-summernote/summernote.min.js" type="text/javascript"></script>--}}
+{{--    <script src="/acm/extra/persian-datepicker/lib/persian-date.js" type="text/javascript"></script>--}}
+{{--    <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/jquery-inputmask/jquery.inputmask.bundle.min.js" type="text/javascript"></script>--}}
+{{--    <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/jquery.input-ip-address-control-1.0.min.js" type="text/javascript"></script>--}}
+{{--    <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/icheck/icheck.min.js" type="text/javascript"></script>--}}
+{{--    <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-toastr/toastr.min.js" type="text/javascript"></script>--}}
+{{--    <script src="/acm/AlaatvCustomFiles/components/alaa_old/scripts/components-editors.js" type="text/javascript"></script>--}}
+{{--    <script src="/acm/AlaatvCustomFiles/components/alaa_old/scripts/ui-toastr.min.js" type="text/javascript"></script>--}}
+{{--    <script src="/acm/extra/persian-datepicker/dist/js/persian-datepicker-0.4.5.min.js" type="text/javascript"></script>--}}
+{{--    <script src="/acm/AlaatvCustomFiles/components/alaa_old/scripts/app.js" type="text/javascript"></script>--}}
+{{--    <script src="/acm/AlaatvCustomFiles/components/alaa_old/scripts/form-input-mask.js" type="text/javascript"></script>--}}
+{{--    <script src="/acm/AlaatvCustomFiles/components/alaa_old/scripts/form-icheck.js" type="text/javascript"></script>--}}
+{{--    <script src="/acm/AlaatvCustomFiles/components/alaa_old/scripts/components-bootstrap-multiselect.min.js" type="text/javascript"></script>--}}
+{{--    <script src="/acm/AlaatvCustomFiles/js/admin/makeDataTable.js" type="text/javascript"></script>--}}
+{{--    <script src="/acm/AlaatvCustomFiles/js/admin-makeMultiSelect.js" type="text/javascript"></script>--}}
+
+
+
+
+
+
+{{--    <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/datatables/datatables.min.js" type="text/javascript"></script>--}}
+{{--    <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js" type="text/javascript"></script>--}}
+{{--    <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js" type="text/javascript"></script>--}}
+{{--    <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-fileinput/bootstrap-fileinput.js" type="text/javascript"></script>--}}
+{{--    <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/jquery-inputmask/jquery.inputmask.bundle.min.js" type="text/javascript"></script>--}}
+{{--    <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/jquery.sparkline.min.js" type="text/javascript"></script>--}}
+{{--    <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-toastr/toastr.min.js" type="text/javascript"></script>--}}
+{{--    <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-select/js/bootstrap-select.min.js" type="text/javascript"></script>--}}
+{{--    <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/jquery-multi-select/js/jquery.multi-select.js" type="text/javascript"></script>--}}
+{{--    <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/jquery-repeater/jquery.repeater.min.js" type="text/javascript"></script>--}}
+{{--    <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-tagsinput/bootstrap-tagsinput.min.js" type="text/javascript"></script>--}}
+{{--    <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/jplayer/dist/jplayer/jquery.jplayer.js" type="text/javascript"></script>--}}
+{{--    <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/jQueryNumberFormat/jquery.number.min.js" type="text/javascript"></script>--}}
+{{--    <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-sweetalert/sweetalert.min.js" type="text/javascript"></script>--}}
+{{--    <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/jquery.input-ip-address-control-1.0.min.js" type="text/javascript"></script>--}}
+{{--    <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/icheck/icheck.min.js" type="text/javascript"></script>--}}
+    
+{{--    <script src="/acm/AlaatvCustomFiles/components/alaa_old/scripts/datatable.min.js" type="text/javascript"></script>--}}
+{{--    <script src="/acm/AlaatvCustomFiles/components/alaa_old/scripts/form-repeater.js" type="text/javascript"></script>--}}
+{{--    <script src="/acm/AlaatvCustomFiles/components/alaa_old/scripts/ui-toastr.min.js" type="text/javascript"></script>--}}
+{{--    <script src="/acm/AlaatvCustomFiles/components/alaa_old/scripts/components-editors.js" type="text/javascript"></script>--}}
+{{--    <script src="/acm/AlaatvCustomFiles/components/alaa_old/scripts/components-multi-select.min.js" type="text/javascript"></script>--}}
+{{--    <script src="/acm/AlaatvCustomFiles/components/alaa_old/scripts/components-bootstrap-multiselect.min.js" type="text/javascript"></script>--}}
+{{--    <script src="/acm/AlaatvCustomFiles/components/alaa_old/scripts/ui-confirmations.min.js" type="text/javascript"></script>--}}
+{{--    <script src="/acm/AlaatvCustomFiles/components/alaa_old/scripts/makeSelect2Single.js" type="text/javascript"></script>--}}
+{{--    <script src="/acm/AlaatvCustomFiles/components/alaa_old/scripts/form-input-mask.js" type="text/javascript"></script>--}}
+{{--    <script src="/acm/AlaatvCustomFiles/components/alaa_old/scripts/form-icheck.js" type="text/javascript"></script>--}}
+{{--    --}}
+{{--    <script src="/acm/extra/persian-datepicker/lib/persian-date.js" type="text/javascript"></script>--}}
+{{--    <script src="/acm/extra/persian-datepicker/dist/js/persian-datepicker-0.4.5.min.js" type="text/javascript"></script>--}}
+{{--    <script src="/acm/AlaatvCustomFiles/js/admin/makeDataTable.js" type="text/javascript"></script>--}}
+{{--    <script src="/acm/AlaatvCustomFiles/js/admin-makeMultiSelect.js" type="text/javascript"></script>--}}
+{{--    <script src="/acm/AlaatvCustomFiles/js/admin-customInitComponent.js" type="text/javascript"></script>--}}
     <script type="text/javascript">
         jQuery(document).ready(function () {
+
+            // $('.icheck').iCheck({
+            //     checkboxClass: 'icheckbox_line',
+            //     radioClass: 'iradio_line',
+            // });
+            //
+            
             // Ajax of Modal forms
             var $modal = $('#ajax-modal');
 
-            $('#employeeCommentSummerNote').summernote({height: 200, placeholder: "توضیحات کارمند"});
-            $('#managerCommentSummerNote').summernote({height: 200, placeholder: "توضیحات مدیر"});
+            $('#employeeCommentSummerNote').summernote({
+                lang: 'fa-IR',
+                height: 300,
+                popover: {
+                    image: [],
+                    link: [],
+                    air: []
+                },
+                placeholder: "توضیحات کارمند"});
+            $('#managerCommentSummerNote').summernote({
+                lang: 'fa-IR',
+                height: 300,
+                popover: {
+                    image: [],
+                    link: [],
+                    air: []
+                },
+                placeholder: "توضیحات مدیر"});
 
             $("#date").persianDatepicker({
                 altField: '#dateAlt',
@@ -245,7 +332,6 @@
                     return d;
                 }
             });
-
             $("#sinceDate").persianDatepicker({
                 altField: '#sinceDateAlt',
                 altFormat: "YYYY MM DD",
@@ -256,7 +342,6 @@
                     return d;
                 }
             });
-
             $("#tillDate").persianDatepicker({
                 altField: '#tillDateAlt',
                 altFormat: "YYYY MM DD",

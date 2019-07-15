@@ -8,7 +8,7 @@ var FormRepeater = function () {
         			show: function () {
 	                	$(this).slideDown();
                         $('.date-picker').datepicker({
-                            rtl: App.isRTL(),
+                            rtl: true,
                             orientation: "left",
                             autoclose: true
                         });

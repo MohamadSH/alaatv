@@ -441,7 +441,11 @@
                                                             controls
                                                             {{-- preload="auto"--}}
                                                             preload="none"
-                                                            poster = '@if(isset($product->introVideoThumbnail)) {{$product->introVideoThumbnail}} @else https://cdn.sanatisharif.ir/media/204/240p/204054ssnv.jpg @endif'>
+                                                            @if(isset($product->introVideoThumbnail))
+                                                            poster = "{{$product->introVideoThumbnail}}?w=400&h=225"
+                                                            @else
+                                                            poster = "https://cdn.sanatisharif.ir/media/204/240p/204054ssnv.jpg"
+                                                            @endif >
     
                                                         {{--                                                        <source--}}
                                                         {{--                                                                src="{{$product->introVideo}}"--}}
@@ -531,6 +535,7 @@
         'blockTitle'=>view('product.partials.productInfoNav', ['targetId'=>'sampleVideo']),
         'blockUrlDisable'=>true,
         'blockType'=>'content',
+        'imageDimension'=>'?w=300&h=169',
         'squareSing'=>false,
         'blockCustomClass'=>'a--owl-carousel-type-2 productShowBlock sampleVideo a--block-widget-1',
         'blockCustomId'=>'Block-sampleVideo'

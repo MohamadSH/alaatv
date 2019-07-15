@@ -211,6 +211,7 @@ mix.styles([
 // ---------------------------------------------------------------------------------- user-profile
 mix.styles(
     [
+        'node_modules/toastr/build/toastr.css',
         'node_modules/animate.css/animate.css',
         'node_modules/persian-datepicker/dist/css/persian-datepicker.css',
         'node_modules/bootstrap-fileinput/css/fileinput.css',
@@ -220,6 +221,8 @@ mix.styles(
     'public/css/user-profile.css'
 ).version()
 .babel([
+        'node_modules/toastr/build/toastr.min.js',
+        'node_modules/block-ui/jquery.blockUI.js',
         'node_modules/bootstrap-fileinput/js/fileinput.js',
         'node_modules/persian-date/dist/persian-date.js',
         'node_modules/persian-datepicker/dist/js/persian-datepicker.js',
@@ -261,6 +264,7 @@ mix.styles([
 
 // ---------------------------------------------------------------------------------- content-show
 mix.styles([
+        'node_modules/toastr/build/toastr.css',
         'public/acm/AlaatvCustomFiles/components/ribbon/style.css',
         'node_modules/block-ui/jquery.blockUI.js',
         'node_modules/owl.carousel/dist/assets/owl.carousel.css',
@@ -277,6 +281,8 @@ mix.styles([
     'public/css/content-show.css'
 ).version()
 .babel([
+        'node_modules/toastr/build/toastr.min.js',
+        'node_modules/block-ui/jquery.blockUI.js',
         'node_modules/owl.carousel/dist/owl.carousel.js',
         'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/js.js',
         'public/acm/videojs/video.min.js',
@@ -439,6 +445,8 @@ mix.styles([
 mix.styles([
         'node_modules/summernote/dist/summernote.css',
         'node_modules/select2/dist/css/select2.css',
+        'node_modules/icheck/skins/all.css',
+        // 'public/acm/AlaatvCustomFiles/components/alaa_old/plugins/icheck/skins/all.css',
         // '/acm/AlaatvCustomFiles/components/alaa_old/plugins/select2/css/select2.min.css',
         // 'public/acm/AlaatvCustomFiles/components/alaa_old/plugins/datatables/dataTables.bootstrap4.css',
         'public/acm/AlaatvCustomFiles/components/alaa_old/plugins/datatables/datatables.min.css',
@@ -451,7 +459,6 @@ mix.styles([
         'public/acm/AlaatvCustomFiles/components/alaa_old/plugins/jquery-multi-select/css/multi-select-rtl.css',
         'public/acm/AlaatvCustomFiles/components/alaa_old/plugins/jplayer/dist/skin/blue.monday/css/jplayer.blue.monday.min.css',
         'public/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-sweetalert/sweetalert.css',
-        'public/acm/AlaatvCustomFiles/components/alaa_old/plugins/icheck/skins/all.css',
         // 'public/acm/extra/persian-datepicker/dist/css/persian-datepicker-0.4.5.min.css',
         'public/acm/extra/persian-datepicker/dist/css/persian-datepicker-1.1.3.min.css',
         'public/acm/AlaatvCustomFiles/components/alaa_old/font/glyphicons-halflings/glyphicons-halflings.css',
@@ -465,8 +472,10 @@ mix.styles([
         'node_modules/tooltip/dist/Tooltip.js',
         'node_modules/select2/dist/js/select2.js',
         'node_modules/select2/dist/js/select2.full.js',
+        'node_modules/icheck/icheck.js',
+        // 'public/acm/AlaatvCustomFiles/components/alaa_old/plugins/icheck/icheck.min.js',
         // 'public/acm/AlaatvCustomFiles/components/alaa_old/plugins/select2/js/select2.full.min.js',
-        'public/acm/AlaatvCustomFiles/components/alaa_old/scripts/datatable.min.js',
+
         'public/acm/AlaatvCustomFiles/components/alaa_old/plugins/datatables/datatables.min.js',
         'public/acm/AlaatvCustomFiles/components/alaa_old/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
         'public/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js',
@@ -477,25 +486,27 @@ mix.styles([
         'public/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-select/js/bootstrap-select.min.js',
         'public/acm/AlaatvCustomFiles/components/alaa_old/plugins/jquery-multi-select/js/jquery.multi-select.js',
         'public/acm/AlaatvCustomFiles/components/alaa_old/plugins/jquery-repeater/jquery.repeater.min.js',
-        'public/acm/AlaatvCustomFiles/components/alaa_old/scripts/form-repeater.js',
-        'public/acm/AlaatvCustomFiles/components/alaa_old/scripts/ui-toastr.min.js',
-        'public/acm/AlaatvCustomFiles/components/alaa_old/scripts/components-editors.js',
         'public/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-tagsinput/bootstrap-tagsinput.min.js',
-        'public/acm/AlaatvCustomFiles/components/alaa_old/scripts/components-multi-select.min.js',
-        'public/acm/AlaatvCustomFiles/components/alaa_old/scripts/components-bootstrap-multiselect.min.js',
         'public/acm/AlaatvCustomFiles/components/alaa_old/plugins/jplayer/dist/jplayer/jquery.jplayer.js',
         'public/acm/AlaatvCustomFiles/components/alaa_old/plugins/jQueryNumberFormat/jquery.number.min.js',
         'public/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-sweetalert/sweetalert.min.js',
         'public/acm/AlaatvCustomFiles/components/alaa_old/plugins/jquery.input-ip-address-control-1.0.min.js',
-        'public/acm/AlaatvCustomFiles/components/alaa_old/plugins/icheck/icheck.min.js',
+
+        'public/acm/AlaatvCustomFiles/components/alaa_old/scripts/datatable.min.js',
+        'public/acm/AlaatvCustomFiles/components/alaa_old/scripts/form-repeater.js',
+        'public/acm/AlaatvCustomFiles/components/alaa_old/scripts/ui-toastr.min.js',
+        'public/acm/AlaatvCustomFiles/components/alaa_old/scripts/components-editors.js',
+        'public/acm/AlaatvCustomFiles/components/alaa_old/scripts/components-multi-select.min.js',
+        'public/acm/AlaatvCustomFiles/components/alaa_old/scripts/components-bootstrap-multiselect.min.js',
         'public/acm/AlaatvCustomFiles/components/alaa_old/scripts/ui-confirmations.min.js',
         'public/acm/AlaatvCustomFiles/components/alaa_old/scripts/makeSelect2Single.js',
         'public/acm/AlaatvCustomFiles/components/alaa_old/scripts/form-input-mask.js',
         'public/acm/AlaatvCustomFiles/components/alaa_old/scripts/form-icheck.js',
+
         'public/acm/extra/persian-datepicker/lib/persian-date.js',
-        // 'public/acm/extra/persian-datepicker/dist/js/persian-datepicker-0.4.5.min.js',
-        'public/acm/extra/persian-datepicker/lib/persian-date-1.0.5.js',
-        'public/acm/extra/persian-datepicker/dist/js/persian-datepicker-1.1.3.min.js',
+        // 'public/acm/extra/persian-datepicker/lib/persian-date-1.0.5.js',
+        'public/acm/extra/persian-datepicker/dist/js/persian-datepicker-0.4.5.min.js',
+        // 'public/acm/extra/persian-datepicker/dist/js/persian-datepicker-1.1.3.min.js',
         // 'public/acm/AlaatvCustomFiles/components/alaa_old/scripts/app.js', // must removed
         'public/acm/AlaatvCustomFiles/js/admin/makeDataTable.js',
         'public/acm/AlaatvCustomFiles/js/admin-makeMultiSelect.js',
@@ -506,7 +517,6 @@ mix.styles([
 
 mix.copyDirectory('node_modules/summernote/dist/font', 'public/css/font');
 mix.copyDirectory('public/acm/AlaatvCustomFiles/components/alaa_old/font/glyphicons-halflings/font', 'public/css/font');
-// mix.copyDirectory('node_modules/glyphicons-halflings/fonts', 'public/css/font');
 
 
 
