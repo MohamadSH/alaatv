@@ -16,8 +16,8 @@ class WebsiteSettingProvider extends ServiceProvider
     public function boot()
     {
         $setting = $this->getSetting();
-        
         view()->share('wSetting', optional($setting)->setting);
+        view()->share('wLogoUrl', optional($setting)->site_logo_url);
         view()->share('setting', $setting);
         
         if (isset(optional(optional($setting)->site)->name)) {
