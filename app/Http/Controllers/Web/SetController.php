@@ -234,7 +234,7 @@ class SetController extends Controller
     private function storePhotoOfSet(Contentset $contentSet, $file): void
     {
         $serverUrl = config('constants.DOWNLOAD_SERVER_PROTOCOL').config('constants.DOWNLOAD_SERVER_NAME');
-        $partialPath = '/upload/contentset/lesson/';
+        $partialPath = '/upload/contentset/departmentlesson/';
 
         $contentSet->photo = $serverUrl.$partialPath.$file->getClientOriginalName();
     }
