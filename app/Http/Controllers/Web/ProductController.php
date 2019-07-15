@@ -117,6 +117,10 @@ class ProductController extends Controller
         
         $products = $productResult;
 
+        if(!$request->has('moderator'))
+        {
+            $filters['active'] = 1 ;
+        }
         if (request()->expectsJson()) {
             return $this->response->setStatusCode(Response::HTTP_OK)
                 ->setContent([
