@@ -2,8 +2,10 @@
 
 namespace App;
 
+use App\Adapter\AlaaSftpAdapter;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
+use Storage;
 
 /**
  * App\Slideshow
@@ -106,7 +108,12 @@ class Slideshow extends BaseModel
     
     public function getUrlAttribute($value): string
     {
-        return route('image', ['category' => 9, 'w' => '1280', 'h' => '500', 'filename' => $this->photo]);
+        /** @var AlaaSftpAdapter $diskAdapter */
+        $diskAdapter = Storage::disk('alaaCdnSFTP')->getAdapter();
+        $imageUrl =  $diskAdapter->getUrl($this->photo);
+        return isset($imageUrl)?$imageUrl.'?w=1280&h=500' :'/acm/image/255x255.png';
+
+//        return route('image', ['category' => 9, 'w' => '1280', 'h' => '500', 'filename' => $this->photo]);
     }
     
     public function websitepage()
