@@ -405,7 +405,8 @@
         <!-- END REGISTRATION FORM 2 -->
     @endif
 @elseif(isset($user))
-    {!! Form::hidden('id',$user->id, ['class' => 'btn red']) !!}
+    {!! Form::hidden('id',$user->id) !!}
+    {!! Form::hidden('moderator',1) !!}
     <div class="form-body">
         <div class="note note-warning">
             <h4 class="caption-subject font-dark bold uppercase"> وارد کردن اطلاعات زیر الزامیست:</h4>
