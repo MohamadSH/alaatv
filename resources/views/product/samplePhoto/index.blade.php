@@ -84,7 +84,7 @@
                     <td>
                         <div class="mt-element-overlay">
                             <div class="mt-overlay-1">
-                                <img alt="عکس محصول @if(isset($photo->title[0])) {{$photo->title}} @endif" class="timeline-badge-userpic" style="width: 60px ;height: 60px" src="{{ route('image', ['category'=>'4','w'=>'60' , 'h'=>'60' ,  'filename' =>  $photo->file ]) }}"/>
+                                <img alt="عکس محصول @if(isset($photo->title[0])) {{$photo->title}} @endif" class="timeline-badge-userpic" style="width: 60px ;height: 60px" src="{{ $photo->url}}"/>
                                 <div class="mt-overlay">
                                     <ul class="mt-info">
                                         <li>
