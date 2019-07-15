@@ -879,56 +879,65 @@ class UserController extends Controller
         
         return $response;
     }
-    
+
     /**
-     * @param  array   $inputData
-     * @param  User    $authenticatedUser
-     *
-     * @param  string  $moderatorPermission
-     * @param  User    $user
+     * @param array $inputData
+     * @param User $user
      *
      * @return void
      * @throws FileNotFoundException
      */
-    private function fillUserFromRequest(array $inputData, User $authenticatedUser, string $moderatorPermission, User &$user): void
+    private function fillUserFromRequest(array $inputData, User &$user): void
     {
-        if ($authenticatedUser->can($moderatorPermission)) {
-            // Checks both if $inputData has password index and it is not null
-            $hasPassword = isset($inputData['password']);
+        $user->fillByPublic($inputData);
 
-            if ($hasPassword) {
-                $user->password = bcrypt($inputData['password']);
-            }
-
-            Arr::pull($inputData , 'password') ;
-            $user->fill($inputData);
-            $hasMobileVerifiedAt = isset($inputData['mobile_verified_at']);
-
-            //ToDo : When a moderator is updating his profile, this won't work
-            if ($hasMobileVerifiedAt) {
-                $user->mobile_verified_at = ($inputData['mobile_verified_at'] == '1') ? Carbon::now()
-                    ->setTimezone('Asia/Tehran') : null;
-            }else{
-                $user->mobile_verified_at = null ;
-            }
-
-            $hasLockProfile = isset($inputData['lockProfile']);
-            if($hasLockProfile){
-                $user->lockProfile = ($inputData['mobile_verified_at'] == '1') ? 1:0;
-            }else{
-                $user->lockProfile = 0 ;
-            }
-        }
-        else {
-            $user->fillByPublic($inputData);
-        }
-        
         $file = $this->getRequestFile($inputData, 'photo');
         if ($file !== false) {
             $this->storePhotoOfUser($user, $file);
         }
     }
-    
+
+    /**
+     * @param array $inputData
+     * @param User $user
+     *
+     * @return void
+     * @throws FileNotFoundException
+     */
+    private function fillUserFromModeratorRequest(array $inputData, User &$user): void
+    {
+        // Checks both if $inputData has password index and it is not null
+        $hasPassword = isset($inputData['password']);
+
+        if ($hasPassword) {
+            $user->password = bcrypt($inputData['password']);
+        }
+
+        Arr::pull($inputData , 'password') ;
+        $user->fill($inputData);
+        $hasMobileVerifiedAt = isset($inputData['mobile_verified_at']);
+
+        //ToDo : When a moderator is updating his profile, this won't work
+        if ($hasMobileVerifiedAt) {
+            $user->mobile_verified_at = ($inputData['mobile_verified_at'] == '1') ? Carbon::now()
+                ->setTimezone('Asia/Tehran') : null;
+        }else{
+            $user->mobile_verified_at = null ;
+        }
+
+        $hasLockProfile = isset($inputData['lockProfile']);
+        if($hasLockProfile){
+            $user->lockProfile = ($inputData['mobile_verified_at'] == '1') ? 1:0;
+        }else{
+            $user->lockProfile = 0 ;
+        }
+
+        $file = $this->getRequestFile($inputData, 'photo');
+        if ($file !== false) {
+            $this->storePhotoOfUser($user, $file);
+        }
+    }
+
     public function show(Request $request, User $user = null)
     {
 
@@ -2100,8 +2109,12 @@ class UserController extends Controller
             return response(['message'=>'User profile is locked'] , Response::HTTP_LOCKED);
         
         try {
-            $this->fillUserFromRequest($request->all(), $authenticatedUser, config('constants.EDIT_USER_ACCESS'),
-                $user);
+            if($request->has('moderator') && $authenticatedUser->can(config('constants.EDIT_USER_ACCESS')))
+            {
+                $this->fillUserFromModeratorRequest($request->all(), $user);
+            }else{
+                $this->fillUserFromRequest($request->all(), $user);
+            }
         } catch (FileNotFoundException $e) {
             return response([
                 "error" => [
