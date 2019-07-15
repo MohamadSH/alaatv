@@ -8,7 +8,7 @@
     "packages": [
         {
             "name": "alaatv/mellat",
-            "version": "v1.1.5",
+            "version": "V1.1.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/alaatv/behpardakht-gateway-driver.git",
@@ -56,7 +56,7 @@
                 "laravel5-package",
                 "php"
             ],
-            "time": "2019-05-11T08:25:40+00:00"
+            "time": "2019-05-08T13:01:38+00:00"
         },
         {
             "name": "alaatv/payment-gateways",
@@ -5462,7 +5462,7 @@
                 },
                 {
                     "name": "Gert de Pagter",
-                    "email": "BackEndTea@gmail.com"
+                    "email": "backendtea@gmail.com"
                 }
             ],
             "description": "Symfony polyfill for ctype functions",
