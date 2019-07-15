@@ -100,7 +100,83 @@
                         <h4 class="m-menu__section-text">مدیریت</h4>
                         <i class="m-menu__section-icon flaticon-more-v2"></i>
                     </li>
-    
+
+                    @ability(config('constants.ROLE_ADMIN'),config('constants.USER_ADMIN_PANEL_ACCESS'))
+                    <li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1">
+                        <a href="{{ action("Web\AdminController@admin") }}" class="m-menu__link ">
+                            <span class="m-menu__item-here"></span>
+                            <i class="m-menu__link-icon flaticon-network"></i>
+                            <span class="m-menu__link-text">کاربران</span>
+                        </a>
+                    </li>
+                    @endability
+                    @permission((config('constants.ORDER_ADMIN_PANEL_ACCESS')))
+                    <li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1">
+                        <a href="{{ action("Web\AdminController@adminOrder") }}" class="m-menu__link ">
+                            <span class="m-menu__item-here"></span>
+                            <i class="m-menu__link-icon flaticon-network"></i>
+                            <span class="m-menu__link-text"> سفارش ها</span>
+                        </a>
+                    </li>
+                    <li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1">
+                        <a href="{{ action("Web\AdminController@adminSalesReport") }}" class="m-menu__link ">
+                            <span class="m-menu__item-here"></span>
+                            <i class="m-menu__link-icon flaticon-network"></i>
+                            <span class="m-menu__link-text"> گزارش فروش</span>
+                        </a>
+                    </li>
+                    @endpermission
+
+                    @permission((config('constants.LIST_BLOCK_ACCESS')))
+                    <li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1">
+                        <a href="{{ action("Web\AdminController@adminBlock") }}" class="m-menu__link ">
+                            <span class="m-menu__item-here"></span>
+                            <i class="m-menu__link-icon flaticon-network"></i>
+                            <span class="m-menu__link-text"> بلوک ها</span>
+                        </a>
+                    </li>
+                    @endpermission
+
+                    @permission((config('constants.PRODUCT_ADMIN_PANEL_ACCESS')))
+                    <li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1">
+                        <a href="{{ action("Web\AdminController@adminProduct") }}" class="m-menu__link ">
+                            <span class="m-menu__item-here"></span>
+                            <i class="m-menu__link-icon flaticon-technology"></i>
+                            <span class="m-menu__link-text">محصولات</span>
+                        </a>
+                    </li>
+                    @endpermission
+
+                    @permission((config('constants.CONTENT_ADMIN_PANEL_ACCESS')))
+                    <li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1">
+                        <a href="{{ action("Web\AdminController@adminContent") }}" class="m-menu__link ">
+                            <span class="m-menu__item-here"></span>
+                            <i class="m-menu__link-icon flaticon-technology"></i>
+                            <span class="m-menu__link-text">محتوا</span>
+                        </a>
+                    </li>
+                    @endpermission
+
+                    @permission((config('constants.SMS_ADMIN_PANEL_ACCESS')))
+                    <li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1">
+                        <a href="{{ action("Web\AdminController@adminSMS") }}" class="m-menu__link ">
+                            <span class="m-menu__item-here"></span>
+                            <i class="m-menu__link-icon flaticon-technology"></i>
+                            <span class="m-menu__link-text">ارسال پیامک</span>
+                        </a>
+                    </li>
+                    @endpermission
+
+{{--                    @permission((config('constants.REPORT_ADMIN_PANEL_ACCESS')))--}}
+{{--                    <li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1">--}}
+{{--                        <a href="{{ action("Web\AdminController@adminReport") }}" class="m-menu__link ">--}}
+{{--                            <span class="m-menu__item-here"></span>--}}
+{{--                            <i class="m-menu__link-icon flaticon-technology"></i>--}}
+{{--                            <span class="m-menu__link-text">گزارش</span>--}}
+{{--                        </a>--}}
+{{--                    </li>--}}
+{{--                    @endpermission--}}
+
                     @role((config("constants.ROLE_ADMIN")))
                     <li class="m-menu__item  m-menu__item--submenu" aria-haspopup="true" m-menu-submenu-toggle="hover">
                         <a href="javascript:" class="m-menu__link m-menu__toggle">
@@ -146,23 +222,12 @@
                         </div>
                     </li>
                     @endrole
-    
-                    @ability(config('constants.ROLE_ADMIN'),config('constants.TELEMARKETING_PANEL_ACCESS'))
-                    <li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1">
-                        <a href="{{action("Web\AdminController@adminTeleMarketing")}}" class="m-menu__link ">
-                            <span class="m-menu__item-here"></span>
-                            <i class="m-menu__link-icon flaticon-graphic"></i>
-                            <span class="m-menu__link-text">تله مارکتینگ</span>
-                        </a>
-                    </li>
-                    @endability
-    
                     @role((config("constants.ROLE_ADMIN")))
                     <li class="m-menu__item  m-menu__item--submenu" aria-haspopup="true" m-menu-submenu-toggle="hover">
                         <a href="javascript:" class="m-menu__link m-menu__toggle">
                             <span class="m-menu__item-here"></span>
                             <i class="m-menu__link-icon flaticon-network"></i>
-                            <span class="m-menu__link-text">مدیریت قرعه کشی</span>
+                            <span class="m-menu__link-text">قرعه کشی ها</span>
                             <i class="m-menu__ver-arrow la la-angle-right"></i>
                         </a>
                         <div class="m-menu__submenu ">
@@ -267,97 +332,45 @@
                         </div>
                     </li>
                     @endpermission
-    
-                    @ability(config('constants.ROLE_ADMIN'),config('constants.USER_ADMIN_PANEL_ACCESS'))
-                    <li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1">
-                        <a href="{{ action("Web\AdminController@admin") }}" class="m-menu__link ">
-                            <span class="m-menu__item-here"></span>
-                            <i class="m-menu__link-icon flaticon-network"></i>
-                            <span class="m-menu__link-text">کاربران</span>
-                        </a>
-                    </li>
-{{--                    <li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1">--}}
-{{--                        <a href="{{ action("Web\AdminController@specialAddUser") }}" class="m-menu__link ">--}}
-{{--                            <span class="m-menu__item-here"></span>--}}
-{{--                            <i class="m-menu__link-icon flaticon-network"></i>--}}
-{{--                            <span class="m-menu__link-text">درج کاربر با سفارش</span>--}}
-{{--                        </a>--}}
-{{--                    </li>--}}
-                    <li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1">
-                        <a href="{{ action("Web\AdminController@adminGenerateRandomCoupon") }}" class="m-menu__link ">
-                            <span class="m-menu__item-here"></span>
-                            <i class="m-menu__link-icon flaticon-network"></i>
-                            <span class="m-menu__link-text">تولید کپن تصادفی</span>
-                        </a>
-                    </li>
-                    @endability
-                    @permission((config('constants.ORDER_ADMIN_PANEL_ACCESS')))
-                    <li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1">
-                        <a href="{{ action("Web\AdminController@adminOrder") }}" class="m-menu__link ">
-                            <span class="m-menu__item-here"></span>
-                            <i class="m-menu__link-icon flaticon-network"></i>
-                            <span class="m-menu__link-text"> سفارش ها</span>
-                        </a>
-                    </li>
-                    <li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1">
-                        <a href="{{ action("Web\AdminController@adminSalesReport") }}" class="m-menu__link ">
-                            <span class="m-menu__item-here"></span>
-                            <i class="m-menu__link-icon flaticon-network"></i>
-                            <span class="m-menu__link-text"> گزارش فروش</span>
-                        </a>
-                    </li>
-                    @endpermission
 
-                    @permission((config('constants.LIST_BLOCK_ACCESS')))
-                    <li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1">
-                        <a href="{{ action("Web\AdminController@adminBlock") }}" class="m-menu__link ">
+                    @permission((config('constants.SITE_CONFIG_ADMIN_PANEL_ACCESS')))
+                    <li class="m-menu__item  m-menu__item--submenu" aria-haspopup="true" m-menu-submenu-toggle="hover">
+                        <a href="javascript:" class="m-menu__link m-menu__toggle">
                             <span class="m-menu__item-here"></span>
                             <i class="m-menu__link-icon flaticon-network"></i>
-                            <span class="m-menu__link-text"> بلوک ها</span>
+                            <span class="m-menu__link-text">پنل های خاص</span>
+                            <i class="m-menu__ver-arrow la la-angle-right"></i>
                         </a>
+                        <div class="m-menu__submenu ">
+                            <span class="m-menu__arrow"></span>
+                            <ul class="m-menu__subnav">
+                                @ability(config('constants.ROLE_ADMIN'),config('constants.TELEMARKETING_PANEL_ACCESS'))
+                                <li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1">
+                                    <a href="{{action("Web\AdminController@adminTeleMarketing")}}" class="m-menu__link ">
+                                        <span class="m-menu__item-here"></span>
+                                        <i class="m-menu__link-icon flaticon-graphic"></i>
+                                        <span class="m-menu__link-text">تله مارکتینگ</span>
+                                    </a>
+                                </li>
+                                @endability
+                                <li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1">
+                                    <a href="{{ action("Web\AdminController@specialAddUser") }}" class="m-menu__link ">
+                                        <span class="m-menu__item-here"></span>
+                                        <i class="m-menu__link-icon flaticon-network"></i>
+                                        <span class="m-menu__link-text">درج کاربر با سفارش</span>
+                                    </a>
+                                </li>
+                                <li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1">
+                                    <a href="{{ action("Web\AdminController@adminGenerateRandomCoupon") }}" class="m-menu__link ">
+                                        <span class="m-menu__item-here"></span>
+                                        <i class="m-menu__link-icon flaticon-network"></i>
+                                        <span class="m-menu__link-text">تولید کپن تصادفی</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
                     </li>
                     @endpermission
-    
-                    @permission((config('constants.PRODUCT_ADMIN_PANEL_ACCESS')))
-                    <li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1">
-                        <a href="{{ action("Web\AdminController@adminProduct") }}" class="m-menu__link ">
-                            <span class="m-menu__item-here"></span>
-                            <i class="m-menu__link-icon flaticon-technology"></i>
-                            <span class="m-menu__link-text">محصولات</span>
-                        </a>
-                    </li>
-                    @endpermission
-    
-                    @permission((config('constants.CONTENT_ADMIN_PANEL_ACCESS')))
-                    <li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1">
-                        <a href="{{ action("Web\AdminController@adminContent") }}" class="m-menu__link ">
-                            <span class="m-menu__item-here"></span>
-                            <i class="m-menu__link-icon flaticon-technology"></i>
-                            <span class="m-menu__link-text">محتوا</span>
-                        </a>
-                    </li>
-                    @endpermission
-    
-                    @permission((config('constants.SMS_ADMIN_PANEL_ACCESS')))
-                    <li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1">
-                        <a href="{{ action("Web\AdminController@adminSMS") }}" class="m-menu__link ">
-                            <span class="m-menu__item-here"></span>
-                            <i class="m-menu__link-icon flaticon-technology"></i>
-                            <span class="m-menu__link-text">ارسال پیامک</span>
-                        </a>
-                    </li>
-                    @endpermission
-    
-                    @permission((config('constants.REPORT_ADMIN_PANEL_ACCESS')))
-                    <li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1">
-                        <a href="{{ action("Web\AdminController@adminReport") }}" class="m-menu__link ">
-                            <span class="m-menu__item-here"></span>
-                            <i class="m-menu__link-icon flaticon-technology"></i>
-                            <span class="m-menu__link-text">گزارش</span>
-                        </a>
-                    </li>
-                    @endpermission
-
                 @endability
 
                 @permission((config('constants.ALAA_FAMILTY')))
@@ -379,7 +392,7 @@
                         <a href="{{ action("Web\SalesReportController") }}" class="m-menu__link ">
                             <span class="m-menu__item-here"></span>
                             <i class="m-menu__link-icon flaticon-clock"></i>
-                            <span class="m-menu__link-text">گزارش فروش</span>
+                            <span class="m-menu__link-text">گزارش فروش دبیران</span>
                         </a>
                     </li>
                     @endpermission
