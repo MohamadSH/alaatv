@@ -116,7 +116,15 @@ class ProductController extends Controller
             ->get($filters);
         
         $products = $productResult;
-        
+
+        if (request()->expectsJson()) {
+            return $this->response->setStatusCode(Response::HTTP_OK)
+                ->setContent([
+                    'result' => $products,
+                    'tags'   => $tags,
+                ]);
+        }
+
         $url = $request->url();
         $this->generateSeoMetaTags(new SeoDummyTags('محصولات '.$this->setting->site->name,
             'کارگاه تست کنکور، همایش، جمع بندی و اردوطلایی نوروز آلاء', $url,
@@ -126,15 +134,8 @@ class ProductController extends Controller
                 'h'        => '100',
                 'filename' => $this->setting->site->siteLogo,
             ]), '100', '100', null));
-        
-        if (request()->expectsJson()) {
-            return $this->response->setStatusCode(Response::HTTP_OK)
-                ->setContent([
-                    'result' => $products,
-                    'tags'   => $tags,
-                ]);
-        }
-    
+
+
         return view('pages.product-search', compact('products', 'tags'));
     }
 

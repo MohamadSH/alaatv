@@ -3,14 +3,12 @@
 namespace App\Http\Controllers\Web;
 
 use App\Classes\Search\RelatedProductSearch;
-use App\Product;
 use App\User;
 use Exception;
 use App\Content;
 use App\Contentset;
 use App\Contenttype;
 use App\Websitesetting;
-use App\Educationalcontent;
 use Illuminate\Support\Str;
 use Jenssegers\Agent\Agent;
 use Illuminate\Http\Response;
@@ -195,9 +193,15 @@ class ContentController extends Controller
         }
         
         $result = $contentSearch->get(compact('filters', 'contentTypes'));
-        
-        $result->offsetSet('set', !$contentOnly ? $setSearch->get($filters) : null);
-        $result->offsetSet('product', !$contentOnly ? $productSearch->get($filters) : null);
+
+        $setFilters = $filters;
+        $setFilters['enable']  = 1;
+        $setFilters['display'] = 1;
+        $result->offsetSet('set', !$contentOnly ? $setSearch->get($setFilters) : null);
+
+        $productFilters = $filters;
+        $productFilters['active']  = 1;
+        $result->offsetSet('product', !$contentOnly ? $productSearch->get($productFilters) : null);
     
         $pageName = 'content-search';
     

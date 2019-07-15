@@ -110,6 +110,15 @@
                         </a>
                     </li>
                     @endability
+                    @permission((config('constants.SMS_ADMIN_PANEL_ACCESS')))
+                    <li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1">
+                        <a href="{{ action("Web\AdminController@adminSMS") }}" class="m-menu__link ">
+                            <span class="m-menu__item-here"></span>
+                            <i class="m-menu__link-icon flaticon-technology"></i>
+                            <span class="m-menu__link-text">ارسال پیامک</span>
+                        </a>
+                    </li>
+                    @endpermission
                     @permission((config('constants.ORDER_ADMIN_PANEL_ACCESS')))
                     <li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1">
                         <a href="{{ action("Web\AdminController@adminOrder") }}" class="m-menu__link ">
@@ -148,23 +157,36 @@
                     @endpermission
 
                     @permission((config('constants.CONTENT_ADMIN_PANEL_ACCESS')))
-                    <li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1">
-                        <a href="{{ action("Web\AdminController@adminContent") }}" class="m-menu__link ">
-                            <span class="m-menu__item-here"></span>
-                            <i class="m-menu__link-icon flaticon-technology"></i>
-                            <span class="m-menu__link-text">محتوا</span>
-                        </a>
-                    </li>
-                    @endpermission
+                        <li class="m-menu__item  m-menu__item--submenu" aria-haspopup="true" m-menu-submenu-toggle="hover">
+                            <a href="javascript:" class="m-menu__link m-menu__toggle">
+                                <span class="m-menu__item-here"></span>
+                                <i class="m-menu__link-icon flaticon-network"></i>
+                                <span class="m-menu__link-text">مدیریت محتوا</span>
+                                <i class="m-menu__ver-arrow la la-angle-right"></i>
+                            </a>
+                            <div class="m-menu__submenu ">
+                                <span class="m-menu__arrow"></span>
+                                <ul class="m-menu__subnav">
+                                    <li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1">
+                                        <a href="{{ action("Web\AdminController@adminContent") }}" class="m-menu__link ">
+                                            <span class="m-menu__item-here"></span>
+                                            <i class="m-menu__link-icon flaticon-technology"></i>
+                                            <span class="m-menu__link-text">محتوا</span>
+                                        </a>
+                                    </li>
 
-                    @permission((config('constants.SMS_ADMIN_PANEL_ACCESS')))
-                    <li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1">
-                        <a href="{{ action("Web\AdminController@adminSMS") }}" class="m-menu__link ">
-                            <span class="m-menu__item-here"></span>
-                            <i class="m-menu__link-icon flaticon-technology"></i>
-                            <span class="m-menu__link-text">ارسال پیامک</span>
-                        </a>
-                    </li>
+                                    @permission((config('constants.LIST_CONTENT_SET_ACCESS')))
+                                    <li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1">
+                                        <a href="{{ action("Web\SetController@index") }}" class="m-menu__link ">
+                                            <span class="m-menu__item-here"></span>
+                                            <i class="m-menu__link-icon flaticon-technology"></i>
+                                            <span class="m-menu__link-text">دسته محتوا</span>
+                                        </a>
+                                    </li>
+                                    @endpermission
+                                </ul>
+                            </div>
+                        </li>
                     @endpermission
 
 {{--                    @permission((config('constants.REPORT_ADMIN_PANEL_ACCESS')))--}}

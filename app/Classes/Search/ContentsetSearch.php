@@ -23,6 +23,8 @@ class ContentsetSearch extends SearchAbstract
         'q',
         'name',
         'tags',
+        'enable',
+        'display'
     ];
     
     /**
@@ -54,8 +56,7 @@ class ContentsetSearch extends SearchAbstract
      */
     protected function getResults(Builder $query)
     {
-        $result = $query->active()
-            ->display()
+        $result = $query
             ->orderBy('created_at', 'desc')
             ->paginate($this->numberOfItemInEachPage, ['*'], $this->pageName, $this->pageNum);
         
