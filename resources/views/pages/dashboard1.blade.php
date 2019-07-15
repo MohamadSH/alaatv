@@ -1,7 +1,7 @@
 @extends('app' , ['pageName'=>$pageName])
 
 @section('page-css')
-    <link href="{{ mix('/css/page-homePage.css') }}" rel="stylesheet" type="text/css"/>
+    <link href="{{ mix('/css/page-homePage.css') }}" rel="stylesheet" type="text/css" defer/>
 @endsection
 
 @section('content')
@@ -25,7 +25,7 @@
                                 </button>
                                 <br>
                                 <span class="m--font-light">
-                                    <img data-src="https://cdn.alaatv.com/upload/alaa-logo-small.png" width="20" class="lazy-image" alt="آلاء">
+                                    <img data-src="https://cdn.alaatv.com/upload/alaa-logo-small.png" width="25" height="33" class="lazy-image" alt="آلاء">
 				                </span>
                                 <div class="m--space-10"></div>
                             </div>
@@ -45,7 +45,7 @@
                                 </button>
                                 <br>
                                 <span class="m--font-light">
-                                    <img data-src="https://cdn.alaatv.com/upload/alaa-logo-small.png" width="20" class="lazy-image">
+                                    <img data-src="https://cdn.alaatv.com/upload/alaa-logo-small.png" width="25" height="33" class="lazy-image">
 				                </span>
                                 <div class="m--space-10"></div>
                             </div>
@@ -65,7 +65,7 @@
                                 </button>
                                 <br>
                                 <span class="m--font-light">
-                                    <img data-src="https://cdn.alaatv.com/upload/alaa-logo-small.png" width="20" class="lazy-image" alt="alaa">
+                                    <img data-src="https://cdn.alaatv.com/upload/alaa-logo-small.png" width="25" height="33" class="lazy-image" alt="alaa">
 				                </span>
                                 <div class="m--space-10"></div>
                             </div>
@@ -85,7 +85,7 @@
                                 </button>
                                 <br>
                                 <span class="m--font-light">
-                                    <img data-src="https://cdn.alaatv.com/upload/alaa-logo-small.png" width="20" class="lazy-image" alt="alaa">
+                                    <img data-src="https://cdn.alaatv.com/upload/alaa-logo-small.png" width="25" height="33" class="lazy-image" alt="alaa">
 				                </span>
                                 <div class="m--space-10"></div>
                             </div>

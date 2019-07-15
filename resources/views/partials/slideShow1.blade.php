@@ -39,9 +39,12 @@
                                          alt="عکس اسلاید @if(isset($slide->title[0])) {{ $slide->title }} @endif "
                                          id="slideshowid-{{ $slide->id }}"
                                          data-width="1280"
+                                         width="1280"
                                          @if($pageName === 'shop')
                                          data-height="300"
+                                         height="300"
                                          @else
+                                         height="500"
                                          data-height="500"
                                          @endif>
                                     @if(isset($slide->title[0]) && isset($slide->shortDescription[0]))
