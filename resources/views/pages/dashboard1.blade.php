@@ -240,4 +240,4 @@
         ];
     </script>
     <script src="{{ mix('/js/page-homePage.js') }}" defer></script>
-
+@endsection
