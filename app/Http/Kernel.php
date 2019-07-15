@@ -3,17 +3,18 @@
 namespace App\Http;
 
 use App\Http\Middleware\Authenticate;
-use App\Http\Middleware\CanAccessEmployeeTimeSheet;
 use App\Http\Middleware\CompleteInfo;
 use Laratrust\Middleware\LaratrustRole;
 use Illuminate\Auth\Middleware\Authorize;
 use App\Http\Middleware\RemoveOrderCoupon;
 use Laratrust\Middleware\LaratrustAbility;
+use Nckg\Minify\Middleware\MinifyResponse;
 use Laratrust\Middleware\LaratrustPermission;
 use Illuminate\Http\Middleware\SetCacheHeaders;
 use Illuminate\Session\Middleware\StartSession;
 use App\Http\Middleware\CheckForMaintenanceMode;
 use App\Http\Middleware\RedirectIfAuthenticated;
+use App\Http\Middleware\CanAccessEmployeeTimeSheet;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 use Illuminate\Routing\Middleware\ThrottleRequests;
 use Illuminate\Routing\Middleware\ValidateSignature;
@@ -43,6 +44,7 @@ class Kernel extends HttpKernel
         Middleware\TrimStrings::class,
         ConvertEmptyStringsToNull::class,
         Middleware\TrustProxies::class,
+        MinifyResponse::class,
     ];
 
     /**
