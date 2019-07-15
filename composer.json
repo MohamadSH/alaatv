@@ -39,6 +39,7 @@
     "laravel/tinker": "^1.0",
     "laravelcollective/html": "^5.8",
     "league/flysystem-sftp": "~1.0",
+    "nckg/laravel-minify-html": "^1.2",
     "paulvl/backup": "3.*",
     "propaganistas/laravel-phone": "^4.1",
     "psr/http-factory": "^1.0",
