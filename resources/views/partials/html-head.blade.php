@@ -26,7 +26,7 @@
 </script>
 
 <!--begin::Global Theme Styles -->
-<link href="{{ mix('/css/all.css') }}" rel="stylesheet" type="text/css" defer/>
+<link href="{{ mix('/css/all.css') }}" rel="stylesheet" type="text/css"/>
 <!--end::Global Theme Styles -->
 
 @yield('page-css')
