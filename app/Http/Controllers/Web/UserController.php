@@ -902,15 +902,22 @@ class UserController extends Controller
 
             Arr::pull($inputData , 'password') ;
             $user->fill($inputData);
-            $hasMobileVerifiedAt = in_array('mobileNumberVerification', $inputData);
+            $hasMobileVerifiedAt = isset($inputData['mobile_verified_at']);
 
+            //ToDo : When a moderator is updating his profile, this won't work
             if ($hasMobileVerifiedAt) {
-                $user->mobile_verified_at = ($inputData['mobileNumberVerification'] == '1') ? Carbon::now()
+                $user->mobile_verified_at = ($inputData['mobile_verified_at'] == '1') ? Carbon::now()
                     ->setTimezone('Asia/Tehran') : null;
+            }else{
+                $user->mobile_verified_at = null ;
             }
 
-            $user->lockProfile = array_get($inputData, 'lockProfile',
-                (isset($user->lockProfile) ? $user->lockProfile : 0));
+            $hasLockProfile = isset($inputData['lockProfile']);
+            if($hasLockProfile){
+                $user->lockProfile = ($inputData['mobile_verified_at'] == '1') ? 1:0;
+            }else{
+                $user->lockProfile = 0 ;
+            }
         }
         else {
             $user->fillByPublic($inputData);
