@@ -57,7 +57,6 @@ class ProductSearch extends SearchAbstract
     protected function getResults(Builder $query)
     {
         $result = $query
-            ->active()
             ->whereNull('grand_id')
             ->whereNull('deleted_at')
             ->orderBy("created_at", "desc")
