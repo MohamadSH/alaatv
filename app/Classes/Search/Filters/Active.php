@@ -16,7 +16,8 @@ class Active extends FilterAbstract
     
     public function apply(Builder $builder, $value, FilterCallback $callback): Builder
     {
+        //ToDo
         $scope = $this->attribute;
-        return $builder->$scope;
+        return $builder->active();
     }
 }
