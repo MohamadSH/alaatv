@@ -12,7 +12,7 @@
                 <div class="m-stack m-stack--ver m-stack--general">
                     <div class="m-stack__item m-stack__item--middle m-brand__logo">
                         <a href="{{action("Web\IndexPageController")}}" class="m-brand__logo-wrapper">
-                            <img alt="لوگوی سایت آلاء" src="{{route('image', ['category'=>'11','w'=>'135' , 'h'=>'67' ,  'filename' =>  optional($wSetting->site)->siteLogo ])}}"/>
+                            <img alt="لوگوی سایت آلاء" src="{{route('image', ['category'=>'11','w'=>'135' , 'h'=>'67' ,  'filename' =>  optional($wSetting->site)->siteLogo ])}}" width="135" height="22"/>
                         </a>
                     </div>
                     <div class="m-stack__item m-stack__item--middle m-brand__tools">
