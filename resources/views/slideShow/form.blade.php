@@ -58,7 +58,7 @@
                 <div class = "fileinput fileinput-new" data-provides = "fileinput">
                     @if(isset($slide->photo))
                         <div class = "fileinput-new thumbnail">
-                            <img style="width:100%" src = "{{ route('image', [ 'category'=>$slideDisk,'w'=>'140' , 'h'=>'140' , 'filename' =>  $slide->photo ]) }}" {{--alt="عکس خدمت" onerror="this.src='http://www.placehold.it/200x150/EFEFEF/AAAAAA&amp;text=no+image';"/> </div>--}}alt = "عکس محصول @if(isset($slide->title[0])) {{$slide->title}} @endif"/>
+                            <img style="width:100%" src = "{{ $slide->url }}" {{--alt="عکس خدمت" onerror="this.src='http://www.placehold.it/200x150/EFEFEF/AAAAAA&amp;text=no+image';"/> </div>--}}alt = "عکس محصول @if(isset($slide->title[0])) {{$slide->title}} @endif"/>
                         </div>
                     @endif
                     <div class = "input-group input-large ">
