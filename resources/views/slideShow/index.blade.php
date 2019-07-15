@@ -39,7 +39,7 @@
                         <img alt="عکس اسلاید @if(isset($slide->title[0])) {{$slide->title}} @endif"
                              class="timeline-badge-userpic"
                              style="width: 60px ;height: 60px"
-                             src="{{ route('image', ['category'=>$slideDisk,'w'=>'60' , 'h'=>'60' ,  'filename' =>  $slide->photo ]) }}"/>
+                             src="{{ $slide->url }}"/>
                     </div>
                 </div>
 
