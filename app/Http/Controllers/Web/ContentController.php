@@ -195,8 +195,11 @@ class ContentController extends Controller
         }
         
         $result = $contentSearch->get(compact('filters', 'contentTypes'));
-        
-        $result->offsetSet('set', !$contentOnly ? $setSearch->get($filters) : null);
+
+        $setFilters = $filters;
+        $setFilters['enable']  = 1;
+        $setFilters['display'] = 1;
+        $result->offsetSet('set', !$contentOnly ? $setSearch->get($setFilters) : null);
         $result->offsetSet('product', !$contentOnly ? $productSearch->get($filters) : null);
     
         $pageName = 'content-search';
