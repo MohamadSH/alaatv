@@ -227,7 +227,15 @@
 
         $(document).ready(function () {
 
-            $('#descriptionSummerNote').summernote({height: 300});
+            $('#descriptionSummerNote').summernote({
+                lang: 'fa-IR',
+                height: 300,
+                popover: {
+                    image: [],
+                    link: [],
+                    air: []
+                },
+            });
 
             $("#validSinceDate").persianDatepicker({
                 altField: '#validSinceDateAlt',
