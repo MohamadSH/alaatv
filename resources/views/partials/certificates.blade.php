@@ -25,10 +25,10 @@
         <div class="certificates-items">
             <div class="row">
                 <div class="col text-center">
-                    <img src="{{ asset('/acm/extra/Alaa-logo.png') }}" class="img-fluid m--img-centered certificatesLogo" alt="فیلم کنکور آلاء" data-name="alaa"/>
+                    <img src="https://cdn.alaatv.com/upload/Alaa-logo.png" class="img-fluid m--img-centered certificatesLogo" alt="فیلم کنکور آلاء" data-name="alaa"/>
                 </div>
                 <div class="col text-center">
-                    <img src="{{ asset('/acm/extra/sharif-school-logo.png') }}" class="img-fluid m--img-centered certificatesLogo" alt="دبیرستان دانشگاه شریف آلاء" data-name="sharif-school"/>
+                    <img src="https://cdn.alaatv.com/upload/sharif-school-logo.png" class="img-fluid m--img-centered certificatesLogo" alt="دبیرستان دانشگاه شریف آلاء" data-name="sharif-school"/>
                 </div>
                 <div class="col text-center">
                     <a onclick = 'window.open("https://trustseal.enamad.ir/Verify.aspx?id=125806&amp;p=gCsnIb3IATIJnVIY", "Popup","toolbar=no, location=no, statusbar=no, menubar=no, scrollbars=1, resizable=0, width=580, height=600, top=30")'>
