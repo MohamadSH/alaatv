@@ -444,7 +444,7 @@
                                                             @if(isset($product->introVideoThumbnail))
                                                             poster = "{{$product->introVideoThumbnail}}?w=400&h=225"
                                                             @else
-                                                            poster = "https://cdn.sanatisharif.ir/media/204/240p/204054ssnv.jpg"
+                                                            poster = "https://cdn.alaatv.com/media/204/240p/204054ssnv.jpg"
                                                             @endif >
     
                                                         {{--                                                        <source--}}
