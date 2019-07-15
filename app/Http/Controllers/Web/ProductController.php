@@ -112,15 +112,14 @@ class ProductController extends Controller
         $tags          = $request->get('tags');
         $filters       = $request->all();
         $pageName      = 'productPage';
-        $productResult = $productSearch->setPageName($pageName)
-            ->get($filters);
-        
-        $products = $productResult;
-
         if(!$request->has('moderator'))
         {
             $filters['active'] = 1 ;
         }
+        $productResult = $productSearch->setPageName($pageName)
+            ->get($filters);
+        
+        $products = $productResult;
         if (request()->expectsJson()) {
             return $this->response->setStatusCode(Response::HTTP_OK)
                 ->setContent([
