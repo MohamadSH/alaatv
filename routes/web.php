@@ -1,6 +1,7 @@
 <?php
 
 
+use App\Http\Controllers\Web\ContentController;
 use App\Http\Controllers\Web\HomeController;
 use App\Http\Controllers\Web\LandingPageController;
 use App\Http\Controllers\Web\PaymentStatusController;
@@ -268,6 +269,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::resource('set', 'Web\SetController');
 
     Route::get('live' , [HomeController::class, 'live']);
+
+    Route::post('updateSet' , [ContentController::class, 'updateSet']);
 });
 
 Route::group(['prefix' => 'c'], function () {

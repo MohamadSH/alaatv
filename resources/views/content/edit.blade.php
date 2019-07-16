@@ -66,7 +66,7 @@
                 </div>
                 <div class = "m-portlet__body">
 
-{{--                    {!! Form::open(['method' => 'POST','action' => ['Web\ContentController@basicStore'], 'class'=>'form-horizontal'  ,'accept-charset'=>'UTF-8']) !!}--}}
+                    {!! Form::open(['method' => 'POST','action' => ['Web\ContentController@updateSet'], 'class'=>'form-horizontal'  ,'accept-charset'=>'UTF-8']) !!}
                     <div class = "row">
                         <div class = "col">
                             {!! Form::hidden('educationalContentId',$content->id) !!}
@@ -79,7 +79,7 @@
                             </div>
                         </div>
                     </div>
-{{--                    {!! Form::close() !!}--}}
+                    {!! Form::close() !!}
 
 
                 </div>
