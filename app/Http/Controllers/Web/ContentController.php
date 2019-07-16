@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Web;
 
 use App\Classes\Search\RelatedProductSearch;
+use App\Collection\ContentCollection;
 use App\User;
 use Exception;
 use App\Content;
@@ -350,6 +351,7 @@ class ContentController extends Controller
                     $contentsWithSameSet,
                     $contentSetName,
                 ] = $content->getSetMates();
+                /** @var ContentCollection $contentsWithSameSet */
                 $contentsWithSameSet  = $contentsWithSameSet->normalMates();
                 $videosWithSameSet    = optional($contentsWithSameSet)->whereIn('type', 'video');
                 $pamphletsWithSameSet = optional($contentsWithSameSet)->whereIn('type', 'pamphlet');
@@ -357,7 +359,7 @@ class ContentController extends Controller
                     $videosWithSameSetL,
                     $videosWithSameSetR,
                 ] = optional($videosWithSameSet)->partition(function ($i) use ($content) {
-                    return $i['content']->id < $content->id;
+                    return $i['content']->session < $content->session;
                 });
                 
                 return [
