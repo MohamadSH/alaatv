@@ -5,11 +5,13 @@ namespace App\Http\Controllers\Web;
 use App\Classes\Search\RelatedProductSearch;
 use App\Collection\ContentCollection;
 use App\User;
+use Carbon\Carbon;
 use Exception;
 use App\Content;
 use App\Contentset;
 use App\Contenttype;
 use App\Websitesetting;
+use Illuminate\Routing\Redirector;
 use Illuminate\Support\Str;
 use Jenssegers\Agent\Agent;
 use Illuminate\Http\Response;
@@ -607,6 +609,59 @@ class ContentController extends Controller
     {
         $files = $this->makeFreePamphletFileArray($fileName, config('constants.DISK19_CLOUD'));
         return $files;
+    }
+
+
+    /**
+     * @param  Request  $request
+     *
+     * @return RedirectResponse|Redirector
+     * @throws Exception
+     */
+    public function updateSet(Request $request)
+    {
+        $educationalContentId =  $request->get("educationalContentId");
+        $newContetnsetId = $request->get("newContetnsetId");
+        $newFileFullName = $request->get("newFileFullName") ;
+
+        $educationalContent = Content::FindOrFail($educationalContentId);
+        $contenttypeId = $educationalContent->contenttype_id;
+        $currentContentset = $educationalContent->set;
+
+        if($newContetnsetId != $currentContentset->id)
+        {
+            $educationalContent->contentset_id = $newContetnsetId;
+        }
+
+        if(isset($newFileFullName[0]))
+        {
+            $isFree = $educationalContent->isFree;
+            if($isFree)
+            {
+                [$files , $thumbnail] = $this->makeFreeContentFiles($contenttypeId, $newFileFullName, $newContetnsetId);
+            }else{
+                $newContentSet = Contentset::find($newContetnsetId);
+                $productId = optional($newContentSet->products->first())->id;
+                if(!isset($productId))
+                    return response()->json(['No product found for this set'], Response::HTTP_BAD_REQUEST);
+
+                [$files , $thumbnail] = $this->makePaidContentFiles($contenttypeId, $newFileFullName , $productId , $newContetnsetId);
+            }
+
+            if(isset($thumbnail))
+                $educationalContent->thumbnail = $thumbnail;
+
+            if(!empty($files))
+            {
+                $this->storeFilesOfContent($educationalContent, $files);
+            }
+        }
+
+        $educationalContent->update();
+
+        Cache::tags('content')->flush();
+        session()->flash('success', 'تغییر نام با موفقیت انجام شد');
+        return redirect()->back();
     }
 
 
