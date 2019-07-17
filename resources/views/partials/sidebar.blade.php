@@ -221,20 +221,20 @@
                                         <span class="m-menu__arrow"></span>
                                         <ul class="m-menu__subnav">
                                             <li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1">
-                                                <a href="{{ action("Web\BotsController@bot" , ['checkorderproducts'=>'1' , 'since'=>'2019-07-15' , 'till'=>'2019-07-17'])  }}" class="m-menu__link ">
+                                                <a target="_blank" href="{{ action("Web\BotsController@bot" , ['checkorderproducts'=>'1' , 'since'=>'2019-07-15' , 'till'=>'2019-07-17'])  }}" class="m-menu__link ">
                                                     <span class="m-menu__item-here"></span>
                                                     <i class="m-menu__link-icon flaticon-technology"></i>
                                                     <span class="m-menu__link-text">پاک شدن آیتم سبد</span>
                                                 </a>
                                             </li>
-                                            <li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1">
+                                            <li target="_blank" class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1">
                                                 <a href="{{ action("Web\BotsController@bot" , ['checkghesdi'=>'1' , 'since'=>'2019-07-15' , 'till'=>'2019-07-17']) }}" class="m-menu__link ">
                                                     <span class="m-menu__item-here"></span>
                                                     <i class="m-menu__link-icon flaticon-technology"></i>
                                                     <span class="m-menu__link-text">قسطی ماندن سفارش</span>
                                                 </a>
                                             </li>
-                                            <li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1">
+                                            <li target="_blank" class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1">
                                                 <a href="{{ action("Web\BotsController@bot" , ['checktransactions'=>'1']) }}" class="m-menu__link ">
                                                     <span class="m-menu__item-here"></span>
                                                     <i class="m-menu__link-icon flaticon-technology"></i>
