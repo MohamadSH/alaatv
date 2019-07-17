@@ -73,7 +73,7 @@ class DonateController extends Controller
             if (isset($donate->user->id)) {
                 $firstName = $donate->user->firstName;
                 $lastName  = $donate->user->lastName;
-                $avatar    = $donate->user->photo;
+                $avatar    = $donate->user->getCustomSizePhoto(150,150);
             }
             
             $donateAmount = $donate->orderproducts(config('constants.ORDER_PRODUCT_TYPE_DEFAULT'))
