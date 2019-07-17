@@ -106,7 +106,7 @@ class DonateController extends Controller
             if (isset($maxDonate->order->user->id)) {
                 $firstName = $maxDonate->order->user->firstName;
                 $lastName  = $maxDonate->order->user->lastName;
-                $avatar    = $maxDonate->order->user->photo;
+                $avatar    = $donate->user->getCustomSizePhoto(150,150);
             }
             
             $donateAmount = $maxDonate->cost;
