@@ -6,6 +6,7 @@ use App\Employeeschedule;
 use App\Employeetimesheet;
 use App\Notifications\EmployeeTimeSheetNotification;
 use App\Traits\DateTrait;
+use App\Traits\User\EmployeeTrait;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
@@ -14,6 +15,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 class SendEmployeeTimeSheetCommand extends Command
 {
     use DateTrait;
+    use EmployeeTrait;
     
     /**
      * The name and signature of the console command.
@@ -83,7 +85,7 @@ class SendEmployeeTimeSheetCommand extends Command
             ->where("date", $toDayDate)
             ->first();
         $done              = false;
-        if (isset($employeeTimeSheet)) {
+        if (!isset($employeeTimeSheet)) {
             $newEmplployeeTimeSheet = new Employeetimesheet();
             
             $newEmplployeeTimeSheet->date    = $toDayDate;
@@ -112,69 +114,67 @@ class SendEmployeeTimeSheetCommand extends Command
                 $done = false;
             }
         }
-        else {
-            if (!$employeeTimeSheet->getOriginal("timeSheetLock")) {
-                if (strcmp($employeeTimeSheet->clockIn, "00:00:00") == 0) {
-                    if (strcmp($employeeTimeSheet->beginLunchBreak, "00:00:00") != 0) {
-                        $employeeTimeSheet->clockIn = $employeeTimeSheet->beginLunchBreak;
-                    }
-                    else {
-                        if (strcmp($employeeTimeSheet->finishLunchBreak, "00:00:00") != 0) {
-                            $employeeTimeSheet->clockIn = $employeeTimeSheet->finishLunchBreak;
-                        }
-                        else {
-                            if (strcmp($employeeTimeSheet->clockOut, "00:00:00") != 0) {
-                                $employeeTimeSheet->clockIn = $employeeTimeSheet->clockOut;
-                            }
-                        }
-                    }
-                }
-                if (strcmp($employeeTimeSheet->clockOut, "00:00:00") == 0) {
-                    if (strcmp($employeeTimeSheet->finishLunchBreak, "00:00:00") != 0) {
-                        $employeeTimeSheet->clockOut = $employeeTimeSheet->finishLunchBreak;
-                    }
-                    else {
-                        if (strcmp($employeeTimeSheet->beginLunchBreak, "00:00:00") != 0) {
-                            $employeeTimeSheet->clockOut = $employeeTimeSheet->beginLunchBreak;
-                        }
-                        else {
-                            if (strcmp($employeeTimeSheet->clockIn, "00:00:00") != 0) {
-                                $employeeTimeSheet->clockOut = $employeeTimeSheet->clockIn;
-                            }
-                        }
-                    }
-                }
-                
-                if (strcmp($employeeTimeSheet->beginLunchBreak,
-                        "00:00:00") == 0 && strcmp($employeeTimeSheet->finishLunchBreak, "00:00:00") != 0) {
-                    if (strcmp($employeeTimeSheet->clockIn, "00:00:00") != 0) {
-                        $employeeTimeSheet->beginLunchBreak = $employeeTimeSheet->clockIn;
-                    }
-                }
-                
-                if (strcmp($employeeTimeSheet->finishLunchBreak,
-                        "00:00:00") == 0 && strcmp($employeeTimeSheet->beginLunchBreak, "00:00:00") != 0) {
-                    if (strcmp($employeeTimeSheet->clockOut, "00:00:00") != 0) {
-                        $employeeTimeSheet->finishLunchBreak = $employeeTimeSheet->clockOut;
-                    }
-                }
-
-//            $employeeTimeSheet->managerComment = $employeeTimeSheet->managerComment . " ثبت توسط سیستم : مرخصی یا تعطیلی غیر رسمی";
-                $employeeTimeSheet->timeSheetLock = 1;
-                
-                $realWorkTime = $employeeTimeSheet->obtainRealWorkTime('IN_SECONDS');
-                if ($realWorkTime <= 0) {
-                    $employeeTimeSheet->overtime_confirmation = true;
-                }
-                
-                if ($employeeTimeSheet->update()) {
-                    $done = $employeeTimeSheet->id;
+        elseif (!$employeeTimeSheet->getOriginal("timeSheetLock")) {
+            if (strcmp($employeeTimeSheet->clockIn, "00:00:00") == 0) {
+                if (strcmp($employeeTimeSheet->beginLunchBreak, "00:00:00") != 0) {
+                    $employeeTimeSheet->clockIn = $employeeTimeSheet->beginLunchBreak;
                 }
                 else {
-                    $done = false;
+                    if (strcmp($employeeTimeSheet->finishLunchBreak, "00:00:00") != 0) {
+                        $employeeTimeSheet->clockIn = $employeeTimeSheet->finishLunchBreak;
+                    }
+                    else {
+                        if (strcmp($employeeTimeSheet->clockOut, "00:00:00") != 0) {
+                            $employeeTimeSheet->clockIn = $employeeTimeSheet->clockOut;
+                        }
+                    }
                 }
             }
-        }
+            if (strcmp($employeeTimeSheet->clockOut, "00:00:00") == 0) {
+                if (strcmp($employeeTimeSheet->finishLunchBreak, "00:00:00") != 0) {
+                    $employeeTimeSheet->clockOut = $employeeTimeSheet->finishLunchBreak;
+                }
+                else {
+                    if (strcmp($employeeTimeSheet->beginLunchBreak, "00:00:00") != 0) {
+                        $employeeTimeSheet->clockOut = $employeeTimeSheet->beginLunchBreak;
+                    }
+                    else {
+                        if (strcmp($employeeTimeSheet->clockIn, "00:00:00") != 0) {
+                            $employeeTimeSheet->clockOut = $employeeTimeSheet->clockIn;
+                        }
+                    }
+                }
+            }
+
+            if (strcmp($employeeTimeSheet->beginLunchBreak,
+                    "00:00:00") == 0 && strcmp($employeeTimeSheet->finishLunchBreak, "00:00:00") != 0) {
+                if (strcmp($employeeTimeSheet->clockIn, "00:00:00") != 0) {
+                    $employeeTimeSheet->beginLunchBreak = $employeeTimeSheet->clockIn;
+                }
+            }
+
+            if (strcmp($employeeTimeSheet->finishLunchBreak,
+                    "00:00:00") == 0 && strcmp($employeeTimeSheet->beginLunchBreak, "00:00:00") != 0) {
+                if (strcmp($employeeTimeSheet->clockOut, "00:00:00") != 0) {
+                    $employeeTimeSheet->finishLunchBreak = $employeeTimeSheet->clockOut;
+                }
+            }
+
+//            $employeeTimeSheet->managerComment = $employeeTimeSheet->managerComment . " ثبت توسط سیستم : مرخصی یا تعطیلی غیر رسمی";
+            $employeeTimeSheet->timeSheetLock = 1;
+
+            $realWorkTime = $employeeTimeSheet->obtainRealWorkTime('IN_SECONDS');
+            if ($realWorkTime <= 0) {
+                $employeeTimeSheet->overtime_confirmation = true;
+            }
+
+            if ($employeeTimeSheet->update()) {
+                $done = $employeeTimeSheet->id;
+            }
+            else {
+                $done = false;
+            }
+            }
         
         if ($done) {
             $employeeTimeSheet = Employeetimesheet::all()
@@ -207,7 +207,7 @@ class SendEmployeeTimeSheetCommand extends Command
     
     private function performTimeSheetTaskForAllEmployee()
     {
-        $users = User::getEmployee();
+        $users = $this->getEmployee();
         $bar   = $this->output->createProgressBar($users->count());
         foreach ($users as $user) {
             $this->performTimeSheetTaskForAnEmployee($user);
