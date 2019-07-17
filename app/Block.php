@@ -101,7 +101,7 @@ class Block extends BaseModel
         'created_at',
         'class',
         'deleted_at',
-        'type',
+//        'type',
     ];
     
     public static function getShopBlocks(): ?BlockCollection
@@ -145,7 +145,7 @@ class Block extends BaseModel
         $block        = new Block;
         $block->id    = 0;
         $block->offer = $offer;
-        $block->type  = 3;
+//        $block->type  = 3;
         $block->order = 0;
         $block->title = $title;
         
