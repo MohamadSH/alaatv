@@ -1209,7 +1209,7 @@ class BotsController extends Controller
                 $setId = $request->get('set');
                 $set = Contentset::Find($setId);
                 if(!isset($set))
-                    dump('Bad request. set has not been set');
+                    return response()->json(['message'=>'Bad request. set has not been set'] , Response::HTTP_BAD_REQUEST);
 
                 $contents = $set->contents()->where('contenttype_id' , 8)->whereNull('thumbnail')->get();
 

@@ -494,23 +494,21 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
      *
      * @return array
      */
-    public function getPriceTextAttribute(User $user = null): array
+    public function getPriceTextAttribute(): array
     {
-        if(is_null($user) && Auth::check())
-            $user = Auth::user();
-
         if ($this->isFree) {
             return 'رایگان';
         }
 
-        $costInfo   = $this->calculatePayablePrice($user);
-        if(is_null($costInfo['cost']))
+        $priceInfo = $this->price;
+
+        if(is_null($priceInfo['base']))
             $basePriceText = 'پس از انتخاب محصول';
         else
-            $basePriceText  = number_format($costInfo['cost']).' تومان';
+            $basePriceText  = number_format($priceInfo['base']).' تومان';
 
-        $finalPriceText = number_format($costInfo['customerPrice']).' تومان';
-        $customerDiscount = $costInfo['customerDiscount'];
+        $finalPriceText = number_format($priceInfo['final']).' تومان';
+        $customerDiscount = $priceInfo['discount'];
 
         return [
                 'basePriceText'     => $basePriceText,
@@ -560,7 +558,12 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
      */
     public function getPriceAttribute()
     {
-        $costArray     = $this->calculatePayablePrice();
+        //ToDo : Doesn't work for app
+        $user = null;
+        if(Auth::check())
+            $user = Auth::user();
+
+        $costArray     = $this->calculatePayablePrice($user);
         $cost          = $costArray['cost'];
         $customerPrice = $costArray['customerPrice'];
         if (isset($cost)) {

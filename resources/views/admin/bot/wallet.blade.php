@@ -26,7 +26,7 @@
             <!-- BEGIN Portlet PORTLET-->
             <div class = "m-portlet m-portlet--mobile m-portlet--body-progress-">
                 <div class = "m-portlet__body">
-                    {!! Form::open(['method'=>'POST' , 'action'=>'Web\HomeController@walletBot' , 'target'=>'_blank' ]) !!}
+                    {!! Form::open(['method'=>'POST' , 'action'=>'Web\BotsController@walletBot' , 'target'=>'_blank' ]) !!}
                     <label for = "userGroup" class = "control-label">
                         گروه کاربران:
                     </label>
