@@ -26,7 +26,7 @@
             <!-- BEGIN Portlet PORTLET-->
             <div class = "m-portlet m-portlet--mobile m-portlet--body-progress-">
                 <div class = "m-portlet__body">
-                    {!! Form::open(['files'=>'true' , 'method'=>'POST' , 'action'=>'Web\HomeController@excelBot' , 'target'=>'_blank' ]) !!}
+                    {!! Form::open(['files'=>'true' , 'method'=>'POST' , 'action'=>'Web\BotsController@excelBot' , 'target'=>'_blank' ]) !!}
                     <input type = "file" name = "file">
                     <input type = "submit" value = "انجام بده">
                     {!! Form::close() !!}
