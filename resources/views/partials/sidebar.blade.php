@@ -204,17 +204,60 @@
                         <a href="javascript:" class="m-menu__link m-menu__toggle">
                             <span class="m-menu__item-here"></span>
                             <i class="m-menu__link-icon flaticon-network"></i>
-                            <span class="m-menu__link-text">عملیات دسته جمعی</span>
+                            <span class="m-menu__link-text">بات ها</span>
                             <i class="m-menu__ver-arrow la la-angle-right"></i>
                         </a>
                         <div class="m-menu__submenu ">
                             <span class="m-menu__arrow"></span>
                             <ul class="m-menu__subnav">
+                                <li class="m-menu__item  m-menu__item--submenu" aria-haspopup="true" m-menu-submenu-toggle="hover">
+                                    <a href="javascript:" class="m-menu__link m-menu__toggle">
+                                        <span class="m-menu__item-here"></span>
+                                        <i class="m-menu__link-icon flaticon-network"></i>
+                                        <span class="m-menu__link-text">بررسی سفارش ها</span>
+                                        <i class="m-menu__ver-arrow la la-angle-right"></i>
+                                    </a>
+                                    <div class="m-menu__submenu ">
+                                        <span class="m-menu__arrow"></span>
+                                        <ul class="m-menu__subnav">
+                                            <li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1">
+                                                <a href="{{ action("Web\BotsController@bot" , ['checkorderproducts'=>'1' , 'since'=>'2019-07-15' , 'till'=>'2019-07-17'])  }}" class="m-menu__link ">
+                                                    <span class="m-menu__item-here"></span>
+                                                    <i class="m-menu__link-icon flaticon-technology"></i>
+                                                    <span class="m-menu__link-text">پاک شدن آیتم سبد</span>
+                                                </a>
+                                            </li>
+                                            <li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1">
+                                                <a href="{{ action("Web\BotsController@bot" , ['checkghesdi'=>'1' , 'since'=>'2019-07-15' , 'till'=>'2019-07-17']) }}" class="m-menu__link ">
+                                                    <span class="m-menu__item-here"></span>
+                                                    <i class="m-menu__link-icon flaticon-technology"></i>
+                                                    <span class="m-menu__link-text">قسطی ماندن سفارش</span>
+                                                </a>
+                                            </li>
+                                            <li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1">
+                                                <a href="{{ action("Web\BotsController@bot" , ['checktransactions'=>'1']) }}" class="m-menu__link ">
+                                                    <span class="m-menu__item-here"></span>
+                                                    <i class="m-menu__link-icon flaticon-technology"></i>
+                                                    <span class="m-menu__link-text">ناموفق ماندن تراکنش</span>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </li>
+
                                 <li class="m-menu__item  m-menu__item--parent" aria-haspopup="true">
                                 <span class="m-menu__link">
                                     <span class="m-menu__item-here"></span>
-                                    <span class="m-menu__link-text">عملیات دسته جمعی</span>
+                                    <span class="m-menu__link-text">بات ها</span>
                                 </span>
+                                </li>
+                                <li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1">
+                                    <a target="_blank" href="{{ action("Web\BotsController@bot" , ["fixthumbnail"=>"1" , 'set'=>'']) }}" class="m-menu__link ">
+                                        <i class="m-menu__link-bullet m-menu__link-bullet--dot">
+                                            <span></span>
+                                        </i>
+                                        <span class="m-menu__link-text">تامبنیل ست</span>
+                                    </a>
                                 </li>
                                 <li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1">
                                     <a target="_blank" href="{{ action("Web\BotsController@adminBot" , ["bot"=>"wallet"]) }}" class="m-menu__link ">
@@ -232,14 +275,14 @@
                                         <span class="m-menu__link-text">اکسل</span>
                                     </a>
                                 </li>
-                                <li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1">
+                               {{-- <li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1">
                                     <a target="_blank" href="{{action("Web\BotsController@bot" , ["voucherbot"=>1])}}" class="m-menu__link ">
                                         <i class="m-menu__link-bullet m-menu__link-bullet--dot">
                                             <span></span>
                                         </i>
                                         <span class="m-menu__link-text">وچر</span>
                                     </a>
-                                </li>
+                                </li>--}}
                             </ul>
                         </div>
                     </li>
