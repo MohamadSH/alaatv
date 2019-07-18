@@ -215,6 +215,7 @@ return [
     'DISK19_CLOUD'                                => 'pamphletSftp',
     'DISK20'                                      => 'book',
     'DISK20_CLOUD'                                => 'bookSftp',
+    'DISK21'                                      => 'productImageSFTP',
 
     'DISK_FREE_CONTENT'              => 'alaaCdnSFTP',
     'DISK_PRODUCT_CONTENT'           => 'productFileSFTP',

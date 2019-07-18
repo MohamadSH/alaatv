@@ -1,5 +1,7 @@
 <?php namespace App\Traits;
 
+use Illuminate\Support\Facades\Storage;
+
 trait FileCommon
 {
     /** Obtains file size based on it's url
@@ -81,5 +83,15 @@ trait FileCommon
         }
         
         return $result;
+    }
+
+    /**
+     * @param string $fullPath
+     * @return string
+     */
+    protected function getSubDirectoryInCDN(string $fullPath):string
+    {
+        $baseRoot = Storage::Disk(config('constants.DISK_FREE_CONTENT'))->getAdapter()->getRoot();
+        return explode($baseRoot, $fullPath)[1];
     }
 }
