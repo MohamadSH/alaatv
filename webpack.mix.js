@@ -7,8 +7,6 @@ mix.styles([
         'public/assets/demo/demo12/base/style.bundle.rtl.css',
         'public/acm/custom-css-app.css',
 
-
-        'public/acm/AlaatvCustomFiles/css/owl-carousel.css',
         'public/acm/AlaatvCustomFiles/css/customStyle.css',
         'public/acm/AlaatvCustomFiles/css/fixThemeStyle.css',
         'public/acm/AlaatvCustomFiles/components/loading/loading.css',

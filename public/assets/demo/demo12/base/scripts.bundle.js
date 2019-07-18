@@ -1896,7 +1896,7 @@ var mWizard = function(elementId, options) {
 
             mUtil.on(element, '.m-wizard__step a.m-wizard__step-number', 'click', function() {
                 var step = this.closest('.m-wizard__step');
-                var steps = mUtil.parents(this, '.m-wizard__steps');
+                var steps = mUtil.parents(this, '.m-wizard__steps')
                 var find = mUtil.findAll(steps, '.m-wizard__step');
                 var num;
 
@@ -3953,7 +3953,7 @@ var mOffcanvas = function(elementId, options) {
         /**
          * Handles offcanvas toggle
          */
-        toggle: function () {
+        toggle: function() {;
             Plugin.eventTrigger('toggle'); 
 
             if (the.state == 'shown') {
@@ -4914,7 +4914,7 @@ var mQuicksearch = function(elementId, options) {
                 if (key == 13) {
                     e.preventDefault();
                 }
-            };
+            }
 
             if (the.options.mode == 'default') {
                 mUtil.addEvent(the.input, 'focus', Plugin.showDropdown);

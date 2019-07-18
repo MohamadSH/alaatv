@@ -1,7 +1,7 @@
 @extends('app' , ['pageName'=>$pageName])
 
 @section('page-css')
-    <link href="{{ mix('/css/page-homePage.css') }}" rel="stylesheet" type="text/css" defer/>
+    <link href="{{ mix('/css/page-homePage.css') }}" rel="stylesheet" type="text/css"/>
 @endsection
 
 @section('content')
