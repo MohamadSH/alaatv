@@ -13,7 +13,7 @@
 }
 
 .highcharts-container , .highcharts-container * {
-  font-family: IRANSans;
+  font-family: IRANSans, Tahoma, Arial, Geneva, sans-serif;
 }
 .highcharts-label.highcharts-tooltip {
   text-align: right;
