@@ -30,6 +30,14 @@
 
 @section("content")
     @if($live == 'on' || $live == 'finished')
+        @if(strlen($message) > 0)
+            <div class="alert alert-info alert-dismissible fade show" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"></button>
+                <strong>
+                    {{ $message }}
+                </strong>
+            </div>
+        @endif
         <div class="row">
             <div class="col-12 col-md-8 mx-auto">
                 <div class="m-portlet m-portlet--primary m-portlet--head-solid-bg">

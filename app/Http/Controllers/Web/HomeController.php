@@ -1202,8 +1202,10 @@ class HomeController extends Controller
         {
             if($now->isBefore($start) || $now->between($start, $finish)) {
                 $live = 'on';
+                $message = '';
             }elseif($now->isAfter($finish)) {
                 $live = 'finished';
+                $message = 'پخش آنلاید به اتمام رسیده است.';
             }
         }else{
             if($now->isBefore($start)) {
