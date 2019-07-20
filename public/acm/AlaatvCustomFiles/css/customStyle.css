@@ -238,29 +238,6 @@
     padding: 0;
 }
 
-.redSquare {
-    width: 10px;
-    height: 10px;
-    background: red;
-    margin-left: 0px;
-    position: relative;
-    margin-right: 10px;
-    display: inline-block;
-    margin-left: 10px;
-}
-
-.blueSquare {
-    width: 10px;
-    height: 10px;
-    background: #36a3f7;
-    margin-left: 0px;
-    position: relative;
-    margin-right: 10px;
-    display: inline-block;
-    margin-left: 10px;
-}
-
-
 #carouselMainSlideShow .carousel-item {
     position: relative;
 }

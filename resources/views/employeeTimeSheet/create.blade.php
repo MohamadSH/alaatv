@@ -436,27 +436,14 @@
                 dataType: "json",
                 statusCode: {
                     200: function (response) {
-//                        var responseJson = response;
                         var newDataTable = $("#employeeTimeSheet_table").DataTable();
                         newDataTable.destroy();
                         $('#employeeTimeSheet_table > tbody').html(response.index);
                         $("#sumWorkSheet").html(response.employeeWorkSheetSum);
                         $("#sumRealWorkTime").html(response.employeeRealWorkTime);
-//                        if(response === null || response === "" ) {
-//                            $('#employeeTimeSheet_table > thead > tr').children('th:first').removeClass().addClass("none");
-//                        }
-//                        else{
-//                            $('#employeeTimeSheet_table > thead > tr').children('th:first').removeClass("none");
-//                        }
                         makeDataTable("employeeTimeSheet_table");
                         $("#employeeTimeSheet-portlet-loading").addClass("d-none");
-//                        $(".filter").each(function () {
-//                            if($(this).val() !== "" && $(this).val() !== null) {
-//                                $(this).addClass("m--font-danger");
-//                            }
-//                        });
                     },
-                    //The status for when the user is not authorized for making the request
                     401: function (ressponse) {
                         location.reload();
                     },
@@ -466,16 +453,10 @@
                     404: function (response) {
                         window.location.replace("/404");
                     },
-                    //The status for when form data is not valid
-                    422: function (response) {
-                        //
-                    },
-                    //The status for when there is error php code
                     500: function (response) {
                         console.log(response.responseText);
                         toastr["error"]("خطای برنامه!", "پیام سیستم");
                     },
-                    //The status for when there is error php code
                     503: function (response) {
                         toastr["error"]("خطای پایگاه داده!", "پیام سیستم");
                     }
@@ -514,12 +495,9 @@
                 data: {_method: 'delete'},
                 statusCode: {
                     200: function (response) {
-                        // console.log(result);
-                        // console.log(result.responseText);
                         toastr["success"]("ساعت کاری با موفقیت حذف شد!", "پیام سیستم");
                         $("#filterButton").trigger("click");
                     },
-                    //The status for when the user is not authorized for making the request
                     401: function (ressponse) {
                         location.reload();
                     },
@@ -528,19 +506,6 @@
                     },
                     404: function (response) {
                         window.location.replace("/404");
-                    },
-                    //The status for when form data is not valid
-                    422: function (response) {
-                        //
-                    },
-                    //The status for when there is error php code
-                    500: function (response) {
-//                        console.log(response.responseText);
-//                        toastr["error"]("خطای برنامه!", "پیام سیستم");
-                    },
-                    //The status for when there is error php code
-                    503: function (response) {
-//                        toastr["error"]("خطای پایگاه داده!", "پیام سیستم");
                     }
                 }
             });

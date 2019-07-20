@@ -73,9 +73,6 @@
                 $.fn.OwlCarouselType2.getGridViewWarper($this).find(' > div').css({
                     'margin-bottom': '0px'
                 });
-                // $('#gridViewWarper-' + this.owlCarouselId + ' > div').css({
-                //     'margin-bottom': '0px'
-                // });
             });
             $($this).on('click', '.a--owl-carousel-type-2-gridViewWarper .a--owl-carousel-type-2-show-detailes', function () {
                 let $this = $('#' + $(this).attr('data-owlcarousel-type-2-id'));

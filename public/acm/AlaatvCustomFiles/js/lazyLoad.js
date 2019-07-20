@@ -56,12 +56,16 @@ var LazyLoad = function () {
     }
 
     function loadImage_oldVersion() {
+        loadObject($('.lazy-image'), function (obj) {
+            $(obj).attr('src', $(obj).data('src'));
+        });
+    }
 
-        let lazyImages = $('.lazy-image');
-        let inAdvance = 0;
-        lazyImages.each(function () {
+    function loadObject(lazyObject, callback) {
+        let inAdvance = $('#m_header').height();
+        lazyObject.each(function () {
             if (parseInt($(this).attr('a-lazyload')) !== 1 && $(this).offset().top < window.innerHeight + window.pageYOffset + inAdvance) {
-                $(this).attr('src', $(this).data('src'));
+                callback(this);
                 $(this).attr('a-lazyload', 1);
             }
         });
@@ -81,6 +85,14 @@ var LazyLoad = function () {
     }
 
     return {
+
+        loadObject: function(lazyObject, callback) {
+            let callbackThrottle = function() {
+                loadObject(lazyObject, callback);
+            };
+            window.addEventListener('scroll', throttle(50, callbackThrottle));
+            window.addEventListener('resize', throttle(50, callbackThrottle));
+        },
 
         image: function () {
             loadImage_newVersion();
