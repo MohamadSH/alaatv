@@ -36,6 +36,12 @@ public/mix-manifest.json
 public/phpinfo.php
 public/test.php
 
+public/css/font/summernote.eot
+public/css/font/summernote.woff
+public/css/font/summernote.ttf
+public/css/font/glyphicons-halflings-regular.ttf
+
+public/js/
 
 public/js/all.js
 public/js/login.js
@@ -64,9 +70,13 @@ public/js/product-content-embed.js
 public/js/checkout-completeInfo.js
 public/js/admin-all.js
 
+public/css/
 public/css/all.css
+public/css/admin-all.css
 public/css/page-shop.css
+public/css/auth-login.css
 public/css/page-error.css
+public/css/user-orders.css
 public/css/content-show.css
 public/css/user-profile.css
 public/css/product-show.css
@@ -84,14 +94,9 @@ public/css/page-dashboard1.css
 public/css/checkout-payment.css
 public/css/landing5-allcss.min.css
 public/css/admin-content-create.css
-public/css/user-profile-salesReport.css
 public/css/product-content-embed.css
-public/css/admin-all.css
-public/css/auth-login.css
 public/css/checkout-verification.css
-public/css/font/glyphicons-halflings-regular.ttf
-public/css/font/summernote.eot
-public/css/font/summernote.ttf
-public/css/font/summernote.woff
+public/css/user-profile-salesReport.css
+public/acm/AlaatvCustomFiles/components/OwlCarouselType2/style.css
 
 public/.well-known/
