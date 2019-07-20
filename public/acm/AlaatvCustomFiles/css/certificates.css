@@ -23,6 +23,10 @@
 .certificates-items .row {
     margin: 0;
 }
+.certificates-items .row .col a {
+    width: 100%;
+    text-align: center;
+}
 /*media query*/
 @media (max-width: 1024px) {
     .certificates-row {
