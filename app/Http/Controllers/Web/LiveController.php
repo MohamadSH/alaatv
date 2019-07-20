@@ -42,14 +42,16 @@ class LiveController extends Controller
         $now = Carbon::now('Asia/Tehran');
         if($user->hasRole('admin'))
         {
-            if($now->isBefore($start) || $now->between($start, $finish)) {
-                $view = 'pages.liveView';
-                $live = 'on';
-            }elseif($now->isAfter($finish)) {
-                $live = 'finished';
-                $message = 'پخش آنلاین به اتمام رسیده است';
-                $view = 'errors.404';
-            }
+            $view = 'pages.liveView';
+            $live = 'on';
+//            if($now->isBefore($start) || $now->between($start, $finish)) {
+//                $view = 'pages.liveView';
+//                $live = 'on';
+//            }elseif($now->isAfter($finish)) {
+//                $live = 'finished';
+//                $message = 'پخش آنلاین به اتمام رسیده است';
+//                $view = 'errors.404';
+//            }
         }else{
             if($now->isBefore($start)) {
                 $live = 'off';
