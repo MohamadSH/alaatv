@@ -123,6 +123,7 @@
         img {
           width: 100%;
           transform-style: flat;
+          height: auto;
         }
       }
 
@@ -364,11 +365,15 @@
 }
 .a--owl-carousel-init-loading {
   display: flex;
+  align-items: center;
   justify-content: center;
+  max-width: 100%;
+  min-height: 200px;
+  overflow: hidden;
 }
 .a--owl-carousel-init-loading .lds-roller {
-  width: 200px;
-  height: 200px;
+  width: 65px;
+  height: 65px;
 }
 
 
