@@ -58,7 +58,7 @@
                             <div class="a--video-wraper">
                                 <video id="video-0"
                                        class="video-js vjs-fluid vjs-default-skin vjs-big-play-centered" controls
-                                       preload="auto" height='360' width="640" poster='{{ $poster }}'>
+                                       preload="auto" height='360' width="640"'>
                                     <source src="https://alaatv.arvanlive.com/hls/test/test.m3u8" type="application/x-mpegURL" res="720p" label="111">
                                     <source src="https://alaatv.arvanlive.com/dash/test/test.mpd" type="application/dash+xml" res="721p" label="222">
                                     <p class="vjs-no-js">@lang('content.javascript is disables! we need it to play a video')</p>
