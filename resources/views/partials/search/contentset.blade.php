@@ -33,8 +33,12 @@
             @endif
         </div>
 
-        <input id = "{{ isset($widgetId) ? 'owl--js-var-next-page-'.$widgetId.'-url' : 'owl--js-var-next-page-set-url' }}" class = "m--hide" type = "hidden" @if(optional($items)->isNotEmpty())value = "{{ $items->nextPageUrl() }}" @elsevalue = ""
-                @endif>
+        <input id = "{{ isset($widgetId) ? 'owl--js-var-next-page-'.$widgetId.'-url' : 'owl--js-var-next-page-set-url' }}" class = "m--hide" type = "hidden"
+               @if(optional($items)->isNotEmpty())
+               value = "{{ $items->nextPageUrl() }}"
+               @else
+               value = ""
+               @endif>
 
     </div>
 @endif

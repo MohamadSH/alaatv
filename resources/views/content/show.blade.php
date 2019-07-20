@@ -131,11 +131,11 @@
                                             <button
                                                 data-gtm-eec-product-id="{{$product->id}}"
                                                 data-gtm-eec-product-name="{{$product->name}}"
-                                                data-gtm-eec-product-price = "@if($product->price){{$product->price['final']}}@endif"
-                                                data-gtm-eec-product-brand = "آلاء"
-                                                data-gtm-eec-product-category = "-"
-                                                data-gtm-eec-product-variant = "-"
-                                                data-gtm-eec-product-quantity = "1"
+                                                data-gtm-eec-product-price="@if($product->price){{$product->price['final']}}@endif"
+                                                data-gtm-eec-product-brand="آلاء"
+                                                data-gtm-eec-product-category="-"
+                                                data-gtm-eec-product-variant="-"
+                                                data-gtm-eec-product-quantity="1"
                                                 class="btn m-btn--air btn-succ  ess m-btn--icon m--margin-bottom-5 btnAddToCart" data-pid="{{ $product->id }}">
                                                 <span>
                                                     <i class="fa fa-cart-arrow-down"></i>
@@ -158,11 +158,11 @@
                                             <button
                                                     data-gtm-eec-product-id="{{$product->id}}"
                                                     data-gtm-eec-product-name="{{$product->name}}"
-                                                    data-gtm-eec-product-price = "@if($product->price){{$product->price['final']}}@endif"
-                                                    data-gtm-eec-product-brand = "آلاء"
-                                                    data-gtm-eec-product-category = "-"
-                                                    data-gtm-eec-product-variant = "-"
-                                                    data-gtm-eec-product-quantity = "1"
+                                                    data-gtm-eec-product-price="@if($product->price){{$product->price['final']}}@endif"
+                                                    data-gtm-eec-product-brand="آلاء"
+                                                    data-gtm-eec-product-category="-"
+                                                    data-gtm-eec-product-variant="-"
+                                                    data-gtm-eec-product-quantity="1"
                                                     class="btn m-btn--air btn-succ  ess m-btn--icon m--margin-bottom-5 btnAddToCart" data-pid="{{ $product->id }}">
                                             <span>
                                                 <i class="fa fa-cart-arrow-down"></i>
@@ -692,7 +692,7 @@
 @endsection
 
 @section('page-js')
-    <script>
+    <script type="text/javascript" defer>
         var related_videos = [
             @if(!is_null(min(13,$videosWithSameSet->count())))
                 @foreach($videosWithSameSet->random( min(13,$videosWithSameSet->count())) as $item)
