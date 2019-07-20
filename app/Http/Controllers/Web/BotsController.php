@@ -106,21 +106,6 @@ class BotsController extends Controller
     public function bot(Request $request)
     {
         try {
-            if ($request->has("emptyorder")) {
-                $orders = Order::whereIn("orderstatus_id", [
-                    config("constants.ORDER_STATUS_CLOSED"),
-                    config("constants.ORDER_STATUS_POSTED"),
-                    config("constants.ORDER_STATUS_READY_TO_POST"),
-                ])
-                    ->whereIn("paymentstatus_id", [config("constants.PAYMENT_STATUS_PAID")])
-                    ->whereDoesntHave("orderproducts", function ($q) {
-                        $q->Where("orderproducttype_id", config("constants.ORDER_PRODUCT_TYPE_DEFAULT"));
-                    })
-                    ->get();
-                dd($orders->pluck("id")
-                    ->toArray());
-            }
-            
             if ($request->has("voucherbot")) {
                 $asiatechProduct      = config("constants.ASIATECH_FREE_ADSL");
                 $voucherPendingOrders = Order::where("orderstatus_id", config("constants.ORDER_STATUS_PENDING"))
@@ -1209,7 +1194,7 @@ class BotsController extends Controller
                 $setId = $request->get('set');
                 $set = Contentset::Find($setId);
                 if(!isset($set))
-                    dump('Bad request. set has not been set');
+                    return response()->json(['message'=>'Bad request. set has not been set'] , Response::HTTP_BAD_REQUEST);
 
                 $contents = $set->contents()->where('contenttype_id' , 8)->whereNull('thumbnail')->get();
 

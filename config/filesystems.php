@@ -91,6 +91,20 @@ return [
             'visibility' => 'public',
         ],
 
+        'productImageSFTP'     => [
+            'driver'     => 'sftp',
+            'host'       => env('SFTP_HOST', ''),
+            'port'       => env('SFTP_PORT', '22'),
+            'username'   => env('SFTP_USERNAME', ''),
+            'password'   => env('SFTP_PASSSWORD', ''),
+            'privateKey' => env('SFTP_PRIVATE_KEY_PATH', ''),
+            'root'       => "/alaa_media/cdn/upload/images/product",
+            'timeout'    => env('SFTP_TIMEOUT', '10'),
+            'prefix'     => null,
+            'dHost'      => "cdn.alaatv.com",
+            'dProtocol'  => "https://",
+        ],
+
         'productCatalog_PDF' => [
             'driver'     => 'local',
             'root'       => storage_path('app/public/product/catalog/pdf'),

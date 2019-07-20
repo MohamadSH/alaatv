@@ -12,6 +12,7 @@ function makeDataTable_loadWithAjax_blocks(dontLoadAjax) {
         {data: "id", title: "#", defaultContent: defaultContent},
         {data: "title", title: "عنوان", defaultContent: defaultContent},
         {data: "order", title: "ترتیب", defaultContent: defaultContent},
+        {data: "type", title: "لوکیشن", defaultContent: defaultContent},
         {
             "data": null,
             "name": "offer.count",

@@ -2,17 +2,20 @@
 
 namespace App\Http\Controllers\Web;
 
+use App\Adapter\AlaaSftpAdapter;
 use App\Productphoto;
+use App\Traits\FileCommon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Storage;
 
 class ProductphotoController extends Controller
 {
     protected $response;
+
+    use FileCommon;
 
     function __construct()
     {
@@ -31,9 +34,13 @@ class ProductphotoController extends Controller
             $file      = $request->file('file');
             $extension = $file->getClientOriginalExtension();
             $fileName  = basename($file->getClientOriginalName(), ".".$extension)."_".date("YmdHis").'.'.$extension;
-            if (Storage::disk(config('constants.DISK4'))
-                ->put($fileName, File::get($file))) {
-                $photo->file = $fileName;
+            $disk = Storage::disk(config('constants.DISK21'));
+            /** @var AlaaSftpAdapter $adaptor */
+            $adaptor = $disk->getAdapter();
+            if ($disk->put($fileName, File::get($file))) {
+                $fullPath = $adaptor->getRoot();
+                $partialPath = $this->getSubDirectoryInCDN($fullPath);
+                $photo->file = $partialPath.$fileName;
             }
         }
 

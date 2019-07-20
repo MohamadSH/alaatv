@@ -1188,8 +1188,8 @@ class HomeController extends Controller
     public function live(Request $request){
         $user = $request->user();
         $now = Carbon::now('Asia/Tehran'); 
-        $start = Carbon::parse('2019-07-02 20:15:00','Asia/Tehran');
-        $finish = Carbon::parse('2019-07-02 22:17:30','Asia/Tehran');
+        $start = Carbon::parse('2019-07-20 04:10:00','Asia/Tehran');
+        $finish = Carbon::parse('2019-07-20 05:40:00','Asia/Tehran');
         $fullVideo = [];
         $poster = asset('/acm/image/dlc/dlc_sabeti.jpg');
         if($user->hasRole('admin'))
@@ -1202,7 +1202,7 @@ class HomeController extends Controller
         }else{
             if($now->isBefore($start)) {
                 $live = 'off';
-                $message = 'پخش آنلاین امشب (۱۱ خرداد) ساعت 20:15 آغاز خواهد شد';
+                $message = 'پخش آنلاین 08:40 امروز شروع میشه';
             }elseif($now->between($start, $finish)){
                 $live = 'on';
                 $message = '';

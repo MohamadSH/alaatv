@@ -24,6 +24,7 @@ class ProductSearch extends SearchAbstract
     protected $validFilters = [
         'name',
         'tags',
+        'active'
     ];
     
     /**
@@ -56,8 +57,6 @@ class ProductSearch extends SearchAbstract
     protected function getResults(Builder $query)
     {
         $result = $query
-//            Conflict with admin panel
-            ->active()
             ->whereNull('grand_id')
             ->whereNull('deleted_at')
             ->orderBy("created_at", "desc")

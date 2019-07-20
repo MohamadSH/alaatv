@@ -10,7 +10,6 @@ use Illuminate\Http\Request;
 use App\Traits\ProductCommon;
 use App\Traits\RequestCommon;
 use Illuminate\Http\Response;
-use App\Classes\SEO\SeoDummyTags;
 use App\Http\Controllers\Controller;
 use App\Classes\Search\ContentsetSearch;
 use Illuminate\Foundation\Http\FormRequest;
@@ -113,25 +112,13 @@ class SetController extends Controller
         
         $sets = $setSearch->setPageName($pageName)
             ->get($filters);
-        
-        $url = $request->url();
-        $this->generateSeoMetaTags(new SeoDummyTags("دوره های آموزشی ".$this->setting->site->name,
-            'دوره های آموزشی دهم، یازدهم و دوازدهم - کنکور و پایه آلاء با همکاری دبیرستان دانشگاه صنعتی شریف', $url,
-            $url, route('image', [
-                'category' => '11',
-                'w'        => '100',
-                'h'        => '100',
-                'filename' => $this->setting->site->siteLogo,
-            ]), '100', '100', null));
-        
-        if (request()->expectsJson() || true) {
-            return $this->response->setStatusCode(Response::HTTP_OK)
-                ->setContent([
-                    'result' => $sets,
-                    'tags'   => $tags,
-                ]);
+
+        if (request()->expectsJson()) {
+            return response()->json([
+                'result' => $sets,
+                'tags'   => $tags,
+            ]);
         }
-        
         return view("set.index", compact("sets", 'tags'));
     }
 
@@ -247,7 +234,7 @@ class SetController extends Controller
     private function storePhotoOfSet(Contentset $contentSet, $file): void
     {
         $serverUrl = config('constants.DOWNLOAD_SERVER_PROTOCOL').config('constants.DOWNLOAD_SERVER_NAME');
-        $partialPath = '/upload/contentset/lesson/';
+        $partialPath = '/upload/contentset/departmentlesson/';
 
         $contentSet->photo = $serverUrl.$partialPath.$file->getClientOriginalName();
     }

@@ -8,12 +8,14 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\{Request, Response};
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Support\{Arr, Collection, Facades\File, Facades\Cache, Facades\Input, Facades\Storage};
-use App\{Bon,
+use App\{Adapter\AlaaSftpAdapter,
+    Bon,
     Block,
     Product,
     Attribute,
     Attributeset,
     Attributetype,
+    Traits\FileCommon,
     Traits\Helper,
     Attributevalue,
     User,
@@ -48,6 +50,7 @@ class ProductController extends Controller
     use CharacterCommon;
     use RequestCommon;
     use SearchCommon;
+    use FileCommon;
     
     /*
     |--------------------------------------------------------------------------
@@ -112,11 +115,26 @@ class ProductController extends Controller
         $tags          = $request->get('tags');
         $filters       = $request->all();
         $pageName      = 'productPage';
-        $productResult = $productSearch->setPageName($pageName)
-            ->get($filters);
-        
+        if(!$request->has('moderator')) {
+            $filters['active'] = 1 ;
+        }
+
+        $productSearch->setPageName($pageName);
+        if($request->has('length')){
+            $productSearch->setNumberOfItemInEachPage($request->get('length'));
+        }
+
+        $productResult = $productSearch->get($filters);
+
         $products = $productResult;
-        
+        if (request()->expectsJson()) {
+            return $this->response->setStatusCode(Response::HTTP_OK)
+                ->setContent([
+                    'result' => $products,
+                    'tags'   => $tags,
+                ]);
+        }
+
         $url = $request->url();
         $this->generateSeoMetaTags(new SeoDummyTags('محصولات '.$this->setting->site->name,
             'کارگاه تست کنکور، همایش، جمع بندی و اردوطلایی نوروز آلاء', $url,
@@ -126,15 +144,8 @@ class ProductController extends Controller
                 'h'        => '100',
                 'filename' => $this->setting->site->siteLogo,
             ]), '100', '100', null));
-        
-        if (request()->expectsJson()) {
-            return $this->response->setStatusCode(Response::HTTP_OK)
-                ->setContent([
-                    'result' => $products,
-                    'tags'   => $tags,
-                ]);
-        }
-    
+
+
         return view('pages.product-search', compact('products', 'tags'));
     }
 
@@ -254,11 +265,16 @@ class ProductController extends Controller
         foreach ($files as $key => $file) {
             $extension  = $file->getClientOriginalExtension();
             $fileName   = basename($file->getClientOriginalName(), '.'.$extension).'_'.date('YmdHis').'.'.$extension;
+            $disk = Storage::disk(config('constants.DISK21'));
+            /** @var AlaaSftpAdapter $adaptor */
+            $adaptor = $disk->getAdapter();
             $done[$key] = false;
-            if (Storage::disk(config('constants.DISK4'))
-                ->put($fileName, File::get($file))) {
+            if ($disk->put($fileName, File::get($file))) {
+                $fullPath = $adaptor->getRoot();
+                $partialPath = $this->getSubDirectoryInCDN($fullPath);
+
                 $done[$key]     = true;
-                $product->image = $fileName;
+                $product->image = $partialPath.$fileName;
                 /**
                  *  Snippet code : resizing the image using the ........ package
                  *
