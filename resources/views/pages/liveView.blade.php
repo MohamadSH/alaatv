@@ -29,7 +29,7 @@
 @endsection
 
 @section("content")
-    @if($live == 'on' || $live == 'finished')
+    @if($live == 'on')
         @if(strlen($message) > 0)
             <div class="alert alert-info alert-dismissible fade show" role="alert">
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close"></button>
@@ -48,11 +48,7 @@
                                 
                                 </span>
                                 <h3 class="m-portlet__head-text">
-                                    @if($live == 'on')
-                                        پخش آنلاین آقای ثابتی
-                                    @else
-                                        دانلود
-                                    @endif
+                                    @if(isset($title)) {{$title}} @endif
                                 </h3>
                             </div>
                         </div>
@@ -115,7 +111,7 @@
                 </svg>
             </div>
             <div class="message">
-                <div class = "col-md-12 page-403">
+                <div class = "col-md-12 page-404">
                     <div class = "details">
                         <h3>
                             {!! $message !!}
@@ -141,7 +137,7 @@
         <script type="text/javascript">
 
 
-            var contentDisplayName = 'پخش آنالین آقای شامی زاده';
+            var contentDisplayName = '{{(isset($title)?$title:'')}}';
             var contentUrl = '{{ asset('/live') }}';
             player = videojs('video-0', {
                 language: 'fa'
