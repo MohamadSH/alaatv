@@ -1188,8 +1188,8 @@ class HomeController extends Controller
     public function live(Request $request){
         $user = $request->user();
         $now = Carbon::now('Asia/Tehran'); 
-        $start = Carbon::parse('2019-07-20 03:30:00','Asia/Tehran');
-        $finish = Carbon::parse('2019-07-02 05:00:00','Asia/Tehran');
+        $start = Carbon::parse('2019-07-20 04:10:00','Asia/Tehran');
+        $finish = Carbon::parse('2019-07-20 05:40:00','Asia/Tehran');
         $fullVideo = [];
         $poster = asset('/acm/image/dlc/dlc_sabeti.jpg');
         if($user->hasRole('admin'))
