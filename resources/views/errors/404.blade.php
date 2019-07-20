@@ -31,13 +31,17 @@
         <div class="message">
         
             <div class = "col-md-12 page-404">
-                <div class = "number m--font-danger"> 404</div>
+                @if(!isset($message))<div class = "number m--font-danger"> 404</div>@endif
                 <div class = "details">
-                    <h3>ظاهرا شما گم شده اید!</h3>
+                    @if(!isset($message))<h3>ظاهرا شما گم شده اید!</h3>@endif
                     <p>
+                        @if(isset($message))
+                            <h3> {{$message}}</h3>
+                        @else
                         صفحه ی مورد نظر شما یافت نشد
+                        @endif
                         <br/>
-                        <a href = "{{action("Web\IndexPageController")}}"> @lang('page.Home') </a>
+                        <a class="btn m-btn--air m-btn--pill btn-info" href = "{{action("Web\IndexPageController")}}"> @lang('page.Home') </a>
                     </p>
                 </div>
             </div>

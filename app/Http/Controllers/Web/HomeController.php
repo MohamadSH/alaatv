@@ -1185,62 +1185,6 @@ class HomeController extends Controller
         return view('admin.topicsTree.index', compact('mote2', 'treePathData', 'htmlPrint', 'lastUpdatedByLernito'));
     }
 
-    public function live(Request $request){
-        $user = $request->user();
-        $now = Carbon::now('Asia/Tehran'); 
-        $start = Carbon::parse('2019-07-20 04:10:00','Asia/Tehran');
-        $finish = Carbon::parse('2019-07-20 05:40:00','Asia/Tehran');
-    
-        $poster = asset('/acm/image/dlc/dlc_sabeti.jpg');
-        $xMpegURL = 'https://alaatv.arvanlive.com/hls/test/test.m3u8';
-        $dashXml = 'https://alaatv.arvanlive.com/dash/test/test.mpd';
-        
-        
-        $fullVideo = [];
-        
-        if($user->hasRole('admin'))
-        {
-            if($now->isBefore($start) || $now->between($start, $finish)) {
-                $live = 'on';
-                $message = '';
-            }elseif($now->isAfter($finish)) {
-                $live = 'finished';
-                $message = 'پخش آنلاید به اتمام رسیده است.';
-            }
-        }else{
-            if($now->isBefore($start)) {
-                $live = 'off';
-                $message = 'پخش آنلاین 08:40 امروز شروع میشه';
-            }elseif($now->between($start, $finish)){
-                $live = 'on';
-                $message = '';
-            }else{
-//                $fullVideo = [
-//                    [
-//                        'src' => 'https://cdn.sanatisharif.ir/media/528/HD_720p/528066seve.mp4',
-//                        'res' => '720p',
-//                        'label' => 'کیفیت عالی',
-//                    ],
-//                    [
-//                        'src' => 'https://cdn.sanatisharif.ir/media/528/hq/528066seve.mp4',
-//                        'res' => '480p',
-//                        'label' => 'کیفیت بالا',
-//                    ],
-//                    [
-//                        'src' => 'https://cdn.sanatisharif.ir/media/528/240p/528066seve.mp4',
-//                        'res' => '240p',
-//                        'label' => 'کیفیت متوسط',
-//                    ]
-//                ];
-                $message = 'پخش آنلاید به اتمام رسیده است.';
-//                $live = 'finished';
-                $live = 'off';
-            }
-        }
-        
-        return view('pages.liveView' , compact('product' , 'live', 'message', 'poster', 'fullVideo', 'xMpegURL', 'dashXml'));
-    }
-
     private function getLastUpdatedByLernito(): array
     {
         $Riazi                = new Riazi();
