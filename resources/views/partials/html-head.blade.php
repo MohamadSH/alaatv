@@ -12,15 +12,7 @@
 {!! SEO::generate(true) !!}
 <!-- end:: seo meta tags -->
 
-{{--<script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.16/webfont.js"></script>--}}
 <script>
-    // // Web font
-    // WebFont.load({
-    //     google: {"families": ["Poppins:300,400,500,600,700", "Roboto:300,400,500,600,700"]},
-    //     active: function () {
-    //         sessionStorage.fonts = true;
-    //     }
-    // });
     // csrf token
     window.Laravel = {!! json_encode(['csrfToken' => csrf_token()]) !!};
 </script>

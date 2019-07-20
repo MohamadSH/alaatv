@@ -84,6 +84,8 @@ jQuery(document).ready( function() {
     SnippetContentShow.init(related_videos);
     $('#owlCarouselParentProducts').OwlCarouselType2({
         OwlCarousel: {
+            center: false,
+            loop: false,
             btnSwfitchEvent: function() {
                 LazyLoad.image();
             }
