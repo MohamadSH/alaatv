@@ -4,7 +4,7 @@
             <i class="fa fa-play"></i> / <i class="fa fa-cloud-download-alt"></i>
         </a>
         <a href="{{ $set->url }}" class="a--block-imageWrapper-image">
-            <img data-src="{{ $set->photo }}?w=253&h=142" alt="{{ $set->small_name }}" class="a--block-image owl-lazy lazy-image main-photo-forLoading"/>
+            <img data-src="{{ $set->photo }}?w=253&h=142" alt="{{ $set->small_name }}" class="a--block-image owl-lazy lazy-image main-photo-forLoading" width="253" height="142" />
         </a>
     </div>
     <div class="a--block-infoWrapper">
