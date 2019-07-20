@@ -14,7 +14,7 @@
         </div>
     </div>
     <div class="col">
-        <div id="{{ $widgetId ?? 'video-carousel' }}" class="{{ $carouselType ?? 'a--owl-carousel-type-1' }} owl-carousel owl-theme" data-per-page="{{ isset($perPage) ? $perPage : 7 }}">
+        <div id="{{ $widgetId ?? 'video-carousel' }}" class="{{ $carouselType ?? 'a--owl-carousel-type-1' }} a--owl-carousel-type-2 owl-carousel owl-theme" data-per-page="{{ isset($perPage) ? $perPage : 7 }}">
             @if($loadChild ?? true && optional($items)->isNotEmpty())
                 @foreach($items as $content)
                     @include('partials.widgets.video1',[

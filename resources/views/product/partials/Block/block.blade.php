@@ -12,20 +12,20 @@
     )
 )
     <div class="row blockWraper a--owl-carousel-row
-        @if(isset($blockCustomClass))
-    {{ $blockCustomClass }}
-    @endif
+            @if(isset($blockCustomClass))
+                {{ $blockCustomClass }}
+            @endif
             blockId-{{ $block->id }}
-    {{ $block->class }}
-    @if(((isset($blockType) && $blockType === 'product') || !isset($blockType)) && isset($block->products))
-            blockWraper-hasProduct
-            scrollSensitiveOnScreen
-@endif "
+            {{ $block->class }}
+            @if(((isset($blockType) && $blockType === 'product') || !isset($blockType)) && isset($block->products))
+                    blockWraper-hasProduct
+                    scrollSensitiveOnScreen
+            @endif "
          @if(isset($blockCustomId))
-         id="{{ $blockCustomId }}"
+            id="{{ $blockCustomId }}"
          @else
-         id="{{ $block->class }}"
-            @endif>
+            id="{{ $block->class }}"
+        @endif>
         <div class="col">
             <div class="m-portlet a--owl-carousel-Wraper OwlCarouselType2-shopPage" id="owlCarousel_{{ $block->id }}">
                 <div class="m-portlet__head">

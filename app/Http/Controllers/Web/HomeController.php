@@ -1190,14 +1190,22 @@ class HomeController extends Controller
         $now = Carbon::now('Asia/Tehran'); 
         $start = Carbon::parse('2019-07-20 04:10:00','Asia/Tehran');
         $finish = Carbon::parse('2019-07-20 05:40:00','Asia/Tehran');
-        $fullVideo = [];
+    
         $poster = asset('/acm/image/dlc/dlc_sabeti.jpg');
+        $xMpegURL = 'https://alaatv.arvanlive.com/hls/test/test.m3u8';
+        $dashXml = 'https://alaatv.arvanlive.com/dash/test/test.mpd';
+        
+        
+        $fullVideo = [];
+        
         if($user->hasRole('admin'))
         {
             if($now->isBefore($start) || $now->between($start, $finish)) {
                 $live = 'on';
+                $message = '';
             }elseif($now->isAfter($finish)) {
                 $live = 'finished';
+                $message = 'پخش آنلاید به اتمام رسیده است.';
             }
         }else{
             if($now->isBefore($start)) {
@@ -1230,7 +1238,7 @@ class HomeController extends Controller
             }
         }
         
-        return view('pages.liveView' , compact('product' , 'live', 'message', 'poster', 'fullVideo'));
+        return view('pages.liveView' , compact('product' , 'live', 'message', 'poster', 'fullVideo', 'xMpegURL', 'dashXml'));
     }
 
     private function getLastUpdatedByLernito(): array

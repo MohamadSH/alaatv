@@ -1,0 +1,433 @@
+.a--owl-carousel-type-2 .carousel {
+    transition-property: transform;
+    transition-duration: .7s
+}
+
+.a--owl-carousel-type-2 .carousel .a--owl-carousel-type-2-item-image {
+    position: relative;
+    bottom: 20px;
+    width: 90%;
+    margin: auto;
+    border-radius: 4px;
+    box-shadow: 0 0 10px 0 rgba(0, 0, 0, .75);
+    transition: all 1s;
+    background: #fff
+}
+
+.a--owl-carousel-type-2 .carousel .a--owl-carousel-type-2-item-subtitle, .a--owl-carousel-type-2 .carousel .a--owl-carousel-type-2-item-title {
+    position: relative;
+    bottom: 15px;
+    padding: 0 15px
+}
+
+.a--owl-carousel-type-2 .carousel .a--owl-carousel-type-2-item-subtitle {
+    display: flex;
+    align-items: center;
+    min-height: 40px;
+    justify-content: space-around
+}
+
+.a--owl-carousel-type-2 .owl-stage .owl-item.active.center {
+    z-index: 1
+}
+
+.a--owl-carousel-type-2 .owl-item.active.center .carousel {
+    transform: scale(1.13);
+    color: #fff;
+    padding: 0
+}
+
+.a--owl-carousel-type-2 .owl-item.active.center .carousel .a--content-author {
+    border-color: #fff
+}
+
+.a--owl-carousel-type-2 .owl-item.active.center .background-solid.carousel {
+    background-color: rgba(60, 0, 177, .3) !important
+}
+
+.a--owl-carousel-type-2 .owl-item.active.center .background-gradient.carousel {
+    background: #ffb822 !important;
+    background: linear-gradient(90deg, #ffb822, #34bfa3) !important
+}
+
+.a--owl-carousel-type-2 .carousel, .a--owl-carousel-type-2 .owl-stage-outer .owl-stage .owl-item .m-widget_head-owlcarousel-item {
+    box-shadow: 0 1px 15px 1px rgba(55, 41, 84, .3) !important;
+    margin-top: 45px;
+    margin-bottom: 30px
+}
+
+.a--owl-carousel-type-2 .owl-prev {
+    right: 0;
+    background: linear-gradient(270deg, rgba(47, 47, 47, .6), rgba(100, 94, 111, .5) 40%, rgba(216, 195, 255, 0)) !important
+}
+
+.a--owl-carousel-type-2 .owl-next {
+    left: 0;
+    background: linear-gradient(90deg, rgba(47, 47, 47, .6), rgba(100, 94, 111, .5) 40%, rgba(216, 195, 255, 0)) !important
+}
+
+.a--owl-carousel-type-2 .owl-next.disabled, .a--owl-carousel-type-2 .owl-prev.disabled {
+    display: none
+}
+
+.a--owl-carousel-type-2 .owl-next, .a--owl-carousel-type-2 .owl-prev {
+    position: absolute;
+    top: 0;
+    height: 100%;
+    width: 40px;
+    margin: 0 !important;
+    color: #fff !important;
+    transition-property: width;
+    transition-duration: .5s
+}
+
+.a--owl-carousel-type-2 .owl-next:hover, .a--owl-carousel-type-2 .owl-prev:hover {
+    width: 70px
+}
+
+.a--owl-carousel-type-2 .a--owlCarouselLoading {
+    height: 100px;
+    width: 100px;
+    background: #fff;
+    border-radius: 50%;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: auto
+}
+
+.a--owl-carousel-type-2 .owl-dots {
+    display: none
+}
+
+.a--owl-carousel-type-2 .owl-stage-outer .owl-stage .owl-item .m-widget_head-owlcarousel-item.carousel {
+    padding: 0
+}
+
+.a--owl-carousel-row .a--block-type-set .a--owl-carousel-Wrapper {
+    border: none;
+    box-shadow: none;
+    background-color: transparent
+}
+
+.a--owl-carousel-row .a--block-type-set .a--owl-carousel-Wrapper .a--block-imageWrapper {
+    position: relative
+}
+
+.a--owl-carousel-row .a--block-type-set .a--owl-carousel-Wrapper .a--block-imageWrapper .btnViewMore {
+    position: absolute;
+    z-index: 2;
+    bottom: 10px;
+    right: 10px;
+    background-color: rgba(0, 163, 182, .6);
+    border: 1px solid #fff;
+    transition: all .5s
+}
+
+.btn-viewOwlcarousel {
+    display: none
+}
+
+.a--owl-carousel-type-2-slide-detailes {
+    position: relative;
+    box-shadow: 0 -15px 60px -17px rgba(0, 0, 0, .75)
+}
+
+.a--owl-carousel-type-2-slide-detailes:before {
+    content: " ";
+    width: 0;
+    height: 0;
+    border-left: 21px solid transparent;
+    border-right: 20px solid transparent;
+    border-bottom: 20px solid #fff;
+    position: absolute;
+    top: -19px;
+    right: calc(50% - 20px)
+}
+
+.subCategoryWarper .subCategoryItem {
+    background: #ffb822 !important;
+    background: linear-gradient(90deg, #ffb822, #34bfa3) !important;
+    text-align: center;
+    margin: 5px 0;
+    padding: 10px;
+    border-radius: 4px;
+    border: 5px dotted #fff
+}
+
+.subCategoryWarper .subCategoryItem .subCategoryItem-title {
+    color: #fff;
+    background: hsla(0, 0%, 50.2%, .4);
+    padding: 10px;
+    line-height: 20px;
+    border-radius: 4px
+}
+
+.gridView-myProduct, .m-widget30 {
+    position: relative
+}
+
+.a--owl-carousel-type-2-gridViewWarper {
+    margin: 0
+}
+
+.a--owl-carousel-type-2-gridViewWarper .carousel:hover > a img.a--owl-carousel-type-2-item-image, .a--owl-carousel-type-2-gridViewWarper .carousel:hover > img.a--owl-carousel-type-2-item-image {
+    transform: scale(1.13)
+}
+
+.a--owl-carousel-type-2-gridViewWarper .carousel.noHoverEffect:hover > a img.a--owl-carousel-type-2-item-image, .a--owl-carousel-type-2-gridViewWarper .carousel.noHoverEffect:hover > img.a--owl-carousel-type-2-item-image {
+    transform: none
+}
+
+.a--content-info .a--content-author {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    padding-top: 5px;
+    border-top: 1px dotted hsla(0, 0%, 50.2%, .14);
+    margin-top: 5px
+}
+
+.a--content-info .a--content-author .a--content-author-photo {
+    padding-left: 5px
+}
+
+.a--content-info .a--content-author .a--content-author-photo img {
+    width: 3rem;
+    border-radius: 50%
+}
+
+.a--content-info .a--content-name {
+    min-height: 60px;
+    display: flex;
+    align-items: center;
+    text-align: right
+}
+
+.ribbon {
+    top: -26px;
+    right: calc(5% - 5px)
+}
+
+.a--owl-carousel-type-2-gridViewWarper .ribbon {
+    top: -12px;
+    right: 9px
+}
+
+.a--block-widget-1 .a--owl-carousel-type-2 .carousel {
+    box-shadow: none !important
+}
+
+.a--block-widget-1 .m-widget30 .m-widget_head .m-widget_head-owlcarousel-items .center > div {
+    background-color: transparent
+}
+
+.a--block-widget-1 .a--owl-carousel-type-2 .owl-item.active.center .carousel {
+    transform: scale(1.05)
+}
+
+.a--block-widget-1 .m-portlet .m-portlet__head {
+    border-bottom: none
+}
+
+.a--block-widget-1 .a--owl-carousel-type-2 .owl-next, .a--block-widget-1 .a--owl-carousel-type-2 .owl-prev {
+    background: none !important
+}
+
+.a--block-widget-1 .m-portlet__head {
+    height: 50px;
+    position: relative
+}
+
+.a--block-widget-1 .m-widget30 .m-widget_head {
+    margin-bottom: 0
+}
+
+.a--block-widget-1 .a--owl-carousel-type-2 .carousel .a--owl-carousel-type-2-item-image {
+    width: 100%
+}
+
+.a--block-widget-1 .a--owl-carousel-type-2 .carousel {
+    margin-bottom: 0 !important
+}
+
+.a--block-widget-1 .m-portlet {
+    background: transparent;
+    box-shadow: none;
+    border: none
+}
+
+.owl-carousel .owl-nav button.owl-next, .owl-carousel .owl-nav button.owl-prev, .owl-carousel button.owl-dot {
+    -webkit-text-stroke: 3px #ff9000;
+    font-size: 8rem !important
+}
+
+.a--owl-carousel-Wrapper .a--owl-carousel-type-2 .owl-stage .owl-item .block-product-item {
+    background: #fff;
+    margin-bottom: 0
+}
+
+.a--owl-carousel-init-loading {
+    display: flex;
+    justify-content: center
+}
+
+.a--owl-carousel-init-loading .lds-roller {
+    width: 200px;
+    height: 200px
+}
+
+.owl-carousel .owl-item.active .owl-lazy.main-photo-forLoading {
+    min-height: 150px
+}
+
+.blueSquare, .recomenderSquare, .redSquare {
+    width: 10px;
+    height: 10px;
+    position: relative;
+    margin-right: 10px;
+    display: inline-block;
+    margin-left: 10px
+}
+
+.recomenderSquare {
+    background: red;
+    border: 2px solid #36a3f7
+}
+
+.redSquare {
+    background: red
+}
+
+.blueSquare {
+    background: #36a3f7
+}
+
+.a--owl-carousel-Wrapper.background-transparent, .a--owl-carousel-Wrapper.background-transparent .a--owl-carousel-mainContent {
+    background: transparent;
+    box-shadow: none
+}
+
+.a--owl-carousel-Wrapper.background-transparent .a--owl-carousel-mainContent, .a--owl-carousel-Wrapper.background-transparent .a--owl-carousel-mainContent .a--owl-carousel-body-content {
+    margin: 0
+}
+
+.a--owl-carousel-Wrapper .a--owl-carousel-head {
+    background: #fff;
+    margin-bottom: 10px
+}
+
+.a--owl-carousel-Wrapper .item.carousel {
+    background: #fff
+}
+
+.a--owl-carousel-Wrapper .item.carousel .item-name {
+    padding: 5px 15px
+}
+
+.a--owl-carousel-Wrapper.background-transparent .a--owl-carousel-mainContent .a--owl-carousel-type-2-gridViewWarper .block-type-simple {
+    margin-bottom: 10px
+}
+
+.a--content-carousel-1 .a--owl-carousel-head {
+    background: #fff;
+    opacity: .85
+}
+
+.a--content-carousel-1 .m-portlet__head {
+    height: 45px;
+    position: relative
+}
+
+.a--content-carousel-1 > .m-portlet {
+    background: transparent;
+    border: none;
+    box-shadow: none
+}
+
+.a--content-carousel-1 .owl-carousel .owl-stage-outer {
+    padding-top: 5px
+}
+
+.a--content-carousel-1 .m-widget19__pic .btnViewMore {
+    position: absolute;
+    z-index: 2;
+    bottom: 10px;
+    right: 10px;
+    background-color: rgba(0, 163, 182, .6);
+    border: 1px solid #fff;
+    transition: all .5s
+}
+
+.a--content-carousel-1 .m-widget19 .m-widget19__content {
+    margin-right: -2.2rem;
+    margin-left: -2.2rem
+}
+
+@media (max-width: 767.98px) {
+    .a--content-carousel-1 .m-widget19 .m-widget19__content, .a--content-carousel-1 .m-widget19 .m-widget19__pic {
+        margin-right: -.3rem;
+        margin-left: -.3rem
+    }
+
+    .a--owl-carousel-type-2 .owl-item .item.carousel .m-portlet .m-portlet__body {
+        padding-top: 0 !important
+    }
+}
+
+.a--content-carousel-1 .m-widget19__pic .btnViewMore:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 10px 5px #00a3b6 !important
+}
+
+.a--content-carousel-1 .owl-carousel-fileTitle {
+    margin: 0 !important;
+    padding: 5px 15px;
+    background: rgba(0, 0, 0, .49)
+}
+
+.a--content-carousel-1 .owl-carousel-fileTitle a {
+    color: #fff;
+    transition-property: all;
+    transition-duration: .3s
+}
+
+.a--content-carousel-1 .owl-carousel-fileTitle a:hover {
+    color: #8bccfe
+}
+
+.a--content-carousel-1 .owl-carousel-fileTitle a:hover:after {
+    border-bottom: 1px solid #fff;
+    opacity: 1
+}
+
+.a--content-carousel-1 .a--owl-carousel-type-2 .m-widget19__header {
+    margin-right: 15px;
+    margin-left: 15px
+}
+
+.a--content-carousel-1 .a--owl-carousel-type-2 .gridItem .m-widget19__content .owl-carousel-fileTitle, .a--content-carousel-1 .a--owl-carousel-type-2 .owl-item .m-widget19__content .owl-carousel-fileTitle {
+    min-height: 47px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center
+}
+
+.a--content-carousel-1 .a--owl-carousel-type-2 .item .m-portlet > .m-portlet__body {
+    padding-bottom: 0;
+    padding-top: 0
+}
+
+.a--content-carousel-1 .a--owl-carousel-type-2 .carousel, .a--content-carousel-1 .a--owl-carousel-type-2 .carousel > .m-portlet, .a--content-carousel-1 .m-widget30 .m-widget_head, .a--owl-carousel-type-2 .carousel {
+    margin-bottom: 0;
+    margin-top: 0
+}
+
+.a--content-carousel-1 .a--owl-carousel-type-2 .gridItem .carousel > .m-portlet {
+    margin-bottom: 10px
+}
+
+.a--content-carousel-1 .a--owl-carousel-type-2 .carousel, .a--content-carousel-1 .a--owl-carousel-type-2 .carousel .m-portlet {
+    box-shadow: none
+}

@@ -15,7 +15,7 @@
 
     </div>
     <div class = "col-12">
-        <div id = "{{  $widgetId ?? 'set-carousel'}}" class = "{{ $carouselType ?? 'a--owl-carousel-type-1' }} owl-carousel owl-theme" data-per-page = "7">
+        <div id = "{{  $widgetId ?? 'set-carousel'}}" class = "{{ $carouselType ?? 'a--owl-carousel-type-1' }} a--owl-carousel-type-2 owl-carousel owl-theme" data-per-page = "7">
             @if($loadChild ?? true && optional($items)->isNotEmpty())
                 @foreach($items as $lesson)
 
@@ -33,8 +33,12 @@
             @endif
         </div>
 
-        <input id = "{{ isset($widgetId) ? 'owl--js-var-next-page-'.$widgetId.'-url' : 'owl--js-var-next-page-set-url' }}" class = "m--hide" type = "hidden" @if(optional($items)->isNotEmpty())value = "{{ $items->nextPageUrl() }}" @elsevalue = ""
-                @endif>
+        <input id = "{{ isset($widgetId) ? 'owl--js-var-next-page-'.$widgetId.'-url' : 'owl--js-var-next-page-set-url' }}" class = "m--hide" type = "hidden"
+               @if(optional($items)->isNotEmpty())
+               value = "{{ $items->nextPageUrl() }}"
+               @else
+               value = ""
+               @endif>
 
     </div>
 @endif
