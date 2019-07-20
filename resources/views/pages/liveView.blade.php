@@ -41,7 +41,7 @@
                                 </span>
                                 <h3 class="m-portlet__head-text">
                                     @if($live == 'on')
-                                        پخش آنلاین آقای ثابتی
+                                        پخش آنلاین هندسه پایه
                                     @else
                                         دانلود
                                     @endif
@@ -134,7 +134,7 @@
         <script type="text/javascript">
 
 
-            var contentDisplayName = 'پخش آنالین آقای ثابتی';
+            var contentDisplayName = 'پخش آنالین آقای شامی زاده';
             var contentUrl = '{{ asset('/live') }}';
             player = videojs('video-0', {
                 language: 'fa'
