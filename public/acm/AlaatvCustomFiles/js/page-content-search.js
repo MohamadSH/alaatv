@@ -59,7 +59,18 @@ var Alaasearch = function () {
             '                       data-gtm-eec-product-variant="'+gtmEecProductVariant+'"' +
             '                       data-gtm-eec-product-list="محصولات صفحه سرچ"' +
             '                       data-gtm-eec-product-position="'+gtmEecProductPosition+'">' + widgetActionName + '</a>\n' +
-            '                    <img src="' + widgetPic + '" alt="' + widgetTitle + '"/>\n' +
+            '                    <a href="' + widgetActionLink + '"' +
+            '                       class="d-block"' +
+            '                       data-gtm-eec-product-id="'+gtmEecProductId+'"' +
+            '                       data-gtm-eec-product-name="'+gtmEecProductName+'"' +
+            '                       data-gtm-eec-product-price="'+priceToStringWithTwoDecimal(price.final)+'"' +
+            '                       data-gtm-eec-product-brand="آلاء"' +
+            '                       data-gtm-eec-product-category="'+gtmEecProductCategory+'"' +
+            '                       data-gtm-eec-product-variant="'+gtmEecProductVariant+'"' +
+            '                       data-gtm-eec-product-list="محصولات صفحه سرچ"' +
+            '                       data-gtm-eec-product-position="'+gtmEecProductPosition+'">' +
+            '                       <img src="' + widgetPic + '" alt="' + widgetTitle + '"/>\n' +
+            '                    </a>\n' +
             '                    <div class="m-widget19__shadow"></div>\n' +
             '                </div>\n' +
             '                <div class="m-widget19__content">\n' +
@@ -111,7 +122,7 @@ var Alaasearch = function () {
         return '<div class = \"item\"> \
     <!--begin:: Widgets/Blog--> \
     <div class = \"m-portlet m-portlet--bordered-semi m-portlet--rounded-force\"> \
-        <div class = \"m-portlet__head m-portlet__head--fit\"> \
+        <div class = \"m-portlet__head m-portlet__head--fit\" onclick="window.location.href=\''+widgetActionLink+'\';"> \
             <div class = \"m-portlet__head-caption\"> \
                 <div class = \"m-portlet__head-action\"> \
                 </div> \
@@ -119,9 +130,9 @@ var Alaasearch = function () {
         </div> \
         <div class = \"m-portlet__body\"> \
             <div class = \"a-widget19 m-widget19\"> \
-                <div class = \"m-widget19__pic m-portlet-fit--top m-portlet-fit--sides\" > \
-                    <a href=\"' + widgetActionLink + '\" class = \"btn btn-sm m-btn--pill btn-brand btnViewMore\">' + widgetActionName + '</a> \
-                    <img src = \"' + widgetPic + '\" alt = \" ' + widgetTitle + '\"/> \
+                <div class = \"m-widget19__pic m-portlet-fit--top m-portlet-fit--sides" onclick="window.location.href=\''+widgetActionLink+'\';"> \
+                    <a href="' + widgetActionLink + '" class="btn btn-sm m-btn--pill btn-brand btnViewMore">' + widgetActionName + '</a> \
+                    <img src ="' + widgetPic + '" alt=" ' + widgetTitle + '" onclick="window.location.href=\''+widgetActionLink+'\';"/> \
                     <div class = \"m-widget19__shadow\"></div> \
                 </div> \
                 <div class = \"m-widget19__content\"> \n' +
@@ -174,7 +185,7 @@ var Alaasearch = function () {
         return '<div class = \"item\"> \
     <!--begin:: Widgets/Blog--> \
     <div class = \"m-portlet m-portlet--bordered-semi m-portlet--rounded-force\"> \
-        <div class = \"m-portlet__head m-portlet__head--fit\"> \
+        <div class = \"m-portlet__head m-portlet__head--fit\" onclick="window.location.href=\''+widgetActionLink+'\';"> \
             <div class = \"m-portlet__head-caption\"> \
                 <div class = \"m-portlet__head-action\"> \
                 </div> \
@@ -182,9 +193,9 @@ var Alaasearch = function () {
         </div> \
         <div class = \"m-portlet__body\"> \
             <div class = \"a-widget19 m-widget19\"> \
-                <div class = \"m-widget19__pic m-portlet-fit--top m-portlet-fit--sides\" > \
-                    <a href=\"' + widgetActionLink +'\" class = \"btn btn-sm m-btn--pill btn-brand btnViewMore\">' + widgetActionName + '</a> \
-                    <img src = \"'+ widgetPic +'\" alt = \" ' + widgetTitle +'\"/> \
+                <div class = \"m-widget19__pic m-portlet-fit--top m-portlet-fit--sides" onclick="window.location.href=\''+widgetActionLink+'\';" > \
+                    <a href="' + widgetActionLink +'" class="btn btn-sm m-btn--pill btn-brand btnViewMore">' + widgetActionName + '</a> \
+                    <img src = \"'+ widgetPic +'\" alt = \" ' + widgetTitle +'\" onclick="window.location.href=\''+widgetActionLink+'\';"/> \
                     <div class = \"m-widget19__shadow\"></div> \
                 </div> \
                 <div class = \"m-widget19__content\"> \n' +
