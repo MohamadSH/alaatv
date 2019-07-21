@@ -55,7 +55,7 @@ class LiveController extends Controller
         }else{
             if($now->isBefore($start)) {
                 $live = 'off';
-                $message = 'پخش آنلاین ساعت '.$startTime.' شروع می شود';
+                $message = 'پخش آنلاین '.$title.' ساعت '.$startTime.' شروع می شود';
                 $view = 'errors.404';
             }elseif($now->between($start, $finish)){
                 $live = 'on';
