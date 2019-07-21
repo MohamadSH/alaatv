@@ -48,7 +48,7 @@
                                 
                                 </span>
                                 <h3 class="m-portlet__head-text">
-                                    @if(isset($title)) {{$title}} @endif
+                                    پخش زنده  @if(isset($title)) {{$title}} @endif
                                 </h3>
                             </div>
                         </div>

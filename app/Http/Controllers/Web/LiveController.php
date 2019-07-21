@@ -21,25 +21,32 @@ class LiveController extends Controller
     {
         $user = $request->user();
         $message = '';
+        $now = Carbon::now('Asia/Tehran');
         $today = Carbon::today()->setTimezone('Asia/Tehran');
         $todayStringDate = $today->toDateString();
         /** @var DayofWeek $dayOfWeek */
         $dayOfWeek = $this->getDayOfWeek($today->dayName)->first();
-        $liveEvent = $this->isThereLive($dayOfWeek, $todayStringDate)->first();
-        $startTime = $liveEvent->start_time;
-        $finishTime = $liveEvent->finish_time;
-        $title = $liveEvent->title;
+        if(!isset($dayOfWeek))
+        {
+            $message = 'روز هفته یافت نشد';
+            $live = 'notFound';
+            return view('errors.404' , compact('live', 'message'));
+        }
 
+        $liveEvent = $this->isThereLive($dayOfWeek, $todayStringDate , $now)->first();
         if(!isset($liveEvent))
         {
             $message = 'امروز پخش زنده ای وجود ندارد';
             $live = 'notFound';
-            return view('pages.liveView' , compact('live', 'message'));
+            return view('errors.404' , compact('live', 'message'));
         }
+
+        $startTime = $liveEvent->start_time;
+        $finishTime = $liveEvent->finish_time;
+        $title = $liveEvent->title;
 
         $start  = Carbon::parse($todayStringDate .' '.$startTime,'Asia/Tehran');
         $finish = Carbon::parse($todayStringDate .' '.$finishTime,'Asia/Tehran');
-        $now = Carbon::now('Asia/Tehran');
         if($user->hasRole('admin'))
         {
             $view = 'pages.liveView';
@@ -87,13 +94,15 @@ class LiveController extends Controller
     /**
      * @param Dayofweek $dayOfWeek
      * @param string $todayDate
+     * @param Carbon $now
      * @return Builder
      */
-    private function isThereLive(Dayofweek $dayOfWeek, string $todayDate):Builder
+    private function isThereLive(Dayofweek $dayOfWeek, string $todayDate , Carbon $now):Builder
     {
         return Live::where('dayofweek_id', $dayOfWeek->id)
             ->where('enable', 1)
             ->where('first_live', '<=', $todayDate)
-            ->where('last_live', '>=', $todayDate);
+            ->where('last_live', '>=', $todayDate)
+            ->where('finish_time' , '>' , $now);
     }
 }
