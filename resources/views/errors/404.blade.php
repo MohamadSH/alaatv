@@ -40,6 +40,9 @@
                         @else
                         صفحه ی مورد نظر شما یافت نشد
                         @endif
+                        @if(isset($message2))
+                            <h4> {{$message2}}</h4>
+                        @endif
                         <br/>
                         <a class="btn m-btn--air m-btn--pill btn-info" href = "{{action("Web\IndexPageController")}}"> @lang('page.Home') </a>
                     </p>
