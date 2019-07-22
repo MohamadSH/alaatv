@@ -1189,42 +1189,6 @@ class BotsController extends Controller
                 dd('done');
 
             }
-
-            if($request->has('fixthumbnail')){
-                $setId = $request->get('set');
-                $set = Contentset::Find($setId);
-                if(!isset($set))
-                    return response()->json(['message'=>'Bad request. set has not been set'] , Response::HTTP_BAD_REQUEST);
-
-                $contents = $set->contents()->where('contenttype_id' , 8)->whereNull('thumbnail')->get();
-
-                foreach ($contents as $content) {
-                    $baseUrl = "https://cdn.sanatisharif.ir/media/";
-                    $videoFileName = basename($content->file_for_admin->get('video')->first()->fileName);
-                    $thumbnailFileName = pathinfo($videoFileName, PATHINFO_FILENAME).".jpg";
-                    $thumbnailUrl      = $baseUrl."thumbnails/".$setId."/".$thumbnailFileName;
-
-                    $size = null;
-                    $type = 'thumbnail';
-
-                    $content->thumbnail = [
-                        'uuid'     => Str::uuid()->toString(),
-                        'disk'     => 'alaaCdnSFTP',
-                        'url'      => $thumbnailUrl,
-                        'fileName' => parse_url($thumbnailUrl)['path'],
-                        'size'     => $size,
-                        'caption'  => null,
-                        'res'      => null,
-                        'type'     => $type,
-                        'ext'      => 'jpg',
-                    ];
-
-                    $content->update();
-                }
-
-                dd('Done');
-            }
-
         } catch (\Exception    $e) {
             $message = "unexpected error";
             
@@ -3321,5 +3285,40 @@ class BotsController extends Controller
         $zarinpal = new Zarinpal(config('Zarinpal.merchantID'));
         $result = $zarinpal->verify($cost, $authority);
         dd($result);
+    }
+
+    public function fixthumbnail(Request $request){
+        $setId = $request->get('set');
+        $set = Contentset::Find($setId);
+        if(!isset($set))
+            return response()->json(['message'=>'Bad request. set has not been set'] , Response::HTTP_BAD_REQUEST);
+
+        $contents = $set->contents()->where('contenttype_id' , 8)->whereNull('thumbnail')->get();
+
+        foreach ($contents as $content) {
+            $baseUrl = "https://cdn.sanatisharif.ir/media/";
+            $videoFileName = basename($content->file_for_admin->get('video')->first()->fileName);
+            $thumbnailFileName = pathinfo($videoFileName, PATHINFO_FILENAME).".jpg";
+            $thumbnailUrl      = $baseUrl."thumbnails/".$setId."/".$thumbnailFileName;
+
+            $size = null;
+            $type = 'thumbnail';
+
+            $content->thumbnail = [
+                'uuid'     => Str::uuid()->toString(),
+                'disk'     => 'alaaCdnSFTP',
+                'url'      => $thumbnailUrl,
+                'fileName' => parse_url($thumbnailUrl)['path'],
+                'size'     => $size,
+                'caption'  => null,
+                'res'      => null,
+                'type'     => $type,
+                'ext'      => 'jpg',
+            ];
+
+            $content->update();
+        }
+
+        dd('Done');
     }
 }
