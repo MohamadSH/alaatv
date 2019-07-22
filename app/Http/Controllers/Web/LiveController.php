@@ -19,7 +19,14 @@ class LiveController extends Controller
      */
     public function __invoke(Request $request)
     {
+        $xMpegURL = 'https://alaatv.arvanlive.com/hls/test/test.m3u8';
+        $dashXml = 'https://alaatv.arvanlive.com/dash/test/test.mpd';
         $user = $request->user();
+        if($user->hasRole('admin')) {
+            $title = 'پخش برای ادمین';
+            return view('pages.liveView', compact('message', 'poster' , 'xMpegURL' , 'dashXml' , 'fullVideo' , 'title' , 'message2'));
+        }
+
         $message = '';
         $now = Carbon::now('Asia/Tehran');
         $nowTime = $now->toTimeString();
@@ -50,23 +57,18 @@ class LiveController extends Controller
 
         $start  = Carbon::parse($todayStringDate .' '.$startTime,'Asia/Tehran');
         $finish = Carbon::parse($todayStringDate .' '.$finishTime,'Asia/Tehran');
-        if($user->hasRole('admin')) {
+        if($now->isBefore($start)) {
+            $message = 'پخش زنده '.$title.' ساعت '.$startTime.' به وقت تهران شروع می شود';
+            $message2 = 'هم اکنون ' .$nowTime;
+            $view = 'errors.404';
+        }elseif($now->between($start, $finish)){
             $view = 'pages.liveView';
         }else{
-            if($now->isBefore($start)) {
-                $message = 'پخش زنده '.$title.' ساعت '.$startTime.' به وقت تهران شروع می شود';
-                $message2 = 'هم اکنون ' .$nowTime;
-                $view = 'errors.404';
-            }elseif($now->between($start, $finish)){
-                $view = 'pages.liveView';
-            }else{
-                $message = 'پخش زنده امروز به اتمام رسیده است';
-                $view = 'errors.404';
-            }
+            $message = 'پخش زنده امروز به اتمام رسیده است';
+            $view = 'errors.404';
         }
 
-        $xMpegURL = 'https://alaatv.arvanlive.com/hls/test/test.m3u8';
-        $dashXml = 'https://alaatv.arvanlive.com/dash/test/test.mpd';
+
         $poster = $currentLive->poster;
         $fullVideo = [];
         return view($view , compact('message', 'poster' , 'xMpegURL' , 'dashXml' , 'fullVideo' , 'title' , 'message2'));
