@@ -2,16 +2,19 @@
 
 namespace App\Http\Controllers\Web;
 
+use App\Adapter\AlaaSftpAdapter;
 use App\Http\Controllers\Controller;
 use App\Repositories\WebsitePageRepo;
 use App\Slideshow;
+use App\Traits\FileCommon;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 
 class SlideShowController extends Controller
 {
+    use FileCommon;
+
     function __construct()
     {
         $this->middleware('permission:'.config('constants.LIST_SLIDESHOW_ACCESS'), ['only' => 'index']);
@@ -62,12 +65,14 @@ class SlideShowController extends Controller
             $extension = $file->getClientOriginalExtension();
             $fileName  = basename($file->getClientOriginalName(), ".".$extension)."_".date("YmdHis").'.'.$extension;
 
-            //ToDo: changing shop's slide show disk
-            if (Storage::disk(config('constants.DISK9'))
-                ->put($fileName, File::get($file))) {
-                $slide->photo = $fileName;
-            }
-            else {
+            $disk = Storage::disk(config('constants.DISK22'));
+            /** @var AlaaSftpAdapter $adaptor */
+            $adaptor = $disk->getAdapter();
+            if ($disk->put($fileName, File::get($file))) {
+                $fullPath = $adaptor->getRoot();
+                $partialPath = $this->getSubDirectoryInCDN($fullPath);
+                $slide->photo = $partialPath.$fileName;
+            }else{
                 session()->put('error', 'بارگذاری عکس بسته با مشکل مواجه شد!');
             }
         }
@@ -138,16 +143,20 @@ class SlideShowController extends Controller
             $file      = $request->file('photo');
             $extension = $file->getClientOriginalExtension();
             $fileName  = basename($file->getClientOriginalName(), ".".$extension)."_".date("YmdHis").'.'.$extension;
-            
-            if (Storage::disk(config('constants.DISK9'))
-                ->put($fileName, File::get($file))) {
-                Storage::disk(config('constants.DISK9'))
-                    ->delete($oldPhoto);
-                $slide->photo = $fileName;
-            }
-            else {
+
+            $disk = Storage::disk(config('constants.DISK22'));
+            /** @var AlaaSftpAdapter $adaptor */
+            $adaptor = $disk->getAdapter();
+            if ($disk->put($fileName, File::get($file))) {
+                $disk->delete($oldPhoto);
+
+                $fullPath = $adaptor->getRoot();
+                $partialPath = $this->getSubDirectoryInCDN($fullPath);
+                $slide->photo = $partialPath.$fileName;
+            }else{
                 session()->put('error', 'بارگذاری عکس بسته با مشکل مواجه شد!');
             }
+
         }
         
         $isEnable = $request->get("isEnable");
