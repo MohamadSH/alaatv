@@ -380,7 +380,7 @@
                                         <i class="m-menu__link-bullet m-menu__link-bullet--dot">
                                             <span></span>
                                         </i>
-                                        <span class="m-menu__link-text">اسلاید شو صفحه اصلی</span>
+                                        <span class="m-menu__link-text">اسلاید شو</span>
                                     </a>
                                 </li>
                                 @endpermission
