@@ -53,6 +53,7 @@ class Productphoto extends BaseModel
         'description',
         'file',
         'product_id',
+        'order',
     ];
     
     protected $hidden = [
