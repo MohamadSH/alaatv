@@ -44,22 +44,22 @@ class ProductphotoController extends Controller
             }
         }
 
-        if ($request->has("order") && isset($photo->product->id)) {
-            if (strlen(preg_replace('/\s+/', '', $request->get("order"))) == 0) {
-                $photo->order = 0;
-            }
-            $filesWithSameOrder = Productphoto::all()
-                ->where("product_id", $photo->product->id)
-                ->where("order", $photo->order);
-            if (!$filesWithSameOrder->isEmpty()) {
-                $filesWithGreaterOrder = Productphoto::all()
-                    ->where("order", ">=", $photo->order);
-                foreach ($filesWithGreaterOrder as $graterProductPhoto) {
-                    $graterProductPhoto->order = $graterProductPhoto->order + 1;
-                    $graterProductPhoto->update();
-                }
-            }
-        }
+//        if ($request->has("order") && isset($photo->product->id)) {
+//            if (strlen(preg_replace('/\s+/', '', $request->get("order"))) == 0) {
+//                $photo->order = 0;
+//            }
+//            $filesWithSameOrder = Productphoto::all()
+//                ->where("product_id", $photo->product->id)
+//                ->where("order", $photo->order);
+//            if (!$filesWithSameOrder->isEmpty()) {
+//                $filesWithGreaterOrder = Productphoto::all()
+//                    ->where("order", ">=", $photo->order);
+//                foreach ($filesWithGreaterOrder as $graterProductPhoto) {
+//                    $graterProductPhoto->order = $graterProductPhoto->order + 1;
+//                    $graterProductPhoto->update();
+//                }
+//            }
+//        }
     
         if ($photo->save()) {
             session()->put('success', 'درج عکس با موفقیت انجام شد');
