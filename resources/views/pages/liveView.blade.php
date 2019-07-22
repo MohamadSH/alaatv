@@ -52,9 +52,9 @@
                             <div class="a--video-wraper">
                                 <video id="video-0"
                                        class="video-js vjs-fluid vjs-default-skin vjs-big-play-centered" controls
-                                       preload="auto" height='360' width="640" poster='{{ $poster }}'>
-                                    <source src="{{ $xMpegURL }}" type="application/x-mpegURL" res="x-mpegURL" label="x-mpegURL">
-                                    <source src="{{ $dashXml }}" type="application/dash+xml" res="dash+xml" label="dash+xml">
+                                       preload="auto" height='360' width="640" poster='{{ (isset($poster))?$poster:'' }}'>
+                                    <source src="{{ (isset($xMpegURL))?$xMpegURL:'' }}" type="application/x-mpegURL" res="x-mpegURL" label="x-mpegURL">
+                                    <source src="{{ (isset($dashXml))?$dashXml:'' }}" type="application/dash+xml" res="dash+xml" label="dash+xml">
                                     <p class="vjs-no-js">@lang('content.javascript is disables! we need it to play a video')</p>
                                 </video>
                             </div>
