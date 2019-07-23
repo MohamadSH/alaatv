@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Collection\ProductCollection;
+use App\Content;
 use App\Http\Controllers\Controller;
 use App\Product;
 use App\Traits\ProductCommon;
@@ -158,5 +159,10 @@ class ProductController extends Controller
                 
                 return json_encode($result, JSON_UNESCAPED_UNICODE);
             });
+    }
+
+    public function fetchProducts(Request $request){
+        $products = Product::active()->whereNull('grand_id');
+        return $products->paginate(25, ['*'], 'page');
     }
 }
