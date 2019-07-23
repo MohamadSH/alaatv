@@ -55,9 +55,14 @@
                                         <td> {{ $set->name }}</td>
                                         <td>{{ $set->enable }}</td>
                                         <td>{{ $set->display }}</td>
-                                        <td><a target="_blank"
+                                        <td>
+                                            <a target="_blank"
                                                href="{{action("Web\SetController@edit" , $set->id)}}">اصلاح
-                                            </a></td>
+                                            </a>
+                                            <a target="_blank"
+                                               href="{{action("Web\SetController@indexContent" , $set->id)}}">لیست محتواها
+                                            </a>
+                                        </td>
                                     </tr>
                                 @endforeach
                             @endif
