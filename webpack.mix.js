@@ -602,8 +602,7 @@ mix.styles([
         ).version();
 
 
-    mix.babel(
-        [
+    mix.babel([
             'public/acm/AlaatvCustomFiles/js/loadGtmEecForPages.js',
         ],
         'public/js/loadGtmEecForPages.js'
