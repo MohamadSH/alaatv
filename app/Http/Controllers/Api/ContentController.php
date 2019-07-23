@@ -31,9 +31,4 @@ class ContentController extends Controller
         return $this->getUserCanNotSeeContentJsonResponse($content, $productsThatHaveThisContent, function ($msg) {
         });
     }
-
-    public function fetchVideos(Request $request){
-        $videos = Content::valid()->where('contenttype_id' , config('constants.CONTENT_TYPE_VIDEO'));
-        return $videos->paginate(25, ['*'], 'page');
-    }
 }
