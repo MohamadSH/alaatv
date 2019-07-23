@@ -206,6 +206,7 @@
 {{--    </div>--}}
     
     @include('partials.certificates')
+    
 @endsection
 
 @section('page-js')

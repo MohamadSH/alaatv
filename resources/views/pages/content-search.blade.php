@@ -55,7 +55,7 @@
                 col
             @endif">
 
-            <div class="row" id="product-carousel-warper">
+            <div class="row a--owl-carousel-row" id="product-carousel-warper">
                 @include('partials.search.video',[
                 'items' => $result->get('product'),
                 'title' => 'محصولات',
@@ -66,14 +66,14 @@
                 'loadChild' => false
                 ])
             </div>
-            <div class="row" id="set-carousel-warper">
+            <div class="row a--owl-carousel-row" id="set-carousel-warper">
                 @include('partials.search.contentset',[
                 'items' => $result->get('set'),
                 'type' => 'set',
                 'loadChild' => false
                 ])
             </div>
-            <div class="row" id="video-carousel-warper">
+            <div class="row a--owl-carousel-row" id="video-carousel-warper">
                 @include('partials.search.video',[
                 'items' => $result->get('video'),
                 'loadChild' => false
