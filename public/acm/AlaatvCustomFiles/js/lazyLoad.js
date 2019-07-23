@@ -103,11 +103,9 @@ var LazyLoad = function () {
             let percentage = calculateSeenPercentage(element, topPadding);
             callback(element, percentage);
         };
-        let bodyDom = document.getElementsByTagName('body')[0];
         document.addEventListener('touchmove', throttle(minInterval, callbackThrottle), false);
         window.addEventListener('scroll', throttle(minInterval, callbackThrottle));
         window.addEventListener('resize', throttle(minInterval, callbackThrottle));
-        bodyDom.addEventListener('resize', throttle(minInterval, callbackThrottle));
 
         let oldBodyHeight = document.body.clientHeight;
         let bodyResizeEvent = function () {
@@ -165,5 +163,25 @@ var LazyLoad = function () {
             loadElementByClassName(className, callback, topPadding);
         },
 
-        image: function () {;;
-  
+        image: function () {
+            loadImage_newVersion();
+            loadImage_oldVersion();
+        },
+
+        carousel: function () {
+            // Bootstrap 4 carousel lazy load
+            carousel_loadHeightOfImageAndLoading();
+            carousel_loadImageSrc();
+            if ($('#carouselMainSlideShow').length === 1) {
+                $('#m_aside_left_hide_toggle').on('click', function() {
+                    carousel_loadHeightOfImageAndLoading();
+                });
+                $(window).on('resize', function() {
+                    carousel_loadHeightOfImageAndLoading();
+                });
+            }
+        },
+
+
+    };
+}();
