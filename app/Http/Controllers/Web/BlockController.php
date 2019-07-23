@@ -58,12 +58,12 @@ class BlockController extends Controller
     public function index(Request $request)
     {
         $perPage = ($request->has('length')) ? $request->get('length') : 10;
-        $blocks = Block::
-        withCount('products')->
-        withCount('sets')->
-        withCount('contents')->
-        withCount('banners')->
-        paginate($perPage);
+        $blocks = Block::orderByDesc('created_at')
+        ->withCount('products')
+        ->withCount('sets')
+        ->withCount('contents')
+        ->withCount('banners')
+        ->paginate($perPage);
         $blocks->each(function ($items) {
             $items->append('editLink');
             $items->append('removeLink');
