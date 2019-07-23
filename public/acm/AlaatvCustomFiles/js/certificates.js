@@ -34,10 +34,11 @@ class Certificate {
         });
 
         let that = this;
-        let lazyLoadCallback = function (obj) {
+
+        LazyLoad.loadElementByClassName('certificates-row', function (element, percentage) {
             that.initCertificatesItemsHeight();
-        };
-        LazyLoad.loadObject($('.certificates-row'), lazyLoadCallback);
+        }, $('#m_header').height());
+
     }
 }
 
