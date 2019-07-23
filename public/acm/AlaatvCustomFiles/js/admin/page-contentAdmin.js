@@ -10,8 +10,6 @@ function removeAssignment(url){
         url: url,
         data:{_method: 'delete'},
         success: function (result) {
-            // console.log(result);
-            // console.log(result.responseText);
             toastr.options = {
                 "closeButton": true,
                 "debug": false,
@@ -30,8 +28,6 @@ function removeAssignment(url){
             $("#assignment-portlet .reload").trigger("click");
         },
         error: function (result) {
-            console.log(result);
-            console.log(result.responseText);
         }
     });
 }
@@ -81,10 +77,7 @@ $(document).on("click", "#assignmentForm-submit", function (){
         url: $("#assignmentForm").attr("action"),
         data: formData,
         statusCode: {
-            //The status for when action was successful
             200: function (response) {
-                // console.log(result);
-                // console.log(result.statusCode);
                 toastr["success"]("درج تمرین با موفقیت انجام شد!", "پیام سیستم");
                 $("#assignmentForm-close").trigger("click");
                 $("#assignment-portlet .reload").trigger("click");
@@ -94,17 +87,14 @@ $(document).on("click", "#assignmentForm-submit", function (){
                 $('#assignmentForm')[0].reset();
                 $('#assignment_major').multiSelect('refresh');
             },
-            //The status for when the user is not authorized for making the request
             403: function (response) {
                 window.location.replace("/403");
             },
             404: function (response) {
                 window.location.replace("/404");
             },
-            //The status for when form data is not valid
             422: function (response) {
                 var errors = $.parseJSON(response.responseText);
-                // console.log("error = "+errors);
                 $.each(errors, function(index, value) {
                     switch(index){
                         case "name":
@@ -138,12 +128,9 @@ $(document).on("click", "#assignmentForm-submit", function (){
                     }
                 });
             },
-            //The status for when there is error php code
             500: function (response) {
-                console.log(response.responseText);
                 toastr["error"]("خطای برنامه!", "پیام سیستم");
             },
-            //The status for when there is error php code
             503: function (response) {
                 toastr["error"]("خطای پایگاه داده!", "پیام سیستم");
             }
@@ -164,8 +151,6 @@ $(document).on("click", "#assignment-portlet .reload", function (){
         type: "GET",
         url: "/assignment",
         success: function (result) {
-            // console.log(result);
-            // console.log(result.responseText);
             var newDataTable =$("#assignment_table").DataTable();
             newDataTable.destroy();
             $('#assignment_table > tbody').html(result);
@@ -173,8 +158,6 @@ $(document).on("click", "#assignment-portlet .reload", function (){
             $("#assignment-portlet-loading").addClass("d-none");
         },
         error: function (result) {
-            console.log(result);
-            console.log(result.responseText);
         }
     });
 
@@ -191,8 +174,6 @@ function removeConsultation(url){
         url: url,
         data:{_method: 'delete'},
         success: function (result) {
-            // console.log(result);
-            // console.log(result.responseText);
             toastr.options = {
                 "closeButton": true,
                 "debug": false,
@@ -211,8 +192,6 @@ function removeConsultation(url){
             $("#consultation-portlet .reload").trigger("click");
         },
         error: function (result) {
-            // console.log(result);
-            // console.log(result.responseText);
         }
     });
 }
@@ -277,7 +256,6 @@ $(document).on("click", "#consultationForm-submit", function (){
             //The status for when form data is not valid
             422: function (response) {
                 var errors = $.parseJSON(response.responseText);
-                // console.log(errors);
                 $.each(errors, function(index, value) {
                     switch (index) {
                         case "name":
@@ -330,8 +308,6 @@ $(document).on("click", "#consultation-portlet .reload", function (){
         type: "GET",
         url: "/consultation",
         success: function (result) {
-            // console.log(result);
-            // console.log(result.responseText);
             var newDataTable =$("#consultation_table").DataTable();
             newDataTable.destroy();
             $('#consultation_table > tbody').html(result);
@@ -339,8 +315,6 @@ $(document).on("click", "#consultation-portlet .reload", function (){
             $("#consultation-portlet-loading").addClass("d-none");
         },
         error: function (result) {
-            // console.log(result);
-            // console.log(result.responseText);
         }
     });
 
@@ -358,8 +332,6 @@ $(document).on("click", "#question-portlet .reload", function (){
         type: "GET",
         url: "/userupload",
         success: function (result) {
-            // console.log(result);
-            // console.log(result.responseText);
             var newDataTable =$("#question_table").DataTable();
             newDataTable.destroy();
             $('#question_table > tbody').html(result);
@@ -367,8 +339,6 @@ $(document).on("click", "#question-portlet .reload", function (){
             $("#question-portlet-loading").addClass("d-none");
         },
         error: function (result) {
-            console.log(result);
-            console.log(result.responseText);
         }
     });
 
@@ -387,8 +357,6 @@ $(document).on("click", ".useruploadUpdate", function (e){
         statusCode: {
             //The status for when action was successful
             200: function (response) {
-                // console.log(response);
-                // console.log(response.responseText);
                 toastr.options = {
                     "closeButton": true,
                     "debug": false,
@@ -420,7 +388,6 @@ $(document).on("click", ".useruploadUpdate", function (e){
             //The status for when form data is not valid
             422: function (response) {
                 var errors = $.parseJSON(response.responseText);
-                console.log(errors);
                 $.each(errors, function(index, value) {
                     switch (index) {
                     }
@@ -451,8 +418,6 @@ function removeArticle(url){
         url: url,
         data:{_method: 'delete'},
         success: function (result) {
-            // console.log(result);
-            // console.log(result.responseText);
             toastr.options = {
                 "closeButton": true,
                 "debug": false,
@@ -471,8 +436,6 @@ function removeArticle(url){
             $("#article-portlet .reload").trigger("click");
         },
         error: function (result) {
-            console.log(result);
-            console.log(result.responseText);
         }
     });
 }
@@ -520,8 +483,6 @@ function removeArticle(url){
 //         statusCode: {
 //             //The status for when action was successful
 //             200: function (response) {
-//                 // console.log(result);
-//                 // console.log(result.statusCode);
 //                 toastr["success"]("درج محصول با موفقیت انجام شد!", "پیام سیستم");
 //                 $("#articleForm-close").trigger("click");
 //                 $("#article-portlet .reload").trigger("click");
@@ -541,7 +502,6 @@ function removeArticle(url){
 //             //The status for when form data is not valid
 //             422: function (response) {
 //                 var errors = $.parseJSON(response.responseText);
-//                 // console.log("error = "+errors);
 //                 $.each(errors, function(index, value) {
 //                     switch(index){
 //                         case "title":
@@ -574,7 +534,6 @@ function removeArticle(url){
 //             },
 //             //The status for when there is error php code
 //             500: function (response) {
-//                 console.log(response.responseText);
 //                 toastr["error"]("خطای برنامه!", "پیام سیستم");
 //             },
 //             //The status for when there is error php code
@@ -598,8 +557,6 @@ $(document).on("click", "#article-portlet .reload", function (){
         type: "GET",
         url: "/article",
         success: function (result) {
-            // console.log(result);
-            // console.log(result.responseText);
             var newDataTable =$("#article_table").DataTable();
             newDataTable.destroy();
             $('#article_table > tbody').html(result);
@@ -607,8 +564,6 @@ $(document).on("click", "#article-portlet .reload", function (){
             $("#article-portlet-loading").addClass("d-none");
         },
         error: function (result) {
-            console.log(result);
-            console.log(result.responseText);
         }
     });
 
@@ -625,8 +580,6 @@ function removeArticlecategory(url){
         url: url,
         data:{_method: 'delete'},
         success: function (result) {
-            // console.log(result);
-            // console.log(result.responseText);
             toastr.options = {
                 "closeButton": true,
                 "debug": false,
@@ -645,8 +598,6 @@ function removeArticlecategory(url){
             $("#articlecategory-portlet .reload").trigger("click");
         },
         error: function (result) {
-            console.log(result);
-            console.log(result.responseText);
         }
     });
 }
@@ -689,26 +640,20 @@ $(document).on("click", "#articlecategoryForm-submit", function (){
         url: $("#articlecategoryForm").attr("action"),
         data: formData,
         statusCode: {
-            //The status for when action was successful
             200: function (response) {
-                // console.log(result);
-                // console.log(result.statusCode);
                 toastr["success"]("درج دسته با موفقیت انجام شد!", "پیام سیستم");
                 $("#articlecategoryForm-close").trigger("click");
                 $("#articlecategory-portlet .reload").trigger("click");
                 $('#articlecategoryForm')[0].reset();
             },
-            //The status for when the user is not authorized for making the request
             403: function (response) {
                 window.location.replace("/403");
             },
             404: function (response) {
                 window.location.replace("/404");
             },
-            //The status for when form data is not valid
             422: function (response) {
                 var errors = $.parseJSON(response.responseText);
-                // console.log("error = "+errors);
                 $.each(errors, function(index, value) {
                     switch(index){
                         case "name":
@@ -730,12 +675,9 @@ $(document).on("click", "#articlecategoryForm-submit", function (){
                     }
                 });
             },
-            //The status for when there is error php code
             500: function (response) {
-                console.log(response.responseText);
                 toastr["error"]("خطای برنامه!", "پیام سیستم");
             },
-            //The status for when there is error php code
             503: function (response) {
                 toastr["error"]("خطای پایگاه داده!", "پیام سیستم");
             }
@@ -755,8 +697,6 @@ $(document).on("click", "#articlecategory-portlet .reload", function (){
         type: "GET",
         url: "/articlecategory",
         success: function (result) {
-            // console.log(result);
-            // console.log(result.responseText);
             var newDataTable =$("#articlecategory_table").DataTable();
             newDataTable.destroy();
             $('#articlecategory_table > tbody').html(result);
@@ -764,8 +704,6 @@ $(document).on("click", "#articlecategory-portlet .reload", function (){
             $("#articlecategory-portlet-loading").addClass("d-none");
         },
         error: function (result) {
-            console.log(result);
-            console.log(result.responseText);
         }
     });
 
@@ -783,8 +721,6 @@ $(document).on("click", "#mbtiAnswer-portlet .reload", function (){
         type: "GET",
         url: "/mbtianswer",
         success: function (result) {
-            // console.log(result);
-            // console.log(result.responseText);
             var newDataTable =$("#mbtiAnswer_table").DataTable();
             newDataTable.destroy();
             $('#mbtiAnswer_table > tbody').html(result);
@@ -792,8 +728,6 @@ $(document).on("click", "#mbtiAnswer-portlet .reload", function (){
             $("#mbtiAnswer-portlet-loading").addClass("d-none");
         },
         error: function (result) {
-            console.log(result);
-            console.log(result.responseText);
         }
     });
 
@@ -813,8 +747,6 @@ $(document).on("click", ".eventResult-portlet .reload", function (){
         url: "/eventresult",
         data : formData ,
         success: function (result) {
-            // console.log(result);
-            // console.log(result.responseText);
             var newDataTable =$("#"+identifier+"_table").DataTable();
             newDataTable.destroy();
             $('#'+identifier+'_table > tbody').html(result);
@@ -822,8 +754,6 @@ $(document).on("click", ".eventResult-portlet .reload", function (){
             $("#"+identifier+"-portlet-loading").addClass("d-none");
         },
         error: function (result) {
-            // console.log(result);
-            // console.log(result.responseText);
         }
     });
 
@@ -854,41 +784,32 @@ $(document).on("click", ".eventResultUpdate", function (e){
         url: url,
         data:formData ,
         statusCode: {
-            //The status for when action was successful
             200: function (response) {
-                // console.log(response);
-                // console.log(response.responseText);
                 $("#eventresult_id .reload").trigger("click");
                 toastr["success"]("اصلاح وضعیت با موفقیت انجام شد!", "پیام سیستم");
 
             },
-            //The status for when the user is not authorized for making the request
             403: function (response) {
                 window.location.replace("/403");
             },
             404: function (response) {
                 window.location.replace("/404");
             },
-            //The status for when form data is not valid
             422: function (response) {
                 var errors = $.parseJSON(response.responseText);
-                console.log(errors);
                 $.each(errors, function(index, value) {
                     switch (index) {
                     }
                 });
             },
-            //The status for when there is error php code
             500: function (response) {
                 toastr["error"]("خطای برنامه!", "پیام سیستم");
             },
-            //The status for when there is error php code
             503: function (response) {
                 toastr["error"]("خطای پایگاه داده!", "پیام سیستم");
             }
         },
         cache: false,
-        // contentType: false,
         processData: false
     });
 });
@@ -906,8 +827,6 @@ $(document).on("click", "#content-portlet .reload", function (){
         url: url,
         data: {"columns":columns ,"controlPanel":true} ,
         success: function (result) {
-            // console.log(result);
-            // console.log(result.responseText);
             var newDataTable =$("#educationalContent_table").DataTable();
             newDataTable.destroy();
             $('#educationalContent_table > tbody').html(result);
@@ -915,8 +834,6 @@ $(document).on("click", "#content-portlet .reload", function (){
             $("#content-portlet-loading").addClass("d-none");
         },
         error: function (result) {
-            // console.log(result);
-            // console.log(result.responseText);
         }
     });
 
@@ -942,34 +859,22 @@ function removeEducationalContent(url){
         url: url,
         data:{_method: 'delete'},
         statusCode: {
-            //The status for when action was successful
             200: function (response) {
-                //                     console.log(result);
-                // console.log(result.responseText);
-//                    toastr["success"]("فایل با موفقیت حذف شد!", "پیام سیستم");
                 toastr["success"]("محتوای آموزشی با موفقیت حذف شد!", "پیام سیستم");
                 $("#content-portlet .reload").trigger("click");
             },
-            //The status for when the user is not authorized for making the request
             403: function (response) {
                 window.location.replace("/403");
             },
             404: function (response) {
                 window.location.replace("/404");
             },
-            //The status for when form data is not valid
             422: function (response) {
                 toastr["error"]("خطای ۴۲۲ . خطای ورودی ها", "پیام سیستم");
             },
-            //The status for when there is error php code
             500: function (response) {
-                // console.log(response);
-                // console.log(response.responseText) ;
             },
-            //The status for when there is error php code
             503: function (response) {
-                //                     console.log(result);
-                // console.log(result.responseText);
                 toastr["error"]("خطای برنامه!", "پیام سیستم");
             }
         },
