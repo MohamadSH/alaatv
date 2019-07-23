@@ -33,7 +33,6 @@
                 // $([document.documentElement, document.body]).animate({
                 //     scrollTop: $this.offset().top - $('#m_header').height()
                 // }, 300);
-                $.fn.OwlCarouselType2.owlCarouselOptions.grid.btnSwfitchEvent();
             });
             $($this).on('click', '.btn-viewOwlCarousel', function (event) {
                 let $this = $('#' + $(this).attr('data-owlcarousel-id'));
@@ -160,6 +159,9 @@
         $.fn.OwlCarouselType2.getGridViewWarper($OwlCarouselType2).css("display", "flex")
             .hide()
             .fadeIn();
+
+
+        $.fn.OwlCarouselType2.owlCarouselOptions.grid.btnSwfitchEvent();
 
     };
 

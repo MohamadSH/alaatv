@@ -93,8 +93,6 @@ function removeProduct(){
         url: $('#product-removeLink').val(),
         data:{_method: 'delete'},
         success: function (result) {
-            // console.log(result);
-            // console.log(result.responseText);
             toastr["success"]("محصول با موفقیت حذف شد!", "پیام سیستم");
             $('#remove-product-loading-image').addClass('d-none');
             $("#product-portlet .reload").trigger("click");
@@ -103,8 +101,6 @@ function removeProduct(){
         error: function (result) {
             $('#remove-product-loading-image').addClass('d-none');
             $('#removeProductModal').modal('hide');
-            // console.log(result);
-            // console.log(result.responseText);
         }
     });
 }
@@ -175,10 +171,7 @@ $(document).on("click", "#productForm-submit", function (){
         url: $("#productForm").attr("action"),
         data: formData,
         statusCode: {
-            //The status for when action was successful
             200: function (response) {
-                // console.log(result);
-                // console.log(result.statusCode);
                 toastr["success"]("درج محصول با موفقیت انجام شد!", "پیام سیستم");
                 $("#productForm-close").trigger("click");
                 $("#product-portlet .reload").trigger("click");
@@ -190,17 +183,14 @@ $(document).on("click", "#productForm-submit", function (){
                 mApp.unblock('#productForm-submit');
                 $('#responsive-product').modal('hide');
             },
-            //The status for when the user is not authorized for making the request
             403: function (response) {
                 window.location.replace("/403");
             },
             404: function (response) {
                 window.location.replace("/404");
             },
-            //The status for when form data is not valid
             422: function (response) {
                 var errors = $.parseJSON(response.responseText);
-                // console.log("error = "+errors);
                 $.each(errors, function(index, value) {
                     switch(index){
                         case "name":
@@ -265,14 +255,11 @@ $(document).on("click", "#productForm-submit", function (){
                 mApp.unblock('#productForm-submit');
                 $('#responsive-product').modal('hide');
             },
-            //The status for when there is error php code
             500: function (response) {
-                console.log(response.responseText);
                 toastr["error"]("خطای برنامه!", "پیام سیستم");
                 mApp.unblock('#productForm-submit');
                 $('#responsive-product').modal('hide');
             },
-            //The status for when there is error php code
             503: function (response) {
                 toastr["error"]("خطای پایگاه داده!", "پیام سیستم");
                 mApp.unblock('#productForm-submit');
@@ -291,8 +278,6 @@ $(document).on("click", "#product-portlet .reload", function (){
     //     type: "GET",
     //     url: "/product",
     //     // success: function (result) {
-    //     //     console.log(result);
-    //         // console.log(result.responseText);
     //         // var newDataTable =$("#product_table").DataTable();
     //         // newDataTable.destroy();
     //         // $('#product_table > tbody').html(result);
@@ -300,8 +285,6 @@ $(document).on("click", "#product-portlet .reload", function (){
     //         // $("#product-portlet-loading").addClass("d-none");
     //     // },
     //     // error: function (result) {
-    //     //     console.log(result);
-    //     //     console.log(result.responseText);
     //     // }
     //     statusCode: {
     //         200:function (response) {
@@ -310,7 +293,6 @@ $(document).on("click", "#product-portlet .reload", function (){
     //             $('#product_table > tbody').html(response);
     //             makeDataTable("product_table");
     //             $("#product-portlet-loading").addClass("d-none");
-    //             // console.log(response.statusCode);
     //         },
     //         //The status for when the user is not authorized for making the request
     //         401:function (ressponse) {
@@ -328,7 +310,6 @@ $(document).on("click", "#product-portlet .reload", function (){
     //         },
     //         //The status for when there is error php code
     //         500: function (response) {
-    //             console.log(response.responseText);
     //             toastr["error"]("خطای برنامه!", "پیام سیستم");
     //         },
     //         //The status for when there is error php code
@@ -429,15 +410,11 @@ function removeCoupon(url){
         url: url,
         data:{_method: 'delete'},
         success: function (result) {
-            // console.log(result);
-            // console.log(result.responseText);
 
             toastr["success"]("کپن با موفقیت حذف شد!", "پیام سیستم");
             $("#coupon-portlet .reload").trigger("click");
         },
         error: function (result) {
-            // console.log(result);
-            // console.log(result.responseText);
         }
     });
 }
@@ -518,7 +495,6 @@ $(document).on("click", "#couponForm-submit", function (){
             //The status for when form data is not valid
             422: function (response) {
                 var errors = $.parseJSON(response.responseText);
-                console.log(errors);
                 $.each(errors, function(index, value) {
                     switch (index) {
                         case "name":
@@ -564,8 +540,6 @@ $(document).on("click", "#couponForm-submit", function (){
             },
             //The status for when there is error php code
             500: function (response) {
-                console.log(response);
-                console.log(response.responseText);
                 toastr["error"]("خطای برنامه!", "پیام سیستم");
                 mApp.unblock('#couponForm-submit');
                 $('#responsive-coupon').modal('hide');
@@ -596,8 +570,6 @@ $(document).on("click", "#coupon-portlet .reload", function (){
             $("#coupon-portlet-loading").addClass("d-none");
         },
         error: function (result) {
-            console.log(result);
-            console.log(result.responseText);
         }
     });
 
@@ -628,14 +600,10 @@ function removeAttributes(url){
         url: url,
         data:{_method: 'delete'},
         success: function (result) {
-            // console.log(result);
-            // console.log(result.responseText);
             toastr["success"]("صفت با موفقیت حذف شد!", "پیام سیستم");
             $("#attribute-portlet .reload").trigger("click");
         },
         error: function (result) {
-            // console.log(result);
-            // console.log(result.responseText);
         }
     });
 }
@@ -663,7 +631,6 @@ $(document).on("click", "#attributeForm-submit", function (){
         url: $("#attributeForm").attr("action"),
         data: formData,
         statusCode: {
-            //The status for when action was successful
             200: function (response) {
                 $("#attributeForm-close").trigger("click");
                 toastr.options = {
@@ -683,20 +650,15 @@ $(document).on("click", "#attributeForm-submit", function (){
                 $("#attribute-portlet .reload").trigger("click");
                 $('#attributeForm')[0].reset();
                 toastr["success"]("درج صفت با موفقیت انجام شد!", "پیام سیستم");
-                // console.log(result);
-                // console.log(result.responseText);
             },
-            //The status for when the user is not authorized for making the request
             403: function (response) {
                 window.location.replace("/403");
             },
             404: function (response) {
                 window.location.replace("/404");
             },
-            //The status for when form data is not valid
             422: function (response) {
                 var errors = $.parseJSON(response.responseText);
-                console.log(errors);
                 $.each(errors, function(index, value) {
                     switch (index) {
                         case "name":
@@ -718,11 +680,9 @@ $(document).on("click", "#attributeForm-submit", function (){
                     }
                 });
             },
-            //The status for when there is error php code
             500: function (response) {
                 toastr["error"]("خطای برنامه!", "پیام سیستم");
             },
-            //The status for when there is error php code
             503: function (response) {
                 toastr["error"]("خطای پایگاه داده!", "پیام سیستم");
             }
@@ -748,8 +708,6 @@ $(document).on("click", "#attribute-portlet .reload", function (){
             $("#attribute-portlet-loading").addClass("d-none");
         },
         error: function (result) {
-            console.log(result);
-            console.log(result.responseText);
         }
     });
     return false;
@@ -764,8 +722,6 @@ function removeAttributesets(url){
         url: url,
         data:{_method: 'delete'},
         success: function (result) {
-            // console.log(result);
-            // console.log(result.responseText);
             toastr.options = {
                 "closeButton": true,
                 "debug": false,
@@ -784,8 +740,6 @@ function removeAttributesets(url){
             $("#attributeset-portlet .reload").trigger("click");
         },
         error: function (result) {
-            // console.log(result);
-            // console.log(result.responseText);
         }
     });
 }
@@ -808,7 +762,6 @@ $(document).on("click", "#attributesetForm-submit", function (){
         url: $("#attributesetForm").attr("action"),
         data: formData,
         statusCode: {
-            //The status for when action was successful
             200: function (response) {
                 $("#attributesetForm-close").trigger("click");
                 toastr.options = {
@@ -828,20 +781,15 @@ $(document).on("click", "#attributesetForm-submit", function (){
                 $("#attributeset-portlet .reload").trigger("click");
                 $('#attributesetForm')[0].reset();
                 toastr["success"]("درج دسته صفت با موفقیت انجام شد!", "پیام سیستم");
-                // console.log(result);
-                // console.log(result.responseText);
             },
-            //The status for when the user is not authorized for making the request
             403: function (response) {
                 window.location.replace("/403");
             },
             404: function (response) {
                 window.location.replace("/404");
             },
-            //The status for when form data is not valid
             422: function (response) {
                 var errors = $.parseJSON(response.responseText);
-                console.log(errors);
                 $.each(errors, function(index, value) {
                     switch (index) {
                         case "name":
@@ -856,11 +804,9 @@ $(document).on("click", "#attributesetForm-submit", function (){
                     }
                 });
             },
-            //The status for when there is error php code
             500: function (response) {
                 toastr["error"]("خطای برنامه!", "پیام سیستم");
             },
-            //The status for when there is error php code
             503: function (response) {
                 toastr["error"]("خطای پایگاه داده!", "پیام سیستم");
             }
@@ -886,8 +832,6 @@ $(document).on("click", "#attributeset-portlet .reload", function (){
             $("#attributeset-portlet-loading").addClass("d-none");
         },
         error: function (result) {
-            console.log(result);
-            console.log(result.responseText);
         }
     });
     return false;
@@ -1022,8 +966,6 @@ function removeComplimentary(url){
             location.reload();
         },
         error: function (result) {
-            // console.log(result);
-            // console.log(result.responseText);
         }
     });
 }
@@ -1038,12 +980,9 @@ function removePhoto(url){
         url: url,
         data: {_method:"POST",productphoto: photoID},
         success: function (result) {
-            console.log(result);
             location.reload();
         },
         error: function (result) {
-            // console.log(result);
-            // console.log(result.responseText);
         }
     });
 }

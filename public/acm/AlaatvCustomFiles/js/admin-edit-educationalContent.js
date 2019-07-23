@@ -114,7 +114,6 @@ var u = Dropzone.options.myAwesomeDropzone = { // The camelized version of the I
 //                    e.stopPropagation();
 //                });
 //                this.on("uploadprogress", function(file, progress) {
-//                    console.log("File progress", progress);
 //                });
         this.on("reset", function() {
             // Gets triggered when the form is actually being sent.
@@ -129,8 +128,6 @@ var u = Dropzone.options.myAwesomeDropzone = { // The camelized version of the I
         // Listen to the sendingmultiple event. In this case, it's the sendingmultiple event instead
         // of the sending event because uploadMultiple is set to true.
         this.on("sending", function(files, xhr, formData){
-//                    console.log(files);
-//                    console.log(xhr);
             var contentset = $('input[name=contentset]').val();
             if(contentset.length > 0)
             {
@@ -162,7 +159,6 @@ var u = Dropzone.options.myAwesomeDropzone = { // The camelized version of the I
         this.on("error", function(files, response) {
             // Gets triggered when there was an  error sending the files.
             // Maybe show form again, and notify user of error
-            console.log(response);
             $("#editForm").find(':submit').prop("disabled" , false);
         });
     }
@@ -197,33 +193,21 @@ $(document).on("click", "#removeFileSubmit", function (){
         url: '/detachContentFile/'+content_id+'/'+file_id,
         data:{},
         statusCode: {
-            //The status for when action was successful
             200: function (response) {
-                //                     console.log(result);
-                // console.log(result.responseText);
-//                    toastr["success"]("فایل با موفقیت حذف شد!", "پیام سیستم");
                 location.reload();
             },
-            //The status for when the user is not authorized for making the request
             403: function (response) {
                 window.location.replace("/403");
             },
             404: function (response) {
                 window.location.replace("/404");
             },
-            //The status for when form data is not valid
             422: function (response) {
                 toastr["error"]("خطای ۴۲۲ . خطای ورودی ها", "پیام سیستم");
             },
-            //The status for when there is error php code
             500: function (response) {
-                console.log(response);
-                console.log(response.responseText) ;
             },
-            //The status for when there is error php code
             503: function (response) {
-                //                     console.log(result);
-                // console.log(result.responseText);
                 toastr["error"]("خطای برنامه!", "پیام سیستم");
             }
         }
@@ -253,35 +237,24 @@ $(document).on("click", ".fileCaptionSubmit", function (){
         url: "/storeContentFileCaption"+"/"+content_id+"/"+file_id,
         data:{caption: caption },
         statusCode: {
-            //The status for when action was successful
             200: function (response) {
-                //                    console.log(result);
-                // console.log(result.responseText);
-//                    toastr["success"]("فایل با موفقیت حذف شد!", "پیام سیستم");
                 location.reload();
             },
-            //The status for when the user is not authorized for making the request
             403: function (response) {
                 window.location.replace("/403");
             },
             404: function (response) {
                 window.location.replace("/404");
             },
-            //The status for when form data is not valid
             422: function (response) {
                 toastr["error"]("خطای ۴۲۲ . خطای ورودی ها", "پیام سیستم");
             },
-            //The status for when there is error php code
             500: function (response) {
             },
-            //The status for when there is error php code
             503: function (response) {
-//                        console.log(result);
-                // console.log(result.responseText);
                 toastr["error"]("خطای برنامه!", "پیام سیستم");
 //                    location.reload();
             },
-            //The server does not support the facility required.
             501: function (response) {
                 toastr["warning"](response.responseText, "پیام سیستم");
             }

@@ -11,6 +11,13 @@ use App\PaymentModule\Controllers\RedirectUserToPaymentPage;
 use App\PaymentModule\Controllers\PaymentVerifierController;
 use App\PaymentModule\Controllers\RedirectAPIUserToPaymentRoute;
 
+
+Route::get('/test.jpg', function(\Illuminate\Http\Request $request){
+    dump($request->header('accept').'::::'.$request->header('User-Agent'));
+    
+//    dd('ssss');
+});
+
 Route::get('embed/c/{content}', "Web\ContentController@embed");
 Route::get('/', 'Web\IndexPageController');
 Route::get('shop', 'Web\ShopPageController')->name('shop');

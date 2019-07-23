@@ -279,10 +279,6 @@ var CheckoutPaymentUi = function () {
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 let statusCode = jqXHR.status;
-                // console.log('statusCode: ', statusCode);
-                // console.log('jqXHR: ', jqXHR);
-                // console.log('textStatus: ', textStatus);
-                // console.log('errorThrown: ', errorThrown);
 
                 let message = '';
 

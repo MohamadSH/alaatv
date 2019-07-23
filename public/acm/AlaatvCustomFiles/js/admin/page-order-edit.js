@@ -44,7 +44,6 @@ var TableDatatablesEditable = function () {
         function editRow(oTable, nRow) {
             var aData = oTable.fnGetData(nRow);
             var jqTds = $('>td', nRow);
-//                    console.log(aData);
             if (aData.length > 2) {
                 var i;
                 for (i = 0; i < aData.length - 2; i++) {
@@ -186,7 +185,6 @@ var TableDatatablesEditable = function () {
         });
 
         table.on('click', '.edit', function (e) {
-            console.log('edit clicked');
             e.preventDefault();
             nNew = false;
 
@@ -212,7 +210,6 @@ var TableDatatablesEditable = function () {
 
         table_totalTransaction.on('click', '.delete', function (e) {
 
-            console.log('hji');
             e.preventDefault();
 
             if (confirm("آیا از حذف سطر مطمئن هستید ?") == false) {
@@ -415,19 +412,14 @@ function removeTransaction() {
         url: '/transaction/' + transaction_id,
         data: {_method: 'delete'},
         success: function (result) {
-            // console.log(result);
-            // console.log(result.responseText);
             location.reload();
         },
         error: function (result) {
-//                     console.log(result);
-//                     console.log(result.responseText);
         }
     });
 }
 
 function updateRow(newData) {
-    console.log('newData: ', newData);
     var transaction_id = $("input[name=transaction_id]").val();
     $.ajax({
         type: 'PUT',
@@ -447,9 +439,6 @@ function updateRow(newData) {
         error: function (result) {
             $(".removeTransactionError").removeClass("d-none");
             $(".removeTransactionError > span").html(result.responseText);
-            // console.log(JSON.parse(result.responseText));
-            console.log(result.responseText);
-            // console.log(result.responseText);
         }
     });
 }
@@ -484,36 +473,20 @@ $(document).on("click", ".btnRemoveOrderproductInModal", function () {
         url: '/orderproduct/' + orderProductId,
         data: {_token: csrf_token},
         statusCode: {
-            //The status for when action was successful
             200: function (response) {
-                // console.log(response);
                 location.reload();
             },
-            //The status for when the user is not authorized for making the request
             403: function (response) {
                 window.location.replace("/403");
             },
-            //The status for when the user is not authorized for making the request
             401: function (response) {
                 window.location.replace("/403");
             },
-            //Method Not Allowed
             405: function (response) {
-//                        console.log(response);
-//                        console.log(response.responseText);
                 location.reload();
             },
             404: function (response) {
                 window.location.replace("/404");
-            },
-            //The status for when form data is not valid
-            422: function (response) {
-                // console.log(response);
-            },
-            //The status for when there is error php code
-            500: function (response) {
-                // console.log(response.responseText);
-//                            toastr["error"]("خطای برنامه!", "پیام سیستم");
             },
             //The status for when there is error php code
             503: function (response) {
@@ -662,7 +635,6 @@ var SweetAlert = function () {
                 var sa_cancelButtonClass = $(this).data('cancel-button-class');
 
                 $(this).click(function () {
-                    //console.log(sa_btnClass);
                     swal({
                             title: sa_title,
                             text: sa_message,
@@ -705,11 +677,8 @@ var SweetAlert = function () {
                                     data: {orderproducts: orderproductIds, order: order_id },
                                     statusCode: {
                                         200: function (response) {
-                                            console.log('detachOrderproductAjax: ', response);
-                                            // console.log($.parseJSON(response.responseText)) ;
                                             location.reload();
                                         },
-                                        //The status for when the user is not authorized for making the request
                                         401: function (ressponse) {
                                             location.reload();
                                         },
@@ -719,15 +688,6 @@ var SweetAlert = function () {
                                         404: function (response) {
                                             window.location.replace("/404");
                                         },
-                                        //The status for when form data is not valid
-                                        422: function (response) {
-                                            //
-                                        },
-                                        //The status for when there is error php code
-                                        500: function (response) {
-                                            console.log(response.responseText);
-                                        },
-                                        //The status for when there is error php code
                                         503: function (response) {
                                             toastr["error"]($.parseJSON(response.responseText).message, "پیام سیستم");
                                         }
