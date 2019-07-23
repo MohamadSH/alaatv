@@ -63,8 +63,8 @@ mix.styles([
         'node_modules/owl.carousel/dist/assets/owl.carousel.css',
         'node_modules/owl.carousel/dist/assets/owl.theme.default.css',
 
-        'public/acm/AlaatvCustomFiles/components/ribbon/style.css',
         'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/style.css',
+        'public/acm/AlaatvCustomFiles/components/ribbon/style.css',
         'public/acm/AlaatvCustomFiles/css/certificates.css',
         'public/acm/AlaatvCustomFiles/css/page-homePage.css',
     ],
@@ -312,7 +312,11 @@ mix.styles([
             'public/acm/AlaatvCustomFiles/components/ribbon/style.css',
             'node_modules/owl.carousel/dist/assets/owl.carousel.css',
             'node_modules/owl.carousel/dist/assets/owl.theme.default.css',
+
             'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/style.css',
+            'public/acm/AlaatvCustomFiles/components/ribbon/style.css',
+
+
             'public/acm/AlaatvCustomFiles/components/MultiLevelSearch/style.css',
             'public/acm/AlaatvCustomFiles/css/page-content-search.css'
         ],

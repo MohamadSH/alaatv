@@ -33,7 +33,9 @@
                                    @endif
                                    data-gtm-eec-promotion-position="{{ $key }}">
                             @endif
+                                    
                                     <div class="lds-roller loadingSlideshow"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+                                    
                                     <img class="d-block w-100 imageSlideOfSlideshow lazy-image"
                                          data-src="{{ $slide->url }}"
                                          alt="عکس اسلاید @if(isset($slide->title[0])) {{ $slide->title }} @endif "

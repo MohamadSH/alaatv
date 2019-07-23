@@ -65,7 +65,7 @@
                                                     <div class="m-widget_head-owlcarousel-item carousel background-gradient"
                                                          data-position="{{ $productKey }}">
                                                         <a href="{{ $product->url }}">
-                                                            <img class="a--owl-carousel-type-2-item-image"
+                                                            <img class="a--owl-carousel-item-image"
                                                                  src="{{ $product->photo }}" alt="{{ $product->name }}">
                                                         </a>
                                                         <br>
@@ -76,7 +76,7 @@
                                                 @elseif($product->sets->count()===1)
                                                     <div class="m-widget_head-owlcarousel-item carousel background-gradient"
                                                          data-position="{{ $productKey }}">
-                                                        <img class="a--owl-carousel-type-2-item-image"
+                                                        <img class="a--owl-carousel-item-image"
                                                              src="{{ $product->photo }}" alt="{{ $product->name }}">
                                                         <br>
                                                         {{ $product->name }}
@@ -100,13 +100,13 @@
                                                 @else
                                                     <div class="m-widget_head-owlcarousel-item carousel"
                                                          data-position="{{ $productKey }}">
-                                                        <img class="a--owl-carousel-type-2-item-image"
+                                                        <img class="a--owl-carousel-item-image"
                                                              src="{{ $product->photo }}" alt="{{ $product->name }}">
                                                         <br>
                                                         <a href="{{ $product->url }}" target="_blank"
                                                            class="m-link">{{ $product->name }}</a>
                                                         <hr>
-                                                        <a class="btn btn-metal m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill a--owl-carousel-type-2-show-detailes m--margin-bottom-5">
+                                                        <a class="btn btn-metal m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill a--owl-carousel-show-detailes m--margin-bottom-5">
                                                             <i class="flaticon-more-v6"></i>
                                                         </a>
                                                     </div>
@@ -124,7 +124,7 @@
                                 @endif
 
                             </div>
-                            <div class="m-portlet a--owl-carousel-type-2-slide-detailes">
+                            <div class="m-portlet a--owl-carousel-slide-detailes">
                                 <div class="m-portlet__head">
                                     <div class="m-portlet__head-caption">
                                         <div class="m-portlet__head-title">
@@ -134,7 +134,7 @@
                                         </div>
                                     </div>
                                     <div class="m-portlet__head-tools">
-                                        <a class="btn btn-outline-danger m-btn m-btn--icon m-btn--icon-only m-btn--pill m-btn--air a--owl-carousel-type-2-hide-detailes">
+                                        <a class="btn btn-outline-danger m-btn m-btn--icon m-btn--icon-only m-btn--pill m-btn--air a--owl-carousel-hide-detailes">
                                             <i class="la la-times"></i>
                                         </a>
                                     </div>
@@ -144,7 +144,7 @@
                                     @if($userAsset->title === 'محصولات من')
                                         @foreach($userAsset->products as $productKey=>$product)
                                             @if(count($product->sets)>1)
-                                                <div class="m-portlet__body subCategoryWarper a--owl-carousel-type-2-slide-iteDetail-{{ $productKey }}">
+                                                <div class="m-portlet__body subCategoryWarper a--owl-carousel-slide-iteDetail-{{ $productKey }}">
                                                     <div class="row justify-content-center">
                                                         @foreach($product->sets as $setKey=>$set)
                                                             <div class="col-12 col-sm-6 col-md-4 col-lg-3">
@@ -236,7 +236,7 @@
 {{--                                                        --}}
 {{--                                                        <div class="m-widget_head">--}}
 {{--                                                            --}}
-{{--                                                            <div class="m-widget_head-owlcarousel-items owl-carousel a--owl-carousel-type-2 myProduct">--}}
+{{--                                                            <div class="m-widget_head-owlcarousel-items owl-carousel a--owl-carousel myProduct">--}}
 {{--                                                                --}}
 {{--                                                                --}}
 {{--                                                                @foreach($userAsset->sets as $setKey=>$set)--}}
@@ -311,48 +311,48 @@
 {{--                                                    <div class="m-widget30">--}}
 {{--                                                        --}}
 {{--                                                        <div class="m-widget_head">--}}
-{{--                                                            <div class="m-widget_head-owlcarousel-items owl-carousel a--owl-carousel-type-2 myFavoriteContent">--}}
+{{--                                                            <div class="m-widget_head-owlcarousel-items owl-carousel a--owl-carousel myFavoriteContent">--}}
 {{--                                                                --}}
 {{--                                                                --}}
 {{--                                                                @foreach($userAsset->content as $contentKey=>$content)--}}
 {{--                                                                    <div data-position="{{ $contentKey }}"--}}
 {{--                                                                         class="m-widget_head-owlcarousel-item carousel">--}}
-{{--                                                                        <img class="a--owl-carousel-type-2-item-image"--}}
+{{--                                                                        <img class="a--owl-carousel-item-image"--}}
 {{--                                                                             src="{{ $content->photo }}" alt="{{ $product->name }}">--}}
 {{--                                                                        {{ $content->name }}--}}
 {{--                                                                    </div>--}}
 {{--                                                                @endforeach--}}
 {{--                                                                --}}
 {{--                                                                --}}{{--<div data-position="0" class="m-widget_head-owlcarousel-item carousel">--}}
-{{--                                                                --}}{{--<img class="a--owl-carousel-type-2-item-image" src="/assets/app/media/img/products/product11.jpg">--}}
+{{--                                                                --}}{{--<img class="a--owl-carousel-item-image" src="/assets/app/media/img/products/product11.jpg">--}}
 {{--                                                                --}}{{--فیزیک--}}
 {{--                                                                --}}{{--</div>--}}
 {{--                                                                --}}{{--<div data-position="1" class="m-widget_head-owlcarousel-item carousel">--}}
-{{--                                                                --}}{{--<img class="a--owl-carousel-type-2-item-image" src="/assets/app/media/img/products/product10.jpg">--}}
+{{--                                                                --}}{{--<img class="a--owl-carousel-item-image" src="/assets/app/media/img/products/product10.jpg">--}}
 {{--                                                                --}}{{--فیزیک--}}
 {{--                                                                --}}{{--</div>--}}
 {{--                                                                --}}{{--<div data-position="2" class="m-widget_head-owlcarousel-item carousel">--}}
-{{--                                                                --}}{{--<img class="a--owl-carousel-type-2-item-image" src="/assets/app/media/img/products/product9.jpg">--}}
+{{--                                                                --}}{{--<img class="a--owl-carousel-item-image" src="/assets/app/media/img/products/product9.jpg">--}}
 {{--                                                                --}}{{--فیزیک--}}
 {{--                                                                --}}{{--</div>--}}
 {{--                                                                --}}{{--<div data-position="3" class="m-widget_head-owlcarousel-item carousel">--}}
-{{--                                                                --}}{{--<img class="a--owl-carousel-type-2-item-image" src="/assets/app/media/img/products/product8.jpg">--}}
+{{--                                                                --}}{{--<img class="a--owl-carousel-item-image" src="/assets/app/media/img/products/product8.jpg">--}}
 {{--                                                                --}}{{--فیزیک--}}
 {{--                                                                --}}{{--</div>--}}
 {{--                                                                --}}{{--<div data-position="4" class="m-widget_head-owlcarousel-item carousel">--}}
-{{--                                                                --}}{{--<img class="a--owl-carousel-type-2-item-image" src="/assets/app/media/img/products/product7.jpg">--}}
+{{--                                                                --}}{{--<img class="a--owl-carousel-item-image" src="/assets/app/media/img/products/product7.jpg">--}}
 {{--                                                                --}}{{--فیزیک--}}
 {{--                                                                --}}{{--</div>--}}
 {{--                                                                --}}{{--<div data-position="5" class="m-widget_head-owlcarousel-item carousel">--}}
-{{--                                                                --}}{{--<img class="a--owl-carousel-type-2-item-image" src="/assets/app/media/img/products/product6.jpg">--}}
+{{--                                                                --}}{{--<img class="a--owl-carousel-item-image" src="/assets/app/media/img/products/product6.jpg">--}}
 {{--                                                                --}}{{--فیزیک--}}
 {{--                                                                --}}{{--</div>--}}
 {{--                                                                --}}{{--<div data-position="6" class="m-widget_head-owlcarousel-item carousel">--}}
-{{--                                                                --}}{{--<img class="a--owl-carousel-type-2-item-image" src="/assets/app/media/img/products/product9.jpg">--}}
+{{--                                                                --}}{{--<img class="a--owl-carousel-item-image" src="/assets/app/media/img/products/product9.jpg">--}}
 {{--                                                                --}}{{--فیزیک--}}
 {{--                                                                --}}{{--</div>--}}
 {{--                                                                --}}{{--<div data-position="7" class="m-widget_head-owlcarousel-item carousel">--}}
-{{--                                                                --}}{{--<img class="a--owl-carousel-type-2-item-image" src="/assets/app/media/img/products/product8.jpg">--}}
+{{--                                                                --}}{{--<img class="a--owl-carousel-item-image" src="/assets/app/media/img/products/product8.jpg">--}}
 {{--                                                                --}}{{--فیزیک--}}
 {{--                                                                --}}{{--</div>--}}
 {{--                                                            </div>--}}
@@ -398,28 +398,28 @@
 {{--                                                    <div class="m-widget30">--}}
 {{--                                                        --}}
 {{--                                                        <div class="m-widget_head">--}}
-{{--                                                            <div class="m-widget_head-owlcarousel-items owl-carousel a--owl-carousel-type-2 myFavoriteProducts">--}}
+{{--                                                            <div class="m-widget_head-owlcarousel-items owl-carousel a--owl-carousel myFavoriteProducts">--}}
 {{--                                                                --}}
 {{--                                                                --}}
 {{--                                                                @foreach($userAsset->product as $productKey=>$product)--}}
 {{--                                                                    <div data-position="{{ $productKey }}"--}}
 {{--                                                                         class="m-widget_head-owlcarousel-item carousel">--}}
-{{--                                                                        <img class="a--owl-carousel-type-2-item-image"--}}
+{{--                                                                        <img class="a--owl-carousel-item-image"--}}
 {{--                                                                             src="{{ $product->photo }}" alt="{{ $product->name }}">--}}
 {{--                                                                        {{ $product->name }}--}}
 {{--                                                                    </div>--}}
 {{--                                                                @endforeach--}}
 {{--                                                                --}}
 {{--                                                                --}}{{--<div data-position="0" class="m-widget_head-owlcarousel-item carousel">--}}
-{{--                                                                --}}{{--<img class="a--owl-carousel-type-2-item-image" src="/assets/app/media/img/products/product11.jpg">--}}
+{{--                                                                --}}{{--<img class="a--owl-carousel-item-image" src="/assets/app/media/img/products/product11.jpg">--}}
 {{--                                                                --}}{{--فیزیک--}}
 {{--                                                                --}}{{--</div>--}}
 {{--                                                                --}}{{--<div data-position="1" class="m-widget_head-owlcarousel-item carousel">--}}
-{{--                                                                --}}{{--<img class="a--owl-carousel-type-2-item-image" src="/assets/app/media/img/products/product10.jpg">--}}
+{{--                                                                --}}{{--<img class="a--owl-carousel-item-image" src="/assets/app/media/img/products/product10.jpg">--}}
 {{--                                                                --}}{{--فیزیک--}}
 {{--                                                                --}}{{--</div>--}}
 {{--                                                                --}}{{--<div data-position="2" class="m-widget_head-owlcarousel-item carousel">--}}
-{{--                                                                --}}{{--<img class="a--owl-carousel-type-2-item-image" src="/assets/app/media/img/products/product9.jpg">--}}
+{{--                                                                --}}{{--<img class="a--owl-carousel-item-image" src="/assets/app/media/img/products/product9.jpg">--}}
 {{--                                                                --}}{{--فیزیک--}}
 {{--                                                                --}}{{--</div>--}}
 {{--                                                            </div>--}}
@@ -441,13 +441,13 @@
 {{--        --}}
 {{--                                    <div class="m-widget_head">--}}
 {{--            --}}
-{{--                                        <div class="m-widget_head-owlcarousel-items owl-carousel a--owl-carousel-type-2 myProduct">--}}
+{{--                                        <div class="m-widget_head-owlcarousel-items owl-carousel a--owl-carousel myProduct">--}}
 {{--                                            @foreach((array)$userAsset->products->all() as $productKey=>$product)--}}
 {{--                                                @if($product->sets->count()===0)--}}
 {{--                                                    <div class="m-widget_head-owlcarousel-item carousel background-gradient"--}}
 {{--                                                         data-position="{{ $productKey }}">--}}
 {{--                                                        <a href="{{ $product->url }}">--}}
-{{--                                                            <img class="a--owl-carousel-type-2-item-image"--}}
+{{--                                                            <img class="a--owl-carousel-item-image"--}}
 {{--                                                                 src="{{ $product->photo }}" alt="{{ $product->name }}">--}}
 {{--                                                        </a>--}}
 {{--                                                        <br>--}}
@@ -458,7 +458,7 @@
 {{--                                                @elseif($product->sets->count()===1)--}}
 {{--                                                    <div class="m-widget_head-owlcarousel-item carousel background-gradient"--}}
 {{--                                                         data-position="{{ $productKey }}">--}}
-{{--                                                        <img class="a--owl-carousel-type-2-item-image"--}}
+{{--                                                        <img class="a--owl-carousel-item-image"--}}
 {{--                                                             src="{{ $product->photo }}" alt="{{ $product->name }}">--}}
 {{--                                                        <br>--}}
 {{--                                                        {{ $product->name }}--}}
@@ -485,14 +485,14 @@
 {{--                                                    <div class="m-widget_head-owlcarousel-item carousel"--}}
 {{--                                                         data-position="{{ $productKey }}">--}}
 {{--                                                        <a href="{{ $product->url }}">--}}
-{{--                                                            <img class="a--owl-carousel-type-2-item-image"--}}
+{{--                                                            <img class="a--owl-carousel-item-image"--}}
 {{--                                                                 src="{{ $product->photo }}" alt="{{ $product->name }}">--}}
 {{--                                                        </a>--}}
 {{--                                                        <br>--}}
 {{--                                                        <a href="{{ $product->url }}" target="_blank"--}}
 {{--                                                           class="m-link">{{ $product->name }}</a>--}}
 {{--                                                        <hr>--}}
-{{--                                                        <a class="btn btn-metal m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill a--owl-carousel-type-2-show-detailes">--}}
+{{--                                                        <a class="btn btn-metal m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill a--owl-carousel-show-detailes">--}}
 {{--                                                            <i class="flaticon-more-v6"></i>--}}
 {{--                                                        </a>--}}
 {{--                                                    </div>--}}
@@ -508,7 +508,7 @@
 {{--                                        @endif--}}
 {{--        --}}
 {{--                                    </div>--}}
-{{--                                    <div class="m-portlet a--owl-carousel-type-2-slide-detailes">--}}
+{{--                                    <div class="m-portlet a--owl-carousel-slide-detailes">--}}
 {{--                                        <div class="m-portlet__head">--}}
 {{--                                            <div class="m-portlet__head-caption">--}}
 {{--                                                <div class="m-portlet__head-title">--}}
@@ -518,7 +518,7 @@
 {{--                                                </div>--}}
 {{--                                            </div>--}}
 {{--                                            <div class="m-portlet__head-tools">--}}
-{{--                                                <a class="btn btn-outline-danger m-btn m-btn--icon m-btn--icon-only m-btn--pill m-btn--air a--owl-carousel-type-2-hide-detailes">--}}
+{{--                                                <a class="btn btn-outline-danger m-btn m-btn--icon m-btn--icon-only m-btn--pill m-btn--air a--owl-carousel-hide-detailes">--}}
 {{--                                                    <i class="la la-times"></i>--}}
 {{--                                                </a>--}}
 {{--                                            </div>--}}
@@ -528,7 +528,7 @@
 {{--                                            @if($userAsset->title === 'محصولات من')--}}
 {{--                                                @foreach($userAsset->products as $productKey=>$product)--}}
 {{--                                                    @if(count($product->sets)>1)--}}
-{{--                                                        <div class="m-portlet__body subCategoryWarper a--owl-carousel-type-2-slide-iteDetail-{{ $productKey }}">--}}
+{{--                                                        <div class="m-portlet__body subCategoryWarper a--owl-carousel-slide-iteDetail-{{ $productKey }}">--}}
 {{--                                                            <div class="row justify-content-center">--}}
 {{--                                                                @foreach($product->sets as $setKey=>$set)--}}
 {{--                                                                    <div class="col-12 col-sm-6 col-md-4 col-lg-3">--}}
