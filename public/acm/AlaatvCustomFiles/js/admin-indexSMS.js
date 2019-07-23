@@ -21,9 +21,6 @@ $(document).on("click", "#filterButton", function (){
         data: formData,
         statusCode: {
             200:function (response) {
-                // console.log(response);
-                // console.log(response.responseText);
-                // response = $.parseJSON(response);
                 $("#allUsers").val(response.allUsers);
                 $("#allUsersNumber").val(response.allUsersNumber);
                 $("#numberOfFatherPhones").val(response.numberOfFatherPhones);
@@ -48,7 +45,6 @@ $(document).on("click", "#filterButton", function (){
                     }
                 });
             },
-            //The status for when the user is not authorized for making the request
             401:function (ressponse) {
                 location.reload();
             },
@@ -58,16 +54,9 @@ $(document).on("click", "#filterButton", function (){
             404: function (response) {
                 window.location.replace("/404");
             },
-            //The status for when form data is not valid
-            422: function (response) {
-                //
-            },
-            //The status for when there is error php code
             500: function (response) {
-                // console.log(response.responseText);
                 toastr["error"]("خطای برنامه!", "پیام سیستم");
             },
-            //The status for when there is error php code
             503: function (response) {
                 toastr["error"]("خطای پایگاه داده!", "پیام سیستم");
             }
@@ -119,7 +108,6 @@ $(document).on("click", "#sendSmsForm-submit", function (){
     $("#smsMessage").parent().removeClass("has-error");
     $("#smsMessageAlert > strong").html("");
 
-    // console.log(typeof ($('#allUsers').val()));
     var formData = new FormData($("#sendSmsForm")[0]);
     formData.append('relatives', $('#relatives').val());
     formData.append('smsProviderNumber', $('#smsProviderNumber').val());
@@ -134,13 +122,10 @@ $(document).on("click", "#sendSmsForm-submit", function (){
         url: $("#sendSmsForm").attr("action"),
         data: formData,
         statusCode: {
-            //The status for when action was successful
             200: function (response) {
                 $("#send-sms-loading").addClass("d-none");
                 $("#smsConformation").modal("hide");
                 mApp.unblock('#smsConformation');
-                // console.log(response);
-                // console.log(response.responseText);
                 var smsCredit = JSON.parse(parseInt(response));
                 if(smsCredit == false){
                     $("#smsCredit").text("خطا در دریافت اطلاعات");
@@ -173,19 +158,15 @@ $(document).on("click", "#sendSmsForm-submit", function (){
                 $("#sendSmsForm")[0].reset();
                 toastr["success"]("پیامک با موفقیت ارسال شد!", "پیام سیستم");
             },
-
-            //The status for when the user is not authorized for making the request
             403: function (response) {
                 window.location.replace("/403");
             },
             404: function (response) {
                 window.location.replace("/404");
             },
-            //The status for when form data is not valid
             422: function (response) {
                 $("#send-sms-loading").addClass("d-none");
                 var errors = $.parseJSON(response.responseText);
-                // console.log(errors);
                 $.each(errors, function(index, value) {
                     switch (index) {
                         case "message":
@@ -197,22 +178,16 @@ $(document).on("click", "#sendSmsForm-submit", function (){
                 $("#smsConformation").modal("hide");
                 mApp.unblock('#smsConformation');
             },
-            //The status for when there is error php code
             500: function (response) {
-                console.log(response);
-                console.log(response.responseText);
                 toastr["error"]("خطای برنامه!", "پیام سیستم");
                 $("#smsConformation").modal("hide");
                 mApp.unblock('#smsConformation');
             },
-            //The status for when there is error php code
             503: function (response) {
                 toastr["error"]("خطای پایگاه داده!", "پیام سیستم");
                 $("#smsConformation").modal("hide");
                 mApp.unblock('#smsConformation');
             },
-
-            //The status for Unavailable For Legal Reasons
             451: function (response) {
                 toastr["error"]("کاربری انتخاب نشده است!", "پیام سیستم");
                 $("#smsConformation").modal("hide");

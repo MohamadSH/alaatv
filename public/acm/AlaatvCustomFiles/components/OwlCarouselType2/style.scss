@@ -229,7 +229,7 @@
         .a--block-titleWrapper {
           background: #828282;
           padding: 5px 10px;
-          height: 45px;
+          height: 60px;
           display: flex;
           align-items: center;
 
@@ -253,7 +253,8 @@
 
     .owl-carousel {
       .owl-stage-outer {
-        padding-top: 15px;
+        padding-top: 0;
+        margin-top: 15px;
       }
     }
   }
