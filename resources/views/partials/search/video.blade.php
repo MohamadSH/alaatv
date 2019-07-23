@@ -13,7 +13,7 @@
             </div>
         </div>
     </div>
-    <div class="col">
+    <div class="col a--owl-carousel-Wraper">
         <div id="{{ $widgetId ?? 'video-carousel' }}" class="{{ $carouselType ?? 'a--owl-carousel-type-1' }} a--owl-carousel-type-2 owl-carousel owl-theme" data-per-page="{{ isset($perPage) ? $perPage : 7 }}">
             @if($loadChild ?? true && optional($items)->isNotEmpty())
                 @foreach($items as $content)

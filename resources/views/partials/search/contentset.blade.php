@@ -14,7 +14,7 @@
         </div>
 
     </div>
-    <div class = "col-12">
+    <div class = "col-12 a--owl-carousel-Wraper">
         <div id = "{{  $widgetId ?? 'set-carousel'}}" class = "{{ $carouselType ?? 'a--owl-carousel-type-1' }} a--owl-carousel-type-2 owl-carousel owl-theme" data-per-page = "7">
             @if($loadChild ?? true && optional($items)->isNotEmpty())
                 @foreach($items as $lesson)
