@@ -6,7 +6,7 @@ var Alaasearch = function () {
     var articleAjaxLock = 0;
     var pamphletAjaxLock = 0;
 
-    function getProductCarouselItem(data) {
+    function getProductCarouselItem(data, itemKey) {
         var widgetActionLink = data.url;
         var widgetActionName = '<i class="flaticon-bag"></i>' + ' / ' + '<i class="fa fa-eye"></i>';
         var widgetPic = data.photo;
@@ -36,69 +36,51 @@ var Alaasearch = function () {
         priceHtml += '    ' + price.final.toLocaleString('fa') + ' تومان \n';
         priceHtml += '</span>';
 
-        return '<div class="item">\n' +
-            discountRibbon +
-            '    <!--begin:: Widgets/Blog-->\n' +
-            '    <div class="m-portlet m-portlet--bordered-semi m-portlet--rounded-force">\n' +
-            '   <div class="m-portlet__head m-portlet__head--fit"> \
-                    <div class="m-portlet__head-caption"> \
-                        <div class="m-portlet__head-action"> \
-                        </div> \
-                    </div> \
-                </div> ' +
-            '        <div class="m-portlet__body">\n' +
-            '            <div class="a-widget19 m-widget19">\n' +
-            '                <div class="m-widget19__pic m-portlet-fit--top m-portlet-fit--sides" >\n' +
-            '                    <a href="' + widgetActionLink + '"' +
-            '                       class="btn btn-sm m-btn--pill btn-brand btnViewMore gtm-eec-product-impression-click"' +
-            '                       data-gtm-eec-product-id="'+gtmEecProductId+'"' +
-            '                       data-gtm-eec-product-name="'+gtmEecProductName+'"' +
-            '                       data-gtm-eec-product-price="'+priceToStringWithTwoDecimal(price.final)+'"' +
-            '                       data-gtm-eec-product-brand="آلاء"' +
-            '                       data-gtm-eec-product-category="'+gtmEecProductCategory+'"' +
-            '                       data-gtm-eec-product-variant="'+gtmEecProductVariant+'"' +
-            '                       data-gtm-eec-product-list="محصولات صفحه سرچ"' +
-            '                       data-gtm-eec-product-position="'+gtmEecProductPosition+'">' + widgetActionName + '</a>\n' +
-            '                    <a href="' + widgetActionLink + '"' +
-            '                       class="d-block"' +
-            '                       data-gtm-eec-product-id="'+gtmEecProductId+'"' +
-            '                       data-gtm-eec-product-name="'+gtmEecProductName+'"' +
-            '                       data-gtm-eec-product-price="'+priceToStringWithTwoDecimal(price.final)+'"' +
-            '                       data-gtm-eec-product-brand="آلاء"' +
-            '                       data-gtm-eec-product-category="'+gtmEecProductCategory+'"' +
-            '                       data-gtm-eec-product-variant="'+gtmEecProductVariant+'"' +
-            '                       data-gtm-eec-product-list="محصولات صفحه سرچ"' +
-            '                       data-gtm-eec-product-position="'+gtmEecProductPosition+'">' +
-            '                       <img src="' + widgetPic + '" alt="' + widgetTitle + '"/>\n' +
-            '                    </a>\n' +
-            '                    <div class="m-widget19__shadow"></div>\n' +
-            '                </div>\n' +
-            '                <div class="m-widget19__content">\n' +
-            '                    <div class="owl-carousel-fileTitle">\n' +
-            '                        <a href="' + widgetActionLink + '" class="m-link gtm-eec-product-impression-click"' +
-            '                           data-gtm-eec-product-id="'+gtmEecProductId+'"\n' +
-            '                           data-gtm-eec-product-name="'+gtmEecProductName+'"\n' +
-            '                           data-gtm-eec-product-price="'+priceToStringWithTwoDecimal(price.final)+'"\n' +
-            '                           data-gtm-eec-product-brand="آلاء"\n' +
-            '                           data-gtm-eec-product-category="'+gtmEecProductCategory+'"\n' +
-            '                           data-gtm-eec-product-variant="'+gtmEecProductVariant+'"\n' +
-            '                           data-gtm-eec-product-list="محصولات صفحه سرچ"\n' +
-            '                           data-gtm-eec-product-position="'+gtmEecProductPosition+'">\n' +
-            '                            <h6>\n' +
-            '                                <span class="m-badge m-badge--info m-badge--dot"></span> ' + widgetTitle + '\n' +
-            '                            </h6>\n' +
-            '                        </a>\n' +
-            '                    </div>\n' +
-            '                    <div class="m-widget19__header">\n' +
-            '                        <div class="m-widget19__info">\n' +
-            priceHtml +
-            '                        </div>\n' +
-            '                    </div>\n' +
-            '                </div>\n' +
-            '            </div>\n' +
+        return '' +
+            '<div class="item carousel a--block-item a--block-type-product"\n' +
+            '     data-position="'+itemKey+'"\n' +
+            '     data-gtm-eec-product-id="'+gtmEecProductId+'"\n' +
+            '     data-gtm-eec-product-name="'+gtmEecProductName+'"\n' +
+            '     data-gtm-eec-product-price="'+priceToStringWithTwoDecimal(price.final)+'"\n' +
+            '     data-gtm-eec-product-brand="آلاء"\n' +
+            '     data-gtm-eec-product-category="-"\n' +
+            '     data-gtm-eec-product-variant="-"\n' +
+            '     data-gtm-eec-product-position="'+itemKey+'"\n' +
+            '     data-gtm-eec-product-list="محصولات صفحه سرچ">'+
+                discountRibbon +
+            '    <div class="a--block-imageWrapper">\n' +
+            '        <a href="' + widgetActionLink + '"\n' +
+            '           class="a--block-imageWrapper-image gtm-eec-product-impression-click"\n' +
+            '           data-gtm-eec-product-id="'+gtmEecProductId+'"\n' +
+            '           data-gtm-eec-product-name="'+gtmEecProductName+'"\n' +
+            '           data-gtm-eec-product-price="'+priceToStringWithTwoDecimal(price.final)+'"\n' +
+            '           data-gtm-eec-product-brand="آلاء"\n' +
+            '           data-gtm-eec-product-category="-"\n' +
+            '           data-gtm-eec-product-variant="-"\n' +
+            '           data-gtm-eec-product-position="'+itemKey+'"\n' +
+            '           data-gtm-eec-product-list="محصولات صفحه سرچ">\n' +
+            '            <img src="'+widgetPic+'?w=400&h=400" alt="'+gtmEecProductName+'" class="a--block-image" width="400" height="400" />\n' +
+            '        </a>\n' +
+            '    </div>\n' +
+            '    <div class="a--block-infoWrapper">\n' +
+            '        <div class="a--block-titleWrapper">\n' +
+            '            <a href="' + widgetActionLink + '"\n' +
+            '               class="m-link a--owl-carousel-type-2-item-subtitle gtm-eec-product-impression-click"\n' +
+            '               data-gtm-eec-product-id="'+gtmEecProductId+'"\n' +
+            '               data-gtm-eec-product-name="'+gtmEecProductName+'"\n' +
+            '               data-gtm-eec-product-price="'+priceToStringWithTwoDecimal(price.final)+'"\n' +
+            '               data-gtm-eec-product-brand="آلاء"\n' +
+            '               data-gtm-eec-product-category="-"\n' +
+            '               data-gtm-eec-product-variant="-"\n' +
+            '               data-gtm-eec-product-position="'+itemKey+'"\n' +
+            '               data-gtm-eec-product-list="محصولات صفحه سرچ">\n' +
+            '                '+widgetTitle+'\n' +
+            '            </a>\n' +
+            '        </div>\n' +
+            '        <div class="a--block-detailesWrapper">\n' +
+                        priceHtml +
             '        </div>\n' +
             '    </div>\n' +
-            '    <!--end:: Widgets/Blog-->\n' +
             '</div>';
     }
 
@@ -247,10 +229,10 @@ var Alaasearch = function () {
             '</div>';
     }
 
-    function makeWidgetFromJsonResponse(data, type) {
+    function makeWidgetFromJsonResponse(data, type, itemKey) {
         switch (type) {
             case 'product':
-                return getProductCarouselItem(data);
+                return getProductCarouselItem(data, itemKey);
             case 'video':
                 return getVideoCarouselItem(data);
             case 'set':
@@ -264,7 +246,7 @@ var Alaasearch = function () {
 
     function addContentToVerticalWidget(vw, data, type) {
         $.each(data, function (index, value) {
-            vw.append(makeWidgetFromJsonResponse(value, type));
+            vw.append(makeWidgetFromJsonResponse(value, type, index));
         });
     }
     function addContentToOwl(owl, data, type) {
@@ -272,7 +254,7 @@ var Alaasearch = function () {
             owl.trigger('add.owl.carousel',
                 [
                     // jQuery('<div class="owl-item">' + makeWidgetFromJsonResponse(value) + '</div>');
-                    jQuery(makeWidgetFromJsonResponse(value, type))
+                    jQuery(makeWidgetFromJsonResponse(value, type, index))
                 ]
             );
         });

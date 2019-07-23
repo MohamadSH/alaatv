@@ -65,6 +65,7 @@ var LazyLoad = function () {
     }
 
     function loadElementByClassName(className, callback, topPadding) {
+
         let elements = document.getElementsByClassName(className),
             elementsLength = elements.length;
         for (let i = 0; i < elementsLength; i++) {
@@ -110,8 +111,6 @@ var LazyLoad = function () {
         let oldBodyHeight = document.body.clientHeight;
         let bodyResizeEvent = function () {
             let newBodyHeight = document.body.clientHeight;
-            console.log('newBodyHeight: ', newBodyHeight);
-            console.log('oldBodyHeight: ', oldBodyHeight);
             if (newBodyHeight !== oldBodyHeight) {
                 oldBodyHeight = newBodyHeight;
                 callbackThrottle();
