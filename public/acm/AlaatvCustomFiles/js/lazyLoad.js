@@ -1,5 +1,7 @@
 var LazyLoad = function () {
 
+    let minInterval = 200;
+
     function image_getImages() {
         return document.querySelectorAll('.lazy-image');
     }
@@ -34,6 +36,7 @@ var LazyLoad = function () {
                 let carouselMainSlideShowWidth = $('#carouselMainSlideShow').width();
                 let minHeight = (carouselMainSlideShowWidth * dataHeight) / dataWidth;
                 $(this).parents('.carousel-item').css({'min-height':minHeight+'px', 'max-height':minHeight+'px'});
+                $(this).parents('.carousel-inner').css({'min-height':minHeight+'px', 'max-height':minHeight+'px'});
             }
         });
     }
@@ -56,19 +59,68 @@ var LazyLoad = function () {
     }
 
     function loadImage_oldVersion() {
-        loadObject($('.lazy-image'), function (obj) {
-            $(obj).attr('src', $(obj).data('src'));
-        });
+        loadElementByClassName('lazy-image', function (element, percentage) {
+            $(element).attr('src', $(element).attr('data-src'));
+        }, $('#m_header').height());
     }
 
-    function loadObject(lazyObject, callback) {
-        let inAdvance = $('#m_header').height();
-        lazyObject.each(function () {
-            if (parseInt($(this).attr('a-lazyload')) !== 1 && $(this).offset().top < window.innerHeight + window.pageYOffset + inAdvance) {
-                callback(this);
-                $(this).attr('a-lazyload', 1);
+    function loadElementByClassName(className, callback, topPadding) {
+        let elements = document.getElementsByClassName(className),
+            elementsLength = elements.length;
+        for (let i = 0; i < elementsLength; i++) {
+
+            let element = elements[i];
+
+            let percent = calculateSeenPercentage(element, topPadding);
+            runCallbackIfCan(element, percent, callback);
+
+            loadObject(element, function (element, percentage) {
+                runCallbackIfCan(element, percentage, callback);
+            }, topPadding);
+        }
+    }
+
+    function runCallbackIfCan(element, percentage, callback) {
+        if (canChangeLazyLoad(element, percentage)) {
+            changeLazyLoadStatus(element);
+            callback(element, percentage);
+        }
+    }
+
+    function canChangeLazyLoad(element, percentage) {
+        let lazyLoadStatus = parseInt($(element).attr('a-lazyload'));
+        if (percentage > 0 && lazyLoadStatus !== 1) {
+            return true;
+        }
+        return false;
+    }
+    function changeLazyLoadStatus(element) {
+        $(element).attr('a-lazyload', 1);
+    }
+
+    function loadObject(element, callback, topPadding) {
+        let callbackThrottle = function() {
+            let percentage = calculateSeenPercentage(element, topPadding);
+            callback(element, percentage);
+        };
+        let bodyDom = document.getElementsByTagName('body')[0];
+        document.addEventListener('touchmove', throttle(minInterval, callbackThrottle), false);
+        window.addEventListener('scroll', throttle(minInterval, callbackThrottle));
+        window.addEventListener('resize', throttle(minInterval, callbackThrottle));
+        bodyDom.addEventListener('resize', throttle(minInterval, callbackThrottle));
+
+        let oldBodyHeight = document.body.clientHeight;
+        let bodyResizeEvent = function () {
+            let newBodyHeight = document.body.clientHeight;
+            console.log('newBodyHeight: ', newBodyHeight);
+            console.log('oldBodyHeight: ', oldBodyHeight);
+            if (newBodyHeight !== oldBodyHeight) {
+                oldBodyHeight = newBodyHeight;
+                callbackThrottle();
             }
-        });
+        };
+        throttle(minInterval, bodyResizeEvent);
+
     }
 
     function throttle(minimumInterval, callback) {
@@ -84,36 +136,34 @@ var LazyLoad = function () {
         };
     }
 
+    function calculateSeenPercentage(element, topPadding) {
+        // $('#m_header').height()
+        // loadObject(lazyObject, callback);
+        let objectHeight = element.offsetHeight,
+            offsetTop = $(element).offset().top,
+            offsetBottom = offsetTop + objectHeight,
+            tp = window.pageYOffset + topPadding,
+            bp = window.pageYOffset + window.innerHeight,
+            calc1 = (bp-offsetTop)*100/objectHeight,
+            calc2 = (offsetBottom-tp)*100/objectHeight,
+            percentage = 0;
+        if (calc1 >= 0 && calc2 >= 0) {
+            if (calc1 > 100 && calc2 > 100) {
+                percentage = 100;
+            } else {
+                percentage = Math.min(calc1, calc2);
+            }
+        } else {
+            percentage = 0;
+        }
+        return percentage;
+    }
+
     return {
 
-        loadObject: function(lazyObject, callback) {
-            let callbackThrottle = function() {
-                loadObject(lazyObject, callback);
-            };
-            window.addEventListener('scroll', throttle(50, callbackThrottle));
-            window.addEventListener('resize', throttle(50, callbackThrottle));
+        loadElementByClassName: function(className, callback, topPadding) {
+            loadElementByClassName(className, callback, topPadding);
         },
 
-        image: function () {
-            loadImage_newVersion();
-            window.addEventListener('scroll', throttle(50, loadImage_oldVersion));
-            window.addEventListener('resize', throttle(50, loadImage_oldVersion));
-        },
-
-        carousel: function () {
-            // Bootstrap 4 carousel lazy load
-            carousel_loadHeightOfImageAndLoading();
-            carousel_loadImageSrc();
-            if ($('#carouselMainSlideShow').length === 1) {
-                $('#m_aside_left_hide_toggle').on('click', function() {
-                    carousel_loadHeightOfImageAndLoading();
-                });
-                $(window).on('resize', function() {
-                    carousel_loadHeightOfImageAndLoading();
-                });
-            }
-        },
-
-
-    };
-}();
+        image: function () {;;
+  

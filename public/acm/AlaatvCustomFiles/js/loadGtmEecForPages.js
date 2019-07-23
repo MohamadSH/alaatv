@@ -149,16 +149,18 @@ jQuery(document).ready( function() {
         var gtmEecImpressionView = [];
         for (let i = 0; i < childObject.length; i++) {
             var childObjectItem = $(childObject[i]).find('.block-product-item');
-            gtmEecImpressionView.push({
-                id:       childObjectItem.data('gtm-eec-product-id').toString(),
-                name:     childObjectItem.data('gtm-eec-product-name').toString(),
-                price:    childObjectItem.data('gtm-eec-product-price').toString(),
-                brand:    childObjectItem.data('gtm-eec-product-brand').toString(),
-                category: childObjectItem.data('gtm-eec-product-category').toString(),
-                variant:  childObjectItem.data('gtm-eec-product-variant').toString(),
-                list:     childObjectItem.data('gtm-eec-product-list').toString(),
-                position: childObjectItem.data('gtm-eec-product-position'),
-            });
+            if (childObjectItem.length > 0) {
+                gtmEecImpressionView.push({
+                    id:       childObjectItem.data('gtm-eec-product-id').toString(),
+                    name:     childObjectItem.data('gtm-eec-product-name').toString(),
+                    price:    childObjectItem.data('gtm-eec-product-price').toString(),
+                    brand:    childObjectItem.data('gtm-eec-product-brand').toString(),
+                    category: childObjectItem.data('gtm-eec-product-category').toString(),
+                    variant:  childObjectItem.data('gtm-eec-product-variant').toString(),
+                    list:     childObjectItem.data('gtm-eec-product-list').toString(),
+                    position: childObjectItem.data('gtm-eec-product-position'),
+                });
+            }
         }
         if (GAEE.reportGtmEecOnConsole()) {
             console.log('gtmEecImpressionViewCarousel: ', gtmEecImpressionView);

@@ -107,136 +107,89 @@ var Alaasearch = function () {
     }
 
     function getVideoCarouselItem(data) {
-
-        var widgetActionLink = data.url;
-        var widgetActionName = '<i class="fa fa-play"></i>' + ' / ' + '<i class="fa fa-cloud-download-alt"></i>';
-        var widgetPic = (typeof (data.photo) === 'undefined' || data.photo == null) ? data.thumbnail : data.photo;
-        var widgetTitle = data.name;
-        var widgetAuthor = {
-            photo: (typeof (data.author.photo) === 'undefined' || data.author.photo == null) ? null : data.author.photo,
-            name: data.author.firstName,
-            full_name: data.author.full_name
+        let inputData = {
+            widgetPic: (typeof (data.photo) === 'undefined' || data.photo == null) ? data.thumbnail + '?w=444&h=250' : data.photo + '?w=444&h=250',
+            widgetTitle: data.name,
+            widgetAuthor: {
+                photo: (typeof (data.author.photo) === 'undefined' || data.author.photo == null) ? null : data.author.photo,
+                name: data.author.firstName,
+                full_name: data.author.full_name
+            },
+            widgetCount: false,
+            widgetLink: data.url
         };
-        var widgetLink = data.url;
-        widgetPic += '?w=444&h=250';
-        return '<div class = \"item\"> \
-    <!--begin:: Widgets/Blog--> \
-    <div class = \"m-portlet m-portlet--bordered-semi m-portlet--rounded-force\"> \
-        <div class = \"m-portlet__head m-portlet__head--fit\" onclick="window.location.href=\''+widgetActionLink+'\';"> \
-            <div class = \"m-portlet__head-caption\"> \
-                <div class = \"m-portlet__head-action\"> \
-                </div> \
-            </div> \
-        </div> \
-        <div class = \"m-portlet__body\"> \
-            <div class = \"a-widget19 m-widget19\"> \
-                <div class = \"m-widget19__pic m-portlet-fit--top m-portlet-fit--sides" onclick="window.location.href=\''+widgetActionLink+'\';"> \
-                    <a href="' + widgetActionLink + '" class="btn btn-sm m-btn--pill btn-brand btnViewMore">' + widgetActionName + '</a> \
-                    <img src ="' + widgetPic + '" alt=" ' + widgetTitle + '" onclick="window.location.href=\''+widgetActionLink+'\';"/> \
-                    <div class = \"m-widget19__shadow\"></div> \
-                </div> \
-                <div class = \"m-widget19__content\"> \n' +
-            '                    <div class="owl-carousel-fileTitle">\n' +
-            '                        <a href="' + widgetActionLink + '" class="m-link">\n' +
-            '                            <h6>\n' +
-            '                                <span class="m-badge m-badge--info m-badge--dot"></span> ' + widgetTitle + '\n' +
-            '                            </h6>\n' +
-            '                        </a>\n' +
-            '                    </div>\
-                    <div class = \"m-widget19__header\"> \
-                        <div class = \"m-widget19__user-img\"> \
-                            <img class = \"m-widget19__img\" src = \" ' + widgetAuthor.photo + '\" alt = \"' + widgetAuthor.name + '\"> \
-                        </div> \
-                        <div class = \"m-widget19__info\"> \
-                            <span class = \"m-widget19__username\"> \
-                            ' + widgetAuthor.full_name + ' \
-                            </span> \
-                            <br> \
-                            <span class = \"m-widget19__time\"> \
-                            موسسه غیرتجاری آلاء \
-                            </span> \
-                        </div> \
-                    </div> \
-                </div> \
-                <!--<div class = \"m-widget19__action\"> \
-                    <a href = \"' + widgetLink + '\" class = \"btn m-btn--pill    btn-outline-warning m-btn m-btn--outline-2x \">نمایش فیلم های این دوره</a> \
-                </div> --> \
-            </div> \
-        </div> \
-    </div> \
-    <!--end:: Widgets/Blog--> \
-</div>';
+
+        return getCommonCarouselItem(inputData);
     }
 
     function getSetCarouselItem(data) {
 
-        var widgetActionLink = data.url;
-        var widgetActionName = 'نمایش این دوره';
-        var widgetPic = (typeof (data.photo) === 'undefined' || data.photo == null) ? data.thumbnail : data.photo;
-        var widgetTitle = data.name;
-        var widgetAuthor = {
-            photo : data.author.photo,
-            name: data.author.firstName,
-            full_name: data.author.full_name
+        let inputData = {
+            widgetPic: (typeof (data.photo) === 'undefined' || data.photo == null) ? data.thumbnail + '?w=253&h=142' : data.photo + '?w=253&h=142',
+            widgetTitle: data.name,
+            widgetAuthor: {
+                photo : data.author.photo,
+                name: data.author.firstName,
+                full_name: data.author.full_name
+            },
+            widgetCount: data.contents_count,
+            widgetLink: data.url
         };
 
-        var widgetCount = data.contents_count;
-        var widgetLink = data.url;
-        return '<div class = \"item\"> \
-    <!--begin:: Widgets/Blog--> \
-    <div class = \"m-portlet m-portlet--bordered-semi m-portlet--rounded-force\"> \
-        <div class = \"m-portlet__head m-portlet__head--fit\" onclick="window.location.href=\''+widgetActionLink+'\';"> \
-            <div class = \"m-portlet__head-caption\"> \
-                <div class = \"m-portlet__head-action\"> \
-                </div> \
-            </div> \
-        </div> \
-        <div class = \"m-portlet__body\"> \
-            <div class = \"a-widget19 m-widget19\"> \
-                <div class = \"m-widget19__pic m-portlet-fit--top m-portlet-fit--sides" onclick="window.location.href=\''+widgetActionLink+'\';" > \
-                    <a href="' + widgetActionLink +'" class="btn btn-sm m-btn--pill btn-brand btnViewMore">' + widgetActionName + '</a> \
-                    <img src = \"'+ widgetPic +'\" alt = \" ' + widgetTitle +'\" onclick="window.location.href=\''+widgetActionLink+'\';"/> \
-                    <div class = \"m-widget19__shadow\"></div> \
-                </div> \
-                <div class = \"m-widget19__content\"> \n' +
-            '                    <div class="owl-carousel-fileTitle">\n' +
-            '                        <a href="' + widgetActionLink + '" class="m-link">\n' +
-            '                            <h6>\n' +
-            '                                <span class="m-badge m-badge--info m-badge--dot"></span> ' + widgetTitle + '\n' +
-            '                            </h6>\n' +
-            '                        </a>\n' +
-            '                    </div>\
-                    <div class = \"m-widget19__header\"> \
-                        <div class = \"m-widget19__user-img\"> \
-                            <img class = \"m-widget19__img\" src = \" ' + widgetAuthor.photo + '\" alt = \"' + widgetAuthor.name + '\"> \
-                        </div> \
-                        <div class = \"m-widget19__info\"> \
-                            <span class = \"m-widget19__username\"> \
-                            ' + widgetAuthor.full_name + ' \
-                            </span> \
-                            <br> \
-                            <span class = \"m-widget19__time\"> \
-                            موسسه غیرتجاری آلاء \
-                            </span> \
-                        </div> \
-                        <div class = \"m-widget19__stats\"> \
-                            <span class = \"m-widget19__number m--font-brand\"> \
-                            ' + widgetCount + ' \
-                            </span> \
-                            <span class = \"m-widget19__comment\"> \
-                            محتوا  \
-                            </span> \
-                        </div> \
-                    </div> \
-                </div> \
-                <!--<div class = \"m-widget19__action\"> \
-                    <a href = \"' + widgetLink +'\" class = \"btn m-btn--pill    btn-outline-warning m-btn m-btn--outline-2x \">نمایش فیلم های این دوره</a> \
-                </div> --> \
-            </div> \
-        </div> \
-    </div> \
-    <!--end:: Widgets/Blog--> \
-</div>';
+        return getCommonCarouselItem(inputData);
+    }
+
+    function getCommonCarouselItem(data) {
+
+        let widgetPic = data.widgetPic,
+            widgetTitle = data.widgetTitle,
+            widgetAuthor = data.widgetAuthor,
+            widgetCount = data.widgetCount,
+            widgetLink = data.widgetLink,
+            widgetCountHtml = '';
+        if (widgetCount !== false) {
+                widgetCountHtml =
+                    '            <div class="a--block-set-count">\n' +
+                    '                <span class="a--block-set-count-number">'+widgetCount+'</span>\n' +
+                    '                <br>\n' +
+                    '                <span class="a--block-set-count-title">محتوا</span>\n' +
+                    '            </div>\n';
+            }
+
+        return '' +
+            '<div class="item carousel a--block-item a--block-type-set">\n' +
+            '    <div class="a--block-imageWrapper">\n' +
+            '        <a href="'+widgetLink+'" class="btn btn-sm m-btn--pill btn-brand btnViewMore">\n' +
+            '            <i class="fa fa-play"></i> / <i class="fa fa-cloud-download-alt"></i>\n' +
+            '        </a>\n' +
+            '        <a href="'+widgetLink+'" class="a--block-imageWrapper-image">\n' +
+            '            <img src="'+widgetPic+'" alt="'+widgetTitle+'" class="a--block-image" width="253" height="142" />\n' +
+            '        </a>\n' +
+            '    </div>\n' +
+            '    <div class="a--block-infoWrapper">\n' +
+            '        <div class="a--block-titleWrapper">\n' +
+            '            <a href="'+widgetLink+'" class="m-link">\n' +
+            '                <h6>\n' +
+            '                    <span class="m-badge m-badge--info m-badge--dot"></span>\n' +
+            '                    '+widgetTitle+'\n' +
+            '                </h6>\n' +
+            '            </a>\n' +
+            '        </div>\n' +
+            '        <div class="a--block-detailesWrapper">\n' +
+            '    \n' +
+            '            <div class="a--block-set-author-pic">\n' +
+            '                <img class="m-widget19__img" src="'+widgetAuthor.photo+'" alt="'+widgetAuthor.full_name+'">\n' +
+            '            </div>\n' +
+            '            <div class="a--block-set-author-name">\n' +
+            '                <span class="a--block-set-author-name-title">'+widgetAuthor.full_name+'</span>\n' +
+            '                <br>\n' +
+            '                <span class="a--block-set-author-name-alaa">موسسه غیرتجاری آلاء</span>\n' +
+            '            </div>\n' +
+                        widgetCountHtml +
+            '            \n' +
+            '        </div>\n' +
+            '    </div>\n' +
+            '</div>';
     }
 
     function getPamphletItem(data) {

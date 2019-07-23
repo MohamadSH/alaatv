@@ -67,49 +67,55 @@
                     </div>
                 </div>
                 <div class="m-portlet__body m-portlet__body--no-padding">
+                    
                     <div class="a--owl-carousel-init-loading">
-                        <div class="lds-roller"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
-                    </div>
-                    <!--begin::Widget 30-->
-                    <div class="m-widget30">
-                        <div class="m-widget_head">
-                            <div class="m-widget_head-owlcarousel-items owl-carousel a--owl-carousel-type-2 carousel_block_{{ $block->id }}">
-                                
-                                
-                                @if(((isset($blockType) && $blockType === 'product') || !isset($blockType)) && isset($block->products))
-                                    @foreach($block->getActiveProducts() as $productKey=>$product)
-                                        @include('product.partials.Block.product')
-                                    @endforeach
-                                @endif
-                                
-                                
-                                
-                                {{-- old content block loop --}}
-                                @if(((isset($blockType) && $blockType === 'content') || !isset($blockType)) && isset($block->contents))
-                                    @foreach($block->getActiveContent() as $contentKey=>$content)
-                                        @include('product.partials.Block.content')
-                                    @endforeach
-                                @endif
-    
-    
-                                {{--                                 new content block loop --}}
-                                @if(((isset($blockType) && $blockType === 'content') || !isset($blockType)) && isset($block->sets) && $block->sets->count() > 0)
-                                        @foreach($block->sets->first()->getActiveContents2() as $contentKey=>$content)
-                                        @include('product.partials.Block.content')
-                                    @endforeach
-                                @endif
-    
-                                @if(((isset($blockType) && $blockType === 'set') || !isset($blockType)) && isset($block->sets))
-                                    @foreach($block->getActiveSets() as $setsKey=>$set)
-                                        @include('product.partials.Block.set')
-                                    @endforeach
-                                @endif
-                            
-                            
-                            </div>
+                        <div class="lds-roller">
+                            <div></div>
+                            <div></div>
+                            <div></div>
+                            <div></div>
+                            <div></div>
+                            <div></div>
+                            <div></div>
+                            <div></div>
                         </div>
                     </div>
-                    <!--end::Widget 30-->
+    
+                    <div class="m-widget_head-owlcarousel-items owl-carousel a--owl-carousel-type-2 carousel_block_{{ $block->id }}">
+        
+        
+                        @if(((isset($blockType) && $blockType === 'product') || !isset($blockType)) && isset($block->products))
+                            @foreach($block->getActiveProducts() as $productKey=>$product)
+                                @include('product.partials.Block.product')
+                            @endforeach
+                        @endif
+        
+        
+        
+                        {{-- old content block loop --}}
+                        @if(((isset($blockType) && $blockType === 'content') || !isset($blockType)) && isset($block->contents))
+                            @foreach($block->getActiveContent() as $contentKey=>$content)
+                                @include('product.partials.Block.content')
+                            @endforeach
+                        @endif
+        
+        
+                        {{--                                 new content block loop --}}
+                        @if(((isset($blockType) && $blockType === 'content') || !isset($blockType)) && isset($block->sets) && $block->sets->count() > 0)
+                            @foreach($block->sets->first()->getActiveContents2() as $contentKey=>$content)
+                                @include('product.partials.Block.content')
+                            @endforeach
+                        @endif
+        
+                        @if(((isset($blockType) && $blockType === 'set') || !isset($blockType)) && isset($block->sets))
+                            @foreach($block->getActiveSets() as $setsKey=>$set)
+                                @include('product.partials.Block.set')
+                            @endforeach
+                        @endif
+    
+    
+                    </div>
+                    
                 </div>
             </div>
         </div>

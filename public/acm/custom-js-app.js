@@ -9,13 +9,12 @@ jQuery(document).ready( function() {
     window.dataLayer = window.dataLayer || [];
     var userIpDimensionValue = $('#js-var-userIp').val();
     var userIdDimensionValue = $('#js-var-userId').val();
-    dataLayer.push(
-        {
-            'userIp': userIpDimensionValue,
-            'dimension2': userIpDimensionValue,
-            'userId': userIdDimensionValue,
-            'user_id': userIdDimensionValue
-        });
+    dataLayer.push({
+        'userIp': userIpDimensionValue,
+        'dimension2': userIpDimensionValue,
+        'userId': userIdDimensionValue,
+        'user_id': userIdDimensionValue
+    });
 
     // toastr.options = {
     //     "closeButton": false,

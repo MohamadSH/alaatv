@@ -41,13 +41,13 @@ class LiveController extends Controller
 
         $liveEvent = $this->isThereLive($dayOfWeek, $todayStringDate , $now)->get();
         if($liveEvent->isEmpty()) {
-            $message = 'امروز پخش زنده ای وجود ندارد';
+            $message = 'هم اکنون برنامه زنده ای وجود ندارد';
             return view('errors.404' , compact('live', 'message'));
         }
 
         $currentLive = $liveEvent->where('finish_time' , '>' , $nowTime)->first();
         if(!isset($currentLive)) {
-            $message = 'پخش زنده امروز به اتمام رسیده است';
+            $message = 'هم اکنون برنامه زنده ای وجود ندارد';
             return view('errors.404' , compact('live', 'message'));
         }
 
