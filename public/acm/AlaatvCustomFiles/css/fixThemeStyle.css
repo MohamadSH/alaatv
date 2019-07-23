@@ -1,8 +1,5 @@
 
 /*fix them style*/
-body, html {
-    height: auto;
-}
 .m-portlet.m-portlet--head-overlay .m-portlet__body {
     margin-top: auto;
 }
