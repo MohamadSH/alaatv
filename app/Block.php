@@ -192,7 +192,7 @@ class Block extends BaseModel
     {
         $blocks = Cache::tags('block')
             ->remember('getMainBlocks', config('constants.CACHE_600'), function () {
-                $blocks = Block::main()
+                $blocks = self::main()
                     ->enable()
                     ->orderBy('order')
                     ->get()
