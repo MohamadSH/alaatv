@@ -201,7 +201,7 @@ trait ContentControllerResponseTrait
     private function makeThumbnailUrlFromFileName(string $fileName, int $contentset_id): string
     {
         //ToDo : Hard code
-        $baseUrl = config('constants.DOWNLOAD_SERVER_PROTOCOL').config('constants.DOWNLOAD_SERVER_NAME').'/media/';
+        $baseUrl = config('constants.DOWNLOAD_SERVER_PROTOCOL').config('constants.DOWNLOAD_SERVER_NAME').config('constants.DOWNLOAD_SERVER_MEDIA_PARTIAL_PATH');
         //thumbnail
         $thumbnailFileName = pathinfo($fileName, PATHINFO_FILENAME).".jpg";
         $thumbnailUrl      = $baseUrl."thumbnails/".$contentset_id."/".$thumbnailFileName;
@@ -218,18 +218,20 @@ trait ContentControllerResponseTrait
     public function makeFreeVideoFileArray(string $fileName , string $disk, int $contentsetId): array
     {
         $serverUrl = config('constants.DOWNLOAD_SERVER_PROTOCOL').config('constants.DOWNLOAD_SERVER_NAME');
+        $mediaPartialPath =config('constants.DOWNLOAD_SERVER_MEDIA_PARTIAL_PATH');
+
         $fileUrl = [
             '720p' => [
-                'url' => $serverUrl.'/media/'.$contentsetId.'/HD_720p/'.$fileName,
-                'partialPath'=> '/media/'.$contentsetId.'/HD_720p/'.$fileName,
+                'url' => $serverUrl.$mediaPartialPath.$contentsetId.'/HD_720p/'.$fileName,
+                'partialPath'=> $mediaPartialPath.$contentsetId.'/HD_720p/'.$fileName,
             ],
             '480p' => [
-                'url' => $serverUrl.'/media/'.$contentsetId.'/hq/'.$fileName,
-                'partialPath'=> '/media/'.$contentsetId.'/hq/'.$fileName,
+                'url' => $serverUrl.$mediaPartialPath.$contentsetId.'/hq/'.$fileName,
+                'partialPath'=> $mediaPartialPath.$contentsetId.'/hq/'.$fileName,
             ],
             '240p' => [
-                'url' => $serverUrl.'/media/'.$contentsetId.'/240p/'.$fileName,
-                'partialPath'=> '/media/'.$contentsetId.'/240p/'.$fileName,
+                'url' => $serverUrl.$mediaPartialPath.$contentsetId.'/240p/'.$fileName,
+                'partialPath'=> $mediaPartialPath.$contentsetId.'/240p/'.$fileName,
             ]
         ];
 
