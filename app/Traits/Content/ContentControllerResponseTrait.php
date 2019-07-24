@@ -220,7 +220,6 @@ trait ContentControllerResponseTrait
         $serverUrl = config('constants.DOWNLOAD_SERVER_PROTOCOL').config('constants.DOWNLOAD_SERVER_NAME');
         $fileUrl = [
             '720p' => [
-                //ToDo : Hard Code!
                 'url' => $serverUrl.'/media/'.$contentsetId.'/HD_720p/'.$fileName,
                 'partialPath'=> '/media/'.$contentsetId.'/HD_720p/'.$fileName,
             ],
