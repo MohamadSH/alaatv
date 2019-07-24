@@ -62,7 +62,7 @@
     
                             @foreach($blocks as $blockKey=>$block)
                                 @if($block->products->count() > 0)
-                                    @include('product.partials.Block.block', [
+                                    @include('block.partials.block', [
                                             'blockCustomClass'=>'landing7Block-'.$blockKey.' a--owl-carousel-type-2 OwlCarouselType2-landing9',
                                             'blockCustomId'=>$block->class
                                         ])
