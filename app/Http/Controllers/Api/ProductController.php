@@ -163,6 +163,23 @@ class ProductController extends Controller
 
     public function fetchProducts(Request $request){
         $products = Product::active()->whereNull('grand_id');
-        return $products->paginate(25, ['*'], 'page');
+        $products = $products->paginate(25, ['*'], 'page');
+
+        $items = [];
+        foreach ($products as $key=>$product) {
+            $items[$key]['id'] = $product->id;
+            $items[$key]['name'] = $product->name;
+            $items[$key]['link'] = $product->url;
+            $items[$key]['image'] = $product->photo;
+        }
+
+        $pagination = [
+          'current_page'=> $products->currentPage(),
+          'data'        => $items,
+          'per_page'     => $products->perPage(),
+          'total'        => $products->total(),
+        ];
+
+        return response()->json($pagination,Response::HTTP_OK , [] ,JSON_UNESCAPED_SLASHES);
     }
 }
