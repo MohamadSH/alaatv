@@ -12,7 +12,24 @@ function makeDataTable_loadWithAjax_blocks(dontLoadAjax) {
         {data: "id", title: "#", defaultContent: defaultContent},
         {data: "title", title: "عنوان", defaultContent: defaultContent},
         {data: "order", title: "ترتیب", defaultContent: defaultContent},
-        {data: "type", title: "لوکیشن", defaultContent: defaultContent},
+        {
+            "data": null,
+            "name": "type",
+            "title": "نوع",
+            defaultContent: defaultContent,
+            "render": function ( data, type, row ) {
+                var type = row.type,
+                    typeMap = {
+                        '1': 'صفحه اصلی',
+                        '2': 'فروشگاه',
+                        '3': 'صفحه محصول',
+                    };
+                if (typeof typeMap[type] !== 'undefined') {
+                    return typeMap[type];
+                }
+                return '-';
+            },
+        },
         {
             "data": null,
             "name": "offer.count",

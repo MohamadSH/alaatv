@@ -527,13 +527,10 @@ $(document).ready(function () {
 
     let pageLoadState = decodeURIComponent(window.location.hash);
     if (pageLoadState === '#ثبت_رتبه') {
-        console.log('sabte rotbe');
         showSabteRotbe();
     } else if (pageLoadState === '#اطلاعات_شخصی') {
-        console.log('etelaate shakhsi');
         showSetting();
     } else {
-        console.log('else');
         showSetting();
     }
 

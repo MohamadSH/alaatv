@@ -156,7 +156,6 @@ $(document).on("click", "#report-portlet .reload", function (){
                 {
                     $('#report_table thead th:last-child').after('<th class="all">قرعه کشی '+this.displayName+'</th>');
                 });
-                // console.log(selectedProducts) ;
                 // if($("#orderProducts option:selected").length >0 && $('#orderProductEnable').prop('checked') == true){
                 //     var allFlag = false ;
                 //     $("#orderProducts option:selected").map(function()
@@ -189,7 +188,6 @@ $(document).on("click", "#report-portlet .reload", function (){
                     }
                 });
             },
-            //The status for when the report is not authorized for making the request
             401:function (ressponse) {
                 location.reload();
             },
@@ -199,16 +197,9 @@ $(document).on("click", "#report-portlet .reload", function (){
             404: function (response) {
                 window.location.replace("/404");
             },
-            //The status for when form data is not valid
-            422: function (response) {
-                //
-            },
-            //The status for when there is error php code
             500: function (response) {
-                console.log(response.responseText);
                 toastr["error"]("خطای برنامه!", "پیام سیستم");
             },
-            //The status for when there is error php code
             503: function (response) {
                 toastr["error"]("خطای پایگاه داده!", "پیام سیستم");
             }
@@ -444,7 +435,6 @@ $(document).on("click", "#bookSellingReport-portlet .reload", function (){
                     }
                 });
             },
-            //The status for when the report is not authorized for making the request
             401:function (ressponse) {
                 location.reload();
             },
@@ -454,16 +444,9 @@ $(document).on("click", "#bookSellingReport-portlet .reload", function (){
             404: function (response) {
                 window.location.replace("/404");
             },
-            //The status for when form data is not valid
-            422: function (response) {
-                //
-            },
-            //The status for when there is error php code
             500: function (response) {
-                console.log(response.responseText);
                 toastr["error"]("خطای برنامه!", "پیام سیستم");
             },
-            //The status for when there is error php code
             503: function (response) {
                 toastr["error"]("خطای پایگاه داده!", "پیام سیستم");
             }

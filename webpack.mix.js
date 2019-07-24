@@ -26,6 +26,28 @@ mix.styles([
         'public/js/all.js'
     ).version();
 
+// ---------------------------------------------------------------------------------- pageHomePage
+mix.styles([
+        'node_modules/owl.carousel/dist/assets/owl.carousel.css',
+        'node_modules/owl.carousel/dist/assets/owl.theme.default.css',
+
+        'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/style.css',
+        'public/acm/AlaatvCustomFiles/components/ribbon/style.css',
+        'public/acm/AlaatvCustomFiles/css/certificates.css',
+        'public/acm/AlaatvCustomFiles/css/page-homePage.css',
+    ],
+    'public/css/page-homePage.css'
+).version()
+    .babel([
+            'node_modules/owl.carousel/dist/owl.carousel.js',
+            'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/js.js',
+            'public/acm/AlaatvCustomFiles/components/aSticky/aSticky.js',
+            'public/acm/AlaatvCustomFiles/js/certificates.js',
+            'public/acm/AlaatvCustomFiles/js/page-homePage.js',
+        ],
+        'public/js/page-homePage.js'
+    ).version();
+
 
 
 // ---------------------------------------------------------------------------------- authLogin
@@ -58,27 +80,6 @@ mix.styles([
         ).version();
 
 
-// ---------------------------------------------------------------------------------- pageHomePage
-mix.styles([
-        'node_modules/owl.carousel/dist/assets/owl.carousel.css',
-        'node_modules/owl.carousel/dist/assets/owl.theme.default.css',
-
-        'public/acm/AlaatvCustomFiles/components/ribbon/style.css',
-        'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/style.css',
-        'public/acm/AlaatvCustomFiles/css/certificates.css',
-        'public/acm/AlaatvCustomFiles/css/page-homePage.css',
-    ],
-    'public/css/page-homePage.css'
-).version()
-    .babel([
-            'node_modules/owl.carousel/dist/owl.carousel.js',
-            'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/js.js',
-            'public/acm/AlaatvCustomFiles/components/aSticky/aSticky.js',
-            'public/acm/AlaatvCustomFiles/js/certificates.js',
-            'public/acm/AlaatvCustomFiles/js/page-homePage.js',
-        ],
-        'public/js/page-homePage.js'
-    ).version();
 
 // ---------------------------------------------------------------------------------- pageShop
     mix.styles([
@@ -312,7 +313,11 @@ mix.styles([
             'public/acm/AlaatvCustomFiles/components/ribbon/style.css',
             'node_modules/owl.carousel/dist/assets/owl.carousel.css',
             'node_modules/owl.carousel/dist/assets/owl.theme.default.css',
+
             'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/style.css',
+            'public/acm/AlaatvCustomFiles/components/ribbon/style.css',
+
+
             'public/acm/AlaatvCustomFiles/components/MultiLevelSearch/style.css',
             'public/acm/AlaatvCustomFiles/css/page-content-search.css'
         ],
@@ -598,8 +603,7 @@ mix.styles([
         ).version();
 
 
-    mix.babel(
-        [
+    mix.babel([
             'public/acm/AlaatvCustomFiles/js/loadGtmEecForPages.js',
         ],
         'public/js/loadGtmEecForPages.js'

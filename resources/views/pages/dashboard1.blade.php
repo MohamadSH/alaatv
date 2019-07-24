@@ -182,7 +182,7 @@
 {{--                </div>--}}
 {{--            </div>--}}
         @endif
-        @include('product.partials.Block.block', [
+        @include('block.partials.block', [
             'blockCustomClass'=>$block->class.' a--content-carousel-1 dasboardLessons',
             'blockCustomId'=>'sectionId-'.$block->class,
             'blockType'=>(isset($block->sets) && $block->sets->count()>0)?'set':(isset($block->products) && $block->products->count()>0?'product':'content'),
@@ -206,6 +206,7 @@
 {{--    </div>--}}
     
     @include('partials.certificates')
+    
 @endsection
 
 @section('page-js')

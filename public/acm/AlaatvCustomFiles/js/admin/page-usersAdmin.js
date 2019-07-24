@@ -114,7 +114,6 @@ function makeDataTable_loadWithAjax_users() {
     ];
     let dataFilter = function (data) {
         var json = jQuery.parseJSON(data);
-        console.log('dataFilter: ', json.data);
         json.recordsTotal = json.total;
         json.recordsFiltered = json.total;
         return JSON.stringify(json); // return JSON string
@@ -163,8 +162,6 @@ function removeUser(){
         url: removeLink,
         data:{_method: 'delete'},
         success: function (result) {
-            // console.log(result);
-            // console.log(result.responseText);
             toastr.options = {
                 "closeButton": true,
                 "debug": false,
@@ -189,8 +186,6 @@ function removeUser(){
             makeDataTable_loadWithAjax_users();
         },
         error: function (result) {
-            // console.log(result);
-            // console.log(result.responseText);
             mApp.unblock('#deleteUserConfirmationModal');
             $('#deleteUserConfirmationModal').modal('hide');
 
@@ -262,8 +257,6 @@ $(document).on("click", "#userForm-submit", function (){
                 if(response.message != undefined && response.message!= null)
                     message += "<br />"+response.message;
                 toastr["success"](message, "پیام سیستم");
-                // console.log(response);
-                // console.log(response.responseText);
                 mApp.unblock('#responsive-user');
                 $('#responsive-user').modal('hide');
 
@@ -294,7 +287,6 @@ $(document).on("click", "#userForm-submit", function (){
             422: function (response) {
                 toastr["error"]("خطای ورودی ها!", "پیام سیستم");
                 var errors = $.parseJSON(response.responseText);
-                // console.log(errors.errors);
                 $.each(errors.errors, function(index, value) {
                     switch (index) {
                         case "firstName":
@@ -352,8 +344,6 @@ $(document).on("click", "#userForm-submit", function (){
             },
             //The status for when there is error php code
             500: function (response) {
-                console.log(response);
-                console.log(response.responseText);
                 toastr["error"]("خطای برنامه!", "پیام سیستم");
                 mApp.unblock('#responsive-user');
                 $('#responsive-user').modal('hide');
@@ -389,7 +379,6 @@ $(document).on("click", "#userForm-submit", function (){
  */
 $(document).on("click", ".eventResult-portlet .reload", function (){
     var identifier = $(this).data("role");
-    console.log(identifier);
     var formData = $("#filter"+identifier+"Form").serialize();
     $("#"+identifier+"-portlet-loading").removeClass("hidden");
     $('#'+identifier+'_table > tbody').html("");
@@ -398,8 +387,6 @@ $(document).on("click", ".eventResult-portlet .reload", function (){
         url: "/eventresult",
         data : formData ,
         success: function (result) {
-            // console.log(result);
-            // console.log(result.responseText);
             var newDataTable =$("#"+identifier+"_table").DataTable();
             newDataTable.destroy();
             $('#'+identifier+'_table > tbody').html(result);
@@ -407,8 +394,6 @@ $(document).on("click", ".eventResult-portlet .reload", function (){
             $("#"+identifier+"-portlet-loading").addClass("hidden");
         },
         error: function (result) {
-            // console.log(result);
-            // console.log(result.responseText);
         }
     });
 
@@ -455,7 +440,6 @@ $(document).on("click", "#user-portlet .reload", function (){
     //     dataType: "json",
     //     statusCode: {
     //         200:function (response) {
-    //             // console.log(response);
     //             var responseJson = response;
     //             var newDataTable =$("#user_table").DataTable();
     //             newDataTable.destroy();
@@ -491,7 +475,6 @@ $(document).on("click", "#user-portlet .reload", function (){
     //         },
     //         //The status for when there is error php code
     //         500: function (response) {
-    //             console.log(response.responseText);
     //             toastr["error"]("خطای برنامه!", "پیام سیستم");
     //         },
     //         //The status for when there is error php code
@@ -509,7 +492,6 @@ $(document).on("click", ".addBon", function (){
     $("#bonUserFullName").text($("#userFullName_"+user_id).text());
 });
 $(document).on("click", "#userAttachBonForm-submit", function (){
-    $('body').modalmanager('loading');
 
     //initializing form alerts
     $("#userBonNumber").parent().removeClass("has-error");
@@ -522,7 +504,6 @@ $(document).on("click", "#userAttachBonForm-submit", function (){
         url: $("#userAttachBonForm").attr("action"),
         data: formData,
         statusCode: {
-            //The status for when action was successful
             200: function (response) {
                 $("#userAttachBonForm-close").trigger("click");
                 toastr.options = {
@@ -542,25 +523,18 @@ $(document).on("click", "#userAttachBonForm-submit", function (){
                 $('#userAttachBonForm')[0].reset();
                 $("#Bonuser-portlet .reload").trigger("click");
                 toastr["success"]("بن با موفقیت تخصیص داده شد!", "پیام سیستم");
-                // console.log(result);
-                // console.log(result.responseText);
             },
-            //The status for when there is error php code
             201: function (response) {
                 toastr["error"]("خطای برنامه!", "پیام سیستم");
             },
-
-            //The status for when the user is not authorized for making the request
             403: function (response) {
                 window.location.replace("/403");
             },
             404: function (response) {
                 window.location.replace("/404");
             },
-            //The status for when form data is not valid
             422: function (response) {
                 var errors = $.parseJSON(response.responseText);
-                console.log(errors);
                 $.each(errors, function(index, value) {
                     switch (index) {
                         case "totalNumber":
@@ -570,13 +544,9 @@ $(document).on("click", "#userAttachBonForm-submit", function (){
                     }
                 });
             },
-            //The status for when there is error php code
             500: function (response) {
-                // console.log(response);
-                // console.log(response.responseText);
                 toastr["error"]("خطای برنامه!", "پیام سیستم");
             },
-            //The status for when there is error php code
             503: function (response) {
                 toastr["error"]("خطای پایگاه داده!", "پیام سیستم");
             }
@@ -585,8 +555,6 @@ $(document).on("click", "#userAttachBonForm-submit", function (){
         contentType: false,
         processData: false
     });
-    $modal.modal().hide();
-    $modal.modal('toggle');
 });
 $(document).on("click", ".OrderFilteradio", function (){
     var radioValue = $(this).val();
@@ -604,12 +572,10 @@ $(document).on("click", ".OrderFilteradio", function (){
 });
 $(document).on("click", ".sendSms", function (){
     var user_id = $(this).closest('ul').attr('id');
-    console.log(user_id);
     $("#users").val(user_id);
     $("#smsUserFullName").text($("#userFullName_"+user_id).text());
 });
 $(document).on("click", "#sendSmsForm-submit", function (){
-    // $('body').modalmanager('loading');
 
     mApp.block('#smsModal', {
         type: "loader",
@@ -665,7 +631,6 @@ $(document).on("click", "#sendSmsForm-submit", function (){
             422: function (response) {
                 $("#send-sms-loading").addClass("d-none");
                 var errors = $.parseJSON(response.responseText);
-                console.log(errors);
                 $.each(errors, function(index, value) {
                     switch (index) {
                         case "message":
@@ -705,8 +670,6 @@ $(document).on("click", "#sendSmsForm-submit", function (){
         contentType: false,
         processData: false
     });
-    // $modal.modal().hide();
-    // $modal.modal('toggle');
 });
 $(document).ready(function () {
 
@@ -733,8 +696,6 @@ function removePermission(url){
         url: url,
         data:{_method: 'delete'},
         success: function (result) {
-            // console.log(result);
-            // console.log(result.responseText);
             toastr.options = {
                 "closeButton": true,
                 "debug": false,
@@ -753,8 +714,6 @@ function removePermission(url){
             $("#permission-portlet .reload").trigger("click");
         },
         error: function (result) {
-            // console.log(result);
-            // console.log(result.responseText);
         }
     });
 }
@@ -806,8 +765,6 @@ $(document).on("click", "#permissionForm-submit", function (){
                 $('#responsive-permission').modal('hide');
                 mApp.unblock('#responsive-permission');
                 toastr["success"]("درج دسترسی با موفقیت انجام شد!", "پیام سیستم");
-                // console.log(result);
-                // console.log(result.responseText);
             },
             //The status for when the user is not authorized for making the request
             403: function (response) {
@@ -819,7 +776,6 @@ $(document).on("click", "#permissionForm-submit", function (){
             //The status for when form data is not valid
             422: function (response) {
                 var errors = $.parseJSON(response.responseText);
-                console.log(errors);
                 $.each(errors, function(index, value) {
                     switch (index) {
                         case "name":
@@ -874,8 +830,6 @@ $(document).on("click", "#permission-portlet .reload", function (){
             $("#permission-portlet-loading").addClass("d-none");
         },
         error: function (result) {
-            console.log(result);
-            console.log(result.responseText);
         }
     });
 
@@ -892,8 +846,6 @@ function removeRole(url){
         url: url,
         data:{_method: 'delete'},
         success: function (result) {
-            // console.log(result);
-            // console.log(result.responseText);
             toastr.options = {
                 "closeButton": true,
                 "debug": false,
@@ -912,13 +864,10 @@ function removeRole(url){
             $("#role-portlet .reload").trigger("click");
         },
         error: function (result) {
-            // console.log(result);
-            // console.log(result.responseText);
         }
     });
 }
 $(document).on("click", "#roleForm-submit", function (){
-    $('body').modalmanager('loading');
     var el = $(this);
 
     //initializing form alerts
@@ -941,7 +890,6 @@ $(document).on("click", "#roleForm-submit", function (){
         url: $("#roleForm").attr("action"),
         data: formData,
         statusCode: {
-            //The status for when action was successful
             200: function (response) {
                 $("#roleForm-close").trigger("click");
                 toastr.options = {
@@ -962,20 +910,15 @@ $(document).on("click", "#roleForm-submit", function (){
                 $('#roleForm')[0].reset();
                 $('#role_permission').multiSelect('refresh');
                 toastr["success"]("درج نقش با موفقیت انجام شد!", "پیام سیستم");
-                // console.log(result);
-                // console.log(result.responseText);
             },
-            //The status for when the user is not authorized for making the request
             403: function (response) {
                 window.location.replace("/403");
             },
             404: function (response) {
                 window.location.replace("/404");
             },
-            //The status for when form data is not valid
             422: function (response) {
                 var errors = $.parseJSON(response.responseText);
-                console.log(errors);
                 $.each(errors, function(index, value) {
                     switch (index) {
                         case "name":
@@ -997,11 +940,9 @@ $(document).on("click", "#roleForm-submit", function (){
                     }
                 });
             },
-            //The status for when there is error php code
             500: function (response) {
                 toastr["error"]("خطای برنامه!", "پیام سیستم");
             },
-            //The status for when there is error php code
             503: function (response) {
                 toastr["error"]("خطای پایگاه داده!", "پیام سیستم");
             }
@@ -1010,8 +951,6 @@ $(document).on("click", "#roleForm-submit", function (){
         contentType: false,
         processData: false
     });
-    $modal.modal().hide();
-    $modal.modal('toggle');
 });
 $(document).on("click", "#role-portlet .reload", function (){
     $("#role-portlet-loading").removeClass("d-none");
@@ -1027,8 +966,6 @@ $(document).on("click", "#role-portlet .reload", function (){
             $("#role-portlet-loading").addClass("d-none");
         },
         error: function (result) {
-            console.log(result);
-            console.log(result.responseText);
         }
     });
 

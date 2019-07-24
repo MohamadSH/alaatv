@@ -424,42 +424,20 @@ jQuery(document).ready(function() {
                     extraAttribute: extraAttributeStates
                 },
                 statusCode: {
-                    //The status for when action was successful
                     200: function (response) {
-                        // console.log(response);
-
                         let successMessage = 'محصول مورد نظر به سبد خرید اضافه شد.';
 
                         toastr.success(successMessage);
 
                         window.location.replace('/checkout/review');
-                        // setTimeout(function () {
-                        //     window.location.replace('/checkout/review');
-                        // }, 1000);
 
                     },
-                    //The status for when the user is not authorized for making the request
-                    403: function (response) {
-                        // window.location.replace("/403");
-                    },
-                    //The status for when the user is not authorized for making the request
-                    401: function (response) {
-                        // window.location.replace("/403");
-                    },
-                    404: function (response) {
-                        // window.location.replace("/404");
-                    },
-                    //The status for when form data is not valid
-                    422: function (response) {
-                    },
-                    //The status for when there is error php code
                     500: function (response) {
 
                         toastr.error('خطای سیستمی رخ داده است.');
 
                         ProductShowPage.enableBtnAddToCart();
                     },
-                    //The status for when there is error php code
                     503: function (response) {
                         toastr.error('خطای پایگاه داده!');
                         ProductShowPage.enableBtnAddToCart();
@@ -603,7 +581,6 @@ jQuery(document).ready(function() {
     player.pic2pic();
 
     // player.on('mode',function(event,mode) {
-    //     console.log('mode: ', mode);
     //     let width = '100%';
     //     if(mode=='large') {
     //         // $('.productDetailesColumns .column1').addClass('order-2');

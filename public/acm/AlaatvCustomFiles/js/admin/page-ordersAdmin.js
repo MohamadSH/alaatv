@@ -67,8 +67,6 @@ function removeOrder(){
         url: remove_link,
         data:{_method: 'delete'},
         success: function (result) {
-            // console.log(result);
-            // console.log(result.responseText);
             toastr.options = {
                 "closeButton": true,
                 "debug": false,
@@ -93,8 +91,6 @@ function removeOrder(){
             makeDataTable_loadWithAjax_orders();
         },
         error: function (result) {
-            // console.log(result);
-            // console.log(result.responseText);
             mApp.unblock('#deleteOrderConfirmationModal');
 
             var newDataTable =$("#order_table").DataTable();
@@ -111,7 +107,6 @@ $(document).on("click", "#order-portlet .reload", function (){
     // var formData = $("#filterOrderForm").serialize();
     // $("#order-portlet-loading").removeClass("d-none");
     $('#order_table > tbody').html("");
-    // console.log(formData);
 
 
     if($("#orderTableColumnFilter").val() !== null) {
@@ -362,8 +357,6 @@ $(document).on("click", "#transaction-portlet .reload", function (){
             });
         },
         error: function (result) {
-            // console.log(result);
-            // console.log(result.responseText);
         }
     });
 
@@ -385,8 +378,6 @@ function removeUserBon(){
         url: 'userbon/'+userbon_id,
         data:{_method: 'delete'},
         success: function (result) {
-            // console.log(result);
-            // console.log(result.responseText);
             toastr.options = {
                 "closeButton": true,
                 "debug": false,
@@ -405,8 +396,6 @@ function removeUserBon(){
             $("#userBon-portlet .reload").trigger("click");
         },
         error: function (result) {
-            // console.log(result);
-            // console.log(result.responseText);
         }
     });
 }
@@ -455,8 +444,6 @@ function removeUserBon(){
 //                 $('#roleForm')[0].reset();
 //                 $('#role_permission').multiSelect('refresh');
 //                 toastr["success"]("درج نقش با موفقیت انجام شد!", "پیام سیستم");
-//                 // console.log(result);
-//                 // console.log(result.responseText);
 //             },
 //             //The status for when the user is not authorized for making the request
 //             403: function (response) {
@@ -468,7 +455,6 @@ function removeUserBon(){
 //             //The status for when form data is not valid
 //             422: function (response) {
 //                 var errors = $.parseJSON(response.responseText);
-//                 console.log(errors);
 //                 $.each(errors, function(index, value) {
 //                     switch (index) {
 //                         case "name":
@@ -553,8 +539,6 @@ $(document).on("click", "#userBon-portlet .reload", function (){
             $("#userBon-portlet-loading").addClass("d-none");
         },
         error: function (result) {
-            // console.log(result);
-            // console.log(result.responseText);
         }
     });
 
@@ -921,37 +905,29 @@ $(document).on('submit', '.completeTransactionInfoForm', function(e){
         url: url,
         data:formData ,
         statusCode: {
-            //The status for when action was successful
             200: function (response) {
-                // console.log(response);
-                // console.log(response.responseText);
                 $(".transactionSpecialButton_"+transctionId).remove();
                 $("#transactionUser_"+transctionId).addClass("font-red");
                 toastr["success"](response.message, "پیام سیستم");
             },
-            //The status for when the user is not authorized for making the request
             403: function (response) {
                 window.location.replace("/403");
             },
             404: function (response) {
                 window.location.replace("/404");
             },
-            //The status for when form data is not valid
             422: function (response) {
                 toastr["error"]("خطای 422 . خطای ورودی ها", "پیام سیستم");
             },
-            //The status for when there is error php code
             500: function (response) {
                 toastr["error"]("خطای 500", "پیام سیستم");
             },
-            //The status for when there is error php code
             503: function (response) {
                 var rasponseJson = $.parseJSON(response.responseText);
                 toastr["error"](rasponseJson.message, "پیام سیستم");
             }
         },
         cache: false,
-        // contentType: false,
         processData: false
     });
     $('#completeTransactionInfo').modal('toggle');
