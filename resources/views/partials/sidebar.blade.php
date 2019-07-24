@@ -252,7 +252,7 @@
                                 </span>
                                 </li>
                                 <li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1">
-                                    <a target="_blank" href="{{ action("Web\BotsController@bot" , ["fixthumbnail"=>"1" , 'set'=>'']) }}" class="m-menu__link ">
+                                    <a target="_blank" href="{{ action("Web\BotsController@fixthumbnail" , ['set'=>'']) }}" class="m-menu__link ">
                                         <i class="m-menu__link-bullet m-menu__link-bullet--dot">
                                             <span></span>
                                         </i>
@@ -380,7 +380,7 @@
                                         <i class="m-menu__link-bullet m-menu__link-bullet--dot">
                                             <span></span>
                                         </i>
-                                        <span class="m-menu__link-text">اسلاید شو صفحه اصلی</span>
+                                        <span class="m-menu__link-text">اسلاید شو</span>
                                     </a>
                                 </li>
                                 @endpermission

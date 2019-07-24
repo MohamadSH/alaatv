@@ -171,6 +171,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post("excelBot", "Web\BotsController@excelBot");
     Route::get("zarinpalbot", "Web\BotsController@ZarinpalVerifyPaymentBot");
     Route::post("salesReportBot", "Web\BotsController@salesReportBot");
+    Route::get("thumbnailbot", "Web\BotsController@fixthumbnail");
     Route::post("registerUserAndGiveOrderproduct", "Web\AdminController@registerUserAndGiveOrderproduct");
     Route::get("specialAddUser", "Web\AdminController@specialAddUser");
     Route::get("v/asiatech", "Web\UserController@voucherRequest");

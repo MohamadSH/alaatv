@@ -6,6 +6,7 @@
 
 use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Api\GetPaymentRedirectEncryptedLink;
+use App\Http\Controllers\Api\ProductController;
 
 Auth::routes(['verify' => true]);
 
@@ -32,6 +33,9 @@ Route::group(['prefix' => 'v1'], function () {
     Route::get('set/{set}', 'Api\SetController@show');
     Route::post('getPrice/{product}', 'Api\ProductController@refreshPrice');
     Route::post('donate', [OrderController::class, 'donateOrder']);
+    Route::any('fetchProducts', [ProductController::class, 'fetchProducts'])
+        ->name('api.fetch.product');
+
 
     Route::group(['middleware' => 'auth:api'], function () {
         Route::any('user/auth2/profile', 'Api\UserController@getAuth2Profile');

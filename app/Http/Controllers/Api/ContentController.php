@@ -31,5 +31,4 @@ class ContentController extends Controller
         return $this->getUserCanNotSeeContentJsonResponse($content, $productsThatHaveThisContent, function ($msg) {
         });
     }
-    
 }
