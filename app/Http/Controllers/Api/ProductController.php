@@ -174,8 +174,9 @@ class ProductController extends Controller
         }
 
         $pagination = [
-          'current_page'=> $products->currentPage(),
-          'data'        => $items,
+          'current_page' => $products->currentPage(),
+          'next_page'    => (!is_null($products->nextPageUrl()))?$products->currentPage()+1:null,
+          'data'         => $items,
           'per_page'     => $products->perPage(),
           'total'        => $products->total(),
         ];
