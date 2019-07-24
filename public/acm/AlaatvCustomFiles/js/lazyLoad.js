@@ -181,6 +181,5 @@ var LazyLoad = function () {
             }
         },
 
-
     };
 }();

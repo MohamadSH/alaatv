@@ -531,7 +531,7 @@
     </div>
 
     {{--نمونه فیلم--}}
-    @include('product.partials.Block.block', [
+    @include('block.partials.block', [
         'blockTitle'=>view('product.partials.productInfoNav', ['targetId'=>'sampleVideo']),
         'blockUrlDisable'=>true,
         'blockType'=>'content',
@@ -544,7 +544,7 @@
 {{--    @if(isset($product->sets) && $product->sets->count() > 0)--}}
 {{--        @foreach($product->sets as $set)--}}
 {{--            --}}{{--نمونه فیلم--}}
-{{--            @include('product.partials.Block.block', [--}}
+{{--            @include('block.partials.block', [--}}
 {{--                'blockTitle'=>$set->title,--}}
 {{--                'blockUrlDisable'=>true,--}}
 {{--                'blockType'=>'content',--}}
@@ -626,7 +626,7 @@
         </div>
     @endif
 
-    @include('product.partials.Block.block', [
+    @include('block.partials.block', [
         'blockTitle'=>view('product.partials.productInfoNav', ['targetId'=>'relatedProduct']),
         'blockUrlDisable'=>true,
         'blockType'=>'product',

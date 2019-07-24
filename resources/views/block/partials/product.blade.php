@@ -48,6 +48,7 @@
                data-gtm-eec-product-variant="-"
                data-gtm-eec-product-position="{{ $productKey }}"
                data-gtm-eec-product-list="{{ $block->title }}">
+                <span class="m-badge m-badge--danger m-badge--dot"></span>
                 {{ $product->name }}
             </a>
         </div>
