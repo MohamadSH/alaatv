@@ -1,4 +1,4 @@
-@if(isset($price))
+@if(isset($price) && $price['base']>0)
     <span class="m-badge m-badge--danger m-badge--wide m-badge--rounded a--productPrice">
         @if($price['final']!=$price['base'])
             <span class="m-badge m-badge--warning a--productRealPrice">{{ number_format($price['base']) }}</span>
