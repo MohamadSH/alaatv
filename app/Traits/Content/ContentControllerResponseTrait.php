@@ -201,7 +201,7 @@ trait ContentControllerResponseTrait
     private function makeThumbnailUrlFromFileName(string $fileName, int $contentset_id): string
     {
         //ToDo : Hard code
-        $baseUrl = "https://cdn.sanatisharif.ir/media/";
+        $baseUrl = config('constants.DOWNLOAD_SERVER_PROTOCOL').config('constants.DOWNLOAD_SERVER_NAME').'/media/';
         //thumbnail
         $thumbnailFileName = pathinfo($fileName, PATHINFO_FILENAME).".jpg";
         $thumbnailUrl      = $baseUrl."thumbnails/".$contentset_id."/".$thumbnailFileName;
@@ -217,10 +217,9 @@ trait ContentControllerResponseTrait
      */
     public function makeFreeVideoFileArray(string $fileName , string $disk, int $contentsetId): array
     {
-        $serverUrl = config('constants.DOWNLOAD_SERVER_PROTOCOL').'cdn.sanatisharif.ir';
+        $serverUrl = config('constants.DOWNLOAD_SERVER_PROTOCOL').config('constants.DOWNLOAD_SERVER_NAME');
         $fileUrl = [
             '720p' => [
-                //ToDo : Hard Code!
                 'url' => $serverUrl.'/media/'.$contentsetId.'/HD_720p/'.$fileName,
                 'partialPath'=> '/media/'.$contentsetId.'/HD_720p/'.$fileName,
             ],
