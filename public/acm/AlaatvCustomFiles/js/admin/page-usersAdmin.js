@@ -492,7 +492,6 @@ $(document).on("click", ".addBon", function (){
     $("#bonUserFullName").text($("#userFullName_"+user_id).text());
 });
 $(document).on("click", "#userAttachBonForm-submit", function (){
-    $('body').modalmanager('loading');
 
     //initializing form alerts
     $("#userBonNumber").parent().removeClass("has-error");
@@ -556,8 +555,6 @@ $(document).on("click", "#userAttachBonForm-submit", function (){
         contentType: false,
         processData: false
     });
-    $modal.modal().hide();
-    $modal.modal('toggle');
 });
 $(document).on("click", ".OrderFilteradio", function (){
     var radioValue = $(this).val();
@@ -579,7 +576,6 @@ $(document).on("click", ".sendSms", function (){
     $("#smsUserFullName").text($("#userFullName_"+user_id).text());
 });
 $(document).on("click", "#sendSmsForm-submit", function (){
-    // $('body').modalmanager('loading');
 
     mApp.block('#smsModal', {
         type: "loader",
@@ -674,8 +670,6 @@ $(document).on("click", "#sendSmsForm-submit", function (){
         contentType: false,
         processData: false
     });
-    // $modal.modal().hide();
-    // $modal.modal('toggle');
 });
 $(document).ready(function () {
 
@@ -874,7 +868,6 @@ function removeRole(url){
     });
 }
 $(document).on("click", "#roleForm-submit", function (){
-    $('body').modalmanager('loading');
     var el = $(this);
 
     //initializing form alerts
@@ -958,8 +951,6 @@ $(document).on("click", "#roleForm-submit", function (){
         contentType: false,
         processData: false
     });
-    $modal.modal().hide();
-    $modal.modal('toggle');
 });
 $(document).on("click", "#role-portlet .reload", function (){
     $("#role-portlet-loading").removeClass("d-none");
