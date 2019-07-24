@@ -86,7 +86,7 @@
         
                         @if(((isset($blockType) && $blockType === 'product') || !isset($blockType)) && isset($block->products))
                             @foreach($block->getActiveProducts() as $productKey=>$product)
-                                @include('product.partials.Block.product')
+                                @include('block.partials.product')
                             @endforeach
                         @endif
         
@@ -95,7 +95,7 @@
                         {{-- old content block loop --}}
                         @if(((isset($blockType) && $blockType === 'content') || !isset($blockType)) && isset($block->contents))
                             @foreach($block->getActiveContent() as $contentKey=>$content)
-                                @include('product.partials.Block.content')
+                                @include('block.partials.content')
                             @endforeach
                         @endif
         
@@ -103,13 +103,13 @@
                         {{--                                 new content block loop --}}
                         @if(((isset($blockType) && $blockType === 'content') || !isset($blockType)) && isset($block->sets) && $block->sets->count() > 0)
                             @foreach($block->sets->first()->getActiveContents2() as $contentKey=>$content)
-                                @include('product.partials.Block.content')
+                                @include('block.partials.content')
                             @endforeach
                         @endif
         
                         @if(((isset($blockType) && $blockType === 'set') || !isset($blockType)) && isset($block->sets))
                             @foreach($block->getActiveSets() as $setsKey=>$set)
-                                @include('product.partials.Block.set')
+                                @include('block.partials.set')
                             @endforeach
                         @endif
     
