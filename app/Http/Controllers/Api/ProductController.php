@@ -185,7 +185,7 @@ class ProductController extends Controller
 
         $pagination = [
           'current_page' => $products->currentPage(),
-          'next_page'    => $products->nextPageUrl(),
+          'next_page_url'    => $products->nextPageUrl(),
           'last_page'    => $products->lastPage(),
           'data'         => $items,
         ];
