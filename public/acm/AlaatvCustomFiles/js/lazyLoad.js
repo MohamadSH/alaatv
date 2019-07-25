@@ -23,11 +23,13 @@ var LazyLoad = function () {
         let w = Math.floor($(element).width()),
             h = Math.floor($(element).height()),
             attrW = $(element).attr('width'),
-            attrH = $(element).attr('height'),
-            imageDimension = '?w='+w+'&h='+h;
+            attrH = $(element).attr('height');
+        
         if(typeof attrW !== 'undefined' && typeof attrH !== 'undefined') {
             h = Math.floor((attrH*w)/attrW);
         }
+        let imageDimension = '?w='+w+'&h='+h;
+        
         if ($(element).attr('data-src').length > 0) {
             $(element).attr('src', $(element).attr('data-src').replace(/\?.*/g, '')+imageDimension);
         }
