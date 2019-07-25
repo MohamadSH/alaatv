@@ -87,12 +87,15 @@ jQuery(document).ready( function() {
             center: false,
             loop: false,
             btnSwfitchEvent: function() {
-                LazyLoad.image();
+                imageObserver.observe();
+            },
+            onTranslatedEvent: function(event) {
+                imageObserver.observe();
             }
         },
         grid: {
             btnSwfitchEvent: function() {
-                LazyLoad.image();
+                imageObserver.observe();
             }
         },
     });

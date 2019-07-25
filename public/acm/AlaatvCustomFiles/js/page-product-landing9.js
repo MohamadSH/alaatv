@@ -24,13 +24,16 @@ $(document).ready(function () {
                     }
                 },
                 btnSwfitchEvent: function() {
-                    LazyLoad.image();
+                    imageObserver.observe();
+                },
+                onTranslatedEvent: function(event) {
+                    imageObserver.observe();
                 }
             },
             grid: {
                 columnClass: 'col-12 col-sm-6 col-md-2 gridItem',
                 btnSwfitchEvent: function() {
-                    LazyLoad.image();
+                    imageObserver.observe();
                 }
             },
             defaultView: 'grid', // OwlCarousel or grid

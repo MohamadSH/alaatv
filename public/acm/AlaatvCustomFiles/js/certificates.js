@@ -32,16 +32,7 @@ class Certificate {
         $( window ).resize(function() {
             new Certificate();
         });
-
-        let that = this;
-
-        LazyLoad.loadElementByClassName('certificates-row', function (element, percentage) {
-            that.initCertificatesItemsHeight();
-        }, $('#m_header').height());
-
     }
 }
 
-$(document).ready(function () {
-    new Certificate();
-});
+new Certificate();

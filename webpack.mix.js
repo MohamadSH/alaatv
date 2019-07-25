@@ -16,6 +16,8 @@ mix.styles([
     'public/css/all.css')
     .version()
     .babel([
+            'node_modules/intersection-observer/intersection-observer.js',
+            'node_modules/lozad/dist/lozad.js',
             'public/assets/vendors/base/vendors.bundle.js',
             'public/assets/demo/demo12/base/scripts.bundle.js',
             'public/acm/AlaatvCustomFiles/js/GoogleAnalyticsEnhancedEcommerce.js',
@@ -526,6 +528,30 @@ mix.styles([
             'public/js/admin-all.js'
         ).version();
 
+// ---------------------------------------------------------------------------------- admin-content-create ????????????
+mix.styles([
+        'node_modules/persian-datepicker/dist/css/persian-datepicker.min.css',
+        'node_modules/bootstrap-fileinput/css/fileinput.css',
+        'node_modules/bootstrap-fileinput/css/fileinput-rtl.css',
+        'node_modules/jquery-multiselect/jquery-MultiSelect.css',
+        'node_modules/bootstrap-multiselect/dist/css/bootstrap-multiselect.css',
+        'node_modules/bootstrap-tagsinput/src/bootstrap-tagsinput.css',
+    ],
+    'public/css/admin-content-create.css'
+).version()
+    .babel([
+            'node_modules/block-ui/jquery.blockUI.js',
+            'node_modules/persian-date/dist/persian-date.js',
+            'node_modules/persian-datepicker/dist/js/persian-datepicker.js',
+            'node_modules/icheck/icheck.min.js',
+            'node_modules/jquery-multiselect/jquery-MultiSelect.js',
+            'node_modules/bootstrap-tagsinput/dist/bootstrap-tagsinput.min.js',
+            'node_modules/bootstrap-multiselect/dist/js/bootstrap-multiselect.js',
+            'node_modules/select2/dist/js/select2.js',
+        ],
+        'public/js/admin-content-create.js'
+    ).version();
+
     mix.copyDirectory('node_modules/summernote/dist/font', 'public/css/font');
     mix.copyDirectory('public/acm/AlaatvCustomFiles/components/alaa_old/font/glyphicons-halflings/font', 'public/css/font');
 
@@ -579,28 +605,6 @@ mix.styles([
 // ).version();
 
 
-    mix.styles([
-            'node_modules/persian-datepicker/dist/css/persian-datepicker.min.css',
-            'node_modules/bootstrap-fileinput/css/fileinput.css',
-            'node_modules/bootstrap-fileinput/css/fileinput-rtl.css',
-            'node_modules/jquery-multiselect/jquery-MultiSelect.css',
-            'node_modules/bootstrap-multiselect/dist/css/bootstrap-multiselect.css',
-            'node_modules/bootstrap-tagsinput/src/bootstrap-tagsinput.css',
-        ],
-        'public/css/admin-content-create.css'
-    ).version()
-        .babel([
-                'node_modules/block-ui/jquery.blockUI.js',
-                'node_modules/persian-date/dist/persian-date.js',
-                'node_modules/persian-datepicker/dist/js/persian-datepicker.js',
-                'node_modules/icheck/icheck.min.js',
-                'node_modules/jquery-multiselect/jquery-MultiSelect.js',
-                'node_modules/bootstrap-tagsinput/dist/bootstrap-tagsinput.min.js',
-                'node_modules/bootstrap-multiselect/dist/js/bootstrap-multiselect.js',
-                'node_modules/select2/dist/js/select2.js',
-            ],
-            'public/js/admin-content-create.js'
-        ).version();
 
 
     mix.babel([

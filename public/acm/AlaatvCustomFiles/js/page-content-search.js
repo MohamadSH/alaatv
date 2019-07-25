@@ -59,7 +59,7 @@ var Alaasearch = function () {
             '           data-gtm-eec-product-variant="-"\n' +
             '           data-gtm-eec-product-position="'+itemKey+'"\n' +
             '           data-gtm-eec-product-list="محصولات صفحه سرچ">\n' +
-            '            <img src="'+widgetPic+'?w=400&h=400" alt="'+gtmEecProductName+'" class="a--block-image" width="400" height="400" />\n' +
+            '            <img src="https://cdn.alaatv.com/loder.jpg?w=1&h=1" data-src="'+widgetPic+'" alt="'+gtmEecProductName+'" class="a--block-image lazy-image" width="400" height="400" />\n' +
             '        </a>\n' +
             '    </div>\n' +
             '    <div class="a--block-infoWrapper">\n' +
@@ -145,7 +145,7 @@ var Alaasearch = function () {
             '            <i class="fa fa-play"></i> / <i class="fa fa-cloud-download-alt"></i>\n' +
             '        </a>\n' +
             '        <a href="'+widgetLink+'" class="a--block-imageWrapper-image">\n' +
-            '            <img src="'+widgetPic+'" alt="'+widgetTitle+'" class="a--block-image" width="253" height="142" />\n' +
+            '            <img src="https://cdn.alaatv.com/loder.jpg?w=16&h=9" data-src="'+widgetPic+'" alt="'+widgetTitle+'" class="a--block-image lazy-image" width="253" height="142" />\n' +
             '        </a>\n' +
             '    </div>\n' +
             '    <div class="a--block-infoWrapper">\n' +
@@ -423,6 +423,7 @@ var Alaasearch = function () {
                 $('#owl--js-var-next-page-product-carousel-url').val(decodeURI(newPageUrl));
                 unLockAjax(owlType);
                 GtmEecImpression.view();
+                imageObserver.observe();
             });
         }
     }
@@ -650,6 +651,9 @@ var Alaasearch = function () {
         } else {
             $('.notFoundMessage').fadeOut();
         }
+
+
+        imageObserver.observe();
     }
 
     function addLoadingItem(owl, owlType) {
@@ -1261,8 +1265,9 @@ jQuery(document).ready(function () {
             responsive: responsive
         };
         if (itemId === 'product-carousel') {
-            function slideChanged(event) {
+            function slideChanged1(event) {
                 GtmEecImpression.view();
+                imageObserver.observe();
             }
             responsive = {
                 0:{
@@ -1284,9 +1289,14 @@ jQuery(document).ready(function () {
                     items:8
                 }
             };
-            config.onTranslated = slideChanged;
+            config.onTranslated = slideChanged1;
             config.responsive = responsive;
             config.lazyLoad = true;
+        } else {
+            function slideChanged2(event) {
+                imageObserver.observe();
+            }
+            config.onTranslated = slideChanged2;
         }
         $(this).owlCarousel(config);
     });
