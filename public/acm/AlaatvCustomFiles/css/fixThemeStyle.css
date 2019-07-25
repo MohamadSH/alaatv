@@ -126,7 +126,16 @@ select.form-control {
 /*media query*/
 @media only screen and (max-width: 767.98px) {
     .m-body .m-content {
-        padding: 10px 20px 30px 20px;
+        /*padding: 10px 20px 30px 20px;*/
+        padding: 10px 5px 30px 5px;
+    }
+    .m-content > .row {
+        margin-left: -5px;
+        margin-right: -5px;
+    }
+    .m-content > .row > .col {
+        padding-left: 5px;
+        padding-right: 5px;
     }
     .m-portlet__body {
         padding: 5px !important;

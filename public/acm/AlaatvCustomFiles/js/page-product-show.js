@@ -514,16 +514,19 @@ jQuery(document).ready(function() {
                 }
             },
             btnSwfitchEvent: function() {
-                LazyLoad.image();
+                imageObserver.observe();
+            },
+            onTranslatedEvent: function(event) {
+                imageObserver.observe();
             }
         },
         grid: {
             columnClass: 'col-12 col-sm-6 col-md-3 gridItem',
             btnSwfitchEvent: function() {
-                LazyLoad.image();
+                imageObserver.observe();
             }
         },
-        defaultView: 'OwlCarousel', // OwlCarousel or grid
+        defaultView: 'grid', // OwlCarousel or grid
         childCountHideOwlCarousel: 4
     });
 
