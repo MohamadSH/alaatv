@@ -575,7 +575,7 @@
                                         <div class="a-widget5__content  {{ $item["content"]->id == $content->id ? 'm--bg-info' : '' }}">
                                             <div class="a-widget5__pic">
                                                 <a class="m-link"
-                                                   href="{{action("Web\ContentController@show" , $item["content"])}}?w=800&h=450">
+                                                   href="{{action("Web\ContentController@show" , $item["content"])}}">
                                                     <img class="m-widget7__img a--full-width lazy-image"
                                                          data-src="{{ isset($item["thumbnail"]) ? $item["thumbnail"]."?w=210&h=118":'' }}"
                                                          alt="{{ $item["content"]->name }}">
