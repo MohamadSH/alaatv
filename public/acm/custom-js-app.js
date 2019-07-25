@@ -1,7 +1,4 @@
-jQuery(document).ready( function() {
-
-    // Bootstrap 4 carousel lazy load
-    LazyLoad.carousel();
+$(document).ready( function() {
 
     /*
      * Google TagManager
@@ -34,6 +31,9 @@ jQuery(document).ready( function() {
     //     "hideMethod": "fadeOut"
     // };
 
-    LazyLoad.image();
 
 });
+
+// Bootstrap 4 carousel lazy load
+LazyLoad.carousel();
+let imageObserver = LazyLoad.image();

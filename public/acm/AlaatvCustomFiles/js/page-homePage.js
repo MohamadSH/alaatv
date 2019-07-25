@@ -1,5 +1,7 @@
 function loadCarousels() {
-    LazyLoad.loadElementByClassName('dasboardLessons', function (element, percentage) {
+
+    LazyLoad.loadElementByQuerySelector('.dasboardLessons', function (element) {
+
         $(element).OwlCarouselType2({
             OwlCarousel: {
 
@@ -24,6 +26,7 @@ function loadCarousels() {
 
                 center: false,
                 loop: false,
+                lazyLoad:false,
                 responsive: {
                     0: {
                         items: 1
@@ -38,23 +41,27 @@ function loadCarousels() {
                         items: 4
                     },
                     1000: {
-                        items: 4
+                        items: 6
                     }
                 },
                 btnSwfitchEvent: function() {
-                    // LazyLoad.image();
+                    imageObserver.observe();
+                },
+                onTranslatedEvent: function(event) {
+                    imageObserver.observe();
                 }
             },
             grid: {
-                columnClass: 'col-12 col-sm-6 col-md-3 gridItem',
+                columnClass: 'col-12 col-sm-6 col-md-2 gridItem',
                 btnSwfitchEvent: function() {
-                    // LazyLoad.image();
+                    imageObserver.observe();
                 }
             },
-            defaultView: 'OwlCarousel', // OwlCarousel or grid
+            defaultView: 'grid', // OwlCarousel or grid
             childCountHideOwlCarousel: 4
         });
-    }, $('#m_header').height());
+
+    });
 }
 
 function loadStickeHeader() {
@@ -66,7 +73,8 @@ function loadStickeHeader() {
         });
     }
 }
-$(document).ready(function () {
+
+// $(document).ready(function () {
     loadCarousels();
     loadStickeHeader();
-});
+// });
