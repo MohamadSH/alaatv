@@ -25,21 +25,21 @@
         <div class="certificates-items">
             <div class="row">
                 <div class="col d-flex align-items-center justify-content-center">
-                    <img data-src="https://cdn.alaatv.com/upload/Alaa-logo.png" class="img-fluid m--img-centered certificatesLogo lazy-image" alt="فیلم کنکور آلاء" data-name="alaa" width="220" height="272" onload="new Certificate();"/>
+                    <img src="https://cdn.alaatv.com/loder.jpg?w=1&h=1" data-src="https://cdn.alaatv.com/upload/Alaa-logo.png" class="img-fluid m--img-centered certificatesLogo lazy-image" alt="فیلم کنکور آلاء" data-name="alaa" width="183" height="226"/>
                 </div>
                 <div class="col d-flex  align-items-center justify-content-center">
-                    <img data-src="https://cdn.alaatv.com/upload/sharif-school-logo.png" class="img-fluid m--img-centered certificatesLogo lazy-image" alt="دبیرستان دانشگاه شریف آلاء" data-name="sharif-school" width="183" height="205" onload="new Certificate();"/>
+                    <img src="https://cdn.alaatv.com/loder.jpg?w=1&h=1" data-src="https://cdn.alaatv.com/upload/sharif-school-logo.png" class="img-fluid m--img-centered certificatesLogo lazy-image" alt="دبیرستان دانشگاه شریف آلاء" data-name="sharif-school" width="183" height="205"/>
                 </div>
                 <div class="col d-flex align-items-center justify-content-center">
                     <a onclick='window.open("https://trustseal.enamad.ir/Verify.aspx?id=125806&amp;p=gCsnIb3IATIJnVIY", "Popup","toolbar=no, location=no, statusbar=no, menubar=no, scrollbars=1, resizable=0, width=580, height=600, top=30")'>
-                        <img class="img-fluid m--img-centered certificatesLogo lazy-image" data-src="https://cdn.alaatv.com/upload/enamad-logo2.png" alt="enamad.ir" data-name="enamad" width="128" height="122" onload="new Certificate();">
+                        <img class="img-fluid m--img-centered certificatesLogo lazy-image" src="https://cdn.alaatv.com/loder.jpg?w=1&h=1" data-src="https://cdn.alaatv.com/upload/enamad-logo2.png" alt="enamad.ir" data-name="enamad" width="183" height="174">
                     </a>
                 </div>
                 <div class="col d-flex align-items-center justify-content-center">
 {{--                    <a onclick='window.open("https://logo.samandehi.ir/Verify.aspx?id=146279&p=rfthaodsgvkauiwkjyoepfvl", "Popup","toolbar=no, scrollbars=no, location=no, statusbar=no, menubar=no, resizable=0, width=450, height=630, top=30")'>--}}
 {{--                        <img class="img-fluid m--img-centered certificatesLogo" src="{{ asset('/acm/extra/samandehi-noghrei.png') }}" alt="لوگو ساماندهی آلاء" data-name="samandehi">--}}
 {{--                    </a>--}}
-                    <img class="img-fluid m--img-centered certificatesLogo lazy-image" id='jxlzwlaofukznbqejzpesizp' style='cursor:pointer' onclick='window.open("https://logo.samandehi.ir/Verify.aspx?id=146279&p=rfthaodsgvkauiwkjyoepfvl", "Popup","toolbar=no, scrollbars=no, location=no, statusbar=no, menubar=no, resizable=0, width=450, height=630, top=30")' alt='logo-samandehi' data-src='https://cdn.alaatv.com/upload/samandehi.png' width="150" height="195" onload="new Certificate();"/>
+                    <img class="img-fluid m--img-centered certificatesLogo lazy-image" id='jxlzwlaofukznbqejzpesizp' style='cursor:pointer' onclick='window.open("https://logo.samandehi.ir/Verify.aspx?id=146279&p=rfthaodsgvkauiwkjyoepfvl", "Popup","toolbar=no, scrollbars=no, location=no, statusbar=no, menubar=no, resizable=0, width=450, height=630, top=30")' alt='logo-samandehi' src="https://cdn.alaatv.com/loder.jpg?w=1&h=1" data-src='https://cdn.alaatv.com/upload/samandehi.png' width="183" height="238"/>
                 </div>
             </div>
         </div>

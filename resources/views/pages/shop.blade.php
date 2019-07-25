@@ -21,118 +21,121 @@
 @section('content')
     @include('partials.slideShow1' ,['marginBottom'=>'25', 'positionOfSlideShow'=>'صفحه فروشگاه'])
     <div class="m--clearfix"></div>
-    <!--begin:: Widgets/Stats-->
-    <div class="m-portlet shopNavItemsWraper">
-        <div class="m-portlet__body  m-portlet__body--no-padding">
-            <div class="row m-row--no-padding m-row--col-separator-xl shopNavItems">
-                <div class="col m--bg-danger shopNavItem">
-                    <a target="_self" onclick="$('html,body').animate({scrollTop: $('.konkoor98').offset().top - 100},'slow');" href="#konkoor98">
-                        <!--begin::Total Profit-->
-                        <div class="m-widget24 m--align-center">
-                            <div class="m-widget24__item">
-                                <button class="btn m-btn m-btn--pill m-btn--air" type="button">
-                                    <h2 class="m-widget24__title">
-                                        همایش
-                                        طلایی
-                                    </h2>
-                                </button>
-                                <br>
-                                <span class="m--font-light">
+    
+    <div class="row">
+        <div class="col">
+            <div class="m-portlet shopNavItemsWraper">
+                <div class="m-portlet__body  m-portlet__body--no-padding">
+                    <div class="row m-row--no-padding m-row--col-separator-xl shopNavItems">
+                        <div class="col m--bg-danger shopNavItem">
+                            <a target="_self" onclick="$('html,body').animate({scrollTop: $('.konkoor98').offset().top - 100},'slow');" href="#konkoor98">
+                                <!--begin::Total Profit-->
+                                <div class="m-widget24 m--align-center">
+                                    <div class="m-widget24__item">
+                                        <button class="btn m-btn m-btn--pill m-btn--air" type="button">
+                                            <h2 class="m-widget24__title">
+                                                همایش
+                                                طلایی
+                                            </h2>
+                                        </button>
+                                        <br>
+                                        <span class="m--font-light">
                                     <img src="https://cdn.alaatv.com/upload/alaa-logo-small.png" width="25" height="33">
 				                </span>
-                                <div class="m--space-10"></div>
-                            </div>
+                                        <div class="m--space-10"></div>
+                                    </div>
+                                </div>
+                                <!--end::Total Profit-->
+                            </a>
                         </div>
-                        <!--end::Total Profit-->
-                    </a>
-                </div>
-                <div class="col m--bg-warning shopNavItem">
-                    <a target="_self" onclick="$('html,body').animate({scrollTop: $('.taftan').offset().top - 100},'slow');" href="#taftan">
-                        <!--begin::Total Profit-->
-                        <div class="m-widget24 m--align-center">
-                            <div class="m-widget24__item">
-                                <button class="btn m-btn m-btn--pill m-btn--air" type="button">
-                                    <h2 class="m-widget24__title">
-                                        همایش
-                                        تفتان
-                                    </h2>
-                                </button>
-                                <br>
-                                <span class="m--font-light">
+                        <div class="col m--bg-warning shopNavItem">
+                            <a target="_self" onclick="$('html,body').animate({scrollTop: $('.taftan').offset().top - 100},'slow');" href="#taftan">
+                                <!--begin::Total Profit-->
+                                <div class="m-widget24 m--align-center">
+                                    <div class="m-widget24__item">
+                                        <button class="btn m-btn m-btn--pill m-btn--air" type="button">
+                                            <h2 class="m-widget24__title">
+                                                همایش
+                                                تفتان
+                                            </h2>
+                                        </button>
+                                        <br>
+                                        <span class="m--font-light">
                                     <img src="https://cdn.alaatv.com/upload/alaa-logo-small.png" width="25" height="33">
 				                </span>
-                                <div class="m--space-10"></div>
-                            </div>
+                                        <div class="m--space-10"></div>
+                                    </div>
+                                </div>
+                                <!--end::Total Profit-->
+                            </a>
                         </div>
-                        <!--end::Total Profit-->
-                    </a>
-                </div>
-                <div class="col m--bg-success shopNavItem">
-                    <a target="_self" onclick="$('html,body').animate({scrollTop: $('.konkoor2').offset().top - 100},'slow');" href="#konkoor2">
-                        <!--begin::Total Profit-->
-                        <div class="m-widget24 m--align-center">
-                            <div class="m-widget24__item">
-                                <button class="btn m-btn m-btn--pill m-btn--air" type="button">
-                                    <h2 class="m-widget24__title">
-                                        همایش
-                                        1 + 5
-                                    </h2>
-                                </button>
-                                <br>
-                                <span class="m--font-light">
+                        <div class="col m--bg-success shopNavItem">
+                            <a target="_self" onclick="$('html,body').animate({scrollTop: $('.konkoor2').offset().top - 100},'slow');" href="#konkoor2">
+                                <!--begin::Total Profit-->
+                                <div class="m-widget24 m--align-center">
+                                    <div class="m-widget24__item">
+                                        <button class="btn m-btn m-btn--pill m-btn--air" type="button">
+                                            <h2 class="m-widget24__title">
+                                                همایش
+                                                1 + 5
+                                            </h2>
+                                        </button>
+                                        <br>
+                                        <span class="m--font-light">
                                     <img src="https://cdn.alaatv.com/upload/alaa-logo-small.png" width="25" height="33">
 				                </span>
-                                <div class="m--space-10"></div>
-                            </div>
+                                        <div class="m--space-10"></div>
+                                    </div>
+                                </div>
+                                <!--end::Total Profit-->
+                            </a>
                         </div>
-                        <!--end::Total Profit-->
-                    </a>
-                </div>
-                <div class="col m--bg-accent shopNavItem">
-                    <a target="_self" onclick="$('html,body').animate({scrollTop: $('.jozavat').offset().top - 100},'slow');" href="#jozavat">
-                        <!--begin::Total Profit-->
-                        <div class="m-widget24 m--align-center">
-                            <div class="m-widget24__item">
-                                <button class="btn m-btn m-btn--pill m-btn--air" type="button">
-                                    <h2 class="m-widget24__title">
-                                        جزوات
-                                        آموزشی
-                                    </h2>
-                                </button>
-                                <br>
-                                <span class="m--font-light">
+                        <div class="col m--bg-accent shopNavItem">
+                            <a target="_self" onclick="$('html,body').animate({scrollTop: $('.jozavat').offset().top - 100},'slow');" href="#jozavat">
+                                <!--begin::Total Profit-->
+                                <div class="m-widget24 m--align-center">
+                                    <div class="m-widget24__item">
+                                        <button class="btn m-btn m-btn--pill m-btn--air" type="button">
+                                            <h2 class="m-widget24__title">
+                                                جزوات
+                                                آموزشی
+                                            </h2>
+                                        </button>
+                                        <br>
+                                        <span class="m--font-light">
                                     <img src="https://cdn.alaatv.com/upload/alaa-logo-small.png" width="25" height="33">
 				                </span>
-                                <div class="m--space-10"></div>
-                            </div>
+                                        <div class="m--space-10"></div>
+                                    </div>
+                                </div>
+                                <!--end::Total Profit-->
+                            </a>
                         </div>
-                        <!--end::Total Profit-->
-                    </a>
-                </div>
-                <div class="col m--bg-info shopNavItem">
-                    <a target="_self" onclick="$('html,body').animate({scrollTop: $('.konkoor1').offset().top - 100},'slow');" href="#konkoor1">
-                        <!--begin::Total Profit-->
-                        <div class="m-widget24 m--align-center">
-                            <div class="m-widget24__item">
-                                <button class="btn m-btn m-btn--pill m-btn--air" type="button">
-                                    <h2 class="m-widget24__title">
-                                        نظام قدیم
-                                    </h2>
-                                </button>
-                                <br>
-                                <span class="m--font-light">
+                        <div class="col m--bg-info shopNavItem">
+                            <a target="_self" onclick="$('html,body').animate({scrollTop: $('.konkoor1').offset().top - 100},'slow');" href="#konkoor1">
+                                <!--begin::Total Profit-->
+                                <div class="m-widget24 m--align-center">
+                                    <div class="m-widget24__item">
+                                        <button class="btn m-btn m-btn--pill m-btn--air" type="button">
+                                            <h2 class="m-widget24__title">
+                                                نظام قدیم
+                                            </h2>
+                                        </button>
+                                        <br>
+                                        <span class="m--font-light">
                                     <img src="https://cdn.alaatv.com/upload/alaa-logo-small.png" width="25" height="33">
 				                </span>
-                                <div class="m--space-10"></div>
-                            </div>
+                                        <div class="m--space-10"></div>
+                                    </div>
+                                </div>
+                                <!--end::Total Profit-->
+                            </a>
                         </div>
-                        <!--end::Total Profit-->
-                    </a>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-    <!--end:: Widgets/Stats-->
     
     @foreach($blocks as $block)
         @if($block->products->count() > 0)
