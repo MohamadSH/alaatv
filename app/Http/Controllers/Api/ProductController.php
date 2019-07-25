@@ -162,23 +162,32 @@ class ProductController extends Controller
     }
 
     public function fetchProducts(Request $request){
+        $since = $request->get('timestamp');
+
         $products = Product::active()->whereNull('grand_id');
+        if(!is_null($since)){
+            $products->where(function($q) use ($since){
+                    $q->where('created_at' , '>=' , $since)
+                        ->orWhere('updated_at' , '>=' , $since);
+            });
+        }
         $products = $products->paginate(25, ['*'], 'page');
 
         $items = [];
         foreach ($products as $key=>$product) {
             $items[$key]['id'] = $product->id;
+            $items[$key]['type'] = 'product';
             $items[$key]['name'] = $product->name;
             $items[$key]['link'] = $product->url;
             $items[$key]['image'] = $product->photo;
+            $items[$key]['tags'] = $product->tags;
         }
 
         $pagination = [
           'current_page' => $products->currentPage(),
-          'next_page'    => (!is_null($products->nextPageUrl()))?$products->currentPage()+1:null,
+          'next_page'    => $products->nextPageUrl(),
+          'last_page'    => $products->lastPage(),
           'data'         => $items,
-          'per_page'     => $products->perPage(),
-          'total'        => $products->total(),
         ];
 
         return response()->json($pagination,Response::HTTP_OK , [] ,JSON_UNESCAPED_SLASHES);
