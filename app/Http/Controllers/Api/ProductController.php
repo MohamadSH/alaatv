@@ -183,11 +183,12 @@ class ProductController extends Controller
             $items[$key]['tags'] = $product->tags;
         }
 
+        $products->appends([$request->input()]);
         $pagination = [
-          'current_page' => $products->currentPage(),
-          'next_page_url'    => $products->nextPageUrl(),
-          'last_page'    => $products->lastPage(),
-          'data'         => $items,
+          'current_page'    => $products->currentPage(),
+          'next_page_url'   => $products->nextPageUrl(),
+          'last_page'       => $products->lastPage(),
+          'data'            => $items,
         ];
 
         return response()->json($pagination,Response::HTTP_OK , [] ,JSON_UNESCAPED_SLASHES);
