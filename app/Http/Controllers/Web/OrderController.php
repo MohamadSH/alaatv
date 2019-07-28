@@ -826,7 +826,8 @@ class OrderController extends Controller
             'description' => optional($this->setting)->site->seo->homepage->metaDescription,
             'image'       => optional($this->setting)->site->siteLogo,
         ]);
-        
+
+        $orderProductCount=0;
         $invoiceInfo = [];
         $user        = $request->user();
         
