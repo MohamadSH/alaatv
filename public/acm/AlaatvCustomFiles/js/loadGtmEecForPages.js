@@ -170,7 +170,7 @@ jQuery(document).ready( function() {
 
     // Impression Click
     $(document).on('click' ,'.gtm-eec-product-impression-click', function(e){
-        var actionFieldList = $(this).data('gtm-eec-actionFieldList');
+        var actionFieldList = $(this).data('gtm-eec-product-list').toString();
         var product = {
             id:       $(this).data('gtm-eec-product-id').toString(),      // (String) The SKU of the product. Example: 'P12345'
             name:     $(this).data('gtm-eec-product-name').toString(),    // (String) The name of the product. Example: 'T-Shirt'

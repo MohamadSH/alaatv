@@ -260,8 +260,12 @@
     bottom: -30px;
 }
 
-.carousel-indicators li {
+.carousel-indicators li.active {
     background-color: #ff9000;
+}
+
+.carousel-indicators li {
+    background-color: #ffd295;
 }
 /*media query*/
 @media only screen and (max-width: 1024px) {

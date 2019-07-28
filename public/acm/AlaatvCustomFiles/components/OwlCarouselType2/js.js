@@ -61,10 +61,9 @@
 
                 $.fn.OwlCarouselType2.showAlaaOwlCarouselItemDetail();
 
-                $([document.documentElement, document.body]).animate({
-                    scrollTop: $this.offset().top - $('#m_header').height()
-                }, 300);
-                $.fn.OwlCarouselType2.owlCarouselOptions.OwlCarousel.btnSwfitchEvent();
+                // $([document.documentElement, document.body]).animate({
+                //     scrollTop: $this.offset().top - $('#m_header').height()
+                // }, 300);
             });
             $($this).on('click', '.a--owl-carousel-hide-detailes', function () {
                 let $this = $('#' + $(this).attr('data-owlcarousel-id'));
@@ -152,8 +151,6 @@
             $.fn.OwlCarouselType2.getGridViewWarper($OwlCarouselType2).append('<div class="'+$.fn.OwlCarouselType2.owlCarouselOptions.grid.columnClass+'">' + $(this)[0].outerHTML + '</div>');
         });
 
-        console.log('gg: ', $.fn.OwlCarouselType2.getGridViewWarper($OwlCarouselType2));
-
 
         $OwlCarouselType2.find('.a--owl-carousel-type-2').fadeOut();
         $.fn.OwlCarouselType2.getGridViewWarper($OwlCarouselType2).css("display", "flex")
@@ -162,7 +159,6 @@
 
 
         $.fn.OwlCarouselType2.owlCarouselOptions.grid.btnSwfitchEvent();
-
     };
 
     $.fn.OwlCarouselType2.getGridViewWarper = function ($this) {
@@ -190,6 +186,10 @@
                 scrollTop: aOwlCarouselSlideDetailes.offset().top
             }, 300);
         }
+
+        $.fn.OwlCarouselType2.owlCarouselOptions.OwlCarousel.onTranslatedEvent(event);
+
+        $.fn.OwlCarouselType2.owlCarouselOptions.OwlCarousel.btnSwfitchEvent();
     };
 
     $.fn.OwlCarouselType2.owlCarouseldefaultOptions = {
@@ -221,6 +221,7 @@
             // onDragged: this.callback,
             onTranslated: $.fn.OwlCarouselType2.showAlaaOwlCarouselItemDetail,
             btnSwfitchEvent: function() {},
+            onTranslatedEvent: function() {},
         },
         grid: {
             btnSwfitchEvent: function() {},
