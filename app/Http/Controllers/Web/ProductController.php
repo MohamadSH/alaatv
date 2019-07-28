@@ -1305,7 +1305,7 @@ class ProductController extends Controller
             }
         }
         
-        return view('product.landing.landing9', compact('landingProducts', 'costCollection', 'withFilter', 'blocks'));
+        return view('product.landing.landing9', compact('blocks'));
     }
     
     /**
@@ -1336,7 +1336,7 @@ class ProductController extends Controller
             }
         }
         
-        return view('product.landing.landing10', compact('landingProducts', 'costCollection', 'withFilter', 'blocks'));
+        return view('product.landing.landing10', compact( 'blocks'));
     }
     
     /**
