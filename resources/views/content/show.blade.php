@@ -576,7 +576,7 @@
                                     <div class="a-widget5__item" id="playlistItem_{{ $item["content"]->id }}">
                                         <div class="a-widget5__content  {{ $item["content"]->id == $content->id ? 'm--bg-info' : '' }}">
                                             <div class="a-widget5__pic">
-                                                <a class="m-link"
+                                                <a class="m-link a--full-width"
                                                    href="{{action("Web\ContentController@show" , $item["content"])}}">
                                                     <img class="m-widget7__img a--full-width lazy-image"
                                                          width="170" height="96"

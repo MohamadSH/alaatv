@@ -45,10 +45,8 @@ var LazyLoad = function () {
 
     function canChangeLazyLoad(element) {
         let lazyLoadStatus = parseInt($(element).attr('a-lazyload'));
-        if (lazyLoadStatus !== 1) {
-            return true;
-        }
-        return false;
+        return lazyLoadStatus !== 1;
+
     }
 
     function changeLazyLoadStatus(element) {
