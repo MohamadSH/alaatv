@@ -2,6 +2,9 @@
 
 namespace App;
 
+/**
+ * @property mixed id
+ */
 class Dayofweek extends BaseModel
 {
     protected $table = 'dayofweek';
