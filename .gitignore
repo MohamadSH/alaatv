@@ -41,8 +41,6 @@ public/css/font/summernote.woff
 public/css/font/summernote.ttf
 public/css/font/glyphicons-halflings-regular.ttf
 
-public/js/
-
 public/js/all.js
 public/js/login.js
 public/js/page-shop.js
@@ -69,8 +67,8 @@ public/js/checkout-verification.js
 public/js/product-content-embed.js
 public/js/checkout-completeInfo.js
 public/js/admin-all.js
+public/js/page-live.js
 
-public/css/
 public/css/all.css
 public/css/admin-all.css
 public/css/page-shop.css
@@ -98,5 +96,6 @@ public/css/product-content-embed.css
 public/css/checkout-verification.css
 public/css/user-profile-salesReport.css
 public/acm/AlaatvCustomFiles/components/OwlCarouselType2/style.css
+public/css/page-live.css
 
 public/.well-known/

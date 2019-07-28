@@ -88,14 +88,17 @@ jQuery(document).ready( function() {
             loop: false,
             btnSwfitchEvent: function() {
                 imageObserver.observe();
+                gtmEecProductObserver.observe();
             },
             onTranslatedEvent: function(event) {
                 imageObserver.observe();
+                gtmEecProductObserver.observe();
             }
         },
         grid: {
             btnSwfitchEvent: function() {
                 imageObserver.observe();
+                gtmEecProductObserver.observe();
             }
         },
     });

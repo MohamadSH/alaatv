@@ -53,18 +53,18 @@ mix.styles([
 
 
 // ---------------------------------------------------------------------------------- authLogin
-    mix.scripts([
-            'node_modules/block-ui/jquery.blockUI.js',
-            'node_modules/jquery-validation/dist/jquery.validate.js',
-            'public/acm/login.js'
-        ],
-        'public/js/login.js'
-    ).version()
-        .styles([
-                'public/acm/AlaatvCustomFiles/css/page-auth-login.css',
-            ],
-            'public/css/auth-login.css'
-        ).version();
+mix.scripts([
+        'node_modules/block-ui/jquery.blockUI.js',
+        'node_modules/jquery-validation/dist/jquery.validate.js',
+        'public/acm/login.js'
+    ],
+    'public/js/login.js'
+).version()
+.styles([
+        'public/acm/AlaatvCustomFiles/css/page-auth-login.css',
+    ],
+    'public/css/auth-login.css'
+).version();
 
 // ---------------------------------------------------------------------------------- contactUs
     mix.styles([
@@ -455,6 +455,59 @@ mix.styles([
             'public/js/product-content-embed.js'
         ).version();
 
+
+// ---------------------------------------------------------------------------------- live ????????????
+mix.styles([
+        'node_modules/@fullcalendar/core/main.css',
+
+        'node_modules/@fullcalendar/daygrid/main.css',
+
+        'node_modules/@fullcalendar/timegrid/main.css',
+
+
+        // 'node_modules/@fullcalendar/timeline/main.css',
+        // 'node_modules/@fullcalendar/resource-timeline/main.css',
+
+        'public/acm/videojs/skins/alaa-theme/videojs.css',
+        'public/acm/videojs/skins/nuevo/videojs.rtl.css',
+        'public/acm/videojs/plugins/pip/videojs.pip.min.css',
+        'public/acm/videojs/plugins/pip/videojs.pip.rtl.css',
+        'public/acm/videojs/plugins/seek-to-point.css',
+        'public/acm/AlaatvCustomFiles/css/page-live.css',
+    ],
+    'public/css/page-live.css'
+).version()
+    .babel([
+        'node_modules/@fullcalendar/core/main.js',
+
+        // 'node_modules/@fullcalendar/timeline/main.js',
+        // 'node_modules/@fullcalendar/resource-common/main.js',
+        // 'node_modules/@fullcalendar/resource-timeline/main.js',
+
+        'node_modules/@fullcalendar/daygrid/main.js',
+
+        'node_modules/@fullcalendar/timegrid/main.js',
+
+        'node_modules/@fullcalendar/core/locales/fa.js',
+
+        'node_modules/tooltip/dist/Tooltip.js',
+
+
+
+        'public/acm/videojs/video.min.js',
+        'public/acm/videojs/plugins/pip/videojs.pip.min.js',
+        'public/acm/videojs/nuevo.min.js',
+        'public/acm/videojs/plugins/videojs.p2p.min.js',
+        'public/acm/videojs/plugins/videojs.hotkeys.min.js',
+        'public/acm/videojs/plugins/seek-to-point.js',
+        'public/acm/videojs/lang/fa.js',
+        'public/acm/AlaatvCustomFiles/js/page-live.js',
+    ],
+    'public/js/page-live.js'
+).version();
+
+
+// ---------------------------------------------------------------------------------- admin-all
     mix.styles([
             'node_modules/summernote/dist/summernote.css',
             'node_modules/select2/dist/css/select2.css',

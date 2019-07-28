@@ -1,17 +1,7 @@
 @extends('app')
 
 @section('page-css')
-{{--    <link href="{{ mix('/css/page-error.css') }}" rel="stylesheet" type="text/css"/>--}}
-    <link href="{{ asset('/acm/videojs/skins/alaa-theme/videojs.css') }}" rel="stylesheet" type="text/css"/>
-    <link href="{{ asset('/acm/videojs/skins/nuevo/videojs.rtl.css') }}" rel="stylesheet" type="text/css"/>
-    <link href="{{ asset('/acm/videojs/plugins/pip/videojs.pip.min.css') }}" rel="stylesheet" type="text/css"/>
-    <link href="{{ asset('/acm/videojs/plugins/pip/videojs.pip.rtl.css') }}" rel="stylesheet" type="text/css"/>
-    <link href="{{ asset('/acm/videojs/plugins/seek-to-point.css') }}" rel="stylesheet" type="text/css"/>
-    <style>
-        .m-portlet .m-portlet__body {
-            padding: 0;
-        }
-    </style>
+    <link href="{{ mix('/css/page-live.css') }}" rel="stylesheet" type="text/css"/>
 @endsection
 
 @section("pageBar")
@@ -29,15 +19,15 @@
 @endsection
 
 @section("content")
+
+    @if(isset($live) && $live === true)
     <div class="row">
             <div class="col-12 col-md-8 mx-auto">
                 <div class="m-portlet m-portlet--primary m-portlet--head-solid-bg">
                     <div class="m-portlet__head">
                         <div class="m-portlet__head-caption">
                             <div class="m-portlet__head-title">
-                                <span class="m-portlet__head-icon">
-                                
-                                </span>
+                                <span class="m-portlet__head-icon"></span>
                                 <h3 class="m-portlet__head-text">
                                     پخش زنده  @if(isset($title)) {{$title}} @endif
                                 </h3>
@@ -48,128 +38,279 @@
                     </div>
                     <div class="m-portlet__body">
                         
-{{--                        @if($live == 'on')--}}
-                            <div class="a--video-wraper">
-                                <video id="video-0"
-                                       class="video-js vjs-fluid vjs-default-skin vjs-big-play-centered" controls
-                                       preload="auto" height='360' width="640" poster='{{ (isset($poster))?$poster:'' }}'>
-                                    <source src="{{ (isset($xMpegURL))?$xMpegURL:'' }}" type="application/x-mpegURL" res="x-mpegURL" label="x-mpegURL">
-                                    <source src="{{ (isset($dashXml))?$dashXml:'' }}" type="application/dash+xml" res="dash+xml" label="dash+xml">
-                                    <p class="vjs-no-js">@lang('content.javascript is disables! we need it to play a video')</p>
-                                </video>
-                            </div>
-{{--                        @elseif($live == 'finished')--}}
-{{--                            <div class="a--video-wraper">--}}
-{{--                                <video id="video-0"--}}
-{{--                                       class="video-js vjs-fluid vjs-default-skin vjs-big-play-centered" controls--}}
-{{--                                       preload="auto" height='360' width="640" poster='{{ $poster }}'>--}}
-{{--                                    @foreach($fullVideo as $video)--}}
-{{--                                        <source src="{{ $video['src'] }}" type="video/mp4" res="{{ $video['res'] }}" label="{{ $video['label'] }}">--}}
-{{--                                    @endforeach--}}
-{{--                                    <p class="vjs-no-js">@lang('content.javascript is disables! we need it to play a video')</p>--}}
-{{--                                </video>--}}
-{{--                            </div>--}}
-{{--                        @endif--}}
+                        <div class="a--video-wraper">
+                            <video id="video-0"
+                                   class="video-js vjs-fluid vjs-default-skin vjs-big-play-centered" controls
+                                   preload="auto" height='360' width="640" poster='{{ (isset($poster))?$poster:'' }}'>
+                                <source src="{{ (isset($xMpegURL))?$xMpegURL:'' }}" type="application/x-mpegURL" res="x-mpegURL" label="x-mpegURL">
+                                <source src="{{ (isset($dashXml))?$dashXml:'' }}" type="application/dash+xml" res="dash+xml" label="dash+xml">
+                                <p class="vjs-no-js">@lang('content.javascript is disables! we need it to play a video')</p>
+                            </video>
+                        </div>
                         <div class="m--clearfix"></div>
-                    
                         
                     </div>
                 </div>
             </div>
         </div>
+    @endif
+
+    <div class="row">
+        <div class="col">
+            <div id="a--fullcalendar"></div>
+        </div>
+    </div>
+    
 @endsection
 
 @section('page-js')
-    <script src="{{asset('/acm/videojs/video.min.js')}}"  type="text/javascript"></script>
-    <script src="{{asset('/acm/videojs/plugins/pip/videojs.pip.min.js')}}"  type="text/javascript"></script>
-    <script src="{{asset('/acm/videojs/nuevo.min.js')}}"  type="text/javascript"></script>
-    <script src="{{asset('/acm/videojs/plugins/videojs.p2p.min.js')}}"  type="text/javascript"></script>
-    <script src="{{asset('/acm/videojs/plugins/videojs.hotkeys.min.js')}}"  type="text/javascript"></script>
-    <script src="{{asset('/acm/videojs/plugins/seek-to-point.js')}}"  type="text/javascript"></script>
-    <script src="{{asset('/acm/videojs/lang/fa.js')}}"  type="text/javascript"></script>
     <script type="text/javascript">
-
-
         var contentDisplayName = '{{(isset($title)?$title:'')}}';
         var contentUrl = '{{ asset('/live') }}';
-        player = videojs('video-0', {
-            language: 'fa',
-            liveui: true,
-            autoplay: true
-        });
-
-        var lastDuration = Infinity;
-        player.on('timeupdate', function() {
-            var duration = player.duration();
-            if(!isFinite(duration)) {
-                var start = player.seekable().start(0);
-                var end = player.seekable().end(0);
-                if(start !== end) {
-                    // 1 seconds offset to prevent freeze when seeking all the way to left
-                    duration = end - start - 1;
-                    if(duration >= 0 && duration !== lastDuration) {
-                        player.duration(duration);
-                        lastDuration = duration;
-                    } else if(isFinite(lastDuration)) {
-                        player.duration(lastDuration);
-                    }
-                }
-            }
-        });
-
-        player.nuevo({
-            // logotitle:"آموزش مجازی آلاء",
-            // logo:"https://sanatisharif.ir/image/11/135/67/logo-150x22_20180430222256.png",
-            logocontrolbar: '/acm/extra/Alaa-logo.gif',
-            // logoposition:"RT", // logo position (LT - top left, RT - top right)
-            logourl:'//sanatisharif.ir',
-
-            shareTitle: contentDisplayName,
-            shareUrl: contentUrl,
-            // shareEmbed: '<iframe src="' + contentEmbedUrl + '" width="640" height="360" frameborder="0" allowfullscreen></iframe>',
-
-
-
-            videoInfo: true,
-            // infoSize: 18,
-            // infoIcon: "https://sanatisharif.ir/image/11/150/150/favicon_32_20180819090313.png",
-
-
-            relatedMenu: true,
-            zoomMenu: true,
-            // related: related_videos,
-            // mirrorButton: true,
-
-            closeallow:false,
-            mute:true,
-            rateMenu:true,
-            resume:true, // (false) enable/disable resume option to start video playback from last time position it was left
-            // theaterButton: true,
-            timetooltip: true,
-            mousedisplay: true,
-            endAction: 'related', // (undefined) If defined (share/related) either sharing panel or related panel will display when video ends.
-            container: "inline",
-
-
-            // limit: 20,
-            // limiturl: "http://localdev.alaatv.com/videojs/examples/basic.html",
-            // limitimage : "//cdn.nuevolab.com/media/limit.png", // limitimage or limitmessage
-            // limitmessage: "اگه می خوای بقیه اش رو ببینی باید پول بدی :)",
-
-
-            // overlay: "//domain.com/overlay.html" //(undefined) - overlay URL to display html on each pause event example: https://www.nuevolab.com/videojs/tryit/overlay
-
-        });
-
-        player.hotkeys({
-            enableVolumeScroll: false,
-            volumeStep: 0.1,
-            seekStep: 5
-        });
-
-        player.pic2pic();
-
-
+        var liveData = @if(isset($schedule)) {{ $schedule }} @else [] @endif;
+        // var liveData = [
+        //     {
+        //         "id": 4,
+        //         "dayofweek_id": 4,
+        //         "title": "هندسه پایه آقای شامیزاده",
+        //         "description": null,
+        //         "poster": "https://cdn.alaatv.com/upload/images/live/hendese_201920071747.jpg",
+        //         "start_time": "07:20:00",
+        //         "finish_time": "08:40:00",
+        //         "first_live": "2019-07-20",
+        //         "last_live": "2019-10-31",
+        //         "enable": 1,
+        //         "created_at": "2019-07-20 12:39:27",
+        //         "updated_at": null,
+        //         "deleted_at": null,
+        //         "date": "2019-07-27",
+        //         "day_of_week": {
+        //             "id": 4,
+        //             "name": "saturday",
+        //             "display_name": "شنبه",
+        //             "created_at": "2019-07-20 12:36:33",
+        //             "updated_at": "2019-07-20 12:36:33",
+        //             "deleted_at": null
+        //         }
+        //     },
+        //     {
+        //         "id": 8,
+        //         "dayofweek_id": 8,
+        //         "title": "گسسته آقای شامیزاده",
+        //         "description": null,
+        //         "poster": "https://cdn.alaatv.com/upload/images/live/gosaste_201920071747.jpg",
+        //         "start_time": "09:45:00",
+        //         "finish_time": "10:55:00",
+        //         "first_live": "2019-07-21",
+        //         "last_live": "2019-10-31",
+        //         "enable": 1,
+        //         "created_at": "2019-07-20 12:39:27",
+        //         "updated_at": null,
+        //         "deleted_at": null,
+        //         "date": "2019-07-28",
+        //         "day_of_week": {
+        //             "id": 8,
+        //             "name": "sunday",
+        //             "display_name": "یکشنبه",
+        //             "created_at": "2019-07-20 12:36:33",
+        //             "updated_at": "2019-07-20 12:36:33",
+        //             "deleted_at": null
+        //         }
+        //     },
+        //     {
+        //         "id": 12,
+        //         "dayofweek_id": 8,
+        //         "title": "گسسته آقای شامیزاده",
+        //         "description": null,
+        //         "poster": "https://cdn.alaatv.com/upload/images/live/gosaste_201920071747.jpg",
+        //         "start_time": "18:19:00",
+        //         "finish_time": "18:20:00",
+        //         "first_live": "2019-07-21",
+        //         "last_live": "2019-10-31",
+        //         "enable": 1,
+        //         "created_at": "2019-07-20 12:39:57",
+        //         "updated_at": null,
+        //         "deleted_at": null,
+        //         "date": "2019-07-28",
+        //         "day_of_week": {
+        //             "id": 8,
+        //             "name": "sunday",
+        //             "display_name": "یکشنبه",
+        //             "created_at": "2019-07-20 12:36:33",
+        //             "updated_at": "2019-07-20 12:36:33",
+        //             "deleted_at": null
+        //         }
+        //     },
+        //     {
+        //         "id": 40,
+        //         "dayofweek_id": 8,
+        //         "title": "فوق برنامه ریاضی تجربی آقای شامیزاده",
+        //         "description": null,
+        //         "poster": "https://cdn.alaatv.com/upload/images/live/riyazi_201920071747.jpg",
+        //         "start_time": "12:10:00",
+        //         "finish_time": "13:10:00",
+        //         "first_live": "2019-07-28",
+        //         "last_live": "2019-10-31",
+        //         "enable": 1,
+        //         "created_at": "2019-07-28 06:01:02",
+        //         "updated_at": null,
+        //         "deleted_at": null,
+        //         "date": "2019-07-28",
+        //         "day_of_week": {
+        //             "id": 8,
+        //             "name": "sunday",
+        //             "display_name": "یکشنبه",
+        //             "created_at": "2019-07-20 12:36:33",
+        //             "updated_at": "2019-07-20 12:36:33",
+        //             "deleted_at": null
+        //         }
+        //     },
+        //     {
+        //         "id": 16,
+        //         "dayofweek_id": 12,
+        //         "title": "ریاضی آقای شامیزاده",
+        //         "description": null,
+        //         "poster": "https://cdn.alaatv.com/upload/images/live/riyazi_201920071747.jpg",
+        //         "start_time": "07:20:00",
+        //         "finish_time": "08:30:00",
+        //         "first_live": "2019-07-22",
+        //         "last_live": "2019-10-31",
+        //         "enable": 1,
+        //         "created_at": "2019-07-20 12:41:42",
+        //         "updated_at": null,
+        //         "deleted_at": null,
+        //         "date": "2019-07-29",
+        //         "day_of_week": {
+        //             "id": 12,
+        //             "name": "monday",
+        //             "display_name": "دوشنبه",
+        //             "created_at": "2019-07-20 12:36:33",
+        //             "updated_at": "2019-07-20 12:36:33",
+        //             "deleted_at": null
+        //         }
+        //     },
+        //     {
+        //         "id": 20,
+        //         "dayofweek_id": 12,
+        //         "title": "ریاضی آقای شامیزاده",
+        //         "description": null,
+        //         "poster": "https://cdn.alaatv.com/upload/images/live/riyazi_201920071747.jpg",
+        //         "start_time": "08:35:00",
+        //         "finish_time": "09:45:00",
+        //         "first_live": "2019-07-22",
+        //         "last_live": "2019-10-31",
+        //         "enable": 1,
+        //         "created_at": "2019-07-20 12:42:10",
+        //         "updated_at": null,
+        //         "deleted_at": null,
+        //         "date": "2019-07-29",
+        //         "day_of_week": {
+        //             "id": 12,
+        //             "name": "monday",
+        //             "display_name": "دوشنبه",
+        //             "created_at": "2019-07-20 12:36:33",
+        //             "updated_at": "2019-07-20 12:36:33",
+        //             "deleted_at": null
+        //         }
+        //     },
+        //     {
+        //         "id": 24,
+        //         "dayofweek_id": 16,
+        //         "title": "هندسه پایه آقای شامیزاده",
+        //         "description": null,
+        //         "poster": "https://cdn.alaatv.com/upload/images/live/hendese_201920071747.jpg",
+        //         "start_time": "09:45:00",
+        //         "finish_time": "10:55:00",
+        //         "first_live": "2019-07-23",
+        //         "last_live": "2019-10-31",
+        //         "enable": 1,
+        //         "created_at": "2019-07-20 12:43:34",
+        //         "updated_at": null,
+        //         "deleted_at": null,
+        //         "date": "2019-07-30",
+        //         "day_of_week": {
+        //             "id": 16,
+        //             "name": "tuesday",
+        //             "display_name": "سه‌شنبه",
+        //             "created_at": "2019-07-20 12:36:33",
+        //             "updated_at": "2019-07-20 12:36:33",
+        //             "deleted_at": null
+        //         }
+        //     },
+        //     {
+        //         "id": 28,
+        //         "dayofweek_id": 16,
+        //         "title": "هندسه پایه آقای شامیزاده",
+        //         "description": null,
+        //         "poster": "https://cdn.alaatv.com/upload/images/live/hendese_201920071747.jpg",
+        //         "start_time": "10:55:00",
+        //         "finish_time": "12:05:00",
+        //         "first_live": "2019-07-23",
+        //         "last_live": "2019-10-31",
+        //         "enable": 1,
+        //         "created_at": "2019-07-20 12:43:59",
+        //         "updated_at": null,
+        //         "deleted_at": null,
+        //         "date": "2019-07-30",
+        //         "day_of_week": {
+        //             "id": 16,
+        //             "name": "tuesday",
+        //             "display_name": "سه‌شنبه",
+        //             "created_at": "2019-07-20 12:36:33",
+        //             "updated_at": "2019-07-20 12:36:33",
+        //             "deleted_at": null
+        //         }
+        //     },
+        //     {
+        //         "id": 32,
+        //         "dayofweek_id": 20,
+        //         "title": "ریاضی آقای شامیزاده",
+        //         "description": null,
+        //         "poster": "https://cdn.alaatv.com/upload/images/live/riyazi_201920071747.jpg",
+        //         "start_time": "07:20:00",
+        //         "finish_time": "08:30:00",
+        //         "first_live": "2019-07-24",
+        //         "last_live": "2019-10-31",
+        //         "enable": 1,
+        //         "created_at": "2019-07-20 12:44:25",
+        //         "updated_at": null,
+        //         "deleted_at": null,
+        //         "date": "2019-07-31",
+        //         "day_of_week": {
+        //             "id": 20,
+        //             "name": "wednesday",
+        //             "display_name": "چهارشنبه",
+        //             "created_at": "2019-07-20 12:36:33",
+        //             "updated_at": "2019-07-20 12:36:33",
+        //             "deleted_at": null
+        //         }
+        //     },
+        //     {
+        //         "id": 36,
+        //         "dayofweek_id": 20,
+        //         "title": "ریاضی آقای شامیزاده",
+        //         "description": null,
+        //         "poster": "https://cdn.alaatv.com/upload/images/live/riyazi_201920071747.jpg",
+        //         "start_time": "08:35:00",
+        //         "finish_time": "09:45:00",
+        //         "first_live": "2019-07-24",
+        //         "last_live": "2019-10-31",
+        //         "enable": 1,
+        //         "created_at": "2019-07-20 12:44:42",
+        //         "updated_at": null,
+        //         "deleted_at": null,
+        //         "date": "2019-07-31",
+        //         "day_of_week": {
+        //             "id": 20,
+        //             "name": "wednesday",
+        //             "display_name": "چهارشنبه",
+        //             "created_at": "2019-07-20 12:36:33",
+        //             "updated_at": "2019-07-20 12:36:33",
+        //             "deleted_at": null
+        //         }
+        //     }
+        // ];
     </script>
+    <script src="{{mix('/js/page-live.js')}}" type="text/javascript"></script>
 @endsection
 
