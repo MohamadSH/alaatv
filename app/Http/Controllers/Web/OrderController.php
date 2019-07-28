@@ -828,6 +828,12 @@ class OrderController extends Controller
         ]);
 
         $orderProductCount=0;
+        $gateways=null;
+        $coupon=null;
+        $notIncludedProductsInCoupon=null;
+        $orderHasDonate=false;
+        $credit=0;
+        $fromWallet=0;
         $invoiceInfo = [];
         $user        = $request->user();
         
