@@ -2,6 +2,13 @@
 
 namespace App;
 
+/**
+ * @property mixed title
+ * @property mixed description
+ * @property mixed poster
+ * @property mixed start_time
+ * @property mixed finish_time
+ */
 class Live extends BaseModel
 {
     protected $table = 'liveschedules';
@@ -25,7 +32,11 @@ class Live extends BaseModel
         'enable',
     ];
 
+    protected $hidden = [
+        'dayofweek'
+    ];
+
     public function dayOfWeek(){
-        return $this->belongsTo(Dayofweek::Class);
+        return $this->belongsTo(Dayofweek::Class , 'dayofweek_id' , 'id');
     }
 }
