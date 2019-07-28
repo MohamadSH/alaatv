@@ -1,5 +1,7 @@
 var GAEE = function () {
 
+    let reportGtmEecOnConsole = false;
+
     function getDataLayer() {
         window.dataLayer = window.dataLayer || [];
         return window.dataLayer;
@@ -100,6 +102,17 @@ var GAEE = function () {
     }
 
     function impression_view(impressions) {
+        // sample impression object => {
+        //     'name': 'Triblend Android T-Shirt',       // Name or ID is required.
+        //     'id': '12345',
+        //     'price': '15.25',
+        //     'brand': 'Google',
+        //     'category': 'Apparel',
+        //     'variant': 'Gray',
+        //     'list': 'Search Results',
+        //     'position': 1
+        // },
+
         window.dataLayer.push({
             event: 'eec.impressionView',
             ecommerce: {
@@ -138,16 +151,50 @@ var GAEE = function () {
             event: 'eec.promotionClick',
             ecommerce: {
                 promoClick: {
-                    promotions: [promotion]
+                    promotions: promotion
                 }
             }
         });
     }
 
+    function getElementData(element, data) {
+        let elementData = element.data(data);
+        if (typeof elementData !== 'undefined') {
+            return elementData;
+        }
+        return 'undefined';
+    }
+
+    function getElementData_product(element) {
+        let gtmEecImpressionView = [];
+        gtmEecImpressionView.push({
+            id:       getElementData(element, 'gtm-eec-product-id').toString(),
+            name:     getElementData(element, 'gtm-eec-product-name').toString(),
+            price:    getElementData(element, 'gtm-eec-product-price').toString(),
+            brand:    getElementData(element, 'gtm-eec-product-brand').toString(),
+            category: getElementData(element, 'gtm-eec-product-category').toString(),
+            variant:  getElementData(element, 'gtm-eec-product-variant').toString(),
+            list:     getElementData(element, 'gtm-eec-product-list').toString(),
+            position: getElementData(element, 'gtm-eec-product-position'),
+        });
+        return gtmEecImpressionView;
+    }
+
+    function getElementData_advertisement(element) {
+        let gtmEecPromotionView = [];
+        gtmEecPromotionView.push({
+            id: getElementData(element, 'gtm-eec-promotion-id').toString(),
+            name: getElementData(element, 'gtm-eec-promotion-name').toString(),
+            creative: getElementData(element, 'gtm-eec-promotion-creative').toString(),
+            position: getElementData(element, 'gtm-eec-promotion-position')
+        });
+        return gtmEecPromotionView;
+    }
+
     return {
 
         reportGtmEecOnConsole: function () {
-            return false;
+            return reportGtmEecOnConsole;
         },
 
         productDetailViews: function (actionFieldList, product) {
@@ -179,18 +226,43 @@ var GAEE = function () {
             getDataLayer();
             impression_view(impressions);
         },
-        impressionClick: function (actionFieldList, product) {
+        impressionViewSingleItem: function (element) {
             getDataLayer();
-            impression_click(actionFieldList, product);
+            let impressions = getElementData_product(element);
+            impression_view(impressions);
+            if (reportGtmEecOnConsole) {
+                console.log('gtmEecImpressionView: ', impressions);
+            }
+        },
+        impressionClick: function (element) {
+            getDataLayer();
+            let impressions = getElementData_product(element),
+                actionFieldList = impressions[0].list;
+            impression_click(actionFieldList, impressions);
+            if (reportGtmEecOnConsole) {
+                console.log('gtmEecImpressionClick: ', impressions);
+            }
         },
 
         promotionView: function (promotions) {
             getDataLayer();
             promotion_view(promotions);
         },
-        promotionClick: function (promotion) {
+        promotionViewSingleItem: function (element) {
             getDataLayer();
+            let promotions = getElementData_advertisement(element);
+            promotion_view(promotions);
+            if (reportGtmEecOnConsole) {
+                console.log('gtmEecPromotionView: ', promotions);
+            }
+        },
+        promotionClick: function (element) {
+            getDataLayer();
+            let promotion = getElementData_advertisement(element);
             promotion_click(promotion);
+            if (reportGtmEecOnConsole) {
+                console.log('gtmEecPromotionClick: ', promotion);
+            }
         },
 
 

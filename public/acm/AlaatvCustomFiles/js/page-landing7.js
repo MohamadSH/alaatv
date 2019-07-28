@@ -22,15 +22,18 @@ $('.OwlCarouselType2-shopPage').each(function(){
             },
             btnSwfitchEvent: function() {
                 imageObserver.observe();
+                gtmEecProductObserver.observe();
             },
             onTranslatedEvent: function(event) {
                 imageObserver.observe();
+                gtmEecProductObserver.observe();
             }
         },
         grid: {
             columnClass: 'col-12 col-sm-6 col-md-2 gridItem',
             btnSwfitchEvent: function() {
                 imageObserver.observe();
+                gtmEecProductObserver.observe();
             }
         },
         defaultView: 'grid', // OwlCarousel or grid

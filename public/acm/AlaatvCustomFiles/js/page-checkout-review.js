@@ -231,6 +231,9 @@ var CheckoutPaymentUi = function () {
         GAEE.checkoutOption(1, 'checkout-payment-HasntDiscountCode');
     }
     function initUiBasedOnHasntDiscountCodeStatus(notIncludedProductsInCoupon) {
+        if ($('#discountCodeValue').length !== 0) {
+            return;
+        }
         var strLen = $('#discountCodeValue').val().length;
         if (strLen > 0) {
             $('#btnSaveDiscountCodeValue').prop('disabled', false);

@@ -85,6 +85,8 @@
         <div class="PamphletAndArticleWraper
             @if(optional($result->get('pamphlet'))->isEmpty() && optional($result->get('article'))->isEmpty())
                 d-none
+            @else
+                col-md-3
             @endif">
             <div class="row">
 
