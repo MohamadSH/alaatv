@@ -37,7 +37,7 @@ var Alaasearch = function () {
         priceHtml += '</span>';
 
         return '' +
-            '<div class="item carousel a--block-item a--block-type-product"\n' +
+            '<div class="item carousel a--block-item a--block-type-product a--gtm-eec-product"\n' +
             '     data-position="'+itemKey+'"\n' +
             '     data-gtm-eec-product-id="'+gtmEecProductId+'"\n' +
             '     data-gtm-eec-product-name="'+gtmEecProductName+'"\n' +
@@ -50,7 +50,7 @@ var Alaasearch = function () {
                 discountRibbon +
             '    <div class="a--block-imageWrapper">\n' +
             '        <a href="' + widgetActionLink + '"\n' +
-            '           class="a--block-imageWrapper-image gtm-eec-product-impression-click"\n' +
+            '           class="a--block-imageWrapper-image a--gtm-eec-product-click"\n' +
             '           data-gtm-eec-product-id="'+gtmEecProductId+'"\n' +
             '           data-gtm-eec-product-name="'+gtmEecProductName+'"\n' +
             '           data-gtm-eec-product-price="'+priceToStringWithTwoDecimal(price.final)+'"\n' +
@@ -65,7 +65,7 @@ var Alaasearch = function () {
             '    <div class="a--block-infoWrapper">\n' +
             '        <div class="a--block-titleWrapper">\n' +
             '            <a href="' + widgetActionLink + '"\n' +
-            '               class="m-link a--owl-carousel-type-2-item-subtitle gtm-eec-product-impression-click"\n' +
+            '               class="m-link a--owl-carousel-type-2-item-subtitle a--gtm-eec-product-click"\n' +
             '               data-gtm-eec-product-id="'+gtmEecProductId+'"\n' +
             '               data-gtm-eec-product-name="'+gtmEecProductName+'"\n' +
             '               data-gtm-eec-product-price="'+priceToStringWithTwoDecimal(price.final)+'"\n' +
@@ -422,7 +422,7 @@ var Alaasearch = function () {
                 }
                 $('#owl--js-var-next-page-product-carousel-url').val(decodeURI(newPageUrl));
                 unLockAjax(owlType);
-                GtmEecImpression.view();
+                gtmEecProductObserver.observe();
                 imageObserver.observe();
             });
         }
@@ -653,6 +653,7 @@ var Alaasearch = function () {
         }
 
 
+        gtmEecProductObserver.observe();
         imageObserver.observe();
     }
 
@@ -1191,35 +1192,35 @@ var GetAjaxData = function () {
     };
 }();
 
-var GtmEecImpression = function () {
-
-    function view() {
-        var countOfExistingProductInCarousel = $('#product-carousel.owl-carousel').find('.owl-item').length;
-        if (countOfExistingProductInCarousel <= 5) {
-            return;
-        }
-        var gtmEecImpressions = [];
-        $('#product-carousel.owl-carousel').find('.owl-item.active .m-widget19__content .gtm-eec-product-impression-click').each(function (index, value) {
-            gtmEecImpressions.push({
-                id:       $(this).data('gtm-eec-product-id'),      // (String) The SKU of the product. Example: 'P12345'
-                name:     $(this).data('gtm-eec-product-name'),    // (String) The name of the product. Example: 'T-Shirt'
-                price:    $(this).data('gtm-eec-product-price'),
-                brand:    $(this).data('gtm-eec-product-brand'),   // (String) The brand name of the product. Example: 'NIKE'
-                category: $(this).data('gtm-eec-product-category'),// (String) Product category of the item. Can have maximum five levels of hierarchy. Example: 'clothes/shirts/t-shirts'
-                variant:  $(this).data('gtm-eec-product-variant'), // (String) What variant of the main product this is. Example: 'Large'
-                list:     $(this).data('gtm-eec-product-list'),
-                position: $(this).data('gtm-eec-product-position'),// (Integer) The position of the impression that was clicked. Example: 1
-            });
-        });
-        GAEE.impressionView(gtmEecImpressions);
-    }
-
-    return {
-        view: function () {
-            view();
-        }
-    };
-}();
+// var GtmEecImpression = function () {
+//
+//     function view() {
+//         var countOfExistingProductInCarousel = $('#product-carousel.owl-carousel').find('.owl-item').length;
+//         if (countOfExistingProductInCarousel <= 5) {
+//             return;
+//         }
+//         var gtmEecImpressions = [];
+//         $('#product-carousel.owl-carousel').find('.owl-item.active .m-widget19__content .a--gtm-eec-product-click').each(function (index, value) {
+//             gtmEecImpressions.push({
+//                 id:       $(this).data('gtm-eec-product-id'),      // (String) The SKU of the product. Example: 'P12345'
+//                 name:     $(this).data('gtm-eec-product-name'),    // (String) The name of the product. Example: 'T-Shirt'
+//                 price:    $(this).data('gtm-eec-product-price'),
+//                 brand:    $(this).data('gtm-eec-product-brand'),   // (String) The brand name of the product. Example: 'NIKE'
+//                 category: $(this).data('gtm-eec-product-category'),// (String) Product category of the item. Can have maximum five levels of hierarchy. Example: 'clothes/shirts/t-shirts'
+//                 variant:  $(this).data('gtm-eec-product-variant'), // (String) What variant of the main product this is. Example: 'Large'
+//                 list:     $(this).data('gtm-eec-product-list'),
+//                 position: $(this).data('gtm-eec-product-position'),// (Integer) The position of the impression that was clicked. Example: 1
+//             });
+//         });
+//         GAEE.impressionView(gtmEecImpressions);
+//     }
+//
+//     return {
+//         view: function () {
+//             view();
+//         }
+//     };
+// }();
 
 $('.notFoundMessage').fadeOut(0);
 
@@ -1266,7 +1267,7 @@ jQuery(document).ready(function () {
         };
         if (itemId === 'product-carousel') {
             function slideChanged1(event) {
-                GtmEecImpression.view();
+                gtmEecProductObserver.observe();
                 imageObserver.observe();
             }
             responsive = {

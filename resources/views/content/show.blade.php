@@ -136,7 +136,7 @@
                                                 data-gtm-eec-product-category="-"
                                                 data-gtm-eec-product-variant="-"
                                                 data-gtm-eec-product-quantity="1"
-                                                class="btn m-btn--air btn-succ  ess m-btn--icon m--margin-bottom-5 btnAddToCart" data-pid="{{ $product->id }}">
+                                                class="btn m-btn--air btn-success m-btn--icon m--margin-bottom-5 a--gtm-eec-product btnAddToCart" data-pid="{{ $product->id }}">
                                                 <span>
                                                     <i class="fa fa-cart-arrow-down"></i>
                                                     <i class="fas fa-sync-alt fa-spin m--hide"></i>
@@ -158,12 +158,14 @@
                                             <button
                                                     data-gtm-eec-product-id="{{$product->id}}"
                                                     data-gtm-eec-product-name="{{$product->name}}"
-                                                    data-gtm-eec-product-price="@if($product->price){{$product->price['final']}}@endif"
+                                                    data-gtm-eec-product-price="@if($product->price){{ number_format($product->price['final'], 2, '.', '') }}@endif"
                                                     data-gtm-eec-product-brand="آلاء"
                                                     data-gtm-eec-product-category="-"
                                                     data-gtm-eec-product-variant="-"
                                                     data-gtm-eec-product-quantity="1"
-                                                    class="btn m-btn--air btn-succ  ess m-btn--icon m--margin-bottom-5 btnAddToCart" data-pid="{{ $product->id }}">
+                                                    data-gtm-eec-product-position="{{ $productKey }}"
+                                                    data-gtm-eec-product-list="صفحه محصول-"
+                                                    class="btn m-btn--air btn-success m-btn--icon m--margin-bottom-5 a--gtm-eec-product btnAddToCart" data-pid="{{ $product->id }}">
                                             <span>
                                                 <i class="fa fa-cart-arrow-down"></i>
                                                 <i class="fas fa-sync-alt fa-spin m--hide"></i>
@@ -185,7 +187,7 @@
                     <div class="row">
                         <div class="col text-center m--margin-bottom-5">
 {{--                            <a href="{{ route('landing.5') }}"--}}
-{{--                               class="gtm-eec-promotion-click scrollSensitiveOnScreen"--}}
+{{--                               class="a--gtm-eec-advertisement a--gtm-eec-advertisement-click"--}}
 {{--                               data-gtm-eec-promotion-id="contentShowPage-rightSide-0"--}}
 {{--                               data-gtm-eec-promotion-name="همایش های دانلودی آلاء"--}}
 {{--                               data-gtm-eec-promotion-creative="سمت راست صفحه بالای توضیحات کانتنت"--}}
@@ -291,7 +293,7 @@
                                         <div class="row">
                                             <div class="col-md-6 text-center m--margin-bottom-5">
 {{--                                                <a href="{{ route('landing.8') }}"--}}
-{{--                                                   class="gtm-eec-promotion-click scrollSensitiveOnScreen"--}}
+{{--                                                   class="a--gtm-eec-advertisement a--gtm-eec-advertisement-click"--}}
 {{--                                                   data-gtm-eec-promotion-id="contentShowPage-rightSide-1"--}}
 {{--                                                   data-gtm-eec-promotion-name="قرعه کشی گوشی"--}}
 {{--                                                   data-gtm-eec-promotion-creative="جلوی لینک های مستقیم دانلود این فیلم"--}}
@@ -302,7 +304,7 @@
                                             </div>
                                             <div class="col-md-6 text-center m--margin-bottom-5">
 {{--                                                <a href="{{ route('landing.5') }}"--}}
-{{--                                                   class="gtm-eec-promotion-click scrollSensitiveOnScreen"--}}
+{{--                                                   class="a--gtm-eec-advertisement a--gtm-eec-advertisement-click"--}}
 {{--                                                   data-gtm-eec-promotion-id="contentShowPage-rightSide-2"--}}
 {{--                                                   data-gtm-eec-promotion-name="همایش های دانلودی آلاء"--}}
 {{--                                                   data-gtm-eec-promotion-creative="جلوی لینک های مستقیم دانلود این فیلم"--}}
@@ -326,7 +328,7 @@
                     <!--end::Portlet-->
                 @elseif(optional($content->template)->name == "pamphlet1" )
                 <!--begin::Portlet-->
-                    <div class="m-portlet m-portlet--mobile m-portlet--body-progress-">
+                    <div class="m-portlet m-portlet--mobile">
                         <div class="m-portlet__body">
                             <div class="m-portlet__body-progress">Loading</div>
                             <!--begin::m-widget5-->
@@ -372,7 +374,7 @@
                     <div class="row">
                         <div class="col text-center m--margin-bottom-5">
 {{--                            <a href="{{ route('landing.5') }}"--}}
-{{--                               class="gtm-eec-promotion-click scrollSensitiveOnScreen"--}}
+{{--                               class="a--gtm-eec-advertisement a--gtm-eec-advertisement-click "--}}
 {{--                               data-gtm-eec-promotion-id="contentShowPage-rightSide-0"--}}
 {{--                               data-gtm-eec-promotion-name="همایش های دانلودی آلاء"--}}
 {{--                               data-gtm-eec-promotion-creative="سمت راست صفحه بالای توضیحات کانتنت"--}}
@@ -384,7 +386,7 @@
                     
                     @if(isset($content->description[0]))
                     <!--begin::Portlet-->
-                        <div class="m-portlet m-portlet--mobile m-portlet--body-progress-">
+                        <div class="m-portlet m-portlet--mobile">
                             <div class="m-portlet__head">
                                 <div class="m-portlet__head-caption">
                                     <div class="m-portlet__head-title">
@@ -425,7 +427,7 @@
         
                 @elseif(optional($content->template)->name == "article1")
                 <!--begin::Portlet-->
-                    <div class="m-portlet m-portlet--mobile m-portlet--body-progress-">
+                    <div class="m-portlet">
                         <div class="m-portlet__head">
                             <div class="m-portlet__head-caption">
                                 <div class="m-portlet__head-title">
@@ -451,7 +453,7 @@
                     <div class="row">
                         <div class="col text-center m--margin-bottom-5">
 {{--                            <a href="{{ route('landing.5') }}"--}}
-{{--                               class="gtm-eec-promotion-click scrollSensitiveOnScreen"--}}
+{{--                               class="a--gtm-eec-advertisement a--gtm-eec-advertisement-click "--}}
 {{--                               data-gtm-eec-promotion-id="contentShowPage-rightSide-0"--}}
 {{--                               data-gtm-eec-promotion-name="همایش های دانلودی آلاء"--}}
 {{--                               data-gtm-eec-promotion-creative="سمت راست صفحه بالای توضیحات کانتنت"--}}
@@ -535,7 +537,7 @@
                 <div class="row">
                     <div class="col text-center m--margin-bottom-5">
                         <a href="{{ route('landing.8') }}"
-                           class="gtm-eec-promotion-click scrollSensitiveOnScreen"
+                           class="a--gtm-eec-advertisement a--gtm-eec-advertisement-click "
                            data-gtm-eec-promotion-id="shop-ghorekeshi3"
                            data-gtm-eec-promotion-name="قرعه کشی گوشی"
                            data-gtm-eec-promotion-creative="سمت چپ صفحه بالای لیست کانتنت های مشابه"
@@ -544,7 +546,7 @@
                         </a>
                     </div>
                 </div>
-                <div class="m-portlet m-portlet--mobile m-portlet--body-progress-">
+                <div class="m-portlet">
                     <div class="m-portlet__head">
                         <div class="m-portlet__head-caption">
                             <div class="m-portlet__head-title">
@@ -577,6 +579,8 @@
                                                 <a class="m-link"
                                                    href="{{action("Web\ContentController@show" , $item["content"])}}">
                                                     <img class="m-widget7__img a--full-width lazy-image"
+                                                         width="170" height="96"
+                                                         src="https://cdn.alaatv.com/loder.jpg?w=16&h=9"
                                                          data-src="{{ isset($item["thumbnail"]) ? $item["thumbnail"]."?w=210&h=118":'' }}"
                                                          alt="{{ $item["content"]->name }}">
                                                 </a>
@@ -608,7 +612,7 @@
                 <div>
 {{--                    <a href="https://alaatv.com/product/312"--}}
 {{--                       data-tooltip-content="همایش طلایی شیمی کنکور"--}}
-{{--                       class="gtm-eec-promotion-click scrollSensitiveOnScreen"--}}
+{{--                       class="a--gtm-eec-advertisement a--gtm-eec-advertisement-click"--}}
 {{--                       data-gtm-eec-promotion-id="contentShowPage-leftSide-1"--}}
 {{--                       data-gtm-eec-promotion-name="همایش طلایی شیمی کنکور"--}}
 {{--                       data-gtm-eec-promotion-creative="سمت چپ صفحه پایین لیست کانتنت های مشابه"--}}
@@ -618,7 +622,7 @@
 {{--                    </a>--}}
 {{--                    <a href="https://alaatv.com/product/312"--}}
 {{--                       data-tooltip-content="همایش طلایی ریاضی تجربی کنکور"--}}
-{{--                       class="gtm-eec-promotion-click scrollSensitiveOnScreen"--}}
+{{--                       class="a--gtm-eec-advertisement a--gtm-eec-advertisement-click"--}}
 {{--                       data-gtm-eec-promotion-id="contentShowPage-leftSide-1"--}}
 {{--                       data-gtm-eec-promotion-name="همایش طلایی ریاضی تجربی کنکور"--}}
 {{--                       data-gtm-eec-promotion-creative="سمت چپ صفحه پایین لیست کانتنت های مشابه"--}}
