@@ -24,7 +24,7 @@
     
     <div class="a--block-imageWrapper">
         <a href="{{ $product->url }}"
-           class="a--block-imageWrapper-image gtm-eec-product-impression-click"
+           class="a--block-imageWrapper-image a--gtm-eec-product a--gtm-eec-product-click"
            data-gtm-eec-product-id="{{ $product->id }}"
            data-gtm-eec-product-name="{{ $product->name }}"
            data-gtm-eec-product-price="{{ number_format($product->price['final'], 2, '.', '') }}"
@@ -39,7 +39,7 @@
     <div class="a--block-infoWrapper">
         <div class="a--block-titleWrapper">
             <a href="{{ $product->url }}"
-               class="m-link a--owl-carousel-type-2-item-subtitle gtm-eec-product-impression-click"
+               class="m-link a--owl-carousel-type-2-item-subtitle a--gtm-eec-product-click"
                data-gtm-eec-product-id="{{ $product->id }}"
                data-gtm-eec-product-name="{{ $product->name }}"
                data-gtm-eec-product-price="{{ number_format($product->price['final'], 2, '.', '') }}"

@@ -24,6 +24,10 @@
     "vue": "^2.5.21"
   },
   "dependencies": {
+    "@fullcalendar/core": "^4.2.0",
+    "@fullcalendar/daygrid": "^4.2.0",
+    "@fullcalendar/resource-timeline": "^4.2.0",
+    "@fullcalendar/timegrid": "^4.2.0",
     "acorn": "^6.2.0",
     "animate.css": "^3.7.2",
     "block-ui": "^2.70.1",
@@ -36,6 +40,7 @@
     "font-awesome": "^4.7.0",
     "fontawesome": "^5.6.3",
     "fs-minipass": "^1.2.6",
+    "fullcalendar": "^3.10.0",
     "glyphicons-halflings": "^1.9.1",
     "gulp": "^4.0.1",
     "highcharts": "^7.1.1",

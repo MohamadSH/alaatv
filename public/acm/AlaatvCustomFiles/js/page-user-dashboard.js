@@ -229,14 +229,17 @@ $(document).ready(function () {
         OwlCarousel: {
             btnSwfitchEvent: function() {
                 imageObserver.observe();
+                gtmEecProductObserver.observe();
             },
             onTranslatedEvent: function(event) {
                 imageObserver.observe();
+                gtmEecProductObserver.observe();
             }
         },
         grid: {
             btnSwfitchEvent: function() {
                 imageObserver.observe();
+                gtmEecProductObserver.observe();
             }
         },
     };

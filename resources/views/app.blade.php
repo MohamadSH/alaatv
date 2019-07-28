@@ -114,9 +114,6 @@
         --}}
         <!--begin::Global Theme Bundle -->
         <script src="{{ mix('/js/all.js') }}" type="text/javascript"></script>
-{{--        <script src="{{ asset('/acm/AlaatvCustomFiles/js/lazyLoad.js') }}" type="text/javascript"></script>--}}
-{{--        <script src="{{ asset('/acm/custom-js-app.js') }}" type="text/javascript"></script>--}}
-{{--        <script src="{{ asset('/acm/AlaatvCustomFiles/js/mLayout.js') }}" type="text/javascript"></script>--}}
         <!--end::Global Theme Bundle -->
         @yield('data-layer')
         

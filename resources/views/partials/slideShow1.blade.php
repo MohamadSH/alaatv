@@ -1,7 +1,7 @@
 @if($slides->count() > 0)
     <div class="row m--margin-bottom-20">
         <div class="col">
-            <div id="carouselMainSlideShow" class="carousel slide scrollSensitiveOnScreen" data-ride="carousel">
+            <div id="carouselMainSlideShow" class="carousel slide" data-ride="carousel">
                 @if($slides->count() > 1)
                     <ol class="carousel-indicators">
                         @foreach($slides as $key => $slide)
@@ -23,7 +23,7 @@
                              data-gtm-eec-promotion-position="{{ $key }}">
                             @if(isset($slide->link) && strlen($slide->link)>0)
                                 <a href="{{$slide->link}}"
-                                   class="gtm-eec-promotion-click gtm-eec-promotion-slideShow"
+                                   class="a--gtm-eec-advertisement a--gtm-eec-advertisement a--gtm-eec-advertisement-click"
                                    data-gtm-eec-promotion-id="slideShow1-{{ $slide->id }}"
                                    data-gtm-eec-promotion-name="{{ $slide->title }}"
                                    @if(isset($positionOfSlideShow))
