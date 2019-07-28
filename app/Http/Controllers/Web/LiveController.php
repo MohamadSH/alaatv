@@ -27,6 +27,8 @@ class LiveController extends Controller
     {
         $user = $request->user();
         $live = false;
+        $poster = '';
+        $title = '';
         $fullVideo = [];
         $xMpegURL = self::XMPEG_URL;
         $dashXml = self::DASH_XML;
