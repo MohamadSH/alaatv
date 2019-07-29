@@ -2,15 +2,18 @@
 
 namespace App\Http\Controllers\Web;
 
+use App\Classes\LiveStreamAssistant;
 use App\Conductor;
 use App\Dayofweek;
 use App\Live;
+use App\Repositories\ConductorRepo;
+use App\Repositories\LiveRepo;
+use App\Repositories\WeekRepo;
 use Carbon\Carbon;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Cache;
 
 class LiveController extends Controller
 {
@@ -27,24 +30,23 @@ class LiveController extends Controller
     {
         $user = $request->user();
         $live = false;
-        $poster = '';
-        $title = '';
+        $poster = null;
+        $title = null;
         $fullVideo = [];
         $xMpegURL = self::XMPEG_URL;
         $dashXml = self::DASH_XML;
+        $nowTime = Carbon::now('Asia/Tehran')->toTimeString();
         $today = Carbon::today()->setTimezone('Asia/Tehran');
-        $now = Carbon::now('Asia/Tehran');
-        $nowTime = $this->getNowTime($now);
-        $todayStringDate = $this->getTodayDateString($today);
+        $todayStringDate = $today->toDateString();
 
         /** @var DayofWeek $dayOfWeek */
-        $dayOfWeek = $this->getDayOfWeek($this->getTodayName($today))->first();
+        $dayOfWeek = WeekRepo::getDayOfWeek($today->dayName)->first();
         if(!isset($dayOfWeek)) {
             $message = 'روز هفته یافت نشد';
             return view('errors.404' , compact('message'));
         }
 
-        $schedule = $this->makeScheduleOfTheWeekCollection()->toJson();
+        $schedule = LiveStreamAssistant::makeScheduleOfTheWeekCollection()->toJson();
 
         if($user->hasRole('admin')) {
             $live = true;
@@ -52,18 +54,19 @@ class LiveController extends Controller
             return view('pages.liveView', compact('nowTime', 'schedule' , 'live' ,'poster' , 'xMpegURL' , 'dashXml' , 'fullVideo' , 'title'));
         }
 
-        $this->closeFinishedPrograms($todayStringDate, $nowTime);
+        LiveStreamAssistant::closeFinishedPrograms($todayStringDate, $nowTime);
 
         /** @var Conductor $liveStream */
-        $liveStream = $this->isThereLiveStream($todayStringDate)->first();
+        $liveStream = ConductorRepo::isThereLiveStream($todayStringDate)->first();
         if(isset($liveStream)){
+            Cache::tags('live')->flush();
             $live = true;
             $poster = $liveStream->poster;
             return view('pages.liveView' , compact( 'nowTime', 'schedule' , 'live' ,'poster' , 'xMpegURL' , 'dashXml' , 'fullVideo' , 'title' ));
         }
 
         /** @var Live $scheduledLive */
-        $scheduledLive = $this->isThereScheduledProgram($dayOfWeek, $todayStringDate , $nowTime)->first();
+        $scheduledLive = LiveRepo::isThereScheduledProgram($dayOfWeek, $todayStringDate , $nowTime)->first();
         if(isset($scheduledLive)) {
             $this->insertLiveConductor($scheduledLive, $scheduledLive->start_time , $todayStringDate);
             $live = true;
@@ -76,10 +79,10 @@ class LiveController extends Controller
     public function startLive(Request $request , Live $live){
         $today = Carbon::today()->setTimezone('Asia/Tehran');
         $now = Carbon::now('Asia/Tehran');
-        $nowTime = $this->getNowTime($now);
-        $todayStringDate = $this->getTodayDateString($today);
+        $nowTime = $now->toTimeString();
+        $todayStringDate = $today->toDateString();
 
-        $liveStream = $this->isThereLiveStream($todayStringDate)->first();
+        $liveStream = ConductorRepo::isThereLiveStream($todayStringDate)->first();
         if(isset($liveStream)){
             return response()->json([
                 'A live is already going on right now',
@@ -96,11 +99,11 @@ class LiveController extends Controller
     public function finishLive(Request $request){
         $today = Carbon::today()->setTimezone('Asia/Tehran');
         $now = Carbon::now('Asia/Tehran');
-        $nowTime = $this->getNowTime($now);
-        $todayStringDate = $this->getTodayDateString($today);
+        $nowTime = $now->toTimeString();
+        $todayStringDate = $today->toDateString();
 
 
-        $liveStream = $this->isThereLiveStream($todayStringDate)->first();
+        $liveStream = ConductorRepo::isThereLiveStream($todayStringDate)->first();
         if(isset($liveStream)){
             Conductor::update([
                 'finish_time'            =>$nowTime,
@@ -117,131 +120,14 @@ class LiveController extends Controller
     }
 
     /**
-     * @param string $today
-     * @return mixed
-     */
-    private function getDayOfWeek(string $today):Builder
-    {
-        return Dayofweek::where('display_name', $today );
-    }
-
-    /**
-     * @param Dayofweek $dayOfWeek
-     * @param string $todayDate
-     * @param string $nowTime
-     * @return Builder
-     */
-    private function isThereScheduledProgram(Dayofweek $dayOfWeek, string $todayDate , string $nowTime):Builder
-    {
-        return Live::where('dayofweek_id', $dayOfWeek->id)
-                    ->where('enable', 1)
-                    ->where('first_live' , '<=', $todayDate)
-                    ->where('last_live'  , '>=', $todayDate)
-                    ->where('start_time' , '<=' , $nowTime)
-                    ->where('finish_time', '>=' , $nowTime);
-    }
-
-    /**
-     * @param string $todayStringDate
-     * @return Builder
-     */
-    private function isThereLiveStream(string $todayStringDate):Builder
-    {
-        return Conductor::where('date', $todayStringDate)
-                        ->whereNull('finish_time');
-    }
-
-    /**
-     * @param string $todayStringDate
-     * @param string $nowTime
-     */
-    private function closeFinishedPrograms(string $todayStringDate, string $nowTime): void
-    {
-        $finishedPrograms = $this->getFinishedPrograms($todayStringDate, $nowTime)->get();
-        foreach ($finishedPrograms as $finishedProgram) {
-            $this->setFinishTime($finishedProgram);
-        }
-    }
-
-    /**
-     * @param string $todayStringDate
-     * @param string $now
-     * @return mixed
-     */
-    private function getFinishedPrograms(string $todayStringDate , string $now)
-    {
-        return Conductor::where('date', $todayStringDate)
-                        ->whereNull('finish_time')
-                        ->where('scheduled_finish_time' , '<' , $now);
-    }
-
-    /**
-     * @param Conductor $finishedConductor
-     */
-    private function setFinishTime(Conductor $finishedConductor): void
-    {
-        $finishedConductor->update([
-            'finish_time' => $finishedConductor->scheduled_finish_time,
-        ]);
-
-    }
-
-    /**
-     * @param Carbon $now
-     * @return string
-     */
-    private function getNowTime(Carbon $now): string
-    {
-        return $now->toTimeString();
-    }
-
-    /**
-     * @param Carbon $today
-     * @return string
-     */
-    private function getTodayDateString(Carbon $today): string
-    {
-        return $today->toDateString();
-    }
-
-    /**
-     * @param Carbon $today
-     * @return string
-     */
-    private function getTodayName(Carbon $today): string
-    {
-        return $today->dayName;
-    }
-
-    /**
-     * @return Collection
-     */
-    private function makeScheduleOfTheWeekCollection(): Collection
-    {
-        $schedules = $this->getScheduleOfTheWeek()->get();
-        foreach ($schedules as $schedule) {
-            $schedule->date = $this->getDateOfWeek($schedule->dayOfWeek->name);
-        }
-
-        return $schedules;
-    }
-
-    /**
-     * @return Builder
-     */
-    private function getScheduleOfTheWeek():Builder
-    {
-        return Live::with('dayOfWeek')->orderBy('dayofweek_id');
-    }
-
-    /**
      * @param Live $scheduledLive
      * @param string $startTime
      * @param string $todayStringDate
+     * @return bool
      */
-    private function insertLiveConductor(Live $scheduledLive, string $startTime, string $todayStringDate): void
+    private function insertLiveConductor(Live $scheduledLive, string $startTime, string $todayStringDate): bool
     {
-        Conductor::create([
+        return Conductor::create([
             'title'                 => $scheduledLive->title,
             'description'           => $scheduledLive->description,
             'poster'                => $scheduledLive->poster,
@@ -250,30 +136,5 @@ class LiveController extends Controller
             'scheduled_finish_time' => $scheduledLive->finish_time,
             'start_time'            => $startTime,
         ]);
-    }
-
-    /**
-     * @param $dayName
-     * @return string|null
-     */
-    private function getDateOfWeek($dayName): ?string
-    {
-        $startOfWeekDate = Carbon::now('Asia/Tehran')->startOfWeek(Carbon::SATURDAY);
-        if ($dayName == 'saturday') {
-            $date = $startOfWeekDate->toDateString();
-        } elseif ($dayName == 'sunday') {
-            $date = $startOfWeekDate->addDay()->toDateString();
-        } elseif ($dayName == 'monday') {
-            $date = $startOfWeekDate->addDays(2)->toDateString();
-        } elseif ($dayName == 'tuesday') {
-            $date = $startOfWeekDate->addDays(3)->toDateString();
-        } elseif ($dayName == 'wednesday') {
-            $date = $startOfWeekDate->addDays(4)->toDateString();
-        } elseif ($dayName == 'thursday') {
-            $date = $startOfWeekDate->addDays(5)->toDateString();
-        } elseif ($dayName == 'friday') {
-            $date = $startOfWeekDate->addDays(6)->toDateString();
-        }
-        return (isset($date))?$date:null;
     }
 }
