@@ -53,10 +53,29 @@
                 </div>
             </div>
         </div>
+    @else
+        <div class="alert alert-info alert-dismissible fade show" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            </button>
+            <strong>
+                در حال حاضر پخش زنده وجود ندارد
+            </strong>
+        </div>
     @endif
 
     <div class="row">
         <div class="col">
+            
+            <div class="m-divider">
+                <span></span>
+                <span class="m-badge m-badge--info m-badge--wide m-badge--rounded">
+                    <h5 class="display-5">
+                        برنامه پخش زنده
+                    </h5>
+                </span>
+                <span></span>
+            </div>
+            
             <div id="a--fullcalendar"></div>
         </div>
     </div>
@@ -67,7 +86,7 @@
     <script type="text/javascript">
         var contentDisplayName = '{{(isset($title)?$title:'')}}';
         var contentUrl = '{{ asset('/live') }}';
-        var liveData = @if(isset($schedule)) {{ $schedule }} @else [] @endif;
+        var liveData = @if(isset($schedule)) {!! $schedule !!} @else [] @endif;
         // var liveData = [
         //     {
         //         "id": 4,
