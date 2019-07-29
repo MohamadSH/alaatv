@@ -505,10 +505,9 @@ class AdminController extends Controller
         return view('admin.indexSMS',
             compact('pageName', 'majors', 'userStatuses', 'roles', 'relatives', 'orderstatuses', 'paymentstatuses',
                 'genders', 'gendersWithUnknown', 'products',
-                'allRootProducts', 'lockProfileStatus', 'mobileNumberVerification', 'sortBy', 'sortType', 'smsCredit',
+                 'lockProfileStatus', 'mobileNumberVerification', 'sortBy', 'sortType', 'smsCredit',
                 'smsProviderNumber',
-                'numberOfFatherPhones', 'numberOfMotherPhones', 'coupons', 'addressSpecialFilter', 'heckoutStatuses',
-                'checkoutStatuses'));
+                 'coupons', 'addressSpecialFilter', 'checkoutStatuses'));
     }
 
     /**
