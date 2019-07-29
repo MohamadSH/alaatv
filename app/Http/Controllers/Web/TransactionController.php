@@ -175,7 +175,7 @@ class TransactionController extends Controller
             
             return json_encode([
                 'index'                      => View::make('transaction.index',
-                    compact('transactions', "transactionOrderproductCost"))
+                    compact('transactions'))
                     ->render(),
                 "totalCost"                  => $totaolCost,
             ], JSON_UNESCAPED_UNICODE);
