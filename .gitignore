@@ -43,6 +43,8 @@ public/css/font/glyphicons-halflings-regular.ttf
 
 public/js/all.js
 public/js/login.js
+public/js/admin-all.js
+public/js/page-live.js
 public/js/page-shop.js
 public/js/contactUs.js
 public/js/page-error.js
@@ -50,6 +52,7 @@ public/js/user-orders.js
 public/js/product-show.js
 public/js/user-profile.js
 public/js/content-show.js
+public/js/page-homePage.js
 public/js/checkout-auth.js
 public/js/page-landing5.js
 public/js/page-landing7.js
@@ -66,10 +69,10 @@ public/js/admin-content-create.js
 public/js/checkout-verification.js
 public/js/product-content-embed.js
 public/js/checkout-completeInfo.js
-public/js/admin-all.js
-public/js/page-live.js
+
 
 public/css/all.css
+public/css/page-live.css
 public/css/admin-all.css
 public/css/page-shop.css
 public/css/auth-login.css
@@ -96,7 +99,6 @@ public/css/product-content-embed.css
 public/css/checkout-verification.css
 public/css/user-profile-salesReport.css
 public/acm/AlaatvCustomFiles/components/OwlCarouselType2/style.css
-public/css/page-live.css
 
 public/.well-known/
 

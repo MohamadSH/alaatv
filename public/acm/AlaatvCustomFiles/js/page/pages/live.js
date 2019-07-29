@@ -1,5 +1,3 @@
-
-
 document.addEventListener('DOMContentLoaded', function() {
     var calendarEl = document.getElementById('a--fullcalendar');
 
@@ -110,8 +108,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
 });
 
-
-
 function formatData(data) {
     let dataLength = data.length,
         newData = [];
@@ -131,8 +127,6 @@ function formatData(data) {
     }
     return newData;
 }
-
-
 
 if ($('#video-0').length > 0) {
 
