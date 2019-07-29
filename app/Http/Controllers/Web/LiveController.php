@@ -96,7 +96,7 @@ class LiveController extends Controller
         ]);
     }
 
-    public function finishLive(Request $request){
+    public function endLive(Request $request){
         $today = Carbon::today()->setTimezone('Asia/Tehran');
         $now = Carbon::now('Asia/Tehran');
         $nowTime = $now->toTimeString();
