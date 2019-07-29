@@ -21,14 +21,14 @@ class ConductorRepo
 
     /**
      * @param string $todayStringDate
-     * @param string $now
+     * @param string $time
      * @return Builder
      */
-    public static function getFinishedPrograms(string $todayStringDate , string $now):Builder
+    public static function getFinishedPrograms(string $todayStringDate , string $time):Builder
     {
         return Conductor::where('date', $todayStringDate)
             ->whereNull('finish_time')
-            ->where('scheduled_finish_time' , '<' , $now);
+            ->where('scheduled_finish_time' , '<' , $time);
     }
 
 }
