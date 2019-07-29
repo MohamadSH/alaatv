@@ -8,6 +8,7 @@ use App\{Assignmentstatus,
     Attributeset,
     Bon,
     Checkoutstatus,
+    Collection\OrderCollections,
     Consultationstatus,
     Coupon,
     Coupontype,
@@ -679,6 +680,8 @@ class AdminController extends Controller
 
     /**
      * Admin panel for lotteries
+     * @param \App\Http\Requests\Request $request
+     * @return Factory|View
      */
     public function adminLottery(\App\Http\Requests\Request $request)
     {
@@ -709,9 +712,13 @@ class AdminController extends Controller
 
     /**
      * Admin panel for tele marketing
+     * @param Request $request
+     * @return Factory|View
      */
     public function adminTeleMarketing(Request $request)
     {
+        $orders= new OrderCollections();
+        $marketingProducts = [];
         if ($request->has('group-mobile')) {
             $marketingProducts = [
                 210,

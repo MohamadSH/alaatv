@@ -104,6 +104,8 @@ class EmployeetimesheetController extends Controller
         $userTodayTimeSheets = Employeetimesheet::where("date", Carbon::today('Asia/Tehran'))
             ->where("user_id", $user->id)
             ->get();
+        $employeetimesheet=null;
+        $isTimeSheetExtra=false;
         if ($userTodayTimeSheets->count() > 1) {
             session()->flash("warning", "شما برای امروز بیش از یک ساعت کاری وارد نموده اید!");
             $formVisible = false;
@@ -134,7 +136,7 @@ class EmployeetimesheetController extends Controller
             ->pluck("displayName", "id");
         
         return view("employeeTimeSheet.create",
-            compact("employeetimesheet", "employeeSchedule", "isTimeSheetExtra", "toDay", "employees", "formVisible",
+            compact("employeetimesheet", "employeeSchedule", "isTimeSheetExtra", "employees", "formVisible",
                 "workdayTypes"));
     }
 
