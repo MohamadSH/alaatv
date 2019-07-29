@@ -2,6 +2,7 @@
 
 namespace App\Http\ViewComposers;
 
+use App\Classes\LiveStreamAssistant;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
@@ -37,6 +38,10 @@ class HeaderComposer
         $user         = $this->request->user();
         $profileImage = ($user != null ? $user->photo : route('image',
             ['category' => '1', 'w' => '39', 'h' => '39', 'filename' => $this->defaultProfileImg]));
-        $view->with(compact('profileImage'));
+
+        //Checking for liveStream
+        $live = LiveStreamAssistant::isThereLiveStream();
+
+        $view->with(compact('profileImage' , 'live'));
     }
 }
