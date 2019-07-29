@@ -1053,7 +1053,7 @@ class UserController extends Controller
         });
 
         return view("user.ordersList",
-            compact("orders", "gateways", "debitCard", "transactions", "instalments", "orderCoupons"));
+            compact("orders", "gateways", "transactions", "instalments", "orderCoupons"));
     }
     
     /**
