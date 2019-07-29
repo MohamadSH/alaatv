@@ -385,8 +385,7 @@ class ContentController extends Controller
         $tags           = implode(',', isset($tags) ? $tags : []);
         $contentset     = $content->set;
     
-        $result = compact('content', 'rootContentTypes', 'validSinceTime', 'tags',
-            'contentset'//            "rootContentTypes"
+        $result = compact('content', 'validSinceTime', 'tags', 'contentset'
         );
     
         $view = view('content.edit', $result);
