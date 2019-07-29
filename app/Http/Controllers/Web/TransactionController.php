@@ -332,10 +332,12 @@ class TransactionController extends Controller
             ->orderBy("order")
             ->pluck('displayName', 'id')
             ->toArray();
+        $deadlineAt = null;
         if (isset($transaction->deadline_at)) {
             $deadlineAt = Carbon::parse($transaction->deadline_at)
                 ->format('Y-m-d');
         }
+        $completedAt=null;
         if (isset($transaction->completed_at)) {
             $completedAt = Carbon::parse($transaction->completed_at)
                 ->format('Y-m-d');
@@ -344,7 +346,7 @@ class TransactionController extends Controller
         $transactionGateways = TransactionGatewayRepo::getTransactionGateways(['enable'=>1])->get()->pluck('displayName' , 'id');
         
         return view("transaction.edit",
-            compact('transaction', 'transactionPaymentmethods', 'transactionStatuses', '$transactionStatuses',
+            compact('transaction', 'transactionPaymentmethods', 'transactionStatuses',
                 'deadlineAt', 'completedAt' , 'transactionGateways'));
     }
 
