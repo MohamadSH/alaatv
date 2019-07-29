@@ -578,8 +578,7 @@ class OrderController extends Controller
         $totalTransactions = $order->transactions;
         
         return view('order.edit',
-            compact('order', 'orderstatuses', 'paymentstatuses', 'coupons', 'orderTransactions', 'transactionstatuses',
-                'productBon',
+            compact('order', 'orderstatuses', 'paymentstatuses', 'coupons', 'orderTransactions',
                 'transactionPaymentmethods', 'transactionStatuses', 'products', 'orderArchivedTransactions',
                 'offlineTransactionPaymentMethods' , 'transactionGateways', 'totalTransactions'));
     }

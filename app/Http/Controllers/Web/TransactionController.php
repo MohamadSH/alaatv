@@ -445,6 +445,7 @@ class TransactionController extends Controller
             $zarinPal     = new Zarinpal($merchant);
             $result       = $zarinPal->getDriver()->unverifiedTransactions(['MerchantID'=>$merchant]);
 
+            $error=null;
             $transactions = collect();
             if ($result['Status'] == 'success') {
                 $authorities = $result["Authorities"];
