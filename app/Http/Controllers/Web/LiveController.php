@@ -89,11 +89,16 @@ class LiveController extends Controller
             ] , Response::HTTP_BAD_REQUEST);
         }
 
-        $this->insertLiveConductor( $live , $nowTime ,  $todayStringDate);
+        $result = $this->insertLiveConductor( $live , $nowTime ,  $todayStringDate);
+        if($result) {
+            return response()->json([
+                'live started successfully',
+            ]);
+        }
 
         return response()->json([
-            'live started successfully',
-        ]);
+            'DB error on inserting into conductor',
+        ] , Response::HTTP_SERVICE_UNAVAILABLE);
     }
 
     public function endLive(Request $request){
