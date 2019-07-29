@@ -578,8 +578,7 @@ class OrderController extends Controller
         $totalTransactions = $order->transactions;
         
         return view('order.edit',
-            compact('order', 'orderstatuses', 'paymentstatuses', 'coupons', 'orderTransactions', 'transactionstatuses',
-                'productBon',
+            compact('order', 'orderstatuses', 'paymentstatuses', 'coupons', 'orderTransactions',
                 'transactionPaymentmethods', 'transactionStatuses', 'products', 'orderArchivedTransactions',
                 'offlineTransactionPaymentMethods' , 'transactionGateways', 'totalTransactions'));
     }
@@ -826,7 +825,14 @@ class OrderController extends Controller
             'description' => optional($this->setting)->site->seo->homepage->metaDescription,
             'image'       => optional($this->setting)->site->siteLogo,
         ]);
-        
+
+        $orderProductCount=0;
+        $gateways=null;
+        $coupon=null;
+        $notIncludedProductsInCoupon=null;
+        $orderHasDonate=false;
+        $credit=0;
+        $fromWallet=0;
         $invoiceInfo = [];
         $user        = $request->user();
         

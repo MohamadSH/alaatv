@@ -3,10 +3,10 @@
 namespace App\Http\Controllers\Api;
 
 use App\Collection\ProductCollection;
-use App\Content;
 use App\Http\Controllers\Controller;
 use App\Product;
 use App\Traits\ProductCommon;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Cache;
@@ -167,8 +167,8 @@ class ProductController extends Controller
         $products = Product::active()->whereNull('grand_id');
         if(!is_null($since)){
             $products->where(function($q) use ($since){
-                    $q->where('created_at' , '>=' , $since)
-                        ->orWhere('updated_at' , '>=' , $since);
+                    $q->where('created_at' , '>=' , Carbon::createFromTimestamp($since))
+                        ->orWhere('updated_at' , '>=' , Carbon::createFromTimestamp($since));
             });
         }
         $products = $products->paginate(25, ['*'], 'page');

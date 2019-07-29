@@ -8,6 +8,7 @@ use App\{Assignmentstatus,
     Attributeset,
     Bon,
     Checkoutstatus,
+    Collection\OrderCollections,
     Consultationstatus,
     Coupon,
     Coupontype,
@@ -505,10 +506,9 @@ class AdminController extends Controller
         return view('admin.indexSMS',
             compact('pageName', 'majors', 'userStatuses', 'roles', 'relatives', 'orderstatuses', 'paymentstatuses',
                 'genders', 'gendersWithUnknown', 'products',
-                'allRootProducts', 'lockProfileStatus', 'mobileNumberVerification', 'sortBy', 'sortType', 'smsCredit',
+                 'lockProfileStatus', 'mobileNumberVerification', 'sortBy', 'sortType', 'smsCredit',
                 'smsProviderNumber',
-                'numberOfFatherPhones', 'numberOfMotherPhones', 'coupons', 'addressSpecialFilter', 'heckoutStatuses',
-                'checkoutStatuses'));
+                 'coupons', 'addressSpecialFilter', 'checkoutStatuses'));
     }
 
     /**
@@ -680,6 +680,8 @@ class AdminController extends Controller
 
     /**
      * Admin panel for lotteries
+     * @param \App\Http\Requests\Request $request
+     * @return Factory|View
      */
     public function adminLottery(\App\Http\Requests\Request $request)
     {
@@ -710,9 +712,13 @@ class AdminController extends Controller
 
     /**
      * Admin panel for tele marketing
+     * @param Request $request
+     * @return Factory|View
      */
     public function adminTeleMarketing(Request $request)
     {
+        $orders= new OrderCollections();
+        $marketingProducts = [];
         if ($request->has('group-mobile')) {
             $marketingProducts = [
                 210,

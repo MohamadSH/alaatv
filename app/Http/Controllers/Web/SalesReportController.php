@@ -79,7 +79,7 @@ class SalesReportController extends Controller
         return view('user.salesReport', compact('limitStatus', 'coupontype', 'products',
             'allTimeCount', 'allTimeSum', 'thisMonthCount', 'thisMonthSum', 'thisWeekCount', 'thisWeekSum',
             'todayCount', 'todaySum',
-            'todayRate', 'thisWeekRate', 'thisMonthRate', 'provinces' , 'userRank' , 'now'));
+              'provinces' , 'userRank' , 'now'));
     }
     
     
