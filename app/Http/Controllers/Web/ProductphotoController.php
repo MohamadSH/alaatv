@@ -6,6 +6,7 @@ use App\Adapter\AlaaSftpAdapter;
 use App\Productphoto;
 use App\Traits\FileCommon;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
