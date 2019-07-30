@@ -33,8 +33,6 @@ class OrderproductController extends Controller
 {
     use OrderCommon;
     use ProductCommon;
-    
-    protected $response;
 
     public function index(Request $request){
         $timeFilterEnable = $request->get('dateFilterEnable');
@@ -95,9 +93,8 @@ class OrderproductController extends Controller
         ]);
     }
 
-    function __construct(Websitesetting $setting, Response $response)
+    function __construct()
     {
-        $this->response = $response;
         $this->middleware('auth', [
             'only' => [
                 'destroy',
@@ -509,8 +506,7 @@ class OrderproductController extends Controller
         Cache::tags('bon')
             ->flush();
         
-        return $this->response->setStatusCode(200)
-            ->setContent(['message' => 'محصول سفارش با موفقیت حذف شد!']);
+        return response()->json(['message' => 'محصول سفارش با موفقیت حذف شد!']);
     }
     
     public function checkOutOrderproducts(Request $request)
@@ -525,7 +521,7 @@ class OrderproductController extends Controller
             $orderproduct->update();
         }
         
-        return $this->response->setStatusCode(200);
+        return response()->json();
     }
     
     /**
@@ -548,10 +544,8 @@ class OrderproductController extends Controller
         $orderproductData['attribute']      = $attributes;
         $orderproductData['extraAttribute'] = $extraAttributes;
         $orderproductData['order_id']       = isset($data['order_id']) ? $data['order_id'] : null;
-        
-        $response = $this->new($orderproductData);
-        
-        return $response;
+
+        return $this->new($orderproductData);
     }
     
     /**
