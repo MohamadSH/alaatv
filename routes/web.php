@@ -159,7 +159,6 @@ Route::group(['middleware' => 'auth'], function () {
     
     Route::get('holdlottery', "Web\LotteryController@holdLottery");
     Route::get('givePrize', "Web\LotteryController@givePrizes");
-    Route::get('smsbot', "Web\BotsController@smsBot");
     Route::get("bot", "Web\BotsController@bot");
     Route::get("pointBot", "Web\BotsController@pointBot");
     Route::post("walletBot", "Web\BotsController@walletBot");

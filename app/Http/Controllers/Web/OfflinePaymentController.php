@@ -26,7 +26,7 @@ class OfflinePaymentController extends Controller
      */
     public function __construct(Request $request)
     {
-//        $this->middleware('OfflineVerifyPayment', ['only' => ['verifyPayment'],]);
+
     }
     
     /**
@@ -45,8 +45,6 @@ class OfflinePaymentController extends Controller
         $user = $request->user();
         $customerDescription = session()->get('customerDescription');
 
-        // We had middleware called OfflineVerifyPayment for this,
-        //but after reconsidering about queries in middleware I put the code in here
         $getOrder = $this->getOrder($request , $user);
         if ($getOrder['error']) {
             return response($getOrder['text'], $getOrder['httpStatusCode']);
