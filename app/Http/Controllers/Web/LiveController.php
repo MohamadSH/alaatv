@@ -38,6 +38,8 @@ class LiveController extends Controller
         $nowTime = Carbon::now('Asia/Tehran')->toTimeString();
         $today = Carbon::today()->setTimezone('Asia/Tehran');
         $todayStringDate = $today->toDateString();
+        $playLiveAjaxUrl = '';
+        $stopLiveAjaxUrl = '';
 
         /** @var DayofWeek $dayOfWeek */
         $dayOfWeek = WeekRepo::getDayOfWeek($today->dayName)->first();
@@ -51,7 +53,7 @@ class LiveController extends Controller
         if($user->hasRole('admin')) {
             $live = true;
             $title = 'پخش برای ادمین';
-            return view('pages.liveView', compact('nowTime', 'schedule' , 'live' ,'poster' , 'xMpegURL' , 'dashXml' , 'fullVideo' , 'title'));
+            return view('pages.liveView', compact('nowTime', 'schedule' , 'live' ,'poster' , 'xMpegURL' , 'dashXml' , 'fullVideo' , 'title', 'playLiveAjaxUrl', 'stopLiveAjaxUrl'));
         }
 
         LiveStreamAssistant::closeFinishedPrograms($todayStringDate, $nowTime);
@@ -62,7 +64,7 @@ class LiveController extends Controller
             Cache::tags('live')->flush();
             $live = true;
             $poster = $liveStream->poster;
-            return view('pages.liveView' , compact( 'nowTime', 'schedule' , 'live' ,'poster' , 'xMpegURL' , 'dashXml' , 'fullVideo' , 'title' ));
+            return view('pages.liveView' , compact( 'nowTime', 'schedule' , 'live' ,'poster' , 'xMpegURL' , 'dashXml' , 'fullVideo' , 'title', 'playLiveAjaxUrl', 'stopLiveAjaxUrl' ));
         }
 
         /** @var Live $scheduledLive */
@@ -72,8 +74,8 @@ class LiveController extends Controller
             $live = true;
             $poster = $scheduledLive->poster;
         }
-
-        return view('pages.liveView' , compact( 'nowTime', 'schedule' , 'live' ,'poster' , 'xMpegURL' , 'dashXml' , 'fullVideo' , 'title' ));
+        
+        return view('pages.liveView' , compact( 'nowTime', 'schedule' , 'live' ,'poster' , 'xMpegURL' , 'dashXml' , 'fullVideo' , 'title', 'playLiveAjaxUrl', 'stopLiveAjaxUrl' ));
     }
 
     public function startLive(Request $request , Live $live){

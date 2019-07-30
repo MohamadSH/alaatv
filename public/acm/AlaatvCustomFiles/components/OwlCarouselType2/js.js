@@ -79,7 +79,7 @@
                     'margin-bottom': '0px'
                 });
 
-                let parent = $(this).parent('#' + $this.attr('id') + ' .m-widget_head-owlcarousel-item.carousel');
+                let parent = $(this).parents('#' + $this.attr('id') + ' .a--block-item');
                 let position = parent.data('position');
 
 
@@ -96,14 +96,16 @@
                             alaaOwlCarouselItemDetailObject.slideDown();
                         }
 
-                        let detailesWarper = $this.find('.m-portlet.a--owl-carousel-slide-detailes');
+                        let detailesWarper = $this.find('.a--owl-carousel-slide-detailes');
                         let target = $.fn.OwlCarouselType2.getGridViewWarper($this).find('.carousel[data-position="' + position + '"]');
                         let targetCol = target.parent();
                         targetCol.css({
-                            'margin-bottom': parseInt(detailesWarper.outerHeight()) + 'px'
+                            'margin-bottom': parseInt(detailesWarper.outerHeight()) + 50 + 'px'
                         });
-                        let positionTop = parseInt(targetCol.outerHeight()) + parseInt(targetCol.position().top);
-                        let positionLeftOfPointer = parseInt(targetCol.position().left) + (parseInt(targetCol.outerWidth()) / 2) - 5;
+
+                        let positionTop = parseInt(targetCol[0].offsetTop) + parseInt(targetCol.outerHeight()) + 20;
+
+                        let positionLeftOfPointer = parseInt(targetCol.position().left) + (parseInt(targetCol.outerWidth()) / 2) - 20;
                         detailesWarper.css({
                             'display': 'block',
                             'position': 'absolute',
@@ -115,7 +117,7 @@
                         if (detailesWarperPointerStyle.length === 0) {
                             detailesWarper.append('<div class="detailesWarperPointerStyle"></div>');
                         }
-                        $this.find('.detailesWarperPointerStyle').html('<style>.a--owl-carousel-slide-detailes::before { right: auto; left: ' + positionLeftOfPointer + 'px; }</style>');
+                        $this.find('.detailesWarperPointerStyle').html('<style>.a--owl-carousel-slide-detailes::before { right: auto; left: ' + positionLeftOfPointer + 'px !important; }</style>');
                     });
                 });
             });
