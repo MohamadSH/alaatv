@@ -2,9 +2,10 @@
 
 namespace App\Traits;
 
-use App\Http\Controllers\WalletController;
+use App\Http\Controllers\Web\WalletController;
 use App\Http\Requests\Request;
 use App\Wallet;
+use Illuminate\Http\Response;
 
 trait HasWallet
 {
@@ -110,7 +111,7 @@ trait HasWallet
             $request->offsetSet("wallettype_id", $walletType);
             RequestCommon::convertRequestToAjax($request);
             $response = $walletController->store($request);
-            if ($response->getStatusCode() == 200) {
+            if ($response->getStatusCode() == Response::HTTP_OK) {
                 $result = json_decode($response->getContent());
                 $wallet = Wallet::where("id", $result->wallet->id)
                     ->first();

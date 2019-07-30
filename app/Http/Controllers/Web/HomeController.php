@@ -15,8 +15,8 @@ use App\Http\Controllers\Controller;
 use League\Flysystem\Sftp\SftpAdapter;
 use App\Console\Commands\CategoryTree\Ensani;
 use Illuminate\Contracts\Encryption\DecryptException;
-use Illuminate\Support\Facades\{DB, File, Input, Route, Config, Storage};
-use App\{Repositories\OrderproductRepo,
+use Illuminate\Support\Facades\{File, Input, Route, Config, Storage};
+use App\{
     User,
     Event,
     Major,
@@ -55,15 +55,13 @@ class HomeController extends Controller
      * @return void
      */
     
-    protected $response;
-    
+
     protected $sideBarAdmin;
     
     protected $setting;
     
-    public function __construct(Response $response, Websitesetting $setting)
+    public function __construct(Websitesetting $setting)
     {
-        $this->response = $response;
         $this->setting  = $setting->setting;
 
 
@@ -433,7 +431,7 @@ class HomeController extends Controller
             
                     return \Illuminate\Support\Facades\Response::stream(function () use ($stream) {
                         fpassthru($stream);
-                    }, 200, [
+                    }, Response::HTTP_OK, [
                         'Content-Type'        => $fs->getMimetype($fileName),
                         'Content-Length'      => $fs->getSize($fileName),
                         'Content-disposition' => 'attachment; filename="'.basename($fileName).'"',
@@ -461,7 +459,7 @@ class HomeController extends Controller
         
                 return \Illuminate\Support\Facades\Response::stream(function () use ($stream) {
                     fpassthru($stream);
-                }, 200, [
+                }, Response::HTTP_OK, [
                     'Content-Type'        => $fs->getMimetype($fileName),
                     'Content-Length'      => $fs->getSize($fileName),
                     'Content-disposition' => 'attachment; filename="'.basename($fileName).'"',
@@ -489,7 +487,7 @@ class HomeController extends Controller
                     
                         return \Illuminate\Support\Facades\Response::stream(function () use ($stream) {
                             fpassthru($stream);
-                        }, 200, [
+                        }, Response::HTTP_OK, [
                             'Content-Type'        => $fs->getMimetype($fileName),
                             'Content-Length'      => $fs->getSize($fileName),
                             'Content-disposition' => 'attachment; filename="'.basename($fileName).'"',
@@ -504,7 +502,7 @@ class HomeController extends Controller
                 
                     return \Illuminate\Support\Facades\Response::stream(function () use ($stream) {
                         fpassthru($stream);
-                    }, 200, [
+                    }, Response::HTTP_OK, [
                         'Content-Type'        => $fs->getMimetype($fileName),
                         'Content-Length'      => $fs->getSize($fileName),
                         'Content-disposition' => 'attachment; filename="'.basename($fileName).'"',
@@ -605,7 +603,7 @@ class HomeController extends Controller
                 ->lastModified($fileName);
             $size         = strlen($file);
             
-            return response($file, 200)
+            return response($file, Response::HTTP_OK)
                 ->header('Content-Type', $type)
                 ->header('Content-Length',
                     $size)
@@ -769,7 +767,7 @@ class HomeController extends Controller
         $users     = User::whereIn('id', $usersId)
             ->get();
         if ($users->isEmpty()) {
-            return $this->response->setStatusCode(451);
+            return response()->json([] , Response::HTTP_UNAVAILABLE_FOR_LEGAL_REASONS);
         }
         
         if (!isset($from) || strlen($from) == 0) {
@@ -777,7 +775,6 @@ class HomeController extends Controller
         }
         
         $mobiles    = [];
-        $finalUsers = collect();
         foreach ($users as $user) {
             if (in_array(0, $relatives)) {
                 array_push($mobiles, ltrim($user->mobile, '0'));
@@ -816,11 +813,10 @@ class HomeController extends Controller
 //        Notification::send($users, new GeneralNotice($message));
         if (!$response['error']) {
             $smsCredit = $this->medianaGetCredit();
-            
-            return $this->response->setContent($smsCredit)
-                ->setStatusCode(200);
+
+            return response()->json($smsCredit);
         } else {
-            return $this->response->setStatusCode(503);
+            return response()->json( [] , Response::HTTP_SERVICE_UNAVAILABLE);
         }
     }
     
@@ -923,25 +919,21 @@ class HomeController extends Controller
                 }
             }
             if ($done) {
-                return $this->response->setStatusCode(Response::HTTP_OK)
-                    ->setContent([
-                        'fileName' => $fileName,
-                        'prefix'   => $filePrefix,
-                    ]);
+                return response()->json([
+                    'fileName' => $fileName,
+                    'prefix'   => $filePrefix,
+                ]);
             } else {
-                return $this->response->setStatusCode(503);
+                return response()->json([] , Response::HTTP_SERVICE_UNAVAILABLE);
             }
         } catch (Exception $e) {
             //            return $this->TAG.' '.$e->getMessage();
-            $message = 'unexpected error';
-            
-            return $this->response->setStatusCode(503)
-                ->setContent([
-                    'message' => $message,
-                    'error'   => $e->getMessage(),
-                    'line'    => $e->getLine(),
-                    'file'    => $e->getFile(),
-                ]);
+            return response()->json([
+                'message' => 'unexpected error',
+                'error'   => $e->getMessage(),
+                'line'    => $e->getLine(),
+                'file'    => $e->getFile(),
+            ] , Response::HTTP_SERVICE_UNAVAILABLE);
         }
     }
     //    public function certificates()

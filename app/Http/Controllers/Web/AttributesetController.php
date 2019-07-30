@@ -38,10 +38,10 @@ class AttributesetController extends Controller
         $attributeset->fill($request->all());
         
         if ($attributeset->save()) {
-            return $this->response->setStatusCode(200);
+            return $this->response->setStatusCode(Response::HTTP_OK);
         }
         else {
-            return $this->response->setStatusCode(503);
+            return $this->response->setStatusCode(Response::HTTP_SERVICE_UNAVAILABLE);
         }
     }
 

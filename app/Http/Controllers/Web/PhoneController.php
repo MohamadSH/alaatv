@@ -32,10 +32,10 @@ class PhoneController extends Controller
             $phone->priority = 0;
         }
         if ($phone->save()) {
-            return $this->response->setStatusCode(200);
+            return $this->response->setStatusCode(Response::HTTP_OK);
         }
         else {
-            return $this->response->setStatusCode(503);
+            return $this->response->setStatusCode(Response::HTTP_SERVICE_UNAVAILABLE);
         }
     }
 

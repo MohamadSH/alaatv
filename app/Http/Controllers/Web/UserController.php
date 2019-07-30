@@ -155,10 +155,14 @@ class UserController extends Controller
 
     public function index(UserIndexRequest $request)
     {
-        //======================================================================
-        //=============================OLD CODE=================================
-        //======================================================================
-        
+        $products = [];
+        $lotteries = [];
+        $reportType   = null;
+        $hasPishtaz = [];
+        $orders = null;
+        $seePaidCost = null;
+
+
         $createdTimeEnable = Input::get('createdTimeEnable');
         $createdSinceDate  = Input::get('createdSinceDate');
         $createdTillDate   = Input::get('createdTillDate');
@@ -522,7 +526,6 @@ class UserController extends Controller
             }
         }
 
-
         $previousPath         = url()->previous();
         if (strcmp($previousPath, action("Web\AdminController@adminSMS")) == 0 || $request->has('smsAdmin')) {
             $index                = "user.index2";
@@ -585,7 +588,6 @@ class UserController extends Controller
             return $items;
         }
         elseif (strcmp($previousPath, action("Web\AdminController@adminReport")) == 0 || $request->has('reportAdmin')) {
-            $reportType           = "";
             $index = "admin.partials.getReportIndex";
 
             $items = $users->get();
@@ -604,7 +606,6 @@ class UserController extends Controller
 
 
             /** For selling books */
-            $hasPishtaz = [];
             if (isset($orders)) {
                 foreach ($items as $user) {
                     if ($user->orders()
@@ -680,15 +681,15 @@ class UserController extends Controller
             'index'                => View::make($index,
                 compact('items', 'products', 'paymentStatusesId', 'reportType', 'hasPishtaz', 'orders', 'seePaidCost',
                     'lotteries'))->render(),
-            'products'             => (isset($products)) ? $products : [],
-            'lotteries'            => (isset($lotteries)) ? $lotteries : [],
+            'products'             => $products ,
+            'lotteries'            => $lotteries ,
             "allUsers"             => $uniqueItemsId??[],
             "allUsersNumber"       => $uniqueItemsIdCount??0,
             "numberOfFatherPhones" => $numberOfFatherPhones??0,
             "numberOfMotherPhones" => $numberOfMotherPhones??0,
         ];
         
-        return response(json_encode($result), 200)->header('Content-Type', 'application/json');
+        return response(json_encode($result), Response::HTTP_OK)->header('Content-Type', 'application/json');
         
         //======================================================================
         //=============================REFACTOR=================================
@@ -799,10 +800,8 @@ class UserController extends Controller
             
             return response($responseContent, Response::HTTP_OK);
         } catch (\Exception    $e) {
-            $message = 'unexpected error';
-            
             return response([
-                'message' => $message,
+                'message' => 'unexpected error',
                 'error'   => $e->getMessage(),
                 'line'    => $e->getLine(),
                 'file'    => $e->getFile(),
@@ -2025,7 +2024,7 @@ class UserController extends Controller
                 $storeContactRequest->offsetSet("relative_id", $parent->id);
                 $storeContactRequest->offsetSet("isServiceRequest", true);
                 $response = $contactController->store($storeContactRequest);
-                if ($response->getStatusCode() == 200) {
+                if ($response->getStatusCode() == Response::HTTP_OK) {
                     $responseContent = json_decode($response->getContent("contact"));
                     $parentContact   = $responseContent->contact;
                 }
@@ -2240,7 +2239,7 @@ class UserController extends Controller
             $updateRequest->offsetSet("grade_id", $request->get("grade_id"));
             RequestCommon::convertRequestToAjax($updateRequest);
             $response = $this->update($updateRequest, $user);
-            if ($response->getStatusCode() == 503) {
+            if ($response->getStatusCode() == Response::HTTP_SERVICE_UNAVAILABLE) {
                 session()->put("error", "خطایی در ثبت اطلاعات شما رخ داد. لطفا مجددا اقدام نمایید");
                 
                 return redirect()->back();
@@ -2261,7 +2260,7 @@ class UserController extends Controller
             $evenResultRequest->offsetSet("participationCodeHash", $request->get("score"));
             RequestCommon::convertRequestToAjax($evenResultRequest);
             $response = $eventResultController->store($evenResultRequest);
-            if ($response->getStatusCode() == 503) {
+            if ($response->getStatusCode() == Response::HTTP_SERVICE_UNAVAILABLE) {
                 session()->put("error", "خطایی در ثبت نام شما رخ داد. لطفا مجددا اقدام نمایید");
                 
                 return redirect()->back();
@@ -2452,7 +2451,7 @@ class UserController extends Controller
         $response        = $orderController->addOrderproduct($request, $product);
         $responseStatus  = $response->getStatusCode();
         $result          = json_decode($response->getContent());
-        if ($responseStatus != 200) {
+        if ($responseStatus != Response::HTTP_OK) {
             return $this->sessionPutAndRedirectBack("خطا در ثبت محصول اینرنت رایگان آسیاتک");
         }
         $user->lockHisProfile();

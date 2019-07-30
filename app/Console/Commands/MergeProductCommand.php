@@ -630,7 +630,7 @@ class MergeProductCommand extends Command
             
             $response = $this->sendRequest(config("constants.TAG_API_URL")."id/product/".$product->id, "PUT", $params);
             
-            if ($response["statusCode"] == 200) {
+            if ($response["statusCode"] == Response::HTTP_OK) {
                 //
             }
             else {

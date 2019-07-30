@@ -92,7 +92,7 @@ class EmployeetimesheetController extends Controller
             "employeeRealWorkTime" => $employeeSumRealWorkTime,
         ];
         
-        return response(json_encode($result, JSON_UNESCAPED_UNICODE), 200)->header('Content-Type', 'application/json');
+        return response(json_encode($result, JSON_UNESCAPED_UNICODE), Response::HTTP_OK)->header('Content-Type', 'application/json');
     }
 
     public function create()
@@ -288,10 +288,10 @@ class EmployeetimesheetController extends Controller
     public function destroy(Employeetimesheet $employeetimesheet, Response $response)
     {
         if ($employeetimesheet->delete()) {
-            return $response->setStatusCode(200);
+            return $response->setStatusCode(Response::HTTP_OK);
         }
         else {
-            return $response->setStatusCode(503);
+            return $response->setStatusCode(Response::HTTP_SERVICE_UNAVAILABLE);
         }
     }
 }

@@ -10,8 +10,6 @@ use App\Productfile;
 use App\Productfiletype;
 use App\Traits\ProductCommon;
 use Carbon\Carbon;
-use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Storage;
@@ -38,7 +36,6 @@ class ProductfileController extends Controller
                 'update',
             ],
         ]);
-        $this->response = new Response();
     }
     
 /**

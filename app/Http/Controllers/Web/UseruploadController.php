@@ -98,7 +98,7 @@ class UseruploadController extends Controller
         $userupload->fill($request->all());
         
         if (!$userupload->update()) {
-            return $this->response->setStatusCode(503);
+            return $this->response->setStatusCode(Response::HTTP_SERVICE_UNAVAILABLE);
         }
         
         if ($oldUserUploadStatus != $userupload->useruploadstatus_id) {
@@ -108,7 +108,7 @@ class UseruploadController extends Controller
             $userupload->user->notify(new CounselingStatusChanged($userUploadStatusName[0]));
         }
         
-        return $this->response->setStatusCode(200);
+        return $this->response->setStatusCode(Response::HTTP_OK);
         
     }
 }

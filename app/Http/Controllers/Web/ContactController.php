@@ -51,7 +51,7 @@ class ContactController extends Controller
         $contact->fill($request->all());
         if ($contact->save()) {
             if ($request->has("isServiceRequest")) {
-                return $this->response->setStatusCode(200)
+                return $this->response->setStatusCode(Response::HTTP_OK)
                     ->setContent(["contact" => $contact]);
             }
 
@@ -60,7 +60,7 @@ class ContactController extends Controller
         }
 
         if ($request->has("isServiceRequest")) {
-            return $this->response->setStatusCode(503);
+            return $this->response->setStatusCode(Response::HTTP_SERVICE_UNAVAILABLE);
         }
         session()->put("error", "خطای پایگاه داده.");
 
