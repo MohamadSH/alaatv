@@ -204,17 +204,17 @@ class MbtianswerController extends Controller
         }
     
         if (count($answers) != $this->numberOfQuestions) {
-            return $this->response->setStatusCode(422);
+            return $this->response->setStatusCode(Response::HTTP_UNPROCESSABLE_ENTITY);
         }
     
         $mbtiAnswer          = new Mbtianswer();
         $mbtiAnswer->user_id = Auth::user()->id;
         $mbtiAnswer->answers = json_encode($answers, JSON_UNESCAPED_UNICODE);
         if (!$mbtiAnswer->save()) {
-            return $this->response->setStatusCode(503);
+            return $this->response->setStatusCode(Response::HTTP_SERVICE_UNAVAILABLE);
         }
     
-        return $this->response->setStatusCode(200);
+        return $this->response->setStatusCode(Response::HTTP_OK);
     }
 
     public function show(Mbtianswer $mbtianswer)

@@ -689,7 +689,7 @@ class UserController extends Controller
             "numberOfMotherPhones" => $numberOfMotherPhones??0,
         ];
         
-        return response(json_encode($result), 200)->header('Content-Type', 'application/json');
+        return response(json_encode($result), Response::HTTP_OK)->header('Content-Type', 'application/json');
         
         //======================================================================
         //=============================REFACTOR=================================
@@ -2024,7 +2024,7 @@ class UserController extends Controller
                 $storeContactRequest->offsetSet("relative_id", $parent->id);
                 $storeContactRequest->offsetSet("isServiceRequest", true);
                 $response = $contactController->store($storeContactRequest);
-                if ($response->getStatusCode() == 200) {
+                if ($response->getStatusCode() == Response::HTTP_OK) {
                     $responseContent = json_decode($response->getContent("contact"));
                     $parentContact   = $responseContent->contact;
                 }
@@ -2239,7 +2239,7 @@ class UserController extends Controller
             $updateRequest->offsetSet("grade_id", $request->get("grade_id"));
             RequestCommon::convertRequestToAjax($updateRequest);
             $response = $this->update($updateRequest, $user);
-            if ($response->getStatusCode() == 503) {
+            if ($response->getStatusCode() == Response::HTTP_SERVICE_UNAVAILABLE) {
                 session()->put("error", "خطایی در ثبت اطلاعات شما رخ داد. لطفا مجددا اقدام نمایید");
                 
                 return redirect()->back();
@@ -2260,7 +2260,7 @@ class UserController extends Controller
             $evenResultRequest->offsetSet("participationCodeHash", $request->get("score"));
             RequestCommon::convertRequestToAjax($evenResultRequest);
             $response = $eventResultController->store($evenResultRequest);
-            if ($response->getStatusCode() == 503) {
+            if ($response->getStatusCode() == Response::HTTP_SERVICE_UNAVAILABLE) {
                 session()->put("error", "خطایی در ثبت نام شما رخ داد. لطفا مجددا اقدام نمایید");
                 
                 return redirect()->back();
@@ -2451,7 +2451,7 @@ class UserController extends Controller
         $response        = $orderController->addOrderproduct($request, $product);
         $responseStatus  = $response->getStatusCode();
         $result          = json_decode($response->getContent());
-        if ($responseStatus != 200) {
+        if ($responseStatus != Response::HTTP_OK) {
             return $this->sessionPutAndRedirectBack("خطا در ثبت محصول اینرنت رایگان آسیاتک");
         }
         $user->lockHisProfile();

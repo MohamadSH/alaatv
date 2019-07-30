@@ -8,6 +8,7 @@ use Carbon\Carbon;
 use App\Contentset;
 use Illuminate\Console\Command;
 use App\Traits\APIRequestCommon;
+use Illuminate\Http\Response;
 
 class TagsCommand extends Command
 {
@@ -121,7 +122,7 @@ class TagsCommand extends Command
                     "PUT",
                     $params
                 );
-                if ($response["statusCode"] != 200) {
+                if ($response["statusCode"] != Response::HTTP_OK) {
                     $this->error("item #".$item["id"]." failed. response : ".$response["statusCode"]);
                 }
             } catch (\Exception    $e) {

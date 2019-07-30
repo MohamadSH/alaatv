@@ -431,7 +431,7 @@ class HomeController extends Controller
             
                     return \Illuminate\Support\Facades\Response::stream(function () use ($stream) {
                         fpassthru($stream);
-                    }, 200, [
+                    }, Response::HTTP_OK, [
                         'Content-Type'        => $fs->getMimetype($fileName),
                         'Content-Length'      => $fs->getSize($fileName),
                         'Content-disposition' => 'attachment; filename="'.basename($fileName).'"',
@@ -459,7 +459,7 @@ class HomeController extends Controller
         
                 return \Illuminate\Support\Facades\Response::stream(function () use ($stream) {
                     fpassthru($stream);
-                }, 200, [
+                }, Response::HTTP_OK, [
                     'Content-Type'        => $fs->getMimetype($fileName),
                     'Content-Length'      => $fs->getSize($fileName),
                     'Content-disposition' => 'attachment; filename="'.basename($fileName).'"',
@@ -487,7 +487,7 @@ class HomeController extends Controller
                     
                         return \Illuminate\Support\Facades\Response::stream(function () use ($stream) {
                             fpassthru($stream);
-                        }, 200, [
+                        }, Response::HTTP_OK, [
                             'Content-Type'        => $fs->getMimetype($fileName),
                             'Content-Length'      => $fs->getSize($fileName),
                             'Content-disposition' => 'attachment; filename="'.basename($fileName).'"',
@@ -502,7 +502,7 @@ class HomeController extends Controller
                 
                     return \Illuminate\Support\Facades\Response::stream(function () use ($stream) {
                         fpassthru($stream);
-                    }, 200, [
+                    }, Response::HTTP_OK, [
                         'Content-Type'        => $fs->getMimetype($fileName),
                         'Content-Length'      => $fs->getSize($fileName),
                         'Content-disposition' => 'attachment; filename="'.basename($fileName).'"',
@@ -603,7 +603,7 @@ class HomeController extends Controller
                 ->lastModified($fileName);
             $size         = strlen($file);
             
-            return response($file, 200)
+            return response($file, Response::HTTP_OK)
                 ->header('Content-Type', $type)
                 ->header('Content-Length',
                     $size)

@@ -490,7 +490,7 @@ class OrderController extends Controller
                 ->render(),
             'myOrderproducts' => $myOrderproducts,
         ];
-        return response(json_encode($result, JSON_UNESCAPED_UNICODE), 200)->header('Content-Type', 'application/json');
+        return response(json_encode($result, JSON_UNESCAPED_UNICODE), Response::HTTP_OK)->header('Content-Type', 'application/json');
     }
     
     public function create()
@@ -694,7 +694,7 @@ class OrderController extends Controller
                     $orderFileRequest->offsetSet('file', $fileName);
                     $orderFileController = new OrderFileController();
                     $responseStatus      = $orderFileController->store($orderFileRequest);
-                    if ($responseStatus->getStatusCode() != 200) {
+                    if ($responseStatus->getStatusCode() != Response::HTTP_OK) {
                         session()->put('error', 'خطا در ذخیره اطلاعات فایل');
                     }
                 } else {

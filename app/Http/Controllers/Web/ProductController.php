@@ -1487,7 +1487,7 @@ class ProductController extends Controller
             if ($product->hasChildren()) {
                 foreach ($product->children as $child) {
                     $response = $this->copy($child);
-                    if ($response->getStatusCode() == 200) {
+                    if ($response->getStatusCode() == Response::HTTP_OK) {
                         $response   = json_decode($response->getContent());
                         $newChildId = $response->newProductId;
                         if (isset($newChildId)) {

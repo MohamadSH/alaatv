@@ -172,7 +172,7 @@ class EventresultController extends Controller
         $eventResult->fill($request->all());
         $updateResult = $eventResult->update();
         if ($request->expectsJson()) {
-            return $this->response->setStatusCode(200);
+            return $this->response->setStatusCode(Response::HTTP_OK);
         }
         else {
             if ($updateResult) {

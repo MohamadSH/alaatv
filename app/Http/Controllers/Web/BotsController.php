@@ -239,7 +239,7 @@ class BotsController extends Controller
                     
                     $storeCoupon = $couponController->store($insertCouponRequest);
                     
-                    if ($storeCoupon->status() == 200) {
+                    if ($storeCoupon->status() == Response::HTTP_OK) {
                         
                         $message = "شما در قرعه کشی وفاداران آلاء برنده یک کد تخفیف شدید.";
                         $message .= "\n";
@@ -1270,7 +1270,7 @@ class BotsController extends Controller
                                 }
                                 RequestCommon::convertRequestToAjax($request);
                                 $response = $this->registerUserAndGiveOrderproduct($request);
-                                if ($response->getStatusCode() == 200) {
+                                if ($response->getStatusCode() == Response::HTTP_OK) {
                                     $counter++;
                                     echo "User inserted: ".$lastName." ".$mobile;
                                     echo "<br>";
@@ -2223,7 +2223,7 @@ class BotsController extends Controller
                     $response = $this->sendRequest(config("constants.TAG_API_URL")."id/$bucket/".$item->id, "PUT",
                         $params);
                     
-                    if ($response["statusCode"] == 200) {
+                    if ($response["statusCode"] == Response::HTTP_OK) {
                         $successCounter++;
                     } else {
                         dump("item #".$item["id"]." failed. response : ".$response["statusCode"]);

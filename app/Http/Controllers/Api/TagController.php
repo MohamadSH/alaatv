@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Classes\RedisTagging;
 use App\Http\Requests\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Response;
 
 //https://github.com/smrchy/rest-tagging
 
@@ -52,7 +53,7 @@ class TagController extends Controller
         if ($tags === null) {
             return response()->json([
                 'error' => 'tag is not set!',
-            ], 410);
+            ], Response::HTTP_GONE);
         }
         
         $response = null;
@@ -68,7 +69,7 @@ class TagController extends Controller
         if (isset($err)) {
             $response = response()->json([
                 'error' => 'msg',
-            ], 410);
+            ], Response::HTTP_GONE);
         }
         $header   = [
             'Content-Type' => 'application/json; charset=UTF-8',
@@ -76,7 +77,7 @@ class TagController extends Controller
         ];
         $response = response()->json([
             'data' => $result,
-        ], 200, $header, JSON_UNESCAPED_UNICODE);
+        ], Response::HTTP_OK, $header, JSON_UNESCAPED_UNICODE);
     }
     
     /**
@@ -97,7 +98,7 @@ class TagController extends Controller
             if (isset($err)) {
                 $response = response()->json([
                     'error' => 'msg',
-                ], 410);
+                ], Response::HTTP_GONE);
             }
             $header   = [
                 'Content-Type' => 'application/json; charset=UTF-8',
@@ -105,7 +106,7 @@ class TagController extends Controller
             ];
             $response = response()->json([
                 'data' => $result,
-            ], 200, $header, JSON_UNESCAPED_UNICODE);
+            ], Response::HTTP_OK, $header, JSON_UNESCAPED_UNICODE);
         });
         
         return $response;
@@ -187,7 +188,7 @@ class TagController extends Controller
                 if (isset($err)) {
                     $response = response()->json([
                         'error' => 'msg',
-                    ], 410);
+                    ], Response::HTTP_GONE);
                 }
                 
                 $header = [
@@ -199,7 +200,7 @@ class TagController extends Controller
     
                 $response = response()->json([
                     'data' => $result,
-                ], 200, $header, JSON_UNESCAPED_UNICODE);
+                ], Response::HTTP_OK, $header, JSON_UNESCAPED_UNICODE);
             });
         
         //dd($response);

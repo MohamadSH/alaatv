@@ -424,7 +424,7 @@ class OrderproductController extends Controller
                             $request->offsetSet('userbonstatus_id', config('constants.USERBON_STATUS_ACTIVE'));
                             /*$response = */
                             $userbonController->store($request);
-                            /*if ($response->getStatusCode() == 200) {
+                            /*if ($response->getStatusCode() == Response::HTTP_OK) {
                                 //ToDo : Appropriate response
                             } else {
 

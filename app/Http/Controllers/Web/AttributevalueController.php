@@ -30,12 +30,9 @@ class AttributevalueController extends Controller
         $attributevalue->fill($request->all());
 
         if ($attributevalue->save()) {
-            return $this->response->setStatusCode(200);
-        } else {
-            return $this->response->setStatusCode(503);
+            return $this->response->setStatusCode(Response::HTTP_OK);
         }
-        
-        return redirect()->back();
+        return $this->response->setStatusCode(Response::HTTP_SERVICE_UNAVAILABLE);
     }
 
     public function edit(Attributevalue $attributevalue)
