@@ -15,8 +15,8 @@ use App\Http\Controllers\Controller;
 use League\Flysystem\Sftp\SftpAdapter;
 use App\Console\Commands\CategoryTree\Ensani;
 use Illuminate\Contracts\Encryption\DecryptException;
-use Illuminate\Support\Facades\{DB, File, Input, Route, Config, Storage};
-use App\{Repositories\OrderproductRepo,
+use Illuminate\Support\Facades\{File, Input, Route, Config, Storage};
+use App\{
     User,
     Event,
     Major,
@@ -769,7 +769,7 @@ class HomeController extends Controller
         $users     = User::whereIn('id', $usersId)
             ->get();
         if ($users->isEmpty()) {
-            return $this->response->setStatusCode(451);
+            return response()->json([] , Response::HTTP_UNAVAILABLE_FOR_LEGAL_REASONS);
         }
         
         if (!isset($from) || strlen($from) == 0) {
@@ -777,7 +777,6 @@ class HomeController extends Controller
         }
         
         $mobiles    = [];
-        $finalUsers = collect();
         foreach ($users as $user) {
             if (in_array(0, $relatives)) {
                 array_push($mobiles, ltrim($user->mobile, '0'));
@@ -816,9 +815,8 @@ class HomeController extends Controller
 //        Notification::send($users, new GeneralNotice($message));
         if (!$response['error']) {
             $smsCredit = $this->medianaGetCredit();
-            
-            return $this->response->setContent($smsCredit)
-                ->setStatusCode(200);
+
+            return response()->json( $smsCredit , Response::HTTP_OK);
         } else {
             return $this->response->setStatusCode(503);
         }

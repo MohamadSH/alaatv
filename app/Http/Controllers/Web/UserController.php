@@ -155,10 +155,14 @@ class UserController extends Controller
 
     public function index(UserIndexRequest $request)
     {
-        //======================================================================
-        //=============================OLD CODE=================================
-        //======================================================================
-        
+        $products = [];
+        $lotteries = [];
+        $reportType   = null;
+        $hasPishtaz = [];
+        $orders = null;
+        $seePaidCost = null;
+
+
         $createdTimeEnable = Input::get('createdTimeEnable');
         $createdSinceDate  = Input::get('createdSinceDate');
         $createdTillDate   = Input::get('createdTillDate');
@@ -522,7 +526,6 @@ class UserController extends Controller
             }
         }
 
-
         $previousPath         = url()->previous();
         if (strcmp($previousPath, action("Web\AdminController@adminSMS")) == 0 || $request->has('smsAdmin')) {
             $index                = "user.index2";
@@ -585,7 +588,6 @@ class UserController extends Controller
             return $items;
         }
         elseif (strcmp($previousPath, action("Web\AdminController@adminReport")) == 0 || $request->has('reportAdmin')) {
-            $reportType           = "";
             $index = "admin.partials.getReportIndex";
 
             $items = $users->get();
@@ -604,7 +606,6 @@ class UserController extends Controller
 
 
             /** For selling books */
-            $hasPishtaz = [];
             if (isset($orders)) {
                 foreach ($items as $user) {
                     if ($user->orders()
@@ -680,8 +681,8 @@ class UserController extends Controller
             'index'                => View::make($index,
                 compact('items', 'products', 'paymentStatusesId', 'reportType', 'hasPishtaz', 'orders', 'seePaidCost',
                     'lotteries'))->render(),
-            'products'             => (isset($products)) ? $products : [],
-            'lotteries'            => (isset($lotteries)) ? $lotteries : [],
+            'products'             => $products ,
+            'lotteries'            => $lotteries ,
             "allUsers"             => $uniqueItemsId??[],
             "allUsersNumber"       => $uniqueItemsIdCount??0,
             "numberOfFatherPhones" => $numberOfFatherPhones??0,
