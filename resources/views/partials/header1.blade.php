@@ -363,7 +363,16 @@
                                 <a href="{{ route('live') }}" class="m-nav__link">
                                     <span class="m-nav__link-icon">
                                         <span class="m-nav__link-icon-wrapper">
-                                            <img class="a--full-width" src="{{ asset('/acm/image/live-on.png') }}">
+                                            <img class="a--full-width lazy-image"
+                                                 src="https://cdn.alaatv.com/loder.jpg?w=1&h=1"
+                                                 @if($live)
+                                                 data-src="https://cdn.alaatv.com/upload/live-on.png"
+                                                 @else
+                                                 data-src="https://cdn.alaatv.com/upload/live-off.png"
+                                                 @endif
+                                                 width="35"
+                                                 height="40"
+                                            >
                                         </span>
                                     </span>
                                 </a>
