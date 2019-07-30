@@ -96,7 +96,6 @@ class Kernel extends HttpKernel
         'OrderCheckoutReview'                       => Middleware\OrderCheckoutReview::class,
         'OrderCheckoutPayment'                      => Middleware\OrderCheckoutPayment::class,
         'SubmitOrderCoupon'                         => Middleware\SubmitOrderCoupon::class,
-        'OfflineVerifyPayment'                      => Middleware\OfflineVerifyPayment::class,
         'RemoveOrderCoupon'                         => RemoveOrderCoupon::class,
         'signed'                                    => ValidateSignature::class,
         'CanAccessEmployeeTimeSheet'                => CanAccessEmployeeTimeSheet::class,

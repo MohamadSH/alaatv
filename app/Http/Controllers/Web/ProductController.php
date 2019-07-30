@@ -62,14 +62,11 @@ class ProductController extends Controller
     
     const PARTIAL_INDEX_TEMPLATE = 'product.index';
     
-    protected $response;
-    
     protected $setting;
     
     
-    public function __construct(Response $response, Websitesetting $setting)
+    public function __construct(Websitesetting $setting)
     {
-        $this->response = $response;
         $this->setting  = $setting->setting;
         $this->callMiddlewares();
     }
@@ -128,11 +125,10 @@ class ProductController extends Controller
 
         $products = $productResult;
         if (request()->expectsJson()) {
-            return $this->response->setStatusCode(Response::HTTP_OK)
-                ->setContent([
-                    'result' => $products,
-                    'tags'   => $tags,
-                ]);
+            return response()->json([
+                'result' => $products,
+                'tags'   => $tags,
+            ]);
         }
 
         $url = $request->url();
@@ -180,10 +176,10 @@ class ProductController extends Controller
                 $this->attachBonToProduct($product, $bonId, $bonDiscount, $bonPlus);
             }
             
-            return $this->response->setStatusCode(Response::HTTP_OK);
+            return response()->json();
         }
         
-        return $this->response->setStatusCode(Response::HTTP_SERVICE_UNAVAILABLE);
+        return response()->json([] , Response::HTTP_SERVICE_UNAVAILABLE);
     }
     
     /**
@@ -334,8 +330,7 @@ class ProductController extends Controller
         $this->generateSeoMetaTags($product);
         
         if (request()->expectsJson()) {
-            return $this->response->setStatusCode(Response::HTTP_OK)
-                ->setContent($product);
+            return response()->json($product);
         }
         
         $block = optional($product)->block;
@@ -494,10 +489,10 @@ class ProductController extends Controller
         
         if ($request->expectsJson()) {
             if ($done) {
-                return $this->response->setStatusCode(Response::HTTP_OK);
+                return response()->json();
             }
             
-            return $this->response->setStatusCode(Response::HTTP_SERVICE_UNAVAILABLE);
+            return response()->json([] , Response::HTTP_SERVICE_UNAVAILABLE);
         }
         
         if ($done) {
@@ -1493,7 +1488,7 @@ class ProductController extends Controller
             if ($product->hasChildren()) {
                 foreach ($product->children as $child) {
                     $response = $this->copy($child);
-                    if ($response->getStatusCode() == 200) {
+                    if ($response->getStatusCode() == Response::HTTP_OK) {
                         $response   = json_decode($response->getContent());
                         $newChildId = $response->newProductId;
                         if (isset($newChildId)) {

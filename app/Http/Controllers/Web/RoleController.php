@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Web;
 
 use App\Role;
 use App\Permission;
-use Zizaco\Entrust\Entrust;
+use Exception;
 use Illuminate\Http\Response;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\EditRoleRequest;
@@ -12,12 +12,8 @@ use App\Http\Requests\InsertRoleRequest;
 
 class RoleController extends Controller
 {
-    protected $response;
-    
     function __construct()
     {
-        $this->response = new Response();
-        
         $this->middleware('role:admin');
     }
     
@@ -37,13 +33,13 @@ class RoleController extends Controller
         if ($role->save()) {
             $role->attachPermissions($request->get('permissions', []));
             
-            return $this->response->setStatusCode(200);
+            return response()->json();
         } else {
-            return $this->response->setStatusCode(503);
+            return response()->json([] , Response::HTTP_SERVICE_UNAVAILABLE);
         }
     }
     
-    public function edit($role, HomeController $homeController)
+    public function edit(Role $role, HomeController $homeController)
     {
         if ($role->isDefault) {
             
@@ -59,7 +55,7 @@ class RoleController extends Controller
         return view('role.edit', compact('role', 'permissions', 'rolePermissions'));
     }
     
-    public function update(EditRoleRequest $request, $role, HomeController $homeController)
+    public function update(EditRoleRequest $request, Role $role, HomeController $homeController)
     {
         if ($role->isDefault) {
             $message = "این نقش قابل اصلاح نمی باشد";
@@ -81,19 +77,28 @@ class RoleController extends Controller
         return redirect()->back();
     }
     
-    public function destroy($role, HomeController $homeController)
+    public function destroy(Role $role, HomeController $homeController)
     {
         if ($role->isDefault) {
             $message = "این نقش قابل حذف نمی باشد";
             
             return $homeController->errorPage($message);
         }
-        if ($role->delete()) {
-            session()->put('success', 'نقش با موفقیت حذف شد');
-        } else {
-            session()->put('error', 'خطای پایگاه داده');
+        try {
+            if ($role->delete()) {
+                session()->put('success', 'نقش با موفقیت حذف شد');
+            } else {
+                session()->put('error', 'خطای پایگاه داده');
+            }
+        } catch (Exception $e) {
+            return response()->json([
+                'message' => 'Error on deleting role',
+                'error'   => $e->getMessage(),
+                'line'    => $e->getLine(),
+                'file'    => $e->getFile(),
+            ] , Response::HTTP_INTERNAL_SERVER_ERROR);
         }
-        
+
         return redirect()->back();
     }
 }

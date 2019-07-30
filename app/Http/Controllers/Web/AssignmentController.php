@@ -80,10 +80,10 @@ class AssignmentController extends Controller
             $assignment->majors()
                 ->sync($request->get('majors', []));
             
-            return $this->response->setStatusCode(200);
+            return $this->response->setStatusCode(Response::HTTP_OK);
         }
         else {
-            return $this->response->setStatusCode(503);
+            return $this->response->setStatusCode(Response::HTTP_SERVICE_UNAVAILABLE);
         }
     }
 

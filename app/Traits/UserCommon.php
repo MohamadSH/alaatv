@@ -33,7 +33,7 @@ trait UserCommon
      * $insertCouponRequest->offsetSet("products" , $couponProducts);
      * $insertCouponRequest->offsetSet("validSince" , "2017-12-14T00:00:00");
      * $insertCouponRequest->offsetSet("validUntil" , "2017-12-19T24:00:00");
-     * $result =  $couponController->store($insertCouponRequest)->status() == 200
+     * $result =  $couponController->store($insertCouponRequest)->status() == Response::HTTP_OK
      * if($result)
      * {
      * $attachCouponRequest = new \App\Http\Requests\SubmitCouponRequest() ;

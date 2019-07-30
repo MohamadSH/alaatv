@@ -7,14 +7,9 @@ use Carbon\Carbon;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\{DB, Input};
 use Illuminate\Support\Str;
-use Maatwebsite\ExcelLight\Excel;
 use App\Http\Controllers\Controller;
-use App\Console\Commands\CategoryTree\Riazi;
-use App\Console\Commands\CategoryTree\Tajrobi;
-use Maatwebsite\ExcelLight\Spout\{Row, Sheet, Reader, Writer};
 use App\{Bon,
     Orderproduct,
-    Repositories\OrderproductRepo,
     User,
     Order,
     Content,
@@ -55,19 +50,16 @@ class BotsController extends Controller
      *
      * @return void
      */
-    
-    protected $response;
-    
+
     protected $sideBarAdmin;
     
     protected $setting;
     
-    public function __construct(Response $response, Websitesetting $setting)
+    public function __construct(Websitesetting $setting)
     {
         $this->middleware('role:admin', [
             'only' => ['bot', 'smsBot', 'checkDisableContentTagBot', 'tagBot', 'pointBot','ZarinpalVerifyPaymentBot','salesReportBot'],
         ]);
-        $this->response = $response;
         $this->setting  = $setting->setting;
     }
     
@@ -96,11 +88,6 @@ class BotsController extends Controller
         } else {
             abort(404);
         }
-    }
-    
-    public function smsBot()
-    {
-        abort("403");
     }
     
     public function bot(Request $request)
@@ -172,557 +159,9 @@ class BotsController extends Controller
             }
             
             if ($request->has("coupon")) {
-                $hamayeshTalai              = [
-                    210,
-                    211,
-                    212,
-                    213,
-                    214,
-                    215,
-                    216,
-                    217,
-                    218,
-                    219,
-                    220,
-                    221,
-                    222,
-                ];
-                $notIncludedUsers_Shimi     = [
-                    2,
-                    111,
-                    117,
-                    203,
-                    347,
-                    417,
-                    806,
-                    923,
-                    963,
-                    1132,
-                    1680,
-                    2150,
-                    2439,
-                    2501,
-                    3176,
-                    3194,
-                    3350,
-                    3778,
-                    3854,
-                    4058,
-                    4134,
-                    4273,
-                    4598,
-                    4994,
-                    5443,
-                    5543,
-                    5949,
-                    6159,
-                    6655,
-                    6712,
-                    7109,
-                    7200,
-                    7325,
-                    7467,
-                    7772,
-                    8151,
-                    8568,
-                    8934,
-                    9247,
-                    9895,
-                    9926,
-                    10127,
-                    10577,
-                    10690,
-                    11017,
-                    11412,
-                    11428,
-                    11513,
-                    11517,
-                    11569,
-                    11619,
-                    11688,
-                    11854,
-                    12173,
-                    12196,
-                    12347,
-                    12443,
-                    12492,
-                    12621,
-                    12672,
-                    12720,
-                    12907,
-                    12959,
-                    13004,
-                    13557,
-                    13583,
-                    13742,
-                    13928,
-                    14046,
-                    14371,
-                    14680,
-                    14870,
-                    15020,
-                    15028,
-                    15079,
-                    15136,
-                    15195,
-                    15330,
-                    15722,
-                    15774,
-                    15893,
-                    16667,
-                    16698,
-                    17671,
-                    18250,
-                    19010,
-                    19169,
-                    19384,
-                    19394,
-                    19588,
-                    20123,
-                    20191,
-                    20285,
-                    20403,
-                    20460,
-                    20534,
-                    20641,
-                    20643,
-                    20669,
-                    20865,
-                    21261,
-                    21292,
-                    21442,
-                    21468,
-                    21471,
-                    21513,
-                    21536,
-                    21663,
-                    21681,
-                    21792,
-                    21922,
-                    22126,
-                    22397,
-                    22419,
-                    22560,
-                    22597,
-                    22733,
-                    23281,
-                    23410,
-                    24019,
-                    24373,
-                    24463,
-                    24683,
-                    24902,
-                    25243,
-                    25276,
-                    25375,
-                    25436,
-                    26289,
-                    26860,
-                    27276,
-                    27387,
-                    27519,
-                    27588,
-                    27590,
-                    27757,
-                    27864,
-                    27886,
-                    27902,
-                    28038,
-                    28117,
-                    28143,
-                    28280,
-                    28340,
-                    28631,
-                    28898,
-                    28907,
-                    29041,
-                    29503,
-                    29740,
-                    29787,
-                    29972,
-                    30087,
-                    30093,
-                    30255,
-                    30367,
-                    30554,
-                    31028,
-                    31033,
-                    31334,
-                    31863,
-                    32573,
-                    32707,
-                    32819,
-                    33189,
-                    33198,
-                    33386,
-                    33666,
-                    33785,
-                    34617,
-                    34851,
-                    34913,
-                    34939,
-                    35468,
-                    35564,
-                    35800,
-                    36119,
-                    36235,
-                    36256,
-                    36753,
-                    36841,
-                    36921,
-                    36950,
-                    37789,
-                    38224,
-                    38368,
-                    38530,
-                    38584,
-                    38604,
-                    38683,
-                    39527,
-                    40743,
-                    42260,
-                    42491,
-                    42676,
-                    42747,
-                    42878,
-                    43381,
-                    44086,
-                    44328,
-                    44399,
-                    44872,
-                    46301,
-                    46357,
-                    46511,
-                    46567,
-                    46641,
-                    46736,
-                    47586,
-                    47612,
-                    47624,
-                    48050,
-                    48417,
-                    48693,
-                    49249,
-                    49543,
-                    50084,
-                    50883,
-                    51899,
-                    51969,
-                    52058,
-                    53232,
-                    54116,
-                    56841,
-                    57559,
-                    61798,
-                    62314,
-                    62449,
-                    63522,
-                    64092,
-                    64235,
-                    66573,
-                    67570,
-                    68263,
-                    68482,
-                    69806,
-                    70904,
-                    71801,
-                    73465,
-                    76536,
-                    78080,
-                    78813,
-                    80023,
-                    80349,
-                    81118,
-                    81753,
-                    82728,
-                    83913,
-                    85670,
-                    87430,
-                    88302,
-                    92617,
-                    94553,
-                    94766,
-                    95339,
-                    95588,
-                    96011,
-                    97934,
-                    98640,
-                    103379,
-                    103875,
-                    103961,
-                    105811,
-                    106239,
-                    106313,
-                    107562,
-                    107751,
-                    108011,
-                    108113,
-                    109148,
-                    109770,
-                    109952,
-                    112128,
-                    112816,
-                    113664,
-                    114751,
-                    116219,
-                    116809,
-                ];
-                $notIncludedUsers_Vafadaran = [
-                    100,
-                    272,
-                    282,
-                    502,
-                    589,
-                    751,
-                    1031,
-                    1281,
-                    1421,
-                    1565,
-                    1572,
-                    1695,
-                    1846,
-                    2143,
-                    2385,
-                    2661,
-                    3396,
-                    3538,
-                    3646,
-                    3738,
-                    3788,
-                    4051,
-                    4117,
-                    4197,
-                    4517,
-                    5009,
-                    5385,
-                    5877,
-                    6452,
-                    6767,
-                    6895,
-                    6896,
-                    7020,
-                    7037,
-                    7056,
-                    7192,
-                    7291,
-                    7442,
-                    7527,
-                    7942,
-                    8199,
-                    8681,
-                    9363,
-                    10244,
-                    10263,
-                    10343,
-                    11088,
-                    11133,
-                    11339,
-                    11440,
-                    11594,
-                    11623,
-                    11742,
-                    11797,
-                    11804,
-                    12155,
-                    12788,
-                    13313,
-                    13410,
-                    13436,
-                    13442,
-                    13448,
-                    13541,
-                    13724,
-                    13746,
-                    13752,
-                    14084,
-                    14807,
-                    14937,
-                    15603,
-                    15914,
-                    16114,
-                    16141,
-                    16291,
-                    16491,
-                    16779,
-                    17275,
-                    17500,
-                    17527,
-                    18344,
-                    18377,
-                    18663,
-                    18759,
-                    19481,
-                    19714,
-                    19736,
-                    20016,
-                    20150,
-                    20172,
-                    20381,
-                    20442,
-                    20501,
-                    20652,
-                    20666,
-                    20732,
-                    20753,
-                    20937,
-                    20953,
-                    21412,
-                    21431,
-                    21522,
-                    22275,
-                    22290,
-                    22391,
-                    22495,
-                    23130,
-                    23438,
-                    23600,
-                    23986,
-                    24223,
-                    24472,
-                    25457,
-                    25557,
-                    25572,
-                    25776,
-                    25806,
-                    26355,
-                    26621,
-                    27764,
-                    28269,
-                    28288,
-                    28371,
-                    28385,
-                    28397,
-                    28405,
-                    28488,
-                    28719,
-                    28865,
-                    29021,
-                    29050,
-                    29054,
-                    29194,
-                    29230,
-                    29334,
-                    29589,
-                    29737,
-                    30038,
-                    30129,
-                    30158,
-                    30318,
-                    30652,
-                    30857,
-                    30958,
-                    31508,
-                    32131,
-                    32274,
-                    32894,
-                    32906,
-                    32959,
-                    32987,
-                    33187,
-                    33255,
-                    33616,
-                    33680,
-                    33803,
-                    33817,
-                    33949,
-                    34018,
-                    34062,
-                    34188,
-                    34966,
-                    35004,
-                    35327,
-                    35652,
-                    35911,
-                    35929,
-                    35936,
-                    36264,
-                    36364,
-                    36444,
-                    36460,
-                    36524,
-                    36788,
-                    36793,
-                    36883,
-                    37006,
-                    37021,
-                    37058,
-                    37156,
-                    38868,
-                    38893,
-                    39022,
-                    39062,
-                    39075,
-                    40088,
-                    40189,
-                    40503,
-                    40958,
-                    41389,
-                    41448,
-                    41858,
-                    42848,
-                    43322,
-                    44436,
-                    46322,
-                    48191,
-                    49032,
-                    49314,
-                    50637,
-                    50671,
-                    51091,
-                    54884,
-                    56547,
-                    57493,
-                    57649,
-                    58317,
-                    59178,
-                    62602,
-                    62713,
-                    62903,
-                    62987,
-                    63530,
-                    66143,
-                    66485,
-                    68472,
-                    69136,
-                    71817,
-                    72386,
-                    72458,
-                    73399,
-                    75119,
-                    76888,
-                    77855,
-                    78596,
-                    78897,
-                    80328,
-                    80408,
-                    80973,
-                    82093,
-                    82744,
-                    82785,
-                    83048,
-                    83991,
-                    85557,
-                    86966,
-                    87086,
-                    87791,
-                    88977,
-                    90447,
-                    92857,
-                    92951,
-                    93432,
-                    93701,
-                    99623,
-                    99686,
-                    101628,
-                    107960,
-                    108174,
-                    110145,
-                    115132,
-                    118902,
-                    119386,
-                    125351,
-                ];
-                $smsNumber                  = config("constants.SMS_PROVIDER_DEFAULT_NUMBER");
+                $hamayeshTalai              = [];
+                $notIncludedUsers_Shimi     = [];
+                $notIncludedUsers_Vafadaran = [];
                 $users                      = User::whereHas("orderproducts", function ($q) use ($hamayeshTalai) {
                     $q->whereHas("order", function ($q) use ($hamayeshTalai) {
                         $q->where("orderstatus_id", config("constants.ORDER_STATUS_CLOSED"))
@@ -800,7 +239,7 @@ class BotsController extends Controller
                     
                     $storeCoupon = $couponController->store($insertCouponRequest);
                     
-                    if ($storeCoupon->status() == 200) {
+                    if ($storeCoupon->status() == Response::HTTP_OK) {
                         
                         $message = "شما در قرعه کشی وفاداران آلاء برنده یک کد تخفیف شدید.";
                         $message .= "\n";
@@ -819,17 +258,6 @@ class BotsController extends Controller
                         
                         $proccessed++;
                         
-                        //                    $openOrder = $userlottery->openOrders()->get()->first();
-                        //                    if (isset($openOrder)) {
-                        //                        session()->forget("order_id");
-                        //                        session()->put("order_id", $openOrder->id);
-                        //                        $attachCouponRequest = new \App\Http\Requests\SubmitCouponRequest();
-                        //                        $attachCouponRequest->offsetSet("coupon", $couponCode);
-                        //                        $orderController = new \App\Http\Controllers\OrderController();
-                        //                        $orderController->submitCoupon($attachCouponRequest);
-                        //                        session()->forget('couponMessageError');
-                        //                        session()->forget('couponMessageSuccess');
-                        //                    }
                     } else {
                         $failedCounter++;
                     }
@@ -1184,7 +612,6 @@ class BotsController extends Controller
                 }
 
                 $response = $this->sendRequest(config("constants.TAG_API_URL")."id/relatedproduct/".$product->id, "PUT", $params);
-                dump($response);
 
                 dd('done');
 
@@ -1192,324 +619,13 @@ class BotsController extends Controller
         } catch (\Exception    $e) {
             $message = "unexpected error";
             
-            return $this->response->setStatusCode(503)
-                ->setContent([
-                    "message" => $message,
-                    "error"   => $e->getMessage(),
-                    "line"    => $e->getLine(),
-                    "file"    => $e->getFile(),
-                ]);
+            return response()->json( [
+                "message" => $message,
+                "error"   => $e->getMessage(),
+                "line"    => $e->getLine(),
+                "file"    => $e->getFile(),
+            ] , Response::HTTP_SERVICE_UNAVAILABLE);
         }
-        
-        /**
-         * Fixing contentset tags
-         *
-         * if(Input::has("id"))
-         * $contentsetId = Input::get("id");
-         * else
-         * dd("Wring inputs, Please pass id as input");
-         *
-         * if(!is_array($contentsetId))
-         * dd("The id input must be an array!");
-         * $contentsets = Contentset::whereIn("id" , $contentsetId)->get();
-         * dump("number of contentsets:".$contentsets->count());
-         * $contentCounter = 0;
-         * foreach ($contentsets as $contentset)
-         * {
-         * $baseTime = Carbon::createFromDate("2017" , "06" , "01" , "Asia/Tehran");
-         * $contents = $contentset->contents->sortBy("pivot.order");
-         * $contentCounter += $contents->count();
-         * foreach ($contents as $content)
-         * {
-         * $content->created_at = $baseTime;
-         * if($content->update())
-         * {
-         * if(isset($content->tags))
-         * {
-         * $params = [
-         * "tags"=> json_encode($content->tags->tags,JSON_UNESCAPED_UNICODE ) ,
-         * ];
-         * if(isset($content->created_at) && strlen($content->created_at) > 0 )
-         * $params["score"] = Carbon::createFromFormat("Y-m-d H:i:s" , $content->created_at )->timestamp;
-         *
-         * $response =  $this->sendRequest(
-         * config("constants.AG_API_URL")."id/content/".$content->id ,
-         * "PUT",
-         * $params
-         * );
-         *
-         * if($response["statusCode"] == 200)
-         * {
-         * }
-         * else
-         * {
-         * dump("tag request for content id ".$content->id." failed. response : ".$response["statusCode"]);
-         * }
-         * }
-         * else
-         * {
-         * dump("content id ".$content->id."did not have ant tags!");
-         * }
-         * }
-         * else
-         * {
-         * dump("content id ".$content->id." was not updated");
-         * }
-         * $baseTime = $baseTime->addDay();
-         * }
-         *
-         * }
-         * dump("number of total processed contents: ".$contentCounter);
-         * dd("done!");
-         */
-        
-        /***
-         * $contents = Content::where("contenttype_id" , 8);
-         * $contentArray = $contents->pluck("id")->toArray();
-         * $sanatishRecords = Sanatisharifmerge::whereIn("content_id" , $contentArray)->get();
-         * $contents = $contents->get();
-         * $successCounter = 0 ;
-         * $failedCounter = 0 ;
-         * dump("number of contents: ".$contents->count());
-         * foreach ($contents as $content)
-         * {
-         * $myRecord =  $sanatishRecords->where("content_id" , $content->id)->first();
-         * if(isset($myRecord))
-         * if(isset($myRecord->videoEnable))
-         * {
-         * if($myRecord->isEnable)
-         * $content->enable = 1;
-         * else
-         * $content->enable = 0 ;
-         * if($content->update())
-         * $successCounter++;
-         * else
-         * $failedCounter++;
-         * }
-         *
-         *
-         * }
-         * dump("success counter: ".$successCounter);
-         * dump("fail counter: ".$failedCounter);
-         *
-         * dd("finish");
-         */
-        
-        /**
-         * $contents =  Content::where("id" , "<" , 158)->get();
-         * dump("number of contents: ".$contents->count());
-         * $successCounter= 0 ;
-         * $failedCounter = 0;
-         * foreach ($contents as $content)
-         * {
-         * $contenttype = $content->contenttypes()->whereDoesntHave("parents")->get()->first();
-         * $content->contenttype_id = $contenttype->id ;
-         * if($content->update())
-         * {
-         * $successCounter++;
-         * }
-         * else
-         * {
-         * $failedCounter++;
-         * dump("content for ".$content->id." was not saved.") ;
-         * }
-         * }
-         * dump("successful : ".$successCounter);
-         * dump("failed: ".$failedCounter) ;
-         * dd("finish");
-         **/
-        /**
-         * Giving gift to users
-         *
-         * $carbon = new Carbon("2018-02-20 00:00:00");
-         * $orderproducts = Orderproduct::whereIn("product_id" ,[ 100] )->whereHas("order" , function ($q) use ($carbon)
-         * {
-         * //           $q->where("orderstatus_id" , 1)->where("created_at" ,">" , $carbon);
-         * $q->where("orderstatus_id" , 2)->whereIn("paymentstatus_id" , [2,3])->where("completed_at" ,">" , $carbon);
-         * })->get();
-         * dump("تعداد سفارش ها" . $orderproducts->count());
-         * $users = array();
-         * $counter = 0;
-         * foreach ($orderproducts as $orderproduct)
-         * {
-         * $order = $orderproduct->order;
-         * if($order->orderproducts->where("product_id" , 107)->isNotEmpty()) continue ;
-         *
-         * $giftOrderproduct = new Orderproduct();
-         * $giftOrderproduct->orderproducttype_id = Config::get("constants.ORDER_PRODUCT_GIFT");
-         * $giftOrderproduct->order_id = $order->id ;
-         * $giftOrderproduct->product_id = 107 ;
-         * $giftOrderproduct->cost = 24000 ;
-         * $giftOrderproduct->discountPercentage = 100 ;
-         * $giftOrderproduct->save() ;
-         *
-         * $giftOrderproduct->parents()->attach($orderproduct->id , ["relationtype_id"=>Config::get("constants.ORDER_PRODUCT_INTERRELATION_PARENT_CHILD")]);
-         * $counter++;
-         * if(isset($order->user->id))
-         * array_push($users , $order->user->id);
-         * else
-         * array_push($users , 0);
-         * }
-         * dump($counter." done");
-         * dd($users);
-         */
-        /**
-         *  Converting Hamayesh with Poshtibani to without poshtibani
-         * if (!Auth::user()->hasRole("admin")) abort(404);
-         *
-         * $productsArray = [164, 160, 156, 152, 148, 144, 140, 136, 132, 128, 124, 120];
-         * $orders = Order::whereHas("orderproducts", function ($q) use ($productsArray) {
-         * $q->whereIn("product_id", $productsArray);
-         * })->whereIn("orderstatus_id", [Config::get("constants.ORDER_STATUS_CLOSED"), Config::set("constants.ORDER_STATUS_POSTED")])->whereIn("paymentstatus_id", [Config::get("constants.PAYMENT_STATUS_PAID"), Config::get("constants.PAYMENT_STATUS_INDEBTED")])->get();
-         *
-         *
-         * dump("Number of orders: ".$orders->count());
-         * $counter = 0;
-         * foreach ($orders as $order)
-         * {
-         * if($order->successfulTransactions->isEmpty()) continue ;
-         * $totalRefund = 0;
-         * foreach ($order->orderproducts->whereIn("product_id", $productsArray) as $orderproduct)
-         * {
-         * $orderproductTotalRefund = 0 ;
-         * $orderproductRefund = (int)((($orderproduct->cost / 88000) * 9000))  ;
-         * $orderproductRefundWithBon = $orderproductRefund * (1 - ($orderproduct->getTotalBonNumber() / 100)) ;
-         * if($order->couponDiscount>0 && $orderproduct->includedInCoupon)
-         * $orderproductTotalRefund += $orderproductRefundWithBon * (1 - ($order->couponDiscount / 100)) ;
-         * else
-         * $orderproductTotalRefund += $orderproductRefundWithBon ;
-         *
-         * $totalRefund += $orderproductTotalRefund ;
-         * $orderproduct->cost = $orderproduct->cost - $orderproductRefund ;
-         * switch ($orderproduct->product_id)
-         * {
-         * case 164:
-         * $orderproduct->product_id = 165 ;
-         * break;
-         * case 160:
-         * $orderproduct->product_id = 161 ;
-         * break;
-         * case 156:
-         * $orderproduct->product_id = 157 ;
-         * break;
-         * case 152:
-         * $orderproduct->product_id = 153 ;
-         * break;
-         * case 148:
-         * $orderproduct->product_id = 149 ;
-         * break;
-         * case 144:
-         * $orderproduct->product_id = 145 ;
-         * break;
-         * case 140:
-         * $orderproduct->product_id = 141 ;
-         * break;
-         * case 136:
-         * $orderproduct->product_id = 137 ;
-         * break;
-         * case 132:
-         * $orderproduct->product_id = 133 ;
-         * break;
-         * case 128:
-         * $orderproduct->product_id = 129 ;
-         * break;
-         * case 124:
-         * $orderproduct->product_id = 125 ;
-         * break;
-         * case 120:
-         * $orderproduct->product_id = 121 ;
-         * break;
-         * default:
-         * break;
-         * }
-         * if(!$orderproduct->update()) dump("orderproduct ".$orderproduct->id." wasn't saved");
-         * }
-         * $newOrder = Order::where("id" , $order->id)->get()->first();
-         * $orderCostArray = $newOrder->obtainOrderCost(true , false , "REOBTAIN");
-         * $newOrder->cost = $orderCostArray["rawCostWithDiscount"] ;
-         * $newOrder->costwithoutcoupon = $orderCostArray["rawCostWithoutDiscount"];
-         * $newOrder->update();
-         *
-         * if($totalRefund > 0 )
-         * {
-         * $transactionRequest =  new \App\Http\Requests\InsertTransactionRequest();
-         * $transactionRequest->offsetSet("comesFromAdmin" , true);
-         * $transactionRequest->offsetSet("order_id" , $order->id);
-         * $transactionRequest->offsetSet("cost" , -$totalRefund);
-         * $transactionRequest->offsetSet("managerComment" , "ثبت سیستمی بازگشت هزینه پشتیبانی همایش 1+5");
-         * $transactionRequest->offsetSet("destinationBankAccount_id" , 1);
-         * $transactionRequest->offsetSet("paymentmethod_id" , Config::get("constants.PAYMENT_METHOD_ATM"));
-         * $transactionRequest->offsetSet("transactionstatus_id" ,  Config::get("constants.TRANSACTION_STATUS_SUCCESSFUL"));
-         * $transactionController = new TransactionController();
-         * $transactionController->store($transactionRequest);
-         *
-         * if(session()->has("success")) {
-         * session()->forget("success");
-         * }elseif(session()->has("error")){
-         * dump("Transaction wasn't saved ,Order: ".$order->id);
-         * session()->forget("error");
-         * }
-         * $counter++;
-         * }
-         * }
-         * dump("Processed: ".$counter) ;
-         */
-        /**
-         *  Fixing complementary products
-         *
-         * $products = \App\Product::all();
-         * $counter = 0 ;
-         * foreach ($products as $product)
-         * {
-         * $orders = \App\Order::whereHas("orderproducts" , function ($q2) use ($product){
-         * $q2->where("product_id" , $product->id)->where("orderproducttype_id", config('constants.ORDER_PRODUCT_TYPE_DEFAULT'));
-         * })->whereIn("orderstatus_id" , [Config::get("constants.ORDER_STATUS_CLOSED") , Config::get("constants.ORDER_STATUS_POSTED") , Config::get("constants.ORDER_STATUS_READY_TO_POST")])
-         * ->whereIn("paymentstatus_id" , [Config::get("constants.PAYMENT_STATUS_INDEBTED") , Config::get("constants.PAYMENT_STATUS_PAID")])->get();
-         *
-         * dump("Number of orders: ".$orders->count());
-         * foreach ($orders as $order)
-         * {
-         * if ($product->hasGifts())
-         * {
-         * foreach ($product->gifts as $gift)
-         * {
-         * if($order->orderproducts->where("product_id" , $gift->id)->isEmpty())
-         * {
-         * $orderproduct = new \App\Orderproduct();
-         * $orderproduct->orderproducttype_id = 2;
-         * $orderproduct->order_id = $order->id;
-         * $orderproduct->product_id = $gift->id;
-         * $orderproduct->cost = $gift->basePrice;
-         * $orderproduct->discountPercentage = 100;
-         * if ($orderproduct->save()) $counter++;
-         * else dump("orderproduct was not saved! order: " . $order->id . " ,product: " . $gift->id);
-         * }
-         * }
-         * }
-         * //$parentsArray = $product->parents;
-         * $parentsArray = $this->makeParentArray($product);
-         * if (!empty($parentsArray)) {
-         * foreach ($parentsArray as $parent) {
-         * foreach ($parent->gifts as $gift) {
-         * if($order->orderproducts->where("product_id" , $gift->id)->isEmpty())
-         * {
-         * $orderproduct = new \App\Orderproduct();
-         * $orderproduct->orderproducttype_id = 2;
-         * $orderproduct->order_id = $order->id;
-         * $orderproduct->product_id = $gift->id;
-         * $orderproduct->cost = $gift->basePrice;
-         * $orderproduct->discountPercentage = 100;
-         * if ($orderproduct->save()) $counter++;
-         * else dump("orderproduct was not saved! order: " . $order->id . " ,product: " . $gift->id);
-         * }
-         * }
-         * }
-         * }
-         * }
-         * }
-         * dump("Number of processed : ".$counter);
-         * dd("finish");
-         * */
     }
     
     public function walletBot(Request $request)
@@ -1522,76 +638,10 @@ class BotsController extends Controller
             $userGroup = $request->get("userGroup");
         }
         
-        $hamayeshTalai      = [
-            210,
-            211,
-            212,
-            213,
-            214,
-            215,
-            216,
-            217,
-            218,
-            219,
-            220,
-            221,
-            222,
-        ];
-        $ordooHozoori       = [
-            195,
-            184,
-            185,
-            186,
-        ];
-        $ordooGheireHozoori = [
-            196,
-            199,
-            206,
-            202,
-            200,
-            201,
-            203,
-            204,
-            205,
-        ];
-        $hamayesh5Plus1     = [
-            123,
-            124,
-            125,
-            119,
-            120,
-            121,
-            163,
-            164,
-            165,
-            159,
-            160,
-            161,
-            155,
-            156,
-            157,
-            151,
-            152,
-            153,
-            147,
-            148,
-            149,
-            143,
-            144,
-            145,
-            139,
-            140,
-            141,
-            135,
-            136,
-            137,
-            131,
-            132,
-            133,
-            127,
-            128,
-            129,
-        ];
+        $hamayeshTalai      = [];
+        $ordooHozoori       = [];
+        $ordooGheireHozoori = [];
+        $hamayesh5Plus1     = [];
         if ($request->has("giftCost")) {
             $giftCredit = $request->get("giftCost");
         } else {
@@ -1852,69 +902,6 @@ class BotsController extends Controller
     
     public function pointBot(Request $request)
     {
-        /** Points for Hamayesh Talai lottery */
-                /*$hamayeshTalai = [306, 316, 322, 318, 302, 326, 312, 298, 308, 328, 342];
-
-                $orderproducts = Orderproduct::whereHas("order" , function ($q) use ($hamayeshTalai){
-                                        $q->whereIn("orderstatus_id" , [config('constants.ORDER_STATUS_CLOSED'),config('constants.ORDER_STATUS_POSTED'),config('constants.ORDER_STATUS_READY_TO_POST')])
-                                          ->whereIn("paymentstatus_id" , [config('constants.PAYMENT_STATUS_PAID')]);
-                                    })->whereIn("product_id" , $hamayeshTalai)
-                                      ->get();
-                $users = [];
-                $successCounter = 0;
-                $failedCounter = 0 ;
-                $warningCounter = 0 ;
-                foreach ($orderproducts as $orderproduct)
-                {
-                    if(isset($orderproduct->order->user->id))
-                    {
-                        $user = $orderproduct->order->user ;
-                        if(isset($users[$user->id]))
-                        {
-                            $users[$user->id]++;
-                        }
-                        else
-                        {
-                            $users[$user->id] = 1 ;
-                        }
-                    }
-                    else
-                    {
-                        dump("User was not found for orderproduct ".$orderproduct->id);
-                        $warningCounter++;
-                    }
-                }
-
-                // USERS WITH PLUS POINTS
-                $orders = Order::where("completed_at" , "<" , "2018-05-18")
-                                ->whereIn("orderstatus_id" , [config('constants.ORDER_STATUS_CLOSED'),config('constants.ORDER_STATUS_POSTED'),config('constants.ORDER_STATUS_READY_TO_POST')])
-                                ->whereIn("paymentstatus_id" , [config('constants.PAYMENT_STATUS_PAID')])
-                                ->whereHas("orderproducts" , function ($q) use ($hamayeshTalai){
-                                    $q->whereIn("product_id" , $hamayeshTalai);
-                                })
-                                ->pluck("user_id")
-                                ->toArray();
-
-                $usersPlus = [];
-                foreach ($orders as $userId)
-                {
-                    if(in_array($userId , $usersPlus))
-                        continue;
-                    else
-                        array_push($usersPlus , $userId) ;
-
-                    if(isset($users[$userId]))
-                    {
-                        $users[$userId]++ ;
-                    }
-                    else
-                    {
-                        $users[$userId] = 1 ;
-                    }
-
-                }*/
-        // /** Points for Hamayesh Talai lottery */
-
         $successCounter = 0;
         $failedCounter  = 0;
         $warningCounter = 0;
@@ -2283,7 +1270,7 @@ class BotsController extends Controller
                                 }
                                 RequestCommon::convertRequestToAjax($request);
                                 $response = $this->registerUserAndGiveOrderproduct($request);
-                                if ($response->getStatusCode() == 200) {
+                                if ($response->getStatusCode() == Response::HTTP_OK) {
                                     $counter++;
                                     echo "User inserted: ".$lastName." ".$mobile;
                                     echo "<br>";
@@ -2352,8 +1339,7 @@ class BotsController extends Controller
         try {
             dump("start time:".Carbon::now("asia/tehran"));
             if (!Input::has("t")) {
-                return $this->response->setStatusCode(422)
-                    ->setContent(["message" => "Wrong inputs: Please pass parameter t. Available values: v , p , cs , pr , e , b ,a"]);
+                return response()->json(["message" => "Wrong inputs: Please pass parameter t. Available values: v , p , cs , pr , e , b ,a"], Response::HTTP_UNPROCESSABLE_ENTITY);
             }
             $type = Input::get("t");
             switch ($type) {
@@ -3204,8 +2190,7 @@ class BotsController extends Controller
                     }
                     break;
                 default:
-                    return $this->response->setStatusCode(422)
-                        ->setContent(["message" => "Unprocessable input t."]);
+                    return response()->json(["message" => "Unprocessable input t."], Response::HTTP_UNPROCESSABLE_ENTITY);
                     break;
             }
             dump("available items: ".$items->count());
@@ -3238,7 +2223,7 @@ class BotsController extends Controller
                     $response = $this->sendRequest(config("constants.TAG_API_URL")."id/$bucket/".$item->id, "PUT",
                         $params);
                     
-                    if ($response["statusCode"] == 200) {
+                    if ($response["statusCode"] == Response::HTTP_OK) {
                         $successCounter++;
                     } else {
                         dump("item #".$item["id"]." failed. response : ".$response["statusCode"]);
@@ -3257,21 +2242,19 @@ class BotsController extends Controller
             dump($warningCounter." warnings");
             dump("finish time:".Carbon::now("asia/tehran"));
             
-            return $this->response->setStatusCode(200)
-                ->setContent(["message" => "Done! number of processed items : ".$counter]);
+            return response()->json(["message" => "Done! number of processed items : $counter"] , Response::HTTP_OK);
         } catch (\Exception $e) {
             $message = "unexpected error";
             dump($successCounter." items successfully done");
             dump($failedCounter." items failed");
             dump($warningCounter." warnings");
-            
-            return $this->response->setStatusCode(503)
-                ->setContent([
-                    "message"                                => $message,
-                    "number of successfully processed items" => $counter,
-                    "error"                                  => $e->getMessage(),
-                    "line"                                   => $e->getLine(),
-                ]);
+
+            return response()->json([
+                "message"                                => $message,
+                "number of successfully processed items" => $counter,
+                "error"                                  => $e->getMessage(),
+                "line"                                   => $e->getLine(),
+            ] , Response::HTTP_SERVICE_UNAVAILABLE );
         }
     }
 

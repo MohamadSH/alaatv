@@ -20,11 +20,11 @@ class RemoteDataCopyController extends Controller
         $this->connection = DB::connection('mysql_sanatisharif');
         $this->response   = new Response();
     }
-    
+
     /**
-     * @param  SanatisharifmergeController  $sanatisharifSyncController
+     * @param SanatisharifmergeController $sanatisharifSyncController
      *
-     * @return $this
+     * @return Response
      */
     public function copyLesson(SanatisharifmergeController $sanatisharifSyncController)
     {
@@ -39,7 +39,7 @@ class RemoteDataCopyController extends Controller
             $response = $sanatisharifSyncController->store($sanatisharifDataRequest);
         }
         
-        return $this->response->setStatusCode(200)
+        return $this->response->setStatusCode(Response::HTTP_OK)
             ->setContent(["message" => "همسان سازی با موفقیت انجام شد"]);
     }
     
@@ -54,7 +54,7 @@ class RemoteDataCopyController extends Controller
             $response = $sanatisharifSyncController->store($sanatisharifDataRequest);
         }
         
-        return $this->response->setStatusCode(200)
+        return $this->response->setStatusCode(Response::HTTP_OK)
             ->setContent(["message" => "همسان سازی با موفقیت انجام شد"]);
     }
     
@@ -92,11 +92,11 @@ class RemoteDataCopyController extends Controller
             $sanatisharifDataRequest->offsetSet("pageOldAddress", "/Sanati-Sharif-Lesson/$lessonid/$depid");
             
             $response = $sanatisharifSyncController->store($sanatisharifDataRequest);
-            if ($response->getStatusCode() == 200) {
+            if ($response->getStatusCode() == Response::HTTP_OK) {
                 $successCounter++;
             }
             else {
-                if ($response->getStatusCode() == 503) {
+                if ($response->getStatusCode() == Response::HTTP_SERVICE_UNAVAILABLE) {
                     $failedCounter++;
                     dump("departmentlesson wasn't copied. id: ".$departmentlessonid);
                 }
@@ -105,7 +105,7 @@ class RemoteDataCopyController extends Controller
         dump("number of failed videos : ".$failedCounter);
         dump("number of copied videos : ".$successCounter);
         
-        return $this->response->setStatusCode(200)
+        return $this->response->setStatusCode(Response::HTTP_OK)
             ->setContent(["message" => "Data sync done successfully"]);
     }
     
@@ -150,11 +150,11 @@ class RemoteDataCopyController extends Controller
             $sanatisharifDataRequest->offsetSet("pageOldAddress", "/Sanati-Sharif-Video/$lessonid/$depid/$videoid");
             
             $response = $sanatisharifSyncController->store($sanatisharifDataRequest);
-            if ($response->getStatusCode() == 200) {
+            if ($response->getStatusCode() == Response::HTTP_OK) {
                 $successCounter++;
             }
             else {
-                if ($response->getStatusCode() == 503) {
+                if ($response->getStatusCode() == Response::HTTP_SERVICE_UNAVAILABLE) {
                     $failedCounter++;
                     dump("video wasn't copied. id: ".$videoid);
                 }
@@ -163,7 +163,7 @@ class RemoteDataCopyController extends Controller
         dump("number of failed videos : ".$failedCounter);
         dump("number of copied videos : ".$successCounter);
         
-        return $this->response->setStatusCode(200)
+        return $this->response->setStatusCode(Response::HTTP_OK)
             ->setContent(["message" => "Data sync done successfully"]);
     }
     
@@ -206,11 +206,11 @@ class RemoteDataCopyController extends Controller
                 "/Sanati-Sharif-Pamphlet/$lessonid/$depid/$pamphletid");
             
             $response = $sanatisharifSyncController->store($sanatisharifDataRequest);
-            if ($response->getStatusCode() == 200) {
+            if ($response->getStatusCode() == Response::HTTP_OK) {
                 $successCounter++;
             }
             else {
-                if ($response->getStatusCode() == 503) {
+                if ($response->getStatusCode() == Response::HTTP_SERVICE_UNAVAILABLE) {
                     $failedCounter++;
                     dump("pamphlet wasn't copied. id: ".$pamphletid);
                 }
@@ -219,7 +219,7 @@ class RemoteDataCopyController extends Controller
         dump("number of failed pamphlets : ".$failedCounter);
         dump("number of copied pamphlets : ".$successCounter);
         
-        return $this->response->setStatusCode(200)
+        return $this->response->setStatusCode(Response::HTTP_OK)
             ->setContent(["message" => "Data sync done successfully"]);
     }
 }

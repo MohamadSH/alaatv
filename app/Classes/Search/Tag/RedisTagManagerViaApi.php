@@ -67,7 +67,7 @@ abstract class RedisTagManagerViaApi implements TaggingInterface
         $method   = 'GET';
         $response = $this->sendRequest($url, $method);
     
-        if ($response['statusCode'] == 200) {
+        if ($response['statusCode'] == Response::HTTP_OK) {
             $result = json_decode($response['result']);
             $tags   = $result->data->tags;
         }
@@ -126,7 +126,7 @@ abstract class RedisTagManagerViaApi implements TaggingInterface
         $method   = 'GET';
         $response = $this->sendRequest($url, $method);
     
-        if ($response['statusCode'] == 200) {
+        if ($response['statusCode'] == Response::HTTP_OK) {
             $result         = json_decode($response['result']);
             $total_items_db = $result->data->total_items_db;
             $arrayOfId      = [];
