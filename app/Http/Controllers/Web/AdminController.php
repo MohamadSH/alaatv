@@ -19,6 +19,7 @@ use App\{Assignmentstatus,
     Notifications\GeneralNotice,
     Notifications\UserRegisterd,
     Order,
+    Orderproduct,
     Orderstatus,
     Paymentmethod,
     Paymentstatus,
@@ -778,7 +779,7 @@ class AdminController extends Controller
         return view('admin.generateSpecialCoupon', compact('productCollection' , 'childrenCollection'));
     }
 
-    public function registerUserAndGiveOrderproduct(\App\Http\Requests\Request $request)
+    public function registerUserAndGiveOrderproduct(\App\Http\Requests\Request $request , OrderController $orderController)
     {
         try {
             $mobile       = $request->get('mobile');
@@ -787,9 +788,10 @@ class AdminController extends Controller
             $lastName     = $request->get('lastName');
             $major_id     = $request->get('major_id');
             $gender_id    = $request->get('gender_id');
+            $productIds   = $request->get('products' , []);
             $user         = User::where('mobile', $mobile)
-                ->where('nationalCode', $nationalCode)
-                ->first();
+                                ->where('nationalCode', $nationalCode)
+                                ->first();
             if (isset($user)) {
                 $flag = false;
                 if (!isset($user->firstName) && isset($firstName)) {
@@ -829,84 +831,43 @@ class AdminController extends Controller
                 }
             }
 
+            $giftOrderDone = false;
+            $responseStatus = Response::HTTP_SERVICE_UNAVAILABLE;
             if (isset($user)) {
-                $orderProductIds = [];
+                if (!empty($productIds)) {
+                    $giftOrder = Order::create([
+                        'orderstatus_id'    => config('constants.ORDER_STATUS_CLOSED'),
+                        'paymentstatus_id'  => config('constants.PAYMENT_STATUS_PAID'),
+                        'cost'              => 0,
+                        'costwithoutcoupon' => 0,
+                        'user_id'           => $user->id,
+                        'completed_at'      => Carbon::now('Asia/Tehran'),
+                    ]);
 
-                $arabiProduct  = 214;
-                $hasArabiOrder = $user->orderproducts()
-                    ->where('product_id', $arabiProduct)
-                    ->whereHas('order', function ($q) {
-                        $q->where('orderstatus_id', config('constants.ORDER_STATUS_CLOSED'));
-                        $q->where('paymentstatus_id', config('constants.PAYMENT_STATUS_PAID'));
-                    })
-                    ->get();
-                if ($hasArabiOrder->isEmpty()) {
-                    array_push($orderProductIds, $arabiProduct);
-                }
-
-                $shimiProduct  = 100;
-                $hasShimiOrder = $user->orderproducts()
-                    ->where('product_id', $shimiProduct)
-                    ->whereHas('order', function ($q) {
-                        $q->where('orderstatus_id', config('constants.ORDER_STATUS_CLOSED'));
-                        $q->where('paymentstatus_id', config('constants.PAYMENT_STATUS_PAID'));
-                    })
-                    ->get();
-
-                if ($hasShimiOrder->isEmpty()) {
-                    array_push($orderProductIds, $shimiProduct);
-                }
-
-                $giftOrderDone = true;
-                if (!empty($orderProductIds)) {
-                    $orderController   = new OrderController();
-                    $storeOrderRequest = new Request();
-                    $storeOrderRequest->offsetSet('orderstatus_id', config('constants.ORDER_STATUS_CLOSED'));
-                    $storeOrderRequest->offsetSet('paymentstatus_id', config('constants.PAYMENT_STATUS_PAID'));
-                    $storeOrderRequest->offsetSet('cost', 0);
-                    $storeOrderRequest->offsetSet('costwithoutcoupon', 0);
-                    $storeOrderRequest->offsetSet('user_id', $user->id);
-                    $giftOrderCompletedAt = Carbon::now()
-                        ->setTimezone('Asia/Tehran');
-                    $storeOrderRequest->offsetSet('completed_at', $giftOrderCompletedAt);
-                    $giftOrder = $orderController->store($storeOrderRequest);
-
-                    $giftOrderMessage = 'ثبت سفارش با موفیت انجام شد';
-                    if ($giftOrder !== false) {
-                        foreach ($orderProductIds as $productId) {
-                            $request->offsetSet('cost', 0);
-                            $request->offsetSet('orderId_bhrk', $giftOrder->id);
-                            $request->offsetSet('userId_bhrk', $user->id);
-                            $product = Product::where('id', $productId)
-                                ->first();
-                            if (isset($product)) {
-                                $response       = $orderController->addOrderproduct($request, $product);
-                                $responseStatus = $response->getStatusCode();
-                                $result         = json_decode($response->getContent());
-                                if ($responseStatus == 200) {
-
-                                } else {
-                                    $giftOrderDone    = false;
-                                    $giftOrderMessage = 'خطا در ثبت آیتم سفارش';
-                                    foreach ($result as $value) {
-                                        $giftOrderMessage .= '<br>';
-                                        $giftOrderMessage .= $value;
-                                    }
-                                }
-                            } else {
-                                $giftOrderDone    = false;
-                                $giftOrderMessage = 'خطا در ثبت آیتم سفارش. محصول یافت نشد.';
+                    if (isset($giftOrder)) {
+                        foreach ($productIds as $productId) {
+                            $orderproduct = Orderproduct::create([
+                                'cost'  => 0 ,
+                                'order_id'  =>  $giftOrder->id,
+                                'product_id'=> $productId,
+                                'orderproducttype_id'=> config('constants.ORDER_PRODUCT_TYPE_DEFAULT'),
+                            ]);
+                            if (isset($orderproduct)) {
+                                $giftOrderDone    = true;
+                                $responseStatus = Response::HTTP_OK;
+                                $giftOrderSuccessMessage = 'ثبت سفارش با موفیت انجام شد';
+                            }else{
+                                $giftOrderErrorMessage = 'خطا در ثبت آیتم سفارش';
                             }
                         }
                     } else {
-                        $giftOrderDone    = false;
-                        $giftOrderMessage = 'خطا در ثبت سفارش';
+                        $giftOrderErrorMessage = 'خطا در ثبت سفارش';
                     }
                 } else {
-                    $giftOrderMessage = 'کاربر مورد نظر محصولات را از قبل داشت';
+                    $giftOrderErrorMessage = 'محصولی انتخاب نشده است';
                 }
             } else {
-                $giftOrderMessage = 'خطا در یافتن کاربر';
+                $giftOrderErrorMessage = 'خطا در یافتن کاربر';
             }
 
             if ($giftOrderDone) {
@@ -926,27 +887,25 @@ class AdminController extends Controller
                 $message = $gender.$user->full_name."\n";
                 $message .= 'همایش طلایی عربی و همایش حل مسائل شیمی به فایل های شما افزوده شد . دانلود در:';
                 $message .= "\n";
-                $message .= 'sanatisharif.ir/asset/';
+                $message .= 'alaatv.com/asset';
                 $user->notify(new GeneralNotice($message));
-                session()->put('success', $giftOrderMessage);
-            } else {
-                session()->put('error', $giftOrderMessage);
+
             }
 
             if ($request->expectsJson()) {
-                if ($giftOrderDone) {
-                    return response()->json();
-                } else {
-                    return response()->json([] , Response::HTTP_SERVICE_UNAVAILABLE);
-                }
+                return response()->json([] , $responseStatus);
             } else {
+                if(isset($giftOrderSuccessMessage)){
+                    session()->put('success', $giftOrderSuccessMessage);
+                }
+                if(isset($giftOrderErrorMessage)){
+                    session()->put('error', $giftOrderErrorMessage);
+                }
                 return redirect()->back();
             }
         } catch (Exception    $e) {
-            $message = 'unexpected error';
-
             return response()->json([
-                'message' => $message,
+                'message' => 'unexpected error',
                 'error'   => $e->getMessage(),
                 'line'    => $e->getLine(),
                 'file'    => $e->getFile(),
