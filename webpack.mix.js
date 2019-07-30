@@ -162,23 +162,23 @@ class Mix {
             ],
             'public/css/page-homePage.css'
         ).version()
-            .babel([
-                    // 'node_modules/lightslider/dist/js/lightslider.js',
-                    //
-                    // 'node_modules/slick-carousel/slick/slick.js',
-                    //
-                    // 'node_modules/glider-js/glider.js',
-                    //
-                    // 'node_modules/siema/dist/siema.min.js',
+        .babel([
+                // 'node_modules/lightslider/dist/js/lightslider.js',
+                //
+                // 'node_modules/slick-carousel/slick/slick.js',
+                //
+                // 'node_modules/glider-js/glider.js',
+                //
+                // 'node_modules/siema/dist/siema.min.js',
 
-                    'node_modules/owl.carousel/dist/owl.carousel.js',
-                    'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/js.js',
-                    'public/acm/AlaatvCustomFiles/components/aSticky/aSticky.js',
-                    'public/acm/AlaatvCustomFiles/js/certificates.js',
-                    'public/acm/AlaatvCustomFiles/js/page/pages/homePage.js',
-                ],
-                'public/js/page-homePage.js'
-            ).version();
+                'node_modules/owl.carousel/dist/owl.carousel.js',
+                'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/js.js',
+                'public/acm/AlaatvCustomFiles/components/aSticky/aSticky.js',
+                'public/acm/AlaatvCustomFiles/js/certificates.js',
+                'public/acm/AlaatvCustomFiles/js/page/pages/homePage.js',
+            ],
+            'public/js/page-homePage.js'
+        ).version();
     }
     mixPageContactUs() {
         this.mix.styles([

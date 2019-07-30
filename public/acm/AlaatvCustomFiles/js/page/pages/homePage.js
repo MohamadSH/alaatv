@@ -275,7 +275,7 @@ function loadCarousels() {
                     gtmEecProductObserver.observe();
                 }
             },
-            defaultView: 'grid', // OwlCarousel or grid
+            defaultView: 'OwlCarousel', // OwlCarousel or grid
             childCountHideOwlCarousel: 4
         });
 
