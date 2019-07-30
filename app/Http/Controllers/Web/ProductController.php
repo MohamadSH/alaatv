@@ -1164,8 +1164,9 @@ class ProductController extends Controller
 //            }
             
             $productsDataForView[] = [
+                'id'                => $value->id,
                 'type'              => $reshteIdArray[$value->id],
-                'price'             => $price,
+                'price'             => $value->price,
                 'priceWithDiscount' => $priceWithDiscount,
                 'image'             => $value->photo.'?w=350&h=350',
                 'name'              => $value->name,

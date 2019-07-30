@@ -126,7 +126,7 @@
                                     </nav>
                                 @endif
                                 @if($productsHasThisContentThroughBlockCollection->count() > 0)
-                                    @foreach($productsHasThisContentThroughBlockCollection as $product)
+                                    @foreach($productsHasThisContentThroughBlockCollection as $productKey=>$product)
                                         @if($product->type['type'] === 'simple')
                                             <button
                                                 data-gtm-eec-product-id="{{$product->id}}"
@@ -136,6 +136,8 @@
                                                 data-gtm-eec-product-category="-"
                                                 data-gtm-eec-product-variant="-"
                                                 data-gtm-eec-product-quantity="1"
+                                                data-gtm-eec-product-position="{{ $productKey }}"
+                                                data-gtm-eec-product-list="نمونه فیلم-دکمه افزودن به سبد"
                                                 class="btn m-btn--air btn-success m-btn--icon m--margin-bottom-5 a--gtm-eec-product btnAddToCart" data-pid="{{ $product->id }}">
                                                 <span>
                                                     <i class="fa fa-cart-arrow-down"></i>
@@ -164,7 +166,7 @@
                                                     data-gtm-eec-product-variant="-"
                                                     data-gtm-eec-product-quantity="1"
                                                     data-gtm-eec-product-position="{{ $productKey }}"
-                                                    data-gtm-eec-product-list="صفحه محصول-"
+                                                    data-gtm-eec-product-list="محصولاتی که شامل این محتوا هستند-دکمه افزودن به سبد"
                                                     class="btn m-btn--air btn-success m-btn--icon m--margin-bottom-5 a--gtm-eec-product btnAddToCart" data-pid="{{ $product->id }}">
                                             <span>
                                                 <i class="fa fa-cart-arrow-down"></i>
