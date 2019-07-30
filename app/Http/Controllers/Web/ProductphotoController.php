@@ -6,20 +6,17 @@ use App\Adapter\AlaaSftpAdapter;
 use App\Productphoto;
 use App\Traits\FileCommon;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 
 class ProductphotoController extends Controller
 {
-    protected $response;
-
     use FileCommon;
 
     function __construct()
     {
-        $this->response = new Response();
+
     }
 
     public function store(Request $request)
@@ -74,9 +71,9 @@ class ProductphotoController extends Controller
     public function destroy(Productphoto $productphoto)
     {
         if ($productphoto->delete()) {
-            return $this->response->setStatusCode(200);
+            return response()->json([] , Response::HTTP_OK);
         } else {
-            return $this->response->setStatusCode(503);
+            return response()->json([] , Response::HTTP_SERVICE_UNAVAILABLE);
         }
     }
 }
