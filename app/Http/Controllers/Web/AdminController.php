@@ -885,10 +885,9 @@ class AdminController extends Controller
                     $gender = '';
                 }
                 $message = $gender.$user->full_name."\n";
-                $message .= 'همایش طلایی عربی و همایش حل مسائل شیمی به فایل های شما افزوده شد . دانلود در:';
                 $message .= "\n";
                 $message .= 'alaatv.com/asset';
-                $user->notify(new GeneralNotice($message));
+//                $user->notify(new GeneralNotice($message));
 
             }
 
