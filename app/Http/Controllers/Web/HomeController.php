@@ -928,10 +928,8 @@ class HomeController extends Controller
             }
         } catch (Exception $e) {
             //            return $this->TAG.' '.$e->getMessage();
-            $message = 'unexpected error';
-
             return response()->json([
-                'message' => $message,
+                'message' => 'unexpected error',
                 'error'   => $e->getMessage(),
                 'line'    => $e->getLine(),
                 'file'    => $e->getFile(),

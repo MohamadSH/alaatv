@@ -800,10 +800,8 @@ class UserController extends Controller
             
             return response($responseContent, Response::HTTP_OK);
         } catch (\Exception    $e) {
-            $message = 'unexpected error';
-            
             return response([
-                'message' => $message,
+                'message' => 'unexpected error',
                 'error'   => $e->getMessage(),
                 'line'    => $e->getLine(),
                 'file'    => $e->getFile(),
