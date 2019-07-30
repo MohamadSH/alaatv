@@ -1233,7 +1233,7 @@ jQuery(document).ready(function () {
         var itemId = $(this).attr('id');
         var responsive = {
             0:{
-                items:1,
+                items:2,
             },
             400:{
                 items:2,
@@ -1272,7 +1272,7 @@ jQuery(document).ready(function () {
             }
             responsive = {
                 0:{
-                    items:1,
+                    items:2,
                 },
                 400:{
                     items:2,
