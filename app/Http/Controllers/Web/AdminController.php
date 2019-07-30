@@ -813,26 +813,19 @@ class AdminController extends Controller
                     $user->update();
                 }
             } else {
-                $registerRequest = new InsertUserRequest();
-                $registerRequest->offsetSet('mobile', $mobile);
-                $registerRequest->offsetSet('nationalCode', $nationalCode);
-                $registerRequest->offsetSet('firstName', $firstName);
-                $registerRequest->offsetSet('lastName', $lastName);
-                $registerRequest->offsetSet('password', $nationalCode);
-                //                $registerRequest->offsetSet("mobileNumberVerification" , 1);
-                $registerRequest->offsetSet('major_id', $major_id);
-                $registerRequest->offsetSet('gender_id', $gender_id);
-                $registerRequest->offsetSet('userstatus_id', 1);
-                $userController = new \App\Http\Controllers\UserController();
-                $response       = $userController->store($registerRequest);
-                $result         = json_decode($response->getContent());
-                if ($response->getStatusCode() == 200) {
-                    $userId = $result->userId;
-                    if ($userId > 0) {
-                        $user = User::where('id', $userId)
-                            ->first();
-                        $user->notify(new UserRegisterd());
-                    }
+                $user = User::craete([
+                    'mobile'        => $mobile,
+                    'nationalCode'  => $nationalCode,
+                    'firstName'     => $firstName,
+                    'lastName'      => $lastName,
+                    'password'      => bcrypt($nationalCode),
+                    'major_id'      => $major_id,
+                    'gender_id'     => $gender_id,
+                    'userstatus_id' => 1,
+                ]);
+                if (isset($user)) {
+                    $user = User::where('id', $user->id)->first();
+                    $user->notify(new UserRegisterd());
                 }
             }
 
@@ -942,9 +935,9 @@ class AdminController extends Controller
 
             if ($request->expectsJson()) {
                 if ($giftOrderDone) {
-                    return $this->response->setStatusCode(200);
+                    return response()->json();
                 } else {
-                    return $this->response->setStatusCode(503);
+                    return response()->json([] , Response::HTTP_SERVICE_UNAVAILABLE);
                 }
             } else {
                 return redirect()->back();
@@ -952,13 +945,12 @@ class AdminController extends Controller
         } catch (Exception    $e) {
             $message = 'unexpected error';
 
-            return $this->response->setStatusCode(500)
-                ->setContent([
-                    'message' => $message,
-                    'error'   => $e->getMessage(),
-                    'line'    => $e->getLine(),
-                    'file'    => $e->getFile(),
-                ]);
+            return response()->json([
+                'message' => $message,
+                'error'   => $e->getMessage(),
+                'line'    => $e->getLine(),
+                'file'    => $e->getFile(),
+            ] , Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 
