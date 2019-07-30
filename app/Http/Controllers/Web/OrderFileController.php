@@ -9,22 +9,15 @@ use Illuminate\Http\Response;
 
 class OrderFileController extends Controller
 {
-    protected $response;
-    
-    function __construct()
-    {
-        $this->response = new Response();
-    }
-
     public function store(Request $request)
     {
         $orderFile = new Orderfile();
         $orderFile->fill($request->all());
         if ($orderFile->save()) {
-            return $this->response->setStatusCode(200);
+            return response()->json();
         }
         else {
-            return $this->response->setStatusCode(503);
+            return response()->json([] , Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 }

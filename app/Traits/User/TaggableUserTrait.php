@@ -5,6 +5,7 @@ namespace App\Traits\User;
 
 
 use App\Collection\ContentCollection;
+use Illuminate\Http\Response;
 
 trait TaggableUserTrait
 {
@@ -58,7 +59,7 @@ trait TaggableUserTrait
          */
         $response = $this->sendRequest(config("constants.TAG_API_URL")."id/author/".$this->id, "GET");
         
-        if ($response["statusCode"] == 200) {
+        if ($response["statusCode"] == Response::HTTP_OK) {
             $result = json_decode($response["result"]);
             $tags   = $result->data->tags;
         } else {

@@ -43,13 +43,10 @@ class AttributegroupController extends Controller
             $attributegroup->attributes()
                 ->sync($request->get('attributes', []));
             
-            return $this->response->setStatusCode(200);
+            return $this->response->setStatusCode(Response::HTTP_OK);
         }
-        else {
-            return $this->response->setStatusCode(503);
-        }
-        
-        return redirect()->back();
+
+        return $this->response->setStatusCode(Response::HTTP_SERVICE_UNAVAILABLE);
     }
 
     public function edit(Attributegroup $attributegroup)

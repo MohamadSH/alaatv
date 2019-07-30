@@ -159,7 +159,6 @@ Route::group(['middleware' => 'auth'], function () {
     
     Route::get('holdlottery', "Web\LotteryController@holdLottery");
     Route::get('givePrize', "Web\LotteryController@givePrizes");
-    Route::get('smsbot', "Web\BotsController@smsBot");
     Route::get("bot", "Web\BotsController@bot");
     Route::get("pointBot", "Web\BotsController@pointBot");
     Route::post("walletBot", "Web\BotsController@walletBot");
@@ -272,7 +271,9 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('listContents/{set}', "Web\SetController@indexContent");
     Route::resource('set', 'Web\SetController');
 
-    Route::get('live' , '\\'.LiveController::class);
+    Route::get('live' , '\\'.LiveController::class)->name('live');
+    Route::post('startlive' , [LiveController::class, 'startLive']);
+    Route::post('endlive'   , [LiveController::class, 'endLive']);
 
     Route::post('updateSet' , [ContentController::class, 'updateSet']);
 });

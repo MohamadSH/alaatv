@@ -9,12 +9,6 @@ use Illuminate\Http\Response;
 
 class WalletController extends Controller
 {
-    protected $response;
-    
-    public function __construct()
-    {
-        $this->response = new Response();
-    }
 
     public function store(Request $request)
     {
@@ -28,11 +22,10 @@ class WalletController extends Controller
         
         if ($request->expectsJson()) {
             if ($done) {
-                return $this->response->setStatusCode(200)
-                    ->setContent(["wallet" => $wallet]);
+                return response()->json(["wallet" => $wallet]);
             }
             else {
-                return $this->response->setStatusCode(503);
+                return response()->json( [] , Response::HTTP_SERVICE_UNAVAILABLE);
             }
         }
     }
@@ -47,10 +40,10 @@ class WalletController extends Controller
         
         if ($request->expectsJson()) {
             if ($done) {
-                return $this->response->setStatusCode(200);
+                return response()->json();
             }
             else {
-                return $this->response->setStatusCode(503);
+                return response()->json([] , Response::HTTP_SERVICE_UNAVAILABLE);
             }
         }
     }

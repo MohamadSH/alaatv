@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Web;
 
+use App\Http\Requests\InsertContentsetRequest;
 use App\User;
 use Carbon\Carbon;
 use App\Contentset;
@@ -645,17 +646,19 @@ class SanatisharifmergeController extends Controller
         $sanatisharifRecord = new Sanatisharifmerge();
         $sanatisharifRecord->fill($request->all());
         if ($sanatisharifRecord->save()) {
-            return $this->response->setStatusCode(200);
+            return $this->response->setStatusCode(Response::HTTP_OK);
         } else {
-            return $this->response->setStatusCode(503);
+            return $this->response->setStatusCode(Response::HTTP_SERVICE_UNAVAILABLE);
         }
     }
-    
+
     /**
      *    METHODS FOR COPYING DATA IN TO TAKHTEKHAK TABLES
+     * @param SetController $controller
+     * @return Response
      */
     
-    public function copyDepartmentlesson()
+    public function copyDepartmentlesson(SetController $controller)
     {
         try {
             $sanatisharifRecords = Sanatisharifmerge::whereNull("videoid")
@@ -684,7 +687,7 @@ class SanatisharifmergeController extends Controller
                     $skippedCounter++;
                     continue;
                 }
-                $request = new Request();
+                $request = new InsertContentsetRequest();
                 
                 $request->offsetSet("id", $sanatisharifRecord->departmentlessonid);
                 $request->offsetSet("enable", $sanatisharifRecord->departmentlessonEnable);
@@ -719,37 +722,34 @@ class SanatisharifmergeController extends Controller
                 dump($tags);
                 
                 $request->offsetSet("name", $name);
-                $controller = new ContentsetController();
                 $response   = $controller->store($request);
-                if ($response->getStatusCode() == 200) {
+                if ($response->getStatusCode() == Response::HTTP_OK) {
                     $request = new Request();
                     $request->offsetSet("departmentlessonTransferred", 1);
                     $response = $this->update($request, $sanatisharifRecord);
-                    if ($response->getStatusCode() == 200) {
+                    if ($response->getStatusCode() == Response::HTTP_OK) {
                         $successCoutner++;
                     } else {
-                        if ($response->getStatusCode() == 503) {
+                        if ($response->getStatusCode() == Response::HTTP_SERVICE_UNAVAILABLE) {
                             dump("departmentlesson state wasn't saved. id: ".$sanatisharifRecord->departmentlessonid);
                             $failedCounter++;
                         }
                     }
-                } else {
-                    if ($response->getStatusCode() == 503) {
+                } elseif ($response->getStatusCode() == Response::HTTP_SERVICE_UNAVAILABLE) {
                         $failedCounter++;
                         dump("departmentlesson wasn't transferred. id: ".$sanatisharifRecord->departmentlessonid);
-                    }
                 }
             }
             dump("number of failed: ".$failedCounter);
             dump("number of successful : ".$successCoutner);
             dump("number of skipped : ".$skippedCounter);
             
-            return $this->response->setStatusCode(200)
+            return $this->response->setStatusCode(Response::HTTP_OK)
                 ->setContent(["message" => "Creating Playlists Done Successfully"]);
         } catch (\Exception    $e) {
             $message = "unexpected error";
             
-            return $this->response->setStatusCode(503)
+            return $this->response->setStatusCode(Response::HTTP_SERVICE_UNAVAILABLE)
                 ->setContent([
                     "message" => $message,
                     "error"   => $e->getMessage(),
@@ -3529,17 +3529,17 @@ class SanatisharifmergeController extends Controller
     {
         $sanatisharifmerge->fill($request->all());
         if ($sanatisharifmerge->update()) {
-            return $this->response->setStatusCode(200);
+            return $this->response->setStatusCode(Response::HTTP_OK);
         } else {
-            return $this->response->setStatusCode(503);
+            return $this->response->setStatusCode(Response::HTTP_SERVICE_UNAVAILABLE);
         }
     }
     
-    public function copyContent()
+    public function copyContent(ContentController $controller)
     {
         try {
             if (!Input::has("t")) {
-                return $this->response->setStatusCode(422)
+                return $this->response->setStatusCode(Response::HTTP_UNPROCESSABLE_ENTITY)
                     ->setContent(["message" => "Wrong inputs: Please pass parameter t. Available values: p , v"]);
             } else {
                 $contentType = Input::get("t");
@@ -3618,10 +3618,10 @@ class SanatisharifmergeController extends Controller
                                 }
                             }
                             $response = $this->update($request, $sanatisharifRecord);
-                            if ($response->getStatusCode() == 200) {
+                            if ($response->getStatusCode() == Response::HTTP_OK) {
                                 $skippedCounter++;
                             } else {
-                                if ($response->getStatusCode() == 503) {
+                                if ($response->getStatusCode() == Response::HTTP_SERVICE_UNAVAILABLE) {
                                     $failCounter++;
                                     dump("Skipped status wasn't saved for video: ".$sanatisharifRecord->videoid);
                                 }
@@ -3787,25 +3787,24 @@ class SanatisharifmergeController extends Controller
                         dump("Warning contentset was not exist. id: ".$sanatisharifRecord->departmentlessonid);
                     }
                     
-                    $controller      = new ContentController();
                     $response        = $controller->store($storeContentReuest);
                     $responseContent = json_decode($response->getContent());
-                    if ($response->getStatusCode() == 200) {
+                    if ($response->getStatusCode() == Response::HTTP_OK) {
                         $request->offsetSet($contentTypeLable."Transferred", 1);
                         if (isset($responseContent->id)) {
                             $request->offsetSet("content_id", $responseContent->id);
                         }
                         $response = $this->update($request, $sanatisharifRecord);
-                        if ($response->getStatusCode() == 200) {
+                        if ($response->getStatusCode() == Response::HTTP_OK) {
                             $successCounter++;
                         } else {
-                            if ($response->getStatusCode() == 503) {
+                            if ($response->getStatusCode() == Response::HTTP_SERVICE_UNAVAILABLE) {
                                 $failCounter++;
                                 dump("failed Transferred status wasn't saved for $contentTypeLable: ".$sanatisharifRecord->$idColumn);
                             }
                         }
                     } else {
-                        if ($response->getStatusCode() == 503) {
+                        if ($response->getStatusCode() == Response::HTTP_SERVICE_UNAVAILABLE) {
                             $failCounter++;
                             dump("failed $contentTypeLable wasn't transferred. id: ".$sanatisharifRecord->$idColumn);
                         }
@@ -3824,12 +3823,12 @@ class SanatisharifmergeController extends Controller
             dump($warningCounter." warnings");
             dump("finish time:".Carbon::now("asia/tehran"));
             
-            return $this->response->setStatusCode(200)
+            return $this->response->setStatusCode(Response::HTTP_OK)
                 ->setContent(["message" => "Transfer Done Successfully"]);
         } catch (\Exception    $e) {
             $message = "unexpected error";
-            
-            return $this->response->setStatusCode(503)
+
+            return $this->response->setStatusCode(Response::HTTP_SERVICE_UNAVAILABLE)
                 ->setContent([
                     "message" => $message,
                     "error"   => $e->getMessage(),
@@ -4839,7 +4838,7 @@ class SanatisharifmergeController extends Controller
                 break;
         }
         
-        return response()->json(json_decode($json, true), 200);
+        return response()->json(json_decode($json, true), Response::HTTP_OK);
     }
     //    public function redirectVideo
 }

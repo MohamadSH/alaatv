@@ -3,13 +3,11 @@
 namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\AttachUserBonRequest;
 use App\Http\Requests\InsertUserBonRequest;
 use App\Product;
 use App\Traits\Helper;
 use App\Userbon;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Input;
 
 class UserbonController extends Controller
@@ -26,8 +24,6 @@ class UserbonController extends Controller
         $this->middleware('permission:'.config('constants.INSERT_USER_BON_ACCESS'), ['only' => 'store']);
         $this->middleware('permission:'.config('constants.LIST_USER_BON_ACCESS'), ['only' => 'index']);
         $this->middleware('permission:'.config('constants.REMOVE_USER_BON_ACCESS'), ['only' => 'destroy']);
-        
-        $this->response = new Response();
     }
 
     public function index()
@@ -108,14 +104,14 @@ class UserbonController extends Controller
         $userbon = new Userbon();
         $userbon->fill($request->all());
         if ($userbon->save()) {
-            return $this->response->setStatusCode(200);
+            return response()->json();
         }
         else {
-            return $this->response->setStatusCode(503);
+            return response()->json([] , Response::HTTP_SERVICE_UNAVAILABLE);
         }
     }
 
-    public function destroy($userbon)
+    public function destroy(Userbon $userbon)
     {
         $userbon->delete();
         

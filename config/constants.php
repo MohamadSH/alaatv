@@ -181,6 +181,8 @@ return [
     'INSERT_BLOCK_ACCESS'                         => 'insertBlock',
     'EDIT_BLOCK_ACCESS'                           => 'editBlock',
     'REMOVE_BLOCK_ACCESS'                         => 'removeBlock',
+    'LIVE_STOP_ACCESS'                            => 'stopLive',
+    'LIVE_PLAY_ACCESS'                            => 'playLive',
 
 
     //Technician

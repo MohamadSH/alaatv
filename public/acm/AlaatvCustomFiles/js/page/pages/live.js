@@ -1,5 +1,3 @@
-
-
 document.addEventListener('DOMContentLoaded', function() {
     var calendarEl = document.getElementById('a--fullcalendar');
 
@@ -110,8 +108,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
 });
 
-
-
 function formatData(data) {
     let dataLength = data.length,
         newData = [];
@@ -131,8 +127,6 @@ function formatData(data) {
     }
     return newData;
 }
-
-
 
 if ($('#video-0').length > 0) {
 
@@ -213,3 +207,27 @@ if ($('#video-0').length > 0) {
 
     player.pic2pic();
 }
+
+$(document).ready(function () {
+    function ajaxLive(ajaxUrl) {
+        $.ajax({
+            type: 'POST',
+            url : ajaxUrl,
+            data: {},
+            dataType: 'json',
+
+            success: function (data) {
+                window.location.reload();
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                alert('خطای سیستمی رخ داده است.');
+            }
+        });
+    }
+    $(document).on('click', '.btnPlayLive', function () {
+        ajaxLive(playLiveAjaxUrl);
+    });
+    $(document).on('click', '.btnStopLive', function () {
+        ajaxLive(stopLiveAjaxUrl);
+    });
+});

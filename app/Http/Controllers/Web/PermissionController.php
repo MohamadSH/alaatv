@@ -15,8 +15,6 @@ class PermissionController extends Controller
     
     function __construct()
     {
-        $this->response = new Response();
-        
         $this->middleware('permission:'.config('constants.LIST_PERMISSION_ACCESS'), ['only' => 'index']);
         $this->middleware('permission:'.config('constants.INSERT_PERMISSION_ACCESS'), ['only' => 'create']);
         $this->middleware('permission:'.config('constants.REMOVE_PERMISSION_ACCESS'), ['only' => 'destroy']);
@@ -38,10 +36,10 @@ class PermissionController extends Controller
         $permission->fill($request->all());
         
         if ($permission->save()) {
-            return $this->response->setStatusCode(200);
+            return response()->json();
         }
         
-        return $this->response->setStatusCode(503);
+        return response()->json([] , Response::HTTP_SERVICE_UNAVAILABLE);
     }
     
     public function edit($permission)
