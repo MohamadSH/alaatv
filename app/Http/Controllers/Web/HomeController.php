@@ -55,15 +55,13 @@ class HomeController extends Controller
      * @return void
      */
     
-    protected $response;
-    
+
     protected $sideBarAdmin;
     
     protected $setting;
     
-    public function __construct(Response $response, Websitesetting $setting)
+    public function __construct(Websitesetting $setting)
     {
-        $this->response = $response;
         $this->setting  = $setting->setting;
 
 
@@ -816,9 +814,9 @@ class HomeController extends Controller
         if (!$response['error']) {
             $smsCredit = $this->medianaGetCredit();
 
-            return response()->json( $smsCredit , Response::HTTP_OK);
+            return response()->json($smsCredit);
         } else {
-            return $this->response->setStatusCode(503);
+            return response()->json( [] , Response::HTTP_SERVICE_UNAVAILABLE);
         }
     }
     
@@ -921,25 +919,23 @@ class HomeController extends Controller
                 }
             }
             if ($done) {
-                return $this->response->setStatusCode(Response::HTTP_OK)
-                    ->setContent([
-                        'fileName' => $fileName,
-                        'prefix'   => $filePrefix,
-                    ]);
+                return response()->json([
+                    'fileName' => $fileName,
+                    'prefix'   => $filePrefix,
+                ]);
             } else {
-                return $this->response->setStatusCode(503);
+                return response()->json([] , Response::HTTP_SERVICE_UNAVAILABLE);
             }
         } catch (Exception $e) {
             //            return $this->TAG.' '.$e->getMessage();
             $message = 'unexpected error';
-            
-            return $this->response->setStatusCode(503)
-                ->setContent([
-                    'message' => $message,
-                    'error'   => $e->getMessage(),
-                    'line'    => $e->getLine(),
-                    'file'    => $e->getFile(),
-                ]);
+
+            return response()->json([
+                'message' => $message,
+                'error'   => $e->getMessage(),
+                'line'    => $e->getLine(),
+                'file'    => $e->getFile(),
+            ] , Response::HTTP_SERVICE_UNAVAILABLE);
         }
     }
     //    public function certificates()
