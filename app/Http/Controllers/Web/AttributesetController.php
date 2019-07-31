@@ -8,7 +8,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\EditAttributesetRequest;
 use App\Http\Requests\InsertAttributesetRequest;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Config;
 
 class AttributesetController extends Controller
 {
@@ -16,8 +15,6 @@ class AttributesetController extends Controller
     
     function __construct()
     {
-        $this->response = new Response();
-        
         $this->middleware('permission:'.config('constants.LIST_ATTRIBUTESET_ACCESS'), ['only' => 'index']);
         $this->middleware('permission:'.config('constants.INSERT_ATTRIBUTESET_ACCESS'), ['only' => 'create']);
         $this->middleware('permission:'.config('constants.REMOVE_ATTRIBUTESET_ACCESS'), ['only' => 'destroy']);
@@ -38,10 +35,10 @@ class AttributesetController extends Controller
         $attributeset->fill($request->all());
         
         if ($attributeset->save()) {
-            return $this->response->setStatusCode(Response::HTTP_OK);
+            return response()->json();
         }
         else {
-            return $this->response->setStatusCode(Response::HTTP_SERVICE_UNAVAILABLE);
+            return response()->json([] , Response::HTTP_SERVICE_UNAVAILABLE);
         }
     }
 

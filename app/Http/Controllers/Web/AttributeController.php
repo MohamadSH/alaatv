@@ -8,7 +8,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\EditAttributeRequest;
 use App\Http\Requests\InsertAttributeRequest;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Config;
 
 class AttributeController extends Controller
 {
@@ -16,8 +15,6 @@ class AttributeController extends Controller
     
     function __construct()
     {
-        $this->response = new Response();
-        
         $this->middleware('permission:'.config('constants.LIST_ATTRIBUTE_ACCESS'), ['only' => 'index']);
         $this->middleware('permission:'.config('constants.INSERT_ATTRIBUTE_ACCESS'), ['only' => 'create']);
         $this->middleware('permission:'.config('constants.REMOVE_ATTRIBUTE_ACCESS'), ['only' => 'destroy']);
@@ -41,10 +38,10 @@ class AttributeController extends Controller
         }
         
         if ($attribute->save()) {
-            return $this->response->setStatusCode(Response::HTTP_OK);
+            return response()->json();
         }
         else {
-            return $this->response->setStatusCode(Response::HTTP_SERVICE_UNAVAILABLE);
+            return response()->json([] , Response::HTTP_SERVICE_UNAVAILABLE);
         }
     }
 

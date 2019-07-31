@@ -21,9 +21,7 @@ class SanatisharifmergeController extends Controller
     use CharacterCommon;
     use RequestCommon;
     use MetaCommon;
-    
-    private $response;
-    
+
     private $teachers;
     
     function __construct()
@@ -638,7 +636,6 @@ class SanatisharifmergeController extends Controller
                 "password"      => "7562359493",
             ],
         ]);
-        $this->response = new Response();
     }
     
     public function store(Request $request)
@@ -646,9 +643,9 @@ class SanatisharifmergeController extends Controller
         $sanatisharifRecord = new Sanatisharifmerge();
         $sanatisharifRecord->fill($request->all());
         if ($sanatisharifRecord->save()) {
-            return $this->response->setStatusCode(Response::HTTP_OK);
+            return response()->json();
         } else {
-            return $this->response->setStatusCode(Response::HTTP_SERVICE_UNAVAILABLE);
+            return response()->json([] , Response::HTTP_SERVICE_UNAVAILABLE);
         }
     }
 
@@ -744,18 +741,14 @@ class SanatisharifmergeController extends Controller
             dump("number of successful : ".$successCoutner);
             dump("number of skipped : ".$skippedCounter);
             
-            return $this->response->setStatusCode(Response::HTTP_OK)
-                ->setContent(["message" => "Creating Playlists Done Successfully"]);
+            return response()->json(["message" => "Creating Playlists Done Successfully"]);
         } catch (\Exception    $e) {
-            $message = "unexpected error";
-            
-            return $this->response->setStatusCode(Response::HTTP_SERVICE_UNAVAILABLE)
-                ->setContent([
-                    "message" => $message,
-                    "error"   => $e->getMessage(),
-                    "line"    => $e->getLine(),
-                    "file"    => $e->getFile(),
-                ]);
+            return response()->json([
+                "message" => "unexpected error",
+                "error"   => $e->getMessage(),
+                "line"    => $e->getLine(),
+                "file"    => $e->getFile(),
+            ] , Response::HTTP_SERVICE_UNAVAILABLE);
         }
     }
     
@@ -3529,9 +3522,9 @@ class SanatisharifmergeController extends Controller
     {
         $sanatisharifmerge->fill($request->all());
         if ($sanatisharifmerge->update()) {
-            return $this->response->setStatusCode(Response::HTTP_OK);
+            return response()->json();
         } else {
-            return $this->response->setStatusCode(Response::HTTP_SERVICE_UNAVAILABLE);
+            return response()->json([] , Response::HTTP_SERVICE_UNAVAILABLE);
         }
     }
     
@@ -3539,8 +3532,7 @@ class SanatisharifmergeController extends Controller
     {
         try {
             if (!Input::has("t")) {
-                return $this->response->setStatusCode(Response::HTTP_UNPROCESSABLE_ENTITY)
-                    ->setContent(["message" => "Wrong inputs: Please pass parameter t. Available values: p , v"]);
+                return response()->json(["message" => "Wrong inputs: Please pass parameter t. Available values: p , v"] , Response::HTTP_UNPROCESSABLE_ENTITY );
             } else {
                 $contentType = Input::get("t");
             }
@@ -3558,8 +3550,7 @@ class SanatisharifmergeController extends Controller
                     $contentTypePersianLable2 = "PDF";
                     break;
                 default:
-                    return $this->response->setStatusCode(422)
-                        ->setContent(["message" => "Wrong inputs: Please pass parameter t. Available values: p , v"]);
+                    return response()->json(["message" => "Wrong inputs: Please pass parameter t. Available values: p , v"] , Response::HTTP_UNPROCESSABLE_ENTITY);
                     break;
             }
             $idColumn          = $contentTypeLable."id";
@@ -3823,17 +3814,13 @@ class SanatisharifmergeController extends Controller
             dump($warningCounter." warnings");
             dump("finish time:".Carbon::now("asia/tehran"));
             
-            return $this->response->setStatusCode(Response::HTTP_OK)
-                ->setContent(["message" => "Transfer Done Successfully"]);
+            return response()->json(["message" => "Transfer Done Successfully"]);
         } catch (\Exception    $e) {
-            $message = "unexpected error";
-
-            return $this->response->setStatusCode(Response::HTTP_SERVICE_UNAVAILABLE)
-                ->setContent([
-                    "message" => $message,
-                    "error"   => $e->getMessage(),
-                    "line"    => $e->getLine(),
-                ]);
+            return response()->json([
+                "message" => "unexpected error",
+                "error"   => $e->getMessage(),
+                "line"    => $e->getLine(),
+            ] , Response::HTTP_SERVICE_UNAVAILABLE );
         }
     }
     
