@@ -13,16 +13,12 @@ use Illuminate\Support\Facades\Input;
 
 class AttributegroupController extends Controller
 {
-    protected $response;
-    
     function __construct()
     {
         $this->middleware('permission:'.config('constants.LIST_ATTRIBUTEGROUP_ACCESS'), ['only' => 'index']);
         $this->middleware('permission:'.config('constants.INSERT_ATTRIBUTEGROUP_ACCESS'), ['only' => 'create']);
         $this->middleware('permission:'.config('constants.REMOVE_ATTRIBUTEGROUP_ACCESS'), ['only' => 'destroy']);
         $this->middleware('permission:'.config('constants.SHOW_ATTRIBUTEGROUP_ACCESS'), ['only' => 'edit']);
-        
-        $this->response = new Response();
     }
 
     public function index()
@@ -43,10 +39,10 @@ class AttributegroupController extends Controller
             $attributegroup->attributes()
                 ->sync($request->get('attributes', []));
             
-            return $this->response->setStatusCode(Response::HTTP_OK);
+            return response()->json();
         }
 
-        return $this->response->setStatusCode(Response::HTTP_SERVICE_UNAVAILABLE);
+        return response()->json([] , Response::HTTP_SERVICE_UNAVAILABLE);
     }
 
     public function edit(Attributegroup $attributegroup)

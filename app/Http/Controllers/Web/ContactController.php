@@ -9,22 +9,17 @@ use App\Contacttype;
 use Illuminate\Http\Response;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Input;
-use Illuminate\Support\Facades\Config;
 use App\Http\Requests\EditPhoneRequest;
 use App\Http\Requests\EditContactRequest;
 use App\Http\Requests\InsertContactRequest;
 
 class ContactController extends Controller
 {
-    protected $response;
-    
     function __construct()
     {
         $this->middleware('permission:'.config('constants.LIST_CONTACT_ACCESS'), ['only' => 'index']);
         $this->middleware('permission:'.config('constants.REMOVE_CONTACT_ACCESS'), ['only' => 'destroy']);
         $this->middleware('permission:'.config('constants.EDIT_CONTACT_ACCESS'), ['only' => 'edit']);
-        
-        $this->response = new Response();
     }
 
     public function index()
@@ -51,8 +46,7 @@ class ContactController extends Controller
         $contact->fill($request->all());
         if ($contact->save()) {
             if ($request->has("isServiceRequest")) {
-                return $this->response->setStatusCode(Response::HTTP_OK)
-                    ->setContent(["contact" => $contact]);
+                return response()->json(["contact" => $contact]);
             }
 
             session()->put("success", "مخاطب با موفقیت درج شد");
@@ -60,7 +54,7 @@ class ContactController extends Controller
         }
 
         if ($request->has("isServiceRequest")) {
-            return $this->response->setStatusCode(Response::HTTP_SERVICE_UNAVAILABLE);
+            return response()->json([] , Response::HTTP_SERVICE_UNAVAILABLE);
         }
         session()->put("error", "خطای پایگاه داده.");
 
