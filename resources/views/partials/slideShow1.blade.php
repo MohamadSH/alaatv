@@ -36,7 +36,7 @@
                                     
                                     <div class="lds-roller loadingSlideshow"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
                                     
-                                    <img class="d-block w-100 imageSlideOfSlideshow lazy-image"
+                                    <img class="d-block a--full-width imageSlideOfSlideshow lazy-image"
                                          data-src="{{ $slide->url }}"
                                          alt="عکس اسلاید @if(isset($slide->title[0])) {{ $slide->title }} @endif "
                                          id="slideshowid-{{ $slide->id }}"

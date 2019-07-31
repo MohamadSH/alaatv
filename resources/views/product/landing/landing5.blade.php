@@ -53,7 +53,16 @@
 
                                                 <div class="col-12 col-sm-6 col-md-4 col-lg-3 m--padding-left-5 m--padding-right-5 m--margin-top-5 a--imageWithCaption {{ $product['type']  }}">
                                                     <img src="{{ $product['image']  }}" alt="{{ $product['name']  }}" class="img-thumbnail lazy-image">
-                                                    <a href="{{ $product['link']  }}">
+                                                    <a href="{{ $product['link']  }}"
+                                                       class="a--gtm-eec-product a--gtm-eec-product-click"
+                                                       data-gtm-eec-product-id="{{ $product['id'] }}"
+                                                       data-gtm-eec-product-name="{{ $product['name'] }}"
+                                                       data-gtm-eec-product-price="{{ number_format($product['price']['final'], 2, '.', '') }}"
+                                                       data-gtm-eec-product-brand="آلاء"
+                                                       data-gtm-eec-product-category="-"
+                                                       data-gtm-eec-product-variant="-"
+                                                       data-gtm-eec-product-position="{{ $key }}"
+                                                       data-gtm-eec-product-list="لندینگ5-همایش های نظام قدیم">
                                                         <div class="a--imageCaptionWarper">
                                                             <div class="a--imageCaptionContent">
                                                                 <div class="a--imageCaptionTitle">

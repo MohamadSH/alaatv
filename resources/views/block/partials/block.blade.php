@@ -27,7 +27,7 @@
         @endif>
         <div class="col">
             <div class="m-portlet a--owl-carousel-Wraper OwlCarouselType2-shopPage" id="owlCarousel_{{ $block->id }}">
-                <div class="m-portlet__head">
+                <div class="m-portlet__head a--owl-carousel-head">
                     <div class="m-portlet__head-caption">
                         <div class="m-portlet__head-title">
                             <h3 class="m-portlet__head-text">
@@ -65,7 +65,7 @@
                         </a>
                     </div>
                 </div>
-                <div class="m-portlet__body m-portlet__body--no-padding">
+                <div class="m-portlet__body m-portlet__body--no-padding a--owl-carousel-body">
                     
                     <div class="a--owl-carousel-init-loading">
                         <div class="lds-roller">

@@ -271,7 +271,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('listContents/{set}', "Web\SetController@indexContent");
     Route::resource('set', 'Web\SetController');
 
-    Route::get('live' , '\\'.LiveController::class);
+    Route::get('live' , '\\'.LiveController::class)->name('live');
     Route::post('startlive' , [LiveController::class, 'startLive']);
     Route::post('endlive'   , [LiveController::class, 'endLive']);
 

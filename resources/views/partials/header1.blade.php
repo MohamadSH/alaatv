@@ -358,6 +358,31 @@
                 <div id="m_header_topbar" class="m-topbar  m-stack m-stack--ver m-stack--general">
                     <div class="m-stack__item m-topbar__nav-wrapper">
                         <ul class="m-topbar__nav m-nav m-nav--inline">
+    
+                            <li class="m-nav__item">
+                                <a href="{{ route('live') }}" class="m-nav__link">
+                                    <span class="m-nav__link-icon">
+                                        <span class="m-nav__link-icon-wrapper">
+                                            <img class="a--full-width lazy-image
+                                                 @if($live)
+                                                    liveOn
+                                                 @else
+                                                    liveOff
+                                                 @endif "
+                                                 src="https://cdn.alaatv.com/loder.jpg?w=1&h=1"
+                                                 @if($live)
+                                                 data-src="https://cdn.alaatv.com/upload/live-on.png"
+                                                 @else
+                                                 data-src="https://cdn.alaatv.com/upload/live-off.png"
+                                                 @endif
+                                                 width="35"
+                                                 height="40"
+                                            >
+                                        </span>
+                                    </span>
+                                </a>
+                            </li>
+                            
                             <li class="m-nav__item m-dropdown m-dropdown--large m-dropdown--arrow m-dropdown--align-right m-dropdown--mobile-full-width m-dropdown--skin-light	m-list-search m-list-search--skin-light" m-dropdown-toggle="click" id="m_quicksearch" m-quicksearch-mode="dropdown" m-dropdown-persistent="1">
 
                                 <a href="#" class="m-nav__link m-dropdown__toggle">
