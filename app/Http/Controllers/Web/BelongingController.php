@@ -2,12 +2,9 @@
 
 namespace App\Http\Controllers\Web;
 
-use App\Belonging;
 use App\Http\Controllers\Controller;
 use App\User;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Storage;
@@ -21,8 +18,6 @@ class BelongingController extends Controller
         $this->middleware('permission:'.config('constants.LIST_BELONGING_ACCESS'), ['only' => 'index']);
         $this->middleware('permission:'.config('constants.INSERT_BELONGING_ACCESS'), ['only' => 'store']);
         $this->middleware('permission:'.config('constants.REMOVE_BELONGING_ACCESS'), ['only' => 'destroy']);
-        
-        $this->response = new Response();
     }
 
     public function index()
