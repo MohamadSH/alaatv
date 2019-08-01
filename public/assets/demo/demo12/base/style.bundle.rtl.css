@@ -72,7 +72,7 @@ article, aside, figcaption, figure, footer, header, hgroup, main, nav, section {
 
 body {
   margin: 0;
-  font-family: "IRANSans, Tahoma, Arial, Geneva, sans-serif";
+  font-family: "IRANSans";
   font-size: 1rem;
   font-weight: 400;
   line-height: 1.5;
@@ -4679,7 +4679,7 @@ a.close.disabled {
   z-index: 1070;
   display: block;
   margin: 0;
-  font-family: "IRANSans, Tahoma, Arial, Geneva, sans-serif";
+  font-family: "IRANSans";
   font-style: normal;
   font-weight: 400;
   line-height: 1.5;
@@ -4763,7 +4763,7 @@ a.close.disabled {
   z-index: 1060;
   display: block;
   max-width: 276px;
-  font-family: "IRANSans, Tahoma, Arial, Geneva, sans-serif";
+  font-family: "IRANSans";
   font-style: normal;
   font-weight: 400;
   line-height: 1.5;
@@ -8840,7 +8840,7 @@ body {
   padding: 0px;
   font-size: 13px;
   font-weight: 300;
-  font-family: IRANSans, Tahoma, Arial, Geneva, sans-serif;
+  font-family: IRANSans;
   -ms-text-size-adjust: 100%;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale; }
@@ -14509,7 +14509,7 @@ strong {
     display: block;
     margin: 0 0 20px 0;
     padding: 0;
-    font-family: "IRANSans, Tahoma, Arial, Geneva, sans-serif";
+    font-family: "IRANSans";
     font-weight: 500; }
   .m-section h4.m-section__heading {
     font-size: 1.1rem; }
@@ -14592,7 +14592,7 @@ strong {
     padding: 0 2rem; }
 
 .btn {
-  font-family: "IRANSans, Tahoma, Arial, Geneva, sans-serif";
+  font-family: "IRANSans";
   -webkit-box-shadow: none !important;
   box-shadow: none !important;
   cursor: pointer;
@@ -14624,7 +14624,7 @@ strong {
     padding: 0.75rem 2rem;
     font-size: 1rem;
     font-weight: 400;
-    font-family: IRANSans, Tahoma, Arial, Geneva, sans-serif; }
+    font-family: IRANSans; }
     .btn.m-btn--custom.btn-sm, .btn-group-sm > .btn.m-btn--custom {
       padding: 0.5rem 1rem;
       font-size: 0.9rem; }
@@ -17820,7 +17820,7 @@ button:active, button:focus {
           align-items: center;
           font-size: 1.3rem;
           font-weight: 500;
-          font-family: IRANSans, Tahoma, Arial, Geneva, sans-serif;
+          font-family: IRANSans;
           margin: 0;
           padding: 0; }
           .m-portlet .m-portlet__head .m-portlet__head-caption .m-portlet__head-title .m-portlet__head-text small {
@@ -17828,13 +17828,13 @@ button:active, button:focus {
             padding-right: 5px;
             font-size: 1rem;
             font-weight: 300;
-            font-family: IRANSans, Tahoma, Arial, Geneva, sans-serif; }
+            font-family: IRANSans; }
           .m-portlet .m-portlet__head .m-portlet__head-caption .m-portlet__head-title .m-portlet__head-text .m-portlet__head-desc {
             margin-top: 0.4rem;
             display: block;
             font-size: 0.85rem;
             font-weight: 300;
-            font-family: IRANSans, Tahoma, Arial, Geneva, sans-serif; }
+            font-family: IRANSans; }
     .m-portlet .m-portlet__head .m-portlet__head-tools {
       display: -webkit-box;
       display: -ms-flexbox;
@@ -18180,7 +18180,7 @@ button:active, button:focus {
         .m-portlet.m-portlet--creative .m-portlet__head .m-portlet__head-caption .m-portlet__head-title .m-portlet__head-text {
           font-size: 1rem;
           font-weight: 400;
-          font-family: IRANSans, Tahoma, Arial, Geneva, sans-serif; }
+          font-family: IRANSans; }
           .m-portlet.m-portlet--creative .m-portlet__head .m-portlet__head-caption .m-portlet__head-title .m-portlet__head-text .m-portlet__head-desc {
             font-size: 0.8rem;
             font-weight: 300; }
