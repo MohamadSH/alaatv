@@ -32,6 +32,11 @@
     min-width: 40px;
 }
 
+.a--block-item .a--block-imageWrapper img,
+.a--block-item .m-btn-group {
+    transition: all 0.5s;
+}
+
 /*media query*/
 @media (max-width: 767.98px) {
     #pamphletModal .m-widget6 .m-widget6__head,

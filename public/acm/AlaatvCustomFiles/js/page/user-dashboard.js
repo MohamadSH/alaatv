@@ -223,6 +223,16 @@ var UserAssets = function () {
     };
 }();
 
+function moveUpBtns(dom) {
+    $('.a--block-item .m-btn-group').css({'position':'relative', 'top':'auto', 'left':'auto', 'transform':'scale(1)'});
+    $('.a--block-item .a--block-imageWrapper img').css({'filter':'none'});
+
+    $(dom).css({'filter':'blur(3px)'});
+    $(dom).parents('.a--block-item').find('.m-btn-group').css({'position':'absolute', 'top':'calc( 50% - 16px)', 'left':'calc( 50% - 70px)', 'transform':'scale(1.5)'});
+    if ($(dom).parents('.a--block-item').find('.a--owl-carousel-show-detailes').length > 0) {
+        $(dom).parents('.a--block-item').find('.a--owl-carousel-show-detailes').trigger('click');
+    }
+}
 
 $(document).ready(function () {
     var OwlCarouselType2Option = {
