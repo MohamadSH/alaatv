@@ -1,9 +1,6 @@
 <div class="item carousel a--block-item a--block-type-set">
     <div class="a--block-imageWrapper">
-    
         
-        
-    
         <div class="a--block-detailesWrapper">
     
             <div class="a--block-set-count">
@@ -16,9 +13,9 @@
                 </a>
             </div>
             
-            <div class="a--block-set-author-pic">
-                <img src="https://cdn.alaatv.com/loder.jpg?w=1&h=1" class="m-widget19__img lazy-image" data-src="{{ $set->author->photo }}" alt="{{ $set->author->full_name }}" width="40" height="40">
-            </div>
+{{--            <div class="a--block-set-author-pic">--}}
+{{--                <img src="https://cdn.alaatv.com/loder.jpg?w=1&h=1" class="m-widget19__img lazy-image" data-src="{{ $set->author->photo }}" alt="{{ $set->author->full_name }}" width="40" height="40">--}}
+{{--            </div>--}}
             
     
         </div>
@@ -40,4 +37,5 @@
         </div>
         
     </div>
+    
 </div>
