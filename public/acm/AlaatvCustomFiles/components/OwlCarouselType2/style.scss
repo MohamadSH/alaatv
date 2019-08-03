@@ -26,15 +26,9 @@
       .a--block-imageWrapper {
         position: relative;
 
-        .a--block-imageWrapper-image {
-          display: block;
+        .a--block-image {
           width: 100%;
-
-          img {
-            width: 100%;
-            transform-style: flat;
-            height: auto;
-          }
+          height: auto;
         }
 
         .btnViewMore {
@@ -50,10 +44,73 @@
     }
 
     .a--block-item.a--block-type-set {
+
+
+      .a--block-imageWrapper {
+        .a--block-detailesWrapper {
+
+          display: flex;
+          justify-content: space-between;
+          padding: 5px 10px;
+          flex-wrap: wrap;
+
+          position: absolute;
+          right: 0;
+          height: 100%;
+          width: 40%;
+          background: #000000c9;
+          color: white;
+
+
+          .a--block-set-count {
+            position: absolute;
+            top: calc( 50% - 40px);
+            left: calc( 50% - 22px);
+            text-align: center;
+            .a--block-set-count-number {
+
+            }
+            .a--block-set-count-title {
+
+            }
+            .a--block-set-count-icon {
+              color: white;
+            }
+          }
+          .a--block-set-author-pic {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            img {
+              border-radius: 200px;
+            }
+          }
+        }
+
+
+        .a--block-set-author-pic {
+          width: 40px;
+          height: 40px;
+          border-radius: 100px;
+          overflow: hidden;
+
+          img {
+            width: 100%;
+          }
+        }
+
+        .a--block-set-author-name {
+          padding-right: 10px;
+          width: calc( 100% - 40px - 30px );
+        }
+
+
+      }
+
       .a--block-infoWrapper {
 
         .a--block-titleWrapper {
-          background: #828282;
+          //background: #828282;
           padding: 5px 10px;
           height: 45px;
           display: flex;
@@ -61,56 +118,20 @@
 
           a {
             top: 0;
-            color: white;
+            //color: white;
             min-height: 0;
             position: relative;
           }
         }
 
-        .a--block-detailesWrapper {
-          display: flex;
-          justify-content: space-between;
-          padding: 5px 10px;
-          flex-wrap: wrap;
-
-          .a--block-set-author-pic {
-            width: 40px;
-            height: 40px;
-            border-radius: 100px;
-            overflow: hidden;
-
-            img {
-              width: 100%;
-            }
-          }
-
-          .a--block-set-author-name {
-            padding-right: 10px;
-            width: calc( 100% - 40px - 30px );
-          }
-
-          @media (max-width: 992px) {
-            .a--block-set-author-name {
-              order: 3;
-              width: 100%;
-            }
-          }
-
-          .a--block-set-count {
-            width: 30px;
-            .a--block-set-count-number {
-              font-weight: bold;
-            }
-          }
-        }
       }
     }
 
     .a--block-item.a--block-type-content {
       .a--block-infoWrapper {
+        margin-bottom: 15px;
 
         .a--block-titleWrapper {
-          background: #828282;
           padding: 5px 10px;
           height: 45px;
           display: flex;
@@ -118,58 +139,6 @@
 
           a {
             top: 0;
-            color: white;
-            min-height: 0;
-            position: relative;
-          }
-        }
-
-        .a--block-detailesWrapper {
-          display: flex;
-          justify-content: space-between;
-          padding: 5px 10px;
-          flex-wrap: wrap;
-
-          .a--block-set-author-pic {
-            width: 40px;
-            height: 40px;
-            border-radius: 100px;
-            overflow: hidden;
-
-            img {
-              width: 100%;
-            }
-          }
-
-          .a--block-set-author-name {
-            padding-right: 10px;
-            width: calc( 100% - 40px - 30px );
-          }
-
-          @media (max-width: 992px) {
-            .a--block-set-author-name {
-              order: 3;
-              width: 100%;
-            }
-          }
-        }
-      }
-    }
-
-    .a--block-item.a--block-type-product {
-
-      .a--block-infoWrapper {
-
-        .a--block-titleWrapper {
-          background: #828282;
-          padding: 5px 10px;
-          height: 60px;
-          display: flex;
-          align-items: center;
-
-          a {
-            top: 0;
-            color: white;
             min-height: 0;
             position: relative;
           }
@@ -180,6 +149,43 @@
           justify-content: center;
           padding: 5px 10px;
           flex-wrap: wrap;
+          position: absolute;
+          bottom: -18px;
+          width: 100%;
+
+          .a--block-set-author-name {
+            padding-right: 10px;
+          }
+
+        }
+      }
+    }
+
+    .a--block-item.a--block-type-product {
+
+      .a--block-infoWrapper {
+        margin-bottom: 16px;
+
+        .a--block-titleWrapper {
+          padding: 5px 10px;
+          height: 60px;
+          display: flex;
+          align-items: center;
+
+          a {
+            top: 0;
+            min-height: 0;
+            position: relative;
+          }
+        }
+
+        .a--block-detailesWrapper {
+          display: flex;
+          justify-content: center;
+          flex-wrap: wrap;
+          position: absolute;
+          bottom: -15px;
+          left: calc( 50% - 52px );
         }
 
       }
@@ -424,9 +430,6 @@
 
 
 .a--block-widget-1 {
-  .a--owl-carousel-type-2 .carousel {
-    box-shadow: none !important;
-  }
   .m-widget30 .m-widget_head .m-widget_head-owlcarousel-items .center > div {
     background-color: transparent;
   }
