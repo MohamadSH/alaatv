@@ -9,15 +9,12 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\InsertEventResultRequest;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Storage;
 
 class EventresultController extends Controller
 {
-    protected $response;
-    
     function __construct()
     {
         /** setting permissions
@@ -25,8 +22,6 @@ class EventresultController extends Controller
          */
         $this->middleware('permission:'.config('constants.LIST_EVENTRESULT_ACCESS')."|".config('constants.LIST_SHARIF_REGISTER_ACCESS'),
             ['only' => 'index']);
-        
-        $this->response = new Response();
     }
 
     public function index()
@@ -72,7 +67,7 @@ class EventresultController extends Controller
                 $eventResult->user_id = $request->get("user_id");
             }
             else {
-                abort(403);
+                abort(Response::HTTP_FORBIDDEN);
             }
         }
         else {
@@ -122,47 +117,45 @@ class EventresultController extends Controller
                 $eventResult->reportFile = $fileName;
             }
         }
-        
+
+        $resultStatus = Response::HTTP_SERVICE_UNAVAILABLE;
+        $done = false;
         if ($eventResult->save()) {
             if ($userUpdate) {
                 $user->update();
             }
-            if ($request->expectsJson()) {
-                $participationCode = $eventResult->participationCode;
-                $resultStatus      = Response::HTTP_OK;
-            }
-            else {
-                session()->put("success", "کارنامه با موفقیت درج شد");
-            }
+            $done = true;
+            $resultStatus      = Response::HTTP_OK;
+            $participationCode = $eventResult->participationCode;
+            $successText = 'Result inserted successfully';
+        }else{
+            $errorText = \Lang::get("responseText.Database error.");
         }
-        else {
-            if ($request->expectsJson()) {
-                $message      = "Database error";
-                $resultStatus = Response::HTTP_SERVICE_UNAVAILABLE;
-            }
-            else {
-                session()->put("error", \Lang::get("responseText.Database error."));
-            }
+
+        if ($done) {
+            $responseContent = [
+                'message'           => $successText??'',
+                'participationCode' => $participationCode ??null,
+            ];
+        }else {
+            $responseContent = [
+                'error' => [
+                    'message' => $errorText??'',
+                    'code'    => $resultStatus??null,
+                ],
+            ];
         }
+
         if ($request->expectsJson()) {
-            if ($resultStatus == Response::HTTP_OK) {
-                $responseContent = [
-                    'message'           => 'Result inserted successfully',
-                    'participationCode' => $participationCode ?? $participationCode,
-                ];
-            }
-            else {
-                $responseContent = [
-                    'error' => [
-                        'message' => $message,
-                        'code'    => $resultStatus,
-                    ],
-                ];
-            }
-            
-            return response($responseContent, Response::HTTP_OK);
+            return response()->json($responseContent , $resultStatus);
         }
         else {
+            if (isset($successText)) {
+                session()->put("success", $successText);
+            }
+            if(isset($errorText)){
+                session()->put("error", $errorText);
+            }
             return redirect()->back();
         }
     }
@@ -172,7 +165,7 @@ class EventresultController extends Controller
         $eventResult->fill($request->all());
         $updateResult = $eventResult->update();
         if ($request->expectsJson()) {
-            return $this->response->setStatusCode(Response::HTTP_OK);
+            return response()->json();
         }
         else {
             if ($updateResult) {
