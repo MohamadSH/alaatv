@@ -23,7 +23,7 @@ class ContentController extends Controller
         }
 
         if ($this->userCanSeeContent($request, $content, 'api')) {
-            return response()->json($content->load('set'));
+            return response()->json($content);
         }
 
         $productsThatHaveThisContent = $content->activeProducts();
