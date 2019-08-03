@@ -68,7 +68,7 @@ class Contentset extends BaseModel implements Taggable
     use favorableTraits;
     use Searchable;
     use TaggableSetTrait;
-    
+
     /**
      * @var array
      */
@@ -80,11 +80,11 @@ class Contentset extends BaseModel implements Taggable
         'enable',
         'display',
     ];
-    
+
     protected $withCount = [
         'contents',
     ];
-    
+
     protected $appends = [
         'url',
         'apiUrl',
@@ -92,7 +92,7 @@ class Contentset extends BaseModel implements Taggable
         'author',
         'contentUrl',
     ];
-    
+
     protected $hidden = [
         'deleted_at',
         'small_name',
@@ -101,7 +101,7 @@ class Contentset extends BaseModel implements Taggable
         'display',
         'productSet',
     ];
-    
+
     /**
      * Create a new Eloquent Collection instance.
      *
@@ -113,8 +113,8 @@ class Contentset extends BaseModel implements Taggable
     {
         return new SetCollection($models);
     }
-    
-    
+
+
     /**
      * Get the index name for the model.
      *
@@ -124,17 +124,17 @@ class Contentset extends BaseModel implements Taggable
     {
         return 'contents_index';
     }
-    
+
     public function shouldBeSearchable()
     {
         return $this->isPublished();
     }
-    
+
     private function isPublished()
     {
         return $this->isActive();
     }
-    
+
     /**
      * Get the indexable data array for the model.
      *
@@ -143,7 +143,7 @@ class Contentset extends BaseModel implements Taggable
     public function toSearchableArray()
     {
         $array = $this->toArray();
-        
+
         $unSetArrayItems = [
             'tags',
             'photo',
@@ -170,7 +170,7 @@ class Contentset extends BaseModel implements Taggable
     | Scopes
     |--------------------------------------------------------------------------
     */
-    
+
     /**
      * Scope a query to only include active Contentsets.
      *
@@ -182,18 +182,18 @@ class Contentset extends BaseModel implements Taggable
     {
         return $query->where('enable', 1);
     }
-    
+
     public function scopeDisplay($query)
     {
         return $query->where('display', 1);
     }
-    
+
     /*
     |--------------------------------------------------------------------------
     | Relations
     |--------------------------------------------------------------------------
     */
-    
+
     public function getContentUrlAttribute($value)
     {
         return action('Web\ContentController@index', [
@@ -202,7 +202,7 @@ class Contentset extends BaseModel implements Taggable
             'free'        => [0, 1],
         ]);
     }
-    
+
     public function getProducts($onlyActiveProduct = true): ProductCollection
     {
         $key = 'products-of-set:'.$this->cacheKey().'onlyActiveProduct-'.$onlyActiveProduct;
@@ -211,7 +211,7 @@ class Contentset extends BaseModel implements Taggable
                 return self::getProductOfSet($onlyActiveProduct, $this);
             });
     }
-    
+
     /**
      * @param  bool        $onlyActiveProduct
      * @param  Contentset  $set
@@ -226,8 +226,8 @@ class Contentset extends BaseModel implements Taggable
             ->get()) ?: new
         ProductCollection();
     }
-    
-    
+
+
     public function products()
     {
         return $this->belongsToMany(Product::class)
@@ -239,28 +239,28 @@ class Contentset extends BaseModel implements Taggable
             ->withTimestamps()
             ->orderBy('order');
     }
-    
+
     /*
     |--------------------------------------------------------------------------
     |
     |--------------------------------------------------------------------------
     */
-    
+
     //Old way ( before migrate)
-    
+
     public function getShortNameAttribute($value)
     {
         return $this->small_name;
     }
-    
-    
+
+
     //new way ( after migrate )
-    
+
     public function getTagsAttribute($value)
     {
         return json_decode($value);
     }
-    
+
     /**
      * Set the set's tag.
      *
@@ -277,27 +277,27 @@ class Contentset extends BaseModel implements Taggable
                 'tags'   => $value,
             ], JSON_UNESCAPED_UNICODE);
         }
-        
+
         $this->attributes['tags'] = $tags;
     }
-    
+
     public function getUrlAttribute($value): string
     {
         $content   = $this->getLastActiveContent();
         $contentId = !is_null($content) ? $content->id : null;
-    
+
         return isset($contentId) ? action("Web\ContentController@show", $contentId) : '';
     }
-    
+
     public function getLastActiveContent(): Content
     {
         $key = 'ContentSet:getLastActiveContent'.$this->cacheKey();
-        
+
         return Cache::tags('set')
             ->remember($key, config('constants.CACHE_300'), function () {
-                
+
                 $r = $this->getActiveContents();
-        
+
                 return $r->sortByDesc('order')
                     ->first() ?: new Content();
             });
@@ -311,7 +311,7 @@ class Contentset extends BaseModel implements Taggable
             ->remember($key, config('constants.CACHE_300'), function () {
 
                 $r = $this->getContents();
-        
+
                 return $r->sortByDesc('order')
                     ->first() ?: new Content();
             });
@@ -320,10 +320,10 @@ class Contentset extends BaseModel implements Taggable
     public function getActiveContents(): ContentCollection
     {
         $key = 'ContentSet:getActiveContents'.$this->cacheKey();
-        
+
         return Cache::tags('set')
             ->remember($key, config('constants.CACHE_300'), function () {
-                
+
                 $oldContentCollection = $this->oldContents()
                     ->active()
                     ->get() ?: new ContentCollection();
@@ -331,17 +331,21 @@ class Contentset extends BaseModel implements Taggable
                     ->active()
                     ->get() ?: new ContentCollection();
                 return $oldContentCollection->merge($newContentCollection);
-                
+
             });
     }
 
-    public function getActiveContents2(){
-        $key = 'ContentSet:getActiveContents2'.$this->cacheKey();
+    public function getActiveContents2(int $type=null){
+        $key = 'ContentSet:getActiveContents2:'.$type.$this->cacheKey();
         return Cache::tags('set')
-            ->remember($key, config('constants.CACHE_300'), function () {
-                return $this->contents()
-                    ->active()
-                    ->get()->sortBy('order');
+            ->remember($key, config('constants.CACHE_300'), function () use ($type){
+                $contents =  $this->contents()->active();
+
+                if(isset($type)){
+                    $contents->type($type);
+                }
+
+                return $contents->get()->sortBy('order');
             });
     }
 
@@ -366,19 +370,19 @@ class Contentset extends BaseModel implements Taggable
         return $this->belongsToMany(Content::class, 'contentset_educationalcontent', 'contentset_id', 'edc_id')
             ->withPivot('order', 'isDefault');
     }
-    
+
     public function contents()
     {
         return $this->hasMany(Content::class);
     }
-    
+
     public function getApiUrlAttribute($value): array
     {
         return [
             'v1' => action("Api\SetController@show", $this),
         ];
     }
-    
+
     /**
      * @param $value
      *
@@ -387,9 +391,9 @@ class Contentset extends BaseModel implements Taggable
     public function getAuthorAttribute($value): User
     {
         $content = $this->getLastActiveContent();
-        
+
         $author = $content->author;
-        
+
         return $author->setVisible([
             'id',
             'firstName',
@@ -398,35 +402,35 @@ class Contentset extends BaseModel implements Taggable
             'full_name',
         ]);
     }
-    
-    
+
+
     public function isActive()
     {
         return $this->isEnable();
     }
-    
+
     public function isEnable(): bool
     {
         if ($this->enable) {
             return true;
         }
-        
+
         return false;
     }
-    
+
     public function getEditLinkAttribute()
     {
 //        if (hasAuthenticatedUserPermission(config('constants.EDIT_BLOCK_ACCESS')))
         return action('Web\SetController@edit', $this->id);
-        
+
         return null;
     }
-    
+
     public function getRemoveLinkAttribute()
     {
 //        if (hasAuthenticatedUserPermission(config('constants.REMOVE_BLOCK_ACCESS')))
 //            return action('Web\BlockController@destroy', $this->id);
-        
+
         return null;
     }
 }
