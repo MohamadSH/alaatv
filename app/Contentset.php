@@ -336,7 +336,7 @@ class Contentset extends BaseModel implements Taggable
     }
 
     public function getActiveContents2(int $type=null){
-        $key = 'ContentSet:getActiveContents2:'.$type.$this->cacheKey();
+        $key = 'ContentSet:type-'.$type.':getActiveContents2:'.$this->cacheKey();
         return Cache::tags('set')
             ->remember($key, config('constants.CACHE_300'), function () use ($type){
                 $contents =  $this->contents()->active();
