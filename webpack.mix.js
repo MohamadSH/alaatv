@@ -217,7 +217,7 @@ class Mix {
                     'node_modules/owl.carousel/dist/owl.carousel.js',
                     'public/acm/AlaatvCustomFiles/components/MultiLevelSearch/js.js',
                     'public/acm/AlaatvCustomFiles/js/page-content-search-filter-data.js',
-                    'public/acm/AlaatvCustomFiles/js/page-content-search.js'
+                    'public/acm/AlaatvCustomFiles/js/page/pages/content-search.js'
                 ],
                 'public/js/content-search.js'
             ).version();
