@@ -645,7 +645,7 @@
                                 <span class="m-badge m-badge--info a--productDiscount">{{ round((1-($invoiceInfo['price']['final']/$invoiceInfo['price']['base']))*100) }}%</span>
                             @endif
                             @if(isset($invoiceInfo['price']['final']))
-                                {{ number_format($invoiceInfo['price']['final']) }} تومان
+                                    {{ number_format($invoiceInfo['price']['final'] - $fromWallet) }} تومان
                             @endif
                         </span>
                     </div>
