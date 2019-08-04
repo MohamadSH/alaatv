@@ -22,7 +22,7 @@
 
 /*fix IRANSans font for select input*/
 .form-control {
-    font-family: IRANSans, Tahoma, Arial, Geneva, sans-serif;
+    font-family: IRANSans;
     font-size: 11px;
 }
 select.form-control {
@@ -121,6 +121,10 @@ select.form-control {
 
 #m_aside_left {
     overflow: auto;
+}
+
+.btn-group.m-btn-group--pill:not(.btn-group-vertical) .btn:only-child {
+    border-radius: 60px;
 }
 
 /*media query*/

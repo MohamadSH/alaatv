@@ -6,10 +6,7 @@ background-gradient
 
 
     <div class="a--block-imageWrapper">
-        <a href="{{ $product->url }}"
-           class="a--block-imageWrapper-image">
-            <img src="https://cdn.alaatv.com/loder.jpg?w=1&h=1" data-src="{{ $product->photo }}" alt="{{ $product->name }}" class="a--block-image lazy-image" width="400" height="400" />
-        </a>
+        <img src="https://cdn.alaatv.com/loder.jpg?w=1&h=1" data-src="{{ $product->photo }}" alt="{{ $product->name }}" class="a--block-image lazy-image" width="400" height="400" onclick="moveUpBtns(this)" />
     </div>
 
     <div class="a--block-infoWrapper">

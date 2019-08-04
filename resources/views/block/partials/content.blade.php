@@ -20,17 +20,16 @@
                 </h6>
             </a>
         </div>
+        @if(strlen(trim($content->author->full_name))>0)
         <div class="a--block-detailesWrapper">
-            
-            <div class="a--block-set-author-pic">
-                <img src="https://cdn.alaatv.com/loder.jpg?w=1&h=1" data-src="{{ $content->author->photo }}" class="m-widget19__img lazy-image" alt="{{ $content->author->full_name }}" width="40" height="40" >
-            </div>
             <div class="a--block-set-author-name">
-                <span class="a--block-set-author-name-title">{{ $content->author->full_name }}</span>
-                <br>
-                <span class="a--block-set-author-name-alaa">موسسه غیرتجاری آلاء</span>
+                <span class="a--block-set-author-name-title">
+                    <span class="m-badge m-badge--info m-badge--wide m-badge--rounded">
+                        {{ trim($content->author->full_name) }}
+                    </span>
+                </span>
             </div>
-        
         </div>
+        @endif
     </div>
 </div>

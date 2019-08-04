@@ -217,7 +217,7 @@ class Mix {
                     'node_modules/owl.carousel/dist/owl.carousel.js',
                     'public/acm/AlaatvCustomFiles/components/MultiLevelSearch/js.js',
                     'public/acm/AlaatvCustomFiles/js/page-content-search-filter-data.js',
-                    'public/acm/AlaatvCustomFiles/js/page-content-search.js'
+                    'public/acm/AlaatvCustomFiles/js/page/pages/content-search.js'
                 ],
                 'public/js/content-search.js'
             ).version();
@@ -327,7 +327,7 @@ class Mix {
                 'public/acm/videojs/plugins/pip/videojs.pip.rtl.css',
                 'public/acm/videojs/plugins/seek-to-point.css',
                 'public/acm/AlaatvCustomFiles/components/summarizeText/style.css',
-                'public/acm/AlaatvCustomFiles/css/page-content-show.css'
+                'public/acm/AlaatvCustomFiles/css/page/content-show.css'
             ],
             'public/css/content-show.css'
         ).version()
@@ -347,7 +347,7 @@ class Mix {
                     'public/acm/AlaatvCustomFiles/components/summarizeText/js.js',
                     'public/acm/AlaatvCustomFiles/components/aSticky/aSticky.js',
                     'public/acm/AlaatvCustomFiles/js/UserCart.js',
-                    'public/acm/AlaatvCustomFiles/js/page-content-show.js'
+                    'public/acm/AlaatvCustomFiles/js/page/content-show.js'
                 ],
                 'public/js/content-show.js'
             ).version();
@@ -464,7 +464,7 @@ class Mix {
                 'node_modules/owl.carousel/dist/assets/owl.carousel.css',
                 'node_modules/owl.carousel/dist/assets/owl.theme.default.css',
                 'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/style.css',
-                'public/acm/AlaatvCustomFiles/css/page-product-show.css',
+                'public/acm/AlaatvCustomFiles/css/page/product-show.css',
             ],
             'public/css/product-show.css'
         ).version()
@@ -494,7 +494,7 @@ class Mix {
                     'public/acm/AlaatvCustomFiles/js/UserCart.js',
                     'public/acm/AlaatvCustomFiles/components/aSticky/aSticky.js',
 
-                    'public/acm/AlaatvCustomFiles/js/page-product-show.js',
+                    'public/acm/AlaatvCustomFiles/js/page/product-show.js',
                 ],
                 'public/js/product-show.js'
             ).version();
@@ -533,7 +533,7 @@ class Mix {
                 'node_modules/bootstrap-switch/dist/css/bootstrap3/bootstrap-switch.css',
                 'node_modules/animate.css/animate.css',
                 'public/acm/AlaatvCustomFiles/components/step/step.css',
-                'public/acm/AlaatvCustomFiles/css/page-checkout-review.css',
+                'public/acm/AlaatvCustomFiles/css/page/checkout-review.css',
             ],
             'public/css/checkout-review.css'
         ).version()
@@ -543,7 +543,7 @@ class Mix {
                     'node_modules/block-ui/jquery.blockUI.js',
                     'node_modules/jquery-sticky/jquery.sticky.js',
                     'public/acm/AlaatvCustomFiles/js/UserCart.js',
-                    'public/acm/AlaatvCustomFiles/js/page-checkout-review.js'
+                    'public/acm/AlaatvCustomFiles/js/page/checkout-review.js'
                 ],
                 'public/js/checkout-review.js'
             ).version();
@@ -555,7 +555,7 @@ class Mix {
             'public/css/checkout-verification.css'
         ).version()
             .babel([
-                    'public/acm/AlaatvCustomFiles/js/page-checkout-verification.js',
+                    'public/acm/AlaatvCustomFiles/js/page/checkout-verification.js',
                 ],
                 'public/js/checkout-verification.js'
             ).version();
@@ -695,7 +695,7 @@ class Mix {
         this.mix.styles(
             [
                 'public/acm/AlaatvCustomFiles/components/step/step.css',
-                'public/acm/AlaatvCustomFiles/css/page-checkout-payment.css',
+                'public/acm/AlaatvCustomFiles/css/page/checkout-payment.css',
             ],
             'public/css/checkout-payment.css'
         ).version()

@@ -223,6 +223,18 @@ var UserAssets = function () {
     };
 }();
 
+function moveUpBtns(dom) {
+    $('.a--block-item .a--block-detailesWrapper').css({'position':'relative', 'top':'auto', 'left':'auto', 'width':'100%', 'transform':'scale(1)'});
+    $('.a--block-item .a--block-detailesWrapper .btn-group-sm').css({'transform':'scale(1)'});
+    $('.a--block-item .a--block-imageWrapper img').css({'filter':'none'});
+
+    $(dom).css({'filter':'blur(3px)'});
+    $(dom).parents('.a--block-item').find('.a--block-detailesWrapper').css({'position':'absolute', 'top':'calc( 50% - 16px)', 'left':'0'});
+    $(dom).parents('.a--block-item').find('.a--block-detailesWrapper .btn-group-sm').css({'transform':'scale(1.5)'});
+    if ($(dom).parents('.a--block-item').find('.a--owl-carousel-show-detailes').length > 0) {
+        $(dom).parents('.a--block-item').find('.a--owl-carousel-show-detailes').trigger('click');
+    }
+}
 
 $(document).ready(function () {
     var OwlCarouselType2Option = {

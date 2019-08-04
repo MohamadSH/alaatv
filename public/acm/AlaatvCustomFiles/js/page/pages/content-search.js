@@ -105,7 +105,6 @@ var Alaasearch = function () {
     }
 
     function getSetCarouselItem(data) {
-
         let inputData = {
             widgetPic: (typeof (data.photo) === 'undefined' || data.photo == null) ? data.thumbnail + '?w=253&h=142' : data.photo + '?w=253&h=142',
             widgetTitle: data.name,
@@ -118,7 +117,55 @@ var Alaasearch = function () {
             widgetLink: data.url
         };
 
-        return getCommonCarouselItem(inputData);
+
+        let widgetPic = inputData.widgetPic,
+            widgetTitle = inputData.widgetTitle,
+            widgetAuthor = inputData.widgetAuthor,
+            widgetCount = inputData.widgetCount,
+            widgetLink = inputData.widgetLink;
+
+        return '' +
+            '<div class="item carousel a--block-item a--block-type-set">\n' +
+            '    <div class="a--block-imageWrapper">\n' +
+            '        \n' +
+            '        <div class="a--block-detailesWrapper">\n' +
+            '    \n' +
+            '            <div class="a--block-set-count">\n' +
+            '                <span class="a--block-set-count-number">'+widgetCount+'</span>\n' +
+            '                <br>\n' +
+            '                <span class="a--block-set-count-title">محتوا</span>\n' +
+            '                <br>\n' +
+            '                <a href="'+widgetLink+'" class="a--block-set-count-icon">\n' +
+            '                    <i class="fa fa-bars"></i>\n' +
+            '                </a>\n' +
+            '            </div>\n' +
+            '            \n' +
+            '            <div class="a--block-set-author-pic d-none">\n' +
+            '                <img src="https://cdn.alaatv.com/loder.jpg?w=1&h=1" class="m-widget19__img lazy-image" data-src="'+widgetAuthor.photo+'" alt="'+widgetAuthor.full_name+'" width="40" height="40">\n' +
+            '            </div>\n' +
+            '            \n' +
+            '    \n' +
+            '        </div>\n' +
+            '        \n' +
+            '        <a href="'+widgetLink+'" class="a--block-imageWrapper-image">\n' +
+            '            <img src="https://cdn.alaatv.com/loder.jpg?w=16&h=9" data-src="'+widgetPic+'" alt="'+widgetTitle+'" class="a--block-image lazy-image" width="453" height="254" />\n' +
+            '        </a>\n' +
+            '    </div>\n' +
+            '    \n' +
+            '    <div class="a--block-infoWrapper">\n' +
+            '        \n' +
+            '        <div class="a--block-titleWrapper">\n' +
+            '            <a href="'+widgetLink+'" class="m-link">\n' +
+            '                <h6>\n' +
+            '                    <span class="m-badge m-badge--info m-badge--dot"></span>\n' +
+            '                    '+widgetTitle+'\n' +
+            '                </h6>\n' +
+            '            </a>\n' +
+            '        </div>\n' +
+            '        \n' +
+            '    </div>\n' +
+            '    \n' +
+            '</div>';
     }
 
     function getCommonCarouselItem(data) {
@@ -128,14 +175,18 @@ var Alaasearch = function () {
             widgetAuthor = data.widgetAuthor,
             widgetCount = data.widgetCount,
             widgetLink = data.widgetLink,
-            widgetCountHtml = '';
-        if (widgetCount !== false) {
-                widgetCountHtml =
-                    '            <div class="a--block-set-count">\n' +
-                    '                <span class="a--block-set-count-number">'+widgetCount+'</span>\n' +
-                    '                <br>\n' +
-                    '                <span class="a--block-set-count-title">محتوا</span>\n' +
-                    '            </div>\n';
+            widgetAuthorFullameHtml = '';
+        if (widgetAuthor.full_name.trim().length > 0) {
+            widgetAuthorFullameHtml =
+                '        <div class="a--block-detailesWrapper">\n' +
+                '            <div class="a--block-set-author-name">\n' +
+                '                <span class="a--block-set-author-name-title">' +
+                '                    <span class="m-badge m-badge--info m-badge--wide m-badge--rounded">\n' +
+                '                        '+widgetAuthor.full_name+'\n' +
+                '                    </span>' +
+                '                </span>\n' +
+                '            </div>\n' +
+                '        </div>\n';
             }
 
         return '' +
@@ -157,19 +208,7 @@ var Alaasearch = function () {
             '                </h6>\n' +
             '            </a>\n' +
             '        </div>\n' +
-            '        <div class="a--block-detailesWrapper">\n' +
-            '    \n' +
-            '            <div class="a--block-set-author-pic">\n' +
-            '                <img class="m-widget19__img" src="'+widgetAuthor.photo+'" alt="'+widgetAuthor.full_name+'">\n' +
-            '            </div>\n' +
-            '            <div class="a--block-set-author-name">\n' +
-            '                <span class="a--block-set-author-name-title">'+widgetAuthor.full_name+'</span>\n' +
-            '                <br>\n' +
-            '                <span class="a--block-set-author-name-alaa">موسسه غیرتجاری آلاء</span>\n' +
-            '            </div>\n' +
-                        widgetCountHtml +
-            '            \n' +
-            '        </div>\n' +
+            widgetAuthorFullameHtml +
             '    </div>\n' +
             '</div>';
     }
@@ -454,7 +493,7 @@ var Alaasearch = function () {
     }
 
     function loadSetFromJson(data) {
-        addContentToOwl($('#set-carousel.owl-carousel'), data.data, 'video');
+        addContentToOwl($('#set-carousel.owl-carousel'), data.data, 'set');
         $('#owl--js-var-next-page-set-url').val(decodeURI(data.next_page_url));
     }
 
@@ -579,6 +618,7 @@ var Alaasearch = function () {
     }
 
     function loadAjaxContent(contentData, isInit) {
+
         var hasPamphletOrArticle = false;
         var hasItem = false;
         var hasPamphlet = false;
