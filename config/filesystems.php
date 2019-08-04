@@ -181,7 +181,7 @@ return [
             'root'       => '/alaa_media/dl/',
             'timeout'    => env('SFTP_TIMEOUT', '10'),
             'prefix'     => null,
-            'dHost'      => "paid.sanatisharif.ir",
+            'dHost'      => "paid.alaatv.com",
             'dProtocol'  => "https://",
         ],
         'alaaCdnSFTP'     => [
@@ -226,7 +226,7 @@ return [
             'root'       => env('SFTP_ROOT', ''),
             'timeout'    => env('SFTP_TIMEOUT', '10'),
             'prefix'     => '/public/c/exam/',
-            'dHost'      => "dl.takhtekhak.com/",
+            'dHost'      => "dl.alaatv.com/",
             'dProtocol'  => "https://",
         ],
 
@@ -247,7 +247,7 @@ return [
             'root'       => '/alaa_media/dl/',
             'timeout'    => env('SFTP_TIMEOUT', '10'),
 
-            'dHost'     => 'paid.sanatisharif.ir',
+            'dHost'     => 'paid.alaatv.com',
             'dProtocol' => 'https://',
             'prefix'    => '/public/c/pamphlet/',
 
@@ -269,7 +269,7 @@ return [
             'root'       => env('SFTP_ROOT', ''),
             'timeout'    => env('SFTP_TIMEOUT', '10'),
             'prefix'     => '/public/c/book/',
-            'dHost'      => "dl.takhtekhak.com/",
+            'dHost'      => "dl.alaatv.com/",
             'dProtocol'  => "https://",
         ],
 
