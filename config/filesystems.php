@@ -181,7 +181,7 @@ return [
             'root'       => '/alaa_media/dl/',
             'timeout'    => env('SFTP_TIMEOUT', '10'),
             'prefix'     => null,
-            'dHost'      => "paid.alaatv.com",
+            'dHost'      => "paid.sanatisharif.ir",
             'dProtocol'  => "https://",
         ],
         'alaaCdnSFTP'     => [
@@ -247,7 +247,7 @@ return [
             'root'       => '/alaa_media/dl/',
             'timeout'    => env('SFTP_TIMEOUT', '10'),
 
-            'dHost'     => 'paid.alaatv.com',
+            'dHost'     => 'paid.sanatisharif.ir',
             'dProtocol' => 'https://',
             'prefix'    => '/public/c/pamphlet/',
 
