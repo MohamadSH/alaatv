@@ -1219,46 +1219,13 @@ var GetAjaxData = function () {
     };
 }();
 
-// var GtmEecImpression = function () {
-//
-//     function view() {
-//         var countOfExistingProductInCarousel = $('#product-carousel.owl-carousel').find('.owl-item').length;
-//         if (countOfExistingProductInCarousel <= 5) {
-//             return;
-//         }
-//         var gtmEecImpressions = [];
-//         $('#product-carousel.owl-carousel').find('.owl-item.active .m-widget19__content .a--gtm-eec-product-click').each(function (index, value) {
-//             gtmEecImpressions.push({
-//                 id:       $(this).data('gtm-eec-product-id'),      // (String) The SKU of the product. Example: 'P12345'
-//                 name:     $(this).data('gtm-eec-product-name'),    // (String) The name of the product. Example: 'T-Shirt'
-//                 price:    $(this).data('gtm-eec-product-price'),
-//                 brand:    $(this).data('gtm-eec-product-brand'),   // (String) The brand name of the product. Example: 'NIKE'
-//                 category: $(this).data('gtm-eec-product-category'),// (String) Product category of the item. Can have maximum five levels of hierarchy. Example: 'clothes/shirts/t-shirts'
-//                 variant:  $(this).data('gtm-eec-product-variant'), // (String) What variant of the main product this is. Example: 'Large'
-//                 list:     $(this).data('gtm-eec-product-list'),
-//                 position: $(this).data('gtm-eec-product-position'),// (Integer) The position of the impression that was clicked. Example: 1
-//             });
-//         });
-//         GAEE.impressionView(gtmEecImpressions);
-//     }
-//
-//     return {
-//         view: function () {
-//             view();
-//         }
-//     };
-// }();
-
 $('.notFoundMessage').fadeOut(0);
 
 jQuery(document).ready(function () {
 
     $.ajaxSetup({ cache: false });
 
-    var owl = jQuery('.a--owl-carousel-type-1');
-    owl.each(function () {
-        var itemId = $(this).attr('id');
-        var responsive = {
+    let otherResponsive = {
             0:{
                 items:1,
             },
@@ -1277,9 +1244,29 @@ jQuery(document).ready(function () {
             1400:{
                 items:5
             }
-        };
-        var config = {
-            stagePadding: 0,
+        },
+        productResponsive = {
+            0:{
+                items:1,
+            },
+            400:{
+                items:2,
+            },
+            600:{
+                items:6,
+            },
+            800:{
+                items:8,
+            },
+            1190:{
+                items:6
+            },
+            1400:{
+                items:8
+            }
+        },
+        config = {
+            stagePadding: 50,
             loop: false,
             rtl:true,
             nav: true,
@@ -1290,40 +1277,24 @@ jQuery(document).ready(function () {
             pullDrag: true,
             lazyLoad:false,
             responsiveClass:true,
-            responsive: responsive
+            responsive: otherResponsive
         };
+    function slideChanged1(event) {
+        gtmEecProductObserver.observe();
+        imageObserver.observe();
+    }
+    function slideChanged2(event) {
+        imageObserver.observe();
+    }
+
+    var owl = jQuery('.a--owl-carousel-type-1');
+    owl.each(function () {
+        let itemId = $(this).attr('id');
         if (itemId === 'product-carousel') {
-            function slideChanged1(event) {
-                gtmEecProductObserver.observe();
-                imageObserver.observe();
-            }
-            responsive = {
-                0:{
-                    items:1,
-                },
-                400:{
-                    items:2,
-                },
-                600:{
-                    items:6,
-                },
-                800:{
-                    items:8,
-                },
-                1190:{
-                    items:6
-                },
-                1400:{
-                    items:8
-                }
-            };
+            config.responsive = productResponsive;
             config.onTranslated = slideChanged1;
-            config.responsive = responsive;
-            config.lazyLoad = true;
         } else {
-            function slideChanged2(event) {
-                imageObserver.observe();
-            }
+            config.responsive = otherResponsive;
             config.onTranslated = slideChanged2;
         }
         $(this).owlCarousel(config);
