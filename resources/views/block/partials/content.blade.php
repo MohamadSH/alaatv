@@ -20,7 +20,7 @@
                 </h6>
             </a>
         </div>
-        @if(strlen(trim($content->author->full_name))>0 || true)
+        @if(strlen(trim($content->author->full_name))>0)
         <div class="a--block-detailesWrapper">
             <div class="a--block-set-author-name">
                 <span class="a--block-set-author-name-title">
