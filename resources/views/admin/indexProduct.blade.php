@@ -1,7 +1,6 @@
 @permission(config('constants.PRODUCT_ADMIN_PANEL_ACCESS'))@extends('app',['pageName'=>$pageName])
 
 @section('page-css')
-    
     <link href="{{ mix('/css/admin-all.css') }}" rel="stylesheet" type="text/css"/>
     <link href="{{ asset('/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-summernote/summernote.css') }}" rel="stylesheet" type="text/css"/>
 @endsection
@@ -671,36 +670,14 @@
                         html += '</div>';
                         
                         return html;
-                    },
-                    // function ( api, rowIdx, columns ) {
-                    //     return 'hi';
-                    //     // var data = $.map( columns, function ( col, i ) {
-                    //     //     return col.hidden ?
-                    //     //         '<tr data-dt-row="'+col.rowIndex+'" data-dt-column="'+col.columnIndex+'">'+
-                    //     //         '<td>'+col.title+':'+'</td> '+
-                    //     //         '<td>'+col.data+'</td>'+
-                    //     //         '</tr>' :
-                    //     //         '';
-                    //     // } ).join('');
-                    //     //
-                    //     // return data ?
-                    //     //     $('<table/>').append( data ) :
-                    //     //     false;
-                    // }
-
+                    }
                 },
             ];
             let dataFilter = function(data){
                 let json = jQuery.parseJSON( data );
                 json.recordsTotal = json.result.total;
                 json.recordsFiltered = json.result.total;
-                // for (let index in json.data) {
-                //     if(!isNaN(index)) {
-                //         json.data[index]['full_name'] =
-                //     }
-                // }
-                //
-                return JSON.stringify( json ); // return JSON string
+                return JSON.stringify( json );
             };
             let ajaxData = function (data) {
                 mApp.block('#product_table_wrapper', {
