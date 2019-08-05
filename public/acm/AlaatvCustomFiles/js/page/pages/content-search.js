@@ -88,7 +88,7 @@ var Alaasearch = function () {
         return parseFloat((Math.round(price * 100) / 100).toString()).toFixed(2);
     }
 
-    function getVideoCarouselItem(data) {
+    function getContentCarouselItem(data) {
         let inputData = {
             widgetPic: (typeof (data.photo) === 'undefined' || data.photo == null) ? data.thumbnail + '?w=444&h=250' : data.photo + '?w=444&h=250',
             widgetTitle: data.name,
@@ -101,7 +101,47 @@ var Alaasearch = function () {
             widgetLink: data.url
         };
 
-        return getCommonCarouselItem(inputData);
+        let widgetPic = inputData.widgetPic,
+            widgetTitle = inputData.widgetTitle,
+            widgetAuthor = inputData.widgetAuthor,
+            widgetCount = inputData.widgetCount,
+            widgetLink = inputData.widgetLink,
+            widgetAuthorFullameHtml = '';
+        if (widgetAuthor.full_name.trim().length > 0) {
+            widgetAuthorFullameHtml =
+                '        <div class="a--block-detailesWrapper">\n' +
+                '            <div class="a--block-set-author-name">\n' +
+                '                <span class="a--block-set-author-name-title">' +
+                '                    <span class="m-badge m-badge--info m-badge--wide m-badge--rounded">\n' +
+                '                        '+widgetAuthor.full_name+'\n' +
+                '                    </span>' +
+                '                </span>\n' +
+                '            </div>\n' +
+                '        </div>\n';
+        }
+
+        return '' +
+            '<div class="item carousel a--block-item a--block-type-content">\n' +
+            '    <div class="a--block-imageWrapper">\n' +
+            '        <a href="'+widgetLink+'" class="btn btn-sm m-btn--pill btn-brand btnViewMore">\n' +
+            '            <i class="fa fa-play"></i> / <i class="fa fa-cloud-download-alt"></i>\n' +
+            '        </a>\n' +
+            '        <a href="'+widgetLink+'" class="a--block-imageWrapper-image">\n' +
+            '            <img src="https://cdn.alaatv.com/loder.jpg?w=16&h=9" data-src="'+widgetPic+'" alt="'+widgetTitle+'" class="a--block-image lazy-image" width="253" height="142" />\n' +
+            '        </a>\n' +
+            '    </div>\n' +
+            '    <div class="a--block-infoWrapper">\n' +
+            '        <div class="a--block-titleWrapper">\n' +
+            '            <a href="'+widgetLink+'" class="m-link">\n' +
+            '                <h6>\n' +
+            '                    <span class="m-badge m-badge--info m-badge--dot"></span>\n' +
+            '                    '+widgetTitle+'\n' +
+            '                </h6>\n' +
+            '            </a>\n' +
+            '        </div>\n' +
+            widgetAuthorFullameHtml +
+            '    </div>\n' +
+            '</div>';
     }
 
     function getSetCarouselItem(data) {
@@ -116,7 +156,6 @@ var Alaasearch = function () {
             widgetCount: data.contents_count,
             widgetLink: data.url
         };
-
 
         let widgetPic = inputData.widgetPic,
             widgetTitle = inputData.widgetTitle,
@@ -165,51 +204,6 @@ var Alaasearch = function () {
             '        \n' +
             '    </div>\n' +
             '    \n' +
-            '</div>';
-    }
-
-    function getCommonCarouselItem(data) {
-
-        let widgetPic = data.widgetPic,
-            widgetTitle = data.widgetTitle,
-            widgetAuthor = data.widgetAuthor,
-            widgetCount = data.widgetCount,
-            widgetLink = data.widgetLink,
-            widgetAuthorFullameHtml = '';
-        if (widgetAuthor.full_name.trim().length > 0) {
-            widgetAuthorFullameHtml =
-                '        <div class="a--block-detailesWrapper">\n' +
-                '            <div class="a--block-set-author-name">\n' +
-                '                <span class="a--block-set-author-name-title">' +
-                '                    <span class="m-badge m-badge--info m-badge--wide m-badge--rounded">\n' +
-                '                        '+widgetAuthor.full_name+'\n' +
-                '                    </span>' +
-                '                </span>\n' +
-                '            </div>\n' +
-                '        </div>\n';
-            }
-
-        return '' +
-            '<div class="item carousel a--block-item a--block-type-set">\n' +
-            '    <div class="a--block-imageWrapper">\n' +
-            '        <a href="'+widgetLink+'" class="btn btn-sm m-btn--pill btn-brand btnViewMore">\n' +
-            '            <i class="fa fa-play"></i> / <i class="fa fa-cloud-download-alt"></i>\n' +
-            '        </a>\n' +
-            '        <a href="'+widgetLink+'" class="a--block-imageWrapper-image">\n' +
-            '            <img src="https://cdn.alaatv.com/loder.jpg?w=16&h=9" data-src="'+widgetPic+'" alt="'+widgetTitle+'" class="a--block-image lazy-image" width="253" height="142" />\n' +
-            '        </a>\n' +
-            '    </div>\n' +
-            '    <div class="a--block-infoWrapper">\n' +
-            '        <div class="a--block-titleWrapper">\n' +
-            '            <a href="'+widgetLink+'" class="m-link">\n' +
-            '                <h6>\n' +
-            '                    <span class="m-badge m-badge--info m-badge--dot"></span>\n' +
-            '                    '+widgetTitle+'\n' +
-            '                </h6>\n' +
-            '            </a>\n' +
-            '        </div>\n' +
-            widgetAuthorFullameHtml +
-            '    </div>\n' +
             '</div>';
     }
 
@@ -273,7 +267,7 @@ var Alaasearch = function () {
             case 'product':
                 return getProductCarouselItem(data, itemKey);
             case 'video':
-                return getVideoCarouselItem(data);
+                return getContentCarouselItem(data);
             case 'set':
                 return getSetCarouselItem(data);
             case 'pamphlet':
@@ -288,6 +282,7 @@ var Alaasearch = function () {
             vw.append(makeWidgetFromJsonResponse(value, type, index));
         });
     }
+
     function addContentToOwl(owl, data, type) {
         $.each(data, function (index, value) {
             owl.trigger('add.owl.carousel',
@@ -299,6 +294,7 @@ var Alaasearch = function () {
         });
         owl.trigger('refresh.owl.carousel');
     }
+
     function ajaxSetup() {
         $.ajaxSetup({
             cache: false,
@@ -307,6 +303,7 @@ var Alaasearch = function () {
             }
         });
     }
+
     function loadData(owl , action,type,callback) {
         ajaxSetup();
 
@@ -368,6 +365,7 @@ var Alaasearch = function () {
                 break;
         }
     }
+
     function unLockAjax(type) {
         switch (type) {
             case 'product':
@@ -719,17 +717,6 @@ var Alaasearch = function () {
             owl.find('.a--vw-Loading').remove();
         }
     }
-
-    // function isScrolledIntoView(elem) {
-    //     if (elem.length === 0) {
-    //         return false;
-    //     }
-    //     var docViewTop = $(window).scrollTop();
-    //     var docViewBottom = docViewTop + $(window).height();
-    //     var elemTop = $(elem).offset().top;
-    //     var elemBottom = elemTop + $(elem).height();
-    //     return ((elemBottom >= docViewTop) && (elemTop <= docViewBottom) && (elemBottom <= docViewBottom) && (elemTop >= docViewTop));
-    // }
 
     function clearOwlcarousel(owl) {
         var length = owl.find('.item').length;
