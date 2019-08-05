@@ -31,7 +31,7 @@ class LiveRepo
      */
     public static function getScheduleOfTheWeek():Builder
     {
-        return Live::with('dayOfWeek')->orderBy('dayofweek_id');
+        return Live::enable()->with('dayOfWeek')->orderBy('dayofweek_id');
     }
 
 }
