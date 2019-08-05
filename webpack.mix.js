@@ -145,16 +145,8 @@ class Mix {
     }
     mixPageHomePage() {
         this.mix.styles([
-                // 'node_modules/lightslider/dist/css/lightslider.css',
-                //
-                // 'node_modules/slick-carousel/slick/slick.css',
-                // 'node_modules/slick-carousel/slick/slick-theme.css',
-                //
-                // 'node_modules/glider-js/glider.css',
-
                 'node_modules/owl.carousel/dist/assets/owl.carousel.css',
                 'node_modules/owl.carousel/dist/assets/owl.theme.default.css',
-
                 'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/style.css',
                 'public/acm/AlaatvCustomFiles/components/ribbon/style.css',
                 'public/acm/AlaatvCustomFiles/css/certificates.css',
@@ -163,14 +155,6 @@ class Mix {
             'public/css/page-homePage.css'
         ).version()
         .babel([
-                // 'node_modules/lightslider/dist/js/lightslider.js',
-                //
-                // 'node_modules/slick-carousel/slick/slick.js',
-                //
-                // 'node_modules/glider-js/glider.js',
-                //
-                // 'node_modules/siema/dist/siema.min.js',
-
                 'node_modules/owl.carousel/dist/owl.carousel.js',
                 'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/js.js',
                 'public/acm/AlaatvCustomFiles/components/aSticky/aSticky.js',
@@ -481,7 +465,6 @@ class Mix {
                     'node_modules/lightgallery/modules/lg-pager.min.js',
                     'node_modules/lightgallery/modules/lg-hash.min.js',
                     'node_modules/lightgallery/modules/lg-share.min.js',
-                    // 'node_modules/lightgallery/modules/lg-video.min.js',
                     'node_modules/lightgallery/modules/lg-zoom.min.js',
                     'public/assets/demo/demo12/custom/components/base/bootstrap-notify.js',
                     'public/acm/videojs/video.min.js',
@@ -570,9 +553,6 @@ class Mix {
                 'node_modules/summernote/dist/summernote.css',
                 'node_modules/select2/dist/css/select2.css',
                 'node_modules/icheck/skins/all.css',
-                // 'public/acm/AlaatvCustomFiles/components/alaa_old/plugins/icheck/skins/all.css',
-                // '/acm/AlaatvCustomFiles/components/alaa_old/plugins/select2/css/select2.min.css',
-                // 'public/acm/AlaatvCustomFiles/components/alaa_old/plugins/datatables/dataTables.bootstrap4.css',
                 'public/acm/AlaatvCustomFiles/components/alaa_old/plugins/datatables/datatables.min.css',
                 'public/acm/AlaatvCustomFiles/components/alaa_old/plugins/datatables/plugins/bootstrap/datatables.bootstrap-rtl.css',
                 'public/acm/AlaatvCustomFiles/components/alaa_old/plugins/select2/css/select2-bootstrap.min.css',
@@ -583,10 +563,8 @@ class Mix {
                 'public/acm/AlaatvCustomFiles/components/alaa_old/plugins/jquery-multi-select/css/multi-select-rtl.css',
                 'public/acm/AlaatvCustomFiles/components/alaa_old/plugins/jplayer/dist/skin/blue.monday/css/jplayer.blue.monday.min.css',
                 'public/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-sweetalert/sweetalert.css',
-                // 'public/acm/extra/persian-datepicker/dist/css/persian-datepicker-0.4.5.min.css',
                 'public/acm/extra/persian-datepicker/dist/css/persian-datepicker-1.1.3.min.css',
                 'public/acm/AlaatvCustomFiles/components/alaa_old/font/glyphicons-halflings/glyphicons-halflings.css',
-                // 'node_modules/glyphicons-halflings/css/glyphicons-halflings.css',
             ],
             'public/css/admin-all.css'
         ).version()
@@ -597,9 +575,6 @@ class Mix {
                     'node_modules/select2/dist/js/select2.js',
                     'node_modules/select2/dist/js/select2.full.js',
                     'node_modules/icheck/icheck.js',
-                    // 'public/acm/AlaatvCustomFiles/components/alaa_old/plugins/icheck/icheck.min.js',
-                    // 'public/acm/AlaatvCustomFiles/components/alaa_old/plugins/select2/js/select2.full.min.js',
-
                     'public/acm/AlaatvCustomFiles/components/alaa_old/plugins/datatables/datatables.min.js',
                     'public/acm/AlaatvCustomFiles/components/alaa_old/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
                     'public/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js',
@@ -626,12 +601,8 @@ class Mix {
                     'public/acm/AlaatvCustomFiles/components/alaa_old/scripts/makeSelect2Single.js',
                     'public/acm/AlaatvCustomFiles/components/alaa_old/scripts/form-input-mask.js',
                     'public/acm/AlaatvCustomFiles/components/alaa_old/scripts/form-icheck.js',
-
                     'public/acm/extra/persian-datepicker/lib/persian-date.js',
-                    // 'public/acm/extra/persian-datepicker/lib/persian-date-1.0.5.js',
                     'public/acm/extra/persian-datepicker/dist/js/persian-datepicker-0.4.5.min.js',
-                    // 'public/acm/extra/persian-datepicker/dist/js/persian-datepicker-1.1.3.min.js',
-                    // 'public/acm/AlaatvCustomFiles/components/alaa_old/scripts/app.js', // must removed
                     'public/acm/AlaatvCustomFiles/js/admin/makeDataTable.js',
                     'public/acm/AlaatvCustomFiles/js/admin-makeMultiSelect.js',
                     'public/acm/AlaatvCustomFiles/js/admin-customInitComponent.js',
