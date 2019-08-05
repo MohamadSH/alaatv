@@ -39,4 +39,8 @@ class Live extends BaseModel
     public function dayOfWeek(){
         return $this->belongsTo(Dayofweek::Class , 'dayofweek_id' , 'id');
     }
+
+    public function scopeEnable($query){
+        return $query->where('enable' , 1);
+    }
 }
