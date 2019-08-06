@@ -85,30 +85,30 @@ class UserController extends Controller
     use SearchCommon;
     use MetaCommon;
     use OrderCommon;
-    
+
     /*
     |--------------------------------------------------------------------------
     | Properties
     |--------------------------------------------------------------------------
     */
-    
-    const PARTIAL_MAIN_INDEX_TEMPLATE = "user.index";
-    
-    const PARTIAL_SMS_INDEX_TEMPLATE = "user.index2";
-    
-    const PARTIAL_REPORT_INDEX_TEMPLATE = "admin.partials.getReportIndex";
-    
-    protected $setting;
-    
 
-    
+    const PARTIAL_MAIN_INDEX_TEMPLATE = "user.index";
+
+    const PARTIAL_SMS_INDEX_TEMPLATE = "user.index2";
+
+    const PARTIAL_REPORT_INDEX_TEMPLATE = "admin.partials.getReportIndex";
+
+    protected $setting;
+
+
+
     public function __construct(Agent $agent, Websitesetting $setting)
     {
         $this->setting = $setting->setting;
         $authException = $this->getAuthExceptionArray($agent);
         $this->callMiddlewares($authException);
     }
-    
+
     /**
      * @param  Agent  $agent
      *
@@ -117,10 +117,10 @@ class UserController extends Controller
     private function getAuthExceptionArray(Agent $agent): array
     {
         $authException = ['show'];
-        
+
         return $authException;
     }
-    
+
     /**
      * @param  array  $authException
      */
@@ -134,7 +134,7 @@ class UserController extends Controller
         $this->middleware('permission:'.config('constants.SHOW_USER_ACCESS'), ['only' => 'edit']);
         $this->middleware('completeInfo', ['only' => ['uploadConsultingQuestion']]);
     }
-    
+
     /**
      * Finding tech person based on his tech code
      *
@@ -149,7 +149,7 @@ class UserController extends Controller
         if (isset($user)) {
             return action('Web\UserController@show', $user);
         }
-        
+
         return 0;
     }
 
@@ -177,48 +177,48 @@ class UserController extends Controller
         else {
             $users = User::orderBy('created_at', 'Desc');
         }
-        
+
         $updatedSinceDate  = Input::get('updatedSinceDate');
         $updatedTillDate   = Input::get('updatedTillDate');
         $updatedTimeEnable = Input::get('updatedTimeEnable');
         if (strlen($updatedSinceDate) > 0 && strlen($updatedTillDate) > 0 && isset($updatedTimeEnable)) {
             $users = $this->timeFilterQuery($users, $updatedSinceDate, $updatedTillDate, 'updated_at');
         }
-        
+
         //filter by firstName, lastName, nationalCode, mobile
         $firstName = trim(Input::get('firstName'));
         if (isset($firstName) && strlen($firstName) > 0) {
             $users = $users->where('firstName', 'like', '%'.$firstName.'%');
         }
-        
+
         $lastName = trim(Input::get('lastName'));
         if (isset($lastName) && strlen($lastName) > 0) {
             $users = $users->where('lastName', 'like', '%'.$lastName.'%');
         }
-        
+
         $nationalCode = trim(Input::get('nationalCode'));
         if (isset($nationalCode) && strlen($nationalCode) > 0) {
             $users = $users->where('nationalCode', 'like', '%'.$nationalCode.'%');
         }
-        
+
         $mobile = trim(Input::get('mobile'));
         if (isset($mobile) && strlen($mobile) > 0) {
             $users = $users->where('mobile', 'like', '%'.$mobile.'%');
         }
-        
+
         //filter by role, major , coupon
         $roleEnable = Input::get('roleEnable');
         $rolesId    = Input::get('roles');
         if (isset($roleEnable) && isset($rolesId)) {
             $users = User::roleFilter($users, $rolesId);
         }
-        
+
         $majorEnable = Input::get('majorEnable');
         $majorsId    = Input::get('majors');
         if (isset($majorEnable) && isset($majorsId)) {
             $users = User::majorFilter($users, $majorsId);
         }
-        
+
         $couponEnable = Input::get('couponEnable');
         $couponsId    = Input::get('coupons');
         if (isset($couponEnable) && isset($couponsId)) {
@@ -243,7 +243,7 @@ class UserController extends Controller
                 });
             }
         }
-        
+
         //filter by product
         $seenProductEnable = Input::get('productEnable');
         $productsId        = Input::get('products');
@@ -257,7 +257,7 @@ class UserController extends Controller
                 $q->whereIn("url", $productUrls);
             });
         }
-        
+
         $orderProductEnable = Input::get("orderProductEnable");
         $productsId         = Input::get('orderProducts');
         if (isset($orderProductEnable) && isset($productsId)) {
@@ -298,7 +298,7 @@ class UserController extends Controller
                         }
                     }
                 }
-                
+
                 if (Input::has("checkoutStatusEnable")) {
                     $checkoutStatuses = Input::get("checkoutStatuses");
                     if (in_array(0, $checkoutStatuses)) {
@@ -322,7 +322,7 @@ class UserController extends Controller
                     })
                         ->whereNotIn('orderstatus_id', [config("constants.ORDER_STATUS_OPEN")]);
                 }
-                
+
                 $createdSinceDate  = Input::get('completedSinceDate');
                 $createdTillDate   = Input::get('completedTillDate');
                 $createdTimeEnable = Input::get('completedTimeEnable');
@@ -352,14 +352,14 @@ class UserController extends Controller
             $users  = $users->whereIn("id", $orders->pluck("user_id")
                 ->toArray());
         }
-        
+
         $paymentStatusesId = Input::get('paymentStatuses');
         if (isset($paymentStatusesId)) {
             //Muhammad Shahrokhi : kar nemikone!
 //            $users = $users->whereHas("orders" , function ($q) use ($paymentStatusesId) {
 //                $q->whereIn("paymentstatus_id", $paymentStatusesId)->whereNotIn('orderstatus_id', [1]);
 //            }
-            
+
             if (!isset($orders)) {
                 $orders = Order::all();
             }
@@ -369,7 +369,7 @@ class UserController extends Controller
             $users = $users->whereIn("id", $orders->pluck("user_id")
                 ->toArray());
         }
-        
+
         $orderStatusesId = Input::get('orderStatuses');
         if (isset($orderStatusesId)) {
             //Muhammad Shahrokhi : kar nemikone!
@@ -395,22 +395,22 @@ class UserController extends Controller
                 $users = $users->where("gender_id", $genderId);
             }
         }
-        
+
         $userstatusId = Input::get("userstatus_id");
         if (isset($userstatusId) && strlen($userstatusId) > 0 && $userstatusId != 0) {
             $users = $users->where("userstatus_id", $userstatusId);
         }
-        
+
         $lockProfileStatus = Input::get("lockProfileStatus");
         if (isset($lockProfileStatus) && strlen($lockProfileStatus) > 0) {
             $users = $users->where("lockProfile", $lockProfileStatus);
         }
-        
+
         $mobileNumberVerification = Input::get("mobileNumberVerification");
         if (isset($mobileNumberVerification) && strlen($mobileNumberVerification) > 0) {
             $users = $users->where("mobileNumberVerification", $mobileNumberVerification);
         }
-        
+
         //filter by postalCode, province , city, address, school , email
         $withoutPostalCode = Input::get("withoutPostalCode");
         if (isset($withoutPostalCode)) {
@@ -425,7 +425,7 @@ class UserController extends Controller
                 $users = $users->where('postalCode', 'like', '%'.$postalCode.'%');
             }
         }
-        
+
         $withoutProvince = Input::get("withoutProvince");
         if (isset($withoutProvince)) {
             $users = $users->where(function ($q) {
@@ -439,7 +439,7 @@ class UserController extends Controller
                 $users = $users->where('province', 'like', '%'.$province.'%');
             }
         }
-        
+
         $withoutCity = Input::get("withoutCity");
         if (isset($withoutCity)) {
             $users = $users->where(function ($q) {
@@ -465,7 +465,7 @@ class UserController extends Controller
 //            if (isset($address) && strlen($address) > 0)
 //                $users = $users->where('address', 'like', '%' . $address . '%');
 //        }
-        
+
         $addressSpecialFilter = Input::get("addressSpecialFilter");
         if (isset($addressSpecialFilter)) {
             switch ($addressSpecialFilter) {
@@ -497,7 +497,7 @@ class UserController extends Controller
                 $users = $users->where('address', 'like', '%'.$address.'%');
             }
         }
-        
+
         $withoutSchool = Input::get("withoutSchool");
         if (isset($withoutSchool)) {
             $users = $users->where(function ($q) {
@@ -511,7 +511,7 @@ class UserController extends Controller
                 $users = $users->where('school', 'like', '%'.$school.'%');
             }
         }
-        
+
         $withoutEmail = Input::get("withoutEmail");
         if (isset($withoutEmail)) {
             $users = $users->where(function ($q) {
@@ -642,17 +642,17 @@ class UserController extends Controller
                     }
                 }
             }
-            
+
             if (Input::has("lotteries")) {
                 $lotteryId = Input::get("lotteries");
                 $lotteries = Lottery::where("id", $lotteryId)
                     ->get();
             }
-            
+
             if (Input::has("reportType")) {
                 $reportType = Input::get("reportType");
             }
-            
+
             if (Input::has("seePaidCost")) {
                 $seePaidCost = true;
             }
@@ -688,13 +688,13 @@ class UserController extends Controller
             "numberOfFatherPhones" => $numberOfFatherPhones??0,
             "numberOfMotherPhones" => $numberOfMotherPhones??0,
         ];
-        
+
         return response(json_encode($result), Response::HTTP_OK)->header('Content-Type', 'application/json');
-        
+
         //======================================================================
         //=============================REFACTOR=================================
         //======================================================================
-        
+
         /*$tags = $request->get('tags');*/
         $filters    = array_filter($request->all()); //Removes null fields
         $isApp      = $this->isRequestFromApp($request);
@@ -716,10 +716,10 @@ class UserController extends Controller
                 $smsIndex    = null;
                 $reportIndex = null;
             }
-            
+
             $uniqueUsers = $userResult->getCollection()
                 ->getUniqueUsers();
-            
+
             $items->push([
                 "totalitems"       => $userResult->total(),
                 "totalUniqueItems" => $uniqueUsers->count(),
@@ -732,7 +732,7 @@ class UserController extends Controller
         }
         if ($isApp) {
             $response = $this->makeJsonForAndroidApp($items);
-            
+
             return response()->json($response, Response::HTTP_OK);
         }
         if (request()->expectsJson()) {
@@ -740,7 +740,7 @@ class UserController extends Controller
                 "items" => $items,
             ], Response::HTTP_OK);
         }
-        
+
         $url = $request->url();
         $this->generateSeoMetaTags(new SeoDummyTags("مدیریت کاربران", "مدیریت کاربران سایت", $url, $url,
             route('image', [
@@ -749,10 +749,10 @@ class UserController extends Controller
                 'h'        => '100',
                 'filename' => $this->setting->site->siteLogo,
             ]), '100', '100', null));
-        
+
         return redirect()->back();
     }
-    
+
     /**
      * @param  Collection  $items
      *
@@ -766,7 +766,7 @@ class UserController extends Controller
         $response = Cache::remember($key, config("constants.CACHE_60"), function () use ($items) {
             $response = collect();
         });
-        
+
         return $response;
     }
 
@@ -774,7 +774,7 @@ class UserController extends Controller
     {
         try {
             $result = $this->new($request->all(), $request->user());
-    
+
             if (isset($result['error'])) {
                 $resultMessage = 'خطا در ذخیره کاربر';
                 $resultCode    = Response::HTTP_INTERNAL_SERVER_ERROR;
@@ -784,7 +784,7 @@ class UserController extends Controller
                 $resultCode    = Response::HTTP_OK;
                 $savedUser     = $result['user'];
             }
-            
+
             if ($resultCode == Response::HTTP_OK) {
                 $responseContent = [
                     'user' => $savedUser ?? $savedUser,
@@ -797,7 +797,7 @@ class UserController extends Controller
                     ],
                 ];
             }
-            
+
             return response($responseContent, Response::HTTP_OK);
         } catch (\Exception    $e) {
             return response([
@@ -808,7 +808,7 @@ class UserController extends Controller
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
-    
+
     /**
      * @param  array      $data
      * @param  User|null  $authenticatedUser
@@ -821,14 +821,14 @@ class UserController extends Controller
             ->where("mobile", $data["mobile"])
             ->where("nationalCode", $data["nationalCode"])
             ->get();
-        
+
         if ($softDeletedUsers->isNotEmpty()) {
             $softDeletedUsers->first()
                 ->restore();
-            
+
             return response([], Response::HTTP_OK);
         }
-        
+
         $user = new User();
         try {
             $this->fillUserFromRequest($data, $authenticatedUser, config('constants.INSERT_USER_ACCESS'), $user);
@@ -843,7 +843,7 @@ class UserController extends Controller
                 ],
             ];
         }
-        
+
         if (!$user->save()) {
             $resultText = 'Datebase error';
             $resultCode = Response::HTTP_SERVICE_UNAVAILABLE;
@@ -853,10 +853,10 @@ class UserController extends Controller
                     'message' => $resultText,
                 ],
             ];
-            
+
             return $response;
         }
-        
+
         if ($user->checkUserProfileForLocking()) {
             $user->lockHisProfile();
         }
@@ -869,13 +869,13 @@ class UserController extends Controller
 
             $this->syncRoles($data["roles"], $user);
         }
-        
+
         $resultText = 'User save successfully';
         $resultCode = Response::HTTP_OK;
         $response   = [
             'user' => $user,
         ];
-        
+
         return $response;
     }
 
@@ -943,18 +943,18 @@ class UserController extends Controller
         if ($user === null) {
             $user = $request->user();
         }
-        
-        
+
+
         /** @var User $autheiticatedUser */
         $autheiticatedUser = $request->user();
         if ($this->authenticatedUserCantSeeThisUser($autheiticatedUser, $user)) {
             abort(Response::HTTP_FORBIDDEN);
         }
-        
+
         if ($request->expectsJson()) {
             return response($user, Response::HTTP_OK);
         }
-        
+
         $genders     = Gender::pluck('name', 'id')
             ->prepend("نامشخص");
         $majors      = Major::pluck('name', 'id')
@@ -972,21 +972,20 @@ class UserController extends Controller
 //            $lotteryMessage,
 //            $lotteryName,
 //        ] = $user->getLottery();
-        
-        $event            = Event::name('konkur97')
-            ->first();
+
+        $event            = Event::name('konkur98')->first();
         $userKonkurResult = $user->eventresults->where("event_id", $event->id)
             ->first();
-        
+
         $userCompletion = $user->info['completion'];
 
-        
+
         return view("user.profile.profile",
             compact("user", 'event', 'userKonkurResult', 'genders', 'majors', 'sideBarMode',
                 /*'exchangeAmount', 'userPoints', 'userLottery', 'prizeCollection', 'lotteryRank', 'lottery', 'lotteryMessage', 'lotteryName' , */
                 'userKonkurResult', 'userCompletion'));
     }
-    
+
     /**
      * @param  User  $authenticaedUser
      * @param  User  $user
@@ -997,7 +996,7 @@ class UserController extends Controller
     {
         return ($user->id !== $authenticaedUser->id) && !($authenticaedUser->can(config('constants.SHOW_USER_ACCESS')));
     }
-    
+
     /**
      * Display a listing user's orders.
      *
@@ -1013,7 +1012,7 @@ class UserController extends Controller
 
         /** @var User $user */
         $user = $request->user();
-        
+
         $key    = "user:orders:".$user->cacheKey();
         $orders = Cache::tags('user')->remember($key, config("constants.CACHE_60"), function () use ($user) {
             return $user->closedOrders()
@@ -1021,21 +1020,21 @@ class UserController extends Controller
 //                ->append('created_at')
                 ->sortByDesc("completed_at");
         });
-        
+
         $key          = "user:transactions:".$user->cacheKey();
         $transactions = Cache::tags('user')->remember($key, config("constants.CACHE_60"), function () use ($user) {
             return $user->getShowableTransactions()
                 ->get()
                 ->groupBy("order_id");
         });
-        
+
         $key         = "user:instalments:".$user->cacheKey();
         $instalments = Cache::tags('user')->remember($key, config("constants.CACHE_60"), function () use ($user) {
             return $user->getInstalments()
                 ->get()
                 ->sortBy("deadline_at");
         });
-        
+
         $gatewaysCollection = Transactiongateway::enable()
             ->get()
             ->sortBy("order");
@@ -1054,7 +1053,7 @@ class UserController extends Controller
         return view("user.ordersList",
             compact("orders", "gateways", "transactions", "instalments", "orderCoupons"));
     }
-    
+
     /**
      * Showing files to user which he has got for his orders
      *
@@ -1066,7 +1065,7 @@ class UserController extends Controller
     {
         return redirect()->route('web.user.dashboard', [$request->user()]);
     }
-    
+
     /**
      * Filling product's pamphlets and videos collection ( called by reference )
      *
@@ -1080,22 +1079,22 @@ class UserController extends Controller
         if (empty($productArray)) {
             return false;
         }
-        
+
         $videoArray    = [];
         $pamphletArray = [];
         foreach ($productArray as $product) {
             if ($this->productIsNeitherInArticlesNorInFilms($product, $pamphletArray, $videoArray)) {
-                
+
                 $pamphletArray = [];
                 if (isset($pamphlets[$product->id])) {
                     $pamphletArray = $pamphlets[$product->id];
                 }
-                
+
                 $videoArray = [];
                 if (isset($videos[$product->id])) {
                     $videoArray = $videos[$product->id];
                 }
-                
+
                 foreach ($product->validProductfiles as $productfile) {
                     if ($productfile->productfiletype_id == config("constants.PRODUCT_FILE_TYPE_PAMPHLET")) {
                         array_push($pamphletArray, [
@@ -1112,14 +1111,14 @@ class UserController extends Controller
                         ]);
                     }
                 }
-                
+
                 if (!empty($pamphletArray)) {
                     $pamphlets->put($product->id, [
                         "productName" => $product->name,
                         "pamphlets"   => $pamphletArray,
                     ]);
                 }
-                
+
                 if (!empty($videoArray)) {
                     $videos->put($product->id, [
                         "productName" => $product->name,
@@ -1127,15 +1126,15 @@ class UserController extends Controller
                     ]);
                 }
             }
-            
+
             if ($mode == "digChildren") {
                 $this->addVideoPamphlet($product->children, $pamphlets, $videos);
             }
-            
+
             $this->addVideoPamphlet($product->complimentaryproducts, $pamphlets, $videos);
         }
     }
-    
+
     /**
      * @param         $product
      * @param  array  $pamphletArray
@@ -1147,7 +1146,7 @@ class UserController extends Controller
     {
         return !in_array($product->id, $pamphletArray) && !in_array($product->id, $videoArray);
     }
-    
+
     /**
      * Show authenticated user belongings
      *
@@ -1160,10 +1159,10 @@ class UserController extends Controller
         $user        = $request->user();
         $belongings  = $user->belongings;
         $sideBarMode = "closed";
-        
+
         return view("user.belongings", compact("belongings", "sideBarMode", "user"));
     }
-    
+
     /**
      * Showing a survey to user to take part in
      *
@@ -1181,10 +1180,10 @@ class UserController extends Controller
             $this->getQuestionsAndAnswerData($questions, $event, $survey, $answersData, $questionsData);
         }
         $pageName = "showSurvey";
-        
+
         return view("survey.show", compact("event", "survey", "questions", "questionsData", "answersData", "pageName"));
     }
-    
+
     /**
      * @param                                  $questions
      * @param                                  $event
@@ -1206,7 +1205,7 @@ class UserController extends Controller
             $this->makeQuestions($questionsData, $question, $requestBaseUrl);
         }
     }
-    
+
     /**
      * @param                                  $event
      * @param  Survey                     $survey
@@ -1241,7 +1240,7 @@ class UserController extends Controller
         }
         $answersData->put($question->id, $questionAnswerArray);
     }
-    
+
     /**
      * @param  Collection                      $questionsData
      * @param                                  $question
@@ -1256,7 +1255,7 @@ class UserController extends Controller
             $this->getQuestionDataInCityStatus($questionsData, $question, $requestBaseUrl);
         }
     }
-    
+
     /**
      * @param  Collection                      $questionsData
      * @param                                  $question
@@ -1284,7 +1283,7 @@ class UserController extends Controller
         $rootMajorArray = array_add($rootMajorArray, $userMajor->name, $majorsArray);
         $questionsData->put($question->id, $rootMajorArray);
     }
-    
+
     /**
      * @param $userMajor
      *
@@ -1302,10 +1301,10 @@ class UserController extends Controller
         }
         $userMajors = $userMajors->pluck('id')
             ->toArray();
-        
+
         return $userMajors;
     }
-    
+
     /**
      * @param  Collection                      $questionsData
      * @param                                  $question
@@ -1345,17 +1344,17 @@ class UserController extends Controller
             ->toArray();
         $genders      = Gender::pluck('name', 'id')
             ->toArray();
-        
+
         return view("user.edit", compact("user", "majors", "userStatuses", "roles", "userRoles", "genders"));
     }
 
     public function destroy($user)
     {
         $user->delete();
-        
+
         return redirect()->back();
     }
-    
+
     /**
      * Show the form for completing information of the specified resource.(Created for orduatalaee 97)
      *
@@ -1367,7 +1366,7 @@ class UserController extends Controller
     {
         return redirect(action("Web\UserController@information", $request->user()), 301);
     }
-    
+
     /**
      * Show the form for completing information of the specified resource.(Created for orduatalaee 97)
      *
@@ -1389,7 +1388,7 @@ class UserController extends Controller
                     ]);
             })
             ->whereIn("orderstatus_id", [config("constants.ORDER_STATUS_CLOSED")]);
-        
+
         if ($validOrders->get()
             ->isEmpty()) {
             return redirect(action("Web\ProductController@landing2"));
@@ -1400,17 +1399,17 @@ class UserController extends Controller
             config("constants.PAYMENT_STATUS_INDEBTED"),
         ])
             ->get();
-        
+
         $order = $unPaidOrders->first();
-        
+
         if (is_null($order)) {
             $order = $paidOrder->first();
         }
-        
+
         if (!isset($order)) {
             abort(403);
         }
-        
+
         $orderproduct = $order->orderproducts(config("constants.ORDER_PRODUCT_TYPE_DEFAULT"))
             ->get()
             ->first();
@@ -1425,7 +1424,7 @@ class UserController extends Controller
         if (isset($grandParent)) {
             $userProduct = $grandParent->name;
         }
-        
+
         $simpleContact   = Contacttype::where("name", "simple")
             ->get()
             ->first();
@@ -1445,14 +1444,14 @@ class UserController extends Controller
             if ($parentContacts->isEmpty()) {
                 continue;
             }
-            
+
             $parentContact = $parentContacts->first();
             $parentMobiles = $parentContact->phones->where("phonetype_id", $mobilePhoneType->id)
                 ->sortBy("priority");
             if ($parentMobiles->isEmpty()) {
                 continue;
             }
-            
+
             $parentMobile = $parentMobiles->first()->phoneNumber;
             $parentsNumber->put($parent->name, $parentMobile);
         }
@@ -1476,7 +1475,7 @@ class UserController extends Controller
         $grades[0]  = "نامشخص";
         $grades     = array_sort_recursive($grades);
         $orderFiles = $order->files;
-        
+
         //////////Lock fields//////////
         $lockedFields = [];
         if ($user->lockProfile) {
@@ -1492,13 +1491,13 @@ class UserController extends Controller
             $completionFieldsCount = count($completionFields);
             $completionPercentage  = (int) $user->completion("custom", $completionFields);
         }
-        
+
         $completedFieldsCount = (int) ceil(($completionPercentage * $completionFieldsCount) / 100);
         if ($orderFiles->isNotEmpty()) {
             $completedFieldsCount++;
         }
         $completionFieldsCount++;
-        
+
         if (isset($order->customerExtraInfo)) {
             $customerExtraInfo = json_decode($order->customerExtraInfo);
             foreach ($customerExtraInfo as $item) {
@@ -1508,30 +1507,30 @@ class UserController extends Controller
                 $completionFieldsCount++;
             }
         }
-        
+
         if (isset($parentsNumber["father"])) {
             $completedFieldsCount++;
         }
         $completionFieldsCount++;
-        
+
         if (isset($parentsNumber["mother"])) {
             $completedFieldsCount++;
         }
         $completionFieldsCount++;
-        
+
         $completionPercentage = (int) (($completedFieldsCount / $completionFieldsCount) * 100);
-        
+
         if ($completionPercentage == 100 && $user->completion("lockProfile") == 100) {
             $user->lockHisProfile();
             $user->updateWithoutTimestamp();
         }
-        
+
         return view("user.completeInfo",
             compact("user", "parentsNumber", "majors", "genders", "bloodTypes", "grades", "userProduct", "order",
                 "orderFiles", "userHasMedicalQuestions",
                 "lockedFields", "completionPercentage", "customerExtraInfo"));
     }
-    
+
     /**
      * Display a page where user can upaload his consulting questions
      *
@@ -1541,7 +1540,7 @@ class UserController extends Controller
     {
         return view("user.uploadConsultingQuestion");
     }
-    
+
     /**
      * Display the list of uploaded files by user
      *
@@ -1553,10 +1552,10 @@ class UserController extends Controller
     {
         $questions = $request->user()->useruploads->where("isEnable", "1");
         $counter   = 1;
-        
+
         return view("user.consultingQuestions", compact("questions", "counter"));
     }
-    
+
     /**
      * Send system generated password to the user that does not belong to anyone
      *
@@ -1573,19 +1572,19 @@ class UserController extends Controller
                 ->where("mobile", $mobile);
             if ($users->isEmpty()) {
                 session()->put("error", "شماره موبایل وارد شده اشتباه می باشد!");
-                
+
                 return redirect()->back();
             }
             $user = $users->first();
         }
-        
+
         if (!isset($user)) {
             if (!Auth::check()) {
                 return redirect(action("Web\HomeController@error403"));
             }
             $user = $request->user();
         }
-        
+
         $now            = Carbon::now();
         $tooManyAttempt = $this->checkTooManyAttemptsMadeForRegeneratePassword($user, $now);
         if ($tooManyAttempt == 'min' || $tooManyAttempt == 'sec') {
@@ -1597,7 +1596,7 @@ class UserController extends Controller
             }
             session()->put("warning",
                 "شما پس از گذشت ۵ دقیقه از آخرین درخواست خود می توانید دوباره درخواست ارسال رمز عبور نمایید .از زمان ارسال آخرین پیامک تایید برای شما ".$timeInterval."می گذرد.");
-            
+
             return redirect()->back();
         }
         //        $password = $this->generateRandomPassword(4);
@@ -1606,7 +1605,7 @@ class UserController extends Controller
             "hashPassword" => bcrypt($user->nationalCode),
         ];
         $user->password = $password["hashPassword"];
-        
+
         /**
          * Sending auto generated password through SMS
          */
@@ -1623,10 +1622,10 @@ class UserController extends Controller
                 "ارسال پیامک حاوی رمز عبور با مشکل مواجه شد! لطفا دوباره درخواست ارسال پیامک نمایید.");
         }
         $user->update();
-        
+
         return redirect()->back();
     }
-    
+
     /**
      * @param $user
      * @param $now
@@ -1639,13 +1638,13 @@ class UserController extends Controller
             if ($now->diffInMinutes(Carbon::parse($user->passwordRegenerated_at)) > 0) {
                 return 'min';
             }
-            
+
             return 'sec';
         }
-        
+
         return false;
     }
-    
+
     /**
      * Showing the form to the user for adding extra information after registeration
      *
@@ -1661,12 +1660,12 @@ class UserController extends Controller
         else {
             $targetUrl = action("Web\IndexPageController");
         }
-        
+
         if ($request->user()
                 ->completion("afterLoginForm") == 100) {
             return redirect($targetUrl);
         }
-        
+
         $previousPath = url()->previous();
         if (strcmp($previousPath, route('login')) == 0) {
             $formByPass = false;
@@ -1676,7 +1675,7 @@ class UserController extends Controller
             $formByPass = true;
             $note       = "برای استفاده از این خدمت سایت لطفا اطلاعات زیر را تکمیل نمایید";
         }
-        
+
         $formFields = Afterloginformcontrol::getFormFields();
         $tables     = [];
         foreach ($formFields as $formField) {
@@ -1688,10 +1687,10 @@ class UserController extends Controller
             $tables[$formField->name] = DB::table($tableName)
                 ->pluck('name', 'id');
         }
-        
+
         return view("user.completeRegister", compact("formFields", "note", "formByPass", "tables"));
     }
-    
+
     /**
      * Storing user's work time (for employees)
      *
@@ -1714,12 +1713,12 @@ class UserController extends Controller
                 ->format('H:i:s');
             $request->offsetSet($actionMap[$request->get('action')], $presentTime);
         }
-        
+
         $userId = Auth::user()->id;
         $request->offsetSet('user_id', $userId);
         $request->offsetSet('date', Carbon::today('Asia/Tehran')
             ->format('Y-m-d'));
-        
+
         $toDayJalali      = $this->convertToJalaliDay(Carbon::today('Asia/Tehran')
             ->format('l'));
         $employeeSchedule = Employeeschedule::where('user_id', $userId)
@@ -1732,7 +1731,7 @@ class UserController extends Controller
             $request->offsetSet('allowedLunchBreakInSec',
                 gmdate('H:i:s', $employeeSchedule->getOriginal('lunchBreakInSeconds')));
         }
-        
+
         $request->offsetSet('modifier_id', $userId);
         $request->offsetSet('serverSide', true);
         $insertRequest  = new InsertEmployeeTimeSheet($request->all());
@@ -1747,7 +1746,7 @@ class UserController extends Controller
         }
         else {
             $message = 'شما بیش از یک ساعت کاری برای امروز ثبت نموده اید!';
-            
+
             return $homeController->errorPage($message);
         }
         if ($done) {
@@ -1756,10 +1755,10 @@ class UserController extends Controller
         else {
             session()->flash('error', 'خطای پایگاه داده');
         }
-        
+
         return redirect()->back();
     }
-    
+
     /**
      * Removes user from lottery
      *
@@ -1771,7 +1770,7 @@ class UserController extends Controller
     {
         $user    = $request->user();
         $message = "";
-        
+
         $bonName = config("constants.BON2");
         $bon     = Bon::where("name", $bonName)
             ->first();
@@ -1783,15 +1782,15 @@ class UserController extends Controller
             $done    = false;
             $message = "خطای غیر منتظره . لطفا بعدا اقدام فرمایید";
         }
-        
+
         if ($done) {
             return $this->makeResponseForRemoveFromLotteryMethod(Response::HTTP_OK, "OK");
         }
-        
+
         if (!isset($userBonTaken) || !$userBonTaken) {
             return $this->makeResponseForRemoveFromLotteryMethod(Response::HTTP_SERVICE_UNAVAILABLE, $message);
         }
-        
+
         foreach ($userbons as $userbon) {
             if (isset($usedUserBon[$userbon->id])) {
                 $usedNumber                = $usedUserBon[$userbon->id]["used"];
@@ -1802,13 +1801,13 @@ class UserController extends Controller
                 $userbon->usedNumber       = 0;
                 $userbon->userbonstatus_id = config("constants.USERBON_STATUS_ACTIVE");
             }
-            
+
             $userbon->update();
         }
-        
+
         return $this->makeResponseForRemoveFromLotteryMethod(Response::HTTP_SERVICE_UNAVAILABLE, $message);
     }
-    
+
     private function checkUserBonsForLottery($user, string &$message, $userbons): array
     {
         $done = false;
@@ -1816,7 +1815,7 @@ class UserController extends Controller
             $message = "شما در قرعه کشی نیستید";
             return [null, null, $done];
         }
-        
+
         list($usedUserBon, $sumBonNumber) = $this->getUsedUserBon($userbons);
         $userBonTaken = true;
         [
@@ -1825,14 +1824,14 @@ class UserController extends Controller
             $prizeName,
             $walletId,
         ] = $this->exchangeLottery($user, $sumBonNumber);
-        
+
         if (!$result) {
             $message = $responseText;
             return [$usedUserBon, $userBonTaken, $done];
         }
         $lottery = Lottery::where("name", config("constants.LOTTERY_NAME"))
             ->first();
-        
+
         if (!isset($lottery)) {
             $message = "خطای غیر منتظره. لطفا بعدا دوباره اقدام نمایید";
             return [$usedUserBon, $userBonTaken, $done];
@@ -1855,7 +1854,7 @@ class UserController extends Controller
                     "rank"   => 0,
                     "prizes" => $prizes,
                 ]);
-            
+
             /**  clearing cache */
             Cache::tags('bon')
                 ->flush();
@@ -1864,10 +1863,10 @@ class UserController extends Controller
         else {
             $message = "شما قبلا از قرعه کشی انصراف داده اید";
         }
-        
+
         return [$usedUserBon, $userBonTaken, $done];
     }
-    
+
     /**
      * @param $userbons
      *
@@ -1885,10 +1884,10 @@ class UserController extends Controller
             $userbon->userbonstatus_id = config("constants.USERBON_STATUS_USED");
             $userbon->update();
         }
-        
+
         return [$usedUserBon, $sumBonNumber];
     }
-    
+
     /**
      * @param  int     $httpStatus
      * @param  string  $message
@@ -1901,7 +1900,7 @@ class UserController extends Controller
             ["message" => $message],
         ], $httpStatus);
     }
-    
+
     /**
      * Store the complentary information of specified resource in storage.
      *
@@ -1926,7 +1925,7 @@ class UserController extends Controller
         OrderController $orderController
     )
     {
-        
+
         $request->offsetSet("phone", $this->convertToEnglish(preg_replace('/\s+/', '', $request->get("phone"))));
         $request->offsetSet("postalCode",
             $this->convertToEnglish(preg_replace('/\s+/', '', $request->get("postalCode"))));
@@ -1935,7 +1934,7 @@ class UserController extends Controller
             'mother' => $this->convertToEnglish(preg_replace('/\s+/', '', $request->get("parentMobiles")["mother"])),
         ];
         $request->offsetSet("parentMobiles", $parentMobiles);
-        
+
         $mapConvertToEnglish = [
             'school',
             'allergy',
@@ -1946,7 +1945,7 @@ class UserController extends Controller
         foreach ($mapConvertToEnglish as $item) {
             $request->offsetSet($item, $this->convertToEnglish($request->get($item)));
         }
-        
+
         $this->validate($request, [
             'photo' => 'image|mimes:jpeg,jpg,png|max:200',
             'file'  => 'mimes:jpeg,jpg,png,zip,pdf,rar',
@@ -1992,7 +1991,7 @@ class UserController extends Controller
             }
         }
         $userController->update($editUserRequest, $user);
-        
+
         /**
          *
          */
@@ -2006,7 +2005,7 @@ class UserController extends Controller
             ->get()
             ->first();
         $parentsNumber   = $request->get("parentMobiles");
-        
+
         foreach ($parentsNumber as $relative => $mobile) {
             if (strlen(preg_replace('/\s+/', '', $mobile)) == 0) {
                 continue;
@@ -2054,7 +2053,7 @@ class UserController extends Controller
                 $parentMobile->update();
             }
         }
-        
+
         $updateOrderRequest = new EditOrderRequest();
         if ($request->hasFile("file")) {
             $updateOrderRequest->offsetSet("file", $request->file("file"));
@@ -2082,9 +2081,9 @@ class UserController extends Controller
         $customerExtraInfo = "[".$jsonConcats."]";
         $updateOrderRequest->offsetSet("customerExtraInfo", $customerExtraInfo);
         $orderController->update($updateOrderRequest, $order);
-        
+
         session()->put("success", "اطلاعات با موفقیت ذخیره شد");
-        
+
         return redirect()->back();
     }
 
@@ -2106,7 +2105,7 @@ class UserController extends Controller
 
         if($user->isUserProfileLocked() && !$authenticatedUser->can(config('constants.EDIT_USER_ACCESS')))
             return response(['message'=>'User profile is locked'] , Response::HTTP_LOCKED);
-        
+
         try {
             if($request->has('moderator') && $authenticatedUser->can(config('constants.EDIT_USER_ACCESS')))
             {
@@ -2128,7 +2127,7 @@ class UserController extends Controller
         if ($user->checkUserProfileForLocking()) {
             $user->lockHisProfile();
         }
-        
+
         if ($user->update()) {
 
             if ($request->has('roles') && $authenticatedUser->can(config('constants.INSET_USER_ROLE'))) {
@@ -2138,7 +2137,7 @@ class UserController extends Controller
 
                 $this->syncRoles($roles, $user);
             }
-            
+
             $message = 'اطلاعات با موفقیت اصلاح شد';
             $status  = Response::HTTP_OK;
         }
@@ -2164,7 +2163,7 @@ class UserController extends Controller
                     ],
                 ];
             }
-            
+
             return response($response, Response::HTTP_OK);
         }
         else {
@@ -2172,7 +2171,7 @@ class UserController extends Controller
             return redirect()->back();
         }
     }
-    
+
     /**
      * Register student for sanati sharif highschool
      *
@@ -2188,13 +2187,13 @@ class UserController extends Controller
             ->get();
         if ($event->isEmpty()) {
             session()->put("error", "رخداد یافت نشد");
-            
+
             return redirect()->back();
         }
         else {
             $event = $event->first();
         }
-        
+
         if (Auth::check()) {
             $user = $request->user();
         }
@@ -2203,7 +2202,7 @@ class UserController extends Controller
                 ->where("nationalCode", $request->get("nationalCode"))
                 ->get();
         }
-        
+
         if (!isset($user) && $registeredUser->isEmpty()) {
             $registerRequest = new Request();
             $registerRequest->offsetSet("firstName", $request->get("firstName"));
@@ -2217,7 +2216,7 @@ class UserController extends Controller
             $response           = $registerController->register($registerRequest);
             if ($response->getStatusCode() != 302) {
                 session()->put("error", "خطایی در ثبت اطلاعات شما اتفاق افتاد . لطفا دوباره اقدام نمایید.");
-                
+
                 return redirect()->back();
             }
             $user = $request->user();
@@ -2241,16 +2240,16 @@ class UserController extends Controller
             $response = $this->update($updateRequest, $user);
             if ($response->getStatusCode() == Response::HTTP_SERVICE_UNAVAILABLE) {
                 session()->put("error", "خطایی در ثبت اطلاعات شما رخ داد. لطفا مجددا اقدام نمایید");
-                
+
                 return redirect()->back();
             }
         }
-        
+
         $eventRegistered = $user->eventresults->where("user_id", $user->id)
             ->where("event_id", $event->id);
         if ($eventRegistered->isNotEmpty()) {
             session()->put("error", "شما قبلا ثبت نام کرده اید");
-            
+
             return redirect()->back();
         }
         else {
@@ -2262,7 +2261,7 @@ class UserController extends Controller
             $response = $eventResultController->store($evenResultRequest);
             if ($response->getStatusCode() == Response::HTTP_SERVICE_UNAVAILABLE) {
                 session()->put("error", "خطایی در ثبت نام شما رخ داد. لطفا مجددا اقدام نمایید");
-                
+
                 return redirect()->back();
             }
             else {
@@ -2271,16 +2270,16 @@ class UserController extends Controller
                 //                    $participationCode = $result->participationCode;
             }
         }
-        
+
         $message = "پیش ثبت نام شما در دبیرستان دانشگاه صنعتی شریف با موفقیت انجام شد .";
         if (isset($participationCode)) {
             $message .= "کد داوطلبی شما: ".$participationCode;
         }
         session()->put("success", $message);
-        
+
         return redirect()->back();
     }
-    
+
     /**
      * Submit user request for voucher request
      *
@@ -2309,19 +2308,19 @@ class UserController extends Controller
                 'height' => 100,
                 'width'  => 100,
             ]);
-        
+
         $user        = $request->user();
         $genders     = Gender::pluck('name', 'id')
             ->prepend("انتخاب کنید");
         $majors      = Major::pluck('name', 'id')
             ->prepend("انتخاب کنید");
         $sideBarMode = "closed";
-        
+
         $asiatechProduct   = config("constants.ASIATECH_FREE_ADSL");
         $nowDateTime       = Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now())
             ->timezone('Asia/Tehran');
         $userHasRegistered = false;
-        
+
         $asitechPendingOrders     = Order::whereHas("orderproducts", function ($q) use ($asiatechProduct) {
             $q->where("product_id", $asiatechProduct);
         })
@@ -2334,7 +2333,7 @@ class UserController extends Controller
         if ($userAsitechPendingOrders->isNotEmpty()) {
             $rank = $userAsitechPendingOrders->keys()
                     ->first() + 1;
-            
+
             $userHasRegistered = true;
         }
         else {
@@ -2351,17 +2350,17 @@ class UserController extends Controller
                 $userVoucher = $user->productvouchers->where("expirationdatetime", ">", $nowDateTime)
                     ->where("product_id", $asiatechProduct)
                     ->first();
-                
+
                 $userHasRegistered = true;
             }
         }
         $mobileVerificationCode = $user->getMobileVerificationCode();
-        
+
         return view("user.submitVoucherRequest",
             compact("user", "genders", "majors", "sideBarMode", "userHasRegistered", "rank", "userVoucher",
                 "mobileVerificationCode"));
     }
-    
+
     /**
      * Submit user request for voucher request
      *
@@ -2380,10 +2379,10 @@ class UserController extends Controller
             ->where("product_id", $asiatechProduct);
         if ($vouchers->isNotEmpty()) {
             session()->put("error", "شما برای اینترنت رایگان ثبت نام کرده اید");
-            
+
             return redirect()->back();
         }
-        
+
         $updateRequest = new EditUserRequest();
         RequestCommon::convertRequestToAjax($updateRequest);
         $updateRequest->offsetSet("postalCode", $request->get("postalCode"));
@@ -2434,11 +2433,11 @@ class UserController extends Controller
         $asiatechOrder->user_id           = $user->id;
         $asiatechOrder->completed_at      = Carbon::now()
             ->setTimezone("Asia/Tehran");
-        
+
         if (!$asiatechOrder->save()) {
             return $this->sessionPutAndRedirectBack("خطا در ثبت سفارش اینترنت رایگان. لطفا بعدا اقدام نمایید");
         }
-        
+
         $request->offsetSet("cost", 0);
         $request->offsetSet("orderId_bhrk", $asiatechOrder->id);
         $product = Product::where("id", $asiatechProduct)
@@ -2446,7 +2445,7 @@ class UserController extends Controller
         if (!isset($product)) {
             return $this->sessionPutAndRedirectBack("محصول اینترنت آسیاتک یافت نشد");
         }
-        
+
         $orderController = new OrderController();
         $response        = $orderController->addOrderproduct($request, $product);
         $responseStatus  = $response->getStatusCode();
@@ -2456,10 +2455,10 @@ class UserController extends Controller
         }
         $user->lockHisProfile();
         $user->update();
-        
+
         return redirect()->back();
     }
-    
+
     /**
      * @param $message
      *
@@ -2470,7 +2469,7 @@ class UserController extends Controller
         session()->put("error", $message);
         return redirect()->back();
     }
-    
+
     /**
      * Checks whether user can give these roles or not
      *
@@ -2486,7 +2485,7 @@ class UserController extends Controller
             }
         }
     }
-    
+
     /**
      * @param  User       $user
      * @param             $newRole
