@@ -1,7 +1,7 @@
 <div class="row">
     <div class="col-12">
         <!-- BEGIN SAMPLE FORM PORTLET-->
-    
+
         @if($editForm)
             {!! Form::open(['method'=>'PUT' , 'action'=>['Web\SetController@update' , $set], 'files'=>true]) !!}
         @else
@@ -94,42 +94,42 @@
                         </div>
                     </div>
                 </div>
-{{--                <div class="form-group {{ $errors->has('photo') ? ' has-danger' : '' }}">--}}
-{{--                    <div class="row">--}}
-{{--                        <label class="control-label col-md-3">عکس</label>--}}
-{{--                        <div class="col-md-9">--}}
-{{--                            <div class="fileinput fileinput-new" data-provides="fileinput">--}}
-{{--                                @if($editForm)--}}
-{{--                                    <div class="fileinput-new thumbnail" style="width: 200px; height: 150px;">--}}
-{{--                                        <img src="{{ $set->photo }}" class="a--full-width" @if(strlen($set->name)>0) alt="{{$set->name}}" @else  alt="عکس محصول" @endif/>--}}
-{{--                                    </div>--}}
-{{--                                @endif--}}
-{{--                                --}}
-{{--                                <div class="fileinput-preview fileinput-exists thumbnail" style="max-width: 200px; max-height: 150px;"></div>--}}
-{{--                                --}}
-{{--                                <div>--}}
-{{--                                    <span class="btn m-btn--pill m-btn--air btn-warning default btn-file">--}}
-{{--                                        <span class="fileinput-new">--}}
-{{--                                            @if($editForm)--}}
-{{--                                                تغییر عکس--}}
-{{--                                            @else--}}
-{{--                                                انتخاب عکس--}}
-{{--                                            @endif--}}
-{{--                                        </span>--}}
-{{--                                        <span class="fileinput-exists"> تغییر </span>--}}
-{{--                                        {!! Form::file('photo') !!}--}}
-{{--                                    </span>--}}
-{{--                                    <a href="javascript:" class="btn m-btn--pill m-btn--air btn-danger fileinput-exists" data-dismiss="fileinput"> حذف</a>--}}
-{{--                                </div>--}}
-{{--                            </div>--}}
-{{--                            @if ($errors->has('photo'))--}}
-{{--                                <span class="form-control-feedback">--}}
-{{--                                    <strong>{{ $errors->first('photo') }}</strong>--}}
-{{--                                </span>--}}
-{{--                            @endif--}}
-{{--                        </div>--}}
-{{--                    </div>--}}
-{{--                </div>--}}
+                <div class="form-group {{ $errors->has('photo') ? ' has-danger' : '' }}">
+                    <div class="row">
+                        <label class="control-label col-md-3">عکس</label>
+                        <div class="col-md-9">
+                            <div class="fileinput fileinput-new" data-provides="fileinput">
+                                @if($editForm)
+                                    <div class="fileinput-new thumbnail" style="width: 200px; height: 150px;">
+                                        <img src="{{ $set->photo }}" class="a--full-width" @if(strlen($set->name)>0) alt="{{$set->name}}" @else  alt="عکس محصول" @endif/>
+                                    </div>
+                                @endif
+
+                                <div class="fileinput-preview fileinput-exists thumbnail" style="max-width: 200px; max-height: 150px;"></div>
+
+                                <div>
+                                    <span class="btn m-btn--pill m-btn--air btn-warning default btn-file">
+                                        <span class="fileinput-new">
+                                            @if($editForm)
+                                                تغییر عکس
+                                            @else
+                                                انتخاب عکس
+                                            @endif
+                                        </span>
+                                        <span class="fileinput-exists"> تغییر </span>
+                                        {!! Form::file('photo') !!}
+                                    </span>
+                                    <a href="javascript:" class="btn m-btn--pill m-btn--air btn-danger fileinput-exists" data-dismiss="fileinput"> حذف</a>
+                                </div>
+                            </div>
+                            @if ($errors->has('photo'))
+                                <span class="form-control-feedback">
+                                    <strong>{{ $errors->first('photo') }}</strong>
+                                </span>
+                            @endif
+                        </div>
+                    </div>
+                </div>
 
                 <div class="form-group">
                     <div class="row">
@@ -142,23 +142,23 @@
                     </div>
                 </div>
                 <div>
-        
+
                     <div class="m-divider m--margin-top-50">
                         <span></span>
                         <span>افزودن محصول جدید به این دسته محتوا</span>
                         <span></span>
                     </div>
-    
+
                     @include('admin.filters.productsFilter', [
                         "id" => "setProduct",
                         'everyProduct'=>false,
                         'title'=>'انتخاب محصول'
                     ])
-    
+
                 </div>
-                
+
                 @if($editForm)
-                
+
                 <div>
                     <div class="m-divider m--margin-top-50">
                         <span></span>
@@ -197,7 +197,7 @@
                     </table>
                 </div>
                 @endif
-    
+
                 <button type="submit" class="btn m-btn--pill m-btn--air btn-warning a--full-width m--margin-top-30">
                     @if($editForm)
                         اصلاح
@@ -205,7 +205,7 @@
                         ثبت
                     @endif
                 </button>
-                
+
             </div>
         </div>
         {!! Form::close() !!}

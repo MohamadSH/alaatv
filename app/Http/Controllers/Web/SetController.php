@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\Web;
 
+use App\Adapter\AlaaSftpAdapter;
 use App\Contentset;
+use App\Traits\FileCommon;
 use App\Websitesetting;
 use App\Traits\MetaCommon;
 use Illuminate\Support\Arr;
@@ -15,6 +17,8 @@ use App\Classes\Search\ContentsetSearch;
 use Illuminate\Foundation\Http\FormRequest;
 use App\Http\Requests\ContentsetIndexRequest;
 use App\Http\Requests\InsertContentsetRequest;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
 
 class SetController extends Controller
 {
@@ -23,26 +27,27 @@ class SetController extends Controller
     | Traits
     |--------------------------------------------------------------------------
     */
-    
+
     use ProductCommon;
     use RequestCommon;
     use MetaCommon;
-    
+    use FileCommon;
+
     /*
     |--------------------------------------------------------------------------
     | Properties
     |--------------------------------------------------------------------------
     */
-    
+
     protected $setting;
-    
+
     public function __construct(Websitesetting $setting)
     {
         $this->setting  = $setting->setting;
         $authException  = $this->getAuthExceptionArray();
         $this->callMiddlewares($authException);
     }
-    
+
     /**
      * @return array
      */
@@ -52,10 +57,10 @@ class SetController extends Controller
             "index",
             "show",
         ];
-        
+
         return $authException;
     }
-    
+
     /**
      * @param $authException
      */
@@ -94,7 +99,7 @@ class SetController extends Controller
 
 
     }
-    
+
     /**
      * Display a listing of the resource.
      *
@@ -105,11 +110,11 @@ class SetController extends Controller
      */
     public function index(ContentsetIndexRequest $request, ContentsetSearch $setSearch)
     {
-        
+
         $tags     = $request->get('tags');
         $filters  = $request->all();
         $pageName = 'setPage';
-        
+
         $sets = $setSearch->setPageName($pageName)
             ->get($filters);
 
@@ -137,7 +142,7 @@ class SetController extends Controller
 
                 $this->syncProducts($products , $contentSet);
             }
-            
+
             session()->put('success' , 'دسته با موفقیت درج شد . شماره دسته : '.$contentSet->id);
             return redirect()->back();
         }
@@ -199,9 +204,9 @@ class SetController extends Controller
         if ($request->expectsJson()) {
             return response()->json($set);
         }
-        
+
         $contents = $set->getActiveContents();
-        
+
         return view('listTest', compact('set', 'contents'));
     }
 
@@ -210,7 +215,7 @@ class SetController extends Controller
         $products = $this->makeProductCollection();
         return view('set.edit', compact('set', 'setProducts', 'products'));
     }
-    
+
     /**
      * Show the form for creating a new resource.
      *
@@ -221,21 +226,26 @@ class SetController extends Controller
         $products = $this->makeProductCollection();
         return view('set.create', compact('products'));
     }
-    
+
     public function indexContent (\App\Http\Requests\Request $request, Contentset $set){
         $contents = optional($set->contents)->sortBy('order');
         return view('set.listContents',compact('set','contents'));
     }
-    
+
     private function syncProducts(array $products , Contentset $contentset){
         $contentset->products()->sync($products);
     }
 
     private function storePhotoOfSet(Contentset $contentSet, $file): void
     {
-        $serverUrl = config('constants.DOWNLOAD_SERVER_PROTOCOL').config('constants.DOWNLOAD_SERVER_NAME');
-        $partialPath = '/upload/contentset/departmentlesson/';
-
-        $contentSet->photo = $serverUrl.$partialPath.$file->getClientOriginalName();
+        $extension = $file->getClientOriginalExtension();
+        $fileName  = basename($file->getClientOriginalName(), ".".$extension)."_".date("YmdHis").'.'.$extension;
+        $disk = Storage::disk(config('constants.DISK23'));
+        /** @var AlaaSftpAdapter $adaptor */
+        if ($disk->put($fileName, File::get($file))) {
+            $fullPath = $disk->getAdapter()->getRoot();
+            $partialPath = $this->getSubDirectoryInCDN($fullPath);
+            $contentSet->photo = config('constants.DOWNLOAD_SERVER_PROTOCOL').config('constants.DOWNLOAD_SERVER_NAME').'/' .$partialPath.$fileName;
+        }
     }
 }
