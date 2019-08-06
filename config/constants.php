@@ -219,6 +219,7 @@ return [
     'DISK20_CLOUD'                                => 'bookSftp',
     'DISK21'                                      => 'productImageSFTP',
     'DISK22'                                      => 'homeSlideShowPicSFTP',
+    'DISK23'                                      => 'setImageSFTP',
 
     'DISK_FREE_CONTENT'              => 'alaaCdnSFTP',
     'DISK_PRODUCT_CONTENT'           => 'productFileSFTP',
@@ -480,7 +481,7 @@ return [
     'ATTRIBUTE_TYPE_MAIN'                      => 1,
     'ATTRIBUTE_TYPE_EXTRA'                     => 2,
     'ATTRIBUTE_TYPE_INFORMATION'               => 3,
-    
+
     'JALALI_CALENDER'                          => [
                                 [
                                     'month'       => 'مهر',
