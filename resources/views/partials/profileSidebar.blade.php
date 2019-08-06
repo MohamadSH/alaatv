@@ -206,7 +206,7 @@
                         </button>
                         <button type="button" class="btn m-btn--air btn-outline-success btn-block" menu="profileMenuPage-sabteRotbe">
                             <i class="la la-trophy"></i>
-                            ثبت رتبه 97
+                            ثبت رتبه 98
                         </button>
                     </div>
                 @endif

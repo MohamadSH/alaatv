@@ -68,7 +68,7 @@
                     <a href="{{ action("Web\UserController@show",Auth::user()) }}#ثبت_رتبه" class="m-menu__link ">
                         <span class="m-menu__item-here"></span>
                         <i class="m-menu__link-icon fa fa-medal"></i>
-                        <span class="m-menu__link-text">ثبت رتبه 97</span>
+                        <span class="m-menu__link-text">ثبت رتبه 98</span>
                     </a>
                 </li>
             @endif
@@ -384,7 +384,7 @@
                                     </a>
                                 </li>
                                 @endpermission
-    
+
                                 <li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1">
                                     <a href="{{ action("Web\AfterLoginFormController@index") }}" class="m-menu__link ">
                                         <i class="m-menu__link-bullet m-menu__link-bullet--dot">
