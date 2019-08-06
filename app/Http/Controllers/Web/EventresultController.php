@@ -27,7 +27,7 @@ class EventresultController extends Controller
     public function index()
     {
         $eventresults = Eventresult::orderBy("rank");
-        
+
         $eventIds = Input::get("event_id");
         if (isset($eventIds)) {
             $eventresults = $eventresults->whereIn("event_id", $eventIds);
@@ -45,9 +45,9 @@ class EventresultController extends Controller
         else {
             $isSharifRegisterEvent = false;
         }
-        
+
         $eventResultStatuses = Eventresultstatus::pluck('displayName', 'id');
-        
+
         return view("event.result.index",
             compact("eventresults", "eventIds", "isSharifRegisterEvent", "eventResultStatuses"));
     }
@@ -56,11 +56,11 @@ class EventresultController extends Controller
     {
         $eventResult = new Eventresult();
         $eventResult->fill($request->all());
-        
+
         if ($request->has("participationCode")) {
             $eventResult->participationCode = encrypt($request->get("participationCode"));
         }
-        
+
         $user = $request->user();
         if ($request->has("user_id")) {
             if ($user->can(config('constants.INSET_EVENTRESULT_ACCESS'))) {
@@ -73,25 +73,25 @@ class EventresultController extends Controller
         else {
             $eventResult->user_id = $user->id;
         }
-        
+
         $eventResult->enableReportPublish = $request->get("enableReportPublish", 0);
-        
+
         $userUpdate = false;
         if ($request->has("major_id")) {
             $userUpdate     = true;
             $user->major_id = $request->get("major_id");
         }
-        
+
         if ($request->has("firstName")) {
             $userUpdate      = true;
             $user->firstName = $request->get("firstName");
         }
-        
+
         if ($request->has("lastName")) {
             $userUpdate     = true;
             $user->lastName = $request->get("lastName");
         }
-        
+
         if ($request->has("participationCode")) {
             if (strlen(preg_replace('/\s+/', '', $request->get("participationCode"))) == 0) {
                 $eventResult->participationCodeHash = null;
@@ -103,14 +103,14 @@ class EventresultController extends Controller
         else {
             $eventResult->participationCodeHash = null;
         }
-        
+
         if ($request->hasFile("reportFile")) {
             $file      = $request->reportFile;
             $extension = $file->getClientOriginalExtension();
             $fileName  = basename($file->getClientOriginalName(), ".".$extension)."_".date("YmdHis").'.'.$extension;
-            
+
             //            $oldReportFile = $eventResult->reportFile;
-            
+
             if (Storage::disk(config('constants.DISK14'))
                 ->put($fileName, File::get($file))) {
                 //                if (isset($oldReportFile)) Storage::disk(config('constants.DISK14'))->delete($oldReportFile);
@@ -127,7 +127,7 @@ class EventresultController extends Controller
             $done = true;
             $resultStatus      = Response::HTTP_OK;
             $participationCode = $eventResult->participationCode;
-            $successText = 'Result inserted successfully';
+            $successText = 'کارنامه با موفقیت ثبت شد';
         }else{
             $errorText = \Lang::get("responseText.Database error.");
         }
@@ -171,7 +171,7 @@ class EventresultController extends Controller
             if ($updateResult) {
                 session()->put("success", "تغییرات با موفقیت ثبت شد");
             }
-            
+
             return redirect()->back();
         }
     }
