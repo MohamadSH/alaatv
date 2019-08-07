@@ -96,7 +96,7 @@
             @endif
 
             @if (!Session::pull('success'))
-                {!! Form::open(['method'=>'POST' , 'action'=>'Web\UserController@registerForSanatiSharifHighSchool']) !!}
+                {!! Form::open(['method'=>'POST' , 'action'=>'Web\SharifSchoolController@registerForSanatiSharifHighSchool']) !!}
                 <input name = "firstName" style = "{{ $errors->has('firstName') ? ' border: solid red;' : '' }}" value = "{{(isset($firstName))?$firstName:old('firstName')}}" {{(isset($firstName))?"disabled":""}} type = "text" placeholder = "نام به فارسی">
 
                 <input name = "lastName" style = "{{ $errors->has('lastName') ? ' border: solid red;' : '' }}" value = "{{(isset($lastName))?$lastName:old('lastName')}}" {{(isset($lastName))?"disabled":""}} type = "text" placeholder = "نام خانوادگی به فارسی">
