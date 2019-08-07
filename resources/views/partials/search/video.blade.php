@@ -3,7 +3,7 @@
         <div class="a--devider-with-title">
             <div class="a--devider-title">
                 <a href="#" class="m-link m-link--primary">
-                    <i class="la la-video-camera"></i>
+                    <i class="fa fa-video"></i>
                     @if(isset($title))
                         {{ $title }}
                     @else

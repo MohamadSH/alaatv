@@ -16,11 +16,11 @@
         <div class = "m-portlet__head-caption">
             <div class = "m-portlet__head-title">
 						<span class = "m-portlet__head-icon m--hide">
-							<i class = "flaticon-statistics"></i>
+							<i class = "fa fa-chart-line"></i>
 						</span>
                 <h2 class = "m-portlet__head-label m-portlet__head-label--warning">
                     <span>
-                        <i class = "flaticon-cogwheel"></i>
+                        <i class = "fa fa-cogs"></i>
                         ویرایش اطلاعات شخصی
                     </span>
                 </h2>
@@ -36,7 +36,7 @@
             @if(!$user->hasVerifiedMobile() || !isset($user->photo) || strcmp($user->photo, config('constants.PROFILE_DEFAULT_IMAGE')) == 0)
                 <div class = "m-alert m-alert--icon alert alert-danger" role = "alert">
                     <div class = "m-alert__icon">
-                        <i class = "flaticon-danger"></i>
+                        <i class = "fa fa-exclamation-triangle"></i>
                     </div>
                     <div class = "m-alert__text">
                         <strong>
@@ -56,7 +56,7 @@
         @if(isset($text2))
             <div class = "m-alert m-alert--icon alert alert-warning" role = "alert">
                 <div class = "m-alert__icon">
-                    <i class = "flaticon-danger"></i>
+                    <i class = "fa fa-exclamation-triangle"></i>
                 </div>
                 <div class = "m-alert__text">
                     <strong>توجه!</strong>
@@ -78,7 +78,7 @@
                         <input type = "text" name = "firstName" id = "firstName" class = "form-control m-input m-input--air" placeholder = "نام" @if(isset($user->firstName))value = "{{ $user->firstName }}"@endif>
                         <span class = "m-input-icon__icon m-input-icon__icon--left">
                         <span>
-                            <i class = "la la-user"></i>
+                            <i class = "fa fa-user"></i>
                         </span>
                     </span>
                     </div>
@@ -91,7 +91,7 @@
                         <input type = "text" name = "lastName" id = "lastName" class = "form-control m-input m-input--air" placeholder = "نام خانوادگی" @if(isset($user->lastName))value = "{{ $user->lastName }}"@endif>
                         <span class = "m-input-icon__icon m-input-icon__icon--left">
                         <span>
-                            <i class = "la la-user"></i>
+                            <i class = "fa fa-user"></i>
                         </span>
                     </span>
                     </div>
@@ -103,7 +103,7 @@
                 <input type = "text" name = "province" id = "province" class = "form-control m-input m-input--air" placeholder = "استان" @if(isset($user->province))value = "{{ $user->province }}"@endif>
                 <span class = "m-input-icon__icon m-input-icon__icon--left">
                         <span>
-                            <i class = "flaticon-placeholder"></i>
+                            <i class = "fa fa-location-arrow"></i>
                         </span>
                     </span>
             </div>
@@ -114,7 +114,7 @@
                 <input type = "text" name = "city" id = "city" class = "form-control m-input m-input--air" placeholder = "شهر" @if(isset($user->city))value = "{{ $user->city }}"@endif>
                 <span class = "m-input-icon__icon m-input-icon__icon--left">
                         <span>
-                            <i class = "flaticon-placeholder"></i>
+                            <i class = "fa fa-location-arrow"></i>
                         </span>
                     </span>
             </div>
@@ -125,7 +125,7 @@
                 <input type = "text" name = "address" id = "address" class = "form-control m-input m-input--air" placeholder = "آدرس محل سکونت" @if(isset($user->address))value = "{{ $user->address }}"@endif>
                 <span class = "m-input-icon__icon m-input-icon__icon--left">
                         <span>
-                            <i class = "flaticon-map-location"></i>
+                            <i class = "fa fa-location-arrow"></i>
                         </span>
                     </span>
             </div>
@@ -136,7 +136,7 @@
                 <input type = "text" dir = "ltr" name = "postalCode" id = "postalCode" class = "form-control m-input m-input--air" placeholder = "کد پستی" @if(isset($user->postalCode))value = "{{ $user->postalCode }}"@endif>
                 <span class = "m-input-icon__icon m-input-icon__icon--left">
                         <span>
-                            <i class = "flaticon-mail-1"></i>
+                            <i class = "fa fa-envelope"></i>
                         </span>
                     </span>
             </div>
@@ -147,7 +147,7 @@
                 {!! Form::select('gender_id',$genders,null,['class' => 'form-control m-input m-input--air', 'id' => 'gender_id']) !!}
                 <span class = "m-input-icon__icon m-input-icon__icon--left">
                         <span>
-                            <i class = "la la-user"></i>
+                            <i class = "fa fa-user"></i>
                         </span>
                     </span>
             </div>
@@ -161,7 +161,7 @@
                     <input name = "birthdateAlt" id = "birthdateAlt" type = "hidden"/>
                     <span class = "m-input-icon__icon m-input-icon__icon--left">
                             <span>
-                                <i class = "flaticon-calendar-1"></i>
+                                <i class = "fa fa-calendar-alt"></i>
                             </span>
                         </span>
                 </div>
@@ -174,7 +174,7 @@
                 <input type = "text" name = "school" id = "school" class = "form-control m-input m-input--air" placeholder = "مدرسه" @if(isset($user->school))value = "{{ $user->school }}"@endif>
                 <span class = "m-input-icon__icon m-input-icon__icon--left">
                         <span>
-                            <i class = "la la-university"></i>
+                            <i class = "fa fa-university"></i>
                         </span>
                     </span>
             </div>
@@ -185,7 +185,7 @@
                 {!! Form::select('major_id',$majors,null,['class' => 'form-control m-input m-input--air', 'id' => 'major_id']) !!}
                 <span class = "m-input-icon__icon m-input-icon__icon--left">
                         <span>
-                            <i class = "la la-mortar-board"></i>
+                            <i class = "fa fa-graduation-cap"></i>
                         </span>
                     </span>
             </div>
@@ -198,7 +198,7 @@
                     <input type = "text" name = "introducedBy" id = "introducedBy" class = "form-control m-input m-input--air" placeholder = "..." @if(isset($user->introducedBy))value = "{{ $user->introducedBy }}"@endif>
                     <span class = "m-input-icon__icon m-input-icon__icon--left">
                             <span>
-                                <i class = "la la-mortar-board"></i>
+                                <i class = "fa fa-graduation-cap"></i>
                             </span>
                         </span>
                 </div>
@@ -211,7 +211,7 @@
                 <input type = "text" dir = "ltr" name = "email" id = "email" class = "form-control m-input m-input--air" placeholder = "ایمیل" @if(isset($user->email))value = "{{ $user->email }}"@endif>
                 <span class = "m-input-icon__icon m-input-icon__icon--left">
                         <span>
-                            <i class = "flaticon-mail"></i>
+                            <i class = "fa fa-envelope"></i>
                         </span>
                     </span>
             </div>

@@ -147,7 +147,7 @@
                                 <div class = "row lastSection">
                                     <div class = "col-12 col-sm-6 col-md-3 col-lg-3 lastSectionItem">
                                         <div class = "icon">
-                                            <i class = "la la-lightbulb-o"></i>
+                                            <i class = "fa fa-lightbulb"></i>
                                         </div>
                                         <div class = "text">
                                             <h3>مفهومی</h3>
@@ -155,7 +155,7 @@
                                     </div>
                                     <div class = "col-12 col-sm-6 col-md-3 col-lg-3 lastSectionItem">
                                         <div class = "icon">
-                                            <i class = "la la-road"></i>
+                                            <i class = "fa fa-road"></i>
                                         </div>
                                         <div class = "text">
                                             <h3>سبقت</h3>
@@ -163,7 +163,7 @@
                                     </div>
                                     <div class = "col-12 col-sm-6 col-md-3 col-lg-3 lastSectionItem">
                                         <div class = "icon">
-                                            <i class = "flaticon-edit-1"></i>
+                                            <i class = "fa fa-edit-1"></i>
                                         </div>
                                         <div class = "text">
                                             <h3>جزوه</h3>

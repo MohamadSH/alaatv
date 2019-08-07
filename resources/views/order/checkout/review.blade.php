@@ -165,7 +165,7 @@
                                                                data-variant="-"
                                                                data-productid="{{ $simpleOrderProductItem->product->id }}"
                                                                class="btn btn-default m-btn m-btn--icon btn-sm m-btn--icon-only m-btn--pill btnRemoveOrderproduct">
-                                                                <i class="la la-close"></i>
+                                                                <i class="fa fa-times"></i>
                                                             </a>
                                                         </div>
                                                     </div>
@@ -287,7 +287,7 @@
                                                                     data-variant="-"
                                                                     data-productid="{{ $orderProductItemChild->product->id }}"
                                                                     class="btn btn-default m-btn m-btn--icon btn-sm m-btn--icon-only m-btn--pill btnRemoveOrderproduct btnRemoveOrderproduct-child">
-                                                                <i class="la la-close"></i>
+                                                                <i class="fa fa-times"></i>
                                                             </button>
                                                             
                                                             <div class="childTitle">
@@ -471,7 +471,7 @@
                                         <div class="row m-row--no-padding align-items-center">
                                             <div class="col">
                                                 <h3 class="m-widget1__title">
-                                                    <i class="la la-money m--icon-font-size-lg3"></i>
+                                                    <i class="fa fa-money-bill-wave m--icon-font-size-lg3"></i>
                                                     پرداخت از درگاه بانک:
                                                 </h3>
                                                 <span class="m-widget1__desc"></span>
@@ -524,7 +524,7 @@
                                         <div class="row m-row--no-padding align-items-center">
                                             <div class="col">
                                                 <h3 class="m-widget1__title">
-                                                    <i class="la la-money m--icon-font-size-lg3"></i>
+                                                    <i class="fa fa-money-bill-wave m--icon-font-size-lg3"></i>
                                                     مبلغ قابل پرداخت:
                                                 </h3>
                                                 <span class="m-widget1__desc"></span>
@@ -607,7 +607,7 @@
             <div class="col">
                 <div class="m-alert m-alert--icon alert alert-warning empteCartAlert" role="alert">
                     <div class="m-alert__icon">
-                        <i class="la la-warning"></i>
+                        <i class="fa fa-exclamation-triangle"></i>
                     </div>
                     <div class="m-alert__text text-center">
                         <strong>سبد خرید شما خالیست!</strong>

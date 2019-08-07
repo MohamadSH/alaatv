@@ -8,7 +8,7 @@
     <nav aria-label = "breadcrumb">
         <ol class = "breadcrumb">
             <li class = "breadcrumb-item">
-                <i class = "flaticon-home-2 m--padding-right-5"></i>
+                <i class = "fa fa-home m--padding-right-5"></i>
                 <a class = "m-link" href = "{{action("Web\IndexPageController")}}">@lang('page.Home')</a>
             </li>
             <li class = "breadcrumb-item" aria-current = "page">
@@ -39,7 +39,7 @@
                     <div class = "m-portlet__head-caption">
                         <div class = "m-portlet__head-title">
                             <span class = "m-portlet__head-icon">
-                                <i class = "la la-photo"></i>
+                                <i class = "fa fa-image"></i>
                             </span>
                             <h3 class = "m-portlet__head-text">
                                 جدول اسلایدهای صفحه اصلی
@@ -50,7 +50,7 @@
                         <ul class = "m-portlet__nav">
                             <li class = "m-portlet__nav-item">
                                 <a href = "{{action("Web\IndexPageController")}}" class = "m-portlet__nav-link m-portlet__nav-link--icon">
-                                    <i class = "flaticon-home-2"></i>
+                                    <i class = "fa fa-home"></i>
                                     رفتن به صفحه ی اصلی
                                 </a>
                             </li>

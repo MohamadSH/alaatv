@@ -8,7 +8,7 @@
     <nav aria-label = "breadcrumb">
         <ol class = "breadcrumb">
             <li class = "breadcrumb-item">
-                <i class = "flaticon-home-2 m--padding-right-5"></i>
+                <i class = "fa fa-home m--padding-right-5"></i>
                 <a class = "m-link" href = "{{action("Web\IndexPageController")}}">@lang('page.Home')</a>
             </li>
             <li class = "breadcrumb-item active" aria-current = "page">
@@ -39,31 +39,31 @@
                         <ul class = "nav nav-tabs m-tabs-line m-tabs-line--primary m-tabs-line--2x" role = "tablist">
                             <li class = "nav-item m-tabs__item">
                                 <a class = "nav-link m-tabs__link active" data-toggle = "tab" href = "#m_tabs_6_1" role = "tab">
-                                    <i class = "la la-cog"></i>
+                                    <i class = "fa fa-cogs"></i>
                                     مشخصات سایت
                                 </a>
                             </li>
                             <li class = "nav-item m-tabs__item">
                                 <a class = "nav-link m-tabs__link" data-toggle = "tab" href = "#m_tabs_6_2" role = "tab">
-                                    <i class = "la la-briefcase"></i>
+                                    <i class = "fa fa-briefcase"></i>
                                     SEO صفحه اصلی
                                 </a>
                             </li>
                             <li class = "nav-item m-tabs__item">
                                 <a class = "nav-link m-tabs__link" data-toggle = "tab" href = "#m_tabs_6_3" role = "tab">
-                                    <i class = "la la-bell-o"></i>
+                                    <i class = "fa fa-bell"></i>
                                     مشخصات شعبه اصلی
                                 </a>
                             </li>
                             <li class = "nav-item m-tabs__item">
                                 <a class = "nav-link m-tabs__link" data-toggle = "tab" href = "#m_tabs_6_4" role = "tab">
-                                    <i class = "la la-bell-o"></i>
+                                    <i class = "fa fa-bell"></i>
                                     شبکه های اجتماعی
                                 </a>
                             </li>
                             <li class = "nav-item m-tabs__item">
                                 <a class = "nav-link m-tabs__link" data-toggle = "tab" href = "#m_tabs_6_5" role = "tab">
-                                    <i class = "la la-bell-o"></i>
+                                    <i class = "fa fa-bell"></i>
                                     لوگو
                                 </a>
                             </li>

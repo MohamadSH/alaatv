@@ -239,6 +239,7 @@ function loadCarousels() {
                 // autoplayHoverPause: true,
 
 
+                stagePadding: 30,
                 center: false,
                 loop: false,
                 lazyLoad:false,
