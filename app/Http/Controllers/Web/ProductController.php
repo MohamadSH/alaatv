@@ -2,17 +2,14 @@
 
 namespace App\Http\Controllers\Web;
 
-use SEO;
 use Exception;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\{Request, Response};
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
-use Illuminate\Support\{Arr, Collection, Facades\File, Facades\Cache, Facades\Input, Facades\Storage};
+use Illuminate\Support\{Arr, Collection, Facades\File, Facades\Storage};
 use App\{Adapter\AlaaSftpAdapter,
     Bon,
-    Block,
     Product,
-    Attribute,
     Attributeset,
     Attributetype,
     Traits\FileCommon,
@@ -28,7 +25,6 @@ use App\{Adapter\AlaaSftpAdapter,
     Traits\RequestCommon,
     Traits\CharacterCommon,
     Classes\SEO\SeoDummyTags,
-    Collection\BlockCollection,
     Classes\Search\ProductSearch,
     Http\Requests\EditProductRequest,
     Http\Requests\ProductIndexRequest,
