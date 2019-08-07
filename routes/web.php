@@ -8,6 +8,7 @@ use App\Http\Controllers\Web\EmployeetimesheetController;
 use App\Http\Controllers\Web\ErrorPageController;
 use App\Http\Controllers\Web\HomeController;
 use App\Http\Controllers\Web\LotteryController;
+use App\Http\Controllers\Web\ProductLandingController;
 use App\Http\Controllers\Web\SharifSchoolController;
 use App\Http\Controllers\Web\LiveController;
 use App\Http\Controllers\Web\PaymentStatusController;
@@ -90,38 +91,18 @@ Route::group(['prefix' => 'orderproduct'], function () {
 });
 
 Route::group(['prefix' => 'landing'], function () {
-
-    Route::get('7' , 'Web\ProductController@landing7')->name('landing.7');
-    Route::get('9' , 'Web\ProductController@landing9')->name('landing.9');
-    Route::get('10' , 'Web\ProductController@landing10')->name('landing.10');
-
-    Route::get('8' , 'Web\ProductController@landing8')->name('landing.8');
-
-    Route::get('6' , [
-        'as'   => 'landing.6',
-        'uses' => 'Web\ProductController@landing6',
-    ]);
-    Route::get('5' , [
-        'as'   => 'landing.5',
-        'uses' => 'Web\ProductController@landing5',
-    ]);
-    Route::get('1' , [
-        'as'   => 'landing.1',
-        'uses' => 'Web\ProductController@landing1',
-    ]);
-    Route::get('2' , [
-        'as'   => 'landing.2',
-        'uses' => 'Web\ProductController@landing2',
-    ]);
-    Route::get('3', [
-        'as'   => 'landing.3',
-        'uses' => 'Web\ProductController@landing3',
-    ]);
-    Route::get('4',  [
-        'as'   => 'landing.4',
-        'uses' => 'Web\ProductController@landing4',
-    ]);
+    Route::get('1' , [ProductLandingController::class, 'landing1'])->name('landing.1');
+    Route::get('2' , [ProductLandingController::class, 'landing2'])->name('landing.2');
+    Route::get('3' , [ProductLandingController::class, 'landing3'])->name('landing.3');
+    Route::get('4' , [ProductLandingController::class, 'landing4'])->name('landing.4');
+    Route::get('5' , [ProductLandingController::class, 'landing5'])->name('landing.5');
+    Route::get('6' , [ProductLandingController::class, 'landing6'])->name('landing.6');
+    Route::get('7' , [ProductLandingController::class, 'landing7'])->name('landing.7');
+    Route::get('8' , [ProductLandingController::class, 'landing8'])->name('landing.8');
+    Route::get('9' , [ProductLandingController::class, 'landing9'])->name('landing.9');
+    Route::get('10', [ProductLandingController::class, 'landing10'])->name('landing.10');
 });
+
 Route::group(['middleware' => 'auth'], function () {
 
     Route::get('logout', '\App\Http\Controllers\Auth\LoginController@logout');
@@ -313,16 +294,12 @@ Route::resource('block', 'Web\BlockController');
 Auth::routes(['verify' => true]);
 
 Route::group(['prefix' => 'mobile'], function () {
-    Route::get("verify", "Web\MobileVerificationController@show")
-        ->name('mobile.verification.notice');
-    Route::post("verify", "Web\MobileVerificationController@verify")
-        ->name('mobile.verification.verify');
-    Route::get("resend", "Web\MobileVerificationController@resend")
-        ->name('mobile.verification.resend');
+    Route::get("verify", "Web\MobileVerificationController@show")->name('mobile.verification.notice');
+    Route::post("verify", "Web\MobileVerificationController@verify")->name('mobile.verification.verify');
+    Route::get("resend", "Web\MobileVerificationController@resend")->name('mobile.verification.resend');
 });
 Route::post("cd3b472d9ba631a73cb7b66ba513df53", "Web\CouponController@generateRandomCoupon");
 
 Route::get("tree", "Web\TopicsTreeController@lernitoTree");
 Route::get("tree/getArrayString/{lnid}", "Web\TopicsTreeController@getTreeInPHPArrayString");
-Route::any('goToPaymentRoute/{paymentMethod}/{device}/', '\\'.RedirectAPIUserToPaymentRoute::class)
-    ->name('redirectToPaymentRoute');
+Route::any('goToPaymentRoute/{paymentMethod}/{device}/', '\\'.RedirectAPIUserToPaymentRoute::class)->name('redirectToPaymentRoute');

@@ -974,7 +974,7 @@ class UserController extends Controller
 
         if ($validOrders->get()
             ->isEmpty()) {
-            return redirect(action("Web\ProductController@landing2"));
+            return redirect(action("Web\ProductLandingController@landing2"));
         }
         $unPaidOrders = $validOrders->get();
         $paidOrder    = $validOrders->whereIn("paymentstatus_id", [
