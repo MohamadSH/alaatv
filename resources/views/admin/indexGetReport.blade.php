@@ -10,7 +10,7 @@
     <nav aria-label = "breadcrumb">
         <ol class = "breadcrumb">
             <li class = "breadcrumb-item">
-                <i class = "flaticon-home-2 m--padding-right-5"></i>
+                <i class = "fa fa-home m--padding-right-5"></i>
                 <a class = "m-link" href = "{{action("Web\IndexPageController")}}">@lang('page.Home')</a>
             </li>
             <li class = "breadcrumb-item active" aria-current = "page">
@@ -48,22 +48,22 @@
                         <ul class = "m-portlet__nav">
                             <li class = "m-portlet__nav-item">
                                 <a href = "#" m-portlet-tool = "reload" class = "m-portlet__nav-link m-portlet__nav-link--icon reload">
-                                    <i class = "la la-refresh"></i>
+                                    <i class = "fa fa-redo"></i>
                                 </a>
                             </li>
                             <li class = "m-portlet__nav-item">
                                 <a href = "#" m-portlet-tool = "toggle" class = "m-portlet__nav-link m-portlet__nav-link--icon">
-                                    <i class = "la la-angle-down"></i>
+                                    <i class = "fa fa-angle-down"></i>
                                 </a>
                             </li>
                             <li class = "m-portlet__nav-item">
                                 <a href = "#" m-portlet-tool = "fullscreen" class = "m-portlet__nav-link m-portlet__nav-link--icon" id = "report-expand">
-                                    <i class = "la la-expand"></i>
+                                    <i class = "fa fa-expand-arrows-alt"></i>
                                 </a>
                             </li>
                             <li class = "m-portlet__nav-item">
                                 <a href = "#" m-portlet-tool = "remove" class = "m-portlet__nav-link m-portlet__nav-link--icon">
-                                    <i class = "la la-close"></i>
+                                    <i class = "fa fa-times"></i>
                                 </a>
                             </li>
                         </ul>
@@ -145,22 +145,22 @@
                         <ul class = "m-portlet__nav">
                             <li class = "m-portlet__nav-item">
                                 <a href = "#" m-portlet-tool = "reload" class = "m-portlet__nav-link m-portlet__nav-link--icon reload">
-                                    <i class = "la la-refresh"></i>
+                                    <i class = "fa fa-redo"></i>
                                 </a>
                             </li>
                             <li class = "m-portlet__nav-item">
                                 <a href = "#" m-portlet-tool = "toggle" class = "m-portlet__nav-link m-portlet__nav-link--icon">
-                                    <i class = "la la-angle-down"></i>
+                                    <i class = "fa fa-angle-down"></i>
                                 </a>
                             </li>
                             <li class = "m-portlet__nav-item">
                                 <a href = "#" m-portlet-tool = "fullscreen" class = "m-portlet__nav-link m-portlet__nav-link--icon" id = "bookSellingReport-expand">
-                                    <i class = "la la-expand"></i>
+                                    <i class = "fa fa-expand-arrows-alt"></i>
                                 </a>
                             </li>
                             <li class = "m-portlet__nav-item">
                                 <a href = "#" m-portlet-tool = "remove" class = "m-portlet__nav-link m-portlet__nav-link--icon">
-                                    <i class = "la la-close"></i>
+                                    <i class = "fa fa-times"></i>
                                 </a>
                             </li>
                         </ul>

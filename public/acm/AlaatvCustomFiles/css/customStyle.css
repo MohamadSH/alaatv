@@ -273,6 +273,13 @@
     animation: a--pulse 1.2s infinite;
 }
 
+[direction="rtl"] .m-aside-menu .m-menu__nav > .m-menu__item > .m-menu__heading .m-menu__ver-arrow.fa.fa-angle-left::before,
+[direction="rtl"] .m-aside-menu .m-menu__nav > .m-menu__item > .m-menu__link .m-menu__ver-arrow.fa.fa-angle-left::before,
+[direction="rtl"] .m-aside-menu .m-menu__nav > .m-menu__item .m-menu__submenu .m-menu__item > .m-menu__heading .m-menu__ver-arrow.fa.fa-angle-left::before,
+[direction="rtl"] .m-aside-menu .m-menu__nav > .m-menu__item .m-menu__submenu .m-menu__item > .m-menu__link .m-menu__ver-arrow.fa.fa-angle-left::before{
+    content: "\f104" !important;
+}
+
 /*media query*/
 @media only screen and (max-width: 1024px) {
     .m-header-menu .m-menu__nav > .m-menu__item .m-menu__submenu > .m-menu__subnav > .m-menu__item {

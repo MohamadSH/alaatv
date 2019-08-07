@@ -26,7 +26,7 @@
                                 <div class="m-portlet__head-title">
                                     <h2 class="m-portlet__head-label m-portlet__head-label--accent a--white-space-nowrap">
                                         <span>
-                                            <i class="la la-bank"></i>
+                                            <i class="fa fa-dollar-sign"></i>
                                             روش پرداخت
                                         </span>
                                     </h2>

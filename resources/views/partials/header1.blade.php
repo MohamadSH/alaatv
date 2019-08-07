@@ -49,7 +49,7 @@
             <div class="m-stack__item m-stack__item--fluid m-header-head" id="m_header_nav">
                 <!-- BEGIN: Horizontal Menu -->
                 <button class="m-aside-header-menu-mobile-close  m-aside-header-menu-mobile-close--skin-dark " id="m_aside_header_menu_mobile_close_btn">
-                    <i class="la la-close"></i>
+                    <i class="fa fa-times"></i>
                 </button>
                 <div id="m_header_menu" class="m-header-menu m-aside-header-menu-mobile m-aside-header-menu-mobile--offcanvas  m-header-menu--skin-dark m-header-menu--submenu-skin-light m-aside-header-menu-mobile--skin-dark m-aside-header-menu-mobile--submenu-skin-dark ">
                     <ul class="m-menu__nav ">
@@ -57,8 +57,8 @@
                             <a href="javascript:" class="m-menu__link m-menu__toggle" title="فیلم و جزوه دهم آلاء">
                                 <i class="m-menu__link-icon flaticon-layers"></i>
                                 <span class="m-menu__link-text">دهم</span>
-                                <i class="m-menu__hor-arrow la la-angle-down"></i>
-                                <i class="m-menu__ver-arrow la la-angle-right"></i>
+                                <i class="m-menu__hor-arrow fa fa-angle-down"></i>
+                                <i class="m-menu__ver-arrow fa fa-angle-left"></i>
                             </a>
                             <div class="m-menu__submenu m-menu__submenu--classic m-menu__submenu--left a-major-menu__submenu">
                                 <ul class="m-menu__subnav">
@@ -102,8 +102,8 @@
                             <a href="javascript:" class="m-menu__link m-menu__toggle" title="فیلم و جزوه یازدهم آلاء">
                                 <i class="m-menu__link-icon flaticon-layers"></i>
                                 <span class="m-menu__link-text">یازدهم</span>
-                                <i class="m-menu__hor-arrow la la-angle-down"></i>
-                                <i class="m-menu__ver-arrow la la-angle-right"></i>
+                                <i class="m-menu__hor-arrow fa fa-angle-down"></i>
+                                <i class="m-menu__ver-arrow fa fa-angle-left"></i>
                             </a>
                             <div class="m-menu__submenu m-menu__submenu--classic m-menu__submenu--left a-major-menu__submenu">
                                 <ul class="m-menu__subnav">
@@ -154,8 +154,8 @@
                                         </span>
                                     </span>
                                 </span>
-                                <i class="m-menu__hor-arrow la la-angle-down"></i>
-                                <i class="m-menu__ver-arrow la la-angle-right"></i>
+                                <i class="m-menu__hor-arrow fa fa-angle-down"></i>
+                                <i class="m-menu__ver-arrow fa fa-angle-left"></i>
                             </a>
                             <div class="m-menu__submenu m-menu__submenu--classic m-menu__submenu--left a-major-menu__submenu">
                                 <ul class="m-menu__subnav">
@@ -217,8 +217,8 @@
                                         </span>
                                     </span>
                                 </span>
-                                <i class="m-menu__hor-arrow la la-angle-down"></i>
-                                <i class="m-menu__ver-arrow la la-angle-right"></i>
+                                <i class="m-menu__hor-arrow fa fa-angle-down"></i>
+                                <i class="m-menu__ver-arrow fa fa-angle-left"></i>
                             </a>
                             <div class="m-menu__submenu m-menu__submenu--classic m-menu__submenu--left a-major-menu__submenu">
                                 <ul class="m-menu__subnav">
@@ -279,8 +279,8 @@
                                         </span>
                                     </span>
                                 </span>
-                                <i class="m-menu__hor-arrow la la-angle-down"></i>
-                                <i class="m-menu__ver-arrow la la-angle-right"></i>
+                                <i class="m-menu__hor-arrow fa fa-angle-down"></i>
+                                <i class="m-menu__ver-arrow fa fa-angle-left"></i>
                             </a>
                             <div class="m-menu__submenu m-menu__submenu--classic m-menu__submenu--left a-major-menu__submenu">
                                 <ul class="m-menu__subnav">
@@ -360,7 +360,7 @@
                         <ul class="m-topbar__nav m-nav m-nav--inline">
     
                             <li class="m-nav__item">
-                                <a href="{{ route('live') }}" class="m-nav__link">
+                                <a href="{{ route('live') }}" class="m-nav__link" title="پخش زنده">
                                     <span class="m-nav__link-icon">
                                         <span class="m-nav__link-icon-wrapper">
                                             <img class="a--full-width lazy-image
@@ -377,6 +377,7 @@
                                                  @endif
                                                  width="35"
                                                  height="40"
+                                                 alt="livePageIcon"
                                             >
                                         </span>
                                     </span>
@@ -386,7 +387,11 @@
                             <li class="m-nav__item m-dropdown m-dropdown--large m-dropdown--arrow m-dropdown--align-right m-dropdown--mobile-full-width m-dropdown--skin-light	m-list-search m-list-search--skin-light" m-dropdown-toggle="click" id="m_quicksearch" m-quicksearch-mode="dropdown" m-dropdown-persistent="1">
 
                                 <a href="#" class="m-nav__link m-dropdown__toggle">
-                                    <span class="m-nav__link-icon"><span class="m-nav__link-icon-wrapper"><i class="flaticon-search-1"></i></span></span>
+                                    <span class="m-nav__link-icon">
+                                        <span class="m-nav__link-icon-wrapper">
+                                            <i class="fa fa-search"></i>
+                                        </span>
+                                    </span>
                                 </a>
                                 <div class="m-dropdown__wrapper a-quick-search">
                                     <span class="m-dropdown__arrow m-dropdown__arrow--center"></span>
@@ -398,7 +403,7 @@
                                                         <input id="m_quicksearch_input" autocomplete="off" type="text" name="q" class="m-list-search__form-input" value="" placeholder="دنبال چی می گردی ؟....">
                                                     </span>
                                                     <span class="m-list-search__form-icon-close" id="m_quicksearch_close">
-                                                        <i class="la la-remove"></i>
+                                                        <i class="fa fa-trash-alt"></i>
                                                     </span>
                                                 </div>
                                             </form>
@@ -427,7 +432,7 @@
                                 <li class="m-nav__item">
                                     <a href="{{ action("Web\UserController@userOrders") }}" class="m-nav__link">
                                         <span class="m-nav__link-icon">
-                                            <span class="m-nav__link-icon-wrapper"><i class="flaticon-coins"></i></span>
+                                            <span class="m-nav__link-icon-wrapper"><i class="fa fa-wallet"></i></span>
                                             @if(Auth::user()->getTotalWalletBalance() > 0)
                                             <span class="m-nav__link-badge m-badge  m-badge--accent">{{ number_format(Auth::user()->getTotalWalletBalance()) }}</span>
                                             @endif
@@ -437,7 +442,7 @@
                                 <li class="m-nav__item">
                                     <a href="{{ action("Web\OrderController@checkoutReview") }}" class="m-nav__link">
                                         <span class="m-nav__link-icon">
-                                            <span class="m-nav__link-icon-wrapper"><i class="flaticon-shopping-basket"></i></span>
+                                            <span class="m-nav__link-icon-wrapper"><i class="fa fa-shopping-cart"></i></span>
                                             @if(Auth::user()->numberOfProductsInBasket > 0)
                                                 <span class="shoppingBasketOfUserNumber m-nav__link-badge m-badge m-badge--danger">{{ Auth::user()->numberOfProductsInBasket }}</span>
                                             @endif
@@ -448,13 +453,7 @@
                                 <li class="m-nav__item m-topbar__user-profile  m-dropdown m-dropdown--medium m-dropdown--arrow  m-dropdown--align-right m-dropdown--mobile-full-width m-dropdown--skin-light" m-dropdown-toggle="click">
                                     <a href="#" class="m-nav__link m-dropdown__toggle">
                                         <span class="m-topbar__userpic">
-                                            <img src="{{ $profileImage }}" class="m--img-rounded m--marginless m--img-centered" alt="عکس پروفایل"/>
-                                        </span>
-                                        <span class="m-nav__link-icon m-topbar__usericon  m--hide">
-                                            <span class="m-nav__link-icon-wrapper"><i class="flaticon-user-ok"></i></span>
-                                        </span>
-                                        <span class="m-topbar__username m--hide">
-                                            {{ Auth::user()->shortName }}
+                                            <img src="{{ $profileImage }}" class="m--img-rounded m--marginless m--img-centered" alt="عکس پروفایل" width="41" height="41"/>
                                         </span>
                                     </a>
                                     <div class="m-dropdown__wrapper">
@@ -479,7 +478,7 @@
                                                         </li>
                                                         <li class="m-nav__item">
                                                             <a href="{{ action("Web\UserController@show",Auth::user()) }}" class="m-nav__link">
-                                                                <i class="m-nav__link-icon flaticon-profile-1"></i>
+                                                                <i class="m-nav__link-icon fa fa-user-circle"></i>
                                                                 <span class="m-nav__link-title">
                                                                     <span class="m-nav__link-wrap">
                                                                         <span class="m-nav__link-text">پروفایل</span>
@@ -489,18 +488,23 @@
                                                         </li>
                                                         <li class="m-nav__item">
                                                             <a href="{{ action("Web\UserController@userProductFiles")  }}" class="m-nav__link">
-                                                                <i class="m-nav__link-icon flaticon-share"></i>
+                                                                <i class="m-nav__link-icon fa fa-cloud-download-alt"></i>
                                                                 <span class="m-nav__link-text">فیلم ها و جزوه های من</span>
                                                             </a>
                                                         </li>
                                                         <li class="m-nav__item">
                                                             <a href="{{ action("Web\UserController@userOrders")  }}" class="m-nav__link">
-                                                                <i class="m-nav__link-icon flaticon-chat-1"></i>
+                                                                <i class="m-nav__link-icon fa fa-receipt"></i>
                                                                 <span class="m-nav__link-text">سفارشهای من</span>
                                                             </a>
                                                         </li>
                                                         <li class="m-nav__separator m-nav__separator--fit"></li>
-                                                        <li class="m-nav__item"><a href="{{ url('/logout') }}" class="btn m-btn--pill btn-secondary m-btn m-btn--custom m-btn--label-brand m-btn--bolder">خروج</a></li>
+                                                        <li class="m-nav__item">
+                                                            <a href="{{ url('/logout') }}" class="btn m-btn--pill btn-secondary m-btn m-btn--custom m-btn--label-brand m-btn--bolder">
+                                                                <i class="fa fa-sign-out-alt"></i>
+                                                                خروج
+                                                            </a>
+                                                        </li>
                                                     </ul>
                                                 </div>
                                             </div>
@@ -513,7 +517,7 @@
                                     <a href="{{ route("login") }}" class="m-nav__link">
                                         <span class="a--login-title">ورود/ثبت نام</span>
                                         <span class="m-nav__link-icon">
-                                        <i class="la la-sign-in"></i>
+                                        <i class="fa fa-sign-in-alt"></i>
                                     </span>
                                     </a>
                                 </li>

@@ -47,22 +47,22 @@
                         <ul class="m-portlet__nav">
                             <li class="m-portlet__nav-item">
                                 <a href="#" m-portlet-tool="reload" class="m-portlet__nav-link m-portlet__nav-link--icon reload">
-                                    <i class="la la-refresh"></i>
+                                    <i class="fa fa-redo"></i>
                                 </a>
                             </li>
                             <li class="m-portlet__nav-item">
                                 <a href="#" m-portlet-tool="toggle" class="m-portlet__nav-link m-portlet__nav-link--icon">
-                                    <i class="la la-angle-down"></i>
+                                    <i class="fa fa-angle-down"></i>
                                 </a>
                             </li>
                             <li class="m-portlet__nav-item">
                                 <a href="#" m-portlet-tool="fullscreen" class="m-portlet__nav-link m-portlet__nav-link--icon" id="content-expand">
-                                    <i class="la la-expand"></i>
+                                    <i class="fa fa-expand-arrows-alt"></i>
                                 </a>
                             </li>
                             <li class="m-portlet__nav-item">
                                 <a href="#" m-portlet-tool="remove" class="m-portlet__nav-link m-portlet__nav-link--icon">
-                                    <i class="la la-close"></i>
+                                    <i class="fa fa-times"></i>
                                 </a>
                             </li>
                         </ul>
@@ -185,22 +185,22 @@
                         <ul class="m-portlet__nav">
                             <li class="m-portlet__nav-item">
                                 <a href="#" m-portlet-tool="reload" class="m-portlet__nav-link m-portlet__nav-link--icon reload">
-                                    <i class="la la-refresh"></i>
+                                    <i class="fa fa-redo"></i>
                                 </a>
                             </li>
                             <li class="m-portlet__nav-item">
                                 <a href="#" m-portlet-tool="toggle" class="m-portlet__nav-link m-portlet__nav-link--icon">
-                                    <i class="la la-angle-down"></i>
+                                    <i class="fa fa-angle-down"></i>
                                 </a>
                             </li>
                             <li class="m-portlet__nav-item">
                                 <a href="#" m-portlet-tool="fullscreen" class="m-portlet__nav-link m-portlet__nav-link--icon" id="assignment-expand">
-                                    <i class="la la-expand"></i>
+                                    <i class="fa fa-expand-arrows-alt"></i>
                                 </a>
                             </li>
                             <li class="m-portlet__nav-item">
                                 <a href="#" m-portlet-tool="remove" class="m-portlet__nav-link m-portlet__nav-link--icon">
-                                    <i class="la la-close"></i>
+                                    <i class="fa fa-times"></i>
                                 </a>
                             </li>
                         </ul>
@@ -293,22 +293,22 @@
                         <ul class="m-portlet__nav">
                             <li class="m-portlet__nav-item">
                                 <a href="#" m-portlet-tool="reload" class="m-portlet__nav-link m-portlet__nav-link--icon reload">
-                                    <i class="la la-refresh"></i>
+                                    <i class="fa fa-redo"></i>
                                 </a>
                             </li>
                             <li class="m-portlet__nav-item">
                                 <a href="#" m-portlet-tool="toggle" class="m-portlet__nav-link m-portlet__nav-link--icon">
-                                    <i class="la la-angle-down"></i>
+                                    <i class="fa fa-angle-down"></i>
                                 </a>
                             </li>
                             <li class="m-portlet__nav-item">
                                 <a href="#" m-portlet-tool="fullscreen" class="m-portlet__nav-link m-portlet__nav-link--icon" id="consultation-expand">
-                                    <i class="la la-expand"></i>
+                                    <i class="fa fa-expand-arrows-alt"></i>
                                 </a>
                             </li>
                             <li class="m-portlet__nav-item">
                                 <a href="#" m-portlet-tool="remove" class="m-portlet__nav-link m-portlet__nav-link--icon">
-                                    <i class="la la-close"></i>
+                                    <i class="fa fa-times"></i>
                                 </a>
                             </li>
                         </ul>
@@ -399,23 +399,23 @@
                             @permission((config('constants.LIST_QUESTION_ACCESS')))
                             <li class="m-portlet__nav-item">
                                 <a href="#" m-portlet-tool="reload" class="m-portlet__nav-link m-portlet__nav-link--icon reload">
-                                    <i class="la la-refresh"></i>
+                                    <i class="fa fa-redo"></i>
                                 </a>
                             </li>
                             @endpermission
                             <li class="m-portlet__nav-item">
                                 <a href="#" m-portlet-tool="toggle" class="m-portlet__nav-link m-portlet__nav-link--icon">
-                                    <i class="la la-angle-down"></i>
+                                    <i class="fa fa-angle-down"></i>
                                 </a>
                             </li>
                             <li class="m-portlet__nav-item">
                                 <a href="#" m-portlet-tool="fullscreen" class="m-portlet__nav-link m-portlet__nav-link--icon" id="question-expand">
-                                    <i class="la la-expand"></i>
+                                    <i class="fa fa-expand-arrows-alt"></i>
                                 </a>
                             </li>
                             <li class="m-portlet__nav-item">
                                 <a href="#" m-portlet-tool="remove" class="m-portlet__nav-link m-portlet__nav-link--icon">
-                                    <i class="la la-close"></i>
+                                    <i class="fa fa-times"></i>
                                 </a>
                             </li>
                         </ul>
@@ -470,23 +470,23 @@
                             @permission((config('constants.LIST_MBTIANSWER_ACCESS')))
                             <li class="m-portlet__nav-item">
                                 <a href="#" m-portlet-tool="reload" class="m-portlet__nav-link m-portlet__nav-link--icon reload">
-                                    <i class="la la-refresh"></i>
+                                    <i class="fa fa-redo"></i>
                                 </a>
                             </li>
                             @endpermission
                             <li class="m-portlet__nav-item">
                                 <a href="#" m-portlet-tool="toggle" class="m-portlet__nav-link m-portlet__nav-link--icon">
-                                    <i class="la la-angle-down"></i>
+                                    <i class="fa fa-angle-down"></i>
                                 </a>
                             </li>
                             <li class="m-portlet__nav-item">
                                 <a href="#" m-portlet-tool="fullscreen" class="m-portlet__nav-link m-portlet__nav-link--icon" id="mbtiAnswer-expand">
-                                    <i class="la la-expand"></i>
+                                    <i class="fa fa-expand-arrows-alt"></i>
                                 </a>
                             </li>
                             <li class="m-portlet__nav-item">
                                 <a href="#" m-portlet-tool="remove" class="m-portlet__nav-link m-portlet__nav-link--icon">
-                                    <i class="la la-close"></i>
+                                    <i class="fa fa-times"></i>
                                 </a>
                             </li>
                         </ul>
@@ -543,23 +543,23 @@
                             @permission((config('constants.LIST_EVENTRESULT_ACCESS')))
                             <li class="m-portlet__nav-item">
                                 <a href="#" m-portlet-tool="reload" class="m-portlet__nav-link m-portlet__nav-link--icon reload" data-role="konkurResult96">
-                                    <i class="la la-refresh"></i>
+                                    <i class="fa fa-redo"></i>
                                 </a>
                             </li>
                             @endpermission
                             <li class="m-portlet__nav-item">
                                 <a href="#" m-portlet-tool="toggle" class="m-portlet__nav-link m-portlet__nav-link--icon">
-                                    <i class="la la-angle-down"></i>
+                                    <i class="fa fa-angle-down"></i>
                                 </a>
                             </li>
                             <li class="m-portlet__nav-item">
                                 <a href="#" m-portlet-tool="fullscreen" class="m-portlet__nav-link m-portlet__nav-link--icon" id="konkurResult96-expand">
-                                    <i class="la la-expand"></i>
+                                    <i class="fa fa-expand-arrows-alt"></i>
                                 </a>
                             </li>
                             <li class="m-portlet__nav-item">
                                 <a href="#" m-portlet-tool="remove" class="m-portlet__nav-link m-portlet__nav-link--icon">
-                                    <i class="la la-close"></i>
+                                    <i class="fa fa-times"></i>
                                 </a>
                             </li>
                         </ul>
@@ -625,23 +625,23 @@
                             @permission((config('constants.LIST_EVENTRESULT_ACCESS')))
                             <li class="m-portlet__nav-item">
                                 <a href="#" m-portlet-tool="reload" class="m-portlet__nav-link m-portlet__nav-link--icon reload" data-role="konkurResult97">
-                                    <i class="la la-refresh"></i>
+                                    <i class="fa fa-redo"></i>
                                 </a>
                             </li>
                             @endpermission
                             <li class="m-portlet__nav-item">
                                 <a href="#" m-portlet-tool="toggle" class="m-portlet__nav-link m-portlet__nav-link--icon">
-                                    <i class="la la-angle-down"></i>
+                                    <i class="fa fa-angle-down"></i>
                                 </a>
                             </li>
                             <li class="m-portlet__nav-item">
                                 <a href="#" m-portlet-tool="fullscreen" class="m-portlet__nav-link m-portlet__nav-link--icon" id="konkurResult97-expand">
-                                    <i class="la la-expand"></i>
+                                    <i class="fa fa-expand-arrows-alt"></i>
                                 </a>
                             </li>
                             <li class="m-portlet__nav-item">
                                 <a href="#" m-portlet-tool="remove" class="m-portlet__nav-link m-portlet__nav-link--icon">
-                                    <i class="la la-close"></i>
+                                    <i class="fa fa-times"></i>
                                 </a>
                             </li>
                         </ul>
@@ -708,23 +708,23 @@
                             @permission((config('constants.LIST_EVENTRESULT_ACCESS')))
                             <li class="m-portlet__nav-item">
                                 <a href="#" m-portlet-tool="reload" class="m-portlet__nav-link m-portlet__nav-link--icon reload" data-role="konkurResult98">
-                                    <i class="la la-refresh"></i>
+                                    <i class="fa fa-redo"></i>
                                 </a>
                             </li>
                             @endpermission
                             <li class="m-portlet__nav-item">
                                 <a href="#" m-portlet-tool="toggle" class="m-portlet__nav-link m-portlet__nav-link--icon">
-                                    <i class="la la-angle-down"></i>
+                                    <i class="fa fa-angle-down"></i>
                                 </a>
                             </li>
                             <li class="m-portlet__nav-item">
                                 <a href="#" m-portlet-tool="fullscreen" class="m-portlet__nav-link m-portlet__nav-link--icon" id="konkurResult98-expand">
-                                    <i class="la la-expand"></i>
+                                    <i class="fa fa-expand-arrows-alt"></i>
                                 </a>
                             </li>
                             <li class="m-portlet__nav-item">
                                 <a href="#" m-portlet-tool="remove" class="m-portlet__nav-link m-portlet__nav-link--icon">
-                                    <i class="la la-close"></i>
+                                    <i class="fa fa-times"></i>
                                 </a>
                             </li>
                         </ul>
@@ -794,23 +794,23 @@
                             @permission((config('constants.LIST_SHARIF_REGISTER_ACCESS')))
                             <li class="m-portlet__nav-item">
                                 <a href="#" m-portlet-tool="reload" class="m-portlet__nav-link m-portlet__nav-link--icon reload" data-role="sharifRegisterResult">
-                                    <i class="la la-refresh"></i>
+                                    <i class="fa fa-redo"></i>
                                 </a>
                             </li>
                             @endpermission
                             <li class="m-portlet__nav-item">
                                 <a href="#" m-portlet-tool="toggle" class="m-portlet__nav-link m-portlet__nav-link--icon">
-                                    <i class="la la-angle-down"></i>
+                                    <i class="fa fa-angle-down"></i>
                                 </a>
                             </li>
                             <li class="m-portlet__nav-item">
                                 <a href="#" m-portlet-tool="fullscreen" class="m-portlet__nav-link m-portlet__nav-link--icon" id="sharifRegisterResult-expand">
-                                    <i class="la la-expand"></i>
+                                    <i class="fa fa-expand-arrows-alt"></i>
                                 </a>
                             </li>
                             <li class="m-portlet__nav-item">
                                 <a href="#" m-portlet-tool="remove" class="m-portlet__nav-link m-portlet__nav-link--icon">
-                                    <i class="la la-close"></i>
+                                    <i class="fa fa-times"></i>
                                 </a>
                             </li>
                         </ul>

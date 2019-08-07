@@ -2,7 +2,7 @@
     <div class = "col-xl-12 m--margin-bottom-5">
         <a href = "#" class = "m-link m-link--primary">
             <h3 style = "font-weight: bold">
-                <i class = "la la-comment"></i>
+                <i class = "fa fa-comment"></i>
                 مقالات آموزشی
             </h3>
         </a>

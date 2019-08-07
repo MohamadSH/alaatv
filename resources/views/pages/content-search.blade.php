@@ -34,7 +34,7 @@
         <div class="col notFoundMessage">
             <div class="m-alert m-alert--icon m-alert--icon-solid m-alert--outline alert alert-warning alert-dismissible fade show" role="alert">
                 <div class="m-alert__icon">
-                    <i class="la la-frown-o"></i>
+                    <i class="fa fa-sad-tear"></i>
                     <span></span>
                 </div>
                 <div class="m-alert__text">
@@ -96,13 +96,13 @@
                             <ul class="nav nav-tabs m-tabs-line m-tabs-line--success m-tabs-line--2x" role="tablist">
                                 <li class="nav-item m-tabs__item" id="pamphlet-vertical-tab">
                                     <a class="nav-link m-tabs__link active" data-toggle="tab" href="#pamphlet-vertical-tabpanel" role="tab">
-                                        <i class="la la-file-pdf-o"></i>
+                                        <i class="fa fa-file-pdf"></i>
                                         جزوات آلاء
                                     </a>
                                 </li>
                                 <li class="nav-item m-tabs__item" id="article-vertical-tab">
                                     <a class="nav-link m-tabs__link" data-toggle="tab" href="#article-vertical-tabpanel" role="tab">
-                                        <i class="la la-comment"></i>
+                                        <i class="fa fa-comment"></i>
                                         مقالات آموزشی
                                     </a>
                                 </li>

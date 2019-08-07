@@ -33,7 +33,7 @@
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" x-placement="bottom-start">
                     @permission((config('constants.EDIT_EMPLOPYEE_WORK_SHEET')))
                     <a class="dropdown-item" target="_blank" href="{{action("Web\EmployeetimesheetController@edit" , $employeeTimeSheet)}}">
-                        <i class="flaticon-edit"></i>
+                        <i class="fa fa-edit"></i>
                         اصلاح
                     </a>
                     @endpermission

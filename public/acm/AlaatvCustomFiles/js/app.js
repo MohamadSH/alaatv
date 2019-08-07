@@ -37,6 +37,7 @@ $(document).ready( function() {
 let imageObserver = LazyLoad.image();
 let gtmEecProductObserver = LazyLoad.gtmEecProduct();
 let gtmEecAdvertisementObserver = LazyLoad.gtmEecAdvertisement();
+
 // Bootstrap 4 carousel lazy load
 LazyLoad.carousel([imageObserver, gtmEecAdvertisementObserver]);
 
@@ -47,6 +48,6 @@ $(document).on('click' ,'.a--gtm-eec-product-click', function(e){
 });
 
 // Promotion Click
-    $(document).on('click' ,'.a--gtm-eec-advertisement-click', function(e){
+$(document).on('click' ,'.a--gtm-eec-advertisement-click', function(e){
     GAEE.promotionClick($(this));
 });

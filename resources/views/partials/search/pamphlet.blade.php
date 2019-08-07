@@ -2,7 +2,7 @@
     <div class = "col-xl-12 m--margin-bottom-5">
         <a href = "#" class = "m-link m-link--primary">
             <h3 style = "font-weight: bold">
-                <i class = "la la-file-pdf-o"></i>
+                <i class = "fa fa-file-pdf"></i>
                 جزوات آلاء
             </h3>
         </a>

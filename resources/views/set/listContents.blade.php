@@ -17,7 +17,7 @@
                     <div class="m-portlet__head-caption">
                         <div class="m-portlet__head-title">
                             <span class="m-portlet__head-icon">
-                                <i class="flaticon-list-2"></i>
+                                <i class="fa fa-list-ul"></i>
                             </span>
                             <h3 class="m-portlet__head-text">
                                 تعداد فیلم های درج شده {{ optional($contents)->count() }}

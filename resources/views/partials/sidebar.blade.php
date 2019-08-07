@@ -1,6 +1,6 @@
 <!-- BEGIN: Left Aside -->
 <button class="m-aside-left-close  m-aside-left-close--skin-dark " id="m_aside_left_close_btn">
-    <i class="la la-close"></i>
+    <i class="fa fa-times"></i>
 </button>
 <div id="m_aside_left" class="m-grid__item	m-aside-left  m-aside-left--skin-dark ">
     <!-- BEGIN: Aside Menu -->
@@ -31,7 +31,7 @@
                     <span class="m-menu__item-here"></span>
                     <i class="m-menu__link-icon fa fa-film"></i>
                     <span class="m-menu__link-text">فیلم های آلاء</span>
-                    <i class="m-menu__ver-arrow la la-angle-right"></i>
+                    <i class="m-menu__ver-arrow fa fa-angle-left"></i>
                 </a>
                 <div class="m-menu__submenu ">
                     <span class="m-menu__arrow"></span>
@@ -87,7 +87,7 @@
                 </a>
             </li>
             <li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1">
-                <a target="_blank" href="https://forum.sanatisharif.ir" class="m-menu__link ">
+                <a target="_blank" href="https://forum.sanatisharif.ir" rel="noreferrer" class="m-menu__link ">
                     <span class="m-menu__item-here"></span>
                     <i class="m-menu__link-icon fab fa-hornbill"></i>
                     <span class="m-menu__link-text">انجمن آلاء</span>
@@ -95,7 +95,7 @@
             </li>
 
             @if(Auth::check())
-                @ability(Config::get('constants.ROLE_ADMIN'),Config::get('constants.ADMIN_PANEL_ACCESS'))
+                @ability(config('constants.ROLE_ADMIN'),config('constants.ADMIN_PANEL_ACCESS'))
                     <li class="m-menu__section ">
                         <h4 class="m-menu__section-text">مدیریت</h4>
                         <i class="m-menu__section-icon flaticon-more-v2"></i>
@@ -162,7 +162,7 @@
                                 <span class="m-menu__item-here"></span>
                                 <i class="m-menu__link-icon flaticon-network"></i>
                                 <span class="m-menu__link-text">مدیریت محتوا</span>
-                                <i class="m-menu__ver-arrow la la-angle-right"></i>
+                                <i class="m-menu__ver-arrow fa fa-angle-left"></i>
                             </a>
                             <div class="m-menu__submenu ">
                                 <span class="m-menu__arrow"></span>
@@ -205,7 +205,7 @@
                             <span class="m-menu__item-here"></span>
                             <i class="m-menu__link-icon flaticon-network"></i>
                             <span class="m-menu__link-text">بات ها</span>
-                            <i class="m-menu__ver-arrow la la-angle-right"></i>
+                            <i class="m-menu__ver-arrow fa fa-angle-left"></i>
                         </a>
                         <div class="m-menu__submenu ">
                             <span class="m-menu__arrow"></span>
@@ -215,7 +215,7 @@
                                         <span class="m-menu__item-here"></span>
                                         <i class="m-menu__link-icon flaticon-network"></i>
                                         <span class="m-menu__link-text">بررسی سفارش ها</span>
-                                        <i class="m-menu__ver-arrow la la-angle-right"></i>
+                                        <i class="m-menu__ver-arrow fa fa-angle-left"></i>
                                     </a>
                                     <div class="m-menu__submenu ">
                                         <span class="m-menu__arrow"></span>
@@ -293,7 +293,7 @@
                             <span class="m-menu__item-here"></span>
                             <i class="m-menu__link-icon flaticon-network"></i>
                             <span class="m-menu__link-text">قرعه کشی ها</span>
-                            <i class="m-menu__ver-arrow la la-angle-right"></i>
+                            <i class="m-menu__ver-arrow fa fa-angle-left"></i>
                         </a>
                         <div class="m-menu__submenu ">
                             <span class="m-menu__arrow"></span>
@@ -354,7 +354,7 @@
                             <span class="m-menu__item-here"></span>
                             <i class="m-menu__link-icon flaticon-network"></i>
                             <span class="m-menu__link-text">پی کربندی سایت</span>
-                            <i class="m-menu__ver-arrow la la-angle-right"></i>
+                            <i class="m-menu__ver-arrow fa fa-angle-left"></i>
                         </a>
                         <div class="m-menu__submenu ">
                             <span class="m-menu__arrow"></span>
@@ -404,7 +404,7 @@
                             <span class="m-menu__item-here"></span>
                             <i class="m-menu__link-icon flaticon-network"></i>
                             <span class="m-menu__link-text">پنل های خاص</span>
-                            <i class="m-menu__ver-arrow la la-angle-right"></i>
+                            <i class="m-menu__ver-arrow fa fa-angle-left"></i>
                         </a>
                         <div class="m-menu__submenu ">
                             <span class="m-menu__arrow"></span>

@@ -32,7 +32,7 @@ background-gradient
                     <button type="button" class="btn btn-success btnViewVideo"
                             data-content-type="video"
                             data-content-url="{{ $product->sets->first()->contentUrl.'&orderBy=order' }}">
-                        <i class="la la-film"></i>
+                        <i class="fa fa-film"></i>
                         فیلم ها
                     </button>
                 </div>

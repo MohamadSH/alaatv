@@ -1266,7 +1266,7 @@ jQuery(document).ready(function () {
             }
         },
         config = {
-            stagePadding: 50,
+            stagePadding: 30,
             loop: false,
             rtl:true,
             nav: true,

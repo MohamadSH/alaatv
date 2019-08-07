@@ -110,7 +110,7 @@
                                     {{--                                                    <button type="button" class="btn btn-success btnViewVideo"--}}
                                     {{--                                                            data-content-type="video"--}}
                                     {{--                                                            data-content-url="{{ $product->sets->first()->contentUrl.'&orderBy=order' }}">--}}
-                                    {{--                                                        <i class="la la-film"></i>--}}
+                                    {{--                                                        <i class="fa fa-film"></i>--}}
                                     {{--                                                        فیلم ها--}}
                                     {{--                                                    </button>--}}
                                     {{--                                                </div>--}}
@@ -152,7 +152,7 @@
                                 </div>
                                 <div class="m-portlet__head-tools">
                                     <a class="btn btn-outline-danger m-btn m-btn--icon m-btn--icon-only m-btn--pill m-btn--air a--owl-carousel-hide-detailes">
-                                        <i class="la la-times"></i>
+                                        <i class="fa fa-times"></i>
                                     </a>
                                 </div>
                             </div>
@@ -183,7 +183,7 @@
                                                                             class="btn btn-success btnViewVideo"
                                                                             data-content-type="video"
                                                                             data-content-url="{{ $set->contentUrl.'&orderBy=order' }}">
-                                                                        <i class="la la-film"></i>
+                                                                        <i class="fa fa-film"></i>
                                                                         فیلم ها
                                                                     </button>
                                                                 </div>
@@ -492,7 +492,7 @@
 {{--                                                                <button type="button" class="btn btn-success btnViewVideo"--}}
 {{--                                                                        data-content-type="video"--}}
 {{--                                                                        data-content-url="{{ $product->sets[0]->contentUrl }}">--}}
-{{--                                                                    <i class="la la-film"></i>--}}
+{{--                                                                    <i class="fa fa-film"></i>--}}
 {{--                                                                    فیلم ها--}}
 {{--                                                                </button>--}}
 {{--                                                            @endif--}}
@@ -536,7 +536,7 @@
 {{--                                            </div>--}}
 {{--                                            <div class="m-portlet__head-tools">--}}
 {{--                                                <a class="btn btn-outline-danger m-btn m-btn--icon m-btn--icon-only m-btn--pill m-btn--air a--owl-carousel-hide-detailes">--}}
-{{--                                                    <i class="la la-times"></i>--}}
+{{--                                                    <i class="fa fa-times"></i>--}}
 {{--                                                </a>--}}
 {{--                                            </div>--}}
 {{--                                        </div>--}}
@@ -567,7 +567,7 @@
 {{--                                                                                        class="btn btn-success btnViewVideo"--}}
 {{--                                                                                        data-content-type="video"--}}
 {{--                                                                                        data-content-url="{{ $set->contentUrl }}">--}}
-{{--                                                                                    <i class="la la-film"></i>--}}
+{{--                                                                                    <i class="fa fa-film"></i>--}}
 {{--                                                                                    فیلم ها--}}
 {{--                                                                                </button>--}}
 {{--                                                                            </div>--}}
@@ -652,7 +652,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="videoModalLabel">
-                        <i class="la la-film"></i>
+                        <i class="fa fa-film"></i>
                         فیلم ها
                     </h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">

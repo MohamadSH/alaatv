@@ -4,7 +4,7 @@
     <nav aria-label = "breadcrumb">
         <ol class = "breadcrumb">
             <li class = "breadcrumb-item">
-                <i class = "flaticon-home-2 m--padding-right-5"></i>
+                <i class = "fa fa-home m--padding-right-5"></i>
                 <a class = "m-link" href = "{{action("Web\IndexPageController")}}">@lang('page.Home')</a>
             </li>
             <li class = "breadcrumb-item active" aria-current = "page">
@@ -75,7 +75,7 @@
                             </h3>
                             <h2 class = "m-portlet__head-label m-portlet__head-label--success">
                                 <span>
-                                    <i class = "la la-trophy"></i>
+                                    <i class = "fa fa-trophy"></i>
                                     ثبت رتبه 97
                                 </span>
                             </h2>
@@ -182,7 +182,7 @@
                                         </div>
                                         <div class = "m-alert m-alert--icon alert alert-accent" role = "alert">
                                             <div class = "m-alert__icon">
-                                                <i class = "la la-warning"></i>
+                                                <i class = "fa fa-exclamation-triangle"></i>
                                             </div>
                                             <div class = "m-alert__text">
                                                 <strong>توضیح: </strong> با زدن تیک بالا شما به ما اجازه می دهید تا رتبه ی شما را در سایت آلاء اعلام کنیم. اگر تمایلی به این کار ندارید می توانید این تیک را نزنید. بدیهی است که با زدن تیک فوق ، درج شماره داوطلبی الزامی خواهد بود .
@@ -230,7 +230,7 @@
 
                     {{--<div class="m-alert m-alert--icon alert alert-warning" role="alert">--}}
                     {{--<div class="m-alert__icon">--}}
-                    {{--<i class="la la-warning"></i>--}}
+                    {{--<i class="fa fa-exclamation-triangle"></i>--}}
                     {{--</div>--}}
                     {{--<div class="m-alert__text">--}}
                     {{--<strong>شما محصولی سفارش نداده اید!</strong>--}}

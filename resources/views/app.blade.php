@@ -88,7 +88,7 @@
         @show
         <!-- begin::Scroll Top -->
         <div id="m_scroll_top" class="m-scroll-top">
-            <i class="la la-arrow-up"></i>
+            <i class="fa fa-angle-up"></i>
         </div>
         <!-- end::Scroll Top -->
         {{--
@@ -96,12 +96,12 @@
         <ul class = "m-nav-sticky" style = "margin-top: 30px;">
             <li class = "m-nav-sticky__item" data-toggle = "m-tooltip" title = "سبد خرید" data-placement = "left">
                 <a href = "https://themeforest.net/item/metronic-responsive-admin-dashboard-template/4021469?ref=keenthemes" target = "_blank">
-                    <i class = "la la-cart-arrow-down"></i>
+                    <i class = "fa fa-angle-down"></i>
                 </a>
             </li>
             <li class = "m-nav-sticky__item" data-toggle = "m-tooltip" title = "Documentation" data-placement = "left">
                 <a href = "https://keenthemes.com/metronic/documentation.html" target = "_blank">
-                    <i class = "la la-code-fork"></i>
+                    <i class = "fa fa-code"></i>
                 </a>
             </li>
             <li class = "m-nav-sticky__item" data-toggle = "m-tooltip" title = "انجمن" data-placement = "left">
