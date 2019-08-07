@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Web;
 use App\Classes\Search\RelatedProductSearch;
 use App\Collection\ContentCollection;
 use App\User;
-use Carbon\Carbon;
 use Exception;
 use App\Content;
 use App\Contentset;
@@ -44,129 +43,17 @@ class ContentController extends Controller
     use MetaCommon;
     use SearchCommon;
     use ContentControllerResponseTrait;
-    
-    protected $setting;
-    
-    
-    public function __construct(
-        Agent $agent,
-        Websitesetting $setting
-    )
+
+    private $setting;
+
+
+    public function __construct(Agent $agent, Websitesetting $setting)
     {
         $this->setting = $setting->setting;
         $authException = $this->getAuthExceptionArray($agent);
         $this->callMiddlewares($authException);
     }
-    
-    /**
-     * @param  Agent  $agent
-     *
-     * @return array
-     */
-    private function getAuthExceptionArray(Agent $agent): array
-    {
-        if ($agent->isRobot()) {
-            $authException = [
-                'index',
-                'show',
-                'embed',
-            ];
-        } else {
-            $authException = ['index'];
-        }
-        //TODO:// preview(Telegram)
-        $authException = [
-            'index',
-            'show',
-            'search',
-            'embed',
-            'attachContentToContentSet',
-        ];
-        
-        return $authException;
-    }
-    
-    /**
-     * @param $authException
-     */
-    private function callMiddlewares(array $authException): void
-    {
-        $this->middleware('auth', ['except' => $authException]);
-        $this->middleware('permission:'.config('constants.INSERT_EDUCATIONAL_CONTENT_ACCESS'), [
-            'only' => [
-                'store',
-                'create',
-                'create2',
-            ],
-        ]);
-        $this->middleware('permission:'.config('constants.EDIT_EDUCATIONAL_CONTENT'), [
-            'only' => [
-                'update',
-                'edit',
-            ],
-        ]);
-        $this->middleware('permission:'.config('constants.REMOVE_EDUCATIONAL_CONTENT_ACCESS'),
-            ['only' => 'destroy']);
-        $this->middleware('convert:order|title', [
-            'only' => [
-                'store',
-                'update',
-            ],
-        ]);
-    }
-    
-    private function makeJsonForAndroidApp($items): array
-    {
-        $key = md5(collect($items)
-            ->pluck('id')
-            ->implode(','));
-    
-        if ($items === null)
-        {
-            $response = [];
-            $response[]  = json_decode('{}', false);
-            return $response;
-        }
 
-        return Cache::remember($key, config('constants.CACHE_60'), function () use ($items) {
-            $response = [];
-
-            /** @var Content $item */
-            foreach ($items as $content) {
-                $s_hd = $s_hq = $s_240 = null;
-
-                foreach ($content->getVideos() as $source) {
-                    if (strcmp($source->res, '240p') === 0) {
-                        $s_240 = $source->link;
-
-                    } elseif (strcmp($source->res, '480p') === 0) {
-                        $s_hq = $source->link;
-                    } elseif (strcmp($source->res, '720p') === 0) {
-                        $s_hd = $source->link;
-                    }
-                }
-                $response[] = [
-                    'videoId'          => $content->id,
-                    'name'             => $content->displayName,
-                    'videoDescribe'    => $content->description,
-                    'url'              => $content->url,
-                    'videoLink480'     => $s_hq ?: $s_hd,
-                    'videoLink240'     => $s_240 ?: $s_hd,
-                    'videoviewcounter' => '0',
-                    'videoDuration'    => 0,
-                    'session'          => $content->order,
-                    'thumbnail'        => $content->thumbnail,
-                ];
-            }
-
-
-            $response[] = json_decode('{}', false);
-
-            return $response;
-        });
-        
-    }
-    
     /**
      * Display a listing of the resource.
      *
@@ -179,22 +66,20 @@ class ContentController extends Controller
      *
      * @return mixed
      */
-    public function index(ContentIndexRequest $request, ContentSearch $contentSearch,
-        ContentsetSearch $setSearch,
-        ProductSearch $productSearch)
+    public function index(ContentIndexRequest $request, ContentSearch $contentSearch, ContentsetSearch $setSearch, ProductSearch $productSearch)
     {
         $request->offsetSet('free', $request->get('free', [1]));
         $contentTypes = array_filter($request->get('contentType', Contenttype::List()));
         $contentOnly  = $request->get('contentOnly', false);
         $tags         = (array) $request->get('tags');
         $filters      = $request->all();
-    
+
         $strstr = strstr($request->header('User-Agent'), 'Alaa');
         $isApp  = ($strstr !== false && $strstr !== '') ? true : false;
         if ($isApp) {
             $contentSearch->setNumberOfItemInEachPage(200);
         }
-        
+
         $result = $contentSearch->get(compact('filters', 'contentTypes'));
 
         $setFilters = $filters;
@@ -205,10 +90,10 @@ class ContentController extends Controller
         $productFilters = $filters;
         $productFilters['active']  = 1;
         $result->offsetSet('product', !$contentOnly ? $productSearch->get($productFilters) : null);
-    
+
         $pageName = 'content-search';
-    
-    
+
+
         if ($isApp) {
             return response()->json($this->makeJsonForAndroidApp(optional($result->get('video'))
                 ->items()));
@@ -220,7 +105,7 @@ class ContentController extends Controller
         $view = view('pages.content-search', compact('result', 'contentTypes', 'tags', 'pageName'));
         return httpResponse($api, $view);
     }
-    
+
     public function embed(Request $request, Content $content)
     {
         $url = action('Web\ContentController@show', $content);
@@ -233,11 +118,11 @@ class ContentController extends Controller
             $contentsWithSameSet,
             $contentSetName,
         ] = $video->getSetMates();
-    
+
         $view = view('content.embed', compact('video', 'contentsWithSameSet', 'contentSetName'));
         return httpResponse(null, $view);
     }
-    
+
     public function create()
     {
         $rootContentTypes = Contenttype::getRootContentType();
@@ -245,11 +130,11 @@ class ContentController extends Controller
             ->pluck('name', 'id');
         $authors          = User::getTeachers()
             ->pluck('full_name', 'id');
-    
+
         $view = view('content.create2', compact('rootContentTypes', 'contentsets', 'authors'));
         return httpResponse(null, $view);
     }
-    
+
     public function create2(Request $request)
     {
 //        $contenttypes = Contenttype::getRootContentType()
@@ -270,11 +155,11 @@ class ContentController extends Controller
         }elseif(isset($setId)){
             session()->flash('error' , 'ست مورد نظر شما یافت نشد');
         }
-    
+
         $view = view('content.create3', compact('contenttypes', 'lastContent'));
         return httpResponse(null, $view);
     }
-    
+
     public function show(Request $request, Content $content, RelatedProductSearch $relatedProductSearch)
     {
         if (!$content->isActive()) {
@@ -284,12 +169,12 @@ class ContentController extends Controller
         $message                     = null;
         $productsThatHaveThisContent = $content->activeProducts() ?: new ProductCollection();
         if (!$user_can_see_content) {
-    
+
             $jsonResponse = $this->getUserCanNotSeeContentJsonResponse($content, $productsThatHaveThisContent,
                 static function ($msg) use (&$message) {
                     $message = $msg;
                 });
-            
+
             if (request()->expectsJson()) {
                 return redirect()->to($content->api_url['v1']);
             }
@@ -307,10 +192,10 @@ class ContentController extends Controller
             $pamphletsWithSameSet,
             $contentSetName,
         ] = $this->getContentInformation($content);
-    
-    
+
+
         $seenCount = $content->pageView;
-        
+
         $userCanSeeCounter = optional(auth()->user())->CanSeeCounter();
         $apiResponse       = response()->json($content, Response::HTTP_OK);
 
@@ -333,65 +218,24 @@ class ContentController extends Controller
                 'pamphletsWithSameSet', 'contentSetName', 'tags',
                 'userCanSeeCounter', 'adItems', 'videosWithSameSetL', 'videosWithSameSetR',
                 'productsThatHaveThisContent', 'user_can_see_content', 'message', 'productsHasThisContentThroughBlockCollection'));
-        
+
         return httpResponse($apiResponse, $viewResponse);
     }
-    
-    /**
-     * @param  Content  $content
-     *
-     * @return array
-     */
-    private function getContentInformation(Content $content): array
-    {
-        $key = 'getContentInformation: '.$content->id;
-        return Cache::tags('set')
-            ->remember($key, config('constants.CACHE_600'), function () use ($content) {
-                $author = $content->authorName;
-                
-                [
-                    $contentsWithSameSet,
-                    $contentSetName,
-                ] = $content->getSetMates();
-                /** @var ContentCollection $contentsWithSameSet */
-                $contentsWithSameSet  = $contentsWithSameSet->normalMates();
-                $videosWithSameSet    = optional($contentsWithSameSet)->whereIn('type', 'video');
-                $pamphletsWithSameSet = optional($contentsWithSameSet)->whereIn('type', 'pamphlet');
-                [
-                    $videosWithSameSetL,
-                    $videosWithSameSetR,
-                ] = optional($videosWithSameSet)->partition(function ($i) use ($content) {
-                    return $i['content']->session < $content->session;
-                });
-                
-                return [
-                    $author,
-                    $content,
-                    $contentsWithSameSet,
-                    $videosWithSameSet,
-                    $videosWithSameSetL,
-                    $videosWithSameSetR,
-                    $pamphletsWithSameSet,
-                    $contentSetName,
-                ];
-            });
-        
-    }
-    
+
     public function edit(Content $content)
     {
         $validSinceTime = optional($content->validSince)->format('H:i:s');
         $tags           = optional($content->tags)->tags;
         $tags           = implode(',', isset($tags) ? $tags : []);
         $contentset     = $content->set;
-    
+
         $result = compact('content', 'validSinceTime', 'tags', 'contentset'
         );
-    
+
         $view = view('content.edit', $result);
         return httpResponse(null, $view);
     }
-    
+
     public function store(InsertContentRequest $request)
     {
         $contenttypeId = $request->get('contenttype_id');
@@ -446,42 +290,6 @@ class ContentController extends Controller
     }
 
     /**
-     * @param  Content  $content
-     *
-     * @param  array    $files
-     */
-    private function storeFilesOfContent(Content $content, array $files): void
-    {
-        $fileCollection = collect();
-        
-        foreach ($files as $key => $file) {
-            $disk     = isset($file->disk) ? $file->disk : null;
-            $fileName = isset($file->name) ? $file->name : null;
-            $caption  = isset($file->caption) ? $file->caption : null;
-            $res      = isset($file->res) ? $file->res : null;
-            $type     = isset($file->type) ? $file->type : null;
-            $url      = isset($file->url) ? $file->url : null;
-            $size     = isset($file->size) ? $file->size : null;
-            if ($this->strIsEmpty($fileName)) {
-                continue;
-            }
-            $fileCollection->push([
-                'uuid'     => Str::uuid()->toString(),
-                'disk'     => $disk,
-                'url'      => $url,
-                'fileName' => $fileName,
-                'size'     => $size,
-                'caption'  => $caption,
-                'res'      => $res,
-                'type'     => $type,
-                'ext'      => pathinfo($fileName, PATHINFO_EXTENSION),
-            ]);
-        }
-        /** @var Content $content */
-        $content->file = $fileCollection;
-    }
-    
-    /**
      * @param EditContentRequest $request
      * @param Content $content
      * @return RedirectResponse
@@ -489,16 +297,16 @@ class ContentController extends Controller
     public function update(EditContentRequest $request, Content $content)
     {
         $this->fillContentFromRequest($request->all(), $content);
-        
+
         if ($content->update()) {
             session()->put('success', 'اصلاح محتوا با موفقیت انجام شد');
         } else {
             session()->put('error', 'خطای پایگاه داده');
         }
-        
+
         return redirect()->back();
     }
-    
+
     public function destroy(Content $content)
     {
         //TODO:// remove Tags From Redis, ( Do it in ContentObserver)
@@ -510,7 +318,7 @@ class ContentController extends Controller
         }
         return response()->json([], Response::HTTP_SERVICE_UNAVAILABLE);
     }
-    
+
     /**
      * Search for an educational content
      *
@@ -521,6 +329,162 @@ class ContentController extends Controller
     public function search()
     {
         return redirect('/c', Response::HTTP_MOVED_PERMANENTLY);
+    }
+
+    /**
+     * @param  Request  $request
+     *
+     * @return RedirectResponse|Redirector
+     * @throws Exception
+     */
+    public function updateSet(Request $request)
+    {
+        $educationalContentId =  $request->get("educationalContentId");
+        $newContetnsetId = $request->get("newContetnsetId");
+        $newFileFullName = $request->get("newFileFullName") ;
+
+        $educationalContent = Content::FindOrFail($educationalContentId);
+        $contenttypeId = $educationalContent->contenttype_id;
+        $currentContentset = $educationalContent->set;
+
+        if($newContetnsetId != $currentContentset->id)
+        {
+            $educationalContent->contentset_id = $newContetnsetId;
+        }
+
+        if(isset($newFileFullName[0]))
+        {
+            $isFree = $educationalContent->isFree;
+            if($isFree)
+            {
+                [$files , $thumbnail] = $this->makeFreeContentFiles($contenttypeId, $newFileFullName, $newContetnsetId);
+            }else{
+                $newContentSet = Contentset::find($newContetnsetId);
+                $productId = optional($newContentSet->products->first())->id;
+                if(!isset($productId))
+                    return response()->json(['No product found for this set'], Response::HTTP_BAD_REQUEST);
+
+                [$files , $thumbnail] = $this->makePaidContentFiles($contenttypeId, $newFileFullName , $productId , $newContetnsetId);
+            }
+
+            if(isset($thumbnail))
+                $educationalContent->thumbnail = $thumbnail;
+
+            if(!empty($files))
+            {
+                $this->storeFilesOfContent($educationalContent, $files);
+            }
+        }
+
+        $educationalContent->update();
+
+        Cache::tags('content')->flush();
+        session()->flash('success', 'تغییر نام با موفقیت انجام شد');
+        return redirect()->back();
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Private Methods
+    |--------------------------------------------------------------------------
+    */
+
+    /**
+     * @param  Agent  $agent
+     *
+     * @return array
+     */
+    private function getAuthExceptionArray(Agent $agent): array
+    {
+        if ($agent->isRobot()) {
+            $authException = [
+                'index',
+                'show',
+                'embed',
+            ];
+        } else {
+            $authException = ['index'];
+        }
+        //TODO:// preview(Telegram)
+        $authException = [
+            'index',
+            'show',
+            'search',
+            'embed',
+            'attachContentToContentSet',
+        ];
+
+        return $authException;
+    }
+
+    /**
+     * @param $authException
+     */
+    private function callMiddlewares(array $authException): void
+    {
+        $this->middleware('auth', ['except' => $authException]);
+        $this->middleware('permission:'.config('constants.INSERT_EDUCATIONAL_CONTENT_ACCESS'), [
+            'only' => [
+                'store',
+                'create',
+                'create2',
+            ],
+        ]);
+        $this->middleware('permission:'.config('constants.EDIT_EDUCATIONAL_CONTENT'), [
+            'only' => [
+                'update',
+                'edit',
+            ],
+        ]);
+        $this->middleware('permission:'.config('constants.REMOVE_EDUCATIONAL_CONTENT_ACCESS'),
+            ['only' => 'destroy']);
+        $this->middleware('convert:order|title', [
+            'only' => [
+                'store',
+                'update',
+            ],
+        ]);
+    }
+
+    /**
+     * @param  Content  $content
+     *
+     * @return array
+     */
+    private function getContentInformation(Content $content): array
+    {
+        $key = 'getContentInformation: '.$content->id;
+        return Cache::tags('set')
+            ->remember($key, config('constants.CACHE_600'), function () use ($content) {
+                $author = $content->authorName;
+
+                [
+                    $contentsWithSameSet,
+                    $contentSetName,
+                ] = $content->getSetMates();
+                /** @var ContentCollection $contentsWithSameSet */
+                $contentsWithSameSet  = $contentsWithSameSet->normalMates();
+                $videosWithSameSet    = optional($contentsWithSameSet)->whereIn('type', 'video');
+                $pamphletsWithSameSet = optional($contentsWithSameSet)->whereIn('type', 'pamphlet');
+                [
+                    $videosWithSameSetL,
+                    $videosWithSameSetR,
+                ] = optional($videosWithSameSet)->partition(function ($i) use ($content) {
+                    return $i['content']->session < $content->session;
+                });
+
+                return [
+                    $author,
+                    $content,
+                    $contentsWithSameSet,
+                    $videosWithSameSet,
+                    $videosWithSameSetL,
+                    $videosWithSameSetR,
+                    $pamphletsWithSameSet,
+                    $contentSetName,
+                ];
+            });
+
     }
 
     /**
@@ -610,58 +574,91 @@ class ContentController extends Controller
         return $files;
     }
 
-
-    /**
-     * @param  Request  $request
-     *
-     * @return RedirectResponse|Redirector
-     * @throws Exception
-     */
-    public function updateSet(Request $request)
+    private function makeJsonForAndroidApp($items): array
     {
-        $educationalContentId =  $request->get("educationalContentId");
-        $newContetnsetId = $request->get("newContetnsetId");
-        $newFileFullName = $request->get("newFileFullName") ;
+        $key = md5(collect($items)
+            ->pluck('id')
+            ->implode(','));
 
-        $educationalContent = Content::FindOrFail($educationalContentId);
-        $contenttypeId = $educationalContent->contenttype_id;
-        $currentContentset = $educationalContent->set;
-
-        if($newContetnsetId != $currentContentset->id)
+        if ($items === null)
         {
-            $educationalContent->contentset_id = $newContetnsetId;
+            $response = [];
+            $response[]  = json_decode('{}', false);
+            return $response;
         }
 
-        if(isset($newFileFullName[0]))
-        {
-            $isFree = $educationalContent->isFree;
-            if($isFree)
-            {
-                [$files , $thumbnail] = $this->makeFreeContentFiles($contenttypeId, $newFileFullName, $newContetnsetId);
-            }else{
-                $newContentSet = Contentset::find($newContetnsetId);
-                $productId = optional($newContentSet->products->first())->id;
-                if(!isset($productId))
-                    return response()->json(['No product found for this set'], Response::HTTP_BAD_REQUEST);
+        return Cache::remember($key, config('constants.CACHE_60'), function () use ($items) {
+            $response = [];
 
-                [$files , $thumbnail] = $this->makePaidContentFiles($contenttypeId, $newFileFullName , $productId , $newContetnsetId);
+            /** @var Content $item */
+            foreach ($items as $content) {
+                $s_hd = $s_hq = $s_240 = null;
+
+                foreach ($content->getVideos() as $source) {
+                    if (strcmp($source->res, '240p') === 0) {
+                        $s_240 = $source->link;
+
+                    } elseif (strcmp($source->res, '480p') === 0) {
+                        $s_hq = $source->link;
+                    } elseif (strcmp($source->res, '720p') === 0) {
+                        $s_hd = $source->link;
+                    }
+                }
+                $response[] = [
+                    'videoId'          => $content->id,
+                    'name'             => $content->displayName,
+                    'videoDescribe'    => $content->description,
+                    'url'              => $content->url,
+                    'videoLink480'     => $s_hq ?: $s_hd,
+                    'videoLink240'     => $s_240 ?: $s_hd,
+                    'videoviewcounter' => '0',
+                    'videoDuration'    => 0,
+                    'session'          => $content->order,
+                    'thumbnail'        => $content->thumbnail,
+                ];
             }
 
-            if(isset($thumbnail))
-                $educationalContent->thumbnail = $thumbnail;
 
-            if(!empty($files))
-            {
-                $this->storeFilesOfContent($educationalContent, $files);
-            }
-        }
+            $response[] = json_decode('{}', false);
 
-        $educationalContent->update();
+            return $response;
+        });
 
-        Cache::tags('content')->flush();
-        session()->flash('success', 'تغییر نام با موفقیت انجام شد');
-        return redirect()->back();
     }
 
+    /**
+     * @param  Content  $content
+     *
+     * @param  array    $files
+     */
+    private function storeFilesOfContent(Content $content, array $files): void
+    {
+        $fileCollection = collect();
 
+        foreach ($files as $key => $file) {
+            $disk     = isset($file->disk) ? $file->disk : null;
+            $fileName = isset($file->name) ? $file->name : null;
+            $caption  = isset($file->caption) ? $file->caption : null;
+            $res      = isset($file->res) ? $file->res : null;
+            $type     = isset($file->type) ? $file->type : null;
+            $url      = isset($file->url) ? $file->url : null;
+            $size     = isset($file->size) ? $file->size : null;
+            if ($this->strIsEmpty($fileName)) {
+                continue;
+            }
+            $fileCollection->push([
+                'uuid'     => Str::uuid()->toString(),
+                'disk'     => $disk,
+                'url'      => $url,
+                'fileName' => $fileName,
+                'size'     => $size,
+                'caption'  => $caption,
+                'res'      => $res,
+                'type'     => $type,
+                'ext'      => pathinfo($fileName, PATHINFO_EXTENSION),
+            ]);
+        }
+        /** @var Content $content */
+        $content->file = $fileCollection;
+    }
 }

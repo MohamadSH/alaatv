@@ -16,56 +16,56 @@ class RoleController extends Controller
     {
         $this->middleware('role:admin');
     }
-    
+
     public function index()
     {
         $roles = Role::all()
             ->sortByDesc('created_at');;
-        
+
         return view("role.index", compact('roles'));
     }
-    
+
     public function store(InsertRoleRequest $request)
     {
         $role = new Role();
         $role->fill($request->all());
-        
+
         if ($role->save()) {
             $role->attachPermissions($request->get('permissions', []));
-            
+
             return response()->json();
         } else {
             return response()->json([] , Response::HTTP_SERVICE_UNAVAILABLE);
         }
     }
-    
-    public function edit(Role $role, HomeController $homeController)
+
+    public function edit(Role $role, ErrorPageController $errorPageController)
     {
         if ($role->isDefault) {
-            
+
             $message = "این نقش قابل اصلاح نمی باشد";
-            
-            return $homeController->errorPage($message);
+
+            return $errorPageController->errorPage($message);
         }
         $permissions     = Permission::pluck('display_name', 'id')
             ->toArray();
         $rolePermissions = $role->permissions->pluck('id')
             ->toArray();
-        
+
         return view('role.edit', compact('role', 'permissions', 'rolePermissions'));
     }
-    
-    public function update(EditRoleRequest $request, Role $role, HomeController $homeController)
+
+    public function update(EditRoleRequest $request, Role $role, ErrorPageController $errorPageController)
     {
         if ($role->isDefault) {
             $message = "این نقش قابل اصلاح نمی باشد";
-            
-            return $homeController->errorPage($message);
+
+            return $errorPageController->errorPage($message);
         }
         if ($role) {
             $role->fill($request->all());
         }
-        
+
         if ($role->update()) {
             $role->permissions()
                 ->sync($request->get('permissions', []));
@@ -73,16 +73,16 @@ class RoleController extends Controller
         } else {
             session()->put("error", "خطای پایگاه داده.");
         }
-        
+
         return redirect()->back();
     }
-    
-    public function destroy(Role $role, HomeController $homeController)
+
+    public function destroy(Role $role, ErrorPageController $errorPageController)
     {
         if ($role->isDefault) {
             $message = "این نقش قابل حذف نمی باشد";
-            
-            return $homeController->errorPage($message);
+
+            return $errorPageController->errorPage($message);
         }
         try {
             if ($role->delete()) {

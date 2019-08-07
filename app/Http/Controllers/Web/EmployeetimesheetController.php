@@ -11,7 +11,6 @@ use App\Employeetimesheet;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Input;
@@ -22,7 +21,7 @@ class EmployeetimesheetController extends Controller
 {
     use DateTrait;
     use EmployeeWorkSheetCommon;
-    
+
     function __construct()
     {
         /** setting permissions
@@ -57,7 +56,7 @@ class EmployeetimesheetController extends Controller
             $usersId            = Input::get("users");
             $employeeTimeSheets = $employeeTimeSheets->whereIn("user_id", $usersId);
         }
-        
+
         if (Input::has("dateEnable")) {
             if (Input::has("sinceDate") && Input::has("tillDate")) {
                 $sinceDate          = Input::get("sinceDate");
@@ -68,19 +67,19 @@ class EmployeetimesheetController extends Controller
                 ]);
             }
         }
-        
+
         if (Input::has("workdayTypes")) {
             $workDayTypes       = Input::get("workdayTypes");
             $employeeTimeSheets = $employeeTimeSheets->whereIn('workdaytype_id', $workDayTypes);
         }
-        
+
         if (Input::has("isPaid")) {
             $isPaid = Input::get("isPaid");
             if (isset($isPaid[0])) {
                 $employeeTimeSheets = $employeeTimeSheets->where('isPaid', $isPaid);
             }
         }
-        
+
         $employeeTimeSheets      = $employeeTimeSheets->get();
         $employeeWorkSheetSum    = $this->sumWorkAndShiftDiff($employeeTimeSheets);
         $employeeSumRealWorkTime = $this->sumRealWorkTime($employeeTimeSheets);
@@ -91,14 +90,14 @@ class EmployeetimesheetController extends Controller
             "employeeWorkSheetSum" => $employeeWorkSheetSum,
             "employeeRealWorkTime" => $employeeSumRealWorkTime,
         ];
-        
+
         return response(json_encode($result, JSON_UNESCAPED_UNICODE), Response::HTTP_OK)->header('Content-Type', 'application/json');
     }
 
-    public function create()
+    public function create(Request $request)
     {
         /** @var User $user */
-        $user   = Auth::user();
+        $user   = $request->user();
         $userId = $user->id;
         /** @var Employeetimesheet $userTodayTimeSheets */
         $userTodayTimeSheets = Employeetimesheet::where("date", Carbon::today('Asia/Tehran'))
@@ -134,7 +133,7 @@ class EmployeetimesheetController extends Controller
             ->pluck("lastName", "id");
         $workdayTypes = Workdaytype::all()
             ->pluck("displayName", "id");
-        
+
         return view("employeeTimeSheet.create",
             compact("employeetimesheet", "employeeSchedule", "isTimeSheetExtra", "employees", "formVisible",
                 "workdayTypes"));
@@ -143,14 +142,14 @@ class EmployeetimesheetController extends Controller
     public function store(InsertEmployeeTimeSheet $request)
     {
         /** @var User $user */
-        $user = Auth::user();
+        $user = $request->user();
         if (!$request->has("modifier_id")) {
             $request->offsetSet("modifier_id", $user->id);
         }
-        
+
         $employeeTimeSheet = new Employeetimesheet();
         $employeeTimeSheet->fill($request->all());
-        
+
         if ($request->has("isExtraDay")) {
             $employeeTimeSheet->workdaytype_id = config("constants.WORKDAY_ID_EXTRA");
             $employeeTimeSheet->isPaid         = 0;
@@ -159,11 +158,11 @@ class EmployeetimesheetController extends Controller
             $employeeTimeSheet->workdaytype_id = config("constants.WORKDAY_ID_USUAL");
             $employeeTimeSheet->isPaid         = 1;
         }
-        
+
         if ($request->has("timeSheetLock")) {
             $employeeTimeSheet->timeSheetLock = 1;
         }
-        
+
         $toDayJalali = $this->convertToJalaliDay(Carbon::today('Asia/Tehran')
             ->format('l'));
         /** @var Employeeschedule $employeeSchedule */
@@ -171,21 +170,21 @@ class EmployeetimesheetController extends Controller
             ->where("day", $toDayJalali)
             ->get()
             ->first();
-        
+
         $allowedLunchBreak = $employeeTimeSheet->getOriginal("allowedLunchBreakInSec");
         if (!isset($allowedLunchBreak)) {
             if (isset($employeeSchedule)) {
                 $employeeTimeSheet->allowedLunchBreakInSec = $employeeSchedule->getOriginal("lunchBreakInSeconds");
             }
         }
-        
+
         $beginTime = $employeeTimeSheet->getOriginal("userBeginTime");
         if (!isset($beginTime)) {
             if (isset($employeeSchedule)) {
                 $employeeTimeSheet->userBeginTime = $employeeSchedule->getOriginal("beginTime");
             }
         }
-        
+
         $finishTime = $employeeTimeSheet->getOriginal("userFinishTime");
         if (!isset($finishTime)) {
             if (isset($employeeSchedule)) {
@@ -199,7 +198,7 @@ class EmployeetimesheetController extends Controller
             }
             else {
                 session()->flash("success", "ساعت کاری با موفقیت درج شد");
-                
+
                 return redirect()->back();
             }
         }
@@ -209,7 +208,7 @@ class EmployeetimesheetController extends Controller
             }
             else {
                 session()->flash("error", Lang::get("responseText.Database error."));
-                
+
                 return redirect()->back();
             }
         }
@@ -225,13 +224,13 @@ class EmployeetimesheetController extends Controller
                 $isExtra = false;
             }
         }
-        
+
         return view("employeeTimeSheet.edit", compact("employeetimesheet", "isExtra"));
     }
 
     public function update(Request $request, Employeetimesheet $employeeTimeSheet)
     {
-        $user = auth()->user();
+        $user = $request->user();
         if (!$request->has('modifier_id')) {
             $request->offsetSet('modifier_id', $user->id);
         }
@@ -293,5 +292,73 @@ class EmployeetimesheetController extends Controller
         else {
             return $response->setStatusCode(Response::HTTP_SERVICE_UNAVAILABLE);
         }
+    }
+
+    /**
+     * Storing user's work time (for employees)
+     *
+     * @param  Request                      $request
+     * @param  EmployeetimesheetController  $employeetimesheetController
+     * @param  HomeController               $errorPageController
+     *
+     * @return Response
+     */
+    public function submitWorkTime(Request $request, EmployeetimesheetController $employeetimesheetController, ErrorPageController $errorPageController)
+    {
+        $actionMap = [
+            'action-clockIn'          => 'clockIn',
+            'action-beginLunchBreak'  => 'beginLunchBreak',
+            'action-finishLunchBreak' => 'finishLunchBreak',
+            'action-clockOut'         => 'clockOut',
+        ];
+        if ($request->has('action') && isset($actionMap[$request->get('action')])) {
+            $presentTime = Carbon::now('Asia/Tehran')
+                ->format('H:i:s');
+            $request->offsetSet($actionMap[$request->get('action')], $presentTime);
+        }
+
+        $userId = $request->user()->id;
+        $request->offsetSet('user_id', $userId);
+        $request->offsetSet('date', Carbon::today('Asia/Tehran')
+            ->format('Y-m-d'));
+
+        $toDayJalali      = $this->convertToJalaliDay(Carbon::today('Asia/Tehran')
+            ->format('l'));
+        $employeeSchedule = Employeeschedule::where('user_id', $userId)
+            ->where('day', $toDayJalali)
+            ->get()
+            ->first();
+        if (isset($employeeSchedule)) {
+            $request->offsetSet('userBeginTime', $employeeSchedule->getOriginal('beginTime'));
+            $request->offsetSet('userFinishTime', $employeeSchedule->getOriginal('finishTime'));
+            $request->offsetSet('allowedLunchBreakInSec',
+                gmdate('H:i:s', $employeeSchedule->getOriginal('lunchBreakInSeconds')));
+        }
+
+        $request->offsetSet('modifier_id', $userId);
+        $request->offsetSet('serverSide', true);
+        $insertRequest  = new InsertEmployeeTimeSheet($request->all());
+        $userTimeSheets = Employeetimesheet::where('date', Carbon::today('Asia/Tehran'))
+            ->where('user_id', $userId->id)
+            ->get();
+        if ($userTimeSheets->count() == 0) {
+            $done = $employeetimesheetController->store($insertRequest);
+        }
+        elseif ($userTimeSheets->count() == 1) {
+            $done = $employeetimesheetController->update($insertRequest, $userTimeSheets->first());
+        }
+        else {
+            $message = 'شما بیش از یک ساعت کاری برای امروز ثبت نموده اید!';
+
+            return $errorPageController->errorPage($message);
+        }
+        if ($done) {
+            session()->flash('success', 'ساعت کاری با موفقیت ذخیره شد');
+        }
+        else {
+            session()->flash('error', 'خطای پایگاه داده');
+        }
+
+        return redirect()->back();
     }
 }

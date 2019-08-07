@@ -182,7 +182,7 @@
                                                                                 "text1p1"=>"قسمت‌های ستاره دار ضروری است." ,
                                                                                 "text1p2"=>"پس از تکمیل فرم زیر، درخواست شما در صف بررسی اینترنت رایگان آسیاتک قرار خواهد گرفت." ,
                                                                                 "text2" =>" اطلاعات وارد شده پس از ثبت درخواست قابل تغییر نیستند.",
-                                                                                "formAction" => "UserController@submitVoucherRequest",
+                                                                                "formAction" => "Web\VoucherController@submitVoucherRequest",
                                                                                 "text3" =>1,
                                                                                 "requiredFields"=>["province" ,
                                                                                                     "city" ,

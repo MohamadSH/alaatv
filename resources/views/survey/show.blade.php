@@ -21,7 +21,7 @@
             </li>
             <li>
                 <i class = "icon-user"></i>
-                <a href = "{{action("Web\UserController@showSurvey")}}">فرم سؤالات</a>
+                <a href = "{{action("Web\SurveyController@show")}}">فرم سؤالات</a>
                 <i class = "fa fa-angle-left"></i>
             </li>
             <li>

@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\{DB, Input};
 use Illuminate\Support\Str;
 use App\Http\Controllers\Controller;
 use App\{Bon,
+    Coupon,
     Orderproduct,
     User,
     Order,
@@ -42,9 +43,9 @@ class BotsController extends Controller
     use CharacterCommon;
     use UserCommon;
     use RequestCommon;
-    
+
     private static $TAG = HomeController::class;
-    
+
     /**
      * Create a new controller instance.
      *
@@ -52,9 +53,9 @@ class BotsController extends Controller
      */
 
     protected $sideBarAdmin;
-    
+
     protected $setting;
-    
+
     public function __construct(Websitesetting $setting)
     {
         $this->middleware('role:admin', [
@@ -62,13 +63,13 @@ class BotsController extends Controller
         ]);
         $this->setting  = $setting->setting;
     }
-    
+
     public function adminBot()
     {
         if (!Input::has("bot")) {
             dd("Please pass bot as input");
         }
-        
+
         $bot    = Input::get("bot");
         $view   = "";
         $params = [];
@@ -89,7 +90,7 @@ class BotsController extends Controller
             abort(404);
         }
     }
-    
+
     public function bot(Request $request)
     {
         try {
@@ -128,12 +129,12 @@ class BotsController extends Controller
                                     $nowDateTime)
                                 ->where("product_id", $asiatechProduct)
                                 ->get();
-                            
+
                             if ($userVoucher->isEmpty()) {
-                                
+
                                 $unusedVoucher->user_id = $orderUser->id;
                                 if ($unusedVoucher->update()) {
-                                    
+
                                     event(new FreeInternetAccept($orderUser));
                                     $counter++;
                                 } else {
@@ -157,7 +158,7 @@ class BotsController extends Controller
                 echo "<br>";
                 dd("DONE!");
             }
-            
+
             if ($request->has("coupon")) {
                 $hamayeshTalai              = [];
                 $notIncludedUsers_Shimi     = [];
@@ -184,23 +185,22 @@ class BotsController extends Controller
                     ->whereNotIn("id", $notIncludedUsers_Shimi)
                     ->whereNotIn("id", $notIncludedUsers_Vafadaran)
                     ->get();
-                
+
                 echo "number of users:".$users->count();
                 echo "<br>";
                 dd("stop");
-                $couponController = new CouponController();
                 $failedCounter    = 0;
                 $proccessed       = 0;
                 dump($users->pluck("id")
                     ->toArray());
-                
+
                 foreach ($users as $user) {
                     do {
                         $couponCode = str_random(5);
                     } while (\App\Coupon::where("code", $couponCode)
                         ->get()
                         ->isNotEmpty());
-                    
+
                     /** Coupon Settings */
                     $couponName        = "قرعه کشی وفاداران آلاء برای ".$user->getFullName();
                     $couponDescription = "قرعه کشی وفاداران آلاء برای ".$user->getFullName();
@@ -218,29 +218,26 @@ class BotsController extends Controller
                         ->toArray();
                     $discount          = 55;
                     /** Coupon Settings */
-                    
-                    $insertCouponRequest = new \App\Http\Requests\InsertCouponRequest();
-                    $insertCouponRequest->offsetSet("enable", 1);
-                    $insertCouponRequest->offsetSet("usageNumber", 0);
-                    $insertCouponRequest->offsetSet("limitStatus", 0);
-                    $insertCouponRequest->offsetSet("coupontype_id", 2);
-                    $insertCouponRequest->offsetSet("discounttype_id", 1);
-                    $insertCouponRequest->offsetSet("name", $couponName);
-                    $insertCouponRequest->offsetSet("description", $couponDescription);
-                    $insertCouponRequest->offsetSet("code", $couponCode);
-                    $insertCouponRequest->offsetSet("products", $couponProducts);
-                    $insertCouponRequest->offsetSet("discount", $discount);
-                    $insertCouponRequest->offsetSet("validSince", $validSinceDate);
-                    $insertCouponRequest->offsetSet("sinceTime", $validSinceTime);
-                    $insertCouponRequest->offsetSet("validSinceEnable", 1);
-                    $insertCouponRequest->offsetSet("validUntil", $validUntilDate);
-                    $insertCouponRequest->offsetSet("untilTime", $validUntilTime);
-                    $insertCouponRequest->offsetSet("validUntilEnable", 1);
-                    
-                    $storeCoupon = $couponController->store($insertCouponRequest);
-                    
-                    if ($storeCoupon->status() == Response::HTTP_OK) {
-                        
+                    $coupon = Coupon::create([
+                        "enable"    => 1 ,
+                        "usageNumber"   => 0 ,
+                        "limitStatus"   => 0 ,
+                        "coupontype_id" => 2 ,
+                        "discounttype_id"   => 1 ,
+                        "name"  => $couponName ,
+                        "description"   => $couponDescription ,
+                        "code"  => $couponCode ,
+                        "products"  => $couponProducts ,
+                        "discount"  => $discount ,
+                        "validSince"    => $validSinceDate ,
+                        "sinceTime" => $validSinceTime ,
+                        "validSinceEnable"  => 1 ,
+                        "validUntil"    => $validUntilDate ,
+                        "untilTime" => $validUntilTime ,
+                        "validUntilEnable"  => 1 ,
+                    ]);
+
+                    if (isset($coupon)) {
                         $message = "شما در قرعه کشی وفاداران آلاء برنده یک کد تخفیف شدید.";
                         $message .= "\n";
                         $message .= "کد شما:";
@@ -255,24 +252,24 @@ class BotsController extends Controller
                         echo "user ".$user->id." notfied";
                         echo "</span>";
                         echo "<br>";
-                        
+
                         $proccessed++;
-                        
+
                     } else {
                         $failedCounter++;
                     }
                 }
-                
+
                 dump("processed: ".$proccessed);
                 dump("failed: ".$failedCounter);
                 dd("coupons done");
             }
-            
+
             if ($request->has("tagfix")) {
                 $contentsetId = 159;
                 $contentset   = Contentset::where("id", $contentsetId)
                     ->first();
-                
+
                 $tags = $contentset->tags->tags;
                 array_push($tags, "نادریان");
                 $bucket           = "contentset";
@@ -281,7 +278,7 @@ class BotsController extends Controller
                     "tags"   => $tags,
                 ];
                 $contentset->tags = json_encode($tagsJson, JSON_UNESCAPED_UNICODE);
-                
+
                 if ($contentset->update()) {
                     $params = [
                         "tags" => json_encode($contentset->tags->tags, JSON_UNESCAPED_UNICODE),
@@ -289,15 +286,15 @@ class BotsController extends Controller
                     if (isset($contentset->created_at) && strlen($contentset->created_at) > 0) {
                         $params["score"] = Carbon::createFromFormat("Y-m-d H:i:s", $contentset->created_at)->timestamp;
                     }
-                    
+
                     $response = $this->sendRequest(config("constants.TAG_API_URL")."id/$bucket/".$contentset->id, "PUT",
                         $params);
                 } else {
                     dump("Error on updating #".$contentset->id);
                 }
-                
+
                 $contents = $contentset->contents;
-                
+
                 foreach ($contents as $content) {
                     $tags = $content->tags->tags;
                     array_push($tags, "نادریان");
@@ -314,7 +311,7 @@ class BotsController extends Controller
                         if (isset($content->created_at) && strlen($content->created_at) > 0) {
                             $params["score"] = Carbon::createFromFormat("Y-m-d H:i:s", $content->created_at)->timestamp;
                         }
-                        
+
                         $response = $this->sendRequest(config("constants.TAG_API_URL")."id/$bucket/".$content->id,
                             "PUT", $params);
                     } else {
@@ -618,7 +615,7 @@ class BotsController extends Controller
             }
         } catch (\Exception    $e) {
             $message = "unexpected error";
-            
+
             return response()->json( [
                 "message" => $message,
                 "error"   => $e->getMessage(),
@@ -627,17 +624,17 @@ class BotsController extends Controller
             ] , Response::HTTP_SERVICE_UNAVAILABLE);
         }
     }
-    
+
     public function walletBot(Request $request)
     {
         if (!$request->has("userGroup")) {
             session()->put("error", "لطفا گروه کاربران را تعیین کنید");
-            
+
             return redirect()->back();
         } else {
             $userGroup = $request->get("userGroup");
         }
-        
+
         $hamayeshTalai      = [];
         $ordooHozoori       = [];
         $ordooGheireHozoori = [];
@@ -646,10 +643,10 @@ class BotsController extends Controller
             $giftCredit = $request->get("giftCost");
         } else {
             session()->put("error", "لطفا مبلغ هدیه را تعیین کنید");
-            
+
             return redirect()->back();
         }
-        
+
         switch ($userGroup) {
             case "1":
                 $productSet = [
@@ -817,16 +814,16 @@ class BotsController extends Controller
                         ]
                         // products id
                     ],
-                
+
                 ];
                 break;
             default:
                 session()->put("error", "گروه کاربران معتبر نمی باشد");
-                
+
                 return redirect()->back();
                 break;
         }
-        
+
         $users = User::query();
         foreach ($productSet as $products) {
             $query = $products["query"];
@@ -837,13 +834,13 @@ class BotsController extends Controller
                     } else {
                         $filterType = "";
                     }
-                    
+
                     if (isset($products["id"])) {
                         $idArray = $products["id"];
                     } else {
                         $idArray = [];
                     }
-                    
+
                     $q->whereHas("orderproducts", function ($q2) use ($idArray, $filterType) {
                         if (!empty($idArray) && strlen($filterType) > 0) {
                             foreach ($idArray as $key => $ids) {
@@ -852,13 +849,13 @@ class BotsController extends Controller
                                 } else {
                                     $myFilterType = $filterType;
                                 }
-                                
+
                                 $q2->$myFilterType("product_id", $ids);
                             }
                         }
                     });
                 }
-                
+
                 $q->whereIn("orderstatus_id", [
                     2,
                     5,
@@ -870,14 +867,14 @@ class BotsController extends Controller
                     ]);
             });
         }
-        
+
         $users = $users->get();
         dump("Total number of users:".$users->count());
-        
+
         if (!$request->has("giveGift")) {
             dd("Done!");
         }
-        
+
         $successCounter = 0;
         $failedCounter  = 0;
         foreach ($users as $user) {
@@ -899,7 +896,7 @@ class BotsController extends Controller
         dump("Number of failed users: ", $failedCounter);
         dd("Done!");
     }
-    
+
     public function pointBot(Request $request)
     {
         $successCounter = 0;
@@ -1114,7 +1111,7 @@ class BotsController extends Controller
             }
         }
 
-        
+
         $users = $users->where("point"  , ">" , 0);
 //        dump($users->count());
 //        dd("STOP points");
@@ -1155,20 +1152,20 @@ class BotsController extends Controller
         if (!isset($bon)) {
             dd("Bon not found");
         }
-        
+
         dump("Number of available users: ".$users->count());
 
         foreach ($users as $userPoint) {
             $userId = $userPoint["user_id"];
             $points = $userPoint["point"];
-            
+
             echo "User Id: ".$userId." , Points: ".$points;
             echo "<br>";
-            
+
             if ($points == 0) {
                 continue;
             }
-            
+
             $userBon                   = new Userbon();
             $userBon->bon_id           = $bon->id;
             $userBon->user_id          = $userId;
@@ -1198,7 +1195,7 @@ class BotsController extends Controller
         dump("number of failed users: ".$failedCounter);
         dd("Done!");
     }
-    
+
     public function excelBot(Request $request)
     {
         dd('This method is not working . Please check it out.');
@@ -1213,10 +1210,10 @@ class BotsController extends Controller
                 $sheet->rows(function (Row $row) use (&$counter, $sheetName) {
                     // Get a column
                     //                    $row->column('نام');
-                    
+
                     // Magic get
                     //                    $row->heading_key;
-                    
+
                     // Array access
                     //                    $row['heading_key'];
                     $mobile       = $row["mobile"];
@@ -1234,7 +1231,7 @@ class BotsController extends Controller
                         //                                dump("OK!") ;
                         //                            }
                         //                        }
-                        
+
                         if (strlen($mobile) > 0 && strlen($nationalCode) > 0) {
                             $nationalCodeValidation = $this->validateNationalCode($nationalCode);
                             $mobileValidation       = (strlen($mobile) == 11);
@@ -1245,11 +1242,11 @@ class BotsController extends Controller
                                 if (strlen($firstName) > 0) {
                                     $request->offsetSet("firstName", $firstName);
                                 }
-                                
+
                                 if (strlen($lastName) > 0) {
                                     $request->offsetSet("lastName", $lastName);
                                 }
-                                
+
                                 if (isset($row["major"])) {
                                     if ($row["major"] == "r") {
                                         $request->offsetSet("major_id", 1);
@@ -1285,11 +1282,11 @@ class BotsController extends Controller
                                 if (!$nationalCodeValidation) {
                                     $fault .= " wrong nationalCode ";
                                 }
-                                
+
                                 if (!$mobile) {
                                     $fault .= " wrong mobile ";
                                 }
-                                
+
                                 echo "<span style='color:orange'>";
                                 echo "Warning! user wrong information: ".$lastName.$fault." ,in sheet : ".$sheetName;
                                 echo "</span>";
@@ -1312,7 +1309,7 @@ class BotsController extends Controller
         dd("Done!");
         //        $rows = Excel::load('storage\\exports\\'. $fileName)->get();
     }
-    
+
     public function checkDisableContentTagBot()
     {
         $disableContents = Content::where("enable", 0)
@@ -1332,7 +1329,7 @@ class BotsController extends Controller
         dump("count: ".$counter);
         dd("finish");
     }
-    
+
     public function tagBot()
     {
         $counter = 0;
@@ -1736,7 +1733,7 @@ class BotsController extends Controller
                             ->pluck("description")
                             ->toArray();
                         $myTags            = array_merge($myTags, $childContentTypes);
-                        
+
                         $majors = $item->majors->pluck("description")
                             ->toArray();
                         if (!empty($majors)) {
@@ -1748,7 +1745,7 @@ class BotsController extends Controller
                         if (!empty($grades)) {
                             $myTags = array_merge($myTags, $grades);
                         }
-                        
+
                         switch ($item->id) {
                             case 141:
                             case 142:
@@ -1777,7 +1774,7 @@ class BotsController extends Controller
                                 ]);
                                 break;
                         }
-                        
+
                         $myTags     = array_merge($myTags, ["متوسطه2"]);
                         $tagsJson   = [
                             "bucket" => $bucket,
@@ -1819,7 +1816,7 @@ class BotsController extends Controller
                             default :
                                 break;
                         }
-                        
+
                         $myTags     = array_merge($myTags, ["متوسطه2"]);
                         $tagsJson   = [
                             "bucket" => $bucket,
@@ -1838,7 +1835,7 @@ class BotsController extends Controller
                         $items = $items->where("id", $id);
                     }
                     $items = $items->get();
-                    
+
                     break;
                 case "pr": //Product
                     $bucket = "product";
@@ -2180,7 +2177,7 @@ class BotsController extends Controller
                                 break;
                         }
                         $myTags = array_merge($myTags, ["متوسطه2"]);
-                        
+
                         $tagsJson   = [
                             "bucket" => $bucket,
                             "tags"   => $myTags,
@@ -2211,7 +2208,7 @@ class BotsController extends Controller
                         $itemTagsArray = $item->tags->tags;
                     }
                 }
-                
+
                 if (is_array($itemTagsArray) && !empty($itemTagsArray) && isset($item["id"])) {
                     $params = [
                         "tags" => json_encode($itemTagsArray, JSON_UNESCAPED_UNICODE),
@@ -2219,10 +2216,10 @@ class BotsController extends Controller
                     if (isset($item->created_at) && strlen($item->created_at) > 0) {
                         $params["score"] = Carbon::createFromFormat("Y-m-d H:i:s", $item->created_at)->timestamp;
                     }
-                    
+
                     $response = $this->sendRequest(config("constants.TAG_API_URL")."id/$bucket/".$item->id, "PUT",
                         $params);
-                    
+
                     if ($response["statusCode"] == Response::HTTP_OK) {
                         $successCounter++;
                     } else {
@@ -2241,7 +2238,7 @@ class BotsController extends Controller
             dump($failedCounter." items failed");
             dump($warningCounter." warnings");
             dump("finish time:".Carbon::now("asia/tehran"));
-            
+
             return response()->json(["message" => "Done! number of processed items : $counter"] , Response::HTTP_OK);
         } catch (\Exception $e) {
             $message = "unexpected error";
