@@ -974,8 +974,7 @@ class UserController extends Controller
 //        ] = $user->getLottery();
 
         $event            = Event::name('konkur98')->first();
-        $userKonkurResult = $user->eventresults->where("event_id", $event->id)
-            ->first();
+        $userKonkurResult = $user->eventresults->where("event_id", $event->id)->first();
 
         $userCompletion = $user->info['completion'];
 
