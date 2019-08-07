@@ -43,12 +43,12 @@
                                 @if($employeetimesheet->getOriginal("timeSheetLock"))
                                     <h4 class="m--font-danger text-center bold col">ساعت کاری امروز شما قفل شده است</h4>
                                 @else
-                                    {!! Form::model( $employeetimesheet,['method' => 'POST','action' => ['Web\UserController@submitWorkTime'] , 'class'=>'form-horizontal col' ,'accept-charset'=>'UTF-8' , 'enctype'=>'multipart/form-data']) !!}
+                                    {!! Form::model( $employeetimesheet,['method' => 'POST','action' => ['Web\EmployeetimesheetController@submitWorkTime'] , 'class'=>'form-horizontal col' ,'accept-charset'=>'UTF-8' , 'enctype'=>'multipart/form-data']) !!}
                                     @include('employeeTimeSheet.form')
                                     {!! Form::close() !!}
                                 @endif
                             @elseif(isset($formVisible) && $formVisible)
-                                {!! Form::open( ['method' => 'POST','action' => ['Web\UserController@submitWorkTime'] , 'class'=>'form-horizontal col' ,'accept-charset'=>'UTF-8' , 'enctype'=>'multipart/form-data']) !!}
+                                {!! Form::open( ['method' => 'POST','action' => ['Web\EmployeetimesheetController@submitWorkTime'] , 'class'=>'form-horizontal col' ,'accept-charset'=>'UTF-8' , 'enctype'=>'multipart/form-data']) !!}
                                 @include('employeeTimeSheet.form')
                                 {!! Form::close() !!}
                             @endif
@@ -177,7 +177,7 @@
                         </div>
                     </div>
                     <!--end::Modal-->
-                    
+
                     <table class="table table-striped table-bordered table-hover dt-responsive" width="100%" id="employeeTimeSheet_table">
                         <thead>
                         <tr>
@@ -224,15 +224,15 @@
             </div>
         </div>
     </div>
-    
+
 @endsection
 
 @section('page-js')
     <script src="{{ mix('/js/admin-all.js') }}" type="text/javascript"></script>
-    
-    
-    
-    
+
+
+
+
 {{--    <script src="/acm/AlaatvCustomFiles/components/alaa_old/scripts/datatable.min.js" type="text/javascript"></script>--}}
 {{--    <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/datatables/datatables.min.js" type="text/javascript"></script>--}}
 {{--    <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js" type="text/javascript"></script>--}}
@@ -274,7 +274,7 @@
 {{--    <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-sweetalert/sweetalert.min.js" type="text/javascript"></script>--}}
 {{--    <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/jquery.input-ip-address-control-1.0.min.js" type="text/javascript"></script>--}}
 {{--    <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/icheck/icheck.min.js" type="text/javascript"></script>--}}
-    
+
 {{--    <script src="/acm/AlaatvCustomFiles/components/alaa_old/scripts/datatable.min.js" type="text/javascript"></script>--}}
 {{--    <script src="/acm/AlaatvCustomFiles/components/alaa_old/scripts/form-repeater.js" type="text/javascript"></script>--}}
 {{--    <script src="/acm/AlaatvCustomFiles/components/alaa_old/scripts/ui-toastr.min.js" type="text/javascript"></script>--}}
@@ -299,7 +299,7 @@
             //     radioClass: 'iradio_line',
             // });
             //
-            
+
             // Ajax of Modal forms
             var $modal = $('#ajax-modal');
 

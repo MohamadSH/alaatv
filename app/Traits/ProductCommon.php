@@ -10,44 +10,6 @@ trait ProductCommon
 {
     /**
      * @param  Product  $product
-     *
-     * @return Collection
-     */
-    function makeAllFileCollection(Product $product): Collection
-    {
-        $key = "product:validProductfiles:pamphlet|video".$product->cacheKey();
-        
-        return Cache::tags(['product'])
-        ->remember($key, config("constants.CACHE_60"), function () use ($product) {
-            $productfiletypes   = Productfiletype::all();
-            $allFilesCollection = collect();
-            foreach ($productfiletypes as $productfiletype) {
-                $filesArray = $product->makeFileArray($productfiletype->name);
-                
-                foreach ($product->children as $child) {
-                    $childFilesArray = $child->makeFileArray($productfiletype->name);
-                    
-                    if (!empty($filesArray)) {
-                        $filesArray = array_merge($filesArray, $childFilesArray);
-                    }
-                }
-                
-                if (!empty($filesArray)) {
-                    $allFilesCollection->push([
-                        "typeName"        => $productfiletype->name,
-                        "typeDisplayName" => $productfiletype->displayName,
-                        "title"           => $product->name,
-                        "files"           => $filesArray,
-                    ]);
-                }
-            }
-            
-            return $allFilesCollection;
-        });
-    }
-    
-    /**
-     * @param  Product  $product
      * @param           $extraAttributeValues
      *
      * @return int|float
@@ -56,7 +18,7 @@ trait ProductCommon
     {
         $key = "product:productExtraCostFromAttributes:Product"."\\".$product->cacheKey()."\\extraAttributeValues:".(isset($extraAttributeValues) ? implode("",
                 $extraAttributeValues) : "-");
-        
+
         return (int)Cache::tags(['product'])->tags('bon')
             ->remember($key, config("constants.CACHE_60"), function () use ($product, $extraAttributeValues) {
                 $totalExtraCost = 0;
@@ -64,18 +26,18 @@ trait ProductCommon
                     $extraCost      = 0;
                     $attributevalue = $product->attributevalues->where("id", $attributevalueId)
                         ->first();
-                    
+
                     if (isset($attributevalue) && isset($attributevalue->pivot->extraCost)) {
                         $extraCost = $attributevalue->pivot->extraCost;
                     }
-                    
+
                     $totalExtraCost += $extraCost;
                 }
-                
+
                 return $totalExtraCost;
             });
     }
-    
+
     /**
      * Finds product intended child based on specified attribute values
      *
@@ -97,7 +59,7 @@ trait ProductCommon
                     }
                 }
             }
-            
+
             if ($flag && $childAttributevalues->count() == count($mainAttributeValues)) {
                 $simpleProduct = $child;
                 break;
@@ -110,7 +72,7 @@ trait ProductCommon
             return null;
         }
     }
-    
+
     /**
      * Copies a product files to another product
      *
@@ -126,7 +88,7 @@ trait ProductCommon
             $newFile->save();
         }
     }
-    
+
     /**
      * @param  Product  $sourceProduct
      * @param  Product  $destinationProduct
@@ -139,7 +101,7 @@ trait ProductCommon
             $newPhoto             = $photo->replicate();
             $newPhoto->product_id = $destinationProduct->id;
             $newPhoto->save();
-            
+
             if (isset($newPhotoInfo["title"])) {
                 $newPhoto->title = $newPhotoInfo["title"];
                 $newPhoto->update();
@@ -150,7 +112,7 @@ trait ProductCommon
             }
         }
     }
-    
+
     /**
      * Calculates costs of a product collection
      *
@@ -165,7 +127,7 @@ trait ProductCommon
             $key .= $product->cacheKey()."-";
         }
         $key = "product:makeCostCollection:".md5($key);
-        
+
         return Cache::tags(['product'])
         ->remember($key, config("constants.CACHE_60"), function () use ($products) {
             $costCollection = collect();
@@ -205,7 +167,7 @@ trait ProductCommon
                 else {
                     $costArray = $product->calculatePayablePrice();
                 }
-                
+
                 $costCollection->put($product->id, [
                     "cost"            => $costArray["cost"],
                     'productDiscount' => $costArray["productDiscount"],
@@ -213,11 +175,11 @@ trait ProductCommon
                     'costForCustomer' => isset($costArray['costForCustomer']) ? $costArray['costForCustomer'] : 0,
                 ]);
             }
-            
+
             return $costCollection;
         });
     }
-    
+
     protected function makeProductCollection($productsId = null)
     {
         $key = ":0-";
@@ -227,7 +189,7 @@ trait ProductCommon
             }
         }
         $key = "product:makeProductCollection:".$key;
-        
+
         return Cache::tags(['product'])
         ->remember($key, config("constants.CACHE_60"), function () use ($productsId) {
             if (isset($productsId)) {
@@ -245,11 +207,11 @@ trait ProductCommon
             foreach ($allProducts as $product) {
                 $products->push($product);
             }
-            
+
             return $products;
         });
     }
-    
+
     protected function haveSameFamily($products)
     {
         $key = null;
@@ -257,7 +219,7 @@ trait ProductCommon
             $key .= $product->cacheKey()."-";
         }
         $key = "product:haveSameFamily:".$key;
-        
+
         return Cache::tags(['product'])
         ->remember($key, config("constants.CACHE_60"), function () use ($products) {
             $flag = true;
@@ -275,7 +237,7 @@ trait ProductCommon
                     }
                 }
             }
-            
+
             return $flag;
         });
     }

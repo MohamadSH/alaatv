@@ -41,7 +41,7 @@ class File extends BaseModel
         'name',
         'uuid',
     ];
-    
+
     /**
      *  Setup model event hooks
      */
@@ -52,20 +52,20 @@ class File extends BaseModel
             $model->uuid = (string) Uuid::generate(4);
         });
     }
-    
+
     public function contents()
     {
         return $this->belongsToMany('App\Content', 'educationalcontent_file', 'file_id', 'content_id')
             ->withPivot("caption");
     }
-    
+
     public function disks()
     {
         return $this->belongsToMany("\App\Disk")
             ->orderBy("priority")
             ->withPivot("priority");
     }
-    
+
     public function getUrl()
     {
         $fileRemotePath = "";
@@ -77,7 +77,7 @@ class File extends BaseModel
             $sftpRoot    = config("constants.SFTP_ROOT");
             $dProtocol   = config("constants.DOWNLOAD_HOST_PROTOCOL");
             $dName       = config("constants.DOWNLOAD_HOST_NAME");
-            
+
             switch ($diskType) {
                 case "SftpAdapter" :
                     //                $fileHost = $diskAdapter->getHost();
@@ -86,18 +86,18 @@ class File extends BaseModel
                     $fileRemotePath .= $this->name;
                     break;
             }
-            
+
             return $fileRemotePath;
         }
         else {
-            return action("Web\HomeController@error404");
+            return action("Web\ErrorPageController@error404");
         }
     }
-    
+
     public function getExtention()
     {
         $ext = pathinfo($this->name, PATHINFO_EXTENSION);
-        
+
         return $ext;
     }
 }
