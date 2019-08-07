@@ -65,16 +65,16 @@ Route::group(['prefix' => 'checkout'], function () {
 
     Route::get('review', "Web\OrderController@checkoutReview")
         ->name('checkoutReview');
-    
+
     Route::get('payment', "Web\OrderController@checkoutPayment")
         ->name('checkoutPayment');
 
     Route::any('verifyPayment/online/{paymentMethod}/{device}', [PaymentVerifierController::class, 'verify'])
         ->name('verifyOnlinePayment');
-    
+
     Route::any('verifyPayment/online/{status}/{paymentMethod}/{device}', [PaymentStatusController::class, 'show'])
         ->name('showOnlinePaymentStatus');
-    
+
     Route::any('verifyPayment/offline/{paymentMethod}/{device}', 'Web\OfflinePaymentController@verifyPayment')
         ->name('verifyOfflinePayment');
 });
@@ -84,13 +84,13 @@ Route::group(['prefix' => 'orderproduct'], function () {
 });
 
 Route::group(['prefix' => 'landing'], function () {
-    
+
     Route::get('7' , 'Web\ProductController@landing7')->name('landing.7');
     Route::get('9' , 'Web\ProductController@landing9')->name('landing.9');
     Route::get('10' , 'Web\ProductController@landing10')->name('landing.10');
-    
+
     Route::get('8' , 'Web\ProductController@landing8')->name('landing.8');
-    
+
     Route::get('6' , [
         'as'   => 'landing.6',
         'uses' => 'Web\ProductController@landing6',
@@ -117,7 +117,7 @@ Route::group(['prefix' => 'landing'], function () {
     ]);
 });
 Route::group(['middleware' => 'auth'], function () {
-    
+
     Route::get('logout', '\App\Http\Controllers\Auth\LoginController@logout');
     Route::get('usersAdmin', 'Web\AdminController@admin');
     Route::get('consultantPanel', 'Web\AdminController@consultantAdmin');
@@ -130,7 +130,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('block/detach/{block}/{type}/{id}', 'Web\BlockController@detachFromBlock');
 
     Route::get('sales-report', 'Web\AdminController@adminSalesReport')->name('admin.salesReport');
-    
+
     Route::get('ordersAdmin', 'Web\AdminController@adminOrder');
     Route::get('smsAdmin', 'Web\AdminController@adminSMS');
     Route::get('botAdmin', 'Web\BotsController@adminBot');
@@ -145,7 +145,9 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('complete-register', 'Web\UserController@completeRegister')
         ->name('completeRegister');
     Route::get('survey', 'Web\UserController@showSurvey');
-    Route::get('97', 'Web\HomeController@submitKonkurResult');
+    Route::get('96', 'Web\EventresultController@create');
+    Route::get('97', 'Web\EventresultController@create');
+    Route::get('98', 'Web\EventresultController@create');
     Route::post("transactionToDonate/{transaction}", "Web\TransactionController@convertToDonate");
     Route::post("completeTransaction/{transaction}", "Web\TransactionController@completeTransaction");
     Route::post("myTransaction/{transaction}", "Web\TransactionController@limitedUpdate");
@@ -156,7 +158,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('exchangeOrderproduct/{order}', 'Web\OrderController@exchangeOrderproduct');
     Route::get('MBTI-Participation', "Web\MbtianswerController@create");
     Route::get('MBTI-Introduction', "Web\MbtianswerController@introduction");
-    
+
     Route::get('holdlottery', "Web\LotteryController@holdLottery");
     Route::get('givePrize', "Web\LotteryController@givePrizes");
     Route::get("bot", "Web\BotsController@bot");
@@ -170,19 +172,19 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get("specialAddUser", "Web\AdminController@specialAddUser");
     Route::get("v/asiatech", "Web\UserController@voucherRequest");
     Route::put("v", "Web\UserController@submitVoucherRequest");
-    
+
     Route::resource('orderproduct', 'Web\OrderproductController');
-    
+
     Route::group(['prefix' => 'user'], function () {
-        
-        
+
+
         Route::get('{user}/dashboard', 'Web\DashboardPageController')
             ->name('web.user.dashboard');
         Route::get('sales-report', '\\'.SalesReportController::class);
         Route::get('profile', 'Web\UserController@show');
         Route::post('profile', 'Web\UserController@update')
             ->name('web.authenticatedUser.profile.update');
-        
+
         Route::get('info', "Web\UserController@informationPublicUrl");
         Route::get('{user}/info', 'Web\UserController@information');
         Route::post('{user}/completeInfo', 'Web\UserController@completeInformation');
@@ -221,7 +223,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::put('addComplimentary/{product}', 'Web\ProductController@addComplimentary');
         Route::put('removeComplimentary/{product}', 'Web\ProductController@removeComplimentary');
     });
-    
+
     Route::resource('user', 'Web\UserController');
     Route::resource('userbon', 'Web\UserbonController');
     Route::resource('assignment', 'Web\AssignmentController');
@@ -254,7 +256,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::resource('employeetimesheet', 'Web\EmployeetimesheetController');
     Route::resource('lottery', 'Web\LotteryController');
     Route::resource('cat', 'Web\CategoryController');
-    
+
     Route::get("copylessonfromremote", "Web\RemoteDataCopyController@copyLesson");
     Route::get("copydepartmentfromremote", "Web\RemoteDataCopyController@copyDepartment");
     Route::get("copydepartmentlessonfromremote", "Web\RemoteDataCopyController@copyDepartmentlesson");
@@ -263,7 +265,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get("copydepartmentlessontotakhtekhak", "Web\SanatisharifmergeController@copyDepartmentlesson");
     Route::get("copycontenttotakhtekhak", "Web\SanatisharifmergeController@copyContent");
     Route::get("tagbot", "Web\BotsController@tagbot");
-    
+
     Route::get("donate", "Web\DonateController");
     Route::post("donateOrder", "Web\OrderController@donateOrder");
     Route::get('adminGenerateRandomCoupon', "Web\AdminController@adminGenerateRandomCoupon");
@@ -279,13 +281,13 @@ Route::group(['middleware' => 'auth'], function () {
 });
 
 Route::group(['prefix' => 'c'], function () {
-    
+
     Route::get('search', 'Web\ContentController@search');
     Route::get('create2', 'Web\ContentController@create2');
-    
+
     Route::get('{c}/favored', 'Web\FavorableController@getUsersThatFavoredThisFavorable');
     Route::post('{c}/favored', 'Web\FavorableController@markFavorableFavorite');
-    
+
     Route::group(['prefix' => '{c}/attach'], function () {
         Route::post('set/{set}', 'Web\ContentController@attachContentToContentSet');
         Route::put('set/{set}', 'Web\ContentController@updateContentSetPivots');

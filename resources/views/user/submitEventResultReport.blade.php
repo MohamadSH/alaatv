@@ -71,7 +71,7 @@
                                                 <h2 class = "control-label ">نظر شما:</h2>
                                                 <text class = "form-control-static bold" style = "font-size: medium ; color:green;text-align: justify"> {{$userEventReport->comment}} </text>
                                             @else
-                                                {!! Form::open(['method' => 'PUT','action' => ['EventresultController@update' , $userEventReport ] ]) !!}
+                                                {!! Form::open(['method' => 'PUT','action' => ['Web\EventresultController@update' , $userEventReport ] ]) !!}
                                                 <textarea rows = "5" name = "comment" placeholder = "آلاء چه نقشی در نتیجه شما داشته و چطور به شما کمک کرده؟" class = "form-control"></textarea>
                                                 {!! Form::submit('ثبت', ['class' => 'btn blue']) !!}
                                                 {!! Form::close() !!}
@@ -80,7 +80,7 @@
                                         </div>
                                     </div>
                                 @else
-                                    {!! Form::open(['files'=>true,'method' => 'POST','action' => ['EventresultController@store'] ]) !!}
+                                    {!! Form::open(['files'=>true,'method' => 'POST','action' => ['Web\EventresultController@store'] ]) !!}
                                     {{ csrf_field() }}
                                     {!! Form::hidden('event_id',$event->id) !!}
                                     {!! Form::hidden('eventresultstatus_id',1) !!}
