@@ -266,7 +266,7 @@ Route::group(['middleware' => 'auth'], function () {
 Route::group(['prefix' => 'c'], function () {
 
     Route::get('search', 'Web\ContentController@search');
-    Route::get('create2', 'Web\ContentController@create2');
+    Route::get('create2', [ContentController::class, 'create2']);
 
     Route::get('{c}/favored', 'Web\FavorableController@getUsersThatFavoredThisFavorable');
     Route::post('{c}/favored', 'Web\FavorableController@markFavorableFavorite');

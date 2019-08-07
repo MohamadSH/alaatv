@@ -843,11 +843,7 @@ class ProductController extends Controller
             Response::HTTP_SERVICE_UNAVAILABLE);
     }
 
-    /*
-    |--------------------------------------------------------------------------
-    | Private Methods
-    |--------------------------------------------------------------------------
-    */
+
 
     /**
      * @param $introVideo
