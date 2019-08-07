@@ -3,11 +3,8 @@
 namespace App\Http\Controllers\Web;
 
 use App\Event;
-use App\Http\Controllers\Auth\RegisterController;
-use App\Http\Requests\EditUserRequest;
-use App\Http\Requests\InsertEventResultRequest;
+use App\Eventresult;
 use App\Http\Requests\RegisterForSanatiSharifHighSchoolRequest;
-use App\Traits\RequestCommon;
 use App\User;
 use Auth;
 use Illuminate\Http\Request;
@@ -174,101 +171,76 @@ class SharifSchoolController extends Controller
      *
      * @return Response
      */
-    public function registerForSanatiSharifHighSchool(RegisterForSanatiSharifHighSchoolRequest $request, EventresultController $eventResultController)
+    public function registerForSanatiSharifHighSchool(RegisterForSanatiSharifHighSchoolRequest $request)
     {
-        $event = Event::where("name", "sabtename_sharif_97")
-            ->get();
-        if ($event->isEmpty()) {
-            session()->put("error", "رخداد یافت نشد");
-
+        $event = Event::where('name', 'sabtename_sharif_97')->first();
+        if (is_null($event)) {
+            session()->put('error', 'رخداد یافت نشد');
             return redirect()->back();
-        }
-        else {
-            $event = $event->first();
         }
 
         if (Auth::check()) {
             $user = $request->user();
         }
         else {
-            $registeredUser = User::where("mobile", $request->get("mobile"))
-                ->where("nationalCode", $request->get("nationalCode"))
-                ->get();
+            $registeredUser = User::where('mobile', $request->get('mobile'))
+                ->where('nationalCode', $request->get('nationalCode'))
+                ->first();
         }
 
-        if (!isset($user) && $registeredUser->isEmpty()) {
-            $registerRequest = new Request();
-            $registerRequest->offsetSet("firstName", $request->get("firstName"));
-            $registerRequest->offsetSet("lastName", $request->get("lastName"));
-            $registerRequest->offsetSet("mobile", $request->get("mobile"));
-            $registerRequest->offsetSet("nationalCode", $request->get("nationalCode"));
-            $registerRequest->offsetSet("major_id", $request->get("major_id"));
-            $registerRequest->offsetSet("grade_id", $request->get("grade_id"));
-            //            $registerRequest->offsetSet("gender_id", 1);
-            $registerController = new RegisterController();
-            $response           = $registerController->register($registerRequest);
-            if ($response->getStatusCode() != 302) {
-                session()->put("error", "خطایی در ثبت اطلاعات شما اتفاق افتاد . لطفا دوباره اقدام نمایید.");
-
+        if (!isset($user) && !isset($registeredUser)) {
+            $user = User::create([
+                'firstName'     => $request->get('firstName') ,
+                'lastName'      => $request->get('lastName') ,
+                'mobile'        => $request->get('mobile') ,
+                'nationalCode'  => $request->get('nationalCode') ,
+                'major_id'      => $request->get('major_id') ,
+                'grade_id'      => $request->get('grade_id') ,
+            ]);
+            if(!isset($user)){
+                session()->put('error', 'خطایی در ثبت اطلاعات شما اتفاق افتاد . لطفا دوباره اقدام نمایید.');
                 return redirect()->back();
             }
-            $user = $request->user();
-        }
-        else {
+        } else {
             if (!isset($user)) {
-                $user = $registeredUser->first();
+                $user = $registeredUser;
             }
-            $updateRequest = new EditUserRequest();
-            if ($request->has("firstName") && (!isset($user->firstName) || strlen(preg_replace('/\s+/', '',
-                        $user->firstName)) == 0)) {
-                $updateRequest->offsetSet("firstName", $request->get("firstName"));
-            }
-            if ($request->has("lastName") && (!isset($user->lastName) || strlen(preg_replace('/\s+/', '',
-                        $user->lastName)) == 0)) {
-                $updateRequest->offsetSet("lastName", $request->get("lastName"));
-            }
-            $updateRequest->offsetSet("major_id", $request->get("major_id"));
-            $updateRequest->offsetSet("grade_id", $request->get("grade_id"));
-            RequestCommon::convertRequestToAjax($updateRequest);
-            $response = $this->update($updateRequest, $user);
-            if ($response->getStatusCode() == Response::HTTP_SERVICE_UNAVAILABLE) {
-                session()->put("error", "خطایی در ثبت اطلاعات شما رخ داد. لطفا مجددا اقدام نمایید");
-
+            $updateUserResult = $user->update([
+                'firstName' => $request->get('firstName'),
+                'lastName'  => $request->get('lastName'),
+                'major_id'  => $request->get('major_id'),
+                'grade_id'  => $request->get('grade_id')
+            ]);
+            if(!$updateUserResult){
+                session()->put('error', 'خطایی در ثبت اطلاعات شما رخ داد. لطفا مجددا اقدام نمایید');
                 return redirect()->back();
             }
         }
 
-        $eventRegistered = $user->eventresults->where("user_id", $user->id)
-            ->where("event_id", $event->id);
+        $eventRegistered = $user->eventresults->where('user_id', $user->id)
+            ->where('event_id', $event->id);
         if ($eventRegistered->isNotEmpty()) {
-            session()->put("error", "شما قبلا ثبت نام کرده اید");
+            session()->put('error', 'شما قبلا ثبت نام کرده اید');
 
             return redirect()->back();
         }
         else {
-            $evenResultRequest = new InsertEventResultRequest();
-            $evenResultRequest->offsetSet("user_id", $user->id);
-            $evenResultRequest->offsetSet("event_id", $event->id);
-            $evenResultRequest->offsetSet("participationCodeHash", $request->get("score"));
-            RequestCommon::convertRequestToAjax($evenResultRequest);
-            $response = $eventResultController->store($evenResultRequest);
-            if ($response->getStatusCode() == Response::HTTP_SERVICE_UNAVAILABLE) {
-                session()->put("error", "خطایی در ثبت نام شما رخ داد. لطفا مجددا اقدام نمایید");
-
+            $eventResult = Eventresult::create([
+                'user_id', $user->id,
+                'event_id', $event->id,
+                'participationCodeHash', $request->get('score')
+            ]);
+            if (!$eventResult) {
+                session()->put('error', 'خطایی در ثبت نام شما رخ داد. لطفا مجددا اقدام نمایید');
                 return redirect()->back();
             }
-            else {
-                //                $result = json_decode($response->getContent());
-                //                if(isset($result->participationCode))
-                //                    $participationCode = $result->participationCode;
-            }
         }
 
-        $message = "پیش ثبت نام شما در دبیرستان دانشگاه صنعتی شریف با موفقیت انجام شد .";
+        $message = 'پیش ثبت نام شما در دبیرستان دانشگاه صنعتی شریف با موفقیت انجام شد .';
         if (isset($participationCode)) {
-            $message .= "کد داوطلبی شما: ".$participationCode;
+            $message .= 'کد داوطلبی شما: '.$participationCode;
         }
-        session()->put("success", $message);
+        session()->put('success', $message);
 
         return redirect()->back();
     }
