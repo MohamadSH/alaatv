@@ -162,131 +162,6 @@ class ProductController extends Controller
         return response()->json([] , Response::HTTP_SERVICE_UNAVAILABLE);
     }
 
-    /**
-     * @param  array    $inputData
-     * @param  Product  $product
-     *
-     * @return void
-     * @throws FileNotFoundException
-     */
-    private function fillProductFromRequest(array $inputData, Product $product): void
-    {
-        $files     = Arr::has($inputData, 'files') ? [Arr::get($inputData, 'files')] : [];
-        $images    = Arr::has($inputData, 'image') ? [Arr::get($inputData, 'image')] : [];
-        $isFree    = Arr::has($inputData, 'isFree');
-        $tagString = Arr::get($inputData, 'tags');
-
-        $product->fill($inputData);
-
-        if (strlen($tagString) > 0) {
-            $product->tags = convertTagStringToArray($tagString);
-        }
-
-        if ($this->strIsEmpty($product->discount)) {
-            $product->discount = 0;
-        }
-
-        $product->isFree = $isFree;
-
-        $product->intro_videos = $this->setIntroVideos(Arr::get($inputData, 'introVideo'),
-            Arr::get($inputData, 'introVideoThumbnail'));
-
-        //Storing product's catalog
-        $storeFileResult = $this->storeCatalogOfProduct($product, $files);
-        //ToDo : delete the file if it is an update
-
-        //Storing product's image
-        $storeImageResult = $this->storeImageOfProduct($product, $images);
-        //ToDo : delete the file if it is an update
-    }
-
-    /** Stores catalog file of the product
-     *
-     * @param  Product  $product
-     *
-     * @param  array    $files
-     *
-     * @return array
-     * @throws FileNotFoundException
-     */
-    private function storeCatalogOfProduct(Product $product, array $files): array
-    {
-        $done = [];
-        foreach ($files as $key => $file) {
-            $extension  = $file->getClientOriginalExtension();
-            $fileName   = basename($file->getClientOriginalName(), '.'.$extension).'_'.date('YmdHis').'.'.$extension;
-            $done[$key] = false;
-            if (Storage::disk(config('constants.DISK5'))
-                ->put($fileName, File::get($file))) {
-                $product->file = $fileName;
-                $done[$key]    = true;
-            }
-        }
-
-        return $done;
-    }
-
-    /** Stores image file of the product
-     *
-     * @param  Product  $product
-     *
-     * @param  array    $files
-     *
-     * @return array
-     * @throws FileNotFoundException
-     */
-    private function storeImageOfProduct(Product $product, array $files): array
-    {
-        $done = [];
-        foreach ($files as $key => $file) {
-            $extension  = $file->getClientOriginalExtension();
-            $fileName   = basename($file->getClientOriginalName(), '.'.$extension).'_'.date('YmdHis').'.'.$extension;
-            $disk = Storage::disk(config('constants.DISK21'));
-            /** @var AlaaSftpAdapter $adaptor */
-            $adaptor = $disk->getAdapter();
-            $done[$key] = false;
-            if ($disk->put($fileName, File::get($file))) {
-                $fullPath = $adaptor->getRoot();
-                $partialPath = $this->getSubDirectoryInCDN($fullPath);
-
-                $done[$key]     = true;
-                $product->image = $partialPath.$fileName;
-                /**
-                 *  Snippet code : resizing the image using the ........ package
-                 *
-                 * $img = Image::make(Storage::disk(config('constants.DISK4'))->getAdapter()->getPathPrefix().$fileName);
-                 * $img->resize(256, 256);
-                 * $img->save(Storage::disk(config('constants.DISK4'))->getAdapter()->getPathPrefix().$fileName);
-                 * */
-            }
-        }
-
-        return $done;
-    }
-
-    /**
-     * @param $product
-     * @param $bonId
-     * @param $bonDiscount
-     * @param $bonPlus
-     */
-    private function attachBonToProduct(Product $product, $bonId, $bonDiscount, $bonPlus): void
-    {
-        $bonQueryBuilder = $product->bons();
-
-        if ($product->hasBon($bonId)) {
-            $bonQueryBuilder->updateExistingPivot($bonId, [
-                'discount' => $bonDiscount,
-                'bonPlus'  => $bonPlus,
-            ]);
-        } else {
-            $bonQueryBuilder->attach($bonId, [
-                'discount' => $bonDiscount,
-                'bonPlus'  => $bonPlus,
-            ]);
-        }
-    }
-
     public function show(Request $request, Product $product)
     {
         //$user = $request->user();
@@ -316,50 +191,6 @@ class ProductController extends Controller
         $block = optional($product)->block;
 
         return view('product.show', compact('product', 'block', 'purchasedProductIdArray', 'allChildIsPurchased'));
-    }
-
-    private function searchInUserAssetsCollection(Product $product, User $user) {
-
-        $purchasedProductIdArray = [];
-        $userAssetsCollection = $user->getDashboardBlocks()->pluck('products');
-        foreach ($userAssetsCollection as $blockProducts) {
-            foreach ($blockProducts as $product1) {
-                $this->iterateProductAndChildren($product1->id, $product, $purchasedProductIdArray);
-            }
-        }
-
-        return $purchasedProductIdArray;
-    }
-
-    private function allChildIsPurchased(Product $product, $purchasedProductIdArray) {
-        if ($product->children->count() > 0) {
-            foreach ($product->children as $productChild) {
-                if (array_search($product->id, $purchasedProductIdArray) === false) {
-                    $res = $this->allChildIsPurchased($productChild, $purchasedProductIdArray);
-                    if (!$res) {
-                        return false;
-                    }
-                }
-            }
-        } elseif (array_search($product->id, $purchasedProductIdArray) === false) {
-            return false;
-        } else {
-            return true;
-        }
-        return true;
-    }
-
-    private function iterateProductAndChildren($searchProductId, Product $product, array & $purchasedProductIdArray) {
-
-        if ($searchProductId === $product->id) {
-            $purchasedProductIdArray[] = $product->id;
-        }
-
-        if ($product->children->count() > 0) {
-            foreach ($product->children as $key=>$childProduct) {
-                $this->iterateProductAndChildren($searchProductId, $childProduct, $purchasedProductIdArray);
-            }
-        }
     }
 
     public function edit(Product $product)
@@ -1016,6 +847,12 @@ class ProductController extends Controller
             Response::HTTP_SERVICE_UNAVAILABLE);
     }
 
+    /*
+    |--------------------------------------------------------------------------
+    | Private Methods
+    |--------------------------------------------------------------------------
+    */
+
     /**
      * @param $introVideo
      * @param $introVideoThumbnail
@@ -1085,4 +922,172 @@ class ProductController extends Controller
         return $videos;
     }
 
+    /**
+     * @param  array    $inputData
+     * @param  Product  $product
+     *
+     * @return void
+     * @throws FileNotFoundException
+     */
+    private function fillProductFromRequest(array $inputData, Product $product): void
+    {
+        $files     = Arr::has($inputData, 'files') ? [Arr::get($inputData, 'files')] : [];
+        $images    = Arr::has($inputData, 'image') ? [Arr::get($inputData, 'image')] : [];
+        $isFree    = Arr::has($inputData, 'isFree');
+        $tagString = Arr::get($inputData, 'tags');
+
+        $product->fill($inputData);
+
+        if (strlen($tagString) > 0) {
+            $product->tags = convertTagStringToArray($tagString);
+        }
+
+        if ($this->strIsEmpty($product->discount)) {
+            $product->discount = 0;
+        }
+
+        $product->isFree = $isFree;
+
+        $product->intro_videos = $this->setIntroVideos(Arr::get($inputData, 'introVideo'),
+            Arr::get($inputData, 'introVideoThumbnail'));
+
+        //Storing product's catalog
+        $storeFileResult = $this->storeCatalogOfProduct($product, $files);
+        //ToDo : delete the file if it is an update
+
+        //Storing product's image
+        $storeImageResult = $this->storeImageOfProduct($product, $images);
+        //ToDo : delete the file if it is an update
+    }
+
+    /** Stores catalog file of the product
+     *
+     * @param  Product  $product
+     *
+     * @param  array    $files
+     *
+     * @return array
+     * @throws FileNotFoundException
+     */
+    private function storeCatalogOfProduct(Product $product, array $files): array
+    {
+        $done = [];
+        foreach ($files as $key => $file) {
+            $extension  = $file->getClientOriginalExtension();
+            $fileName   = basename($file->getClientOriginalName(), '.'.$extension).'_'.date('YmdHis').'.'.$extension;
+            $done[$key] = false;
+            if (Storage::disk(config('constants.DISK5'))
+                ->put($fileName, File::get($file))) {
+                $product->file = $fileName;
+                $done[$key]    = true;
+            }
+        }
+
+        return $done;
+    }
+
+    /** Stores image file of the product
+     *
+     * @param  Product  $product
+     *
+     * @param  array    $files
+     *
+     * @return array
+     * @throws FileNotFoundException
+     */
+    private function storeImageOfProduct(Product $product, array $files): array
+    {
+        $done = [];
+        foreach ($files as $key => $file) {
+            $extension  = $file->getClientOriginalExtension();
+            $fileName   = basename($file->getClientOriginalName(), '.'.$extension).'_'.date('YmdHis').'.'.$extension;
+            $disk = Storage::disk(config('constants.DISK21'));
+            /** @var AlaaSftpAdapter $adaptor */
+            $adaptor = $disk->getAdapter();
+            $done[$key] = false;
+            if ($disk->put($fileName, File::get($file))) {
+                $fullPath = $adaptor->getRoot();
+                $partialPath = $this->getSubDirectoryInCDN($fullPath);
+
+                $done[$key]     = true;
+                $product->image = $partialPath.$fileName;
+                /**
+                 *  Snippet code : resizing the image using the ........ package
+                 *
+                 * $img = Image::make(Storage::disk(config('constants.DISK4'))->getAdapter()->getPathPrefix().$fileName);
+                 * $img->resize(256, 256);
+                 * $img->save(Storage::disk(config('constants.DISK4'))->getAdapter()->getPathPrefix().$fileName);
+                 * */
+            }
+        }
+
+        return $done;
+    }
+
+    /**
+     * @param $product
+     * @param $bonId
+     * @param $bonDiscount
+     * @param $bonPlus
+     */
+    private function attachBonToProduct(Product $product, $bonId, $bonDiscount, $bonPlus): void
+    {
+        $bonQueryBuilder = $product->bons();
+
+        if ($product->hasBon($bonId)) {
+            $bonQueryBuilder->updateExistingPivot($bonId, [
+                'discount' => $bonDiscount,
+                'bonPlus'  => $bonPlus,
+            ]);
+        } else {
+            $bonQueryBuilder->attach($bonId, [
+                'discount' => $bonDiscount,
+                'bonPlus'  => $bonPlus,
+            ]);
+        }
+    }
+
+    private function searchInUserAssetsCollection(Product $product, User $user) {
+
+        $purchasedProductIdArray = [];
+        $userAssetsCollection = $user->getDashboardBlocks()->pluck('products');
+        foreach ($userAssetsCollection as $blockProducts) {
+            foreach ($blockProducts as $product1) {
+                $this->iterateProductAndChildren($product1->id, $product, $purchasedProductIdArray);
+            }
+        }
+
+        return $purchasedProductIdArray;
+    }
+
+    private function allChildIsPurchased(Product $product, $purchasedProductIdArray) {
+        if ($product->children->count() > 0) {
+            foreach ($product->children as $productChild) {
+                if (array_search($product->id, $purchasedProductIdArray) === false) {
+                    $res = $this->allChildIsPurchased($productChild, $purchasedProductIdArray);
+                    if (!$res) {
+                        return false;
+                    }
+                }
+            }
+        } elseif (array_search($product->id, $purchasedProductIdArray) === false) {
+            return false;
+        } else {
+            return true;
+        }
+        return true;
+    }
+
+    private function iterateProductAndChildren($searchProductId, Product $product, array & $purchasedProductIdArray) {
+
+        if ($searchProductId === $product->id) {
+            $purchasedProductIdArray[] = $product->id;
+        }
+
+        if ($product->children->count() > 0) {
+            foreach ($product->children as $key=>$childProduct) {
+                $this->iterateProductAndChildren($searchProductId, $childProduct, $purchasedProductIdArray);
+            }
+        }
+    }
 }
