@@ -71,12 +71,12 @@
 							<i class = "flaticon-statistics"></i>
 						</span>
                             <h3 class = "m-portlet__head-text">
-                                ثبت کارنامه کنکور سراسری 97
+                                ثبت کارنامه کنکور سراسری 98
                             </h3>
                             <h2 class = "m-portlet__head-label m-portlet__head-label--success">
                                 <span>
                                     <i class = "fa fa-trophy"></i>
-                                    ثبت رتبه 97
+                                    ثبت رتبه 98
                                 </span>
                             </h2>
                         </div>
@@ -95,7 +95,7 @@
                     @endif
                     <form method = "POST" id = "frmSabteRotbe" action = "{{ action('Web\EventresultController@store') }}" accept-charset = "UTF-8" enctype = "multipart/form-data">
                         @csrf
-                        <input name = "event_id" type = "hidden" value = "3">
+                        <input name = "event_id" type = "hidden" value = "{{$event->id}}">
                         <input name = "eventresultstatus_id" type = "hidden" value = "1">
                         <div class = "form-body">
                             <div class = "row">

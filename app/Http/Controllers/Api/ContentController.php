@@ -11,7 +11,7 @@ use App\Traits\Content\ContentControllerResponseTrait;
 class ContentController extends Controller
 {
     use ContentControllerResponseTrait;
-    
+
     public function show(Request $request, Content $content)
     {
         if (!$content->isActive()) {
@@ -21,13 +21,13 @@ class ContentController extends Controller
                 'message' => $message,
             ], $code);
         }
-    
+
         if ($this->userCanSeeContent($request, $content, 'api')) {
-            return response()->json($content, Response::HTTP_OK);
+            return response()->json($content);
         }
-    
+
         $productsThatHaveThisContent = $content->activeProducts();
-    
+
         return $this->getUserCanNotSeeContentJsonResponse($content, $productsThatHaveThisContent, function ($msg) {
         });
     }

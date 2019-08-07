@@ -22,7 +22,7 @@
             </li>
             <li>
                 <i class = "fa fa-list-alt"></i>
-                <a href = "{{action("Web\HomeController@consultantEntekhabReshteList")}}">لیست دانش آموزان</a>
+                <a href = "{{action("Web\ConsultationController@consultantEntekhabReshteList")}}">لیست دانش آموزان</a>
                 <i class = "fa fa-angle-left"></i>
             </li>
             <li>
@@ -108,7 +108,7 @@
     @include("systemMessage.flash")
     <div class = "row">
         <div class = "col-md-12">
-            <form method = "POST" action = "{{action("Web\HomeController@consultantStoreEntekhabReshte")}}">
+            <form method = "POST" action = "{{action("Web\ConsultationController@consultantStoreEntekhabReshte")}}">
                 <input type = "hidden" value = "1" name = "parentMajor">
                 <input type = "hidden" value = "{{$user->id}}" name = "user">
                 {{ csrf_field() }}

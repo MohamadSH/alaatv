@@ -73,7 +73,7 @@
                     <span class = "m-badge m-badge--wide label-sm m-badge--danger">درج نشده </span> @endif
             </td>
             <td style = "width: 20%">
-                {!! Form::model($eventresult, ['method' => 'PUT', 'action' => ['EventresultController@update', $eventresult] , 'id' => 'eventResultForm_'.$eventresult->id]) !!}
+                {!! Form::model($eventresult, ['method' => 'PUT', 'action' => ['Web\EventresultController@update', $eventresult] , 'id' => 'eventResultForm_'.$eventresult->id]) !!}
                 <div class = "input-group">
                     <div class = "input-icon">
                         {!! Form::select('eventresultstatus_id', $eventResultStatuses, null, ['class' => 'form-control']) !!}

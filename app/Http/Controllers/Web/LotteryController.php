@@ -7,6 +7,10 @@ use App\Http\Controllers\Controller;
 use App\Lottery;
 use App\Notifications\GiftGiven;
 use App\Notifications\LotteryWinner;
+use App\Traits\UserCommon;
+use App\Userbon;
+use Illuminate\Contracts\Routing\ResponseFactory;
+use Illuminate\Filesystem\Cache;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use LuckyBox\Card\IdCard;
@@ -14,6 +18,7 @@ use LuckyBox\LuckyBox;
 
 class LotteryController extends Controller
 {
+    use UserCommon;
     public function __construct()
     {
         $this->middleware('role:admin');
@@ -37,29 +42,29 @@ class LotteryController extends Controller
             if ($request->has('lottery')) {
                 $lotteryName = $request->get('lottery');
             }
-            
+
             $lottery = Lottery::where('name', $lotteryName)->first();
             if (!isset($lottery)) {
                 dd('Lottery not found!');
             }
-            
+
             $bonName = config('constants.BON2');
             $bon     = Bon::where('name', $bonName)
                 ->first();
             if (!isset($bon)) {
                 dd('Unexpected error! bon not found.');
             }
-            
+
             $luckyBox = new LuckyBox();
             $luckyBox->setConsumable(true);
-            
+
             $participants = \App\Userbon::where('bon_id', $bon->id)
                 ->where('userbonstatus_id', 1)
                 ->get();
-            
+
             dump('Number of userbons: '.$participants->count());
             dump('Sum of total points: '.$participants->sum('totalNumber'));
-            
+
             $participantArray = [];
             foreach ($participants as $participant) {
                 $points = $participant->totalNumber - $participant->usedNumber;
@@ -83,7 +88,7 @@ class LotteryController extends Controller
                     $userbon = $user->userbons->where('bon_id', $bon->id)
                         ->where('userbonstatus_id', 1)
                         ->first();
-                    
+
                     if (isset($userbon)) {
                         $userbon->userbonstatus_id = 3;
                         $userbon->usedNumber       = $userbon->totalNumber;
@@ -102,16 +107,16 @@ class LotteryController extends Controller
                         echo "<span style='color:red;font-weight: bolder'>"."#$counter: "."</span>".$user->full_name." - $user->mobile"." - $user->nationalCode"." Points: ".$userbon->totalNumber;
                         echo '<br>';
                         $successCounter++;
-                        
+
                         //                        [
                         //                            $prizeName ,
                         //                            $amount
                         //                        ]= $lottery->prizes($counter);
-                        
+
                         //                      $user->notify(new LotteryWinner($lottery , $counter , $prizeName));
                         //                      echo '<span style='color:green;font-weight: bolder'>User notified</span>';
                         //                      echo '<br>';
-                        
+
                         array_push($winners, $cardId);
                     }
                     else {
@@ -130,7 +135,7 @@ class LotteryController extends Controller
                     $warningCounter++;
                 }
             }
-            
+
             dump('number of successfully processed users: '.$successCounter);
             dump('number of failed users: '.$failedCounter);
             dump('number of warnings: '.$warningCounter);
@@ -139,7 +144,7 @@ class LotteryController extends Controller
             dump($successCounter.' users successfully done');
             dump($failedCounter.' users failed');
             dump($warningCounter.' warnings');
-            
+
             return response()->json( [
                 'message'                                => 'unexpected error',
                 'number of successfully processed items' => $counter,
@@ -162,7 +167,7 @@ class LotteryController extends Controller
             if ($request->has('lottery')) {
                 $lotteryName = $request->get('lottery');
             }
-            
+
             $lottery = Lottery::where('name', $lotteryName)
                 ->first();
             if (!isset($lottery)) {
@@ -171,7 +176,7 @@ class LotteryController extends Controller
 
             /** @var Lottery $lottery */
             $userlotteries = $lottery->users->sortBy('pivot.rank');
-            
+
             $successCounter = 0;
             $failedCounter  = 0;
             dump('Number of participants: '.$userlotteries->count());
@@ -182,19 +187,19 @@ class LotteryController extends Controller
                     $amount,
                     $memorial,
                 ] = $lottery->prizes($rank);
-                
+
                 $done      = true;
                 $prizeInfo = '';
                 if ($amount > 0) {
                     $depositResult = $userlottery->deposit($amount, config('constants.WALLET_TYPE_GIFT'));
                     $done          = $depositResult['result'];
                     $responseText  = $depositResult['responseText'];
-                    
+
                     if ($done) {
 //                        $userlottery->notify(new GiftGiven($amount));
                         echo "<span style='color:green' >"."Wallet notification sent to user :".$userlottery->lastName."</span>";
                         echo '<br>';
-                        
+
                         $objectId  = $depositResult['wallet'];
                         $prizeInfo = '
                           "objectType": "App\\\\Wallet",
@@ -211,14 +216,14 @@ class LotteryController extends Controller
                           ';
                     }
                 }
-                
+
                 if ($done) {
                     if (strlen($prizeName) == 0) {
 //                        $userlottery->notify(new LotteryWinner($lottery, $rank, $prizeName, $memorial));
                         echo "<span style='color:green;font-weight: bolder'>User ".$userlottery->mobile." with rank ".$rank." notified</span>";
                         echo '<br>';
                     }
-                    
+
                     $itemName = '';
                     if (strlen($prizeName) > 0) {
                         $itemName = $prizeName;
@@ -228,7 +233,7 @@ class LotteryController extends Controller
                             $itemName = $memorial;
                         }
                     }
-                    
+
                     $prizes = '';
                     if (strlen($prizeInfo) > 0) {
                         $prizes = '{
@@ -249,19 +254,19 @@ class LotteryController extends Controller
                     }';
                         }
                     }
-                    
+
                     $pivotArray = [];
                     if (strlen($prizes) > 0) {
                         $pivotArray['prizes'] = $prizes;
                     }
-                    
+
                     if (!empty($pivotArray)) {
                         $givePrizeResult = $userlottery->lotteries()
                             ->where('lottery_id', $lottery->id)
                             ->where('pivot.rank',
                                 $rank)
                             ->updateExistingPivot($lottery->id, $pivotArray);
-                        
+
                         if (!$givePrizeResult) {
                             dump('Failed on updating prize for user: '.$userlottery->id);
                             $failedCounter++;
@@ -289,5 +294,149 @@ class LotteryController extends Controller
                 'line'    => $e->getLine(),
             ], Response::HTTP_SERVICE_UNAVAILABLE);
         }
+    }
+
+    /**
+     * Removes user from lottery
+     *
+     * @param  Request  $request
+     *
+     * @return Response
+     */
+    public function removeFromLottery(Request $request)
+    {
+        $user    = $request->user();
+        $message = "";
+
+        $bonName = config("constants.BON2");
+        $bon     = Bon::where("name", $bonName)
+            ->first();
+        if (isset($bon)) {
+            $userbons = $user->userValidBons($bon);
+            list($usedUserBon, $userBonTaken, $done) = $this->checkUserBonsForLottery($user, $message, $userbons);
+        }
+        else {
+            $done    = false;
+            $message = "خطای غیر منتظره . لطفا بعدا اقدام فرمایید";
+        }
+
+        if ($done) {
+            return $this->makeResponseForRemoveFromLotteryMethod(Response::HTTP_OK, "OK");
+        }
+
+        if (!isset($userBonTaken) || !$userBonTaken) {
+            return $this->makeResponseForRemoveFromLotteryMethod(Response::HTTP_SERVICE_UNAVAILABLE, $message);
+        }
+
+        foreach ($userbons as $userbon) {
+            if (isset($usedUserBon[$userbon->id])) {
+                $usedNumber                = $usedUserBon[$userbon->id]["used"];
+                $userbon->usedNumber       = max($userbon->usedNumber - $usedNumber, 0);
+                $userbon->userbonstatus_id = config("constants.USERBON_STATUS_ACTIVE");
+            }
+            else {
+                $userbon->usedNumber       = 0;
+                $userbon->userbonstatus_id = config("constants.USERBON_STATUS_ACTIVE");
+            }
+
+            $userbon->update();
+        }
+
+        return $this->makeResponseForRemoveFromLotteryMethod(Response::HTTP_SERVICE_UNAVAILABLE, $message);
+    }
+
+    private function checkUserBonsForLottery($user, string &$message, $userbons): array
+    {
+        $done = false;
+        if (!$userbons->isNotEmpty()) {
+            $message = "شما در قرعه کشی نیستید";
+            return [null, null, $done];
+        }
+
+        list($usedUserBon, $sumBonNumber) = $this->getUsedUserBon($userbons);
+        $userBonTaken = true;
+        [
+            $result,
+            $responseText,
+            $prizeName,
+            $walletId,
+        ] = $this->exchangeLottery($user, $sumBonNumber);
+
+        if (!$result) {
+            $message = $responseText;
+            return [$usedUserBon, $userBonTaken, $done];
+        }
+        $lottery = Lottery::where("name", config("constants.LOTTERY_NAME"))
+            ->first();
+
+        if (!isset($lottery)) {
+            $message = "خطای غیر منتظره. لطفا بعدا دوباره اقدام نمایید";
+            return [$usedUserBon, $userBonTaken, $done];
+        }
+        $prizes = '{
+                      "items": [
+                        {
+                          "name": "'.$prizeName.'",
+                          "objectType": "App\\\\Wallet",
+                          "objectId": "'.$walletId.'"
+                        }
+                      ]
+                    }';
+        if ($user->lotteries()
+            ->where("lottery_id", $lottery->id)
+            ->get()
+            ->isEmpty()) {
+            $attachResult = $user->lotteries()
+                ->attach($lottery->id, [
+                    "rank"   => 0,
+                    "prizes" => $prizes,
+                ]);
+
+            /**  clearing cache */
+            Cache::tags('bon')
+                ->flush();
+            $done = true;
+        }
+        else {
+            $message = "شما قبلا از قرعه کشی انصراف داده اید";
+        }
+
+        return [$usedUserBon, $userBonTaken, $done];
+    }
+
+    /**
+     * @param  int     $httpStatus
+     * @param  string  $message
+     *
+     * @return ResponseFactory|Response
+     */
+    private function makeResponseForRemoveFromLotteryMethod(int $httpStatus, string $message)
+    {
+        return response([
+            ["message" => $message],
+        ], $httpStatus);
+    }
+
+
+    /**
+     * @param $userbons
+     *
+     * @return array
+     */
+    private function getUsedUserBon($userbons): array
+    {
+        $usedUserBon  = collect();
+        $sumBonNumber = 0;
+        /** @var Userbon $userbon */
+        foreach ($userbons as $userbon) {
+            $totalBonNumber = $userbon->totalNumber - $userbon->usedNumber;
+            $usedUserBon->put($userbon->id, ["used" => $totalBonNumber]);
+            $sumBonNumber              += $totalBonNumber;
+            $userbon->usedNumber       = $userbon->usedNumber + $totalBonNumber;
+            $userbon->userbonstatus_id = config("constants.USERBON_STATUS_USED");
+            $userbon->update();
+        }
+
+        return [$usedUserBon, $sumBonNumber];
     }
 }
