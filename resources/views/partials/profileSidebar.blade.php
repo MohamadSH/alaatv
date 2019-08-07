@@ -89,11 +89,11 @@
                         <hr>
 
                         <br>
-                        <i class="la la-barcode"></i>
+                        <i class="fa fa-barcode"></i>
                         کد ملی:
                         @if(isset($user->nationalCode)) {{ $user->nationalCode }} @endif
                         <br>
-                        <i class="la la-mobile"></i>
+                        <i class="fa fa-mobile-alt"></i>
                         شماره موبایل:
                         @if(isset($user->mobile)){{ $user->mobile }} @endif
                         <br>
@@ -123,7 +123,7 @@
                                             <input type="text" name="postalCode" id="txtMobileVerificationCode" class="form-control m-input m-input--air" placeholder="کد تایید">
                                             <span class="m-input-icon__icon m-input-icon__icon--left">
                                                     <span>
-                                                        <i class="la la-mobile"></i>
+                                                        <i class="fa fa-mobile-alt"></i>
                                                     </span>
                                                 </span>
                                         </div>
@@ -197,7 +197,7 @@
                         @endif
 
                         <button type="button" class="btn m-btn--air btn-outline-warning btn-block" menu="profileMenuPage-setting">
-                            <i class="flaticon-cogwheel"></i>
+                            <i class="fa fa-cogs"></i>
                             ویرایش اطلاعات شخصی
                         </button>
                         <button type="button" class="btn m-btn--air btn-info btn-block animated infinite rubberBand" menu="profileMenuPage-filmVaJozve" onclick="window.location.href='{{ route('web.user.dashboard', Auth::user()) }}';">
@@ -205,8 +205,8 @@
                             دریافت فیلم های و جزوات
                         </button>
                         <button type="button" class="btn m-btn--air btn-outline-success btn-block" menu="profileMenuPage-sabteRotbe">
-                            <i class="la la-trophy"></i>
-                            ثبت رتبه 98
+                            <i class="fa fa-trophy"></i>
+                            ثبت رتبه 97
                         </button>
                     </div>
                 @endif
@@ -220,7 +220,7 @@
 
 {{--<!-- END SIDEBAR USER TITLE -->--}}{{--<!-- SIDEBAR MENU -->--}}{{--@if(isset($withNavigation) && $withNavigation)--}}{{--<div class="profile-usermenu">--}}{{--<ul class="nav">--}}{{--<li @if(strcmp(url()->current() , action("Web\UserController@show",$user)) == 0) class="active" @endif >--}}{{--<a href="{{ action("Web\UserController@show",$user) }}">--}}{{--<i class="icon-settings"></i> تنظیمات حساب کاربری </a>--}}{{--</li>--}}{{--<li @if(strcmp(url()->current() , action("Web\UserController@userProductFiles")) == 0) class="active" @endif >--}}{{--<a href="{{action("Web\UserController@userProductFiles")}}" class="font-yellow">--}}{{--<i class="fa fa-cloud-download "></i> فیلم ها و جزوه ها </a></li>--}}{{--<li class="@if(strcmp(url()->current() , action("Web\UserController@showBelongings")) == 0) active @endif">--}}{{--<a  href="{{action("Web\UserController@showBelongings")}}">--}}{{--<i class="fa fa-address-card" aria-hidden="true"></i>پروفایل فنی من</a>--}}{{--</li>--}}
 
-{{--<li @if(strcmp(url()->current() , action("Web\VoucherController@voucherRequest")) == 0) class="active" @endif >--}}{{--<a href="{{action("Web\UserController@voucherRequest")}}">--}}{{--<i class="fa fa-registered"></i>ثبت درخواست اینترنت آسیاتک</a>--}}{{--</li>--}}{{--</ul>--}}{{--</div>--}}{{--@endif--}}{{--<!-- END MENU -->--}}{{--</div><!-- END PORTLET MAIN -->--}}{{--@if(isset($withInfoBox) && $withInfoBox)--}}{{----}}{{--<!-- PORTLET MAIN -->--}}{{----}}{{--<div class="portlet light ">--}}{{----}}{{--<div>--}}{{----}}{{--<h4 class="profile-desc-title">اطلاعات ثبت شده</h4>--}}{{----}}{{--<div class="margin-top-20 profile-desc-link">--}}{{----}}{{--<i class="fa fa-user"></i> کد ملی:--}}{{----}}{{--<span>@if(isset($user->nationalCode)) {{ $user->nationalCode }} @endif</span>--}}{{----}}{{--</div>--}}{{----}}{{--<div class="margin-top-20 profile-desc-link">--}}{{----}}{{--<i class="fa fa-mobile"></i> شماره موبایل:--}}{{----}}{{--<span>@if(isset($user->mobile)){{ $user->mobile }} @endif</span>--}}{{----}}{{--@if($user->hasVerifiedMobile())--}}{{----}}{{--<span class="m-badge m-badge--wide m-badge--success">شماره موبایل تایید شده است. </span>--}}{{----}}{{--@else--}}{{----}}{{--<span class="m-badge m-badge--wide m-badge--danger"> توجه! شماره موبایل تایید نشده است. </span>--}}{{----}}{{--@endif--}}
+{{--<li @if(strcmp(url()->current() , action("Web\UserController@voucherRequest")) == 0) class="active" @endif >--}}{{--<a href="{{action("Web\UserController@voucherRequest")}}">--}}{{--<i class="fa fa-registered"></i>ثبت درخواست اینترنت آسیاتک</a>--}}{{--</li>--}}{{--</ul>--}}{{--</div>--}}{{--@endif--}}{{--<!-- END MENU -->--}}{{--</div><!-- END PORTLET MAIN -->--}}{{--@if(isset($withInfoBox) && $withInfoBox)--}}{{----}}{{--<!-- PORTLET MAIN -->--}}{{----}}{{--<div class="portlet light ">--}}{{----}}{{--<div>--}}{{----}}{{--<h4 class="profile-desc-title">اطلاعات ثبت شده</h4>--}}{{----}}{{--<div class="margin-top-20 profile-desc-link">--}}{{----}}{{--<i class="fa fa-user"></i> کد ملی:--}}{{----}}{{--<span>@if(isset($user->nationalCode)) {{ $user->nationalCode }} @endif</span>--}}{{----}}{{--</div>--}}{{----}}{{--<div class="margin-top-20 profile-desc-link">--}}{{----}}{{--<i class="fa fa-mobile"></i> شماره موبایل:--}}{{----}}{{--<span>@if(isset($user->mobile)){{ $user->mobile }} @endif</span>--}}{{----}}{{--@if($user->hasVerifiedMobile())--}}{{----}}{{--<span class="m-badge m-badge--wide m-badge--success">شماره موبایل تایید شده است. </span>--}}{{----}}{{--@else--}}{{----}}{{--<span class="m-badge m-badge--wide m-badge--danger"> توجه! شماره موبایل تایید نشده است. </span>--}}{{----}}{{--@endif--}}
 
 {{--</div>--}}{{--<div class="margin-top-20 profile-desc-link">--}}{{--@if (Session::has('verificationSuccess'))--}}{{--<div class="alert alert-success alert-dismissable">--}}{{--<button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>--}}{{--{{ Session::pull('verificationSuccess') }}--}}{{--</div>--}}{{--@endif--}}{{--</div>--}}{{--@if(!$user->hasVerifiedMobile() )--}}{{--<div class="margin-top-20 profile-desc-link">--}}{{--<div class="form-group form-md-line-input">--}}{{--{!! Form::open(['method' => 'POST','action' => ['Web\MobileVerificationController@verify'] , 'id'=>'submitVerificationCodeForm']) !!}--}}{{--<fieldset--}}{{--class="hasRequestedVerificationCode {{(!isset($mobileVerificationCode) || is_null($mobileVerificationCode))?"hidden":""}}">--}}{{--<input type="text" name="code" class="form-control" id="form_control_1"--}}{{--placeholder="کد تایید شماره خود را وارد نمایید">--}}{{--<label for="form_control_1"><span class="font-red-thunderbird">تایید شماره موبایل(حساب کاربری)</span></label>--}}{{--<span class="form-control-feedback">برای دریافت کد روی دکمه درخواست کلیک کنید</span>--}}{{--</fieldset>--}}{{--</div>--}}{{--<div class="form-actions noborder" style="text-align: center;">--}}{{--<fieldset--}}{{--class="hasRequestedVerificationCode {{(!isset($mobileVerificationCode) || is_null($mobileVerificationCode))?"hidden":""}}">--}}{{--<button type="submit" class="btn green">تایید کد</button>--}}{{--</fieldset>--}}{{--<fieldset id="hasntRequestedVerificationCode" class="">--}}{{--<a href="{{action("Web\MobileVerificationController@resend")}}" class="btn blue"--}}{{--id="sendVerificationCodeButton">@if(isset($mobileVerificationCode)) درخواست مجدد کد @else--}}{{--درخواست ارسال کد@endif</a>--}}{{--</fieldset>--}}{{--<img src="/img/loading-spinner-default.gif" style="width: 15px; display: none"--}}{{--id="verificationCodeAjaxLoadingSpinner">--}}{{--{!! Form::close() !!}--}}{{--</div>--}}{{--<div class="form-group form-md-line-input" style="text-align: justify;">--}}{{--<div class="alert alert-success alert-dismissable hidden" id="verificationCodeSuccess">--}}{{--<button type="button" class="close" aria-hidden="true"></button>--}}{{--<span></span>--}}{{--</div>--}}{{--<div class="alert alert-danger alert-dismissable hidden" id="verificationCodeError">--}}{{--<button type="button" class="close" aria-hidden="true"></button>--}}{{--<span></span>--}}{{--</div>--}}{{--<div class="alert alert-info alert-dismissable hidden" id="verificationCodeInfo">--}}{{--<button type="button" class="close" aria-hidden="true"></button>--}}{{--<span></span>--}}{{--</div>--}}{{--<div class="alert alert-warning alert-dismissable hidden" id="verificationCodeWarning">--}}{{--<button type="button" class="close" aria-hidden="true"></button>--}}{{--<span></span>--}}{{--</div>--}}{{--</div>--}}{{--</div>--}}{{--@endif--}}{{--<div class="margin-top-20 profile-desc-link">--}}{{--<i class="fa fa-graduation-cap"></i> رشته:--}}{{--<span>@if(isset($user->major->name)){{ $user->major->name }}--}}{{--@else <span class="m-badge m-badge--wide m-badge--danger"> درج نشده </span>--}}{{--@endif</span>--}}{{--</div>--}}{{--<div class="margin-top-20 profile-desc-link">--}}{{--<i class="fa fa-graduation-cap"></i> جنیست:--}}{{--<span>@if(isset($user->gender->name)){{ $user->gender->name }}--}}{{--@else <span class="m-badge m-badge--wide m-badge--danger"> درج نشده </span>--}}{{--@endif</span>--}}{{--</div>--}}{{--</div>--}}{{--</div>--}}{{--<!-- END PORTLET MAIN -->--}}{{--@endif--}}
 
