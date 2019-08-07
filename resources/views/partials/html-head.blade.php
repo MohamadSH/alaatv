@@ -5,8 +5,11 @@
 <link rel="dns-prefetch" href="//app.najva.com">
 
 <meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, shrink-to-fit=no">
 <meta name="csrf-token" content="{{ csrf_token() }}">
+<meta name="theme-color" content="#ff9000" />
+{{--<link rel="manifest" href="/manifest.json">--}}
+
 
 <!-- begin::seo meta tags -->
 {!! SEO::generate(true) !!}

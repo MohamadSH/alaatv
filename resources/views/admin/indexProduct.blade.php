@@ -1,7 +1,6 @@
 @permission(config('constants.PRODUCT_ADMIN_PANEL_ACCESS'))@extends('app',['pageName'=>$pageName])
 
 @section('page-css')
-    
     <link href="{{ mix('/css/admin-all.css') }}" rel="stylesheet" type="text/css"/>
     <link href="{{ asset('/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-summernote/summernote.css') }}" rel="stylesheet" type="text/css"/>
 @endsection
@@ -161,22 +160,22 @@
                         <ul class="m-portlet__nav">
                             <li class="m-portlet__nav-item">
                                 <a href="#" m-portlet-tool="reload" class="m-portlet__nav-link m-portlet__nav-link--icon reload">
-                                    <i class="la la-refresh"></i>
+                                    <i class="fa fa-redo"></i>
                                 </a>
                             </li>
                             <li class="m-portlet__nav-item">
                                 <a href="#" m-portlet-tool="toggle" class="m-portlet__nav-link m-portlet__nav-link--icon">
-                                    <i class="la la-angle-down"></i>
+                                    <i class="fa fa-angle-down"></i>
                                 </a>
                             </li>
                             <li class="m-portlet__nav-item">
                                 <a href="#" m-portlet-tool="fullscreen" class="m-portlet__nav-link m-portlet__nav-link--icon" id="product-expand">
-                                    <i class="la la-expand"></i>
+                                    <i class="fa fa-expand-arrows-alt"></i>
                                 </a>
                             </li>
                             <li class="m-portlet__nav-item">
                                 <a href="#" m-portlet-tool="remove" class="m-portlet__nav-link m-portlet__nav-link--icon">
-                                    <i class="la la-close"></i>
+                                    <i class="fa fa-times"></i>
                                 </a>
                             </li>
                         </ul>
@@ -247,22 +246,22 @@
                         <ul class="m-portlet__nav">
                             <li class="m-portlet__nav-item">
                                 <a href="#" m-portlet-tool="reload" class="m-portlet__nav-link m-portlet__nav-link--icon reload">
-                                    <i class="la la-refresh"></i>
+                                    <i class="fa fa-redo"></i>
                                 </a>
                             </li>
                             <li class="m-portlet__nav-item">
                                 <a href="#" m-portlet-tool="toggle" class="m-portlet__nav-link m-portlet__nav-link--icon">
-                                    <i class="la la-angle-down"></i>
+                                    <i class="fa fa-angle-down"></i>
                                 </a>
                             </li>
                             <li class="m-portlet__nav-item">
                                 <a href="#" m-portlet-tool="fullscreen" class="m-portlet__nav-link m-portlet__nav-link--icon" id="coupon-expand">
-                                    <i class="la la-expand"></i>
+                                    <i class="fa fa-expand-arrows-alt"></i>
                                 </a>
                             </li>
                             <li class="m-portlet__nav-item">
                                 <a href="#" m-portlet-tool="remove" class="m-portlet__nav-link m-portlet__nav-link--icon">
-                                    <i class="la la-close"></i>
+                                    <i class="fa fa-times"></i>
                                 </a>
                             </li>
                         </ul>
@@ -357,22 +356,22 @@
                         <ul class="m-portlet__nav">
                             <li class="m-portlet__nav-item">
                                 <a href="#" m-portlet-tool="reload" class="m-portlet__nav-link m-portlet__nav-link--icon reload">
-                                    <i class="la la-refresh"></i>
+                                    <i class="fa fa-redo"></i>
                                 </a>
                             </li>
                             <li class="m-portlet__nav-item">
                                 <a href="#" m-portlet-tool="toggle" class="m-portlet__nav-link m-portlet__nav-link--icon">
-                                    <i class="la la-angle-down"></i>
+                                    <i class="fa fa-angle-down"></i>
                                 </a>
                             </li>
                             <li class="m-portlet__nav-item">
                                 <a href="#" m-portlet-tool="fullscreen" class="m-portlet__nav-link m-portlet__nav-link--icon" id="attribute-expand">
-                                    <i class="la la-expand"></i>
+                                    <i class="fa fa-expand-arrows-alt"></i>
                                 </a>
                             </li>
                             <li class="m-portlet__nav-item">
                                 <a href="#" m-portlet-tool="remove" class="m-portlet__nav-link m-portlet__nav-link--icon">
-                                    <i class="la la-close"></i>
+                                    <i class="fa fa-times"></i>
                                 </a>
                             </li>
                         </ul>
@@ -459,22 +458,22 @@
                         <ul class="m-portlet__nav">
                             <li class="m-portlet__nav-item">
                                 <a href="#" m-portlet-tool="reload" class="m-portlet__nav-link m-portlet__nav-link--icon reload">
-                                    <i class="la la-refresh"></i>
+                                    <i class="fa fa-redo"></i>
                                 </a>
                             </li>
                             <li class="m-portlet__nav-item">
                                 <a href="#" m-portlet-tool="toggle" class="m-portlet__nav-link m-portlet__nav-link--icon">
-                                    <i class="la la-angle-down"></i>
+                                    <i class="fa fa-angle-down"></i>
                                 </a>
                             </li>
                             <li class="m-portlet__nav-item">
                                 <a href="#" m-portlet-tool="fullscreen" class="m-portlet__nav-link m-portlet__nav-link--icon" id="attributeset-expand">
-                                    <i class="la la-expand"></i>
+                                    <i class="fa fa-expand-arrows-alt"></i>
                                 </a>
                             </li>
                             <li class="m-portlet__nav-item">
                                 <a href="#" m-portlet-tool="remove" class="m-portlet__nav-link m-portlet__nav-link--icon">
-                                    <i class="la la-close"></i>
+                                    <i class="fa fa-times"></i>
                                 </a>
                             </li>
                         </ul>
@@ -671,36 +670,14 @@
                         html += '</div>';
                         
                         return html;
-                    },
-                    // function ( api, rowIdx, columns ) {
-                    //     return 'hi';
-                    //     // var data = $.map( columns, function ( col, i ) {
-                    //     //     return col.hidden ?
-                    //     //         '<tr data-dt-row="'+col.rowIndex+'" data-dt-column="'+col.columnIndex+'">'+
-                    //     //         '<td>'+col.title+':'+'</td> '+
-                    //     //         '<td>'+col.data+'</td>'+
-                    //     //         '</tr>' :
-                    //     //         '';
-                    //     // } ).join('');
-                    //     //
-                    //     // return data ?
-                    //     //     $('<table/>').append( data ) :
-                    //     //     false;
-                    // }
-
+                    }
                 },
             ];
             let dataFilter = function(data){
                 let json = jQuery.parseJSON( data );
                 json.recordsTotal = json.result.total;
                 json.recordsFiltered = json.result.total;
-                // for (let index in json.data) {
-                //     if(!isNaN(index)) {
-                //         json.data[index]['full_name'] =
-                //     }
-                // }
-                //
-                return JSON.stringify( json ); // return JSON string
+                return JSON.stringify( json );
             };
             let ajaxData = function (data) {
                 mApp.block('#product_table_wrapper', {

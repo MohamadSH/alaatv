@@ -62,13 +62,13 @@
                             <li class="nav-item m-tabs__item">
                                 <a class="nav-link m-tabs__link active" data-toggle="tab" href="#user-orderList"
                                    role="tab">
-                                    <i class="la la-shopping-cart"></i>
+                                    <i class="fa fa-receipt"></i>
                                     لیست سفارشات
                                 </a>
                             </li>
                             <li class="nav-item m-tabs__item">
                                 <a class="nav-link m-tabs__link" data-toggle="tab" href="#user-paymentsList" role="tab">
-                                    <i class="la la-money"></i>
+                                    <i class="fa fa-money-bill-wave"></i>
                                     لیست پرداخت ها
                                 </a>
                             </li>
@@ -76,7 +76,7 @@
                                 <li class="nav-item m-tabs__item">
                                     <a class="nav-link m-tabs__link" data-toggle="tab" href="#user-instalmentsList"
                                        role="tab">
-                                        <i class="la la-bank"></i>
+                                        <i class="fa fa-dollar-sign"></i>
                                         لیست قسط های شما
                                     </a>
                                 </li>
@@ -193,7 +193,7 @@
                                                             <a onclick="event.preventDefault();"
                                                                data-order-key="{{ $orderKey  }}"
                                                                class="btn btn-outline-accent m-btn m-btn--icon btn-lg m-btn--icon-only m-btn--pill m-btn--air btnViewOrderDetailes">
-                                                                <i class="flaticon-mark"></i>
+                                                                <i class="fa fa-ellipsis-h"></i>
                                                             </a>
                                                         </td>
                                                     </tr>

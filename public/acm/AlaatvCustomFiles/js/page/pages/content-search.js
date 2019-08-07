@@ -88,7 +88,7 @@ var Alaasearch = function () {
         return parseFloat((Math.round(price * 100) / 100).toString()).toFixed(2);
     }
 
-    function getVideoCarouselItem(data) {
+    function getContentCarouselItem(data) {
         let inputData = {
             widgetPic: (typeof (data.photo) === 'undefined' || data.photo == null) ? data.thumbnail + '?w=444&h=250' : data.photo + '?w=444&h=250',
             widgetTitle: data.name,
@@ -101,7 +101,47 @@ var Alaasearch = function () {
             widgetLink: data.url
         };
 
-        return getCommonCarouselItem(inputData);
+        let widgetPic = inputData.widgetPic,
+            widgetTitle = inputData.widgetTitle,
+            widgetAuthor = inputData.widgetAuthor,
+            widgetCount = inputData.widgetCount,
+            widgetLink = inputData.widgetLink,
+            widgetAuthorFullameHtml = '';
+        if (widgetAuthor.full_name.trim().length > 0) {
+            widgetAuthorFullameHtml =
+                '        <div class="a--block-detailesWrapper">\n' +
+                '            <div class="a--block-set-author-name">\n' +
+                '                <span class="a--block-set-author-name-title">' +
+                '                    <span class="m-badge m-badge--info m-badge--wide m-badge--rounded">\n' +
+                '                        '+widgetAuthor.full_name+'\n' +
+                '                    </span>' +
+                '                </span>\n' +
+                '            </div>\n' +
+                '        </div>\n';
+        }
+
+        return '' +
+            '<div class="item carousel a--block-item a--block-type-content">\n' +
+            '    <div class="a--block-imageWrapper">\n' +
+            '        <a href="'+widgetLink+'" class="btn btn-sm m-btn--pill btn-brand btnViewMore">\n' +
+            '            <i class="fa fa-play"></i> / <i class="fa fa-cloud-download-alt"></i>\n' +
+            '        </a>\n' +
+            '        <a href="'+widgetLink+'" class="a--block-imageWrapper-image">\n' +
+            '            <img src="https://cdn.alaatv.com/loder.jpg?w=16&h=9" data-src="'+widgetPic+'" alt="'+widgetTitle+'" class="a--block-image lazy-image" width="253" height="142" />\n' +
+            '        </a>\n' +
+            '    </div>\n' +
+            '    <div class="a--block-infoWrapper">\n' +
+            '        <div class="a--block-titleWrapper">\n' +
+            '            <a href="'+widgetLink+'" class="m-link">\n' +
+            '                <h6>\n' +
+            '                    <span class="m-badge m-badge--info m-badge--dot"></span>\n' +
+            '                    '+widgetTitle+'\n' +
+            '                </h6>\n' +
+            '            </a>\n' +
+            '        </div>\n' +
+            widgetAuthorFullameHtml +
+            '    </div>\n' +
+            '</div>';
     }
 
     function getSetCarouselItem(data) {
@@ -116,7 +156,6 @@ var Alaasearch = function () {
             widgetCount: data.contents_count,
             widgetLink: data.url
         };
-
 
         let widgetPic = inputData.widgetPic,
             widgetTitle = inputData.widgetTitle,
@@ -165,51 +204,6 @@ var Alaasearch = function () {
             '        \n' +
             '    </div>\n' +
             '    \n' +
-            '</div>';
-    }
-
-    function getCommonCarouselItem(data) {
-
-        let widgetPic = data.widgetPic,
-            widgetTitle = data.widgetTitle,
-            widgetAuthor = data.widgetAuthor,
-            widgetCount = data.widgetCount,
-            widgetLink = data.widgetLink,
-            widgetAuthorFullameHtml = '';
-        if (widgetAuthor.full_name.trim().length > 0) {
-            widgetAuthorFullameHtml =
-                '        <div class="a--block-detailesWrapper">\n' +
-                '            <div class="a--block-set-author-name">\n' +
-                '                <span class="a--block-set-author-name-title">' +
-                '                    <span class="m-badge m-badge--info m-badge--wide m-badge--rounded">\n' +
-                '                        '+widgetAuthor.full_name+'\n' +
-                '                    </span>' +
-                '                </span>\n' +
-                '            </div>\n' +
-                '        </div>\n';
-            }
-
-        return '' +
-            '<div class="item carousel a--block-item a--block-type-set">\n' +
-            '    <div class="a--block-imageWrapper">\n' +
-            '        <a href="'+widgetLink+'" class="btn btn-sm m-btn--pill btn-brand btnViewMore">\n' +
-            '            <i class="fa fa-play"></i> / <i class="fa fa-cloud-download-alt"></i>\n' +
-            '        </a>\n' +
-            '        <a href="'+widgetLink+'" class="a--block-imageWrapper-image">\n' +
-            '            <img src="https://cdn.alaatv.com/loder.jpg?w=16&h=9" data-src="'+widgetPic+'" alt="'+widgetTitle+'" class="a--block-image lazy-image" width="253" height="142" />\n' +
-            '        </a>\n' +
-            '    </div>\n' +
-            '    <div class="a--block-infoWrapper">\n' +
-            '        <div class="a--block-titleWrapper">\n' +
-            '            <a href="'+widgetLink+'" class="m-link">\n' +
-            '                <h6>\n' +
-            '                    <span class="m-badge m-badge--info m-badge--dot"></span>\n' +
-            '                    '+widgetTitle+'\n' +
-            '                </h6>\n' +
-            '            </a>\n' +
-            '        </div>\n' +
-            widgetAuthorFullameHtml +
-            '    </div>\n' +
             '</div>';
     }
 
@@ -273,7 +267,7 @@ var Alaasearch = function () {
             case 'product':
                 return getProductCarouselItem(data, itemKey);
             case 'video':
-                return getVideoCarouselItem(data);
+                return getContentCarouselItem(data);
             case 'set':
                 return getSetCarouselItem(data);
             case 'pamphlet':
@@ -288,6 +282,7 @@ var Alaasearch = function () {
             vw.append(makeWidgetFromJsonResponse(value, type, index));
         });
     }
+
     function addContentToOwl(owl, data, type) {
         $.each(data, function (index, value) {
             owl.trigger('add.owl.carousel',
@@ -299,6 +294,7 @@ var Alaasearch = function () {
         });
         owl.trigger('refresh.owl.carousel');
     }
+
     function ajaxSetup() {
         $.ajaxSetup({
             cache: false,
@@ -307,6 +303,7 @@ var Alaasearch = function () {
             }
         });
     }
+
     function loadData(owl , action,type,callback) {
         ajaxSetup();
 
@@ -368,6 +365,7 @@ var Alaasearch = function () {
                 break;
         }
     }
+
     function unLockAjax(type) {
         switch (type) {
             case 'product':
@@ -719,17 +717,6 @@ var Alaasearch = function () {
             owl.find('.a--vw-Loading').remove();
         }
     }
-
-    // function isScrolledIntoView(elem) {
-    //     if (elem.length === 0) {
-    //         return false;
-    //     }
-    //     var docViewTop = $(window).scrollTop();
-    //     var docViewBottom = docViewTop + $(window).height();
-    //     var elemTop = $(elem).offset().top;
-    //     var elemBottom = elemTop + $(elem).height();
-    //     return ((elemBottom >= docViewTop) && (elemTop <= docViewBottom) && (elemBottom <= docViewBottom) && (elemTop >= docViewTop));
-    // }
 
     function clearOwlcarousel(owl) {
         var length = owl.find('.item').length;
@@ -1232,46 +1219,13 @@ var GetAjaxData = function () {
     };
 }();
 
-// var GtmEecImpression = function () {
-//
-//     function view() {
-//         var countOfExistingProductInCarousel = $('#product-carousel.owl-carousel').find('.owl-item').length;
-//         if (countOfExistingProductInCarousel <= 5) {
-//             return;
-//         }
-//         var gtmEecImpressions = [];
-//         $('#product-carousel.owl-carousel').find('.owl-item.active .m-widget19__content .a--gtm-eec-product-click').each(function (index, value) {
-//             gtmEecImpressions.push({
-//                 id:       $(this).data('gtm-eec-product-id'),      // (String) The SKU of the product. Example: 'P12345'
-//                 name:     $(this).data('gtm-eec-product-name'),    // (String) The name of the product. Example: 'T-Shirt'
-//                 price:    $(this).data('gtm-eec-product-price'),
-//                 brand:    $(this).data('gtm-eec-product-brand'),   // (String) The brand name of the product. Example: 'NIKE'
-//                 category: $(this).data('gtm-eec-product-category'),// (String) Product category of the item. Can have maximum five levels of hierarchy. Example: 'clothes/shirts/t-shirts'
-//                 variant:  $(this).data('gtm-eec-product-variant'), // (String) What variant of the main product this is. Example: 'Large'
-//                 list:     $(this).data('gtm-eec-product-list'),
-//                 position: $(this).data('gtm-eec-product-position'),// (Integer) The position of the impression that was clicked. Example: 1
-//             });
-//         });
-//         GAEE.impressionView(gtmEecImpressions);
-//     }
-//
-//     return {
-//         view: function () {
-//             view();
-//         }
-//     };
-// }();
-
 $('.notFoundMessage').fadeOut(0);
 
 jQuery(document).ready(function () {
 
     $.ajaxSetup({ cache: false });
 
-    var owl = jQuery('.a--owl-carousel-type-1');
-    owl.each(function () {
-        var itemId = $(this).attr('id');
-        var responsive = {
+    let otherResponsive = {
             0:{
                 items:1,
             },
@@ -1290,9 +1244,29 @@ jQuery(document).ready(function () {
             1400:{
                 items:5
             }
-        };
-        var config = {
-            stagePadding: 0,
+        },
+        productResponsive = {
+            0:{
+                items:1,
+            },
+            400:{
+                items:2,
+            },
+            600:{
+                items:6,
+            },
+            800:{
+                items:8,
+            },
+            1190:{
+                items:6
+            },
+            1400:{
+                items:8
+            }
+        },
+        config = {
+            stagePadding: 30,
             loop: false,
             rtl:true,
             nav: true,
@@ -1303,40 +1277,24 @@ jQuery(document).ready(function () {
             pullDrag: true,
             lazyLoad:false,
             responsiveClass:true,
-            responsive: responsive
+            responsive: otherResponsive
         };
+    function slideChanged1(event) {
+        gtmEecProductObserver.observe();
+        imageObserver.observe();
+    }
+    function slideChanged2(event) {
+        imageObserver.observe();
+    }
+
+    var owl = jQuery('.a--owl-carousel-type-1');
+    owl.each(function () {
+        let itemId = $(this).attr('id');
         if (itemId === 'product-carousel') {
-            function slideChanged1(event) {
-                gtmEecProductObserver.observe();
-                imageObserver.observe();
-            }
-            responsive = {
-                0:{
-                    items:1,
-                },
-                400:{
-                    items:2,
-                },
-                600:{
-                    items:6,
-                },
-                800:{
-                    items:8,
-                },
-                1190:{
-                    items:6
-                },
-                1400:{
-                    items:8
-                }
-            };
+            config.responsive = productResponsive;
             config.onTranslated = slideChanged1;
-            config.responsive = responsive;
-            config.lazyLoad = true;
         } else {
-            function slideChanged2(event) {
-                imageObserver.observe();
-            }
+            config.responsive = otherResponsive;
             config.onTranslated = slideChanged2;
         }
         $(this).owlCarousel(config);

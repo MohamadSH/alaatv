@@ -89,11 +89,11 @@
                         <hr>
 
                         <br>
-                        <i class="la la-barcode"></i>
+                        <i class="fa fa-barcode"></i>
                         کد ملی:
                         @if(isset($user->nationalCode)) {{ $user->nationalCode }} @endif
                         <br>
-                        <i class="la la-mobile"></i>
+                        <i class="fa fa-mobile-alt"></i>
                         شماره موبایل:
                         @if(isset($user->mobile)){{ $user->mobile }} @endif
                         <br>
@@ -123,7 +123,7 @@
                                             <input type="text" name="postalCode" id="txtMobileVerificationCode" class="form-control m-input m-input--air" placeholder="کد تایید">
                                             <span class="m-input-icon__icon m-input-icon__icon--left">
                                                     <span>
-                                                        <i class="la la-mobile"></i>
+                                                        <i class="fa fa-mobile-alt"></i>
                                                     </span>
                                                 </span>
                                         </div>
@@ -197,7 +197,7 @@
                         @endif
 
                         <button type="button" class="btn m-btn--air btn-outline-warning btn-block" menu="profileMenuPage-setting">
-                            <i class="flaticon-cogwheel"></i>
+                            <i class="fa fa-cogs"></i>
                             ویرایش اطلاعات شخصی
                         </button>
                         <button type="button" class="btn m-btn--air btn-info btn-block animated infinite rubberBand" menu="profileMenuPage-filmVaJozve" onclick="window.location.href='{{ route('web.user.dashboard', Auth::user()) }}';">
@@ -205,7 +205,7 @@
                             دریافت فیلم های و جزوات
                         </button>
                         <button type="button" class="btn m-btn--air btn-outline-success btn-block" menu="profileMenuPage-sabteRotbe">
-                            <i class="la la-trophy"></i>
+                            <i class="fa fa-trophy"></i>
                             ثبت رتبه 98
                         </button>
                     </div>

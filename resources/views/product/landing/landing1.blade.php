@@ -11,7 +11,7 @@
             font-size: 15px !important;
         }
 
-        .sideItems .flaticon-pie-chart {
+        .sideItems .fa.fa-chart-pie {
             font-size: 30px !important;
         }
         .m-widget24 .m-widget24__item .m-widget24__stats {
@@ -82,7 +82,7 @@
                                                             ۱/۳
                                                         </h4>
                                                         <span class="m-widget24__stats m--font-success">
-                                                            <i class="flaticon-pie-chart"></i>
+                                                            <i class="fa fa-chart-pie"></i>
                                                         </span>
                                                         <br>
                                                         <span class="m-widget24__desc">

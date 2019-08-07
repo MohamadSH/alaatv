@@ -8,7 +8,7 @@
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item">
-                <i class="flaticon-home-2 m--padding-right-5"></i>
+                <i class="fa fa-home m--padding-right-5"></i>
                 <a class="m-link" href="{{action("Web\IndexPageController")}}">@lang('page.Home')</a>
             </li>
             <li class="breadcrumb-item">
@@ -236,7 +236,7 @@
                                                     <div class="a--summarize-text">
                                                         <div class="a--summarize-text-toggleBtn">
                                                             <button class="btn btn-accent m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill">
-                                                                <i class="la la-angle-double-down"></i>
+                                                                <i class="fa fa-angle-double-down"></i>
                                                             </button>
                                                         </div>
                                                         <div class="a--summarize-text-content">
@@ -280,7 +280,7 @@
                                                         </div>
                                                         <div class="m-widget4__ext">
                                                             <a href="{{ $file->link }}?download=1" class="m-widget4__icon">
-                                                                <i class="la la-download"></i>
+                                                                <i class="fa fa-download"></i>
                                                             </a>
                                                         </div>
                                                     </div>
@@ -410,7 +410,7 @@
                                         <div class="a--summarize-text">
                                             <div class="a--summarize-text-toggleBtn">
                                                 <button class="btn btn-accent m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill">
-                                                    <i class="la la-angle-double-down"></i>
+                                                    <i class="fa fa-angle-double-down"></i>
                                                 </button>
                                             </div>
                                             <div class="a--summarize-text-content">
@@ -489,7 +489,7 @@
                                 <li class="m-portlet__nav-item">
                                     <a href="#" m-portlet-tool="toggle"
                                        class="m-portlet__nav-link m-portlet__nav-link--icon">
-                                        <i class="la la-angle-down"></i>
+                                        <i class="fa fa-angle-down"></i>
                                     </a>
                                 </li>
                             </ul>
@@ -518,7 +518,7 @@
                                         <div class="m-widget4__ext">
                                             <a href="{{ action("Web\ContentController@show" , $item["content"]) }}"
                                                class="m-widget4__icon">
-                                                <i class="m--link la la-long-arrow-left"></i>
+                                                <i class="m--link fa fa-chevron-left"></i>
                                             </a>
                                         </div>
                                     </div>

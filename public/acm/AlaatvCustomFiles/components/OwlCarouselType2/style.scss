@@ -5,15 +5,24 @@
 
     .a--owl-carousel-head {
       background: white;
+
+
+      .btn-viewGrid,
+      .btn-viewOwlcarousel {
+
+      }
+      .btn-viewOwlcarousel {
+        display: none;
+      }
+      .btn-viewGrid {
+
+      }
     }
 
     .a--owl-carousel-body {
       position: relative;
     }
 
-    .btn-viewOwlcarousel {
-      display: none;
-    }
 
     .a--block-item {
 

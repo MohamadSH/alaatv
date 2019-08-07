@@ -19,7 +19,7 @@
             @permission((config('constants.SHOW_SITE_CONFIG_ACCESS')))
             <li class = "m-nav__item @if(strcmp($section , "websiteSetting") == 0) m-nav__item--active @endif">
                 <a href = "{{action("Web\AdminController@adminSiteConfig")}}" class = "m-nav__link">
-                    <i class = "m-nav__link-icon flaticon-cogwheel"></i>
+                    <i class = "m-nav__link-icon fa fa-cogs"></i>
                     <span class = "m-nav__link-text">
                         تنظیمات سایت
                     </span>
@@ -32,7 +32,7 @@
             <li class = "m-nav__item
                         {{--m-nav__item--disabled--}}@if(strcmp($section , "slideShow") == 0) m-nav__item--active @endif">
                 <a href = "{{action("Web\AdminController@adminSlideShow")}}" class = "m-nav__link">
-                    <i class = "m-nav__link-icon la la-photo"></i>
+                    <i class = "m-nav__link-icon fa fa-image"></i>
                     <span class = "m-nav__link-text">
                         اسلاید شو صفحه اصلی
                     </span>

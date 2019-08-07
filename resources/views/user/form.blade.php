@@ -771,7 +771,7 @@
                         @endif
                         @if(strcmp($formField->name , "photo") !== 0)
                             <span class="m-input-icon__icon m-input-icon__icon--left">
-                                    <span><i class="flaticon-edit"></i></span>
+                                    <span><i class="fa fa-edit"></i></span>
                                 </span>
                         @endif
                     </div>

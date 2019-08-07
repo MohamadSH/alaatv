@@ -8,7 +8,7 @@
     <nav aria-label = "breadcrumb">
         <ol class = "breadcrumb">
             <li class = "breadcrumb-item">
-                <i class = "flaticon-home-2"></i>
+                <i class = "fa fa-home"></i>
                 <a href = "{{action('Web\IndexPageController')}}">@lang('page.Home')</a>
             </li>
             <li class = "breadcrumb-item active" aria-current = "page">
@@ -30,7 +30,7 @@
                     <div class = "m-portlet__head-caption">
                         <div class = "m-portlet__head-title">
 						<span class = "m-portlet__head-icon m--hide">
-						<i class = "la la-gear"></i>
+						<i class = "fa fa-cog"></i>
 						</span>
                             <h3 class = "m-portlet__head-text">
                                 ارسال پیام به آلاء
