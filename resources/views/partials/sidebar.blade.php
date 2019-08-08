@@ -193,7 +193,7 @@
                     <li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1">
                         <a href="{{ route('admin.wallet') }}" class="m-menu__link ">
                             <span class="m-menu__item-here"></span>
-                            <i class="m-menu__link-icon flaticon-technology"></i>
+                            <i class="m-menu__link-icon flaticon-network"></i>
                             <span class="m-menu__link-text">پنل کیف پول</span>
                         </a>
                     </li>
