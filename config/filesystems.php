@@ -269,6 +269,22 @@ return [
 
         ],
 
+        'pamphletSftp2' => [
+            'driver'     => 'sftp',
+            'host'       => env('SFTP_HOST2', ''),
+            'port'       => env('SFTP_PORT', '22'),
+            'username'   => env('SFTP_USERNAME', ''),
+            'password'   => env('SFTP_PASSSWORD', ''),
+            'privateKey' => env('SFTP_PRIVATE_KEY_PATH', ''),
+            'root'       => '/alaa_media/dl/',
+            'timeout'    => env('SFTP_TIMEOUT', '10'),
+
+            'dHost'     => 'paid.alaatv.com',
+            'dProtocol' => 'https://',
+            'prefix'    => '/public/c/pamphlet/',
+
+        ],
+
         'book' => [
             'driver'     => 'local',
             'root'       => storage_path('app/public/content/book'),
