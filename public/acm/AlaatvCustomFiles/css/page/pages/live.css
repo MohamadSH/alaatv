@@ -1,3 +1,38 @@
 .m-portlet .m-portlet__body {
     padding: 0;
 }
+
+.fc-event {
+    font-size: 1em;
+}
+
+#a--fullcalendar .fc-view-container .fc-content-skeleton tr td .fc-content-col .fc-event-container .fc-content .fc-title {
+    -webkit-line-clamp: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    direction: rtl;
+}
+
+#a--fullcalendar .fc-view-container .fc-head .fc-row tr th.fc-axis {
+    width: 11px;
+    height: 40px;
+    transform: rotate(90deg);
+    bottom: 11px;
+    position: relative;
+}
+
+
+/*media query*/
+@media only screen and (max-width: 767px) {
+    #a--fullcalendar .fc-view-container .fc-head .fc-row tr th {
+        font-size: 0.8em;
+    }
+    #a--fullcalendar .fc-view-container .fc-head .fc-row tr th.fc-axis {
+        bottom: 8px;
+    }
+    .fc-event {
+        font-size: 0.8em;
+    }
+}

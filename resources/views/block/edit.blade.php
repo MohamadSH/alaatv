@@ -26,7 +26,7 @@
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item">
-                <i class="flaticon-home-2 m--padding-right-5"></i>
+                <i class="fa fa-home m--padding-right-5"></i>
                 <a class="m-link" href="{{action("Web\IndexPageController")}}">@lang('page.Home')</a>
             </li>
             <li class="breadcrumb-item" aria-current="page">
@@ -133,11 +133,11 @@
                                             <td class="operations">
                                                 <div class="btn-group" role="group" aria-label="First group">
                                                     <a href="{{ $product->editLink }}" class="m-btn btn btn-warning">
-                                                        <i class="la la-pencil"></i>
+                                                        <i class="fa fa-edit"></i>
                                                         ویرایش
                                                     </a>
                                                     <button type="button" class="m-btn btn btn-danger btnDetachProduct" data-detach-link="{{ action('Web\BlockController@detachFromBlock', [$block->id, 'product', $product->id]) }}" data-name="{{ $product->name }}">
-                                                        <i class="la la-paperclip"></i>
+                                                        <i class="fa fa-paperclip"></i>
                                                         حذف
                                                     </button>
                                                 </div>
@@ -193,11 +193,11 @@
                                         <td class="operations">
                                             <div class="btn-group" role="group" aria-label="First group">
                                                 <a href="{{ $set->editLink }}" class="m-btn btn btn-warning">
-                                                    <i class="la la-pencil"></i>
+                                                    <i class="fa fa-edit"></i>
                                                     ویرایش
                                                 </a>
                                                 <button type="button" class="m-btn btn btn-danger btnDetachSet" data-detach-link="{{ action('Web\BlockController@detachFromBlock', [$block->id, 'set', $set->id]) }}" data-name="{{ $set->name }}">
-                                                    <i class="la la-paperclip"></i>
+                                                    <i class="fa fa-paperclip"></i>
                                                     حذف
                                                 </button>
                                             </div>
@@ -243,11 +243,11 @@
                                         <td class="operations">
                                             <div class="btn-group" role="group" aria-label="First group">
                                                 <a href="{{ $content->editLink }}" class="m-btn btn btn-warning">
-                                                    <i class="la la-pencil"></i>
+                                                    <i class="fa fa-edit"></i>
                                                     ویرایش
                                                 </a>
                                                 <button type="button" class="m-btn btn btn-danger btnDetachContent" data-detach-link="{{ action('Web\BlockController@detachFromBlock', [$block->id, 'content', $content->id]) }}" data-name="{{ $content->name }}">
-                                                    <i class="la la-paperclip"></i>
+                                                    <i class="fa fa-paperclip"></i>
                                                     حذف
                                                 </button>
                                             </div>
@@ -281,11 +281,11 @@
                                         <td class="operations">
                                             <div class="btn-group" role="group" aria-label="First group">
                                                 <a href="{{ $banner->editLink }}" class="m-btn btn btn-warning">
-                                                    <i class="la la-pencil"></i>
+                                                    <i class="fa fa-edit"></i>
                                                     ویرایش
                                                 </a>
                                                 <button type="button" class="m-btn btn btn-danger">
-                                                    <i class="la la-paperclip"></i>
+                                                    <i class="fa fa-paperclip"></i>
                                                     حذف
                                                 </button>
                                             </div>

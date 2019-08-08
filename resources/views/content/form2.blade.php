@@ -1,6 +1,6 @@
 <div class="row">
     <div class="col-md-4">
-    
+
         <label class="mt-checkbox mt-checkbox-outline">
             <div class="md-checkbox">
                 @if(Auth::user()->can(config('constants.CHANGE_TO_PAID_CONTENT')))
@@ -85,10 +85,10 @@
                             </div>
                             <div class="input-group input-group-sm">
                                 <span class="input-group-btn">
-    
+
                                     <a target="_blank" href="{{$file->link}}" class="btn blue-dark"><i class="fa fa-download"></i>                                </a>
                                 </span>
-    
+
     {{--                            <span class="input-group-btn">--}}
     {{--                                <a class="btn btn-icon-only btn-outline red removeFile" data-target="#deleteFileConfirmationModal" data-toggle="modal" data-id="{{$file->id}}" data-to="{{$content->id}}">--}}
     {{--                                    <i class="fa fa-times"></i>--}}
@@ -133,10 +133,17 @@
                         @endforeach
                     @endif
             @else
-                <li class="list-group-item text-center m--font-danger " style="font-size: small">فایلی درج نشده است
-                </li>
+                <li class="list-group-item text-center m--font-danger " style="font-size: small">فایلی درج نشده است</li>
             @endif
         </ul>
+        @if($content->contenttype_id == config('constants.CONTENT_TYPE_PAMPHLET'))
+            <div class="row">
+                <label class=" col-md-4 control-label red" for="pamphlet">آپلود فایل جزوه</label>
+                <div class="col-md-12">
+                    <input name="pamphlet" type="file"/>
+                </div>
+            </div>
+        @endif
 {{--        <div class="row">--}}
 {{--            <div class="col-md-12">--}}
 {{--                <select name="fileQuality" class="form-control">--}}

@@ -27,10 +27,10 @@
                 </div>
                 <div class="m-portlet__head-tools">
                     <a href="#" class="btn btn-outline-metal m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill m-btn--air btn-viewGrid">
-                        <i class="fa flaticon-shapes"></i>
+                        <i class="fa fa-th"></i>
                     </a>
                     <a href="#" class="btn btn-outline-metal m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill m-btn--air btn-viewOwlCarousel">
-                        <i class="flaticon-more-v4"></i>
+                        <i class="fa-exchange-alt"></i>
                     </a>
                 </div>
             </div>

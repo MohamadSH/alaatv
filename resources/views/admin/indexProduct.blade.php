@@ -160,22 +160,22 @@
                         <ul class="m-portlet__nav">
                             <li class="m-portlet__nav-item">
                                 <a href="#" m-portlet-tool="reload" class="m-portlet__nav-link m-portlet__nav-link--icon reload">
-                                    <i class="la la-refresh"></i>
+                                    <i class="fa fa-redo"></i>
                                 </a>
                             </li>
                             <li class="m-portlet__nav-item">
                                 <a href="#" m-portlet-tool="toggle" class="m-portlet__nav-link m-portlet__nav-link--icon">
-                                    <i class="la la-angle-down"></i>
+                                    <i class="fa fa-angle-down"></i>
                                 </a>
                             </li>
                             <li class="m-portlet__nav-item">
                                 <a href="#" m-portlet-tool="fullscreen" class="m-portlet__nav-link m-portlet__nav-link--icon" id="product-expand">
-                                    <i class="la la-expand"></i>
+                                    <i class="fa fa-expand-arrows-alt"></i>
                                 </a>
                             </li>
                             <li class="m-portlet__nav-item">
                                 <a href="#" m-portlet-tool="remove" class="m-portlet__nav-link m-portlet__nav-link--icon">
-                                    <i class="la la-close"></i>
+                                    <i class="fa fa-times"></i>
                                 </a>
                             </li>
                         </ul>
@@ -246,22 +246,22 @@
                         <ul class="m-portlet__nav">
                             <li class="m-portlet__nav-item">
                                 <a href="#" m-portlet-tool="reload" class="m-portlet__nav-link m-portlet__nav-link--icon reload">
-                                    <i class="la la-refresh"></i>
+                                    <i class="fa fa-redo"></i>
                                 </a>
                             </li>
                             <li class="m-portlet__nav-item">
                                 <a href="#" m-portlet-tool="toggle" class="m-portlet__nav-link m-portlet__nav-link--icon">
-                                    <i class="la la-angle-down"></i>
+                                    <i class="fa fa-angle-down"></i>
                                 </a>
                             </li>
                             <li class="m-portlet__nav-item">
                                 <a href="#" m-portlet-tool="fullscreen" class="m-portlet__nav-link m-portlet__nav-link--icon" id="coupon-expand">
-                                    <i class="la la-expand"></i>
+                                    <i class="fa fa-expand-arrows-alt"></i>
                                 </a>
                             </li>
                             <li class="m-portlet__nav-item">
                                 <a href="#" m-portlet-tool="remove" class="m-portlet__nav-link m-portlet__nav-link--icon">
-                                    <i class="la la-close"></i>
+                                    <i class="fa fa-times"></i>
                                 </a>
                             </li>
                         </ul>
@@ -356,22 +356,22 @@
                         <ul class="m-portlet__nav">
                             <li class="m-portlet__nav-item">
                                 <a href="#" m-portlet-tool="reload" class="m-portlet__nav-link m-portlet__nav-link--icon reload">
-                                    <i class="la la-refresh"></i>
+                                    <i class="fa fa-redo"></i>
                                 </a>
                             </li>
                             <li class="m-portlet__nav-item">
                                 <a href="#" m-portlet-tool="toggle" class="m-portlet__nav-link m-portlet__nav-link--icon">
-                                    <i class="la la-angle-down"></i>
+                                    <i class="fa fa-angle-down"></i>
                                 </a>
                             </li>
                             <li class="m-portlet__nav-item">
                                 <a href="#" m-portlet-tool="fullscreen" class="m-portlet__nav-link m-portlet__nav-link--icon" id="attribute-expand">
-                                    <i class="la la-expand"></i>
+                                    <i class="fa fa-expand-arrows-alt"></i>
                                 </a>
                             </li>
                             <li class="m-portlet__nav-item">
                                 <a href="#" m-portlet-tool="remove" class="m-portlet__nav-link m-portlet__nav-link--icon">
-                                    <i class="la la-close"></i>
+                                    <i class="fa fa-times"></i>
                                 </a>
                             </li>
                         </ul>
@@ -458,22 +458,22 @@
                         <ul class="m-portlet__nav">
                             <li class="m-portlet__nav-item">
                                 <a href="#" m-portlet-tool="reload" class="m-portlet__nav-link m-portlet__nav-link--icon reload">
-                                    <i class="la la-refresh"></i>
+                                    <i class="fa fa-redo"></i>
                                 </a>
                             </li>
                             <li class="m-portlet__nav-item">
                                 <a href="#" m-portlet-tool="toggle" class="m-portlet__nav-link m-portlet__nav-link--icon">
-                                    <i class="la la-angle-down"></i>
+                                    <i class="fa fa-angle-down"></i>
                                 </a>
                             </li>
                             <li class="m-portlet__nav-item">
                                 <a href="#" m-portlet-tool="fullscreen" class="m-portlet__nav-link m-portlet__nav-link--icon" id="attributeset-expand">
-                                    <i class="la la-expand"></i>
+                                    <i class="fa fa-expand-arrows-alt"></i>
                                 </a>
                             </li>
                             <li class="m-portlet__nav-item">
                                 <a href="#" m-portlet-tool="remove" class="m-portlet__nav-link m-portlet__nav-link--icon">
-                                    <i class="la la-close"></i>
+                                    <i class="fa fa-times"></i>
                                 </a>
                             </li>
                         </ul>

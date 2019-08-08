@@ -18,7 +18,7 @@ trait HasWallet
     {
         return $this->hasMany('\App\Wallet');
     }
-    
+
     /**
      * Retrieve the balance of all of this user's wallet
      */
@@ -29,10 +29,10 @@ trait HasWallet
         foreach ($wallets as $wallet) {
             $totalBalance += $wallet->balance;
         }
-        
+
         return $totalBalance;
     }
-    
+
     /**
      * Determine if the user can withdraw the given amount
      *
@@ -44,7 +44,7 @@ trait HasWallet
     {
         return $this->getWalletBalance() >= $amount;
     }
-    
+
     /**
      * Retrieve the balance of this user's wallet
      *
@@ -59,10 +59,10 @@ trait HasWallet
         if (isset($wallet)) {
             $balance = $wallet->balance;
         }
-        
+
         return $balance;
     }
-    
+
     /**
      * Fail to move credits to this account
      *
@@ -74,7 +74,7 @@ trait HasWallet
     {
         $this->deposit($amount, $type, $meta, false);
     }
-    
+
     /**
      * Move credits to this account
      *
@@ -85,56 +85,43 @@ trait HasWallet
      */
     public function deposit($amount = 0, $walletType = null)
     {
-        $failed       = true;
-        $responseText = "";
-        
+        $done       = false;
         if (!isset($walletType)) {
             $walletType = config("constants.WALLET_TYPE_MAIN");
         }
-        $wallet = $this->wallets->where("wallettype_id", $walletType)
-            ->first();
+        $wallet = $this->wallets->where("wallettype_id", $walletType)->first();
         if (isset($wallet)) {
             $result = $wallet->deposit($amount);
             if ($result["result"]) {
-                $failed = false;
+                $responseText = "SUCCESSFUL";
+                $done = true;
             }
             else {
-                $failed       = true;
                 $responseText = $result["responseText"];
             }
         }
         else {
-            $walletController = new WalletController();
-            $request          = new Request();
-            
-            $request->offsetSet("user_id", $this->id);
-            $request->offsetSet("wallettype_id", $walletType);
-            RequestCommon::convertRequestToAjax($request);
-            $response = $walletController->store($request);
-            if ($response->getStatusCode() == Response::HTTP_OK) {
-                $result = json_decode($response->getContent());
-                $wallet = Wallet::where("id", $result->wallet->id)
-                    ->first();
+            $wallet = Wallet::create([
+                'user_id'       => $this->id ,
+                'wallettype_id' => $walletType
+            ]);
+            if (isset($wallet)) {
                 $wallet->deposit($amount);
-                $failed = false;
+                $responseText = "SUCCESSFUL";
+                $done = true;
             }
             else {
-                $failed       = true;
                 $responseText = "CAN_NOT_CREATE_WALLET";
             }
         }
-        
-        if (!$failed) {
-            $responseText = "SUCCESSFUL";
-        }
-        
+
         return [
-            "result"       => !$failed,
-            "responseText" => $responseText,
-            "wallet"       => (isset($wallet)) ? $wallet->id : 0,
+            "result"       => $done,
+            "responseText" => (isset($responseText))?$responseText:'',
+            "wallet"       => (isset($wallet)) ? $wallet->id : null,
         ];
     }
-    
+
     /**
      * Move credits from this account
      *
@@ -148,10 +135,10 @@ trait HasWallet
         if (!isset($walletType)) {
             $walletType = config("constants.WALLET_TYPE_MAIN");
         }
-        
+
         return $this->withdraw($amount, $walletType, false);
     }
-    
+
     /**
      * Attempt to move credits from this account
      *
@@ -165,7 +152,7 @@ trait HasWallet
     {
         $failed       = true;
         $responseText = "";
-        
+
         if (!isset($walletType)) {
             $walletType = config("constants.WALLET_TYPE_MAIN");
         }
@@ -194,18 +181,18 @@ trait HasWallet
                 $responseText = "CAN_NOT_CREATE_WALLET";
             }
         }
-        
+
         if (!$failed) {
             $responseText = "SUCCESSFUL";
         }
-        
+
         return [
             "result"       => !$failed,
             "responseText" => $responseText,
             "wallet"       => (isset($wallet)) ? $wallet->id : 0,
         ];
     }
-    
+
     /**
      * Returns the actual balance for this wallet.
      * Might be different from the balance property if the database is manipulated

@@ -59,7 +59,7 @@
             @permission((config('constants.EDIT_SLIDESHOW_ACCESS')))
             <a class="btn btn-sm btn-outline-warning m-btn m-btn--custom m-btn--icon m-btn--pill m-btn--air deleteSlide m--margin-right-20" href="{{action("Web\SlideShowController@edit" , $slide)}}">
                 <span>
-                    <i class="flaticon-edit"></i>
+                    <i class="fa fa-edit"></i>
                     <span>اصلاح</span>
                 </span>
             </a>

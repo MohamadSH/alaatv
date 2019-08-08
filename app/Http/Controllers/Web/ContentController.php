@@ -11,10 +11,11 @@ use App\Contentset;
 use App\Contenttype;
 use App\Websitesetting;
 use Illuminate\Routing\Redirector;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Jenssegers\Agent\Agent;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\{Cache};
+use Illuminate\Support\Facades\{Cache, File, Storage};
 use App\Http\Controllers\Controller;
 use App\Collection\ProductCollection;
 use App\Classes\Search\ContentSearch;
@@ -372,7 +373,7 @@ class ContentController extends Controller
 
             if(!empty($files))
             {
-                $this->storeFilesOfContent($educationalContent, $files);
+                $this->insertFilesOfContent($educationalContent, $files);
             }
         }
 
@@ -444,6 +445,38 @@ class ContentController extends Controller
                 'update',
             ],
         ]);
+    }
+
+    /**
+     * @param array $inputData
+     * @param Content $content
+     *
+     * @return void
+     */
+    private function fillContentFromRequest(array $inputData, Content $content): void
+    {
+        $validSinceDateTime = array_get($inputData , 'validSinceDate');
+        $enabled    = Arr::has($inputData , 'enable');
+        $isFree    = Arr::has($inputData , 'isFree');
+        $tagString  = array_get($inputData , 'tags');
+        $files      = array_get($inputData , 'files' , []);
+        $pamphlet      = array_get($inputData , 'pamphlet');
+
+        $content->fill($inputData);
+        //ToDo : keep time in $validSinceDateTime
+//        $content->validSince = $validSinceDateTime;
+        $content->validSince = explode(' ', $validSinceDateTime)[0];
+        $content->enable     = $enabled ? 1 : 0;
+        $content->isFree     = $isFree ? 1 : 0;
+        $content->tags       = convertTagStringToArray($tagString);
+
+        if(isset($pamphlet)){
+            $files =$this->storePamphletOfContent($pamphlet);
+        }
+
+        if(!empty($files)) {
+            $this->insertFilesOfContent($content, $files);
+        }
     }
 
     /**
@@ -560,8 +593,7 @@ class ContentController extends Controller
      */
     private function makePahmphletFilesForPaidContent(string $fileName, int $productId): array
     {
-        $files = $this->makePaidPamphletFileArray($fileName, config('constants.DISK_PRODUCT_CONTENT'), $productId);
-        return $files;
+        return $this->makePaidPamphletFileArray($fileName, config('constants.DISK_PRODUCT_CONTENT'), $productId);
     }
 
     /**
@@ -570,8 +602,7 @@ class ContentController extends Controller
      */
     private function makePamphletFilesForFreeContent(string $fileName): array
     {
-        $files = $this->makeFreePamphletFileArray($fileName, config('constants.DISK19_CLOUD'));
-        return $files;
+        return $this->makeFreePamphletFileArray($fileName, config('constants.DISK19_CLOUD2'));
     }
 
     private function makeJsonForAndroidApp($items): array
@@ -631,7 +662,7 @@ class ContentController extends Controller
      *
      * @param  array    $files
      */
-    private function storeFilesOfContent(Content $content, array $files): void
+    private function insertFilesOfContent(Content $content, array $files): void
     {
         $fileCollection = collect();
 
@@ -660,5 +691,16 @@ class ContentController extends Controller
         }
         /** @var Content $content */
         $content->file = $fileCollection;
+    }
+
+    private function storePamphletOfContent($pamphletFile):array
+    {
+        $extension = $pamphletFile->getClientOriginalExtension();
+        $filename  = basename($pamphletFile->getClientOriginalName(), ".".$extension)."_".date("YmdHis").'.'.$extension;
+        $disk = Storage::disk(config('constants.DISK19_CLOUD2'));
+        if ($disk->put($filename, File::get($pamphletFile))) {
+            return $this->makePamphletFilesForFreeContent($filename);
+        }
+        return [];
     }
 }

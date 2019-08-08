@@ -90,7 +90,7 @@
                     <button type = "submit" name = "action" value = "action-clockIn" class = "btn m-btn m-btn--custom m-btn--icon m-btn--pill m-btn--air btn-accent text-center btn-sm col-4">
                         <span class = "a--full-width">
                             آمدم
-                            <i class = "la la-check"></i>
+                            <i class = "fa fa-check"></i>
                         </span>
                     </button>
                     <div class = "col-3">
@@ -107,7 +107,7 @@
                     <button type = "submit" name = "action" value = "action-beginLunchBreak" class = "btn m-btn m-btn--custom m-btn--icon m-btn--pill m-btn--air btn-accent text-center btn-sm col-4">
                         <span class = "a--full-width">
                             رفتم ناهار
-                            <i class = "la la-check"></i>
+                            <i class = "fa fa-check"></i>
                         </span>
                     </button>
                     <div class = "col-3">
@@ -120,7 +120,7 @@
                     <button type = "submit" name = "action" value = "action-finishLunchBreak" class = "btn m-btn m-btn--custom m-btn--icon m-btn--pill m-btn--air btn-accent text-center btn-sm col-md-4">
                         <span class = "a--full-width">
                             از ناهار برگشتم
-                            <i class = "la la-check"></i>
+                            <i class = "fa fa-check"></i>
                         </span>
                     </button>
                     <div class = "col-3">
@@ -133,7 +133,7 @@
                     <button type = "submit" name = "action" value = "action-clockOut" class = "btn m-btn m-btn--custom m-btn--icon m-btn--pill m-btn--air btn-accent text-center btn-sm col-md-4">
                         <span class = "a--full-width">
                             رفتم خونه
-                            <i class = "la la-check"></i>
+                            <i class = "fa fa-check"></i>
                         </span>
                     </button>
                     <div class = "col-3">

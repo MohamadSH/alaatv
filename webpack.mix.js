@@ -1,8 +1,53 @@
 class Mix {
 
     constructor() {
+        this.outputCssFile = [];
         this.mix = require('laravel-mix');
+        this.purify = require("purify-css");
         this.mix.sass('public/acm/AlaatvCustomFiles/components/OwlCarouselType2/style.scss', 'public/acm/AlaatvCustomFiles/components/OwlCarouselType2');
+        this.mix.sass('public/acm/AlaatvCustomFiles/components/MultiLevelSearch/style.scss', 'public/acm/AlaatvCustomFiles/components/MultiLevelSearch');
+    }
+
+    static getBaseCss() {
+        return [
+            'public/acm/webFonts/IRANSans/css/fontiran.css',
+            'public/assets/vendors/base/vendors.bundle.rtl.css',
+            'public/assets/demo/demo12/base/style.bundle.rtl.css',
+            'public/acm/custom-css-app.css',
+
+            'public/acm/AlaatvCustomFiles/css/customStyle.css',
+            'public/acm/AlaatvCustomFiles/css/fixThemeStyle.css',
+            'public/acm/AlaatvCustomFiles/components/loading/loading.css',
+        ];
+    }
+
+    static getBaseJs() {
+        return [
+            'node_modules/intersection-observer/intersection-observer.js',
+            'node_modules/lozad/dist/lozad.js',
+            'public/assets/vendors/base/vendors.bundle.js',
+            'public/assets/demo/demo12/base/scripts.bundle.js',
+            'public/acm/AlaatvCustomFiles/js/GoogleAnalyticsEnhancedEcommerce.js',
+            'public/acm/AlaatvCustomFiles/js/lazyLoad.js',
+            'public/acm/AlaatvCustomFiles/js/app.js',
+            'public/acm/AlaatvCustomFiles/js/mLayout.js'
+        ];
+    }
+
+    mixCssAndJs(cssArray, cssName, jsArray, jsName) {
+        //scripts - babel
+
+        // mix.styles(Mix.getBaseCss().concat(cssArray), cssName)
+        //     .scripts(Mix.getBaseJs().concat(jsArray), jsName).version();
+
+        this.mix.scripts(jsArray, jsName).styles(cssArray, cssName).version();
+
+        this.outputCssFile.push({
+            cssName: cssName,
+            cssArray: cssArray,
+            jsArray: jsArray
+        });
+        console.log('cssName: ', cssName);
     }
 
     mixAll() {
@@ -15,37 +60,43 @@ class Mix {
         this.mixCheckout();
         this.mixAdmin();
         this.mixCopyDirectory();
+
+        this.mix.then(() => {
+            this.purifyCss();
+        });
+    }
+
+    purifyCss() {
+        let outputCssFilesLength = this.outputCssFile.length;
+        for (let i = 0; i < outputCssFilesLength; i++) {
+            let cssName = this.outputCssFile[i].cssName,
+                jsArray = this.outputCssFile[i].jsArray;
+            console.log('purifyCss: ', cssName);
+            this.purify((['./resources/views/**/*.blade.php', './resources/views/**/**/*.blade.php', './resources/views/**/**/**/*.blade.php']).concat(jsArray), [cssName], {
+                output: './' + cssName,
+                // output: './public/css/'+fileName+'.purify.css',
+
+                // Will minify CSS code in addition to purify.
+                minify: true,
+                // Logs info on how much css was removed
+                info: true,
+
+                // // Logs out removed selectors.
+                // rejected: true
+            });
+        }
     }
 
     mixBase() {
-        this.mix.styles([
-                'public/acm/webFonts/IRANSans/css/fontiran.css',
-                'public/assets/vendors/base/vendors.bundle.rtl.css',
-                'public/assets/demo/demo12/base/style.bundle.rtl.css',
-                'public/acm/custom-css-app.css',
-
-                'public/acm/AlaatvCustomFiles/css/customStyle.css',
-                'public/acm/AlaatvCustomFiles/css/fixThemeStyle.css',
-                'public/acm/AlaatvCustomFiles/components/loading/loading.css',
-            ],
-            'public/css/all.css')
-            .version()
-            .babel([
-                    'node_modules/intersection-observer/intersection-observer.js',
-                    'node_modules/lozad/dist/lozad.js',
-                    'public/assets/vendors/base/vendors.bundle.js',
-                    'public/assets/demo/demo12/base/scripts.bundle.js',
-                    'public/acm/AlaatvCustomFiles/js/GoogleAnalyticsEnhancedEcommerce.js',
-                    'public/acm/AlaatvCustomFiles/js/lazyLoad.js',
-                    'public/acm/AlaatvCustomFiles/js/app.js',
-                    'public/acm/AlaatvCustomFiles/js/mLayout.js'
-                ],
-                'public/js/all.js'
-            ).version();
+        this.mixCssAndJs(
+            Mix.getBaseCss(),
+            'public/css/all.css',
+            Mix.getBaseJs(),
+            'public/js/all.js', 'all');
     }
 
     mixPageLive() {
-        this.mix.styles([
+        this.mixCssAndJs([
                 'node_modules/@fullcalendar/core/main.css',
 
                 'node_modules/@fullcalendar/daygrid/main.css',
@@ -63,39 +114,37 @@ class Mix {
                 'public/acm/videojs/plugins/seek-to-point.css',
                 'public/acm/AlaatvCustomFiles/css/page/pages/live.css',
             ],
-            'public/css/page-live.css'
-        ).version()
-            .babel([
-                    'node_modules/@fullcalendar/core/main.js',
+            'public/css/page-live.css',
+            [
+                'node_modules/@fullcalendar/core/main.js',
 
-                    // 'node_modules/@fullcalendar/timeline/main.js',
-                    // 'node_modules/@fullcalendar/resource-common/main.js',
-                    // 'node_modules/@fullcalendar/resource-timeline/main.js',
+                // 'node_modules/@fullcalendar/timeline/main.js',
+                // 'node_modules/@fullcalendar/resource-common/main.js',
+                // 'node_modules/@fullcalendar/resource-timeline/main.js',
 
-                    'node_modules/@fullcalendar/daygrid/main.js',
+                'node_modules/@fullcalendar/daygrid/main.js',
 
-                    'node_modules/@fullcalendar/timegrid/main.js',
+                'node_modules/@fullcalendar/timegrid/main.js',
 
-                    'node_modules/@fullcalendar/core/locales/fa.js',
+                'node_modules/@fullcalendar/core/locales/fa.js',
 
-                    'node_modules/tooltip/dist/Tooltip.js',
-
+                'node_modules/tooltip/dist/Tooltip.js',
 
 
-                    'public/acm/videojs/video.min.js',
-                    'public/acm/videojs/plugins/pip/videojs.pip.min.js',
-                    'public/acm/videojs/nuevo.min.js',
-                    'public/acm/videojs/plugins/videojs.p2p.min.js',
-                    'public/acm/videojs/plugins/videojs.hotkeys.min.js',
-                    'public/acm/videojs/plugins/seek-to-point.js',
-                    'public/acm/videojs/lang/fa.js',
-                    'public/acm/AlaatvCustomFiles/js/page/pages/live.js',
-                ],
-                'public/js/page-live.js'
-            ).version();
+
+                'public/acm/videojs/video.min.js',
+                'public/acm/videojs/plugins/pip/videojs.pip.min.js',
+                'public/acm/videojs/nuevo.min.js',
+                'public/acm/videojs/plugins/videojs.p2p.min.js',
+                'public/acm/videojs/plugins/videojs.hotkeys.min.js',
+                'public/acm/videojs/plugins/seek-to-point.js',
+                'public/acm/videojs/lang/fa.js',
+                'public/acm/AlaatvCustomFiles/js/page/pages/live.js',
+            ],
+            'public/js/page-live.js');
     }
     mixPageShop() {
-        this.mix.styles([
+        this.mixCssAndJs([
                 'node_modules/slick-carousel/slick/slick.css',
                 'node_modules/slick-carousel/slick/slick-theme.css',
                 'public/acm/AlaatvCustomFiles/components/ribbon/style.css',
@@ -105,9 +154,8 @@ class Mix {
                 'public/acm/AlaatvCustomFiles/css/certificates.css',
                 'public/acm/AlaatvCustomFiles/css/page/pages/shop.css',
             ],
-            'public/css/page-shop.css'
-        ).version()
-            .babel([
+            'public/css/page-shop.css',
+            [
                     'node_modules/owl.carousel/dist/owl.carousel.js',
                     'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/js.js',
                     'public/acm/AlaatvCustomFiles/components/aSticky/aSticky.js',
@@ -118,33 +166,31 @@ class Mix {
             );
     }
     mixPageError() {
-        this.mix.styles([
+        this.mixCssAndJs([
                 'public/acm/AlaatvCustomFiles/css/page/pages/error.css',
             ],
-            'public/css/page-error.css'
-        ).version()
-            .babel([
+            'public/css/page-error.css',
+            [
                     'public/acm/AlaatvCustomFiles/js/page/pages/error.js'
                 ],
                 'public/js/page-error.js'
-            ).version();
+            );
     }
     mixAuthLogin() {
-        this.mix.styles([
+        this.mixCssAndJs([
                 'public/acm/AlaatvCustomFiles/css/page/pages/auth-login.css',
             ],
-            'public/css/auth-login.css'
-        ).version()
-            .scripts([
+            'public/css/auth-login.css',
+            [
                     'node_modules/block-ui/jquery.blockUI.js',
                     'node_modules/jquery-validation/dist/jquery.validate.js',
                     'public/acm/AlaatvCustomFiles/js/page/pages/login.js'
                 ],
                 'public/js/login.js'
-            ).version();
+            );
     }
     mixPageHomePage() {
-        this.mix.styles([
+        this.mixCssAndJs([
                 'node_modules/owl.carousel/dist/assets/owl.carousel.css',
                 'node_modules/owl.carousel/dist/assets/owl.theme.default.css',
                 'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/style.css',
@@ -152,35 +198,33 @@ class Mix {
                 'public/acm/AlaatvCustomFiles/css/certificates.css',
                 'public/acm/AlaatvCustomFiles/css/page/pages/homePage.css',
             ],
-            'public/css/page-homePage.css'
-        ).version()
-        .babel([
+            'public/css/page-homePage.css',
+            [
                 'node_modules/owl.carousel/dist/owl.carousel.js',
                 'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/js.js',
                 'public/acm/AlaatvCustomFiles/components/aSticky/aSticky.js',
                 'public/acm/AlaatvCustomFiles/js/certificates.js',
                 'public/acm/AlaatvCustomFiles/js/page/pages/homePage.js',
             ],
-            'public/js/page-homePage.js'
-        ).version();
+            'public/js/page-homePage.js',
+            'page-homePage');
     }
     mixPageContactUs() {
-        this.mix.styles([
+        this.mixCssAndJs([
                 'public/acm/AlaatvCustomFiles/css/page/pages/contactUs.css',
             ],
-            'public/css/page-contactUs.css'
-        ).version()
-            .scripts([
-                    'node_modules/inputmask/dist/jquery.inputmask.bundle.js',
-                    'node_modules/inputmask/dist/inputmask/inputmask.date.extensions.js',
-                    'node_modules/inputmask/dist/inputmask/inputmask.numeric.extensions.js',
-                    'public/acm/AlaatvCustomFiles/js/page/pages/contactUs.js'
-                ],
-                'public/js/contactUs.js'
-            ).version();
+            'public/css/page-contactUs.css',
+            [
+                'node_modules/inputmask/dist/jquery.inputmask.bundle.js',
+                'node_modules/inputmask/dist/inputmask/inputmask.date.extensions.js',
+                'node_modules/inputmask/dist/inputmask/inputmask.numeric.extensions.js',
+                'public/acm/AlaatvCustomFiles/js/page/pages/contactUs.js'
+            ],
+            'public/js/contactUs.js'
+        );
     }
     mixPageContentSearch() {
-        this.mix.styles([
+        this.mixCssAndJs([
                 'node_modules/select2/dist/css/select2.css',
                 'public/acm/AlaatvCustomFiles/components/ribbon/style.css',
                 'node_modules/owl.carousel/dist/assets/owl.carousel.css',
@@ -193,9 +237,8 @@ class Mix {
                 'public/acm/AlaatvCustomFiles/components/MultiLevelSearch/style.css',
                 'public/acm/AlaatvCustomFiles/css/page/pages/content-search.css'
             ],
-            'public/css/content-search.css'
-        ).version()
-            .babel([
+            'public/css/content-search.css',
+            [
                     'node_modules/block-ui/jquery.blockUI.js',
                     'node_modules/select2/dist/js/select2.js',
                     'node_modules/owl.carousel/dist/owl.carousel.js',
@@ -204,7 +247,7 @@ class Mix {
                     'public/acm/AlaatvCustomFiles/js/page/pages/content-search.js'
                 ],
                 'public/js/content-search.js'
-            ).version();
+            );
     }
     mixPages() {
         this.mixPageLive();
@@ -217,20 +260,19 @@ class Mix {
     }
 
     mixPageUserOrders() {
-        this.mix.styles([
+        this.mixCssAndJs([
                 'public/acm/AlaatvCustomFiles/css/page/user-orders.css',
             ],
-            'public/css/user-orders.css'
-        ).version()
-            .babel([
+            'public/css/user-orders.css',
+            [
                     'node_modules/persian-date/dist/persian-date.js',
                     'public/acm/AlaatvCustomFiles/js/page/user-orders.js'
                 ],
                 'public/js/user-orders.js'
-            ).version();
+            );
     }
     mixPageUserProfile() {
-        this.mix.styles(
+        this.mixCssAndJs(
             [
                 'node_modules/toastr/build/toastr.css',
                 'node_modules/animate.css/animate.css',
@@ -239,9 +281,8 @@ class Mix {
                 'node_modules/bootstrap-fileinput/css/fileinput-rtl.css',
                 'public/acm/AlaatvCustomFiles/css/page/user-profile.css',
             ],
-            'public/css/user-profile.css'
-        ).version()
-            .babel([
+            'public/css/user-profile.css',
+            [
                     'node_modules/toastr/build/toastr.min.js',
                     'node_modules/block-ui/jquery.blockUI.js',
                     'node_modules/bootstrap-fileinput/js/fileinput.js',
@@ -250,10 +291,10 @@ class Mix {
                     'public/acm/AlaatvCustomFiles/js/page/user-profile.js'
                 ],
                 'public/js/user-profile.js'
-            ).version();
+            );
     }
     mixPageUserDashboard() {
-        this.mix.styles([
+        this.mixCssAndJs([
                 'node_modules/owl.carousel/dist/assets/owl.carousel.css',
                 'node_modules/owl.carousel/dist/assets/owl.theme.default.css',
                 'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/style.css',
@@ -261,25 +302,23 @@ class Mix {
                 'public/acm/AlaatvCustomFiles/components/ribbon/style.css',
                 'public/acm/AlaatvCustomFiles/css/page/user-dashboard.css',
             ],
-            'public/css/user-dashboard.css'
-        ).version()
-            .babel([
+            'public/css/user-dashboard.css',
+            [
                     'node_modules/block-ui/jquery.blockUI.js',
                     'node_modules/owl.carousel/dist/owl.carousel.js',
                     'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/js.js',
                     'public/acm/AlaatvCustomFiles/js/page/user-dashboard.js',
                 ],
                 'public/js/user-dashboard.js'
-            ).version();
+            );
     }
     mixPageUserProfileSalesReport() {
-        this.mix.styles([
+        this.mixCssAndJs([
                 'node_modules/highcharts/css/highcharts.css',
                 'public/acm/AlaatvCustomFiles/css/page/user-sales-report.css',
             ],
-            'public/css/user-profile-salesReport.css'
-        ).version()
-            .babel([
+            'public/css/user-profile-salesReport.css',
+            [
                     'public/acm/AlaatvCustomFiles/js/iran.geo-map.js',
                     'node_modules/highcharts/highcharts.js',
                     'node_modules/highcharts/modules/map.js',
@@ -288,7 +327,7 @@ class Mix {
                     'public/acm/AlaatvCustomFiles/js/page/user-sales-report.js',
                 ],
                 'public/js/user-profile-salesReport.js'
-            ).version();
+            );
     }
     mixUser() {
         this.mixPageUserOrders();
@@ -298,7 +337,7 @@ class Mix {
     }
 
     mixPageContentShow() {
-        this.mix.styles([
+        this.mixCssAndJs([
                 'node_modules/toastr/build/toastr.css',
                 'public/acm/AlaatvCustomFiles/components/ribbon/style.css',
                 'node_modules/block-ui/jquery.blockUI.js',
@@ -313,9 +352,8 @@ class Mix {
                 'public/acm/AlaatvCustomFiles/components/summarizeText/style.css',
                 'public/acm/AlaatvCustomFiles/css/page/content-show.css'
             ],
-            'public/css/content-show.css'
-        ).version()
-            .babel([
+            'public/css/content-show.css',
+            [
                     'node_modules/tooltip/dist/Tooltip.js',
                     'node_modules/toastr/build/toastr.min.js',
                     'node_modules/block-ui/jquery.blockUI.js',
@@ -334,58 +372,54 @@ class Mix {
                     'public/acm/AlaatvCustomFiles/js/page/content-show.js'
                 ],
                 'public/js/content-show.js'
-            ).version();
+            );
     }
 
-
     mixLanding5() {
-        this.mix.styles([
+        this.mixCssAndJs([
                 'public/acm/AlaatvCustomFiles/components/imageWithCaption/style.css',
                 'public/acm/AlaatvCustomFiles/css/page-product-landing5.css',
             ],
-            'public/css/page-landing5.css'
-        ).version()
-            .babel([
+            'public/css/page-landing5.css',
+            [
                     'public/acm/AlaatvCustomFiles/js/page-product-landing5.js',
                 ],
                 'public/js/page-landing5.js'
-            ).version();
+            );
     }
     mixLanding7() {
-        this.mix.styles([
+        this.mixCssAndJs([
                 'node_modules/owl.carousel/dist/assets/owl.carousel.css',
                 'node_modules/owl.carousel/dist/assets/owl.theme.default.css',
                 'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/style.css',
                 'public/acm/AlaatvCustomFiles/css/page-product-landing7.css',
             ],
-            'public/css/page-landing7.css'
-        ).version()
-            .babel([
+            'public/css/page-landing7.css',
+            [
                     'node_modules/owl.carousel/dist/owl.carousel.js',
                     'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/js.js',
                     'public/acm/AlaatvCustomFiles/js/page-landing7.js',
                 ],
                 'public/js/page-landing7.js'
-            ).version();
+            );
     }
     mixLanding8() {
-        this.mix.styles([
+        this.mixCssAndJs([
                 'node_modules/flipclock/dist/flipclock.css',
                 'public/acm/AlaatvCustomFiles/components/imageWithCaption/style.css',
                 'public/acm/AlaatvCustomFiles/components/ribbon/style.css',
                 'public/acm/AlaatvCustomFiles/css/page-product-landing8.css',
             ],
-            'public/css/page-landing8.css'
-        ).version()
-            .babel([
+            'public/css/page-landing8.css',
+            [
                     'node_modules/flipclock/dist/flipclock.js',
                     'public/acm/AlaatvCustomFiles/js/page-product-landing8.js',
                 ],
                 'public/js/page-landing8.js'
-            ).version();
+            );
     }
     mixLanding9() {
-        this.mix.styles([
+        this.mixCssAndJs([
                 'node_modules/slick-carousel/slick/slick.css',
                 'node_modules/slick-carousel/slick/slick-theme.css',
                 'public/acm/AlaatvCustomFiles/components/ribbon/style.css',
@@ -395,19 +429,18 @@ class Mix {
                 'public/acm/AlaatvCustomFiles/css/page-product-landing7.css',
                 'public/acm/AlaatvCustomFiles/css/page-product-landing9.css',
             ],
-            'public/css/page-landing9.css'
-        ).version()
-            .babel([
+            'public/css/page-landing9.css',
+            [
                     'node_modules/owl.carousel/dist/owl.carousel.js',
                     'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/js.js',
                     'public/acm/AlaatvCustomFiles/components/aSticky/aSticky.js',
                     'public/acm/AlaatvCustomFiles/js/page-product-landing9.js',
                 ],
                 'public/js/page-landing9.js'
-            ).version();
+            );
     }
     mixLanding10() {
-        this.mix.styles([
+        this.mixCssAndJs([
                 'public/acm/AlaatvCustomFiles/components/ribbon/style.css',
                 'node_modules/owl.carousel/dist/assets/owl.carousel.css',
                 'node_modules/owl.carousel/dist/assets/owl.theme.default.css',
@@ -415,16 +448,15 @@ class Mix {
                 'public/acm/AlaatvCustomFiles/css/page-product-landing7.css',
                 'public/acm/AlaatvCustomFiles/css/page-product-landing9.css',
             ],
-            'public/css/page-landing10.css'
-        ).version()
-            .babel([
+            'public/css/page-landing10.css',
+            [
                     'node_modules/owl.carousel/dist/owl.carousel.js',
                     'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/js.js',
                     'public/acm/AlaatvCustomFiles/components/aSticky/aSticky.js',
                     'public/acm/AlaatvCustomFiles/js/page-product-landing10.js',
                 ],
                 'public/js/page-landing10.js'
-            ).version();
+            );
     }
     mixLanding() {
         this.mixLanding5();
@@ -435,7 +467,7 @@ class Mix {
     }
 
     mixPageProductShow() {
-        this.mix.styles([
+        this.mixCssAndJs([
                 'node_modules/toastr/build/toastr.css',
                 'node_modules/bootstrap-switch/dist/css/bootstrap3/bootstrap-switch.css',
                 'node_modules/lightgallery/src/css/lightgallery.css',
@@ -450,9 +482,8 @@ class Mix {
                 'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/style.css',
                 'public/acm/AlaatvCustomFiles/css/page/product-show.css',
             ],
-            'public/css/product-show.css'
-        ).version()
-            .babel([
+            'public/css/product-show.css',
+            [
                     'node_modules/toastr/build/toastr.min.js',
                     'node_modules/block-ui/jquery.blockUI.js',
                     'node_modules/bootstrap-switch/dist/js/bootstrap-switch.js',
@@ -480,19 +511,18 @@ class Mix {
                     'public/acm/AlaatvCustomFiles/js/page/product-show.js',
                 ],
                 'public/js/product-show.js'
-            ).version();
+            );
     }
     mixPageProductContentEmbed() {
-        this.mix.styles([
+        this.mixCssAndJs([
                 'public/acm/videojs/skins/alaa-theme/videojs.css',
                 'public/acm/videojs/plugins/pip/videojs.pip.min.css',
                 'public/acm/videojs/plugins/pip/videojs.pip.rtl.css',
                 'public/acm/videojs/plugins/seek-to-point.css',
                 'public/acm/AlaatvCustomFiles/css/product-content-embed.css',
             ],
-            'public/css/product-content-embed.css'
-        ).version()
-            .babel([
+            'public/css/product-content-embed.css',
+            [
                     'public/acm/videojs/video.min.js',
                     'public/acm/videojs/plugins/pip/videojs.pip.min.js',
                     'public/acm/videojs/nuevo.min.js',
@@ -503,7 +533,7 @@ class Mix {
                     'public/acm/AlaatvCustomFiles/js/product-content-embed.js',
                 ],
                 'public/js/product-content-embed.js'
-            ).version();
+            );
     }
     mixProduct() {
         this.mixPageProductShow();
@@ -511,16 +541,15 @@ class Mix {
     }
 
     mixPageCheckoutReview() {
-        this.mix.styles([
+        this.mixCssAndJs([
                 'node_modules/toastr/build/toastr.css',
                 'node_modules/bootstrap-switch/dist/css/bootstrap3/bootstrap-switch.css',
                 'node_modules/animate.css/animate.css',
                 'public/acm/AlaatvCustomFiles/components/step/step.css',
                 'public/acm/AlaatvCustomFiles/css/page/checkout-review.css',
             ],
-            'public/css/checkout-review.css'
-        ).version()
-            .babel([
+            'public/css/checkout-review.css',
+            [
                     'node_modules/toastr/build/toastr.min.js',
                     'node_modules/bootstrap-switch/dist/js/bootstrap-switch.js',
                     'node_modules/block-ui/jquery.blockUI.js',
@@ -529,19 +558,18 @@ class Mix {
                     'public/acm/AlaatvCustomFiles/js/page/checkout-review.js'
                 ],
                 'public/js/checkout-review.js'
-            ).version();
+            );
     }
     mixPageCheckoutVerification() {
-        this.mix.styles([
+        this.mixCssAndJs([
                 'node_modules/animate.css/animate.css',
             ],
-            'public/css/checkout-verification.css'
-        ).version()
-            .babel([
+            'public/css/checkout-verification.css',
+            [
                     'public/acm/AlaatvCustomFiles/js/page/checkout-verification.js',
                 ],
                 'public/js/checkout-verification.js'
-            ).version();
+            );
     }
     mixCheckout() {
         this.mixPageCheckoutReview();
@@ -549,7 +577,7 @@ class Mix {
     }
 
     mixAdminBase() {
-        this.mix.styles([
+        this.mixCssAndJs([
                 'node_modules/summernote/dist/summernote.css',
                 'node_modules/select2/dist/css/select2.css',
                 'node_modules/icheck/skins/all.css',
@@ -566,9 +594,8 @@ class Mix {
                 'public/acm/extra/persian-datepicker/dist/css/persian-datepicker-1.1.3.min.css',
                 'public/acm/AlaatvCustomFiles/components/alaa_old/font/glyphicons-halflings/glyphicons-halflings.css',
             ],
-            'public/css/admin-all.css'
-        ).version()
-            .babel([
+            'public/css/admin-all.css',
+            [
                     'node_modules/summernote/dist/summernote.js',
                     'node_modules/block-ui/jquery.blockUI.js',
                     'node_modules/tooltip/dist/Tooltip.js',
@@ -608,10 +635,10 @@ class Mix {
                     'public/acm/AlaatvCustomFiles/js/admin-customInitComponent.js',
                 ],
                 'public/js/admin-all.js'
-            ).version();
+            );
     }
     mixAdminContentCreate() {
-        this.mix.styles([
+        this.mixCssAndJs([
                 'node_modules/persian-datepicker/dist/css/persian-datepicker.min.css',
                 'node_modules/bootstrap-fileinput/css/fileinput.css',
                 'node_modules/bootstrap-fileinput/css/fileinput-rtl.css',
@@ -619,9 +646,8 @@ class Mix {
                 'node_modules/bootstrap-multiselect/dist/css/bootstrap-multiselect.css',
                 'node_modules/bootstrap-tagsinput/src/bootstrap-tagsinput.css',
             ],
-            'public/css/admin-content-create.css'
-        ).version()
-            .babel([
+            'public/css/admin-content-create.css',
+            [
                     'node_modules/block-ui/jquery.blockUI.js',
                     'node_modules/persian-date/dist/persian-date.js',
                     'node_modules/persian-datepicker/dist/js/persian-datepicker.js',
@@ -632,7 +658,7 @@ class Mix {
                     'node_modules/select2/dist/js/select2.js',
                 ],
                 'public/js/admin-content-create.js'
-            ).version();
+            );
     }
     mixAdmin() {
         this.mixAdminBase();
@@ -645,7 +671,7 @@ class Mix {
     }
 
     oldMixCheckoutAuth() {
-        this.mix.babel(
+        mix.babel(
             [
                 'public/acm/AlaatvCustomFiles/js/page-checkout-auth.js',
             ],
@@ -654,7 +680,7 @@ class Mix {
     }
 
     oldMixCheckoutCompleteInfo() {
-        this.mix.babel(
+        mix.babel(
             [
                 'public/acm/AlaatvCustomFiles/js/page-checkout-completeInfo.js',
             ],
@@ -663,7 +689,7 @@ class Mix {
     }
 
     oldMixCheckoutPayment() {
-        this.mix.styles(
+        mix.styles(
             [
                 'public/acm/AlaatvCustomFiles/components/step/step.css',
                 'public/acm/AlaatvCustomFiles/css/page/checkout-payment.css',
@@ -680,5 +706,5 @@ class Mix {
     }
 }
 
-let mix = new Mix();
-mix.mixAll();
+let mixAsset = new Mix();
+mixAsset.mixAll();

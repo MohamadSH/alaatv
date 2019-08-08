@@ -1,3 +1,17 @@
 {
-  "gcm_sender_id": "103953800507"
+  "name": "AlaaTV",
+  "short_name": "AlaaTV",
+  "gcm_sender_id": "103953800507",
+  "icons": [{
+    "src": "acm/extra/Alaa-logo.png",
+    "sizes": "512x512",
+    "type": "image/png"
+  },{
+    "src": "acm/extra/Alaa-logo.png",
+    "sizes": "192x192",
+    "type": "image/png"
+  }],
+  "background_color": "#ff9000",
+  "theme_color": "#ff9000",
+  "display": "fullscreen"
 }

@@ -28,7 +28,7 @@
                                             </div>
                                             <div class = "d-table-cell">
                                                 <a href = "javascript:" data-repeater-delete class = "btn btn-danger mt-repeater-delete mt-repeater-del-right mt-repeater-btn-inline">
-                                                    <i class = "flaticon-delete"></i>
+                                                    <i class = "resources/views"></i>
                                                 </a>
                                             </div>
                                         </div>

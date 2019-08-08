@@ -9,7 +9,7 @@
     <nav aria-label = "breadcrumb">
         <ol class = "breadcrumb">
             <li class = "breadcrumb-item">
-                <i class = "flaticon-home-2 m--padding-right-5"></i>
+                <i class = "fa fa-home m--padding-right-5"></i>
                 <a class = "m-link" href = "{{action("Web\AdminController@admin")}}">مدیریت کاربران</a>
             </li>
             <li class = "breadcrumb-item active" aria-current = "page">

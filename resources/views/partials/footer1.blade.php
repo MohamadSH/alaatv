@@ -39,7 +39,7 @@
                     </li>
                     <li class = "m-nav__item m-nav__item">
                         <a href = "{{ action("Web\ContactUsController") }}" class = "m-nav__link" data-toggle = "m-tooltip" title = "@lang('page.contact us')" data-placement = "left">
-                            <i class = "m-nav__link-icon flaticon-info m--icon-font-size-lg3"></i>
+                            <i class = "m-nav__link-icon fa fa-question-circle m--icon-font-size-lg3"></i>
                         </a>
                     </li>
                 </ul>

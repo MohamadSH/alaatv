@@ -29,10 +29,8 @@
         
         <div class="a--block-titleWrapper">
             <a href="{{ $set->url }}" class="m-link">
-                <h6>
-                    <span class="m-badge m-badge--info m-badge--dot"></span>
-                    {{ $set->small_name }}
-                </h6>
+                <span class="m-badge m-badge--info m-badge--dot"></span>
+                {{ $set->small_name }}
             </a>
         </div>
         

@@ -23,7 +23,7 @@
 @endsection
 
 @section('content')
-
+    
     @include('systemMessage.flash')
 
 
@@ -41,12 +41,12 @@
                     </div>
                     <div class="m-portlet__head-tools">
                         <a href="#"
-                           class="btn btn-outline-metal m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill m-btn--air btn-viewGrid">
-                            <i class="fa flaticon-shapes"></i>
+                           class="btn btn-outline-metal m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill m-btn--air btn-viewGrid" title="نمایش شبکه ای">
+                            <i class="fa fa-th"></i>
                         </a>
                         <a href="#"
-                           class="btn btn-outline-metal m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill m-btn--air btn-viewOwlCarousel">
-                            <i class="flaticon-more-v4"></i>
+                           class="btn btn-outline-metal m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill m-btn--air btn-viewOwlCarousel" title="نمایش افقی">
+                            <i class="fa fa-exchange-alt"></i>
                         </a>
                     </div>
                 </div>
@@ -58,8 +58,8 @@
                             <a href="{{action('Web\UserController@show' , $user)}}" class="btn m-btn--pill m-btn--air m-btn m-btn--gradient-from-info m-btn--gradient-to-accent">تکمیل پروفایل</a>
                         </div>
                     @else
-
-
+        
+        
                         <div class="a--owl-carousel-init-loading">
                             <div class="lds-roller">
                                 <div></div>
@@ -72,13 +72,13 @@
                                 <div></div>
                             </div>
                         </div>
-
+        
                         <div class="m-widget_head-owlcarousel-items owl-carousel a--owl-carousel-type-2 myProduct">
-
+            
                             @foreach($userAssetsCollection as $userAssetKey=>$userAsset)
                                 @foreach($userAsset->products as $productKey=>$product)
                                     @include('block.partials.purchasedProducts')
-
+                    
                                     {{--                                        @if($product->sets->count()===0)--}}
                                     {{--                                            <div class="a--block-item a--block-type-dashboard carousel background-gradient"--}}
                                     {{--                                                 data-position="{{ $productKey }}">--}}
@@ -110,7 +110,7 @@
                                     {{--                                                    <button type="button" class="btn btn-success btnViewVideo"--}}
                                     {{--                                                            data-content-type="video"--}}
                                     {{--                                                            data-content-url="{{ $product->sets->first()->contentUrl.'&orderBy=order' }}">--}}
-                                    {{--                                                        <i class="la la-film"></i>--}}
+                                    {{--                                                        <i class="fa fa-film"></i>--}}
                                     {{--                                                        فیلم ها--}}
                                     {{--                                                    </button>--}}
                                     {{--                                                </div>--}}
@@ -131,16 +131,16 @@
                                     {{--                                        @endif--}}
                                 @endforeach
                             @endforeach
-
+        
                         </div>
-
+        
                         @if(count($userAssetsCollection->filter(function ($value, $key) {return $value->title === 'محصولات من'; })->all())===0)
                             <div class="alert alert-info" role="alert">
                                 <strong> هنوز از آلاء خرید نکرده اید. </strong>
                                 بعد از اینکه از آلاء خرید کنید، امکان مشاهده خریدهای شما در این قسمت فراهم می شود.
                             </div>
                         @endif
-
+                    
                         <div class="m-portlet a--owl-carousel-slide-detailes">
                             <div class="m-portlet__head">
                                 <div class="m-portlet__head-caption">
@@ -152,11 +152,11 @@
                                 </div>
                                 <div class="m-portlet__head-tools">
                                     <a class="btn btn-outline-danger m-btn m-btn--icon m-btn--icon-only m-btn--pill m-btn--air a--owl-carousel-hide-detailes">
-                                        <i class="la la-times"></i>
+                                        <i class="fa fa-times"></i>
                                     </a>
                                 </div>
                             </div>
-
+        
                             @foreach($userAssetsCollection as $userAssetKey=>$userAsset)
                                 @if($userAsset->title === 'محصولات من')
                                     @foreach($userAsset->products as $productKey=>$product)
@@ -172,20 +172,20 @@
                                                                 <hr>
                                                                 <div class="m-btn-group m-btn-group--pill btn-group m-btn-group m-btn-group--pill btn-group-sm"
                                                                      role="group" aria-label="Small button group">
-                                                                        <button type="button"
-                                                                                class="btn btn-warning btnViewPamphlet"
-                                                                                data-content-type="pamphlet"
-                                                                                data-content-url="{{ $set->contentUrl.'&orderBy=order' }}">
-                                                                            <i class="flaticon-edit-1"></i>
-                                                                            جزوات
-                                                                        </button>
-                                                                        <button type="button"
-                                                                                class="btn btn-success btnViewVideo"
-                                                                                data-content-type="video"
-                                                                                data-content-url="{{ $set->contentUrl.'&orderBy=order' }}">
-                                                                            <i class="la la-film"></i>
-                                                                            فیلم ها
-                                                                        </button>
+                                                                    <button type="button"
+                                                                            class="btn btn-warning btnViewPamphlet"
+                                                                            data-content-type="pamphlet"
+                                                                            data-content-url="{{ $set->contentUrl.'&orderBy=order' }}">
+                                                                        <i class="flaticon-edit-1"></i>
+                                                                        جزوات
+                                                                    </button>
+                                                                    <button type="button"
+                                                                            class="btn btn-success btnViewVideo"
+                                                                            data-content-type="video"
+                                                                            data-content-url="{{ $set->contentUrl.'&orderBy=order' }}">
+                                                                        <i class="fa fa-film"></i>
+                                                                        فیلم ها
+                                                                    </button>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -198,13 +198,13 @@
                             @endforeach
                         </div>
                     @endif
-
-
+                    
+                    
                 </div>
             </div>
         </div>
     </div>
-
+    
 {{--    --}}
 {{--    @foreach($userAssetsCollection as $userAssetKey=>$userAsset)--}}
 {{--        @if($userAsset->title === 'دسته های مورد علاقه من' || $userAsset->title === 'محتوای مورد علاقه من' || $userAsset->title === 'محصولات مورد علاقه من')--}}
@@ -492,7 +492,7 @@
 {{--                                                                <button type="button" class="btn btn-success btnViewVideo"--}}
 {{--                                                                        data-content-type="video"--}}
 {{--                                                                        data-content-url="{{ $product->sets[0]->contentUrl }}">--}}
-{{--                                                                    <i class="la la-film"></i>--}}
+{{--                                                                    <i class="fa fa-film"></i>--}}
 {{--                                                                    فیلم ها--}}
 {{--                                                                </button>--}}
 {{--                                                            @endif--}}
@@ -536,7 +536,7 @@
 {{--                                            </div>--}}
 {{--                                            <div class="m-portlet__head-tools">--}}
 {{--                                                <a class="btn btn-outline-danger m-btn m-btn--icon m-btn--icon-only m-btn--pill m-btn--air a--owl-carousel-hide-detailes">--}}
-{{--                                                    <i class="la la-times"></i>--}}
+{{--                                                    <i class="fa fa-times"></i>--}}
 {{--                                                </a>--}}
 {{--                                            </div>--}}
 {{--                                        </div>--}}
@@ -567,7 +567,7 @@
 {{--                                                                                        class="btn btn-success btnViewVideo"--}}
 {{--                                                                                        data-content-type="video"--}}
 {{--                                                                                        data-content-url="{{ $set->contentUrl }}">--}}
-{{--                                                                                    <i class="la la-film"></i>--}}
+{{--                                                                                    <i class="fa fa-film"></i>--}}
 {{--                                                                                    فیلم ها--}}
 {{--                                                                                </button>--}}
 {{--                                                                            </div>--}}
@@ -593,7 +593,7 @@
 {{--        @endif--}}
 {{--    @endforeach--}}
 {{--    --}}
-
+    
     <!--begin::Modal-->
     <div class="modal fade" id="pamphletModal" tabindex="-1" role="dialog" aria-labelledby="pamphletModalModalLabel"
          aria-hidden="true">
@@ -609,7 +609,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-
+                    
                     <div class="row">
                         <div class="col-12">
                             <div class="m-widget6">
@@ -624,11 +624,11 @@
                                     </div>
                                 </div>
                                 <div class="m-widget6__body">
-
+                                
                                 </div>
                             </div>
                         </div>
-
+                        
                         <div class="col-12 text-center">
                             <input type="hidden" id="pamphletContentNextPageUrl">
                             <button type="button"
@@ -638,7 +638,7 @@
                             </button>
                         </div>
                     </div>
-
+                
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">بستن</button>
@@ -652,7 +652,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="videoModalLabel">
-                        <i class="la la-film"></i>
+                        <i class="fa fa-film"></i>
                         فیلم ها
                     </h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -660,7 +660,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-
+                    
                     <div class="row">
                         <div class="col-12">
                             <div class="m-widget6">
@@ -675,11 +675,11 @@
                                     </div>
                                 </div>
                                 <div class="m-widget6__body">
-
+                                
                                 </div>
                             </div>
                         </div>
-
+                        
                         <div class="col-12 text-center">
                             <input type="hidden" id="videoContentNextPageUrl">
                             <button type="button"
@@ -689,7 +689,7 @@
                             </button>
                         </div>
                     </div>
-
+                
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">بستن</button>

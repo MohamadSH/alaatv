@@ -21,7 +21,7 @@
                 <div class = "col a--step-item @if($step == 2) current @elseif($step < 2) notPassed @elseif($step > 2) passed @endif" @if($step !== 2)onclick = "window.location.href = '{{ action("Web\OrderController@checkoutReview") }}';"
                         @endif>
                     <div class = "a--step-item-icon">
-                        <i class = "flaticon-list-3"></i>
+                        <i class = "fa fa-clipboard-check"></i>
                     </div>
                     <div class = "a--step-item-text">
                         بازبینی
@@ -29,7 +29,7 @@
                 </div>
                 <div class = "col a--step-item @if($step == 3) current @elseif($step < 3) notPassed @elseif($step > 3) passed @endif">
                     <div class = "a--step-item-icon">
-                        <i class = "la la-money"></i>
+                        <i class = "fa fa-money-bill-wave"></i>
                     </div>
                     <div class = "a--step-item-text">
                         اطلاعات پرداخت
