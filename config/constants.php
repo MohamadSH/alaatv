@@ -27,6 +27,7 @@ return [
     'SMS_ADMIN_PANEL_ACCESS'                      => 'smsAdminPanel',
     'ORDER_ADMIN_PANEL_ACCESS'                    => 'orderAdminPanel',
     'SITE_CONFIG_ADMIN_PANEL_ACCESS'              => 'siteConfigAdminPanel',
+    'WALLET_ADMIN_PANEL'                          => 'walletAdminPanel',
     'ALAA_FAMILTY'                                => 'alaaFamily',
     'LIST_ASSIGNMENT_ACCESS'                      => 'listAssignment',
     'INSERT_ASSIGNMENT_ACCESS'                    => 'insertAssignment',
@@ -183,6 +184,7 @@ return [
     'REMOVE_BLOCK_ACCESS'                         => 'removeBlock',
     'LIVE_STOP_ACCESS'                            => 'stopLive',
     'LIVE_PLAY_ACCESS'                            => 'playLive',
+    'GIVE_WALLET_CREDIT'                          => 'giveWalletCredit',
 
 
     //Technician

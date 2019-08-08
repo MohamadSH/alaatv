@@ -13,10 +13,8 @@ use App\{Assignmentstatus,
     Coupon,
     Coupontype,
     Gender,
-    Http\Requests\InsertUserRequest,
     Lottery,
     Major,
-    Notifications\GeneralNotice,
     Notifications\UserRegisterd,
     Order,
     Orderproduct,
@@ -76,10 +74,9 @@ class AdminController extends Controller
         $this->middleware('permission:'.config('constants.SMS_ADMIN_PANEL_ACCESS'), ['only' => 'adminSMS']);
         $this->middleware('permission:'.config('constants.REPORT_ADMIN_PANEL_ACCESS'), ['only' => 'adminReport']);
         $this->middleware('permission:'.config('constants.LIST_BLOCK_ACCESS'), ['only' => 'adminBlock']);
-        $this->middleware('ability:'.config('constants.ROLE_ADMIN').','.config('constants.TELEMARKETING_PANEL_ACCESS'),
-            ['only' => 'adminTeleMarketing']);
-        $this->middleware('permission:'.config('constants.INSERT_COUPON_ACCESS'),
-            ['only' => 'adminGenerateRandomCoupon']);
+        $this->middleware('ability:'.config('constants.ROLE_ADMIN').','.config('constants.TELEMARKETING_PANEL_ACCESS'), ['only' => 'adminTeleMarketing']);
+        $this->middleware('permission:'.config('constants.INSERT_COUPON_ACCESS'), ['only' => 'adminGenerateRandomCoupon']);
+        $this->middleware('permission:'.config('constants.WALLET_ADMIN_PANEL'), ['only' => 'adminGiveWalletCredit']);
         $this->middleware('role:admin', [
             'only' => [
                 'adminLottery',
@@ -91,7 +88,6 @@ class AdminController extends Controller
 
 
     }
-
 
     /**
      * Show admin panel main page
@@ -514,6 +510,9 @@ class AdminController extends Controller
 
     /**
      * Admin panel for adjusting site configuration
+     * @param Request $request
+     * @param SlideShowController $slideShowController
+     * @return Factory|View
      */
     public function adminSlideShow(Request $request , SlideShowController $slideShowController)
     {
@@ -681,10 +680,10 @@ class AdminController extends Controller
 
     /**
      * Admin panel for lotteries
-     * @param \App\Http\Requests\Request $request
+     * @param Request $request
      * @return Factory|View
      */
-    public function adminLottery(\App\Http\Requests\Request $request)
+    public function adminLottery(Request $request)
     {
         $userlotteries = collect();
         if ($request->has('lottery')) {
@@ -779,7 +778,7 @@ class AdminController extends Controller
         return view('admin.generateSpecialCoupon', compact('productCollection' , 'childrenCollection'));
     }
 
-    public function registerUserAndGiveOrderproduct(\App\Http\Requests\Request $request , OrderController $orderController)
+    public function registerUserAndGiveOrderproduct(Request $request , OrderController $orderController)
     {
         try {
             $mobile       = $request->get('mobile');
@@ -912,7 +911,7 @@ class AdminController extends Controller
         }
     }
 
-    public function specialAddUser(\App\Http\Requests\Request $request)
+    public function specialAddUser(Request $request)
     {
         $majors   = Major::pluck('name', 'id');
         $genders  = Gender::pluck('name', 'id');
@@ -950,5 +949,9 @@ class AdminController extends Controller
         $checkoutStatuses       = array_sort_recursive($checkoutStatuses);
 
         return view('admin.salesReport', compact('products', 'pageName', 'ajaxActionUrl' , 'checkoutStatuses'));
+    }
+
+    public function adminGiveWalletCredit(Request $request){
+        return view('admin.wallet');
     }
 }
