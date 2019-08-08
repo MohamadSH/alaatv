@@ -24,13 +24,13 @@ class InsertEventResultRequest extends FormRequest
             'reportFile' => 'required|mimes:jpeg,jpg,png,pdf,rar,zip',
         ];
     }
-    
+
     public function prepareForValidation()
     {
         $this->replaceNumbers();
         parent::prepareForValidation();
     }
-    
+
     protected function replaceNumbers()
     {
         $input = $this->request->all();
@@ -42,10 +42,7 @@ class InsertEventResultRequest extends FormRequest
             $input["rank"] = preg_replace('/\s+/', '', $input["rank"]);
             $input["rank"] = $this->convertToEnglish($input["rank"]);
         }
-        if (isset($input["comment"])) {
-            $input["comment"] = preg_replace('/\s+/', '', $input["comment"]);
-        }
-    
+
         $this->replace($input);
     }
 }
