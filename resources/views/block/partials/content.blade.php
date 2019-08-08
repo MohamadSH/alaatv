@@ -14,10 +14,8 @@
     <div class="a--block-infoWrapper">
         <div class="a--block-titleWrapper">
             <a href="{{ $content->url }}" class="m-link">
-                <h6>
-                    <span class="m-badge m-badge--info m-badge--dot"></span>
-                    {{ $content->name }}
-                </h6>
+                <span class="m-badge m-badge--info m-badge--dot"></span>
+                {{ $content->name }}
             </a>
         </div>
         @if(strlen(trim($content->author->full_name))>0)

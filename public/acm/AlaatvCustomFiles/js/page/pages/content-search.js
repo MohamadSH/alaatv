@@ -195,10 +195,8 @@ var Alaasearch = function () {
             '        \n' +
             '        <div class="a--block-titleWrapper">\n' +
             '            <a href="'+widgetLink+'" class="m-link">\n' +
-            '                <h6>\n' +
-            '                    <span class="m-badge m-badge--info m-badge--dot"></span>\n' +
-            '                    '+widgetTitle+'\n' +
-            '                </h6>\n' +
+            '                <span class="m-badge m-badge--info m-badge--dot"></span>\n' +
+            '                '+widgetTitle+'\n' +
             '            </a>\n' +
             '        </div>\n' +
             '        \n' +
@@ -1298,6 +1296,7 @@ jQuery(document).ready(function () {
             config.onTranslated = slideChanged2;
         }
         $(this).owlCarousel(config);
+        $(this).trigger('refresh.owl.carousel');
     });
 
 

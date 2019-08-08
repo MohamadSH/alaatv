@@ -24,7 +24,7 @@
     
     <div class="a--block-imageWrapper">
         <a href="{{ $product->url }}"
-           class="a--block-imageWrapper-image a--gtm-eec-product a--gtm-eec-product-click"
+           class="a--block-imageWrapper-image a--gtm-eec-product a--gtm-eec-product-click d-block"
            data-gtm-eec-product-id="{{ $product->id }}"
            data-gtm-eec-product-name="{{ $product->name }}"
            data-gtm-eec-product-price="{{ number_format($product->price['final'], 2, '.', '') }}"

@@ -59,7 +59,6 @@
                 @include('partials.search.video',[
                 'items' => $result->get('product'),
                 'title' => 'محصولات',
-                'carouselType' => 'a--owl-carousel-type-1',
                 'widgetId'=>'product-carousel',
                 'type' => 'product',
                 'perPage' => 9,

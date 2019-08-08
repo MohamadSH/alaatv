@@ -62,13 +62,13 @@
 				//== Fixed aside custom scroller
 				&.m-aside-left--skin-dark {
 					.ps {
-						@include m-set-component--scrollable-skin( array-get($layout, self, fixed, scroller, color, dark) );
+						//@include m-set-component--scrollable-skin( array-get($layout, self, fixed, scroller, color, dark) );
 					}
 				}
 
 				&.m-aside-left--skin-light {
 					.ps {
-						@include m-set-component--scrollable-skin( array-get($layout, self, fixed, scroller, color, light) );
+						//@include m-set-component--scrollable-skin( array-get($layout, self, fixed, scroller, color, light) );
 					}
 				}
 			}

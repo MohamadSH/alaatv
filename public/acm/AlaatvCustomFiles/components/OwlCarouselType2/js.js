@@ -7,127 +7,131 @@
             let $this = $(this);
             $.fn.OwlCarouselType2.carouselElement = $this;
             let countOfChild = $this.find('.carousel').length;
-            $this.find('.a--owl-carousel-type-2').owlCarousel($.fn.OwlCarouselType2.owlCarouselOptions.OwlCarousel);
-            $this.find('.a--owl-carousel-init-loading').fadeOut();
 
-            $.fn.OwlCarouselType2.showAlaaOwlCarouselItemDetail();
-
-            $this.find('.carousel').attr('data-owlcarousel-id', $this.attr('id'));
-            $this.find('.btn-viewGrid').attr('data-owlcarousel-id', $this.attr('id'));
-            $this.find('.btn-viewOwlCarousel').attr('data-owlcarousel-id', $this.attr('id')).fadeOut(0);
-            $this.find('.a--owl-carousel-hide-detailes').attr('data-owlcarousel-id', $this.attr('id'));
-            $this.find('.a--owl-carousel-show-detailes').attr('data-owlcarousel-id', $this.attr('id'));
-
-            $($this).on('click', '.carousel', function () {
-                let $this = $('#' + $(this).attr('data-owlcarousel-id'));
-                let position = $(this).data('position');
-                $this.find('.a--owl-carousel-type-2').trigger('to.owl.carousel', position);
-            });
-            $($this).on('click', '.btn-viewGrid', function (event) {
-                let $this = $('#' + $(this).attr('data-owlcarousel-id'));
-
-                event.preventDefault();
-
-                $.fn.OwlCarouselType2.switchToGridView($this);
-
-                // $([document.documentElement, document.body]).animate({
-                //     scrollTop: $this.offset().top - $('#m_header').height()
-                // }, 300);
-            });
-            $($this).on('click', '.btn-viewOwlCarousel', function (event) {
-                let $this = $('#' + $(this).attr('data-owlcarousel-id'));
-                event.preventDefault();
-
-                $.fn.OwlCarouselType2.getGridViewWarper($this).html('');
-
-                $this.find('.btn-viewGrid').fadeIn(0);
-                $this.find('.btn-viewOwlCarousel').fadeOut(0);
-
-                $this.find('.m-portlet.a--owl-carousel-slide-detailes').css({
-                    'display': 'block',
-                    'position': 'relative',
-                    'width': 'auto',
-                    'top': '0'
-                });
-
-                $this.find('.subCategoryWarper').fadeOut(0);
-                $this.find('.a--owl-carousel-slide-detailes').slideUp(0);
-
-                $this.find('.detailesWarperPointerStyle').html('');
+            $this.find('.a--owl-carousel-init-loading').fadeOut(500, function() {
 
                 $this.find('.a--owl-carousel-type-2').owlCarousel($.fn.OwlCarouselType2.owlCarouselOptions.OwlCarousel);
-                $.fn.OwlCarouselType2.getGridViewWarper($this).fadeOut(0);
-                $this.find('.a--owl-carousel-type-2').fadeIn();
 
                 $.fn.OwlCarouselType2.showAlaaOwlCarouselItemDetail();
 
-                // $([document.documentElement, document.body]).animate({
-                //     scrollTop: $this.offset().top - $('#m_header').height()
-                // }, 300);
-            });
-            $($this).on('click', '.a--owl-carousel-hide-detailes', function () {
-                let $this = $('#' + $(this).attr('data-owlcarousel-id'));
-                $this.find('.a--owl-carousel-slide-detailes').slideUp();
-                $this.find('.subCategoryWarper').fadeOut();
-                $.fn.OwlCarouselType2.getGridViewWarper($this).find(' > div').css({
-                    'margin-bottom': '0px'
+                $this.find('.carousel').attr('data-owlcarousel-id', $this.attr('id'));
+                $this.find('.btn-viewGrid').attr('data-owlcarousel-id', $this.attr('id'));
+                $this.find('.btn-viewOwlCarousel').attr('data-owlcarousel-id', $this.attr('id')).fadeOut(0);
+                $this.find('.a--owl-carousel-hide-detailes').attr('data-owlcarousel-id', $this.attr('id'));
+                $this.find('.a--owl-carousel-show-detailes').attr('data-owlcarousel-id', $this.attr('id'));
+
+                $($this).on('click', '.carousel', function () {
+                    let $this = $('#' + $(this).attr('data-owlcarousel-id'));
+                    let position = $(this).data('position');
+                    $this.find('.a--owl-carousel-type-2').trigger('to.owl.carousel', position);
                 });
-            });
-            $($this).on('click', '.a--owl-carousel-gridViewWarper .a--owl-carousel-show-detailes', function () {
-                let $this = $('#' + $(this).attr('data-owlcarousel-id'));
-                $.fn.OwlCarouselType2.getGridViewWarper($this).find(' > div').css({
-                    'margin-bottom': '0px'
+                $($this).on('click', '.btn-viewGrid', function (event) {
+                    let $this = $('#' + $(this).attr('data-owlcarousel-id'));
+
+                    event.preventDefault();
+
+                    $.fn.OwlCarouselType2.switchToGridView($this);
+
+                    // $([document.documentElement, document.body]).animate({
+                    //     scrollTop: $this.offset().top - $('#m_header').height()
+                    // }, 300);
                 });
+                $($this).on('click', '.btn-viewOwlCarousel', function (event) {
+                    let $this = $('#' + $(this).attr('data-owlcarousel-id'));
+                    event.preventDefault();
 
-                let parent = $(this).parents('#' + $this.attr('id') + ' .a--block-item');
-                let position = parent.data('position');
+                    $.fn.OwlCarouselType2.getGridViewWarper($this).html('');
 
+                    $this.find('.btn-viewGrid').fadeIn(0);
+                    $this.find('.btn-viewOwlCarousel').fadeOut(0);
 
-                let alaaOwlCarouselItemDetailClass = 'a--owl-carousel-slide-iteDetail-' + position;
-                // let localOwlCarouselId = this.owlCarouselId;
-                $.when($this.find('.subCategoryWarper').fadeOut(0)).done(function () {
+                    $this.find('.m-portlet.a--owl-carousel-slide-detailes').css({
+                        'display': 'block',
+                        'position': 'relative',
+                        'width': 'auto',
+                        'top': '0'
+                    });
 
-                    let aOwlCarouselSlideDetailes = $this.find('.a--owl-carousel-slide-detailes');
-                    let alaaOwlCarouselItemDetailObject = $this.find('.' + alaaOwlCarouselItemDetailClass);
-                    $.when(aOwlCarouselSlideDetailes.slideUp(0)).done(function () {
+                    $this.find('.subCategoryWarper').fadeOut(0);
+                    $this.find('.a--owl-carousel-slide-detailes').slideUp(0);
 
-                        if (alaaOwlCarouselItemDetailObject.length > 0) {
-                            aOwlCarouselSlideDetailes.fadeIn();
-                            alaaOwlCarouselItemDetailObject.slideDown();
-                        }
+                    $this.find('.detailesWarperPointerStyle').html('');
 
-                        let detailesWarper = $this.find('.a--owl-carousel-slide-detailes');
-                        let target = $.fn.OwlCarouselType2.getGridViewWarper($this).find('.carousel[data-position="' + position + '"]');
-                        let targetCol = target.parent();
-                        targetCol.css({
-                            'margin-bottom': parseInt(detailesWarper.outerHeight()) + 50 + 'px'
-                        });
+                    $this.find('.a--owl-carousel-type-2').owlCarousel($.fn.OwlCarouselType2.owlCarouselOptions.OwlCarousel);
+                    $.fn.OwlCarouselType2.getGridViewWarper($this).fadeOut(0);
+                    $this.find('.a--owl-carousel-type-2').fadeIn();
 
-                        let positionTop = parseInt(targetCol[0].offsetTop) + parseInt(targetCol.outerHeight()) + 20;
+                    $.fn.OwlCarouselType2.showAlaaOwlCarouselItemDetail();
 
-                        let positionLeftOfPointer = parseInt(targetCol.position().left) + (parseInt(targetCol.outerWidth()) / 2) - 20;
-                        detailesWarper.css({
-                            'display': 'block',
-                            'position': 'absolute',
-                            'width': '100%',
-                            'z-index': '1',
-                            'top': positionTop + 'px'
-                        });
-                        let detailesWarperPointerStyle = $this.find('.detailesWarperPointerStyle');
-                        if (detailesWarperPointerStyle.length === 0) {
-                            detailesWarper.append('<div class="detailesWarperPointerStyle"></div>');
-                        }
-                        $this.find('.detailesWarperPointerStyle').html('<style>.a--owl-carousel-slide-detailes::before { right: auto; left: ' + positionLeftOfPointer + 'px !important; }</style>');
+                    // $([document.documentElement, document.body]).animate({
+                    //     scrollTop: $this.offset().top - $('#m_header').height()
+                    // }, 300);
+                });
+                $($this).on('click', '.a--owl-carousel-hide-detailes', function () {
+                    let $this = $('#' + $(this).attr('data-owlcarousel-id'));
+                    $this.find('.a--owl-carousel-slide-detailes').slideUp();
+                    $this.find('.subCategoryWarper').fadeOut();
+                    $.fn.OwlCarouselType2.getGridViewWarper($this).find(' > div').css({
+                        'margin-bottom': '0px'
                     });
                 });
-            });
+                $($this).on('click', '.a--owl-carousel-gridViewWarper .a--owl-carousel-show-detailes', function () {
+                    let $this = $('#' + $(this).attr('data-owlcarousel-id'));
+                    $.fn.OwlCarouselType2.getGridViewWarper($this).find(' > div').css({
+                        'margin-bottom': '0px'
+                    });
 
-            if (countOfChild < $.fn.OwlCarouselType2.owlCarouselOptions.childCountHideOwlCarousel) {
-                $.fn.OwlCarouselType2.switchToGridView($this);
-                $this.find('.btn-viewOwlCarousel').fadeOut();
-            } else if ($.fn.OwlCarouselType2.owlCarouselOptions.defaultView === 'grid') {
-                $.fn.OwlCarouselType2.switchToGridView($this);
-            }
+                    let parent = $(this).parents('#' + $this.attr('id') + ' .a--block-item');
+                    let position = parent.data('position');
+
+
+                    let alaaOwlCarouselItemDetailClass = 'a--owl-carousel-slide-iteDetail-' + position;
+                    // let localOwlCarouselId = this.owlCarouselId;
+                    $.when($this.find('.subCategoryWarper').fadeOut(0)).done(function () {
+
+                        let aOwlCarouselSlideDetailes = $this.find('.a--owl-carousel-slide-detailes');
+                        let alaaOwlCarouselItemDetailObject = $this.find('.' + alaaOwlCarouselItemDetailClass);
+                        $.when(aOwlCarouselSlideDetailes.slideUp(0)).done(function () {
+
+                            if (alaaOwlCarouselItemDetailObject.length > 0) {
+                                aOwlCarouselSlideDetailes.fadeIn();
+                                alaaOwlCarouselItemDetailObject.slideDown();
+                            }
+
+                            let detailesWarper = $this.find('.a--owl-carousel-slide-detailes');
+                            let target = $.fn.OwlCarouselType2.getGridViewWarper($this).find('.carousel[data-position="' + position + '"]');
+                            let targetCol = target.parent();
+                            targetCol.css({
+                                'margin-bottom': parseInt(detailesWarper.outerHeight()) + 50 + 'px'
+                            });
+
+                            let positionTop = parseInt(targetCol[0].offsetTop) + parseInt(targetCol.outerHeight()) + 20;
+
+                            let positionLeftOfPointer = parseInt(targetCol.position().left) + (parseInt(targetCol.outerWidth()) / 2) - 20;
+                            detailesWarper.css({
+                                'display': 'block',
+                                'position': 'absolute',
+                                'width': '100%',
+                                'z-index': '1',
+                                'top': positionTop + 'px'
+                            });
+                            let detailesWarperPointerStyle = $this.find('.detailesWarperPointerStyle');
+                            if (detailesWarperPointerStyle.length === 0) {
+                                detailesWarper.append('<div class="detailesWarperPointerStyle"></div>');
+                            }
+                            $this.find('.detailesWarperPointerStyle').html('<style>.a--owl-carousel-slide-detailes::before { right: auto; left: ' + positionLeftOfPointer + 'px !important; }</style>');
+                        });
+                    });
+                });
+
+                if (countOfChild < $.fn.OwlCarouselType2.owlCarouselOptions.childCountHideOwlCarousel) {
+                    $.fn.OwlCarouselType2.switchToGridView($this);
+                    $this.find('.btn-viewOwlCarousel').fadeOut();
+                } else if ($.fn.OwlCarouselType2.owlCarouselOptions.defaultView === 'grid') {
+                    $.fn.OwlCarouselType2.switchToGridView($this);
+                }
+
+            });
         });
     };
 

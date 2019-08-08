@@ -1,0 +1,125 @@
+.a--multi-level-search {
+  display: none;
+  margin-bottom: 20px;
+  padding-top: 5px;
+
+  .selectorItem {
+    margin-top: 10px;
+    position: relative;
+
+    .selectorItemTitle {
+      font-size: 20px;
+      font-weight: bold;
+      text-align: center;
+      display: none;
+    }
+
+    .subItem:hover {
+      background-color: #2bbbad;
+      box-shadow: 0 5px 15px 15px rgba(0,0,0,.18),0 4px 15px 0 rgba(0,0,0,.15);
+      z-index: 2;
+    }
+
+    .subItem {
+      white-space: nowrap;
+      text-align: center;
+      margin: 0.5px;
+      padding: 10px 50px;
+      background-color: #4285f4;
+      cursor: pointer;
+      transition-property: all;
+      transition-duration: 0.3s;
+      color: white;
+      /*box-shadow: 0 5px 11px 0 rgba(0,0,0,.18),0 4px 15px 0 rgba(0,0,0,.15);*/
+    }
+
+    .select2 {
+      max-width: 100%;
+      min-width: 100%;
+    }
+
+    .select2warper {
+      margin: 1px 0;
+      background: white;
+      border: solid 1px #dbdbdb;
+      border-radius: 50px;
+      -webkit-box-shadow: 0px 5px 10px 2px rgba(196, 197, 214, 0.36) !important;
+      box-shadow: 0px 5px 10px 2px rgba(196, 197, 214, 0.36) !important;
+    }
+
+    .select2warper > div {
+      position: relative;
+    }
+  }
+
+  .selectorItem[data-select-display="select2"] .select2-selection {
+    border: none;
+  }
+
+  .filterNavigationWarper {
+    list-style: none;
+    /*background: #4c4c4c;*/
+    /*background: #ffffff;*/
+    display: table;
+    padding: 5px 20px;
+    border-radius: 1px;
+    margin: auto;
+    /*-webkit-box-shadow: 0px 5px 10px 2px rgba(196, 197, 214, 0.36) !important;*/
+    /*box-shadow: 0px 5px 10px 2px rgba(196, 197, 214, 0.36) !important;*/
+
+    .filterNavigationStep {
+      list-style: none;
+      position: relative;
+      margin: 10px 5px;
+      display: table-cell;
+      vertical-align: middle;
+      cursor: pointer;
+    }
+
+    .filterNavigationStep.active {
+      color: #36a3f7 !important;
+    }
+
+    .filterNavigationStep.current {
+      color: #34bfa3 !important;
+    }
+
+    .filterNavigationStep.deactive {
+      color: #717171 !important;
+    }
+
+    .filterNavigationStep.current:before {
+      content: ' ';
+      position: absolute;
+      bottom: -15px;
+      left: 62%;
+      border-bottom: solid 0 transparent;
+      border-right: solid 7px transparent;
+      border-left: solid 7px transparent;
+      border-top: solid 10px #f4516c;
+      width: 14px;
+      height: 12px;
+    }
+
+    .filterNavigationStep:after {
+      content: ">";
+      font: normal normal normal 16px/1 Arial;
+      font-size: 20px;
+      vertical-align: middle;
+      cursor: default;
+      margin-left: 15px;
+      margin-right: 5px;
+      color: #9816f4;
+    }
+
+    .filterNavigationStep:last-child:after {
+      content: '';
+    }
+
+  }
+}
+
+.select2-dropdown {
+  position: absolute !important;
+  z-index: 90 !important;
+}
