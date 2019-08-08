@@ -1,6 +1,7 @@
 <?php
 
 
+use App\Http\Controllers\Web\AdminController;
 use App\Http\Controllers\Web\ConsultationController;
 use App\Http\Controllers\Web\ContentController;
 use App\Http\Controllers\Web\DashboardPageController;
@@ -15,6 +16,7 @@ use App\Http\Controllers\Web\PaymentStatusController;
 use App\Http\Controllers\Web\SalesReportController;
 use App\Http\Controllers\Web\SurveyController;
 use App\Http\Controllers\Web\UserController;
+use App\Http\Controllers\Web\WalletController;
 use App\PaymentModule\Controllers\RedirectUserToPaymentPage;
 use App\PaymentModule\Controllers\PaymentVerifierController;
 use App\PaymentModule\Controllers\RedirectAPIUserToPaymentRoute;
@@ -127,6 +129,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('majorAdminPanel', 'Web\AdminController@adminMajor');
     Route::get('lotteryAdminPanel', 'Web\AdminController@adminLottery');
     Route::get('teleMarketingAdminPanel', 'Web\AdminController@adminTeleMarketing');
+    Route::get('walletAdminPanel', [AdminController::class, 'adminGiveWalletCredit'])->name('admin.wallet');
+    Route::post('giveWalletCredit', [WalletController::class, 'giveCredit'])->name('admin.wallet.giveCredit');
     Route::post('adminSendSMS', [HomeController::class , 'sendSMS']);
     Route::get('asset', 'Web\UserController@userProductFiles')->name('user.asset');
     Route::get('complete-register', 'Web\UserController@completeRegister')->name('completeRegister');

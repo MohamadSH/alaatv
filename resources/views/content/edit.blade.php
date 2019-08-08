@@ -1,7 +1,7 @@
 @permission((Config::get('constants.EDIT_EDUCATIONAL_CONTENT')))@extends("app",["pageName"=>"admin"])
 
 @section('page-css')
-    
+
     <link href="{{ mix('/css/admin-all.css') }}" rel="stylesheet" type="text/css"/>
     <style>
         .datepicker-header {
@@ -11,7 +11,7 @@
         span.tag {
             direction: ltr;
         }
-        
+
         #editForm .list-group .list-group-item .badge {
             font-size: 1rem;
         }

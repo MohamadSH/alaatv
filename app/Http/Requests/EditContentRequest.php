@@ -21,24 +21,12 @@ class EditContentRequest extends FormRequest
 
     public function rules()
     {
-        $file1ExtraRule = "";
-        if (Input::hasFile("file1")) {
-            $file1ExtraRule = "mimes:pdf";
-        }
-    
-        $file2ExtraRule = "";
-        if (Input::hasFile("file2")) {
-            $file2ExtraRule = "mimes:pdf";
-        }
-    
         return [
             //            'order' => 'required|numeric',
             'name'  => 'required',
             //            'grades'=>'required|exists:grades,id',
             //            'majors'=>'required|exists:majors,id',
             //            'contenttypes'=>'required|exists:contenttypes,id',
-            'file1' => $file1ExtraRule,
-            'file2' => $file2ExtraRule,
         ];
     }
 }
