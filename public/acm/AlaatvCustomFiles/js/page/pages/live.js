@@ -13,19 +13,21 @@ document.addEventListener('DOMContentLoaded', function() {
             defaultView: 'timeGridWeek',
 
 
-            // viewSkeletonRender: function( info ) {
-            //
-            //     let element = info.view.header.thead.children[0].children,
-            //         elementLength = element.length;
-            //     console.log('element: ', element);
-            //     console.log('elementLength: ', elementLength);
-            //
-            //     for (let i = 0; i < elementLength; i++) {
-            //         console.log('innerHTML: ', element[i].innerHTML);
-            //         element[i].innerHTML = element[i].innerText.replace(' ', '<br>');
-            //     }
-            //
-            // },
+            viewSkeletonRender: function( info ) {
+
+                let element = info.view.header.thead.children[0].children,
+                    elementLength = element.length;
+
+                for (let i = 0; i < elementLength; i++) {
+                    console.log('element[i].innerText :', element[i].innerText);
+                    if (element[i].innerText.trim().length === 0) {
+                        element[i].innerHTML = 'ساعت';
+                    } else {
+                        element[i].innerHTML = element[i].innerText.replace('-', '/');
+                    }
+                }
+
+            },
 
             editable: false,
             // aspectRatio: 1,

@@ -1,6 +1,3 @@
-// const path = require('path');
-// const glob = require('glob-all');
-
 class Mix {
 
     constructor() {
@@ -8,6 +5,7 @@ class Mix {
         this.mix = require('laravel-mix');
         this.purify = require("purify-css");
         this.mix.sass('public/acm/AlaatvCustomFiles/components/OwlCarouselType2/style.scss', 'public/acm/AlaatvCustomFiles/components/OwlCarouselType2');
+        this.mix.sass('public/acm/AlaatvCustomFiles/components/MultiLevelSearch/style.scss', 'public/acm/AlaatvCustomFiles/components/MultiLevelSearch');
     }
 
     static getBaseCss() {
@@ -73,6 +71,7 @@ class Mix {
         for (let i = 0; i < outputCssFilesLength; i++) {
             let cssName = this.outputCssFile[i].cssName,
                 jsArray = this.outputCssFile[i].jsArray;
+            console.log('purifyCss: ', cssName);
             this.purify((['./resources/views/**/*.blade.php', './resources/views/**/**/*.blade.php', './resources/views/**/**/**/*.blade.php']).concat(jsArray), [cssName], {
                 output: './' + cssName,
                 // output: './public/css/'+fileName+'.purify.css',
@@ -85,7 +84,6 @@ class Mix {
                 // // Logs out removed selectors.
                 // rejected: true
             });
-            console.log('purifyCss: ', cssName);
         }
     }
 
