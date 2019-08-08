@@ -189,7 +189,17 @@
                         </li>
                     @endpermission
 
-{{--                    @permission((config('constants.REPORT_ADMIN_PANEL_ACCESS')))--}}
+                    @permission((config('constants.WALLET_ADMIN_PANEL')))
+                    <li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1">
+                        <a href="{{ route('admin.wallet') }}" class="m-menu__link ">
+                            <span class="m-menu__item-here"></span>
+                            <i class="m-menu__link-icon flaticon-technology"></i>
+                            <span class="m-menu__link-text">پنل کیف پول</span>
+                        </a>
+                    </li>
+                    @endpermission
+
+                {{--                    @permission((config('constants.REPORT_ADMIN_PANEL_ACCESS')))--}}
 {{--                    <li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1">--}}
 {{--                        <a href="{{ action("Web\AdminController@adminReport") }}" class="m-menu__link ">--}}
 {{--                            <span class="m-menu__item-here"></span>--}}
