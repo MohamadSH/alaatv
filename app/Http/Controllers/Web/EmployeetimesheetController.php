@@ -339,7 +339,7 @@ class EmployeetimesheetController extends Controller
         $request->offsetSet('serverSide', true);
         $insertRequest  = new InsertEmployeeTimeSheet($request->all());
         $userTimeSheets = Employeetimesheet::where('date', Carbon::today('Asia/Tehran'))
-            ->where('user_id', $userId->id)
+            ->where('user_id', $userId)
             ->get();
         if ($userTimeSheets->count() == 0) {
             $done = $employeetimesheetController->store($insertRequest);

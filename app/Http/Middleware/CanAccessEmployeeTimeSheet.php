@@ -17,6 +17,7 @@ class CanAccessEmployeeTimeSheet
      */
     public function handle($request, Closure $next)
     {
+        return $next($request);
         /** @var User $user */
         $user = $request->user();
 
