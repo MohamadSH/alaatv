@@ -17,7 +17,7 @@ use Illuminate\Foundation\Http\FormRequest;
 
 trait ContentControllerResponseTrait
 {
-    
+
     /**
      * @param                                     $message
      * @param  int                                $code
@@ -38,13 +38,13 @@ trait ContentControllerResponseTrait
                 'product' => isset($productsThatHaveThisContent) && $productsThatHaveThisContent->isEmpty() ? null :
                     $productsThatHaveThisContent,
             ], $code);
-            
+
         }
         return response()->json([
             'message' => $message,
         ], $code);
     }
-    
+
     /**
      * @param  Request  $request
      * @param  Content  $content
@@ -58,77 +58,21 @@ trait ContentControllerResponseTrait
         return $content->isFree || optional($request->user($gard))->hasContent($content);
     }
 
-    /**
-     * @param array $inputData
-     * @param Content $content
-     *
-     * @return void
-     */
-    protected function fillContentFromRequest(array $inputData, Content $content): void
-    {
-        $validSinceDateTime = array_get($inputData , 'validSinceDate');
-        $enabled    = Arr::has($inputData , 'enable');
-        $isFree    = Arr::has($inputData , 'isFree');
-        $tagString  = array_get($inputData , 'tags');
-        $files      = array_get($inputData , 'files' , []);
-        
-        $content->fill($inputData);
-        //ToDo : keep time in $validSinceDateTime
-//        $content->validSince = $validSinceDateTime;
-        $content->validSince = explode(' ', $validSinceDateTime)[0];
-        $content->enable     = $enabled ? 1 : 0;
-        $content->isFree     = $isFree ? 1 : 0;
-        $content->tags       = convertTagStringToArray($tagString);
-        if(!empty($files))
-        {
-            $this->storeFilesOfContent($content, $files);
-        }
-    }
-    
-    /**
-     * @param $time
-     * @param $validSince
-     *
-     * @return null|string
-     */
-    protected function getValidSinceDateTime($time, $validSince): string
-    {
-        if (isset($time)) {
-            if (strlen($time) > 0) {
-                $time = Carbon::parse($time)
-                    ->format('H:i:s');
-            } else {
-                $time = "00:00:00";
-            }
-        }
-        if (isset($validSince)) {
-            $validSince = Carbon::parse($validSince)
-                ->format('Y-m-d'); //Muhammad : added a day because it returns one day behind and IDK why!!
-            if (isset($time)) {
-                $validSince = $validSince." ".$time;
-            }
-            
-            return $validSince;
-        }
-        
-        return null;
-    }
-    
     protected function getUserCanNotSeeContentJsonResponse(Content $content, ProductCollection $productsThatHaveThisContent, callable $callback): JsonResponse
     {
         $product_that_have_this_content_is_empty = $productsThatHaveThisContent->isEmpty();
-        
+
         $messageLookupTable = [
             '0' => trans('content.Not Free'),
             '1' => trans('content.Not Free And you can\'t buy it'),
         ];
         $message            = Arr::get($messageLookupTable, (int) $product_that_have_this_content_is_empty);
-        
+
         $callback($message);
         return $this->userCanNotSeeContentResponse($message,
             Response::HTTP_FORBIDDEN, $content, $productsThatHaveThisContent, true);
     }
-    
+
     /**
      * @param $thumbnailUrl
      *
@@ -200,12 +144,10 @@ trait ContentControllerResponseTrait
      */
     private function makeThumbnailUrlFromFileName(string $fileName, int $contentset_id): string
     {
-        //ToDo : Hard code
         $baseUrl = config('constants.DOWNLOAD_SERVER_PROTOCOL').config('constants.DOWNLOAD_SERVER_NAME').config('constants.DOWNLOAD_SERVER_MEDIA_PARTIAL_PATH');
-        //thumbnail
         $thumbnailFileName = pathinfo($fileName, PATHINFO_FILENAME).".jpg";
         $thumbnailUrl      = $baseUrl."thumbnails/".$contentset_id."/".$thumbnailFileName;
-        
+
         return $thumbnailUrl;
     }
 
@@ -304,6 +246,4 @@ trait ContentControllerResponseTrait
         }
         return $files;
     }
-
-
 }

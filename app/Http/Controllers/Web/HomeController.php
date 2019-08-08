@@ -191,24 +191,21 @@ class HomeController extends Controller
                 $diskName = config('constants.DISK14');
                 break;
             case config('constants.DISK18') :
-                if (Storage::disk(config('constants.DISK18_CLOUD'))
-                    ->exists($fileName)) {
+                if (Storage::disk(config('constants.DISK18_CLOUD'))->exists($fileName)) {
                     $diskName = config('constants.DISK18_CLOUD');
                 } else {
                     $diskName = config('constants.DISK18');
                 }
                 break;
             case config('constants.DISK19'):
-                if (Storage::disk(config('constants.DISK19_CLOUD'))
-                    ->exists($fileName)) {
-                    $diskName = Config::  get('constants.DISK19_CLOUD');
+                if (Storage::disk(config('constants.DISK19_CLOUD2'))->exists($fileName)) {
+                    $diskName = Config::  get('constants.DISK19_CLOUD2');
                 } else {
                     $diskName = config('constants.DISK19');
                 }
                 break;
             case config('constants.DISK20'):
-                if (Storage::disk(config('constants.DISK20_CLOUD'))
-                    ->exists($fileName)) {
+                if (Storage::disk(config('constants.DISK20_CLOUD'))->exists($fileName)) {
                     $diskName = Config::  get('constants.DISK20_CLOUD');
                 } else {
                     $diskName = config('constants.DISK20');

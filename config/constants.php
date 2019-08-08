@@ -215,6 +215,7 @@ return [
     'DISK18_CLOUD'                                => 'examSftp',
     'DISK19'                                      => 'pamphlet',
     'DISK19_CLOUD'                                => 'pamphletSftp',
+    'DISK19_CLOUD2'                               => 'pamphletSftp2',
     'DISK20'                                      => 'book',
     'DISK20_CLOUD'                                => 'bookSftp',
     'DISK21'                                      => 'productImageSFTP',
