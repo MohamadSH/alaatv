@@ -22,6 +22,11 @@
 
 <!--begin::Global Theme Styles -->
 <link href="{{ mix('/css/all.css') }}" rel="stylesheet" type="text/css"/>
+<style>
+    .a--owl-carousel-row .a--owl-carousel-Wraper .a--block-item.a--block-type-set .a--block-imageWrapper .a--block-detailesWrapper {
+        z-index: 9;
+    }
+</style>
 <!--end::Global Theme Styles -->
 
 @yield('page-css')
