@@ -11,11 +11,10 @@ background-gradient
 
     <div class="a--block-infoWrapper">
         <div class="a--block-titleWrapper">
-            <a href="{{ $product->url }}"
-               class="m-link a--owl-carousel-type-2-item-subtitle">
+            <span class="m-link a--owl-carousel-type-2-item-subtitle">
                 <span class="m-badge m-badge--danger m-badge--dot"></span>
                 {{ $product->name }}
-            </a>
+            </span>
         </div>
         @if($product->sets->count()!==0)
         <div class="a--block-detailesWrapper">

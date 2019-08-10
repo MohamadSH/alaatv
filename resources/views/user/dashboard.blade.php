@@ -8,11 +8,11 @@
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item">
-                <i class="flaticon-home-2"></i>
+                <i class="fa fa-home"></i>
                 <a class="m-link" href="{{action("Web\IndexPageController")}}">@lang('page.Home')</a>
             </li>
             <li class="breadcrumb-item">
-                <i class="flaticon-user"></i>
+                <i class="fa fa-user"></i>
                 <a class="m-link" href="{{ action("Web\UserController@show",[$user]) }}">@lang('page.Profile')</a>
             </li>
             <li class="breadcrumb-item active" aria-current="page">
@@ -104,7 +104,7 @@
                                     {{--                                                    <button type="button" class="btn btn-warning btnViewPamphlet"--}}
                                     {{--                                                            data-content-type="pamphlet"--}}
                                     {{--                                                            data-content-url="{{ $product->sets->first()->contentUrl.'&orderBy=order' }}">--}}
-                                    {{--                                                        <i class="flaticon-edit-1"></i>--}}
+                                    {{--                                                        <i class="fa fa-edit"></i>--}}
                                     {{--                                                        جزوات--}}
                                     {{--                                                    </button>--}}
                                     {{--                                                    <button type="button" class="btn btn-success btnViewVideo"--}}
@@ -125,7 +125,7 @@
                                     {{--                                                   class="m-link">{{ $product->name }}</a>--}}
                                     {{--                                                <hr>--}}
                                     {{--                                                <a class="btn btn-metal m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill a--owl-carousel-show-detailes m--margin-bottom-5">--}}
-                                    {{--                                                    <i class="flaticon-more-v6"></i>--}}
+                                    {{--                                                    <i class="fa fa-ellipsis-h"></i>--}}
                                     {{--                                                </a>--}}
                                     {{--                                            </div>--}}
                                     {{--                                        @endif--}}
@@ -176,7 +176,7 @@
                                                                             class="btn btn-warning btnViewPamphlet"
                                                                             data-content-type="pamphlet"
                                                                             data-content-url="{{ $set->contentUrl.'&orderBy=order' }}">
-                                                                        <i class="flaticon-edit-1"></i>
+                                                                        <i class="fa fa-edit"></i>
                                                                         جزوات
                                                                     </button>
                                                                     <button type="button"
@@ -215,7 +215,7 @@
 {{--                            <div class="m-portlet__head-caption">--}}
 {{--                                <div class="m-portlet__head-title">--}}
 {{--                                    <h3 class="m-portlet__head-text">--}}
-{{--                                        <i class="flaticon-confetti m--margin-right-10"></i>--}}
+{{--                                        <i class="fa fa-magic m--margin-right-10"></i>--}}
 {{--                                        علاقه مندی های من--}}
 {{--                                    </h3>--}}
 {{--                                </div>--}}
@@ -239,11 +239,11 @@
 {{--                                                    <div class="m-portlet__head-tools">--}}
 {{--                                                        <a href="#"--}}
 {{--                                                           class="btn btn-outline-metal m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill m-btn--air d-none d-md-block d-lg-block d-sm-block btn-viewGrid">--}}
-{{--                                                            <i class="fa flaticon-shapes"></i>--}}
+{{--                                                            <i class="fa fa-th"></i>--}}
 {{--                                                        </a>--}}
 {{--                                                        <a href="#"--}}
 {{--                                                           class="btn btn-outline-metal m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill m-btn--air btn-viewOwlCarousel">--}}
-{{--                                                            <i class="flaticon-more-v4"></i>--}}
+{{--                                                            <i class="fa fa-ellipsis-h"></i>--}}
 {{--                                                        </a>--}}
 {{--                                                    </div>--}}
 {{--                                                </div>--}}
@@ -315,11 +315,11 @@
 {{--                                                    <div class="m-portlet__head-tools">--}}
 {{--                                                        <a href="#"--}}
 {{--                                                           class="btn btn-outline-metal m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill m-btn--air d-none d-md-block d-lg-block d-sm-block btn-viewGrid">--}}
-{{--                                                            <i class="fa flaticon-shapes"></i>--}}
+{{--                                                            <i class="fa fa-th"></i>--}}
 {{--                                                        </a>--}}
 {{--                                                        <a href="#"--}}
 {{--                                                           class="btn btn-outline-metal m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill m-btn--air btn-viewOwlCarousel">--}}
-{{--                                                            <i class="flaticon-more-v4"></i>--}}
+{{--                                                            <i class="fa fa-ellipsis-h"></i>--}}
 {{--                                                        </a>--}}
 {{--                                                    </div>--}}
 {{--                                                </div>--}}
@@ -402,11 +402,11 @@
 {{--                                                    <div class="m-portlet__head-tools">--}}
 {{--                                                        <a href="#"--}}
 {{--                                                           class="btn btn-outline-metal m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill m-btn--air d-none d-md-block d-lg-block d-sm-block btn-viewGrid">--}}
-{{--                                                            <i class="fa flaticon-shapes"></i>--}}
+{{--                                                            <i class="fa fa-th"></i>--}}
 {{--                                                        </a>--}}
 {{--                                                        <a href="#"--}}
 {{--                                                           class="btn btn-outline-metal m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill m-btn--air btn-viewOwlCarousel">--}}
-{{--                                                            <i class="flaticon-more-v4"></i>--}}
+{{--                                                            <i class="fa fa-ellipsis-h"></i>--}}
 {{--                                                        </a>--}}
 {{--                                                    </div>--}}
 {{--                                                </div>--}}
@@ -485,7 +485,7 @@
 {{--                                                            <button type="button" class="btn btn-warning btnViewPamphlet"--}}
 {{--                                                                    data-content-type="pamphlet"--}}
 {{--                                                                    data-content-url="{{ $product->sets[0]->contentUrl }}">--}}
-{{--                                                                <i class="flaticon-edit-1"></i>--}}
+{{--                                                                <i class="fa fa-edit"></i>--}}
 {{--                                                                جزوات--}}
 {{--                                                            </button>--}}
 {{--                                                            @if(count($product->sets[0]->video) > 0)--}}
@@ -510,7 +510,7 @@
 {{--                                                           class="m-link">{{ $product->name }}</a>--}}
 {{--                                                        <hr>--}}
 {{--                                                        <a class="btn btn-metal m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill a--owl-carousel-show-detailes">--}}
-{{--                                                            <i class="flaticon-more-v6"></i>--}}
+{{--                                                            <i class="fa fa-ellipsis-h"></i>--}}
 {{--                                                        </a>--}}
 {{--                                                    </div>--}}
 {{--                                                @endif--}}
@@ -560,7 +560,7 @@
 {{--                                                                                        class="btn btn-warning btnViewPamphlet"--}}
 {{--                                                                                        data-content-type="pamphlet"--}}
 {{--                                                                                        data-content-url="{{ $set->contentUrl }}">--}}
-{{--                                                                                    <i class="flaticon-edit-1"></i>--}}
+{{--                                                                                    <i class="fa fa-edit"></i>--}}
 {{--                                                                                    جزوات--}}
 {{--                                                                                </button>--}}
 {{--                                                                                <button type="button"--}}
@@ -601,7 +601,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="pamphletModalModalLabel">
-                        <i class="flaticon-edit-1"></i>
+                        <i class="fa fa-edit"></i>
                         جزوات
                     </h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
