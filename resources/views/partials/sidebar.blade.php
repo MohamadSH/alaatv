@@ -87,7 +87,7 @@
                 </a>
             </li>
             <li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1">
-                <a target="_blank" href="https://forum.sanatisharif.ir" rel="noreferrer" class="m-menu__link ">
+                <a target="_blank" href="https://forum.alaatv.com" rel="noreferrer" class="m-menu__link ">
                     <span class="m-menu__item-here"></span>
                     <i class="m-menu__link-icon fab fa-hornbill"></i>
                     <span class="m-menu__link-text">انجمن آلاء</span>
