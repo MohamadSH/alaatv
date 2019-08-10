@@ -39,7 +39,7 @@
 
                         <!-- BEGIN: Topbar Toggler -->
                         <a id="m_aside_header_topbar_mobile_toggle" href="javascript:" class="m-brand__icon m--visible-tablet-and-mobile-inline-block">
-                            <i class="flaticon-more"></i>
+                            <i class="fa fa-ellipsis-v"></i>
                         </a>
                         <!-- BEGIN: Topbar Toggler -->
                     </div>
