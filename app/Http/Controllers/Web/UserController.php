@@ -766,20 +766,14 @@ class UserController extends Controller
 
         if (in_array("roles", $data) && isset($data["roles"]) && $authenticatedUser->can(config('constants.INSET_USER_ROLE')))
         {
-            $roles = $data['roles'];
-            if(is_null($roles))
-                $roles = [];
-
             $this->syncRoles($data["roles"], $user);
         }
 
         $resultText = 'User save successfully';
         $resultCode = Response::HTTP_OK;
-        $response   = [
+        return [
             'user' => $user,
         ];
-
-        return $response;
     }
 
     public function show(Request $request, User $user = null)
@@ -1389,12 +1383,8 @@ class UserController extends Controller
 
         if ($user->update()) {
 
-            if ($request->has('roles') && $authenticatedUser->can(config('constants.INSET_USER_ROLE'))) {
-                $roles = $request->get('roles');
-                if(is_null($roles))
-                    $roles=[];
-
-                $this->syncRoles($roles, $user);
+            if ($authenticatedUser->can(config('constants.INSET_USER_ROLE'))) {
+                $this->syncRoles($request->get('roles' , []), $user);
             }
 
             $message = 'اطلاعات با موفقیت اصلاح شد';
