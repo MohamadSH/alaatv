@@ -771,11 +771,9 @@ class UserController extends Controller
 
         $resultText = 'User save successfully';
         $resultCode = Response::HTTP_OK;
-        $response   = [
+        return [
             'user' => $user,
         ];
-
-        return $response;
     }
 
     public function show(Request $request, User $user = null)
