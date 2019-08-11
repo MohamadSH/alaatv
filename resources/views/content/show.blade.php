@@ -638,58 +638,92 @@
     </div>
 
     @if($productsThatHaveThisContent->isNotEmpty())
-        <div class="row">
+        <div class="row a--owl-carousel-row blockWraper-hasProduct">
             <div class="col">
-                <div class="m-portlet  m-portlet--bordered blockWraper-hasProduct" id="owlCarouselParentProducts">
-                    <div class="m-portlet__head">
+                <div class="m-portlet a--owl-carousel-Wraper" id="owlCarouselParentProducts">
+                    <div class="m-portlet__head a--owl-carousel-head">
                         <div class="m-portlet__head-caption">
                             <div class="m-portlet__head-title">
                                 <h3 class="m-portlet__head-text">
+                                    <span class="redSquare"></span>
                                     محصولاتی که شامل این محتوا هستند
                                 </h3>
                             </div>
                         </div>
                         <div class="m-portlet__head-tools">
                             <a href="#"
-                               class="btn btn-outline-metal m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill m-btn--air d-none d-md-block d-lg-block d-sm-block btn-viewGrid">
-                                <i class="fa flaticon-shapes"></i>
+                               class="btn btn-outline-metal m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill m-btn--air btn-viewGrid" title="نمایش شبکه ای">
+                                <i class="fa fa-th"></i>
                             </a>
                             <a href="#"
-                               class="btn btn-outline-metal m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill m-btn--air btn-viewOwlCarousel">
-                                <i class="flaticon-more-v4"></i>
+                               class="btn btn-outline-metal m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill m-btn--air btn-viewOwlCarousel" title="نمایش افقی">
+                                <i class="fa fa-exchange-alt"></i>
                             </a>
                         </div>
                     </div>
-                    <div class="m-portlet__body m-portlet__body--no-padding">
-                        <!--begin::Widget 30-->
-                        <div class="m-widget30">
+                    <div class="m-portlet__body m-portlet__body--no-padding a--owl-carousel-body">
     
-                            <div class="m-widget_head">
-        
-                                <div class="m-widget_head-owlcarousel-items owl-carousel a--owl-carousel-type-2 parentProducts">
-                                    @foreach($productsThatHaveThisContent as $productKey=>$product)
-                                        <div class="m-widget_head-owlcarousel-item carousel block-product-item"
-                                             data-gtm-eec-product-id="{{ $product->id }}"
-                                             data-gtm-eec-product-name="{{ $product->name }}"
-                                             data-gtm-eec-product-category="-"
-                                             data-gtm-eec-product-position="{{ $productKey }}"
-                                             data-position="{{ $productKey }}"
-                                             data-gtm-eec-list=" محصولاتی که شامل این محتوا هستند - {{ $content->displayName }} ">
-                                            <a href="{{ $product->url }}">
-                                                <img class="a--owl-carousel-type-2-item-image owl-lazy lazy-image"
-                                                     data-src="{{ $product->photo }}?w=350&h=350" alt="{{ $product->name }}">
-                                            </a>
-                                            <br>
-                                            <a href="{{ $product->url }}" target="_blank"
-                                               class="m-link">{{ $product->name }}</a>
-                                        </div>
-                                    @endforeach
-                                </div>
-    
+                        <div class="a--owl-carousel-init-loading">
+                            <div class="lds-roller">
+                                <div></div>
+                                <div></div>
+                                <div></div>
+                                <div></div>
+                                <div></div>
+                                <div></div>
+                                <div></div>
+                                <div></div>
                             </div>
-
                         </div>
-                        <!--end::Widget 30-->
+    
+                        <div class="m-widget_head-owlcarousel-items owl-carousel a--owl-carousel-type-2 carousel_block_owlCarouselParentProducts">
+                            @foreach($productsThatHaveThisContent as $productKey=>$product)
+                                <div class="item carousel a--block-item a--block-type-product"
+                                     data-position="{{ $productKey }}"
+                                     data-gtm-eec-product-id="{{ $product->id }}"
+                                     data-gtm-eec-product-name="{{ $product->name }}"
+                                     data-gtm-eec-product-price="{{ number_format($product->price['final'], 2, '.', '') }}"
+                                     data-gtm-eec-product-brand="آلاء"
+                                     data-gtm-eec-product-category="-"
+                                     data-gtm-eec-product-variant="-"
+                                     data-gtm-eec-product-position="{{ $productKey }}"
+                                     data-gtm-eec-product-list="محصولاتی که شامل این محتوا هستند">
+                
+                                    <div class="a--block-imageWrapper">
+                                        <a href="{{ $product->url }}"
+                                           class="a--block-imageWrapper-image a--gtm-eec-product a--gtm-eec-product-click d-block"
+                                           data-gtm-eec-product-id="{{ $product->id }}"
+                                           data-gtm-eec-product-name="{{ $product->name }}"
+                                           data-gtm-eec-product-price="{{ number_format($product->price['final'], 2, '.', '') }}"
+                                           data-gtm-eec-product-brand="آلاء"
+                                           data-gtm-eec-product-category="-"
+                                           data-gtm-eec-product-variant="-"
+                                           data-gtm-eec-product-position="{{ $productKey }}"
+                                           data-gtm-eec-product-list="محصولاتی که شامل این محتوا هستند">
+                                            <img src="https://cdn.alaatv.com/loder.jpg?w=1&h=1" data-src="{{ $product->photo }}" alt="{{ $product->name }}" class="a--block-image lazy-image" width="400" height="400" />
+                                        </a>
+                                    </div>
+                                    <div class="a--block-infoWrapper">
+                                        <div class="a--block-titleWrapper">
+                                            <a href="{{ $product->url }}"
+                                               class="m-link a--owl-carousel-type-2-item-subtitle a--gtm-eec-product-click"
+                                               data-gtm-eec-product-id="{{ $product->id }}"
+                                               data-gtm-eec-product-name="{{ $product->name }}"
+                                               data-gtm-eec-product-price="{{ number_format($product->price['final'], 2, '.', '') }}"
+                                               data-gtm-eec-product-brand="آلاء"
+                                               data-gtm-eec-product-category="-"
+                                               data-gtm-eec-product-variant="-"
+                                               data-gtm-eec-product-position="{{ $productKey }}"
+                                               data-gtm-eec-product-list="محصولاتی که شامل این محتوا هستند">
+                                                <span class="m-badge m-badge--danger m-badge--dot"></span>
+                                                {{ $product->name }}
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+
                     </div>
                 </div>
             </div>
@@ -716,6 +750,6 @@
             @endif
         ];
     </script>
-    <script src="{{ mix("/js/content-show.js") }}" type="text/javascript" defer></script>
+    <script src="{{ mix("/js/content-show.js") }}" type="text/javascript"></script>
 @endsection
 
