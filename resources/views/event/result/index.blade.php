@@ -72,6 +72,9 @@
             <td>@if(isset($eventresult->rank)) {{$eventresult->rank}} @else
                     <span class = "m-badge m-badge--wide label-sm m-badge--danger">درج نشده </span> @endif
             </td>
+            <td>@if(isset($eventresult->enableReportPublish)) {{($eventresult->enableReportPublish)?'بله':'خیر'}} @else
+                    <span class = "m-badge m-badge--wide label-sm m-badge--danger">درج نشده </span> @endif
+            </td>
             <td style = "width: 20%">
                 {!! Form::model($eventresult, ['method' => 'PUT', 'action' => ['Web\EventresultController@update', $eventresult] , 'id' => 'eventResultForm_'.$eventresult->id]) !!}
                 <div class = "input-group">
