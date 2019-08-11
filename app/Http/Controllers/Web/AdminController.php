@@ -62,14 +62,10 @@ class AdminController extends Controller
 
     public function __construct()
     {
-        $this->middleware('ability:'.config('constants.ROLE_ADMIN').','.config('constants.USER_ADMIN_PANEL_ACCESS'),
-            ['only' => 'admin']);
-        $this->middleware('permission:'.config('constants.CONSULTANT_PANEL_ACCESS'),
-            ['only' => 'consultantAdmin']);
-        $this->middleware('permission:'.config('constants.PRODUCT_ADMIN_PANEL_ACCESS'),
-            ['only' => 'adminProduct']);
-        $this->middleware('permission:'.config('constants.CONTENT_ADMIN_PANEL_ACCESS'),
-            ['only' => 'adminContent']);
+        $this->middleware('ability:'.config('constants.ROLE_ADMIN').','.config('constants.USER_ADMIN_PANEL_ACCESS'), ['only' => 'admin']);
+        $this->middleware('permission:'.config('constants.CONSULTANT_PANEL_ACCESS'), ['only' => 'consultantAdmin']);
+        $this->middleware('permission:'.config('constants.PRODUCT_ADMIN_PANEL_ACCESS'), ['only' => 'adminProduct']);
+        $this->middleware('permission:'.config('constants.CONTENT_ADMIN_PANEL_ACCESS'), ['only' => 'adminContent']);
         $this->middleware('permission:'.config('constants.LIST_ORDER_ACCESS'), ['only' => 'adminOrder']);
         $this->middleware('permission:'.config('constants.SMS_ADMIN_PANEL_ACCESS'), ['only' => 'adminSMS']);
         $this->middleware('permission:'.config('constants.REPORT_ADMIN_PANEL_ACCESS'), ['only' => 'adminReport']);
@@ -77,6 +73,7 @@ class AdminController extends Controller
         $this->middleware('ability:'.config('constants.ROLE_ADMIN').','.config('constants.TELEMARKETING_PANEL_ACCESS'), ['only' => 'adminTeleMarketing']);
         $this->middleware('permission:'.config('constants.INSERT_COUPON_ACCESS'), ['only' => 'adminGenerateRandomCoupon']);
         $this->middleware('permission:'.config('constants.WALLET_ADMIN_PANEL'), ['only' => 'adminGiveWalletCredit']);
+        $this->middleware('permission:'.config('constants.LIST_EVENTRESULT_ACCESS'), ['only' => 'adminRegistrationList']);
         $this->middleware('role:admin', [
             'only' => [
                 'adminLottery',
@@ -396,14 +393,12 @@ class AdminController extends Controller
     public function adminContent()
     {
         $majors             = Major::pluck('name', 'id');
-        $assignmentStatuses = Assignmentstatus::pluck('name', 'id');
-        $assignmentStatuses->prepend('انتخاب وضعیت');
-        $consultationStatuses = Consultationstatus::pluck('name', 'id');
-        $consultationStatuses->prepend('انتخاب وضعیت');
+//        $assignmentStatuses = Assignmentstatus::pluck('name', 'id');
+//        $assignmentStatuses->prepend('انتخاب وضعیت');
+//        $consultationStatuses = Consultationstatus::pluck('name', 'id');
+//        $consultationStatuses->prepend('انتخاب وضعیت');
 
-        $pageName = 'admin';
-
-        return view('admin.indexContent', compact('pageName', 'assignmentStatuses', 'consultationStatuses', 'majors'));
+        return view('admin.indexContent', compact('majors'));
     }
 
     /**
@@ -949,6 +944,10 @@ class AdminController extends Controller
         $checkoutStatuses       = array_sort_recursive($checkoutStatuses);
 
         return view('admin.salesReport', compact('products', 'pageName', 'ajaxActionUrl' , 'checkoutStatuses'));
+    }
+
+    public function adminRegistrationList(Request $request) {
+        return view('admin.indexRegistration');
     }
 
     public function adminGiveWalletCredit(Request $request){
