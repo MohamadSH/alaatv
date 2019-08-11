@@ -64,7 +64,7 @@ return [
             'visibility' => 'public',
 
             /*            'driver'     => 'sftp',
-                        'host'       => env('SFTP_HOST', ''),
+                        'host'       => env('SFTP_HOST2', ''),
                         'port'       => env('SFTP_PORT', '22'),
                         'username'   => env('SFTP_USERNAME', ''),
                         'password'   => env('SFTP_PASSSWORD', ''),
@@ -93,7 +93,7 @@ return [
 
         'productImageSFTP'     => [
             'driver'     => 'sftp',
-            'host'       => env('SFTP_HOST', ''),
+            'host'       => env('SFTP_HOST2', ''),
             'port'       => env('SFTP_PORT', '22'),
             'username'   => env('SFTP_USERNAME', ''),
             'password'   => env('SFTP_PASSSWORD', ''),
@@ -136,7 +136,7 @@ return [
 
         'homeSlideShowPicSFTP'     => [
             'driver'     => 'sftp',
-            'host'       => env('SFTP_HOST', ''),
+            'host'       => env('SFTP_HOST2', ''),
             'port'       => env('SFTP_PORT', '22'),
             'username'   => env('SFTP_USERNAME', ''),
             'password'   => env('SFTP_PASSSWORD', ''),
@@ -174,7 +174,7 @@ return [
 
         'productFileSFTP' => [
             'driver'     => 'sftp',
-            'host'       => env('SFTP_HOST', ''),
+            'host'       => env('SFTP_HOST2', ''),
             'port'       => env('SFTP_PORT', '22'),
             'username'   => env('SFTP_USERNAME', ''),
             'password'   => env('SFTP_PASSSWORD', ''),
@@ -188,7 +188,7 @@ return [
 
         'setImageSFTP'     => [
             'driver'     => 'sftp',
-            'host'       => env('SFTP_HOST', ''),
+            'host'       => env('SFTP_HOST2', ''),
             'port'       => env('SFTP_PORT', '22'),
             'username'   => env('SFTP_USERNAME', ''),
             'password'   => env('SFTP_PASSSWORD', ''),
@@ -202,7 +202,7 @@ return [
 
         'alaaCdnSFTP'     => [
             'driver'     => 'sftp',
-            'host'       => env('SFTP_HOST', ''),
+            'host'       => env('SFTP_HOST2', ''),
             'port'       => env('SFTP_PORT', '22'),
             'username'   => env('SFTP_USERNAME', ''),
             'password'   => env('SFTP_PASSSWORD', ''),
@@ -234,7 +234,7 @@ return [
 
         'examSftp' => [
             'driver'     => 'sftp',
-            'host'       => env('SFTP_HOST', ''),
+            'host'       => env('SFTP_HOST2', ''),
             'port'       => env('SFTP_PORT', '22'),
             'username'   => env('SFTP_USERNAME', ''),
             'password'   => env('SFTP_PASSSWORD', ''),
@@ -255,7 +255,7 @@ return [
 
         'pamphletSftp' => [
             'driver'     => 'sftp',
-            'host'       => env('SFTP_HOST', ''),
+            'host'       => env('SFTP_HOST2', ''),
             'port'       => env('SFTP_PORT', '22'),
             'username'   => env('SFTP_USERNAME', ''),
             'password'   => env('SFTP_PASSSWORD', ''),
@@ -293,7 +293,7 @@ return [
 
         'bookSftp' => [
             'driver'     => 'sftp',
-            'host'       => env('SFTP_HOST', ''),
+            'host'       => env('SFTP_HOST2', ''),
             'port'       => env('SFTP_PORT', '22'),
             'username'   => env('SFTP_USERNAME', ''),
             'password'   => env('SFTP_PASSSWORD', ''),
