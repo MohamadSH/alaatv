@@ -131,6 +131,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('teleMarketingAdminPanel', 'Web\AdminController@adminTeleMarketing');
     Route::get('walletAdminPanel', [AdminController::class, 'adminGiveWalletCredit'])->name('admin.wallet');
     Route::post('giveWalletCredit', [WalletController::class, 'giveCredit'])->name('admin.wallet.giveCredit');
+    Route::get('registrationListAdminPanel', [AdminController::class, 'adminRegistrationList'])->name('admin.registrationList');
     Route::post('adminSendSMS', [HomeController::class , 'sendSMS']);
     Route::get('asset', 'Web\UserController@userProductFiles')->name('user.asset');
     Route::get('complete-register', 'Web\UserController@completeRegister')->name('completeRegister');
