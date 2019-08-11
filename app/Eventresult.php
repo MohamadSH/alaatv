@@ -2,6 +2,8 @@
 
 namespace App;
 
+use PhpParser\Builder\Class_;
+
 /**
  * App\Eventresult
  *
@@ -62,19 +64,19 @@ class Eventresult extends BaseModel
         'enableReportPublish',
         'comment',
     ];
-    
+
     public function user()
     {
         return $this->belongsTo('\App\User');
     }
-    
+
     public function event()
     {
         return $this->belongsTo('\App\Event');
     }
-    
+
     public function eventresultstatus()
     {
-        return $this->belongsTo("\App\Eventresultstatus");
+        return $this->belongsTo(Eventresultstatus::Class);
     }
 }
