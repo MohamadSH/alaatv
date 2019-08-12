@@ -133,8 +133,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('giveWalletCredit', [WalletController::class, 'giveCredit'])->name('admin.wallet.giveCredit');
     Route::get('registrationListAdminPanel', [AdminController::class, 'adminRegistrationList'])->name('admin.registrationList');
     Route::post('adminSendSMS', [HomeController::class , 'sendSMS']);
-    Route::get('asset', 'Web\UserController@userProductFiles')->name('user.asset');
-    Route::get('complete-register', 'Web\UserController@completeRegister')->name('completeRegister');
+    Route::get('asset', [UserController::class, 'userProductFiles'])->name('user.asset');
+    Route::get('complete-register', [UserController::class, 'completeRegister'])->name('completeRegister');
     Route::get('survey',  [SurveyController::class, 'show']);
     Route::resource('survey', '\\'. SurveyController::class);
     Route::get('96', 'Web\EventresultController@create');
@@ -176,9 +176,9 @@ Route::group(['middleware' => 'auth'], function () {
         Route::post('profile', 'Web\UserController@update')
             ->name('web.authenticatedUser.profile.update');
 
-        Route::get('info', "Web\UserController@informationPublicUrl");
+        Route::get('info', [UserController::class, 'informationPublicUrl']);
         Route::get('{user}/info', 'Web\UserController@information');
-        Route::post('{user}/completeInfo', 'Web\UserController@completeInformation');
+        Route::post('{user}/completeInfo', [UserController::class, 'completeInformation']);
         Route::get('orders', 'Web\UserController@userOrders');
         Route::get('question', 'Web\UserController@uploads');
         Route::get('getVerificationCode', 'Web\UserController@sendVerificationCode');
@@ -194,10 +194,10 @@ Route::group(['middleware' => 'auth'], function () {
     });
     Route::group(['prefix' => 'order'], function () {
         Route::post('detachorderproduct', 'Web\OrderController@detachOrderproduct');
-        Route::post('addOrderproduct/{product}', "Web\OrderController@addOrderproduct");
-        Route::delete('removeOrderproduct/{product}', "Web\OrderController@removeOrderproduct");
-        Route::post('submitCoupon', "Web\OrderController@submitCoupon");
-        Route::get('RemoveCoupon', "Web\OrderController@removeCoupon");
+        Route::post('addOrderproduct/{product}', 'Web\OrderController@addOrderproduct');
+        Route::delete('removeOrderproduct/{product}', 'Web\OrderController@removeOrderproduct');
+        Route::post('submitCoupon', 'Web\OrderController@submitCoupon');
+        Route::get('RemoveCoupon', 'Web\OrderController@removeCoupon');
     });
     Route::group(['prefix' => 'product'], function () {
         Route::get('{product}/createConfiguration', 'Web\ProductController@createConfiguration');
@@ -234,31 +234,31 @@ Route::group(['middleware' => 'auth'], function () {
     Route::resource('websiteSetting', 'Web\WebsiteSettingController');
     Route::resource('productfile', 'Web\ProductfileController');
     Route::resource('major', 'Web\MajorController');
-    Route::resource('usersurveyanwser', "Web\UserSurveyAnswerController");
-    Route::resource('eventresult', "Web\EventresultController");
-    Route::resource('productphoto', "Web\ProductphotoController");
-    Route::resource('mbtianswer', "Web\MbtianswerController");
-    Route::resource('slideshow', "Web\SlideShowController");
+    Route::resource('usersurveyanwser', 'Web\UserSurveyAnswerController');
+    Route::resource('eventresult', 'Web\EventresultController');
+    Route::resource('productphoto', 'Web\ProductphotoController');
+    Route::resource('mbtianswer', 'Web\MbtianswerController');
+    Route::resource('slideshow', 'Web\SlideShowController');
     Route::resource('city', 'Web\CityController');
     Route::resource('file', 'Web\FileController');
     Route::resource('employeetimesheet', 'Web\EmployeetimesheetController');
     Route::resource('lottery', 'Web\LotteryController');
     Route::resource('cat', 'Web\CategoryController');
 
-    Route::get("copylessonfromremote", "Web\RemoteDataCopyController@copyLesson");
-    Route::get("copydepartmentfromremote", "Web\RemoteDataCopyController@copyDepartment");
-    Route::get("copydepartmentlessonfromremote", "Web\RemoteDataCopyController@copyDepartmentlesson");
-    Route::get("copyvideofromremote", "Web\RemoteDataCopyController@copyVideo");
-    Route::get("copypamphletfromremote", "Web\RemoteDataCopyController@copyPamphlet");
-    Route::get("copydepartmentlessontotakhtekhak", "Web\SanatisharifmergeController@copyDepartmentlesson");
-    Route::get("copycontenttotakhtekhak", "Web\SanatisharifmergeController@copyContent");
-    Route::get("tagbot", "Web\BotsController@tagbot");
+    Route::get('copylessonfromremote', 'Web\RemoteDataCopyController@copyLesson');
+    Route::get('copydepartmentfromremote', 'Web\RemoteDataCopyController@copyDepartment');
+    Route::get('copydepartmentlessonfromremote', 'Web\RemoteDataCopyController@copyDepartmentlesson');
+    Route::get('copyvideofromremote', 'Web\RemoteDataCopyController@copyVideo');
+    Route::get('copypamphletfromremote', 'Web\RemoteDataCopyController@copyPamphlet');
+    Route::get('copydepartmentlessontotakhtekhak', 'Web\SanatisharifmergeController@copyDepartmentlesson');
+    Route::get('copycontenttotakhtekhak', 'Web\SanatisharifmergeController@copyContent');
+    Route::get('tagbot', 'Web\BotsController@tagbot');
 
-    Route::get("donate", "Web\DonateController");
-    Route::post("donateOrder", "Web\OrderController@donateOrder");
-    Route::get('adminGenerateRandomCoupon', "Web\AdminController@adminGenerateRandomCoupon");
+    Route::get('donate', 'Web\DonateController');
+    Route::post('donateOrder', 'Web\OrderController@donateOrder');
+    Route::get('adminGenerateRandomCoupon', 'Web\AdminController@adminGenerateRandomCoupon');
 
-    Route::get('listContents/{set}', "Web\SetController@indexContent");
+    Route::get('listContents/{set}', 'Web\SetController@indexContent');
     Route::resource('set', 'Web\SetController');
 
     Route::get('live' , '\\'.LiveController::class)->name('live');
@@ -287,24 +287,24 @@ Route::group(['prefix' => 'product'], function () {
     Route::post('{product}/favored', 'Web\FavorableController@markFavorableFavorite');
 });
 
-Route::get("ctag", "Web\ContentController@retrieveTags");
+Route::get('ctag', 'Web\ContentController@retrieveTags');
 Route::resource('product', 'Web\ProductController');
 
 Route::resource('c', 'Web\ContentController')->names([
     'index' => 'content.index'
 ]);;
-Route::resource("sanatisharifmerge", "Web\SanatisharifmergeController");
+Route::resource('sanatisharifmerge', 'Web\SanatisharifmergeController');
 Route::resource('article', 'Web\ArticleController');
 Route::resource('block', 'Web\BlockController');
 Auth::routes(['verify' => true]);
 
 Route::group(['prefix' => 'mobile'], function () {
-    Route::get("verify", "Web\MobileVerificationController@show")->name('mobile.verification.notice');
-    Route::post("verify", "Web\MobileVerificationController@verify")->name('mobile.verification.verify');
-    Route::get("resend", "Web\MobileVerificationController@resend")->name('mobile.verification.resend');
+    Route::get('verify', 'Web\MobileVerificationController@show')->name('mobile.verification.notice');
+    Route::post('verify', 'Web\MobileVerificationController@verify')->name('mobile.verification.verify');
+    Route::get('resend', 'Web\MobileVerificationController@resend')->name('mobile.verification.resend');
 });
-Route::post("cd3b472d9ba631a73cb7b66ba513df53", "Web\CouponController@generateRandomCoupon");
+Route::post('cd3b472d9ba631a73cb7b66ba513df53', 'Web\CouponController@generateRandomCoupon');
 
-Route::get("tree", "Web\TopicsTreeController@lernitoTree");
-Route::get("tree/getArrayString/{lnid}", "Web\TopicsTreeController@getTreeInPHPArrayString");
+Route::get('tree', 'Web\TopicsTreeController@lernitoTree');
+Route::get('tree/getArrayString/{lnid}', 'Web\TopicsTreeController@getTreeInPHPArrayString');
 Route::any('goToPaymentRoute/{paymentMethod}/{device}/', '\\'.RedirectAPIUserToPaymentRoute::class)->name('redirectToPaymentRoute');

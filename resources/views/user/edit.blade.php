@@ -1,5 +1,3 @@
-@permission((config('constants.SHOW_USER_ACCESS')))
-
 @extends('app' , ['pageName' => 'admin'])
 
 @section('page-css')
@@ -30,7 +28,7 @@
 @endsection
 
 @section('content')
-    
+
     @include('systemMessage.flash')
 
     <div class = "row">
@@ -95,5 +93,3 @@
     <script src="{{ mix('/js/admin-all.js') }}" type="text/javascript"></script>
     <script src="{{ asset('/acm/AlaatvCustomFiles/js/admin/page-user-edit.js') }}" type="text/javascript"></script>
 @endsection
-
-@endpermission
