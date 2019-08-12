@@ -508,7 +508,7 @@
             <div class="col-md-9">
                 <div class="fileinput fileinput-new" data-provides="fileinput">
                     <div class="fileinput-new thumbnail" style="width: 200px; height: 150px;">
-                        <img class="a--fullWidth" src="{{ $user->photo }}" alt="عکس پروفایل"/>
+                        <img class="a--fullWidth" src="{{ $user->getCustomSizePhoto(200,200) }}" alt="عکس پروفایل"/>
                     </div>
                     <style>
                         .fileinput .thumbnail > img {
