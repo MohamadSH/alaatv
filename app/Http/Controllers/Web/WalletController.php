@@ -60,7 +60,6 @@ class WalletController extends Controller
     }
 
     public function giveCredit(GiveWalletCreditRequest $request){
-        dd('yes');
         $credit = $request->get('credit' , 0);
         $user = User::where('mobile' , $request->get('mobile'))->where('nationalCode' , $request->get('nationalCode'))->first();
         if(!isset($user)){
