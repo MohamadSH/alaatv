@@ -947,7 +947,7 @@ class AdminController extends Controller
     }
 
     public function adminRegistrationList(Request $request) {
-        return view('admin.indexRegistration');
+        return view('admin.indexRegistrationList');
     }
 
     public function adminGiveWalletCredit(Request $request){
