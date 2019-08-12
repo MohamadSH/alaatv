@@ -36,7 +36,7 @@ var LazyLoad = function () {
 
         imageDimension = '?w='+w+'&h='+h;
 
-        if ($(element).attr('data-src').length > 0) {
+        if (typeof $(element).attr('data-src') !== 'undefined' && $(element).attr('data-src').length > 0) {
             $(element).attr('src', $(element).attr('data-src').replace(/\?.*/g, '') + imageDimension);
         }
 

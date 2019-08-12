@@ -20,13 +20,18 @@
     window.Laravel = {!! json_encode(['csrfToken' => csrf_token()]) !!};
 </script>
 
+<link rel="preload" href="{{ asset('/acm/webFonts/IRANSans/farsi_numeral/woff2/IRANSansWeb(FaNum)_Light.woff2') }}" as="font" type="font/woff2" crossOrigin="anonymous" >
+<link rel="preload" href="{{ asset('/css/fonts/fontawesome5/fa-solid-900.woff2') }}" as="font" type="font/woff2" crossOrigin="anonymous" >
+<link rel="preload" href="{{ asset('/css/fonts/fontawesome5/fa-brands-400.woff2') }}" as="font" type="font/woff2" crossOrigin="anonymous" >
+
+<link rel="preload" href="{{ mix('/css/all.css') }}" as="style" />
+@yield('page-preload-css')
+
+<link rel="preload" href="{{ mix('/js/all.js') }}" as="script">
+@yield('page-preload-js')
+
 <!--begin::Global Theme Styles -->
-<link href="{{ mix('/css/all.css') }}" rel="stylesheet" type="text/css"/>
-<style>
-    .a--owl-carousel-row .a--owl-carousel-Wraper .a--block-item.a--block-type-set .a--block-imageWrapper .a--block-detailesWrapper {
-        z-index: 9;
-    }
-</style>
+<link href="{{ mix('/css/all.css') }}" rel="stylesheet" />
 <!--end::Global Theme Styles -->
 
 @yield('page-css')

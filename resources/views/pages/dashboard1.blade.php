@@ -1,5 +1,9 @@
 @extends('app' , ['pageName'=>$pageName])
 
+@section('page-preload-css')
+    <link rel="preload" href="{{ mix('/css/page-homePage.css') }}" as="style" />
+@endsection
+
 @section('page-css')
     <link href="{{ mix('/css/page-homePage.css') }}" rel="stylesheet" type="text/css"/>
 @endsection
@@ -244,5 +248,9 @@
             @endforeach
         ];
     </script>
-    <script src="{{ mix('/js/page-homePage.js') }}" ></script>
+    <script src="{{ mix('/js/page-homePage.js') }}" async ></script>
+@endsection
+
+@section('page-preload-js')
+    <link rel="preload" href="{{ mix('/js/page-homePage.js') }}" as="script">
 @endsection
