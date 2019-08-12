@@ -238,7 +238,7 @@
     
                                                         <div class="a--imageWithCaption">
                                                             @if(isset($product['product']->image[0]))
-                                                                <img src="{{$product['product']->photo}}?w=300&h=300" alt="عکس محصول@if(isset($product['product']->name[0])) {{$product['product']->name}} @endif" class="img-thumbnail lazy-image">
+                                                                <img src="https://cdn.alaatv.com/loder.jpg?w=1&h=1" data-src="{{$product['product']->photo}}?w=300&h=300" alt="عکس محصول@if(isset($product['product']->name[0])) {{$product['product']->name}} @endif" class="img-thumbnail lazy-image" width="400" height="400">
                                                             @endif
         
         

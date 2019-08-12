@@ -280,6 +280,11 @@
     content: "\f104" !important;
 }
 
+.m-switch.m-switch--icon input:empty ~ span::after {
+    font-family: "Font Awesome 5 Free";
+    content: "\f00c";
+    font-weight: 900;
+}
 .modal .modal-content .modal-header .close::before {
     font-family: "Font Awesome 5 Free";
     content: "\f00d";
@@ -338,6 +343,49 @@
 @media only screen and (max-width: 1024px) {
     .m-header-menu .m-menu__nav > .m-menu__item .m-menu__submenu > .m-menu__subnav > .m-menu__item {
         background: transparent;
+    }
+}
+
+
+
+@media only screen and (max-width: 1800px) {
+    #carouselMainSlideShow .carousel-inner {
+        min-height: 719.922px;
+    }
+}
+@media only screen and (max-width: 1500px) {
+    #carouselMainSlideShow .carousel-inner {
+        min-height: 561.719px;
+    }
+}
+@media only screen and (max-width: 1140px) {
+    #carouselMainSlideShow .carousel-inner {
+        min-height: 421.875px;
+    }
+}
+@media only screen and (max-width: 960px) {
+    #carouselMainSlideShow .carousel-inner {
+        min-height: 351.563px;
+    }
+}
+@media only screen and (max-width: 720px) {
+    #carouselMainSlideShow .carousel-inner {
+        min-height: 277.344px;
+    }
+}
+@media only screen and (max-width: 540px) {
+    #carouselMainSlideShow .carousel-inner {
+        min-height: 207.031px;
+    }
+}
+@media only screen and (max-width: 414px) {
+    #carouselMainSlideShow .carousel-inner {
+        min-height: 157.813px;
+    }
+}
+@media only screen and (max-width: 375px) {
+    #carouselMainSlideShow .carousel-inner {
+        min-height: 142.578px;
     }
 }
 
