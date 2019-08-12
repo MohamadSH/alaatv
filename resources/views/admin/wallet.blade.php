@@ -25,36 +25,30 @@
         <div class = "col-md-12">
             <!-- BEGIN Portlet PORTLET-->
             <div class = "m-portlet m-portlet--mobile m-portlet--body-progress-">
-                {!! Form::open(['method' => 'POST', 'url' => route('admin.wallet.giveCredit')  ]) !!}
+                {!! Form::open(['method' => 'POST', 'url' => route('admin.wallet.giveCredit') , 'id'=>'findUserForm'  ]) !!}
                     <div class = "m-portlet__body">
                         <div class = "row">
-                            <div class = "col-md-6 form-group {{($errors->has('nationalCode')?'has-danger':'')}}">
+                            <div class = "col-md-6 form-group" id="nationalCodeFormGroup" >
                                 <p>{!! Form::text('nationalCode', old('nationalCode'), ['class' => 'form-control', 'id' => 'nationalCode'  , 'maxlength'=>'10' , 'placeholder'=>'کد ملی']) !!}
-                                    @if ($errors->has('nationalCode'))
                                         <span class="form-control-feedback ">
-                                              <strong>{{ $errors->first('nationalCode') }}</strong>
+                                              <strong id="nationalCodeValidation">{{ $errors->first('nationalCode') }}</strong>
                                         </span>
-                                    @endif
                                 </p>
                             </div>
-                            <div class = "col-md-6 form-group {{($errors->has('mobile')?'has-danger':'')}}">
+                            <div class = "col-md-6 form-group" id="mobileFormGroup" >
                                 <p>{!! Form::text('mobile', old('nationalCode'), ['class' => 'form-control', 'id' => 'mobile' , 'maxlength'=>'11' , 'placeholder'=>'موبایل']) !!}
-                                    @if ($errors->has('mobile'))
                                         <span class="form-control-feedback">
-                                              <strong>{{ $errors->first('mobile') }}</strong>
+                                              <strong id="mobileValidation">{{ $errors->first('mobile') }}</strong>
                                         </span>
-                                    @endif
                                 </p>
                             </div>
                         </div>
                         <div class = "row">
-                            <div class = "col-md-6 form-group {{($errors->has('credit')?'has-danger':'')}}">
+                            <div class = "col-md-6 form-group" id="creditCodeFormGroup" >
                                 <p>{!! Form::text('credit', old('credit'), ['class' => 'form-control', 'id' => 'credit'  , 'maxlength'=>'10' , 'placeholder'=>'مبلغ اعتبار (تومان)']) !!}
-                                    @if ($errors->has('credit'))
                                         <span class="form-control-feedback">
-                                              <strong>{{ $errors->first('credit') }}</strong>
+                                              <strong id="creditValidation" >{{ $errors->first('credit') }}</strong>
                                         </span>
-                                    @endif
                                 </p>
                             </div>
                         </div>
@@ -70,4 +64,54 @@
         </div>
     </div>
     @endpermission
+@endsection
+@section('page-js')
+    <script type="application/javascript">
+        $(document).on('submit', '#findUserForm', function (e) {
+            e.preventDefault();
+            $('#mobileValidation').html('');
+            $('#nationalCodeValidation').html('');
+            $('#creditValidation').html('');
+            $('#mobileFormGroup').removeClass('has-danger');
+            $('#nationalCodeFormGroup').removeClass('has-danger');
+            $('#creditFormGroup').removeClass('has-danger');
+            formData = $('#findUserForm').serialize();
+            $.ajax({
+                type: $('#findUserForm').attr('method'),
+                url: $('#findUserForm').attr('action'),
+                data: formData,
+                statusCode: {
+                    //The status for when action was successful
+                    200: function (response) {
+                    },
+                    //The status for when the user is not authorized for making the request
+                    403: function (response) {
+                        window.location.replace("/403");
+                    },
+                    404: function (response) {
+                        window.location.replace("/404");
+                    },
+                    //The status for when form data is not valid
+                    422: function (response) {
+                        console.log($.parseJSON(response.responseText).errors);
+                        $.each($.parseJSON(response.responseText).errors, function (index, value) {
+                            console.log(index);
+                            console.log(value);
+                            console.log('#'+index+'Validation');
+                            $('#'+index+'Validation').html(value);
+                            $('#'+index+'FormGroup').addClass('has-danger');
+                        });
+                    },
+                    //The status for when there is error php code
+                    500: function (response) {
+                    },
+                    //The status for when there is error php code
+                    503: function (response) {
+                    }
+                },
+                contentType: false,
+                processData: false
+            });
+        });
+    </script>
 @endsection
