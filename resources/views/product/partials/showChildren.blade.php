@@ -1,6 +1,6 @@
 @if(count($product->children)>0)
     <li class="m-nav__item  m-nav__item--active position-relative">
-        
+
         {{--@if(isset($product->pivot->control_id) && ( $product->pivot->control_id ==  config("constants.CONTROL_SWITCH") || $product->pivot->control_id == Config::get("constants.CONTROL_GROUPED_CHECKBOX") ))--}}
         @if(
             (array_search($product->id, $purchasedProductIdArray) === false) &&
@@ -43,7 +43,7 @@
         <a class="m-nav__link a--radius-2 m--padding-left-65" role="tab" id="m_nav_link_{{ $product->id }}" data-toggle="collapse" href="#m_nav_sub_{{ $product->id }}" aria-expanded=" false">
 @else
     <li class="m-nav__item selectableProduct-child-lastNode">
-    
+
         <a class="m-nav__link ">
             @endif
             <span class="m-nav__link-title a--full-width">
@@ -72,7 +72,7 @@
                                                @if((array_search($product->id, $purchasedProductIdArray) !== false) || $childIsPurchased)
                                                disabled="disabled"
                                                @endif
-                                               
+
                                                data-gtm-eec-product-id="{{ $product->id }}"
                                                data-gtm-eec-product-name="{{ $product->name }}"
                                                data-gtm-eec-product-price="{{ number_format($product->price['final'], 2, '.', '') }}"
@@ -91,10 +91,10 @@
                             <span class="childProductName-{{ $product->id }}">
                                 {{$product->name}}
                             </span>
-                            
+
                             {{--@if((int)$product->cost > 0)--}}
                             <span class="m-nav__link-badge float-right">
-                                
+
                                 @if(!$product->children->count()>0 && (array_search($product->id, $purchasedProductIdArray) !== false) || $childIsPurchased)
                                     <span class="m-badge m-badge--info m-badge--wide m-badge--rounded">
                                         خریده اید
@@ -107,7 +107,7 @@
                                         <span class="m-badge m-badge--danger m-badge--wide m-badge--rounded a--productPrice">
                                         <span class="m-badge m-badge--warning a--productRealPrice">{{ number_format($product->price['base']) }}</span>
                                         {{ number_format($product->price['final']) }} تومان
-                                        <span class="m-badge m-badge--info a--productDiscount">{{ (1-($product->price['final']/$product->price['base']))*100 }}%</span>
+                                        <span class="m-badge m-badge--info a--productDiscount">{{ (int)((1-($product->price['final']/$product->price['base']))*100) }}%</span>
                                     </span>
                                     @else
                                         <span class="m-widget6__text m--align-right m--font-boldest m--font-primary">
@@ -115,7 +115,7 @@
                                     </span>
                                     @endIf
                                 @endif
-                                
+
                             </span>
                             {{--@endif--}}
                         </div>
