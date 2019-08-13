@@ -227,15 +227,17 @@
           display: flex;
           align-items: center;
 
-          a {
-            top: 0;
-            min-height: 0;
-            position: relative;
-          }
+          -webkit-line-clamp: 2;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          display: -webkit-box;
+          -webkit-box-orient: vertical;
+
         }
         .a--block-detailesWrapper {
           text-align: center;
           color: #fff;
+          height: 35px;
         }
       }
     }

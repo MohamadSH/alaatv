@@ -138,7 +138,7 @@ var UserAssets = function () {
             let url = downloadLink.url;
             downloadBtns +=
                 '<a href="'+url+'" target="_blank" class="m-btn btn btn-success">\n' +
-                '    <i class="la la-download"></i>\n' +title+
+                '    <i class="fa fa-cloud-download-alt"></i>\n' +title+
                 '</a>\n';
         }
 
@@ -159,7 +159,7 @@ var UserAssets = function () {
             '    <span class="m-widget6__text">\n' +
             '        <div class="m-btn-group m-btn-group--pill btn-group" role="group" aria-label="First group">\n' +
             '            <a href="'+viewLink+'" target="_blank" class="m-btn btn btn-info">\n' +
-            '                <i class="la la-eye"></i>\n' +
+            '                <i class="fa fa-edit"></i>\n' +
             '            </a>\n' +
                             downloadBtns+
             '        </div>\n' +
@@ -178,7 +178,7 @@ var UserAssets = function () {
             let url = downloadLink.url;
             downloadBtns +=
                 '<a href="'+url+'" target="_blank" class="m-btn btn btn-success">\n' +
-                '    <i class="la la-download"></i>\n' +title+
+                '    <i class="fa fa-cloud-download-alt"></i>\n' +title+
                 '</a>\n';
         }
         if (thumbnail === null) {
@@ -197,7 +197,7 @@ var UserAssets = function () {
             '    <span class="m-widget6__text">\n' +
             '        <div class="m-btn-group m-btn-group--pill btn-group" role="group" aria-label="First group">\n' +
             '            <a href="'+viewLink+'" target="_blank" class="m-btn btn btn-info">\n' +
-            '                <i class="la la-eye"></i>\n' +
+            '                <i class="fa fa-eye"></i>\n' +
             '            </a>\n' +
                          downloadBtns+
             '        </div>\n' +

@@ -11,10 +11,8 @@ background-gradient
 
     <div class="a--block-infoWrapper">
         <div class="a--block-titleWrapper">
-            <span class="m-link a--owl-carousel-type-2-item-subtitle">
-                <span class="m-badge m-badge--danger m-badge--dot"></span>
-                {{ $product->name }}
-            </span>
+            <span class="m-badge m-badge--danger m-badge--dot"></span>
+            {{ $product->name }}
         </div>
         @if($product->sets->count()!==0)
         <div class="a--block-detailesWrapper">
@@ -26,7 +24,7 @@ background-gradient
                     <button type="button" class="btn btn-warning btnViewPamphlet"
                             data-content-type="pamphlet"
                             data-content-url="{{ $product->sets->first()->contentUrl.'&orderBy=order' }}">
-                        <i class="flaticon-edit-1"></i>
+                        <i class="fa fa-edit"></i>
                         جزوات
                     </button>
                     @endif
@@ -41,7 +39,7 @@ background-gradient
                 </div>
             @else
                 <a class="btn btn-metal m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill a--owl-carousel-show-detailes m--margin-bottom-5">
-                    <i class="flaticon-more-v6"></i>
+                    <i class="fa fa-ellipsis-h"></i>
                 </a>
             @endif
 

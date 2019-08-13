@@ -582,7 +582,7 @@
                                                    href="{{action("Web\ContentController@show" , $item["content"])}}">
                                                     <img class="m-widget7__img a--full-width lazy-image"
                                                          width="170" height="96"
-                                                         src="https://cdn.alaatv.com/loder.jpg?w=16&h=9"
+                                                         src="https://cdn.alaatv.com/loder.jpg?w=1&h=1"
                                                          data-src="{{ isset($item["thumbnail"]) ? $item["thumbnail"]."?w=210&h=118":'' }}"
                                                          alt="{{ $item["content"]->name }}">
                                                 </a>
