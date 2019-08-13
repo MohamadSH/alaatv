@@ -138,12 +138,11 @@ class ContentController extends Controller
 
     public function create2(Request $request)
     {
-//        $contenttypes = Contenttype::getRootContentType()
-//            ->pluck('displayName', 'id');
         $contenttypes = [ 8 => 'فیلم' , 1 =>    'جزوه'];
 
         $setId = $request->get('set');
         $set = Contentset::find($setId);
+        $lastContent=null;
         if(isset($set))
         {
             $lastContent = $set->getLastContent();
