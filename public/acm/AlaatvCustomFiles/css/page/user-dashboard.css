@@ -37,6 +37,11 @@
     transition: all 0.5s;
 }
 
+.m-btn--icon.m-btn--custom.m-btn--icon-only {
+    width: 30px;
+    height: 30px;
+}
+
 /*media query*/
 @media (max-width: 767.98px) {
     #pamphletModal .m-widget6 .m-widget6__head,

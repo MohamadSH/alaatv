@@ -1231,13 +1231,13 @@ jQuery(document).ready(function () {
                 items:2,
             },
             600:{
-                items:4,
+                items:3,
             },
             800:{
-                items:5,
+                items:4,
             },
             1190:{
-                items:4
+                items:5
             },
             1400:{
                 items:5
@@ -1251,10 +1251,10 @@ jQuery(document).ready(function () {
                 items:2,
             },
             600:{
-                items:6,
+                items:3,
             },
             800:{
-                items:8,
+                items:5,
             },
             1190:{
                 items:6
