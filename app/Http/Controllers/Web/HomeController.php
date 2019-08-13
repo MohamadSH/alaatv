@@ -64,7 +64,7 @@ class HomeController extends Controller
             'home',
         ];
         $this->middleware('auth', ['except' => $authException]);
-        $this->middleware('role:admin', ['only' => 'debug']);
+        $this->middleware('role:admin', ['only' => [ 'debug' , 'adTest' ] ]);
     }
 
     public function debug(Request $request, BlockCollectionFormatter $formatter)
@@ -701,6 +701,10 @@ class HomeController extends Controller
                 'file'    => $e->getFile(),
             ] , Response::HTTP_SERVICE_UNAVAILABLE);
         }
+    }
+
+    public function adTest(Request $request){
+        return view('pages.adtest');
     }
 
     /**

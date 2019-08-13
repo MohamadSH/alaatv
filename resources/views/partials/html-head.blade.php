@@ -20,9 +20,9 @@
     window.Laravel = {!! json_encode(['csrfToken' => csrf_token()]) !!};
 </script>
 
-<link rel="preload" href="{{ asset('/acm/webFonts/IRANSans/farsi_numeral/woff2/IRANSansWeb(FaNum)_Light.woff2') }}" as="font" type="font/woff2" crossOrigin="anonymous" >
-<link rel="preload" href="{{ asset('/css/fonts/fontawesome5/fa-solid-900.woff2') }}" as="font" type="font/woff2" crossOrigin="anonymous" >
-<link rel="preload" href="{{ asset('/css/fonts/fontawesome5/fa-brands-400.woff2') }}" as="font" type="font/woff2" crossOrigin="anonymous" >
+<link rel="preload" href="/acm/webFonts/IRANSans/farsi_numeral/woff2/IRANSansWeb(FaNum)_Light.woff2" as="font" type="font/woff2" crossOrigin="anonymous" >
+<link rel="preload" href="/css/fonts/fontawesome5/fa-solid-900.woff2" as="font" type="font/woff2" crossOrigin="anonymous" >
+<link rel="preload" href="/css/fonts/fontawesome5/fa-brands-400.woff2" as="font" type="font/woff2" crossOrigin="anonymous" >
 
 <link rel="preload" href="{{ mix('/css/all.css') }}" as="style" />
 @yield('page-preload-css')

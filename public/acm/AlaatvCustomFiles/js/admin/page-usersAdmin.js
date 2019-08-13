@@ -67,12 +67,12 @@ function makeDataTable_loadWithAjax_users() {
                     '                <ul class="dropdown-menu" role="menu" id="' + row.id + '">\n' +
                     '                    <li>\n' +
                     '                        <a target="_blank" href="'+row.editLink+'">\n' +
-                    '                            <i class="flaticon-edit" aria-hidden="true"></i> ویرایش\n' +
+                    '                            <i class="fa fa-edit" aria-hidden="true"></i> ویرایش\n' +
                     '                        </a>\n' +
                     '                    </li>\n' +
                     '                    <li>\n' +
                     '                        <a class="deleteUser" data-target="#deleteUserConfirmationModal" data-toggle="modal" data-link="'+row.removeLink+'" data-fullname="'+row.firstName+' '+row.lastName+'">\n' +
-                    '                            <i class="flaticon-delete" aria-hidden="true"></i> حذف\n' +
+                    '                            <i class="fa fa-trash-alt" aria-hidden="true"></i> حذف\n' +
                     '                        </a>\n' +
                     '                    </li>\n' +
                     '                    <li>\n' +
@@ -87,7 +87,7 @@ function makeDataTable_loadWithAjax_users() {
                     '                    </li>\n' +
                     '                    <li>\n' +
                     '                        <a href="'+$('#contactUrl').val()+row.id+'" target="_blank">\n' +
-                    '                            <i class="flaticon-book" aria-hidden="true"></i> دفترچه تلفن\n' +
+                    '                            <i class="m-demo-icon" aria-hidden="true"></i> دفترچه تلفن\n' +
                     '                        </a>\n' +
                     '                    </li>\n' +
                     '                </ul>\n' +

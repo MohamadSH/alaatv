@@ -346,7 +346,7 @@ var CheckoutPaymentUi = function () {
             html += '' +
                 '<div class="m-alert m-alert--icon m-alert--icon-solid m-alert--outline alert alert-warning alert-dismissible fade show" role="alert">\n' +
                 '  <div class="m-alert__icon">\n' +
-                '    <i class="flaticon-exclamation"></i>\n' +
+                '    <i class="fa fa-exclamation-triangle"></i>\n' +
                 '    <span></span>\n' +
                 '  </div>\n' +
                 '  <div class="m-alert__text">\n' +

@@ -8,7 +8,7 @@ var Alaasearch = function () {
 
     function getProductCarouselItem(data, itemKey) {
         var widgetActionLink = data.url;
-        var widgetActionName = '<i class="flaticon-bag"></i>' + ' / ' + '<i class="fa fa-eye"></i>';
+        var widgetActionName = '<i class="fa fa-cart-arrow-down"></i>' + ' / ' + '<i class="fa fa-eye"></i>';
         var widgetPic = data.photo;
         var widgetTitle = data.name;
         var price = data.price;
@@ -180,14 +180,14 @@ var Alaasearch = function () {
             '            </div>\n' +
             '            \n' +
             '            <div class="a--block-set-author-pic d-none">\n' +
-            '                <img src="https://cdn.alaatv.com/loder.jpg?w=1&h=1" class="m-widget19__img lazy-image" data-src="'+widgetAuthor.photo+'" alt="'+widgetAuthor.full_name+'" width="40" height="40">\n' +
+            '                <img src="https://cdn.alaatv.com/loder.jpg?w=16&h=9" class="m-widget19__img lazy-image" data-src="'+widgetAuthor.photo+'" alt="'+widgetAuthor.full_name+'" width="40" height="40">\n' +
             '            </div>\n' +
             '            \n' +
             '    \n' +
             '        </div>\n' +
             '        \n' +
             '        <a href="'+widgetLink+'" class="a--block-imageWrapper-image">\n' +
-            '            <img src="https://cdn.alaatv.com/loder.jpg?w=16&h=9" data-src="'+widgetPic+'" alt="'+widgetTitle+'" class="a--block-image lazy-image" width="453" height="254" />\n' +
+            '            <img src="https://cdn.alaatv.com/loder.jpg?w=1&h=1" data-src="'+widgetPic+'" alt="'+widgetTitle+'" class="a--block-image lazy-image" width="453" height="254" />\n' +
             '        </a>\n' +
             '    </div>\n' +
             '    \n' +
@@ -1231,13 +1231,13 @@ jQuery(document).ready(function () {
                 items:2,
             },
             600:{
-                items:4,
+                items:3,
             },
             800:{
-                items:5,
+                items:4,
             },
             1190:{
-                items:4
+                items:5
             },
             1400:{
                 items:5
@@ -1251,10 +1251,10 @@ jQuery(document).ready(function () {
                 items:2,
             },
             600:{
-                items:6,
+                items:3,
             },
             800:{
-                items:8,
+                items:5,
             },
             1190:{
                 items:6
