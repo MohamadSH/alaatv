@@ -601,7 +601,7 @@ class ContentController extends Controller
      */
     private function makePamphletFilesForFreeContent(string $fileName): array
     {
-        return $this->makeFreePamphletFileArray($fileName, config('constants.DISK19_CLOUD'));
+        return $this->makeFreePamphletFileArray($fileName, config('constants.DISK19_CLOUD2'));
     }
 
     private function makeJsonForAndroidApp($items): array
@@ -696,7 +696,7 @@ class ContentController extends Controller
     {
         $extension = $pamphletFile->getClientOriginalExtension();
         $filename  = basename($pamphletFile->getClientOriginalName(), ".".$extension)."_".date("YmdHis").'.'.$extension;
-        $disk = Storage::disk(config('constants.DISK19_CLOUD'));
+        $disk = Storage::disk(config('constants.DISK19_CLOUD2'));
         if ($disk->put($filename, File::get($pamphletFile))) {
             return $this->makePamphletFilesForFreeContent($filename);
         }
