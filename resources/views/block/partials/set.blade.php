@@ -21,7 +21,7 @@
         </div>
         
         <a href="{{ $set->url }}" class="a--block-imageWrapper-image">
-            <img src="https://cdn.alaatv.com/loder.jpg?w=16&h=9" data-src="{{ $set->photo }}" alt="{{ $set->small_name }}" class="a--block-image lazy-image" width="453" height="254" />
+            <img src="https://cdn.alaatv.com/loder.jpg?w=1&h=1" data-src="{{ $set->photo }}" alt="{{ $set->small_name }}" class="a--block-image lazy-image" width="453" height="254" />
         </a>
     </div>
     

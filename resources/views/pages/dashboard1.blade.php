@@ -31,7 +31,7 @@
                                         </button>
                                         <br>
                                         <span class="m--font-light">
-                                    <img data-src="https://cdn.alaatv.com/upload/alaa-logo-small.png" width="25" height="33" class="lazy-image" alt="آلاء">
+                                    <img src="https://cdn.alaatv.com/loder.jpg?w=1&h=1" data-src="https://cdn.alaatv.com/upload/alaa-logo-small.png" width="25" height="33" class="lazy-image" alt="آلاء">
 				                </span>
                                         <div class="m--space-10"></div>
                                     </div>
@@ -51,7 +51,7 @@
                                         </button>
                                         <br>
                                         <span class="m--font-light">
-                                    <img data-src="https://cdn.alaatv.com/upload/alaa-logo-small.png" width="25" height="33" class="lazy-image" alt="آلاء">
+                                    <img src="https://cdn.alaatv.com/loder.jpg?w=1&h=1" data-src="https://cdn.alaatv.com/upload/alaa-logo-small.png" width="25" height="33" class="lazy-image" alt="آلاء">
 				                </span>
                                         <div class="m--space-10"></div>
                                     </div>
@@ -71,7 +71,7 @@
                                         </button>
                                         <br>
                                         <span class="m--font-light">
-                                    <img data-src="https://cdn.alaatv.com/upload/alaa-logo-small.png" width="25" height="33" class="lazy-image" alt="آلاء">
+                                    <img src="https://cdn.alaatv.com/loder.jpg?w=1&h=1" data-src="https://cdn.alaatv.com/upload/alaa-logo-small.png" width="25" height="33" class="lazy-image" alt="آلاء">
 				                </span>
                                         <div class="m--space-10"></div>
                                     </div>
@@ -91,7 +91,7 @@
                                         </button>
                                         <br>
                                         <span class="m--font-light">
-                                    <img data-src="https://cdn.alaatv.com/upload/alaa-logo-small.png" width="25" height="33" class="lazy-image" alt="آلاء">
+                                    <img src="https://cdn.alaatv.com/loder.jpg?w=1&h=1" data-src="https://cdn.alaatv.com/upload/alaa-logo-small.png" width="25" height="33" class="lazy-image" alt="آلاء">
 				                </span>
                                         <div class="m--space-10"></div>
                                     </div>
