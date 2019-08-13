@@ -69,17 +69,20 @@
                         <i class = "fa fa-download"></i>
                     </a> @else
                     <span class = "m-badge m-badge--wide label-sm m-badge--warning"> درج نشده </span> @endif </td>
-            <td>@if(isset($eventresult->rank)) {{$eventresult->rank}} @else
+            <td>@if(isset($eventresult->rank)) <span style="font-weight:bold ; color:{{($eventresult->rank<=1000)?'#18e018':'red'}}"> {{$eventresult->rank}} </span> @else
                     <span class = "m-badge m-badge--wide label-sm m-badge--danger">درج نشده </span> @endif
             </td>
-            <td style = "width: 20%">
+            <td>@if(isset($eventresult->enableReportPublish)) <span style="font-weight:bold ; color:{{($eventresult->enableReportPublish)?'#18e018':'red'}}">{{($eventresult->enableReportPublish)?'بله':'خیر'}}</span> @else
+                    <span class = "m-badge m-badge--wide label-sm m-badge--danger">درج نشده </span> @endif
+            </td>
+            <td>
                 {!! Form::model($eventresult, ['method' => 'PUT', 'action' => ['Web\EventresultController@update', $eventresult] , 'id' => 'eventResultForm_'.$eventresult->id]) !!}
                 <div class = "input-group">
                     <div class = "input-icon">
                         {!! Form::select('eventresultstatus_id', $eventResultStatuses, null, ['class' => 'form-control']) !!}
                     </div>
                     <span class = "input-group-btn">
-                        <button type = "submit" class = "btn grey-mint eventResultUpdate" data-role = "{{$eventresult->id}}">تأیید</button>
+                        <button type = "submit" class = "btn m-btn--pill m-btn--air m-btn m-btn--gradient-from-primary m-btn--gradient-to-info eventResultUpdate" data-role = "{{$eventresult->id}}">تغییر</button>
                     </span>
                 </div>
                 {!! Form::close() !!}

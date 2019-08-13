@@ -29,17 +29,6 @@
                 <span class="m-badge m-badge--wide label-sm m-badge--danger"> درج نشده </span>  @endif
         </td>
         @endpermission
-        @permission((config('constants.SHOW_TRANSACTION_TOTAL_FILTERED_COST_ACCESS')))
-        <td>
-            @if(isset($transactionOrderproductCost[$transaction->id]))
-                <span dir="ltr">{{number_format( $transactionOrderproductCost[$transaction->id]["cost"]  )}}</span>@else
-                <span class="m-badge m-badge--wide label-sm m-badge--warning"> نامشخص </span>  @endif
-        </td>
-        <td>
-            @if(isset($transactionOrderproductCost[$transaction->id])){{number_format($transactionOrderproductCost[$transaction->id]["extraCost"])}} @else
-                <span class="m-badge m-badge--wide label-sm m-badge--warning"> نامشخص </span>  @endif
-        </td>
-        @endpermission
         <td>
             @if(isset($transaction->transactionID)) {{$transaction->transactionID}}
             @elseif(isset($transaction->traceNumber)) {{$transaction->traceNumber}}

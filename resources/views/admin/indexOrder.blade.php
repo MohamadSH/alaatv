@@ -27,7 +27,7 @@
             border: none;
             padding-top: 0;
         }
-        
+
     </style>
 @endsection
 
@@ -56,7 +56,7 @@
             {{--@role(('admin'))<p>ادمین محترم‌، لیست بنهای تخصیص داده شده به کاربران به این صفحه اضافه شده است! همچنین افزودن بنهای محصول بعد از تایید سفارش نیز در اصلاح سفارشهای تایید نشده اضافه شده است.</p>@endrole--}}
             {{--<strong class="m--font-danger">ادمین محترم سیستم فیلتر جدول سفارش ها ارتقاء یافته است. اگر این بار اول است که از تاریخ ۷ اسفند به بعد از این پنل استفاده می کنید ، لطفا کش بروزر خود را خالی نمایید . با تشکر</strong>--}}
             {{--</div>--}}
-    
+
             {{--delete order modal--}}
             @permission((config('constants.REMOVE_ORDER_ACCESS')))
             <!--begin::Modal-->
@@ -84,7 +84,7 @@
             </div>
             <!--end::Modal-->
             @endpermission
-            
+
             @permission((config('constants.LIST_ORDER_ACCESS')))
             <div class="m-portlet m-portlet--head-solid-bg m-portlet--accent m-portlet--collapsed m-portlet--head-sm" m-portlet="true" id="order-portlet">
                 <div class="m-portlet__head">
@@ -280,7 +280,7 @@
                             </div>
                         </div>
                     </div>
-                    
+
                     <table class="table table-striped table-bordered table-hover dt-responsive" width="100%" id="order_table">
 
                         {{--sms panel modal--}}
@@ -527,7 +527,7 @@
                         </div>
                     </div>
                     <!--end::Modal-->
-                    
+
                     <table class="table table-striped table-bordered table-hover dt-responsive" width="100%"
                            id="transaction_table">
                         <thead>
@@ -539,10 +539,6 @@
                             @permission((config('constants.SHOW_TRANSACTION_TOTAL_COST_ACCESS')))
                             <th class="all"> مبلغ سفارش</th>
                             <th class="all"> مبلغ تراکنش</th>
-                            @endpermission
-                            @permission((config('constants.SHOW_TRANSACTION_TOTAL_FILTERED_COST_ACCESS')))
-                            <th class="all"> مبلغ فیلتر شده</th>
-                            <th class="all"> مبلغ آیتم افزوده</th>
                             @endpermission
                             <th class="all"> کد تراکنش</th>
                             <th class="all">درگاه پرداخت</th>
@@ -556,7 +552,7 @@
                         </tr>
                         </thead>
                         <tbody>
-                        Loading by ajax
+                        {{--Loading by ajax--}}
                         </tbody>
                     </table>
                 </div>
@@ -651,7 +647,7 @@
                     </div>
                     delete conformation
                     @permission((config('constants.REMOVE_USER_BON_ACCESS')))
-    
+
                     <!--begin::Modal-->
                     <div class="modal fade" id="deleteUserBonConfirmationModal" tabindex="-1" role="dialog" aria-labelledby="completeTransactionInfoLabel" aria-hidden="true">
                         <div class="modal-dialog modal-lg" role="document">
@@ -676,7 +672,7 @@
                         </div>
                     </div>
                     <!--end::Modal-->
-                    
+
                     @endpermission
                     <table class="table table-striped table-bordered table-hover dt-responsive" width="100%"
                            id="userBon_table">
@@ -692,7 +688,7 @@
                         </tr>
                         </thead>
                         <tbody>
-                        Loading by ajax
+                        {{--Loading by ajax--}}
                         </tbody>
                     </table>
                 </div>
@@ -704,12 +700,12 @@
 @endsection
 
 @section('page-js')
-    
+
     <script src="{{ mix('/js/admin-all.js') }}" type="text/javascript"></script>
     <script type="text/javascript">
         @permission((config('constants.LIST_ORDER_ACCESS')));
         function makeDataTable_loadWithAjax_orders(dontLoadAjax) {
-            
+
             $('#order_table > tbody').html("");
             let defaultContent = "<span class=\"m-badge m-badge--wide label-sm m-badge--danger\"> درج نشده </span>";
             let columns = [
@@ -883,9 +879,9 @@
                             if (typeof successfulTransaction.grandParent !== 'undefined') {
                                 successfulTransactions += '<a target="_blank" href="#" class="btn btn-sm m-btn--pill m-btn--air btn-info m--margin-left-10">رفتن به تراکنش والد</a>';
                             }
-                            
+
                             successfulTransactions += '<br>';
-                            
+
                             successfulTransactions += ',تاریخ پرداخت:';
                             if (typeof successfulTransaction.jalaliCompletedAt !== 'undefined' && successfulTransaction.jalaliCompletedAt !== null) {
                                 successfulTransactions += successfulTransaction.jalaliCompletedAt;
@@ -919,7 +915,7 @@
                             }
                             pendingTransactions += '<div class="transactionItem pendingTransactionItem">';
                             let pendingTransaction = row.pendingTransactions[index];
-                            
+
                             if (typeof pendingTransaction.paymentmethod !== 'undefined') {
                                 pendingTransactions += pendingTransaction.paymentmethod.displayName;
                             }
@@ -937,7 +933,7 @@
                             }
                             pendingTransactions += '<br>';
                             pendingTransactions += '<a target="_blank" href="#" class="btn-sm btn m-btn--pill m-btn--air btn-primary sbold m--margin-left-10">اصلاح</a>';
-                            
+
                             if (typeof pendingTransaction.transactionID !== 'undefined') {
                                 pendingTransactions += '  ,شماره تراکنش: ' + pendingTransaction.transactionID;
                             }
@@ -983,7 +979,7 @@
                             }
                             unpaidTransactions += '<div class="transactionItem unpaidTransactionItem">';
                             let unpaidTransaction = row.unpaidTransactions[index];
-                            
+
                             if (typeof unpaidTransaction.cost !== 'undefined') {
                                 unpaidTransactions += ' ,مبلغ:  ' + unpaidTransaction.cost.toLocaleString('fa');
                             } else {
@@ -992,7 +988,7 @@
                             unpaidTransactions += '<a target="_blank" href="#" class="btn btn-sm m-btn--pill m-btn--air btn-info m--margin-left-10">اصلاح</a>';
 
                             unpaidTransactions += '<br>';
-                            
+
                             unpaidTransactions += ' ,مهلت پرداخت: ';
                             if (typeof unpaidTransaction.jalaliDeadlineAt !== 'undefined') {
                                 unpaidTransactions += unpaidTransaction.jalaliDeadlineAt;
