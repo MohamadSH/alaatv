@@ -138,12 +138,11 @@ class ContentController extends Controller
 
     public function create2(Request $request)
     {
-//        $contenttypes = Contenttype::getRootContentType()
-//            ->pluck('displayName', 'id');
         $contenttypes = [ 8 => 'فیلم' , 1 =>    'جزوه'];
 
         $setId = $request->get('set');
         $set = Contentset::find($setId);
+        $lastContent=null;
         if(isset($set))
         {
             $lastContent = $set->getLastContent();
@@ -602,7 +601,7 @@ class ContentController extends Controller
      */
     private function makePamphletFilesForFreeContent(string $fileName): array
     {
-        return $this->makeFreePamphletFileArray($fileName, config('constants.DISK19_CLOUD2'));
+        return $this->makeFreePamphletFileArray($fileName, config('constants.DISK19_CLOUD'));
     }
 
     private function makeJsonForAndroidApp($items): array
@@ -697,7 +696,7 @@ class ContentController extends Controller
     {
         $extension = $pamphletFile->getClientOriginalExtension();
         $filename  = basename($pamphletFile->getClientOriginalName(), ".".$extension)."_".date("YmdHis").'.'.$extension;
-        $disk = Storage::disk(config('constants.DISK19_CLOUD2'));
+        $disk = Storage::disk(config('constants.DISK19_CLOUD'));
         if ($disk->put($filename, File::get($pamphletFile))) {
             return $this->makePamphletFilesForFreeContent($filename);
         }
