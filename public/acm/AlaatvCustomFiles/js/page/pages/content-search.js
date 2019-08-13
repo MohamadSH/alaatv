@@ -8,7 +8,7 @@ var Alaasearch = function () {
 
     function getProductCarouselItem(data, itemKey) {
         var widgetActionLink = data.url;
-        var widgetActionName = '<i class="flaticon-bag"></i>' + ' / ' + '<i class="fa fa-eye"></i>';
+        var widgetActionName = '<i class="fa fa-cart-arrow-down"></i>' + ' / ' + '<i class="fa fa-eye"></i>';
         var widgetPic = data.photo;
         var widgetTitle = data.name;
         var price = data.price;
@@ -127,7 +127,7 @@ var Alaasearch = function () {
             '            <i class="fa fa-play"></i> / <i class="fa fa-cloud-download-alt"></i>\n' +
             '        </a>\n' +
             '        <a href="'+widgetLink+'" class="a--block-imageWrapper-image">\n' +
-            '            <img src="https://cdn.alaatv.com/loder.jpg?w=16&h=9" data-src="'+widgetPic+'" alt="'+widgetTitle+'" class="a--block-image lazy-image" width="253" height="142" />\n' +
+            '            <img src="https://cdn.alaatv.com/loder.jpg?w=1&h=1" data-src="'+widgetPic+'" alt="'+widgetTitle+'" class="a--block-image lazy-image" width="253" height="142" />\n' +
             '        </a>\n' +
             '    </div>\n' +
             '    <div class="a--block-infoWrapper">\n' +
@@ -187,7 +187,7 @@ var Alaasearch = function () {
             '        </div>\n' +
             '        \n' +
             '        <a href="'+widgetLink+'" class="a--block-imageWrapper-image">\n' +
-            '            <img src="https://cdn.alaatv.com/loder.jpg?w=16&h=9" data-src="'+widgetPic+'" alt="'+widgetTitle+'" class="a--block-image lazy-image" width="453" height="254" />\n' +
+            '            <img src="https://cdn.alaatv.com/loder.jpg?w=1&h=1" data-src="'+widgetPic+'" alt="'+widgetTitle+'" class="a--block-image lazy-image" width="453" height="254" />\n' +
             '        </a>\n' +
             '    </div>\n' +
             '    \n' +
