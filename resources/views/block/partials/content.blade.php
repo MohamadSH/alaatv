@@ -5,7 +5,7 @@
         </a>
         <a href="{{ $content->url }}" class="a--block-imageWrapper-image">
             <img class="a--block-image lazy-image"
-                 src="https://cdn.alaatv.com/loder.jpg?w=1&h=1"
+                 src="https://cdn.alaatv.com/loder.jpg?w=16&h=9"
                  data-src="{{ $content->thumbnail }}"
                 alt="{{ $content->name }}"
                 width="253" height="142" />
