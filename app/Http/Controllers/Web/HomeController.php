@@ -64,7 +64,7 @@ class HomeController extends Controller
             'home',
         ];
         $this->middleware('auth', ['except' => $authException]);
-        $this->middleware('role:admin', ['only' => [ 'debug' , 'adTest' ] ]);
+        $this->middleware('role:admin', ['only' => [ 'debug'] ]);
     }
 
     public function debug(Request $request, BlockCollectionFormatter $formatter)
