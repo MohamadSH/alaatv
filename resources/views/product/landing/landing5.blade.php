@@ -52,7 +52,7 @@
 
 
                                                 <div class="col-12 col-sm-6 col-md-4 col-lg-3 m--padding-left-5 m--padding-right-5 m--margin-top-5 a--imageWithCaption {{ $product['type']  }}">
-                                                    <img src="{{ $product['image']  }}" alt="{{ $product['name']  }}" class="img-thumbnail lazy-image">
+                                                    <img src="https://cdn.alaatv.com/loder.jpg?w=1&h=1" data-src="{{ $product['image']  }}" alt="{{ $product['name']  }}" class="img-thumbnail lazy-image" width="400" height="400">
                                                     <a href="{{ $product['link']  }}"
                                                        class="a--gtm-eec-product a--gtm-eec-product-click"
                                                        data-gtm-eec-product-id="{{ $product['id'] }}"

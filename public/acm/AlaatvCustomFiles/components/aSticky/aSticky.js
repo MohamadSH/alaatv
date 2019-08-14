@@ -201,6 +201,9 @@
 
           var stickyId = stickyElement.attr('id');
           var wrapperId = stickyId ? stickyId + '-' + defaults.wrapperClassName : defaults.wrapperClassName;
+          while (document.getElementById(wrapperId) !== null) {
+              wrapperId = wrapperId+'1';
+          }
           var wrapper = $('<div></div>')
             .attr('id', wrapperId)
             .addClass(o.wrapperClassName);

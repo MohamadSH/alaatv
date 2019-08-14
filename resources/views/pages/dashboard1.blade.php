@@ -1,5 +1,9 @@
 @extends('app' , ['pageName'=>$pageName])
 
+@section('page-preload-css')
+    <link rel="preload" href="{{ mix('/css/page-homePage.css') }}" as="style" />
+@endsection
+
 @section('page-css')
     <link href="{{ mix('/css/page-homePage.css') }}" rel="stylesheet" type="text/css"/>
 @endsection
@@ -27,7 +31,7 @@
                                         </button>
                                         <br>
                                         <span class="m--font-light">
-                                    <img data-src="https://cdn.alaatv.com/upload/alaa-logo-small.png" width="25" height="33" class="lazy-image" alt="آلاء">
+                                    <img src="https://cdn.alaatv.com/loder.jpg?w=1&h=1" data-src="https://cdn.alaatv.com/upload/alaa-logo-small.png" width="25" height="33" class="lazy-image" alt="آلاء">
 				                </span>
                                         <div class="m--space-10"></div>
                                     </div>
@@ -47,7 +51,7 @@
                                         </button>
                                         <br>
                                         <span class="m--font-light">
-                                    <img data-src="https://cdn.alaatv.com/upload/alaa-logo-small.png" width="25" height="33" class="lazy-image" alt="آلاء">
+                                    <img src="https://cdn.alaatv.com/loder.jpg?w=1&h=1" data-src="https://cdn.alaatv.com/upload/alaa-logo-small.png" width="25" height="33" class="lazy-image" alt="آلاء">
 				                </span>
                                         <div class="m--space-10"></div>
                                     </div>
@@ -67,7 +71,7 @@
                                         </button>
                                         <br>
                                         <span class="m--font-light">
-                                    <img data-src="https://cdn.alaatv.com/upload/alaa-logo-small.png" width="25" height="33" class="lazy-image" alt="آلاء">
+                                    <img src="https://cdn.alaatv.com/loder.jpg?w=1&h=1" data-src="https://cdn.alaatv.com/upload/alaa-logo-small.png" width="25" height="33" class="lazy-image" alt="آلاء">
 				                </span>
                                         <div class="m--space-10"></div>
                                     </div>
@@ -87,7 +91,7 @@
                                         </button>
                                         <br>
                                         <span class="m--font-light">
-                                    <img data-src="https://cdn.alaatv.com/upload/alaa-logo-small.png" width="25" height="33" class="lazy-image" alt="آلاء">
+                                    <img src="https://cdn.alaatv.com/loder.jpg?w=1&h=1" data-src="https://cdn.alaatv.com/upload/alaa-logo-small.png" width="25" height="33" class="lazy-image" alt="آلاء">
 				                </span>
                                         <div class="m--space-10"></div>
                                     </div>
@@ -244,5 +248,9 @@
             @endforeach
         ];
     </script>
-    <script src="{{ mix('/js/page-homePage.js') }}" ></script>
+    <script src="{{ mix('/js/page-homePage.js') }}" async ></script>
+@endsection
+
+@section('page-preload-js')
+    <link rel="preload" href="{{ mix('/js/page-homePage.js') }}" as="script">
 @endsection
