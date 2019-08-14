@@ -75,27 +75,27 @@ class Productfile extends BaseModel
         'validSince',
         'cloudFile',
     ];
-    
+
     public function product()
     {
         return $this->belongsTo('\App\Product');
     }
-    
+
     public function content()
     {
         return $this->belongsTo('\App\Content');
     }
-    
+
     public function set()
     {
         return $this->belongsTo(Contentset::class, 'contentset_id');
     }
-    
+
     public function productfiletype()
     {
         return $this->belongsTo('\App\Productfiletype');
     }
-    
+
     /**
      * @return string
      * Converting Created_at field to jalali
@@ -104,10 +104,10 @@ class Productfile extends BaseModel
     {
         $explodedDateTime = explode(' ', $this->validSince);
         $explodedTime     = $explodedDateTime[1];
-    
+
         return $this->convertDate($this->validSince, 'toJalali').' '.$explodedTime;
     }
-    
+
     /**
      * Scope a query to only include enable(or disable) Products.
      *
@@ -119,7 +119,7 @@ class Productfile extends BaseModel
     {
         return $query->where('enable', '=', 1);
     }
-    
+
     public function scopeValid($query)
     {
         /** @var QueryBuilder $query */
@@ -130,7 +130,7 @@ class Productfile extends BaseModel
                 ->orwhereNull('validSince');
         });
     }
-    
+
     /**
      * @param $fileName
      * @param $productId
@@ -144,8 +144,8 @@ class Productfile extends BaseModel
             ->get()
             ->first()->cloudFile;
         //TODO: verify "$productFileLink = "http://".env("SFTP_HOST" , "").":8090/". $cloudFile;"
-        $productFileLink = config('constants.DOWNLOAD_HOST_PROTOCOL',
-                'https://').config('constants.DOWNLOAD_HOST_NAME').$cloudFile;
+        $productFileLink = config('constants.DOWNLOAD_SERVER_PROTOCOL',
+                'https://').config('constants.PAID_SERVER_NAME').$cloudFile;
         $unixTime        = Carbon::today()
             ->addDays(2)->timestamp;
         $userIP          = request()->ip();
@@ -153,7 +153,7 @@ class Productfile extends BaseModel
         $ipArray    = explode('.', $userIP);
         $ipArray[3] = 0;
         $userIP     = implode('.', $ipArray);
-    
+
         $linkHash     = $this->generateSecurePathHash($unixTime, $userIP, 'TakhteKhak', $cloudFile);
         $externalLink = $productFileLink.'?md5='.$linkHash.'&expires='.$unixTime;
         return $externalLink;
