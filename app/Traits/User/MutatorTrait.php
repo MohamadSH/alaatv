@@ -23,7 +23,7 @@ trait mutatorTrait
             $this->attributes["firstName"] = $value;
         }
     }
-    
+
     /** Setter mutator for major_id
      *
      * @param $value
@@ -37,7 +37,7 @@ trait mutatorTrait
             $this->attributes["lastName"] = $value;
         }
     }
-    
+
     /** Setter mutator for major_id
      *
      * @param $value
@@ -51,7 +51,7 @@ trait mutatorTrait
             $this->attributes["major_id"] = $value;
         }
     }
-    
+
     /** Setter mutator for bloodtype_id
      *
      * @param $value
@@ -65,7 +65,7 @@ trait mutatorTrait
             $this->attributes["bloodtype_id"] = $value;
         }
     }
-    
+
     /** Setter mutator for grade_id
      *
      * @param $value
@@ -79,7 +79,7 @@ trait mutatorTrait
             $this->attributes["gender_id"] = $value;
         }
     }
-    
+
     /** Setter mutator for grade_id
      *
      * @param $value
@@ -93,7 +93,7 @@ trait mutatorTrait
             $this->attributes["grade_id"] = $value;
         }
     }
-    
+
     /** Setter mutator for email
      *
      * @param $value
@@ -107,7 +107,7 @@ trait mutatorTrait
             $this->attributes["email"] = $value;
         }
     }
-    
+
     /** Setter mutator for phone
      *
      * @param $value
@@ -121,7 +121,7 @@ trait mutatorTrait
             $this->attributes["phone"] = $value;
         }
     }
-    
+
     /** Setter mutator for city
      *
      * @param $value
@@ -135,7 +135,7 @@ trait mutatorTrait
             $this->attributes["city"] = $value;
         }
     }
-    
+
     /** Setter mutator for province
      *
      * @param $value
@@ -149,7 +149,7 @@ trait mutatorTrait
             $this->attributes["province"] = $value;
         }
     }
-    
+
     /** Setter mutator for address
      *
      * @param $value
@@ -163,7 +163,7 @@ trait mutatorTrait
             $this->attributes["address"] = $value;
         }
     }
-    
+
     /** Setter mutator for postalCode
      *
      * @param $value
@@ -177,7 +177,7 @@ trait mutatorTrait
             $this->attributes["postalCode"] = $value;
         }
     }
-    
+
     /** Setter mutator for school
      *
      * @param $value
@@ -191,7 +191,7 @@ trait mutatorTrait
             $this->attributes["school"] = $value;
         }
     }
-    
+
     /** Setter mutator for allergy
      *
      * @param $value
@@ -205,7 +205,7 @@ trait mutatorTrait
             $this->attributes["allergy"] = $value;
         }
     }
-    
+
     /** Setter mutator for medicalCondition
      *
      * @param $value
@@ -219,7 +219,7 @@ trait mutatorTrait
             $this->attributes["medicalCondition"] = $value;
         }
     }
-    
+
     /** Setter mutator for discount
      *
      * @param $value
@@ -233,7 +233,7 @@ trait mutatorTrait
             $this->attributes["diet"] = $value;
         }
     }
-    
+
     /**
      *
      */
@@ -241,17 +241,17 @@ trait mutatorTrait
     {
         return ucfirst($this->lastName).' '.ucfirst($this->firstName);
     }
-    
+
     public function getPhotoAttribute($value)
     {
         $profileImage = ($value != null ? $value : config('constants.PROFILE_DEFAULT_IMAGE'));
         $profileImage = route('image', [
             'category' => '1',
-            'w'        => '39',
-            'h'        => '39',
+            'w'        => '100',
+            'h'        => '100',
             'filename' => $profileImage,
         ]);
-        
+
         return $profileImage;
     }
 
@@ -267,7 +267,7 @@ trait mutatorTrait
 
         return $profileImage;
     }
-    
+
     public function getShortNameAttribute()
     {
         if (isset($this->firstName)) {
@@ -276,10 +276,10 @@ trait mutatorTrait
         if (isset($this->lastName)) {
             return ucfirst($this->lastName);
         }
-        
+
         return 'کاربر آلایی';
     }
-    
+
     public function getFullNameAttribute($value)
     {
         return ucfirst($this->firstName).' '.ucfirst($this->lastName);
