@@ -63,18 +63,30 @@ class WalletController extends Controller
         $credit = $request->get('credit' , 0);
         $user = User::where('mobile' , $request->get('mobile'))->where('nationalCode' , $request->get('nationalCode'))->first();
         if(!isset($user)){
-            session()->put('error' , 'کاربر مورد نظر یافت نشد');
-            return redirect()->back();
+            return response()->json([
+                'error' => [
+                    'code'  => Response::HTTP_NOT_FOUND,
+                    'message'   => 'User not found',
+                ]
+            ]);
         }
 
         $depositResult =  $user->deposit( $credit , config('constants.WALLET_TYPE_GIFT'));
         if($depositResult['result']){
-            session()->put('success' , number_format($credit).' تومان به کیف پول '.$user->full_name.' افزوده شد');
-            return redirect()->back();
+            return response()->json([
+                'message'   => 'Credit added successfully',
+                'userFullName' => $user->full_name
+            ]);
         }
 
-        session()->put('error' , 'خطا در اعطای اعتبار');
-        return redirect()->back();
+        return response()->json([
+            [
+                'error'=>[
+                    'code' => Response::HTTP_SERVICE_UNAVAILABLE ,
+                    'message' => 'Unexpected error',
+                ]
+            ]
+        ]);
     }
 
     /*
