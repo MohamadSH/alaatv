@@ -75,8 +75,8 @@ class File extends BaseModel
                 ->getAdapter();
             $diskType    = class_basename($diskAdapter);
             $sftpRoot    = config("constants.SFTP_ROOT");
-            $dProtocol   = config("constants.DOWNLOAD_HOST_PROTOCOL");
-            $dName       = config("constants.DOWNLOAD_HOST_NAME");
+            $dProtocol   = config("constants.DOWNLOAD_SERVER_PROTOCOL");
+            $dName       = config("constants.PAID_SERVER_NAME");
 
             switch ($diskType) {
                 case "SftpAdapter" :
