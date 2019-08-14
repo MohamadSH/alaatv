@@ -266,7 +266,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('endlive'   , [LiveController::class, 'endLive']);
 
     Route::post('updateSet' , [ContentController::class, 'updateSet']);
-    Route::get('adtest' , [HomeController::class, 'adTest']);
+    Route::get('atest' , [HomeController::class, 'adTest']);
 });
 
 Route::group(['prefix' => 'c'], function () {
