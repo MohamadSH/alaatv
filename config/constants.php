@@ -217,7 +217,6 @@ return [
     'DISK18_CLOUD'                                => 'examSftp',
     'DISK19'                                      => 'pamphlet',
     'DISK19_CLOUD'                                => 'pamphletSftp',
-    'DISK19_CLOUD2'                               => 'pamphletSftp2',
     'DISK20'                                      => 'book',
     'DISK20_CLOUD'                                => 'bookSftp',
     'DISK21'                                      => 'productImageSFTP',
@@ -386,7 +385,8 @@ return [
     //
     'TAG_API_URL'                              => env('TAG_API_URL', null),
     'SERVER'                                   => env('SERVER'),
-    'DOWNLOAD_SERVER_NAME'                     => env('DOWNLOAD_SERVER_NAME', null),
+    'CDN_SERVER_NAME'                          => env('CDN_SERVER_NAME', null),
+    'PAID_SERVER_NAME'                         => env('PAID_SERVER_NAME', null),
     'DOWNLOAD_SERVER_ROOT'                     => env('DOWNLOAD_SERVER_ROOT', null),
     'DOWNLOAD_SERVER_PROTOCOL'                 => env('DOWNLOAD_SERVER_PROTOCOL', null),
     'DOWNLOAD_SERVER_MEDIA_PARTIAL_PATH'       => env('DOWNLOAD_SERVER_MEDIA_PARTIAL_PATH', null),
