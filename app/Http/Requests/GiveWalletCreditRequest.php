@@ -26,7 +26,7 @@ class GiveWalletCreditRequest extends FormRequest
         return [
             'mobile'        => 'required',
             'nationalCode'  => 'required',
-            'credit'        => 'required',
+            'credit'        => 'required|numeric|min:100',
         ];
     }
 }
