@@ -139,7 +139,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::resource('survey', '\\'. SurveyController::class);
     Route::get('96', 'Web\EventresultController@create');
     Route::get('97', 'Web\EventresultController@create');
-    Route::get('98', 'Web\EventresultController@create');
+    Route::get('98', 'Web\EventresultController@create')->name('user.konkurResult');
     Route::post("transactionToDonate/{transaction}", "Web\TransactionController@convertToDonate");
     Route::post("completeTransaction/{transaction}", "Web\TransactionController@completeTransaction");
     Route::post("myTransaction/{transaction}", "Web\TransactionController@limitedUpdate");
