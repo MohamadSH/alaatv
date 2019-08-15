@@ -65,7 +65,7 @@
                     @include('user.profile.profileView', ['withBio'=>true])
                 @endif
             @elseif($pageType === 'sabteRotbe')
-                @include('user.profile.profileView', ['withBio'=>true])
+                @include('user.user.profile.profileSabteRotbe')
             @endif
         </div>
     </div>
