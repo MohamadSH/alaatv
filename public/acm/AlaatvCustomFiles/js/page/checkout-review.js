@@ -234,7 +234,7 @@ var CheckoutPaymentUi = function () {
         if ($('#discountCodeValue').length !== 0) {
             return;
         }
-        var strLen = $('#discountCodeValue').val().length;
+        var strLen = (typeof $('#discountCodeValue').val() !== 'undefined') ? $('#discountCodeValue').val().length : 0;
         if (strLen > 0) {
             $('#btnSaveDiscountCodeValue').prop('disabled', false);
         } else {
