@@ -9,6 +9,7 @@ use App\Http\Controllers\Web\EmployeetimesheetController;
 use App\Http\Controllers\Web\ErrorPageController;
 use App\Http\Controllers\Web\HomeController;
 use App\Http\Controllers\Web\LotteryController;
+use App\Http\Controllers\Web\OrderproductController;
 use App\Http\Controllers\Web\ProductLandingController;
 use App\Http\Controllers\Web\SharifSchoolController;
 use App\Http\Controllers\Web\LiveController;
@@ -89,7 +90,7 @@ Route::group(['prefix' => 'checkout'], function () {
 });
 Route::group(['prefix' => 'orderproduct'], function () {
 //    Route::get('store', 'Web\OrderproductController@store');
-    Route::post('checkout', 'Web\OrderproductController@checkOutOrderproducts');
+    Route::post('checkout', [OrderproductController::class, 'checkOutOrderproducts']);
 });
 
 Route::group(['prefix' => 'landing'], function () {
@@ -137,9 +138,6 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('complete-register', [UserController::class, 'completeRegister'])->name('completeRegister');
     Route::get('survey',  [SurveyController::class, 'show']);
     Route::resource('survey', '\\'. SurveyController::class);
-    Route::get('96', 'Web\EventresultController@create');
-    Route::get('97', 'Web\EventresultController@create');
-    Route::get('98', 'Web\EventresultController@create')->name('user.konkurResult');
     Route::post("transactionToDonate/{transaction}", "Web\TransactionController@convertToDonate");
     Route::post("completeTransaction/{transaction}", "Web\TransactionController@completeTransaction");
     Route::post("myTransaction/{transaction}", "Web\TransactionController@limitedUpdate");
@@ -166,6 +164,9 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::resource('orderproduct', 'Web\OrderproductController');
 
+    Route::get('96', [UserController::class, 'submitKonkurResult']);
+    Route::get('97', [UserController::class, 'submitKonkurResult']);
+    Route::get('98', [UserController::class, 'submitKonkurResult'])->name('user.konkurResult');
     Route::group(['prefix' => 'user'], function () {
 
 
