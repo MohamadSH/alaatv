@@ -155,44 +155,6 @@ $(document).ready(function () {
         }
     });
 
-    function changeStatus(status) {
-
-        let url = document.location.href.split('#')[0];
-
-        url += '#' + status;
-
-        history.pushState('data to be passed', 'Title of the page', url);
-        // The above will add a new entry to the history so you can press Back button to go to the previous state.
-        // To change the URL in place without adding a new entry to history use
-        // history.replaceState('data to be passed', 'Title of the page', '');
-    }
-
-    function showSabteRotbe() {
-        changeStatus('ثبت_رتبه');
-        $('.profileMenuPage.profileMenuPage-filmVaJozve').fadeOut(0);
-        $('.profileMenuPage.profileMenuPage-setting').fadeOut(0);
-        $('.profileMenuPage.profileMenuPage-sabteRotbe').fadeIn();
-        $([document.documentElement, document.body]).animate({
-            scrollTop: $('.profileMenuPage.profileMenuPage-sabteRotbe').offset().top - $('#m_header').height() - 30
-        }, 500);
-    }
-
-    function showFilmVaJozve() {
-        $('.profileMenuPage.profileMenuPage-filmVaJozve').slideDown();
-        $('.profileMenuPage.profileMenuPage-sabteRotbe').slideUp();
-        $('.profileMenuPage.profileMenuPage-setting').slideUp();
-    }
-
-    function showSetting() {
-        changeStatus('اطلاعات_شخصی');
-        $('.profileMenuPage.profileMenuPage-filmVaJozve').fadeOut(0);
-        $('.profileMenuPage.profileMenuPage-sabteRotbe').fadeOut(0);
-        $('.profileMenuPage.profileMenuPage-setting').fadeIn();
-        $([document.documentElement, document.body]).animate({
-            scrollTop: $('.profileMenuPage.profileMenuPage-setting').offset().top - $('#m_header').height() - 30
-        }, 500);
-    }
-
     $('#birthdate').persianDatepicker({
         observer: true,
         format: 'YYYY/MM/DD',
@@ -499,20 +461,6 @@ $(document).ready(function () {
         });
     });
 
-    $(document).on('click', '.profile-usermenu button', function () {
-        let menu = $(this).attr('menu');
-        if (menu === 'profileMenuPage-sabteRotbe') {
-            showSabteRotbe();
-        } else if (menu === 'profileMenuPage-filmVaJozve') {
-            // showFilmVaJozve();
-        } else if (menu === 'profileMenuPage-setting') {
-            showSetting();
-        }
-        // mUtil.getScroll(document.getElementById('profileMenuPage-sabteRotbe'), 'Top');
-        //
-        // mUtil.scrollTop();
-    });
-
     $(document).on('submit', '#frmSabteRotbe', function(e){
         let validation = sabteRotbeFormValidation();
 
@@ -524,22 +472,4 @@ $(document).ready(function () {
             return false;
         }
     });
-
-    let pageLoadState = decodeURIComponent(window.location.hash);
-    if (pageLoadState === '#ثبت_رتبه') {
-        showSabteRotbe();
-    } else if (pageLoadState === '#اطلاعات_شخصی') {
-        showSetting();
-    } else {
-        showSetting();
-    }
-
-    $(window).on('hashchange', function() {
-        if (window.location.hash === '#ثبت_رتبه') {
-            showSabteRotbe();
-        } else if (window.location.hash === '#اطلاعات_شخصی') {
-            showSetting();
-        }
-    });
-
 });

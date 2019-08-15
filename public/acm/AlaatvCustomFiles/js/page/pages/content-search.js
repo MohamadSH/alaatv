@@ -180,14 +180,14 @@ var Alaasearch = function () {
             '            </div>\n' +
             '            \n' +
             '            <div class="a--block-set-author-pic d-none">\n' +
-            '                <img src="https://cdn.alaatv.com/loder.jpg?w=16&h=9" class="m-widget19__img lazy-image" data-src="'+widgetAuthor.photo+'" alt="'+widgetAuthor.full_name+'" width="40" height="40">\n' +
+            '                <img src="https://cdn.alaatv.com/loder.jpg?w=1&h=1" class="m-widget19__img lazy-image" data-src="'+widgetAuthor.photo+'" alt="'+widgetAuthor.full_name+'" width="40" height="40">\n' +
             '            </div>\n' +
             '            \n' +
             '    \n' +
             '        </div>\n' +
             '        \n' +
             '        <a href="'+widgetLink+'" class="a--block-imageWrapper-image">\n' +
-            '            <img src="https://cdn.alaatv.com/loder.jpg?w=1&h=1" data-src="'+widgetPic+'" alt="'+widgetTitle+'" class="a--block-image lazy-image" width="453" height="254" />\n' +
+            '            <img src="https://cdn.alaatv.com/loder.jpg?w=16&h=9" data-src="'+widgetPic+'" alt="'+widgetTitle+'" class="a--block-image lazy-image" width="453" height="254" />\n' +
             '        </a>\n' +
             '    </div>\n' +
             '    \n' +
