@@ -166,7 +166,7 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::get('96', [UserController::class, 'submitKonkurResult']);
     Route::get('97', [UserController::class, 'submitKonkurResult']);
-    Route::get('98', [UserController::class, 'submitKonkurResult'])->name('user.konkurResult');
+    Route::get('98', [UserController::class, 'submitKonkurResult'])->name('web.user.konkurResult');
     Route::group(['prefix' => 'user'], function () {
 
 

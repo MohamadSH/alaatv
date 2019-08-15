@@ -204,7 +204,7 @@
                             <i class="flaticon-multimedia-4"></i>
                             دریافت فیلم های و جزوات
                         </button>
-                        <button type="button" class="btn m-btn--air btn-outline-success btn-block" menu="profileMenuPage-sabteRotbe">
+                        <button type="button" class="btn m-btn--air btn-outline-success btn-block" menu="profileMenuPage-sabteRotbe" onclick="window.location.href='{{ route('web.user.konkurResult') }}';">
                             <i class="fa fa-trophy"></i>
                             ثبت رتبه 98
                         </button>
