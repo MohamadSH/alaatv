@@ -154,6 +154,9 @@
     line-height: 1;
     transition: all 0.5s;
 }
+.productInfoNav.productInfoNav-btnAddToCart{
+    padding-right: 5px;
+}
 .productInfoNav.this,
 .is-sticky .productInfoNav {
     display: inline-block;
@@ -164,7 +167,7 @@
 .is-sticky .productInfoNav.this {
     color: #333;
     background: #e1e1e1;
-    padding: 10px 0 10px 5px;
+    padding: 5px 0 5px 5px;
     margin-right: 5px;
     border-radius: 0;
 }
@@ -212,6 +215,11 @@
 
 /*media query*/
 @media (max-width: 767.98px) {
+
+    .sticky-wrapper.is-sticky .m-portlet__head {
+        padding: 0;
+    }
+
     .productInfoNav {
         font-size: 0.9rem;
     }

@@ -179,7 +179,7 @@ var Alaasearch = function () {
             '                </a>\n' +
             '            </div>\n' +
             '            \n' +
-            '            <div class="a--block-set-author-pic d-none">\n' +
+            '            <div class="a--block-set-author-pic">\n' +
             '                <img src="https://cdn.alaatv.com/loder.jpg?w=1&h=1" class="m-widget19__img lazy-image" data-src="'+widgetAuthor.photo+'" alt="'+widgetAuthor.full_name+'" width="40" height="40">\n' +
             '            </div>\n' +
             '            \n' +

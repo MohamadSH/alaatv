@@ -594,13 +594,13 @@
                                                 </span>
                                             </a>
                                         @else
-                                            <button class="btn m-btn--air btn-success m-btn--icon btnAddToCart gta-track-add-to-card">
-                                                <span>
-                                                    <i class="fa fa-cart-arrow-down"></i>
-                                                    <i class="fas fa-sync-alt fa-spin m--hide"></i>
-                                                    <span>افزودن به سبد خرید</span>
-                                                </span>
-                                            </button>
+{{--                                            <button class="btn m-btn--air btn-success m-btn--icon btnAddToCart gta-track-add-to-card">--}}
+{{--                                                <span>--}}
+{{--                                                    <i class="fa fa-cart-arrow-down"></i>--}}
+{{--                                                    <i class="fas fa-sync-alt fa-spin m--hide"></i>--}}
+{{--                                                    <span>افزودن به سبد خرید</span>--}}
+{{--                                                </span>--}}
+{{--                                            </button>--}}
                                         @endif
                                         
                                         
