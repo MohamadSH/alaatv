@@ -1516,7 +1516,7 @@ class UserController extends Controller
 
         $hasLockProfile = isset($inputData['lockProfile']);
         if($hasLockProfile){
-            $user->lockProfile = ($inputData['mobile_verified_at'] == '1') ? 1:0;
+            $user->lockProfile = ($inputData['lockProfile'] == '1') ? 1:0;
         }else{
             $user->lockProfile = 0 ;
         }
