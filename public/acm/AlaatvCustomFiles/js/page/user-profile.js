@@ -499,20 +499,6 @@ $(document).ready(function () {
         });
     });
 
-    $(document).on('click', '.profile-usermenu button', function () {
-        let menu = $(this).attr('menu');
-        if (menu === 'profileMenuPage-sabteRotbe') {
-            showSabteRotbe();
-        } else if (menu === 'profileMenuPage-filmVaJozve') {
-            // showFilmVaJozve();
-        } else if (menu === 'profileMenuPage-setting') {
-            showSetting();
-        }
-        // mUtil.getScroll(document.getElementById('profileMenuPage-sabteRotbe'), 'Top');
-        //
-        // mUtil.scrollTop();
-    });
-
     $(document).on('submit', '#frmSabteRotbe', function(e){
         let validation = sabteRotbeFormValidation();
 
