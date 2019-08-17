@@ -783,7 +783,6 @@ class UserController extends Controller
             $user = $request->user();
         }
 
-
         /** @var User $autheiticatedUser */
         $autheiticatedUser = $request->user();
         if ($this->authenticatedUserCantSeeThisUser($autheiticatedUser, $user)) {
@@ -793,12 +792,10 @@ class UserController extends Controller
         if ($request->expectsJson()) {
             return response($user, Response::HTTP_OK);
         }
+        $userCompletion = $user->info['completion'];
 
-        $genders     = Gender::pluck('name', 'id')
-            ->prepend("نامشخص");
-        $majors      = Major::pluck('name', 'id')
-            ->prepend("نامشخص");
-        $sideBarMode = "closed";
+        $genders     = Gender::pluck('name', 'id')->prepend("نامشخص");
+        $majors      = Major::pluck('name', 'id')->prepend("نامشخص");
 
 //        /** LOTTERY */
 //        [
@@ -812,16 +809,27 @@ class UserController extends Controller
 //            $lotteryName,
 //        ] = $user->getLottery();
 
+
+        $sideBarMode = "closed";
+        $pageType = "profile";
+        return view("user.profile.profile",
+            compact("user", 'genders', 'majors', 'sideBarMode',  'userCompletion' , 'pageType'
+                /*'exchangeAmount', 'userPoints', 'userLottery', 'prizeCollection', 'lotteryRank', 'lottery', 'lotteryMessage', 'lotteryName' , */
+            ));
+    }
+
+    public function submitKonkurResult(Request $request)
+    {
+        $user = $request->user();
+        $userCompletion = $user->info['completion'];
+
         $event            = Event::name('konkur98')->first();
         $userKonkurResult = $user->eventresults->where("event_id", $event->id)->first();
 
-        $userCompletion = $user->info['completion'];
-
-
+        $sideBarMode = "closed";
+        $pageType = "sabteRotbe";
         return view("user.profile.profile",
-            compact("user", 'event', 'userKonkurResult', 'genders', 'majors', 'sideBarMode',
-                /*'exchangeAmount', 'userPoints', 'userLottery', 'prizeCollection', 'lotteryRank', 'lottery', 'lotteryMessage', 'lotteryName' , */
-                'userKonkurResult', 'userCompletion'));
+            compact("user", 'event', 'userKonkurResult', 'sideBarMode', 'userCompletion' , 'pageType'));
     }
 
     /**
@@ -1516,7 +1524,7 @@ class UserController extends Controller
 
         $hasLockProfile = isset($inputData['lockProfile']);
         if($hasLockProfile){
-            $user->lockProfile = ($inputData['mobile_verified_at'] == '1') ? 1:0;
+            $user->lockProfile = ($inputData['lockProfile'] == '1') ? 1:0;
         }else{
             $user->lockProfile = 0 ;
         }

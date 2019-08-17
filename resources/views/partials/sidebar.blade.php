@@ -65,7 +65,7 @@
             </li>
             @if(Auth::check())
                 <li class="m-menu__item @if(isset($pageName) && strcmp($pageName , "submitKonkurResult")==0) m-menu__item--active @endif" aria-haspopup="true" m-menu-link-redirect="1">
-                    <a href="{{ action("Web\UserController@show",Auth::user()) }}#ثبت_رتبه" class="m-menu__link ">
+                    <a href="{{route('web.user.konkurResult')}}" class="m-menu__link ">
                         <span class="m-menu__item-here"></span>
                         <i class="m-menu__link-icon fa fa-medal"></i>
                         <span class="m-menu__link-text">ثبت رتبه 98</span>

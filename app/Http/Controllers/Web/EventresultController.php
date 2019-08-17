@@ -175,8 +175,4 @@ class EventresultController extends Controller
             return redirect()->back();
         }
     }
-
-    public function create(Request $request){
-        return redirect(action('Web\UserController@show' , $request->user()).'#ثبت_رتبه' , Response::HTTP_FOUND);
-    }
 }

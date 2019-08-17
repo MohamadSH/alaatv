@@ -62,15 +62,6 @@ return [
             'driver'     => 'local',
             'root'       => storage_path('app/public/profile/images'),
             'visibility' => 'public',
-
-            /*            'driver'     => 'sftp',
-                        'host'       => env('SFTP_HOST2', ''),
-                        'port'       => env('SFTP_PORT', '22'),
-                        'username'   => env('SFTP_USERNAME', ''),
-                        'password'   => env('SFTP_PASSSWORD', ''),
-                        'privateKey' => env('SFTP_PRIVATE_KEY_PATH', ''),
-                        'root'       => env('SFTP_ROOT', '').'/public/c/pamphlet/',
-                        'timeout'    => env('SFTP_TIMEOUT', '10'),*/
         ],
 
         'assignmentQuestionFile' => [
@@ -91,20 +82,6 @@ return [
             'visibility' => 'public',
         ],
 
-        'productImageSFTP'     => [
-            'driver'     => 'sftp',
-            'host'       => env('SFTP_HOST2', ''),
-            'port'       => env('SFTP_PORT', '22'),
-            'username'   => env('SFTP_USERNAME', ''),
-            'password'   => env('SFTP_PASSSWORD', ''),
-            'privateKey' => env('SFTP_PRIVATE_KEY_PATH', ''),
-            'root'       => '/cdn/upload/images/product',
-            'timeout'    => env('SFTP_TIMEOUT', '10'),
-            'prefix'     => null,
-            'dHost'      => "cdn.alaatv.com",
-            'dProtocol'  => "https://",
-        ],
-
         'productCatalog_PDF' => [
             'driver'     => 'local',
             'root'       => storage_path('app/public/product/catalog/pdf'),
@@ -122,6 +99,7 @@ return [
             'root'       => storage_path('app/public/consultation/thumbnails'),
             'visibility' => 'public',
         ],
+
         'articleImage'          => [
             'driver'     => 'local',
             'root'       => storage_path('app/public/article/images'),
@@ -133,26 +111,6 @@ return [
             'root'       => storage_path('app/public/slideShow/home'),
             'visibility' => 'public',
         ],
-
-        'homeSlideShowPicSFTP'     => [
-            'driver'     => 'sftp',
-            'host'       => env('SFTP_HOST2', ''),
-            'port'       => env('SFTP_PORT', '22'),
-            'username'   => env('SFTP_USERNAME', ''),
-            'password'   => env('SFTP_PASSSWORD', ''),
-            'privateKey' => env('SFTP_PRIVATE_KEY_PATH', ''),
-            'root'       => '/cdn/upload/images/slideShow',
-            'timeout'    => env('SFTP_TIMEOUT', '10'),
-            'prefix'     => null,
-            'dHost'      => "cdn.alaatv.com",
-            'dProtocol'  => "https://",
-        ],
-
-        //        'articleSlideShowPic' => [
-        //            'driver' => 'local',
-        //            'root'   => storage_path('app/public/slideShow/article'),
-        //            'visibility' => 'public',
-        //        ],
 
         'orderFile' => [
             'driver'     => 'local',
@@ -170,48 +128,6 @@ return [
             'driver'     => 'local',
             'root'       => storage_path('app/public/product/files'),
             'visibility' => 'public',
-        ],
-
-        'productFileSFTP' => [
-            'driver'     => 'sftp',
-            'host'       => env('SFTP_HOST2', ''),
-            'port'       => env('SFTP_PORT', '22'),
-            'username'   => env('SFTP_USERNAME', ''),
-            'password'   => env('SFTP_PASSSWORD', ''),
-            'privateKey' => env('SFTP_PRIVATE_KEY_PATH', ''),
-            'root'       => '/cdn/paid',
-            'timeout'    => env('SFTP_TIMEOUT', '10'),
-            'prefix'     => null,
-            'dHost'      => "paid.alaatv.com",
-            'dProtocol'  => "https://",
-        ],
-
-        'setImageSFTP'     => [
-            'driver'     => 'sftp',
-            'host'       => env('SFTP_HOST2', ''),
-            'port'       => env('SFTP_PORT', '22'),
-            'username'   => env('SFTP_USERNAME', ''),
-            'password'   => env('SFTP_PASSSWORD', ''),
-            'privateKey' => env('SFTP_PRIVATE_KEY_PATH', ''),
-            'root'       => '/cdn/upload/contentset/departmentlesson',
-            'timeout'    => env('SFTP_TIMEOUT', '10'),
-            'prefix'     => null,
-            'dHost'      => "cdn.alaatv.com",
-            'dProtocol'  => "https://",
-        ],
-
-        'alaaCdnSFTP'     => [
-            'driver'     => 'sftp',
-            'host'       => env('SFTP_HOST2', ''),
-            'port'       => env('SFTP_PORT', '22'),
-            'username'   => env('SFTP_USERNAME', ''),
-            'password'   => env('SFTP_PASSSWORD', ''),
-            'privateKey' => env('SFTP_PRIVATE_KEY_PATH', ''),
-            'root'       => '/cdn/',
-            'timeout'    => env('SFTP_TIMEOUT', '10'),
-            'prefix'     => null,
-            'dHost'      => "cdn.alaatv.com",
-            'dProtocol'  => "https://",
         ],
 
         'eventReport' => [
@@ -232,76 +148,16 @@ return [
             'visibility' => 'public',
         ],
 
-        'examSftp' => [
-            'driver'     => 'sftp',
-            'host'       => env('SFTP_HOST2', ''),
-            'port'       => env('SFTP_PORT', '22'),
-            'username'   => env('SFTP_USERNAME', ''),
-            'password'   => env('SFTP_PASSSWORD', ''),
-            'privateKey' => env('SFTP_PRIVATE_KEY_PATH', ''),
-            'root'       => '/cdn/public/c/exam/',
-            'timeout'    => env('SFTP_TIMEOUT', '10'),
-            'prefix'     => '/public/c/exam/',
-            'dHost'      => "dl.alaatv.com/",
-            'dProtocol'  => "https://",
-        ],
-
-
         'pamphlet' => [
             'driver'     => 'local',
             'root'       => storage_path('app/public/content/pamphlet'),
             'visibility' => 'public',
         ],
 
-        'pamphletSftp' => [
-            'driver'     => 'sftp',
-            'host'       => env('SFTP_HOST2', ''),
-            'port'       => env('SFTP_PORT', '22'),
-            'username'   => env('SFTP_USERNAME', ''),
-            'password'   => env('SFTP_PASSSWORD', ''),
-            'privateKey' => env('SFTP_PRIVATE_KEY_PATH', ''),
-            'root'       => '/cdn/paid/public/c/pamphlet/',
-            'timeout'    => env('SFTP_TIMEOUT', '10'),
-            'dHost'     => 'paid.alaatv.com',
-            'dProtocol' => 'https://',
-            'prefix'    => '/public/c/pamphlet/',
-
-        ],
-
-        'pamphletSftp2' => [
-            'driver'     => 'sftp',
-            'host'       => env('SFTP_HOST2', ''),
-            'port'       => env('SFTP_PORT', '22'),
-            'username'   => env('SFTP_USERNAME', ''),
-            'password'   => env('SFTP_PASSSWORD', ''),
-            'privateKey' => env('SFTP_PRIVATE_KEY_PATH', ''),
-            'root'       => '/cdn/paid/public/c/pamphlet/',
-            'timeout'    => env('SFTP_TIMEOUT', '10'),
-
-            'dHost'     => 'paid.alaatv.com',
-            'dProtocol' => 'https://',
-            'prefix'    => '/public/c/pamphlet/',
-
-        ],
-
         'book' => [
             'driver'     => 'local',
             'root'       => storage_path('app/public/content/book'),
             'visibility' => 'public',
-        ],
-
-        'bookSftp' => [
-            'driver'     => 'sftp',
-            'host'       => env('SFTP_HOST2', ''),
-            'port'       => env('SFTP_PORT', '22'),
-            'username'   => env('SFTP_USERNAME', ''),
-            'password'   => env('SFTP_PASSSWORD', ''),
-            'privateKey' => env('SFTP_PRIVATE_KEY_PATH', ''),
-            'root'       => env('SFTP_ROOT', ''),
-            'timeout'    => env('SFTP_TIMEOUT', '10'),
-            'prefix'     => '/cdn/paid/public/c/book/',
-            'dHost'      => "dl.alaatv.com/",
-            'dProtocol'  => "https://",
         ],
 
         'digitalSignatureCertificates' => [
@@ -314,6 +170,120 @@ return [
             'driver'     => 'local',
             'root'       => storage_path('app/public/digitalSignatures/signatures'),
             'visibility' => 'public',
+        ],
+
+
+
+        'productImageSFTP'     => [
+            'driver'     => 'sftp',
+            'host'       => env('SFTP_HOST2', ''),
+            'port'       => env('SFTP_PORT', '22'),
+            'username'   => env('SFTP_USERNAME', ''),
+            'password'   => env('SFTP_PASSWORD', ''),
+            'privateKey' => env('SFTP_PRIVATE_KEY_PATH', ''),
+            'root'       => env('SFTP_ROOT', ''),
+            'prefix'     => '/upload/images/product/',
+            'timeout'    => env('SFTP_TIMEOUT', '10'),
+            'dHost'      => env('CDN_SERVER_NAME', ''),
+            'dProtocol'  => env('DOWNLOAD_SERVER_PROTOCOL', 'http://'),
+        ],
+
+        'homeSlideShowPicSFTP'     => [
+            'driver'     => 'sftp',
+            'host'       => env('SFTP_HOST2', ''),
+            'port'       => env('SFTP_PORT', '22'),
+            'username'   => env('SFTP_USERNAME', ''),
+            'password'   => env('SFTP_PASSWORD', ''),
+            'privateKey' => env('SFTP_PRIVATE_KEY_PATH', ''),
+            'root'       => env('SFTP_ROOT', ''),
+            'prefix'     => '/upload/images/slideShow',
+            'timeout'    => env('SFTP_TIMEOUT', '10'),
+            'dHost'      => env('CDN_SERVER_NAME', ''),
+            'dProtocol'  => env('DOWNLOAD_SERVER_PROTOCOL', 'http://'),
+        ],
+
+        'productFileSFTP' => [
+            'driver'     => 'sftp',
+            'host'       => env('SFTP_HOST2', ''),
+            'port'       => env('SFTP_PORT', '22'),
+            'username'   => env('SFTP_USERNAME', ''),
+            'password'   => env('SFTP_PASSWORD', ''),
+            'privateKey' => env('SFTP_PRIVATE_KEY_PATH', ''),
+            'root'       => env('SFTP_ROOT', '').'/paid/private/',
+            'prefix'     => null,
+            'timeout'    => env('SFTP_TIMEOUT', '10'),
+            'dHost'      => env('PAID_SERVER_NAME',null),
+            'dProtocol'  => env('DOWNLOAD_SERVER_PROTOCOL', 'http://'),
+        ],
+
+        'setImageSFTP'     => [
+            'driver'     => 'sftp',
+            'host'       => env('SFTP_HOST2', ''),
+            'port'       => env('SFTP_PORT', '22'),
+            'username'   => env('SFTP_USERNAME', ''),
+            'password'   => env('SFTP_PASSWORD', ''),
+            'privateKey' => env('SFTP_PRIVATE_KEY_PATH', ''),
+            'root'       => env('SFTP_ROOT', ''),
+            'prefix'       => '/upload/contentset/departmentlesson',
+            'timeout'    => env('SFTP_TIMEOUT', '10'),
+            'dHost'      => env('CDN_SERVER_NAME', ''),
+            'dProtocol'  => env('DOWNLOAD_SERVER_PROTOCOL', 'http://'),
+        ],
+
+        'alaaCdnSFTP'     => [
+            'driver'     => 'sftp',
+            'host'       => env('SFTP_HOST2', ''),
+            'port'       => env('SFTP_PORT', '22'),
+            'username'   => env('SFTP_USERNAME', ''),
+            'password'   => env('SFTP_PASSWORD', ''),
+            'privateKey' => env('SFTP_PRIVATE_KEY_PATH', ''),
+            'root'       => env('SFTP_ROOT', ''),
+            'prefix'     => null,
+            'timeout'    => env('SFTP_TIMEOUT', '10'),
+            'dHost'      => env('CDN_SERVER_NAME', ''),
+            'dProtocol'  => env('DOWNLOAD_SERVER_PROTOCOL', 'http://'),
+        ],
+
+        'pamphletSftp' => [
+            'driver'     => 'sftp',
+            'host'       => env('SFTP_HOST2', ''),
+            'port'       => env('SFTP_PORT', '22'),
+            'username'   => env('SFTP_USERNAME', ''),
+            'password'   => env('SFTP_PASSWORD', ''),
+            'privateKey' => env('SFTP_PRIVATE_KEY_PATH', ''),
+            'root'       => env('SFTP_ROOT', '').'/paid',
+            'prefix'     => '/public/c/pamphlet/',
+            'timeout'    => env('SFTP_TIMEOUT', '10'),
+            'dHost'      => env('PAID_SERVER_NAME',null),
+            'dProtocol'  => env('DOWNLOAD_SERVER_PROTOCOL', 'http://'),
+        ],
+
+        'examSftp' => [
+            'driver'     => 'sftp',
+            'host'       => env('SFTP_HOST2', ''),
+            'port'       => env('SFTP_PORT', '22'),
+            'username'   => env('SFTP_USERNAME', ''),
+            'password'   => env('SFTP_PASSWORD', ''),
+            'privateKey' => env('SFTP_PRIVATE_KEY_PATH', ''),
+            'root'       => env('SFTP_ROOT', '').'/paid',
+            'prefix'     => '/public/c/exam/',
+            'timeout'    => env('SFTP_TIMEOUT', '10'),
+            'dHost'      => env('PAID_SERVER_NAME',null),
+            'dProtocol'  => env('DOWNLOAD_SERVER_PROTOCOL', 'http://'),
+        ],
+
+        'bookSftp' => [
+            'driver'     => 'sftp',
+            'host'       => env('SFTP_HOST2', ''),
+            'port'       => env('SFTP_PORT', '22'),
+            'username'   => env('SFTP_USERNAME', ''),
+            'password'   => env('SFTP_PASSWORD', ''),
+            'privateKey' => env('SFTP_PRIVATE_KEY_PATH', ''),
+            'root'       => env('SFTP_ROOT', '').'/paid',
+            'prefix'     => '/public/c/book/',
+            'timeout'    => env('SFTP_TIMEOUT', '10'),
+            'dHost'      => env('PAID_SERVER_NAME',null),
+            'dProtocol'  => env('DOWNLOAD_SERVER_PROTOCOL', 'http://'),
         ],
 
         's3' => [

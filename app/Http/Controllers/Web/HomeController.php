@@ -64,7 +64,7 @@ class HomeController extends Controller
             'home',
         ];
         $this->middleware('auth', ['except' => $authException]);
-        $this->middleware('role:admin', ['only' => 'debug']);
+        $this->middleware('role:admin', ['only' => [ 'debug'] ]);
     }
 
     public function debug(Request $request, BlockCollectionFormatter $formatter)
@@ -259,7 +259,7 @@ class HomeController extends Controller
                         ->getRoot();
                     //TODO: verify "$fileRemotePath = "http://" . $fileHost . ":8090" . "/public" . explode("public", $fileRoot)[1];"
 
-                    $fileRemotePath = config('constants.DOWNLOAD_HOST_PROTOCOL').config('constants.DOWNLOAD_HOST_NAME').'/public'.explode('public',
+                    $fileRemotePath = config('constants.DOWNLOAD_SERVER_PROTOCOL').config('constants.PAID_SERVER_NAME').'/public'.explode('public',
                             $fileRoot)[1];
 
                     return response()->redirectTo($fileRemotePath.$fileName);
@@ -674,7 +674,7 @@ class HomeController extends Controller
                     if ($filesystem->put($originalFileName, fopen($newFileNameDir, 'r+'))) {
                         $done = true;
                         // example:  https://cdn.sanatisharif.ir/media/203/hq/203001dtgr.mp4
-                        $fileName = config('constants.DOWNLOAD_SERVER_PROTOCOL').config('constants.DOWNLOAD_SERVER_NAME').config('constants.DOWNLOAD_SERVER_MEDIA_PARTIAL_PATH').$contentSetId.$originalFileName;
+                        $fileName = config('constants.DOWNLOAD_SERVER_PROTOCOL').config('constants.CDN_SERVER_NAME').config('constants.DOWNLOAD_SERVER_MEDIA_PARTIAL_PATH').$contentSetId.$originalFileName;
                     }
                 } else {
                     $filesystem = Storage::disk($disk.'Sftp');
@@ -701,6 +701,10 @@ class HomeController extends Controller
                 'file'    => $e->getFile(),
             ] , Response::HTTP_SERVICE_UNAVAILABLE);
         }
+    }
+
+    public function adTest(Request $request){
+        return view('pages.adtest');
     }
 
     /**

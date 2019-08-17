@@ -229,6 +229,7 @@ return [
         'school'                   => 'مدرسه',
         'introducedBy'             => 'معرف',
         'address'                  => 'آدرس',
+        'credit'                  => 'اعتبار',
     ],
 
     "FileArray" => [
