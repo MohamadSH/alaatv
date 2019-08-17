@@ -499,33 +499,38 @@ $(document).on("click", ".btnRemoveOrderproductInModal", function () {
 $(document).on("click", ".recycleOrderproduct", function () {
     let orderProductId = $(this).data('order-product-id');
     $('input[type="hidden"][name="orderProductIdForRecycle"]').val(orderProductId);
+    let actionUrl = $(this).data('action');
+    $('input[type="hidden"][name="orderProductRestoreActionUrl"]').val(actionUrl);
 });
 
 $(document).on("click", ".btnRecycleOrderproductInModal", function () {
     let orderProductId = $('input[type="hidden"][name="orderProductIdForRecycle"]').val();
+    let actionUrl = $('input[type="hidden"][name="orderProductRestoreActionUrl"]').val();
     $.ajax({
         type: "POST",
-        url: '/orderproduct/'+orderProductId+'/restore',
-        data: {_token: csrf_token},
+        url: actionUrl,
+        data: {_token: csrf_token , orderproductId:orderProductId},
         statusCode: {
             200: function (response) {
-                location.reload();
+                if(response.error != undefined && response.error != null){
+                    if(response.error.code == 503){
+                        toastr["error"]("خطای غیر منتظره", "پیام سیستم");
+                    }else if(response.error.code == 404){
+                        toastr["error"]("آیتم مورد نظر یافت نشد", "پیام سیستم");
+                    }
+                }else{
+                    location.reload();
+                }
             },
             403: function (response) {
-                location.reload();
-            },
-            401: function (response) {
-                location.reload();
-            },
-            405: function (response) {
-                location.reload();
+                toastr["error"]("شما اجازه این کار را ندارید", "پیام سیستم");
             },
             404: function (response) {
-                location.reload();
+                toastr["error"]("درخواست مورد نظر یافت نشد", "پیام سیستم");
             },
             //The status for when there is error php code
-            503: function (response) {
-                toastr["error"]("خطای پایگاه داده!", "پیام سیستم");
+            500: function (response) {
+                toastr["error"]("خطای کد!", "پیام سیستم");
             }
         }
     });

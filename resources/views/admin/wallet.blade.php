@@ -36,7 +36,7 @@
         <div class = "col-md-12">
             <!-- BEGIN Portlet PORTLET-->
             <div class = "m-portlet m-portlet--mobile m-portlet--body-progress-">
-                {!! Form::open(['method' => 'POST', 'url' => route('admin.wallet.giveCredit') , 'id'=>'findUserForm'  ]) !!}
+                {!! Form::open(['method' => 'POST', 'url' => route('web.admin.wallet.giveCredit') , 'id'=>'findUserForm'  ]) !!}
                 <div class = "m-portlet__body">
                     <div class = "row">
                         <div class = "col-md-6 form-group" id="nationalCodeFormGroup" >
