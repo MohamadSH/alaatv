@@ -12,7 +12,7 @@ trait CharacterCommon
     {
         return strlen(preg_replace('/\s+/', '', $str)) == 0;
     }
-    
+
     /** Converts Persian numbers in a string to English numbers
      *
      * @param  string  $string
@@ -74,14 +74,14 @@ trait CharacterCommon
             '۸',
             '۹',
         ];
-        
+
         $string = str_replace($persianDecimal, $newNumbers, $string);
         $string = str_replace($arabicDecimal, $newNumbers, $string);
         $string = str_replace($arabic, $newNumbers, $string);
-        
+
         return str_replace($persian, $newNumbers, $string);
     }
-    
+
     /** Converts a string to slug form
      *
      * @param  string  $string
@@ -93,18 +93,18 @@ trait CharacterCommon
     {
         $string = trim($string);
         $string = mb_strtolower($string, 'UTF-8');
-        
+
         // Make alphanumeric (removes all other characters)
         // this makes the string safe especially when used as a part of a URL
         // this keeps latin characters and Persian characters as well
-        $string = preg_replace("/[^a-z 0-9_\s-ءاآؤئبپتثجچحخدذرزژسشصضطظعغفقكکگلمنوهی]/u", '', $string);
-        
+        $string = preg_replace("/[^a\-z 0\-9_\s\-ءاآؤئبپتثجچحخدذرزژسشصضطظعغفقكکگلمنوهی]/u", '', $string);
+
         // Remove multiple dashes or whitespaces or underscores
-        $string = preg_replace("/[\s-_]+/", ' ', $string);
-        
+        $string = preg_replace("/[\s\-_]+/", ' ', $string);
+
         // Convert whitespaces and underscore to the given separator
         $string = preg_replace("/[\s_]/", $separator, $string);
-        
+
         return $string;
     }
 }
