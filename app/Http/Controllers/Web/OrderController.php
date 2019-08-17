@@ -549,38 +549,35 @@ class OrderController extends Controller
             ->toArray();
         $paymentstatuses = Paymentstatus::pluck('displayName', 'id')
             ->toArray();
-
-        if (!isset($order->coupon->id)) {
-            $order->coupon_id = 0;
-        }
-
-        $coupons = Coupon::pluck('name', 'id')
-            ->toArray();
-        $coupons = array_add($coupons, 0, 'بدون کپن');
-        $coupons = array_sort_recursive($coupons);
-
-        $orderTransactions                = $order->successfulTransactions->merge($order->pendingTransactions)
-            ->merge($order->unpaidTransactions);
-        $orderArchivedTransactions        = $order->archivedSuccessfulTransactions;
-        $transactionPaymentmethods        = Paymentmethod::pluck('displayName', 'name')
-            ->toArray();
+        $transactionPaymentmethods        = Paymentmethod::pluck('displayName', 'name')->toArray();
         $offlineTransactionPaymentMethods = Paymentmethod::where('id', '<>', config('constants.PAYMENT_METHOD_ONLINE'))
             ->pluck('displayName', 'id')
             ->toArray();
         $transactionStatuses              = Transactionstatus::orderBy('order')
             ->pluck('displayName', 'id')
             ->toArray();
-
-        $products = $this->makeProductCollection();
+        $coupons = Coupon::pluck('name', 'id')->toArray();
+        $coupons = array_add($coupons, 0, 'بدون کپن');
+        $coupons = array_sort_recursive($coupons);
 
         $transactionGateways = TransactionGatewayRepo::getTransactionGateways(['enable'=>1])->get()->pluck('displayName' , 'id');
 
-        $totalTransactions = $order->transactions;
+        $products = $this->makeProductCollection();
+
+        if (!isset($order->coupon->id)) {
+            $order->coupon_id = 0;
+        }
+
+        $orderproducts                    = $order->orderproducts()->get();
+        $trashedOrderproducts             = $order->orderproducts()->onlyTrashed()->orderBy('deleted_at' , 'desc')->get();
+        $orderTransactions                = $order->successfulTransactions()->get()->merge($order->pendingTransactions()->get())->merge($order->unpaidTransactions()->get());
+        $orderArchivedTransactions        = $order->archivedSuccessfulTransactions()->get();
+        $totalTransactions                = $order->transactions()->get();
 
         return view('order.edit',
             compact('order', 'orderstatuses', 'paymentstatuses', 'coupons', 'orderTransactions',
                 'transactionPaymentmethods', 'transactionStatuses', 'products', 'orderArchivedTransactions',
-                'offlineTransactionPaymentMethods' , 'transactionGateways', 'totalTransactions'));
+                'offlineTransactionPaymentMethods' , 'transactionGateways', 'totalTransactions' , 'trashedOrderproducts' , 'orderproducts'));
     }
 
     /**

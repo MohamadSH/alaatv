@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Web;
 
 use App\Bon;
+use App\Http\Requests\RestoreOrderproductRequest;
 use App\Repositories\OrderproductRepo;
 use App\User;
 use App\Order;
@@ -310,7 +311,18 @@ class OrderproductController extends Controller
         return response()->json(['message' => 'محصول سفارش با موفقیت حذف شد!']);
     }
 
-    public function restore(Request $request , Orderproduct $orderproduct){
+    public function restore(RestoreOrderproductRequest $request){
+        $orderproduct = Orderproduct::onlyTrashed()->find($request->get('orderproductId'));
+        if(!isset($orderproduct)) {
+            return response()->json([
+                    'error' => [
+                        'code'   =>  Response::HTTP_NOT_FOUND,
+                        'message'=> 'Orderproduct not found',
+                    ]
+            ]);
+        }
+
+
         $restoreResult = $orderproduct->restore();
         if($restoreResult) {
             return response()->json([
@@ -319,12 +331,10 @@ class OrderproductController extends Controller
         }
 
         return response()->json([
-           [
                'error' => [
                    'code'   =>  Response::HTTP_SERVICE_UNAVAILABLE,
                    'message'=> 'Unexpected error',
                ]
-           ]
         ]);
     }
 

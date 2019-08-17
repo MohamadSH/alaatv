@@ -127,7 +127,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('lotteryAdminPanel', 'Web\AdminController@adminLottery');
     Route::get('teleMarketingAdminPanel', 'Web\AdminController@adminTeleMarketing');
     Route::get('walletAdminPanel', [AdminController::class, 'adminGiveWalletCredit'])->name('admin.wallet');
-    Route::post('giveWalletCredit', [WalletController::class, 'giveCredit'])->name('admin.wallet.giveCredit');
+    Route::get('cacheclearAdmin', [AdminController::class, 'adminCacheClear'])->name('web.admin.cacheclear');
+    Route::post('giveWalletCredit', [WalletController::class, 'giveCredit'])->name('web.admin.wallet.giveCredit');
     Route::get('registrationListAdminPanel', [AdminController::class, 'adminRegistrationList'])->name('admin.registrationList');
     Route::post('adminSendSMS', [HomeController::class , 'sendSMS']);
     Route::get('asset', [UserController::class, 'userProductFiles'])->name('user.asset');
@@ -158,10 +159,10 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get("v/asiatech", "Web\VoucherController@voucherRequest");
     Route::put("v", "Web\VoucherController@submitVoucherRequest");
 
-    Route::resource('orderproduct', 'Web\OrderproductController');
     Route::group(['prefix' => 'orderproduct'], function () {
-        Route::post("{orderproduct}/restore", [OrderproductController::class, 'restore']);
+        Route::post('restore', [OrderproductController::class, 'restore'])->name('web.orderproduct.restore');
     });
+    Route::resource('orderproduct', 'Web\OrderproductController');
 
 
     Route::get('96', [UserController::class, 'submitKonkurResult']);
