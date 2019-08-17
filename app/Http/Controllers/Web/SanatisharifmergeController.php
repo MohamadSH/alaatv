@@ -23,7 +23,7 @@ class SanatisharifmergeController extends Controller
     use MetaCommon;
 
     private $teachers;
-    
+
     function __construct()
     {
         $this->middleware('role:admin', [
@@ -637,7 +637,7 @@ class SanatisharifmergeController extends Controller
             ],
         ]);
     }
-    
+
     public function store(Request $request)
     {
         $sanatisharifRecord = new Sanatisharifmerge();
@@ -654,7 +654,7 @@ class SanatisharifmergeController extends Controller
      * @param SetController $controller
      * @return Response
      */
-    
+
     public function copyDepartmentlesson(SetController $controller)
     {
         try {
@@ -667,7 +667,7 @@ class SanatisharifmergeController extends Controller
             //        $sanatisharifRecords = Sanatisharifmerge::groupBy('departmentlessonid')->where("departmentlessonTransferred" , 0);
             //Bug: farze kon ye deplesson ham khodesh vared shode ham video barayash vared shode. man chon bar asase sotoone departmentlessonTransferred filter mikonam
             // var recordi ke deplessonid va videoid darad dataye departmentlessonTransferred sefr ast kare filtere man ra kharab mikonad
-            
+
             dump("number of available deplessons : ".count($sanatisharifRecords));
             $successCoutner     = 0;
             $failedCounter      = 0;
@@ -685,12 +685,12 @@ class SanatisharifmergeController extends Controller
                     continue;
                 }
                 $request = new InsertContentsetRequest();
-                
+
                 $request->offsetSet("id", $sanatisharifRecord->departmentlessonid);
                 $request->offsetSet("enable", $sanatisharifRecord->departmentlessonEnable);
                 $request->offsetSet("display", $sanatisharifRecord->departmentlessonEnable);
                 $request->offsetSet("photo", "http://cdn.alaatv.com/upload/contentset/".$sanatisharifRecord->pic);
-                
+
                 $tags             = [
                     "دوره_آموزشی",
                 ];
@@ -710,14 +710,14 @@ class SanatisharifmergeController extends Controller
                     array_push($tags, $this->make_slug($teacherName, "_"));
                     $name .= " ".$teacherName;
                 }
-                
+
                 $tagsJson = [
                     "bucket" => "contentset",
                     "tags"   => $tags,
                 ];
                 $request->offsetSet("tags", json_encode($tagsJson, JSON_UNESCAPED_UNICODE));
                 dump($tags);
-                
+
                 $request->offsetSet("name", $name);
                 $response   = $controller->store($request);
                 if ($response->getStatusCode() == Response::HTTP_OK) {
@@ -740,7 +740,7 @@ class SanatisharifmergeController extends Controller
             dump("number of failed: ".$failedCounter);
             dump("number of successful : ".$successCoutner);
             dump("number of skipped : ".$skippedCounter);
-            
+
             return response()->json(["message" => "Creating Playlists Done Successfully"]);
         } catch (\Exception    $e) {
             return response()->json([
@@ -751,7 +751,7 @@ class SanatisharifmergeController extends Controller
             ] , Response::HTTP_SERVICE_UNAVAILABLE);
         }
     }
-    
+
     private function determineContentSetName($deplessonid, $lessonname, $depname, $depyear)
     {
         /**making year label* */
@@ -762,16 +762,16 @@ class SanatisharifmergeController extends Controller
         } else {
             $yearLabel = "";
         }
-        
+
         $name        = $lessonname." ".$depname.$yearLabel;
         $specialName = $this->deplessonMultiplexer($deplessonid, 2);
         if (strlen($specialName) > 0) {
             $name = $specialName;
         }
-        
+
         return $name;
     }
-    
+
     private function deplessonMultiplexer($deplessonid, $mod = 1)
     {
         if ($mod == 1) {
@@ -2393,10 +2393,10 @@ class SanatisharifmergeController extends Controller
                 }
                 break;
         }
-        
+
         return $c;
     }
-    
+
     private function departmentMultiplexer($depid, $mod = 1)
     {
         if ($mod == 1) {
@@ -2987,10 +2987,10 @@ class SanatisharifmergeController extends Controller
                 }
                 break;
         }
-        
+
         return $c;
     }
-    
+
     private function lessonMultiplexer($lessonid, $lessonname, $mod = 1)
     {
         if ($mod == 1) {
@@ -3327,17 +3327,17 @@ class SanatisharifmergeController extends Controller
                 }
                 break;
         }
-        
+
         return $c;
     }
-    
+
     private function determineTeacherName($userfirstname, $userlastname, $id = 0, $mod = 1)
     {
         /**
          *  mod 1 => id is deplessonid
          *  mod 2 => id is videoid
          */
-        
+
         if ($mod == 1) switch ($id) {//deplessonid
             case 20 :
                 $userid = 0;
@@ -3467,7 +3467,7 @@ class SanatisharifmergeController extends Controller
             default:
                 break;
         }
-        
+
         if (isset($userid)) {
             if ($userid == 0) {
                 $userfirstname = "";
@@ -3483,24 +3483,24 @@ class SanatisharifmergeController extends Controller
                 }
             }
         }
-        
+
         if (!isset($userfirstname)) {
             $userfirstname = "";
         }
         if (!isset($userlastname)) {
             $userlastname = "";
         }
-        
+
         if ($userfirstname == "گروه آموزشی" || $userfirstname == "مشاوران دبیرستان") {
             $userfirstname = "";
         }
-        
+
         return [
             "firstname" => $userfirstname,
             "lastname"  => $userlastname,
         ];
     }
-    
+
     private function makeName($firstname, $lastname)
     {
         $fullName = "";
@@ -3514,10 +3514,10 @@ class SanatisharifmergeController extends Controller
                 $fullName .= $firstname;
             }
         }
-        
+
         return $fullName;
     }
-    
+
     public function update(Request $request, $sanatisharifmerge)
     {
         $sanatisharifmerge->fill($request->all());
@@ -3527,7 +3527,7 @@ class SanatisharifmergeController extends Controller
             return response()->json([] , Response::HTTP_SERVICE_UNAVAILABLE);
         }
     }
-    
+
     public function copyContent(ContentController $controller)
     {
         try {
@@ -3536,7 +3536,7 @@ class SanatisharifmergeController extends Controller
             } else {
                 $contentType = Input::get("t");
             }
-            
+
             switch ($contentType) {
                 case "v" :
                     $threshold               = 2000;
@@ -3558,7 +3558,7 @@ class SanatisharifmergeController extends Controller
             $descriptionColumn = $contentTypeLable."descrip";
             $enableColumn      = $contentTypeLable."Enable";
             $sessionColumn     = $contentTypeLable."session";
-            
+
             $sanatisharifRecords = Sanatisharifmerge::whereNotNull($contentTypeLable."id")
                 ->where($contentTypeLable."Transferred", 0);
             if (Input::has("id")) {
@@ -3566,7 +3566,7 @@ class SanatisharifmergeController extends Controller
                 $sanatisharifRecords->where($idColumn, $id);
             }
             $sanatisharifRecords = $sanatisharifRecords->get();
-            
+
             $counter        = 0;
             $successCounter = 0;
             $failCounter    = 0;
@@ -3619,7 +3619,7 @@ class SanatisharifmergeController extends Controller
                             }
                             continue 2;
                         }
-                            
+
                             $files = [];
                             if (isset($sanatisharifRecord->videolink) && strlen($sanatisharifRecord->videolink) > 0) {
                                 array_push($files, [
@@ -3656,7 +3656,7 @@ class SanatisharifmergeController extends Controller
                                         }
                                     }
                                 }
-                                
+
                                 if (isset($filePath)) {
                                     $pathInfoArray = pathinfo($filePath);
                                     $thumbnailFile = "https://cdn.sanatisharif.ir/media/thumbnails/".$sanatisharifRecord->departmentlessonid."/".$pathInfoArray["filename"].".jpg";
@@ -3694,38 +3694,38 @@ class SanatisharifmergeController extends Controller
                         default:
                             break;
                     }
-                    
+
                     $storeContentReuest->offsetSet("template_id", $template_id);
                     $storeContentReuest->offsetSet("contenttype_id", $contenttype_id);
-                    
+
                     if (isset($sanatisharifRecord->$nameColumn) && strlen($sanatisharifRecord->$nameColumn) > 0) {
                         $storeContentReuest->offsetSet("name", $sanatisharifRecord->$nameColumn);
                         //                        $metaTitle = strip_tags(htmlspecialchars(substr($sanatisharifRecord->$nameColumn ,0,55)));
                         //                        $storeContentReuest->offsetSet("metaTitle" , $metaTitle );
                     }
-                    
+
                     if (isset($sanatisharifRecord->$descriptionColumn) && strlen($sanatisharifRecord->$descriptionColumn) > 0) {
                         $storeContentReuest->offsetSet("description", $sanatisharifRecord->$descriptionColumn);
                         $metaDescription = htmlspecialchars(strip_tags(substr($sanatisharifRecord->$descriptionColumn,
                             0, 155)));
                         $storeContentReuest->offsetSet("metaDescription", $metaDescription);
                     }
-                    
+
                     if ((isset($sanatisharifRecord->$nameColumn) && strlen($sanatisharifRecord->$nameColumn) > 0) || (isset($sanatisharifRecord->$descriptionColumn) && strlen($sanatisharifRecord->$descriptionColumn) > 0)) {
                         $text = strip_tags($sanatisharifRecord->$nameColumn)." ".strip_tags($sanatisharifRecord->$descriptionColumn);
                         $text = preg_replace('/[^\p{L}|\p{N}]+/u', ' ', $text);
                         $text = preg_replace('/[\p{Z}]{2,}/u', " ", $text);
-                        
+
                         $addKeyword    = 'دبیرستان,دانشگاه,صنعتی,شریف,آلاء,الا,دانشگاه شریف, دبیرستان شریف, فیلم, آموزش,رایگان,کنکور,امتحان نهایی,تدریس';
                         $manualKeyword = '';
                         $metaKeywords  = $this->generateKeywordsMeta($text, $manualKeyword, $addKeyword);
                         $storeContentReuest->offsetSet("metaKeywords", $metaKeywords);
                     }
-                    
+
                     $teacherNameArray = $this->determineTeacherName($sanatisharifRecord->teacherfirstname,
                         $sanatisharifRecord->teacherlastname,
                         $sanatisharifRecord->videoid, 2);
-                    
+
                     $authorId = $this->determineAuthor($teacherNameArray['firstname'], $teacherNameArray["lastname"]);
                     if ($authorId == 0) {
                         $warningCounter++;
@@ -3734,9 +3734,9 @@ class SanatisharifmergeController extends Controller
                     } else {
                         $storeContentReuest->offsetSet("author_id", $authorId);
                     }
-                    
+
                     $tags = [$this->make_slug($contentTypePersianLable, "_")];
-                    
+
                     if (isset($contentTypePersianLable2) && strlen($contentTypePersianLable2) > 0) {
                         $tags = array_merge($tags, [$this->make_slug($contentTypePersianLable2, "_")]);
                     }
@@ -3754,14 +3754,14 @@ class SanatisharifmergeController extends Controller
                         "tags"   => $tags,
                     ];
                     $storeContentReuest->offsetSet("tags", json_encode($tagsJson, JSON_UNESCAPED_UNICODE));
-                    
+
                     dump($tags);
-                    
+
                     if (!$sanatisharifRecord->$enableColumn) {
                         $storeContentReuest->offsetSet("enable", 0);
                     }
                     //            $storeContentReuest->offsetSet("validSince" , "");
-                    
+
                     $storeContentReuest->offsetSet("contenttypes", $contentTypeId);
                     if (Contentset::where("id", $sanatisharifRecord->departmentlessonid)
                         ->get()
@@ -3777,7 +3777,7 @@ class SanatisharifmergeController extends Controller
                         $warningCounter++;
                         dump("Warning contentset was not exist. id: ".$sanatisharifRecord->departmentlessonid);
                     }
-                    
+
                     $response        = $controller->store($storeContentReuest);
                     $responseContent = json_decode($response->getContent());
                     if ($response->getStatusCode() == Response::HTTP_OK) {
@@ -3813,7 +3813,7 @@ class SanatisharifmergeController extends Controller
             dump($failCounter." records failed");
             dump($warningCounter." warnings");
             dump("finish time:".Carbon::now("asia/tehran"));
-            
+
             return response()->json(["message" => "Transfer Done Successfully"]);
         } catch (\Exception    $e) {
             return response()->json([
@@ -3823,7 +3823,7 @@ class SanatisharifmergeController extends Controller
             ] , Response::HTTP_SERVICE_UNAVAILABLE );
         }
     }
-    
+
     private function determineAuthor($frstname, $lastname)
     {
         $author = $this->teachers->where("userfirstname", $frstname)
@@ -3846,17 +3846,17 @@ class SanatisharifmergeController extends Controller
                 "mobile"       => $info["mobile"],
                 "nationalCode" => $info["nationalCode"],
             ], $info);
-            
+
             if (isset($authorAccount)) {
                 $userId = $authorAccount->id;
             }
         } else {
             $userId = 0;
         }
-        
+
         return $userId;
     }
-    
+
     public function redirectLesson(Request $request, $lId = null, $dId = null)
     {
         $tag    = $this->getDepLessonTags($lId, $dId);
@@ -3866,14 +3866,14 @@ class SanatisharifmergeController extends Controller
         if ($isApp) {
             $app = "&contentType[]=video";
         }
-        
+
         return redirect($newUri.$app, 301);
     }
-    
+
     private function getDepLessonTags($lId = null, $dId = null)
     {
         $key = "getDepLessonTags:".$lId."-".$dId;
-        
+
         return Cache::rememberForever($key, function () use ($lId, $dId) {
             $tag1 = [];
             $tag2 = [];
@@ -3906,11 +3906,11 @@ class SanatisharifmergeController extends Controller
                 }
             }
             $tag = array_merge($tag1, $tag2, $tag3, $tag4);
-            
+
             return $tag;
         });
     }
-    
+
     public function redirectVideo(Request $request, $lId = null, $dId = null, $vId = null)
     {
         $key    = "Url:".$lId."-".$dId."-".$vId;
@@ -3925,7 +3925,7 @@ class SanatisharifmergeController extends Controller
                 }
             }
             $tag = $this->getDepLessonTags($lId, $dId);
-            
+
             return action("Web\ContentController@index", ["tags" => $tag]);
         });
         $app    = null;
@@ -3935,10 +3935,10 @@ class SanatisharifmergeController extends Controller
         }
         $newUri .= $app;
         $newUri = urldecode($newUri);
-        
+
         return redirect($newUri, 301);
     }
-    
+
     public function redirectEmbedVideo(Request $request, $lId = null, $dId = null, $vId = null)
     {
         $key    = "Url:".$lId."-".$dId."-".$vId;
@@ -3953,13 +3953,13 @@ class SanatisharifmergeController extends Controller
                 }
             }
             $tag = $this->getDepLessonTags($lId, $dId);
-            
+
             return urldecode(action("Web\ContentController@index", ["tags" => $tag]));
         });
-        
+
         return redirect($newUri, 301);
     }
-    
+
     public function redirectPamphlet(Request $request, $lId = null, $dId = null, $pId = null)
     {
         $key    = "Url:".$lId."-".$dId."-".$pId;
@@ -3974,13 +3974,13 @@ class SanatisharifmergeController extends Controller
                 }
             }
             $tag = $this->getDepLessonTags($lId, $dId);
-            
+
             return urldecode(action("Web\ContentController@index", ["tags" => $tag]));
         });
-        
+
         return redirect($newUri, 301);
     }
-    
+
     public function AlaaApp(Request $request, $mod)
     {
         $json = null;
@@ -4824,7 +4824,7 @@ class SanatisharifmergeController extends Controller
                 ';
                 break;
         }
-        
+
         return response()->json(json_decode($json, true), Response::HTTP_OK);
     }
     //    public function redirectVideo

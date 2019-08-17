@@ -88,10 +88,6 @@ Route::group(['prefix' => 'checkout'], function () {
     Route::any('verifyPayment/offline/{paymentMethod}/{device}', 'Web\OfflinePaymentController@verifyPayment')
         ->name('verifyOfflinePayment');
 });
-Route::group(['prefix' => 'orderproduct'], function () {
-//    Route::get('store', 'Web\OrderproductController@store');
-    Route::post('checkout', [OrderproductController::class, 'checkOutOrderproducts']);
-});
 
 Route::group(['prefix' => 'landing'], function () {
     Route::get('1' , [ProductLandingController::class, 'landing1'])->name('landing.1');
@@ -163,6 +159,10 @@ Route::group(['middleware' => 'auth'], function () {
     Route::put("v", "Web\VoucherController@submitVoucherRequest");
 
     Route::resource('orderproduct', 'Web\OrderproductController');
+    Route::group(['prefix' => 'orderproduct'], function () {
+        Route::post("{orderproduct}/restore", [OrderproductController::class, 'restore']);
+    });
+
 
     Route::get('96', [UserController::class, 'submitKonkurResult']);
     Route::get('97', [UserController::class, 'submitKonkurResult']);

@@ -11,7 +11,6 @@ use App\Attribute;
 use App\Orderproduct;
 use App\Attributevalue;
 use App\Checkoutstatus;
-use App\Websitesetting;
 use App\Traits\OrderCommon;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -26,13 +25,21 @@ use App\Collection\OrderproductCollection;
 use App\Http\Requests\InsertUserBonRequest;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use App\Http\Requests\OrderProduct\OrderProductStoreRequest;
-use App\Http\Requests\OrderProduct\AttachExtraAttributesRequest;
 use App\Classes\OrderProduct\RefinementProduct\RefinementFactory;
 
 class OrderproductController extends Controller
 {
     use OrderCommon;
     use ProductCommon;
+
+    function __construct()
+    {
+        $this->middleware('permission:'.config('constants.LIST_ORDERPRODUCT_ACCESS'), ['only' => 'index']);
+        $this->middleware('permission:'.config('constants.UPDATE_ORDERPRODUCT_ACCESS'), ['only' => 'update']);
+        $this->middleware('permission:'.config('constants.SHOW_ORDERPRODUCT_ACCESS'), ['only' => 'edit']);
+        $this->middleware('permission:'.config('constants.RESTORE_ORDERPRODUCT_ACCESS'), ['only' => 'restore']);
+        $this->middleware(['CheckPermissionForSendOrderId',], ['only' => ['store'],]);
+    }
 
     public function index(Request $request){
         $timeFilterEnable = $request->get('dateFilterEnable');
@@ -43,10 +50,9 @@ class OrderproductController extends Controller
 
         $since = null;
         $till = null ;
-        if($timeFilterEnable)
-        {
-            $since = Carbon::createFromFormat('Y-n-j H:i:s', explode(' ' , $request->since)[0].' 00:00:00');
-            $till = Carbon::createFromFormat('Y-n-j H:i:s', explode(' ' , $request->till)[0].' 23:59:59');
+        if($timeFilterEnable) {
+            $since = Carbon::createFromFormat('Y-n-j H:i:s', explode(' ' , $request->get('since'))[0].' 00:00:00');
+            $till = Carbon::createFromFormat('Y-n-j H:i:s', explode(' ' , $request->get('till'))[0].' 23:59:59');
         }
 
         if($checkoutStatus == 0){
@@ -64,8 +70,7 @@ class OrderproductController extends Controller
 
         $totalNubmer = $orderproducts->count();
 
-        if($pageNumber > 1)
-        {
+        if($pageNumber > 1) {
             $orderproducts->chunk(20)[$pageNumber];
             return response()->json([
                 'orderproducts' => $orderproducts,
@@ -80,7 +85,7 @@ class OrderproductController extends Controller
         }
 
         $checkoutResult = false;
-        if($checkoutEnable){
+        if($checkoutEnable && $request->user()->can(config('constants.CHECKOUT_ORDERPRODUCT_ACCESS'))){
             $checkoutResult = Orderproduct::whereIn('id' , $orderproducts->pluck('id')->toArray())->update(['checkoutstatus_id' => config('constants.ORDERPRODUCT_CHECKOUT_STATUS_PAID')]);
         }
 
@@ -93,24 +98,6 @@ class OrderproductController extends Controller
         ]);
     }
 
-    function __construct()
-    {
-        $this->middleware('auth', [
-            'only' => [
-                'destroy',
-                'edit',
-                'update',
-            ],
-        ]);
-        $this->middleware([
-            'CheckPermissionForSendOrderId',
-            /*'checkPermissionForSendExtraAttributesCost'*/
-        ], [
-            'only' => ['store'],
-        ]);
-        $this->middleware('CheckPermissionForSendExtraAttributesCost', ['only' => ['attachExtraAttributes']]);
-    }
-    
     public function store(OrderProductStoreRequest $request)
     {
         if ($request->has('extraAttribute')) {
@@ -123,201 +110,15 @@ class OrderproductController extends Controller
                 $request->offsetSet('parentProduct', $product);
             }
         }
-        
+
         $result        = $this->new($request->all());
         $orderproducts = $result['data']['storedOrderproducts'];
-        
+
         return response()->json([
             'orderproducts' => $orderproducts,
         ]);
     }
-    
-    /**
-     * @param  Request  $request
-     * @param  Product  $product
-     *
-     * @return Collection|null
-     */
-    public function getAttributesValuesFromProduct(Request $request, Product $product): ?Collection
-    {
-        $extraAttributes   = $request->get('extraAttribute');
-        $extraAttributesId = array_column($extraAttributes, 'id');
-        $attributesValues  = $product->getAttributesValueByIds($extraAttributesId);
-        
-        return $attributesValues;
-    }
-    
-    /**
-     * @param  Request     $request
-     * @param  Collection  $attributesValues
-     */
-    public function syncExtraAttributesCost(Request $request, Collection $attributesValues)
-    {
-        $extraAttributes = $request->get('extraAttribute');
-        foreach ($attributesValues as $key => $attributesValue) {
-            foreach ($extraAttributes as $key1 => $extraAttribute) {
-                if ($extraAttribute['id'] == $attributesValue['id']) {
-                    $extraAttributes[$key1]['cost']   = $attributesValue->pivot->extraCost;
-                    $extraAttributes[$key1]['object'] = $attributesValue;
-                }
-            }
-        }
-        $request->offsetSet('extraAttribute', $extraAttributes);
-    }
-    
-    /**
-     * Saves a new Orderproduct
-     *
-     * @param  array  $data
-     *
-     * @return array
-     */
-    public function new(array $data): array
-    {
-        $report = [
-            'status'  => true,
-            'message' => [],
-            'data'    => [],
-        ];
-        
-        //ToDo : discuss getting order from request /** @var Order $order */
-        /*if(isset($data['order'])) {
-            $order = $data['order'];
-        } else {
-            $order = Order::FindorFail($orderId)->first();
-        }*/
-        
-        $data = array_merge([
-            'product_id'     => null,
-            'order_id'       => null,
-            'products'       => null,
-            'attribute'      => null,
-            'extraAttribute' => null,
-            'withoutBon'     => null,
-        ], $data);
-        
-        $productId = $data['product_id'];
-        $orderId   = $data['order_id'];
-        
-        try {
-            $order   = Order::FindorFail($orderId);
-            $product = Product::FindorFail($productId);
-        } catch (ModelNotFoundException $e) {
-            report($e);
-            $report['status']    = false;
-            $report['message'][] = 'Unknown order or product';
-            
-            return $report;
-        }
-        $user = $order->user;
-        
-        $simpleProducts = (new RefinementFactory($product, $data))->getRefinementClass()
-            ->getProducts();
-        
-        $notDuplicateProduct = $order->checkProductsExistInOrderProducts($simpleProducts);
-        
-        if (count($simpleProducts) != 0 && count($notDuplicateProduct) == 0) {
-            $report['status']           = false;
-            $report['message'][]        = 'This product has been added to order before';
-            $report['data']['products'] = $simpleProducts;
-        } else {
-            if (count($simpleProducts) == 0) {
-                $report['status']           = false;
-                $report['message'][]        = 'No products has been selected';
-                $report['data']['products'] = $simpleProducts;
-            }
-        }
-        
-        $storedOrderproducts = new OrderproductCollection();
-        /**
-         * save orderproduct and attach extraAttribute
-         */
-        foreach ($notDuplicateProduct as $key => $productItem) {
-            $orderProduct                      = new Orderproduct();
-            $orderProduct->product_id          = $productItem->id;
-            $orderProduct->order_id            = $order->id;
-            $orderProduct->orderproducttype_id = config('constants.ORDER_PRODUCT_TYPE_DEFAULT');
-            if (isset($data['cost'])) {
-                $orderProduct->cost = $data['cost'];
-            }
-            if (!$orderProduct->save()) {
-                continue;
-            }
-            $productItem->decreaseProductAmountWithValue(1);
-            
-            if (isset($data['extraAttribute'])) {
-                $attachExtraAttributesRequest = new AttachExtraAttributesRequest();
-                $attachExtraAttributesRequest->offsetSet('extraAttribute', $data['extraAttribute']);
-                $this->attachExtraAttributes($attachExtraAttributesRequest, $orderProduct);
-            }
-            
-            $this->applyOrderProductBon($data, $user, $orderProduct, $productItem);
-            
-            $this->applyOrderGifts($order, $orderProduct, $productItem);
-            
-            $storedOrderproducts->push($orderProduct);
-        }
-        
-        $report['data']['storedOrderproducts'] = $storedOrderproducts;
 
-        return $report;
-    }
-    
-    /**
-     * @param  AttachExtraAttributesRequest  $request
-     * @param  Orderproduct                  $orderProduct
-     */
-    public function attachExtraAttributes(AttachExtraAttributesRequest $request, Orderproduct $orderProduct): void
-    {
-        $extraAttributes = $request->get('extraAttribute');
-        foreach ($extraAttributes as $value) {
-            $orderProduct->attributevalues()
-                ->attach($value['id'], [
-                    'extraCost' => $value['cost'],
-                ]);
-        }
-    }
-    
-    /**
-     * @param  array         $data
-     * @param  User          $user
-     * @param  Orderproduct  $orderProduct
-     * @param  Product       $product
-     */
-    private function applyOrderProductBon(array $data, User $user, Orderproduct $orderProduct, Product $product): void
-    {
-        $bonName = config('constants.BON1');
-        
-        $bon = $product->getTotalBons($bonName);
-        
-        $canApplyBon = $this->canApplyBonForRequest($data, $product, $bon);
-        if (!$canApplyBon) {
-            return;
-        }
-        
-        $userValidBons = $user->userValidBons($bon->first());
-        
-        if ($userValidBons->isNotEmpty()) {
-            $orderProduct->applyBons($userValidBons, $bon->first());
-        }
-    }
-    
-    /**
-     * @param  array       $data
-     * @param  Product     $product
-     * @param  Collection  $bon
-     *
-     * @return bool
-     */
-    private function canApplyBonForRequest(array $data, Product $product, Collection $bon): bool
-    {
-        if (!isset($data['withoutBon']) || !$data['withoutBon']) {
-            return $product->canApplyBon($bon);
-        } else {
-            return false;
-        }
-    }
-    
     public function edit($orderproduct)
     {
         $products                = $this->makeProductCollection();
@@ -346,16 +147,16 @@ class OrderproductController extends Controller
         $checkoutStatuses       = Checkoutstatus::pluck('displayName', 'id')
             ->toArray();
         $checkoutStatuses       = array_sort_recursive($checkoutStatuses);
-        
+
         $product  = $orderproduct->product()
             ->first();
-        
+
         return view('order.orderproduct.edit',
             compact('orderproduct', 'products', 'product', 'extraSelectCollection', 'extraCheckboxCollection',
                 'orderproductCost', 'defaultExtraAttributes',
                 'checkoutStatuses'));
     }
-    
+
     /**
      * Update the specified resource in storage.
      *
@@ -369,16 +170,16 @@ class OrderproductController extends Controller
     {
         $cancelOldDiscount = false;
         $orderproduct->fill($request->all());
-        
+
         if (strlen($orderproduct->checkoutstatus_id) == 0) {
             $orderproduct->checkoutstatus_id = null;
         }
-        
+
         $orderproduct->attributevalues()
             ->detach($orderproduct->attributevalues->pluck('id')
                 ->toArray());
         if ($request->has('extraAttribute')) {
-            
+
             $extraAttributes = $request->get('extraAttribute');
             foreach ($extraAttributes as $value) {
                 if ($value > 0) {
@@ -394,7 +195,7 @@ class OrderproductController extends Controller
                 }
             }
         }
-        
+
         if ($request->has('changeProduct')) {
             $newProduct = Product::where('id', ($request->get('newProductId')))
                 ->get()
@@ -434,7 +235,7 @@ class OrderproductController extends Controller
                 }
             }
         }
-        
+
         if ($request->has('changeCost')) {
             if (strlen($request->get('cost')) > 0) {
                 $cancelOldDiscount = true;
@@ -445,7 +246,7 @@ class OrderproductController extends Controller
                 $orderproduct->cost = $request->get('newProductCost');
             }
         }
-        
+
         if ($cancelOldDiscount) {
             $orderproduct->userbons()
                 ->detach($orderproduct->userbons->pluck('id')
@@ -454,7 +255,7 @@ class OrderproductController extends Controller
             $orderproduct->discountPercentage = 0;
             $orderproduct->discountAmount     = 0;
         }
-        
+
         if ($orderproduct->update()) {
             $order = Order::where('id', $orderproduct->order_id)
                 ->get()
@@ -469,10 +270,10 @@ class OrderproductController extends Controller
         } else {
             session()->put('error', 'خطای پایگاه داده در اصلاح کالای سفارش');
         }
-        
+
         return redirect()->back();
     }
-    
+
     public function destroy(Orderproduct $orderproduct)
     {
         $orderproduct_userbons = $orderproduct->userbons;
@@ -484,7 +285,7 @@ class OrderproductController extends Controller
             }
         }
         $deleteFlag = $orderproduct->delete() ? true : false;
-        
+
         $previousRoute = app('router')
             ->getRoutes()
             ->match(app('request')->create(URL::previous()))
@@ -495,35 +296,180 @@ class OrderproductController extends Controller
             $orderproduct->order->costwithoutcoupon = $orderCost['rawCostWithoutDiscount'];
             $orderproduct->order->updateWithoutTimestamp();
         }
-        
+
         if (!$deleteFlag) {
             return response()->json(['message' => 'خطا در حذف محصول سفارش'] , Response::HTTP_SERVICE_UNAVAILABLE );
         }
-        
+
         foreach ($orderproduct->children as $child) {
             $child->delete();
         }
         Cache::tags('bon')
             ->flush();
-        
+
         return response()->json(['message' => 'محصول سفارش با موفقیت حذف شد!']);
     }
-    
-    public function checkOutOrderproducts(Request $request)
-    {
-        $orderproductIds      = $request->get('orderproducts');
-        $newCheckoutstatus_id = $request->get('checkoutStatus');
-        $orderproducts        = Orderproduct::whereIn('id', $orderproductIds)
-            ->get();
-        
-        foreach ($orderproducts as $orderproduct) {
-            $orderproduct->checkoutstatus_id = $newCheckoutstatus_id;
-            $orderproduct->update();
+
+    public function restore(Request $request , Orderproduct $orderproduct){
+        $restoreResult = $orderproduct->restore();
+        if($restoreResult) {
+            return response()->json([
+                'message' => 'Orderproduct restored successfully'
+            ]);
         }
-        
-        return response()->json();
+
+        return response()->json([
+           [
+               'error' => [
+                   'code'   =>  Response::HTTP_SERVICE_UNAVAILABLE,
+                   'message'=> 'Unexpected error',
+               ]
+           ]
+        ]);
     }
-    
+
+    /**
+     * Saves a new Orderproduct
+     *
+     * @param  array  $data
+     *
+     * @return array
+     */
+    public function new(array $data): array
+    {
+        $report = [
+            'status'  => true,
+            'message' => [],
+            'data'    => [],
+        ];
+
+        //ToDo : discuss getting order from request /** @var Order $order */
+        /*if(isset($data['order'])) {
+            $order = $data['order'];
+        } else {
+            $order = Order::FindorFail($orderId)->first();
+        }*/
+
+        $data = array_merge([
+            'product_id'     => null,
+            'order_id'       => null,
+            'products'       => null,
+            'attribute'      => null,
+            'extraAttribute' => null,
+            'withoutBon'     => null,
+        ], $data);
+
+        $productId = $data['product_id'];
+        $orderId   = $data['order_id'];
+
+        try {
+            $order   = Order::FindorFail($orderId);
+            $product = Product::FindorFail($productId);
+        } catch (ModelNotFoundException $e) {
+            report($e);
+            $report['status']    = false;
+            $report['message'][] = 'Unknown order or product';
+
+            return $report;
+        }
+        $user = $order->user;
+
+        $simpleProducts = (new RefinementFactory($product, $data))->getRefinementClass()->getProducts();
+
+        $notDuplicateProduct = $order->checkProductsExistInOrderProducts($simpleProducts);
+
+        if (count($simpleProducts) != 0 && count($notDuplicateProduct) == 0) {
+            $report['status']           = false;
+            $report['message'][]        = 'This product has been added to order before';
+            $report['data']['products'] = $simpleProducts;
+        } else {
+            if (count($simpleProducts) == 0) {
+                $report['status']           = false;
+                $report['message'][]        = 'No products has been selected';
+                $report['data']['products'] = $simpleProducts;
+            }
+        }
+
+        $storedOrderproducts = new OrderproductCollection();
+        /**
+         * save orderproduct and attach extraAttribute
+         */
+        foreach ($notDuplicateProduct as $key => $productItem) {
+            $orderProduct                      = new Orderproduct();
+            $orderProduct->product_id          = $productItem->id;
+            $orderProduct->order_id            = $order->id;
+            $orderProduct->orderproducttype_id = config('constants.ORDER_PRODUCT_TYPE_DEFAULT');
+            if (isset($data['cost'])) {
+                $orderProduct->cost = $data['cost'];
+            }
+            if (!$orderProduct->save()) {
+                continue;
+            }
+            $productItem->decreaseProductAmountWithValue(1);
+
+            if (isset($data['extraAttribute']) && is_array($data['extraAttribute'])) {
+                $this->attachExtraAttributes($data['extraAttribute'], $orderProduct);
+            }
+
+            $this->applyOrderProductBon($data, $user, $orderProduct, $productItem);
+
+            $this->applyOrderGifts($order, $orderProduct, $productItem);
+
+            $storedOrderproducts->push($orderProduct);
+        }
+
+        $report['data']['storedOrderproducts'] = $storedOrderproducts;
+
+        return $report;
+    }
+
+    /**
+     * @param  Request  $request
+     * @param  Product  $product
+     *
+     * @return Collection|null
+     */
+    public function getAttributesValuesFromProduct(Request $request, Product $product): ?Collection
+    {
+        $extraAttributes   = $request->get('extraAttribute');
+        $extraAttributesId = array_column($extraAttributes, 'id');
+        $attributesValues  = $product->getAttributesValueByIds($extraAttributesId);
+
+        return $attributesValues;
+    }
+
+    /**
+     * @param  Request     $request
+     * @param  Collection  $attributesValues
+     */
+    public function syncExtraAttributesCost(Request $request, Collection $attributesValues)
+    {
+        $extraAttributes = $request->get('extraAttribute');
+        foreach ($attributesValues as $key => $attributesValue) {
+            foreach ($extraAttributes as $key1 => $extraAttribute) {
+                if ($extraAttribute['id'] == $attributesValue['id']) {
+                    $extraAttributes[$key1]['cost']   = $attributesValue->pivot->extraCost;
+                    $extraAttributes[$key1]['object'] = $attributesValue;
+                }
+            }
+        }
+        $request->offsetSet('extraAttribute', $extraAttributes);
+    }
+
+    /**
+     * @param array $extraAttributes
+     * @param Orderproduct $orderProduct
+     */
+    public function attachExtraAttributes(array $extraAttributes, Orderproduct $orderProduct): void
+    {
+        foreach ($extraAttributes as $value) {
+            $orderProduct->attributevalues()
+                ->attach($value['id'], [
+                    'extraCost' => $value['cost'],
+                ]);
+        }
+    }
+
     /**
      * Stores an array of json objects , each containing of an orderproduct info
      *
@@ -538,7 +484,7 @@ class OrderproductController extends Controller
         $productIds           = optional($orderproductJsonObject)->products;
         $attributes           = optional($orderproductJsonObject)->attribute;
         $extraAttributes      = optional($orderproductJsonObject)->extraAttribute;
-        
+
         $orderproductData['product_id']     = $grandParentProductId;
         $orderproductData['products']       = $productIds;
         $orderproductData['attribute']      = $attributes;
@@ -547,7 +493,47 @@ class OrderproductController extends Controller
 
         return $this->new($orderproductData);
     }
-    
+
+    /**
+     * @param  array         $data
+     * @param  User          $user
+     * @param  Orderproduct  $orderProduct
+     * @param  Product       $product
+     */
+    private function applyOrderProductBon(array $data, User $user, Orderproduct $orderProduct, Product $product): void
+    {
+        $bonName = config('constants.BON1');
+
+        $bon = $product->getTotalBons($bonName);
+
+        $canApplyBon = $this->canApplyBonForRequest($data, $product, $bon);
+        if (!$canApplyBon) {
+            return;
+        }
+
+        $userValidBons = $user->userValidBons($bon->first());
+
+        if ($userValidBons->isNotEmpty()) {
+            $orderProduct->applyBons($userValidBons, $bon->first());
+        }
+    }
+
+    /**
+     * @param  array       $data
+     * @param  Product     $product
+     * @param  Collection  $bon
+     *
+     * @return bool
+     */
+    private function canApplyBonForRequest(array $data, Product $product, Collection $bon): bool
+    {
+        if (!isset($data['withoutBon']) || !$data['withoutBon']) {
+            return $product->canApplyBon($bon);
+        } else {
+            return false;
+        }
+    }
+
     /**
      * @param                                  $attributevalues
      * @param                                  $controlName
@@ -580,9 +566,9 @@ class OrderproductController extends Controller
             default:
                 break;
         }
-        
+
     }
-    
+
     /**
      * @param                                  $attributevalues
      * @param                                  $orderproductAttributevalues
@@ -614,7 +600,7 @@ class OrderproductController extends Controller
             ]);
         }
     }
-    
+
     /**
      * @param                                  $attributevalues
      * @param                                  $orderproductAttributevalues
@@ -632,7 +618,7 @@ class OrderproductController extends Controller
             } else {
                 $extraCost = null;
             }
-            
+
             $groupedCheckbox->put($attributevalue->id, [
                 'index'     => $attributevalueIndex,
                 'extraCost' => $extraCost,
