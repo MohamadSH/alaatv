@@ -25,6 +25,11 @@
 <link rel="preload" href="/css/fonts/fontawesome5/fa-brands-400.woff2" as="font" type="font/woff2" crossOrigin="anonymous" >
 
 <link rel="preload" href="{{ mix('/css/all.css') }}" as="style" />
+<style>
+    .liveIconOnMobile {
+        min-width: 35px;
+    }
+</style>
 @yield('page-preload-css')
 
 <link rel="preload" href="{{ mix('/js/all.js') }}" as="script">

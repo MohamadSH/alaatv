@@ -15,4 +15,15 @@
         <span class="redSquare"></span>
          محصولات مرتبط
     </div>
+    
+    
+    <div class="productInfoNav productInfoNav-btnAddToCart">
+        <button class="btn m-btn--air btn-success m-btn--icon btnAddToCart gta-track-add-to-card">
+            <span>
+                <i class="fa fa-cart-arrow-down"></i>
+                <i class="fas fa-sync-alt fa-spin m--hide"></i>
+            </span>
+        </button>
+    </div>
+    
 </div>
