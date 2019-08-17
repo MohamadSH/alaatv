@@ -47,6 +47,7 @@ use Auth;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Contracts\View\Factory;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Http\{Request, Response};
 use Illuminate\Support\Facades\Input;
 use Illuminate\View\View;
@@ -952,5 +953,10 @@ class AdminController extends Controller
 
     public function adminGiveWalletCredit(Request $request){
         return view('admin.wallet');
+    }
+
+    public function adminCacheClear(Request $request){
+        Artisan::call('cache:clear');
+        dd('Cache cleared');
     }
 }

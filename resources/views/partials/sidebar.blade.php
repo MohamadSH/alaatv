@@ -101,6 +101,16 @@
                         <i class="m-menu__section-icon flaticon-more-v2"></i>
                     </li>
 
+                    @role((config("constants.ROLE_ADMIN")))
+                    <li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1">
+                        <a target="_blank" href="{{ route('web.admin.cacheclear') }}" class="m-menu__link ">
+                            <span class="m-menu__item-here"></span>
+                            <i class="m-menu__link-icon flaticon-network"></i>
+                            <span class="m-menu__link-text m--font-bold m--font-focus">خالی کردن کش</span>
+                        </a>
+                    </li>
+                    @endability
+
                     @ability(config('constants.ROLE_ADMIN'),config('constants.USER_ADMIN_PANEL_ACCESS'))
                     <li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1">
                         <a href="{{ action("Web\AdminController@admin") }}" class="m-menu__link ">
