@@ -496,6 +496,41 @@ $(document).on("click", ".btnRemoveOrderproductInModal", function () {
     });
 });
 
+$(document).on("click", ".recycleOrderproduct", function () {
+    let orderProductId = $(this).data('order-product-id');
+    $('input[type="hidden"][name="orderProductIdForRecycle"]').val(orderProductId);
+});
+
+$(document).on("click", ".btnRecycleOrderproductInModal", function () {
+    let orderProductId = $('input[type="hidden"][name="orderProductIdForRecycle"]').val();
+    $.ajax({
+        type: "POST",
+        url: '/orderproduct/'+orderProductId+'/restore',
+        data: {_token: csrf_token},
+        statusCode: {
+            200: function (response) {
+                location.reload();
+            },
+            403: function (response) {
+                location.reload();
+            },
+            401: function (response) {
+                location.reload();
+            },
+            405: function (response) {
+                location.reload();
+            },
+            404: function (response) {
+                location.reload();
+            },
+            //The status for when there is error php code
+            503: function (response) {
+                toastr["error"]("خطای پایگاه داده!", "پیام سیستم");
+            }
+        }
+    });
+});
+
 var TableDatatablesManaged = function () {
 
     var initTable1 = function () {

@@ -325,11 +325,11 @@
                                         </td>
                                         <td class="text-center">
                                             <a href="{{action("Web\OrderproductController@edit" , $orderproduct)}}"
-                                               class="btn blue btn-sm btn-outline sbold uppercase">
+                                               class="btn btn-primary btn-sm btn-outline sbold uppercase">
                                                 <i class="fa fa-pencil-square-o"></i>
                                                 اصلاح
                                             </a>
-                                            <button class="btn red btn-sm btn-outline sbold removeOrderproduct"
+                                            <button class="btn btn-danger btn-sm btn-outline sbold removeOrderproduct"
                                                     id="orderProductId_{{$orderproduct->id}}"
                                                     data-order-product-id="{{$orderproduct->id}}"
                                                     data-toggle="modal"
@@ -772,6 +772,37 @@
                             </div>
                         </div>
                         <div class="tab-pane" id="portlet_tab5" role="tabpanel">
+    
+    
+                            <!--begin::Modal-->
+                            <div class="modal fade" id="orderproductRecycleModal" tabindex="-1" role="dialog"
+                                 aria-labelledby="orderproductExchangeModalLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-lg" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title">
+                                                بازگردانی محصول سفارش
+                                            </h5>
+                                            <button type="button" class="close" data-dismiss="modal"
+                                                    aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <input type="hidden" name="orderProductIdForRecycle" value="">
+                                            آیا اطمینان دارید؟
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary"
+                                                    data-dismiss="modal">خیر
+                                            </button>
+                                            <button type="submit" class="btn btn-primary btnRecycleOrderproductInModal">بله</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--end::Modal-->
+                            
                             <table class="table table-striped table-bordered table-hover table-checkable order-column"
                                    id="sample_1">
                                 <thead>
@@ -912,18 +943,20 @@
                                         </td>
                                         <td class="text-center">
                                             <a href="{{action("Web\OrderproductController@edit" , $orderproduct)}}"
-                                               class="btn blue btn-sm btn-outline sbold uppercase">
+                                               class="btn btn-primary btn-sm btn-outline sbold uppercase">
                                                 <i class="fa fa-pencil-square-o"></i>
                                                 اصلاح
                                             </a>
-                                            <button class="btn red btn-sm btn-outline sbold removeOrderproduct"
+                                            @if(strlen($orderproduct->deleted_at)>0)
+                                            <button class="btn btn-danger btn-sm btn-outline sbold recycleOrderproduct"
                                                     id="orderProductId_{{$orderproduct->id}}"
                                                     data-order-product-id="{{$orderproduct->id}}"
                                                     data-toggle="modal"
-                                                    data-target="#orderproductRemoveModal">
-                                                <i class="fa fa-trash"></i>
-                                                حذف
+                                                    data-target="#orderproductRecycleModal">
+                                                <i class="fa fa-recycle"></i>
+                                                بازگردانی
                                             </button>
+                                            @endif
                                         </td>
                                     </tr>
                                 @endforeach
