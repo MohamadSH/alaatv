@@ -81,6 +81,7 @@ class AdminController extends Controller
                 'registerUserAndGiveOrderproduct',
                 'specialAddUser',
                 'adminSalesReport',
+                'adminCacheClear'
             ],
         ]);
 
