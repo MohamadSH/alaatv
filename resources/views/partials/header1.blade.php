@@ -16,7 +16,28 @@
                         </a>
                     </div>
                     <div class="m-stack__item m-stack__item--middle m-brand__tools">
-
+                        
+                        <!-- BEGIN: Responsive Aside Left Menu Toggler -->
+                        <a href="{{ route('live') }}" class="m-brand__toggler--left m--visible-tablet-and-mobile-inline-block" title="پخش زنده">
+                            <img class="a--full-width lazy-image
+                                @if($live)
+                                liveOn
+                                @else
+                                liveOff
+                                @endif "
+                                src="https://cdn.alaatv.com/loder.jpg?w=1&h=1"
+                                @if($live)
+                                data-src="https://cdn.alaatv.com/upload/live-on.png"
+                                @else
+                                data-src="https://cdn.alaatv.com/upload/live-off-mobile.png"
+                                @endif
+                                width="35"
+                                height="40"
+                                alt="livePageIcon"
+                            >
+                        </a>
+                        <!-- END -->
+                        
                         <!-- BEGIN: Responsive Aside Left Menu Toggler -->
                         <a href="javascript:" id="m_aside_left_offcanvas_toggle" class="m-brand__icon m-brand__toggler m-brand__toggler--left m--visible-tablet-and-mobile-inline-block">
                             <span></span>
