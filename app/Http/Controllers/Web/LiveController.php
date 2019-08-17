@@ -74,7 +74,7 @@ class LiveController extends Controller
             $live = true;
             $poster = $scheduledLive->poster;
         }
-        
+
         return view('pages.liveView' , compact( 'nowTime', 'schedule' , 'live' ,'poster' , 'xMpegURL' , 'dashXml' , 'fullVideo' , 'title', 'playLiveAjaxUrl', 'stopLiveAjaxUrl' ));
     }
 
@@ -132,7 +132,7 @@ class LiveController extends Controller
      * @param string $todayStringDate
      * @return bool
      */
-    private function insertLiveConductor(Live $scheduledLive, string $startTime, string $todayStringDate): bool
+    private function insertLiveConductor(Live $scheduledLive, string $startTime, string $todayStringDate): Conductor
     {
         return Conductor::create([
             'title'                 => $scheduledLive->title,
