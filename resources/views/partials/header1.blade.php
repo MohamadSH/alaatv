@@ -18,7 +18,7 @@
                     <div class="m-stack__item m-stack__item--middle m-brand__tools">
                         
                         <!-- BEGIN: Responsive Aside Left Menu Toggler -->
-                        <a href="{{ route('live') }}" class="m-brand__toggler--left m--visible-tablet-and-mobile-inline-block" title="پخش زنده">
+                        <a href="{{ route('live') }}" class="m-brand__toggler--left m--visible-tablet-and-mobile-inline-block liveIconOnMobile" title="پخش زنده">
                             <img class="a--full-width lazy-image
                                 @if($live)
                                 liveOn
