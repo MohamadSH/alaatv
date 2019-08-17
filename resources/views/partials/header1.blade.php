@@ -380,7 +380,7 @@
                     <div class="m-stack__item m-topbar__nav-wrapper">
                         <ul class="m-topbar__nav m-nav m-nav--inline">
     
-                            <li class="m-nav__item">
+                            <li class="m-nav__item m--hidden-tablet-and-mobile">
                                 <a href="{{ route('live') }}" class="m-nav__link" title="پخش زنده">
                                     <span class="m-nav__link-icon">
                                         <span class="m-nav__link-icon-wrapper">
