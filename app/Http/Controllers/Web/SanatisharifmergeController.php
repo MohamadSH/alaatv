@@ -15,7 +15,6 @@ use App\Traits\CharacterCommon;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Input;
-use Illuminate\Support\Facades\Log;
 
 class SanatisharifmergeController extends Controller
 {
