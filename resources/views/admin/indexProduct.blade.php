@@ -314,7 +314,7 @@
                             <th></th>
                             <th class="all"> نام کپن</th>
                             <th class="all"> کد کپن</th>
-                            {{--<th class="desktop"> عکس </th>--}}
+                            <th class="min-tablet"> فعال</th>
                             <th class="min-tablet">میزان تخفیف (%)</th>
                             <th class="min-tablet">حداکثر مبلغ مجاز خرید</th>
                             <th class="min-tablet">تعداد این کپن</th>
