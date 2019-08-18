@@ -10,7 +10,7 @@
     </style>
 </head>
 <body>
-<div class="AlaaAdDom" alaa-ad-size="size-width-full" alaa-ad-source="chibekhoonam"></div>
+<div class="AlaaAdDom" alaa-ad-size="size-width-full"></div>
 <script type="text/javascript">
     (function (w, d, i) {
         var fp = 'https://ads.alaatv.com/js/engine.js',
@@ -25,7 +25,7 @@
         j.async = true;
         j.src = fp + '?uuid=' + i + '&v=' + v;
         f.parentNode.insertBefore(j, f);
-    })(window, document, '35b39d4b-517b-44bc-85c4-44f93242836f');
+    })(window, document, '<?php if(isset($uuid)) echo $uuid; else echo '' ; ?>');
 </script>
 </body>
 </html>
