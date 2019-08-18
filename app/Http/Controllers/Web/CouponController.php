@@ -46,6 +46,7 @@ class CouponController extends Controller
             ->toArray();
         $coupontype     = Coupontype::pluck('displayName', 'id');
 
+        $validSinceDate = $validUntilDate = $validSinceTime = $validUntilTime = null;
         if (isset($coupon->validSince)) {
             $validSinceDate = Carbon::parse($coupon->validSince)
                 ->format('Y-m-d');
