@@ -696,12 +696,11 @@ class ContentController extends Controller
     {
         $disk = Storage::disk(config('constants.DISK19_CLOUD'));
 
-        $oldPamphlets = $content->getPamphlets();
+        foreach ($content->getPamphlets() as $pamphlet){
+            $disk->delete(basename($pamphlet->link));
+        }
         $filename  = $pamphletFile->getClientOriginalName();
         if ($disk->put($filename, File::get($pamphletFile))) {
-            foreach ($oldPamphlets as $pamphlet){
-                $disk->delete(basename($pamphlet->link));
-            }
             return $this->makePamphletFilesForFreeContent($filename);
         }
         return [];
