@@ -7,9 +7,9 @@
                 <span class = "m-badge m-badge--wide label-sm m-badge--danger"> درج نشده </span> @endif</td>
         <td>@if(isset($coupon->description[0])){{$coupon->description}} @else
                 <span class = "m-badge m-badge--wide label-sm m-badge--warning"> بدون توضیح </span> @endif</td>
+        <td>{{($coupon->enable)?'بله':'خیر'}}</td>
         <td>@if(isset($coupon->code[0])){{$coupon->code}} @else
                 <span class = "m-badge m-badge--wide label-sm m-badge--danger"> درج نشده </span> @endif</td>
-
         <td>@if(isset($coupon->discount)){{$coupon->discount}} @else
                 <span class = "m-badge m-badge--wide label-sm m-badge--danger"> درج نشده </span> @endif</td>
         {{--        <td>@if(isset($coupon->maxCost[0])){{$coupon->maxCost}} @else <span class="m-badge m-badge--wide label-sm m-badge--warning"> ندارد </span> @endif</td>--}}
@@ -57,7 +57,7 @@
                 <ul class = "dropdown-menu" role = "menu">
                     @permission((config('constants.SHOW_COUPON_ACCESS')))
                     <li>
-                        <a href = "{{action("Web\CouponController@edit" , $coupon)}}">
+                        <a target="_blank" href = "{{action("Web\CouponController@edit" , $coupon)}}">
                             <i class = "fa fa-pencil"></i>
                             اصلاح
                         </a>
