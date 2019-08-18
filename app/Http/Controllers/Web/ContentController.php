@@ -470,7 +470,7 @@ class ContentController extends Controller
         $content->tags       = convertTagStringToArray($tagString);
 
         if(isset($pamphlet)){
-            $files =$this->storePamphletOfContent($pamphlet);
+            $files =$this->storePamphletOfContent( $content , $pamphlet);
         }
 
         if(!empty($files)) {
@@ -692,11 +692,16 @@ class ContentController extends Controller
         $content->file = $fileCollection;
     }
 
-    private function storePamphletOfContent($pamphletFile):array
+    private function storePamphletOfContent(Content $content , $pamphletFile):array
     {
-        $filename  = $pamphletFile->getClientOriginalName();
         $disk = Storage::disk(config('constants.DISK19_CLOUD'));
+
+        $oldPamphlets = $content->getPamphlets();
+        $filename  = $pamphletFile->getClientOriginalName();
         if ($disk->put($filename, File::get($pamphletFile))) {
+            foreach ($oldPamphlets as $pamphlet){
+                $disk->delete(basename($pamphlet->link));
+            }
             return $this->makePamphletFilesForFreeContent($filename);
         }
         return [];
