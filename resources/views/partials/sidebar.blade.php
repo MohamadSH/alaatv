@@ -230,60 +230,15 @@
 {{--                    @endpermission--}}
 
                     @role((config("constants.ROLE_ADMIN")))
-                    <li class="m-menu__item  m-menu__item--submenu" aria-haspopup="true" m-menu-submenu-toggle="hover">
-                        <a href="javascript:" class="m-menu__link m-menu__toggle">
+                    <li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1">
+                        <a href="{{ route('web.admin.bots') }}" class="m-menu__link ">
                             <span class="m-menu__item-here"></span>
                             <i class="m-menu__link-icon flaticon-network"></i>
-                            <span class="m-menu__link-text">بات ها</span>
-                            <i class="m-menu__ver-arrow fa fa-angle-left"></i>
+                            <span class="m-menu__link-text m--font-bold m--font-accent">پنل بات ها</span>
                         </a>
-                        <div class="m-menu__submenu ">
-                            <span class="m-menu__arrow"></span>
-                            <ul class="m-menu__subnav">
-                                <li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1">
-                                    <a href="{{ route('web.admin.bots' , ['bot'=>'checkOrders']) }}" class="m-menu__link ">
-                                        <i class="m-menu__link-bullet m-menu__link-bullet--dot">
-                                            <span></span>
-                                        </i>
-                                        <span class="m-menu__link-text m--font-bold m--font-accent">چک کردن سفارش ها</span>
-                                    </a>
-                                </li>
-                                <li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1">
-                                    <a target="_blank" href="{{ action("Web\BotsController@fixthumbnail" , ['set'=>'']) }}" class="m-menu__link ">
-                                        <i class="m-menu__link-bullet m-menu__link-bullet--dot">
-                                            <span></span>
-                                        </i>
-                                        <span class="m-menu__link-text">تامبنیل ست</span>
-                                    </a>
-                                </li>
-                                <li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1">
-                                    <a target="_blank" href="{{ route("web.admin.bots" , ["bot"=>"wallet"]) }}" class="m-menu__link ">
-                                        <i class="m-menu__link-bullet m-menu__link-bullet--dot">
-                                            <span></span>
-                                        </i>
-                                        <span class="m-menu__link-text">هدیه کیف پول</span>
-                                    </a>
-                                </li>
-                                <li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1">
-                                    <a target="_blank" href="{{ route("web.admin.bots" , ["bot"=>"excel"]) }}" class="m-menu__link ">
-                                        <i class="m-menu__link-bullet m-menu__link-bullet--dot">
-                                            <span></span>
-                                        </i>
-                                        <span class="m-menu__link-text">اکسل</span>
-                                    </a>
-                                </li>
-                               {{-- <li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1">
-                                    <a target="_blank" href="{{action("Web\BotsController@bot" , ["voucherbot"=>1])}}" class="m-menu__link ">
-                                        <i class="m-menu__link-bullet m-menu__link-bullet--dot">
-                                            <span></span>
-                                        </i>
-                                        <span class="m-menu__link-text">وچر</span>
-                                    </a>
-                                </li>--}}
-                            </ul>
-                        </div>
                     </li>
                     @endrole
+
                     @role((config("constants.ROLE_ADMIN")))
                     <li class="m-menu__item  m-menu__item--submenu" aria-haspopup="true" m-menu-submenu-toggle="hover">
                         <a href="javascript:" class="m-menu__link m-menu__toggle">
