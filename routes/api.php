@@ -36,8 +36,8 @@ Route::group(['prefix' => 'v1'], function () {
     Route::post('donate', [OrderController::class, 'donateOrder']);
 //    Route::any('fetchProducts', [ProductController::class, 'fetchProducts'])
 //        ->name('api.fetch.product');
-    Route::any('fetchSets', [ContentController::class, 'fetchSets'])
-        ->name('api.fetch.set');
+    Route::any('fetchContents', [ContentController::class, 'fetchContents'])
+        ->name('api.fetch.content');
 
 
     Route::group(['middleware' => 'auth:api'], function () {
