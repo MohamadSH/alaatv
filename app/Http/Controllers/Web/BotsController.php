@@ -64,33 +64,6 @@ class BotsController extends Controller
         $this->setting  = $setting->setting;
     }
 
-    public function adminBot()
-    {
-        if (!Input::has("bot")) {
-            dd("Please pass bot as input");
-        }
-
-        $bot    = Input::get("bot");
-        $view   = "";
-        $params = [];
-        switch ($bot) {
-            case "wallet":
-                $view = "admin.bot.wallet";
-                break;
-            case "excel":
-                $view = "admin.bot.excel";
-                break;
-            default:
-                break;
-        }
-        $pageName = "adminBot";
-        if (strlen($view) > 0) {
-            return view($view, compact('pageName', 'params'));
-        } else {
-            abort(404);
-        }
-    }
-
     public function bot(Request $request)
     {
         try {
