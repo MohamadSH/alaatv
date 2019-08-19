@@ -10,7 +10,7 @@
     </style>
 </head>
 <body>
-<div class="AlaaAdDom" alaa-ad-size="size-width-full"></div>
+<div class="AlaaAdDom" alaa-ad-preloadimage="1"></div>
 <script type="text/javascript">
     (function (w, d, i) {
         var fp = 'https://ads.alaatv.com/js/engine.js',
