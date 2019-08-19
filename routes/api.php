@@ -4,6 +4,7 @@
     These routes are loaded by the RouteServiceProvider within a group which is assigned the "api" middleware group.
 */
 
+use App\Http\Controllers\Api\ContentController;
 use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Api\GetPaymentRedirectEncryptedLink;
 use App\Http\Controllers\Api\ProductController;
@@ -33,8 +34,10 @@ Route::group(['prefix' => 'v1'], function () {
     Route::get('set/{set}', 'Api\SetController@show');
     Route::post('getPrice/{product}', 'Api\ProductController@refreshPrice');
     Route::post('donate', [OrderController::class, 'donateOrder']);
-    Route::any('fetchProducts', [ProductController::class, 'fetchProducts'])
-        ->name('api.fetch.product');
+//    Route::any('fetchProducts', [ProductController::class, 'fetchProducts'])
+//        ->name('api.fetch.product');
+    Route::any('fetchSets', [ContentController::class, 'fetchSets'])
+        ->name('api.fetch.set');
 
 
     Route::group(['middleware' => 'auth:api'], function () {
@@ -54,7 +57,7 @@ Route::group(['prefix' => 'v1'], function () {
             Route::get('review', 'Api\OrderController@checkoutReview')->name('api.checkout.review');
             Route::get('payment', 'Api\OrderController@checkoutPayment')->name('api.checkout.payment');
         });
-    
+
         Route::any('getPaymentRedirectEncryptedLink', '\\'.GetPaymentRedirectEncryptedLink::class)
             ->name('api.payment.getEncryptedLink');
     });
