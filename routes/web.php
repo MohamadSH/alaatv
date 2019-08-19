@@ -125,7 +125,6 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('registrationListAdminPanel', [AdminController::class, 'adminRegistrationList'])->name('web.admin.registrationList');
     Route::get("specialAddUser", [AdminController::class, 'specialAddUser'])->name('web.admin.specialAddUser');
     Route::get('adminGenerateRandomCoupon', [AdminController::class, 'adminGenerateRandomCoupon'])->name('web.admin.generateRandomCoupon');
-    Route::get('checkOrderBotAdminPanel', [AdminController::class, 'adminCheckOrderBot'])->name('web.admin.checkOrderBot');
     Route::get('adminBot', [AdminController::class, 'adminBot'])->name('web.admin.bots');
     Route::post('giveWalletCredit', [WalletController::class, 'giveCredit'])->name('web.admin.wallet.giveCredit');
     Route::post("registerUserAndGiveOrderproduct", [AdminController::class, 'registerUserAndGiveOrderproduct'])->name('web.admin.registerUserAndGiveOrderproduct');
