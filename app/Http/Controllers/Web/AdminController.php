@@ -947,25 +947,7 @@ class AdminController extends Controller
 
     public function adminBot(Request $request)
     {
-        $bot = $request->get('bot');
-        if (!isset($bot)) {
-            dd('Please pass bot as input');
-        }
-
-        switch ($bot) {
-            case 'wallet':
-                return view('admin.bot.wallet');
-                break;
-            case 'excel':
-                return view('admin.bot.excel');
-                break;
-            case 'checkOrders':
-                return view('admin.bot.checkOrderBot');
-                break;
-            default:
-                abort(404);
-                break;
-        }
+        return view('admin.botAdmin');
     }
 }
 
