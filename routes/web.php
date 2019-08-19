@@ -154,7 +154,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('excelBot', 'Web\BotsController@excelBot');
     Route::get('zarinpalbot', 'Web\BotsController@ZarinpalVerifyPaymentBot');
     Route::post('salesReportBot', 'Web\BotsController@salesReportBot');
-    Route::get('thumbnailbot', 'Web\BotsController@fixthumbnail');
+    Route::get('thumbnailbot', 'Web\BotsController@fixthumbnail')->name('web.bot.fixthumbnails');
     Route::get('v/asiatech', 'Web\VoucherController@voucherRequest');
     Route::put('v', 'Web\VoucherController@submitVoucherRequest');
 
