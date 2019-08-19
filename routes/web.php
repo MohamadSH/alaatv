@@ -24,7 +24,7 @@ use App\PaymentModule\Controllers\RedirectAPIUserToPaymentRoute;
 
 
 
-Route::get('embed/c/{content}', "Web\ContentController@embed");
+Route::get('embed/c/{content}', 'Web\ContentController@embed');
 Route::get('/', 'Web\IndexPageController');
 Route::get('shop', 'Web\ShopPageController')->name('shop');
 Route::get('home', 'Web\HomeController@home');
@@ -37,8 +37,8 @@ Route::get('d/{data}', [HomeController::class , 'newDownload']);
 Route::get('contactUs', 'Web\ContactUsController');
 Route::get('rules', 'Web\RulesPageController');
 Route::get('articleList', 'Web\ArticleController@showList');
-Route::get("debug", 'Web\HomeController@debug');
-Route::get("telgramAgent2", "Web\HomeController@telgramAgent");
+Route::get('debug', 'Web\HomeController@debug');
+Route::get('telgramAgent2', 'Web\HomeController@telgramAgent');
 Route::post('sendMail', [HomeController::class , 'sendMail']);
 Route::get('product/search', 'Web\ProductController@search');
 Route::get('showPartial/{product}', 'Web\ProductController@showPartial');
@@ -56,9 +56,9 @@ Route::get('image/{category}/{w}/{h}/{filename}', [
     'as'   => 'image',
     'uses' => 'Web\HomeController@getImage',
 ]);
-Route::get("sharif", [SharifSchoolController::class , 'schoolRegisterLanding']);
-Route::get("sharifLanding", [SharifSchoolController::class , 'sharifLanding']);
-Route::post("registerForSanatiSharifHighSchool", [SharifSchoolController::class , 'registerForSanatiSharifHighSchool']);
+Route::get('sharif', [SharifSchoolController::class , 'schoolRegisterLanding']);
+Route::get('sharifLanding', [SharifSchoolController::class , 'sharifLanding']);
+Route::post('registerForSanatiSharifHighSchool', [SharifSchoolController::class , 'registerForSanatiSharifHighSchool']);
 
 Route::get('sitemap.xml', [HomeController::class , 'siteMapXML']);
 Route::group(['prefix' => 'sitemap'], function () {
@@ -68,15 +68,15 @@ Route::group(['prefix' => 'sitemap'], function () {
 });
 
 Route::group(['prefix' => 'checkout'], function () {
-    Route::get('auth', "Web\OrderController@checkoutAuth");
+    Route::get('auth', 'Web\OrderController@checkoutAuth');
 
     Route::get('completeInfo', 'Web\OrderController@checkoutCompleteInfo')
         ->name('checkoutCompleteInfo');
 
-    Route::get('review', "Web\OrderController@checkoutReview")
+    Route::get('review', 'Web\OrderController@checkoutReview')
         ->name('checkoutReview');
 
-    Route::get('payment', "Web\OrderController@checkoutPayment")
+    Route::get('payment', 'Web\OrderController@checkoutPayment')
         ->name('checkoutPayment');
 
     Route::any('verifyPayment/online/{paymentMethod}/{device}', [PaymentVerifierController::class, 'verify'])
@@ -123,11 +123,11 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('walletAdminPanel', [AdminController::class, 'adminGiveWalletCredit'])->name('web.admin.wallet');
     Route::get('cacheclearAdmin', [AdminController::class, 'adminCacheClear'])->name('web.admin.cacheclear');
     Route::get('registrationListAdminPanel', [AdminController::class, 'adminRegistrationList'])->name('web.admin.registrationList');
-    Route::get("specialAddUser", [AdminController::class, 'specialAddUser'])->name('web.admin.specialAddUser');
+    Route::get('specialAddUser', [AdminController::class, 'specialAddUser'])->name('web.admin.specialAddUser');
     Route::get('adminGenerateRandomCoupon', [AdminController::class, 'adminGenerateRandomCoupon'])->name('web.admin.generateRandomCoupon');
     Route::get('adminBot', [AdminController::class, 'adminBot'])->name('web.admin.bots');
     Route::post('giveWalletCredit', [WalletController::class, 'giveCredit'])->name('web.admin.wallet.giveCredit');
-    Route::post("registerUserAndGiveOrderproduct", [AdminController::class, 'registerUserAndGiveOrderproduct'])->name('web.admin.registerUserAndGiveOrderproduct');
+    Route::post('registerUserAndGiveOrderproduct', [AdminController::class, 'registerUserAndGiveOrderproduct'])->name('web.admin.registerUserAndGiveOrderproduct');
     Route::post('adminSendSMS', [HomeController::class , 'sendSMS'])->name('web.sendSms');
     /*** Admin routes */
 
@@ -136,27 +136,27 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('complete-register', [UserController::class, 'completeRegister'])->name('completeRegister');
     Route::get('survey',  [SurveyController::class, 'show']);
     Route::resource('survey', '\\'. SurveyController::class);
-    Route::post("transactionToDonate/{transaction}", "Web\TransactionController@convertToDonate");
-    Route::post("completeTransaction/{transaction}", "Web\TransactionController@completeTransaction");
-    Route::post("myTransaction/{transaction}", "Web\TransactionController@limitedUpdate");
+    Route::post('transactionToDonate/{transaction}', 'Web\TransactionController@convertToDonate');
+    Route::post('completeTransaction/{transaction}', 'Web\TransactionController@completeTransaction');
+    Route::post('myTransaction/{transaction}', 'Web\TransactionController@limitedUpdate');
     Route::get('getUnverifiedTransactions', 'Web\TransactionController@getUnverifiedTransactions');
     Route::any('paymentRedirect/{paymentMethod}/{device}', '\\'.RedirectUserToPaymentPage::class)->name('redirectToBank');
     Route::get('exitAdminInsertOrder', 'Web\OrderController@exitAdminInsertOrder');
     Route::post('exchangeOrderproduct/{order}', 'Web\OrderController@exchangeOrderproduct');
-    Route::get('MBTI-Participation', "Web\MbtianswerController@create");
-    Route::get('MBTI-Introduction', "Web\MbtianswerController@introduction");
+    Route::get('MBTI-Participation', 'Web\MbtianswerController@create');
+    Route::get('MBTI-Introduction', 'Web\MbtianswerController@introduction');
 
-    Route::get('holdlottery', "Web\LotteryController@holdLottery");
-    Route::get('givePrize', "Web\LotteryController@givePrizes");
-    Route::get("bot", "Web\BotsController@bot")->name('web.bots');
-    Route::get("pointBot", "Web\BotsController@pointBot");
-    Route::post("walletBot", "Web\BotsController@walletBot");
-    Route::post("excelBot", "Web\BotsController@excelBot");
-    Route::get("zarinpalbot", "Web\BotsController@ZarinpalVerifyPaymentBot");
-    Route::post("salesReportBot", "Web\BotsController@salesReportBot");
-    Route::get("thumbnailbot", "Web\BotsController@fixthumbnail");
-    Route::get("v/asiatech", "Web\VoucherController@voucherRequest");
-    Route::put("v", "Web\VoucherController@submitVoucherRequest");
+    Route::get('holdlottery', 'Web\LotteryController@holdLottery');
+    Route::get('givePrize', 'Web\LotteryController@givePrizes');
+    Route::get('bot', 'Web\BotsController@bot')->name('web.bots');
+    Route::get('pointBot', 'Web\BotsController@pointBot');
+    Route::post('walletBot', 'Web\BotsController@walletBot');
+    Route::post('excelBot', 'Web\BotsController@excelBot');
+    Route::get('zarinpalbot', 'Web\BotsController@ZarinpalVerifyPaymentBot');
+    Route::post('salesReportBot', 'Web\BotsController@salesReportBot');
+    Route::get('thumbnailbot', 'Web\BotsController@fixthumbnail');
+    Route::get('v/asiatech', 'Web\VoucherController@voucherRequest');
+    Route::put('v', 'Web\VoucherController@submitVoucherRequest');
 
     Route::group(['prefix' => 'orderproduct'], function () {
         Route::post('restore', [OrderproductController::class, 'restore'])->name('web.orderproduct.restore');
