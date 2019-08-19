@@ -241,7 +241,7 @@
                             <span class="m-menu__arrow"></span>
                             <ul class="m-menu__subnav">
                                 <li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1">
-                                    <a href="{{ route('web.admin.checkOrderBot') }}" class="m-menu__link ">
+                                    <a href="{{ route('web.admin.bots' , ['bot'=>'checkOrders']) }}" class="m-menu__link ">
                                         <i class="m-menu__link-bullet m-menu__link-bullet--dot">
                                             <span></span>
                                         </i>
