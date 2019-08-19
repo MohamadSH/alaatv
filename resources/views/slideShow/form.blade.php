@@ -3,7 +3,7 @@
         <div class = "row">
             <label class = "col-md-4 control-label">تیتر اسلاید</label>
             <div class = "col-md-6">
-                {!! Form::text('title' , null, ['class' => 'form-control', 'placeholder'=>'عنوان نمایش داده شده روی عکس']) !!}
+                {!! Form::text('title' , null, ['class' => 'form-control', 'placeholder'=>'عنوان نمایش داده شده روی عکس' , 'required']) !!}
                 <span class="form-control-feedback">  </span>
             </div>
         </div>
