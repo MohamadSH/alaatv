@@ -30,7 +30,7 @@
                 <a class="m-link" href="{{action("Web\IndexPageController")}}">@lang('page.Home')</a>
             </li>
             <li class="breadcrumb-item" aria-current="page">
-                <a class="m-link" href="{{ route('blockAdmin') }}">لیست بلاک ها</a>
+                <a class="m-link" href="{{ route('web.admin.block') }}">لیست بلاک ها</a>
             </li>
             <li class="breadcrumb-item active" aria-current="page">
                 <a class="m-link" href="#">
@@ -43,9 +43,9 @@
 @endsection
 
 @section('content')
-    
+
     @include("systemMessage.flash")
-    
+
     <div class="row">
         <div class="col">
             <!--begin::Portlet-->
@@ -101,22 +101,22 @@
                         </div>
                         <div class="tab-pane blockProductsPane" id="m_tabs_12_2" role="tabpanel">
                             <div>
-        
+
                                 <div class="m-divider m--margin-top-50">
                                     <span></span>
                                     <span>افزودن محصول جدید به این بلاک</span>
                                     <span></span>
                                 </div>
-        
+
                                 @include('admin.filters.productsFilter', [
                                     "id" => "block-products",
                                     "name" => "block-products[]",
                                     'everyProduct'=>false,
                                     'title'=>'انتخاب محصول'
                                 ])
-    
+
                             </div>
-                            
+
                             <table class="table table-striped table-bordered table-hover dt-responsive" width="100%" id="block_product_table">
                                 <thead>
                                     <tr>
@@ -141,7 +141,7 @@
                                                         حذف
                                                     </button>
                                                 </div>
-                                                
+
                                             </td>
                                         </tr>
                                     @endforeach
@@ -150,7 +150,7 @@
                         </div>
                         <div class="tab-pane" id="m_tabs_12_3" role="tabpanel">
                             <div>
-        
+
                                 <div class="m-divider m--margin-top-50">
                                     <span></span>
                                     <span>افزودن دسته جدید به این بلاک</span>
@@ -175,7 +175,7 @@
                                         </option>
                                     @endforeach
                                 </select>
-    
+
                             </div>
                             <table class="table table-striped table-bordered table-hover dt-responsive" width="100%" id="block_set_table">
                                 <thead>
@@ -201,7 +201,7 @@
                                                     حذف
                                                 </button>
                                             </div>
-                    
+
                                         </td>
                                     </tr>
                                 @endforeach
@@ -210,13 +210,13 @@
                         </div>
                         <div class="tab-pane" id="m_tabs_12_4" role="tabpanel">
                             <div>
-        
+
                                 <div class="m-divider m--margin-top-50">
                                     <span></span>
                                     <span>افزودن محتوا جدید به این بلاک</span>
                                     <span></span>
                                 </div>
-    
+
                                 <div class="row">
                                     <label class="col-md-2 control-label" for="tags">
                                         شماره محتوا را وارد کنید:
@@ -225,7 +225,7 @@
                                         <input name="contents" type="text" class="form-control input-large contents" value="{{ implode(',',$blockContents->pluck('id')->toArray()) }}">
                                     </div>
                                 </div>
-    
+
                             </div>
                             <table class="table table-striped table-bordered table-hover dt-responsive" width="100%" id="block_content_table">
                                 <thead>
@@ -251,7 +251,7 @@
                                                     حذف
                                                 </button>
                                             </div>
-                    
+
                                         </td>
                                     </tr>
                                 @endforeach
@@ -289,7 +289,7 @@
                                                     حذف
                                                 </button>
                                             </div>
-                    
+
                                         </td>
                                     </tr>
                                 @endforeach
@@ -328,7 +328,7 @@
         </div>
     </div>
     <!--end::Modal-->
-    
+
 @endsection
 
 @section('page-js')
@@ -356,7 +356,7 @@
 
         var blockProductsId = {!! json_encode($blockProductsId) !!};
         var blockType = {!! $block->type !!};
-        
+
         $("input.blockTags").tagsinput({
             tagClass: 'm-badge m-badge--info m-badge--wide m-badge--rounded'
         });
@@ -367,7 +367,7 @@
          * Start up jquery
          */
         jQuery(document).ready(function () {
-            
+
             makeDataTable("block_product_table");
             makeDataTable("block_set_table");
             makeDataTable("block_content_table");
@@ -413,9 +413,9 @@
                     $(this).attr('selected', 'selected');
                 }
             });
-            
+
         });
 
-        
+
     </script>
 @endsection

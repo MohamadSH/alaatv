@@ -103,34 +103,36 @@ Route::group(['prefix' => 'landing'], function () {
 });
 
 Route::group(['middleware' => 'auth'], function () {
-
     Route::get('logout', '\App\Http\Controllers\Auth\LoginController@logout');
-    Route::get('usersAdmin', 'Web\AdminController@admin');
-    Route::get('consultantPanel', 'Web\AdminController@consultantAdmin');
-    Route::get('consultantEntekhabReshtePanel', [ConsultationController::class, 'consultantEntekhabReshte']);
-    Route::get('consultantEntekhabReshteList', [ConsultationController::class, 'consultantEntekhabReshteList']);
-    Route::post('consultantStoreEntekhabReshte', [ConsultationController::class, 'consultantStoreEntekhabReshte']);
-    Route::get('productAdmin', 'Web\AdminController@adminProduct');
-    Route::get('contentAdmin', 'Web\AdminController@adminContent');
-    Route::get('blockAdmin', 'Web\AdminController@adminBlock')->name('blockAdmin');
-    Route::get('block/detach/{block}/{type}/{id}', 'Web\BlockController@detachFromBlock');
 
-    Route::get('sales-report', 'Web\AdminController@adminSalesReport')->name('admin.salesReport');
-
-    Route::get('ordersAdmin', 'Web\AdminController@adminOrder');
-    Route::get('smsAdmin', 'Web\AdminController@adminSMS');
-    Route::get('botAdmin', 'Web\BotsController@adminBot');
-    Route::get('siteConfigAdmin', 'Web\AdminController@adminSiteConfig');
-    Route::get('slideShowAdmin', 'Web\AdminController@adminSlideShow');
-    Route::get('report', 'Web\AdminController@adminReport');
-    Route::get('majorAdminPanel', 'Web\AdminController@adminMajor');
-    Route::get('lotteryAdminPanel', 'Web\AdminController@adminLottery');
-    Route::get('teleMarketingAdminPanel', 'Web\AdminController@adminTeleMarketing');
-    Route::get('walletAdminPanel', [AdminController::class, 'adminGiveWalletCredit'])->name('admin.wallet');
+    /*** Admin routes */
+    Route::get('usersAdmin', [AdminController::class, 'admin'])->name('web.admin.users');
+    Route::get('consultantPanel', [AdminController::class, 'consultantAdmin'])->name('web.admin.consultant');
+    Route::get('productAdmin', [AdminController::class, 'adminProduct'])->name('web.admin.product');
+    Route::get('contentAdmin', [AdminController::class, 'adminContent'])->name('web.admin.content');
+    Route::get('blockAdmin', [AdminController::class, 'adminBlock'])->name('web.admin.block');
+    Route::get('sales-report', [AdminController::class, 'adminSalesReport'])->name('web.admin.salesReport');
+    Route::get('ordersAdmin', [AdminController::class, 'adminOrder'])->name('web.admin.order');
+    Route::get('smsAdmin', [AdminController::class, 'adminSMS'])->name('web.admin.sms');
+    Route::get('siteConfigAdmin', [AdminController::class, 'adminSiteConfig'])->name('web.admin.siteConfig');
+    Route::get('slideShowAdmin', [AdminController::class, 'adminSlideShow'])->name('web.admin.slideshow');
+    Route::get('report',[AdminController::class, 'adminReport'])->name('web.admin.report');
+    Route::get('majorAdminPanel', [AdminController::class, 'adminMajor'])->name('web.admin.major');
+    Route::get('lotteryAdminPanel', [AdminController::class, 'adminLottery'])->name('web.admin.lottery');
+    Route::get('teleMarketingAdminPanel', [AdminController::class, 'adminTeleMarketing'])->name('web.admin.teleMarketing');
+    Route::get('walletAdminPanel', [AdminController::class, 'adminGiveWalletCredit'])->name('web.admin.wallet');
     Route::get('cacheclearAdmin', [AdminController::class, 'adminCacheClear'])->name('web.admin.cacheclear');
+    Route::get('registrationListAdminPanel', [AdminController::class, 'adminRegistrationList'])->name('web.admin.registrationList');
+    Route::get("specialAddUser", [AdminController::class, 'specialAddUser'])->name('web.admin.specialAddUser');
+    Route::get('adminGenerateRandomCoupon', [AdminController::class, 'adminGenerateRandomCoupon'])->name('web.admin.generateRandomCoupon');
+    Route::get('checkOrderBotAdminPanel', [AdminController::class, 'adminCheckOrderBot'])->name('web.admin.checkOrderBot');
+    Route::get('adminBot', [AdminController::class, 'adminBot'])->name('web.admin.bots');
     Route::post('giveWalletCredit', [WalletController::class, 'giveCredit'])->name('web.admin.wallet.giveCredit');
-    Route::get('registrationListAdminPanel', [AdminController::class, 'adminRegistrationList'])->name('admin.registrationList');
-    Route::post('adminSendSMS', [HomeController::class , 'sendSMS']);
+    Route::post("registerUserAndGiveOrderproduct", [AdminController::class, 'registerUserAndGiveOrderproduct'])->name('web.admin.registerUserAndGiveOrderproduct');
+    Route::post('adminSendSMS', [HomeController::class , 'sendSMS'])->name('web.sendSms');
+    /*** Admin routes */
+
+
     Route::get('asset', [UserController::class, 'userProductFiles'])->name('user.asset');
     Route::get('complete-register', [UserController::class, 'completeRegister'])->name('completeRegister');
     Route::get('survey',  [SurveyController::class, 'show']);
@@ -147,15 +149,13 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::get('holdlottery', "Web\LotteryController@holdLottery");
     Route::get('givePrize', "Web\LotteryController@givePrizes");
-    Route::get("bot", "Web\BotsController@bot");
+    Route::get("bot", "Web\BotsController@bot")->name('web.bots');
     Route::get("pointBot", "Web\BotsController@pointBot");
     Route::post("walletBot", "Web\BotsController@walletBot");
     Route::post("excelBot", "Web\BotsController@excelBot");
     Route::get("zarinpalbot", "Web\BotsController@ZarinpalVerifyPaymentBot");
     Route::post("salesReportBot", "Web\BotsController@salesReportBot");
     Route::get("thumbnailbot", "Web\BotsController@fixthumbnail");
-    Route::post("registerUserAndGiveOrderproduct", "Web\AdminController@registerUserAndGiveOrderproduct");
-    Route::get("specialAddUser", "Web\AdminController@specialAddUser");
     Route::get("v/asiatech", "Web\VoucherController@voucherRequest");
     Route::put("v", "Web\VoucherController@submitVoucherRequest");
 
@@ -169,8 +169,6 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('97', [UserController::class, 'submitKonkurResult']);
     Route::get('98', [UserController::class, 'submitKonkurResult'])->name('web.user.konkurResult');
     Route::group(['prefix' => 'user'], function () {
-
-
         Route::get('{user}/dashboard', '\\'. DashboardPageController::class)
             ->name('web.user.dashboard');
         Route::get('sales-report', '\\'.SalesReportController::class);
@@ -213,6 +211,11 @@ Route::group(['middleware' => 'auth'], function () {
         Route::put('addComplimentary/{product}', 'Web\ProductController@addComplimentary');
         Route::put('removeComplimentary/{product}', 'Web\ProductController@removeComplimentary');
     });
+
+    Route::get('consultantEntekhabReshtePanel', [ConsultationController::class, 'consultantEntekhabReshte']);
+    Route::get('consultantEntekhabReshteList', [ConsultationController::class, 'consultantEntekhabReshteList']);
+    Route::post('consultantStoreEntekhabReshte', [ConsultationController::class, 'consultantStoreEntekhabReshte']);
+
 
     Route::resource('user', 'Web\UserController');
     Route::resource('userbon', 'Web\UserbonController');
@@ -258,7 +261,6 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::get('donate', 'Web\DonateController');
     Route::post('donateOrder', 'Web\OrderController@donateOrder');
-    Route::get('adminGenerateRandomCoupon', 'Web\AdminController@adminGenerateRandomCoupon');
 
     Route::get('listContents/{set}', 'Web\SetController@indexContent');
     Route::resource('set', 'Web\SetController');
@@ -269,6 +271,7 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::post('updateSet' , [ContentController::class, 'updateSet']);
     Route::get('atest' , [HomeController::class, 'adTest']);
+    Route::get('block/detach/{block}/{type}/{id}', 'Web\BlockController@detachFromBlock');
 });
 
 Route::group(['prefix' => 'c'], function () {
