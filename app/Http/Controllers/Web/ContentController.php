@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\Web;
 
+use App\Block;
 use App\Classes\Search\RelatedProductSearch;
+use App\Collection\BlockCollection;
 use App\Collection\ContentCollection;
 use App\User;
 use Exception;
@@ -212,6 +214,8 @@ class ContentController extends Controller
             }
             return $products;
         });
+
+//        $contentBlocks = Block::getContentBlocks();
 
         $viewResponse      = view('content.show',
             compact('seenCount', 'author', 'content', 'contentsWithSameSet', 'videosWithSameSet',
