@@ -103,7 +103,7 @@ class AdminController extends Controller
         $gendersWithUnknown->prepend('نامشخص');
         $permissions = Permission::pluck('display_name', 'id');
         $roles = Role::pluck('display_name', 'id');
-        //        $roles = array_add($roles , 0 , "همه نقش ها");
+        //        $roles = array_add($roles , 0 , 'همه نقش ها');
         //        $roles = array_sort_recursive($roles);
         $limitStatus = [
             0 => 'نامحدود',
@@ -257,7 +257,7 @@ class AdminController extends Controller
                 ->pluck('displayName', 'id')
                 ->toArray();
         }
-        //        $orderstatuses= array_sort_recursive(array_add($orderstatuses , 0 , "دارای هر وضعیت سفارش")->toArray());
+        //        $orderstatuses= array_sort_recursive(array_add($orderstatuses , 0 , 'دارای هر وضعیت سفارش')->toArray());
 
         $paymentstatuses = Paymentstatus::pluck('displayName', 'id')
             ->toArray();
@@ -298,7 +298,7 @@ class AdminController extends Controller
             'created_at' => 'تاریخ ثبت اولیه',
             'userFirstName' => 'نام مشتری',
             'userLastName' => 'نام خانوادگی مشتری'
-            /* , "productName" => "نام محصول"*/
+            /* , 'productName' => 'نام محصول'*/
         ];
         $sortType = [
             'desc' => 'نزولی',
@@ -576,7 +576,7 @@ class AdminController extends Controller
         $gendersWithUnknown->prepend('نامشخص');
         $permissions = Permission::pluck('display_name', 'id');
         $roles = Role::pluck('display_name', 'id');
-        //        $roles = array_add($roles , 0 , "همه نقش ها");
+        //        $roles = array_add($roles , 0 , 'همه نقش ها');
         //        $roles = array_sort_recursive($roles);
         $limitStatus = [
             0 => 'نامحدود',
@@ -615,7 +615,7 @@ class AdminController extends Controller
             1 => 'تایید شده',
         ];
 
-        //        $tableDefaultColumns = ["نام" , "رشته"  , "موبایل"  ,"شهر" , "استان" , "وضعیت شماره موبایل" , "کد پستی" , "آدرس" , "مدرسه" , "وضعیت" , "زمان ثبت نام" , "زمان اصلاح" , "نقش های کاربر" , "تعداد بن" , "عملیات"];
+        //        $tableDefaultColumns = ['نام' , 'رشته'  , 'موبایل'  ,'شهر' , 'استان' , 'وضعیت شماره موبایل' , 'کد پستی' , 'آدرس' , 'مدرسه' , 'وضعیت' , 'زمان ثبت نام' , 'زمان اصلاح' , 'نقش های کاربر' , 'تعداد بن' , 'عملیات'];
 
         $sortBy = [
             'updated_at' => 'تاریخ اصلاح',
@@ -860,8 +860,8 @@ class AdminController extends Controller
                 } else {
                     $gender = '';
                 }
-                $message = $gender . $user->full_name . "\n";
-                $message .= "\n";
+                $message = $gender . $user->full_name . '\n';
+                $message .= '\n';
                 $message .= 'alaatv.com/asset';
 //                $user->notify(new GeneralNotice($message));
 
@@ -942,38 +942,29 @@ class AdminController extends Controller
     public function adminCacheClear(Request $request)
     {
         Artisan::call('cache:clear');
-        dd('Cache cleared');
+        dd('Cache successfully cleared');
     }
 
-    public function adminCheckOrderBot(Request $request)
+    public function adminBot(Request $request)
     {
-        return view('admin.checkOrderBot');
-    }
-
-    public function adminBot()
-    {
-        if (!Input::has("bot")) {
-            dd("Please pass bot as input");
+        $bot = $request->get('bot');
+        if (!isset($bot)) {
+            dd('Please pass bot as input');
         }
 
-        $bot = Input::get("bot");
-        $view = "";
-        $params = [];
         switch ($bot) {
-            case "wallet":
-                $view = "admin.bot.wallet";
+            case 'wallet':
+                return view('admin.bot.wallet');
                 break;
-            case "excel":
-                $view = "admin.bot.excel";
+            case 'excel':
+                return view('admin.bot.excel');
+                break;
+            case 'checkOrders':
+                return view('admin.bot.checkOrderBot');
                 break;
             default:
+                abort(404);
                 break;
-        }
-        $pageName = "adminBot";
-        if (strlen($view) > 0) {
-            return view($view, compact('pageName', 'params'));
-        } else {
-            abort(404);
         }
     }
 }

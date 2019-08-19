@@ -1,4 +1,4 @@
-@extends('app',['pageName'=>$pageName])
+@extends('app')
 
 @section('pageBar')
     <nav aria-label = "breadcrumb">
