@@ -68,7 +68,7 @@ class ContentController extends Controller
         $pagination = [
             'current_page'    => $currentPage,
             'next_page_url'   => $nextPageUrl,
-            'last_page'       => $contents->lastPage(),
+            'last_page'       => 40,
             'data'            => $items,
         ];
 
