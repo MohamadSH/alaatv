@@ -14,7 +14,11 @@
                     @foreach($slides as $key => $slide)
                         <div class="carousel-item @if($key == 0) active @endif text-center"
                              data-gtm-eec-promotion-id="{{ $slide->id }}"
+                             @if(strlen(trim($slide->title))>0)
                              data-gtm-eec-promotion-name="{{ $slide->title }}"
+                             @else
+                             data-gtm-eec-promotion-name="تصویر اسلایدشو-بدون عنوان"
+                             @endif
                              @if(isset($positionOfSlideShow))
                              data-gtm-eec-promotion-creative="اسلاید شو - {{ $positionOfSlideShow }}"
                              @else
@@ -25,7 +29,11 @@
                                 <a href="{{$slide->link}}"
                                    class="a--gtm-eec-advertisement a--gtm-eec-advertisement a--gtm-eec-advertisement-click"
                                    data-gtm-eec-promotion-id="slideShow1-{{ $slide->id }}"
+                                   @if(strlen(trim($slide->title))>0)
                                    data-gtm-eec-promotion-name="{{ $slide->title }}"
+                                   @else
+                                   data-gtm-eec-promotion-name="تصویر اسلایدشو-بدون عنوان"
+                                   @endif
                                    @if(isset($positionOfSlideShow))
                                    data-gtm-eec-promotion-creative="اسلاید شو - {{ $positionOfSlideShow }}"
                                    @else
