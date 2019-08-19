@@ -201,7 +201,7 @@
 
                     @permission((config('constants.LIST_EVENTRESULT_ACCESS')))
                     <li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1">
-                        <a href="{{ route('admin.registrationList') }}" class="m-menu__link ">
+                        <a href="{{ route('web.admin.registrationList') }}" class="m-menu__link ">
                             <span class="m-menu__item-here"></span>
                             <i class="m-menu__link-icon flaticon-network"></i>
                             <span class="m-menu__link-text">پنل لیستها</span>
@@ -211,7 +211,7 @@
 
                     @permission((config('constants.WALLET_ADMIN_PANEL')))
                     <li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1">
-                        <a href="{{ route('admin.wallet') }}" class="m-menu__link ">
+                        <a href="{{ route('web.admin.wallet') }}" class="m-menu__link ">
                             <span class="m-menu__item-here"></span>
                             <i class="m-menu__link-icon flaticon-network"></i>
                             <span class="m-menu__link-text">پنل کیف پول</span>
@@ -240,46 +240,13 @@
                         <div class="m-menu__submenu ">
                             <span class="m-menu__arrow"></span>
                             <ul class="m-menu__subnav">
-                                <li class="m-menu__item  m-menu__item--submenu" aria-haspopup="true" m-menu-submenu-toggle="hover">
-                                    <a href="javascript:" class="m-menu__link m-menu__toggle">
-                                        <span class="m-menu__item-here"></span>
-                                        <i class="m-menu__link-icon flaticon-network"></i>
-                                        <span class="m-menu__link-text">بررسی سفارش ها</span>
-                                        <i class="m-menu__ver-arrow fa fa-angle-left"></i>
+                                <li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1">
+                                    <a href="{{ route('web.admin.checkOrderBot') }}" class="m-menu__link ">
+                                        <i class="m-menu__link-bullet m-menu__link-bullet--dot">
+                                            <span></span>
+                                        </i>
+                                        <span class="m-menu__link-text m--font-bold m--font-accent">چک کردن سفارش ها</span>
                                     </a>
-                                    <div class="m-menu__submenu ">
-                                        <span class="m-menu__arrow"></span>
-                                        <ul class="m-menu__subnav">
-                                            <li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1">
-                                                <a target="_blank" href="{{ action("Web\BotsController@bot" , ['checkorderproducts'=>'1' , 'since'=>'2019-07-15' , 'till'=>'2019-07-17'])  }}" class="m-menu__link ">
-                                                    <span class="m-menu__item-here"></span>
-                                                    <i class="m-menu__link-icon flaticon-technology"></i>
-                                                    <span class="m-menu__link-text">پاک شدن آیتم سبد</span>
-                                                </a>
-                                            </li>
-                                            <li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1">
-                                                <a target="_blank"  href="{{ action("Web\BotsController@bot" , ['checkghesdi'=>'1' , 'since'=>'2019-07-15' , 'till'=>'2019-07-17']) }}" class="m-menu__link ">
-                                                    <span class="m-menu__item-here"></span>
-                                                    <i class="m-menu__link-icon flaticon-technology"></i>
-                                                    <span class="m-menu__link-text">قسطی ماندن سفارش</span>
-                                                </a>
-                                            </li>
-                                            <li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1">
-                                                <a target="_blank" href="{{ action("Web\BotsController@bot" , ['checktransactions'=>'1']) }}" class="m-menu__link ">
-                                                    <span class="m-menu__item-here"></span>
-                                                    <i class="m-menu__link-icon flaticon-technology"></i>
-                                                    <span class="m-menu__link-text">ناموفق ماندن تراکنش</span>
-                                                </a>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </li>
-
-                                <li class="m-menu__item  m-menu__item--parent" aria-haspopup="true">
-                                <span class="m-menu__link">
-                                    <span class="m-menu__item-here"></span>
-                                    <span class="m-menu__link-text">بات ها</span>
-                                </span>
                                 </li>
                                 <li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1">
                                     <a target="_blank" href="{{ action("Web\BotsController@fixthumbnail" , ['set'=>'']) }}" class="m-menu__link ">
@@ -290,7 +257,7 @@
                                     </a>
                                 </li>
                                 <li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1">
-                                    <a target="_blank" href="{{ action("Web\BotsController@adminBot" , ["bot"=>"wallet"]) }}" class="m-menu__link ">
+                                    <a target="_blank" href="{{ route("web.admin.bots" , ["bot"=>"wallet"]) }}" class="m-menu__link ">
                                         <i class="m-menu__link-bullet m-menu__link-bullet--dot">
                                             <span></span>
                                         </i>
@@ -298,7 +265,7 @@
                                     </a>
                                 </li>
                                 <li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1">
-                                    <a target="_blank" href="{{ action("Web\BotsController@adminBot" , ["bot"=>"excel"]) }}" class="m-menu__link ">
+                                    <a target="_blank" href="{{ route("web.admin.bots" , ["bot"=>"excel"]) }}" class="m-menu__link ">
                                         <i class="m-menu__link-bullet m-menu__link-bullet--dot">
                                             <span></span>
                                         </i>
