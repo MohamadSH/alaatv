@@ -35,33 +35,40 @@ class ContentController extends Controller
         });
     }
 
-    public function fetchSets(Request $request){
+    public function fetchContents(Request $request){
         $since = $request->get('timestamp');
 
-        $sets = Contentset::active()->display();
+        $contents = Content::active()->free()->type(config('constants.CONTENT_TYPE_VIDEO'));
         if(!is_null($since)){
-            $sets->where(function($q) use ($since){
+            $contents->where(function($q) use ($since){
                 $q->where('created_at' , '>=' , Carbon::createFromTimestamp($since))
                     ->orWhere('updated_at' , '>=' , Carbon::createFromTimestamp($since));
             });
         }
-        $sets = $sets->paginate(25, ['*'], 'page');
+        $contents->orderBy('created_at' , 'DESC');
+        $contents = $contents->paginate(25, ['*'], 'page');
 
         $items = [];
-        foreach ($sets as $key=>$set) {
-            $items[$key]['id'] = $set->id;
-            $items[$key]['type'] = 'set';
-            $items[$key]['name'] = $set->name;
-            $items[$key]['link'] = $set->url;
-            $items[$key]['image'] = $set->photo;
-            $items[$key]['tags'] = $set->tags;
+        foreach ($contents as $key=>$content) {
+            $items[$key]['id'] = $content->id;
+            $items[$key]['type'] = 'content';
+            $items[$key]['name'] = $content->name;
+            $items[$key]['link'] = $content->url;
+            $items[$key]['image'] = $content->thumbnail;
+            $items[$key]['tags'] = $content->tags;
         }
 
-        $sets->appends([$request->input()]);
+        $currentPage = $contents->currentPage();
+        $nextPageUrl = null;
+        if($currentPage < 40){
+            $nextPageUrl = $contents->nextPageUrl();
+        }
+
+        $contents->appends([$request->input()]);
         $pagination = [
-            'current_page'    => $sets->currentPage(),
-            'next_page_url'   => $sets->nextPageUrl(),
-            'last_page'       => $sets->lastPage(),
+            'current_page'    => $currentPage,
+            'next_page_url'   => $nextPageUrl,
+            'last_page'       => $contents->lastPage(),
             'data'            => $items,
         ];
 
