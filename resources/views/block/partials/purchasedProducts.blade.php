@@ -1,7 +1,7 @@
 <div class="item carousel a--block-item a--block-type-dashboard
 @if($product->sets->count() > 1)
 background-gradient
-@endif" data-position="{{ $productKey }}">
+@endif">
 
 
 
