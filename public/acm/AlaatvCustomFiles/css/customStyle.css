@@ -401,6 +401,11 @@
         min-height: 142.578px;
     }
 }
+@media only screen and (max-width: 320px) {
+    .m-brand .m-brand__tools .m-brand__icon {
+        margin-right: 5px;
+    }
+}
 
 @-webkit-keyframes a--pulse {
     0% {
