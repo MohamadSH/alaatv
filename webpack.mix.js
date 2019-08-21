@@ -55,12 +55,12 @@ class Mix {
 
     mixAll() {
         this.mixBase();
-        // this.mixPages();
-        // this.mixUser();
-        // this.mixLanding();
-        // this.mixProduct();
-        // this.mixPageContentShow();
-        // this.mixCheckout();
+        this.mixPages();
+        this.mixUser();
+        this.mixLanding();
+        this.mixProduct();
+        this.mixPageContentShow();
+        this.mixCheckout();
         this.mixAdmin();
         this.mixCopyDirectory();
 
