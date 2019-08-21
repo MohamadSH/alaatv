@@ -344,7 +344,13 @@
     filter: blur(0px);
     transition: all 1.5s;
 }
+.lazy-image {
+    height: auto;
+}
 
+.liveIconOnMobile {
+    min-width: 35px;
+}
 
 /*media query*/
 @media only screen and (max-width: 1024px) {
