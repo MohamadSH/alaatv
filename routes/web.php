@@ -24,7 +24,7 @@ use App\PaymentModule\Controllers\RedirectAPIUserToPaymentRoute;
 
 
 
-Route::get('embed/c/{content}', "Web\ContentController@embed");
+Route::get('embed/c/{content}', 'Web\ContentController@embed');
 Route::get('/', 'Web\IndexPageController');
 Route::get('shop', 'Web\ShopPageController')->name('shop');
 Route::get('home', 'Web\HomeController@home');
@@ -37,8 +37,8 @@ Route::get('d/{data}', [HomeController::class , 'newDownload']);
 Route::get('contactUs', 'Web\ContactUsController');
 Route::get('rules', 'Web\RulesPageController');
 Route::get('articleList', 'Web\ArticleController@showList');
-Route::get("debug", 'Web\HomeController@debug');
-Route::get("telgramAgent2", "Web\HomeController@telgramAgent");
+Route::get('debug', 'Web\HomeController@debug');
+Route::get('telgramAgent2', 'Web\HomeController@telgramAgent');
 Route::post('sendMail', [HomeController::class , 'sendMail']);
 Route::get('product/search', 'Web\ProductController@search');
 Route::get('showPartial/{product}', 'Web\ProductController@showPartial');
@@ -56,9 +56,9 @@ Route::get('image/{category}/{w}/{h}/{filename}', [
     'as'   => 'image',
     'uses' => 'Web\HomeController@getImage',
 ]);
-Route::get("sharif", [SharifSchoolController::class , 'schoolRegisterLanding']);
-Route::get("sharifLanding", [SharifSchoolController::class , 'sharifLanding']);
-Route::post("registerForSanatiSharifHighSchool", [SharifSchoolController::class , 'registerForSanatiSharifHighSchool']);
+Route::get('sharif', [SharifSchoolController::class , 'schoolRegisterLanding']);
+Route::get('sharifLanding', [SharifSchoolController::class , 'sharifLanding']);
+Route::post('registerForSanatiSharifHighSchool', [SharifSchoolController::class , 'registerForSanatiSharifHighSchool']);
 
 Route::get('sitemap.xml', [HomeController::class , 'siteMapXML']);
 Route::group(['prefix' => 'sitemap'], function () {
@@ -68,15 +68,15 @@ Route::group(['prefix' => 'sitemap'], function () {
 });
 
 Route::group(['prefix' => 'checkout'], function () {
-    Route::get('auth', "Web\OrderController@checkoutAuth");
+    Route::get('auth', 'Web\OrderController@checkoutAuth');
 
     Route::get('completeInfo', 'Web\OrderController@checkoutCompleteInfo')
         ->name('checkoutCompleteInfo');
 
-    Route::get('review', "Web\OrderController@checkoutReview")
+    Route::get('review', 'Web\OrderController@checkoutReview')
         ->name('checkoutReview');
 
-    Route::get('payment', "Web\OrderController@checkoutPayment")
+    Route::get('payment', 'Web\OrderController@checkoutPayment')
         ->name('checkoutPayment');
 
     Route::any('verifyPayment/online/{paymentMethod}/{device}', [PaymentVerifierController::class, 'verify'])
@@ -103,73 +103,71 @@ Route::group(['prefix' => 'landing'], function () {
 });
 
 Route::group(['middleware' => 'auth'], function () {
-
     Route::get('logout', '\App\Http\Controllers\Auth\LoginController@logout');
-    Route::get('usersAdmin', 'Web\AdminController@admin');
-    Route::get('consultantPanel', 'Web\AdminController@consultantAdmin');
-    Route::get('consultantEntekhabReshtePanel', [ConsultationController::class, 'consultantEntekhabReshte']);
-    Route::get('consultantEntekhabReshteList', [ConsultationController::class, 'consultantEntekhabReshteList']);
-    Route::post('consultantStoreEntekhabReshte', [ConsultationController::class, 'consultantStoreEntekhabReshte']);
-    Route::get('productAdmin', 'Web\AdminController@adminProduct');
-    Route::get('contentAdmin', 'Web\AdminController@adminContent');
-    Route::get('blockAdmin', 'Web\AdminController@adminBlock')->name('blockAdmin');
-    Route::get('block/detach/{block}/{type}/{id}', 'Web\BlockController@detachFromBlock');
 
-    Route::get('sales-report', 'Web\AdminController@adminSalesReport')->name('admin.salesReport');
+    /*** Admin routes */
+    Route::get('usersAdmin', [AdminController::class, 'admin'])->name('web.admin.users');
+    Route::get('consultantPanel', [AdminController::class, 'consultantAdmin'])->name('web.admin.consultant');
+    Route::get('productAdmin', [AdminController::class, 'adminProduct'])->name('web.admin.product');
+    Route::get('contentAdmin', [AdminController::class, 'adminContent'])->name('web.admin.content');
+    Route::get('blockAdmin', [AdminController::class, 'adminBlock'])->name('web.admin.block');
+    Route::get('sales-report', [AdminController::class, 'adminSalesReport'])->name('web.admin.salesReport');
+    Route::get('ordersAdmin', [AdminController::class, 'adminOrder'])->name('web.admin.order');
+    Route::get('smsAdmin', [AdminController::class, 'adminSMS'])->name('web.admin.sms');
+    Route::get('siteConfigAdmin', [AdminController::class, 'adminSiteConfig'])->name('web.admin.siteConfig');
+    Route::get('slideShowAdmin', [AdminController::class, 'adminSlideShow'])->name('web.admin.slideshow');
+    Route::get('report',[AdminController::class, 'adminReport'])->name('web.admin.report');
+    Route::get('majorAdminPanel', [AdminController::class, 'adminMajor'])->name('web.admin.major');
+    Route::get('lotteryAdminPanel', [AdminController::class, 'adminLottery'])->name('web.admin.lottery');
+    Route::get('teleMarketingAdminPanel', [AdminController::class, 'adminTeleMarketing'])->name('web.admin.teleMarketing');
+    Route::get('walletAdminPanel', [AdminController::class, 'adminGiveWalletCredit'])->name('web.admin.wallet');
+    Route::get('cacheclearAdmin', [AdminController::class, 'adminCacheClear'])->name('web.admin.cacheclear');
+    Route::get('registrationListAdminPanel', [AdminController::class, 'adminRegistrationList'])->name('web.admin.registrationList');
+    Route::get('specialAddUser', [AdminController::class, 'specialAddUser'])->name('web.admin.specialAddUser');
+    Route::get('adminGenerateRandomCoupon', [AdminController::class, 'adminGenerateRandomCoupon'])->name('web.admin.generateRandomCoupon');
+    Route::get('adminBot', [AdminController::class, 'adminBot'])->name('web.admin.bots');
+    Route::post('giveWalletCredit', [WalletController::class, 'giveCredit'])->name('web.admin.wallet.giveCredit');
+    Route::post('registerUserAndGiveOrderproduct', [AdminController::class, 'registerUserAndGiveOrderproduct'])->name('web.admin.registerUserAndGiveOrderproduct');
+    Route::post('adminSendSMS', [HomeController::class , 'sendSMS'])->name('web.sendSms');
+    /*** Admin routes */
 
-    Route::get('ordersAdmin', 'Web\AdminController@adminOrder');
-    Route::get('smsAdmin', 'Web\AdminController@adminSMS');
-    Route::get('botAdmin', 'Web\BotsController@adminBot');
-    Route::get('siteConfigAdmin', 'Web\AdminController@adminSiteConfig');
-    Route::get('slideShowAdmin', 'Web\AdminController@adminSlideShow');
-    Route::get('report', 'Web\AdminController@adminReport');
-    Route::get('majorAdminPanel', 'Web\AdminController@adminMajor');
-    Route::get('lotteryAdminPanel', 'Web\AdminController@adminLottery');
-    Route::get('teleMarketingAdminPanel', 'Web\AdminController@adminTeleMarketing');
-    Route::get('walletAdminPanel', [AdminController::class, 'adminGiveWalletCredit'])->name('admin.wallet');
-    Route::post('giveWalletCredit', [WalletController::class, 'giveCredit'])->name('admin.wallet.giveCredit');
-    Route::get('registrationListAdminPanel', [AdminController::class, 'adminRegistrationList'])->name('admin.registrationList');
-    Route::post('adminSendSMS', [HomeController::class , 'sendSMS']);
+
     Route::get('asset', [UserController::class, 'userProductFiles'])->name('user.asset');
     Route::get('complete-register', [UserController::class, 'completeRegister'])->name('completeRegister');
     Route::get('survey',  [SurveyController::class, 'show']);
     Route::resource('survey', '\\'. SurveyController::class);
-    Route::post("transactionToDonate/{transaction}", "Web\TransactionController@convertToDonate");
-    Route::post("completeTransaction/{transaction}", "Web\TransactionController@completeTransaction");
-    Route::post("myTransaction/{transaction}", "Web\TransactionController@limitedUpdate");
+    Route::post('transactionToDonate/{transaction}', 'Web\TransactionController@convertToDonate');
+    Route::post('completeTransaction/{transaction}', 'Web\TransactionController@completeTransaction');
+    Route::post('myTransaction/{transaction}', 'Web\TransactionController@limitedUpdate');
     Route::get('getUnverifiedTransactions', 'Web\TransactionController@getUnverifiedTransactions');
     Route::any('paymentRedirect/{paymentMethod}/{device}', '\\'.RedirectUserToPaymentPage::class)->name('redirectToBank');
     Route::get('exitAdminInsertOrder', 'Web\OrderController@exitAdminInsertOrder');
     Route::post('exchangeOrderproduct/{order}', 'Web\OrderController@exchangeOrderproduct');
-    Route::get('MBTI-Participation', "Web\MbtianswerController@create");
-    Route::get('MBTI-Introduction', "Web\MbtianswerController@introduction");
+    Route::get('MBTI-Participation', 'Web\MbtianswerController@create');
+    Route::get('MBTI-Introduction', 'Web\MbtianswerController@introduction');
 
-    Route::get('holdlottery', "Web\LotteryController@holdLottery");
-    Route::get('givePrize', "Web\LotteryController@givePrizes");
-    Route::get("bot", "Web\BotsController@bot");
-    Route::get("pointBot", "Web\BotsController@pointBot");
-    Route::post("walletBot", "Web\BotsController@walletBot");
-    Route::post("excelBot", "Web\BotsController@excelBot");
-    Route::get("zarinpalbot", "Web\BotsController@ZarinpalVerifyPaymentBot");
-    Route::post("salesReportBot", "Web\BotsController@salesReportBot");
-    Route::get("thumbnailbot", "Web\BotsController@fixthumbnail");
-    Route::post("registerUserAndGiveOrderproduct", "Web\AdminController@registerUserAndGiveOrderproduct");
-    Route::get("specialAddUser", "Web\AdminController@specialAddUser");
-    Route::get("v/asiatech", "Web\VoucherController@voucherRequest");
-    Route::put("v", "Web\VoucherController@submitVoucherRequest");
+    Route::get('holdlottery', 'Web\LotteryController@holdLottery');
+    Route::get('givePrize', 'Web\LotteryController@givePrizes');
+    Route::get('bot', 'Web\BotsController@bot')->name('web.bots');
+    Route::get('pointBot', 'Web\BotsController@pointBot');
+    Route::post('walletBot', 'Web\BotsController@walletBot');
+    Route::post('excelBot', 'Web\BotsController@excelBot');
+    Route::get('zarinpalbot', 'Web\BotsController@ZarinpalVerifyPaymentBot');
+    Route::post('salesReportBot', 'Web\BotsController@salesReportBot');
+    Route::get('thumbnailbot', 'Web\BotsController@fixthumbnail')->name('web.bot.fixthumbnails');
+    Route::get('v/asiatech', 'Web\VoucherController@voucherRequest');
+    Route::put('v', 'Web\VoucherController@submitVoucherRequest');
 
-    Route::resource('orderproduct', 'Web\OrderproductController');
     Route::group(['prefix' => 'orderproduct'], function () {
-        Route::post("{orderproduct}/restore", [OrderproductController::class, 'restore']);
+        Route::post('restore', [OrderproductController::class, 'restore'])->name('web.orderproduct.restore');
     });
+    Route::resource('orderproduct', 'Web\OrderproductController');
 
 
     Route::get('96', [UserController::class, 'submitKonkurResult']);
     Route::get('97', [UserController::class, 'submitKonkurResult']);
     Route::get('98', [UserController::class, 'submitKonkurResult'])->name('web.user.konkurResult');
     Route::group(['prefix' => 'user'], function () {
-
-
         Route::get('{user}/dashboard', '\\'. DashboardPageController::class)
             ->name('web.user.dashboard');
         Route::get('sales-report', '\\'.SalesReportController::class);
@@ -212,6 +210,11 @@ Route::group(['middleware' => 'auth'], function () {
         Route::put('addComplimentary/{product}', 'Web\ProductController@addComplimentary');
         Route::put('removeComplimentary/{product}', 'Web\ProductController@removeComplimentary');
     });
+
+    Route::get('consultantEntekhabReshtePanel', [ConsultationController::class, 'consultantEntekhabReshte']);
+    Route::get('consultantEntekhabReshteList', [ConsultationController::class, 'consultantEntekhabReshteList']);
+    Route::post('consultantStoreEntekhabReshte', [ConsultationController::class, 'consultantStoreEntekhabReshte']);
+
 
     Route::resource('user', 'Web\UserController');
     Route::resource('userbon', 'Web\UserbonController');
@@ -257,7 +260,6 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::get('donate', 'Web\DonateController');
     Route::post('donateOrder', 'Web\OrderController@donateOrder');
-    Route::get('adminGenerateRandomCoupon', 'Web\AdminController@adminGenerateRandomCoupon');
 
     Route::get('listContents/{set}', 'Web\SetController@indexContent');
     Route::resource('set', 'Web\SetController');
@@ -268,6 +270,7 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::post('updateSet' , [ContentController::class, 'updateSet']);
     Route::get('atest' , [HomeController::class, 'adTest']);
+    Route::get('block/detach/{block}/{type}/{id}', 'Web\BlockController@detachFromBlock');
 });
 
 Route::group(['prefix' => 'c'], function () {

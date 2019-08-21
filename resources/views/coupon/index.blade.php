@@ -7,9 +7,9 @@
                 <span class = "m-badge m-badge--wide label-sm m-badge--danger"> درج نشده </span> @endif</td>
         <td>@if(isset($coupon->description[0])){{$coupon->description}} @else
                 <span class = "m-badge m-badge--wide label-sm m-badge--warning"> بدون توضیح </span> @endif</td>
+        <td>{{($coupon->enable)?'بله':'خیر'}}</td>
         <td>@if(isset($coupon->code[0])){{$coupon->code}} @else
                 <span class = "m-badge m-badge--wide label-sm m-badge--danger"> درج نشده </span> @endif</td>
-
         <td>@if(isset($coupon->discount)){{$coupon->discount}} @else
                 <span class = "m-badge m-badge--wide label-sm m-badge--danger"> درج نشده </span> @endif</td>
         {{--        <td>@if(isset($coupon->maxCost[0])){{$coupon->maxCost}} @else <span class="m-badge m-badge--wide label-sm m-badge--warning"> ندارد </span> @endif</td>--}}
@@ -48,7 +48,7 @@
         </td>
         <td>@if(isset($coupon->validUntil) && strlen($coupon->validUntil) > 0){{$coupon->ValidUntil_Jalali()}} @else
                 <span class = "m-badge m-badge--wide label-sm m-badge--danger"> درج نشده </span> @endif</td>
-        </td>@permission('config("constants.SHOW_COUPON_ACCESS") , config("constants.REMOVE_COUPON_ACCESS")')
+        </td>
         <td>
             <div class = "btn-group">
                 <button class = "btn btn-xs black dropdown-toggle" type = "button" data-toggle = "dropdown" aria-expanded = "false"> عملیات
@@ -57,12 +57,13 @@
                 <ul class = "dropdown-menu" role = "menu">
                     @permission((config('constants.SHOW_COUPON_ACCESS')))
                     <li>
-                        <a href = "{{action("Web\CouponController@edit" , $coupon)}}">
+                        <a target="_blank" href = "{{action("Web\CouponController@edit" , $coupon)}}">
                             <i class = "fa fa-pencil"></i>
                             اصلاح
                         </a>
                     </li>
-                    @endpermission @permission((config('constants.REMOVE_COUPON_ACCESS')))
+                    @endpermission
+                    @permission((config('constants.REMOVE_COUPON_ACCESS')))
                     <li>
                         <a data-target = "#static-{{$coupon->id}}" data-toggle = "modal">
                             <i class = "fa fa-remove"></i>
@@ -72,7 +73,8 @@
                     @endpermission
                 </ul>
                 <div id = "ajax-modal" class = "modal fade" tabindex = "-1"></div>
-                <!-- static -->@permission((config('constants.REMOVE_COUPON_ACCESS')))
+                <!-- static -->
+                @permission((config('constants.REMOVE_COUPON_ACCESS')))
 
                 <!--begin::Modal-->
                 <div class = "modal fade" id = "static-{{$coupon->id}}" tabindex = "-1" role = "dialog" aria-hidden = "true">
@@ -93,7 +95,6 @@
                 @endpermission
             </div>
         </td>
-             @endpermission
     </tr>
 @endforeach
 @endpermission

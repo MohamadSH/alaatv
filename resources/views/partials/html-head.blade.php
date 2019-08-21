@@ -29,6 +29,9 @@
     .liveIconOnMobile {
         min-width: 35px;
     }
+    .lazy-image{
+        height: auto !important;
+    }
 </style>
 @yield('page-preload-css')
 

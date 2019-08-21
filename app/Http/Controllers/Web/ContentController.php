@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\Web;
 
+use App\Block;
 use App\Classes\Search\RelatedProductSearch;
+use App\Collection\BlockCollection;
 use App\Collection\ContentCollection;
 use App\User;
 use Exception;
@@ -212,6 +214,8 @@ class ContentController extends Controller
             }
             return $products;
         });
+
+//        $contentBlocks = Block::getContentBlocks();
 
         $viewResponse      = view('content.show',
             compact('seenCount', 'author', 'content', 'contentsWithSameSet', 'videosWithSameSet',
@@ -470,7 +474,7 @@ class ContentController extends Controller
         $content->tags       = convertTagStringToArray($tagString);
 
         if(isset($pamphlet)){
-            $files =$this->storePamphletOfContent($pamphlet);
+            $files =$this->storePamphletOfContent( $content , $pamphlet);
         }
 
         if(!empty($files)) {
@@ -692,10 +696,14 @@ class ContentController extends Controller
         $content->file = $fileCollection;
     }
 
-    private function storePamphletOfContent($pamphletFile):array
+    private function storePamphletOfContent(Content $content , $pamphletFile):array
     {
-        $filename  = $pamphletFile->getClientOriginalName();
         $disk = Storage::disk(config('constants.DISK19_CLOUD'));
+
+        foreach ($content->getPamphlets() as $pamphlet){
+            $disk->delete(basename($pamphlet->link));
+        }
+        $filename  = $pamphletFile->getClientOriginalName();
         if ($disk->put($filename, File::get($pamphletFile))) {
             return $this->makePamphletFilesForFreeContent($filename);
         }

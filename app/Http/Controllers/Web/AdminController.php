@@ -47,6 +47,7 @@ use Auth;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Contracts\View\Factory;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Http\{Request, Response};
 use Illuminate\Support\Facades\Input;
 use Illuminate\View\View;
@@ -62,24 +63,26 @@ class AdminController extends Controller
 
     public function __construct()
     {
-        $this->middleware('ability:'.config('constants.ROLE_ADMIN').','.config('constants.USER_ADMIN_PANEL_ACCESS'), ['only' => 'admin']);
-        $this->middleware('permission:'.config('constants.CONSULTANT_PANEL_ACCESS'), ['only' => 'consultantAdmin']);
-        $this->middleware('permission:'.config('constants.PRODUCT_ADMIN_PANEL_ACCESS'), ['only' => 'adminProduct']);
-        $this->middleware('permission:'.config('constants.CONTENT_ADMIN_PANEL_ACCESS'), ['only' => 'adminContent']);
-        $this->middleware('permission:'.config('constants.LIST_ORDER_ACCESS'), ['only' => 'adminOrder']);
-        $this->middleware('permission:'.config('constants.SMS_ADMIN_PANEL_ACCESS'), ['only' => 'adminSMS']);
-        $this->middleware('permission:'.config('constants.REPORT_ADMIN_PANEL_ACCESS'), ['only' => 'adminReport']);
-        $this->middleware('permission:'.config('constants.LIST_BLOCK_ACCESS'), ['only' => 'adminBlock']);
-        $this->middleware('ability:'.config('constants.ROLE_ADMIN').','.config('constants.TELEMARKETING_PANEL_ACCESS'), ['only' => 'adminTeleMarketing']);
-        $this->middleware('permission:'.config('constants.INSERT_COUPON_ACCESS'), ['only' => 'adminGenerateRandomCoupon']);
-        $this->middleware('permission:'.config('constants.WALLET_ADMIN_PANEL'), ['only' => 'adminGiveWalletCredit']);
-        $this->middleware('permission:'.config('constants.LIST_EVENTRESULT_ACCESS'), ['only' => 'adminRegistrationList']);
+        $this->middleware('ability:' . config('constants.ROLE_ADMIN') . ',' . config('constants.USER_ADMIN_PANEL_ACCESS'), ['only' => 'admin']);
+        $this->middleware('permission:' . config('constants.CONSULTANT_PANEL_ACCESS'), ['only' => 'consultantAdmin']);
+        $this->middleware('permission:' . config('constants.PRODUCT_ADMIN_PANEL_ACCESS'), ['only' => 'adminProduct']);
+        $this->middleware('permission:' . config('constants.CONTENT_ADMIN_PANEL_ACCESS'), ['only' => 'adminContent']);
+        $this->middleware('permission:' . config('constants.LIST_ORDER_ACCESS'), ['only' => 'adminOrder']);
+        $this->middleware('permission:' . config('constants.SMS_ADMIN_PANEL_ACCESS'), ['only' => 'adminSMS']);
+        $this->middleware('permission:' . config('constants.REPORT_ADMIN_PANEL_ACCESS'), ['only' => 'adminReport']);
+        $this->middleware('permission:' . config('constants.LIST_BLOCK_ACCESS'), ['only' => 'adminBlock']);
+        $this->middleware('ability:' . config('constants.ROLE_ADMIN') . ',' . config('constants.TELEMARKETING_PANEL_ACCESS'), ['only' => 'adminTeleMarketing']);
+        $this->middleware('permission:' . config('constants.INSERT_COUPON_ACCESS'), ['only' => 'adminGenerateRandomCoupon']);
+        $this->middleware('permission:' . config('constants.WALLET_ADMIN_PANEL'), ['only' => 'adminGiveWalletCredit']);
+        $this->middleware('permission:' . config('constants.LIST_EVENTRESULT_ACCESS'), ['only' => 'adminRegistrationList']);
         $this->middleware('role:admin', [
             'only' => [
                 'adminLottery',
                 'registerUserAndGiveOrderproduct',
                 'specialAddUser',
                 'adminSalesReport',
+                'adminCacheClear',
+                'adminCheckOrder',
             ],
         ]);
 
@@ -93,16 +96,16 @@ class AdminController extends Controller
      */
     public function admin()
     {
-        $userStatuses       = Userstatus::pluck('displayName', 'id');
-        $majors             = Major::pluck('name', 'id');
-        $genders            = Gender::pluck('name', 'id');
+        $userStatuses = Userstatus::pluck('displayName', 'id');
+        $majors = Major::pluck('name', 'id');
+        $genders = Gender::pluck('name', 'id');
         $gendersWithUnknown = clone $genders;
         $gendersWithUnknown->prepend('نامشخص');
         $permissions = Permission::pluck('display_name', 'id');
-        $roles       = Role::pluck('display_name', 'id');
-        //        $roles = array_add($roles , 0 , "همه نقش ها");
+        $roles = Role::pluck('display_name', 'id');
+        //        $roles = array_add($roles , 0 , 'همه نقش ها');
         //        $roles = array_sort_recursive($roles);
-        $limitStatus  = [
+        $limitStatus = [
             0 => 'نامحدود',
             1 => 'محدود',
         ];
@@ -124,7 +127,7 @@ class AdminController extends Controller
 
         $products = $this->makeProductCollection();
 
-        $lockProfileStatus        = [
+        $lockProfileStatus = [
             0 => 'پروفایل باز',
             1 => 'پروفایل قفل شده',
         ];
@@ -154,15 +157,15 @@ class AdminController extends Controller
             'عملیات',
         ];
 
-        $sortBy               = [
+        $sortBy = [
             'updated_at' => 'تاریخ اصلاح',
             'created_at' => 'تاریخ ثبت نام',
-            'firstName'  => 'نام',
-            'lastName'   => 'نام خانوادگی',
+            'firstName' => 'نام',
+            'lastName' => 'نام خانوادگی',
         ];
-        $sortType             = [
+        $sortType = [
             'desc' => 'نزولی',
-            'asc'  => 'صعودی',
+            'asc' => 'صعودی',
         ];
         $addressSpecialFilter = [
             'بدون فیلتر خاص',
@@ -174,10 +177,10 @@ class AdminController extends Controller
             ->toArray();
         $coupons = array_sort_recursive($coupons);
 
-        $checkoutStatuses    = Checkoutstatus::pluck('displayName', 'id')
+        $checkoutStatuses = Checkoutstatus::pluck('displayName', 'id')
             ->toArray();
         $checkoutStatuses[0] = 'نامشخص';
-        $checkoutStatuses    = array_sort_recursive($checkoutStatuses);
+        $checkoutStatuses = array_sort_recursive($checkoutStatuses);
 
         $pageName = 'admin';
 
@@ -198,18 +201,18 @@ class AdminController extends Controller
     {
         $attributecontrols = Attributecontrol::pluck('name', 'id')
             ->toArray();
-        $enableStatus      = [
+        $enableStatus = [
             0 => 'غیرفعال',
             1 => 'فعال',
         ];
-        $attributesets     = Attributeset::pluck('name', 'id')
+        $attributesets = Attributeset::pluck('name', 'id')
             ->toArray();
-        $limitStatus       = [
+        $limitStatus = [
             0 => 'نامحدود',
             1 => 'محدود',
         ];
 
-        $products   = Product::pluck('name', 'id')
+        $products = Product::pluck('name', 'id')
             ->toArray();
         $coupontype = Coupontype::pluck('displayName', 'id');
 
@@ -220,7 +223,7 @@ class AdminController extends Controller
             ->sortByDesc('order')
             ->first();
         if (isset($lastProduct)) {
-            $lastOrderNumber     = $lastProduct->order + 1;
+            $lastOrderNumber = $lastProduct->order + 1;
             $defaultProductOrder = $lastOrderNumber;
         } else {
             $defaultProductOrder = 1;
@@ -242,7 +245,7 @@ class AdminController extends Controller
     public function adminOrder()
     {
         $pageName = 'admin';
-        $user     = Auth::user();
+        $user = Auth::user();
         if ($user->can(config('constants.SHOW_OPENBYADMIN_ORDER'))) {
             $orderstatuses = Orderstatus::whereNotIn('id', [config('constants.ORDER_STATUS_OPEN')])
                 ->pluck('displayName', 'id');
@@ -254,15 +257,15 @@ class AdminController extends Controller
                 ->pluck('displayName', 'id')
                 ->toArray();
         }
-        //        $orderstatuses= array_sort_recursive(array_add($orderstatuses , 0 , "دارای هر وضعیت سفارش")->toArray());
+        //        $orderstatuses= array_sort_recursive(array_add($orderstatuses , 0 , 'دارای هر وضعیت سفارش')->toArray());
 
-        $paymentstatuses     = Paymentstatus::pluck('displayName', 'id')
+        $paymentstatuses = Paymentstatus::pluck('displayName', 'id')
             ->toArray();
-        $majors              = Major::pluck('name', 'id');
-        $checkoutStatuses    = Checkoutstatus::pluck('displayName', 'id')
+        $majors = Major::pluck('name', 'id');
+        $checkoutStatuses = Checkoutstatus::pluck('displayName', 'id')
             ->toArray();
         $checkoutStatuses[0] = 'نامشخص';
-        $checkoutStatuses    = array_sort_recursive($checkoutStatuses);
+        $checkoutStatuses = array_sort_recursive($checkoutStatuses);
 
         $products = collect();
         if ($user->hasRole('onlineNoroozMarketing')) {
@@ -276,7 +279,7 @@ class AdminController extends Controller
             ->toArray();
 
         $attributevalueCollection = collect();
-        $extraAttributes          = Attribute::whereHas('attributegroups', function ($q) {
+        $extraAttributes = Attribute::whereHas('attributegroups', function ($q) {
             $q->where('attributetype_id', 2);
         })
             ->get();
@@ -289,17 +292,17 @@ class AdminController extends Controller
             }
         }
 
-        $sortBy   = [
-            'updated_at'    => 'تاریخ اصلاح مدیریتی',
-            'completed_at'  => 'تاریخ ثبت نهایی',
-            'created_at'    => 'تاریخ ثبت اولیه',
+        $sortBy = [
+            'updated_at' => 'تاریخ اصلاح مدیریتی',
+            'completed_at' => 'تاریخ ثبت نهایی',
+            'created_at' => 'تاریخ ثبت اولیه',
             'userFirstName' => 'نام مشتری',
-            'userLastName'  => 'نام خانوادگی مشتری'
-            /* , "productName" => "نام محصول"*/
+            'userLastName' => 'نام خانوادگی مشتری'
+            /* , 'productName' => 'نام محصول'*/
         ];
         $sortType = [
             'desc' => 'نزولی',
-            'asc'  => 'صعودی',
+            'asc' => 'صعودی',
         ];
 
         $transactionTypes = [
@@ -317,7 +320,7 @@ class AdminController extends Controller
 
         $userBonStatuses = Userbonstatus::pluck('displayName', 'id');
 
-        $orderTableDefaultColumns       = [
+        $orderTableDefaultColumns = [
             'محصولات',
             'نام خانوادگی',
             'نام کوچک',
@@ -361,7 +364,7 @@ class AdminController extends Controller
             'مبلغ فیلتر شده',
             'مبلغ آیتم افزوده',
         ];
-        $userBonTableDefaultColumns     = [
+        $userBonTableDefaultColumns = [
             'نام کاربر',
             'تعداد بن تخصیص داده شده',
             'وضعیت بن',
@@ -369,13 +372,13 @@ class AdminController extends Controller
             'تاریخ درج',
             'عملیات',
         ];
-        $addressSpecialFilter           = [
+        $addressSpecialFilter = [
             'بدون فیلتر خاص',
             'بدون آدرس ها',
             'آدرس دارها',
         ];
 
-        $paymentGateways = Transactiongateway::enable()->get()->pluck('displayName' , 'id');
+        $paymentGateways = Transactiongateway::enable()->get()->pluck('displayName', 'id');
 
         return view('admin.indexOrder',
             compact('pageName', 'orderstatuses', 'products', 'paymentMethods', 'majors', 'paymentstatuses', 'sortBy',
@@ -392,7 +395,7 @@ class AdminController extends Controller
      */
     public function adminContent()
     {
-        $majors             = Major::pluck('name', 'id');
+        $majors = Major::pluck('name', 'id');
 //        $assignmentStatuses = Assignmentstatus::pluck('name', 'id');
 //        $assignmentStatuses->prepend('انتخاب وضعیت');
 //        $consultationStatuses = Consultationstatus::pluck('name', 'id');
@@ -408,21 +411,21 @@ class AdminController extends Controller
      */
     public function consultantAdmin()
     {
-        $questions              = Userupload::all()
+        $questions = Userupload::all()
             ->sortByDesc('created_at');
-        $questionStatusDone     = Useruploadstatus::all()
+        $questionStatusDone = Useruploadstatus::all()
             ->where('name', 'done')
             ->first();
-        $questionStatusPending  = Useruploadstatus::all()
+        $questionStatusPending = Useruploadstatus::all()
             ->where('name', 'pending')
             ->first();
-        $newQuestionsCount      = Userupload::all()
+        $newQuestionsCount = Userupload::all()
             ->where('useruploadstatus_id', $questionStatusPending->id)
             ->count();
         $answeredQuestionsCount = Userupload::all()
             ->where('useruploadstatus_id', $questionStatusDone->id)
             ->count();
-        $counter                = 0;
+        $counter = 0;
 
         $pageName = 'consultantAdmin';
 
@@ -437,9 +440,9 @@ class AdminController extends Controller
      */
     public function adminSMS()
     {
-        $userStatuses       = Userstatus::pluck('name', 'id');
-        $majors             = Major::pluck('name', 'id');
-        $genders            = Gender::pluck('name', 'id');
+        $userStatuses = Userstatus::pluck('name', 'id');
+        $majors = Major::pluck('name', 'id');
+        $genders = Gender::pluck('name', 'id');
         $gendersWithUnknown = clone $genders;
         $gendersWithUnknown->prepend('نامشخص');
         $roles = Role::pluck('display_name', 'id');
@@ -451,7 +454,7 @@ class AdminController extends Controller
 
         $products = $this->makeProductCollection();
 
-        $lockProfileStatus        = [
+        $lockProfileStatus = [
             0 => 'پروفایل باز',
             1 => 'پروفایل قفل شده',
         ];
@@ -464,15 +467,15 @@ class AdminController extends Controller
 //        $relatives = Relative::pluck('displayName', 'id');
 //        $relatives->prepend('فرد');
 
-        $sortBy               = [
+        $sortBy = [
             'updated_at' => 'تاریخ اصلاح',
             'created_at' => 'تاریخ ثبت نام',
-            'firstName'  => 'نام',
-            'lastName'   => 'نام خانوادگی',
+            'firstName' => 'نام',
+            'lastName' => 'نام خانوادگی',
         ];
-        $sortType             = [
+        $sortType = [
             'desc' => 'نزولی',
-            'asc'  => 'صعودی',
+            'asc' => 'صعودی',
         ];
         $addressSpecialFilter = [
             'بدون فیلتر خاص',
@@ -480,14 +483,14 @@ class AdminController extends Controller
             'آدرس دارها',
         ];
 
-        $checkoutStatuses    = Checkoutstatus::pluck('displayName', 'id')
+        $checkoutStatuses = Checkoutstatus::pluck('displayName', 'id')
             ->toArray();
         $checkoutStatuses[0] = 'نامشخص';
-        $checkoutStatuses    = array_sort_recursive($checkoutStatuses);
+        $checkoutStatuses = array_sort_recursive($checkoutStatuses);
 
         $pageName = 'admin';
 
-        $smsCredit = (int) $this->medianaGetCredit();
+        $smsCredit = (int)$this->medianaGetCredit();
 
         $smsProviderNumber = config('constants.SMS_PROVIDER_NUMBER');
 
@@ -498,9 +501,9 @@ class AdminController extends Controller
         return view('admin.indexSMS',
             compact('pageName', 'majors', 'userStatuses', 'roles', 'relatives', 'orderstatuses', 'paymentstatuses',
                 'genders', 'gendersWithUnknown', 'products',
-                 'lockProfileStatus', 'mobileNumberVerification', 'sortBy', 'sortType', 'smsCredit',
+                'lockProfileStatus', 'mobileNumberVerification', 'sortBy', 'sortType', 'smsCredit',
                 'smsProviderNumber',
-                 'coupons', 'addressSpecialFilter', 'checkoutStatuses'));
+                'coupons', 'addressSpecialFilter', 'checkoutStatuses'));
     }
 
     /**
@@ -509,44 +512,23 @@ class AdminController extends Controller
      * @param SlideShowController $slideShowController
      * @return Factory|View
      */
-    public function adminSlideShow(Request $request , SlideShowController $slideShowController)
+    public function adminSlideShow(Request $request, SlideShowController $slideShowController)
     {
 
-        $slides             = $slideShowController->index();
-        $slideDisk          = 9;
-        $section            = 'slideShow';
+        $slides = $slideShowController->index();
+        $slideDisk = 9;
+        $section = 'slideShow';
 
         $websitePages = WebsitePageRepo::getWebsitePages(
             ['url' => [
                 '/home',
                 '/shop',
             ]]
-        )->pluck('displayName' , 'id');
+        )->pluck('displayName', 'id');
 
 
         return view('admin.siteConfiguration.slideShow',
             compact('slides', 'section', 'slideDisk', 'websitePages'));
-    }
-
-    /**
-     * Admin panel for adjusting site configuration
-     */
-    public function adminArticleSlideShow()
-    {
-
-        $slideController    = new SlideShowController();
-        $slideWebsitepageId = $websitePageId = Websitepage::all()
-            ->where('url', '/لیست-مقالات')
-            ->first()->id;
-        $slides             = $slideController->index()
-            ->where('websitepage_id', $slideWebsitepageId);
-        $slideDisk          = 13;
-        $slideContentName   = 'عکس اسلاید صفحه مقالات';
-        $sideBarMode        = 'closed';
-        $section            = 'articleSlideShow';
-
-        return view('admin.siteConfiguration.articleSlideShow',
-            compact('slides', 'sideBarMode', 'slideWebsitepageId', 'section', 'slideDisk', 'slideContentName'));
     }
 
     /**
@@ -566,7 +548,7 @@ class AdminController extends Controller
      */
     public function adminMajor()
     {
-        $parentName  = Input::get('parent');
+        $parentName = Input::get('parent');
         $parentMajor = Major::all()
             ->where('name', $parentName)
             ->where('majortype_id', 1)
@@ -587,16 +569,16 @@ class AdminController extends Controller
      */
     public function adminReport()
     {
-        $userStatuses       = Userstatus::pluck('displayName', 'id');
-        $majors             = Major::pluck('name', 'id');
-        $genders            = Gender::pluck('name', 'id');
+        $userStatuses = Userstatus::pluck('displayName', 'id');
+        $majors = Major::pluck('name', 'id');
+        $genders = Gender::pluck('name', 'id');
         $gendersWithUnknown = clone $genders;
         $gendersWithUnknown->prepend('نامشخص');
         $permissions = Permission::pluck('display_name', 'id');
-        $roles       = Role::pluck('display_name', 'id');
-        //        $roles = array_add($roles , 0 , "همه نقش ها");
+        $roles = Role::pluck('display_name', 'id');
+        //        $roles = array_add($roles , 0 , 'همه نقش ها');
         //        $roles = array_sort_recursive($roles);
-        $limitStatus  = [
+        $limitStatus = [
             0 => 'نامحدود',
             1 => 'محدود',
         ];
@@ -620,11 +602,11 @@ class AdminController extends Controller
             176,
             167,
         ];
-        $bookProducts   = $this->makeProductCollection($bookProductsId);
+        $bookProducts = $this->makeProductCollection($bookProductsId);
 
         $products = $this->makeProductCollection();
 
-        $lockProfileStatus        = [
+        $lockProfileStatus = [
             0 => 'پروفایل باز',
             1 => 'پروفایل قفل شده',
         ];
@@ -633,17 +615,17 @@ class AdminController extends Controller
             1 => 'تایید شده',
         ];
 
-        //        $tableDefaultColumns = ["نام" , "رشته"  , "موبایل"  ,"شهر" , "استان" , "وضعیت شماره موبایل" , "کد پستی" , "آدرس" , "مدرسه" , "وضعیت" , "زمان ثبت نام" , "زمان اصلاح" , "نقش های کاربر" , "تعداد بن" , "عملیات"];
+        //        $tableDefaultColumns = ['نام' , 'رشته'  , 'موبایل'  ,'شهر' , 'استان' , 'وضعیت شماره موبایل' , 'کد پستی' , 'آدرس' , 'مدرسه' , 'وضعیت' , 'زمان ثبت نام' , 'زمان اصلاح' , 'نقش های کاربر' , 'تعداد بن' , 'عملیات'];
 
-        $sortBy               = [
+        $sortBy = [
             'updated_at' => 'تاریخ اصلاح',
             'created_at' => 'تاریخ ثبت نام',
-            'firstName'  => 'نام',
-            'lastName'   => 'نام خانوادگی',
+            'firstName' => 'نام',
+            'lastName' => 'نام خانوادگی',
         ];
-        $sortType             = [
+        $sortType = [
             'desc' => 'نزولی',
-            'asc'  => 'صعودی',
+            'asc' => 'صعودی',
         ];
         $addressSpecialFilter = [
             'بدون فیلتر خاص',
@@ -660,10 +642,10 @@ class AdminController extends Controller
 
         $pageName = 'admin';
 
-        $checkoutStatuses    = Checkoutstatus::pluck('displayName', 'id')
+        $checkoutStatuses = Checkoutstatus::pluck('displayName', 'id')
             ->toArray();
         $checkoutStatuses[0] = 'نامشخص';
-        $checkoutStatuses    = array_sort_recursive($checkoutStatuses);
+        $checkoutStatuses = array_sort_recursive($checkoutStatuses);
 
         return view('admin.indexGetReport',
             compact('pageName', 'majors', 'userStatuses', 'permissions', 'roles', 'limitStatus', 'orderstatuses',
@@ -682,17 +664,17 @@ class AdminController extends Controller
     {
         $userlotteries = collect();
         if ($request->has('lottery')) {
-            $lotteryName        = $request->get('lottery');
-            $lottery            = Lottery::where('name', $lotteryName)
+            $lotteryName = $request->get('lottery');
+            $lottery = Lottery::where('name', $lotteryName)
                 ->get()
                 ->first();
             $lotteryDisplayName = $lottery->displayName;
-            $userlotteries      = $lottery->users->where('pivot.rank', '>', 0)
+            $userlotteries = $lottery->users->where('pivot.rank', '>', 0)
                 ->sortBy('pivot.rank');
         }
 
-        $bonName     = config('constants.BON2');
-        $bon         = Bon::where('name', $bonName)
+        $bonName = config('constants.BON2');
+        $bon = Bon::where('name', $bonName)
             ->first();
         $pointsGiven = Userbon::where('bon_id', $bon->id)
             ->where('userbonstatus_id', 1)
@@ -712,7 +694,7 @@ class AdminController extends Controller
      */
     public function adminTeleMarketing(Request $request)
     {
-        $orders= new OrderCollections();
+        $orders = new OrderCollections();
         $marketingProducts = [];
         if ($request->has('group-mobile')) {
             $marketingProducts = [
@@ -730,13 +712,13 @@ class AdminController extends Controller
                 221,
                 222,
             ];
-            $mobiles           = $request->get('group-mobile');
-            $mobileArray       = [];
+            $mobiles = $request->get('group-mobile');
+            $mobileArray = [];
             foreach ($mobiles as $mobile) {
                 $mobileArray[] = $mobile['mobile'];
             }
             $baseDataTime = Carbon::createFromTimeString('2018-05-03 00:00:00');
-            $orders       = Order::whereHas('user', function ($q) use ($mobileArray, $baseDataTime) {
+            $orders = Order::whereHas('user', function ($q) use ($mobileArray, $baseDataTime) {
                 $q->whereIn('mobile', $mobileArray);
             })
                 ->whereHas('orderproducts', function ($q2) use ($marketingProducts) {
@@ -767,42 +749,42 @@ class AdminController extends Controller
         /** @var Product $product */
         foreach ($productCollection as $product) {
             $children = $product->getAllChildren();
-            $childrenCollection->put( $product->id , $children);
+            $childrenCollection->put($product->id, $children);
         }
 
-        return view('admin.generateSpecialCoupon', compact('productCollection' , 'childrenCollection'));
+        return view('admin.generateSpecialCoupon', compact('productCollection', 'childrenCollection'));
     }
 
-    public function registerUserAndGiveOrderproduct(Request $request , OrderController $orderController)
+    public function registerUserAndGiveOrderproduct(Request $request, OrderController $orderController)
     {
         try {
-            $mobile       = $request->get('mobile');
+            $mobile = $request->get('mobile');
             $nationalCode = $request->get('nationalCode');
-            $firstName    = $request->get('firstName');
-            $lastName     = $request->get('lastName');
-            $major_id     = $request->get('major_id');
-            $gender_id    = $request->get('gender_id');
-            $productIds   = $request->get('products' , []);
-            $user         = User::where('mobile', $mobile)
-                                ->where('nationalCode', $nationalCode)
-                                ->first();
+            $firstName = $request->get('firstName');
+            $lastName = $request->get('lastName');
+            $major_id = $request->get('major_id');
+            $gender_id = $request->get('gender_id');
+            $productIds = $request->get('products', []);
+            $user = User::where('mobile', $mobile)
+                ->where('nationalCode', $nationalCode)
+                ->first();
             if (isset($user)) {
                 $flag = false;
                 if (!isset($user->firstName) && isset($firstName)) {
                     $user->firstName = $firstName;
-                    $flag            = true;
+                    $flag = true;
                 }
                 if (!isset($user->lastName) && isset($lastName)) {
                     $user->lastName = $lastName;
-                    $flag           = true;
+                    $flag = true;
                 }
                 if (!isset($user->major_id) && isset($major_id)) {
                     $user->major_id = $major_id;
-                    $flag           = true;
+                    $flag = true;
                 }
                 if (!isset($user->gender_id) && isset($gender_id)) {
                     $user->gender_id = $gender_id;
-                    $flag            = true;
+                    $flag = true;
                 }
 
                 if ($flag) {
@@ -810,13 +792,13 @@ class AdminController extends Controller
                 }
             } else {
                 $user = User::craete([
-                    'mobile'        => $mobile,
-                    'nationalCode'  => $nationalCode,
-                    'firstName'     => $firstName,
-                    'lastName'      => $lastName,
-                    'password'      => bcrypt($nationalCode),
-                    'major_id'      => $major_id,
-                    'gender_id'     => $gender_id,
+                    'mobile' => $mobile,
+                    'nationalCode' => $nationalCode,
+                    'firstName' => $firstName,
+                    'lastName' => $lastName,
+                    'password' => bcrypt($nationalCode),
+                    'major_id' => $major_id,
+                    'gender_id' => $gender_id,
                     'userstatus_id' => 1,
                 ]);
                 if (isset($user)) {
@@ -830,27 +812,27 @@ class AdminController extends Controller
             if (isset($user)) {
                 if (!empty($productIds)) {
                     $giftOrder = Order::create([
-                        'orderstatus_id'    => config('constants.ORDER_STATUS_CLOSED'),
-                        'paymentstatus_id'  => config('constants.PAYMENT_STATUS_PAID'),
-                        'cost'              => 0,
+                        'orderstatus_id' => config('constants.ORDER_STATUS_CLOSED'),
+                        'paymentstatus_id' => config('constants.PAYMENT_STATUS_PAID'),
+                        'cost' => 0,
                         'costwithoutcoupon' => 0,
-                        'user_id'           => $user->id,
-                        'completed_at'      => Carbon::now('Asia/Tehran'),
+                        'user_id' => $user->id,
+                        'completed_at' => Carbon::now('Asia/Tehran'),
                     ]);
 
                     if (isset($giftOrder)) {
                         foreach ($productIds as $productId) {
                             $orderproduct = Orderproduct::create([
-                                'cost'  => 0 ,
-                                'order_id'  =>  $giftOrder->id,
-                                'product_id'=> $productId,
-                                'orderproducttype_id'=> config('constants.ORDER_PRODUCT_TYPE_DEFAULT'),
+                                'cost' => 0,
+                                'order_id' => $giftOrder->id,
+                                'product_id' => $productId,
+                                'orderproducttype_id' => config('constants.ORDER_PRODUCT_TYPE_DEFAULT'),
                             ]);
                             if (isset($orderproduct)) {
-                                $giftOrderDone    = true;
+                                $giftOrderDone = true;
                                 $responseStatus = Response::HTTP_OK;
                                 $giftOrderSuccessMessage = 'ثبت سفارش با موفیت انجام شد';
-                            }else{
+                            } else {
                                 $giftOrderErrorMessage = 'خطا در ثبت آیتم سفارش';
                             }
                         }
@@ -878,20 +860,20 @@ class AdminController extends Controller
                 } else {
                     $gender = '';
                 }
-                $message = $gender.$user->full_name."\n";
-                $message .= "\n";
+                $message = $gender . $user->full_name . '\n';
+                $message .= '\n';
                 $message .= 'alaatv.com/asset';
 //                $user->notify(new GeneralNotice($message));
 
             }
 
             if ($request->expectsJson()) {
-                return response()->json([] , $responseStatus);
+                return response()->json([], $responseStatus);
             } else {
-                if(isset($giftOrderSuccessMessage)){
+                if (isset($giftOrderSuccessMessage)) {
                     session()->put('success', $giftOrderSuccessMessage);
                 }
-                if(isset($giftOrderErrorMessage)){
+                if (isset($giftOrderErrorMessage)) {
                     session()->put('error', $giftOrderErrorMessage);
                 }
                 return redirect()->back();
@@ -899,17 +881,17 @@ class AdminController extends Controller
         } catch (Exception    $e) {
             return response()->json([
                 'message' => 'unexpected error',
-                'error'   => $e->getMessage(),
-                'line'    => $e->getLine(),
-                'file'    => $e->getFile(),
-            ] , Response::HTTP_INTERNAL_SERVER_ERROR);
+                'error' => $e->getMessage(),
+                'line' => $e->getLine(),
+                'file' => $e->getFile(),
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 
     public function specialAddUser(Request $request)
     {
-        $majors   = Major::pluck('name', 'id');
-        $genders  = Gender::pluck('name', 'id');
+        $majors = Major::pluck('name', 'id');
+        $genders = Gender::pluck('name', 'id');
         $pageName = 'admin';
 
         return view('admin.insertUserAndOrderproduct', compact('majors', 'genders', 'pageName'));
@@ -935,22 +917,37 @@ class AdminController extends Controller
         return view('admin.indexBlock', compact('pageName', 'blockTypes'));
     }
 
-    public function adminSalesReport(Request $request) {
+    public function adminSalesReport(Request $request)
+    {
         $pageName = 'adminSalesReport';
-        $products   = Product::orderBy('created_at' , 'desc')->get();
+        $products = Product::orderBy('created_at', 'desc')->get();
         $ajaxActionUrl = action('Web\OrderproductController@index');
-        $checkoutStatuses       = Checkoutstatus::pluck('displayName', 'id')->toArray();
-        $checkoutStatuses[0]   = 'همه';
-        $checkoutStatuses       = array_sort_recursive($checkoutStatuses);
+        $checkoutStatuses = Checkoutstatus::pluck('displayName', 'id')->toArray();
+        $checkoutStatuses[0] = 'همه';
+        $checkoutStatuses = array_sort_recursive($checkoutStatuses);
 
-        return view('admin.salesReport', compact('products', 'pageName', 'ajaxActionUrl' , 'checkoutStatuses'));
+        return view('admin.salesReport', compact('products', 'pageName', 'ajaxActionUrl', 'checkoutStatuses'));
     }
 
-    public function adminRegistrationList(Request $request) {
+    public function adminRegistrationList(Request $request)
+    {
         return view('admin.indexRegistrationList');
     }
 
-    public function adminGiveWalletCredit(Request $request){
+    public function adminGiveWalletCredit(Request $request)
+    {
         return view('admin.wallet');
     }
+
+    public function adminCacheClear(Request $request)
+    {
+        Artisan::call('cache:clear');
+        dd('Cache successfully cleared');
+    }
+
+    public function adminBot(Request $request)
+    {
+        return view('admin.botAdmin');
+    }
 }
+

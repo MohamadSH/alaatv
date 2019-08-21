@@ -22,11 +22,11 @@
 @section('content')
     <div class="row">
         <div class="col">
-            
+
             @permission((config('constants.LIST_PRODUCT_ACCESS')))
-            
+
             <div class="modals-product-list">
-    
+
                 @permission((config('constants.COPY_PRODUCT_ACCESS')))
                 <!--begin::Modal-->
                 <div class="modal fade" id="copyProductModal" tabindex="-1" role="dialog" aria-labelledby="copyProductModalModalLabel" aria-hidden="true">
@@ -52,7 +52,7 @@
                 </div>
                 <!--end::Modal-->
                 @endpermission
-    
+
                 @permission((config('constants.REMOVE_PRODUCT_ACCESS')))
                 <!--begin::Modal-->
                 <div class="modal fade" id="removeProductModal" tabindex="-1" role="dialog" aria-labelledby="removeProductModalLabel" aria-hidden="true">
@@ -78,8 +78,8 @@
                 </div>
                 <!--end::Modal-->
                 @endpermission
-    
-    
+
+
                 @permission((config('constants.INSERT_PRODUCT_ACCESS')))
                 <!--begin::Modal-->
                 <div class="modal fade" id="responsive-product" tabindex="-1" role="dialog" aria-labelledby="responsive-productModalLabel" aria-hidden="true">
@@ -105,7 +105,7 @@
                 </div>
                 <!--end::Modal-->
                 @endpermission
-                
+
                 <!--begin::Modal-->
                 <div class="modal fade" id="showProductPhotoInModal" tabindex="-1" role="dialog" aria-labelledby="showProductPhotoInModalLabel" aria-hidden="true">
                     <div class="modal-dialog modal-lg" role="document">
@@ -126,13 +126,13 @@
                     </div>
                 </div>
                 <!--end::Modal-->
-    
+
                 <!--begin::Modal-->
                 <div class="modal fade" id="static-longDescription" tabindex="-1" role="dialog" aria-hidden="true">
                     <div class="modal-dialog modal-lg" role="document">
                         <div class="modal-content">
                             <div class="modal-body">
-                
+
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">بستن</button>
@@ -314,7 +314,7 @@
                             <th></th>
                             <th class="all"> نام کپن</th>
                             <th class="all"> کد کپن</th>
-                            {{--<th class="desktop"> عکس </th>--}}
+                            <th class="min-tablet"> فعال</th>
                             <th class="min-tablet">میزان تخفیف (%)</th>
                             <th class="min-tablet">حداکثر مبلغ مجاز خرید</th>
                             <th class="min-tablet">تعداد این کپن</th>
@@ -323,9 +323,9 @@
                             <th class="none">تاریخ ثبت</th>
                             <th class="none">تاریخ شروع اعتبار:</th>
                             <th class="none">تاریخ پایان اعتبار:</th>
-                            @permission('config("constants.SHOW_COUPON_ACCESS") , config("constants.REMOVE_COUPON_ACCESS")')
+{{--                            @permission('config("constants.SHOW_COUPON_ACCESS") , config("constants.REMOVE_COUPON_ACCESS")')--}}
                             <th class="all"> عملیات</th>
-                            @endpermission
+{{--                            @endpermission--}}
                         </tr>
                         </thead>
                         <tbody>
@@ -538,7 +538,7 @@
             </div>
             <!-- END SAMPLE TABLE PORTLET-->
             @endpermission
-            
+
         </div>
     </div>
 @endsection
@@ -553,7 +553,7 @@
 
             var newDataTable =$("#product_table").DataTable();
             newDataTable.destroy();
-            
+
             $('#product_table > tbody').html("");
             let defaultContent = "<span class=\"m-badge m-badge--wide label-sm m-badge--danger\"> درج نشده </span>";
             let columns = [
@@ -668,7 +668,7 @@
                             '    </a>\n';
                         @endpermission
                         html += '</div>';
-                        
+
                         return html;
                     }
                 },
