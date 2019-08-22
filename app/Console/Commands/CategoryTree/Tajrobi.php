@@ -2494,8 +2494,8 @@ class Tajrobi extends GetTree
                                     ],
                                     [
                                         'id'       => '8888',
-                                        'name'     => 'درس شانزدهم: یادی از نماز و روزه',
-                                        'tags'     => json_encode(['درس_شانزدهم:_یادی_از_نماز_و_روزه'],
+                                        'name'     => 'درس شانزدهم: یاری از نماز و روزه',
+                                        'tags'     => json_encode(['درس شانزدهم: یاری از نماز و روزه'],
                                             JSON_UNESCAPED_UNICODE),
                                         'children' => [
                                             [
@@ -37197,13 +37197,13 @@ class Tajrobi extends GetTree
                         'children' => [
                             [
                                 'id'       => '7382',
-                                'name'     => 'درس اول: آفرینش کیهان و تکوین زمین',
-                                'tags'     => json_encode(['درس_اول:_آفرینش_کیهان_و_تکوین_زمین'],
+                                'name'     => 'فصل اول: آفرینش کیهان و تکوین زمین',
+                                'tags'     => json_encode(['فصل اول: آفرینش کیهان و تکوین زمین'],
                                     JSON_UNESCAPED_UNICODE),
                                 'children' => [
                                     [
                                         'id'       => '7373',
-                                        'name'     => 'تکوین زمین، آغاز زندگی در آن',
+                                        'name'     => 'تکوین زمین و آغاز زندگی در آن',
                                         'tags'     => json_encode(['تکوین_زمین،_آغاز_زندگی_در_آن'],
                                             JSON_UNESCAPED_UNICODE),
                                         'children' => [
@@ -37267,6 +37267,12 @@ class Tajrobi extends GetTree
                                         ],
                                     ],
                                     [
+                                        'id' => '16912',
+                                        'name' => 'حرکات زمین',
+                                        'tags' => json_encode(['حرکات_زمین'], JSON_UNESCAPED_UNICODE),
+                                        'children' => []
+                                    ],
+                                    [
                                         'id'       => '7381',
                                         'name'     => 'فعالیت‌ها',
                                         'tags'     => json_encode(['فعالیت‌ها'], JSON_UNESCAPED_UNICODE),
@@ -37279,8 +37285,8 @@ class Tajrobi extends GetTree
                             ],
                             [
                                 'id'       => '7392',
-                                'name'     => 'درس دوم: منابع معدنی، زیربنای تمدن و توسعۀ صنعتی',
-                                'tags'     => json_encode(['درس_دوم:_منابع_معدنی،_زیربنای_تمدن_و_توسعۀ_صنعتی'],
+                                'name'     => 'فصل دوم: منابع معدنی و ذخایر انرژی، زیربنای تمدن و توسعه',
+                                'tags'     => json_encode(['فصل دوم: منابع معدنی و ذخایر انرژی، زیربنای تمدن و توسعه'],
                                     JSON_UNESCAPED_UNICODE),
                                 'children' => [
                                     [
@@ -37362,8 +37368,8 @@ class Tajrobi extends GetTree
                             ],
                             [
                                 'id'       => '7398',
-                                'name'     => 'درس سوم: منابع آب و خاک',
-                                'tags'     => json_encode(['درس_سوم:_منابع_آب_و_خاک'], JSON_UNESCAPED_UNICODE),
+                                'name'     => 'فصل سوم: منابع آب و خاک',
+                                'tags'     => json_encode(['فصل سوم: منابع آب و خاک'], JSON_UNESCAPED_UNICODE),
                                 'children' => [
                                     [
                                         'id'       => '7393',
@@ -37391,8 +37397,8 @@ class Tajrobi extends GetTree
                                     ],
                                     [
                                         'id'       => '7396',
-                                        'name'     => 'خاک',
-                                        'tags'     => json_encode(['خاک'], JSON_UNESCAPED_UNICODE),
+                                        'name'     => 'خاک و فرسایش',
+                                        'tags'     => json_encode(['خاک و فرسایش'], JSON_UNESCAPED_UNICODE),
                                         'children' => [
                                         
                                         ],
@@ -37410,8 +37416,8 @@ class Tajrobi extends GetTree
                             ],
                             [
                                 'id'       => '7411',
-                                'name'     => 'درس چهارم: زمین‌شناسی و سازه‌های مهندسی',
-                                'tags'     => json_encode(['درس_چهارم:_زمین‌شناسی_و_سازه‌های_مهندسی'],
+                                'name'     => 'فصل چهارم: زمین‌شناسی و سازه‌های مهندسی',
+                                'tags'     => json_encode(['فصل چهارم: زمین‌شناسی و سازه‌های مهندسی'],
                                     JSON_UNESCAPED_UNICODE),
                                 'children' => [
                                     [
@@ -37520,8 +37526,8 @@ class Tajrobi extends GetTree
                             ],
                             [
                                 'id'       => '7418',
-                                'name'     => 'درس پنجم: زمین‌شناسی و سلامت',
-                                'tags'     => json_encode(['درس_پنجم:_زمین‌شناسی_و_سلامت'], JSON_UNESCAPED_UNICODE),
+                                'name'     => 'فصل پنجم: زمین‌شناسی و سلامت',
+                                'tags'     => json_encode(['فصل پنجم: زمین‌شناسی و سلامت'], JSON_UNESCAPED_UNICODE),
                                 'children' => [
                                     [
                                         'id'       => '7412',
@@ -37577,8 +37583,8 @@ class Tajrobi extends GetTree
                             ],
                             [
                                 'id'       => '7426',
-                                'name'     => 'درس ششم: پویایی زمین',
-                                'tags'     => json_encode(['درس_ششم:_پویایی_زمین'], JSON_UNESCAPED_UNICODE),
+                                'name'     => 'فصل ششم: پویایی زمین',
+                                'tags'     => json_encode(['فصل ششم: پویایی زمین'], JSON_UNESCAPED_UNICODE),
                                 'children' => [
                                     [
                                         'id'       => '7419',
@@ -37641,8 +37647,8 @@ class Tajrobi extends GetTree
                             ],
                             [
                                 'id'       => '7437',
-                                'name'     => 'درس هفتم: زمین‌شناسی ایران',
-                                'tags'     => json_encode(['درس_هفتم:_زمین‌شناسی_ایران'], JSON_UNESCAPED_UNICODE),
+                                'name'     => 'فصل هفتم: زمین‌شناسی ایران',
+                                'tags'     => json_encode(['فصل هفتم: زمین‌شناسی ایران'], JSON_UNESCAPED_UNICODE),
                                 'children' => [
                                     [
                                         'id'       => '7427',
@@ -47914,7 +47920,12 @@ class Tajrobi extends GetTree
                                         
                                         ],
                                     ],
-                                
+                                    [
+                                        'id' => '16913',
+                                        'name' => 'مفهوم درصد جرمی و مسائل مربوط به آن',
+                                        'tags' => json_encode(['مفهوم_درصد_جرمی_و_مسائل_مربوط_به_آن'], JSON_UNESCAPED_UNICODE),
+                                        'children' => []
+                                    ]
                                 ],
                             ],
                             [
@@ -48049,6 +48060,12 @@ class Tajrobi extends GetTree
                                         'children' => [],
                                     
                                     ],
+                                    [
+                                        'id' => '16914',
+                                        'name' => 'مبدل کاتالیستی',
+                                        'tags' => json_encode(['مبدل_کاتالیستی'], JSON_UNESCAPED_UNICODE),
+                                        'children' => []
+                                    ]
                                 
                                 ],
                             
@@ -48058,8 +48075,8 @@ class Tajrobi extends GetTree
                     [
                         
                         'id'       => '16017',
-                        'name'     => 'علوم اجتماعی',
-                        'tags'     => json_encode(['علوم_اجتماعی'], JSON_UNESCAPED_UNICODE),
+                        'name'     => 'هویت اجتماعی',
+                        'tags'     => json_encode(['هویت اجتماعی'], JSON_UNESCAPED_UNICODE),
                         'children' => [
                             
                             [
