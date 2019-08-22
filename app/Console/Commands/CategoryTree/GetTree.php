@@ -117,7 +117,6 @@ abstract class GetTree
                                 'diff'        => $newDiff,
                                 'lernitoNode' => $lernitoValue,
                                 'alaaNode'    => $targetValue,
-                                /*'keyChain' => $localKeyChain,*/
                             ];
                         }
                     }

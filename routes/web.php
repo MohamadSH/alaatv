@@ -312,4 +312,5 @@ Route::post('cd3b472d9ba631a73cb7b66ba513df53', 'Web\CouponController@generateRa
 
 Route::get('tree', 'Web\TopicsTreeController@lernitoTree');
 Route::get('tree/getArrayString/{lnid}', 'Web\TopicsTreeController@getTreeInPHPArrayString');
+Route::get('tree/ignoreUpdateItem/{iuid}', 'Web\TopicsTreeController@ignoreUpdateItem');
 Route::any('goToPaymentRoute/{paymentMethod}/{device}/', '\\'.RedirectAPIUserToPaymentRoute::class)->name('redirectToPaymentRoute');

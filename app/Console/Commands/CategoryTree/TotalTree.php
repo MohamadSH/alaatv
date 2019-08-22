@@ -2,9 +2,12 @@
 
 namespace App\Console\Commands\CategoryTree;
 
+use Illuminate\Support\Facades\Storage;
+
 class TotalTree
 {
     private $treePathData;
+    private $ignoredUpdateItemPath = 'lernitoIgnoredUpdateItems.txt';
     
     public function getLernitoTreeHtmlPrint()
     {
@@ -13,8 +16,6 @@ class TotalTree
         $Ensani  = new Ensani();
         
         $lastUpdatedByLernito = $this->getLastUpdatedByLernito();
-        
-        /*return $lastUpdatedByLernito;*/
         
         $mote2 = [
             [
@@ -36,7 +37,6 @@ class TotalTree
                 'children' => $Ensani->getLernitoStyle(),
             ],
         ];
-        /*return $mote2;*/
         
         $htmlPrint    = '';
         $this->treePathData = [];
@@ -92,6 +92,7 @@ class TotalTree
                     $pathId3     = $pathId2.'-'.$value2['id'];
                     $htmlPrint   .= $this->printDars($value2, $pathString3, $pathId3);
                 }
+                
                 $htmlPrint .= '</ul></li>';
             }
             $htmlPrint .= '</ul></li>';
@@ -140,14 +141,27 @@ class TotalTree
         if (isset($lastUpdatedByLernito['diff'])) {
             foreach ($lastUpdatedByLernito['diff'] as $diffKey => $diffNode) {
                 if (!isset($diffNode['diff']) && isset($diffNode['lernitoNode'])) {
-                    $newItem              = $this->changeLernitoNodeToAlaaNode($diffNode['lernitoNode']);
+                    $this->changeLernitoNodeChildren($diffNode['lernitoNode']);
+                    $newItem = $diffNode['lernitoNode'];
                     $newItem['isNewItem'] = true;
-                    $oldChildren[]        = $newItem;
+                    $checkNodeIsIgnored = $this->checkNodeIsIgnored($newItem['orginalId']);
+                    if (!$checkNodeIsIgnored) {
+                        $oldChildren[] = $newItem;
+                    }
                 }
                 elseif (isset($diffNode['diff']) && isset($diffNode['lernitoNode']) && isset($diffNode['alaaNode'])) {
                     foreach ($oldChildren as $oldChildrenKey => $oldChildrenValue) {
                         if ($diffNode['alaaNode']['id'] == $oldChildrenValue['id']) {
-                            $oldChildren[$oldChildrenKey]['hasNewItem'] = true;
+    
+                            if($oldChildren[$oldChildrenKey]['id'] == '11674') {
+//                                dd($oldChildrenValue);
+//                                dd($diffNode);
+//                                dd($oldChildren[$oldChildrenKey]);
+                            }
+                            
+                            if ($this->checkHasNewItemBasedIgnoredNode($diffNode)) {
+                                $oldChildren[$oldChildrenKey]['hasNewItem'] = true;
+                            }
                             $this->updatePaieNodes($diffNode, $oldChildren[$oldChildrenKey]['children']);
                         }
                     }
@@ -156,15 +170,27 @@ class TotalTree
         }
     }
     
-    private function changeLernitoNodeToAlaaNode(array &$lernitoNode)
-    {
-        $this->changeLernitoNodeChildren($lernitoNode);
-        return $lernitoNode;
+    private function checkHasNewItemBasedIgnoredNode($lastUpdatedByLernito) {
+        if (isset($lastUpdatedByLernito['diff'])) {
+            foreach ($lastUpdatedByLernito['diff'] as $diffKey => $diffNode) {
+                $checkHasNewItemBasedIgnoredNode = $this->checkHasNewItemBasedIgnoredNode($diffNode);
+                if ($checkHasNewItemBasedIgnoredNode === true) {
+                    return true;
+                }
+            }
+        } else {
+            $checkNodeIsIgnored = $this->checkNodeIsIgnored($lastUpdatedByLernito['lernitoNode']['_id']);
+            if (!$checkNodeIsIgnored) {
+                return true;
+            }
+        }
+        return false;
     }
     
     private function changeLernitoNodeChildren(array &$lernitoNodeChildren)
     {
         $lernitoNodeChildren['id']   = time().'-'.$lernitoNodeChildren['_id'];
+        $lernitoNodeChildren['orginalId']   = $lernitoNodeChildren['_id'];
         $lernitoNodeChildren['name'] = $lernitoNodeChildren['label'];
         $lernitoNodeChildren['tags'] = json_encode([str_replace(' ', '_', $lernitoNodeChildren['label'])],
             JSON_UNESCAPED_UNICODE);
@@ -188,11 +214,20 @@ class TotalTree
             $hasNew = '1';
         }
         $isNew = '0';
+        $ignoreBtn = '';
+        $checkNodeIsIgnored = false;
         if (isset($nodeData['isNewItem']) && $nodeData['isNewItem'] === true) {
             $isNew = '1';
+            $ignoreBtn = '<button type="button" class="btn btn-sm btn-info btnIgnoreUpdateItem" data-ignore="'.$nodeData['orginalId'].'">ignore</button>';
+            $checkNodeIsIgnored = $this->checkNodeIsIgnored($nodeData['orginalId']);
         }
-        
-        $htmlPrint = '<li class="no_checkbox" data-has-new="'.$hasNew.'" data-is-new="'.$isNew.'" data-alaa-node-id="'.$id.'" data-jstree=\'{"checkbox_disabled":true, "icon":"/acm/extra/topicsTree/img/parent-icon.png"}\'>'.$name.'<ul>';
+        if ($id == '11669') {
+//            dd($checkNodeIsIgnored);
+        }
+        if ($checkNodeIsIgnored) {
+            return '';
+        }
+        $htmlPrint = '<li class="no_checkbox" data-has-new="'.$hasNew.'" data-is-new="'.$isNew.'" data-alaa-node-id="'.$id.'" data-jstree=\'{"checkbox_disabled":true, "icon":"/acm/extra/topicsTree/img/parent-icon.png"}\'>'.$name.$ignoreBtn.'<ul>';
         foreach ($data as $key => $value) {
             $pathString = $ps.'@@**@@'.$value['name'];
             $pathId     = $pid.'-'.$value['id'];
@@ -204,11 +239,18 @@ class TotalTree
             else {
                 
                 $isNewItem = '0';
+                $ignoreBtn = '';
+                $checkNodeIsIgnored = false;
                 if (isset($value['isNewItem']) && $value['isNewItem'] === true) {
                     $isNewItem = '1';
+                    $ignoreBtn = '<button type="button" class="btn btn-sm btn-info btnIgnoreUpdateItem" data-ignore="'.$value['orginalId'].'">ignore</button>';
+                    $checkNodeIsIgnored = $this->checkNodeIsIgnored($value['orginalId']);
+                }
+    
+                if (!$checkNodeIsIgnored) {
+                    $htmlPrint .= '<li data-jstree=\'{"icon":"/acm/extra/topicsTree/img/book-icon-1.png"}\' data-alaa-node-id="'.$value['id'].'" data-is-new="'.$isNewItem.'" ps="'.$pathString.'" pid="'.$pathId.'" id="'.$value['id'].'">'.$value['name'].$ignoreBtn.'</li>';
                 }
                 
-                $htmlPrint .= '<li data-jstree=\'{"icon":"/acm/extra/topicsTree/img/book-icon-1.png"}\' data-alaa-node-id="'.$value['id'].'" data-is-new="'.$isNewItem.'" ps="'.$pathString.'" pid="'.$pathId.'" id="'.$value['id'].'">'.$value['name'].'</li>';
                 $this->treePathData[$value['id']] = [
                     'ps'  => $pathString,
                     'pid' => $pathId,
@@ -230,7 +272,7 @@ class TotalTree
         $maxId                = $this->getLastIdOfTopicsTree();
         
         $nodeFound = $this->findLernitoNodeById($lastUpdatedByLernito, $lernitoNodeId);
-        $this->changeLernitoNodeToAlaaNode($nodeFound);
+        $this->changeLernitoNodeChildren($nodeFound);
         $stringFormat = str_replace('"', "'", $this->convertAlaaNodeArrayToStringFormat($nodeFound, $maxId));
         $stringFormat = str_replace(PHP_EOL, '', $stringFormat);
         
@@ -354,5 +396,30 @@ class TotalTree
             }
         }
         return $nodeArrayString;
+    }
+    
+    public function getIgnoredUpdateItems() {
+        $ignoredIds = Storage::get($this->ignoredUpdateItemPath);
+        $ignoredIdsArray = json_decode($ignoredIds, true);
+        if ($ignoredIdsArray === null) {
+            return [];
+        } else {
+            return $ignoredIdsArray;
+        }
+    }
+    
+    public function saveNewIgnoredUpdateItem($iuid) {
+        $ignoredIdsArray = $this->getIgnoredUpdateItems();
+        $ignoredIdsArray[] = $iuid;
+        Storage::put( $this->ignoredUpdateItemPath, json_encode($ignoredIdsArray));
+    }
+    
+    private function checkNodeIsIgnored($nodeId) {
+        $ignoredIdsArray = $this->getIgnoredUpdateItems();
+        if (in_array($nodeId, $ignoredIdsArray)) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }
