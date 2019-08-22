@@ -293,6 +293,16 @@
     font-family: "Font Awesome 5 Free";
     font-weight: 900;
 }
+.m-nav .m-nav__item > .m-nav__link.collapsed .m-nav__link-arrow::before {
+    content: "\f107";
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+}
+.m-nav .m-nav__item > .m-nav__link .m-nav__link-arrow::before {
+    content: "\f104";
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+}
 .alert-dismissible .close:before {
     content: "\f00d";
 }
