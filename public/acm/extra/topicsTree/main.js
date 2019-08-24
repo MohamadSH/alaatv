@@ -108,7 +108,7 @@ function updateSelectedItems() {
             selectedItemsText.push(treePathData[selectedIds[key]].ps);
         }
     }
-    console.log('selectedItemsText: ', selectedItemsText);
+    // console.log('selectedItemsText: ', selectedItemsText);
 
     let sameReport = matchString(selectedItemsText);
 
@@ -138,7 +138,7 @@ function updateSelectedItems() {
     // }
     // $('#valueOfTags').html(JSON.stringify(tagsAraray));
 
-    console.log(sameReport.prArray);
+    // console.log(sameReport.prArray);
     $('#valueOfTags').html(JSON.stringify(sameReport.prArray));
     
 }
@@ -264,10 +264,10 @@ $( document ).ready(function() {
         try {
             var successful = document.execCommand('copy');
             var msg = successful ? 'successful' : 'unsuccessful';
-            console.log('Copying text command was :' + msg);
+            // console.log('Copying text command was :' + msg);
             alert('توضیحات کپی شدند!');
         } catch (err) {
-            console.log('Oops, unable to copy');
+            // console.log('Oops, unable to copy');
         }
 
     });
@@ -280,10 +280,10 @@ $( document ).ready(function() {
         try {
             var successful = document.execCommand('copy');
             var msg = successful ? 'successful' : 'unsuccessful';
-            console.log('Copying text command was :' + msg);
+            // console.log('Copying text command was :' + msg);
             alert('تگها کپی شدند!');
         } catch (err) {
-            console.log('Oops, unable to copy');
+            // console.log('Oops, unable to copy');
         }
 
     });
@@ -296,10 +296,10 @@ $( document ).ready(function() {
         try {
             var successful = document.execCommand('copy');
             var msg = successful ? 'successful' : 'unsuccessful';
-            console.log('Copying text command was :' + msg);
+            // console.log('Copying text command was :' + msg);
             alert('متن آرایه کپی شد!');
         } catch (err) {
-            console.log('Oops, unable to copy');
+            // console.log('Oops, unable to copy');
         }
 
     });

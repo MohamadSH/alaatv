@@ -8,10 +8,6 @@ use Illuminate\Http\Request;
 
 class TopicsTreeController extends Controller
 {
-    /**
-     * @param Request $request
-     * @return
-     */
     public function lernitoTree(Request $request)
     {
         $TotalTree = new TotalTree();
@@ -24,5 +20,11 @@ class TopicsTreeController extends Controller
         $TotalTree = new TotalTree();
         $stringFormat = $TotalTree->getTreeNodeByIdInHtmlString($lnid);
         return $stringFormat;
+    }
+
+    public function ignoreUpdateItem(Request $request, $iuid)
+    {
+        $TotalTree = new TotalTree();
+        $TotalTree->saveNewIgnoredUpdateItem($iuid);
     }
 }

@@ -1,25 +1,18 @@
 document.addEventListener('DOMContentLoaded', function() {
     var calendarEl = document.getElementById('a--fullcalendar');
 
-    var calendar = new FullCalendar.Calendar(calendarEl,
-
-
-
-        {
+    var calendar = new FullCalendar.Calendar(calendarEl, {
             locale: 'fa',
             plugins: [ 'timeGrid' ],
             // timeZone: 'UTC',
             timeZone: 'Iran/Tehran',
             defaultView: 'timeGridWeek',
-
-
             viewSkeletonRender: function( info ) {
 
                 let element = info.view.header.thead.children[0].children,
                     elementLength = element.length;
 
                 for (let i = 0; i < elementLength; i++) {
-                    console.log('element[i].innerText :', element[i].innerText);
                     if (element[i].innerText.trim().length === 0) {
                         element[i].innerHTML = 'ساعت';
                     } else {
@@ -28,7 +21,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
 
             },
-
             editable: false,
             // aspectRatio: 1,
             nowIndicator: true,
@@ -49,12 +41,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 //     container: 'body'
                 // });
             },
-
             eventClick: function(info) {
                 alert(info.event.title);
-                // console.log(info.event.title);
-                // console.log(info.event._instance.range);
-                // console.log(info.event._instance.range.start);
                 // alert('Event: ' + info.event.title);
                 // alert('Coordinates: ' + info.jsEvent.pageX + ',' + info.jsEvent.pageY);
                 // alert('View: ' + info.view.type);
@@ -62,12 +50,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 // change the border color just for fun
                 // info.el.style.borderColor = 'red';
             },
-
             events: formatData(liveData),
-
             minTime: "07:00:00",
             maxTime: "13:00:00",
-
         }
 
     //
@@ -99,15 +84,8 @@ document.addEventListener('DOMContentLoaded', function() {
     //     resources: 'https://fullcalendar.io/demo-resources.json?with-nesting&with-colors',
     //     events: 'https://fullcalendar.io/demo-events.json?single-day&for-resource-timeline'
     // }
-
-
-
-
-
     );
-
     calendar.render();
-
 });
 
 function formatData(data) {

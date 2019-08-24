@@ -78,6 +78,13 @@
             direction: ltr;
             text-align: left;
         }
+        .btnIgnoreUpdateItem {
+            position: relative;
+            z-index: 9999;
+            padding: 2px 5px;
+            line-height: 15px;
+            margin-right: 45px;
+        }
     </style>
 </head>
 <body>
@@ -170,8 +177,10 @@
         $('#html')
         // listen for event
             .on('changed.jstree', function (e, data) {
+                if ($(data.event.target).hasClass('btnIgnoreUpdateItem')) {
+                    return;
+                }
                 updateSelectedItems()
-                // console.log(data);
 
                 // var i, j, r = [];
                 // for(i = 0, j = data.selected.length; i < j; i++) {
@@ -202,7 +211,6 @@
             });
 
         $(document).on('click', 'li[data-is-new="1"] > i, li[data-is-new="1"] > a', function (e, data) {
-            console.log($(this));
             let lnid = $(this).parents('li').attr('data-alaa-node-id');
             lnid = lnid.split('-');
             lnid = lnid[1];
@@ -218,14 +226,30 @@
                         .replace(/<div class='objectBody'>/g, '')
                         .replace(/<div class='objectWraper'>/g, '')
                         .replace(/<div class='inChildren'>/g, '');
-                    console.log(result);
                     $('#selectedConvertedAlaaNodeArrayToStringFormat').val(result);
                 },
                 error: function (result) {
-                    console.log(result);
                 }
             });
 
+        });
+
+        $(document).on('click', '.btnIgnoreUpdateItem', function (e, data) {
+            let iuid = $(this).data('ignore');
+            if (confirm('آیا از نادیده گرفتن این آیتم از آپدیت اطمینان دارید؟')) {
+                $.ajax({
+                    type: 'GET',
+                    url: '/tree/ignoreUpdateItem/' + iuid,
+                    data: {},
+                    success: function (result) {
+                        window.location.reload();
+                    },
+                    error: function (result) {
+                        window.location.reload();
+                    }
+                });
+            } else {
+            }
         });
 
     });
