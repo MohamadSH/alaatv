@@ -93,6 +93,7 @@ class LiveController extends Controller
 
         $result = $this->insertLiveConductor( $live , $nowTime ,  $todayStringDate);
         if($result) {
+            Cache::tags('live')->flush();
             return response()->json([
                 'live started successfully',
             ]);
@@ -112,6 +113,7 @@ class LiveController extends Controller
 
         $liveStream = ConductorRepo::isThereLiveStream($todayStringDate)->first();
         if(isset($liveStream)){
+            Cache::tags('live')->flush();
             $liveStream->update([
                 'finish_time'            =>$nowTime,
             ]);
