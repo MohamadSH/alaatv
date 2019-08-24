@@ -112,7 +112,7 @@ class LiveController extends Controller
 
         $liveStream = ConductorRepo::isThereLiveStream($todayStringDate)->first();
         if(isset($liveStream)){
-            Conductor::update([
+            $liveStream->update([
                 'finish_time'            =>$nowTime,
             ]);
 
