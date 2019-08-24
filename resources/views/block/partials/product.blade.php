@@ -1,5 +1,4 @@
 <div class="item carousel a--block-item a--block-type-product"
-     data-position="{{ $productKey }}"
      data-gtm-eec-product-id="{{ $product->id }}"
      data-gtm-eec-product-name="{{ $product->name }}"
      data-gtm-eec-product-price="{{ number_format($product->price['final'], 2, '.', '') }}"
@@ -8,7 +7,6 @@
      data-gtm-eec-product-variant="-"
      data-gtm-eec-product-position="{{ $productKey }}"
      data-gtm-eec-product-list="{{ $block->title }}">
-    
     
     @if($product->price['final'] !== $product->price['base'])
         <div class="ribbon">
