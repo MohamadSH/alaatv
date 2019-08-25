@@ -69,11 +69,13 @@ class LiveController extends Controller
 
         /** @var Live $scheduledLive */
         $scheduledLive = LiveRepo::isThereScheduledProgram($dayOfWeek, $todayStringDate , $nowTime)->first();
-        $isThereFinishedProgram = ConductorRepo::isThereFinishedScheduledProgram($todayStringDate , $scheduledLive->finish_time)->first();
-        if(isset($scheduledLive) && !isset($isThereFinishedProgram)) {
-            $this->insertLiveConductor($scheduledLive->start_time , $todayStringDate , $scheduledLive);
-            $live = true;
-            $poster = $scheduledLive->poster;
+        if(isset($scheduledLive)) {
+            $isThereFinishedProgram = ConductorRepo::isThereFinishedScheduledProgram($todayStringDate , $scheduledLive->finish_time)->first();
+            if( !isset($isThereFinishedProgram)) {
+                $this->insertLiveConductor($scheduledLive->start_time , $todayStringDate , $scheduledLive);
+                $live = true;
+                $poster = $scheduledLive->poster;
+            }
         }
 
         return view('pages.liveView' , compact( 'nowTime', 'schedule' , 'live' ,'poster' , 'xMpegURL' , 'dashXml' , 'fullVideo' , 'title', 'playLiveAjaxUrl', 'stopLiveAjaxUrl' ));
