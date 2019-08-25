@@ -28,7 +28,13 @@ class ConductorRepo
     {
         return Conductor::where('date', $todayStringDate)
             ->whereNull('finish_time')
+            ->whereNotNull('scheduled_finish_time')
             ->where('scheduled_finish_time' , '<' , $time);
     }
 
+    public static function isThereFinishedScheduledProgram(string $todayStringDate , string $scheduledFinishTime):Builder{
+        return Conductor::where('date', $todayStringDate)
+                        ->whereNotNull('finish_time')
+                        ->where('finish_time' , '<='  , $scheduledFinishTime);
+    }
 }

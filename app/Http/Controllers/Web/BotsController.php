@@ -567,7 +567,7 @@ class BotsController extends Controller
             if($request->has('product') && $request->has('contents'))
             {
                 $product = Product::find($request->get('product'));
-                $contents = \App\Content::whereIn('id' , $request->get('contents'))->get();
+                $contents = Content::whereIn('id' , $request->get('contents'))->get();
                 $tags = [];
                 foreach ($contents as $content) {
                     array_push($tags , 'c-'.$content->id);

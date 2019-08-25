@@ -69,8 +69,9 @@ class LiveController extends Controller
 
         /** @var Live $scheduledLive */
         $scheduledLive = LiveRepo::isThereScheduledProgram($dayOfWeek, $todayStringDate , $nowTime)->first();
-        if(isset($scheduledLive)) {
-            $this->insertLiveConductor($scheduledLive, $scheduledLive->start_time , $todayStringDate);
+        $isThereFinishedProgram = ConductorRepo::isThereFinishedScheduledProgram($todayStringDate , $scheduledLive->finish_time)->first();
+        if(isset($scheduledLive) && !isset($isThereFinishedProgram)) {
+            $this->insertLiveConductor($scheduledLive->start_time , $todayStringDate , $scheduledLive);
             $live = true;
             $poster = $scheduledLive->poster;
         }
@@ -78,7 +79,7 @@ class LiveController extends Controller
         return view('pages.liveView' , compact( 'nowTime', 'schedule' , 'live' ,'poster' , 'xMpegURL' , 'dashXml' , 'fullVideo' , 'title', 'playLiveAjaxUrl', 'stopLiveAjaxUrl' ));
     }
 
-    public function startLive(Request $request , Live $live){
+    public function startLive(Request $request ){
         $today = Carbon::today()->setTimezone('Asia/Tehran');
         $now = Carbon::now('Asia/Tehran');
         $nowTime = $now->toTimeString();
@@ -91,7 +92,7 @@ class LiveController extends Controller
             ] , Response::HTTP_BAD_REQUEST);
         }
 
-        $result = $this->insertLiveConductor( $live , $nowTime ,  $todayStringDate);
+        $result = $this->insertLiveConductor($nowTime ,  $todayStringDate);
         if($result) {
             Cache::tags('live')->flush();
             return response()->json([
@@ -132,17 +133,17 @@ class LiveController extends Controller
      * @param Live $scheduledLive
      * @param string $startTime
      * @param string $todayStringDate
-     * @return bool
+     * @return Conductor
      */
-    private function insertLiveConductor(Live $scheduledLive, string $startTime, string $todayStringDate): Conductor
+    private function insertLiveConductor(string $startTime, string $todayStringDate,Live $scheduledLive=null): Conductor
     {
         return Conductor::create([
-            'title'                 => $scheduledLive->title,
-            'description'           => $scheduledLive->description,
-            'poster'                => $scheduledLive->poster,
+            'title'                 => optional($scheduledLive)->title,
+            'description'           => optional($scheduledLive)->description,
+            'poster'                => optional($scheduledLive)->poster,
             'date'                  => $todayStringDate,
-            'scheduled_start_time'  => $scheduledLive->start_time,
-            'scheduled_finish_time' => $scheduledLive->finish_time,
+            'scheduled_start_time'  => optional($scheduledLive)->start_time,
+            'scheduled_finish_time' => optional($scheduledLive)->finish_time,
             'start_time'            => $startTime,
         ]);
     }
