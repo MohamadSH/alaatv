@@ -1,4 +1,5 @@
-@permission((config('constants.SMS_ADMIN_PANEL_ACCESS')))@extends('app',['pageName'=>$pageName])
+@permission((config('constants.SMS_ADMIN_PANEL_ACCESS')))
+@extends('app',['pageName'=>$pageName])
 
 @section('page-css')
     <link href="{{ mix('/css/admin-all.css') }}" rel="stylesheet" type="text/css"/>
@@ -26,9 +27,7 @@
 
 @section('content')
     <div class="row">
-        {{--Ajax modal loaded after inserting content--}}
-        <div id="ajax-modal" class="modal fade" tabindex="-1"></div>
-        {{--Ajax modal for panel startup --}}
+        
         {{--<!-- /.modal -->--}}
         <div class="col-md-12">
             <div class="alert alert-info" role="alert">
@@ -190,6 +189,33 @@
                             {!! Form::open(['action' => 'Web\UserController@index' , 'class'=>'form-horizontal form-row-seperated' , 'id' => 'filterUserForm']) !!}
                             <div class="form-body" style="background: #e7ecf1">
                                 @include("admin.filters.userFilterPack")
+    
+                                <div class="form-group">
+                                    <div class="row">
+                                        <label class="col-lg-2 col-md-2 bold control-label">تاریخ ایجاد سبد خرید :</label>
+                                        <div class="col-lg-10 col-md-10">
+                                            <div class = "row">
+                                                <label class = "control-label" style = "float: right;">
+                                                    <label class = "mt-checkbox mt-checkbox-outline">
+                                                        <input type = "checkbox" id = "CreatedBasketEnable" value = "1" name = "createdTimeEnable">
+                                                        <span class = "bg-grey-cararra"></span>
+                                                    </label>
+                                                </label>
+                                                <label class = "control-label" style = " float: right;">از تاریخ</label>
+                                                <div class = "col-md-3 col-xs-12">
+                                                    <input id = "CreatedBasketSince" type = "text" class = "form-control" disabled = "disabled">
+                                                    <input name = "CreatedBasketSince" id = "CreatedBasketSinceAlt" type = "text" class = "form-control d-none">
+                                                </div>
+                                                <label class = "control-label" style = "float: right;">تا تاریخ</label>
+                                                <div class = "col-md-3 col-xs-12">
+                                                    <input id = "CreatedBasketTill" type = "text" class = "form-control" disabled = "disabled">
+                                                    <input name = "CreatedBasketTill" id = "CreatedBasketTillAlt" type = "text" class = "form-control d-none">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
                                 <div class="form-group">
                                     <div class="ccl-mg-12 col-md-12">
                                         <button type="button" id="filterButton" class="btn btn-lg bg-font-dark" style="background: #489fff">فیلتر

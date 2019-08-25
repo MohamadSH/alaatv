@@ -30,7 +30,7 @@ var LazyLoad = function () {
             attrH = $(element).attr('height'),
             imageDimension;
 
-        if(typeof attrW !== 'undefined' && typeof attrH !== 'undefined') {
+        if(typeof attrW !== 'undefined' && typeof attrH !== 'undefined' && !isNaN(attrW) && !isNaN(attrH)) {
             h = Math.floor((attrH*w)/attrW);
         }
 
