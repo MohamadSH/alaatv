@@ -215,13 +215,13 @@ class ContentController extends Controller
             return $products;
         });
 
-//        $contentBlocks = Block::getContentBlocks();
+        $contentBlocks = Block::getContentBlocks();
 
         $viewResponse      = view('content.show',
             compact('seenCount', 'author', 'content', 'contentsWithSameSet', 'videosWithSameSet',
                 'pamphletsWithSameSet', 'contentSetName', 'tags',
                 'userCanSeeCounter', 'adItems', 'videosWithSameSetL', 'videosWithSameSetR',
-                'productsThatHaveThisContent', 'user_can_see_content', 'message', 'productsHasThisContentThroughBlockCollection'));
+                'productsThatHaveThisContent', 'user_can_see_content', 'message', 'productsHasThisContentThroughBlockCollection' , 'contentBlocks'));
 
         return httpResponse($apiResponse, $viewResponse);
     }
