@@ -37,7 +37,7 @@
                             </div>
                         </div>
                         <div class="m-portlet__body">
-                            
+
                             <div class="a--video-wraper">
                                 <video id="video-0"
                                        class="video-js vjs-fluid vjs-default-skin vjs-big-play-centered" controls
@@ -48,7 +48,7 @@
                                 </video>
                             </div>
                             <div class="m--clearfix"></div>
-                            
+
                         </div>
                     </div>
                 </div>
@@ -64,10 +64,10 @@
             </div>
         </div>
         @endpermission
-    
+
     @else
-    
-    
+
+
         @permission((config('constants.LIVE_PLAY_ACCESS')))
         <div class="row">
             <div class="col text-center">
@@ -78,7 +78,7 @@
             </div>
         </div>
         @endpermission
-        
+
         <div class="alert alert-info alert-dismissible fade show" role="alert">
             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
             </button>
@@ -90,7 +90,7 @@
 
     <div class="row">
         <div class="col">
-            
+
             <div class="m-divider">
                 <span></span>
                 <span class="m-badge m-badge--info m-badge--wide m-badge--rounded">
@@ -100,11 +100,11 @@
                 </span>
                 <span></span>
             </div>
-            
+
             <div id="a--fullcalendar"></div>
         </div>
     </div>
-    
+
 @endsection
 
 @section('page-js')
