@@ -730,6 +730,14 @@
         </div>
     @endif
 
+    @foreach($contentBlocks as $block)
+        @include('block.partials.block', [
+        'blockCustomClass'=> 'contentBlock',
+        'blockCustomId'=>'sectionId-'.$block->class,
+        'blockType'=>(isset($block->sets) && $block->sets->count()>0)?'set':(isset($block->products) && $block->products->count()>0?'product':'content'),
+        'blockUrlDisable'=>false,
+        ])
+    @endforeach
     <div class="AlaaAdDom" alaa-ad-preloadimage="1"></div>
 @endsection
 
