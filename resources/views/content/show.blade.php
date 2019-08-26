@@ -732,7 +732,7 @@
 
     @foreach($contentBlocks as $block)
         @include('block.partials.block', [
-        'blockCustomClass'=>$block->class.'contentBlock',
+        'blockCustomClass'=> 'contentBlock',
         'blockCustomId'=>'sectionId-'.$block->class,
         'blockType'=>(isset($block->sets) && $block->sets->count()>0)?'set':(isset($block->products) && $block->products->count()>0?'product':'content'),
         'blockUrlDisable'=>false,
