@@ -732,7 +732,7 @@
 
     @foreach($contentBlocks as $block)
         @include('block.partials.block', [
-        'blockCustomClass'=>$block->class.'contentBlock',
+        'blockCustomClass'=> 'contentBlock',
         'blockCustomId'=>'sectionId-'.$block->class,
         'blockType'=>(isset($block->sets) && $block->sets->count()>0)?'set':(isset($block->products) && $block->products->count()>0?'product':'content'),
         'blockUrlDisable'=>false,
@@ -776,47 +776,5 @@
         })(window, document, '35b39d4b-517b-44bc-85c4-44f93242836f');
     </script>
     <script src="{{ mix("/js/content-show.js") }}" type="text/javascript"></script>
-    <script>
-        $('.contentBlock').OwlCarouselType2({
-            OwlCarousel: {
-                center: false,
-                loop: false,
-                responsive: {
-                    0: {
-                        items: 1
-                    },
-                    400: {
-                        items: 2
-                    },
-                    600: {
-                        items: 3
-                    },
-                    800: {
-                        items: 4
-                    },
-                    1000: {
-                        items: 5
-                    }
-                },
-                btnSwfitchEvent: function() {
-                    imageObserver.observe();
-                    gtmEecProductObserver.observe();
-                },
-                onTranslatedEvent: function(event) {
-                    imageObserver.observe();
-                    gtmEecProductObserver.observe();
-                }
-            },
-            grid: {
-                columnClass: 'col-12 col-sm-6 col-md-3 gridItem',
-                btnSwfitchEvent: function() {
-                    imageObserver.observe();
-                    gtmEecProductObserver.observe();
-                }
-            },
-            defaultView: 'OwlCarousel', // OwlCarousel or grid
-            childCountHideOwlCarousel: 4
-        });
-    </script>
 @endsection
 
