@@ -64,6 +64,7 @@ class LiveController extends Controller
             Cache::tags('live')->flush();
             $live = true;
             $poster = $liveStream->poster;
+            $title = $liveStream->title;
             return view('pages.liveView' , compact( 'nowTime', 'schedule' , 'live' ,'poster' , 'xMpegURL' , 'dashXml' , 'fullVideo' , 'title', 'playLiveAjaxUrl', 'stopLiveAjaxUrl' ));
         }
 
