@@ -14,7 +14,7 @@ class AlterTableWorktimesheetsAddOvertimestatus extends Migration
     public function up()
     {
         Schema::table('employeetimesheets', function (Blueprint $table) {
-            $table->unsignedInteger('overtime_status_id')->nullable()->comment('وضعیت اضافه کاری');
+            $table->unsignedInteger('overtime_status_id')->nullable()->comment('وضعیت اضافه کاری')->after('modifier_id');
 
             $table->foreign('overtime_status_id')
                 ->references('id')
