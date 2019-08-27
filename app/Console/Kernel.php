@@ -14,7 +14,7 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [//
     ];
-    
+
     /**
      * Define the application's command schedule.
      *
@@ -28,16 +28,20 @@ class Kernel extends ConsoleKernel
             ->daily();*/
         $schedule->command('horizon:snapshot')
             ->everyFiveMinutes();
-        
+
         $schedule->command('backup:mysql-dump')
             ->timezone('Asia/Tehran')
             ->dailyAt('04:30');
-        
+
         $schedule->command('alaaTv:employee:send:timeSheet 0')
-            ->dailyAt('22:30')
+            ->dailyAt('23:45')
+            ->timezone('Asia/Tehran');
+
+        $schedule->command('alaaTv:employee:check:overtime:confirmation')
+            ->dailyAt('00:00')
             ->timezone('Asia/Tehran');
     }
-    
+
     /**
      * Register the Closure based commands for the application.
      *
@@ -46,7 +50,7 @@ class Kernel extends ConsoleKernel
     protected function commands()
     {
         $this->load(__DIR__.'/Commands');
-        
+
         require base_path('routes/console.php');
     }
 }
