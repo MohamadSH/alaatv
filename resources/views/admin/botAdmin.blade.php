@@ -123,6 +123,27 @@
                                 <i class="fa fa-list-ul"></i>
                             </span>
                     <h3 class="m-portlet__head-text">
+                        تایید تراکنش زرین پال
+                    </h3>
+                </div>
+            </div>
+        </div>
+        <div class = "m-portlet__body">
+            {!! Form::open(['method'=>'GET' , 'url'=>route('web.bot.verifyZarinpal') , 'target'=>'_blank']) !!}
+            <input type="text" name="authority" value="" placeholder="شماره اتوریتی" dir="ltr">
+            <input type="text" name="cost" value="" placeholder="مبلغ(تومان)" dir="ltr">
+            <button type="submit" class = "btn btn-info">تایید کن</button>
+            {!! Form::close() !!}
+        </div>
+    </div>
+    <div class = "m-portlet m-portlet--mobile m-portlet--body-progress-">
+        <div class="m-portlet__head">
+            <div class="m-portlet__head-caption">
+                <div class="m-portlet__head-title">
+                            <span class="m-portlet__head-icon">
+                                <i class="fa fa-list-ul"></i>
+                            </span>
+                    <h3 class="m-portlet__head-text">
                         درست کردن تامبنیل ها
                     </h3>
                 </div>
