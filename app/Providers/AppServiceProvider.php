@@ -8,7 +8,7 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\{Auth, Schema, Storage, Validator};
 use App\{Content,
-    Observers\EmployeeTimesheetObserver,
+    Observers\EmployeetimesheetObserver,
     Product,
     Contentset,
     Orderproduct,
@@ -54,7 +54,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         Content::observe(ContentObserver::class);
-        Content::observe(EmployeeTimesheetObserver::class);
+        Content::observe(EmployeetimesheetObserver::class);
         Product::observe(ProductObserver::class);
         Contentset::observe(SetObserver::class);
         Orderproduct::observe(OrderproductObserver::class);
