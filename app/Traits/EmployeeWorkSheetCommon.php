@@ -5,7 +5,7 @@ use App\Employeetimesheet;
 trait EmployeeWorkSheetCommon
 {
     use TimeCommon;
-    
+
     /**
      * Sum the employeeTimeSheet workAndShiftDiff
      *
@@ -20,10 +20,10 @@ trait EmployeeWorkSheetCommon
         foreach ($workTimeSheets as $workTimeSheet) {
             $totalRealWorkTime += $workTimeSheet->obtainRealWorkTime("IN_SECONDS");
         }
-        
+
         return $this->convertSecToHour(abs($totalRealWorkTime));
     }
-    
+
     /**
      * Sum the employeeTimeSheet realWorkTime
      *
@@ -43,7 +43,7 @@ trait EmployeeWorkSheetCommon
                 $totalConfirmedWorkAndShiftDiff += $workTimeDif;
                 continue;
             }
-            if($workTimeSheet->overtime_confirmation) {
+            if($workTimeSheet->overtime_status_id == config('constants.EMPLOYEE_OVERTIME_STATUS_CONFIRMED')) {
                 $totalConfirmedWorkAndShiftDiff += $workTimeDif;
             } else {
                 $totalUnConfirmedWorkAndShiftDiff += $workTimeDif;
