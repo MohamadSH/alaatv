@@ -209,13 +209,9 @@ class EmployeetimesheetController extends Controller
 
     public function edit(Request $request, Employeetimesheet $employeetimesheet)
     {
+        $isExtra = false;
         if ($employeetimesheet->workdaytype_id == config('constants.WORKDAY_ID_EXTRA')) {
             $isExtra = true;
-        }
-        else {
-            if ($employeetimesheet->workdaytype_id == config('constants.WORKDAY_ID_USUAL')) {
-                $isExtra = false;
-            }
         }
 
         if($request->user()->hasRole('admin')){

@@ -44,7 +44,6 @@ use Illuminate\Database\Eloquent as EloquentAlias;
  * @property-write mixed                $managercomment
  * @property-read \App\User             $user
  * @property-read \App\Workdaytype|null $workdaytype
- * @property bool                       overtime_confirmation
  * @method static bool|null forceDelete()
  * @method static \Illuminate\Database\Query\Builder|Employeetimesheet onlyTrashed()
  * @method static bool|null restore()

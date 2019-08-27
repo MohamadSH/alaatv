@@ -38,7 +38,7 @@ class Kernel extends ConsoleKernel
             ->timezone('Asia/Tehran');
 
         $schedule->command('alaaTv:employee:check:overtime:confirmation')
-            ->dailyAt('00:00')
+            ->dailyAt('00:05')
             ->timezone('Asia/Tehran');
     }
 
