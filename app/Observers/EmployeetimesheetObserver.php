@@ -5,7 +5,7 @@ namespace App\Observers;
 use App\Employeetimesheet;
 use Illuminate\Support\Facades\Artisan;
 
-class EmployeeTimesheetObserver
+class EmployeetimesheetObserver
 {
     /**
      * Handle the content "created" event.
