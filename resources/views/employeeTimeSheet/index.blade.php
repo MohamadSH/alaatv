@@ -83,16 +83,15 @@
                 @if(strpos($employeeTimeSheet->obtain_work_and_shift_diff_in_hour,'منفی')!=false)
                     {{ $employeeTimeSheet->obtain_work_and_shift_diff_in_hour }}
                 @else
-                    @if(
-                        isset($employeeTimeSheet->overtime_confirmation) &&
-                        $employeeTimeSheet->overtime_confirmation==1
-                    )
-                        {{ $employeeTimeSheet->obtain_work_and_shift_diff_in_hour }}
+                    {{ $employeeTimeSheet->obtain_work_and_shift_diff_in_hour }}
+                    @if($employeeTimeSheet->overtime_status_id==config('constants.EMPLOYEE_OVERTIME_STATUS_CONFIRMED'))
                         <span class="m-badge m-badge--wide label-sm m-badge--success"> اضافه کاری تایید شده </span>
-                    @else
-                        {{ $employeeTimeSheet->obtain_work_and_shift_diff_in_hour }}
-                        <span class="m-badge m-badge--wide label-sm m-badge--danger"> اضافه کاری تایید نشده </span>
+                    @elseif($employeeTimeSheet->overtime_status_id==config('constants.EMPLOYEE_OVERTIME_STATUS_REJECTED'))
+                        <span class="m-badge m-badge--wide label-sm m-badge--danger"> اضافه کاری رد شده </span>
+                    @elseif($employeeTimeSheet->overtime_status_id==config('constants.EMPLOYEE_OVERTIME_STATUS_UNCONFIRMED'))
+                        <span class="m-badge m-badge--wide label-sm m-badge--warning"> اضافه کاری تایید نشده </span>
                     @endif
+
                 @endif
             @else
                 _
