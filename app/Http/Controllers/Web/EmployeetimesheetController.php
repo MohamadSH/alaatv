@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Web;
 
+use App\Employeeovertimestatus;
 use App\User;
 use Carbon\Carbon;
 use App\Workdaytype;
@@ -52,29 +53,29 @@ class EmployeetimesheetController extends Controller
     {
         /** @var Employeetimesheet $employeeTimeSheets */
         $employeeTimeSheets = Employeetimesheet::orderBy('date', 'Desc');
-        if (Input::has("users")) {
-            $usersId            = Input::get("users");
-            $employeeTimeSheets = $employeeTimeSheets->whereIn("user_id", $usersId);
+        if (Input::has('users')) {
+            $usersId            = Input::get('users');
+            $employeeTimeSheets = $employeeTimeSheets->whereIn('user_id', $usersId);
         }
 
-        if (Input::has("dateEnable")) {
-            if (Input::has("sinceDate") && Input::has("tillDate")) {
-                $sinceDate          = Input::get("sinceDate");
-                $tillDate           = Input::get("tillDate");
+        if (Input::has('dateEnable')) {
+            if (Input::has('sinceDate') && Input::has('tillDate')) {
+                $sinceDate          = Input::get('sinceDate');
+                $tillDate           = Input::get('tillDate');
                 $employeeTimeSheets = $employeeTimeSheets->whereBetween('date', [
-                    explode("T", $sinceDate)[0],
-                    explode("T", $tillDate)[0],
+                    explode('T', $sinceDate)[0],
+                    explode('T', $tillDate)[0],
                 ]);
             }
         }
 
-        if (Input::has("workdayTypes")) {
-            $workDayTypes       = Input::get("workdayTypes");
+        if (Input::has('workdayTypes')) {
+            $workDayTypes       = Input::get('workdayTypes');
             $employeeTimeSheets = $employeeTimeSheets->whereIn('workdaytype_id', $workDayTypes);
         }
 
-        if (Input::has("isPaid")) {
-            $isPaid = Input::get("isPaid");
+        if (Input::has('isPaid')) {
+            $isPaid = Input::get('isPaid');
             if (isset($isPaid[0])) {
                 $employeeTimeSheets = $employeeTimeSheets->where('isPaid', $isPaid);
             }
@@ -84,11 +85,11 @@ class EmployeetimesheetController extends Controller
         $employeeWorkSheetSum    = $this->sumWorkAndShiftDiff($employeeTimeSheets);
         $employeeSumRealWorkTime = $this->sumRealWorkTime($employeeTimeSheets);
         $result                  = [
-            'index'                => View::make("employeeTimeSheet.index",
+            'index'                => View::make('employeeTimeSheet.index',
                 compact('employeeTimeSheets', 'employeeWorkSheetSum'))
                 ->render(),
-            "employeeWorkSheetSum" => $employeeWorkSheetSum,
-            "employeeRealWorkTime" => $employeeSumRealWorkTime,
+            'employeeWorkSheetSum' => $employeeWorkSheetSum,
+            'employeeRealWorkTime' => $employeeSumRealWorkTime,
         ];
 
         return response(json_encode($result, JSON_UNESCAPED_UNICODE), Response::HTTP_OK)->header('Content-Type', 'application/json');
@@ -100,26 +101,26 @@ class EmployeetimesheetController extends Controller
         $user   = $request->user();
         $userId = $user->id;
         /** @var Employeetimesheet $userTodayTimeSheets */
-        $userTodayTimeSheets = Employeetimesheet::where("date", Carbon::today('Asia/Tehran'))
-            ->where("user_id", $user->id)
+        $userTodayTimeSheets = Employeetimesheet::where('date', Carbon::today('Asia/Tehran'))
+            ->where('user_id', $user->id)
             ->get();
         $employeetimesheet=null;
         $isTimeSheetExtra=false;
         if ($userTodayTimeSheets->count() > 1) {
-            session()->flash("warning", "شما برای امروز بیش از یک ساعت کاری وارد نموده اید!");
+            session()->flash('warning', 'شما برای امروز بیش از یک ساعت کاری وارد نموده اید!');
             $formVisible = false;
         }
         else {
             $toDayJalali = $this->convertToJalaliDay(Carbon::today('Asia/Tehran')
                 ->format('l'));
             /** @var Employeeschedule $employeeSchedule */
-            $employeeSchedule = Employeeschedule::where("user_id", $userId)
-                ->where("day", $toDayJalali)
+            $employeeSchedule = Employeeschedule::where('user_id', $userId)
+                ->where('day', $toDayJalali)
                 ->get()
                 ->first();
             if ($userTodayTimeSheets->isNotEmpty()) {
                 $employeetimesheet = $userTodayTimeSheets->first();
-                if ($employeetimesheet->workdaytype_id == config("constants.WORKDAY_ID_EXTRA")) {
+                if ($employeetimesheet->workdaytype_id == config('constants.WORKDAY_ID_EXTRA')) {
                     $isTimeSheetExtra = true;
                 }
                 else {
@@ -129,159 +130,120 @@ class EmployeetimesheetController extends Controller
             $formVisible = true;
         }
         $employees    = User::select()
-            ->role([config("constants.ROLE_EMPLOYEE")])
-            ->pluck("lastName", "id");
+            ->role([config('constants.ROLE_EMPLOYEE')])
+            ->pluck('lastName', 'id');
         $workdayTypes = Workdaytype::all()
-            ->pluck("displayName", "id");
+            ->pluck('displayName', 'id');
 
-        return view("employeeTimeSheet.create",
-            compact("employeetimesheet", "employeeSchedule", "isTimeSheetExtra", "employees", "formVisible",
-                "workdayTypes"));
+        if($user->hasRole('admin')){
+            $employeeovertimestatus = Employeeovertimestatus::all()->pluck('display_name' , 'id');
+        }else{
+            $employeeovertimestatus = Employeeovertimestatus::where('name' , '<>' , 'rejected')->get()->pluck('display_name' , 'id');
+        }
+
+        return view('employeeTimeSheet.create',
+            compact('employeetimesheet', 'employeeSchedule', 'isTimeSheetExtra', 'employees', 'formVisible', 'workdayTypes' , 'employeeovertimestatus'));
     }
 
     public function store(InsertEmployeeTimeSheet $request)
     {
         /** @var User $user */
         $user = $request->user();
-        if (!$request->has("modifier_id")) {
-            $request->offsetSet("modifier_id", $user->id);
+        if (!$request->has('modifier_id')) {
+            $request->offsetSet('modifier_id', $user->id);
         }
 
         $employeeTimeSheet = new Employeetimesheet();
         $employeeTimeSheet->fill($request->all());
 
-        if ($request->has("isExtraDay")) {
-            $employeeTimeSheet->workdaytype_id = config("constants.WORKDAY_ID_EXTRA");
+        if ($request->has('isExtraDay')) {
+            $employeeTimeSheet->workdaytype_id = config('constants.WORKDAY_ID_EXTRA');
             $employeeTimeSheet->isPaid         = 0;
         }
         else {
-            $employeeTimeSheet->workdaytype_id = config("constants.WORKDAY_ID_USUAL");
+            $employeeTimeSheet->workdaytype_id = config('constants.WORKDAY_ID_USUAL');
             $employeeTimeSheet->isPaid         = 1;
         }
 
-        if ($request->has("timeSheetLock")) {
+        if ($request->has('timeSheetLock')) {
             $employeeTimeSheet->timeSheetLock = 1;
         }
 
         $toDayJalali = $this->convertToJalaliDay(Carbon::today('Asia/Tehran')
             ->format('l'));
         /** @var Employeeschedule $employeeSchedule */
-        $employeeSchedule = Employeeschedule::where("user_id", $employeeTimeSheet->user_id)
-            ->where("day", $toDayJalali)
+        $employeeSchedule = Employeeschedule::where('user_id', $employeeTimeSheet->user_id)
+            ->where('day', $toDayJalali)
             ->get()
             ->first();
 
-        $allowedLunchBreak = $employeeTimeSheet->getOriginal("allowedLunchBreakInSec");
+        $allowedLunchBreak = $employeeTimeSheet->getOriginal('allowedLunchBreakInSec');
         if (!isset($allowedLunchBreak)) {
             if (isset($employeeSchedule)) {
-                $employeeTimeSheet->allowedLunchBreakInSec = $employeeSchedule->getOriginal("lunchBreakInSeconds");
+                $employeeTimeSheet->allowedLunchBreakInSec = $employeeSchedule->getOriginal('lunchBreakInSeconds');
             }
         }
 
-        $beginTime = $employeeTimeSheet->getOriginal("userBeginTime");
+        $beginTime = $employeeTimeSheet->getOriginal('userBeginTime');
         if (!isset($beginTime)) {
             if (isset($employeeSchedule)) {
-                $employeeTimeSheet->userBeginTime = $employeeSchedule->getOriginal("beginTime");
+                $employeeTimeSheet->userBeginTime = $employeeSchedule->getOriginal('beginTime');
             }
         }
 
-        $finishTime = $employeeTimeSheet->getOriginal("userFinishTime");
+        $finishTime = $employeeTimeSheet->getOriginal('userFinishTime');
         if (!isset($finishTime)) {
             if (isset($employeeSchedule)) {
-                $employeeTimeSheet->userFinishTime = $employeeSchedule->getOriginal("finishTime");
+                $employeeTimeSheet->userFinishTime = $employeeSchedule->getOriginal('finishTime');
             }
         }
-        $done = $employeeTimeSheet->save();
-        if ($done) {
-            if ($request->has("serverSide")) {
-                return true;
-            }
-            else {
-                session()->flash("success", "ساعت کاری با موفقیت درج شد");
-
-                return redirect()->back();
-            }
+        if ($employeeTimeSheet->save()) {
+            session()->flash('success', 'ساعت کاری با موفقیت درج شد');
+            return redirect()->back();
         }
         else {
-            if ($request->has("serverSide")) {
-                return false;
-            }
-            else {
-                session()->flash("error", Lang::get("responseText.Database error."));
-
-                return redirect()->back();
-            }
+            session()->flash('error', Lang::get('responseText.Database error.'));
+            return redirect()->back();
         }
     }
 
-    public function edit(Employeetimesheet $employeetimesheet)
+    public function edit(Request $request, Employeetimesheet $employeetimesheet)
     {
-        if ($employeetimesheet->workdaytype_id == config("constants.WORKDAY_ID_EXTRA")) {
+        if ($employeetimesheet->workdaytype_id == config('constants.WORKDAY_ID_EXTRA')) {
             $isExtra = true;
         }
         else {
-            if ($employeetimesheet->workdaytype_id == config("constants.WORKDAY_ID_USUAL")) {
+            if ($employeetimesheet->workdaytype_id == config('constants.WORKDAY_ID_USUAL')) {
                 $isExtra = false;
             }
         }
 
-        return view("employeeTimeSheet.edit", compact("employeetimesheet", "isExtra"));
+        if($request->user()->hasRole('admin')){
+            $employeeovertimestatus = Employeeovertimestatus::all()->pluck('display_name' , 'id');
+        }else{
+            $employeeovertimestatus = Employeeovertimestatus::where('name' , '<>' , 'rejected')->get()->pluck('display_name' , 'id');
+        }
+
+
+        return view('employeeTimeSheet.edit', compact('employeetimesheet', 'isExtra' , 'employeeovertimestatus'));
     }
 
     public function update(Request $request, Employeetimesheet $employeeTimeSheet)
     {
-        $user = $request->user();
-        if (!$request->has('modifier_id')) {
-            $request->offsetSet('modifier_id', $user->id);
-        }
+        $request->offsetSet('modifier_id', $request->get('modifier_id' , $request->user()->id));
         $employeeTimeSheet->fill($request->all());
-        if ($request->has('isExtraDay')) {
-            $employeeTimeSheet->workdaytype_id = config('constants.WORKDAY_ID_EXTRA');
-            $employeeTimeSheet->isPaid         = 0;
-        } else {
-            $employeeTimeSheet->workdaytype_id = config('constants.WORKDAY_ID_USUAL');
-            $employeeTimeSheet->isPaid         = 1;
-        }
-        if ($request->has('timeSheetLock')) {
-            $employeeTimeSheet->timeSheetLock = 1;
-        } else {
-            $employeeTimeSheet->timeSheetLock = 0;
-        }
-        if ($request->has('isPaid')) {
-            $employeeTimeSheet->isPaid = 1;
-        } else {
-            $employeeTimeSheet->isPaid = 0;
-        }
-        $realWorkTime = $employeeTimeSheet->obtainRealWorkTime('IN_SECONDS');
-        /*if(
-            ($realWorkTime>0 &&
-                !$user->can(config('constants.editEmployeeWorkSheet'))
-            ) ||
-            (
-                $request->has('OvertimeConfirmation') &&
-                $request->get('OvertimeConfirmation') == 1 &&
-                $user->can(config('constants.editEmployeeWorkSheet'))
-            )
-        )*/
-        if ($request->has('overtime_confirmation')) {
-            $employeeTimeSheet->overtime_confirmation = true;
-        } else {
-            $employeeTimeSheet->overtime_confirmation = false;
-        }
-        $done = $employeeTimeSheet->update();
-        if ($done)
-            if ($request->has('serverSide')) {
-                return true;
-            } else {
-                session()->flash('success', 'ساعت کاری با موفقیت اصلاح شد');
-                return redirect()->back();
-            }
-        elseif ($request->has('serverSide')) {
-                return false;
-            } else {
+
+        $employeeTimeSheet->workdaytype_id = ($request->has('isExtraDay'))?config('constants.WORKDAY_ID_EXTRA'):config('constants.WORKDAY_ID_USUAL');
+        $employeeTimeSheet->timeSheetLock = ($request->has('timeSheetLock'))?1:0;
+        $employeeTimeSheet->isPaid = ($request->has('isPaid'))?1:0;
+
+        if ($employeeTimeSheet->update()) {
+            session()->flash('success', 'ساعت کاری با موفقیت اصلاح شد');
+            return redirect()->back();
+        }else {
             session()->flash('error', 'خطای پایگاه داده');
             return redirect()->back();
-            }
+        }
     }
 
     public function destroy(Employeetimesheet $employeetimesheet, Response $response)
@@ -305,53 +267,55 @@ class EmployeetimesheetController extends Controller
      */
     public function submitWorkTime(Request $request, EmployeetimesheetController $employeetimesheetController, ErrorPageController $errorPageController)
     {
+        if(!$request->has('action')){
+            session()->flash('error', 'نوع ساعت کاری نامشخص است');
+            return redirect()->back();
+        }
+
+        $done = false;
         $actionMap = [
             'action-clockIn'          => 'clockIn',
             'action-beginLunchBreak'  => 'beginLunchBreak',
             'action-finishLunchBreak' => 'finishLunchBreak',
             'action-clockOut'         => 'clockOut',
         ];
-        if ($request->has('action') && isset($actionMap[$request->get('action')])) {
-            $presentTime = Carbon::now('Asia/Tehran')
-                ->format('H:i:s');
-            $request->offsetSet($actionMap[$request->get('action')], $presentTime);
-        }
 
         $userId = $request->user()->id;
-        $request->offsetSet('user_id', $userId);
-        $request->offsetSet('date', Carbon::today('Asia/Tehran')
-            ->format('Y-m-d'));
+        $presentTime = Carbon::now('Asia/Tehran')->format('H:i:s');
+        $toDayJalali      = $this->convertToJalaliDay(Carbon::today('Asia/Tehran')->format('l'));
 
-        $toDayJalali      = $this->convertToJalaliDay(Carbon::today('Asia/Tehran')
-            ->format('l'));
         $employeeSchedule = Employeeschedule::where('user_id', $userId)
             ->where('day', $toDayJalali)
             ->get()
             ->first();
-        if (isset($employeeSchedule)) {
-            $request->offsetSet('userBeginTime', $employeeSchedule->getOriginal('beginTime'));
-            $request->offsetSet('userFinishTime', $employeeSchedule->getOriginal('finishTime'));
-            $request->offsetSet('allowedLunchBreakInSec',
-                gmdate('H:i:s', $employeeSchedule->getOriginal('lunchBreakInSeconds')));
-        }
 
-        $request->offsetSet('modifier_id', $userId);
-        $request->offsetSet('serverSide', true);
-        $insertRequest  = new InsertEmployeeTimeSheet($request->all());
-        $userTimeSheets = Employeetimesheet::where('date', Carbon::today('Asia/Tehran'))
-            ->where('user_id', $userId)
-            ->get();
+        $userTimeSheets = Employeetimesheet::where('date', Carbon::today('Asia/Tehran'))->where('user_id', $userId)->get();
         if ($userTimeSheets->count() == 0) {
-            $done = $employeetimesheetController->store($insertRequest);
+            $employeeSheet = Employeetimesheet::create([
+                $actionMap[$request->get('action' , 'action-clockIn')] => $presentTime ,
+                'user_id'               => $userId,
+                'date'                  => Carbon::today('Asia/Tehran')->format('Y-m-d'),
+                'userBeginTime'         => optional($employeeSchedule)->getOriginal('beginTime'),
+                'userFinishTime'        => optional($employeeSchedule)->getOriginal('finishTime'),
+                'allowedLunchBreakInSec'=> gmdate('H:i:s', optional($employeeSchedule)->getOriginal('lunchBreakInSeconds')),
+                'modifier_id'           => $userId,
+                'overtime_status_id'    => config('constants.EMPLOYEE_OVERTIME_STATUS_UNCONFIRMED'),
+            ]);
+            if(isset($employeeSheet)) {
+                $done = true;
+            }
         }
         elseif ($userTimeSheets->count() == 1) {
-            $done = $employeetimesheetController->update($insertRequest, $userTimeSheets->first());
+            $done = $userTimeSheets->first()->update([
+                $actionMap[
+                    $request->get('action' , 'action-clockIn')] => $presentTime ,
+                    'modifier_id'           => $userId,
+            ]);
+        } else {
+            session()->flash('error', 'شما بیش از یک ساعت کاری برای امروز ثبت نموده اید!');
+            return redirect()->back();
         }
-        else {
-            $message = 'شما بیش از یک ساعت کاری برای امروز ثبت نموده اید!';
 
-            return $errorPageController->errorPage($message);
-        }
         if ($done) {
             session()->flash('success', 'ساعت کاری با موفقیت ذخیره شد');
         }

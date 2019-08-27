@@ -3,7 +3,6 @@
         <div class = "form-group">
             <div class = "row">
                 @if(Auth::user()->can(config('constants.INSERT_EMPLOPYEE_WORK_SHEET')))
-                    {{--<label class=" col-md-4 control-label" for="date">انتخاب کارمند</label>--}}
                     @if(!isset($employeetimesheet))
                         <div class = "col-md-2 {{ $errors->has('user_id') ? ' has-danger' : '' }}">
                             {!! Form::select("user_id" , $employees, null , ["class" => "form-control" , "placeholder" => "انتخاب کارمند"]) !!}
@@ -14,7 +13,6 @@
                             @endif
                         </div>
                     @endif
-                    {{--<label class=" col-md-2 control-label" for="date">انتخاب تاریخ</label>--}}
                     <div class = "col-md-2 {{ $errors->has('date') ? ' has-danger' : '' }}">
                         <input type = "text" class = "form-control text-center" id = "date" value = "@if(isset($employeetimesheet->date)){{$employeetimesheet->getOriginal("date")}}@endif" dir = "ltr">
                         {!! Form::text('date', null, ['class' => 'form-control d-none', 'id' => 'dateAlt'  ]) !!}
@@ -186,20 +184,23 @@
                                 {!! Form::checkbox('timeSheetLock', '1', (isset($employeetimesheet) )? $employeetimesheet->getOriginal("timeSheetLock") : null ,  ['value' => '1'  , 'class'=>'icheck' ,'data-checkbox'=>'icheckbox_line-red' , 'data-label'=>'قفل کردن'  ]) !!}
                                 قفل کردن
                             </label>
+                            <br>
                             <label>
                                 {!! Form::checkbox('isExtraDay', '1', (isset($isExtra))? $isExtra : null,  ['value' => '1'  , 'class'=>'icheck' ,'data-checkbox'=>'icheckbox_line-orange' , 'data-label'=>'به عنوان روز خاص ثبت شود' ]) !!}
                                 به عنوان روز خاص ثبت شود
                             </label>
+                            <br>
                             {{--@permission((config('constants.INSERT_EMPLOPYEE_WORK_SHEET')))--}}
                             <label>
                                 {!! Form::checkbox('isPaid', '1', (isset($employeetimesheet) )? $employeetimesheet->getOriginal("isPaid") : null,  ['value' => '1'  , 'class'=>'icheck' ,'data-checkbox'=>'icheckbox_line-blue' , 'data-label'=>'تسویه شده' , (isset($employeetimesheet) )? "" : "checked"  ]) !!}
                                 تسویه شده
                             </label>
+                            <br>
                             {{--@endpermission--}}
                             @permission((config('constants.EDIT_EMPLOPYEE_WORK_SHEET')))
                             <label>
-                                {!! Form::checkbox('overtime_confirmation', '1', (isset($employeetimesheet) )? $employeetimesheet->getOriginal('overtime_confirmation') : null,  ['value' => '1'  , 'class'=>'icheck' ,'data-checkbox'=>'icheckbox_line-green' , 'data-label'=>'تاییدیه اضافه کاری' , (isset($employeetimesheet) )? "" : "checked"  ]) !!}
                                 تاییدیه اضافه کاری
+                                {!! Form::select("overtime_status_id" , $employeeovertimestatus, null, ['class' => 'form-control a--full-width']) !!}
                             </label>
                             @endpermission
                         </div>
