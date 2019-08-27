@@ -105,8 +105,9 @@ class Employeetimesheet extends BaseModel
         'managerComment',
         'employeeComment',
         'modifier_id',
+        'overtime_status_id'
     ];
-    
+
     /**
      * Set the employeeTimeSheet's clockIn.
      *
@@ -118,21 +119,21 @@ class Employeetimesheet extends BaseModel
     {
         if (strlen(preg_replace('/\s+/', '', $value)) != 0) {
             $value = explode(":", $value);
-            
+
             $hour = $value[0];
             if (strlen($hour) == 0) {
                 $hour = "00";
             }
-            
+
             $minute = $value[1];
             if (strlen($minute) == 0) {
                 $minute = "00";
             }
-            
+
             $this->attributes['clockIn'] = $hour.":".$minute;
         }
     }
-    
+
     /**
      * Set the employeeTimeSheet's clockIn.
      *
@@ -144,21 +145,21 @@ class Employeetimesheet extends BaseModel
     {
         if (strlen(preg_replace('/\s+/', '', $value)) != 0) {
             $value = explode(":", $value);
-            
+
             $hour = $value[0];
             if (strlen($hour) == 0) {
                 $hour = "00";
             }
-            
+
             $minute = $value[1];
             if (strlen($minute) == 0) {
                 $minute = "00";
             }
-            
+
             $this->attributes['beginLunchBreak'] = $hour.":".$minute;
         }
     }
-    
+
     /**
      * Set the employeeTimeSheet's clockIn.
      *
@@ -170,21 +171,21 @@ class Employeetimesheet extends BaseModel
     {
         if (strlen(preg_replace('/\s+/', '', $value)) != 0) {
             $value = explode(":", $value);
-            
+
             $hour = $value[0];
             if (strlen($hour) == 0) {
                 $hour = "00";
             }
-            
+
             $minute = $value[1];
             if (strlen($minute) == 0) {
                 $minute = "00";
             }
-            
+
             $this->attributes['finishLunchBreak'] = $hour.":".$minute;
         }
     }
-    
+
     /**
      * Set the employeeTimeSheet's clockIn.
      *
@@ -196,21 +197,21 @@ class Employeetimesheet extends BaseModel
     {
         if (strlen(preg_replace('/\s+/', '', $value)) != 0) {
             $value = explode(":", $value);
-            
+
             $hour = $value[0];
             if (strlen($hour) == 0) {
                 $hour = "00";
             }
-            
+
             $minute = $value[1];
             if (strlen($minute) == 0) {
                 $minute = "00";
             }
-            
+
             $this->attributes['clockOut'] = $hour.":".$minute;
         }
     }
-    
+
     /**
      * Set the employeeTimeSheet's userBeginTime.
      *
@@ -222,21 +223,21 @@ class Employeetimesheet extends BaseModel
     {
         if (strlen(preg_replace('/\s+/', '', $value)) != 0) {
             $value = explode(":", $value);
-            
+
             $hour = $value[0];
             if (strlen($hour) == 0) {
                 $hour = "00";
             }
-            
+
             $minute = $value[1];
             if (strlen($minute) == 0) {
                 $minute = "00";
             }
-            
+
             $this->attributes['userBeginTime'] = $hour.":".$minute;
         }
     }
-    
+
     /**
      * Set the employeeTimeSheet's userFinishTime.
      *
@@ -248,21 +249,21 @@ class Employeetimesheet extends BaseModel
     {
         if (strlen(preg_replace('/\s+/', '', $value)) != 0) {
             $value = explode(":", $value);
-            
+
             $hour = $value[0];
             if (strlen($hour) == 0) {
                 $hour = "00";
             }
-            
+
             $minute = $value[1];
             if (strlen($minute) == 0) {
                 $minute = "00";
             }
-            
+
             $this->attributes['userFinishTime'] = $hour.":".$minute;
         }
     }
-    
+
     /**
      * Set the employeeTimeSheet's breakDurationInSeconds.
      *
@@ -280,7 +281,7 @@ class Employeetimesheet extends BaseModel
             $this->attributes['breakDurationInSeconds'] = $breakTime[0] * 3600 + $breakTime[1] * 60;
         }
     }
-    
+
     /**
      * Set the employeeTimeSheet's managerComment.
      *
@@ -297,7 +298,7 @@ class Employeetimesheet extends BaseModel
             $this->attributes['managerComment'] = null;
         }
     }
-    
+
     /**
      * Set the employeeTimeSheet's employeeComment.
      *
@@ -314,7 +315,7 @@ class Employeetimesheet extends BaseModel
             $this->attributes['managerComment'] = null;
         }
     }
-    
+
     /**
      * Set the employeeTimeSheet's date.
      *
@@ -327,7 +328,7 @@ class Employeetimesheet extends BaseModel
         $this->attributes['date'] = Carbon::parse($value)
             ->format('Y-m-d');
     }
-    
+
     /**
      * Set the employeeTimeSheet's breakDurationInSeconds.
      *
@@ -345,7 +346,7 @@ class Employeetimesheet extends BaseModel
             $this->attributes['allowedLunchBreakInSec'] = $breakTime[0] * 3600 + $breakTime[1] * 60;
         }
     }
-    
+
     /**
      * Get the Employeeschedule's userBeginTime.
      *
@@ -362,7 +363,7 @@ class Employeetimesheet extends BaseModel
             return $value;
         }
     }
-    
+
     /**
      * Get the Employeeschedule's usrFinishTime.
      *
@@ -379,7 +380,7 @@ class Employeetimesheet extends BaseModel
             return $value;
         }
     }
-    
+
     /**
      * Get the Employeeschedule's clockIn.
      *
@@ -396,7 +397,7 @@ class Employeetimesheet extends BaseModel
             return $value;
         }
     }
-    
+
     /**
      * Get the Employeeschedule's date.
      *
@@ -406,7 +407,7 @@ class Employeetimesheet extends BaseModel
      */
     public function getBeginlunchbreakAttribute($value)
     {
-        
+
         if (!isset($value)) {
             return "00:00:00";
         }
@@ -414,7 +415,7 @@ class Employeetimesheet extends BaseModel
             return $value;
         }
     }
-    
+
     /**
      * Get the Employeeschedule's beginLunchBreak.
      *
@@ -431,7 +432,7 @@ class Employeetimesheet extends BaseModel
             return $value;
         }
     }
-    
+
     /**
      * Get the Employeeschedule's clockOut.
      *
@@ -448,7 +449,7 @@ class Employeetimesheet extends BaseModel
             return $value;
         }
     }
-    
+
     /**
      * Get the employeeTimeSheet's breakDurationInSeconds.
      *
@@ -465,7 +466,7 @@ class Employeetimesheet extends BaseModel
             return null;
         }
     }
-    
+
     /**
      * Get the Employeeschedule's lunchBreakInSeconds.
      *
@@ -477,7 +478,7 @@ class Employeetimesheet extends BaseModel
     {
         return gmdate("H:i:s", $value);
     }
-    
+
     /**
      * Get the Employeeschedule's timeSheetLock.
      *
@@ -494,7 +495,7 @@ class Employeetimesheet extends BaseModel
             return "خیر";
         }
     }
-    
+
     /**
      * Get the Employeeschedule's isPaid.
      *
@@ -511,7 +512,7 @@ class Employeetimesheet extends BaseModel
             return "خیر";
         }
     }
-    
+
     /**
      * Get the Employeeschedule's updated_at.
      *
@@ -525,7 +526,7 @@ class Employeetimesheet extends BaseModel
         /*$explodedTime = $explodedDateTime[1] ;*/
         return $this->convertDate($value, "toJalali");
     }
-    
+
     /**
      * Get the Employeeschedule's created_at.
      *
@@ -539,7 +540,7 @@ class Employeetimesheet extends BaseModel
         /*$explodedTime = $explodedDateTime[1] ;*/
         return $this->convertDate($value, "toJalali");
     }
-    
+
     /**
      * Get the Employeeschedule's date.
      *
@@ -551,7 +552,7 @@ class Employeetimesheet extends BaseModel
     {
         return $this->convertDate($value, "toJalali");
     }
-    
+
     /**
      * Get the Employeeschedule's date.
      *
@@ -569,7 +570,7 @@ class Employeetimesheet extends BaseModel
                 return null;
         }
     }
-    
+
     public function getEmployeeFullName()
     {
         $fullName = "";
@@ -584,35 +585,35 @@ class Employeetimesheet extends BaseModel
                 $fullName .= $this->user->lastName;
             }
         }
-        
+
         return $fullName;
     }
-    
+
     public function getModifierFullName()
     {
         return $this->modifier->firstName." ".$this->modifier->lastName;
     }
-    
+
     public function user()
     {
         return $this->belongsTo("\App\User");
     }
-    
+
     public function modifier()
     {
         return $this->belongsTo("\App\User");
     }
-    
+
     public function workdaytype()
     {
         return $this->belongsTo("\App\Workdaytype");
     }
-    
+
     public function getObtainWorkAndShiftDiffInHourAttribute()
     {
         return $this->obtainWorkAndShiftDiff('HOUR_FORMAT');
     }
-    
+
     /**
      * Obtain the employeeTimeSheet workAndShiftDiff
      *
@@ -628,7 +629,7 @@ class Employeetimesheet extends BaseModel
                     $beginTime        = Carbon::parse($this->obtainRealWorkTime("HOUR_FORMAT"));
                     $finishTime       = Carbon::parse($this->obtainShiftTime());
                     $workAndShiftDiff = $finishTime->diffInSeconds($beginTime, false);
-                    
+
                     return $workAndShiftDiff;
                 }
                 else {
@@ -671,14 +672,14 @@ class Employeetimesheet extends BaseModel
                     if ($second > 0) {
                         $persianTime .= $second." ثانیه ";
                     }
-                    
+
                     if ($workAndShiftDiffInSec < 0) {
                         $persianTime .= " کم کاری";
                     }
                     else {
                         $persianTime .= " اضافه کاری";
                     }
-                    
+
                     return $persianTime;
                 }
                 else {
@@ -688,7 +689,7 @@ class Employeetimesheet extends BaseModel
                 return false;
         }
     }
-    
+
     /**
      * Obtain the employeeTimeSheet realWorkTime
      *
@@ -704,7 +705,7 @@ class Employeetimesheet extends BaseModel
                     $beginTime    = Carbon::parse($this->obtainWorkTime());
                     $finishTime   = Carbon::parse($this->obtainTotalBreakTime());
                     $realWorkTime = $finishTime->diffInSeconds($beginTime);
-                    
+
                     return $realWorkTime;
                 }
                 else {
@@ -717,7 +718,7 @@ class Employeetimesheet extends BaseModel
                     $finishTime   = Carbon::parse($this->obtainTotalBreakTime());
                     $realWorkTime = $finishTime->diff($beginTime)
                         ->format('%H:%I:%S');
-                    
+
                     return $realWorkTime;
                 }
                 else {
@@ -728,7 +729,7 @@ class Employeetimesheet extends BaseModel
                 return false;
         }
     }
-    
+
     /**
      * Obtain the employeeTimeSheet workTime
      */
@@ -739,14 +740,14 @@ class Employeetimesheet extends BaseModel
             $finishTime = Carbon::parse($this->clockOut);
             $workTime   = $finishTime->diff($beginTime)
                 ->format('%H:%I:%S');
-            
+
             return $workTime;
         }
         else {
             return false;
         }
     }
-    
+
     /**
      * Obtain the employeeTimeSheet totalBreakTime
      */
@@ -760,14 +761,14 @@ class Employeetimesheet extends BaseModel
             else {
                 $totalBreak = $this->getOriginal("breakDurationInSeconds");
             }
-            
+
             return gmdate("H:i:s", $totalBreak);
         }
         else {
             return false;
         }
     }
-    
+
     /**
      * Obtain the employeeTimeSheet lunchOverTimeInSeconds
      */
@@ -776,14 +777,14 @@ class Employeetimesheet extends BaseModel
         if (isset($this->allowedLunchBreakInSec) && $this->obtainLunchTime() !== false) {
             $beginTime  = Carbon::parse($this->allowedLunchBreakInSec);
             $finishTime = Carbon::parse($this->obtainLunchTime());
-            
+
             return $finishTime->diffInSeconds($beginTime, false);
         }
         else {
             return false;
         }
     }
-    
+
     /**
      * Obtain the employeeTimeSheet lunchTime
      */
@@ -794,14 +795,14 @@ class Employeetimesheet extends BaseModel
             $finishTime = Carbon::parse($this->finishLunchBreak);
             $lunchTime  = $finishTime->diff($beginTime)
                 ->format('%H:%I:%S');
-            
+
             return $lunchTime;
         }
         else {
             return false;
         }
     }
-    
+
     /**
      * Obtain the employeeTimeSheet shiftTime
      *
@@ -817,7 +818,7 @@ class Employeetimesheet extends BaseModel
                     $beginTime  = Carbon::parse($this->userBeginTime);
                     $finishTime = Carbon::parse($this->userFinishTime);
                     $shiftTime  = $finishTime->diffInSeconds($beginTime, false);
-                    
+
                     return $shiftTime;
                 }
                 else {
@@ -830,7 +831,7 @@ class Employeetimesheet extends BaseModel
                     $finishTime = Carbon::parse($this->userFinishTime);
                     $shiftTime  = $finishTime->diff($beginTime)
                         ->format('%H:%I:%S');
-                    
+
                     return $shiftTime;
                 }
                 else {
@@ -862,7 +863,7 @@ class Employeetimesheet extends BaseModel
                             $persianShiftTime .= $second." ثانیه ";
                         }
                     }
-                    
+
                     return $persianShiftTime;
                 }
                 else {
