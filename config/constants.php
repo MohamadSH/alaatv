@@ -491,6 +491,10 @@ return [
     'ATTRIBUTE_TYPE_EXTRA'                     => 2,
     'ATTRIBUTE_TYPE_INFORMATION'               => 3,
 
+    'EMPLOYEE_OVERTIME_STATUS_UNCONFIRMED'     => 1,
+    'EMPLOYEE_OVERTIME_STATUS_CONFIRMED'       => 2,
+    'EMPLOYEE_OVERTIME_STATUS_REJECTED'        => 3,
+
     'JALALI_CALENDER'                          => [
                                 [
                                     'month'       => 'مهر',
