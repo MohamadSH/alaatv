@@ -8,6 +8,7 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\{Auth, Schema, Storage, Validator};
 use App\{Content,
+    Observers\EmployeeTimesheetObserver,
     Product,
     Contentset,
     Orderproduct,
@@ -21,7 +22,7 @@ use App\{Content,
 class AppServiceProvider extends ServiceProvider
 {
     use UserCommon;
-    
+
     /**
      * Register any application services.
      *
@@ -34,17 +35,17 @@ class AppServiceProvider extends ServiceProvider
                     ->hasRole("admin"));
         });
         Schema::defaultStringLength(191);
-        
+
         Storage::extend('sftp', function ($app, $config) {
             return new Filesystem(new AlaaSftpAdapter($config));
         });
-        
+
         Collection::macro('pushAt', function ($key, $item) {
             return $this->put($key, collect($this->get($key))->push($item));
         });
-        
+
     }
-    
+
     /**
      * Bootstrap any application services.
      *
@@ -53,12 +54,13 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         Content::observe(ContentObserver::class);
+        Content::observe(EmployeeTimesheetObserver::class);
         Product::observe(ProductObserver::class);
         Contentset::observe(SetObserver::class);
         Orderproduct::observe(OrderproductObserver::class);
         $this->defineValidationRules();
     }
-    
+
     private function defineValidationRules(): void
     {
         /**
@@ -68,10 +70,10 @@ class AppServiceProvider extends ServiceProvider
             if (strcmp($parameters[0], 'nationalCode') == 0) {
                 return $this->validateNationalCode($value);
             }
-            
+
             return true;
         });
-        
+
         Validator::extend('activeProduct', function ($attribute, $value, $parameters, $validator) {
             return Product::findOrFail($value)->active;
         });
