@@ -136,7 +136,7 @@
                 <li class="list-group-item text-center m--font-danger " style="font-size: small">فایلی درج نشده است</li>
             @endif
         </ul>
-        @if($content->contenttype_id == config('constants.CONTENT_TYPE_PAMPHLET'))
+        @if($content->isFree && $content->contenttype_id == config('constants.CONTENT_TYPE_PAMPHLET'))
             <div class="row">
                 <label class=" col-md-4 control-label red" for="pamphlet">آپلود فایل جزوه</label>
                 <div class="col-md-12">
