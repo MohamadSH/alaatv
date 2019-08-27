@@ -17,7 +17,7 @@ class CreateEmployeeovertimestatusTable extends Migration
         Schema::create('employeeovertimestatus', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name')->comment('نام وضعیت');
-            $table->string('display_name')->nullable()->comment('نام قابل نمایش وضعیت')->after('modifier_id');
+            $table->string('display_name')->nullable()->comment('نام قابل نمایش وضعیت');
             $table->timestamps();
             $table->softDeletes();
         });
