@@ -609,6 +609,10 @@ class Employeetimesheet extends BaseModel
         return $this->belongsTo("\App\Workdaytype");
     }
 
+    public function overtimestatus(){
+        return $this->belongsTo(Employeeovertimestatus::Class , 'id' , 'overtime_status_id');
+    }
+
     public function getObtainWorkAndShiftDiffInHourAttribute()
     {
         return $this->obtainWorkAndShiftDiff('HOUR_FORMAT');
