@@ -17,7 +17,6 @@ use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Input;
 use App\Traits\EmployeeWorkSheetCommon;
 use App\Http\Requests\InsertEmployeeTimeSheet;
-use Illuminate\Support\Facades\Artisan;
 
 class EmployeetimesheetController extends Controller
 {
@@ -235,7 +234,6 @@ class EmployeetimesheetController extends Controller
         $employeeTimeSheet->isPaid = ($request->has('isPaid'))?1:0;
 
         if ($employeeTimeSheet->update()) {
-            Artisan::call('cache:clear');
             session()->flash('success', 'ساعت کاری با موفقیت اصلاح شد');
             return redirect()->back();
         }else {
