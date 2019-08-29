@@ -9,7 +9,6 @@ use Illuminate\Support\Facades\{DB, Input};
 use Illuminate\Support\Str;
 use App\Http\Controllers\Controller;
 use App\{Bon,
-    Coupon,
     Orderproduct,
     User,
     Order,
@@ -30,10 +29,8 @@ use App\{Bon,
     Notifications\GiftGiven,
     Traits\APIRequestCommon,
     Events\FreeInternetAccept,
-    Notifications\GeneralNotice};
+    };
 use Zarinpal\Zarinpal;
-
-//use Jenssegers\Agent\Agent;
 
 class BotsController extends Controller
 {
