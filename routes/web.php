@@ -2,6 +2,7 @@
 
 
 use App\Http\Controllers\Web\AdminController;
+use App\Http\Controllers\Web\BotsController;
 use App\Http\Controllers\Web\ConsultationController;
 use App\Http\Controllers\Web\ContentController;
 use App\Http\Controllers\Web\DashboardPageController;
@@ -149,12 +150,12 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('holdlottery', 'Web\LotteryController@holdLottery');
     Route::get('givePrize', 'Web\LotteryController@givePrizes');
     Route::get('bot', 'Web\BotsController@bot')->name('web.bots');
-    Route::get('pointBot', 'Web\BotsController@pointBot');
-    Route::post('walletBot', 'Web\BotsController@walletBot');
-    Route::post('excelBot', 'Web\BotsController@excelBot');
-    Route::get('zarinpalbot', 'Web\BotsController@ZarinpalVerifyPaymentBot')->name('web.bot.verifyZarinpal');
-    Route::post('salesReportBot', 'Web\BotsController@salesReportBot');
-    Route::get('thumbnailbot', 'Web\BotsController@fixthumbnail')->name('web.bot.fixthumbnails');
+    Route::get('pointBot', [BotsController::class, 'pointBot'])->name('web.bot.point');
+    Route::post('walletBot',[BotsController::class, 'walletBot'])->name('web.bot.wallet');
+    Route::post('excelBot', [BotsController::class, 'excelBot'])->name('web.bot.excel');
+    Route::post('zarinpalbot', [BotsController::class, 'ZarinpalVerifyPaymentBot'])->name('web.bot.verifyZarinpal');
+    Route::post('thumbnailbot', [BotsController::class, 'fixthumbnail'])->name('web.bot.fixthumbnails');
+    Route::post('introcontenttag', [BotsController::class, 'introContentTags'])->name('web.bot.introContentTags');
     Route::get('v/asiatech', 'Web\VoucherController@voucherRequest');
     Route::put('v', 'Web\VoucherController@submitVoucherRequest');
 

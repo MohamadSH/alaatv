@@ -52,15 +52,11 @@ class BotsController extends Controller
      * @return void
      */
 
-    protected $sideBarAdmin;
-
     protected $setting;
 
     public function __construct(Websitesetting $setting)
     {
-        $this->middleware('role:admin', [
-            'only' => ['bot', 'smsBot', 'checkDisableContentTagBot', 'tagBot', 'pointBot','ZarinpalVerifyPaymentBot','salesReportBot'],
-        ]);
+        $this->middleware('role:admin');
         $this->setting  = $setting->setting;
     }
 
@@ -130,112 +126,6 @@ class BotsController extends Controller
                 echo "<span style='color:green'>Number of processed orders: ".$counter."</span>";
                 echo "<br>";
                 dd("DONE!");
-            }
-
-            if ($request->has("coupon")) {
-                $hamayeshTalai              = [];
-                $notIncludedUsers_Shimi     = [];
-                $notIncludedUsers_Vafadaran = [];
-                $users                      = User::whereHas("orderproducts", function ($q) use ($hamayeshTalai) {
-                    $q->whereHas("order", function ($q) use ($hamayeshTalai) {
-                        $q->where("orderstatus_id", config("constants.ORDER_STATUS_CLOSED"))
-                            ->whereIn("paymentstatus_id", [
-                                config("constants.PAYMENT_STATUS_PAID"),
-                            ]);
-                    })
-                        ->whereIn("product_id", $hamayeshTalai);
-                    //                        ->havingRaw('COUNT(*) > 0');
-                })
-                    ->whereDoesntHave("orderproducts", function ($q) use ($hamayeshTalai) {
-                        $q->whereHas("order", function ($q) use ($hamayeshTalai) {
-                            $q->where("orderstatus_id", config("constants.ORDER_STATUS_CLOSED"))
-                                ->whereIn("paymentstatus_id", [
-                                    config("constants.PAYMENT_STATUS_PAID"),
-                                ]);
-                        })
-                            ->where("product_id", 210);
-                    })
-                    ->whereNotIn("id", $notIncludedUsers_Shimi)
-                    ->whereNotIn("id", $notIncludedUsers_Vafadaran)
-                    ->get();
-
-                echo "number of users:".$users->count();
-                echo "<br>";
-                dd("stop");
-                $failedCounter    = 0;
-                $proccessed       = 0;
-                dump($users->pluck("id")
-                    ->toArray());
-
-                foreach ($users as $user) {
-                    do {
-                        $couponCode = str_random(5);
-                    } while (\App\Coupon::where("code", $couponCode)
-                        ->get()
-                        ->isNotEmpty());
-
-                    /** Coupon Settings */
-                    $couponName        = "قرعه کشی وفاداران آلاء برای ".$user->getFullName();
-                    $couponDescription = "قرعه کشی وفاداران آلاء برای ".$user->getFullName();
-                    $validSinceDate    = "2018-06-11";
-                    $validUntilDate    = " 00:00:00";
-                    $validSinceTime    = "2018-06-15";
-                    $validUntilTime    = "12:00:00";
-                    $couponProducts    = \App\Product::whereNotIn("id", [
-                        179,
-                        180,
-                        182,
-                    ])
-                        ->get()
-                        ->pluck('id')
-                        ->toArray();
-                    $discount          = 55;
-                    /** Coupon Settings */
-                    $coupon = Coupon::create([
-                        "enable"    => 1 ,
-                        "usageNumber"   => 0 ,
-                        "limitStatus"   => 0 ,
-                        "coupontype_id" => 2 ,
-                        "discounttype_id"   => 1 ,
-                        "name"  => $couponName ,
-                        "description"   => $couponDescription ,
-                        "code"  => $couponCode ,
-                        "products"  => $couponProducts ,
-                        "discount"  => $discount ,
-                        "validSince"    => $validSinceDate ,
-                        "sinceTime" => $validSinceTime ,
-                        "validSinceEnable"  => 1 ,
-                        "validUntil"    => $validUntilDate ,
-                        "untilTime" => $validUntilTime ,
-                        "validUntilEnable"  => 1 ,
-                    ]);
-
-                    if (isset($coupon)) {
-                        $message = "شما در قرعه کشی وفاداران آلاء برنده یک کد تخفیف شدید.";
-                        $message .= "\n";
-                        $message .= "کد شما:";
-                        $message .= "\n";
-                        $message .= $couponCode;
-                        $message .= "\n";
-                        $message .= "مهلت استفاده از کد: تا پنجشنبه ساعت 11 شب";
-                        $message .= "\n";
-                        $message .= "به امید اینکه با کمک دیگر همایش های آلاء در کنکور بدرخشید و برنده iphonex در قرعه کشی عید فطر آلاء باشید.";
-                        $user->notify(new GeneralNotice($message));
-                        echo "<span style='color:green'>";
-                        echo "user ".$user->id." notfied";
-                        echo "</span>";
-                        echo "<br>";
-
-                        $proccessed++;
-
-                    } else {
-                        $failedCounter++;
-                    }
-                }
-
-                dump("processed: ".$proccessed);
-                dump("failed: ".$failedCounter);
-                dd("coupons done");
             }
 
             if ($request->has("tagfix")) {
@@ -329,30 +219,6 @@ class BotsController extends Controller
 
             }
 
-            if($request->has('fakedonates')){
-                $orders = Order::where('paymentstatus_id' , config('constants.PAYMENT_STATUS_INDEBTED'))
-                                ->where('orderstatus_id' , config('constants.ORDER_STATUS_CLOSED'))
-                                ->where('costWithoutcoupon' , 0)
-                                ->whereHas('orderproducts' , function ($q){
-                                    $q->where('product_id' , Product::CUSTOM_DONATE_PRODUCT);
-                                })
-                                ->get();
-
-                dump('Found total '.$orders->count().' fake donate orders');
-                $counter = 0;
-                foreach ($orders as $order) {
-                    if($order->totalPaidCost() == 0)
-                    {
-                        $counter++;
-                        $orderLink = action('Web\OrderController@edit' , $order);
-                        echo $counter.' - ';
-                        echo('<a target="_blank" href="'.$orderLink.'">'.$order->id.'</a>');
-                        echo('<br>');
-                    }
-                }
-                dd('Done!');
-            }
-
             if($request->has('checkorderproducts')){
                 $mode = 'paid_more';
                 if($request->has('notpaid')){
@@ -419,110 +285,6 @@ class BotsController extends Controller
                 dd('Done!');
             }
 
-            if($request->has('checkmellat')){
-                $transactionId = $request->get('id');
-                if(!isset($transactionId)) {
-                    dd('Please provide transaction id');
-                }
-
-                $transaction = Transaction::find($transactionId);
-                if(!isset($transaction)){
-                    dd('Transaction not found');
-                }
-
-                $client = new \SoapClient('https://bpm.shaparak.ir/pgwchannel/services/pgw?wsdl');
-
-                $parameters = [
-                    'terminalId'      => config('behpardakht.terminalId'),
-                    'userName'        => config('behpardakht.username'),
-                    'userPassword'    => config('behpardakht.password'),
-                    'orderId'         => $transaction->order_id,
-                    'saleOrderId'     => $transaction->order_id,
-                    'saleReferenceId' => $transaction->transactionID,
-                ];
-
-
-                try {
-                    dd($client->bpInquiryRequest($parameters));
-                } catch (\SoapFault $e) {
-                    throw $e;
-                }
-            }
-
-            if($request->has('refundwallet')){
-                $walletTransactions = Transaction::where('paymentmethod_id' , config('constants.PAYMENT_METHOD_WALLET'))
-                                                    ->where('transactionstatus_id' , config('constants.TRANSACTION_STATUS_SUSPENDED'))
-                                                    ->get();
-
-                dump('total transactions: '.$walletTransactions->count() );
-                dump('total transactions cost: '.number_format($walletTransactions->sum('cost')));
-                /** @var Transaction $walletTransaction */
-                $totalRefund = 0;
-
-                $depositFlag = false;
-                if($request->has('dorefund')){
-                    $depositFlag = true;
-                }
-
-
-                foreach ($walletTransactions as $walletTransaction) {
-                    /** @var Order $order */
-                    $order = $walletTransaction->order;
-                    /** @var \App\Wallet $wallet */
-                    $wallet = $walletTransaction->wallet;
-                    if(!isset($order)) {
-                        echo('Transaction does not have order: '.$walletTransaction->id);
-                        echo('</br>');
-                        continue;
-                    }
-
-                    if(!isset($wallet)) {
-                        echo('Transaction does not have wallet: '.$walletTransaction->id);
-                        echo('</br>');
-                        continue;
-                    }
-
-                    if($walletTransaction->cost < 0){
-                        echo('Transaction cost is minus: '.$walletTransaction->id);
-                        echo('</br>');
-                        continue;
-                    }
-
-                    if($walletTransaction->cost == 0){
-                        echo('Transaction cost is zero: '.$walletTransaction->id);
-                        echo('</br>');
-                        continue;
-                    }
-
-                    if($order->paymentstatus_id == config('constants.PAYMENT_STATUS_PAID')){
-                        echo('Order status is paid: '.$walletTransaction->id);
-                        echo('</br>');
-                        continue;
-                    }
-
-                    if($order->orderstatus_id != config('constants.ORDER_STATUS_CLOSED') && $order->orderstatus_id != config('constants.ORDER_STATUS_CANCELED')){
-                        echo('Order status is not closed: '.$order->orderstatus_id.' '.$walletTransaction->id);
-                        echo('</br>');
-                        continue;
-                    }
-
-
-                    if($depositFlag){
-                        $result = $walletTransaction->depositThisWalletTransaction();
-                        if($result['result'])
-                        {
-                            $totalRefund += $walletTransaction->cost;
-                            $walletTransaction->delete();
-                        }else{
-                            echo('Could not update wallet '.$wallet->id.' : '.$walletTransaction->id);
-                            echo('</br>');
-                        }
-                    }
-                }
-
-                dd('total refunded : '.number_format($totalRefund));
-            }
-
             if($request->has('walletquery')){
                 $query = User::whereHas('transactions' , function ($q) {
                     $q->where('paymentmethod_id', config('constants.PAYMENT_METHOD_WALLET'))
@@ -552,39 +314,6 @@ class BotsController extends Controller
                         ->toArray();
 
                     dd($orderproducts);
-            }
-
-            if($request->has('query')){
-                $orders = Order::where('orderstatus_id' , config('constants.ORDER_STATUS_CLOSED'))
-                                ->where('paymentstatus_id' , config('constants.PAYMENT_STATUS_INDEBTED'))
-                                ->whereDoesntHave('transactions' , function ($q){
-                                    $q->where('transactionstatus_id' , config('constants.TRANSACTION_STATUS_SUCCESSFUL'));
-                                });
-
-                dd($orders->toSql());
-            }
-
-            if($request->has('product') && $request->has('contents'))
-            {
-                $product = Product::find($request->get('product'));
-                $contents = Content::whereIn('id' , $request->get('contents'))->get();
-                $tags = [];
-                foreach ($contents as $content) {
-                    array_push($tags , 'c-'.$content->id);
-                }
-
-                $params = [
-                    "tags" => json_encode($tags, JSON_UNESCAPED_UNICODE),
-                ];
-
-                if (isset($product->created_at) && strlen($product->created_at) > 0) {
-                    $params["score"] = Carbon::createFromFormat("Y-m-d H:i:s", $product->created_at)->timestamp;
-                }
-
-                $response = $this->sendRequest(config("constants.TAG_API_URL")."id/relatedproduct/".$product->id, "PUT", $params);
-
-                dd('done');
-
             }
         } catch (\Exception    $e) {
             $message = "unexpected error";
@@ -1281,26 +1010,6 @@ class BotsController extends Controller
         echo "<br>";
         dd("Done!");
         //        $rows = Excel::load('storage\\exports\\'. $fileName)->get();
-    }
-
-    public function checkDisableContentTagBot()
-    {
-        $disableContents = Content::where("enable", 0)
-            ->get();
-        $counter         = 0;
-        foreach ($disableContents as $content) {
-            $tags = $content->retrievingTags();
-            if (!empty($tags)) {
-                $author = "";
-                if (isset($content->author_id)) {
-                    $author = $content->user->lastName;
-                }
-                dump($content->id." has tags! type: ".$content->contenttype_id." author: ".$author);
-                $counter++;
-            }
-        }
-        dump("count: ".$counter);
-        dd("finish");
     }
 
     public function tagBot()
@@ -2237,7 +1946,9 @@ class BotsController extends Controller
 
         $zarinpal = new Zarinpal(config('Zarinpal.merchantID'));
         $result = $zarinpal->verify($cost, $authority);
-        dd($result);
+        return response()->json([
+            'result'  => $result
+        ]);
     }
 
     public function fixthumbnail(Request $request){
@@ -2272,6 +1983,40 @@ class BotsController extends Controller
             $content->update();
         }
 
-        dd('Done');
+        return response()->json([
+            'message'  => 'thumbnails fixed successfully'
+        ]);
+    }
+
+    public function introContentTags(Request $request){
+        $product = Product::find($request->get('product'));
+        $contents = Content::whereIn('id' , $request->get('contents'))->get();
+        if(!isset($product) || $contents->isEmpty()){
+            return response()->json([
+                'error'=>[
+                    'code'  => Response::HTTP_BAD_REQUEST,
+                    'message'   => 'please set product and contents argument'
+                ]
+            ]);
+        }
+
+        $tags = [];
+        foreach ($contents as $content) {
+            array_push($tags , 'c-'.$content->id);
+        }
+
+        $params = [
+            "tags" => json_encode($tags, JSON_UNESCAPED_UNICODE),
+        ];
+
+        if (isset($product->created_at) && strlen($product->created_at) > 0) {
+            $params["score"] = Carbon::createFromFormat("Y-m-d H:i:s", $product->created_at)->timestamp;
+        }
+
+        $response = $this->sendRequest(config("constants.TAG_API_URL")."id/relatedproduct/".$product->id, "PUT", $params);
+
+        return response()->json([
+           'result'=> $response
+        ]);
     }
 }
