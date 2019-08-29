@@ -1987,7 +1987,7 @@ class BotsController extends Controller
 
     public function introContentTags(Request $request){
         $product = Product::find($request->get('product'));
-        $contents = Content::whereIn('id' , $request->get('contents'))->get();
+        $contents = Content::whereIn('id' , convertTagStringToArray($request->get('contents' , [])))->get();
         if(!isset($product) || $contents->isEmpty()){
             return response()->json([
                 'error'=>[

@@ -172,7 +172,7 @@
         <div class = "m-portlet__body">
             {!! Form::open(['method'=>'POST' , 'url'=>route('web.bot.introContentTags') , 'target'=>'_blank']) !!}
                 <input type="text" name="product" value="" placeholder="شماره محصول" dir="ltr">
-                <input type="text" name="contents" value="" placeholder="شماره کانتنتها جدا شده با کانا" dir="ltr">
+                <input type="text" name="contents" value="" placeholder="شماره کانتنتها جدا شده با کاما" dir="ltr">
                 <button type="submit" class = "btn btn-info">درست کن</button>
             {!! Form::close() !!}
         </div>
