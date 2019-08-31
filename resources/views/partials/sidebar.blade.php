@@ -11,7 +11,7 @@
                 <i class="m-menu__section-icon flaticon-more-v2"></i>
             </li>
             <li class="m-menu__item  @if(isset($pageName) && strcmp($pageName , "dashboard")==0) m-menu__item--active @endif" aria-haspopup="true">
-                <a href="{{ action("Web\IndexPageController") }}" class="m-menu__link ">
+                <a href="{{ route('web.index') }}" class="m-menu__link ">
                     <span class="m-menu__item-here"></span>
                     <i class="m-menu__link-icon fa fa-home"></i>
                     <span class="m-menu__link-text">صفحه اصلی</span>

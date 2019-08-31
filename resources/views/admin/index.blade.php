@@ -18,7 +18,7 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item">
                 <i class="fa fa-home m--padding-right-5"></i>
-                <a class="m-link" href="{{action("Web\IndexPageController")}}">@lang('page.Home')</a>
+                <a class="m-link" href="{{route('web.index')}}">@lang('page.Home')</a>
             </li>
             <li class="breadcrumb-item active" aria-current="page">
                 <a class="m-link" href="#">پنل مدیریت کاربران</a>
@@ -87,7 +87,7 @@
                 </div>
                 <div class="m-portlet__body">
                     <input type="hidden" id="contactUrl" value="/contact?user=">
-    
+
                     <div class="m-portlet m-portlet--skin-dark m-portlet--bordered-semi m--bg-brand">
                         <div class="m-portlet__head">
                             <div class="m-portlet__head-caption">
@@ -166,7 +166,7 @@
                     <table class="table table-striped table-bordered table-hover dt-responsive" width="100%" id="user_table">
                         {{--sms panel modal--}}
                         @permission((config('constants.SEND_SMS_TO_USER_ACCESS')))
-        
+
                         <!--begin::Modal-->
                         <div class="modal fade" id="smsModal" tabindex="-1" role="dialog" aria-labelledby="smsModalLabel" aria-hidden="true">
                             <div class="modal-dialog modal-lg" role="document">
@@ -215,7 +215,7 @@
                         <!--end::Modal-->@endpermission
                         {{--delete user confirmation modal--}}
                         @permission((config('constants.REMOVE_USER_ACCESS')))
-        
+
                         <!--begin::Modal-->
                         <div class="modal fade" id="deleteUserConfirmationModal" tabindex="-1" role="dialog" aria-labelledby="deleteUserConfirmationModalLabel" aria-hidden="true">
                             <div class="modal-dialog modal-lg" role="document">
@@ -310,7 +310,7 @@
                         {{--Loading by ajax--}}
                         </tbody>
                     </table>
-                    
+
                 </div>
             </div>
             <!-- END SAMPLE TABLE PORTLET-->
@@ -397,7 +397,7 @@
                                                 </div>
                                             </div>
                                             <!--end::Modal-->
-                                            
+
                                             @endpermission
                                         </div>
                                     </div>
@@ -473,7 +473,7 @@
                     <div class="table-toolbar">
                         <div class="row">
                             <div class="col-md-6">
-                
+
                                 @role((config("constants.ROLE_ADMIN")))
                                 <a class="btn m-btn--air btn-info" data-toggle="modal" href="#responsive-role" data-target="#responsive-role">
                                     <i class="fa fa-plus"></i>
@@ -504,7 +504,7 @@
                                     </div>
                                 </div>
                                 <!--end::Modal-->@endrole
-            
+
                             </div>
                         </div>
                     </div>
@@ -538,8 +538,8 @@
 @endsection
 
 @section('page-js')
-    
-    
+
+
     <script src="{{ mix('/js/admin-all.js') }}" type="text/javascript"></script>
     <script src="{{ asset('/acm/AlaatvCustomFiles/js/admin/page-usersAdmin.js') }}" type="text/javascript"></script>
 

@@ -11,12 +11,12 @@
             <div class="m-stack__item m-brand  m-brand--skin-dark ">
                 <div class="m-stack m-stack--ver m-stack--general">
                     <div class="m-stack__item m-stack__item--middle m-brand__logo">
-                        <a href="{{action("Web\IndexPageController")}}" class="m-brand__logo-wrapper">
+                        <a href="{{route('web.index')}}" class="m-brand__logo-wrapper">
                             <img alt="لوگوی سایت آلاء" src="{{$wLogoUrl}}"  width="135" height="22"/>
                         </a>
                     </div>
                     <div class="m-stack__item m-stack__item--middle m-brand__tools">
-                        
+
                         <!-- BEGIN: Responsive Aside Left Menu Toggler -->
                         <a href="{{ route('live') }}" class="m-brand__toggler--left m--visible-tablet-and-mobile-inline-block liveIconOnMobile" title="پخش زنده">
                             <img class="a--full-width lazy-image
@@ -37,7 +37,7 @@
                             >
                         </a>
                         <!-- END -->
-                        
+
                         <!-- BEGIN: Responsive Aside Left Menu Toggler -->
                         <a href="javascript:" id="m_aside_left_offcanvas_toggle" class="m-brand__icon m-brand__toggler m-brand__toggler--left m--visible-tablet-and-mobile-inline-block">
                             <span></span>
@@ -214,7 +214,7 @@
                                         </a>
                                     </li>
                                     <li class="m-menu__item " m-menu-link-redirect="1" aria-haspopup="true">
-                                        <a href="{{ route('shop') }}" class="m-menu__link ">
+                                        <a href="{{ route('web.shop') }}" class="m-menu__link ">
                                             {{--                                            <i class="m-menu__link-icon majorIcon"><img src="{{ asset('/acm/extra/ensani.gif') }}" alt="riazi" > </i>--}}
                                             <span class="m-menu__link-title">
                                                 <span class="m-menu__link-wrap">
@@ -379,7 +379,7 @@
                 <div id="m_header_topbar" class="m-topbar  m-stack m-stack--ver m-stack--general">
                     <div class="m-stack__item m-topbar__nav-wrapper">
                         <ul class="m-topbar__nav m-nav m-nav--inline">
-    
+
                             <li class="m-nav__item m--hidden-tablet-and-mobile">
                                 <a href="{{ route('live') }}" class="m-nav__link" title="پخش زنده">
                                     <span class="m-nav__link-icon">
@@ -404,7 +404,7 @@
                                     </span>
                                 </a>
                             </li>
-                            
+
                             <li class="m-nav__item m-dropdown m-dropdown--large m-dropdown--arrow m-dropdown--align-right m-dropdown--mobile-full-width m-dropdown--skin-light	m-list-search m-list-search--skin-light" m-dropdown-toggle="click" id="m_quicksearch" m-quicksearch-mode="dropdown" m-dropdown-persistent="1">
 
                                 <a href="#" class="m-nav__link m-dropdown__toggle">
@@ -532,7 +532,7 @@
                                         </div>
                                     </div>
                                 </li>
-                                
+
                             @else
                                 <li class="a--login-item m-nav__item m-topbar__quick-actions m-topbar__quick-actions--img">
                                     <a href="{{ route("login") }}" class="m-nav__link">
@@ -543,9 +543,9 @@
                                     </a>
                                 </li>
                             @endif
-    
-    
-                            
+
+
+
                             {{--<li class="m-nav__item m-topbar__user-profile m-topbar__user-profile--img m-dropdown m-dropdown--medium m-dropdown--arrow m-dropdown--header-bg-fill m-dropdown--align-right m-dropdown--mobile-full-width m-dropdown--skin-light"--}}
                             {{--m-dropdown-toggle="click" aria-expanded="true">--}}
                             {{--<a href="#" class="m-nav__link m-dropdown__toggle">--}}
@@ -637,8 +637,8 @@
                                     <span class="m-nav__link-icon"><i class="flaticon-grid-menu"></i></span>
                                 </a>
                             </li>
-                            
-                            
+
+
                         </ul>
                     </div>
                 </div>

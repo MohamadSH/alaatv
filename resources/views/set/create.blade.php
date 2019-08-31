@@ -18,7 +18,7 @@
             max-width: 100%;
             min-width: 100%;
         }
-        
+
         .multiselect-native-select, .mt-multiselect {
             width: 100%;
         }
@@ -30,7 +30,7 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item">
                 <i class="fa fa-home m--padding-right-5"></i>
-                <a class="m-link" href="{{action("Web\IndexPageController")}}">@lang('page.Home')</a>
+                <a class="m-link" href="{{route('web.index')}}">@lang('page.Home')</a>
             </li>
             <li class="breadcrumb-item" aria-current="page">
                 <a class="m-link" href="{{action("Web\AdminController@adminProduct")}}">پنل مدیریتی محصولات</a>
@@ -44,7 +44,7 @@
 
 @section('content')
     @include('systemMessage.flash')
-    
+
     @include('set.form', ['editForm' => false])
 
 @endsection
