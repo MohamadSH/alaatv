@@ -19,15 +19,15 @@ class GetPaymentRedirectEncryptedLink extends Controller
      */
     public function __invoke(Request $request)
     {
-        $paymentMethod = $request->get('paymentMethod', 'mellat');
+        $paymentMethod = $request->get('paymentMethod', 'zarinpal');
         $device        = $request->get('device', 'android');
         $orderId       = $request->get('order_id');
         $user          = $request->user();
-        
+
         $encryptedPostfix = $this->getEncryptedPostfix($user , $orderId);
-        
+
         $redirectTo = $this->getEncryptedUrl($paymentMethod, $device, $encryptedPostfix);
-        
+
         return response()->json([
             'url' => $redirectTo,
         ]);

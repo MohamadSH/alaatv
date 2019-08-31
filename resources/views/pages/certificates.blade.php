@@ -9,7 +9,7 @@
         <ol class = "breadcrumb">
             <li class = "breadcrumb-item">
                 <i class = "fa fa-home"></i>
-                <a href = "{{action("Web\IndexPageController")}}">@lang('page.Home')</a>
+                <a href = "{{route('web.index')}}">@lang('page.Home')</a>
             </li>
             <li class = "breadcrumb-item active" aria-current = "page">
                 مجوزها

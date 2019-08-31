@@ -29,7 +29,7 @@
             </svg>
         </div>
         <div class="message">
-            
+
             <div class = "col-md-12 page-403">
                 <div class = "number m--font-danger">403</div>
                 <div class = "details">
@@ -37,11 +37,11 @@
                     <p>
                         دسترسی شما به این بخش ممکن نمی باشد
                         <br/>
-                        <a href = "{{action("Web\IndexPageController")}}"> @lang('page.Home') </a>
+                        <a href = "{{route('web.index')}}"> @lang('page.Home') </a>
                     </p>
                 </div>
             </div>
-        
+
         </div>
     </div>
 @endsection

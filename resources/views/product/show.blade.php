@@ -16,7 +16,7 @@
             display: none !important;
         }
         @endif
-        
+
         @if(
             mb_strlen(trim(strip_tags($product->shortDescription))) === 0 &&
             mb_strlen(trim(strip_tags($product->longDescription))) === 0
@@ -38,7 +38,7 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item">
                 <i class="fa fa-home m--padding-right-5"></i>
-                <a class="m-link" href="{{action("Web\IndexPageController")}}">@lang('page.Home')</a>
+                <a class="m-link" href="{{route('web.index')}}">@lang('page.Home')</a>
             </li>
             <li class="breadcrumb-item">
                 <i class="fa fa-chalkboard-teacher"></i>
@@ -52,13 +52,13 @@
 @endsection
 
 @section('content')
-    
+
     <div class="row">
         <div class="col">
             @include('systemMessage.flash')
         </div>
     </div>
-    
+
     <div class="row" id="a_top_section">
         <div class="col">
             <!--begin::Portlet-->
@@ -78,7 +78,7 @@
                                                     <i class="flaticon-interface-9"></i>
                                                 </div>
                                                 <div class="m-alert__text">
-                                                    <strong>تعداد بن {{ $product->bons->first()->pivot->bonPlus }}+</strong>
+                                                    <strong>{{ $product->bons->first()->pivot->bonPlus }}+ آلاء بن</strong>
                                                 </div>
                                             </div>
                                         @else
@@ -117,7 +117,7 @@
                                                     <div class="m-portlet__body m--padding-top-5 m--padding-bottom-5 m--padding-right-10 m--padding-left-10">
                                                         <!--begin::m-widget4-->
                                                         <div class="m-widget4">
-    
+
                                                             @if(optional(optional(optional($product->attributes)->get('information'))->where('control', 'simple'))->count())
                                                                 @foreach($product->attributes->get('information')->where('control', 'simple') as $key => $informationItem)
                                                                     @if(count($informationItem->data) > 1)
@@ -152,11 +152,11 @@
                                                                                 </span>
                                                                             </div>
                                                                         </div>
-            
+
                                                                     @endforeach
                                                                 @endforeach
                                                             @endif
-    
+
                                                             @if(optional($product->attributes)->get('main') != null && $product->attributes->get('main')->where('control', 'simple'))
                                                                 @foreach($product->attributes->get('main')->where('control', 'simple') as $key => $informationItem)
                                                                     @if(count($informationItem->data) > 1)
@@ -223,7 +223,7 @@
                                                     <div class="m-portlet__body m--padding-5">
                                                         <!--begin::m-widget4-->
                                                         <div class="m-widget4">
-                                                            
+
                                                             @foreach($product->attributes->get('information')->where('control', 'checkBox') as $key => $informationItem)
                                                                 @if(count($informationItem->data) > 1)
                                                                     <div class="m-widget4__item  m--padding-top-5 m--padding-bottom-5 m--padding-right-10 m--padding-left-10 a--full-width m--font-boldest">
@@ -302,7 +302,7 @@
                                                 </div>
                                             </div>
                                             <div class="m-portlet__body">
-                                                
+
                                                 <ul class="m-nav m-nav--active-bg" id="m_nav" role="tablist">
                                                     @if(isset($product->children) && !empty($product->children))
                                                         @foreach($product->children as $p)
@@ -332,7 +332,7 @@
                                                 </div>
                                             </div>
                                             <div class="m-portlet__body">
-    
+
                                                 @if(optional(optional(optional($product->attributes)->get('main'))->where('type', 'main'))->count()>0)
 
                                                     @if($product->attributes->get('main')->where('type', 'main')->where('control', 'dropDown')->count()>0)
@@ -372,8 +372,8 @@
 
                                     {{--دکمه افزودن به سبد خرید--}}
                                     @if($product->enable)
-        
-        
+
+
                                         @if($allChildIsPurchased)
                                             <div class="alert alert-info" role="alert">
                                                 <strong>شما این محصول را خریده اید</strong>
@@ -385,14 +385,14 @@
                                                         {{ $product->priceText['basePriceText'] }}
                                                     @else
                                                         قیمت محصول: <strike>{{ $product->priceText['basePriceText'] }} </strike><br>
-                                                        قیمت برای مشتری:  {{ $product->priceText['finalPriceText'] }}
+                                                        قیمت با تخفیف:  {{ $product->priceText['finalPriceText'] }}
                                                     @endif
                                                 </span>
                                                 <span id="a_product-discount"></span>
                                             </h5>
                                         @endif
-                                    
-                                    
+
+
                                         @if($allChildIsPurchased)
                                             <a class="btn m-btn m-btn--pill m-btn--air m-btn--gradient-from-focus m-btn--gradient-to-danger  animated infinite pulse" role="button" href="{{ action("Web\UserController@userProductFiles") }}">
                                                 <i class="fa fa-play-circle"></i>
@@ -417,7 +417,7 @@
                                     @endif
 
                                 </div>
-    
+
                                 @if( isset($product->introVideo) || (isset($product->gift) && $product->gift->isNotEmpty()))
                                 <div class="col-lg-4">
 
@@ -425,12 +425,12 @@
                                         <div class="m-portlet__body">
                                             <div class="m-widget19 a--nuevo-alaa-theme a--media-parent">
                                                 <div class="m-widget19__pic m-portlet-fit--top m-portlet-fit--sides a--video-wraper">
-                                                    
+
                                                     @if( $product->introVideo )
                                                         <input type="hidden" name="introVideo"
                                                                value="{{ $product->introVideo }}">
                                                     @endif
-                                                    
+
                                                     <video
                                                             id="videoPlayer"
                                                             class="
@@ -446,7 +446,7 @@
                                                             @else
                                                             poster = "https://cdn.alaatv.com/media/204/240p/204054ssnv.jpg"
                                                             @endif >
-    
+
                                                         {{--                                                        <source--}}
                                                         {{--                                                                src="{{$product->introVideo}}"--}}
                                                         {{--                                                                id="videoPlayerSource"--}}
@@ -553,21 +553,21 @@
 {{--                ])--}}
 {{--        @endforeach--}}
 {{--    @endif--}}
-    
-    
+
+
         {{--نمونه جزوه--}}
     @include('product.partials.pamphlet')
-    
+
     @if(isset($product->specialDescription) && mb_strlen(trim(strip_tags($product->specialDescription))) > 0)
-    
+
         <div class="m-portlet m-portlet--tabs m--margin-bottom-10 m--margin-top-10">
             <div class="m-portlet__body">
                 {!! $product->specialDescription !!}
             </div>
         </div>
-        
+
     @endif
-    
+
     @if(mb_strlen(trim(strip_tags($product->shortDescription))) > 0 || mb_strlen(trim(strip_tags($product->longDescription))) > 0)
         <div class="row m--margin-top-10">
             <div class="col m--margin-bottom-25">
@@ -584,8 +584,8 @@
                             <ul class="m-portlet__nav">
                                 <li class="m-portlet__nav-item">
                                     <p class="m-portlet__nav-link m-portlet__nav-link--icon">
-    
-    
+
+
                                         @if($allChildIsPurchased)
                                             <a class="btn m-btn m-btn--pill m-btn--air m-btn--gradient-from-focus m-btn--gradient-to-danger  animated infinite pulse" role="button" href="{{ action("Web\UserController@userProductFiles") }}">
                                                 <i class="fa fa-play-circle"></i>
@@ -602,8 +602,8 @@
 {{--                                                </span>--}}
 {{--                                            </button>--}}
                                         @endif
-                                        
-                                        
+
+
                                     </p>
                                 </li>
                             </ul>
@@ -634,7 +634,7 @@
         'blockCustomClass'=>'a--owl-carousel-type-2 productShowBlock relatedProduct',
         'blockCustomId'=>'Block-relatedProduct'
         ])
-    
+
 @endsection
 
 @section('page-js')
@@ -656,6 +656,6 @@
         @else
         '-';
         @endif
-        
+
     </script>
 @endsection

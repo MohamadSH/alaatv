@@ -5,7 +5,7 @@
         <ol class = "breadcrumb">
             <li class = "breadcrumb-item">
                 <i class = "fa fa-home"></i>
-                <a href = "{{action("Web\IndexPageController")}}">@lang('page.Home')</a>
+                <a href = "{{route('web.index')}}">@lang('page.Home')</a>
             </li>
             <li class = "breadcrumb-item active" aria-current = "page">
                 قوانین و مقررارت
@@ -29,7 +29,7 @@
                     </div>
                 </div>
                 <div class = "m-portlet__body">
-    
+
                     <div class="m--margin-bottom-10">
                         <span class="m-badge m-badge--light m-badge--bordered m-badge-bordered--info">1</span>
                         توجه داشته باشید ثبت سفارش در هر زمان به معنی پذیرفتن کامل کلیه شرایط و قوانین آلاء از سوی کاربر
@@ -67,9 +67,9 @@
                         <span class="m-badge m-badge--light m-badge--bordered m-badge-bordered--info">8</span>
                         استفاده گروهی و یا انتشار محصولات آلاء شرعا حرام و از نظر اخلاقی غیر مجاز می باشد.
                     </div>
-                    
-                    
-                    
+
+
+
                 </div>
             </div>
             <!--End::Portlet-->

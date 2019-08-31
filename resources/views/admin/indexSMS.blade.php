@@ -16,7 +16,7 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item">
                 <i class="fa fa-home m--padding-right-5"></i>
-                <a class="m-link" href="{{action("Web\IndexPageController")}}">@lang('page.Home')</a>
+                <a class="m-link" href="{{route('web.index')}}">@lang('page.Home')</a>
             </li>
             <li class="breadcrumb-item active" aria-current="page">
                 <a class="m-link" href="#">پنل ارسال پیامک</a>
@@ -27,7 +27,7 @@
 
 @section('content')
     <div class="row">
-        
+
         {{--<!-- /.modal -->--}}
         <div class="col-md-12">
             <div class="alert alert-info" role="alert">
@@ -129,7 +129,7 @@
                             </div>
                         </div>
                     </div>
-    
+
                     <!--begin::Modal-->
                     <div class="modal fade" id="smsConformation" tabindex="-1" role="dialog" aria-labelledby="addBonModalLabel" aria-hidden="true">
                         <div class="modal-dialog modal-lg" role="document">
@@ -173,7 +173,7 @@
                         </div>
                     </div>
                     <!--end::Modal-->
-                    
+
                     <div class="clear-fix" style="height: 50px"></div>
                     <div class="portlet box blue">
                         {{--<div class="portlet-title">--}}
@@ -189,7 +189,7 @@
                             {!! Form::open(['action' => 'Web\UserController@index' , 'class'=>'form-horizontal form-row-seperated' , 'id' => 'filterUserForm']) !!}
                             <div class="form-body" style="background: #e7ecf1">
                                 @include("admin.filters.userFilterPack")
-    
+
                                 <div class="form-group">
                                     <div class="row">
                                         <label class="col-lg-2 col-md-2 bold control-label">تاریخ ایجاد سبد خرید :</label>
@@ -215,7 +215,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                
+
                                 <div class="form-group">
                                     <div class="ccl-mg-12 col-md-12">
                                         <button type="button" id="filterButton" class="btn btn-lg bg-font-dark" style="background: #489fff">فیلتر
@@ -258,7 +258,7 @@
 
 @section('page-js')
     <script src="{{ mix('/js/admin-all.js') }}" type="text/javascript"></script>
-    
+
 {{--    <script src="/acm/AlaatvCustomFiles/components/alaa_old/scripts/datatable.min.js" type="text/javascript"></script>--}}
 {{--    <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/datatables/datatables.min.js" type="text/javascript"></script>--}}
 {{--    <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js" type="text/javascript"></script>--}}
@@ -271,10 +271,10 @@
 {{--    --}}
 {{--    <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/jQueryNumberFormat/jquery.number.min.js" type="text/javascript"></script>--}}
 {{--    <script src="/acm/AlaatvCustomFiles/js/admin-makeMultiSelect.js" type="text/javascript"></script>--}}
-    
+
     <script src="/acm/AlaatvCustomFiles/js/admin-indexSMS.js" type="text/javascript"></script>
-    
-    
+
+
 @endsection
 
 @endpermission

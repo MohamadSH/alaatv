@@ -9,7 +9,7 @@
         <ol class = "breadcrumb">
             <li class = "breadcrumb-item">
                 <i class = "fa fa-home m--padding-right-5"></i>
-                <a class = "m-link" href = "{{action("Web\IndexPageController")}}">@lang('page.Home')</a>
+                <a class = "m-link" href = "{{route('web.index')}}">@lang('page.Home')</a>
             </li>
             <li class = "breadcrumb-item" aria-current = "page">
                 <a class = "m-link" href = "#">پیکربندی سایت</a>
@@ -49,7 +49,7 @@
                     <div class = "m-portlet__head-tools">
                         <ul class = "m-portlet__nav">
                             <li class = "m-portlet__nav-item">
-                                <a href = "{{action("Web\IndexPageController")}}" class = "m-portlet__nav-link m-portlet__nav-link--icon">
+                                <a href = "{{route('web.index')}}" class = "m-portlet__nav-link m-portlet__nav-link--icon">
                                     <i class = "fa fa-home"></i>
                                     رفتن به صفحه ی اصلی
                                 </a>
@@ -101,8 +101,8 @@
                     </div>
                 </div>
                 <div class = "m-portlet__body">
-    
-    
+
+
                     {{--<div class = "form-group">
                         <div class = "row">
                             <label class = "col-md-3 control-label">صفحه اسلایدشو</label>
@@ -121,7 +121,7 @@
                             </div>
                         </div>
                     </div>--}}
-                    
+
                     <div class = "custom-alerts alert alert-success fade in display-hide" id = "successMessage">
                         <button type = "button" class = "close" data-dismiss = "alert" aria-hidden = "true"></button>
                         <i class = "fa fa-check-circle"></i>
