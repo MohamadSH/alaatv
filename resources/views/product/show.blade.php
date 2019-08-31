@@ -78,7 +78,7 @@
                                                     <i class="flaticon-interface-9"></i>
                                                 </div>
                                                 <div class="m-alert__text">
-                                                    <strong>تعداد بن {{ $product->bons->first()->pivot->bonPlus }}+</strong>
+                                                    <strong>{{ $product->bons->first()->pivot->bonPlus }}+ آلاء بن</strong>
                                                 </div>
                                             </div>
                                         @else
@@ -385,7 +385,7 @@
                                                         {{ $product->priceText['basePriceText'] }}
                                                     @else
                                                         قیمت محصول: <strike>{{ $product->priceText['basePriceText'] }} </strike><br>
-                                                        قیمت برای مشتری:  {{ $product->priceText['finalPriceText'] }}
+                                                        قیمت با تخفیف:  {{ $product->priceText['finalPriceText'] }}
                                                     @endif
                                                 </span>
                                                 <span id="a_product-discount"></span>
