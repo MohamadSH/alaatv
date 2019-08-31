@@ -9,7 +9,7 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item">
                 <i class="fa fa-home m--padding-right-5"></i>
-                <a class="m-link" href="{{action("Web\IndexPageController")}}">@lang('page.Home')</a>
+                <a class="m-link" href="{{route('web.index')}}">@lang('page.Home')</a>
             </li>
             <li class="breadcrumb-item active" aria-current="page">
                 <a class="m-link" href="#">پروفایل</a>
@@ -22,9 +22,9 @@
 @endsection
 
 @section('content')
-    
+
     @include('systemMessage.flash')
-    
+
     <div class="row">
         <div class="col">
 {{--            <h1>به دلیل کش سرورها، آمار ها حداکثر دارای 3.5 ساعت تاخیر هستند.</h1>--}}
@@ -34,7 +34,7 @@
                         <div class="m-portlet__body  m-portlet__body--no-padding">
                             <div class="row m-row--no-padding m-row--col-separator-xl">
                                 <div class="col-12 col-md-6">
-        
+
                                     <!--begin::New Orders-->
 {{--                                    <div class="m-widget24">--}}
 {{--                                        <div class="m-widget24__item">--}}
@@ -61,7 +61,7 @@
 {{--                                            </span>--}}
 {{--                                        </div>--}}
 {{--                                    </div>--}}
-        
+
                                     <!--end::New Orders-->
                                 </div>
                                 <div class="col-12 col-md-6">
@@ -91,7 +91,7 @@
 {{--                                            </span>--}}
 {{--                                        </div>--}}
 {{--                                    </div>--}}
-        
+
                                     <!--end::New Orders-->
                                 </div>
                                 <div class="col-12 col-md-6">
@@ -122,11 +122,11 @@
 {{--                                            </span>--}}
 {{--                                        </div>--}}
 {{--                                    </div>--}}
-        
+
                                     <!--end::New Users-->
                                 </div>
                                 <div class="col-12 col-md-6">
-                    
+
                                     <!--begin::Total Profit-->
                                     <div class="m-widget24">
                                         <div class="m-widget24__item">
@@ -142,7 +142,7 @@
                                                 {{$allTimeCount}}
                                             </span>
                                             <div class="m--space-10"></div>
-    
+
                                             <span class="m-widget24__desc">
                                                 <span class="m-badge m-badge--info m-badge--wide m-badge--rounded">
                                                     رتبه شما:
@@ -161,7 +161,7 @@
                                             </span>--}}
                                         </div>
                                     </div>
-                    
+
                                     <!--end::Total Profit-->
                                 </div>
                             </div>
@@ -179,7 +179,7 @@
                     <div id="mapContainer"></div>
                 </div>
             </div>
-            
+
             <!--begin::Portlet-->
             {{--<div class="m-portlet m-portlet--head-solid-bg m-portlet--accent m-portlet--collapsed m-portlet--head-sm" m-portlet="true" id="produc-portlet">
                 <div class="m-portlet__head">
@@ -220,8 +220,8 @@
                     </div>
                 </div>
                 <div class="m-portlet__body">
-    
-    
+
+
                     <div class="m-portlet m-portlet--creative m-portlet--bordered-semi profileMenuPage profileMenuPage-sabteRotbe">
                         <div class="m-portlet__head">
                             <div class="m-portlet__head-caption">
@@ -245,8 +245,8 @@
                             <div id="chartcontainer1"></div>
                         </div>
                     </div>
-    
-    
+
+
                     <div class="m-portlet m-portlet--creative m-portlet--bordered-semi profileMenuPage profileMenuPage-sabteRotbe">
                         <div class="m-portlet__head">
                             <div class="m-portlet__head-caption">
@@ -270,11 +270,11 @@
                             <div id="chartcontainer2"></div>
                         </div>
                     </div>
-                    
+
                 </div>
             </div>--}}
             <!--end::Portlet-->
-            
+
             <!--begin::Portlet-->
             {{--<div class="m-portlet m-portlet--head-solid-bg m-portlet--info m-portlet--collapsed m-portlet--head-sm" m-portlet="true" id="bone-portlet">
                 <div class="m-portlet__head">
@@ -315,9 +315,9 @@
                     </div>
                 </div>
                 <div class="m-portlet__body">
-    
-    
-    
+
+
+
                     <div class="m-portlet m-portlet--creative m-portlet--bordered-semi profileMenuPage profileMenuPage-sabteRotbe">
                         <div class="m-portlet__head">
                             <div class="m-portlet__head-caption">
@@ -341,12 +341,12 @@
                             <div id="chartcontainer3"></div>
                         </div>
                     </div>
-                    
-                    
+
+
                 </div>
             </div>--}}
             <!--end::Portlet-->
-    
+
             <!--begin::Portlet-->
             {{--<div class="m-portlet m-portlet--head-solid-bg m-portlet--primary m-portlet--collapsed m-portlet--head-sm" m-portlet="true" id="createbone-portlet">
                 <div class="m-portlet__head">
@@ -387,8 +387,8 @@
                     </div>
                 </div>
                 <div class="m-portlet__body">
-    
-    
+
+
                     {!! Form::hidden('discounttype_id',1) !!}
                     <div class="col-md-12">
                         <p class="caption-subject font-dark bold uppercase"> وارد کردن اطلاعات زیر الزامی می باشد:</p>
@@ -458,7 +458,7 @@
                 </div>
             </div>--}}
             <!--end::Portlet-->
-            
+
         </div>
     </div>
 @endsection

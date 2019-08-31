@@ -79,7 +79,7 @@ class HomeController extends Controller
 
     public function home()
     {
-        return redirect('/', 301);
+        return redirect('/', Response::HTTP_MOVED_PERMANENTLY);
     }
 
     /**

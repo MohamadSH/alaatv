@@ -14,7 +14,7 @@
             font-size: 14px;
             font-weight: bold;
         }
-        
+
         .multiselect-native-select, .mt-multiselect {
             width: 100%;
         }
@@ -26,7 +26,7 @@
             border: none;
             padding-top: 0;
         }
-    
+
     </style>
 @endsection
 
@@ -35,7 +35,7 @@
         <ol class = "breadcrumb">
             <li class = "breadcrumb-item">
                 <i class = "fa fa-home m--padding-right-5"></i>
-                <a class = "m-link" href = "{{action("Web\IndexPageController")}}">@lang('page.Home')</a>
+                <a class = "m-link" href = "{{route('web.index')}}">@lang('page.Home')</a>
             </li>
             <li class = "breadcrumb-item active" aria-current = "page">
                 <a class = "m-link" href = "#">پنل مدیریت سفاش ها</a>
@@ -47,7 +47,7 @@
 @section('content')
     <div class="row">
         <div class="col">
-            
+
             <div class="m-portlet m-portlet--creative m-portlet--bordered-semi profileMenuPage profileMenuPage-filmVaJozve">
                 <div class="m-portlet__head">
                     <div class="m-portlet__head-caption">
@@ -63,7 +63,7 @@
 
                 </div>
                 <div class="m-portlet__body">
-    
+
                     <div class="form-group">
                         <div class="row">
                             <div class="col">
@@ -92,7 +92,7 @@
                                         </option>
                                     @endforeach
                                 </select>
-            
+
                             </div>
                         </div>
                     </div>
@@ -147,21 +147,21 @@
                     </div>
 
                     <button type="button" class="btn m-btn--pill m-btn--air btn-info btnFilter">فیلتر</button>
-                    
+
                     <div class="reportOfFilter">
                         <span class="m-badge m-badge--info m-badge--wide m-badge--rounded report1">
-                        
+
                         </span>
                         <br>
                         <span class="report2">
-                        
+
                         </span>
                         <br>
                         <span class="report3">
 
                         </span>
                     </div>
-                    
+
                 </div>
             </div>
         </div>

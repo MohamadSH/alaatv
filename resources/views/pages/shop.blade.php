@@ -9,7 +9,7 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item">
                 <i class="fa fa-home"></i>
-                <a href="{{action("Web\IndexPageController")}}">@lang('page.Home')</a>
+                <a href="{{route('web.index')}}">@lang('page.Home')</a>
             </li>
             <li class="breadcrumb-item active" aria-current="page">
                 فروشگاه آلاء
@@ -21,7 +21,7 @@
 @section('content')
     @include('partials.slideShow1' ,['marginBottom'=>'25', 'positionOfSlideShow'=>'صفحه فروشگاه'])
     <div class="m--clearfix"></div>
-    
+
     <div class="row">
         <div class="col">
             <div class="m-portlet shopNavItemsWraper">
@@ -136,7 +136,7 @@
             </div>
         </div>
     </div>
-    
+
     @foreach($blocks as $block)
         @if($block->products->count() > 0)
             @include('block.partials.block', [
@@ -144,7 +144,7 @@
             ])
         @endif
     @endforeach
-    
+
     @include("partials.certificates")
 @endsection
 

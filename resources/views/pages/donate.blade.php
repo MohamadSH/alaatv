@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="Designer" content="Alaa">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    
+
     {!! SEO::generate(true) !!}
 
     <link rel="stylesheet" href="{{ asset('/acm/extra/donate/css/styles.min.css') }}">
@@ -29,12 +29,12 @@
 {{--        {!! Form::open(['method'=>'POST' , 'action'=>'Web\OrderController@donateOrder' , 'class'=>'donation-form']) !!}--}}
         <div class="donation-form">
             <p>با کمک های شما عزیزان مجموعه آلا به راحتی بر روی کیفیت خدمات کار می کند</p>
-    
+
             <div class="textfield">
                 <input type="text" placeholder="مبلغ مورد نظر شما" name="amount" id="amount">
                 <span class="suffix">تومان</span>
             </div><!-- .textfield -->
-    
+
             <button id="btnDonationNow">همین الان کمک می کنم</button>
         </div>
 {{--        {!! Form::close() !!}--}}
@@ -241,7 +241,7 @@
     {{--</div><!-- .provinces-charts -->--}}
 
     <footer class="site-footer">
-        <a class="copyright" href="{{action("Web\IndexPageController")}}">
+        <a class="copyright" href="{{route('web.index')}}">
             <img src="/acm/extra/donate/images/copyright.png" alt="Copyright">
         </a>
     </footer>

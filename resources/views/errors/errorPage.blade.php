@@ -37,7 +37,7 @@
                 {{--<h1 class="m--font-danger">خطا!</h1>--}}
                 <p class = "bold "> {!!    $message !!}
                     <br/>
-                    <a class = "btn green" href = "{{action("Web\IndexPageController")}}"> صفحه اصلی</a>
+                    <a class = "btn green" href = "{{route('web.index')}}"> صفحه اصلی</a>
                 {{--or try the search bar below. </p>--}}
                 {{--<form action="#">--}}
                 {{--<div class="input-group input-medium">--}}

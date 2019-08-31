@@ -29,7 +29,7 @@
             </svg>
         </div>
         <div class="message">
-        
+
             <div class = "col-md-12 page-404">
                 @if(!isset($message))<div class = "number m--font-danger"> 404</div>@endif
                 <div class = "details">
@@ -44,11 +44,11 @@
                             <h4> {{$message2}}</h4>
                         @endif
                         <br/>
-                        <a class="btn m-btn--air m-btn--pill btn-info" href = "{{action("Web\IndexPageController")}}"> @lang('page.Home') </a>
+                        <a class="btn m-btn--air m-btn--pill btn-info" href = "{{route('web.index')}}"> @lang('page.Home') </a>
                     </p>
                 </div>
             </div>
-            
+
         </div>
     </div>
 @endsection

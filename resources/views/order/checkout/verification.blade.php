@@ -9,7 +9,7 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item">
                 <i class="fa fa-home m--padding-right-5"></i>
-                <a class="m-link" href="{{action("Web\IndexPageController")}}">@lang('page.Home')</a>
+                <a class="m-link" href="{{route('web.index')}}">@lang('page.Home')</a>
             </li>
             <li class="breadcrumb-item">
                 <i class="flaticon-photo-camera m--padding-right-5"></i>
@@ -23,10 +23,10 @@
 @endsection
 
 @section('content')
-    
+
     <div class="m-portlet">
         <div class="m-portlet__body">
-            
+
             <div class="row">
                 <div class="shop.blacol-md-6">
                     <h1 class="m--font-primary">رسید پرداخت</h1>
@@ -44,9 +44,9 @@
                                                     کیف پول
                                                 @endif
                                             </span>
-            
+
                             <hr>
-            
+
                             @if($status === 'successful')
                                 @if(isset($result['RefID']))
                                     کد پیگیری
@@ -55,7 +55,7 @@
                                                         {{ $result['RefID'] }}
                                                     </span>
                                 @endif
-                
+
                                 @if(isset($result['cardPanMask']))
                                     <hr>
                                     شماره کارت
@@ -65,10 +65,10 @@
                                 @endif
                             @endif
                         @else
-        
+
                         @endif
                                     </span>
-    
+
                 </div>
                 <div class="col-md-6 text-center">
                     <a href="{{ asset('/') }}">
@@ -76,10 +76,10 @@
                     </a>
                 </div>
             </div>
-    
+
             <div class="row m--margin-top-20">
                 <div class="col">
-    
+
                     @if(isset($result['messages']))
                         <div class="alert
                                         @if($status==='successful')
@@ -96,7 +96,7 @@
                             @endforeach
                         </div>
                     @endif
-    
+
                     @if(isset($result['OrderSuccessPaymentResult']['saveOrder']) && $result['OrderSuccessPaymentResult']['saveOrder']!=1)
                         <div class="alert alert-danger alert-dismissible fade show" role="alert">
                             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
@@ -104,7 +104,7 @@
                             پرداخت شما با موفقیت انجام شده است، اما روند ثبت آن دچار مشکل شده است. لطفا با پشتیبانی سایت تماس بگیرید.
                         </div>
                     @endif
-    
+
                     @if(isset($result['OrderSuccessPaymentResult']['saveBon']) && $result['OrderSuccessPaymentResult']['saveBon']>0)
                         <div class="alert alert-success alert-dismissible fade show" role="alert">
                             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
@@ -115,7 +115,7 @@
 
                 </div>
             </div>
-            
+
         </div>
     </div>
 
