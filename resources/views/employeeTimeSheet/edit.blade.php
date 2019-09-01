@@ -1,5 +1,3 @@
-@permission((Config::get('constants.EDIT_EMPLOPYEE_WORK_SHEET')))
-
 @extends('app')
 
 @section('page-css')
@@ -103,4 +101,3 @@
 
     </script>
 @endsection
-@endpermission

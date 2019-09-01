@@ -28,10 +28,8 @@ class EmployeetimesheetController extends Controller
         /** setting permissions
          *
          */
-        $this->middleware('ability:'.config('constants.EMPLOYEE_ROLE').','.config('constants.LIST_EMPLOPYEE_WORK_SHEET'),
-            ['only' => 'index']);
-        $this->middleware('ability:'.config('constants.EMPLOYEE_ROLE').'|,'.config('constants.INSERT_EMPLOPYEE_WORK_SHEET').'|'.config('constants.LIST_EMPLOPYEE_WORK_SHEET'),
-            ['only' => ['create']]);
+        $this->middleware('ability:'.config('constants.EMPLOYEE_ROLE').','.config('constants.LIST_EMPLOPYEE_WORK_SHEET'), ['only' => 'index']);
+        $this->middleware('ability:'.config('constants.EMPLOYEE_ROLE').'|,'.config('constants.INSERT_EMPLOPYEE_WORK_SHEET').'|'.config('constants.LIST_EMPLOPYEE_WORK_SHEET'), ['only' => ['create']]);
         $this->middleware('permission:'.config('constants.INSERT_EMPLOPYEE_WORK_SHEET'), ['only' => 'store']);
         $this->middleware('permission:'.config('constants.REMOVE_EMPLOPYEE_WORK_SHEET'), ['only' => 'destroy']);
         $this->middleware('permission:'.config('constants.EDIT_EMPLOPYEE_WORK_SHEET'), [
@@ -49,20 +47,25 @@ class EmployeetimesheetController extends Controller
         ]);
     }
 
-    public function index()
+    public function index(Request $request)
     {
         /** @var Employeetimesheet $employeeTimeSheets */
         $employeeTimeSheets = Employeetimesheet::orderBy('date', 'Desc');
         if (Input::has('users')) {
             $usersId            = Input::get('users');
-            $employeeTimeSheets = $employeeTimeSheets->whereIn('user_id', $usersId);
+            $employeeTimeSheets->whereIn('user_id', $usersId);
+        }
+
+        if($request->user()->id == 8992)
+        {// Agha majid
+            $employeeTimeSheets->whereIn('user_id', [397580 , 285202]);
         }
 
         if (Input::has('dateEnable')) {
             if (Input::has('sinceDate') && Input::has('tillDate')) {
                 $sinceDate          = Input::get('sinceDate');
                 $tillDate           = Input::get('tillDate');
-                $employeeTimeSheets = $employeeTimeSheets->whereBetween('date', [
+                $employeeTimeSheets->whereBetween('date', [
                     explode('T', $sinceDate)[0],
                     explode('T', $tillDate)[0],
                 ]);
@@ -71,13 +74,13 @@ class EmployeetimesheetController extends Controller
 
         if (Input::has('workdayTypes')) {
             $workDayTypes       = Input::get('workdayTypes');
-            $employeeTimeSheets = $employeeTimeSheets->whereIn('workdaytype_id', $workDayTypes);
+            $employeeTimeSheets->whereIn('workdaytype_id', $workDayTypes);
         }
 
         if (Input::has('isPaid')) {
             $isPaid = Input::get('isPaid');
             if (isset($isPaid[0])) {
-                $employeeTimeSheets = $employeeTimeSheets->where('isPaid', $isPaid);
+                $employeeTimeSheets->where('isPaid', $isPaid);
             }
         }
 
@@ -209,6 +212,13 @@ class EmployeetimesheetController extends Controller
 
     public function edit(Request $request, Employeetimesheet $employeetimesheet)
     {
+        if($request->user()->id == 8992)
+        {// Agha majid
+            if(!in_array($employeetimesheet->user_id, [397580 , 285202])){
+                abort(403);
+            }
+        }
+
         $isExtra = false;
         if ($employeetimesheet->workdaytype_id == config('constants.WORKDAY_ID_EXTRA')) {
             $isExtra = true;
@@ -226,6 +236,13 @@ class EmployeetimesheetController extends Controller
 
     public function update(Request $request, Employeetimesheet $employeeTimeSheet)
     {
+        if($request->user()->id == 8992)
+        {// Agha majid
+            if(!in_array($employeeTimeSheet->user_id, [397580 , 285202])){
+                abort(403);
+            }
+        }
+
         $request->offsetSet('modifier_id', $request->get('modifier_id' , $request->user()->id));
         $employeeTimeSheet->fill($request->all());
 
