@@ -58,7 +58,7 @@ class EmployeetimesheetController extends Controller
 
         if($request->user()->id == 8992)
         {// Agha majid
-            $employeeTimeSheets->whereIn('user_id', [397580 , 285202]);
+            $employeeTimeSheets->whereIn('user_id', [397580 , 285202 , 8992]);
         }
 
         if (Input::has('dateEnable')) {
