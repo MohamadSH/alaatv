@@ -200,10 +200,14 @@
                             @permission((config('constants.EDIT_EMPLOPYEE_WORK_SHEET')))
                             <label>
                                 تاییدیه اضافه کاری:
-                                @if(isset($employeetimesheet) && $employeetimesheet->overtime_status_id==config('constants.EMPLOYEE_OVERTIME_STATUS_REJECTED'))
-                                    <span class = 'm--font-bold m--font-danger'>رد شده است</span>
-                                @else
+                                @if(Auth::user()->hasRole('admin'))
                                     {!! Form::select("overtime_status_id" , $employeeovertimestatus, null, ['class' => 'form-control a--full-width']) !!}
+                                @else
+                                    @if(isset($employeetimesheet) && $employeetimesheet->overtime_status_id==config('constants.EMPLOYEE_OVERTIME_STATUS_REJECTED'))
+                                        <span class = 'm--font-bold m--font-danger'>رد شده است</span>
+                                    @else
+                                        {!! Form::select("overtime_status_id" , $employeeovertimestatus, null, ['class' => 'form-control a--full-width']) !!}
+                                    @endif
                                 @endif
                             </label>
                             @endpermission
