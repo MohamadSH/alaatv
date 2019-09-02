@@ -603,7 +603,7 @@ class BotsController extends Controller
         $warningCounter = 0;
         $users          = collect();
 
-        if($request->has('15tir')){
+        if($request->has('jashnvare_tabestan')){
             $transactions = Transaction::whereHas("order", function ($q) {
                 $q->whereIn("orderstatus_id", [config("constants.ORDER_STATUS_CLOSED") , config('constants.ORDER_STATUS_POSTED')])
                     ->whereIn("paymentstatus_id", [config("constants.PAYMENT_STATUS_PAID") , config('constants.PAYMENT_STATUS_VERIFIED_INDEBTED')])
@@ -611,8 +611,8 @@ class BotsController extends Controller
                         $q2->whereNotIn('product_id' , [Product::CUSTOM_DONATE_PRODUCT , Product::DONATE_PRODUCT_5_HEZAR , Product::ASIATECH_PRODUCT]) ;
                     });
             })
-            ->where("created_at" , '>=', "2019-06-10 19:30:00") // 20 khordad 98 saat 12 shab tehran
-            ->where('created_at' , '<=', "2019-07-03 19:30:00") // 12 tir 98 saat 12 shab
+            ->where("created_at" , '>=', "2019-08-11 19:30:00") // 20 mordad 98 saat 12 shab tehran
+            ->where('created_at' , '<=', "2019-09-01 19:30:00") // 2 shahrivar 98 saat 12 shab
             ->where("transactionstatus_id", config("constants.TRANSACTION_STATUS_SUCCESSFUL"))
             ->where('paymentmethod_id' , '<>' , config('constants.PAYMENT_METHOD_WALLET'))
             ->where("cost", ">", 0)
@@ -642,9 +642,9 @@ class BotsController extends Controller
                     $warningCounter++;
                 }
             }
-        }elseif($request->has('riyazi')){
+        }
+        elseif($request->has('riyazi')){
             // riyazi [318]
-
             $riyaziComplete = User::whereHas('orderproducts' , function ($q){
                 $q->whereHas('order' , function ($q2){
                     $q2->whereIn("orderstatus_id", [config("constants.ORDER_STATUS_CLOSED") , config('constants.ORDER_STATUS_POSTED')])
@@ -730,7 +730,8 @@ class BotsController extends Controller
                     "point"       => 1,
                 ]);
             }
-        }elseif($request->has('tajrobi')){
+        }
+        elseif($request->has('tajrobi')){
             // tajrobi [328 ,322,316] zist[326]
             $tajrobiComplete = User::whereHas('orderproducts' , function ($q){
                 $q->where('product_id' , 298)

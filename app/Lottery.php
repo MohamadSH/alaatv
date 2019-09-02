@@ -47,34 +47,34 @@ class Lottery extends BaseModel
         'essentialPoints',
         'prizes',
     ];
-    
+
     public function users()
     {
         return $this->belongsToMany("\App\User")
             ->withPivot("rank", "prizes");
     }
-    
+
     public function prizes($rank)
     {
         $prizeName = "";
         $amount    = 0;
         $memorial  = "";
-        if ($this->id == 6) {
+        if ($this->id == 7) {
             if ($rank == 1) {//nafare aval
-                $prizeName = "یک دستگاه موبایل سامسونگ s9";
+                $prizeName = "یک دستگاه موبایل سامسونگ A50";
             }
             //            else
             //            {
             //                $memorial = "کد تخفیف ayft با 70 درصد تخفیف";
             //            }
-            
+
             //            elseif($rank > 13 && $rank <= 123 )
             //            {
             //                $amount = 60000 ;
             //                $prizeName = "مبلغ ".number_format($amount). " تومان اعتبار هدیه";
             //            }
         }
-        
+
         return [
             $prizeName,
             $amount,
