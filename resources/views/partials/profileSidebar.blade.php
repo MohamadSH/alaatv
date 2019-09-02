@@ -202,7 +202,7 @@
                         </button>
                         <button type="button" class="btn m-btn--air btn-info btn-block animated infinite rubberBand" menu="profileMenuPage-filmVaJozve" onclick="window.location.href='{{ route('web.user.dashboard', Auth::user()) }}';">
                             <i class="flaticon-multimedia-4"></i>
-                            دریافت فیلم های و جزوات
+                            دریافت فیلم ها و جزوات من
                         </button>
                         <button type="button" class="btn m-btn--air btn-outline-success btn-block" menu="profileMenuPage-sabteRotbe" onclick="window.location.href='{{ route('web.user.konkurResult') }}';">
                             <i class="fa fa-trophy"></i>
