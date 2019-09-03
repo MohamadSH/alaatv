@@ -632,7 +632,7 @@ class BotsController extends Controller
                         foreach ($userRecords as $key => $userRecord){
                             $userRecords[$key]["totalAmount"] += $transaction->cost;
                             $point                             = (int) ($userRecord["totalAmount"] / $amountUnit);
-                            $userRecord[$key]["point"]         = $point ;
+                            $userRecords[$key]["point"]         = $point ;
 //                          $userRecord["point"]       = $point * $pointMultiply;
                         }
                     } else {
