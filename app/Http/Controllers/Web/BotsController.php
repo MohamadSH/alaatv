@@ -630,9 +630,9 @@ class BotsController extends Controller
                     $userRecords = $users->where("user_id", $user->id);
                     if ($userRecords->isNotEmpty()) {
                         foreach ($userRecords as $key => $userRecord){
-                            $userRecords[$key]["totalAmount"] += $transaction->cost;
+                            $users[$key]["totalAmount"] += $transaction->cost;
                             $point                             = (int) ($userRecord["totalAmount"] / $amountUnit);
-                            $userRecords[$key]["point"]         = $point ;
+                            $users[$key]["point"]         = $point ;
 //                          $userRecord["point"]       = $point * $pointMultiply;
                         }
                     } else {
