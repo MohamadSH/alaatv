@@ -755,57 +755,6 @@ class OrderController extends Controller
     /**
      * Showing authentication step in the checkout process
      *
-     * @param
-     *
-     * @return Response
-     */
-    public function checkoutAuth()
-    {
-        if (Auth::check()) {
-            return redirect(action("Web\OrderController@checkoutReview"));
-        }
-
-        return view('order.checkout.auth');
-    }
-
-    /**
-     * Showing information completion step in the checkout process
-     *
-     * @param
-     *
-     * @return Response
-     */
-    public function checkoutCompleteInfo()
-    {
-        if (!Auth::check()) {
-            return redirect(action("Web\OrderController@checkoutAuth"));
-        }
-        $user = Auth::user();
-        if ($user->completion('afterLoginForm') == 100) {
-            session()->pull('success');
-            session()->pull('tab');
-            session()->pull('belongsTo');
-
-            return redirect(action("Web\OrderController@checkoutReview"));
-        }
-        $formFields = Afterloginformcontrol::getFormFields();
-        $tables     = [];
-        foreach ($formFields as $formField) {
-            if (strpos($formField->name, '_id')) {
-                $tableName                = $formField->name;
-                $tableName                = str_replace('_id', 's', $tableName);
-                $tables[$formField->name] = DB::table($tableName)
-                    ->pluck('name', 'id');
-            }
-        }
-        $note = 'لطفا برای ادامه مراحل اطلاعات زیر را تکمیل نمایید';
-
-        return view('order.checkout.completeInfo', compact('formFields', 'note', 'tables'));
-    }
-
-    /**
-     * Showing authentication step in the checkout process
-     *
      * @param  CheckoutReviewRequest  $request
      *
      * @param  AlaaInvoiceGenerator   $invoiceGenerator
@@ -838,7 +787,6 @@ class OrderController extends Controller
 
             if (isset($order)) {
                 Cache::tags('order')->flush();
-                /** checkout payment */
                 $credit         = optional($order->user)->getTotalWalletBalance();
                 $orderHasDonate = $order->hasTheseProducts([
                     Product::CUSTOM_DONATE_PRODUCT,
@@ -900,179 +848,6 @@ class OrderController extends Controller
         return view('order.checkout.review',
         compact('invoiceInfo' , 'orderProductCount', 'gateways', 'coupon', 'notIncludedProductsInCoupon', 'orderHasDonate', 'credit' , 'fromWallet', 'pageName'));
 
-    }
-
-    /**
-     * @param  array  $cookieOrderproducts
-     *
-     * @return OrderproductCollection
-     */
-    private function convertOrderproductObjectsToCollection(array $cookieOrderproducts): OrderproductCollection
-    {
-        $fakeOrderproducts = new OrderproductCollection();
-
-        foreach ($cookieOrderproducts as $key => $cookieOrderproduct) {
-            $grandParentProductId = optional($cookieOrderproduct)->product_id;
-            $childrenIds          = optional($cookieOrderproduct)->products;
-            $attributes           = optional($cookieOrderproduct)->attribute;
-            $extraAttributes      = optional($cookieOrderproduct)->extraAttribute;
-
-            $grandParentProduct = Product::Find($grandParentProductId);
-            if (!isset($grandParentProduct)) {
-                continue;
-            }
-
-            $data = [
-                'products'       => $childrenIds,
-                'atttibute'      => $attributes,
-                'extraAttribute' => $extraAttributes,
-            ];
-
-            $products = (new RefinementFactory($grandParentProduct, $data))->getRefinementClass()
-                ->getProducts();
-
-            /** @var Product $product */
-            foreach ($products as $product) {
-                $fakeOrderproduct             = new Orderproduct();
-                $fakeOrderproduct->id         = $product->id;
-                $fakeOrderproduct->product_id = $product->id;
-                $costInfo                     = $product->calculatePayablePrice();
-                $fakeOrderproduct->cost       = $costInfo['cost'];
-                $fakeOrderproduct->updated_at = Carbon::now();
-                $fakeOrderproduct->created_at = Carbon::now();
-
-                $fakeOrderproducts->push($fakeOrderproduct);
-            }
-        }
-
-        return $fakeOrderproducts;
-    }
-
-    /**
-     * Showing the checkout invoice for printing
-     *
-     * @param  Request  $request
-     *
-     * @return Response
-     */
-    public function checkoutInvoice(Request $request)
-    {
-        return redirect(action("Web\OrderController@checkoutReview"));
-        if (!Auth::check()) {
-            return redirect(action("Web\OrderController@checkoutAuth"));
-        }
-
-        $orderInfo = $this->getUserOpenOrderInfo($request->user());
-
-        /** @var Order $order */
-        $order = $orderInfo['order'];
-        /** @var OrderproductCollection $orderproducts */
-        $orderproducts = $orderInfo['purchasedOrderproducts'];
-
-        $costCollection = collect();
-        foreach ($orderproducts as $orderproduct) {
-            $costArray = $orderproduct->obtainOrderproductCost(false);
-            $costCollection->put($orderproduct->id, [
-                'cost'        => $costArray['base'],
-                'extraCost'   => $costArray['extraCost'],
-                'bonDiscount' => $costArray['bonDiscount'],
-            ]);
-        }
-        $orderCostArray = $order->obtainOrderCost(true);
-        /** @var OrderproductCollection $calculatedOrderproducts */
-        $calculatedOrderproducts = $orderCostArray['calculatedOrderproducts'];
-        $calculatedOrderproducts->updateCostValues();
-
-        $orderCost = $orderCostArray['rawCostWithDiscount'] + $orderCostArray['rawCostWithoutDiscount'];
-        $user      = $order->user;
-
-        $todayDate = $this->convertDate(Carbon::now()
-            ->toDateTimeString(), 'toJalali');
-
-        return view('order.checkout.invoice',
-            compact('orderproducts', 'orderCost', 'costCollection', 'user', 'todayDate'));
-    }
-
-    /**
-     * Showing payment step in checkout the process
-     *
-     * @param  Request               $request
-     *
-     * @param  AlaaInvoiceGenerator  $invoiceGenerator
-     *
-     * @return Response
-     * @throws Exception
-     */
-    public function checkoutPayment(Request $request, AlaaInvoiceGenerator $invoiceGenerator)
-    {
-        return redirect(action("Web\OrderController@checkoutReview"));
-
-        $this->generateCustomMeta([
-            'title'       => 'آلاء|پرداخت',
-            'url'         => $request->url(),
-            'siteName'    => 'آلاء',
-            'description' => optional($this->setting)->site->seo->homepage->metaDescription,
-            'image'       => optional($this->setting)->site->siteLogo,
-        ]);
-
-        $order = Order::Find($request->order_id);
-        if (isset($order)) {
-            $credit         = optional($order->user)->getTotalWalletBalance();
-            $orderHasDonate = $order->hasTheseProducts([
-                Product::CUSTOM_DONATE_PRODUCT,
-                Product::DONATE_PRODUCT_5_HEZAR,
-            ]);
-            $gateways       = Transactiongateway::enable()
-                ->get()
-                ->sortBy('order')
-                ->pluck('displayName', 'name');
-
-            $coupon                 = $order->coupon;
-            $couponValidationStatus = optional($coupon)->validateCoupon();
-            if (in_array($couponValidationStatus, [
-                Coupon::COUPON_VALIDATION_STATUS_DISABLED,
-                Coupon::COUPON_VALIDATION_STATUS_USAGE_TIME_NOT_BEGUN,
-                Coupon::COUPON_VALIDATION_STATUS_EXPIRED,
-            ])) {
-                $order->detachCoupon();
-                if ($order->updateWithoutTimestamp()) {
-                    $coupon->decreaseUseNumber();
-                    $coupon->update();
-                }
-
-                $order = $order->fresh();
-            }
-            $coupon                      = $order->coupon_info;
-            $notIncludedProductsInCoupon = $order->reviewCouponProducts();
-
-            $invoiceInfo = $invoiceGenerator->generateOrderInvoice($order);
-            //ToDo : no need to orderproducts
-
-            $orderproducts = $invoiceInfo['items'];
-            /** @var OrderproductCollection $orderproducts */
-            if($orderproducts->isEmpty())
-                return redirect()->route("checkoutReview");
-
-            $response = response([
-                'price'                       => $invoiceInfo['price'],
-                'credit'                      => $credit,
-                'couponInfo'                  => $coupon,
-                'notIncludedProductsInCoupon' => $notIncludedProductsInCoupon,
-                'orderHasDonate'              => $orderHasDonate,
-            ], Response::HTTP_OK);
-        } else {
-            $response = response(['message' => 'Order not found'], Response::HTTP_BAD_REQUEST);
-        }
-
-        if ($request->expectsJson()) {
-            return $response;
-        }
-
-        $pageName = 'payment';
-
-        return view('order.checkout.payment',
-            compact('gateways', 'coupon', 'notIncludedProductsInCoupon', 'orderHasDonate', 'credit', 'invoiceInfo',
-                'pageName'));
     }
 
     /**
@@ -1796,5 +1571,51 @@ class OrderController extends Controller
                 'file'  => $e->getFile(),
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
+    }
+
+    /**
+     * @param  array  $cookieOrderproducts
+     *
+     * @return OrderproductCollection
+     */
+    private function convertOrderproductObjectsToCollection(array $cookieOrderproducts): OrderproductCollection
+    {
+        $fakeOrderproducts = new OrderproductCollection();
+
+        foreach ($cookieOrderproducts as $key => $cookieOrderproduct) {
+            $grandParentProductId = optional($cookieOrderproduct)->product_id;
+            $childrenIds          = optional($cookieOrderproduct)->products;
+            $attributes           = optional($cookieOrderproduct)->attribute;
+            $extraAttributes      = optional($cookieOrderproduct)->extraAttribute;
+
+            $grandParentProduct = Product::Find($grandParentProductId);
+            if (!isset($grandParentProduct)) {
+                continue;
+            }
+
+            $data = [
+                'products'       => $childrenIds,
+                'atttibute'      => $attributes,
+                'extraAttribute' => $extraAttributes,
+            ];
+
+            $products = (new RefinementFactory($grandParentProduct, $data))->getRefinementClass()
+                ->getProducts();
+
+            /** @var Product $product */
+            foreach ($products as $product) {
+                $fakeOrderproduct             = new Orderproduct();
+                $fakeOrderproduct->id         = $product->id;
+                $fakeOrderproduct->product_id = $product->id;
+                $costInfo                     = $product->calculatePayablePrice();
+                $fakeOrderproduct->cost       = $costInfo['cost'];
+                $fakeOrderproduct->updated_at = Carbon::now();
+                $fakeOrderproduct->created_at = Carbon::now();
+
+                $fakeOrderproducts->push($fakeOrderproduct);
+            }
+        }
+
+        return $fakeOrderproducts;
     }
 }

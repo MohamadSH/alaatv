@@ -7,7 +7,6 @@
 use App\Http\Controllers\Api\ContentController;
 use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Api\GetPaymentRedirectEncryptedLink;
-use App\Http\Controllers\Api\ProductController;
 
 Auth::routes(['verify' => true]);
 
@@ -54,8 +53,8 @@ Route::group(['prefix' => 'v1'], function () {
         });
 
         Route::group(['prefix' => 'checkout'], function () {
-            Route::get('review', 'Api\OrderController@checkoutReview')->name('api.checkout.review');
-            Route::get('payment', 'Api\OrderController@checkoutPayment')->name('api.checkout.payment');
+            Route::get('review', [OrderController::class, 'checkoutReview'])->name('api.checkout.review');
+            Route::get('payment', [OrderController::class, 'checkoutPayment'])->name('api.checkout.payment');
         });
 
         Route::any('getPaymentRedirectEncryptedLink', '\\'.GetPaymentRedirectEncryptedLink::class)

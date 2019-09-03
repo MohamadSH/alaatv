@@ -625,6 +625,15 @@
                             <span class="m-badge m-badge--success m-badge--wide m-badge--rounded orderCostReport"></span>
                         </div>
                     </div>
+                    @if(isset($credit))
+                        <div class="row margin-top-40 text-center">
+                            <div class="col">
+                                <span class="m-badge m-badge--success m-badge--wide m-badge--rounded">
+                                    اعتبار کیف پول: {{number_format($credit)}} تومان
+                                </span>
+                            </div>
+                        </div>
+                    @endif
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn m-btn--pill m-btn--air btn-outline-brand m-btn m-btn--custom"
