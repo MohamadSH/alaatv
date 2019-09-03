@@ -639,6 +639,9 @@ class BotsController extends Controller
 //                            "point"       => $point * $pointMultiply,
                         ]);
                     }
+                    if($user->id == 264834){
+                        dump($transaction->cost , $userRecord) ;
+                    }
                 } else {
                     dump("Warning: User was not found for transaction ".$transaction->id);
                     $warningCounter++;
