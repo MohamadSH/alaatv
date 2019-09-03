@@ -627,13 +627,14 @@ class BotsController extends Controller
                         dump( $users->where("user_id", $user->id));
                     }
 
-                    $userRecord = $users->where("user_id", $user->id)->first();
-
-                    if (isset($userRecord)) {
-                        $userRecord["totalAmount"] += $transaction->cost;
-                        $point                     = (int) ($userRecord["totalAmount"] / $amountUnit);
-                        $userRecord["point"]       = $point ;
-//                        $userRecord["point"]       = $point * $pointMultiply;
+                    $userRecords = $users->where("user_id", $user->id);
+                    if ($userRecords->isNotEmpty()) {
+                        foreach ($userRecords as $key => $userRecord){
+                            $userRecords[$key]["totalAmount"] += $transaction->cost;
+                            $point                             = (int) ($userRecord["totalAmount"] / $amountUnit);
+                            $userRecord[$key]["point"]         = $point ;
+//                          $userRecord["point"]       = $point * $pointMultiply;
+                        }
                     } else {
                         $point = (int) ($transaction->cost / $amountUnit);
                         $users->push([
