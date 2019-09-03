@@ -30,7 +30,7 @@
             <div class = "m-portlet m-portlet--mobile m-portlet--body-progress-">
                 <div class = "m-portlet__body">
                     <span class = "bold" style = "font-size: larger"></span>&nbsp;&nbsp;
-                    <a class = "btn btn-default" href = "{{action("Web\BotsController@pointBot")}}?15tir" {{($pointsGiven)?"disabled":""}} target = "_blank">
+                    <a class = "btn btn-default" href = "{{action("Web\BotsController@pointBot").'?'.$lotteryName}}" {{($pointsGiven)?"disabled":""}} target = "_blank">
                         اهدای امتیاز
                     </a>
 {{--                    <a class = "btn btn-default" href = "{{action("Web\BotsController@pointBot")}}?riyazi" {{($pointsGiven)?"disabled":""}} target = "_blank">--}}
