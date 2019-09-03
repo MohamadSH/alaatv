@@ -603,7 +603,7 @@ class BotsController extends Controller
         $warningCounter = 0;
         $users          = collect();
 
-        if($request->has('jashnvare_tabestan')){
+        if($request->has('summer98')){
             $transactions = Transaction::whereHas("order", function ($q) {
                 $q->whereIn("orderstatus_id", [config("constants.ORDER_STATUS_CLOSED") , config('constants.ORDER_STATUS_POSTED')])
                     ->whereIn("paymentstatus_id", [config("constants.PAYMENT_STATUS_PAID") , config('constants.PAYMENT_STATUS_VERIFIED_INDEBTED')])
