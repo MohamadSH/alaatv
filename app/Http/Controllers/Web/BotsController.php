@@ -623,7 +623,10 @@ class BotsController extends Controller
             foreach ($transactions as $transaction) {
                 $user = $transaction->order->user;
                 if (isset($user)) {
-                    dump( $users->where("user_id", $user->id));
+                    if($user->id == 264834){
+                        dump( $users->where("user_id", $user->id));
+                    }
+
                     $userRecord = $users->where("user_id", $user->id)->first();
 
                     if (isset($userRecord)) {
