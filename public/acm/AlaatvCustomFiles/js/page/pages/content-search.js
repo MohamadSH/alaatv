@@ -216,7 +216,7 @@ var Alaasearch = function () {
             name: (data.author!==null) ? data.author.firstName : '',
             full_name: (data.author!==null) ? data.author.full_name : ''
         };
-        /*if (
+        if (
             typeof widgetThumbnail !== 'undefined' &&
             widgetThumbnail !== null &&
             widgetThumbnail.length !== 0
@@ -227,8 +227,7 @@ var Alaasearch = function () {
                 '</div>\n';
         } else {
             widgetThumbnail = '';
-        }*/
-        widgetThumbnail = '<span class="blueSquare"></span>';
+        }
         if (
             typeof widgetAuthor.photo !== 'undefined' &&
             widgetAuthor.photo !== null &&
