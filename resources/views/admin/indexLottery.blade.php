@@ -33,12 +33,12 @@
                     <a class = "btn btn-default" href = "{{action("Web\BotsController@pointBot")}}?15tir" {{($pointsGiven)?"disabled":""}} target = "_blank">
                         اهدای امتیاز
                     </a>
-                    <a class = "btn btn-default" href = "{{action("Web\BotsController@pointBot")}}?riyazi" {{($pointsGiven)?"disabled":""}} target = "_blank">
-                        اهدای امتیاز اضافه ریاضی
-                    </a>
-                    <a class = "btn btn-default" href = "{{action("Web\BotsController@pointBot")}}?tajrobi" {{($pointsGiven)?"disabled":""}} target = "_blank">
-                        اهدای امتیاز اضافه تجربی
-                    </a>
+{{--                    <a class = "btn btn-default" href = "{{action("Web\BotsController@pointBot")}}?riyazi" {{($pointsGiven)?"disabled":""}} target = "_blank">--}}
+{{--                        اهدای امتیاز اضافه ریاضی--}}
+{{--                    </a>--}}
+{{--                    <a class = "btn btn-default" href = "{{action("Web\BotsController@pointBot")}}?tajrobi" {{($pointsGiven)?"disabled":""}} target = "_blank">--}}
+{{--                        اهدای امتیاز اضافه تجربی--}}
+{{--                    </a>--}}
                     <span class = "m--font-danger bold">{{($pointsGiven)?"اهدا شده است":""}}</span>
                     <hr>
                 </div>
