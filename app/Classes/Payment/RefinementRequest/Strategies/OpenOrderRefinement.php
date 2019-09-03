@@ -24,17 +24,18 @@ class OpenOrderRefinement extends Refinement
         }
         $openOrder = $this->getOpenOrder();
         $openOrder->load('orderproducts');
-        
+
         if (!$openOrder->orderproducts->isNotEmpty()) {
             $this->message    = 'No items in your cart';
             $this->statusCode = Response::HTTP_BAD_REQUEST;
-            
+
             return $this;
         }
-        
+
         $this->order = $openOrder;
         $this->orderUniqueId = $openOrder->id;
         $this->getOrderCost();
+        $this->resetWalletPendingCredit();
         $this->donateCost = $this->order->getDonateCost();
         if ($this->canDeductFromWallet()) {
             $this->payByWallet();
@@ -56,7 +57,7 @@ class OpenOrderRefinement extends Refinement
 
         return $this;
     }
-    
+
     /**
      * @return Order
      */

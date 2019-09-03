@@ -30,13 +30,12 @@ class OrderIdRefinement extends Refinement
             $this->orderUniqueId = $order->id.Carbon::now()->timestamp;
             $this->user  = $this->order->user;
             $this->getOrderCost();
+            $this->resetWalletPendingCredit();
             // ToDo: if sent open order_id user can't use wallet
             $this->donateCost = $this->order->getDonateCost();
-//            if ($this->canDeductFromWallet()) {
-//                $this->payByWallet();
-//            }
-
-            $this->resetWalletPendingCredit();
+            if ($this->canDeductFromWallet()) {
+                $this->payByWallet();
+            }
 
             if($this->cost > 0)
             {
@@ -57,10 +56,10 @@ class OrderIdRefinement extends Refinement
             $this->statusCode = Response::HTTP_NOT_FOUND;
             $this->message    = 'سفارشی یافت نشد.';
         }
-        
+
         return $this;
     }
-    
+
     /**
      * @param  int  $orderId
      *

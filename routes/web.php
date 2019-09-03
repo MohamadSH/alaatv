@@ -71,16 +71,8 @@ Route::group(['prefix' => 'sitemap'], function () {
 });
 
 Route::group(['prefix' => 'checkout'], function () {
-    Route::get('auth', 'Web\OrderController@checkoutAuth');
-
-    Route::get('completeInfo', 'Web\OrderController@checkoutCompleteInfo')
-        ->name('checkoutCompleteInfo');
-
     Route::get('review', 'Web\OrderController@checkoutReview')
         ->name('checkoutReview');
-
-    Route::get('payment', 'Web\OrderController@checkoutPayment')
-        ->name('checkoutPayment');
 
     Route::any('verifyPayment/online/{paymentMethod}/{device}', [PaymentVerifierController::class, 'verify'])
         ->name('verifyOnlinePayment');
