@@ -628,7 +628,7 @@ class BotsController extends Controller
                     if (isset($userRecord)) {
                         $userRecord["totalAmount"] += $transaction->cost;
                         $point                     = (int) ($userRecord["totalAmount"] / $amountUnit);
-                        $userRecord["point"]       += $point ;
+                        $userRecord["point"]       = $point ;
 //                        $userRecord["point"]       = $point * $pointMultiply;
                     } else {
                         $point = (int) ($transaction->cost / $amountUnit);
