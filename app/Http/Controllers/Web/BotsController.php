@@ -623,10 +623,6 @@ class BotsController extends Controller
             foreach ($transactions as $transaction) {
                 $user = $transaction->order->user;
                 if (isset($user)) {
-                    if($user->id == 264834){
-                        dump( $users->where("user_id", $user->id));
-                    }
-
                     $userRecords = $users->where("user_id", $user->id);
                     if ($userRecords->isNotEmpty()) {
                         foreach ($userRecords as $key => $userRecord){
@@ -644,9 +640,6 @@ class BotsController extends Controller
                             "point"       => $point,
 //                            "point"       => $point * $pointMultiply,
                         ]);
-                    }
-                    if($user->id == 264834){
-                        dump($transaction->cost , $userRecord) ;
                     }
                 } else {
                     dump("Warning: User was not found for transaction ".$transaction->id);
