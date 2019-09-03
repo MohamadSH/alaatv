@@ -91,3 +91,20 @@ if (!function_exists('getCurrentWeekDateViaDayName')) {
     }
 
 }
+
+if (! function_exists('alaaSetting')) {
+    /**
+     * Get / set the specified cache value.
+     *
+     * If an array is passed, we'll assume you want to put to the cache.
+     *
+     * @param  dynamic  key|key,default|data,expiration|null
+     * @return mixed|\Illuminate\Cache\CacheManager
+     *
+     * @throws \Exception
+     */
+    function alaaSetting()
+    {
+        return app('App\Websitesetting');
+    }
+}

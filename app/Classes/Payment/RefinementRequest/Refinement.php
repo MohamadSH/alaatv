@@ -20,27 +20,27 @@ use Illuminate\Http\Response;
 abstract class Refinement
 {
     use OrderCommon;
-    
+
     /**
      * @var array $inputData
      */
     protected $inputData;
-    
+
     /**
      * @var int $statusCode
      */
     protected $statusCode;
-    
+
     /**
      * @var string $message
      */
     protected $message;
-    
+
     /**
      * @var User $user
      */
     protected $user;
-    
+
     /**
      * @var Order $order
      */
@@ -55,42 +55,42 @@ abstract class Refinement
      * @var int $cost
      */
     protected $cost;
-    
+
     /**
      * @var int $paidFromWalletCost
      */
     protected $paidFromWalletCost;
-    
+
     /**
      * @var int $donateCost
      */
     protected $donateCost;
-    
+
     /**
      * @var Transaction $transaction
      */
     protected $transaction;
-    
+
     /**
      * @var string $description
      */
     protected $description;
-    
+
     /**
      * @var int $walletId
      */
     protected $walletId;
-    
+
     /**
      * @var int $walletChargingAmount
      */
     protected $walletChargingAmount;
-    
+
     /**
      * @var TransactionController
      */
     protected $transactionController;
-    
+
     public function __construct()
     {
         $this->donateCost  = 0;
@@ -98,7 +98,7 @@ abstract class Refinement
         $this->message     = '';
         $this->description = '';
     }
-    
+
     /**
      * @param  array  $inputData
      *
@@ -111,10 +111,10 @@ abstract class Refinement
         $this->user                  = $this->inputData['user'] ?? null;
         $this->walletId              = $this->inputData['walletId'] ?? null;
         $this->walletChargingAmount  = $this->inputData['walletChargingAmount'] ?? null;
-        
+
         return $this;
     }
-    
+
     /**
      * @return Refinement
      */
@@ -128,15 +128,15 @@ abstract class Refinement
             $this->message    = 'transactionController not set';
             $this->statusCode = Response::HTTP_BAD_REQUEST;
         }
-        
+
         return $this;
     }
-    
+
     /**
      * @return Refinement
      */
     abstract function loadData(): Refinement;
-    
+
     /**
      * @return array
      */
@@ -154,14 +154,14 @@ abstract class Refinement
             'description'  => $this->description,
         ];
     }
-    
+
     protected function getOrderCost(): void
     {
         $this->validateCoupon();
         $this->order->refreshCost();
         $this->cost = $this->order->totalCost() - $this->order->totalPaidCost();
     }
-    
+
     protected function validateCoupon(): void
     {
         $coupon                 = $this->order->coupon;
@@ -175,7 +175,7 @@ abstract class Refinement
             $this->order->fresh();
         }
     }
-    
+
     /**
      * @param  bool  $deposit
      *
@@ -200,7 +200,7 @@ abstract class Refinement
 
         return $result;
     }
-    
+
     /**
      * @return bool
      */
@@ -216,7 +216,7 @@ abstract class Refinement
             return false;
         }*/
     }
-    
+
     protected function payByWallet(): void
     {
         $deductibleCostFromWallet = $this->cost - $this->donateCost;
@@ -227,12 +227,9 @@ abstract class Refinement
             return ;
         }
 
-//        $walletPayResult          = $this->payOrderCostByWallet($this->user, $this->order, $deductibleCostFromWallet);
         $walletPayResult          = $this->canPayOrderByWallet($this->user, $deductibleCostFromWallet);
         if ($walletPayResult['result']) {
             $remainedCost = $walletPayResult['cost'];
-//            $this->order->close();
-//            $this->order->updateWithoutTimestamp();
         }
         $remainedCost             = $remainedCost + $this->donateCost;
         $this->cost               = $remainedCost;

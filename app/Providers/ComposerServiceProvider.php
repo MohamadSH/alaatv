@@ -21,7 +21,7 @@ class ComposerServiceProvider extends ServiceProvider
     {
         // Using class based composers...
         View::composer('pages.content-search', 'App\Http\ViewComposers\ContentSearchComposer');
-        
+
         View::composer([
             'content.show',
             'pages.product-search',
@@ -43,24 +43,22 @@ class ComposerServiceProvider extends ServiceProvider
             $closedSideBar = true;
             $view->with(compact('closedSideBar'));
         });
-        
+
         View::composer('partials.header1', 'App\Http\ViewComposers\HeaderComposer');
-        
+
         /**
          *  lessons
          */
         View::composer([
 //            'pages.dashboard1',
-'partials.sidebar',
+                'partials.sidebar',
         ], function ($view) {
             $sections = (new webBlockCollectionFormatter(new webSetCollectionFormatter()))->format(Block::getMainBlocks());
 //            $sections = collect();
 //            dd($sections);
             $view->with(compact('sections'));
         });
-        view()->share('bonName', Bon::getAlaaBonDisplayName());
-        view()->share('userIpAddress', Request::ip());
-        
+
         View::composer([
             'product.partials.showChildren',
         ], function ($view) {
@@ -76,8 +74,18 @@ class ComposerServiceProvider extends ServiceProvider
             ];
             $view->with(compact('colors'));
         });
+
+        View::composer([
+            '*'
+        ], function ($view){
+            $view->with('bonName',Bon::getAlaaBonDisplayName());
+            $view->with('userIpAddress', Request::ip());
+            $view->with('wSetting',optional(alaaSetting())->setting);
+            $view->with('wLogoUrl',optional(alaaSetting())->site_logo_url);
+            $view->with('setting',alaaSetting());
+        });
     }
-    
+
     /**
      * Register services.
      *
