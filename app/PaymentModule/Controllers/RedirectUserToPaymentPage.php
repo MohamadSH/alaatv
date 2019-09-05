@@ -61,7 +61,7 @@ class RedirectUserToPaymentPage extends Controller
             ->thenRespondWith([[Responses::class, 'sendToOfflinePaymentProcess'], [$device, $order,$customerDescription]]);
 
         /** @var string $description */
-        $description = $this->getTransactionDescription($data['description'], $user->mobile, $order);
+        $description = $this->getTransactionDescription($data['description'] , $device, $user->mobile, $order);
 
         $paymentClient = PaymentDriver::select($paymentMethod);
         $url = $this->comeBackFromGateWayUrl($paymentMethod, $device);
@@ -108,15 +108,21 @@ class RedirectUserToPaymentPage extends Controller
     }
 
     /**
-     * @param  string      $description
+     * @param string $description
+     * @param string $device
      * @param              $mobile
-     * @param  Order|null  $order
+     * @param Order|null $order
      *
      * @return string
      */
-    private function getTransactionDescription(string $description, $mobile, $order = null)
+    private function getTransactionDescription(string $description ,string $device, $mobile, $order = null)
     {
-        $description .= 'سایت آلاء - ';
+        $description = '';
+        if($device == 'web'){
+            $description .= 'سایت آلاء - ';
+        }elseif($device == 'android'){
+            $description .= 'اپ اندروید آلاء - ';
+        }
         $description .= $mobile.' - محصولات: ';
 
         if (is_null($order)) {
@@ -132,10 +138,10 @@ class RedirectUserToPaymentPage extends Controller
                 $description .= 'یک محصول نامشخص , ';
             }
         }
-    
+
         return $description;
     }
-    
+
     /**
      * @param  int  $cost
      *
@@ -145,7 +151,7 @@ class RedirectUserToPaymentPage extends Controller
     {
         return boolean($cost <= 0);
     }
-    
+
     /**
      * @param  string  $paymentMethod
      * @param  string  $device
