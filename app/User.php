@@ -614,6 +614,12 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber, 
         return $this->hasMany(Firebasetoken::class);
     }
 
+    public function lotteries()
+    {
+        return $this->belongsToMany(Lottery::Class)
+            ->withPivot("rank", "prizes");
+    }
+
     /**
      * Compares user's password with a new password
      *
@@ -670,12 +676,12 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber, 
             ->get();
         return $validOrders;
     }
-    
+
     public function cacheKey()
     {
         $key  = $this->getKey();
         $time = (optional($this->updated_at)->timestamp ?: optional($this->created_at)->timestamp) ?: 0;
-    
+
         return sprintf('%s:%s-%s', $this->getTable(), $key, $time);
     }
 
