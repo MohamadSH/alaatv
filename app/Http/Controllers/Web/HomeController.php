@@ -69,9 +69,6 @@ class HomeController extends Controller
 
     public function debug(Request $request, BlockCollectionFormatter $formatter)
     {
-        $user = User::find(1);
-        $order = \App\Order::find(448143);
-        dd($user->notify(new InvoicePaid($order)));
         return (array) optional($request->user('alaatv'))->id;
     }
 
