@@ -69,7 +69,7 @@ class RedirectUserToPaymentPage extends Controller
         $authorityCode = nullable($paymentClient->generateAuthorityCode($url, $cost, $description, $orderUniqueId))
             ->orFailWith([Responses::class, 'noResponseFromBankError'] );
 
-        TransactionRepo::setAuthorityForTransaction($authorityCode, $transaction->id , $this->getGatewyId($paymentMethod), $description)
+        TransactionRepo::setAuthorityForTransaction($authorityCode, $transaction->id , $this->getGatewyId($paymentMethod), $description , $device)
             ->orRespondWith([Responses::class, 'editTransactionError']);
 
         if ($this->shouldCloseOrder($order))

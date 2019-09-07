@@ -12,7 +12,7 @@ use App\Http\Controllers\Controller;
 use League\Flysystem\Sftp\SftpAdapter;
 use Illuminate\Contracts\Encryption\DecryptException;
 use Illuminate\Support\Facades\{File, Input, Config, Storage};
-use App\{
+use App\{Notifications\InvoicePaid,
     User,
     Product,
     Productfile,
@@ -69,19 +69,6 @@ class HomeController extends Controller
 
     public function debug(Request $request, BlockCollectionFormatter $formatter)
     {
-        $lottery = \App\Lottery::Find(7);
-        $participants = $lottery->users;
-        foreach ($participants as $participant) {
-            $rank = $participant->pivot->rank;
-            if($rank <= 50){
-                $participant->deposit(20000 , 2);
-            }elseif($rank > 50 && $rank <= 200){
-                $participant->deposit(10000 , 2);
-            }elseif($rank > 200 ){
-                $participant->deposit(5000 , 2);
-            }
-        }
-        dd('Done');
         return (array) optional($request->user('alaatv'))->id;
     }
 
