@@ -111,8 +111,9 @@ class Transaction extends BaseModel
         'transactionstatus_id',
         'completed_at',
         'description',
+        'device_id',
     ];
-    
+
     protected $appends = [
         'paymentmethod',
         'transactiongateway',
@@ -121,7 +122,7 @@ class Transaction extends BaseModel
         'editLink',
         'removeLink',
     ];
-    
+
     protected $hidden = [
         'order_id',
         'destinationBankAccount_id',
@@ -129,7 +130,7 @@ class Transaction extends BaseModel
         'transactiongateway_id',
         'updated_at',
     ];
-    
+
     /**
      * Create a new Eloquent Collection instance.
      *
@@ -141,27 +142,27 @@ class Transaction extends BaseModel
     {
         return new TransactionCollection($models);
     }
-    
+
     public function order()
     {
         return $this->belongsTo('App\Order');
     }
-    
+
     public function transactionstatus()
     {
         return $this->belongsTo('App\Transactionstatus');
     }
-    
+
     public function sourceBankAccount()
     {
         return $this->belongsTo('\App\Bankaccount', 'bankaccounts', 'sourceBankAccount_id', 'id');
     }
-    
+
     public function destinationBankAccount()
     {
         return $this->belongsTo('\App\Bankaccount', 'bankaccounts', 'destinationBankAccount_id', 'id');
     }
-    
+
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
@@ -169,7 +170,7 @@ class Transaction extends BaseModel
     {
         return $this->belongsTo("\App\Wallet");
     }
-    
+
     /**
      * @return string
      * Converting Created_at field to jalali
@@ -180,7 +181,7 @@ class Transaction extends BaseModel
         //        $explodedTime = $explodedDateTime[1] ;
         return $this->convertDate($this->deadline_at, "toJalali");
     }
-    
+
     public function parents()
     {
         return $this->belongsToMany('App\Transaction', 'transaction_transaction', 't2_id',
@@ -190,7 +191,7 @@ class Transaction extends BaseModel
                 'transactioninterraltions.id')//            ->select('major1_id AS id', 'majorinterrelationtypes.name AS pivot_relationName' , 'majorinterrelationtypes.displayName AS pivot_relationDisplayName')
         ->where("relationtype_id", config("constants.TRANSACTION_INTERRELATION_PARENT_CHILD"));
     }
-    
+
     public function children()
     {
         return $this->belongsToMany('App\Transaction', 'transaction_transaction', 't1_id',
@@ -200,7 +201,7 @@ class Transaction extends BaseModel
             ->where("relationtype_id",
                 config("constants.TRANSACTION_INTERRELATION_PARENT_CHILD"));
     }
-    
+
     public function getGrandParent()
     {
         $counter       = 1;
@@ -217,7 +218,7 @@ class Transaction extends BaseModel
             return array_last($parentsArray);
         }
     }
-    
+
     public function hasParents($depth = 1)
     {
         $counter       = 0;
@@ -236,7 +237,7 @@ class Transaction extends BaseModel
             return true;
         }
     }
-    
+
     public function getCode()
     {
         if (isset($this->transactionID)) {
@@ -261,7 +262,7 @@ class Transaction extends BaseModel
             }
         }
     }
-    
+
     /**
      * @param  \Illuminate\Database\Eloquent\Builder  $query
      * @param  string                                 $authority
@@ -272,7 +273,7 @@ class Transaction extends BaseModel
     {
         return $query->where('authority', $authority);
     }
-    
+
     /**
      * @param  \Illuminate\Database\Eloquent\Builder  $query
      *
@@ -282,7 +283,7 @@ class Transaction extends BaseModel
     {
         return $query->where("paymentmethod_id", config("constants.PAYMENT_METHOD_WALLET"));
     }
-    
+
     public function depositThisWalletTransaction()
     {
         $wallet = $this->wallet;
@@ -293,10 +294,10 @@ class Transaction extends BaseModel
         else {
             $response = ["result" => false];
         }
-        
+
         return $response;
     }
-    
+
     public function getTransactionGatewayAttribute()
     {
         return optional($this->transactiongateway()
@@ -306,12 +307,12 @@ class Transaction extends BaseModel
             'description',
         ]);
     }
-    
+
     public function transactiongateway()
     {
         return $this->belongsTo('App\Transactiongateway');
     }
-    
+
     public function getPaymentmethodAttribute()
     {
         return optional($this->paymentmethod()
@@ -321,12 +322,12 @@ class Transaction extends BaseModel
             'description',
         ]);
     }
-    
+
     public function paymentmethod()
     {
         return $this->belongsTo('\App\Paymentmethod');
     }
-    
+
     public function getJalaliCompletedAtAttribute()
     {
         $transaction = $this;
@@ -339,7 +340,7 @@ class Transaction extends BaseModel
                 return null;
             });
     }
-    
+
     public function getJalaliDeadlineAtAttribute()
     {
         $transaction = $this;

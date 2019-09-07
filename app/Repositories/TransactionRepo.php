@@ -2,31 +2,41 @@
 
 namespace App\Repositories;
 
+use App\Classes\Util\Boolean;
 use Carbon\Carbon;
 use App\Transaction;
 
 class TransactionRepo
 {
     /**
-     * @param  string  $authority
+     * @param string $authority
      * @param          $transactionId
-     * @param  string  $description
+     * @param $gatewayId
+     * @param string $description
      *
-     * @return \App\Classes\Util\Boolean
+     * @param string $device
+     * @return bool
      */
-    public static function setAuthorityForTransaction(string $authority, $transactionId, $gatewayId , string $description): \App\Classes\Util\Boolean
+    public static function setAuthorityForTransaction(string $authority, $transactionId, $gatewayId , string $description , string $device): Boolean
     {
+        $deviceMap = [
+          'web'     => 1,
+          'android' => 2,
+          'ios'     => 3,
+        ];
+
         $data = [
             'destinationBankAccount_id' => 1,
             'authority'                 => $authority,
             'transactiongateway_id'     => $gatewayId,
             'paymentmethod_id'          => config('constants.PAYMENT_METHOD_ONLINE'),
             'description'               => $description,
+            'device_id'                 => $deviceMap[$device],
         ];
-        
+
         return boolean(static::modify($data, $transactionId));
     }
-    
+
     public static function modify($data, $transactionId)
     {
         $transaction = Transaction::findOrFail($transactionId);
@@ -40,19 +50,19 @@ class TransactionRepo
             'managerComment',
             'paymentmethod_id',
         ];
-        
+
         foreach ($props as $prop) {
             if (strlen($transaction->$prop) == 0) {
                 $transaction->$prop = null;
             }
         }
-        
+
         self::setTimestamp($data, "deadline_at", $transaction);
         self::setTimestamp($data, "completed_at", $transaction);
-        
+
         return $transaction->update();
     }
-    
+
     /**
      * @param          $data
      * @param  string  $column
@@ -67,14 +77,14 @@ class TransactionRepo
                 ->format('Y-m-d');
         }
     }
-    
+
     public static function getTransactionByAuthority($authority)
     {
         return nullable(Transaction::where('authority', $authority)->first());
     }
-    
+
     /**
-     * @param  \App\Transaction  $transaction
+     * @param Transaction $transaction
      * @param  string            $refId
      * @param  string|null       $cardPanMask
      */
@@ -90,7 +100,7 @@ class TransactionRepo
 
         self::changeTransactionStatusToSuccessful($transaction->id, $refId, $bankAccountId);
     }
-    
+
     /**
      * @param            $id
      * @param  string    $transactionID
@@ -107,7 +117,7 @@ class TransactionRepo
         // issue #1760
             'transactionstatus_id'      => 3,
         ];
-        
+
         static::modify($data, (int) $id);
     }
 

@@ -4,6 +4,7 @@ namespace App\Notifications;
 
 use App\Broadcasting\MedianaPatternChannel;
 use App\Classes\sms\MedianaMessage;
+use App\Order;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
@@ -11,24 +12,26 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Notification;
 use Illuminate\Queue\SerializesModels;
 
-class CounselingStatusChanged extends Notification implements ShouldQueue
+class DownloadNotice extends Notification implements ShouldQueue
 {
     use Queueable, SerializesModels;
 
-    const MEDIANA_PATTERN_CODE_COUNSELING_STATUS_CHANGED = 803;
+    protected const MEDIANA_PATTERN_CODE_INVOICE_PAID = 'c6tqjgflvh';
 
     public $timeout = 120;
+    /**
+     * @var Order
+     */
+    private $invoice;
 
     /**
-     * @var User
+     * Create a new notification instance.
+     *
+     * @param  Order  $invoice
      */
-    protected $user;
-
-    private $orderStatus;
-
-    public function __construct($orderStatus)
+    public function __construct(Order $invoice)
     {
-        $this->orderStatus = $orderStatus;
+        $this->invoice = $invoice;
     }
 
     /**
@@ -40,11 +43,8 @@ class CounselingStatusChanged extends Notification implements ShouldQueue
      */
     public function via($notifiable)
     {
-        $this->user = $notifiable;
-
         return [
             MedianaPatternChannel::class,
-
         ];
     }
 
@@ -57,21 +57,25 @@ class CounselingStatusChanged extends Notification implements ShouldQueue
     {
         return (new MedianaMessage())->content($this->msg())
             ->setInputData($this->getInputData())
-            ->setPatternCode(self::MEDIANA_PATTERN_CODE_COUNSELING_STATUS_CHANGED)
+            ->setPatternCode(self::MEDIANA_PATTERN_CODE_INVOICE_PAID)
             ->sendAt(Carbon::now());
     }
 
     private function msg(): string
     {
-        $messageCore = " آلایی عزیز وضعیت سوال مشاوره ای شما به ".$this->orderStatus." تغییر کرد."."\n"."alaatv.com";
-
-        return $messageCore;
+        return '';
     }
 
     private function getInputData(): array
     {
+        $userFullName = optional($this->getInvoiceUser())->full_name;
         return [
-            'name' => $this->orderStatus,
+            'name' => (isset($userFullName))?$userFullName:'آلایی',
         ];
+    }
+
+    private function getInvoiceUser(): User
+    {
+        return  $this->invoice->user;
     }
 }
