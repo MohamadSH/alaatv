@@ -70,7 +70,7 @@ class DownloadNotice extends Notification implements ShouldQueue
     {
         $userFullName = optional($this->getInvoiceUser())->full_name;
         return [
-            'name' => (isset($userFullName))?$userFullName:'آلایی',
+            'name' => (isset($userFullName) && strlen($userFullName) > 0)?$userFullName:'آلایی',
         ];
     }
 
