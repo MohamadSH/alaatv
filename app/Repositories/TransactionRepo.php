@@ -10,14 +10,14 @@ class TransactionRepo
 {
     /**
      * @param string $authority
-     * @param          $transactionId
+     * @param    int      $transactionId
      * @param $gatewayId
      * @param string $description
      *
      * @param string $device
      * @return bool
      */
-    public static function setAuthorityForTransaction(string $authority, $transactionId, $gatewayId , string $description , string $device): Boolean
+    public static function setAuthorityForTransaction(string $authority, int $transactionId, $gatewayId , string $description , string $device): Boolean
     {
         $deviceMap = [
           'web'     => 1,
