@@ -14,11 +14,11 @@ use Illuminate\Queue\SerializesModels;
 class FreeInternetAccept extends Notification implements ShouldQueue
 {
     use Queueable, SerializesModels;
-    
+
     const MEDIANA_PATTERN_CODE_FREE_INTERNET_ACCEPT = 812;
-    
+
     public $timeout = 120;
-    
+
     /**
      * Get the notification's delivery channels.
      *
@@ -34,7 +34,7 @@ class FreeInternetAccept extends Notification implements ShouldQueue
             'mail',
         ];
     }
-    
+
     /**
      * Get the mail representation of the notification.
      *
@@ -45,16 +45,16 @@ class FreeInternetAccept extends Notification implements ShouldQueue
     public function toMail($notifiable)
     {
         return (new MailMessage)->line($this->msg())
-            ->action('دریافت فایل راهنما', url('https://sanatisharif.ir/v/asiatech'));
+            ->action('دریافت فایل راهنما', url('https://alaatv.com/v/asiatech'));
     }
-    
+
     private function msg(): string
     {
-        $messageCore = "آلایی عزیز با درخواست اینترنت رایگان شما موافقت شد"."\n".'دریافت فایل راهنما از'.'https://sanatisharif.ir/v/asiatech';
-        
+        $messageCore = "آلایی عزیز با درخواست اینترنت رایگان شما موافقت شد"."\n".'دریافت فایل راهنما از'.'https://alaatv.com/v/asiatech';
+
         return $messageCore;
     }
-    
+
     /**
      * @param $notifiable
      *
@@ -67,11 +67,11 @@ class FreeInternetAccept extends Notification implements ShouldQueue
             ->setPatternCode(self::MEDIANA_PATTERN_CODE_FREE_INTERNET_ACCEPT)
             ->sendAt(Carbon::now());
     }
-    
+
     private function getInputData(): array
     {
         return [
-            'https://sanatisharif.ir/v/asiatech' => 'https://sanatisharif.ir/v/asiatech',
+            'https://alaatv.com/v/asiatech' => 'https://alaatv.com/v/asiatech',
         ];
     }
 }
