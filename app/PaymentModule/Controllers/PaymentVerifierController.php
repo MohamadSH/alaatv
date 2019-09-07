@@ -67,7 +67,9 @@ class PaymentVerifierController extends Controller
             $responseMessages[] = 'توجه کنید که محصولات پیش خرید شده در تاریخ مقرر شده برای دانلود قرار داده می شوند';
 
             $myOrder->user->notify(new InvoicePaid($myOrder));
-            $myOrder->user->notify(new DownloadNotice($myOrder));
+            if($device == 'android') {
+                $myOrder->user->notify(new DownloadNotice($myOrder));
+            }
         } else {
             $this->handleOrderCanceledPayment($myOrder);
             $this->handleOrderCanceledTransaction($transaction);
