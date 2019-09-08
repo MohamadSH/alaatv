@@ -15,16 +15,16 @@ use Illuminate\Queue\SerializesModels;
 class InvoicePaid extends Notification implements ShouldQueue
 {
     use Queueable, SerializesModels;
-    
-    protected const MEDIANA_PATTERN_CODE_INVOICE_PAID = 800;
-    
+
+    protected const MEDIANA_PATTERN_CODE_INVOICE_PAID = 'dl51dcp831';
+
     public $timeout = 120;
-    
+
     /**
      * @var Order
      */
     protected $invoice;
-    
+
     /**
      * Create a new notification instance.
      *
@@ -34,7 +34,7 @@ class InvoicePaid extends Notification implements ShouldQueue
     {
         $this->invoice = $invoice;
     }
-    
+
     /**
      * Get the notification's delivery channels.
      *
@@ -48,7 +48,7 @@ class InvoicePaid extends Notification implements ShouldQueue
             MedianaPatternChannel::class,
         ];
     }
-    
+
     /**
      * @param $notifiable
      *
@@ -56,55 +56,39 @@ class InvoicePaid extends Notification implements ShouldQueue
      */
     public function toMediana($notifiable)
     {
-        
+
         return (new MedianaMessage())->content($this->msg())
             ->setInputData($this->getInputData())
             ->setPatternCode(self::MEDIANA_PATTERN_CODE_INVOICE_PAID)
             ->sendAt(Carbon::now());
     }
-    
+
     private function msg(): string
     {
-        $user = $this->getInvoiceUser();
-        
-        return $this->getGender($user);
-        
-        $messageCore = "سفارش شما با موفقیت ثبت شد."."\n"."شماره سفارش:"."\n".$this->invoice->id."\n"."پشتیبانی:"."\n"."https://goo.gl/jme5VU";
-        $message     = "سلام ".$gender.$user->full_name."\n".$messageCore;
-        
-        return $message;
+        return '';
     }
-    
-    private function getInvoiceUser(): User
-    {
-        return $this->invoice->user;
-    }
-    
-    /**
-     * @param  \App\User  $user
-     *
-     * @return string
-     */
-    private function getGender(User $user): string
-    {
-        if (!isset($user->gender_id)) {
-            return "";
-        }
-        if ($user->gender->name == "خانم") {
-            return "خانم ";
-        }
-        if ($user->gender->name == "آقا") {
-            return "آقای ";
-        }
-        
-        return "";
-    }
-    
+
     private function getInputData(): array
     {
         return [
             'code'                   => $this->invoice->id,
-            "https://goo.gl/jme5VU " => "https://goo.gl/jme5VU"."\n"."https://alaatv.com/asset",
+            'name' => $this->getUserFullName() ,
+            'assetLink' => route('user.asset') ,
+            'supportLink' => 'https://goo.gl/jme5VU',
         ];
+    }
+
+    private function getInvoiceUser(): User
+    {
+        return $this->invoice->user;
+    }
+
+    /**
+     * @return mixed
+     */
+    private function getUserFullName():string
+    {
+        $userFullName = optional($this->getInvoiceUser())->full_name;
+        return (isset($userFullName) && strlen($userFullName) > 0)?$userFullName:'آلایی' ;
     }
 }

@@ -68,10 +68,18 @@ class DownloadNotice extends Notification implements ShouldQueue
 
     private function getInputData(): array
     {
-        $userFullName = optional($this->getInvoiceUser())->full_name;
         return [
-            'name' => (isset($userFullName) && strlen($userFullName) > 0)?$userFullName:'آلایی',
+            'name' => $this->getUserFullName() ,
         ];
+    }
+
+    /**
+     * @return mixed
+     */
+    private function getUserFullName():string
+    {
+        $userFullName = optional($this->getInvoiceUser())->full_name;
+        return (isset($userFullName))?$userFullName:'آلایی' ;
     }
 
     private function getInvoiceUser(): User
