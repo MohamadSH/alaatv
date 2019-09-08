@@ -12,7 +12,8 @@ use App\Http\Controllers\Controller;
 use League\Flysystem\Sftp\SftpAdapter;
 use Illuminate\Contracts\Encryption\DecryptException;
 use Illuminate\Support\Facades\{File, Input, Config, Storage};
-use App\{Notifications\InvoicePaid,
+use App\{Notifications\DownloadNotice,
+    Notifications\InvoicePaid,
     User,
     Product,
     Productfile,
