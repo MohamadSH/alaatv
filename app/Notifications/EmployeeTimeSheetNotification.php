@@ -15,7 +15,7 @@ class EmployeeTimeSheetNotification extends Notification implements ShouldQueue
 {
     use Queueable, SerializesModels;
 
-    const MEDIANA_PATTERN_CODE_EMPLOYEE_TIME_SHEET = '1isxm5wtvr';
+    const MEDIANA_PATTERN_CODE_EMPLOYEE_TIME_SHEET = 'x7r2ty1ah4';
 
     public $timeout = 120;
 
