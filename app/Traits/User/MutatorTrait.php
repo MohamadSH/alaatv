@@ -282,6 +282,10 @@ trait mutatorTrait
 
     public function getFullNameAttribute($value)
     {
+        if(!isset($this->firstName) && !isset($this->lastName)){
+            return null;
+        }
+
         return ucfirst($this->firstName).' '.ucfirst($this->lastName);
     }
 }
