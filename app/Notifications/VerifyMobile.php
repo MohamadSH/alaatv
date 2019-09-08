@@ -15,7 +15,7 @@ class VerifyMobile extends Notification implements ShouldQueue
 {
     use Queueable, SerializesModels;
 
-    const MEDIANA_PATTERN_CODE_USER_SEND_VERIFICATION_CODE = 801;
+    const MEDIANA_PATTERN_CODE_USER_SEND_VERIFICATION_CODE = 'clj7zn69t8';
 
     public $timeout = 120;
 
@@ -67,6 +67,7 @@ class VerifyMobile extends Notification implements ShouldQueue
         // ToDo : Code does not appear in the delivered message
         return [
             'code' => $this->user->getMobileVerificationCode(),
+            'supportLink' => 'https://goo.gl/jme5VU',
         ];
     }
 }
