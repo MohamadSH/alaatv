@@ -8,6 +8,7 @@ use App\Notifications\DownloadNotice;
 use App\User;
 use App\Order;
 use App\Wallet;
+use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -211,6 +212,7 @@ class OfflinePaymentController extends Controller
                 /** End */
 
                 $order->orderstatus_id= config('constants.ORDER_STATUS_CLOSED');
+                $order->completed_at     = Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now())->timezone('Asia/Tehran');
                 if ($order->hasCost()) {
                     $cost = $order->totalCost() - $order->totalPaidCost();
                     if ($cost == 0) {
