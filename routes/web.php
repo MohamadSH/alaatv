@@ -11,6 +11,7 @@ use App\Http\Controllers\Web\ErrorPageController;
 use App\Http\Controllers\Web\HomeController;
 use App\Http\Controllers\Web\IndexPageController;
 use App\Http\Controllers\Web\LotteryController;
+use App\Http\Controllers\Web\MobileVerificationController;
 use App\Http\Controllers\Web\OrderproductController;
 use App\Http\Controllers\Web\ProductLandingController;
 use App\Http\Controllers\Web\SharifSchoolController;
@@ -175,16 +176,12 @@ Route::group(['middleware' => 'auth'], function () {
         Route::post('{user}/completeInfo', [UserController::class, 'completeInformation']);
         Route::get('orders', 'Web\UserController@userOrders');
         Route::get('question', 'Web\UserController@uploads');
-        Route::get('getVerificationCode', 'Web\UserController@sendVerificationCode');
-        Route::post('sendSMS', 'Web\UserController@sendSMS');
         Route::post('submitWorkTime', [EmployeetimesheetController::class, 'submitWorkTime']);
         Route::post('removeFromLottery', [LotteryController::class, 'removeFromLottery']);
         Route::get('uploadQuestion', [ConsultationController::class, 'uploadConsultingQuestion']);
         Route::get('orders', [UserController::class, 'userOrders']);
         Route::get('question', [UserController::class, 'userQuestions']);
-        Route::get('getVerificationCode', 'Web\UserController@sendVerificationCode');
-        Route::post('verifyAccount', 'Web\UserController@submitVerificationCode');
-        Route::post('sendSMS', 'Web\UserController@sendSMS');
+        Route::post('sendSMS', [UserController::class, 'sendSMS']);
     });
     Route::group(['prefix' => 'order'], function () {
         Route::post('detachorderproduct', 'Web\OrderController@detachOrderproduct');
@@ -299,9 +296,9 @@ Route::resource('block', 'Web\BlockController');
 Auth::routes(['verify' => true]);
 
 Route::group(['prefix' => 'mobile'], function () {
-    Route::get('verify', 'Web\MobileVerificationController@show')->name('mobile.verification.notice');
-    Route::post('verify', 'Web\MobileVerificationController@verify')->name('mobile.verification.verify');
-    Route::get('resend', 'Web\MobileVerificationController@resend')->name('mobile.verification.resend');
+    Route::get('verify', [MobileVerificationController::class, 'show'])->name('mobile.verification.notice');
+    Route::post('verify', [MobileVerificationController::class, 'verify'])->name('mobile.verification.verify');
+    Route::get('resend', [MobileVerificationController::class, 'resend'])->name('mobile.verification.resend');
 });
 Route::post('cd3b472d9ba631a73cb7b66ba513df53', 'Web\CouponController@generateRandomCoupon');
 
