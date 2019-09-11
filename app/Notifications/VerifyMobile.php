@@ -64,10 +64,9 @@ class VerifyMobile extends Notification implements ShouldQueue
 
     private function getInputData(): array
     {
-        // ToDo : Code does not appear in the delivered message
         return [
             'code' => $this->user->getMobileVerificationCode(),
-            'supportLink' => 'https://goo.gl/jme5VU',
+            'supportLink' => '',
         ];
     }
 }
