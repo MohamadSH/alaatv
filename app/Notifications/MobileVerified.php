@@ -38,22 +38,22 @@ class MobileVerified extends Notification implements ShouldQueue
 
         return [
             MedianaPatternChannel::class,
-            'mail',
+//            'mail',
         ];
     }
 
-    /**
-     * Get the mail representation of the notification.
-     *
-     * @param  mixed  $notifiable
-     *
-     * @return \Illuminate\Notifications\Messages\MailMessage
-     */
-    public function toMail($notifiable)
-    {
-        return (new MailMessage)->line($this->msg())
-            ->action('برو به سایت آلاء', url('/'));
-    }
+//    /**
+//     * Get the mail representation of the notification.
+//     *
+//     * @param  mixed  $notifiable
+//     *
+//     * @return \Illuminate\Notifications\Messages\MailMessage
+//     */
+//    public function toMail($notifiable)
+//    {
+//        return (new MailMessage)->line($this->msg())
+//            ->action('برو به سایت آلاء', url('/'));
+//    }
 
     private function msg(): string
     {
