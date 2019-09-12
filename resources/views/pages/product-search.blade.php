@@ -30,6 +30,7 @@
                 'widgetTitle'      => $product->name,
                 'widgetPic'        => $product->photo,
                 'widgetLink'       => action("Web\ProductController@show", $product),
+                'widgetTagsQuery'  => $tagsQuery,
                 'widgetPrice'      => $product->price,
                 'widgetPriceLabel' => ($product->isFree || $product->basePrice == 0 ? 0 : 1)
                 ])
