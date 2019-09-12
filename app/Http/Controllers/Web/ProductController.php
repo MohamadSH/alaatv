@@ -117,10 +117,8 @@ class ProductController extends Controller
                 'filename' => $this->setting->site->siteLogo,
             ]), '100', '100', null));
 
-        $tagsQuery = http_build_query([
-            'tags'=> $tags
-        ]);
-        return view('pages.product-search', compact('products', 'tags' , 'tagsQuery'));
+        $linkParameters = request()->except('page');
+        return view('pages.product-search', compact('products', 'tags' , 'linkParameters'));
     }
 
     /**

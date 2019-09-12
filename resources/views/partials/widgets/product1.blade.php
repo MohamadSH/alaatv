@@ -34,7 +34,7 @@
                     <hr>
                 </div>
                 <div class="m-widget19__action">
-                    <a href="{{ $widgetLink.'&'.$widgetTagsQuery }}"
+                    <a href="{{ $widgetLink }}"
                        class="btn m-btn--pill    btn-outline-warning m-btn m-btn--outline-2x a--full-width">اطلاعات
                         بیشتر</a>
                 </div>
