@@ -16,7 +16,7 @@ class InvoicePaid extends Notification implements ShouldQueue
 {
     use Queueable, SerializesModels;
 
-    protected const MEDIANA_PATTERN_CODE_INVOICE_PAID = 'dl51dcp831';
+    protected const MEDIANA_PATTERN_CODE_INVOICE_PAID = 'et0jpn43fn';
 
     public $timeout = 120;
 
