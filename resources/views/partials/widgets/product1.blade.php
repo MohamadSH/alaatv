@@ -27,14 +27,14 @@
                     <div class="m-widget19__shadow"></div>
                 </div>
                 <div class="m-widget19__content m--padding-top-10">
-                    
+
                     @include('product.partials.price', ['price'=>$widgetPrice])
                     <hr>
                     <h2 class="m--icon-font-size-sm2">{{ $widgetTitle }}</h2>
                     <hr>
                 </div>
                 <div class="m-widget19__action">
-                    <a href="{{ $widgetLink }}"
+                    <a href="{{ $widgetLink.'&'.$tagsQuery }}"
                        class="btn m-btn--pill    btn-outline-warning m-btn m-btn--outline-2x a--full-width">اطلاعات
                         بیشتر</a>
                 </div>
