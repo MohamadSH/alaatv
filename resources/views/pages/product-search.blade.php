@@ -30,7 +30,6 @@
                 'widgetTitle'      => $product->name,
                 'widgetPic'        => $product->photo,
                 'widgetLink'       => action("Web\ProductController@show", $product),
-                'widgetTagsQuery'  => $tagsQuery,
                 'widgetPrice'      => $product->price,
                 'widgetPriceLabel' => ($product->isFree || $product->basePrice == 0 ? 0 : 1)
                 ])
@@ -40,7 +39,7 @@
     <div class="row">
         <div class="col-xl-12 m--align-center">
             <div class="m--block-inline">
-                {{ $products->links() }}
+                {{ $products->appends($linkParameters)->links() }}
             </div>
 
         </div>
