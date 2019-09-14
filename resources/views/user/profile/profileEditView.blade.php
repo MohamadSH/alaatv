@@ -230,7 +230,7 @@
             @if(isset($submitCaption))
                 {{$submitCaption}}
             @else
-                ثبت درخواست
+                ثبت اطلاعات پروفایل
             @endif
         </button>
 
