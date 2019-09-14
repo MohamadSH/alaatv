@@ -16,7 +16,7 @@ class MobileVerified extends Notification implements ShouldQueue
 {
     use Queueable, SerializesModels;
 
-    const MEDIANA_PATTERN_CODE_USER_MOBILE_VERIFIED = '8cnm2mm7vj';
+    const MEDIANA_PATTERN_CODE_USER_MOBILE_VERIFIED = 'gxppqifdwl';
 
     public $timeout = 120;
 
@@ -76,8 +76,18 @@ class MobileVerified extends Notification implements ShouldQueue
     private function getInputData(): array
     {
         return [
-            'name' => 'آلایی',
+            'name' => $this->getUserFullName(),
             'request' => 'شماره موبایل',
+            'supportLink' => ''
         ];
+    }
+
+    /**
+     * @return mixed
+     */
+    private function getUserFullName():string
+    {
+        $userFullName = optional($this->user)->full_name;
+        return (isset($userFullName))?$userFullName:'آلایی' ;
     }
 }
