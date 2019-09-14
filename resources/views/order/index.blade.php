@@ -322,7 +322,7 @@
         </td>
         <td>
             @if($order->orderproducts->isNotEmpty())
-                {{$order->addedBonSum($order->user)}}
+                {{$order->addedBonSum()}}
             @else
                 <span class = "m-badge m-badge--wide m-badge--info">سفارش خالی است!</span>
             @endif
