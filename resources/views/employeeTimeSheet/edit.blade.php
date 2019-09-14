@@ -34,7 +34,7 @@
         <div class = "col-md-12">
             <div class = "m-portlet m-portlet--mobile">
                 <div class = "m-portlet__body">
-                    {!! Form::model($employeetimesheet, ['method' => 'PUT','action' => ['Web\EmployeetimesheetController@update',$employeetimesheet] , 'class'=>'form-horizontal' ,'accept-charset'=>'UTF-8' , 'enctype'=>'multipart/form-data']) !!}
+                    {!! Form::model($employeetimesheet, ['method' => 'PUT','action' => ['Web\EmployeetimesheetController@update',$employeetimesheet] , 'class'=>'form-horizontal' ,'accept-charset'=>'UTF-8' ]) !!}
                     @include('employeeTimeSheet.form')
                     {!! Form::close() !!}
                 </div>

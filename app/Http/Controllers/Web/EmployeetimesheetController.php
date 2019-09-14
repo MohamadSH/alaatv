@@ -12,6 +12,7 @@ use App\Employeetimesheet;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Input;
@@ -102,41 +103,26 @@ class EmployeetimesheetController extends Controller
     {
         /** @var User $user */
         $user   = $request->user();
-        $userId = $user->id;
-        /** @var Employeetimesheet $userTodayTimeSheets */
-        $userTodayTimeSheets = Employeetimesheet::where('date', Carbon::today('Asia/Tehran'))
-            ->where('user_id', $user->id)
-            ->get();
-        $employeetimesheet=null;
         $isTimeSheetExtra=false;
-        if ($userTodayTimeSheets->count() > 1) {
-            session()->flash('warning', 'شما برای امروز بیش از یک ساعت کاری وارد نموده اید!');
-            $formVisible = false;
-        }
-        else {
-            $toDayJalali = $this->convertToJalaliDay(Carbon::today('Asia/Tehran')
-                ->format('l'));
-            /** @var Employeeschedule $employeeSchedule */
-            $employeeSchedule = Employeeschedule::where('user_id', $userId)
-                ->where('day', $toDayJalali)
-                ->get()
-                ->first();
-            if ($userTodayTimeSheets->isNotEmpty()) {
-                $employeetimesheet = $userTodayTimeSheets->first();
-                if ($employeetimesheet->workdaytype_id == config('constants.WORKDAY_ID_EXTRA')) {
-                    $isTimeSheetExtra = true;
-                }
-                else {
-                    $isTimeSheetExtra = false;
-                }
-            }
-            $formVisible = true;
+        $toDayJalali = $this->convertToJalaliDay(Carbon::today('Asia/Tehran')->format('l'));
+        /** @var Employeeschedule $employeeSchedule */
+        $employeeSchedule = Employeeschedule::where('user_id', $user->id)
+                            ->where('day', $toDayJalali)
+                            ->get()
+                            ->first();
+
+        $employeeTimeSheet = Employeetimesheet::where('date', Carbon::today('Asia/Tehran'))
+            ->where('user_id', $user->id)
+            ->first();
+
+        if (isset($employeeTimeSheet) && $employeeTimeSheet->workdaytype_id == config('constants.WORKDAY_ID_EXTRA')) {
+                $isTimeSheetExtra = true;
         }
         $employees    = User::select()
-            ->role([config('constants.ROLE_EMPLOYEE')])
-            ->pluck('lastName', 'id');
-        $workdayTypes = Workdaytype::all()
-            ->pluck('displayName', 'id');
+                            ->role([config('constants.ROLE_EMPLOYEE')])
+                            ->pluck('lastName', 'id');
+
+        $workdayTypes = Workdaytype::all()->pluck('displayName', 'id');
 
         if($user->hasRole('admin')){
             $employeeovertimestatus = Employeeovertimestatus::all()->pluck('display_name' , 'id');
@@ -145,7 +131,7 @@ class EmployeetimesheetController extends Controller
         }
 
         return view('employeeTimeSheet.create',
-            compact('employeetimesheet', 'employeeSchedule', 'isTimeSheetExtra', 'employees', 'formVisible', 'workdayTypes' , 'employeeovertimestatus'));
+            compact('employeeTimeSheet', 'employeeSchedule', 'isTimeSheetExtra', 'employees', 'workdayTypes' , 'employeeovertimestatus'));
     }
 
     public function store(InsertEmployeeTimeSheet $request)
@@ -272,13 +258,10 @@ class EmployeetimesheetController extends Controller
     /**
      * Storing user's work time (for employees)
      *
-     * @param  Request                      $request
-     * @param  EmployeetimesheetController  $employeetimesheetController
-     * @param  HomeController               $errorPageController
-     *
+     * @param Request $request
      * @return Response
      */
-    public function submitWorkTime(Request $request, EmployeetimesheetController $employeetimesheetController, ErrorPageController $errorPageController)
+    public function submitWorkTime(Request $request)
     {
         if(!$request->has('action')){
             session()->flash('error', 'نوع ساعت کاری نامشخص است');
