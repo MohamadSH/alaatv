@@ -50,15 +50,15 @@ class Wallet extends BaseModel
         'balance',
         'pending_to_reduce',
     ];
-    
+
     /**
      * Retrieve owner
      */
     public function user()
     {
-        return $this->belongsTo('\App\User');
+        return $this->belongsTo(User::class);
     }
-    
+
     /**
      * Force to move credits from this account
      *
@@ -70,7 +70,7 @@ class Wallet extends BaseModel
     {
         return $this->withdraw($amount, false);
     }
-    
+
     /**
      * Attempt to add credits to this wallet
      *
@@ -86,7 +86,7 @@ class Wallet extends BaseModel
          * unused variable
          */ /*$failed = true;*/
         /*$responseText = '';*/
-        
+
         $accepted = $shouldAccept ? $this->canWithdraw($amount) : true;
 
         if ($amount > 0) {
@@ -95,7 +95,6 @@ class Wallet extends BaseModel
                 $this->balance = $newBalance;
                 $result        = $this->update();
                 if ($result) {
-                    $completed_at = Carbon::now()->setTimezone('Asia/Tehran');
                     $this->transactions()
                         ->create([
                             'order_id'             => $orderId,
@@ -103,7 +102,7 @@ class Wallet extends BaseModel
                             'cost'                 => $amount,
                             'transactionstatus_id' => config('constants.TRANSACTION_STATUS_SUCCESSFUL'),
                             'paymentmethod_id'     => config('constants.PAYMENT_METHOD_WALLET'),
-                            'completed_at'         => $completed_at,
+                            'completed_at'         => Carbon::now()->setTimezone('Asia/Tehran'),
                         ]);
                     $responseText = 'SUCCESSFUL';
                     $failed       = false;
@@ -128,7 +127,7 @@ class Wallet extends BaseModel
             'responseText' => $responseText,
         ];
     }
-    
+
     /**
      * Determine if the user can withdraw from this wallet
      *
@@ -140,7 +139,7 @@ class Wallet extends BaseModel
     {
         return $this->balance >= $amount;
     }
-    
+
     /**
      * Retrieve all transactions
      */
@@ -148,7 +147,7 @@ class Wallet extends BaseModel
     {
         return $this->hasMany('\App\Transaction');
     }
-    
+
     /**
      * Attempt to move credits from this wallet
      *
@@ -200,13 +199,13 @@ class Wallet extends BaseModel
             $failed       = true;
             $responseText = 'WRONG_AMOUNT';
         }
-        
+
         return [
             'result'       => !$failed,
             'responseText' => $responseText,
         ];
     }
-    
+
     public function walletType()
     {
         return $this->belongsTo('App\Wallettype', 'wallettype_id', 'id');
