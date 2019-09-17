@@ -263,7 +263,7 @@ class EmployeetimesheetController extends Controller
      */
     public function submitWorkTime(Request $request , Employeetimesheet $employeeTimeSheet=null)
     {
-        if(isset($employeeTimeSheet)){
+        if(isset($employeeTimeSheet) && !$request->has('action')){
             $request->offsetUnset('overtime_status_id');
             $employeeTimeSheet->fill($request->all());
             $employeeTimeSheet->workdaytype_id = ($request->has('isExtraDay'))?config('constants.WORKDAY_ID_EXTRA'):config('constants.WORKDAY_ID_USUAL');
