@@ -43,13 +43,13 @@
                                 @if($employeeTimeSheet->getOriginal("timeSheetLock"))
                                     <h4 class="m--font-danger text-center bold col">ساعت کاری امروز شما قفل شده است</h4>
                                 @else
-                                    {!! Form::model( $employeeTimeSheet,['method' => 'POST','action' => ['Web\EmployeetimesheetController@submitWorkTime'] , 'class'=>'form-horizontal col' ,'accept-charset'=>'UTF-8' , 'enctype'=>'multipart/form-data']) !!}
-                                    @include('employeeTimeSheet.form')
+                                    {!! Form::model( $employeeTimeSheet,['method' => 'POST','action' => ['Web\EmployeetimesheetController@submitWorkTime' , $employeeTimeSheet] , 'class'=>'form-horizontal col' ,'accept-charset'=>'UTF-8' , 'enctype'=>'multipart/form-data']) !!}
+                                    @include('employeeTimeSheet.form' , ['submitWorkTime'=>1])
                                     {!! Form::close() !!}
                                 @endif
                             @else
                                 {!! Form::open( ['method' => 'POST','action' => ['Web\EmployeetimesheetController@submitWorkTime'] , 'class'=>'form-horizontal col' ,'accept-charset'=>'UTF-8' , 'enctype'=>'multipart/form-data']) !!}
-                                    @include('employeeTimeSheet.form')
+                                    @include('employeeTimeSheet.form', ['submitWorkTime'=>1])
                                 {!! Form::close() !!}
                             @endif
                         @endif
