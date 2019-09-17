@@ -103,7 +103,7 @@ class EmployeetimesheetController extends Controller
     {
         /** @var User $user */
         $user   = $request->user();
-        $isTimeSheetExtra=false;
+        $isExtra=false;
         $toDayJalali = $this->convertToJalaliDay(Carbon::today('Asia/Tehran')->format('l'));
         /** @var Employeeschedule $employeeSchedule */
         $employeeSchedule = Employeeschedule::where('user_id', $user->id)
@@ -116,7 +116,7 @@ class EmployeetimesheetController extends Controller
             ->first();
 
         if (isset($employeeTimeSheet) && $employeeTimeSheet->workdaytype_id == config('constants.WORKDAY_ID_EXTRA')) {
-                $isTimeSheetExtra = true;
+            $isExtra = true;
         }
         $employees    = User::select()
                             ->role([config('constants.ROLE_EMPLOYEE')])
@@ -129,9 +129,8 @@ class EmployeetimesheetController extends Controller
         }else{
             $employeeovertimestatus = Employeeovertimestatus::where('name' , '<>' , 'rejected')->get()->pluck('display_name' , 'id');
         }
-
         return view('employeeTimeSheet.create',
-            compact('employeeTimeSheet', 'employeeSchedule', 'isTimeSheetExtra', 'employees', 'workdayTypes' , 'employeeovertimestatus'));
+            compact('employeeTimeSheet', 'employeeSchedule', 'isExtra', 'employees', 'workdayTypes' , 'employeeovertimestatus'));
     }
 
     public function store(InsertEmployeeTimeSheet $request)
@@ -196,17 +195,17 @@ class EmployeetimesheetController extends Controller
         }
     }
 
-    public function edit(Request $request, Employeetimesheet $employeetimesheet)
+    public function edit(Request $request, Employeetimesheet $employeeTimeSheet)
     {
         if($request->user()->id == 8992)
         {// Agha majid
-            if(!in_array($employeetimesheet->user_id, [397580 , 285202])){
+            if(!in_array($employeeTimeSheet->user_id, [397580 , 285202])){
                 abort(403);
             }
         }
 
         $isExtra = false;
-        if ($employeetimesheet->workdaytype_id == config('constants.WORKDAY_ID_EXTRA')) {
+        if ($employeeTimeSheet->workdaytype_id == config('constants.WORKDAY_ID_EXTRA')) {
             $isExtra = true;
         }
 
@@ -217,7 +216,7 @@ class EmployeetimesheetController extends Controller
         }
 
 
-        return view('employeeTimeSheet.edit', compact('employeetimesheet', 'isExtra' , 'employeeovertimestatus'));
+        return view('employeeTimeSheet.edit', compact('employeeTimeSheet', 'isExtra' , 'employeeovertimestatus'));
     }
 
     public function update(Request $request, Employeetimesheet $employeeTimeSheet)
@@ -245,9 +244,9 @@ class EmployeetimesheetController extends Controller
         }
     }
 
-    public function destroy(Employeetimesheet $employeetimesheet, Response $response)
+    public function destroy(Employeetimesheet $employeeTimeSheet, Response $response)
     {
-        if ($employeetimesheet->delete()) {
+        if ($employeeTimeSheet->delete()) {
             return $response->setStatusCode(Response::HTTP_OK);
         }
         else {
@@ -259,10 +258,22 @@ class EmployeetimesheetController extends Controller
      * Storing user's work time (for employees)
      *
      * @param Request $request
+     * @param Employeetimesheet|null $employeeTimeSheet
      * @return Response
      */
-    public function submitWorkTime(Request $request)
+    public function submitWorkTime(Request $request , Employeetimesheet $employeeTimeSheet=null)
     {
+        if(isset($employeeTimeSheet)){
+            $request->offsetUnset('overtime_status_id');
+            $employeeTimeSheet->fill($request->all());
+            $employeeTimeSheet->workdaytype_id = ($request->has('isExtraDay'))?config('constants.WORKDAY_ID_EXTRA'):config('constants.WORKDAY_ID_USUAL');
+            $employeeTimeSheet->timeSheetLock = ($request->has('timeSheetLock'))?1:0;
+            $employeeTimeSheet->isPaid = ($request->has('isPaid'))?1:0;
+            $employeeTimeSheet->update();
+            session()->flash('success', 'ساعت کاری با موفقیت ذخیره شد');
+            return redirect()->back();
+        }
+
         if(!$request->has('action')){
             session()->flash('error', 'نوع ساعت کاری نامشخص است');
             return redirect()->back();
