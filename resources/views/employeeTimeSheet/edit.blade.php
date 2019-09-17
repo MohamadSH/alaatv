@@ -19,7 +19,7 @@
             <li class = "breadcrumb-item active" aria-current = "page">
                 <a class = "m-link" href = "#">
                     اصلاح ساعت کاری
-                    @if(isset($employeetimesheet)) {{$employeetimesheet->getEmployeeFullName()}} @endif
+                    @if(isset($employeeTimeSheet)) {{$employeeTimeSheet->getEmployeeFullName()}} @endif
                 </a>
             </li>
         </ol>
@@ -34,7 +34,7 @@
         <div class = "col-md-12">
             <div class = "m-portlet m-portlet--mobile">
                 <div class = "m-portlet__body">
-                    {!! Form::model($employeetimesheet, ['method' => 'PUT','action' => ['Web\EmployeetimesheetController@update',$employeetimesheet] , 'class'=>'form-horizontal' ,'accept-charset'=>'UTF-8' ]) !!}
+                    {!! Form::model($employeeTimeSheet, ['method' => 'PUT','action' => ['Web\EmployeetimesheetController@update',$employeeTimeSheet] , 'class'=>'form-horizontal' ,'accept-charset'=>'UTF-8' ]) !!}
                     @include('employeeTimeSheet.form')
                     {!! Form::close() !!}
                 </div>
