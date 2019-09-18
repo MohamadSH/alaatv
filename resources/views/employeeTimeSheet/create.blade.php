@@ -48,7 +48,7 @@
                                     {!! Form::close() !!}
                                 @endif
                             @else
-                                {!! Form::open( ['method' => 'POST','action' => ['Web\EmployeetimesheetController@submitWorkTime'] , 'class'=>'form-horizontal col' ,'accept-charset'=>'UTF-8' , 'enctype'=>'multipart/form-data']) !!}
+                                {!! Form::open( ['method' => 'POST','action' => ['Web\EmployeetimesheetController@submitWorkTime' ] , 'class'=>'form-horizontal col' ,'accept-charset'=>'UTF-8' , 'enctype'=>'multipart/form-data']) !!}
                                     @include('employeeTimeSheet.form', ['submitWorkTime'=>1])
                                 {!! Form::close() !!}
                             @endif
