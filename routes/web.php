@@ -177,6 +177,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('orders', 'Web\UserController@userOrders');
         Route::get('question', 'Web\UserController@uploads');
         Route::post('submitWorkTime/{employeetimesheet}', [EmployeetimesheetController::class, 'submitWorkTime']);
+        Route::post('submitWorkTime', [EmployeetimesheetController::class, 'submitWorkTime']);
         Route::post('removeFromLottery', [LotteryController::class, 'removeFromLottery']);
         Route::get('uploadQuestion', [ConsultationController::class, 'uploadConsultingQuestion']);
         Route::get('orders', [UserController::class, 'userOrders']);
