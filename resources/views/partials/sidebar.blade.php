@@ -11,7 +11,7 @@
                 <i class="m-menu__section-icon flaticon-more-v2"></i>
             </li>
             <li class="m-menu__item  @if(isset($pageName) && strcmp($pageName , "dashboard")==0) m-menu__item--active @endif" aria-haspopup="true">
-                <a href="{{ action("Web\IndexPageController") }}" class="m-menu__link ">
+                <a href="{{ route('web.index') }}" class="m-menu__link ">
                     <span class="m-menu__item-here"></span>
                     <i class="m-menu__link-icon fa fa-home"></i>
                     <span class="m-menu__link-text">صفحه اصلی</span>
@@ -294,6 +294,14 @@
                                             <span></span>
                                         </i>
                                         <span class="m-menu__link-text">قرعه کشی کنکور 98</span>
+                                    </a>
+                                </li>
+                                <li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1">
+                                    <a target="_blank" href="{{ action("Web\AdminController@adminLottery" , ["lottery"=>"summer98"]) }}" class="m-menu__link ">
+                                        <i class="m-menu__link-bullet m-menu__link-bullet--dot">
+                                            <span></span>
+                                        </i>
+                                        <span class="m-menu__link-text">قرعه کشی تابستان 98</span>
                                     </a>
                                 </li>
                             </ul>

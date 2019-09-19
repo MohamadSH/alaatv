@@ -29,7 +29,7 @@
             </svg>
         </div>
         <div class="message">
-            
+
             <div class = "col-md-12 page-500">
                 <div class = "number m--font-danger"> 500</div>
                 <div class = "details">
@@ -37,11 +37,11 @@
                     <p>
 {{--                        تیم ما در حال برطرف کردن این خطا می باشند. لطفا چند دقیقه دیگر دوباره امتحان کنید.--}}
                         <br/>
-                        <a href = "{{action("Web\IndexPageController")}}"> @lang('page.Home') </a>
+                        <a href = "{{route('web.index')}}"> @lang('page.Home') </a>
                     </p>
                 </div>
             </div>
-            
+
         </div>
     </div>
 @endsection

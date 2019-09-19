@@ -15,34 +15,34 @@ use Illuminate\Queue\SerializesModels;
 class LotteryWinner extends Notification implements ShouldQueue
 {
     use Queueable, SerializesModels;
-    
+
     public $timeout = 120;
-    
+
     /**
      * @var int
      */
     protected $rank;
-    
+
     /**
      * @var string
      */
     protected $prize;
-    
+
     /**
      * @var string
      */
     protected $memorial;
-    
+
     /**
      * @var Lottery
      */
     protected $lottery;
-    
+
     /**
      * @var User
      */
     protected $user;
-    
+
     /**
      * Create a new notification instance.
      *
@@ -58,7 +58,7 @@ class LotteryWinner extends Notification implements ShouldQueue
         $this->prize    = $prize;
         $this->memorial = $memorial;
     }
-    
+
     /**
      * Get the notification's delivery channels.
      *
@@ -69,12 +69,12 @@ class LotteryWinner extends Notification implements ShouldQueue
     public function via($notifiable)
     {
         $this->user = $notifiable;
-        
+
         return [
             MedianaChannel::class,
         ];
     }
-    
+
     /**
      * @param $notifiable
      *
@@ -85,7 +85,7 @@ class LotteryWinner extends Notification implements ShouldQueue
         return (new MedianaMessage())->content($this->msg())
             ->sendAt(Carbon::now());
     }
-    
+
     private function msg(): string
     {
         $lotteryName = $this->lottery->displayName;
@@ -93,7 +93,7 @@ class LotteryWinner extends Notification implements ShouldQueue
         $prize       = $this->prize;
         $memorial    = $this->memorial;
         $gender      = $this->getGender();
-        
+
         if (strlen($prize) > 0) {
             $messageCore = "شما برنده ".$rank." در قرعه کشی ".$lotteryName." شده اید. جایزه شما ".$prize." می باشد و در سریع ترین زمان به شما تقدیم خواهد شد.";
         }
@@ -105,12 +105,12 @@ class LotteryWinner extends Notification implements ShouldQueue
                 $messageCore = "شما در قرعه کشی ".$lotteryName." شرکت داده شدید و متاسفانه برنده نشدید.";
             }
         }
-        
-        $messageCore = $messageCore."\n"."آلاء"."\n"."sanatisharif.ir";
-        
+
+        $messageCore = $messageCore."\n"."آلاء"."\n"."alaatv.com";
+
         return "سلام ".$gender.$this->user->full_name."\n".$messageCore;
     }
-    
+
     /**
      * @return string
      */
@@ -125,7 +125,7 @@ class LotteryWinner extends Notification implements ShouldQueue
         if ($this->user->gender->name == "آقا") {
             return "آقای ";
         }
-        
+
         return "";
     }
 }

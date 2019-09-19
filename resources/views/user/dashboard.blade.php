@@ -9,7 +9,7 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item">
                 <i class="fa fa-home"></i>
-                <a class="m-link" href="{{action("Web\IndexPageController")}}">@lang('page.Home')</a>
+                <a class="m-link" href="{{route('web.index')}}">@lang('page.Home')</a>
             </li>
             <li class="breadcrumb-item">
                 <i class="fa fa-user"></i>
@@ -23,7 +23,7 @@
 @endsection
 
 @section('content')
-    
+
     @include('systemMessage.flash')
 
 
@@ -58,8 +58,8 @@
                             <a href="{{action('Web\UserController@show' , $user)}}" class="btn m-btn--pill m-btn--air m-btn m-btn--gradient-from-info m-btn--gradient-to-accent">تکمیل پروفایل</a>
                         </div>
                     @else
-        
-        
+
+
                         <div class="a--owl-carousel-init-loading">
                             <div class="lds-roller">
                                 <div></div>
@@ -72,24 +72,24 @@
                                 <div></div>
                             </div>
                         </div>
-        
+
                         <div class="m-widget_head-owlcarousel-items owl-carousel a--owl-carousel-type-2 myProduct">
-            
+
                             @foreach($userAssetsCollection as $userAssetKey=>$userAsset)
                                 @foreach($userAsset->products as $productKey=>$product)
                                     @include('block.partials.purchasedProducts')
                                 @endforeach
                             @endforeach
-        
+
                         </div>
-        
+
                         @if(count($userAssetsCollection->filter(function ($value, $key) {return $value->title === 'محصولات من'; })->all())===0)
                             <div class="alert alert-info" role="alert">
                                 <strong> هنوز از آلاء خرید نکرده اید. </strong>
                                 بعد از اینکه از آلاء خرید کنید، امکان مشاهده خریدهای شما در این قسمت فراهم می شود.
                             </div>
                         @endif
-                    
+
                         <div class="m-portlet a--owl-carousel-slide-detailes">
                             <div class="m-portlet__head">
                                 <div class="m-portlet__head-caption">
@@ -105,7 +105,7 @@
                                     </a>
                                 </div>
                             </div>
-        
+
                             @foreach($userAssetsCollection as $userAssetKey=>$userAsset)
                                 @if($userAsset->title === 'محصولات من')
                                     @foreach($userAsset->products as $productKey=>$product)
@@ -151,13 +151,13 @@
                             @endforeach
                         </div>
                     @endif
-                    
-                    
+
+
                 </div>
             </div>
         </div>
     </div>
-    
+
     <!--begin::Modal-->
     <div class="modal fade" id="pamphletModal" tabindex="-1" role="dialog" aria-labelledby="pamphletModalModalLabel"
          aria-hidden="true">
@@ -173,7 +173,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    
+
                     <div class="row">
                         <div class="col-12">
                             <div class="m-widget6">
@@ -188,11 +188,11 @@
                                     </div>
                                 </div>
                                 <div class="m-widget6__body">
-                                
+
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div class="col-12 text-center">
                             <input type="hidden" id="pamphletContentNextPageUrl">
                             <button type="button"
@@ -202,7 +202,7 @@
                             </button>
                         </div>
                     </div>
-                
+
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">بستن</button>
@@ -224,7 +224,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    
+
                     <div class="row">
                         <div class="col-12">
                             <div class="m-widget6">
@@ -239,11 +239,11 @@
                                     </div>
                                 </div>
                                 <div class="m-widget6__body">
-                                
+
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div class="col-12 text-center">
                             <input type="hidden" id="videoContentNextPageUrl">
                             <button type="button"
@@ -253,7 +253,7 @@
                             </button>
                         </div>
                     </div>
-                
+
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">بستن</button>

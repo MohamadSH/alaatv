@@ -128,7 +128,7 @@ class Order extends BaseModel
         4,
         8,
     ];
-    
+
     /*
     |--------------------------------------------------------------------------
     | Traits methods
@@ -136,7 +136,7 @@ class Order extends BaseModel
     */
     use ProductCommon;
     use Helper;
-    
+
     /*
     |--------------------------------------------------------------------------
     | Properties methods
@@ -207,13 +207,13 @@ class Order extends BaseModel
         'deleted_at',
         'created_at',
     ];
-    
+
     public static function orderStatusFilter($orders, $orderStatusesId)
     {
         /** @var Order $orders */
         return $orders->whereIn('orderstatus_id', $orderStatusesId);
     }
-    
+
     public static function UserMajorFilter($orders, $majorsId)
     {
         /** @var Order $orders */
@@ -228,16 +228,16 @@ class Order extends BaseModel
                 $q->whereIn("major_id", $majorsId);
             });
         }
-        
+
         return $orders;
     }
-    
+
     public static function paymentStatusFilter($orders, $paymentStatusesId)
     {
         /** @var QueryBuilder $orders */
         return $orders->whereIn('paymentstatus_id', $paymentStatusesId);
     }
-    
+
     /**
      * Create a new Eloquent Collection instance.
      *
@@ -249,29 +249,29 @@ class Order extends BaseModel
     {
         return new OrderCollections($models);
     }
-    
+
     public function onlinetransactions()
     {
         return $this->hasMany('App\Transaction')
             ->where('paymentmethod_id', 1);
     }
-    
+
     public function archivedSuccessfulTransactions()
     {
         return $this->hasMany('App\Transaction')
             ->where("transactionstatus_id", config("constants.TRANSACTION_STATUS_ARCHIVED_SUCCESSFUL"));
     }
-    
+
     public function transactions()
     {
         return $this->hasMany('App\Transaction');
     }
-    
+
     public function files()
     {
         return $this->hasMany('\App\Orderfile');
     }
-    
+
     public function normalOrderproducts()
     {
         return $this->hasMany('App\Orderproduct')
@@ -280,12 +280,12 @@ class Order extends BaseModel
                 $q->Where("orderproducttype_id", config("constants.ORDER_PRODUCT_TYPE_DEFAULT"));
             });
     }
-    
+
     public function giftOrderproducts()
     {
         return $this->orderproducts(config('constants.ORDER_PRODUCT_GIFT'));
     }
-    
+
     /**
      * @param  null   $type
      * @param  array  $filters
@@ -308,7 +308,7 @@ class Order extends BaseModel
         } else {
             $relation = $this->hasMany('App\Orderproduct');
         }
-        
+
         foreach ($filters as $filter) {
             if (isset($filter["isArray"])) {
                 $relation->whereIn($filter["attribute"], $filter["value"]);
@@ -316,10 +316,10 @@ class Order extends BaseModel
                 $relation->where($filter["attribute"], $filter["value"]);
             }
         }
-        
+
         return $relation;
     }
-    
+
     /**
      * Determines this order's coupon discount type
      * Note: In case it has any coupons returns false
@@ -344,10 +344,10 @@ class Order extends BaseModel
                 ];
             }
         }
-        
+
         return false;
     }
-    
+
     /**
      * Indicated whether order cost has been determined or not
      *
@@ -357,7 +357,7 @@ class Order extends BaseModel
     {
         return (isset($this->cost) || isset($this->costwithoutcoupon));
     }
-    
+
     /**
      * @param $user
      *
@@ -367,7 +367,7 @@ class Order extends BaseModel
     {
         return optional($this->user)->id == optional($user)->id;
     }
-    
+
     /**
      * Calculates the discount amount of totalCost relevant to this order's coupon
      *
@@ -387,10 +387,10 @@ class Order extends BaseModel
                 }
             }
         }
-        
+
         return $totalCost;
     }
-    
+
     public function determineCoupontype()
     {
         if ($this->hasCoupon()) {
@@ -406,10 +406,10 @@ class Order extends BaseModel
                 ];
             }
         }
-        
+
         return false;
     }
-    
+
     /**
      * Determines whether order has coupon or not
      *
@@ -423,7 +423,7 @@ class Order extends BaseModel
             return false;
         }
     }
-    
+
     public function CompletedAt_Jalali()
     {
         /**
@@ -432,12 +432,12 @@ class Order extends BaseModel
         //        $explodedTime = $explodedDateTime[1] ;
         return $this->convertDate($this->completed_at, "toJalali");
     }
-    
+
     public function getNumberOfProductsAttribute()
     {
         return $this->orderproducts->count();
     }
-    
+
     /**
      * Gets this order's products
      *
@@ -481,7 +481,7 @@ class Order extends BaseModel
 
             });
     }
-    
+
     public function refreshCost()
     {
         $orderCost               = $this->obtainOrderCost(true);
@@ -492,10 +492,10 @@ class Order extends BaseModel
         $this->cost              = $orderCost["rawCostWithDiscount"];
         $this->costwithoutcoupon = $orderCost["rawCostWithoutDiscount"];
         $this->updateWithoutTimestamp();
-        
+
         return ["newCost" => $orderCost];
     }
-    
+
     /**
      * Obtain order total cost
      *
@@ -544,7 +544,7 @@ class Order extends BaseModel
             'calculatedOrderproducts'       => $priceInfo['orderproductsInfo']['calculatedOrderproducts'],
         ];
     }
-    
+
     /**
      * Gives order bons to user
      *
@@ -558,7 +558,7 @@ class Order extends BaseModel
         $totalFailedBons     = 0;
         $checkedProducts     = [];
         $user                = $this->user;
-        
+
         $orderproducts = $this->orderproducts(config("constants.ORDER_PRODUCT_TYPE_DEFAULT"))
             ->get();
         foreach ($orderproducts as $orderproduct) {
@@ -601,13 +601,13 @@ class Order extends BaseModel
                 }
             }
         }
-        
+
         return [
             $totalSuccessfulBons,
             $totalFailedBons,
         ];
     }
-    
+
     public function closeWalletPendingTransactions()
     {
         /**
@@ -622,7 +622,7 @@ class Order extends BaseModel
             $transaction->update();
         }
     }
-    
+
     /**
      * @param  ProductCollection  $products
      *
@@ -638,10 +638,10 @@ class Order extends BaseModel
                 $notDuplicateProduct->push($product);
             }
         }
-        
+
         return $notDuplicateProduct;
     }
-    
+
     /**
      * Determines if this order has given products
      *
@@ -654,7 +654,7 @@ class Order extends BaseModel
         return $this->orderproducts->whereIn("product_id", $products)
             ->isNotEmpty();
     }
-    
+
     /**
      * @return int
      */
@@ -669,10 +669,10 @@ class Order extends BaseModel
         foreach ($orderProducts as $orderProduct) {
             $donateCost += $orderProduct->cost;
         }
-        
+
         return $donateCost;
     }
-    
+
     public function closeOrderWithIndebtedStatus()
     {
         $this->close(config("constants.PAYMENT_STATUS_INDEBTED"));
@@ -680,7 +680,7 @@ class Order extends BaseModel
         $this->update();
         $this->timestamps = true;
     }
-    
+
     /**
      * Closes this order
      *
@@ -696,14 +696,14 @@ class Order extends BaseModel
             // You can't put config() in method signature
             $orderStatus = config("constants.ORDER_STATUS_CLOSED");
         }
-        
+
         $this->orderstatus_id   = $orderStatus;
 
         if(isset($paymentStatus))
             $this->paymentstatus_id = $paymentStatus;
         $this->completed_at     = Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now())->timezone('Asia/Tehran');
     }
-    
+
     public function detachUnusedCoupon()
     {
         $usedCoupon = $this->hasProductsThatUseItsCoupon();
@@ -719,7 +719,7 @@ class Order extends BaseModel
             }
         }
     }
-    
+
     /**
      * Determines whether the coupon is usable for this order or not
      *
@@ -734,17 +734,17 @@ class Order extends BaseModel
         if ($orderproductCount == optional($notIncludedProducts)->count()) {
             $flag = false;
         }
-        
+
         return $flag;
     }
-    
+
     /**
      * @return \Illuminate\Support\Collection|null
      */
     public function reviewCouponProducts(): ?Collection
     {
         $orderproducts = $this->orderproducts->whereType([config("constants.ORDER_PRODUCT_TYPE_DEFAULT")]);
-        
+
         $coupon              = $this->coupon;
         $notIncludedProducts = new  ProductCollection();
         if (isset($coupon)) {
@@ -755,14 +755,14 @@ class Order extends BaseModel
                 }
             }
         }
-        
+
         if ($notIncludedProducts->isNotEmpty()) {
             return $notIncludedProducts;
         } else {
             return null;
         }
     }
-    
+
     /**
      * Detaches coupon from this order
      *
@@ -773,7 +773,7 @@ class Order extends BaseModel
         $this->couponDiscount       = 0;
         $this->couponDiscountAmount = 0;
     }
-    
+
     /**
      * @return int $totalWalletRefund
      */
@@ -782,7 +782,7 @@ class Order extends BaseModel
         $walletTransactions = $this->suspendedTransactions()
             ->walletMethod()
             ->get();
-        
+
         $totalWalletRefund = 0;
         foreach ($walletTransactions as $transaction) {
             $response = $transaction->depositThisWalletTransaction();
@@ -791,10 +791,10 @@ class Order extends BaseModel
                 $totalWalletRefund += $transaction->cost;
             }
         }
-        
+
         return $totalWalletRefund;
     }
-    
+
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany|Transaction
      */
@@ -803,12 +803,12 @@ class Order extends BaseModel
         return $this->hasMany('App\Transaction')
             ->where("transactionstatus_id", config("constants.TRANSACTION_STATUS_SUSPENDED"));
     }
-    
+
     public function getOrderstatusAttribute()
     {
         $order = $this;
         $key   = "order:orderstatus:".$order->cacheKey();
-        
+
         return Cache::tags(["order"])
             ->remember($key, config("constants.CACHE_10"), function () use ($order) {
                 return optional($order->orderstatus()
@@ -819,17 +819,17 @@ class Order extends BaseModel
                 ]);
             });
     }
-    
+
     public function orderstatus()
     {
         return $this->belongsTo('App\Orderstatus');
     }
-    
+
     public function getPaymentstatusAttribute()
     {
         $order = $this;
         $key   = 'order:paymentstatus:'.$order->cacheKey();
-        
+
         return Cache::tags(['order'])
             ->remember($key, config('constants.CACHE_10'), function () use ($order) {
                 return optional($order->paymentstatus()
@@ -840,17 +840,17 @@ class Order extends BaseModel
                 ]);
             });
     }
-    
+
     public function paymentstatus()
     {
         return $this->belongsTo('App\Paymentstatus');
     }
-    
+
     public function getCouponInfoAttribute()
     {
         $order = $this;
         $key   = "order:coupon:".$order->cacheKey();
-        
+
         return Cache::tags(["order"])
             ->remember($key, config("constants.CACHE_10"), function () use ($order) {
                 $coupon = $order->coupon()
@@ -858,13 +858,13 @@ class Order extends BaseModel
                 if (!isset($coupon)) {
                     return null;
                 }
-                
+
                 $coupon->setVisible([
                     'name',
                     'code',
                     //                            'discountType',
                 ]);
-                
+
                 return array_merge($coupon->toArray(), $this->coupon_discount_type);
             });
     }
@@ -881,12 +881,12 @@ class Order extends BaseModel
                     ->where('paymentmethod_id', '<>' ,config('constants.PAYMENT_METHOD_WALLET'))
                     ->where('transactionstatus_id', config('constants.TRANSACTION_STATUS_SUCCESSFUL'));
     }
-    
+
     public function coupon()
     {
         return $this->belongsTo('App\Coupon');
     }
-    
+
     /**
      * Recalculates order's cost and updates it's cost
      *
@@ -897,12 +897,12 @@ class Order extends BaseModel
     {
         return $this->totalCost();
     }
-    
+
     public function totalCost()
     {
         return (int)$this->obtainOrderCost()["totalCost"];
     }
-    
+
     /**
      * @return Collection
      */
@@ -910,7 +910,7 @@ class Order extends BaseModel
     {
         $order = $this;
         $key   = "order:orderproducts:".$order->cacheKey();
-        
+
         return Cache::tags(["order"])
             ->remember($key, config("constants.CACHE_5"), function () use ($order) {
                 /** @var OrderproductCollection $orderproducts */
@@ -933,11 +933,11 @@ class Order extends BaseModel
                         'grandProduct',
                     ]);
                 }
-                
+
                 return $orderproducts;
             });
     }
-    
+
     /**
      * @return int
      */
@@ -945,12 +945,12 @@ class Order extends BaseModel
     {
         return $this->totalPaidCost() + $this->totalRefund();
     }
-    
+
     public function totalPaidCost()
     {
         $order = $this;
         $key   = "order:totalPaidCost:".$order->cacheKey();
-        
+
         return (int)Cache::tags(["order"])
             ->remember($key, config("constants.CACHE_60"), function () use ($order) {
                 $totalPaidCost          = 0;
@@ -959,16 +959,16 @@ class Order extends BaseModel
                     $totalPaidCost = $successfulTransactions->where('cost', '>', 0)
                         ->sum("cost");
                 }
-                
+
                 return $totalPaidCost;
             });
     }
-    
+
     public function totalRefund()
     {
         $order = $this;
         $key   = "order:totalRefund:".$order->cacheKey();
-        
+
         return (int)Cache::tags(["order"])
             ->remember($key, config("constants.CACHE_60"), function () use ($order) {
                 $totalRefund            = 0;
@@ -977,11 +977,11 @@ class Order extends BaseModel
                     $totalRefund = $successfulTransactions->where('cost', '<', 0)
                         ->sum("cost");
                 }
-                
+
                 return $totalRefund;
             });
     }
-    
+
     /**
      * @return int
      */
@@ -989,7 +989,7 @@ class Order extends BaseModel
     {
         return $this->totalRefund();
     }
-    
+
     /**
      * @return Collection
      */
@@ -997,7 +997,7 @@ class Order extends BaseModel
     {
         $order = $this;
         $key   = "order:donates:".$order->cacheKey();
-        
+
         return Cache::tags(["order"])
             ->remember($key, config("constants.CACHE_10"), function () use ($order) {
                 return $this->orderproducts->whereIn('product_id', [
@@ -1006,27 +1006,27 @@ class Order extends BaseModel
                 ]);
             });
     }
-    
+
     /**
      * @return int
      */
     public function getDonateAmountAttribute(): int
     {
         $donateOrderProducts = $this->donates;
-        
+
         $donateCost = 0;
         if ($donateOrderProducts->isNotEmpty()) {
             $donateCost = $donateOrderProducts->sum("cost");
         }
-        
+
         return $donateCost;
     }
-    
+
     public function getSuccessfulTransactionsAttribute()
     {
         $order = $this;
         $key   = "order:transactions:".$order->cacheKey();
-        
+
         return Cache::tags(["order"])
             ->remember($key, config("constants.CACHE_60"), function () use ($order) {
                 /** @var TransactionCollection $successfulTransactions */
@@ -1046,11 +1046,11 @@ class Order extends BaseModel
                     'jalaliCompletedAt',
                     'editLink',
                 ]);
-                
+
                 return $successfulTransactions;
             });
     }
-    
+
     public function successfulTransactions()
     {
         return $this->hasMany('App\Transaction')
@@ -1061,9 +1061,9 @@ class Order extends BaseModel
                         config("constants.TRANSACTION_STATUS_SUSPENDED"));
             });
     }
-    
+
     public function getPendingTransactionsAttribute()
-    
+
     {
         $order = $this;
         $key   = "order:pendingtransactions:".$order->cacheKey();
@@ -1086,19 +1086,19 @@ class Order extends BaseModel
                     'jalaliCompletedAt',
                     'editLink',
                 ]);
-                
+
                 return $pendingTransaction;
             });
     }
-    
+
     public function pendingTransactions()
     {
         return $this->hasMany('App\Transaction')
             ->where("transactionstatus_id", config("constants.TRANSACTION_STATUS_PENDING"));
     }
-    
+
     public function getUnpaidTransactionsAttribute()
-    
+
     {
         $order = $this;
         $key   = "order:unpaidtransactions:".$order->cacheKey();
@@ -1122,39 +1122,39 @@ class Order extends BaseModel
                     'jalaliDeadlineAt',
                     'editLink',
                 ]);
-                
+
                 return $unpaidTransaction;
             });
     }
-    
+
     public function unpaidTransactions()
     {
         return $this->hasMany('App\Transaction')
             ->where("transactionstatus_id", config("constants.TRANSACTION_STATUS_UNPAID"));
     }
-    
+
     public function getOrderPostingInfoAttribute()
     {
         $order = $this;
         $key   = "order:postInfo:".$order->cacheKey();
-        
+
         return Cache::tags(["order"])
             ->remember($key, config("constants.CACHE_600"), function () use ($order) {
                 return $order->orderpostinginfos()
                     ->get();
             });
     }
-    
+
     public function orderpostinginfos()
     {
         return $this->hasMany('\App\Orderpostinginfo');
     }
-    
+
     public function getDebtAttribute()
     {
         return $this->debt();
     }
-    
+
     public function debt()
     {
         $order = $this;
@@ -1164,22 +1164,22 @@ class Order extends BaseModel
                 if ($this->orderstatus_id == config("constants.ORDER_STATUS_REFUNDED")) {
                     return -($this->totalPaidCost() + $this->totalRefund());
                 }
-                
+
                 $cost = $this->obtainOrderCost()["totalCost"];
                 return $cost - ($this->totalPaidCost() + $this->totalRefund());
             });
     }
-    
+
     public function getUsedBonSumAttribute()
     {
         return $this->usedBonSum();
     }
-    
+
     public function usedBonSum()
     {
         $order = $this;
         $key   = "order:usedBonSum:".$order->cacheKey();
-        
+
         return (int)Cache::tags(["order"])
             ->remember($key, config("constants.CACHE_600"), function () use ($order) {
                 $bonSum = 0;
@@ -1188,50 +1188,47 @@ class Order extends BaseModel
                         $bonSum += $orderproduct->userbons->sum("pivot.usageNumber");
                     }
                 }
-                
+
                 return $bonSum;
             });
     }
-    
+
     public function getAddedBonSumAttribute()
-    
     {
         return $this->addedBonSum();
     }
-    
+
     public function addedBonSum($intendedUser = null)
     {
         $order = $this;
         $key   = "order:addedBonSum:".$order->cacheKey();
-        
-        return (int)Cache::tags(["order"])
-            ->remember($key, config("constants.CACHE_600"), function () use ($order) {
-                $bonSum = 0;
+
+        return Cache::tags(["order"])
+            ->remember($key, config("constants.CACHE_600"), function () use ($order , $intendedUser) {
+                /** @var User $user */
                 if (isset($intendedUser)) {
                     $user = $intendedUser;
-                } else {
-                    if (Auth::check()) {
-                        $user = Auth::user();
+                } elseif (Auth::check()) {
+                    $user = Auth::user();
+                } else{
+                    $user = $this->user;
+                }
+
+                $bonSum = 0;
+                foreach ($this->orderproducts as $orderproduct) {
+                    /** @var Collection $userbons */
+                    $userbons = $user->userbons->where("orderproduct_id", $orderproduct->id);
+                    if ($userbons->isNotEmpty()) {
+                        $bonSum += $userbons->sum("totalNumber");
                     }
                 }
-                
-                if (isset($user)) {
-                    foreach ($this->orderproducts as $orderproduct) {
-                        if (!$user->userbons->where("orderproduct_id", $orderproduct->id)
-                            ->isEmpty()) {
-                            $bonSum += $user->userbons->where("orderproduct_id", $orderproduct->id)
-                                ->sum("totalNumber");
-                        }
-                    }
-                }
-                
                 return $bonSum;
             });
     }
-    
+
     public function getUserAttribute()
     {
-        
+
         $order = $this;
         $key   = "order:user:".$order->cacheKey();
         return Cache::tags(["order"])
@@ -1249,11 +1246,11 @@ class Order extends BaseModel
                     'info',
                     'userstatus',
                 ];
-                
+
                 if (hasAuthenticatedUserPermission(config('constants.SHOW_USER_MOBILE'))) {
                     $visibleColumns = array_merge($visibleColumns, ['mobile']);
                 }
-                
+
                 if (hasAuthenticatedUserPermission(config('constants.SHOW_USER_EMAIL'))) {
                     $visibleColumns = array_merge($visibleColumns, ['email']);
                 }
@@ -1267,12 +1264,12 @@ class Order extends BaseModel
                     ->setVisible($visibleColumns);
             });
     }
-    
+
     public function user()
     {
         return $this->belongsTo('App\User');
     }
-    
+
     public function getJalaliUpdatedAtAttribute()
     {
         $order = $this;
@@ -1283,12 +1280,12 @@ class Order extends BaseModel
                     if (hasAuthenticatedUserPermission(config('constants.SHOW_ORDER_ACCESS'))) {
                         return $this->convertDate($order->updated_at, "toJalali");
                     }
-                
+
                 return null;
             });
-        
+
     }
-    
+
     public function getJalaliCreatedAtAttribute()
     {
         $order = $this;
@@ -1299,12 +1296,12 @@ class Order extends BaseModel
                     if (hasAuthenticatedUserPermission(config('constants.SHOW_ORDER_ACCESS'))) {
                         return $this->convertDate($order->created_at, "toJalali");
                     }
-                
+
                 return null;
             });
-        
+
     }
-    
+
     public function getJalaliCompletedAtAttribute()
     {
         $order = $this;
@@ -1315,14 +1312,14 @@ class Order extends BaseModel
                     if (hasAuthenticatedUserPermission(config('constants.SHOW_ORDER_ACCESS'))) {
                         return $this->convertDate($order->completed_at, "toJalali");
                     }
-                
+
                 return null;
             });
     }
-    
+
     public function getPostingInfoAttribute()
     {
-        
+
         $order = $this;
         $key   = "order:postingInfo:".$order->cacheKey();
         return Cache::tags(["order"])
@@ -1330,9 +1327,9 @@ class Order extends BaseModel
                 return $order->orderpostinginfos()
                     ->get();
             });
-        
+
     }
-    
+
     public function getManagerCommentAttribute()
     {
         $order = $this;
@@ -1343,17 +1340,17 @@ class Order extends BaseModel
                     return $order->ordermanagercomments()
                         ->get();
                 }
-                
+
                 return null;
             });
-        
+
     }
-    
+
     public function ordermanagercomments()
     {
         return $this->hasMany('App\Ordermanagercomment');
     }
-    
+
     public function getEditLinkAttribute()
     {
         if (hasAuthenticatedUserPermission(config('constants.EDIT_ORDER_ACCESS')))
@@ -1362,7 +1359,7 @@ class Order extends BaseModel
         return null;
 
     }
-    
+
     public function getRemoveLinkAttribute()
     {
         if (hasAuthenticatedUserPermission(config('constants.REMOVE_ORDER_ACCESS')))

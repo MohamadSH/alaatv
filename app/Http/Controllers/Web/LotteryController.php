@@ -31,7 +31,6 @@ class LotteryController extends Controller
      */
     public function holdLottery(Request $request)
     {
-        dd('Access denied');
         $counter        = 0;
         $successCounter = 0;
         $failedCounter  = 0;
@@ -161,7 +160,6 @@ class LotteryController extends Controller
      */
     public function givePrizes(Request $request)
     {
-        dd('Access denied');
         try {
             $lotteryName = '';
             if ($request->has('lottery')) {

@@ -16,21 +16,21 @@ class SendEmployeeTimeSheetCommand extends Command
 {
     use DateTrait;
     use EmployeeTrait;
-    
+
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
     protected $signature = 'alaaTv:employee:send:timeSheet {employee : The ID of the employee}';
-    
+
     /**
      * The console command description.
      *
      * @var string
      */
     protected $description = 'send TimeSheet to employee';
-    
+
     /**
      * Create a new command instance.
      *
@@ -40,7 +40,7 @@ class SendEmployeeTimeSheetCommand extends Command
     {
         parent::__construct();
     }
-    
+
     /**
      * Execute the console command.
      *
@@ -54,7 +54,7 @@ class SendEmployeeTimeSheetCommand extends Command
                 $user = User::findOrFail($employeeId);
             } catch (ModelNotFoundException $exception) {
                 $this->error($exception->getMessage());
-                
+
                 return;
             }
             if ($this->confirm('You have chosen '.$user->full_name.'. Do you wish to continue?', true)) {
@@ -65,7 +65,7 @@ class SendEmployeeTimeSheetCommand extends Command
             $this->performTimeSheetTaskForAllEmployee();
         }
     }
-    
+
     private function performTimeSheetTaskForAnEmployee(User $user)
     {
         $this->info("send TimeSheet to".$user->full_name);
@@ -75,7 +75,7 @@ class SendEmployeeTimeSheetCommand extends Command
             ->format("Y-m-d");
         $this->calculate($user, $dayOfWeekJalali, $toDayDate);
     }
-    
+
     private function calculate(User $employee, $dayOfWeekJalali, $toDayDate)
     {
         $employeeSchedule  = Employeeschedule::where("user_id", $employee->id)
@@ -87,7 +87,7 @@ class SendEmployeeTimeSheetCommand extends Command
         $done              = false;
         if (!isset($employeeTimeSheet)) {
             $newEmplployeeTimeSheet = new Employeetimesheet();
-            
+
             $newEmplployeeTimeSheet->date    = $toDayDate;
             $newEmplployeeTimeSheet->user_id = $employee->id;
             if (isset($employeeSchedule)) {
@@ -105,7 +105,7 @@ class SendEmployeeTimeSheetCommand extends Command
             $newEmplployeeTimeSheet->timeSheetLock          = 1;
             $newEmplployeeTimeSheet->isPaid                 = 1;
             $newEmplployeeTimeSheet->workdaytype_id         = 1;
-            
+
             if ($newEmplployeeTimeSheet->save()) {
                 $realWorkTime = $newEmplployeeTimeSheet->obtainRealWorkTime('IN_SECONDS');
                 $done         = $newEmplployeeTimeSheet->id;
@@ -165,7 +165,7 @@ class SendEmployeeTimeSheetCommand extends Command
 
             $realWorkTime = $employeeTimeSheet->obtainRealWorkTime('IN_SECONDS');
             if ($realWorkTime <= 0) {
-                $employeeTimeSheet->overtime_confirmation = true;
+                $employeeTimeSheet->overtime_status_id = config('constants.EMPLOYEE_OVERTIME_STATUS_CONFIRMED');
             }
 
             if ($employeeTimeSheet->update()) {
@@ -175,7 +175,7 @@ class SendEmployeeTimeSheetCommand extends Command
                 $done = false;
             }
             }
-        
+
         if ($done) {
             $employeeTimeSheet = Employeetimesheet::all()
                 ->where("id", $done)
@@ -183,7 +183,7 @@ class SendEmployeeTimeSheetCommand extends Command
             /**
              * Sending auto generated password through SMS
              */
-            
+
             $todayJalaliDate        = $this->convertDate($toDayDate, "toJalali");
             $todayJalaliDate        = explode("/", $todayJalaliDate);
             $jalaliYear             = $todayJalaliDate[0];
@@ -192,7 +192,7 @@ class SendEmployeeTimeSheetCommand extends Command
             $jalaliYear             = substr($jalaliYear, -2);
             $todayJalaliDateCaption = $jalaliDay." ".$jalaliMonth." ".$jalaliYear;
             $persianShiftTime       = $employeeTimeSheet->obtainShiftTime("PERSIAN_FORMAT");
-            
+
             if ($persianShiftTime !== 0) {
                 $date     = $todayJalaliDateCaption;
                 $in       = $employeeTimeSheet->clockIn;
@@ -204,7 +204,7 @@ class SendEmployeeTimeSheetCommand extends Command
             }
         }
     }
-    
+
     private function performTimeSheetTaskForAllEmployee()
     {
         $users = $this->getEmployee();

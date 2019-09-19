@@ -15,16 +15,16 @@ use Illuminate\Queue\SerializesModels;
 class MobileVerified extends Notification implements ShouldQueue
 {
     use Queueable, SerializesModels;
-    
-    const MEDIANA_PATTERN_CODE_USER_MOBILE_VERIFIED = 817;
-    
+
+    const MEDIANA_PATTERN_CODE_USER_MOBILE_VERIFIED = 'gxppqifdwl';
+
     public $timeout = 120;
-    
+
     /**
      * @var User
      */
     protected $user;
-    
+
     /**
      * Get the notification's delivery channels.
      *
@@ -35,31 +35,31 @@ class MobileVerified extends Notification implements ShouldQueue
     public function via($notifiable)
     {
         $this->user = $notifiable;
-        
+
         return [
             MedianaPatternChannel::class,
-            'mail',
+//            'mail',
         ];
     }
-    
-    /**
-     * Get the mail representation of the notification.
-     *
-     * @param  mixed  $notifiable
-     *
-     * @return \Illuminate\Notifications\Messages\MailMessage
-     */
-    public function toMail($notifiable)
-    {
-        return (new MailMessage)->line($this->msg())
-            ->action('برو به سایت آلاء', url('/'));
-    }
-    
+
+//    /**
+//     * Get the mail representation of the notification.
+//     *
+//     * @param  mixed  $notifiable
+//     *
+//     * @return \Illuminate\Notifications\Messages\MailMessage
+//     */
+//    public function toMail($notifiable)
+//    {
+//        return (new MailMessage)->line($this->msg())
+//            ->action('برو به سایت آلاء', url('/'));
+//    }
+
     private function msg(): string
     {
         return "آلایی عزیز، شماره موبایل شما در آلاء تایید شد.";
     }
-    
+
     /**
      * @param $notifiable
      *
@@ -72,11 +72,22 @@ class MobileVerified extends Notification implements ShouldQueue
             ->setPatternCode(self::MEDIANA_PATTERN_CODE_USER_MOBILE_VERIFIED)
             ->sendAt(Carbon::now());
     }
-    
+
     private function getInputData(): array
     {
         return [
-            'request' => 'شماره موبایل ',
+            'name' => $this->getUserFullName(),
+            'request' => 'شماره موبایل',
+            'supportLink' => ''
         ];
+    }
+
+    /**
+     * @return mixed
+     */
+    private function getUserFullName():string
+    {
+        $userFullName = optional($this->user)->full_name;
+        return (isset($userFullName))?$userFullName:'آلایی' ;
     }
 }

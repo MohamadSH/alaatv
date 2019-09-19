@@ -783,11 +783,11 @@
         <div class="m-portlet__foot m-portlet__foot--fit">
             <div class="m-form__actions">
                 @if(isset($formByPass) && !$formByPass)
-                    <button type="button" class="btn m-btn--pill m-btn--air btn-accent" onclick="location.href = '@if(session()->has("redirectTo"))  {{session()->get("redirectTo")}}@else {{action("Web\IndexPageController")}} @endif' ">
+                    <button type="button" class="btn m-btn--pill m-btn--air btn-accent" onclick="location.href = '@if(session()->has("redirectTo"))  {{session()->get("redirectTo")}}@else {{route('web.index')}} @endif' ">
                         بعدا پر می کنم
                     </button>
                 @elseif(isset($hasHomeButton))
-                    <a href="{{action("Web\IndexPageController")}}" class="btn m-btn--pill m-btn--air btn-danger"> @lang('page.Home') </a>
+                    <a href="{{route('web.index')}}" class="btn m-btn--pill m-btn--air btn-danger"> @lang('page.Home') </a>
                 @endif
                 @if(!Auth::user()->lockProfile)
                     <button type="submit" class="btn m-btn--pill m-btn--air btn-success"> ادامه</button>

@@ -49,7 +49,7 @@
                             @if($type!='product')
                                 <span class = "m-widget19__username">
                                 {{ $widgetAuthor->full_name }}
-                            </span>
+                                </span>
                                 <br>
                                 <span class = "m-widget19__time">
                                 موسسه غیرتجاری آلاء

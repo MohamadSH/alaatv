@@ -4,9 +4,11 @@ namespace App\Http\Controllers\Web;
 
 use App\Bon;
 use App\Events\FillTmpShareOfOrder;
+use App\Notifications\DownloadNotice;
 use App\User;
 use App\Order;
 use App\Wallet;
+use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -28,7 +30,7 @@ class OfflinePaymentController extends Controller
     {
 
     }
-    
+
     /**
      * @param  Request  $request
      * @param  string   $paymentMethod
@@ -58,7 +60,7 @@ class OfflinePaymentController extends Controller
         if ($check['error'])
             return response($check['text'], $check['httpStatusCode']);
 
-        
+
         if (!$this->processVerification($order, $paymentMethod , $customerDescription))
             return response(['message' => 'Invalid inputs'], Response::HTTP_BAD_REQUEST);
 
@@ -66,7 +68,7 @@ class OfflinePaymentController extends Controller
             <a href="'.route('user.asset').'" class="btn m-btn--pill m-btn--air m-btn m-btn--gradient-from-info m-btn--gradient-to-accent animated infinite heartBeat">
                 دانلودهای من
             </a>';
-        
+
         $responseMessages = [
             'سفارش شما با موفقیت ثبت شد',
             'برای دانلود محصولاتی که خریده اید به صفحه روبرو بروید: '.$assetLink,
@@ -83,6 +85,10 @@ class OfflinePaymentController extends Controller
             ]);
 
         event(new FillTmpShareOfOrder($order));
+        if($device == 'android') {
+            $order->user->notify(new DownloadNotice($order));
+        }
+
         return redirect()->route('showOnlinePaymentStatus', [
             'status'        => 'successful',
             'paymentMethod' => $paymentMethod,
@@ -104,7 +110,7 @@ class OfflinePaymentController extends Controller
         else{
             $order = $user->openOrders->first();
         }
-        
+
         $error    = false;
         $response = Response::HTTP_OK;
         if (!isset($order)) {
@@ -112,7 +118,7 @@ class OfflinePaymentController extends Controller
             $response = Response::HTTP_BAD_REQUEST;
             $text     = 'No order found';
         }
-        
+
         $result = [
             'error'          => $error,
             'httpStatusCode' => $response,
@@ -121,7 +127,7 @@ class OfflinePaymentController extends Controller
                 'order' => isset($order) ? $order : null,
             ],
         ];
-        
+
         return $result;
     }
 
@@ -146,7 +152,7 @@ class OfflinePaymentController extends Controller
                 'text'           => 'Order not found',
             ];
         }
-        
+
         return $result;
     }
 
@@ -174,14 +180,14 @@ class OfflinePaymentController extends Controller
                         }
                     }
                 }
-        
+
                 $orderPaymentStatus = config('constants.PAYMENT_STATUS_UNPAID');
                 $order->close($orderPaymentStatus);
-                
+
                 break;
             case 'wallet':
             case 'noPayment':
-                
+
                 /** Wallet transactions */
 //                $order->closeWalletPendingTransactions();
                 $wallets = optional($order->user)->wallets;
@@ -206,6 +212,7 @@ class OfflinePaymentController extends Controller
                 /** End */
 
                 $order->orderstatus_id= config('constants.ORDER_STATUS_CLOSED');
+                $order->completed_at     = Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now())->timezone('Asia/Tehran');
                 if ($order->hasCost()) {
                     $cost = $order->totalCost() - $order->totalPaidCost();
                     if ($cost == 0) {
@@ -220,7 +227,7 @@ class OfflinePaymentController extends Controller
                             ] = $order->giveUserBons($bonName);
 
                         /** End */
-    
+
                         $order->paymentstatus_id = config('constants.PAYMENT_STATUS_PAID');
                         if(strlen($customerDescription)>0)
                         {

@@ -9,7 +9,7 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item">
                 <i class="fa fa-home m--padding-right-5"></i>
-                <a class="m-link" href="{{action("Web\IndexPageController")}}">@lang('page.Home')</a>
+                <a class="m-link" href="{{route('web.index')}}">@lang('page.Home')</a>
             </li>
             <li class="breadcrumb-item" aria-current="page">
                 <a class="m-link" href="{{action("Web\AdminController@adminProduct")}}">پنل مدیریتی محصولات</a>
@@ -27,7 +27,7 @@
 @endsection
 
 @section('content')
-    
+
     @include("systemMessage.flash")
 
     <div class="row">
@@ -351,7 +351,7 @@
             $('#removeProductPhoto img').attr('src', photoAddress);
             $('#removeProductPhoto').modal('show');
         }
-        
+
         $("input.productTags").tagsinput({
             tagClass: 'm-badge m-badge--info m-badge--wide m-badge--rounded'
         });

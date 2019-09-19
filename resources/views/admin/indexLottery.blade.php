@@ -11,7 +11,7 @@
         <ol class = "breadcrumb">
             <li class = "breadcrumb-item">
                 <i class = "fa fa-home m--padding-right-5"></i>
-                <a class = "m-link" href = "{{action("Web\IndexPageController")}}">@lang('page.Home')</a>
+                <a class = "m-link" href = "{{route('web.index')}}">@lang('page.Home')</a>
             </li>
             <li class = "breadcrumb-item active" aria-current = "page">
                 <a class = "m-link" href = "#">پنل مدیریت قرعه کشی</a>
@@ -30,15 +30,15 @@
             <div class = "m-portlet m-portlet--mobile m-portlet--body-progress-">
                 <div class = "m-portlet__body">
                     <span class = "bold" style = "font-size: larger"></span>&nbsp;&nbsp;
-                    <a class = "btn btn-default" href = "{{action("Web\BotsController@pointBot")}}?15tir" {{($pointsGiven)?"disabled":""}} target = "_blank">
+                    <a class = "btn btn-default" href = "{{action("Web\BotsController@pointBot").'?'.$lotteryName}}" {{($pointsGiven)?"disabled":""}} target = "_blank">
                         اهدای امتیاز
                     </a>
-                    <a class = "btn btn-default" href = "{{action("Web\BotsController@pointBot")}}?riyazi" {{($pointsGiven)?"disabled":""}} target = "_blank">
-                        اهدای امتیاز اضافه ریاضی
-                    </a>
-                    <a class = "btn btn-default" href = "{{action("Web\BotsController@pointBot")}}?tajrobi" {{($pointsGiven)?"disabled":""}} target = "_blank">
-                        اهدای امتیاز اضافه تجربی
-                    </a>
+{{--                    <a class = "btn btn-default" href = "{{action("Web\BotsController@pointBot")}}?riyazi" {{($pointsGiven)?"disabled":""}} target = "_blank">--}}
+{{--                        اهدای امتیاز اضافه ریاضی--}}
+{{--                    </a>--}}
+{{--                    <a class = "btn btn-default" href = "{{action("Web\BotsController@pointBot")}}?tajrobi" {{($pointsGiven)?"disabled":""}} target = "_blank">--}}
+{{--                        اهدای امتیاز اضافه تجربی--}}
+{{--                    </a>--}}
                     <span class = "m--font-danger bold">{{($pointsGiven)?"اهدا شده است":""}}</span>
                     <hr>
                 </div>

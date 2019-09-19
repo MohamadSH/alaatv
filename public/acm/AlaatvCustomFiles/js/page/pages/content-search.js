@@ -249,12 +249,12 @@ var Alaasearch = function () {
             '                    ' + widgetTitle + '\n' +
             '                </a>\n' +
             '            </span>\n' +
-            '        <br>\n' +
-            '        <span class="m-widget4__sub">\n' +
-            '                <a href="' + widgetActionLink + '" class="m-link">\n' +
-            '                    ' + widgetAuthor.full_name + '\n' +
-            '                </a>\n' +
-            '            </span>\n' +
+            // '        <br>\n' +
+            // '        <span class="m-widget4__sub">\n' +
+            // '                <a href="' + widgetActionLink + '" class="m-link">\n' +
+            // '                    ' + widgetAuthor.full_name + '\n' +
+            // '                </a>\n' +
+            // '            </span>\n' +
             '    </div>\n' +
             widgetThumbnail +
             '</div>';

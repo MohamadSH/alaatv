@@ -10,7 +10,7 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item">
                 <i class="flaticon-home-2 m--padding-right-5"></i>
-                <a class="m-link" href="{{action("Web\IndexPageController")}}">@lang('page.Home')</a>
+                <a class="m-link" href="{{route('web.index')}}">@lang('page.Home')</a>
             </li>
             <li class="breadcrumb-item active" aria-current="page">
                 سفارش های من
@@ -54,7 +54,7 @@
 
     <div class="row">
         <div class="col">
-    
+
             <div class="m-portlet m-portlet--tabs">
                 <div class="m-portlet__head">
                     <div class="m-portlet__head-tools">
@@ -87,7 +87,7 @@
                 <div class="m-portlet__body">
                     <div class="tab-content">
                         <div class="tab-pane active" id="user-orderList" role="tabpanel">
-    
+
                             @if(!isset($orders) || count($orders)===0)
                                 <div class="alert alert-info" role="alert">
                                     <strong>شما تاکنون سفارشی ثبت نکرده اید</strong>
@@ -96,7 +96,7 @@
                                 <div class="m-section">
                                     <div class="m-section__content">
                                         <div class="table-responsive">
-    
+
                                             <table class="table m-table m-table--head-bg-success table-hover">
                                                 <thead>
                                                 <tr>
@@ -131,7 +131,7 @@
                                                                 </span>
                                                         </td>
                                                         <td>
-    
+
                                                             @if(isset($order->paymentstatus->id) && $order->paymentstatus->id == config("constants.PAYMENT_STATUS_PAID"))
                                                                 <span class="m-badge m-badge--wide m-badge--success">
                                                                         {{$order->paymentstatus->displayName}}
@@ -201,7 +201,7 @@
 
                                                 </tbody>
                                             </table>
-    
+
                                             <!--begin::Modal-->
                                             <div id="orderDetailesModal" class="modal fade" tabindex="-1"
                                                  {{--role="dialog"--}}{{--aria-labelledby="exampleModalLabel"--}}{{--aria-hidden="true"--}}data-backdrop="static"
@@ -218,7 +218,7 @@
                                                             </button>
                                                         </div>
                                                         <div class="modal-body">
-    
+
                                                             <div class="m-portlet m-portlet--skin-dark m-portlet--bordered-semi m--bg-accent">
                                                                 <div class="m-portlet__head">
                                                                     <div class="m-portlet__head-caption">
@@ -233,7 +233,7 @@
                                                                     </div>
                                                                 </div>
                                                                 <div class="m-portlet__body orderTotalyInfoWraper">
-    
+
                                                                     <div class="row">
                                                                         <div class="col col-md-6">
                                                                             <table class="table table-sm m-table">
@@ -286,19 +286,19 @@
                                                                                     </tbody>
                                                                                 </table>
                                                                             </div>
-                                                                            
+
                                                                             <div class="alert alert-success customerDescription customerDescriptionInModal" role="alert">
-                                                                            
+
                                                                             </div>
 
                                                                         </div>
                                                                     </div>
-    
+
                                                                     {{--<th>توضیح شما</th>--}}
 
                                                                 </div>
                                                             </div>
-    
+
                                                             <div class="m-portlet m-portlet--mobile orderDetailes-totalProductPortlet">
                                                                 <div class="m-portlet__head">
                                                                     <div class="m-portlet__head-caption">
@@ -315,7 +315,7 @@
                                                                     </div>
                                                                 </div>
                                                             </div>
-    
+
                                                             <div class="m-portlet m-portlet--skin-dark m-portlet--bordered-semi m--bg-info orderDetailes-totalTransactionsTable">
                                                                 <div class="m-portlet__head">
                                                                     <div class="m-portlet__head-caption">
@@ -330,7 +330,7 @@
                                                                     </div>
                                                                 </div>
                                                                 <div class="m-portlet__body">
-    
+
                                                                     <table class="table table-sm m-table m-table--head-bg-primary orderDetailes-successfulTransactionsTable">
                                                                         <thead class="thead-inverse">
                                                                         <tr>
@@ -347,7 +347,7 @@
                                                                         </thead>
                                                                         <tbody class="orderDetailes-successfulTransactions"></tbody>
                                                                     </table>
-    
+
                                                                     <table class="table table-sm m-table m-table--head-bg-primary orderDetailes-pendingTransactionsTable">
                                                                         <thead class="thead-inverse">
                                                                         <tr>
@@ -364,7 +364,7 @@
                                                                         </thead>
                                                                         <tbody class="orderDetailes-pending_transactions"></tbody>
                                                                     </table>
-    
+
                                                                     <table class="table table-sm m-table m-table--head-bg-primary orderDetailes-unpaidTransactionsTable">
                                                                         <thead class="thead-inverse">
                                                                         <tr>
@@ -404,7 +404,7 @@
 
                         </div>
                         <div class="tab-pane" id="user-paymentsList" role="tabpanel">
-    
+
                             @if(!isset($transactions) || count($transactions)===0)
                                 <div class="alert alert-info" role="alert">
                                     <strong>برای شما تاکنون تراکنشی ثبت نشده است.</strong>
@@ -601,13 +601,13 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                
+
                 {!! Form::open(['method' => 'POST','route' => ['redirectToBank', 'paymentMethod'=>'zarinpal', 'device'=>'web'], 'id'=>'onlinePaymentModalForm']) !!}
                 <div class="modal-body">
-        
+
                     {!! Form::hidden('order_id',null) !!}
                     {!! Form::hidden('transaction_id',null , ["disabled"]) !!}
-        
+
                     <div class="row margin-top-20" id="gatewayDiv">
                         <div class="col">
                             <div class="form-group">
@@ -625,6 +625,15 @@
                             <span class="m-badge m-badge--success m-badge--wide m-badge--rounded orderCostReport"></span>
                         </div>
                     </div>
+                    @if(isset($credit))
+                        <div class="row margin-top-40 text-center">
+                            <div class="col">
+                                <span class="m-badge m-badge--success m-badge--wide m-badge--rounded">
+                                    اعتبار کیف پول: {{number_format($credit)}} تومان
+                                </span>
+                            </div>
+                        </div>
+                    @endif
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn m-btn--pill m-btn--air btn-outline-brand m-btn m-btn--custom"

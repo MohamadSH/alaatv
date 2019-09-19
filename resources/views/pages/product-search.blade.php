@@ -5,7 +5,7 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item">
                 <i class="fa fa-home"></i>
-                <a class="m-link" href="{{action("Web\IndexPageController")}}">@lang('page.Home')</a>
+                <a class="m-link" href="{{route('web.index')}}">@lang('page.Home')</a>
             </li>
             <li class="breadcrumb-item active" aria-current="page">
                 <i class="fa fa-chalkboard-teacher"></i>
@@ -16,7 +16,7 @@
 @endsection
 
 @section("content")
-    
+
     <div class="row justify-content-center">
         @if($products->isEmpty())
             <div class="alert alert-info" role="alert">
@@ -39,9 +39,9 @@
     <div class="row">
         <div class="col-xl-12 m--align-center">
             <div class="m--block-inline">
-                {{ $products->links() }}
+                {{ $products->appends($linkParameters)->links() }}
             </div>
-        
+
         </div>
     </div>
 @endsection

@@ -117,8 +117,8 @@ class ProductController extends Controller
                 'filename' => $this->setting->site->siteLogo,
             ]), '100', '100', null));
 
-
-        return view('pages.product-search', compact('products', 'tags'));
+        $linkParameters = request()->except('page');
+        return view('pages.product-search', compact('products', 'tags' , 'linkParameters'));
     }
 
     /**

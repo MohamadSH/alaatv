@@ -1,5 +1,3 @@
-@permission((Config::get('constants.EDIT_EMPLOPYEE_WORK_SHEET')))
-
 @extends('app')
 
 @section('page-css')
@@ -16,12 +14,12 @@
         <ol class = "breadcrumb">
             <li class = "breadcrumb-item">
                 <i class = "fa fa-home m--padding-right-5"></i>
-                <a class = "m-link" href = "{{action("Web\IndexPageController")}}">@lang('page.Home')</a>
+                <a class = "m-link" href = "{{route('web.index')}}">@lang('page.Home')</a>
             </li>
             <li class = "breadcrumb-item active" aria-current = "page">
                 <a class = "m-link" href = "#">
                     اصلاح ساعت کاری
-                    @if(isset($employeetimesheet)) {{$employeetimesheet->getEmployeeFullName()}} @endif
+                    @if(isset($employeeTimeSheet)) {{$employeeTimeSheet->getEmployeeFullName()}} @endif
                 </a>
             </li>
         </ol>
@@ -29,14 +27,14 @@
 @endsection
 
 @section("content")
-    
+
     @include("systemMessage.flash")
-    
+
     <div class = "row">
         <div class = "col-md-12">
             <div class = "m-portlet m-portlet--mobile">
                 <div class = "m-portlet__body">
-                    {!! Form::model($employeetimesheet, ['method' => 'PUT','action' => ['Web\EmployeetimesheetController@update',$employeetimesheet] , 'class'=>'form-horizontal' ,'accept-charset'=>'UTF-8' , 'enctype'=>'multipart/form-data']) !!}
+                    {!! Form::model($employeeTimeSheet, ['method' => 'PUT','action' => ['Web\EmployeetimesheetController@update',$employeeTimeSheet] , 'class'=>'form-horizontal' ,'accept-charset'=>'UTF-8' ]) !!}
                     @include('employeeTimeSheet.form')
                     {!! Form::close() !!}
                 </div>
@@ -52,7 +50,7 @@
         jQuery(document).ready(function () {
             $('#employeeCommentSummerNote').summernote({height: 200, placeholder: "توضیحات کارمند"});
             $('#managerCommentSummerNote').summernote({height: 200, placeholder: "توضیحات مدیر"});
-    
+
             $("#date").persianDatepicker({
                 altField: '#dateAlt',
                 altFormat: "YYYY MM DD",
@@ -63,7 +61,7 @@
                     return d;
                 }
             });
-    
+
             $("#clockIn").inputmask("hh:mm", {
                 placeholder: "",
                 clearMaskOnLostFocus: true
@@ -96,11 +94,10 @@
                 placeholder: "",
                 clearMaskOnLostFocus: true
             });
-    
-    
+
+
             $("#filterButton").trigger("click");
         });
-    
+
     </script>
 @endsection
-@endpermission

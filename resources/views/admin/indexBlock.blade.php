@@ -9,7 +9,7 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item">
                 <i class="fa fa-home m--padding-right-5"></i>
-{{--                <a class="m-link" href="{{action("Web\IndexPageController")}}">@lang('page.Home')</a>--}}
+{{--                <a class="m-link" href="{{route('web.index')}}">@lang('page.Home')</a>--}}
             </li>
             <li class="breadcrumb-item active" aria-current="page">
                 <a class="m-link" href="#">پنل مدیریت بلاک ها</a>
@@ -19,9 +19,9 @@
 @endsection
 
 @section('content')
-    
+
     @include("systemMessage.flash")
-    
+
     <div class="row">
         <div class="col">
             <!-- BEGIN BLOCK TABLE PORTLET-->
@@ -121,7 +121,7 @@
                         </div>
                     </div>
                     <!--end::Modal-->
-    
+
                     <!--begin::Modal-->
                     <div class="modal fade" id="removeBlockModal" tabindex="-1" role="dialog" aria-labelledby="removeBlockModalLabel" aria-hidden="true">
                         <div class="modal-dialog modal-lg" role="document">
@@ -147,7 +147,7 @@
                         </div>
                     </div>
                     <!--end::Modal-->
-                    
+
                     <!--begin::Modal-->
                     <div class="modal fade" id="showBlockPhotoInModal" tabindex="-1" role="dialog" aria-labelledby="showBlockPhotoInModalLabel" aria-hidden="true">
                         <div class="modal-dialog modal-lg" role="document">
@@ -168,14 +168,14 @@
                         </div>
                     </div>
                     <!--end::Modal-->
-    
-    
+
+
                     <!--begin::Modal-->
                     <div class="modal fade" id="static-longDescription" tabindex="-1" role="dialog" aria-hidden="true">
                         <div class="modal-dialog modal-lg" role="document">
                             <div class="modal-content">
                                 <div class="modal-body">
-                                
+
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">بستن</button>
@@ -184,7 +184,7 @@
                         </div>
                     </div>
                     <!--end::Modal-->
-            
+
                     <table class="table table-striped table-bordered table-hover dt-responsive" width="100%" id="block_table">
                         <thead>
                             <tr>

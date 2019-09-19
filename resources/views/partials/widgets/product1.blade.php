@@ -27,7 +27,7 @@
                     <div class="m-widget19__shadow"></div>
                 </div>
                 <div class="m-widget19__content m--padding-top-10">
-                    
+
                     @include('product.partials.price', ['price'=>$widgetPrice])
                     <hr>
                     <h2 class="m--icon-font-size-sm2">{{ $widgetTitle }}</h2>

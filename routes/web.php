@@ -2,19 +2,23 @@
 
 
 use App\Http\Controllers\Web\AdminController;
+use App\Http\Controllers\Web\BotsController;
 use App\Http\Controllers\Web\ConsultationController;
 use App\Http\Controllers\Web\ContentController;
 use App\Http\Controllers\Web\DashboardPageController;
 use App\Http\Controllers\Web\EmployeetimesheetController;
 use App\Http\Controllers\Web\ErrorPageController;
 use App\Http\Controllers\Web\HomeController;
+use App\Http\Controllers\Web\IndexPageController;
 use App\Http\Controllers\Web\LotteryController;
+use App\Http\Controllers\Web\MobileVerificationController;
 use App\Http\Controllers\Web\OrderproductController;
 use App\Http\Controllers\Web\ProductLandingController;
 use App\Http\Controllers\Web\SharifSchoolController;
 use App\Http\Controllers\Web\LiveController;
 use App\Http\Controllers\Web\PaymentStatusController;
 use App\Http\Controllers\Web\SalesReportController;
+use App\Http\Controllers\Web\ShopPageController;
 use App\Http\Controllers\Web\SurveyController;
 use App\Http\Controllers\Web\UserController;
 use App\Http\Controllers\Web\WalletController;
@@ -25,12 +29,12 @@ use App\PaymentModule\Controllers\RedirectAPIUserToPaymentRoute;
 
 
 Route::get('embed/c/{content}', 'Web\ContentController@embed');
-Route::get('/', 'Web\IndexPageController');
-Route::get('shop', 'Web\ShopPageController')->name('shop');
-Route::get('home', 'Web\HomeController@home');
-Route::get('404', [ErrorPageController::class , 'error404']);
-Route::get('403', [ErrorPageController::class , 'error403']);
-Route::get('500', [ErrorPageController::class , 'error500']);
+Route::get('/', '\\'.IndexPageController::class)->name('web.index');
+Route::get('shop', '\\'.ShopPageController::class)->name('web.shop');
+Route::get('home', [HomeController::class , 'home'])->name('web.home');
+Route::get('404',  [ErrorPageController::class , 'error404']);
+Route::get('403',  [ErrorPageController::class , 'error403']);
+Route::get('500',  [ErrorPageController::class , 'error500']);
 Route::get('error', [ErrorPageController::class , 'errorPage']);
 Route::get('download', [HomeController::class , 'download']);
 Route::get('d/{data}', [HomeController::class , 'newDownload']);
@@ -68,16 +72,8 @@ Route::group(['prefix' => 'sitemap'], function () {
 });
 
 Route::group(['prefix' => 'checkout'], function () {
-    Route::get('auth', 'Web\OrderController@checkoutAuth');
-
-    Route::get('completeInfo', 'Web\OrderController@checkoutCompleteInfo')
-        ->name('checkoutCompleteInfo');
-
     Route::get('review', 'Web\OrderController@checkoutReview')
         ->name('checkoutReview');
-
-    Route::get('payment', 'Web\OrderController@checkoutPayment')
-        ->name('checkoutPayment');
 
     Route::any('verifyPayment/online/{paymentMethod}/{device}', [PaymentVerifierController::class, 'verify'])
         ->name('verifyOnlinePayment');
@@ -149,12 +145,12 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('holdlottery', 'Web\LotteryController@holdLottery');
     Route::get('givePrize', 'Web\LotteryController@givePrizes');
     Route::get('bot', 'Web\BotsController@bot')->name('web.bots');
-    Route::get('pointBot', 'Web\BotsController@pointBot');
-    Route::post('walletBot', 'Web\BotsController@walletBot');
-    Route::post('excelBot', 'Web\BotsController@excelBot');
-    Route::get('zarinpalbot', 'Web\BotsController@ZarinpalVerifyPaymentBot');
-    Route::post('salesReportBot', 'Web\BotsController@salesReportBot');
-    Route::get('thumbnailbot', 'Web\BotsController@fixthumbnail')->name('web.bot.fixthumbnails');
+    Route::get('pointBot', [BotsController::class, 'pointBot'])->name('web.bot.point');
+    Route::post('walletBot',[BotsController::class, 'walletBot'])->name('web.bot.wallet');
+    Route::post('excelBot', [BotsController::class, 'excelBot'])->name('web.bot.excel');
+    Route::post('zarinpalbot', [BotsController::class, 'ZarinpalVerifyPaymentBot'])->name('web.bot.verifyZarinpal');
+    Route::post('thumbnailbot', [BotsController::class, 'fixthumbnail'])->name('web.bot.fixthumbnails');
+    Route::post('introcontenttag', [BotsController::class, 'introContentTags'])->name('web.bot.introContentTags');
     Route::get('v/asiatech', 'Web\VoucherController@voucherRequest');
     Route::put('v', 'Web\VoucherController@submitVoucherRequest');
 
@@ -180,16 +176,13 @@ Route::group(['middleware' => 'auth'], function () {
         Route::post('{user}/completeInfo', [UserController::class, 'completeInformation']);
         Route::get('orders', 'Web\UserController@userOrders');
         Route::get('question', 'Web\UserController@uploads');
-        Route::get('getVerificationCode', 'Web\UserController@sendVerificationCode');
-        Route::post('sendSMS', 'Web\UserController@sendSMS');
+        Route::post('submitWorkTime/{employeetimesheet}', [EmployeetimesheetController::class, 'submitWorkTime']);
         Route::post('submitWorkTime', [EmployeetimesheetController::class, 'submitWorkTime']);
         Route::post('removeFromLottery', [LotteryController::class, 'removeFromLottery']);
         Route::get('uploadQuestion', [ConsultationController::class, 'uploadConsultingQuestion']);
         Route::get('orders', [UserController::class, 'userOrders']);
         Route::get('question', [UserController::class, 'userQuestions']);
-        Route::get('getVerificationCode', 'Web\UserController@sendVerificationCode');
-        Route::post('verifyAccount', 'Web\UserController@submitVerificationCode');
-        Route::post('sendSMS', 'Web\UserController@sendSMS');
+        Route::post('sendSMS', [UserController::class, 'sendSMS']);
     });
     Route::group(['prefix' => 'order'], function () {
         Route::post('detachorderproduct', 'Web\OrderController@detachOrderproduct');
@@ -304,9 +297,9 @@ Route::resource('block', 'Web\BlockController');
 Auth::routes(['verify' => true]);
 
 Route::group(['prefix' => 'mobile'], function () {
-    Route::get('verify', 'Web\MobileVerificationController@show')->name('mobile.verification.notice');
-    Route::post('verify', 'Web\MobileVerificationController@verify')->name('mobile.verification.verify');
-    Route::get('resend', 'Web\MobileVerificationController@resend')->name('mobile.verification.resend');
+    Route::get('verify', [MobileVerificationController::class, 'show'])->name('mobile.verification.notice');
+    Route::post('verify', [MobileVerificationController::class, 'verify'])->name('mobile.verification.verify');
+    Route::get('resend', [MobileVerificationController::class, 'resend'])->name('mobile.verification.resend');
 });
 Route::post('cd3b472d9ba631a73cb7b66ba513df53', 'Web\CouponController@generateRandomCoupon');
 
