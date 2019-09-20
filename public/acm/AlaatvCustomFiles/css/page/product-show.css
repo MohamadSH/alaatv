@@ -180,7 +180,35 @@
 
 #productInformation {
     column-count: 2;
+    font-size: 1.2em;
+    line-height: 2em;
+    column-gap: 60px;
+    text-align: justify;
 }
+.addToCartForMobileDeviceWrapper {
+    display: none;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    z-index: 999;
+    background: white;
+    -webkit-box-shadow: 0px 0px 42px -19px rgba(0,0,0,0.75);
+    -moz-box-shadow: 0px 0px 42px -19px rgba(0,0,0,0.75);
+    box-shadow: 0px 0px 42px -19px rgba(0,0,0,0.75);
+}
+
+.addToCartForMobileDeviceWrapper .btnAddToCart {
+    margin-bottom: 0 !important;
+    float: right;
+}
+
+.a_product-price_mobile-wrapper {
+    float: left;
+    margin-left: 10px;
+    line-height: 40px;
+}
+
 
 .productAttributes .m-portlet__head,
 .productInformation .m-portlet__head {
@@ -250,8 +278,6 @@
         display: flex;
     }
 }
-
-/*media query*/
 @media (max-width: 768px) {
     .m-portlet.m-portlet--tabs .m-portlet__head,
     .m-portlet.m-portlet--tabs .m-portlet__head .m-portlet__head-caption,
@@ -260,5 +286,10 @@
     }
     .m-portlet.m-portlet--tabs .m-portlet__head .m-portlet__head-tools {
         margin-top: 0;
+    }
+}
+@media (max-width: 991px) {
+    .addToCartForMobileDeviceWrapper {
+        display: block;
     }
 }

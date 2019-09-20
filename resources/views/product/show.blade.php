@@ -530,6 +530,61 @@
         </div>
     </div>
 
+
+    {{--دکمه افزودن به سبد خرید--}}
+    @if($product->enable)
+
+
+        <div class="addToCartForMobileDeviceWrapper" >
+
+
+            @if($allChildIsPurchased)
+                <a class="btn m-btn m-btn--pill m-btn--air m-btn--gradient-from-focus m-btn--gradient-to-danger  animated infinite pulse" role="button" href="{{ action("Web\UserController@userProductFiles") }}">
+                    <i class="fa fa-play-circle"></i>
+                    مشاهده در صفحه فیلم ها و جزوه های من
+                </a>
+            @else
+                <button class="btn m-btn--air btn-success m-btn--icon m--margin-bottom-5 btnAddToCart gta-track-add-to-card">
+                    <span>
+                        <i class="fa fa-cart-arrow-down"></i>
+                        <i class="fas fa-sync-alt fa-spin m--hide"></i>
+                        <span>افزودن به سبد خرید</span>
+                    </span>
+                </button>
+            @endif
+
+            @if($allChildIsPurchased)
+                <span class="alert alert-info" role="alert">
+                    <strong>شما این محصول را خریده اید</strong>
+                </span>
+            @else
+                <div class="m--font-brand a_product-price_mobile-wrapper">
+                    <span id="a_product-price_mobile">
+                        @if($product->priceText['discount'] == 0 )
+                            <span>{{ $product->priceText['finalPriceText'] }} </span>
+
+                        @else
+                            <strike>{{ $product->priceText['basePriceText'] }} </strike>
+                            <span class="m-badge m-badge--danger m-badge--wide m-badge--rounded">{{ $product->priceText['finalPriceText'] }}</span>
+                        @endif
+                    </span>
+                    <span id="a_product-discount_mobile"></span>
+                </div>
+            @endif
+
+
+        </div>
+    @else
+        <div class="addToCartForMobileDeviceWrapper" >
+            <button class="btn btn-danger btn-lg m-btn  m-btn m-btn--icon">
+                <span>
+                    <i class="flaticon-shopping-basket"></i>
+                    <span>این محصول غیر فعال است.</span>
+                </span>
+            </button>
+        </div>
+    @endif
+
     {{--نمونه فیلم--}}
     @include('block.partials.block', [
         'blockTitle'=>view('product.partials.productInfoNav', ['targetId'=>'sampleVideo']),
