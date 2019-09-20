@@ -12,10 +12,16 @@
                 <a class="m-link" href="{{route('web.index')}}">@lang('page.Home')</a>
             </li>
             <li class="breadcrumb-item">
-                <i class="flaticon-photo-camera m--padding-right-5"></i>
+                <i class="fa fa-video-camera m--padding-right-5"></i>
                 <a class="m-link"
                    href="{{ action("Web\ContentController@index") }}">@lang('content.Educational Content Of Alaa')</a>
             </li>
+            @if(isset($contentSetName))
+                <li class="breadcrumb-item">
+                    <i class="fa fa-video-camera m--padding-right-5"></i>
+                    <a class="m-link" href="#">{{ $contentSetName }}</a>
+                </li>
+            @endif
             <li class="breadcrumb-item active" aria-current="page">
                 <a class="m-link" href="#"> {{ $content->displayName }} </a>
             </li>

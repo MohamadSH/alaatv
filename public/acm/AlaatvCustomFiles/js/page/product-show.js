@@ -128,9 +128,11 @@ var ProductShowPage = function () {
         var product = $("input[name=product_id]").val();
 
         $('#a_product-price').html('<div class="m-loader m-loader--success"></div>');
+        $('#a_product-price_mobile').html('<div class="m-loader m-loader--success"></div>');
         if (mainAttributeState.length === 0 && productState.length === 0 && extraAttributeState.length === 0) {
 
             $('#a_product-price').html('قیمت محصول: ' + 'پس از انتخاب محصول');
+            $('#a_product-price_mobile').html('قیمت پس از انتخاب محصول');
 
             toastr.warning("شما هیچ محصولی را انتخاب نکرده اید.", "توجه!");
             return false;
@@ -149,21 +151,26 @@ var ProductShowPage = function () {
                         toastr.warning(response.error.message + '(' + response.error.code + ')');
 
                         $('#a_product-price').html('قیمت محصول: ' + 'پس از انتخاب محصول');
+                        $('#a_product-price_mobile').html('قیمت پس از انتخاب محصول');
                     }
                     if (response.cost != null) {
-                        let response_cost = parseInt(response.cost.base);
-                        let response_costForCustomer = parseInt(response.cost.final);
+                        var response_cost = parseInt(response.cost.base);
+                        var response_costForCustomer = parseInt(response.cost.final);
 
                         if (response_costForCustomer < response_cost) {
                             $('#a_product-price').html('قیمت محصول: <del>' + response_cost.toLocaleString('fa') + '</del> تومان <br>قیمت برای مشتری: ' + response_costForCustomer.toLocaleString('fa') + ' تومان ');
+                            $('#a_product-price_mobile').html('<strike>'+response_cost.toLocaleString('fa') + ' تومان '+'</strike>' +
+                                '<span class="m-badge m-badge--danger m-badge--wide m-badge--rounded">'+response_costForCustomer.toLocaleString('fa') + ' تومان '+'</span>');
                         } else {
                             $('#a_product-price').html('قیمت محصول: ' + response_costForCustomer.toLocaleString('fa') + ' تومان ');
+                            $('#a_product-price_mobile').html('<span>'+response_costForCustomer.toLocaleString('fa') + ' تومان '+'</span>');
                         }
                     } else {
 
                         toastr.error('خطایی رخ داده است.');
 
                         $('#a_product-price').html('-');
+                        $('#a_product-price_mobile').html('-');
                     }
                 },
                 //The status for when the user is not authorized for making the request
@@ -184,6 +191,7 @@ var ProductShowPage = function () {
                 500: function (response) {
                     toastr.error('خطایی رخ داده است.');
                     $('#a_product-price').html('-');
+                    $('#a_product-price_mobile').html('-');
                 },
                 //The status for when there is error php code
                 503: function (response) {
