@@ -70,12 +70,15 @@
 
         @permission((config('constants.LIVE_PLAY_ACCESS')))
         <div class="row">
+            {!! Form::open(['method'=>'POST' , 'id'=>'playLiveForm' ]) !!}
             <div class="col text-center">
+                <input type="text" name="title" placeholder="عنوان">
                 <button type="button" class="btn m-btn--pill m-btn--air m-btn m-btn--gradient-from-primary m-btn--gradient-to-info mx-auto btnPlayLive">
                     <i class="fa fa-play"></i>
                     پخش
                 </button>
             </div>
+            {!! Form::close() !!}
         </div>
         @endpermission
 

@@ -104,7 +104,8 @@ class Employeetimesheet extends BaseModel
         'managerComment',
         'employeeComment',
         'modifier_id',
-        'overtime_status_id'
+        'overtime_status_id',
+        'timeSheetLock',
     ];
 
     /**
