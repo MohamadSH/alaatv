@@ -190,10 +190,12 @@ if ($('#video-0').length > 0) {
 
 $(document).ready(function () {
     function ajaxLive(ajaxUrl) {
+        var formData = $('#playLiveForm').serialize();
+        var formMethod = $('#playLiveForm').attr('method');
         $.ajax({
-            type: 'POST',
+            type: formMethod,
             url : ajaxUrl,
-            data: {},
+            data: formData,
             dataType: 'json',
 
             success: function (data) {
