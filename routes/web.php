@@ -258,8 +258,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::resource('set', 'Web\SetController');
 
     Route::get('live' , '\\'.LiveController::class)->name('live');
-    Route::post('startlive' , [LiveController::class, 'startLive']);
-    Route::post('endlive'   , [LiveController::class, 'endLive']);
+    Route::post('startlive' , [LiveController::class, 'startLive'])->name('web.start.live');
+    Route::post('endlive'   , [LiveController::class, 'endLive'])->name('web.end.live');
 
     Route::post('updateSet' , [ContentController::class, 'updateSet']);
     Route::get('atest' , [HomeController::class, 'adTest']);

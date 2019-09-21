@@ -38,8 +38,8 @@ class LiveController extends Controller
         $nowTime = Carbon::now('Asia/Tehran')->toTimeString();
         $today = Carbon::today()->setTimezone('Asia/Tehran');
         $todayStringDate = $today->toDateString();
-        $playLiveAjaxUrl = action('Web\LiveController@startLive');
-        $stopLiveAjaxUrl = action('Web\LiveController@endLive');
+        $playLiveAjaxUrl = route('web.start.live');
+        $stopLiveAjaxUrl = route('web.end.live');
 
         /** @var DayofWeek $dayOfWeek */
         $dayOfWeek = WeekRepo::getDayOfWeek($today->dayName)->first();
