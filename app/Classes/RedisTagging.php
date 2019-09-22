@@ -187,7 +187,8 @@ class RedisTagging extends Singleton
                 }
                 try {
                     if (strcmp($type, self::CONST_TYPE_INTER) == 0) {
-                        $redis->zInter($randKey, $keys, null, 'MIN');
+//                        $redis->zInter($randKey, $keys, null, 'MIN');
+                          $redis->zinterstore($randKey, $keys, [], 'min');
                     }
                     else {
                         $redis->zUnion($randKey, $keys, null, 'MIN');
@@ -226,7 +227,7 @@ class RedisTagging extends Singleton
         }
 
         if ($cTags > 1) {
-            $redis->delete($resultkey);
+            $redis->unlink($resultkey);
         }
 
         $result = [];
