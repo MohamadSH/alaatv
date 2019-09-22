@@ -88,6 +88,13 @@ use App\Collection\TransactionCollection;
  * @property-read mixed                                                       $transaction_gateway
  * @property-read mixed                                                       $cache_cooldown_seconds
  * @property mixed jalali_created_at
+ * @property int|null $device_id آی دی دیوایس کاربر
+ * @property-read int|null $children_count
+ * @property-read mixed $edit_link
+ * @property-read mixed $jalali_created_at
+ * @property-read mixed $remove_link
+ * @property-read int|null $parents_count
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Transaction whereDeviceId($value)
  */
 class Transaction extends BaseModel
 {

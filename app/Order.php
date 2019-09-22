@@ -120,6 +120,25 @@ use App\Classes\Checkout\Alaa\ReObtainOrderFromRecords;
  * @property-read mixed                                                               $unpaid_transactions
  * @property-read mixed                                                               $used_bon_sum
  * @property-read mixed                                                               $cache_cooldown_seconds
+ * @property-read int|null $archived_successful_transactions_count
+ * @property-read int|null $files_count
+ * @property-read int $donate_amount
+ * @property-read \Collection $donates
+ * @property-read mixed $edit_link
+ * @property-read mixed $none_wallet_successful_transactions
+ * @property-read mixed $purchased_orderproducts
+ * @property-read mixed $purchased_orderproducts_count
+ * @property-read mixed $remove_link
+ * @property-read mixed $wallet_successful_transactions
+ * @property-read int|null $normal_orderproducts_count
+ * @property-read int|null $onlinetransactions_count
+ * @property-read int|null $ordermanagercomments_count
+ * @property-read int|null $orderpostinginfos_count
+ * @property-read int|null $pending_transactions_count
+ * @property-read int|null $successful_transactions_count
+ * @property-read int|null $suspended_transactions_count
+ * @property-read int|null $transactions_count
+ * @property-read int|null $unpaid_transactions_count
  */
 class Order extends BaseModel
 {

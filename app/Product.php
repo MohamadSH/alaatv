@@ -142,6 +142,35 @@ use App\Traits\{ProductCommon,
  * @property mixed block
  * @property \Illuminate\Support\Collection intro_videos
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Product main()
+ * @property int|null $block_id بلاک مرتبط با این محصول
+ * @property string|null $intro_videos کلیپ های معرفی محصول
+ * @property-read \App\Block|null $block
+ * @property-read int|null $bons_count
+ * @property-read int|null $children_count
+ * @property-read int|null $complimentaryproducts_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Contract[] $contracts
+ * @property-read int|null $contracts_count
+ * @property-read int|null $coupons_count
+ * @property-read int|null $favorite_by_count
+ * @property-read mixed $attribute_set
+ * @property-read mixed $bon_discount
+ * @property-read mixed $bon_plus
+ * @property-read mixed $edit_link
+ * @property-read mixed $intro_video
+ * @property-read mixed $intro_video_thumbnail
+ * @property-read mixed $jalali_created_at
+ * @property-read mixed $jalali_updated_at
+ * @property-read mixed $jalali_valid_since
+ * @property-read mixed $jalali_valid_until
+ * @property-read mixed $remove_link
+ * @property-read int|null $gifts_count
+ * @property-read int|null $orderproducts_count
+ * @property-read int|null $parents_count
+ * @property-read int|null $photos_count
+ * @property-read int|null $productfiles_count
+ * @property-read int|null $sets_count
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Product whereBlockId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Product whereIntroVideos($value)
  */
 class Product extends BaseModel implements Advertisable, Taggable, SeoInterface, FavorableInterface
 {

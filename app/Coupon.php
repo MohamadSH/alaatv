@@ -65,6 +65,9 @@ use Carbon\Carbon;
  * @property-read mixed                                                   $discount_type
  * @property-read mixed                                                   $cache_cooldown_seconds
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Coupon whereCode($value)
+ * @property-read int|null $marketers_count
+ * @property-read int|null $orders_count
+ * @property-read int|null $products_count
  */
 class Coupon extends BaseModel
 {

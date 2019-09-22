@@ -76,6 +76,18 @@ use App\Classes\Checkout\Alaa\OrderproductCheckout;
  * @property-read mixed                                                          $photo
  * @property-read mixed                                                          $price
  * @property-read mixed                                                          $cache_cooldown_seconds
+ * @property int|null $tmp_final_cost کش قیمت نهایی
+ * @property int|null $tmp_extra_cost کش قیمت افزوده نهایی
+ * @property float|null $tmp_share_order مبلغی که سهم این آبتم از قیمت کل است
+ * @property-read int|null $attributevalues_count
+ * @property-read int|null $children_count
+ * @property-read mixed $attached_bons_number
+ * @property-read int|null $inserted_userbons_count
+ * @property-read int|null $parents_count
+ * @property-read int|null $userbons_count
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Orderproduct whereTmpExtraCost($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Orderproduct whereTmpFinalCost($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Orderproduct whereTmpShareOrder($value)
  */
 class Orderproduct extends BaseModel
 {
