@@ -183,7 +183,7 @@ class RedisTagging extends Singleton
                 $randKey = $ns.str_random(10).'_'.Carbon::now()->micro;
                 $keys    = [];
                 foreach ($tags as $tag) {
-                    array_push($keys, $prefix.$tag);
+                    $keys[] = $prefix.$tag;
                 }
                 try {
                     if (strcmp($type, self::CONST_TYPE_INTER) == 0) {
