@@ -188,7 +188,7 @@ class RedisTagging extends Singleton
                 try {
                     if (strcmp($type, self::CONST_TYPE_INTER) == 0) {
 //                        $redis->zInter($randKey, $keys, null, 'MIN');
-                          $redis->zinterstore($randKey, $keys, [], 'min');
+                          $redis->zinterstore($randKey, $keys, ['min']);
                     }
                     else {
                         $redis->zUnion($randKey, $keys, null, 'MIN');
@@ -212,10 +212,10 @@ class RedisTagging extends Singleton
         try {
             $total_items_db = $redis->zCount($resultkey, '-inf', '+inf');
             if (strcmp($order, self::CONST_ORDER_DESC) == 0) {
-                $tagsresult = $redis->zRevRange($resultkey, $offset, $lastElement, $withScores);
+                $tagsresult = $redis->zRevRange($resultkey, $offset, $lastElement, ["withscores"=>$withScores]);
             }
             else {
-                $tagsresult = $redis->zRange($resultkey, $offset, $lastElement, $withScores);
+                $tagsresult = $redis->zRange($resultkey, $offset, $lastElement, ["withscores"=>$withScores]);
             }
         } catch (Exception $e) {
             $total_items_db = 0;
