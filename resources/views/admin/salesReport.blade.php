@@ -79,7 +79,7 @@
                                         data-filter="true"
                                         data-height="200"
                                         id="productId"
-                                        name="productId"
+                                        name="product_id"
                                         title="انتخاب دسته">
                                     <option value="0"
                                             class="bold">
