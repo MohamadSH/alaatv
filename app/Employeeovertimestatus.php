@@ -45,6 +45,12 @@ namespace App;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel disableCache()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel withCacheCooldownSeconds($seconds)
  * @property-read mixed                                                             $cache_cooldown_seconds
+ * @property string $name نام وضعیت
+ * @property string|null $display_name نام قابل نمایش وضعیت
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Employeetimesheet[] $employeetimesheet
+ * @property-read int|null $employeetimesheet_count
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Employeeovertimestatus whereDisplayName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Employeeovertimestatus whereName($value)
  */
 class Employeeovertimestatus extends BaseModel
 {

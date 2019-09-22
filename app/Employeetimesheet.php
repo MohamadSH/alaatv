@@ -85,6 +85,9 @@ use Illuminate\Database\Eloquent as EloquentAlias;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Employeetimesheet query()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Employeetimesheet whereOvertimeConfirmation($value)
  * @property-read mixed                 $cache_cooldown_seconds
+ * @property int|null $overtime_status_id وضعیت اضافه کاری
+ * @property-read \App\Employeeovertimestatus $overtimestatus
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Employeetimesheet whereOvertimeStatusId($value)
  */
 class Employeetimesheet extends BaseModel
 {

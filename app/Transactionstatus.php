@@ -34,6 +34,7 @@ namespace App;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel disableCache()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel withCacheCooldownSeconds($seconds)
  * @property-read mixed                                                       $cache_cooldown_seconds
+ * @property-read int|null $transactions_count
  */
 class Transactionstatus extends BaseModel
 {
