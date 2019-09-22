@@ -12,7 +12,7 @@ use App\Employeetimesheet;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Arr;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Input;
@@ -21,14 +21,6 @@ use App\Http\Requests\InsertEmployeeTimeSheet;
 
 class EmployeetimesheetController extends Controller
 {
-    const ACTION_MAP = [
-        'action-clockIn'          => 'clockIn',
-        'action-beginLunchBreak'  => 'beginLunchBreak',
-        'action-finishLunchBreak' => 'finishLunchBreak',
-        'action-clockOut'         => 'clockOut',
-    ];
-
-
     use DateTrait;
     use EmployeeWorkSheetCommon;
 
@@ -115,9 +107,9 @@ class EmployeetimesheetController extends Controller
         $toDayJalali = $this->convertToJalaliDay(Carbon::today('Asia/Tehran')->format('l'));
         /** @var Employeeschedule $employeeSchedule */
         $employeeSchedule = Employeeschedule::where('user_id', $user->id)
-                            ->where('day', $toDayJalali)
-                            ->get()
-                            ->first();
+            ->where('day', $toDayJalali)
+            ->get()
+            ->first();
 
         $employeeTimeSheet = Employeetimesheet::where('date', Carbon::today('Asia/Tehran'))
             ->where('user_id', $user->id)
@@ -127,8 +119,8 @@ class EmployeetimesheetController extends Controller
             $isExtra = true;
         }
         $employees    = User::select()
-                            ->role([config('constants.ROLE_EMPLOYEE')])
-                            ->pluck('lastName', 'id');
+            ->role([config('constants.ROLE_EMPLOYEE')])
+            ->pluck('lastName', 'id');
 
         $workdayTypes = Workdaytype::all()->pluck('displayName', 'id');
 
@@ -237,7 +229,13 @@ class EmployeetimesheetController extends Controller
         }
 
         $request->offsetSet('modifier_id', $request->get('modifier_id' , $request->user()->id));
-        if ($employeeTimeSheet->update($this->makeInputData($request->all()))) {
+        $employeeTimeSheet->fill($request->all());
+
+        $employeeTimeSheet->workdaytype_id = ($request->has('isExtraDay'))?config('constants.WORKDAY_ID_EXTRA'):config('constants.WORKDAY_ID_USUAL');
+        $employeeTimeSheet->timeSheetLock = ($request->has('timeSheetLock'))?1:0;
+        $employeeTimeSheet->isPaid = ($request->has('isPaid'))?1:0;
+
+        if ($employeeTimeSheet->update()) {
             session()->flash('success', 'ساعت کاری با موفقیت اصلاح شد');
             return redirect()->back();
         }else {
@@ -260,25 +258,70 @@ class EmployeetimesheetController extends Controller
      * Storing user's work time (for employees)
      *
      * @param Request $request
+     * @param Employeetimesheet|null $employeeTimeSheet
      * @return Response
      */
-    public function submitWorkTime(Request $request)
+    public function submitWorkTime(Request $request , Employeetimesheet $employeeTimeSheet=null)
     {
+        if(isset($employeeTimeSheet) && !$request->has('action')){
+            $request->offsetUnset('overtime_status_id');
+            $employeeTimeSheet->fill($request->all());
+            $employeeTimeSheet->workdaytype_id = ($request->has('isExtraDay'))?config('constants.WORKDAY_ID_EXTRA'):config('constants.WORKDAY_ID_USUAL');
+            $employeeTimeSheet->timeSheetLock = ($request->has('timeSheetLock'))?1:0;
+            $employeeTimeSheet->isPaid = ($request->has('isPaid'))?1:0;
+            $employeeTimeSheet->update();
+            session()->flash('success', 'ساعت کاری با موفقیت ذخیره شد');
+            return redirect()->back();
+        }
+
         if(!$request->has('action')){
             session()->flash('error', 'نوع ساعت کاری نامشخص است');
             return redirect()->back();
         }
 
-        $userID = $request->user()->id;
-        $userTimeSheet = Employeetimesheet::where('date', Carbon::today('Asia/Tehran'))->where('user_id', $userID)->first();
-        if(!isset($userTimeSheet)){
-            session()->flash('error', 'شما برای امروز ساعت کاری ثبت ننموده اید');
+        $done = false;
+        $actionMap = [
+            'action-clockIn'          => 'clockIn',
+            'action-beginLunchBreak'  => 'beginLunchBreak',
+            'action-finishLunchBreak' => 'finishLunchBreak',
+            'action-clockOut'         => 'clockOut',
+        ];
+
+        $userId = $request->user()->id;
+        $presentTime = Carbon::now('Asia/Tehran')->format('H:i:s');
+        $toDayJalali      = $this->convertToJalaliDay(Carbon::today('Asia/Tehran')->format('l'));
+
+        $employeeSchedule = Employeeschedule::where('user_id', $userId)
+            ->where('day', $toDayJalali)
+            ->get()
+            ->first();
+
+        $userTimeSheets = Employeetimesheet::where('date', Carbon::today('Asia/Tehran'))->where('user_id', $userId)->get();
+        if ($userTimeSheets->count() == 0) {
+            $employeeSheet = Employeetimesheet::create([
+                $actionMap[$request->get('action' , 'action-clockIn')] => $presentTime ,
+                'user_id'               => $userId,
+                'date'                  => Carbon::today('Asia/Tehran')->format('Y-m-d'),
+                'userBeginTime'         => optional($employeeSchedule)->getOriginal('beginTime'),
+                'userFinishTime'        => optional($employeeSchedule)->getOriginal('finishTime'),
+                'allowedLunchBreakInSec'=> gmdate('H:i:s', optional($employeeSchedule)->getOriginal('lunchBreakInSeconds')),
+                'modifier_id'           => $userId,
+                'overtime_status_id'    => config('constants.EMPLOYEE_OVERTIME_STATUS_UNCONFIRMED'),
+            ]);
+            if(isset($employeeSheet)) {
+                $done = true;
+            }
+        }
+        elseif ($userTimeSheets->count() == 1) {
+            $done = $userTimeSheets->first()->update([
+                $actionMap[
+                $request->get('action' , 'action-clockIn')] => $presentTime ,
+                'modifier_id'           => $userId,
+            ]);
+        } else {
+            session()->flash('error', 'شما بیش از یک ساعت کاری برای امروز ثبت نموده اید!');
             return redirect()->back();
         }
-        $done = $userTimeSheet->update([
-            self::ACTION_MAP[$request->get('action' , 'action-clockIn')] => Carbon::now('Asia/Tehran')->format('H:i:s'),
-                'modifier_id'           => $userID,
-        ]);
 
         if ($done) {
             session()->flash('success', 'ساعت کاری با موفقیت ذخیره شد');
@@ -288,45 +331,5 @@ class EmployeetimesheetController extends Controller
         }
 
         return redirect()->back();
-    }
-
-    public function submitWorkTime2(Request $request){
-        $userId = $request->user()->id;
-        $presentTime = Carbon::now('Asia/Tehran')->format('H:i:s');
-        $toDayJalali      = $this->convertToJalaliDay(Carbon::today('Asia/Tehran')->format('l'));
-        $employeeSchedule = Employeeschedule::where('user_id', $userId)
-            ->where('day', $toDayJalali)
-            ->get()
-            ->first();
-        $done = Employeetimesheet::create([
-            self::ACTION_MAP[$request->get('action' , 'action-clockIn')] => $presentTime ,
-            'user_id'               => $userId,
-            'date'                  => Carbon::today('Asia/Tehran')->format('Y-m-d'),
-            'userBeginTime'         => optional($employeeSchedule)->getOriginal('beginTime'),
-            'userFinishTime'        => optional($employeeSchedule)->getOriginal('finishTime'),
-            'allowedLunchBreakInSec'=> gmdate('H:i:s', optional($employeeSchedule)->getOriginal('lunchBreakInSeconds')),
-            'modifier_id'           => $userId,
-            'overtime_status_id'    => config('constants.EMPLOYEE_OVERTIME_STATUS_UNCONFIRMED'),
-        ]);
-    }
-
-    public function updateWorkTime(Request $request , Employeetimesheet $employeeTimeSheet){
-        $request->offsetUnset('overtime_status_id');
-        $employeeTimeSheet->update($this->makeInputData($request->all()));
-        session()->flash('success', 'ساعت کاری با موفقیت ذخیره شد');
-        return redirect()->back();
-    }
-
-    /**
-     * @param array
-     * @return array
-     */
-    private function makeInputData(array $inputData): array
-    {
-        $inputData['workdaytype_id'] = (Arr::get($inputData, 'isExtraDay')) ? config('constants.WORKDAY_ID_EXTRA') : config('constants.WORKDAY_ID_USUAL');
-        $inputData['timeSheetLock'] = (Arr::get($inputData, 'timeSheetLock')) ? 1 : 0;
-        $inputData['isPaid'] = (Arr::get($inputData, 'isPaid')) ? 1 : 0;
-
-        return $inputData;
     }
 }
