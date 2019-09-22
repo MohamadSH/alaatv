@@ -123,6 +123,16 @@ use Illuminate\Support\Facades\{Cache, Artisan};
  * @property-read mixed                                                       $previous_api_url
  * @property-read mixed                                                       $previous_url
  * @property-read mixed                                                       $cache_cooldown_seconds
+ * @property-read int|null $contentsets_count
+ * @property-read int|null $favorite_by_count
+ * @property-read int|null $files_count
+ * @property-read mixed $edit_link
+ * @property-read \Collection $file_for_admin
+ * @property-read mixed $remove_link
+ * @property-read int|null $grades_count
+ * @property-read int|null $majors_count
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Content free()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Content type($type)
  */
 class Content extends BaseModel implements Advertisable, Taggable, SeoInterface, FavorableInterface
 {

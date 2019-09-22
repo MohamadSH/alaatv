@@ -37,6 +37,8 @@ use Illuminate\Support\Facades\Config;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel disableCache()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel withCacheCooldownSeconds($seconds)
  * @property-read mixed                                                          $cache_cooldown_seconds
+ * @property-read int|null $attributegroups_count
+ * @property-read int|null $products_count
  */
 class Attributeset extends BaseModel
 {

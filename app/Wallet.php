@@ -38,6 +38,9 @@ use Carbon\Carbon;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel withCacheCooldownSeconds($seconds)
  * @property-read \App\Wallettype|null                                        $walletType
  * @property-read mixed                                                       $cache_cooldown_seconds
+ * @property int $pending_to_reduce مبلغی که علی الحساب از کیف پول کم شده است
+ * @property-read int|null $transactions_count
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Wallet wherePendingToReduce($value)
  */
 class Wallet extends BaseModel
 {

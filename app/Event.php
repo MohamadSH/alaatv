@@ -41,6 +41,9 @@ namespace App;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel withCacheCooldownSeconds($seconds)
  * @property-read mixed                                                            $cache_cooldown_seconds
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Event name($value)
+ * @property-read int|null $eventresults_count
+ * @property-read int|null $surveys_count
+ * @property-read int|null $usersurveyanswers_count
  */
 class Event extends BaseModel
 {

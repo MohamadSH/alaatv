@@ -283,6 +283,54 @@ use App\Traits\User\{BonTrait,
  * @method static \Illuminate\Database\Eloquent\Builder|\App\User orWhereRoleIs($role = '', $team = null)
  * @property string|null                                                        $lastServiceCall آخرین تماس کارمندان روابط عمومی با کاربر
  * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereLastServiceCall($value)
+ * @property-read \App\HelpDesk\Collection\TicketCollection|\App\HelpDesk\Models\Ticket[] $agentTickets
+ * @property-read int|null $agent_tickets_count
+ * @property-read int|null $bankaccounts_count
+ * @property-read int|null $clients_count
+ * @property-read int|null $closed_orders_count
+ * @property-read int|null $closedorderproducts_count
+ * @property-read int|null $contacts_count
+ * @property-read int|null $contents_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Contract[] $contracts
+ * @property-read int|null $contracts_count
+ * @property-read int|null $eventresults_count
+ * @property-read int|null $favored_content_count
+ * @property-read int|null $favored_product_count
+ * @property-read int|null $favored_set_count
+ * @property-read int|null $firebasetokens_count
+ * @property-read mixed $closed_orders
+ * @property-read mixed $edit_link
+ * @property-read mixed $jalali_created_at
+ * @property-read mixed $jalali_updated_at
+ * @property-read mixed $remove_link
+ * @property-read mixed $total_bon_number
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\HelpDesk\Models\Category[] $helpCategories
+ * @property-read int|null $help_categories_count
+ * @property-read int|null $lotteries_count
+ * @property-read int|null $mbtianswers_count
+ * @property-read int|null $notifications_count
+ * @property-read int|null $open_orders_count
+ * @property-read int|null $order_transactions_count
+ * @property-read int|null $ordermanagercomments_count
+ * @property-read int|null $orderproducts_count
+ * @property-read int|null $orders_count
+ * @property-read int|null $permissions_count
+ * @property-read int|null $productvouchers_count
+ * @property-read int|null $roles_count
+ * @property-read int|null $seensitepages_count
+ * @property-read \App\HelpDesk\Collection\TicketCollection|\App\HelpDesk\Models\Ticket[] $tickets
+ * @property-read int|null $tickets_count
+ * @property-read int|null $tokens_count
+ * @property-read int|null $transactions_count
+ * @property-read int|null $userbons_count
+ * @property-read int|null $usersurveyanswers_count
+ * @property-read int|null $useruploads_count
+ * @property-read int|null $wallet_transactions_count
+ * @property-read int|null $wallets_count
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\User helpAdmins()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\User helpAgents()
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\User permissionName($permissionName)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\User roleName($roleName)
  */
 class User extends Authenticatable implements Taggable, MustVerifyMobileNumber, MustVerifyEmail , AgentInterface
 {

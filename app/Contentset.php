@@ -62,6 +62,14 @@ use Illuminate\Database\Eloquent\Builder;
  * @property-read mixed                       $cache_cooldown_seconds
  * @property-read ContentCollection|Content[] $contents2
  * @property-read ProductCollection|Product[] $products
+ * @property-read int|null $contents_count
+ * @property-read int|null $favorite_by_count
+ * @property-read mixed $edit_link
+ * @property-read mixed $remove_link
+ * @property-read \App\Collection\ContentCollection|\App\Content[] $oldContents
+ * @property-read int|null $old_contents_count
+ * @property-read int|null $products_count
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Contentset display()
  */
 class Contentset extends BaseModel implements Taggable
 {

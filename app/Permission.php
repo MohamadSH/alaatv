@@ -32,6 +32,7 @@ use Laratrust\Models\LaratrustPermission;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Permission newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Permission newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Permission query()
+ * @property-read int|null $roles_count
  */
 class Permission extends LaratrustPermission
 {
