@@ -11,12 +11,16 @@
         <span class="redSquare"></span>
          بررسی محصول
     </div>
+    <div class="productInfoNav productInfoNav-detailes @if($targetId==='specialDescription') this @endif" data-tid="specialDescription">
+        <span class="redSquare"></span>
+         فیلم های مرتبط
+    </div>
     <div class="productInfoNav productInfoNav-relatedProduct @if($targetId==='relatedProduct') this @endif" data-tid="Block-relatedProduct">
         <span class="redSquare"></span>
          محصولات مرتبط
     </div>
-    
-    
+
+
     <div class="productInfoNav productInfoNav-btnAddToCart">
         <button class="btn m-btn--air btn-success m-btn--icon btnAddToCart gta-track-add-to-card">
             <span>
@@ -25,5 +29,5 @@
             </span>
         </button>
     </div>
-    
+
 </div>
