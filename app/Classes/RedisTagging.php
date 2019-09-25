@@ -130,7 +130,7 @@ class RedisTagging extends Singleton
                     $pipe->zRem($ns.':TAGS:'.$tag, $id);
                 }
                 # Also delete the index for this ID
-                $pipe->delete($id_index);
+                $pipe->unlink($id_index);
                 # Delete the id in the IDS list
                 $pipe->sRem($ns.':IDs', $id);
                 # Clean up the TAGCOUNT
@@ -234,23 +234,23 @@ class RedisTagging extends Singleton
 
         if ($withScores) {
             foreach ($tagsresult as $id => $score) {
-                $temp = [
+                $temp     = [
                     'bucket' => $bucket,
                     'id'     => $id,
                     'score'  => $score,
 
                 ];
-                array_push($result, $temp);
+                $result[] = $temp;
             }
         }
         else {
             foreach ($tagsresult as $id) {
-                $temp = [
+                $temp     = [
                     'bucket' => $bucket,
                     'id'     => $id,
                     'score'  => 0,
                 ];
-                array_push($result, $temp);
+                $result[] = $temp;
             }
         }
         $cb(null, [
