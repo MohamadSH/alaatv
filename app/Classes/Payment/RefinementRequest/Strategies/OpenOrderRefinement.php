@@ -10,6 +10,7 @@ namespace App\Classes\Payment\RefinementRequest\Strategies;
 
 use App\Classes\Payment\RefinementRequest\Refinement;
 use App\Order;
+use Carbon\Carbon;
 use Illuminate\Http\Response;
 
 class OpenOrderRefinement extends Refinement
@@ -33,7 +34,12 @@ class OpenOrderRefinement extends Refinement
         }
 
         $this->order = $openOrder;
-        $this->orderUniqueId = $openOrder->id;
+        if($openOrder->user_id == 1)
+        {
+            $this->orderUniqueId = $openOrder->id.Carbon::now()->timestamp;
+        }else{
+            $this->orderUniqueId = $openOrder->id;
+        }
         $this->getOrderCost();
         $this->resetWalletPendingCredit();
         $this->donateCost = $this->order->getDonateCost();
