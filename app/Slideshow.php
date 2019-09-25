@@ -46,6 +46,7 @@ use Storage;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel disableCache()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel withCacheCooldownSeconds($seconds)
  * @property-read mixed  $cache_cooldown_seconds
+ * @property int in_new_tab
  */
 class Slideshow extends BaseModel
 {
@@ -60,12 +61,13 @@ class Slideshow extends BaseModel
         'link',
         'order',
         'isEnable',
+        'in_new_tab',
     ];
-    
+
     protected $appends = [
         'url',
     ];
-    
+
     protected $hidden = [
         'websitepage_id',
         'photo',
@@ -73,7 +75,7 @@ class Slideshow extends BaseModel
         'deleted_at',
         'created_at',
     ];
-    
+
     public static function getMainBanner(): Collection
     {
         return Cache::tags([
@@ -89,7 +91,7 @@ class Slideshow extends BaseModel
                     ->get();
             });
     }
-    
+
     public static function getShopBanner()
     {
         return Cache::tags([
@@ -105,7 +107,7 @@ class Slideshow extends BaseModel
                     ->get();
             });
     }
-    
+
     public function getUrlAttribute($value): string
     {
         /** @var AlaaSftpAdapter $diskAdapter */
@@ -115,12 +117,12 @@ class Slideshow extends BaseModel
 
 //        return route('image', ['category' => 9, 'w' => '1280', 'h' => '500', 'filename' => $this->photo]);
     }
-    
+
     public function websitepage()
     {
         return $this->belongsTo('\App\Websitepage');
     }
-    
+
     /**
      * @return string
      * Converting Created_at field to jalali
@@ -131,14 +133,14 @@ class Slideshow extends BaseModel
             $explodedDateTime = explode(" ", $this->created_at);
             if (strcmp($explodedDateTime[0], "0000-00-00") != 0) {
                 $explodedTime = $explodedDateTime[1];
-                
+
                 return $this->convertDate($explodedDateTime[0], 1)." ".$explodedTime;
             }
         }
-        
+
         return "نا مشخص";
     }
-    
+
     /**
      * @return string
      * Converting Updated_at field to jalali
@@ -149,11 +151,11 @@ class Slideshow extends BaseModel
             $explodedDateTime = explode(" ", $this->updated_at);
             if (strcmp($explodedDateTime[0], "0000-00-00") != 0) {
                 $explodedTime = $explodedDateTime[1];
-                
+
                 return $this->convertDate($explodedDateTime[0], 1)." ".$explodedTime;
             }
         }
-        
+
         return "نا مشخص";
     }
 }
