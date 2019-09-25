@@ -34,7 +34,7 @@ class SlideShowController extends Controller
     {
         $slides = Slideshow::all()
             ->sortBy("order");
-        
+
         return $slides;
     }
 
@@ -42,11 +42,11 @@ class SlideShowController extends Controller
     {
         $slide = new Slideshow();
         $slide->fill($request->all());
-        
+
         if (strlen($slide->order) == 0) {
             $slide->order = 0;
         }
-        
+
         if (strlen($slide->link) == 0) {
             $slide->link = null;
         }
@@ -59,7 +59,7 @@ class SlideShowController extends Controller
                 }
             }
         }
-        
+
         if ($request->hasFile("photo")) {
             $file      = $request->file('photo');
             $extension = $file->getClientOriginalExtension();
@@ -76,7 +76,7 @@ class SlideShowController extends Controller
                 session()->put('error', 'بارگذاری عکس بسته با مشکل مواجه شد!');
             }
         }
-        
+
         $isEnable = $request->get("isEnable");
         if (isset($isEnable)) {
             $slide->isEnable = 1;
@@ -84,14 +84,14 @@ class SlideShowController extends Controller
         else {
             $slide->isEnable = 0;
         }
-        
+
         if ($slide->save()) {
             session()->put('success', 'اسلاید با موفقیت افزوده شد!');
         }
         else {
             session()->put('error', 'خطای پایگاه داده!');
         }
-        
+
         return redirect()->back();
     }
 
@@ -106,7 +106,7 @@ class SlideShowController extends Controller
                 '/shop',
             ]]
         )->pluck('displayName' , 'id');
-        
+
         return view("slideShow.edit", compact('slide', 'slideDisk', 'slideWebsitepageId', 'previousUrl', 'websitePages'));
     }
 
@@ -118,27 +118,10 @@ class SlideShowController extends Controller
      */
     public function update(Request $request, Slideshow $slide)
     {
-        
+
         $oldPhoto = $slide->photo;
         $slide->fill($request->all());
 
-        if (strlen($slide->order) == 0) {
-            $slide->order = 0;
-        }
-        
-        if (strlen($slide->link) == 0) {
-            $slide->link = null;
-        }
-        else {
-            if (isset($slide->link)) {
-                if (strcmp($slide->link[0], "#") != 0) {
-                    if (!preg_match("/^http:\/\//", $slide->link) && !preg_match("/^https:\/\//", $slide->link)) {
-                        $slide->link = "https://".$slide->link;
-                    }
-                }
-            }
-        }
-        
         if ($request->hasFile("photo")) {
             $file      = $request->file('photo');
             $extension = $file->getClientOriginalExtension();
@@ -158,15 +141,10 @@ class SlideShowController extends Controller
             }
 
         }
-        
-        $isEnable = $request->get("isEnable");
-        if (isset($isEnable)) {
-            $slide->isEnable = 1;
-        }
-        else {
-            $slide->isEnable = 0;
-        }
-        
+
+        $slide->isEnable = ($request->has("isEnable"))?1:0;
+        $slide->in_new_tab = ($request->has("in_new_tab"))?1:0;
+
         if ($slide->update()) {
             session()->put('success', 'اسلاید با موفقیت اصلاح شد!');
             session()->put('warning', 'کش را پاک کنید');
@@ -174,7 +152,7 @@ class SlideShowController extends Controller
         else {
             session()->put('error', 'خطای پایگاه داده!');
         }
-        
+
         return redirect()->back();
     }
 
@@ -186,7 +164,7 @@ class SlideShowController extends Controller
         else {
             session()->put('error', 'خطای پایگاه داده!');
         }
-        
+
         return response([
             'sessionData' => session()->all(),
         ]);
