@@ -493,7 +493,7 @@
                                                     <img src="/acm/extra/payment/gateway/zarinpal-logo.png" class="img-thumbnail bankLogo" alt="bank-logo" width="60">
                                                     <span></span>
                                                 </label>
-                                                <label class="m-radio m-radio--check-bold m-radio--state-info">
+                                                <label class="m-radio m-radio--check-bold m-radio--state-info d-none">
                                                     <input type="radio" name="radioBankType" value="{{route('redirectToBank', ['paymentMethod'=>'mellat', 'device'=>'web'])}}" data-bank-type="mellat" >
                                                     <img src="/acm/extra/payment/gateway/mellat-logo.png" class="img-thumbnail bankLogo" alt="bank-logo" width="60">
                                                     <span></span>
