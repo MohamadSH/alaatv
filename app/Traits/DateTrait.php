@@ -14,7 +14,18 @@ trait DateTrait
     {
         return $this->convertDate($this->created_at, "toJalali");
     }
-    
+
+    /**
+     * @return string
+     * Converting Created_at field to jalali
+     */
+    public function CreatedAt_Jalali_WithTime()
+    {
+        $explodedDateTime = explode(" ", $this->created_at);
+
+        return $this->convertDate($this->created_at, "toJalali").' '.$explodedDateTime[1];
+    }
+
     public function convertDate($date, $convertType)
     {
         if (strcmp($convertType, 'toJalali') == 0 && strlen($date) > 0) {
@@ -24,7 +35,7 @@ trait DateTrait
             $year         = $explodedDate[0];
             $month        = $explodedDate[1];
             $day          = $explodedDate[2];
-            
+
             return $this->gregorian_to_jalali($year, $month, $day, "/");
         }
         else {
@@ -33,12 +44,12 @@ trait DateTrait
                 $year         = $explodedDate[0];
                 $month        = $explodedDate[1];
                 $day          = $explodedDate[2];
-                
+
                 return $this->jalali_to_gregorian($year, $month, $day, "-");
             }
         }
     }
-    
+
     protected function gregorian_to_jalali($g_y, $g_m, $g_d, $mod = '')
     {
         $d_4   = $g_y % 4;
@@ -85,14 +96,14 @@ trait DateTrait
             $jd = $doy_j - 186 - ($jm * 30);
             $jm += 7;
         }
-        
+
         return ($mod == '') ? [
             $jy,
             $jm,
             $jd,
         ] : $jy.$mod.$jm.$mod.$jd;
     }
-    
+
     protected function jalali_to_gregorian($j_y, $j_m, $j_d, $mod = '')
     {
         $d_4   = ($j_y + 1) % 4;
@@ -132,14 +143,14 @@ trait DateTrait
             }
             $gd -= $v;
         }
-        
+
         return ($mod == '') ? [
             $gy,
             $gm,
             $gd,
         ] : $gy.$mod.$gm.$mod.$gd;
     }
-    
+
     /**
      *  Converting Completed field to jalali
      *
@@ -152,7 +163,7 @@ trait DateTrait
 //        $explodedTime = $explodedDateTime[1] ;
         return $this->convertDate($this->completed_at, "toJalali");
     }
-    
+
     /**
      * Converting validSince field to Jalali
      *
@@ -163,10 +174,10 @@ trait DateTrait
         $explodedDateTime = explode(" ", $this->validSince);
         $explodedTime     = $explodedDateTime[1];
         $explodedDate     = $this->convertDate($this->validSince, "toJalali");
-        
+
         return ($explodedDate." ".$explodedTime);
     }
-    
+
     /**
      * Converting validUntil field to Jalali
      *
@@ -177,10 +188,10 @@ trait DateTrait
         $explodedDateTime = explode(" ", $this->validUntil);
         $explodedTime     = $explodedDateTime[1];
         $explodedDate     = $this->convertDate($this->validUntil, "toJalali");
-        
+
         return ($explodedDate." ".$explodedTime);
     }
-    
+
     /**
      * @return string
      * Converting Updated_at field to jalali
@@ -189,7 +200,7 @@ trait DateTrait
     {
         return $this->convertDate($this->updated_at, "toJalali");
     }
-    
+
     public function convertToJalaliDay($day)
     {
         switch ($day) {
@@ -218,7 +229,7 @@ trait DateTrait
                 break;
         }
     }
-    
+
     public function convertToJalaliMonth($month, $mode = "NUMBER_TO_STRING")
     {
         if ($mode == "NUMBER_TO_STRING") {
@@ -318,10 +329,10 @@ trait DateTrait
                 }
             }
         }
-        
+
         return $result;
     }
-    
+
     public function getJalaliMonthDays($month)
     {
         $days = 0;
@@ -363,13 +374,13 @@ trait DateTrait
                 $days = 29;
                 break;
             default:
-                
+
                 break;
         }
-        
+
         return $days;
     }
-    
+
     public function getFinancialYear($currentYear, $currentMonth, $pointedMonth)
     {
         $pointedYear = 0;
@@ -389,7 +400,7 @@ trait DateTrait
                 $pointedYear = $currentYear;
             }
         }
-        
+
         return $pointedYear;
     }
 
