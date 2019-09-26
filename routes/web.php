@@ -10,6 +10,7 @@ use App\Http\Controllers\Web\EmployeetimesheetController;
 use App\Http\Controllers\Web\ErrorPageController;
 use App\Http\Controllers\Web\HomeController;
 use App\Http\Controllers\Web\IndexPageController;
+use App\Http\Controllers\Web\LiveDescriptionController;
 use App\Http\Controllers\Web\LotteryController;
 use App\Http\Controllers\Web\MobileVerificationController;
 use App\Http\Controllers\Web\OrderproductController;
@@ -241,6 +242,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::resource('employeetimesheet', 'Web\EmployeetimesheetController');
     Route::resource('lottery', 'Web\LotteryController');
     Route::resource('cat', 'Web\CategoryController');
+    Route::resource('livedescription', '\\'.LiveDescriptionController::class );
 
     Route::get('copylessonfromremote', 'Web\RemoteDataCopyController@copyLesson');
     Route::get('copydepartmentfromremote', 'Web\RemoteDataCopyController@copyDepartment');

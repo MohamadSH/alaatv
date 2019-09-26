@@ -5,6 +5,7 @@ namespace App\Providers;
 use Illuminate\Support\Facades\{Cache, Route};
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 use App\{City,
+    LiveDescription,
     Role,
     User,
     Order,
@@ -46,7 +47,7 @@ class RouteServiceProvider extends ServiceProvider
      * @var string
      */
     protected $namespace = 'App\Http\Controllers';
-    
+
     /**
      * Define your route model bindings, pattern filters, etc.
      *
@@ -58,7 +59,7 @@ class RouteServiceProvider extends ServiceProvider
         parent::boot();
         $this->modelBinding();
     }
-    
+
     /**
      *
      */
@@ -66,7 +67,7 @@ class RouteServiceProvider extends ServiceProvider
     {
         Route::bind('user', function ($value) {
             $key = 'User:'.$value;
-            
+
             return Cache::tags([
                 'user',
                 $key,
@@ -78,7 +79,7 @@ class RouteServiceProvider extends ServiceProvider
         });
         Route::bind('assignment', function ($value) {
             $key = 'Assignment:'.$value;
-    
+
             return Cache::tags([
                 'assignment',
                 $key,
@@ -89,7 +90,7 @@ class RouteServiceProvider extends ServiceProvider
         });
         Route::bind('consultation', function ($value) {
             $key = 'Consultation:'.$value;
-    
+
             return Cache::tags([
                 'consultation',
                 $key,
@@ -100,7 +101,7 @@ class RouteServiceProvider extends ServiceProvider
         });
         Route::bind('order', function ($value) {
             $key = 'Order:'.$value;
-    
+
             return Cache::tags([
                 'order',
                 $key,
@@ -111,7 +112,7 @@ class RouteServiceProvider extends ServiceProvider
         });
         Route::bind('product', function ($value) {
             $key = 'Product:'.$value;
-    
+
             return Cache::tags([
                 'product',
                 $key,
@@ -133,13 +134,13 @@ class RouteServiceProvider extends ServiceProvider
                 if (!$product->relationLoaded('bons')) {
                     $product->load('bons');
                 }
-                
+
                 return $product;
             });
         });
         Route::bind('orderproduct', function ($value) {
             $key = 'Orderproduct:'.$value;
-    
+
             return Cache::tags([
                 'orderproduct',
                 $key,
@@ -150,7 +151,7 @@ class RouteServiceProvider extends ServiceProvider
         });
         Route::bind('attributevalue', function ($value) {
             $key = 'Attributevalue:'.$value;
-    
+
             return Cache::tags([
                 'attributevalue',
                 $key,
@@ -161,7 +162,7 @@ class RouteServiceProvider extends ServiceProvider
         });
         Route::bind('permission', function ($value) {
             $key = 'Permission:'.$value;
-    
+
             return Cache::tags([
                 'permissoin',
                 $key,
@@ -172,7 +173,7 @@ class RouteServiceProvider extends ServiceProvider
         });
         Route::bind('role', function ($value) {
             $key = 'Role:'.$value;
-    
+
             return Cache::tags([
                 'role',
                 $key,
@@ -183,7 +184,7 @@ class RouteServiceProvider extends ServiceProvider
         });
         Route::bind('coupon', function ($value) {
             $key = 'Coupon:'.$value;
-    
+
             return Cache::tags([
                 'coupon',
                 $key,
@@ -194,7 +195,7 @@ class RouteServiceProvider extends ServiceProvider
         });
         Route::bind('userupload', function ($value) {
             $key = 'Userupload:'.$value;
-    
+
             return Cache::tags([
                 'userupload',
                 $key,
@@ -205,7 +206,7 @@ class RouteServiceProvider extends ServiceProvider
         });
         Route::bind('attribute', function ($value) {
             $key = 'Attribute:'.$value;
-    
+
             return Cache::tags([
                 'attribute',
                 $key,
@@ -216,7 +217,7 @@ class RouteServiceProvider extends ServiceProvider
         });
         Route::bind('attributeset', function ($value) {
             $key = 'Attributeset:'.$value;
-    
+
             return Cache::tags([
                 'attributeset',
                 $key,
@@ -227,7 +228,7 @@ class RouteServiceProvider extends ServiceProvider
         });
         Route::bind('attributegroup', function ($value) {
             $key = 'Attributegroup:'.$value;
-    
+
             return Cache::tags([
                 'attributegroup',
                 $key,
@@ -238,7 +239,7 @@ class RouteServiceProvider extends ServiceProvider
         });
         Route::bind('userbon', function ($value) {
             $key = 'Userbon:'.$value;
-    
+
             return Cache::tags([
                 'userbon',
                 $key,
@@ -249,7 +250,7 @@ class RouteServiceProvider extends ServiceProvider
         });
         Route::bind('mbtianswer', function ($value) {
             $key = 'Mbtianswer:'.$value;
-    
+
             return Cache::tags([
                 'mbtianswer',
                 $key,
@@ -260,7 +261,7 @@ class RouteServiceProvider extends ServiceProvider
         });
         Route::bind('contact', function ($value) {
             $key = 'Contact:'.$value;
-    
+
             return Cache::tags([
                 'contact',
                 $key,
@@ -271,7 +272,7 @@ class RouteServiceProvider extends ServiceProvider
         });
         Route::bind('phone', function ($value) {
             $key = 'Phone:'.$value;
-    
+
             return Cache::tags([
                 'phone',
                 $key,
@@ -282,7 +283,7 @@ class RouteServiceProvider extends ServiceProvider
         });
         Route::bind('afterloginformcontrol', function ($value) {
             $key = 'Afterloginformcontrol:'.$value;
-    
+
             return Cache::tags([
                 'afterloginformcontrol',
                 $key,
@@ -293,7 +294,7 @@ class RouteServiceProvider extends ServiceProvider
         });
         Route::bind('article', function ($value) {
             $key = 'Article:'.$value;
-    
+
             return Cache::tags([
                 'article',
                 $key,
@@ -304,7 +305,7 @@ class RouteServiceProvider extends ServiceProvider
         });
         Route::bind('articlecategory', function ($value) {
             $key = 'Articlecategory:'.$value;
-    
+
             return Cache::tags([
                 'atriclecategory',
                 $key,
@@ -315,7 +316,7 @@ class RouteServiceProvider extends ServiceProvider
         });
         Route::bind('slideshow', function ($value) {
             $key = 'Slideshow:'.$value;
-    
+
             return Cache::tags([
                 'slideshow',
                 $key,
@@ -326,7 +327,7 @@ class RouteServiceProvider extends ServiceProvider
         });
         Route::bind('websiteSetting', function ($value) {
             $key = 'Websitesetting:'.$value;
-    
+
             return Cache::tags([
                 'websiteSetting',
                 $key,
@@ -337,7 +338,7 @@ class RouteServiceProvider extends ServiceProvider
         });
         Route::bind('productfile', function ($value) {
             $key = 'Productfile:'.$value;
-    
+
             return Cache::tags([
                 'productfile',
                 $key,
@@ -348,7 +349,7 @@ class RouteServiceProvider extends ServiceProvider
         });
         Route::bind('city', function ($value) {
             $key = 'City:'.$value;
-    
+
             return Cache::tags([
                 'city',
                 $key,
@@ -375,7 +376,7 @@ class RouteServiceProvider extends ServiceProvider
         */
         Route::bind('c', function ($value) {
             $key = 'Content:'.$value;
-    
+
             return Cache::tags([
                 'content',
                 $key,
@@ -393,28 +394,28 @@ class RouteServiceProvider extends ServiceProvider
                         $c->load('user');
                     }
                 }
-                
+
                 return $c ?? abort(404);
             });
         });
-        
+
         Route::bind('set', function ($value) {
             $key = 'Set:'.$value;
-    
+
             return Cache::tags([
                 'set',
                 $key,
             ])->remember($key, config('constants.CACHE_60'), function () use ($value) {
                 $set = Contentset::where('id', $value)
                     ->first();
-                
+
                 return $set ?? abort(404);
             });
         });
-    
+
         Route::bind('employeetimesheet', function ($value) {
             $key = 'Employeetimesheet:'.$value;
-        
+
             return Cache::tags([
                 'employeetimesheet',
                 $key,
@@ -425,7 +426,7 @@ class RouteServiceProvider extends ServiceProvider
         });
         Route::bind('productphoto', function ($value) {
             $key = 'Productphoto:'.$value;
-        
+
             return Cache::tags([
                 'productphoto',
                 $key,
@@ -436,7 +437,7 @@ class RouteServiceProvider extends ServiceProvider
         });
         Route::bind('wallet', function ($value) {
             $key = 'Wallet:'.$value;
-        
+
             return Cache::tags([
                 'wallet',
                 $key,
@@ -447,7 +448,7 @@ class RouteServiceProvider extends ServiceProvider
         });
         Route::bind('eventresult', function ($value) {
             $key = 'Eventresuly:'.$value;
-        
+
             return Cache::tags([
                 'eventresult',
                 $key,
@@ -456,8 +457,20 @@ class RouteServiceProvider extends ServiceProvider
                         ->first() ?? abort(404);
             });
         });
+
+        Route::bind('livedescription', function ($value) {
+            $key = 'Livedescription:'.$value;
+
+            return Cache::tags([
+                'livedescription',
+                $key,
+            ])->remember($key, config('constants.CACHE_5'), function () use ($value) {
+                return LiveDescription::where('id', $value)
+                        ->first() ?? abort(404);
+            });
+        });
     }
-    
+
     /**
      * Define the routes for the application.
      *
@@ -466,11 +479,11 @@ class RouteServiceProvider extends ServiceProvider
     public function map()
     {
         $this->mapApiRoutes();
-        
+
         $this->mapWebRoutes();
         //
     }
-    
+
     /**
      * Define the "api" routes for the application.
      *
@@ -480,13 +493,13 @@ class RouteServiceProvider extends ServiceProvider
      */
     protected function mapApiRoutes()
     {
-        
+
         Route::prefix('api')
             ->middleware('api')
             ->namespace($this->namespace)
             ->group(base_path('routes/api.php'));
     }
-    
+
     /**
      * Define the "web" routes for the application.
      *
@@ -496,7 +509,7 @@ class RouteServiceProvider extends ServiceProvider
      */
     protected function mapWebRoutes()
     {
-        
+
         Route::middleware('web')
             ->namespace($this->namespace)
             ->group(base_path('routes/web.php'));
