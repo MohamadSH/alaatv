@@ -130,6 +130,73 @@
         </div>
         @endif
 
+        <div class="col-md-12">
+                <!-- BEGIN PRODUCT TABLE PORTLET-->
+                <div class="m-portlet m-portlet--head-solid-bg m-portlet--accent m-portlet--collapsed m-portlet--head-sm" m-portlet="true" id="productFiles-portlet">
+                    <div class="m-portlet__head">
+                        <div class="m-portlet__head-caption">
+                            <div class="m-portlet__head-title">
+                            <span class="m-portlet__head-icon">
+                                <i class="fa fa-cogs"></i>
+                            </span>
+                                <h3 class="m-portlet__head-text">
+                                    توضیحات لحظه ای
+                                </h3>
+                            </div>
+                        </div>
+                        <div class="m-portlet__head-tools">
+                            <ul class="m-portlet__nav">
+                                <li class="m-portlet__nav-item">
+                                    <a href="#" m-portlet-tool="toggle" class="m-portlet__nav-link m-portlet__nav-link--icon">
+                                        <i class="fa fa-angle-down"></i>
+                                    </a>
+                                </li>
+                                <li class="m-portlet__nav-item">
+                                    <a href="#" m-portlet-tool="fullscreen" class="m-portlet__nav-link m-portlet__nav-link--icon" id="product-expand">
+                                        <i class="fa fa-expand-arrows-alt"></i>
+                                    </a>
+                                </li>
+                                <li class="m-portlet__nav-item">
+                                    <a href="#" m-portlet-tool="remove" class="m-portlet__nav-link m-portlet__nav-link--icon">
+                                        <i class="fa fa-times"></i>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="m-portlet__body">
+                        {!! Form::open(['method'=>'POST' , 'route'=>'livedescription.store']) !!}
+                            <input type="hidden" name="product_id" value="{{$product->id}}">
+                        <div class = "form-group">
+                            <input type="text" name="title" placeholder="عنوان">
+                        </div>
+                        <div class = "form-group">
+                            <textarea id="productLiveDescriptionSummerNote" name="description" placeholder="توضیح"></textarea>
+                        </div>
+                            <input type="submit" value="ذخیره">
+                        {!! Form::close() !!}
+                        <hr>
+                        @if($liveDescriptions->isNotEmpty())
+                            <ul>
+                                @foreach($liveDescriptions as $liveDescription)
+                                    <li>
+                                        <h5  style="font-weight: bolder"><span style="color:red;text-decoration: underline">عنوان: </span>{{$liveDescription->title}}</h5>
+                                        <p  style="font-size:1.2rem ; direction: ltr"><span style="color:red;text-decoration: underline">تاریخ : </span>{{$liveDescription->CreatedAt_Jalali_WithTime()}}</p>
+                                        <p style="font-size:1.2rem"><span style="color:red;text-decoration: underline">توضیح :</span> {!! $liveDescription->description !!}</p>
+                                        <a class="btn btn-accent" target="_blank" href="{{route('livedescription.edit' , ['liveDescription' => $liveDescription])}}">اصلاح</a>
+                                        <a  href="#" class="btn btn-danger removeLiveDescription" data-action="{{route('livedescription.destroy' , ['liveDescription' => $liveDescription])}}" >حذف</a>
+                                    </li>
+                                    <hr>
+                                @endforeach
+                            </ul>
+                        @else
+                            <h4>اطلاعاتی برای نمایش وجود ندارد</h4>
+                        @endif
+                    </div>
+                </div>
+                <!-- END SAMPLE TABLE PORTLET-->
+            </div>
+
         @permission((config('constants.LIST_PRODUCT_FILE_ACCESS')))
             <div class="col-md-12">
                 <!-- BEGIN PRODUCT TABLE PORTLET-->
@@ -376,13 +443,45 @@
             $('#productShortDescriptionSummerNote').summernote({height: 300});
             $('#productLongDescriptionSummerNote').summernote({height: 300});
             $('#productSpecialDescriptionSummerNote').summernote({height: 300});
+            $('#productLiveDescriptionSummerNote').summernote({height: 300});
 
 
         });
 
-        $(document).on("change", "#productFileTypeSelect", function () {
-            var lastOrder = $("#lastProductFileOrder_" + $(this).val()).val();
-            $("#productFileOrder").val(lastOrder);
+        $(document).on('change', '#productFileTypeSelect', function () {
+            var lastOrder = $('#lastProductFileOrder_' + $(this).val()).val();
+            $('#productFileOrder').val(lastOrder);
+        });
+
+        $(document).on('click', '.removeLiveDescription', function () {
+            console.log($(this).data('action'));
+            $.ajax({
+                type: 'POST',
+                url: $(this).data('action'),
+                data: {_method:'DELETE'},
+                statusCode: {
+                    200: function (response) {
+                        toastr['success']('توضیح لحظه ای با موفقیت حذف شد', 'پیام سیستم');
+                        location.reload();
+                    },
+                    401: function (ressponse) {
+                        location.reload();
+                    },
+                    403: function (response) {
+                        window.location.replace('/403');
+                    },
+                    404: function (response) {
+                        window.location.replace('/404');
+                    },
+                    500: function (response) {
+                        console.log(response.responseText);
+                        toastr['error']('خطای برنامه!', 'پیام سیستم');
+                    },
+                    503: function (response) {
+                        toastr['error']('خطای پایگاه داده!', 'پیام سیستم');
+                    }
+                }
+            });
         });
     </script>
     <script src="public/acm/AlaatvCustomFiles/js/admin/page-productAdmin.js" type="text/javascript"></script>

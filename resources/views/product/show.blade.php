@@ -30,6 +30,84 @@
             display: none !important;
         }
         @endif
+
+    .m-timeline-3 .m-timeline-3__item {
+            disply: table;
+            margin-bottom: 1rem;
+            position: relative; }
+        .m-timeline-3 .m-timeline-3__item:before {
+            position: absolute;
+            display: block;
+            width: 0.28rem;
+            border-radius: 0.3rem;
+            height: 70%;
+            right: 11rem;
+            top: 0.46rem;
+            content: ""; }
+        .m-timeline-3 .m-timeline-3__item .m-timeline-3__item-time {
+            direction: ltr;
+            display: table-cell;
+            vertical-align: top;
+            padding-top: 0.6rem;
+            font-weight: 500;
+            font-size: 1.3rem;
+            position: absolute;
+            text-align: left;
+            width: 10.57rem ; }
+        .m-timeline-3 .m-timeline-3__item .m-timeline-3__item-desc {
+            display: table-cell;
+            width: 100%;
+            vertical-align: top;
+            font-size: 1rem;
+            padding-right: 12rem; }
+        .m-timeline-3 .m-timeline-3__item .m-timeline-3__item-desc .m-timeline-3__item-text {
+            font-size: 1.1rem;
+            font-weight: 400; }
+        .m-timeline-3 .m-timeline-3__item .m-timeline-3__item-desc .m-timeline-3__item-user-name .m-timeline-3__item-link {
+            color:rebeccapurple;
+            font-weight: 600;
+            font-size: 1.2rem;
+            text-decoration: none;}
+
+        @media (max-width: 768px) {
+            .m-timeline-3 .m-timeline-3__item {
+                margin-right: 0; } }
+
+        .m-timeline-3__item .m-timeline-3__item-time {
+            color: #898b96; }
+
+        .m-timeline-3__item .m-timeline-3__item-desc .m-timeline-3__item-text {
+            color: black; }
+
+        .m-timeline-3__item.m-timeline-3__item--brand:before {
+            background: #716aca; }
+
+        .m-timeline-3__item.m-timeline-3__item--metal:before {
+            background: #c4c5d6; }
+
+        .m-timeline-3__item.m-timeline-3__item--light:before {
+            background: #ffffff; }
+
+        .m-timeline-3__item.m-timeline-3__item--accent:before {
+            background: #00c5dc; }
+
+        .m-timeline-3__item.m-timeline-3__item--focus:before {
+            background: #9816f4; }
+
+        .m-timeline-3__item.m-timeline-3__item--primary:before {
+            background: #5867dd; }
+
+        .m-timeline-3__item.m-timeline-3__item--success:before {
+            background: #34bfa3; }
+
+        .m-timeline-3__item.m-timeline-3__item--info:before {
+            background: #36a3f7; }
+
+        .m-timeline-3__item.m-timeline-3__item--warning:before {
+            background: #ffb822; }
+
+        .m-timeline-3__item.m-timeline-3__item--danger:before {
+            background: #f4516c; }
     </style>
 @endsection
 
@@ -613,23 +691,6 @@
         {{--نمونه جزوه--}}
     @include('product.partials.pamphlet')
 
-    @if(isset($product->specialDescription) && mb_strlen(trim(strip_tags($product->specialDescription))) > 0)
-        <div class="m-portlet m-portlet--tabs m--margin-bottom-10 m--margin-top-10">
-            <div class="m-portlet__head">
-                <div class="m-portlet__head-caption">
-                    <div class="m-portlet__head-title">
-                        <h3 class="m-portlet__head-text">
-                            @include('product.partials.productInfoNav', ['targetId'=>'specialDescription'])
-                        </h3>
-                    </div>
-                </div>
-            </div>
-            <div class="m-portlet__body">
-                {!! $product->specialDescription !!}
-            </div>
-        </div>
-    @endif
-
     @if(mb_strlen(trim(strip_tags($product->shortDescription))) > 0 || mb_strlen(trim(strip_tags($product->longDescription))) > 0)
         <div class="row m--margin-top-10">
             <div class="col m--margin-bottom-25">
@@ -688,6 +749,49 @@
         </div>
     @endif
 
+    @if($liveDescriptions->isNotEmpty())
+        <div class="row m--margin-top-10">
+            <div class="col m--margin-bottom-25">
+                <div class="m-portlet m-portlet--tabs productLiveDescription" id="productLiveDescription">
+                    <div class="m-portlet__head">
+                        <div class="m-portlet__head-caption">
+                            <div class="m-portlet__head-title">
+                                <h3 class="m-portlet__head-text">
+                                    @include('product.partials.productInfoNav', ['targetId'=>'productLiveDescription'])
+                                </h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="m-portlet__body">
+                        <div class="tab-content">
+                            <div class="m-timeline-3">
+                                <div class="m-timeline-3__items">
+                                    @foreach($liveDescriptions as $liveDescription)
+                                        <div class="m-timeline-3__item m-timeline-3__item--info">
+                                            <span class="m-timeline-3__item-time">{{$liveDescription->CreatedAt_Jalali_WithTime()}}</span>
+                                            <div class="m-timeline-3__item-desc">
+                                            <span class="m-timeline-3__item-user-name">
+                                                    <a  class="m-timeline-3__item-link">
+                                                                {{$liveDescription->title}}
+                                                    </a>
+                                            </span>
+                                                <br>
+                                                <span class="m-timeline-3__item-text">
+                                                    {!!  $liveDescription->description !!}
+                                            </span>
+
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endif
+
     @include('block.partials.block', [
         'blockTitle'=>view('product.partials.productInfoNav', ['targetId'=>'relatedProduct']),
         'blockUrlDisable'=>true,
@@ -718,6 +822,12 @@
         @else
         '-';
         @endif
+
+        $(document).load(function () {
+            // $('.m-timeline-3__item-time').html(new persianDate(Date.parse($('.m-timeline-3__item-time').text())).format("dddd, DD MMMM YYYY"));
+
+
+        });
 
     </script>
 @endsection
