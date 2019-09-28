@@ -562,7 +562,7 @@ class ContentController extends Controller
         if ($contenttypeId == config('constants.CONTENT_TYPE_VIDEO')) {
             [$files, $thumbnail] = $this->makeVideoFilesForPaidContent($fileName, $productId , $contentsetId);
         } elseif ($contenttypeId == config('constants.CONTENT_TYPE_PAMPHLET')) {
-            $files = $this->makePahmphletFilesForPaidContent($fileName, $productId);
+            $files = $this->makePamphletFilesForPaidContent($fileName, $productId);
         }
         return [$files , $thumbnail];
     }
@@ -599,7 +599,7 @@ class ContentController extends Controller
      * @param int $productId
      * @return array
      */
-    private function makePahmphletFilesForPaidContent(string $fileName, int $productId): array
+    private function makePamphletFilesForPaidContent(string $fileName, int $productId): array
     {
         return $this->makePaidPamphletFileArray($fileName, config('constants.DISK_PRODUCT_CONTENT'), $productId);
     }
