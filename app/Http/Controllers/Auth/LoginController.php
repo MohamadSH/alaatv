@@ -120,7 +120,7 @@ class LoginController extends Controller
         
         if ($this->attemptLogin($request)) {
             if ($this->guard()
-                    ->user()->userstatus_id == 1) {
+                    ->user()->userstatus_id === 1) {
                 return $this->sendLoginResponse($request);
             }
     

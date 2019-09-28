@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Http\Controllers\Controller;
-use App\Traits\{CharacterCommon, Helper, RedirectTrait, RequestCommon, UserCommon};
 use App\User;
-use Illuminate\Foundation\Auth\RegistersUsers;
+use Validator;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Validator;
+use App\Http\Controllers\Controller;
+use Illuminate\Foundation\Auth\RegistersUsers;
+use App\Traits\{Helper, UserCommon, RequestCommon, RedirectTrait, CharacterCommon};
 
 class RegisterController extends Controller
 {
@@ -39,7 +39,7 @@ class RegisterController extends Controller
     {
         $this->middleware('guest');
         $this->middleware('convert:mobile|password|nationalCode');
-        $request->offsetSet("userstatus_id", $request->get('userstatus_id', 2));
+        $request->offsetSet('userstatus_id', $request->get('userstatus_id', 2));
     }
     
     /**
@@ -64,8 +64,8 @@ class RegisterController extends Controller
     {
         $totalUserrules = $this->getInsertUserValidationRules($data);
         $rules          = [
-            "mobile"       => $totalUserrules["mobile"],
-            "nationalCode" => $totalUserrules["nationalCode"],
+            'mobile'       => $totalUserrules['mobile'],
+            'nationalCode' => $totalUserrules['nationalCode'],
         ];
         
         return Validator::make($data, $rules);
