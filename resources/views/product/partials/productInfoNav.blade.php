@@ -11,9 +11,9 @@
         <span class="redSquare"></span>
          بررسی محصول
     </div>
-    <div class="productInfoNav productInfoNav-detailes @if($targetId==='specialDescription') this @endif" data-tid="specialDescription">
+    <div class="productInfoNav productInfoNav-liveDescription @if($targetId==='productLiveDescription') this @endif" data-tid="productLiveDescription">
         <span class="redSquare"></span>
-         فیلم های مرتبط
+         توضیحات لحظه ای
     </div>
     <div class="productInfoNav productInfoNav-relatedProduct @if($targetId==='relatedProduct') this @endif" data-tid="Block-relatedProduct">
         <span class="redSquare"></span>

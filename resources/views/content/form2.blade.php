@@ -226,6 +226,18 @@
         </div>
         <div class="form-group">
             <div class="row">
+                <label class="col-md-2 control-label" for="name">نوع محتوا :
+                </label>
+                <div class="col-md-9">
+                    {!! Form::select('contenttype_id', $contenttypes, null ,['class' => 'form-control m-input m-input--air', 'id' => 'contenttypes']) !!}
+                    <span class="form-control-feedback">
+                               <strong></strong>
+                   </span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="row">
                 <label class="col-md-2 control-label" for="name">نام :
                     <span class="required"> * </span>
                 </label>
