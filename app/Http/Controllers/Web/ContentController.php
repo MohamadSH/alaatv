@@ -232,38 +232,26 @@ class ContentController extends Controller
         $tags           = optional($content->tags)->tags;
         $tags           = implode(',', isset($tags) ? $tags : []);
         $contentset     = $content->set;
+        $contenttypes = [ 8 => 'فیلم' , 1 =>    'جزوه'];
 
-        $result = compact('content', 'validSinceTime', 'tags', 'contentset'
-        );
-
+        $result = compact('content', 'validSinceTime', 'tags', 'contentset' , 'contenttypes' );
         $view = view('content.edit', $result);
         return httpResponse(null, $view);
     }
 
     public function store(InsertContentRequest $request)
     {
-        $contenttypeId = $request->get('contenttype_id');
-        $fileName =       $request->get('fileName');
-        $contentsetId=   $request->get('contentset_id');
-        $isFree = $request->has('isFree');
-        $content = new Content();
+        $contenttypeId  = $request->get('contenttype_id');
+        $fileName       = $request->get('fileName');
+        $contentsetId   = $request->get('contentset_id');
+        $isFree         = $request->has('isFree');
+        $content        = new Content();
 
-        if($isFree)
-        {
-            [$files , $thumbnail] = $this->makeFreeContentFiles($contenttypeId, $fileName, $contentsetId);
-        }else{
-            $contentset = Contentset::find($contentsetId);
-            $productId = optional($contentset->products->first())->id;
-            if(!isset($productId))
-                return response()->json(['No product found for this set'], Response::HTTP_BAD_REQUEST);
+        [$files , $thumbnail]=$this->getFileLinks($isFree, $contenttypeId, $fileName, $contentsetId);
 
-            [$files , $thumbnail] = $this->makePaidContentFiles($contenttypeId, $fileName , $productId , $contentsetId);
-        }
-
-        if(isset($thumbnail))
+        if(isset($thumbnail)) {
             $content->thumbnail = $thumbnail;
-
-
+        }
 
         $request->offsetSet('files', $files);
 
@@ -274,10 +262,8 @@ class ContentController extends Controller
             $done = true;
         }
 
-        if($request->expectsJson())
-        {
-            if($done)
-            {
+        if($request->expectsJson()) {
+            if($done) {
                 $api = response()->json([
                     'id' => $content->id,
                 ]);
@@ -288,7 +274,6 @@ class ContentController extends Controller
             return httpResponse($api1, null);
 
         }
-//        Cache::tags('content')->flush();
         session()->flash('success' , 'محتوا با موفقیت درج شد. '.'<a href="'.action('Web\ContentController@edit' , $content).'">اصلاح محتوا</a>');
         return redirect()->back();
     }
@@ -300,6 +285,26 @@ class ContentController extends Controller
      */
     public function update(EditContentRequest $request, Content $content)
     {
+        $contenttypeId  = $request->get('contenttype_id');
+        if($content->contenttype_id == config('constants.CONTENT_TYPE_VIDEO')) {
+            $fileName       = basename($content->file_for_admin['video']->first()->fileName);
+        }elseif($content->contenttype_id == config('constants.CONTENT_TYPE_PAMPHLET')){
+            $fileName       = basename($content->file_for_admin['pamphlet']->first()->fileName);
+        }else{
+            session()->put('warning', 'محتوا باید فیلم یا جزوه باشد');
+            return redirect()->back();
+        }
+
+        $contentsetId           = $content->contentset_id;
+        $isFree                 = $request->has('isFree');
+        [$files , $thumbnail]   = $this->getFileLinks($isFree, $contenttypeId, $fileName, $contentsetId);
+
+        if(isset($thumbnail)) {
+            $content->thumbnail = $thumbnail;
+        }
+
+        $request->offsetSet('files', $files);
+
         $this->fillContentFromRequest($request->all(), $content);
 
         if ($content->update()) {
@@ -376,7 +381,7 @@ class ContentController extends Controller
 
             if(!empty($files))
             {
-                $this->insertFilesOfContent($educationalContent, $files);
+                $this->makeFilesCollection($educationalContent, $files);
             }
         }
 
@@ -460,10 +465,10 @@ class ContentController extends Controller
     {
         $validSinceDateTime = array_get($inputData , 'validSinceDate');
         $enabled    = Arr::has($inputData , 'enable');
-        $isFree    = Arr::has($inputData , 'isFree');
+        $isFree     = Arr::has($inputData , 'isFree');
         $tagString  = array_get($inputData , 'tags');
         $files      = array_get($inputData , 'files' , []);
-        $pamphlet      = array_get($inputData , 'pamphlet');
+        $pamphlet   = array_get($inputData , 'pamphlet');
 
         $content->fill($inputData);
         //ToDo : keep time in $validSinceDateTime
@@ -478,7 +483,7 @@ class ContentController extends Controller
         }
 
         if(!empty($files)) {
-            $this->insertFilesOfContent($content, $files);
+            $this->makeFilesCollection($content, $files);
         }
     }
 
@@ -665,7 +670,7 @@ class ContentController extends Controller
      *
      * @param  array    $files
      */
-    private function insertFilesOfContent(Content $content, array $files): void
+    private function makeFilesCollection(Content $content, array $files): void
     {
         $fileCollection = collect();
 
@@ -708,5 +713,20 @@ class ContentController extends Controller
             return $this->makePamphletFilesForFreeContent($filename);
         }
         return [];
+    }
+
+    private function getFileLinks(int $isFree, int $contenttypeId, string $fileName, int $contentsetId):array{
+        if($isFree) {
+            [$files , $thumbnail] = $this->makeFreeContentFiles($contenttypeId, $fileName, $contentsetId);
+        }else{
+            $contentset = Contentset::find($contentsetId);
+            $productId = optional($contentset->products->first())->id;
+            if(!isset($productId))
+                return [[],null];
+
+            [$files , $thumbnail] = $this->makePaidContentFiles($contenttypeId, $fileName , $productId , $contentsetId);
+        }
+
+        return [$files , $thumbnail];
     }
 }
