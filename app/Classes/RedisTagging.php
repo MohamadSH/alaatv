@@ -153,7 +153,8 @@ class RedisTagging extends Singleton
      * @param  string  $type        *optional* Default ="desc"
      * @param          $cb
      */
-    public function tags($bucket, $tags, $limit = 100, $offset = 0, $withScores = 0, $order = 'desc', $type = 'inter', $cb)
+    public function tags($bucket, $tags, $cb, $limit = 100, $offset = 0, $withScores = 0, $order = 'desc', $type =
+    'inter'): void
     {
 
         $redis  = Redis::connection('redisDB');
@@ -163,7 +164,7 @@ class RedisTagging extends Singleton
         $lastElement = $offset + $limit - 1;
 
         $cTags = count($tags);
-        if ($cTags == 0) {
+        if ($cTags === 0) {
             $cb(null, [
                 'total_items_result' => 0,
                 'total_items_db'     => 0,
@@ -178,44 +179,41 @@ class RedisTagging extends Singleton
 
             return;
         }
-        else {
-            if ($cTags > 1) {
-                $randKey = $ns.str_random(10).'_'.Carbon::now()->micro;
-                $keys    = [];
-                foreach ($tags as $tag) {
-                    $keys[] = $prefix.$tag;
-                }
-                try {
-                    if (strcmp($type, self::CONST_TYPE_INTER) == 0) {
-//                        $redis->zInter($randKey, $keys, null, 'MIN');
-                          $redis->zinterstore($randKey, $keys, ['min']);
-                    }
-                    else {
-                        $redis->zUnion($randKey, $keys, null, 'MIN');
-                    }
-                } catch (Exception $e) {
-                    $cb($e, [
-                        'msg' => 'Error!',
-                    ]);
-
-                    return;
-                }
-                $resultkey = $randKey;
+    
+        if ($cTags > 1) {
+            $randKey = $ns.str_random(10).'_'.Carbon::now()->micro;
+            $keys    = [];
+            foreach ($tags as $tag) {
+                $keys[] = $prefix.$tag;
             }
-            else {
-                if ($cTags == 1) {
-                    $resultkey = $prefix.$tags[0];
+            try {
+                if (strcmp($type, self::CONST_TYPE_INTER) === 0) {
+//                        $redis->zInter($randKey, $keys, null, 'MIN');
+                    $redis->zinterstore($randKey, $keys, ['min']);
+                } else {
+                    $redis->zUnion($randKey, $keys, null, 'MIN');
                 }
+            } catch (Exception $e) {
+                $cb($e, [
+                    'msg' => 'Error!',
+                ]);
+            
+                return;
+            }
+            $resultkey = $randKey;
+        } else {
+            if ($cTags == 1) {
+                $resultkey = $prefix.$tags[0];
             }
         }
-
+    
         try {
             $total_items_db = $redis->zCount($resultkey, '-inf', '+inf');
-            if (strcmp($order, self::CONST_ORDER_DESC) == 0) {
-                $tagsresult = $redis->zRevRange($resultkey, $offset, $lastElement, ["withscores"=>$withScores]);
+            if (strcmp($order, self::CONST_ORDER_DESC) === 0) {
+                $tagsresult = $redis->zRevRange($resultkey, $offset, $lastElement, ['withscores' => $withScores]);
             }
             else {
-                $tagsresult = $redis->zRange($resultkey, $offset, $lastElement, ["withscores"=>$withScores]);
+                $tagsresult = $redis->zRange($resultkey, $offset, $lastElement, ['withscores' => $withScores]);
             }
         } catch (Exception $e) {
             $total_items_db = 0;

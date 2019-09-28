@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\Api;
 
 use App\Classes\RedisTagging;
+use Illuminate\Http\Response;
 use App\Http\Requests\Request;
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Response;
 
 //https://github.com/smrchy/rest-tagging
 
@@ -182,29 +182,30 @@ class TagController extends Controller
         $order      = $request->order ?? 'desc';
         
         $response = null;
+        $error    = null;
 //                dd($tags);
-        $this->redis->tags($bucket, $tags, $limit, $offset, $withscores, $order, $type,
-            function ($err, $result) use (& $response) {
+        $this->redis->tags($bucket, $tags,
+            function ($err, $result) use (& $response, &$error) {
                 if (isset($err)) {
-                    $response = response()->json([
+                    $error = [
                         'error' => 'msg',
-                    ], Response::HTTP_GONE);
+                    ];
+                    return;
                 }
-                
-                $header = [
-                    'Content-Type' => 'application/json; charset=UTF-8',
-                    'charset'      => 'utf-8',
-                ];
-    
                 $this->convertToUtf8($result);
-    
-                $response = response()->json([
+                $response = [
                     'data' => $result,
-                ], Response::HTTP_OK, $header, JSON_UNESCAPED_UNICODE);
-            });
-        
-        //dd($response);
-        return $response;
+                ];
+            }, $limit, $offset, $withscores, $order, $type);
+    
+        if (isset($error)) {
+            return response()->json($error, Response::HTTP_GONE);
+        }
+        $header = [
+            'Content-Type' => 'application/json; charset=UTF-8',
+            'charset'      => 'utf-8',
+        ];
+        return response()->json($response, Response::HTTP_OK, $header, JSON_UNESCAPED_UNICODE);
     }
     
     public function flush(Request $request)
