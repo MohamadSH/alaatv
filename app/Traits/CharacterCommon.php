@@ -10,7 +10,7 @@ trait CharacterCommon
      */
     public function strIsEmpty($str): bool
     {
-        return strlen(preg_replace('/\s+/', '', $str)) == 0;
+        return preg_replace('/\s+/', '', $str) === '';
     }
 
     /** Converts Persian numbers in a string to English numbers

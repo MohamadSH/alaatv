@@ -8,17 +8,17 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\{Auth, Schema, Storage, Validator};
 use App\{Content,
-    Employeetimesheet,
-    Observers\EmployeetimesheetObserver,
     Product,
     Contentset,
     Orderproduct,
+    Employeetimesheet,
     Traits\UserCommon,
     Observers\SetObserver,
     Adapter\AlaaSftpAdapter,
     Observers\ProductObserver,
     Observers\ContentObserver,
-    Observers\OrderproductObserver};
+    Observers\OrderproductObserver,
+    Observers\EmployeetimesheetObserver};
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -33,11 +33,11 @@ class AppServiceProvider extends ServiceProvider
     {
         Horizon::auth(function ($request) {
             return (Auth::check() && Auth::user()
-                    ->hasRole("admin"));
+                    ->hasRole('admin'));
         });
         Schema::defaultStringLength(191);
-
-        Storage::extend('sftp', function ($app, $config) {
+    
+        Storage::extend('sftp', static function ($app, $config) {
             return new Filesystem(new AlaaSftpAdapter($config));
         });
 
@@ -68,7 +68,7 @@ class AppServiceProvider extends ServiceProvider
          *  National code validation for registration form
          */
         Validator::extend('validate', function ($attribute, $value, $parameters, $validator) {
-            if (strcmp($parameters[0], 'nationalCode') == 0) {
+            if (strcmp($parameters[0], 'nationalCode') === 0) {
                 return $this->validateNationalCode($value);
             }
 
