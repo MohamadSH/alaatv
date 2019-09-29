@@ -69,9 +69,6 @@ class HomeController extends Controller
 
     public function debug(Request $request, BlockCollectionFormatter $formatter)
     {
-        echo 'c123'.'<br>';
-        echo 'c453'.'<br>';
-        echo 'c837'.'<br>';
 //        return (array) optional($request->user('alaatv'))->id;
     }
 
