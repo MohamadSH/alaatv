@@ -28,7 +28,7 @@ class webSetCollectionFormatter implements SetCollectionFormatter
         }
         return $lessons;
     }
-    
+
     /**
      * @param  \App\Contentset  $set
      *
@@ -44,11 +44,11 @@ class webSetCollectionFormatter implements SetCollectionFormatter
                     "author"        => $content->author,
                     "pic"           => $set->photo,
                     "content_id"    => $content->id,
-                    "content_count" => $set->contents_count,
+                    "content_count" => $set->activeContents_count,
                 ];
-                
+
                 return $lesson;
             });
-        
+
     }
 }
