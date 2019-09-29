@@ -69,6 +69,7 @@ use Illuminate\Database\Eloquent\Builder;
  * @property-read \App\Collection\ContentCollection|\App\Content[] $oldContents
  * @property-read int|null $old_contents_count
  * @property-read int|null $products_count
+ * @property mixed activeContents_count
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Contentset display()
  */
 class Contentset extends BaseModel implements Taggable
@@ -90,7 +91,7 @@ class Contentset extends BaseModel implements Taggable
     ];
 
     protected $withCount = [
-        'contents',
+        'activeContents',
     ];
 
     protected $appends = [
@@ -347,7 +348,7 @@ class Contentset extends BaseModel implements Taggable
         $key = 'ContentSet:type-'.$type.':getActiveContents2:'.$this->cacheKey();
         return Cache::tags('set')
             ->remember($key, config('constants.CACHE_300'), function () use ($type){
-                $contents =  $this->contents()->active();
+                $contents =  $this->activeContents();
 
                 if(isset($type)){
                     $contents->type($type);
@@ -382,6 +383,11 @@ class Contentset extends BaseModel implements Taggable
     public function contents()
     {
         return $this->hasMany(Content::class);
+    }
+
+    public function activeContents()
+    {
+        return $this->contents()->active();
     }
 
     public function getApiUrlAttribute($value): array
