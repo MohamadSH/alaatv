@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\{DB, Input};
 use Illuminate\Support\Str;
 use App\Http\Controllers\Controller;
 use App\{Bon,
+    Coupon,
     Orderproduct,
     User,
     Order,
@@ -28,8 +29,7 @@ use App\{Bon,
     Traits\CharacterCommon,
     Notifications\GiftGiven,
     Traits\APIRequestCommon,
-    Events\FreeInternetAccept,
-    };
+    Events\FreeInternetAccept};
 use Zarinpal\Zarinpal;
 
 class BotsController extends Controller
@@ -2020,5 +2020,31 @@ class BotsController extends Controller
         return response()->json([
            'result'=> $response
         ]);
+    }
+
+    public function generateMassiveRandomCoupon(Request $request){
+        $codePreFix = $request->get('codePrefix' , '');
+
+        $numberOfCodes = $request->get('number');
+        for ($i = 1 ; $i <= $numberOfCodes ; $i++) {
+            do {
+                $code = $codePreFix.random_int(100, 999);
+            } while (Coupon::where('code', $code)->get()->isNotEmpty());
+
+            $coupon = Coupon::create([
+                'code' => $code,
+                'discount' => $request->get('discount'),
+                'coupontype_id' => config('constants.COUPON_TYPE_OVERALL'),
+                'discounttype_id' => config('constants.DISCOUNT_TYPE_PERCENTAGE'),
+                'name' => $request->get('name'),
+                'validUntil' => $request->get('validUntil') ,
+                'usageLimit' => $request->get('usageLimit'),
+            ]);
+
+            echo $coupon->code;
+            echo '<br>';
+        }
+
+        dd("DONE");
     }
 }
