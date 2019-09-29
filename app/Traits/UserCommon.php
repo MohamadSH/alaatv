@@ -209,7 +209,7 @@ trait UserCommon
     {
         $extension = $file->getClientOriginalExtension();
         $fileName  = basename($file->getClientOriginalName(), '.'.$extension).'_'.date('YmdHis').'.'.$extension;
-        if (Storage::disk(config('constants.DISK1'))
+        if (Storage::disk(config('constants.DISK24'))
             ->put($fileName, File::get($file))) {
             $oldPhoto = $user->photo;
             if (!$this->userHasDefaultAvatar($oldPhoto)) {
