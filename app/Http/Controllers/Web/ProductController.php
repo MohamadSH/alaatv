@@ -238,7 +238,11 @@ class ProductController extends Controller
         $tags = optional($product->tags)->tags;
         $tags = implode(',', isset($tags) ? $tags : []);
 
-        $liveDescriptions = $product->livedescriptions->sortByDesc('created_at');
+
+        $liveDescriptions = collect();
+        if($product->id == 347){
+            $liveDescriptions = $product->livedescriptions->sortByDesc('created_at');
+        }
 
         return view('product.edit',
             compact('product', 'amountLimit', 'defaultAmountLimit', 'enableStatus', 'defaultEnableStatus',

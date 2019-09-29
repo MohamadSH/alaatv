@@ -1364,11 +1364,13 @@ class UserController extends Controller
 
         if($user->isUserProfileLocked() && !$authenticatedUser->can(config('constants.EDIT_USER_ACCESS')))
             return response(['message'=>'User profile is locked'] , Response::HTTP_LOCKED);
-
         try {
             if($request->has('moderator') && $authenticatedUser->can(config('constants.EDIT_USER_ACCESS')))
             {
                 $this->fillUserFromModeratorRequest($request->all(), $user);
+                if ($authenticatedUser->can(config('constants.INSET_USER_ROLE'))) {
+                    $this->syncRoles($request->get('roles' , []), $user);
+                }
             }else{
                 $this->fillUserFromRequest($request->all(), $user);
             }
@@ -1388,11 +1390,6 @@ class UserController extends Controller
         }
 
         if ($user->update()) {
-
-            if ($authenticatedUser->can(config('constants.INSET_USER_ROLE'))) {
-                $this->syncRoles($request->get('roles' , []), $user);
-            }
-
             $message = 'اطلاعات با موفقیت اصلاح شد';
             $status  = Response::HTTP_OK;
         }

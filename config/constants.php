@@ -228,6 +228,7 @@ return [
     'DISK21'                                      => 'productImageSFTP',
     'DISK22'                                      => 'homeSlideShowPicSFTP',
     'DISK23'                                      => 'setImageSFTP',
+    'DISK24'                                      => 'profileImageSFTP',
 
     'DISK_FREE_CONTENT'              => 'alaaCdnSFTP',
     'DISK_PRODUCT_CONTENT'           => 'productFileSFTP',
