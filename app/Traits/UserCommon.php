@@ -45,7 +45,7 @@ trait UserCommon
      * $prizeName = "کد تخفیف ".$couponCode." با ".config("constants.HAMAYESH_LOTTERY_EXCHANGE_AMOUNT")."% تخفیف( تا تاریخ 1396/09/28 اعتبار دارد )" ;
      * }
      */
-        
+
         /**   giving credit */
         $unitAmount    = config("constants.HAMAYESH_LOTTERY_EXCHANGE_AMOUNT");
         $amount        = $unitAmount * $points;
@@ -54,7 +54,7 @@ trait UserCommon
         $responseText  = $depositResult["responseText"];
         $objectId      = $depositResult["wallet"];
         $prizeName     = "مبلغ ".number_format($amount)." تومان اعتبار هدیه";
-        
+
         return [
             $done,
             $responseText,
@@ -62,7 +62,7 @@ trait UserCommon
             $objectId,
         ];
     }
-    
+
     /**
      * Validates national code
      *
@@ -76,26 +76,26 @@ trait UserCommon
         if (!preg_match('/^[0-9]{10}$/', $value)) {
             $flag = false;
         }
-        
+
         for ($i = 0; $i < 10; $i++) {
             if (preg_match('/^'.$i.'{10}$/', $value)) {
                 $flag = false;
             }
         }
-        
+
         for ($i = 0, $sum = 0; $i < 9; $i++) {
             $sum += ((10 - $i) * intval(substr($value, $i, 1)));
         }
-        
+
         $ret    = $sum % 11;
         $parity = intval(substr($value, 9, 1));
         if (($ret < 2 && $ret == $parity) || ($ret >= 2 && $ret == 11 - $parity)) {
             $flag = true;
         }
-        
+
         return $flag;
     }
-    
+
     /**
      * Determines oldPassword and newPassword confirmation of the user
      *
@@ -108,13 +108,13 @@ trait UserCommon
     public function userPasswordConfirmation(\App\User $user, $claimedOldPassword, $newPassword): array
     {
         [$confirmed, $message] = $this->getMsg($user, $claimedOldPassword, $newPassword);
-        
+
         return [
             "confirmed" => $confirmed,
             "message"   => $message,
         ];
     }
-    
+
     /**
      * @param  \App\User  $user
      * @param             $claimedOldPassword
@@ -127,14 +127,14 @@ trait UserCommon
         if (!$user->compareWithCurrentPassword($claimedOldPassword)) {
             return [false, \Lang::get('confirmation.Claimed old password is not correct')];
         }
-        
+
         if (!$user->compareWithCurrentPassword($newPassword)) {
             return [true, \Lang::get('confirmation.Confirmed.')];
         }
-        
+
         return [false, \Lang::get('confirmation.Current password and new password are the same.')];
     }
-    
+
     /**
      * @param $orders
      *
@@ -147,7 +147,7 @@ trait UserCommon
             ->where("transactionstatus_id",
                 config("constants.TRANSACTION_STATUS_UNPAID"));
     }
-    
+
     /**
      * Returns validation rules for inserting a user
      *
@@ -190,10 +190,10 @@ trait UserCommon
             'gender_id'     => 'sometimes|nullable|exists:genders,id',
             'email'         => 'sometimes|nullable|email',
         ];
-        
+
         return $rules;
     }
-    
+
     /**
      * @param  User  $user
      * @param        $file
@@ -204,17 +204,15 @@ trait UserCommon
     {
         $extension = $file->getClientOriginalExtension();
         $fileName  = basename($file->getClientOriginalName(), ".".$extension)."_".date("YmdHis").'.'.$extension;
-        if (Storage::disk(config('constants.DISK1'))
-            ->put($fileName, File::get($file))) {
-            $oldPhoto = $user->photo;
+        if (Storage::disk(config('constants.DISK24'))->put($fileName, File::get($file))) {
+            $oldPhoto = $user->getOriginal('photo');
             if (!$this->userHasDefaultAvatar($oldPhoto)) {
-                Storage::disk(config('constants.DISK1'))
-                    ->delete($oldPhoto);
+                Storage::disk(config('constants.DISK24'))->delete($oldPhoto);
             }
             $user->photo = $fileName;
         }
     }
-    
+
     /**
      * Checks whether user has default avatar or not
      *
@@ -224,9 +222,9 @@ trait UserCommon
      */
     public function userHasDefaultAvatar($photo): bool
     {
-        return strcmp($photo, config('constants.PROFILE_DEFAULT_IMAGE')) != 0;
+        return strcmp($photo, config('constants.PROFILE_DEFAULT_IMAGE')) == 0;
     }
-    
+
     /**
      * @param  array  $newRoleIds
      * @param  User   $staffUser

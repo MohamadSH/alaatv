@@ -8,6 +8,8 @@
 
 namespace App\Traits\User;
 
+use Illuminate\Support\Facades\Storage;
+
 trait mutatorTrait
 {
     /** Setter mutator for major_id
@@ -244,28 +246,38 @@ trait mutatorTrait
 
     public function getPhotoAttribute($value)
     {
-        $profileImage = ($value != null ? $value : config('constants.PROFILE_DEFAULT_IMAGE'));
-        $profileImage = route('image', [
-            'category' => '1',
-            'w'        => '100',
-            'h'        => '100',
-            'filename' => $profileImage,
-        ]);
+        $diskAdapter = Storage::disk('alaaCdnSFTP')->getAdapter();
+        $imageUrl =  $diskAdapter->getUrl($value);
+        return isset($imageUrl)?$imageUrl."?w=100&h=100" :'/acm/image/255x255.png';
 
-        return $profileImage;
+//        $profileImage = ($value != null ? $value : config('constants.PROFILE_DEFAULT_IMAGE'));
+//        $profileImage = route('image', [
+//            'category' => '1',
+//            'w'        => '100',
+//            'h'        => '100',
+//            'filename' => $profileImage,
+//        ]);
+//
+//        return $profileImage;
     }
 
     public function getCustomSizePhoto(int $width , int $height){
         $value = $this->getOriginal('photo');
-        $profileImage = ($value != null ? $value : config('constants.PROFILE_DEFAULT_IMAGE'));
-        $profileImage = route('image', [
-            'category' => '1',
-            'w'        => $width,
-            'h'        => $height,
-            'filename' => $profileImage,
-        ]);
 
-        return $profileImage;
+        $diskAdapter = Storage::disk('alaaCdnSFTP')->getAdapter();
+        $imageUrl =  $diskAdapter->getUrl($value);
+        return isset($imageUrl)?$imageUrl."?w=$width&h=$height" :'/acm/image/255x255.png';
+
+
+//        $profileImage = ($value != null ? $value : config('constants.PROFILE_DEFAULT_IMAGE'));
+//        $profileImage = route('image', [
+//            'category' => '1',
+//            'w'        => $width,
+//            'h'        => $height,
+//            'filename' => $profileImage,
+//        ]);
+//
+//        return $profileImage;
     }
 
     public function getShortNameAttribute()
