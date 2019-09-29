@@ -541,19 +541,6 @@
         @if(isset($videosWithSameSet) and $videosWithSameSet->count() > 0)
             <div class="col-12 col-sm-12 col-md-12 col-lg-4">
                 <!--begin::Portlet-->
-
-                <div class="row">
-                    <div class="col text-center m--margin-bottom-5">
-                        <a href="{{ route('landing.8') }}"
-                           class="a--gtm-eec-advertisement a--gtm-eec-advertisement-click "
-                           data-gtm-eec-promotion-id="shop-ghorekeshi3"
-                           data-gtm-eec-promotion-name="قرعه کشی گوشی"
-                           data-gtm-eec-promotion-creative="سمت چپ صفحه بالای لیست کانتنت های مشابه"
-                           data-gtm-eec-promotion-position="0">
-                            <img data-src="{{ asset('/acm/extra/ads/gif/970-90(1).gif') }}" class="a--full-width lazy-image">
-                        </a>
-                    </div>
-                </div>
                 <div class="m-portlet">
                     <div class="m-portlet__head">
                         <div class="m-portlet__head-caption">

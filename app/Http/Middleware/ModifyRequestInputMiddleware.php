@@ -2,9 +2,9 @@
 
 namespace App\Http\Middleware;
 
-use App\Traits\CharacterCommon;
 use Closure;
 use Illuminate\Http\Request;
+use App\Traits\CharacterCommon;
 
 class ModifyRequestInputMiddleware
 {
@@ -27,8 +27,8 @@ class ModifyRequestInputMiddleware
 
         return $next($request);
     }
-
-    protected function replaceNumbers(Request &$request, array $array)
+    
+    protected function replaceNumbers(Request $request, array $array)
     {
         $input = $request->all();
         foreach ($array as $item) {

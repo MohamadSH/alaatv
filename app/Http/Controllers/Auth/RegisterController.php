@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Http\Controllers\Controller;
-use App\Traits\{CharacterCommon, Helper, RedirectTrait, RequestCommon, UserCommon};
 use App\User;
-use Illuminate\Foundation\Auth\RegistersUsers;
+use Validator;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Validator;
+use App\Http\Controllers\Controller;
+use Illuminate\Auth\Events\Registered;
+use Illuminate\Foundation\Auth\RegistersUsers;
+use App\Traits\{Helper, UserCommon, RequestCommon, RedirectTrait, CharacterCommon};
 
 class RegisterController extends Controller
 {
@@ -39,14 +40,14 @@ class RegisterController extends Controller
     {
         $this->middleware('guest');
         $this->middleware('convert:mobile|password|nationalCode');
-        $request->offsetSet("userstatus_id", $request->get('userstatus_id', 2));
+        $request->offsetSet('userstatus_id', $request->get('userstatus_id', 2));
     }
     
     /**
      * overriding method
      * Show the application registration form.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function showRegistrationForm()
     {
@@ -64,8 +65,8 @@ class RegisterController extends Controller
     {
         $totalUserrules = $this->getInsertUserValidationRules($data);
         $rules          = [
-            "mobile"       => $totalUserrules["mobile"],
-            "nationalCode" => $totalUserrules["nationalCode"],
+            'mobile'       => $totalUserrules['mobile'],
+            'nationalCode' => $totalUserrules['nationalCode'],
         ];
         
         return Validator::make($data, $rules);
@@ -91,13 +92,17 @@ class RegisterController extends Controller
     /**
      * The user has been registered.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  mixed                     $user
+     * @param  Request  $request
+     * @param  mixed    $user
      *
      * @return mixed
      */
     protected function registered(Request $request, User $user)
     {
+        event(new Registered($user));
+        $this->guard()
+            ->login($user);
+        
         if ($request->expectsJson()) {
             $token = $user->getAppToken();
             $data  = array_merge([
