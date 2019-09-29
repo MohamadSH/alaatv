@@ -33,7 +33,7 @@
 
                     <div class="row">
                         @if(Auth::user()->can(config('constants.INSERT_EMPLOPYEE_WORK_SHEET')))
-                            {!! Form::open( ['method' => 'POST','action' => ['Web\EmployeetimesheetController@store'] , 'class'=>'form-horizontal col' ,'accept-charset'=>'UTF-8' ]) !!}
+                            {!! Form::open( ['method' => 'POST','route' => 'employeetimesheet.store' , 'class'=>'form-horizontal col' ,'accept-charset'=>'UTF-8' ]) !!}
                             <div class="col">
                                 @include('employeeTimeSheet.form')
                             </div>
@@ -43,12 +43,12 @@
                                 @if($employeeTimeSheet->getOriginal("timeSheetLock"))
                                     <h4 class="m--font-danger text-center bold col">ساعت کاری امروز شما قفل شده است</h4>
                                 @else
-                                    {!! Form::model( $employeeTimeSheet,['method' => 'POST','action' => ['Web\EmployeetimesheetController@submitWorkTime' , $employeeTimeSheet] , 'class'=>'form-horizontal col' ,'accept-charset'=>'UTF-8' , 'enctype'=>'multipart/form-data']) !!}
+                                    {!! Form::model( $employeeTimeSheet,['method' => 'POST', 'route' => ['web.user.employeetime.submit.update' , $employeeTimeSheet->id] , 'class'=>'form-horizontal col' ,'accept-charset'=>'UTF-8' , 'enctype'=>'multipart/form-data']) !!}
                                     @include('employeeTimeSheet.form' , ['submitWorkTime'=>1])
                                     {!! Form::close() !!}
                                 @endif
                             @else
-                                {!! Form::open( ['method' => 'POST','action' => ['Web\EmployeetimesheetController@submitWorkTime' ] , 'class'=>'form-horizontal col' ,'accept-charset'=>'UTF-8' , 'enctype'=>'multipart/form-data']) !!}
+                                {!! Form::open( ['method' => 'POST','route' => 'web.user.employeetime.submit' , 'class'=>'form-horizontal col' ,'accept-charset'=>'UTF-8' , 'enctype'=>'multipart/form-data']) !!}
                                     @include('employeeTimeSheet.form', ['submitWorkTime'=>1])
                                 {!! Form::close() !!}
                             @endif
