@@ -16,7 +16,7 @@ class AlterTableProductsModifyPhoto extends Migration
     {
         $products = Product::all();
         $output = new ConsoleOutput();
-        $output->writeln('updating products photos...');
+        $output->writeln('Updating products photos...');
         $progress = new ProgressBar($output, $products->count());
         foreach ($products as $product) {
             $fileName = $product->image;
