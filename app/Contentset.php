@@ -91,7 +91,7 @@ class Contentset extends BaseModel implements Taggable
     ];
 
     protected $withCount = [
-        'activeContents',
+        'contents',
     ];
 
     protected $appends = [
