@@ -685,6 +685,7 @@
                     state: "info",
                 });
                 data.productPage = getNextPageParam(data.start, data.length);
+                data.moderator = 1;
                 delete data.columns;
                 return data;
             };
