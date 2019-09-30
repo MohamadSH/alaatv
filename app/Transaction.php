@@ -117,6 +117,7 @@ class Transaction extends BaseModel
         'transactiongateway_id',
         'transactionstatus_id',
         'completed_at',
+        'deadline_at',
         'description',
         'device_id',
     ];

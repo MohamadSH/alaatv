@@ -39,7 +39,8 @@
             <div class="row">
                 <label class="col-md-3 control-label" for="transactionDeadlineAt">
                     @if(isset($withCheckbox) && in_array("deadline_at" , $withCheckbox))
-                        <input type="checkbox" name="deadlineAtEnable" value="1" id="transactionDeadlineAtEnable">@endif
+                        <input type="checkbox" name="deadlineAtEnable" value="1" id="transactionDeadlineAtEnable">
+                    @endif
                     مهلت پرداخت:
                 </label>
                 <div class="col-md-6">

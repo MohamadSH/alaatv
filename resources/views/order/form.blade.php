@@ -137,27 +137,27 @@
         <div class = "row">
             <label class = "col-md-2 control-label" for = "questionFile">فایل سفارش</label>
             <div class = "col-md-10">
-                @if(!$order->files->isEmpty())
-                    <a target = "_blank" class = "btn blue" href = "{{action("Web\HomeController@download" , ["content"=>"فایل سفارش","fileName"=>$order->files->first()->file ])}}">دانلود فایل</a>
-                @else
-                    <div class = "fileinput fileinput-new" data-provides = "fileinput">
-                        <div class = "input-group input-large ">
-                            <div class = "form-control uneditable-input input-fixed input-medium" data-trigger = "fileinput">
-                                <i class = "fa fa-file fileinput-exists"></i>&nbsp;
-                                <span class = "fileinput-filename"></span>
-                            </div>
-                            <span class = "input-group-addon btn default btn-file">
-                                                                        <span class = "fileinput-new"> انتخاب فایل </span>
-                                                                        <span class = "fileinput-exists"> تغییر </span>
-                            {!! Form::file('file' , ['id'=>'file']) !!} </span>
-                            <a href = "javascript:" class = "input-group-addon btn red fileinput-exists" data-dismiss = "fileinput"> حذف</a>
+                    @foreach($order->files as $key=>$file)
+                        <a target = "_blank" class = "btn blue" href = "{{action("Web\HomeController@download" , ["content"=>"فایل سفارش","fileName"=>$file->file ])}}">دانلود فایل {{$key+1}}</a>
+                        <br>
+                    @endforeach
+                <div class = "fileinput fileinput-new" data-provides = "fileinput">
+                    <div class = "input-group input-large ">
+                        <div class = "form-control uneditable-input input-fixed input-medium" data-trigger = "fileinput">
+                            <i class = "fa fa-file fileinput-exists"></i>&nbsp;
+                            <span class = "fileinput-filename"></span>
                         </div>
+                        <span class = "input-group-addon btn btn-accent btn-file">
+                                                                    <span class = "fileinput-new"> انتخاب فایل </span>
+                                                                    <span class = "fileinput-exists"> تغییر </span>
+                        {!! Form::file('file' , ['id'=>'file']) !!} </span>
+                        <a href = "javascript:" class = "input-group-addon btn btn-danger fileinput-exists" data-dismiss = "fileinput"> حذف</a>
                     </div>
-                    @if ($errors->has('file'))
-                        <span class="form-control-feedback">
-                            <strong>{{ $errors->first('file') }}</strong>
-                        </span>
-                    @endif
+                </div>
+                @if ($errors->has('file'))
+                    <span class="form-control-feedback">
+                        <strong>{{ $errors->first('file') }}</strong>
+                    </span>
                 @endif
             </div>
         </div>

@@ -4,6 +4,9 @@
 
 @section('page-css')
     <link href="{{ mix('/css/admin-all.css') }}" rel="stylesheet" type="text/css"/>
+    <style>
+        .datepicker-plot-area{z-index:1600 !important;}
+    </style>
 @endsection
 
 @section('pageBar')
@@ -697,7 +700,6 @@
                             </table>
                         </div>
                         <div class="tab-pane" id="portlet_tab4" role="tabpanel">
-
                             <div class="alert alert-success alert-dismissible fade show removeTransactionSuccess d-none" role="alert">
                                 <button type="button" class="close" data-dismiss="alert" aria-label="Close"></button>
                                 تراکنش با موفقیت اصلاح شد
