@@ -179,7 +179,7 @@ class RedisTagging extends Singleton
 
             return;
         }
-    
+
         if ($cTags > 1) {
             $randKey = $ns.str_random(10).'_'.Carbon::now()->micro;
             $keys    = [];
@@ -197,7 +197,7 @@ class RedisTagging extends Singleton
                 $cb($e, [
                     'msg' => 'Error!',
                 ]);
-            
+
                 return;
             }
             $resultkey = $randKey;
@@ -206,13 +206,12 @@ class RedisTagging extends Singleton
                 $resultkey = $prefix.$tags[0];
             }
         }
-    
+
         try {
             $total_items_db = $redis->zCount($resultkey, '-inf', '+inf');
             if (strcmp($order, self::CONST_ORDER_DESC) === 0) {
                 $tagsresult = $redis->zRevRange($resultkey, $offset, $lastElement, ['withscores' => $withScores]);
-            }
-            else {
+            } else {
                 $tagsresult = $redis->zRange($resultkey, $offset, $lastElement, ['withscores' => $withScores]);
             }
         } catch (Exception $e) {

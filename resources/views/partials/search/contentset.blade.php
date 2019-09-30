@@ -26,7 +26,7 @@
                     'widgetPic'        => (isset($lesson->photo) && strlen($lesson->photo)>0 ? $lesson->photo."?w=253&h=142" : 'https://via.placeholder.com/235x142'),
                     'widgetAuthor'     => $lesson->author,
                     'widgetLink'       => $lesson->url,
-                    'widgetCount'      => $lesson->contents_count,
+                    'widgetCount'      => $lesson->activeContents->count(),
                     'widgetScroll'     => 1
                     ])
                 @endforeach
