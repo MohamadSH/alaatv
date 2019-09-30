@@ -362,9 +362,9 @@ jQuery(document).ready(function () {
 
     $("#transactionDeadlineAt").persianDatepicker({
         altField: '#transactionDeadlineAtAlt',
-        altFormat: "YYYY MM DD",
+        altFormat: "YYYY-MM-DD",
         observer: true,
-        format: 'YYYY-MM-DD',
+        format: 'YYYY/MM/DD',
         altFieldFormatter: function (unixDate) {
             // var d = new Date(unixDate).toISOString();
             let targetDatetime = new Date(unixDate);
