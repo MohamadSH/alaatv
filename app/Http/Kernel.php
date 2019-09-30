@@ -60,7 +60,7 @@ class Kernel extends HttpKernel
             StartSession::class,
             AuthenticateSession::class,
             ShareErrorsFromSession::class,
-            Middleware\VerifyCsrfToken::class,
+            //            Middleware\VerifyCsrfToken::class,
             SubstituteBindings::class,
             CreateFreshApiToken::class,
             CacheableWithNginx::class,
