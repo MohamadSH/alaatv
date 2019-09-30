@@ -1227,8 +1227,6 @@ class Order extends BaseModel
                 /** @var User $user */
                 if (isset($intendedUser)) {
                     $user = $intendedUser;
-                } elseif (Auth::check()) {
-                    $user = Auth::user();
                 } else{
                     $user = $this->user;
                 }
