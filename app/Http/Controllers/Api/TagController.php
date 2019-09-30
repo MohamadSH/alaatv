@@ -42,8 +42,8 @@ class TagController extends Controller
      */
     public function add(Request $request, $bucket, $id)
     {
-        
-        $tags  = json_decode($request->tags);
+    
+        $tags  = json_decode($request->tags, true, 512, JSON_THROW_ON_ERROR);
         $score = $request->score;
     
         if ($score === null) {
