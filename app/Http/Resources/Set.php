@@ -31,7 +31,7 @@ class Set extends JsonResource
             'description'    => $this->description,
             'photo'          => $this->photo,
             'tags'           => $this->tags,
-            'contents_count' => $this->activeContents->count(),
+            'contents_count' => $this->contents_count,
             'url'            => [
                 'last_content' => [
                     'web' => $this->url,
