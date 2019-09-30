@@ -210,9 +210,9 @@ class RedisTagging extends Singleton
         try {
             $total_items_db = $redis->zCount($resultkey, '-inf', '+inf');
             if (strcmp($order, self::CONST_ORDER_DESC) === 0) {
-                $tagsresult = $redis->zRevRange($resultkey, $offset, $lastElement, ['withscores' => $withScores]);
+                $tagsresult = $redis->zRevRange($resultkey, $offset, $lastElement, $withScores);
             } else {
-                $tagsresult = $redis->zRange($resultkey, $offset, $lastElement, ['withscores' => $withScores]);
+                $tagsresult = $redis->zRange($resultkey, $offset, $lastElement, $withScores);
             }
         } catch (Exception $e) {
             $total_items_db = 0;
