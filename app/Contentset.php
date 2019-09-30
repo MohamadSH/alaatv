@@ -70,6 +70,7 @@ use Illuminate\Database\Eloquent\Builder;
  * @property-read int|null $old_contents_count
  * @property-read int|null $products_count
  * @property mixed activeContents_count
+ * @property mixed activeContents
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Contentset display()
  */
 class Contentset extends BaseModel implements Taggable
@@ -92,6 +93,7 @@ class Contentset extends BaseModel implements Taggable
 
     protected $withCount = [
         'contents',
+        'activeContents',
     ];
 
     protected $appends = [
