@@ -22,11 +22,11 @@ class CacheableWithNginx
      */
     public function handle($request, Closure $next)
     {
-        if ($request->user() && !$this->inExceptArray($request)) {
-            \Cookie::queue(cookie()->forever($this->cookieName, '1'));
-        } else {
-            \Cookie::queue(cookie()->forget($this->cookieName));
+        if ($request->user() || $this->inExceptArray($request)) {
+            $this->canNotCacheThisRequest();
+            return $next($request);
         }
+        $this->weCanCacheThisRequest();
         return $next($request);
     }
     
@@ -50,5 +50,15 @@ class CacheableWithNginx
         }
         
         return false;
+    }
+    
+    private function canNotCacheThisRequest(): void
+    {
+        \Cookie::queue(cookie()->forever($this->cookieName, '1'));
+    }
+    
+    private function weCanCacheThisRequest(): void
+    {
+        \Cookie::queue(cookie()->forget($this->cookieName));
     }
 }
