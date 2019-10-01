@@ -43,7 +43,6 @@ Route::get('contactUs', 'Web\ContactUsController');
 Route::get('rules', 'Web\RulesPageController');
 Route::get('articleList', 'Web\ArticleController@showList');
 Route::get('debug', 'Web\HomeController@debug');
-Route::get('telgramAgent2', 'Web\HomeController@telgramAgent');
 Route::post('sendMail', [HomeController::class , 'sendMail']);
 Route::get('product/search', 'Web\ProductController@search');
 Route::get('showPartial/{product}', 'Web\ProductController@showPartial');
@@ -288,7 +287,6 @@ Route::group(['prefix' => 'product'], function () {
     Route::post('{product}/favored', 'Web\FavorableController@markFavorableFavorite');
 });
 
-Route::get('ctag', 'Web\ContentController@retrieveTags');
 Route::resource('product', 'Web\ProductController');
 
 Route::resource('c', 'Web\ContentController')->names([
