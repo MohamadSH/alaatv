@@ -22,7 +22,7 @@ class CacheableWithNginx
      */
     public function handle($request, Closure $next)
     {
-        if ($request->user() || $this->inExceptArray($request)) {
+        if ($request->user() && !$this->inExceptArray($request)) {
             \Cookie::queue(cookie()->forever($this->cookieName, '1'));
         } else {
             \Cookie::queue(cookie()->forget($this->cookieName));
