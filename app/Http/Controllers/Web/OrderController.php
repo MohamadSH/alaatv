@@ -549,7 +549,7 @@ class OrderController extends Controller
             ->toArray();
         $paymentstatuses = Paymentstatus::pluck('displayName', 'id')
             ->toArray();
-        $transactionPaymentmethods        = Paymentmethod::pluck('displayName', 'name')->toArray();
+        $transactionPaymentmethods        = Paymentmethod::pluck('displayName', 'id')->toArray();
         $offlineTransactionPaymentMethods = Paymentmethod::where('id', '<>', config('constants.PAYMENT_METHOD_ONLINE'))
             ->pluck('displayName', 'id')
             ->toArray();
