@@ -9,6 +9,7 @@ use Illuminate\Auth\Middleware\Authorize;
 use App\Http\Middleware\RemoveOrderCoupon;
 use Laratrust\Middleware\LaratrustAbility;
 use Nckg\Minify\Middleware\MinifyResponse;
+use App\Http\Middleware\CacheableWithNginx;
 use Laratrust\Middleware\LaratrustPermission;
 use Illuminate\Http\Middleware\SetCacheHeaders;
 use Illuminate\Session\Middleware\StartSession;
@@ -59,9 +60,10 @@ class Kernel extends HttpKernel
             StartSession::class,
             AuthenticateSession::class,
             ShareErrorsFromSession::class,
-            Middleware\VerifyCsrfToken::class,
+            //            Middleware\VerifyCsrfToken::class,
             SubstituteBindings::class,
             CreateFreshApiToken::class,
+            CacheableWithNginx::class,
         ],
 
         'api' => [
