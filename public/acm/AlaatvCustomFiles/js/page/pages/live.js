@@ -188,28 +188,34 @@ if ($('#video-0').length > 0) {
     player.pic2pic();
 }
 
-$(document).ready(function () {
-    function ajaxLive(ajaxUrl) {
-        var formData = $('#playLiveForm').serialize();
-        var formMethod = $('#playLiveForm').attr('method');
-        $.ajax({
-            type: formMethod,
-            url : ajaxUrl,
-            data: formData,
-            dataType: 'json',
-
-            success: function (data) {
-                window.location.reload();
-            },
-            error: function (jqXHR, textStatus, errorThrown) {
-                alert('خطای سیستمی رخ داده است.');
-            }
-        });
-    }
-    $(document).on('click', '.btnPlayLive', function () {
-        ajaxLive(playLiveAjaxUrl);
+$(document).on('click', '#btnPlayLive', function () {
+    console.log('in start');
+    let title = $('#startLiveTitle').val();
+    $.ajax({
+        type: 'POST',
+        url : playLiveAjaxUrl,
+        data: {title:title},
+        // dataType: 'json',
+        success: function (data) {
+            window.location.reload();
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            alert('خطای سیستمی رخ داده است.');
+        }
     });
-    $(document).on('click', '.btnStopLive', function () {
-        ajaxLive(stopLiveAjaxUrl);
+});
+
+$(document).on('click', '#btnStopLive', function () {
+    console.log('in stop');
+    $.ajax({
+        type: 'POST',
+        url : stopLiveAjaxUrl,
+        // dataType: 'json',
+        success: function (data) {
+            window.location.reload();
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            alert('خطای سیستمی رخ داده است.');
+        }
     });
 });
