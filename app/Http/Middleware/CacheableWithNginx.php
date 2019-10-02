@@ -35,7 +35,7 @@ class CacheableWithNginx
         $response = $next($request);
     
         return $response->withHeaders([
-            'Cache-Control' => 'public, max-age='. 60 * (config('cache_time_in_minutes')),
+            'Cache-Control' => 'public, max-age='. 60 * (config('cache_time_in_minutes', 60)),
         ]);
     }
     
