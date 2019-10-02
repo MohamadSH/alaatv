@@ -8,6 +8,7 @@ echo -e "$(cat /home/alaa/deploy/.env)" | sudo -S service php7.3-fpm reload
 echo -e "$(cat /home/alaa/deploy/.env)" | sudo -S rm -rf /cache_ramdisk/fastFCGIcache/*
 echo -e "$(cat /home/alaa/deploy/.env)" | sudo -S rm -rf /cache_ramdisk/fastFCGIcache/*
 
+composer install
  # perform any migrations                                                                                
 php artisan migrate --force                                                                             
 php artisan cache:clear                                                                                 
