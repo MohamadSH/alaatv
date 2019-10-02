@@ -12,6 +12,6 @@ class EncryptCookies extends Middleware
      * @var array
      */
     protected $except = [
-        'nginx_not_cacheable',
+        'nocache',
     ];
 }
