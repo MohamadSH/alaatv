@@ -28,17 +28,26 @@ class CacheableWithNginx
     public function handle($request, Closure $next)
     {
         if ($this->isNotCachable($request)) {
-            $this->canNotCacheThisRequest($request);
+            if ($this->methodIsGetOrHead($request)) {
+                Cookie::queue(cookie()->forever($this->cookieName, '1'));
+            }
             return $next($request);
         }
         $this->weCanCacheThisRequest();
         $response = $next($request);
     
-        return $response->withHeaders([
-            'Cache-Control' => 'public, max-age='. 60 * (config('cache_time_in_minutes', 60)),
-        ]);
+        if ($this->methodIsGetOrHead($request)) {
+            return $response->withHeaders([
+                'Cache-Control' => 'public, max-age='. 60 * (config('cache_time_in_minutes', 60)),
+            ]);
+        }
+        return $response;
     }
     
+    private function methodIsGetOrHead(Request $request)
+    {
+        return $request->isMethod('GET') || $request->isMethod('HEAD') ? true : false;
+    }
     /**
      *
      * @param  Request  $request
@@ -58,12 +67,6 @@ class CacheableWithNginx
         }
         
         return false;
-    }
-    
-    private function canNotCacheThisRequest(Request $request): void
-    {
-        Cookie::queue(cookie()->forever($this->cookieName, '1'));
-    
     }
     
     private function weCanCacheThisRequest(): void
