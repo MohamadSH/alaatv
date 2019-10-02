@@ -27,14 +27,16 @@ class CacheableWithNginx
      */
     public function handle($request, Closure $next)
     {
-        if ($request->user() || $this->inExceptArray($request)) {
+        if ($this->isNotCachable($request)) {
             $this->canNotCacheThisRequest($request);
             return $next($request);
         }
         $this->weCanCacheThisRequest();
         $response = $next($request);
     
-        return $response;
+        return $response->withHeaders([
+            'Cache-Control' => 'public, max-age='. 60 * (config('cache_time_in_minutes')),
+        ]);
     }
     
     /**
@@ -67,5 +69,15 @@ class CacheableWithNginx
     private function weCanCacheThisRequest(): void
     {
         Cookie::queue(cookie()->forget($this->cookieName));
+    }
+    
+    /**
+     * @param $request
+     *
+     * @return bool
+     */
+    private function isNotCachable($request): bool
+    {
+        return $request->user() || $this->inExceptArray($request);
     }
 }
