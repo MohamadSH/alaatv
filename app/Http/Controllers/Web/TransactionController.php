@@ -32,8 +32,8 @@ class TransactionController extends Controller
         $this->middleware('permission:'.config('constants.LIST_TRANSACTION_ACCESS'), ['only' => 'index']);
         $this->middleware('permission:'.config('constants.SHOW_TRANSACTION_ACCESS'), ['only' => 'edit']);
         $this->middleware('permission:'.config('constants.EDIT_TRANSACTION_ACCESS'), ['only' => 'update']);
+        $this->middleware('permission:'.config('constants.INSERT_TRANSACTION_ACCESS'),['only'=>'store']);
         $this->middleware('role:admin', ['only' => 'getUnverifiedTransactions']);
-        //        $this->middleware('permission:'.config('constants.INSERT_TRANSACTION_ACCESS'),['only'=>'store']);
     }
 
     public function index(Request $request)
@@ -244,44 +244,35 @@ class TransactionController extends Controller
     {
         $order = Order::find($request->get('order_id'));
         if (!isset($order)) {
-            $result = [
-                'statusCode' => Response::HTTP_NOT_FOUND,
-                'message'    => 'سفارش شما یافت نشد.',
-            ];
-
             return response()->json([
-                'error' => $result['message'],
-            ], $result['statusCode']);
+                'error' => 'سفارش شما یافت نشد.',
+            ], Response::HTTP_NOT_FOUND);
         }
 
-        // ToDo: just admin can insert payed transaction (check request and user permission)
-
-        $canInsertTransaction = $request->user()
-            ->can(config('constants.INSERT_TRANSACTION_ACCESS'));
-        $isOrderOwner         = ($order->user_id == $request->user()->id);
-
-        if (!$canInsertTransaction && !$isOrderOwner) {
-            $result = [
-                'statusCode' => Response::HTTP_FORBIDDEN,
-                'message'    => 'سفارش مورد نظر متعلق به شما نمی باشد',
-            ];
-
-            return response()->json([
-                'error' => $result['message'],
-            ], $result['statusCode']);
+        if($request->get('paymentmethod_id') == config('constants.PAYMENT_METHOD_WALLET') && $request->has('walletWithdraw')){
+            if(!isset($order->user)){
+                return response()->json([
+                    'error' => 'کاربر صاحب سفارش یافت نشد',
+                ], Response::HTTP_NOT_FOUND);
+            }
+            /** @var \App\Wallet $wallet */
+            $wallet = $order->user->wallets->where("wallettype_id", config('constants.WALLET_TYPE_GIFT'))->first();
+            $request->offsetSet('wallet_id', $wallet->id);
+            $withdrawResult = $wallet->withdraw($request->get('cost') , $order->id , true , false);
+            if(!$withdrawResult['result']){
+                session()->flash('error' , 'امکان برداشت مبلغ مورد نظر از کیف پول وجود ندارد');
+                return redirect()->back();
+            }
         }
 
         $result = $this->new($request->all());
 
-        if($request->ajax() || $request->expectsJson())
-            return response()->json([
-                'error' => $result['message'],
-            ], $result['statusCode']);
-
-        if($result['statusCode'] == Response::HTTP_OK)
+        if($result['statusCode'] == Response::HTTP_OK) {
             session()->flash('success' , $result['message']);
-        else
+        }
+        else {
             session()->flash('error' , $result['message']);
+        }
 
         return redirect()->back();
     }

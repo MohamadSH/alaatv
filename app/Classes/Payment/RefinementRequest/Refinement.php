@@ -9,7 +9,7 @@
 namespace App\Classes\Payment\RefinementRequest;
 
 use App\Coupon;
-use App\Http\Controllers\TransactionController;
+use App\Http\Controllers\Web\TransactionController;
 use App\Order;
 use App\Traits\OrderCommon;
 use App\Transaction;

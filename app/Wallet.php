@@ -77,13 +77,14 @@ class Wallet extends BaseModel
     /**
      * Attempt to add credits to this wallet
      *
-     * @param  integer  $amount
-     * @param  null     $orderId
-     * @param  boolean  $shouldAccept
+     * @param integer $amount
+     * @param null $orderId
+     * @param boolean $shouldAccept
      *
+     * @param bool $withCreatingTransaction
      * @return array
      */
-    public function withdraw($amount, $orderId = null, $shouldAccept = true)
+    public function withdraw($amount, $orderId = null, $shouldAccept = true , $withCreatingTransaction=true)
     {
         /**
          * unused variable
@@ -98,17 +99,19 @@ class Wallet extends BaseModel
                 $this->balance = $newBalance;
                 $result        = $this->update();
                 if ($result) {
-                    $this->transactions()
-                        ->create([
-                            'order_id'             => $orderId,
-                            'wallet_id'            => $this->id,
-                            'cost'                 => $amount,
-                            'transactionstatus_id' => config('constants.TRANSACTION_STATUS_SUCCESSFUL'),
-                            'paymentmethod_id'     => config('constants.PAYMENT_METHOD_WALLET'),
-                            'completed_at'         => Carbon::now()->setTimezone('Asia/Tehran'),
-                        ]);
                     $responseText = 'SUCCESSFUL';
                     $failed       = false;
+                    if($withCreatingTransaction){
+                        $this->transactions()
+                            ->create([
+                                'order_id'             => $orderId,
+                                'wallet_id'            => $this->id,
+                                'cost'                 => $amount,
+                                'transactionstatus_id' => config('constants.TRANSACTION_STATUS_SUCCESSFUL'),
+                                'paymentmethod_id'     => config('constants.PAYMENT_METHOD_WALLET'),
+                                'completed_at'         => Carbon::now()->setTimezone('Asia/Tehran'),
+                            ]);
+                    }
                 }
                 else {
                     $failed       = true;
