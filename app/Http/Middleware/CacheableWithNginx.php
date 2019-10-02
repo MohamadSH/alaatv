@@ -28,7 +28,7 @@ class CacheableWithNginx
     public function handle($request, Closure $next)
     {
         if ($this->isNotCachable($request)) {
-            if ($this->methodIsGetOrHead($request)) {
+            if ($this->methodIsGetOrHead($request) && !$request->hasCookie($this->cookieName)) {
                 Cookie::queue(cookie()->forever($this->cookieName, '1'));
             }
             return $next($request);

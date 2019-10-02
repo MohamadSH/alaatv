@@ -146,24 +146,6 @@ class LoginController extends Controller
     }
     
     /**
-     * Send the response after the user was authenticated.
-     *
-     * @param  Request  $request
-     *
-     * @return Response
-     */
-    protected function sendLoginResponse(Request $request)
-    {
-        if (!$request->expectsJson()) {
-            $request->session()
-                ->regenerate();
-        }
-        $this->clearLoginAttempts($request);
-        return $this->authenticated($request, $this->guard()
-            ->user()) ?: redirect()->intended($this->redirectPath());
-    }
-    
-    /**
      * The user has been authenticated.
      *
      * @param  Request  $request
