@@ -72,7 +72,7 @@ class CacheableWithNginx
     }
     
     /**
-     * @param $request
+     * @param  Request  $request
      *
      * @return bool
      */
