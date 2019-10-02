@@ -49,11 +49,11 @@ class LogoutAllUsersCommand extends Command
             foreach ($users as $user) {
                 auth()->loginUsingId($user->id);
                 auth()->logoutOtherDevices($user->nationalCode);
-                auth()->logout();
+
 
 
                 //Removing redis sessions:
-                $redis = Redis::connection();
+                $redis = Redis::connection('session');
                 //get all session IDs for user
                 $userSessions = $redis->smembers('users:sessions:' . $user->id);
                 $currentSession = Session::getId();
@@ -65,10 +65,10 @@ class LogoutAllUsersCommand extends Command
                     //for remove sessions ID from array of user sessions (if user logout or manually logout )
                     $redis->srem('users:sessions:' . $user->id, $sessionId);
                     //remove Laravel session (logout user from other device)
-                    $redis->del('laravel:' . $sessionId);
+                    $redis->unlink('laravel:' . $sessionId);
 
                 }
-
+                auth()->logout();
                 // Get remember_me cookie name
                 $rememberMeCookie = Auth::getRecallerName();
                 // Tell Laravel to forget this cookie
