@@ -14,6 +14,7 @@ class CacheableWithNginx
         '/checkout/review',
         '/logout',
         '/goToPaymentRoute/*',
+        '/checkout/*',
     ];
     
     /**
