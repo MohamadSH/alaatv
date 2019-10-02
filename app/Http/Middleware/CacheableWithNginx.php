@@ -2,22 +2,25 @@
 
 namespace App\Http\Middleware;
 
+use Cookie;
 use Closure;
+use Illuminate\Http\Request;
 
 class CacheableWithNginx
 {
-    private $cookieName = 'nginx_not_cacheable';
+    private $cookieName = 'nocache';
     private $except     = [
         '/login',
         '/checkout/review',
         '/logout',
         '/goToPaymentRoute/*',
     ];
+    
     /**
      * Handle an incoming request.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure                  $next
+     * @param  Request  $request
+     * @param  Closure  $next
      *
      * @return mixed
      */
@@ -32,9 +35,8 @@ class CacheableWithNginx
     }
     
     /**
-     * Determine if the request has a URI that should pass through CSRF verification.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  Request  $request
      *
      * @return bool
      */
@@ -55,11 +57,11 @@ class CacheableWithNginx
     
     private function canNotCacheThisRequest(): void
     {
-        \Cookie::queue(cookie()->forever($this->cookieName, '1'));
+        Cookie::queue(cookie()->forever($this->cookieName, '1'));
     }
     
     private function weCanCacheThisRequest(): void
     {
-        \Cookie::queue(cookie()->forget($this->cookieName));
+        Cookie::queue(cookie()->forget($this->cookieName));
     }
 }
