@@ -8,6 +8,7 @@
 
 namespace App\Classes\Search;
 
+use App\Content;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
@@ -15,7 +16,7 @@ use App\Classes\Search\{Filters\Tags, Tag\ContentTagManagerViaApi};
 
 class ContentSearch extends SearchAbstract
 {
-    protected $model = "App\Content";
+    protected $model = Content::class;
     
     protected $pageName = 'contentPage';
 

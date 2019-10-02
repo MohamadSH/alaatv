@@ -11,6 +11,7 @@ class CacheableWithNginx
         '/login',
         '/checkout/review',
         '/logout',
+        '/goToPaymentRoute/*',
     ];
     /**
      * Handle an incoming request.

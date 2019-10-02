@@ -3,8 +3,6 @@
 namespace App\Http\Controllers\Api;
 
 use App\Content;
-use App\Contentset;
-use App\Product;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -39,7 +37,7 @@ class ContentController extends Controller
         $since = $request->get('timestamp');
 
         $contents = Content::active()->free()->type(config('constants.CONTENT_TYPE_VIDEO'));
-        if(!is_null($since)){
+        if ($since !== null) {
             $contents->where(function($q) use ($since){
                 $q->where('created_at' , '>=' , Carbon::createFromTimestamp($since))
                     ->orWhere('updated_at' , '>=' , Carbon::createFromTimestamp($since));
