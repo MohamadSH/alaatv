@@ -102,7 +102,5 @@ public/css/user-profile-salesReport.css
 public/acm/AlaatvCustomFiles/components/OwlCarouselType2/style.css
 
 public/.well-known/
-
 chown.sh
-deploy.sh
 ga-service_account-0d4476d84562.json
