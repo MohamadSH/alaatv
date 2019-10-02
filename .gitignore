@@ -104,3 +104,4 @@ public/acm/AlaatvCustomFiles/components/OwlCarouselType2/style.css
 public/.well-known/
 chown.sh
 ga-service_account-0d4476d84562.json
+!/public/js/page-live.js
