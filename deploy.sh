@@ -2,7 +2,7 @@
 
 #!/bin/bash
 
-cd /home/alaa/project/sohrab/alaaTv
+cd /home/alaa/alaatv
 echo -e "$(cat /home/alaa/deploy/.env)" | sudo -S service php7.3-fpm reload
 echo -e "$(cat /home/alaa/deploy/.env)" | sudo -S rm -rf /cache_ramdisk/fastFCGIcache/*
 echo -e "$(cat /home/alaa/deploy/.env)" | sudo -S rm -rf /cache_ramdisk/fastFCGIcache/*
@@ -15,7 +15,7 @@ echo -e "$(cat /home/alaa/deploy/.env)" | sudo -S rm -rf /cache_ramdisk/fastFCGI
  echo -e "$(cat /home/alaa/deploy/.env)" | sudo -S php artisan view:clear
  echo -e "$(cat /home/alaa/deploy/.env)" | sudo -S php artisan view:cache                                
                                                                                                          
- echo -e "$(cat /home/alaa/deploy/.env)" | sudo -S chown alaa:www-data -R /home/alaa/project/sohrab/alaaTv
+ echo -e "$(cat /home/alaa/deploy/.env)" | sudo -S chown alaa:www-data -R /home/alaa/alaatv/home/alaa/alaatv
  echo -e "$(cat /home/alaa/deploy/.env)" | sudo -S chgrp -R www-data storage bootstrap/cache             
  echo -e "$(cat /home/alaa/deploy/.env)" | sudo -S chmod -R ug+rwx storage bootstrap/cache               
                                                                                                          
