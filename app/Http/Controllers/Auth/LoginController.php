@@ -186,6 +186,21 @@ class LoginController extends Controller
      *
      * @return array
      */
+    
+    /**
+     * Attempt to log the user into the application.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     *
+     * @return bool
+     */
+    protected function attemptLogin(Request $request)
+    {
+        return $this->guard()
+            ->attempt(
+                $this->credentials($request), $request->filled('remember')
+            );
+    }
     protected function credentials(Request $request)
     {
         return $request->only($this->username(), 'nationalCode', 'password');
