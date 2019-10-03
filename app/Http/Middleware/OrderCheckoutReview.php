@@ -60,8 +60,9 @@ class OrderCheckoutReview
                     $this->orderproductController->storeOrderproductJsonObject($cookieOrderproduct, $data);
                 }
             }
-            Cookie::queue(cookie()->forget('cartItems'));
         }
+        Cookie::queue(cookie()->forget('cartItems'));
+
 
         return $next($request);
     }
