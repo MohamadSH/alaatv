@@ -5,8 +5,6 @@
 cd /home/alaa/alaatv
 php artisan down
 echo -e "$(cat /home/alaa/deploy/.env)" | sudo -S service php7.3-fpm reload
-echo -e "$(cat /home/alaa/deploy/.env)" | sudo -S rm -rf /cache_ramdisk/fastFCGIcache/*
-echo -e "$(cat /home/alaa/deploy/.env)" | sudo -S rm -rf /cache_ramdisk/fastFCGIcache/*
 
 composer install
  # perform any migrations                                                                                
@@ -28,4 +26,5 @@ composer dump
 echo -e "$(cat /home/alaa/deploy/.env)" | sudo -S rm -rf /cache_ramdisk/fastFCGIcache/*
 echo -e "$(cat /home/alaa/deploy/.env)" | sudo -S rm -rf /cache_ramdisk/fastFCGIcache/*
 echo -e "$(cat /home/alaa/deploy/.env)" | sudo -S service php7.3-fpm reload
+echo -e "$(cat /home/alaa/deploy/.env)" | sudo -S service nginx reload
 php artisan up
