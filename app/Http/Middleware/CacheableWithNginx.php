@@ -2,63 +2,85 @@
 
 namespace App\Http\Middleware;
 
+use Cookie;
 use Closure;
+use Illuminate\Http\Request;
 
 class CacheableWithNginx
 {
-    private $cookieName = 'nginx_not_cacheable';
-//    private $except     = [
-//        '/login',
-//        '/checkout/review',
-//        '/logout',
-//    ];
+    private $cookieName = 'nocache';
+    private $except     = [
+        '/login',
+        '/checkout/review',
+        '/logout',
+        '/goToPaymentRoute/*',
+        '/checkout/*',
+    ];
+    
     /**
      * Handle an incoming request.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure                  $next
+     * @param  Request  $request
+     * @param  Closure  $next
      *
      * @return mixed
      */
     public function handle($request, Closure $next)
     {
-        if ($request->user()) {
-            $this->canNotCacheThisRequest();
+        if ($this->isNotCachable($request)) {
+            if ($this->methodIsGetOrHead($request) && !$request->hasCookie($this->cookieName)) {
+                Cookie::queue(cookie()->forever($this->cookieName, '1'));
+            }
             return $next($request);
         }
         $this->weCanCacheThisRequest();
-        return $next($request);
+        $response = $next($request);
+    
+        if ($this->methodIsGetOrHead($request)) {
+            return $response->withHeaders([
+                'Cache-Control' => 'public, max-age='. 60 * (config('cache_time_in_minutes', 60)),
+            ]);
+        }
+        return $response;
     }
-
-//    /**
-//     * Determine if the request has a URI that should pass through CSRF verification.
-//     *
-//     * @param  \Illuminate\Http\Request  $request
-//     *
-//     * @return bool
-//     */
-//    protected function inExceptArray($request)
-//    {
-//        foreach ($this->except as $except) {
-//            if ($except !== '/') {
-//                $except = trim($except, '/');
-//            }
-//
-//            if ($request->fullUrlIs($except) || $request->is($except)) {
-//                return true;
-//            }
-//        }
-//
-//        return false;
-//    }
-
-    private function canNotCacheThisRequest(): void
+    
+    private function methodIsGetOrHead(Request $request)
     {
-        \Cookie::queue(cookie()->forever($this->cookieName, '1'));
+        return $request->isMethod('GET') || $request->isMethod('HEAD') ? true : false;
     }
-
+    /**
+     *
+     * @param  Request  $request
+     *
+     * @return bool
+     */
+    protected function inExceptArray($request)
+    {
+        foreach ($this->except as $except) {
+            if ($except !== '/') {
+                $except = trim($except, '/');
+            }
+            
+            if ($request->fullUrlIs($except) || $request->is($except)) {
+                return true;
+            }
+        }
+        
+        return false;
+    }
+    
     private function weCanCacheThisRequest(): void
     {
-        \Cookie::queue(cookie()->forget($this->cookieName));
+        Cookie::queue(cookie()->forget($this->cookieName));
+    }
+    
+    /**
+     * @param  Request  $request
+     *
+     * @return bool
+     */
+    private function isNotCachable($request): bool
+    {
+        return $request->user() || $this->inExceptArray($request);
     }
 }

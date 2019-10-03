@@ -17,7 +17,7 @@ class LoginController extends Controller
 {
     use CharacterCommon;
     use RedirectTrait;
-    
+
     /*
     |--------------------------------------------------------------------------
     | Login Controller
@@ -28,72 +28,35 @@ class LoginController extends Controller
     | to conveniently provide its functionality to your applications.
     |
     */
-    
+
     use AuthenticatesUsers;
-    
+
     /**
      * Create a new controller instance.
      *
      */
     public function __construct()
     {
-        
-        $this->middleware('guest')
-            ->except('logout');
-        
+
+        $this->middleware('guest', ['except' => 'logout']);
+
         $this->middleware('convert:mobile|password|nationalCode');
     }
-    
+
     /**
-     * Log the user out of the application.
-     *
-     * @param  Request  $request
+     * Show the application login form.
      *
      * @return Response
      */
-    public function logout(Request $request)
+    public function showLoginForm()
     {
-        $this->guard()
-            ->logout();
-        
-        if ($request->expectsJson()) {
-            //TODO:// revoke all apps!!!
-            $request->user()
-                ->token()
-                ->revoke();
-        }
-        else {
-            $request->session()
-                ->invalidate();
-        }
-        
-        return $this->loggedOut($request) ?: redirect('/');
+        return view('auth.login3');
     }
-    
-    /**
-     * The user has logged out of the application.
-     *
-     * @param  Request  $request
-     *
-     * @return mixed
-     */
-    protected function loggedOut(Request $request)
-    {
-        if ($request->expectsJson()) {
-            return response()->json([
-                'status'     => 1,
-                'msg'        => 'user sign out.',
-                'redirectTo' => action("Web\IndexPageController"),
-            ], Response::HTTP_OK);
-        }
-    }
-    
+
     /**
      * Handle a login request to the application.
      *
      * @param  Request             $request
-     *
-     *
      * @param  RegisterController  $registerController
      *
      * @return RedirectResponse|Response|JsonResponse
@@ -111,23 +74,24 @@ class LoginController extends Controller
         /**
          * Login or register this new user
          */
-        
+
         // If the class is using the ThrottlesLogins trait, we can automatically throttle
         // the login attempts for this application. We'll key this by the username and
         // the IP address of the client making these requests into this application.
-        if ($this->hasTooManyLoginAttempts($request)) {
-            
+        if (method_exists($this, 'hasTooManyLoginAttempts') &&
+            $this->hasTooManyLoginAttempts($request)) {
+
             $this->fireLockoutEvent($request);
-            
+
             return $this->sendLockoutResponse($request);
         }
-        
+
         if ($this->attemptLogin($request)) {
             if ($this->guard()
                     ->user()->userstatus_id === 1) {
                 return $this->sendLoginResponse($request);
             }
-    
+
             return redirect()
                 ->back()
                 ->withInput($request->only('mobile', 'remember'))
@@ -135,7 +99,7 @@ class LoginController extends Controller
                     'inActive' => 'حساب کاربری شما غیر فعال شده است!',
                 ], 'login');
         }
-        
+
         // If the login attempt was unsuccessful we will increment the number of attempts
         // to login and redirect the user back to the login form. Of course, when this
         // user surpasses their maximum number of attempts they will get locked out.
@@ -144,25 +108,50 @@ class LoginController extends Controller
 //        Log::error('LoginController login 7');
         return $registerController->register($request);
     }
-    
+
     /**
-     * Send the response after the user was authenticated.
+     * Log the user out of the application.
      *
      * @param  Request  $request
      *
      * @return Response
      */
-    protected function sendLoginResponse(Request $request)
+    public function logout(Request $request)
     {
-        if (!$request->expectsJson()) {
+        $this->guard()
+            ->logout();
+
+        if ($request->expectsJson()) {
+            //TODO:// revoke all apps!!!
+            $request->user()
+                ->token()
+                ->revoke();
+        } else {
             $request->session()
-                ->regenerate();
+                ->invalidate();
         }
-        $this->clearLoginAttempts($request);
-        return $this->authenticated($request, $this->guard()
-            ->user()) ?: redirect()->intended($this->redirectPath());
+
+        return $this->loggedOut($request) ?: redirect('/');
     }
-    
+
+    /**
+     * The user has logged out of the application.
+     *
+     * @param  Request  $request
+     *
+     * @return mixed
+     */
+    protected function loggedOut(Request $request)
+    {
+        if ($request->expectsJson()) {
+            return response()->json([
+                'status'     => 1,
+                'msg'        => 'user sign out.',
+                'redirectTo' => action("Web\IndexPageController"),
+            ], Response::HTTP_OK);
+        }
+    }
+
     /**
      * The user has been authenticated.
      *
@@ -177,7 +166,7 @@ class LoginController extends Controller
         if (!$request->expectsJson()) {
             return redirect($this->redirectTo($request));
         }
-        
+
         $token = $user->getAppToken();
         $data  = array_merge([
             'user' => $user,
@@ -189,29 +178,12 @@ class LoginController extends Controller
             'data'       => $data,
         ], Response::HTTP_OK);
     }
-    
-    /**
-     * Show the application login form.
-     *
-     * @return Response
-     */
-    public function showLoginForm()
-    {
-        return view('auth.login3');
-    }
-    
-    /**
-     * Get the needed authorization credentials from the request.
-     *
-     * @param  Request  $request
-     *
-     * @return array
-     */
+
     protected function credentials(Request $request)
     {
         return $request->only($this->username(), 'nationalCode', 'password');
     }
-    
+
     /**
      * Get the login username to be used by the controller.
      *

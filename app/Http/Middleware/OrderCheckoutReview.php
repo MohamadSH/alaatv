@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use Cookie;
 use Closure;
 use App\User;
 use Illuminate\Http\Response;
@@ -15,13 +16,13 @@ class OrderCheckoutReview
     /**
      * StoreOrderproductCookieInOpenOrder constructor.
      *
-     * @param OrderproductController $orderproductController
+     * @param OrderproductController  $orderproductController
      */
     public function __construct(OrderproductController $orderproductController)
     {
         $this->orderproductController = $orderproductController;
     }
-    
+
     /**
      * Handle an incoming request.
      *
@@ -39,7 +40,7 @@ class OrderCheckoutReview
         }
         /** @var User $user */
         $user = Auth::guard($guard)->user();
-    
+
         if ($request->has('order_id')) {
             if (!$user->can('constants.SHOW_ORDER_INVOICE_ACCESS')) {
                 return response([], Response::HTTP_FORBIDDEN);
@@ -50,18 +51,17 @@ class OrderCheckoutReview
 
         $openOrder = $user->getOpenOrder();
         $request->offsetSet('order_id', $openOrder->id);
-    
-        if (isset($_COOKIE['cartItems'])) {
-            $cookieOrderproducts = json_decode($_COOKIE['cartItems'], true, 512, JSON_THROW_ON_ERROR);
+
+        if ($request->hasCookie('cartItems')) {
+            $cookieOrderproducts = json_decode($request->cookie('cartItems'), false, 512, JSON_THROW_ON_ERROR);
             if ($this->validateCookieOrderproducts($cookieOrderproducts)) {
                 foreach ($cookieOrderproducts as $cookieOrderproduct) {
                     $data = ['order_id' => $openOrder->id];
                     $this->orderproductController->storeOrderproductJsonObject($cookieOrderproduct, $data);
                 }
             }
-
-            setcookie('cartItems', '', time() - 3600, '/');
         }
+        Cookie::queue(cookie()->forget('cartItems'));
 
         return $next($request);
     }
