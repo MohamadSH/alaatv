@@ -17,7 +17,7 @@ class LoginController extends Controller
 {
     use CharacterCommon;
     use RedirectTrait;
-    
+
     /*
     |--------------------------------------------------------------------------
     | Login Controller
@@ -28,21 +28,21 @@ class LoginController extends Controller
     | to conveniently provide its functionality to your applications.
     |
     */
-    
+
     use AuthenticatesUsers;
-    
+
     /**
      * Create a new controller instance.
      *
      */
     public function __construct()
     {
-    
+
         $this->middleware('guest', ['except' => 'logout']);
-        
+
         $this->middleware('convert:mobile|password|nationalCode');
     }
-    
+
     /**
      * Show the application login form.
      *
@@ -52,7 +52,7 @@ class LoginController extends Controller
     {
         return view('auth.login3');
     }
-    
+
     /**
      * Handle a login request to the application.
      *
@@ -74,24 +74,24 @@ class LoginController extends Controller
         /**
          * Login or register this new user
          */
-        
+
         // If the class is using the ThrottlesLogins trait, we can automatically throttle
         // the login attempts for this application. We'll key this by the username and
         // the IP address of the client making these requests into this application.
         if (method_exists($this, 'hasTooManyLoginAttempts') &&
             $this->hasTooManyLoginAttempts($request)) {
-            
+
             $this->fireLockoutEvent($request);
-            
+
             return $this->sendLockoutResponse($request);
         }
-        
+
         if ($this->attemptLogin($request)) {
             if ($this->guard()
                     ->user()->userstatus_id === 1) {
                 return $this->sendLoginResponse($request);
             }
-    
+
             return redirect()
                 ->back()
                 ->withInput($request->only('mobile', 'remember'))
@@ -99,7 +99,7 @@ class LoginController extends Controller
                     'inActive' => 'حساب کاربری شما غیر فعال شده است!',
                 ], 'login');
         }
-        
+
         // If the login attempt was unsuccessful we will increment the number of attempts
         // to login and redirect the user back to the login form. Of course, when this
         // user surpasses their maximum number of attempts they will get locked out.
@@ -108,7 +108,7 @@ class LoginController extends Controller
 //        Log::error('LoginController login 7');
         return $registerController->register($request);
     }
-    
+
     /**
      * Log the user out of the application.
      *
@@ -120,7 +120,7 @@ class LoginController extends Controller
     {
         $this->guard()
             ->logout();
-        
+
         if ($request->expectsJson()) {
             //TODO:// revoke all apps!!!
             $request->user()
@@ -130,10 +130,10 @@ class LoginController extends Controller
             $request->session()
                 ->invalidate();
         }
-        
+
         return $this->loggedOut($request) ?: redirect('/');
     }
-    
+
     /**
      * The user has logged out of the application.
      *
@@ -151,7 +151,7 @@ class LoginController extends Controller
             ], Response::HTTP_OK);
         }
     }
-    
+
     /**
      * The user has been authenticated.
      *
@@ -166,7 +166,7 @@ class LoginController extends Controller
         if (!$request->expectsJson()) {
             return redirect($this->redirectTo($request));
         }
-        
+
         $token = $user->getAppToken();
         $data  = array_merge([
             'user' => $user,
@@ -178,34 +178,12 @@ class LoginController extends Controller
             'data'       => $data,
         ], Response::HTTP_OK);
     }
-    
-    /**
-     * Get the needed authorization credentials from the request.
-     *
-     * @param  Request  $request
-     *
-     * @return array
-     */
-    
-    /**
-     * Attempt to log the user into the application.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     *
-     * @return bool
-     */
-    protected function attemptLogin(Request $request)
-    {
-        return $this->guard()
-            ->attempt(
-                $this->credentials($request), $request->filled('remember')
-            );
-    }
+
     protected function credentials(Request $request)
     {
         return $request->only($this->username(), 'nationalCode', 'password');
     }
-    
+
     /**
      * Get the login username to be used by the controller.
      *
