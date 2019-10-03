@@ -1,10 +1,9 @@
 <?php namespace App\Traits;
 
 use App\Product;
-use App\Productfiletype;
+use Illuminate\Support\Str;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Str;
 
 trait ProductCommon
 {
@@ -16,15 +15,15 @@ trait ProductCommon
      */
     public function productExtraCostFromAttributes(Product $product, $extraAttributeValues)
     {
-        $key = "product:productExtraCostFromAttributes:Product"."\\".$product->cacheKey()."\\extraAttributeValues:".(isset($extraAttributeValues) ? implode("",
-                $extraAttributeValues) : "-");
+        $key = 'product:productExtraCostFromAttributes:Product'."\\".$product->cacheKey()."\\extraAttributeValues:".(isset($extraAttributeValues) ? implode('',
+                $extraAttributeValues) : '-');
 
         return (int)Cache::tags(['product'])->tags('bon')
-            ->remember($key, config("constants.CACHE_60"), function () use ($product, $extraAttributeValues) {
+            ->remember($key, config('constants.CACHE_60'), function () use ($product, $extraAttributeValues) {
                 $totalExtraCost = 0;
                 foreach ($extraAttributeValues as $attributevalueId) {
                     $extraCost      = 0;
-                    $attributevalue = $product->attributevalues->where("id", $attributevalueId)
+                    $attributevalue = $product->attributevalues->where('id', $attributevalueId)
                         ->first();
 
                     if (isset($attributevalue) && isset($attributevalue->pivot->extraCost)) {
@@ -101,13 +100,13 @@ trait ProductCommon
             $newPhoto             = $photo->replicate();
             $newPhoto->product_id = $destinationProduct->id;
             $newPhoto->save();
-
-            if (isset($newPhotoInfo["title"])) {
-                $newPhoto->title = $newPhotoInfo["title"];
+    
+            if (isset($newPhotoInfo['title'])) {
+                $newPhoto->title = $newPhotoInfo['title'];
                 $newPhoto->update();
             }
-            if (isset($newPhotoInfo["description"])) {
-                $newPhoto->description = $newPhotoInfo["description"];
+            if (isset($newPhotoInfo['description'])) {
+                $newPhoto->description = $newPhotoInfo['description'];
                 $newPhoto->update();
             }
         }
@@ -124,17 +123,17 @@ trait ProductCommon
     {
         $key = null;
         foreach ($products as $product) {
-            $key .= $product->cacheKey()."-";
+            $key .= $product->cacheKey().'-';
         }
-        $key = "product:makeCostCollection:".md5($key);
+        $key = 'product:makeCostCollection:'.md5($key);
 
         return Cache::tags(['product'])
-        ->remember($key, config("constants.CACHE_60"), function () use ($products) {
+            ->remember($key, config('constants.CACHE_60'), function () use ($products) {
             $costCollection = collect();
             foreach ($products as $product) {
-                if ($product->producttype_id == config("constants.PRODUCT_TYPE_CONFIGURABLE")) {
+                if ($product->producttype_id == config('constants.PRODUCT_TYPE_CONFIGURABLE')) {
                     /** @var Collection $enableChildren */
-                    $enableChildren = $product->children->where("enable",
+                    $enableChildren = $product->children->where('enable',
                         1); // It is not query efficient to use scopeEnable
                     if ($enableChildren->count() == 1) {
                         $costArray = $enableChildren->first()
@@ -143,24 +142,23 @@ trait ProductCommon
                     else {
                         $costArray = $product->calculatePayablePrice();
                     }
-                }
-                elseif ($product->producttype_id == config("constants.PRODUCT_TYPE_SELECTABLE")) {
+                } elseif ($product->producttype_id == config('constants.PRODUCT_TYPE_SELECTABLE')) {
                     $allChildren                  = $product->getAllChildren()
-                        ->where("pivot.isDefault", 1);
+                        ->where('pivot.isDefault', 1);
                     $costArray                    = [];
-                    $costArray["productDiscount"] = null;
-                    $costArray["bonDiscount"]     = null;
-                    $costArray["costForCustomer"] = 0;
-                    $costArray["cost"]            = 0;
+                    $costArray['productDiscount'] = null;
+                    $costArray['bonDiscount']     = null;
+                    $costArray['costForCustomer'] = 0;
+                    $costArray['cost']            = 0;
                     if (is_callable([$this, 'refreshPrice'])) {
                         $request = new \App\Http\Requests\Request();
-                        $request->offsetSet("products", $allChildren->pluck("id")
+                        $request->offsetSet('products', $allChildren->pluck('id')
                             ->toArray());
-                        $request->offsetSet("type", "productSelection");
+                        $request->offsetSet('type', 'productSelection');
                         $costInfo                     = $this->refreshPrice($request, $product);
                         $costInfo                     = json_decode($costInfo);
-                        $costArray["costForCustomer"] = $costInfo->costForCustomer;
-                        $costArray["cost"]            = $costInfo->cost;
+                        $costArray['costForCustomer'] = $costInfo->costForCustomer;
+                        $costArray['cost']            = $costInfo->cost;
                     }
 //                    $costArray = $product->calculatePayablePrice();
                 }
@@ -169,8 +167,8 @@ trait ProductCommon
                 }
 
                 $costCollection->put($product->id, [
-                    "cost"            => $costArray["cost"],
-                    'productDiscount' => $costArray["productDiscount"],
+                    'cost'            => $costArray['cost'],
+                    'productDiscount' => $costArray['productDiscount'],
                     'bonDiscount'     => $costArray['bonDiscount'],
                     'costForCustomer' => isset($costArray['costForCustomer']) ? $costArray['costForCustomer'] : 0,
                 ]);
@@ -182,25 +180,25 @@ trait ProductCommon
 
     protected function makeProductCollection($productsId = null)
     {
-        $key = ":0-";
+        $key = ':0-';
         if (isset($productsId)) {
             foreach ($productsId as $product) {
-                $key .= $product."-";
+                $key .= $product.'-';
             }
         }
-        $key = "product:makeProductCollection:".$key;
+        $key = 'product:makeProductCollection:'.$key;
 
         return Cache::tags(['product'])
-        ->remember($key, config("constants.CACHE_60"), function () use ($productsId) {
+            ->remember($key, config('constants.CACHE_60'), function () use ($productsId) {
             if (isset($productsId)) {
                 $allProducts = Product::getProducts()
-                    ->whereIn("id", $productsId)
-                    ->orderBy("created_at", "Desc")
+                    ->whereIn('id', $productsId)
+                    ->orderBy('created_at', 'Desc')
                     ->get();
             }
             else {
                 $allProducts = Product::getProducts()
-                    ->orderBy("created_at", "Desc")
+                    ->orderBy('created_at', 'Desc')
                     ->get();
             }
             $products = collect();
@@ -216,12 +214,12 @@ trait ProductCommon
     {
         $key = null;
         foreach ($products as $product) {
-            $key .= $product->cacheKey()."-";
+            $key .= $product->cacheKey().'-';
         }
-        $key = "product:haveSameFamily:".$key;
+        $key = 'product:haveSameFamily:'.$key;
 
         return Cache::tags(['product'])
-        ->remember($key, config("constants.CACHE_60"), function () use ($products) {
+            ->remember($key, config('constants.CACHE_60'), function () use ($products) {
             $flag = true;
             foreach ($products as $key => $product) {
                 if (isset($products[$key + 1])) {

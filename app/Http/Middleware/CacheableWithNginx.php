@@ -14,6 +14,7 @@ class CacheableWithNginx
         '/checkout/review',
         '/logout',
         '/goToPaymentRoute/*',
+        '/checkout/*',
     ];
     
     /**
@@ -26,14 +27,27 @@ class CacheableWithNginx
      */
     public function handle($request, Closure $next)
     {
-        if ($request->user() || $this->inExceptArray($request)) {
-            $this->canNotCacheThisRequest();
+        if ($this->isNotCachable($request)) {
+            if ($this->methodIsGetOrHead($request) && !$request->hasCookie($this->cookieName)) {
+                Cookie::queue(cookie()->forever($this->cookieName, '1'));
+            }
             return $next($request);
         }
         $this->weCanCacheThisRequest();
-        return $next($request);
+        $response = $next($request);
+    
+        if ($this->methodIsGetOrHead($request)) {
+            return $response->withHeaders([
+                'Cache-Control' => 'public, max-age='. 60 * (config('cache_time_in_minutes', 60)),
+            ]);
+        }
+        return $response;
     }
     
+    private function methodIsGetOrHead(Request $request)
+    {
+        return $request->isMethod('GET') || $request->isMethod('HEAD') ? true : false;
+    }
     /**
      *
      * @param  Request  $request
@@ -55,13 +69,18 @@ class CacheableWithNginx
         return false;
     }
     
-    private function canNotCacheThisRequest(): void
-    {
-        Cookie::queue(cookie()->forever($this->cookieName, '1'));
-    }
-    
     private function weCanCacheThisRequest(): void
     {
         Cookie::queue(cookie()->forget($this->cookieName));
+    }
+    
+    /**
+     * @param  Request  $request
+     *
+     * @return bool
+     */
+    private function isNotCachable($request): bool
+    {
+        return $request->user() || $this->inExceptArray($request);
     }
 }

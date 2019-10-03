@@ -37,63 +37,26 @@ class LoginController extends Controller
      */
     public function __construct()
     {
-        
-        $this->middleware('guest')
-            ->except('logout');
+    
+        $this->middleware('guest', ['except' => 'logout']);
         
         $this->middleware('convert:mobile|password|nationalCode');
     }
     
     /**
-     * Log the user out of the application.
-     *
-     * @param  Request  $request
+     * Show the application login form.
      *
      * @return Response
      */
-    public function logout(Request $request)
+    public function showLoginForm()
     {
-        $this->guard()
-            ->logout();
-        
-        if ($request->expectsJson()) {
-            //TODO:// revoke all apps!!!
-            $request->user()
-                ->token()
-                ->revoke();
-        }
-        else {
-            $request->session()
-                ->invalidate();
-        }
-        
-        return $this->loggedOut($request) ?: redirect('/');
-    }
-    
-    /**
-     * The user has logged out of the application.
-     *
-     * @param  Request  $request
-     *
-     * @return mixed
-     */
-    protected function loggedOut(Request $request)
-    {
-        if ($request->expectsJson()) {
-            return response()->json([
-                'status'     => 1,
-                'msg'        => 'user sign out.',
-                'redirectTo' => action("Web\IndexPageController"),
-            ], Response::HTTP_OK);
-        }
+        return view('auth.login3');
     }
     
     /**
      * Handle a login request to the application.
      *
      * @param  Request             $request
-     *
-     *
      * @param  RegisterController  $registerController
      *
      * @return RedirectResponse|Response|JsonResponse
@@ -115,7 +78,8 @@ class LoginController extends Controller
         // If the class is using the ThrottlesLogins trait, we can automatically throttle
         // the login attempts for this application. We'll key this by the username and
         // the IP address of the client making these requests into this application.
-        if ($this->hasTooManyLoginAttempts($request)) {
+        if (method_exists($this, 'hasTooManyLoginAttempts') &&
+            $this->hasTooManyLoginAttempts($request)) {
             
             $this->fireLockoutEvent($request);
             
@@ -146,21 +110,46 @@ class LoginController extends Controller
     }
     
     /**
-     * Send the response after the user was authenticated.
+     * Log the user out of the application.
      *
      * @param  Request  $request
      *
      * @return Response
      */
-    protected function sendLoginResponse(Request $request)
+    public function logout(Request $request)
     {
-        if (!$request->expectsJson()) {
+        $this->guard()
+            ->logout();
+        
+        if ($request->expectsJson()) {
+            //TODO:// revoke all apps!!!
+            $request->user()
+                ->token()
+                ->revoke();
+        } else {
             $request->session()
-                ->regenerate();
+                ->invalidate();
         }
-        $this->clearLoginAttempts($request);
-        return $this->authenticated($request, $this->guard()
-            ->user()) ?: redirect()->intended($this->redirectPath());
+        
+        return $this->loggedOut($request) ?: redirect('/');
+    }
+    
+    /**
+     * The user has logged out of the application.
+     *
+     * @param  Request  $request
+     *
+     * @return mixed
+     */
+    protected function loggedOut(Request $request)
+    {
+        if ($request->expectsJson()) {
+            return response()->json([
+                'status'     => 1,
+                'msg'        => 'user sign out.',
+                'redirectTo' => action("Web\IndexPageController"),
+            ], Response::HTTP_OK);
+        }
     }
     
     /**
@@ -191,22 +180,27 @@ class LoginController extends Controller
     }
     
     /**
-     * Show the application login form.
-     *
-     * @return Response
-     */
-    public function showLoginForm()
-    {
-        return view('auth.login3');
-    }
-    
-    /**
      * Get the needed authorization credentials from the request.
      *
      * @param  Request  $request
      *
      * @return array
      */
+    
+    /**
+     * Attempt to log the user into the application.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     *
+     * @return bool
+     */
+    protected function attemptLogin(Request $request)
+    {
+        return $this->guard()
+            ->attempt(
+                $this->credentials($request), $request->filled('remember')
+            );
+    }
     protected function credentials(Request $request)
     {
         return $request->only($this->username(), 'nationalCode', 'password');
