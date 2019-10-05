@@ -437,6 +437,11 @@ class ContentSearchComposer
                     "firstName" => "امید",
                     "value"     => "امید_زاهدی",
                 ],
+                [
+                    "lastName"  => "محمد رضا",
+                    "firstName" => "یاری",
+                    "value"     => "محمد_رضا_یاری",
+                ],
             ])
                 ->sortBy("lastName")
                 ->values(),
@@ -822,6 +827,11 @@ class ContentSearchComposer
                     "lastName"  => "جهانبخش",
                     "firstName" => "",
                     "value"     => "جهانبخش",
+                ],
+                [
+                    "lastName"  => "محمد رضا",
+                    "firstName" => "یاری",
+                    "value"     => "محمد_رضا_یاری",
                 ],
             ])
                 ->sortBy("lastName")
