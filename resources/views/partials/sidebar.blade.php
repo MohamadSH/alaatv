@@ -120,6 +120,7 @@
                         </a>
                     </li>
                     @endability
+
                     @permission((config('constants.SMS_ADMIN_PANEL_ACCESS')))
                     <li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1">
                         <a href="{{ action("Web\AdminController@adminSMS") }}" class="m-menu__link ">
@@ -129,6 +130,7 @@
                         </a>
                     </li>
                     @endpermission
+
                     @permission((config('constants.ORDER_ADMIN_PANEL_ACCESS')))
                     <li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1">
                         <a href="{{ action("Web\AdminController@adminOrder") }}" class="m-menu__link ">
@@ -308,6 +310,7 @@
                         </div>
                     </li>
                     @endrole
+
                     @permission((config('constants.SITE_CONFIG_ADMIN_PANEL_ACCESS')))
                     <li class="m-menu__item  m-menu__item--submenu" aria-haspopup="true" m-menu-submenu-toggle="hover">
                         <a href="javascript:" class="m-menu__link m-menu__toggle">
@@ -358,7 +361,7 @@
                     </li>
                     @endpermission
 
-                    @permission((config('constants.SITE_CONFIG_ADMIN_PANEL_ACCESS')))
+                    @permission((config('constants.PARTICULAR_ADMIN_PANELS')))
                     <li class="m-menu__item  m-menu__item--submenu" aria-haspopup="true" m-menu-submenu-toggle="hover">
                         <a href="javascript:" class="m-menu__link m-menu__toggle">
                             <span class="m-menu__item-here"></span>
@@ -378,6 +381,7 @@
                                     </a>
                                 </li>
                                 @endability
+                                @role(config('constants.ROLE_ADMIN'))
                                 <li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1">
                                     <a href="{{ action("Web\AdminController@specialAddUser") }}" class="m-menu__link ">
                                         <span class="m-menu__item-here"></span>
@@ -385,6 +389,8 @@
                                         <span class="m-menu__link-text">درج کاربر با سفارش</span>
                                     </a>
                                 </li>
+                                @endability
+                                @permission((config('constants.INSERT_COUPON_ACCESS')))
                                 <li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1">
                                     <a href="{{ action("Web\AdminController@adminGenerateRandomCoupon") }}" class="m-menu__link ">
                                         <span class="m-menu__item-here"></span>
@@ -392,6 +398,7 @@
                                         <span class="m-menu__link-text">تولید کپن تصادفی</span>
                                     </a>
                                 </li>
+                                @endpermission
                             </ul>
                         </div>
                     </li>
