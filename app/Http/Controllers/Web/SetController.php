@@ -205,9 +205,7 @@ class SetController extends Controller
             return response()->json($set);
         }
 
-        $contents = $set->getActiveContents();
-
-        return view('listTest', compact('set', 'contents'));
+        return $set->getActiveContents();
     }
 
     public function edit(Contentset $set) {
