@@ -39,11 +39,8 @@ class ZeroWalletsCommand extends Command
      */
     public function handle()
     {
-        $wallets = Wallet::where('balance' , '>' ,  0)->whereDoesntHave('user' , function ($q){
-            $q->whereHas('lotteries' , function ($q2){
-                $q2->where('lottery_id' , 7);
-            });
-        })->get();
+        $wallets = Wallet::where('balance' , '>' ,  0)
+                    ->where('wallettype_id' , config('constants.WALLET_TYPE_GIFT'))->get();
 
         $walletCount = $wallets->count();
         if($this->confirm("$walletCount wallets found , Do you want to continue zeroing these wallets", true)) {
@@ -57,8 +54,9 @@ class ZeroWalletsCommand extends Command
                         'cost'                 => $wallet->balance,
                         'transactionstatus_id' => config('constants.TRANSACTION_STATUS_SUCCESSFUL'),
                         'paymentmethod_id'     => config('constants.PAYMENT_METHOD_WALLET'),
-                        'completed_at'         => Carbon::now()->setTimezone('Asia/Tehran'),
-                        'managerComment'       => 'تراکنش سیستمی . صفر کردن کیف پول ها در 31 شهریور 1398'
+                        'completed_at'         => Carbon::now('Asia/Tehran'),
+                        'managerComment'       => 'تراکنش سیستمی . صفر کردن کیف پول ها در 13 مهر 1398' ,
+                        'description'          => 'پایان اعتبار کیف پول' ,
                     ]);
 
                 if(isset($transaction)){
