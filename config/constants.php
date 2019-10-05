@@ -27,6 +27,7 @@ return [
     'SMS_ADMIN_PANEL_ACCESS'                      => 'smsAdminPanel',
     'ORDER_ADMIN_PANEL_ACCESS'                    => 'orderAdminPanel',
     'SITE_CONFIG_ADMIN_PANEL_ACCESS'              => 'siteConfigAdminPanel',
+    'PARTICULAR_ADMIN_PANELS'                     => 'particularAdminPanel',
     'WALLET_ADMIN_PANEL'                          => 'walletAdminPanel',
     'ALAA_FAMILTY'                                => 'alaaFamily',
     'LIST_ASSIGNMENT_ACCESS'                      => 'listAssignment',
