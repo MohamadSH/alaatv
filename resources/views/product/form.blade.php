@@ -318,7 +318,19 @@
                     </div>
                 </div>
             @else
-                {!! Form::hidden("name" , $product->name) !!}
+                <div class="form-group {{ $errors->has('name') ? ' has-danger' : '' }}">
+                    <div class="row">
+                        <label class="col-md-3 control-label" for="name">نام کالا</label>
+                        <div class="col-md-9">
+                            {!! Form::text('name', null, ['class' => 'form-control', 'id' => 'name' ]) !!}
+                            @if ($errors->has('name'))
+                                <span class="form-control-feedback">
+                                    <strong>{{ $errors->first('name') }}</strong>
+                                </span>
+                            @endif
+                        </div>
+                    </div>
+                </div>
                 {!! Form::hidden("attributeset_id" , $product->attributeset_id) !!}
                 <div class="form-group {{ $errors->has('basePrice') ? ' has-danger' : '' }}">
                     <div class="row">
@@ -415,8 +427,8 @@
                 </div>
                 @include('product.partials.tagsInput' )
                 @include('product.partials.productBlock' )
-                
-                
+
+
                 <div class="form-actions">
                     <div class="row">
                         <div class="col-md-offset-3 col-md-9">
@@ -580,7 +592,7 @@
                                     <span class="fileinput-exists"> تغییر </span>
                                     {!! Form::file('image' , ['id'=>'productImage']) !!}
                                 </span>
-        
+
                                 <a href="javascript:" class="btn red fileinput-exists" id="productImage-remove" data-dismiss="fileinput"> حذف</a>
                             </div>
                             <div class="clearfix margin-top-10">
