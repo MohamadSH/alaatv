@@ -31,7 +31,7 @@ $(document).ready(function () {
 
         $.ajax({
             url: ajaxActionUrl,
-            type: 'POST',
+            type: 'GET',
             data: {
                 product_id: $('#productId').val(),
                 since: $('#dateFilterCreatedSinceAlt').val(),
