@@ -382,8 +382,8 @@
                                             <div class="m-portlet__body">
 
                                                 <ul class="m-nav m-nav--active-bg" id="m_nav" role="tablist">
-                                                    @if(isset($product->children) && !empty($product->children))
-                                                        @foreach($product->children as $p)
+                                                    @if(!empty($children))
+                                                        @foreach($children as $p)
                                                             @include('product.partials.showChildren',['product' => $p , 'color' => 1, 'childIsPurchased' => (array_search($product->id, $purchasedProductIdArray) !== false)])
                                                         @endforeach
                                                     @endif
