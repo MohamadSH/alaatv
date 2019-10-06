@@ -538,7 +538,11 @@ class OrderproductController extends Controller
     private function canApplyBonForRequest(array $data, Product $product, Collection $bon): bool
     {
         if (!isset($data['withoutBon']) || !$data['withoutBon']) {
-            return $product->canApplyBon($bon);
+            if($bon->isEmpty()){
+                return false;
+            }
+
+            return $product->canApplyBon($bon->first());
         } else {
             return false;
         }
