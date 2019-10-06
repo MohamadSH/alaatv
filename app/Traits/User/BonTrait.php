@@ -27,7 +27,7 @@ trait BonTrait
     public function userValidBons(Bon $bon)
     {
         $key = "user:userValidBons:".$this->cacheKey()."-".(isset($bon) ? $bon->cacheKey() : "");
-        
+
         return Cache::tags('bon')
             ->remember($key, config("constants.CACHE_60"), function () use ($bon) {
                 return Userbon::where("user_id", $this->id)
@@ -48,7 +48,7 @@ trait BonTrait
                     ->get();
             });
     }
-    
+
     /**
      * @param  string  $bonName
      *
@@ -60,10 +60,10 @@ trait BonTrait
             $bonName = config("constants.BON1");
         }
         $key = "user:userHasBon:".$this->cacheKey()."-".$bonName;
-        
+
         return Cache::tags('bon')
             ->remember($key, config("constants.CACHE_60"), function () use ($bonName) {
-                
+
                 $bon = Bon::all()
                     ->where('name', $bonName)
                     ->where('isEnable', '=', 1);
@@ -71,17 +71,16 @@ trait BonTrait
                     return false;
                 }
                 /** @var Userbon $userbons */
-                $userbons       = $this->userbons->where("bon_id", $bon->first()->id)
-                    ->where("userbonstatus_id", config("constants.USERBON_STATUS_ACTIVE"));
+                $userbons       = $this->userValidBons($bon->first());
                 $totalBonNumber = 0;
                 foreach ($userbons as $userbon) {
-                    $totalBonNumber = $totalBonNumber + $userbon->validateBon();
+                    $totalBonNumber = $totalBonNumber + ($userbon->totalNumber - $userbon->usedNumber);
                 }
-                
+
                 return $totalBonNumber;
             });
     }
-    
+
     public function userbons()
     {
         return $this->hasMany('\App\Userbon');
