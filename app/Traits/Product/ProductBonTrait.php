@@ -8,6 +8,7 @@
 
 namespace App\Traits\Product;
 
+use App\Bon;
 use App\Product;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
@@ -88,13 +89,12 @@ trait ProductBonTrait
      *
      * @return bool
      */
-    public function canApplyBon($bon): bool
+    public function canApplyBon(Bon $bon): bool
     {
         /** @var Collection $bon */
-        return (!($this->isFree || ($this->hasParents() && $this->parents()
-                        ->first()->isFree)) && ($this->basePrice != 0) && $bon->isNotEmpty());
+        return (!($this->isFree || ($this->hasParents() && $this->parents()->first()->isFree)) && ($this->basePrice != 0) && $bon->pivot->discount > 0);
     }
-    
+
     /**
      * Checks whether this product has this bon or not
      *
@@ -105,18 +105,18 @@ trait ProductBonTrait
     public function hasBon(int $bonId): bool
     {
         $key = "product:hasBon:-bonId:$bonId".$this->cacheKey();
-        
+
         return Cache::tags(["product"])
             ->remember($key, config("constants.CACHE_600"), function () use ($bonId) {
                 return $this->bons->where("id", $bonId)
                     ->isNotEmpty();
             });
     }
-    
+
     public function calculateBonPlus($bonId):int
     {
         $key = "product:bonPlus:".$bonId.$this->cacheKey();
-        
+
         return (int)Cache::tags(["product"])
             ->remember($key, config("constants.CACHE_600"), function () use ($bonId) {
                 $bonPlus = 0;
@@ -131,11 +131,11 @@ trait ProductBonTrait
                         }
                     }
                 }
-                
+
                 return $bonPlus;
             });
     }
-    
+
     /**
      * Obtains product's bon discount percentage
      *
@@ -146,7 +146,7 @@ trait ProductBonTrait
     public function obtainBonDiscount($bonName)
     {
         $key = "product:bonDiscount:$bonName".$this->cacheKey();
-        
+
         return Cache::tags(["product"])
             ->remember($key, config("constants.CACHE_10"), function () use ($bonName) {
                 $discount = 0;
@@ -156,7 +156,7 @@ trait ProductBonTrait
                     $discount = $bon->pivot->discount;
                 }
 
-                
+
                 return $discount / 100;
             });
     }
