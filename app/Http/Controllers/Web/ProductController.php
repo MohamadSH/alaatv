@@ -188,7 +188,12 @@ class ProductController extends Controller
 
         $liveDescriptions = $product->livedescriptions->sortByDesc('created_at');
 
-        return view('product.show', compact('product', 'block', 'purchasedProductIdArray', 'allChildIsPurchased' , 'liveDescriptions'));
+        $children = collect();
+        if(is_null($product->grand_id)){
+            $children = $product->children()->enable()->get();
+        }
+
+        return view('product.show', compact('product', 'block', 'purchasedProductIdArray', 'allChildIsPurchased' , 'liveDescriptions' , 'children'));
     }
 
     public function edit(Product $product)

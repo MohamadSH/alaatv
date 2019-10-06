@@ -1,11 +1,11 @@
-@if(count($product->children)>0)
+@if(count($product->children->where('enable',1))>0)
     <li class="m-nav__item  m-nav__item--active position-relative">
 
         {{--@if(isset($product->pivot->control_id) && ( $product->pivot->control_id ==  config("constants.CONTROL_SWITCH") || $product->pivot->control_id == Config::get("constants.CONTROL_GROUPED_CHECKBOX") ))--}}
         @if(
             (array_search($product->id, $purchasedProductIdArray) === false) &&
             !$childIsPurchased &&
-            $product->children->pluck('id')->every(function ($value, $key) use ($purchasedProductIdArray) {
+            $product->children->where('enable',1)->pluck('id')->every(function ($value, $key) use ($purchasedProductIdArray) {
                 return (array_search($value, $purchasedProductIdArray) === false);
             })
         )
@@ -14,7 +14,7 @@
                 <input name="products[]"
                        value="{{ $product->id }}"
                        type="checkbox"
-                       class="hasParent_{{ $product->pivot->parent_id }} @if(count($product->children)>0) hasChildren @endif product"
+                       class="hasParent_{{ $product->pivot->parent_id }} @if(count($product->children->where('enable',1))>0) hasChildren @endif product"
 {{--                       @if(isset($product->pivot->isDefault) && $product->pivot->isDefault)--}}
                        @if(
                             isset($product->pivot->isDefault) &&
@@ -50,7 +50,7 @@
                 <span class="m-nav__link-wrap">
                     <span class="m-nav__link-text">
                         @if(
-                            !$product->children->count()>0 &&
+                            !$product->children->where('enable',1)->count()>0 &&
                             (array_search($product->id, $purchasedProductIdArray) === false) &&
                             !$childIsPurchased
                             )
@@ -60,7 +60,7 @@
                                         <input name="products[]"
                                                value="{{ $product->id }}"
                                                type="checkbox"
-                                               class="hasParent_{{ $product->pivot->parent_id }} @if(count($product->children)>0) hasChildren @endif product"
+                                               class="hasParent_{{ $product->pivot->parent_id }} @if(count($product->children->where('enable',1))>0) hasChildren @endif product"
 {{--                                               @if(isset($product->pivot->isDefault) && $product->pivot->isDefault)--}}
                                                @if(
                                                     isset($product->pivot->isDefault) &&
@@ -95,14 +95,14 @@
                             {{--@if((int)$product->cost > 0)--}}
                             <span class="m-nav__link-badge float-right">
 
-                                @if(!$product->children->count()>0 && (array_search($product->id, $purchasedProductIdArray) !== false) || $childIsPurchased)
+                                @if(!$product->children->where('enable',1)->count()>0 && (array_search($product->id, $purchasedProductIdArray) !== false) || $childIsPurchased)
                                     <span class="m-badge m-badge--info m-badge--wide m-badge--rounded">
                                         خریده اید
                                         <a class="btn btn-sm m-btn m-btn--pill m-btn--air m-btn--gradient-from-focus m-btn--gradient-to-danger  animated infinite pulse" role="button" href="{{ action("Web\UserController@userProductFiles") }}">
                                             <i class="fa fa-play-circle"></i>
                                         </a>
                                     </span>
-                                @elseif(!$product->children->count()>0)
+                                @elseif(!$product->children->where('enable',1)->count()>0)
                                     @if($product->price['base']!==$product->price['final'])
                                         <span class="m-badge m-badge--danger m-badge--wide m-badge--rounded a--productPrice">
                                         <span class="m-badge m-badge--warning a--productRealPrice">{{ number_format($product->price['base']) }}</span>
@@ -134,13 +134,13 @@
 
                 </span>
             </span>
-            @if(count($product->children)>0)
+            @if(count($product->children->where('enable',1))>0)
                 <span class="m-nav__link-arrow"></span>
             @endif
         </a>
-        @if(count($product->children)>0)
+        @if(count($product->children->where('enable',1))>0)
             <ul class="m-nav__sub collapse show children_{{$product->id}} m--padding-top-5" id="m_nav_sub_{{ $product->id }}" role="tabpanel" aria-labelledby="m_nav_link_{{ $product->id }}" data-parent="#m_nav_link_{{ $product->id }}">
-                @foreach($product->children as $p)
+                @foreach($product->children->where('enable',1) as $p)
                     @include('product.partials.showChildren',['product' => $p, 'color' => $color + 1, 'childIsPurchased' => (array_search($product->id, $purchasedProductIdArray) !== false)])
                 @endforeach
             </ul>
