@@ -1674,7 +1674,7 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
     public function sets()
     {
         return $this->belongsToMany(Contentset::class)
-            ->enable()
+            ->active()
             ->using(ProductSet::class)
             ->as('productSet')
             ->withPivot([
