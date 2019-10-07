@@ -57,6 +57,22 @@
                 </div>
                 <div class="form-group">
                     <div class="row">
+                        <label class="col-md-2 control-label" for="redirectUrl">لینک ریدایرکت</label>
+                        <div class="col-md-10">
+                            {!! Form::text('redirectUrl', ($editForm) ? $set->redirectUrl : null, ['class' => 'form-control', 'id' => 'redirectUrl' , 'dir'=>'ltr' ]) !!}
+                            @if ($errors->has('redirectUrl'))
+                                <span class="form-control-feedback">
+                                    <strong>{{ $errors->first('redirectUrl') }}</strong>
+                                </span>
+                            @endif
+                        </div>
+                        <label class="col-md-2 control-label">ریدایرکت تمام کانتنت ها
+                        <input type="checkbox" name="redirectAllContents">
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
                         <label class="col-md-2 control-label" for="name">نام</label>
                         <div class="col-md-10">
                             {!! Form::text('name', ($editForm) ? $set->name : null, ['class' => 'form-control', 'id' => 'name' ]) !!}

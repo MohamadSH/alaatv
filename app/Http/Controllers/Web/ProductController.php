@@ -90,6 +90,7 @@ class ProductController extends Controller
         $pageName      = 'productPage';
         if(!$request->has('moderator')) {
             $filters['active'] = 1 ;
+            $productFilters['doesntHaveGrand']  = 1;
         }
 
         $productSearch->setPageName($pageName);

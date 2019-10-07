@@ -69,6 +69,7 @@ use Illuminate\Database\Eloquent\Builder;
  * @property-read \App\Collection\ContentCollection|\App\Content[] $oldContents
  * @property-read int|null $old_contents_count
  * @property-read int|null $products_count
+ * @property mixed redirectUrl
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Contentset display()
  */
 class Contentset extends BaseModel implements Taggable
@@ -81,6 +82,7 @@ class Contentset extends BaseModel implements Taggable
      * @var array
      */
     protected $fillable = [
+        'redirectUrl',
         'name',
         'small_name',
         'description',

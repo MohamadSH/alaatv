@@ -15,6 +15,11 @@ class ContentController extends Controller
 
     public function show(Request $request, Content $content)
     {
+        if (!is_null($content->redirectUrl)) {
+            return redirect(convertRedirectUrlToApiVersion($content->redirectUrl),
+                Response::HTTP_FOUND, $request->headers->all());
+        }
+
         if (!$content->isActive()) {
             $message = '';
             $code    = Response::HTTP_LOCKED;
