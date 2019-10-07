@@ -158,6 +158,14 @@ class SetController extends Controller
 
         if ($contentSet->update()) {
 
+            if($request->has('redirectAllContents')){
+                foreach ($contentSet->contents as $content) {
+                    $content->update([
+                       'redirectUrl' => $request->get('redirectUrl'),
+                    ]);
+                }
+            }
+
             if($request->has('products'))
             {
                 $products = $request->get('products');
@@ -168,8 +176,7 @@ class SetController extends Controller
 
             session()->put('success' , 'دسته با موفقیت اصلاح شد');
             return redirect()->back();
-        }
-        else {
+        } else {
             session()->put('error' , 'خطای پایگاه داده');
             return redirect()->back();
         }
@@ -201,6 +208,10 @@ class SetController extends Controller
 
     public function show(Request $request, Contentset $set)
     {
+        if (isset($set->redirectUrl)) {
+            return redirect($set->redirectUrl, Response::HTTP_FOUND, $request->headers->all());
+        }
+
         if ($request->expectsJson()) {
             return response()->json($set);
         }
