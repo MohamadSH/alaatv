@@ -6,12 +6,12 @@ use App\Coupon;
 use App\Product;
 use Carbon\Carbon;
 use App\Coupontype;
-use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Response;
 use App\Http\Requests\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\EditCouponRequest;
 use App\Http\Requests\InsertCouponRequest;
+use Illuminate\Foundation\Http\FormRequest;
 
 class CouponController extends Controller
 {
@@ -126,7 +126,7 @@ class CouponController extends Controller
                 ->isNotEmpty());
 
             $request->offsetSet('code', $code);
-            if ($request->has('products') && !empty($request->gat('products'))) {
+            if ($request->has('products') && !empty($request->get('products'))) {
                 $request->offsetSet('coupontype_id', 2);
             } else {
                 $request->offsetSet('coupontype_id', 1);
