@@ -1674,13 +1674,13 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
     public function sets()
     {
         return $this->belongsToMany(Contentset::class)
+            ->enable()
             ->using(ProductSet::class)
             ->as('productSet')
             ->withPivot([
                 'order',
             ])
             ->withTimestamps()
-            ->enable()
             ->orderBy('order');
     }
 

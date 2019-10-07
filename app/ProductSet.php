@@ -46,6 +46,6 @@ class ProductSet extends Pivot
     ];
     
     
-    protected $table = "contentset_product";
+    protected $table = 'contentset_product';
     //$p->sets()->updateExistingPivot($s,['order'=>4])
 }
