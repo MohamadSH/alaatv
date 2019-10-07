@@ -92,6 +92,7 @@ class ContentController extends Controller
 
         $productFilters = $filters;
         $productFilters['active']  = 1;
+        $productFilters['doesntHaveGrand']  = 1;
         $result->offsetSet('product', !$contentOnly ? $productSearch->get($productFilters) : null);
 
         $pageName = 'content-search';
@@ -164,6 +165,10 @@ class ContentController extends Controller
 
     public function show(Request $request, Content $content, RelatedProductSearch $relatedProductSearch)
     {
+        if (isset($content->redirectUrl)) {
+            return redirect($content->redirectUrl, Response::HTTP_FOUND, $request->headers->all());
+        }
+
         if (!$content->isActive()) {
             abort(Response::HTTP_LOCKED, 'Deactivated!');
         }
@@ -308,6 +313,11 @@ class ContentController extends Controller
         $this->fillContentFromRequest($request->all(), $content);
 
         if ($content->update()) {
+            //ToDo:  removing tags and files in case of redirecting content
+            if($request->has('redirectUrl')){
+
+            }
+
             session()->put('success', 'اصلاح محتوا با موفقیت انجام شد');
         } else {
             session()->put('error', 'خطای پایگاه داده');

@@ -214,6 +214,18 @@
 
         <div class="form-group">
             <div class="row">
+                <label class="col-md-2 control-label" for="redirectUrl">لینک ریدایرکت :
+                </label>
+                <div class="col-md-9">
+                    {!! Form::text('redirectUrl', null, ['class' => 'form-control', 'id' => 'redirectUrl' , 'dir'=>'ltr']) !!}
+                    <span class="form-control-feedback">
+                       <strong></strong>
+                   </span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="row">
                 <label class="col-md-2 control-label" for="name">ترتیب :
                 </label>
                 <div class="col-md-9">

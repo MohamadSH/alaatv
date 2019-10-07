@@ -131,6 +131,7 @@ use Illuminate\Support\Facades\{Cache, Artisan};
  * @property-read mixed $remove_link
  * @property-read int|null $grades_count
  * @property-read int|null $majors_count
+ * @property mixed redirectUrl
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Content free()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Content type($type)
  */
@@ -181,6 +182,7 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
     protected $table = 'educationalcontents';
 
     protected $fillable = [
+        'redirectUrl',
         'name',
         'description',
         'context',
