@@ -6,6 +6,8 @@ use App\Events\Authenticated;
 use App\Events\MobileVerified;
 use App\Events\FreeInternetAccept;
 use App\Events\FillTmpShareOfOrder;
+use App\Events\UserAvatarUploaded;
+use App\Listeners\RemoveOldUserAvatarListener;
 use Illuminate\Auth\Events\Registered;
 use App\Listeners\AuthenticatedListener;
 use App\Listeners\MobileVerifiedListener;
@@ -42,12 +44,15 @@ class EventServiceProvider extends ServiceProvider
         AccessTokenCreated::class  => [
 //            'App\Listeners\RevokeOldTokens',
         ],
-        
+
         RefreshTokenCreated::class => [
 //            'App\Listeners\PruneOldTokens',
         ],
+        UserAvatarUploaded::class      => [
+            RemoveOldUserAvatarListener::class,
+        ],
     ];
-    
+
     /**
      * Register any events for your application.
      *

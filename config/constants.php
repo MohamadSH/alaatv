@@ -158,6 +158,8 @@ return [
     'EDIT_EDUCATIONAL_CONTENT'                    => 'editEducationalContent',
     'REMOVE_EDUCATIONAL_CONTENT_ACCESS'           => 'removeEducationalContent',
     'SHOW_EDUCATIONAL_CONTENT_ACCESS'             => 'showEducationalContent',
+    'REDIRECT_EDUCATIONAL_CONTENT_ACCESS'         => 'redirectEducationalContent',
+    'REMOVE_EDUCATIONAL_CONTENT_FILE_ACCESS'      => 'removeEducationalContentFile',
     'REPORT_ADMIN_PANEL_ACCESS'                   => 'reportAdminPanelAccess',
     'INSERT_EMPLOPYEE_WORK_SHEET'                 => 'insertEmployeeWorkSheet',
     'LIST_EMPLOPYEE_WORK_SHEET'                   => 'listEmployeeWorkSheet',

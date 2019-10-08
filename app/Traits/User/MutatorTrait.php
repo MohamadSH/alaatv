@@ -246,9 +246,9 @@ trait mutatorTrait
 
     public function getPhotoAttribute($value)
     {
-//        $diskAdapter = Storage::disk('alaaCdnSFTP')->getAdapter();
-//        $imageUrl =  $diskAdapter->getUrl($value);
-//        return isset($imageUrl)?$imageUrl."?w=100&h=100" :'/acm/image/255x255.png';
+        $diskAdapter = Storage::disk('alaaCdnSFTP')->getAdapter();
+        $imageUrl =  $diskAdapter->getUrl($value);
+        return isset($imageUrl)?$imageUrl."?w=100&h=100" :'/acm/image/255x255.png';
 
         $profileImage = ($value != null ? $value : config('constants.PROFILE_DEFAULT_IMAGE'));
         $profileImage = route('image', [
@@ -263,10 +263,10 @@ trait mutatorTrait
 
     public function getCustomSizePhoto(int $width , int $height){
         $value = $this->getOriginal('photo');
-//
-//        $diskAdapter = Storage::disk('alaaCdnSFTP')->getAdapter();
-//        $imageUrl =  $diskAdapter->getUrl($value);
-//        return isset($imageUrl)?$imageUrl."?w=$width&h=$height" :'/acm/image/255x255.png';
+
+        $diskAdapter = Storage::disk('alaaCdnSFTP')->getAdapter();
+        $imageUrl =  $diskAdapter->getUrl($value);
+        return isset($imageUrl)?$imageUrl."?w=$width&h=$height" :'/acm/image/255x255.png';
 
 
         $profileImage = ($value != null ? $value : config('constants.PROFILE_DEFAULT_IMAGE'));

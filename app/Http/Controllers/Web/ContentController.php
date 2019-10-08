@@ -290,6 +290,11 @@ class ContentController extends Controller
      */
     public function update(EditContentRequest $request, Content $content)
     {
+        $user = $request->user();
+        if(!$user->can(config('constants.REDIRECT_EDUCATIONAL_CONTENT_ACCESS'))){
+            $request->offsetUnset('redirectUrl');
+        }
+
         $contenttypeId  = $request->get('contenttype_id');
         if($content->contenttype_id == config('constants.CONTENT_TYPE_VIDEO')) {
             $fileName       = basename($content->file_for_admin['video']->first()->fileName);
