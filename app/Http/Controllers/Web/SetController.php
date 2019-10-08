@@ -2,23 +2,23 @@
 
 namespace App\Http\Controllers\Web;
 
-use App\Adapter\AlaaSftpAdapter;
 use App\Contentset;
-use App\Traits\FileCommon;
 use App\Websitesetting;
+use App\Traits\FileCommon;
 use App\Traits\MetaCommon;
 use Illuminate\Support\Arr;
 use Illuminate\Http\Request;
 use App\Traits\ProductCommon;
 use App\Traits\RequestCommon;
 use Illuminate\Http\Response;
+use App\Adapter\AlaaSftpAdapter;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
 use App\Classes\Search\ContentsetSearch;
 use Illuminate\Foundation\Http\FormRequest;
 use App\Http\Requests\ContentsetIndexRequest;
 use App\Http\Requests\InsertContentsetRequest;
-use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Storage;
 
 class SetController extends Controller
 {
@@ -54,8 +54,8 @@ class SetController extends Controller
     private function getAuthExceptionArray(): array
     {
         $authException = [
-            "index",
-            "show",
+            'index',
+            'show',
         ];
 
         return $authException;
@@ -124,7 +124,7 @@ class SetController extends Controller
                 'tags'   => $tags,
             ]);
         }
-        return view("set.index", compact("sets", 'tags'));
+        return view('set.index', compact('sets', 'tags'));
     }
 
     public function store(InsertContentsetRequest $request)
@@ -215,8 +215,8 @@ class SetController extends Controller
         if ($request->expectsJson()) {
             return response()->json($set);
         }
-
-        return $set->getActiveContents();
+    
+        return redirect($set->url);
     }
 
     public function edit(Contentset $set) {
@@ -248,8 +248,8 @@ class SetController extends Controller
     private function storePhotoOfSet(Contentset $contentSet, $file): void
     {
         $extension = $file->getClientOriginalExtension();
-        $fileName  = basename($file->getClientOriginalName(), ".".$extension)."_".date("YmdHis").'.'.$extension;
-        $disk = Storage::disk(config('constants.DISK23'));
+        $fileName  = basename($file->getClientOriginalName(), '.'.$extension).'_'.date('YmdHis').'.'.$extension;
+        $disk      = Storage::disk(config('constants.DISK23'));
         /** @var AlaaSftpAdapter $adaptor */
         if ($disk->put($fileName, File::get($file))) {
             $fullPath = $disk->getAdapter()->getRoot();
