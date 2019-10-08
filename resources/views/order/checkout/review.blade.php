@@ -489,12 +489,12 @@
                                         <div class="m-form__group form-group text-center m--margin-top-10">
                                             <div class="m-radio-inline">
                                                 <label class="m-radio m-radio--check-bold m-radio--state-info">
-                                                    <input type="radio" name="radioBankType" value="{{route('redirectToBank', ['paymentMethod'=>'zarinpal', 'device'=>'web'])}}" data-bank-type="zarinpal" checked>
+                                                    <input type="radio" name="radioBankType" value="{{route('redirectToBank', ['paymentMethod'=>'zarinpal', 'device'=>'web'])}}" data-bank-type="zarinpal" >
                                                     <img src="/acm/extra/payment/gateway/zarinpal-logo.png" class="img-thumbnail bankLogo" alt="bank-logo" width="60">
                                                     <span></span>
                                                 </label>
-                                                <label class="m-radio m-radio--check-bold m-radio--state-info d-none">
-                                                    <input type="radio" name="radioBankType" value="{{route('redirectToBank', ['paymentMethod'=>'mellat', 'device'=>'web'])}}" data-bank-type="mellat" >
+                                                <label class="m-radio m-radio--check-bold m-radio--state-info">
+                                                    <input type="radio" name="radioBankType" value="{{route('redirectToBank', ['paymentMethod'=>'mellat', 'device'=>'web'])}}" data-bank-type="mellat" checked>
                                                     <img src="/acm/extra/payment/gateway/mellat-logo.png" class="img-thumbnail bankLogo" alt="bank-logo" width="60">
                                                     <span></span>
                                                 </label>
