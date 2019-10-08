@@ -1,13 +1,13 @@
 <?php namespace App\Traits;
 
-use Lang;
+use App\Events\UserAvatarUploaded;
 use App\User;
 use App\Transaction;
 use Illuminate\Validation\Rule;
-use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
 
 trait UserCommon
 {
@@ -19,7 +19,7 @@ trait UserCommon
      *
      * @return array
      */
-    public function exchangeLottery($user, $points)
+    public function exchangeLottery($user, $points):array
     {
         /**   giving coupon */ /**do {
      * $couponCode = str_random(5);
@@ -75,7 +75,7 @@ trait UserCommon
      *
      * @return bool
      */
-    public function validateNationalCode($value)
+    public function validateNationalCode($value):bool
     {
         $flag = false;
         if (!preg_match('/^[0-9]{10}$/', $value)) {
@@ -99,45 +99,6 @@ trait UserCommon
         }
 
         return $flag;
-    }
-
-    /**
-     * Determines oldPassword and newPassword confirmation of the user
-     *
-     * @param  User    $user
-     * @param  string  $claimedOldPassword
-     * @param  string  $newPassword
-     *
-     * @return array
-     */
-    public function userPasswordConfirmation(User $user, $claimedOldPassword, $newPassword): array
-    {
-        [$confirmed, $message] = $this->getMsg($user, $claimedOldPassword, $newPassword);
-
-        return [
-            'confirmed' => $confirmed,
-            'message'   => $message,
-        ];
-    }
-
-    /**
-     * @param  User       $user
-     * @param             $claimedOldPassword
-     * @param             $newPassword
-     *
-     * @return array
-     */
-    private function getMsg(User $user, $claimedOldPassword, $newPassword): array
-    {
-        if (!$user->compareWithCurrentPassword($claimedOldPassword)) {
-            return [false, Lang::get('confirmation.Claimed old password is not correct')];
-        }
-
-        if (!$user->compareWithCurrentPassword($newPassword)) {
-            return [true, Lang::get('confirmation.Confirmed.')];
-        }
-
-        return [false, Lang::get('confirmation.Current password and new password are the same.')];
     }
 
     /**
@@ -200,36 +161,22 @@ trait UserCommon
     }
 
     /**
-     * @param  User  $user
+     * @param User $user
      * @param        $file
-     *
+     * @return string|null
      * @throws FileNotFoundException
      */
-    protected function storePhotoOfUser(User &$user, $file): void
+    protected function storePhotoOfUser(User $user, $file): ?string
     {
         $extension = $file->getClientOriginalExtension();
         $fileName  = basename($file->getClientOriginalName(), '.'.$extension).'_'.date('YmdHis').'.'.$extension;
-        //Sftp : disk24
-        if (Storage::disk(config('constants.DISK1'))
-            ->put($fileName, File::get($file))) {
-            $oldPhoto = $user->photo;
-            if (!$this->userHasDefaultAvatar($oldPhoto)) {
-                Storage::disk(config('constants.DISK1'))->delete($oldPhoto);
-            }
-            $user->photo = $fileName;
+        if (Storage::disk(config('constants.DISK24'))->put($fileName, File::get($file))) {
+            $path = 'upload/images/profile/'.$fileName;
+            event(new UserAvatarUploaded($user , $path));
+            return $path;
         }
-    }
 
-    /**
-     * Checks whether user has default avatar or not
-     *
-     * @param $photo
-     *
-     * @return bool
-     */
-    public function userHasDefaultAvatar($photo): bool
-    {
-        return strcmp($photo, config('constants.PROFILE_DEFAULT_IMAGE')) == 0;
+        return null;
     }
 
     /**

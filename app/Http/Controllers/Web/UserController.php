@@ -1479,13 +1479,16 @@ class UserController extends Controller
      * @return void
      * @throws FileNotFoundException
      */
-    private function fillUserFromRequest(array $inputData, User &$user): void
+    private function fillUserFromRequest(array $inputData, User $user): void
     {
         $user->fillByPublic($inputData);
 
         $file = $this->getRequestFile($inputData, 'photo');
         if ($file !== false) {
-            $this->storePhotoOfUser($user, $file);
+            $storePicResult = $this->storePhotoOfUser($user, $file);
+            if(isset($storePicResult)){
+                $user->photo = $storePicResult;
+            }
         }
     }
 
@@ -1496,7 +1499,7 @@ class UserController extends Controller
      * @return void
      * @throws FileNotFoundException
      */
-    private function fillUserFromModeratorRequest(array $inputData, User &$user): void
+    private function fillUserFromModeratorRequest(array $inputData, User $user): void
     {
         // Checks both if $inputData has password index and it is not null
         $hasPassword = isset($inputData['password']);
