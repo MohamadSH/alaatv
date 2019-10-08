@@ -829,8 +829,8 @@ class ContentSearchComposer
                     "value"     => "جهانبخش",
                 ],
                 [
-                    "lastName"  => "محمد رضا",
-                    "firstName" => "یاری",
+                    "lastName"  => "یاری",
+                    "firstName" => "محمد رضا",
                     "value"     => "محمد_رضا_یاری",
                 ],
             ])
