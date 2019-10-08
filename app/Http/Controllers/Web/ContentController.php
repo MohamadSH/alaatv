@@ -313,11 +313,6 @@ class ContentController extends Controller
         $this->fillContentFromRequest($request->all(), $content);
 
         if ($content->update()) {
-            //ToDo:  removing tags and files in case of redirecting content
-            if($request->has('redirectUrl')){
-
-            }
-
             session()->put('success', 'اصلاح محتوا با موفقیت انجام شد');
         } else {
             session()->put('error', 'خطای پایگاه داده');
