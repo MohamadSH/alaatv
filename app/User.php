@@ -2,6 +2,12 @@
 
 namespace App;
 
+use App\Collection\ContentCollection;
+use App\Collection\OrderCollections;
+use App\Collection\OrderproductCollection;
+use App\HelpDesk\Collection\TicketCollection;
+use App\HelpDesk\Models\Ticket;
+use Eloquent;
 use Hash;
 use Carbon\Carbon;
 use App\Traits\Helper;
@@ -14,7 +20,14 @@ use App\HelpDesk\AgentInterface;
 use App\Traits\APIRequestCommon;
 use App\HelpDesk\Models\Category;
 use App\Collection\UserCollection;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Notifications\DatabaseNotification;
+use Illuminate\Notifications\DatabaseNotificationCollection;
 use Kalnoy\Nestedset\QueryBuilder;
+use Laravel\Passport\Client;
 use Laravel\Passport\HasApiTokens;
 use App\HelpDesk\Traits\AgentTrait;
 use App\Collection\ProductCollection;
@@ -36,6 +49,7 @@ use App\Traits\User\{BonTrait,
     VouchersTrait,
     DashboardTrait,
     TaggableUserTrait};
+use Laravel\Passport\Token;
 
 /**
  * App\User
@@ -88,11 +102,11 @@ use App\Traits\User\{BonTrait,
  *               $remember_token
  * @property string|null
  *               $passwordRegenerated_at   تاریخ آخرین تولید خودکار(بازیابی) رمز عبور
- * @property \Carbon\Carbon|null
+ * @property Carbon|null
  *               $created_at
- * @property \Carbon\Carbon|null
+ * @property Carbon|null
  *               $updated_at
- * @property \Carbon\Carbon|null
+ * @property Carbon|null
  *               $deleted_at
  * @property string|null
  *               $email                    ایمیل کاربر
@@ -110,147 +124,143 @@ use App\Traits\User\{BonTrait,
  *               $diet                     رژیم غذایی خاص
  * @property string|null
  *               $techCode                 کد تکنسین
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Bankaccount[]
+ * @property-read Collection|Bankaccount[]
  *                    $bankaccounts
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Belonging[]
- *                    $belongings
- * @property-read \App\Bloodtype|null
+ * @property-read Bloodtype|null
  *                    $bloodtype
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Contact[]
+ * @property-read Collection|Contact[]
  *                    $contacts
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Content[]
+ * @property-read Collection|Content[]
  *                    $contents
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Employeeschedule[]
+ * @property-read Collection|Employeeschedule[]
  *                    $employeeschedules
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Employeetimesheet[]
+ * @property-read Collection|Employeetimesheet[]
  *                    $employeetimesheets
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Eventresult[]
+ * @property-read Collection|Eventresult[]
  *                    $eventresults
- * @property-read \App\Gender|null
+ * @property-read Gender|null
  *                    $gender
  * @property-read mixed
  *                    $full_name
- * @property-read \App\Grade|null
+ * @property-read Grade|null
  *                    $grade
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Lottery[]
+ * @property-read Collection|Lottery[]
  *                    $lotteries
- * @property-read \App\Major|null
+ * @property-read Major|null
  *                    $major
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Mbtianswer[]
+ * @property-read Collection|Mbtianswer[]
  *                    $mbtianswers
- * @property-read \Illuminate\Notifications\DatabaseNotificationCollection|\Illuminate\Notifications\DatabaseNotification[]
+ * @property-read DatabaseNotificationCollection|DatabaseNotification[]
  *                $notifications
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Order[]
+ * @property-read Collection|Order[]
  *                    $openOrders
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Transaction[]
+ * @property-read Collection|Transaction[]
  *                    $orderTransactions
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Ordermanagercomment[]
+ * @property-read Collection|Ordermanagercomment[]
  *                    $ordermanagercomments
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Orderproduct[]
+ * @property-read Collection|Orderproduct[]
  *                    $orderproducts
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Order[]
+ * @property-read Collection|Order[]
  *                    $orders
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Permission[]
+ * @property-read Collection|Permission[]
  *                    $permissions
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Productvoucher[]
+ * @property-read Collection|Productvoucher[]
  *                    $productvouchers
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Role[]
+ * @property-read Collection|Role[]
  *                    $roles
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Websitepage[]
+ * @property-read Collection|Websitepage[]
  *                    $seensitepages
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Transaction[]
+ * @property-read Collection|Transaction[]
  *                    $transactions
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Userbon[]
+ * @property-read Collection|Userbon[]
  *                    $userbons
- * @property-read \App\Userstatus
+ * @property-read Userstatus
  *                    $userstatus
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Usersurveyanswer[]
+ * @property-read Collection|Usersurveyanswer[]
  *                    $usersurveyanswers
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Userupload[]
+ * @property-read Collection|Userupload[]
  *                    $useruploads
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Verificationmessage[]
- *                    $verificationmessages
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Transaction[]
+ * @property-read Collection|Transaction[]
  *                    $walletTransactions
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Wallet[]
+ * @property-read Collection|Wallet[]
  *                    $wallets
  * @method static bool|null forceDelete()
  * @method static \Illuminate\Database\Query\Builder|User onlyTrashed()
  * @method static bool|null restore()
- * @method static \Illuminate\Database\Eloquent\Builder|User whereAddress($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User whereAllergy($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User whereBio($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User whereBirthdate($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User whereBloodtypeId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User whereCity($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User whereDeletedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User whereDiet($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User whereEmail($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User whereFirstName($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User whereGenderId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User whereGradeId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User whereIntroducedBy($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User whereLastName($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User whereLockProfile($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User whereMajorId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User whereMedicalCondition($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User whereMobile($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User whereMobileNumberVerification($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User whereNationalCode($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User wherePassword($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User wherePasswordRegeneratedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User wherePermissionIs($permission = '')
- * @method static \Illuminate\Database\Eloquent\Builder|User wherePhone($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User wherePhoto($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User wherePostalCode($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User whereProvince($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User whereRememberToken($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User whereRoleIs($role = '')
- * @method static \Illuminate\Database\Eloquent\Builder|User whereSchool($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User whereSkype($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User whereTechCode($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User whereUserstatusId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User whereWhatsapp($value)
+ * @method static Builder|User whereAddress($value)
+ * @method static Builder|User whereAllergy($value)
+ * @method static Builder|User whereBio($value)
+ * @method static Builder|User whereBirthdate($value)
+ * @method static Builder|User whereBloodtypeId($value)
+ * @method static Builder|User whereCity($value)
+ * @method static Builder|User whereCreatedAt($value)
+ * @method static Builder|User whereDeletedAt($value)
+ * @method static Builder|User whereDiet($value)
+ * @method static Builder|User whereEmail($value)
+ * @method static Builder|User whereFirstName($value)
+ * @method static Builder|User whereGenderId($value)
+ * @method static Builder|User whereGradeId($value)
+ * @method static Builder|User whereId($value)
+ * @method static Builder|User whereIntroducedBy($value)
+ * @method static Builder|User whereLastName($value)
+ * @method static Builder|User whereLockProfile($value)
+ * @method static Builder|User whereMajorId($value)
+ * @method static Builder|User whereMedicalCondition($value)
+ * @method static Builder|User whereMobile($value)
+ * @method static Builder|User whereMobileNumberVerification($value)
+ * @method static Builder|User whereNationalCode($value)
+ * @method static Builder|User wherePassword($value)
+ * @method static Builder|User wherePasswordRegeneratedAt($value)
+ * @method static Builder|User wherePermissionIs($permission = '')
+ * @method static Builder|User wherePhone($value)
+ * @method static Builder|User wherePhoto($value)
+ * @method static Builder|User wherePostalCode($value)
+ * @method static Builder|User whereProvince($value)
+ * @method static Builder|User whereRememberToken($value)
+ * @method static Builder|User whereRoleIs($role = '')
+ * @method static Builder|User whereSchool($value)
+ * @method static Builder|User whereSkype($value)
+ * @method static Builder|User whereTechCode($value)
+ * @method static Builder|User whereUpdatedAt($value)
+ * @method static Builder|User whereUserstatusId($value)
+ * @method static Builder|User whereWhatsapp($value)
  * @method static \Illuminate\Database\Query\Builder|User withTrashed()
  * @method static \Illuminate\Database\Query\Builder|User withoutTrashed()
- * @mixin \Eloquent
- * @method static \Illuminate\Database\Eloquent\Builder|User role($roles)
+ * @mixin Eloquent
+ * @method static Builder|User role($roles)
  * @property string|null
  *               $nameSlug                 اسلاگ شده نام
  * @property-read mixed
  *                    $full_name_reverse
- * @method static \Illuminate\Database\Eloquent\Builder|User whereNameSlug($value)
+ * @method static Builder|User whereNameSlug($value)
  * @property string|null
  *               $mobile_verified_code     کد تایید شماره موبایل
  * @property string|null
  *               $mobile_verified_at       تاریخ تایید شماره موبایل
- * @property-read \App\Collection\ContentCollection|\App\Content[]
+ * @property-read ContentCollection|Content[]
  *                    $favoredContent
- * @property-read \App\Collection\ProductCollection|\App\Product[]
+ * @property-read ProductCollection|Product[]
  *                    $favoredProduct
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Contentset[]
+ * @property-read Collection|Contentset[]
  *                    $favoredSet
- * @method static \Illuminate\Database\Eloquent\Builder|User whereMobileVerifiedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User whereMobileVerifiedCode($value)
+ * @method static Builder|User whereMobileVerifiedAt($value)
+ * @method static Builder|User whereMobileVerifiedCode($value)
  * @property string|null                                                              $email_verified_at
  * @property-read mixed                                                               $reverse_full_name
  * @property-write mixed                                                              $first_name
  * @property-write mixed                                                              $last_name
  * @property-write mixed                                                              $medical_condition
  * @property-write mixed                                                              $postal_code
- * @method static \Illuminate\Database\Eloquent\Builder|User newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|User newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|User query()
- * @method static \Illuminate\Database\Eloquent\Builder|User whereEmailVerifiedAt($value)
- * @property-read \App\Collection\OrderproductCollection|\App\Orderproduct[]          $closedorderproducts
+ * @method static Builder|User newModelQuery()
+ * @method static Builder|User newQuery()
+ * @method static Builder|User query()
+ * @method static Builder|User whereEmailVerifiedAt($value)
+ * @property-read OrderproductCollection|Orderproduct[] $closedorderproducts
  * @property mixed                                                                    mobile
  * @property string                                                                   lastName
  * @property string                                                                   firstName
  * @property int                                                                      id
- * @method static \Illuminate\Database\Eloquent\Builder|User active()
+ * @method static Builder|User active()
  * @method static select()
  * @property-read mixed                                                               $number_of_products_in_basket
  * @property-read mixed                                                               $short_name
@@ -259,9 +269,9 @@ use App\Traits\User\{BonTrait,
  * @property-read mixed                                                               $grade_info
  * @property-read mixed                                                               $major_info
  * @property-read mixed                                                               $wallet_info
- * @property-read \Illuminate\Database\Eloquent\Collection|\Laravel\Passport\Client[] $clients
+ * @property-read Collection|Client[] $clients
  * @property-read mixed                                                               $info
- * @property-read \Illuminate\Database\Eloquent\Collection|\Laravel\Passport\Token[]  $tokens
+ * @property-read Collection|Token[]  $tokens
  * @property mixed                                                                    openOrders
  * @property mixed                                                                    nameSlug
  * @property mixed                                                                    nationalCode
@@ -271,19 +281,19 @@ use App\Traits\User\{BonTrait,
  * @property int                                                                      lockProfile
  * @property string                                                                   photo
  * @property mixed                                                                    roles
- * @property static|null                                                              mobile_verified_at
+ * @property null                                                              mobile_verified_at
  * @property mixed                                                                    closed_orders
  * @property mixed                                                                    email
- * @property-read \App\Collection\OrderCollections|\App\Order[]                       $closedOrders
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Firebasetoken[]       $firebasetokens
+ * @property-read OrderCollections|Order[] $closedOrders
+ * @property-read Collection|Firebasetoken[] $firebasetokens
  * @property-read mixed                                                               $user_status
  * @property mixed updated_at
  * @property mixed created_at
- * @method static \Illuminate\Database\Eloquent\Builder|\App\User orWherePermissionIs($permission = '')
- * @method static \Illuminate\Database\Eloquent\Builder|\App\User orWhereRoleIs($role = '', $team = null)
+ * @method static Builder|User orWherePermissionIs($permission = '')
+ * @method static Builder|User orWhereRoleIs($role = '', $team = null)
  * @property string|null                                                        $lastServiceCall آخرین تماس کارمندان روابط عمومی با کاربر
- * @method static \Illuminate\Database\Eloquent\Builder|\App\User whereLastServiceCall($value)
- * @property-read \App\HelpDesk\Collection\TicketCollection|\App\HelpDesk\Models\Ticket[] $agentTickets
+ * @method static Builder|User whereLastServiceCall($value)
+ * @property-read TicketCollection|Ticket[] $agentTickets
  * @property-read int|null $agent_tickets_count
  * @property-read int|null $bankaccounts_count
  * @property-read int|null $clients_count
@@ -291,20 +301,19 @@ use App\Traits\User\{BonTrait,
  * @property-read int|null $closedorderproducts_count
  * @property-read int|null $contacts_count
  * @property-read int|null $contents_count
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Contract[] $contracts
+ * @property-read Collection|Contract[] $contracts
  * @property-read int|null $contracts_count
  * @property-read int|null $eventresults_count
  * @property-read int|null $favored_content_count
  * @property-read int|null $favored_product_count
  * @property-read int|null $favored_set_count
  * @property-read int|null $firebasetokens_count
- * @property-read mixed $closed_orders
  * @property-read mixed $edit_link
  * @property-read mixed $jalali_created_at
  * @property-read mixed $jalali_updated_at
  * @property-read mixed $remove_link
  * @property-read mixed $total_bon_number
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\HelpDesk\Models\Category[] $helpCategories
+ * @property-read Collection|Category[] $helpCategories
  * @property-read int|null $help_categories_count
  * @property-read int|null $lotteries_count
  * @property-read int|null $mbtianswers_count
@@ -318,7 +327,7 @@ use App\Traits\User\{BonTrait,
  * @property-read int|null $productvouchers_count
  * @property-read int|null $roles_count
  * @property-read int|null $seensitepages_count
- * @property-read \App\HelpDesk\Collection\TicketCollection|\App\HelpDesk\Models\Ticket[] $tickets
+ * @property-read TicketCollection|Ticket[] $tickets
  * @property-read int|null $tickets_count
  * @property-read int|null $tokens_count
  * @property-read int|null $transactions_count
@@ -327,10 +336,10 @@ use App\Traits\User\{BonTrait,
  * @property-read int|null $useruploads_count
  * @property-read int|null $wallet_transactions_count
  * @property-read int|null $wallets_count
- * @method static \Illuminate\Database\Eloquent\Builder|\App\User helpAdmins()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\User helpAgents()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\User permissionName($permissionName)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\User roleName($roleName)
+ * @method static Builder|User helpAdmins()
+ * @method static Builder|User helpAgents()
+ * @method static Builder|User permissionName($permissionName)
+ * @method static Builder|User roleName($roleName)
  */
 class User extends Authenticatable implements Taggable, MustVerifyMobileNumber, MustVerifyEmail , AgentInterface
 {
@@ -568,7 +577,7 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber, 
     */
 
     /**
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @param  Builder  $query
      * @param  array                                  $roles
      *
      * @return mixed
@@ -582,7 +591,7 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber, 
     }
 
     /**
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @param  Builder  $query
      *
      * @param  string                                 $roleName
      *
@@ -596,7 +605,7 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber, 
     }
 
     /**
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @param  Builder  $query
      *
      *
      * @param  string                                 $permissionName
@@ -613,7 +622,7 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber, 
 
 
     /**
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @param  Builder  $query
      *
      * @return mixed
      */
@@ -736,7 +745,7 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber, 
     /**
      * Get userstatus that belongs to
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
     public function userstatus()
     {
@@ -746,10 +755,22 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber, 
     /**
      * Get related help categories
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     * @return BelongsToMany
      */
     public function helpCategories()
     {
         return $this->belongsToMany(Category::class, 'help_categories_users',  'user_id','category_id');
+    }
+
+    /**
+     * Checks whether user has default avatar or not
+     *
+     * @param $photo
+     *
+     * @return bool
+     */
+    public function userHasDefaultAvatar(): bool
+    {
+        return strcmp($this->photo, config('constants.PROFILE_DEFAULT_IMAGE')) == 0;
     }
 }

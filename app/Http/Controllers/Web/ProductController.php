@@ -88,9 +88,9 @@ class ProductController extends Controller
         $tags          = $request->get('tags');
         $filters       = $request->all();
         $pageName      = 'productPage';
+        $filters['doesntHaveGrand']  = 1;
         if(!$request->has('moderator')) {
             $filters['active'] = 1 ;
-            $productFilters['doesntHaveGrand']  = 1;
         }
 
         $productSearch->setPageName($pageName);

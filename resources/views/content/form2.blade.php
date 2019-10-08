@@ -212,6 +212,7 @@
             </div>
         </div>
 
+        @permission((config('constants.REDIRECT_EDUCATIONAL_CONTENT_ACCESS')))
         <div class="form-group">
             <div class="row">
                 <label class="col-md-2 control-label" for="redirectUrl">لینک ریدایرکت :
@@ -224,6 +225,8 @@
                 </div>
             </div>
         </div>
+        @endpermission
+
         <div class="form-group">
             <div class="row">
                 <label class="col-md-2 control-label" for="name">ترتیب :
