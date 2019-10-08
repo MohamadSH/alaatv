@@ -881,8 +881,8 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
     public function validProductfiles($fileType = '', $getValid = 1)
     {
         $product = $this;
-
-        $files = $product->hasMany('\App\Productfile')
+    
+        $files = $product->hasMany(Productfile::class)
             ->enable();
         if ($getValid) {
             $files->valid();
@@ -1673,8 +1673,9 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
      */
     public function sets()
     {
-        return $this->belongsToMany('App\Contentset')
-            ->using('App\ProductSet')
+        return $this->belongsToMany(Contentset::class)
+            ->active()
+            ->using(ProductSet::class)
             ->as('productSet')
             ->withPivot([
                 'order',
