@@ -66,15 +66,15 @@ class RedisTagging extends Singleton
     /**
      * Remove / Delete an item
      *
-     * @param  string  $bucket
-     * @param  string  $id
+     * @param string $bucket
+     * @param string $id
      * @param          $cb
      *
-     * @return bool Returns `true` even if that id did not exist.
+     * @return void Returns `true` even if that id did not exist.
      */
     public function remove($bucket, $id, $cb)
     {
-        $this->set($bucket, $id, [], 0, $cb);
+        $this->set($bucket, $id, [], $cb);
     }
 
     /**
@@ -88,7 +88,7 @@ class RedisTagging extends Singleton
      *
      * @return bool Returns `true` when the item was set.
      */
-    public function set($bucket, $id, $tags, $score = 0, $cb)
+    public function set($bucket, $id, $tags,  $cb , $score = 0)
     {
         $redis = Redis::connection('redisDB');
         if (!$this->validation($bucket)) {

@@ -74,7 +74,7 @@ class TransactionRepo
     {
         if (isset($data[$column]) && strlen($data[$column]) > 0) {
             $transaction->$column = Carbon::parse($data[$column])
-                ->format('Y-m-d');
+                ->format('Y-m-d H:i:s');
         }
     }
 
@@ -108,18 +108,11 @@ class TransactionRepo
      */
     private static function changeTransactionStatusToSuccessful($id, string $transactionID, int $bankAccountId = null)
     {
-        $data = [
-            'completed_at'              => Carbon::now()->setTimezone('Asia/Tehran'),
+        static::modify([
+            'completed_at'              => Carbon::now('Asia/Tehran'),
             'transactionID'             => $transactionID,
             'destinationBankAccount_id' => $bankAccountId,
-//            'transactionstatus_id'      => config("constants.TRANSACTION_STATUS_SUCCESSFUL"),
-        // Commented temporary to see if this caused Mellat bug or not
-        // issue #1760
-            'transactionstatus_id'      => 3,
-        ];
-
-        static::modify($data, (int) $id);
+            'transactionstatus_id'      => config('constants.TRANSACTION_STATUS_SUCCESSFUL'),
+        ], (int) $id);
     }
-
-
 }

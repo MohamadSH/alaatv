@@ -17,4 +17,13 @@ trait TaggableTrait
             $tagging->setTags($taggable->getTaggableId(), $taggable->getTaggableTags(), $taggable->getTaggableScore());
         }
     }
+
+    /**
+     * @param  Taggable          $taggable
+     * @param  TaggingInterface  $tagging
+     */
+    public function removeTagsOfTaggable(Taggable $taggable, TaggingInterface $tagging): void
+    {
+        $tagging->removeTags($taggable->getTaggableId());
+    }
 }

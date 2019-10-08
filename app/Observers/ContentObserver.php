@@ -10,14 +10,14 @@ use Illuminate\Support\Facades\Artisan;
 class ContentObserver
 {
     private $tagging;
-    
+
     use TaggableTrait;
-    
+
     public function __construct(TaggingInterface $tagging)
     {
         $this->tagging = $tagging;
     }
-    
+
     /**
      * Handle the content "created" event.
      *
@@ -27,9 +27,9 @@ class ContentObserver
      */
     public function created(Content $content)
     {
-        
+
     }
-    
+
     /**
      * Handle the content "updated" event.
      *
@@ -40,7 +40,7 @@ class ContentObserver
     public function updated(Content $content)
     {
     }
-    
+
     /**
      * Handle the content "deleted" event.
      *
@@ -52,7 +52,7 @@ class ContentObserver
     {
         //
     }
-    
+
     /**
      * Handle the content "restored" event.
      *
@@ -64,7 +64,7 @@ class ContentObserver
     {
         //
     }
-    
+
     /**
      * Handle the content "force deleted" event.
      *
@@ -76,7 +76,7 @@ class ContentObserver
     {
         //
     }
-    
+
     /**
      * When issuing a mass update via Eloquent,
      * the saved and updated model events will not be fired for the updated models.
@@ -88,7 +88,7 @@ class ContentObserver
     {
         $content->template_id = $this->findTemplateIdOfaContent($content);
     }
-    
+
     /**
      * @param $content
      *
@@ -102,10 +102,14 @@ class ContentObserver
                    Content::CONTENT_TYPE_VIDEO    => Content::CONTENT_TEMPLATE_VIDEO,
                ][$content->contenttype_id] ?? null;
     }
-    
+
     public function saved(Content $content)
     {
-        $this->sendTagsOfTaggableToApi($content, $this->tagging);
+        if(isset($content->redirectUrl)){
+            $this->removeTagsOfTaggable($content, $this->tagging);
+        }else{
+            $this->sendTagsOfTaggableToApi($content, $this->tagging);
+        }
         Artisan::call('cache:clear');
     }
 }

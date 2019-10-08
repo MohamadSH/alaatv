@@ -4,6 +4,11 @@ namespace App;
 
 use Cache;
 use App\Collection\TransactionCollection;
+use Carbon\Carbon;
+use Eloquent;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * App\Transaction
@@ -34,55 +39,55 @@ use App\Collection\TransactionCollection;
  *           کننده درگاه تراکنش
  * @property int|null                                                         $transactionstatus_id      آیدی مشخص
  *           کننده وضعیت تراکنش
- * @property \Carbon\Carbon|null                                              $created_at
+ * @property Carbon|null                                              $created_at
  * @property string|null                                                      $deadline_at               مهلت پرداخت
  * @property string|null                                                      $completed_at              تاریخ پرداخت
- * @property \Carbon\Carbon|null                                              $updated_at
- * @property \Carbon\Carbon|null                                              $deleted_at
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Transaction[] $children
- * @property-read \App\Bankaccount                                            $destinationBankAccount
- * @property-read \App\Order|null                                             $order
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Transaction[] $parents
- * @property-read \App\Paymentmethod|null                                     $paymentmethod
- * @property-read \App\Bankaccount                                            $sourceBankAccount
- * @property-read \App\Transactiongateway|null                                $transactiongateway
- * @property-read \App\Transactionstatus|null                                 $transactionstatus
- * @property-read \App\Wallet|null                                            $wallet
+ * @property Carbon|null                                              $updated_at
+ * @property Carbon|null                                              $deleted_at
+ * @property-read Collection|Transaction[] $children
+ * @property-read Bankaccount $destinationBankAccount
+ * @property-read Order|null                                             $order
+ * @property-read Collection|Transaction[] $parents
+ * @property-read Paymentmethod|null                                     $paymentmethod
+ * @property-read Bankaccount $sourceBankAccount
+ * @property-read Transactiongateway|null                                $transactiongateway
+ * @property-read Transactionstatus|null                                 $transactionstatus
+ * @property-read Wallet|null                                            $wallet
  * @method static bool|null forceDelete()
- * @method static \Illuminate\Database\Query\Builder|\App\Transaction onlyTrashed()
+ * @method static \Illuminate\Database\Query\Builder|Transaction onlyTrashed()
  * @method static bool|null restore()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Transaction whereAuthority($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Transaction whereCompletedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Transaction whereCost($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Transaction whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Transaction whereDeadlineAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Transaction whereDeletedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Transaction whereDestinationBankAccountId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Transaction whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Transaction whereManagerComment($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Transaction whereOrderId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Transaction wherePaycheckNumber($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Transaction wherePaymentmethodId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Transaction whereReferenceNumber($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Transaction whereSourceBankAccountId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Transaction whereTraceNumber($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Transaction whereTransactionID($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Transaction whereTransactiongatewayId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Transaction whereTransactionstatusId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Transaction whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Transaction whereWalletId($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Transaction withTrashed()
- * @method static \Illuminate\Database\Query\Builder|\App\Transaction withoutTrashed()
- * @mixin \Eloquent
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Transaction newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Transaction newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Transaction query()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Transaction authority($authority)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel disableCache()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Transaction walletMethod()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel withCacheCooldownSeconds($seconds)
+ * @method static Builder|Transaction whereAuthority($value)
+ * @method static Builder|Transaction whereCompletedAt($value)
+ * @method static Builder|Transaction whereCost($value)
+ * @method static Builder|Transaction whereCreatedAt($value)
+ * @method static Builder|Transaction whereDeadlineAt($value)
+ * @method static Builder|Transaction whereDeletedAt($value)
+ * @method static Builder|Transaction whereDestinationBankAccountId($value)
+ * @method static Builder|Transaction whereId($value)
+ * @method static Builder|Transaction whereManagerComment($value)
+ * @method static Builder|Transaction whereOrderId($value)
+ * @method static Builder|Transaction wherePaycheckNumber($value)
+ * @method static Builder|Transaction wherePaymentmethodId($value)
+ * @method static Builder|Transaction whereReferenceNumber($value)
+ * @method static Builder|Transaction whereSourceBankAccountId($value)
+ * @method static Builder|Transaction whereTraceNumber($value)
+ * @method static Builder|Transaction whereTransactionID($value)
+ * @method static Builder|Transaction whereTransactiongatewayId($value)
+ * @method static Builder|Transaction whereTransactionstatusId($value)
+ * @method static Builder|Transaction whereUpdatedAt($value)
+ * @method static Builder|Transaction whereWalletId($value)
+ * @method static \Illuminate\Database\Query\Builder|Transaction withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|Transaction withoutTrashed()
+ * @mixin Eloquent
+ * @method static Builder|Transaction newModelQuery()
+ * @method static Builder|Transaction newQuery()
+ * @method static Builder|Transaction query()
+ * @method static Builder|Transaction authority($authority)
+ * @method static Builder|BaseModel disableCache()
+ * @method static Builder|Transaction walletMethod()
+ * @method static Builder|BaseModel withCacheCooldownSeconds($seconds)
  * @property string|null                                                      $description               توضیح تراکنش
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Transaction whereDescription($value)
+ * @method static Builder|Transaction whereDescription($value)
  * @property-read mixed                                                       $jalali_completed_at
  * @property-read mixed                                                       $jalali_deadline_at
  * @property-read mixed                                                       $transaction_gateway
@@ -91,10 +96,9 @@ use App\Collection\TransactionCollection;
  * @property int|null $device_id آی دی دیوایس کاربر
  * @property-read int|null $children_count
  * @property-read mixed $edit_link
- * @property-read mixed $jalali_created_at
  * @property-read mixed $remove_link
  * @property-read int|null $parents_count
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Transaction whereDeviceId($value)
+ * @method static Builder|Transaction whereDeviceId($value)
  */
 class Transaction extends BaseModel
 {
@@ -172,7 +176,7 @@ class Transaction extends BaseModel
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return BelongsTo
      */
     public function wallet()
     {
@@ -272,10 +276,10 @@ class Transaction extends BaseModel
     }
 
     /**
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @param  Builder  $query
      * @param  string                                 $authority
      *
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @return Builder
      */
     public function scopeAuthority($query, string $authority)
     {
@@ -283,9 +287,9 @@ class Transaction extends BaseModel
     }
 
     /**
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @param  Builder  $query
      *
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @return Builder
      */
     public function scopeWalletMethod($query)
     {

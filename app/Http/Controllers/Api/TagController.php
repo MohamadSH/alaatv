@@ -12,12 +12,12 @@ use App\Http\Controllers\Controller;
 class TagController extends Controller
 {
     protected $redis;
-    
+
     public function __construct()
     {
         $this->redis = RedisTagging::getInstance();
     }
-    
+
     /**
      * PUT /rt/id/:bucket/:id
      * Add or update an item. The URL contains the bucket (e.g. 'concerts') and the id for this item.
@@ -42,28 +42,28 @@ class TagController extends Controller
      */
     public function add(Request $request, $bucket, $id)
     {
-    
+
         $tags  = json_decode($request->tags, false, 512, JSON_THROW_ON_ERROR);
         $score = $request->score;
-    
+
         if ($score === null) {
             $score = 0;
         }
-    
+
         if ($tags === null) {
             return response()->json([
                 'error' => 'tag is not set!',
             ], Response::HTTP_GONE);
         }
-        
+
         $response = null;
-        $this->redis->set($bucket, $id, $tags, $score, function ($err, $result) use (& $response) {
+        $this->redis->set($bucket, $id, $tags, function ($err, $result) use (& $response) {
             $this->callBack($err, $result, $response);
-        });
-        
+        }, $score);
+
         return $response;
     }
-    
+
     private function callBack($err, $result, & $response)
     {
         if (isset($err)) {
@@ -79,7 +79,7 @@ class TagController extends Controller
             'data' => $result,
         ], Response::HTTP_OK, $header, JSON_UNESCAPED_UNICODE);
     }
-    
+
     /**
      * GET /rt/id/:bucket/:id
      * Get all tags for an ID
@@ -90,7 +90,7 @@ class TagController extends Controller
      *
      * @return null
      */
-    
+
     public function get(Request $request, $bucket, $id)
     {
         $response = null;
@@ -108,10 +108,10 @@ class TagController extends Controller
                 'data' => $result,
             ], Response::HTTP_OK, $header, JSON_UNESCAPED_UNICODE);
         });
-        
+
         return $response;
     }
-    
+
     /**
      * DELETE /rt/id/:bucket/:id
      * Delete an item and all its tag associations.
@@ -134,10 +134,10 @@ class TagController extends Controller
         $this->redis->remove($bucket, $id, function ($err, $result) use (& $response) {
             $this->callBack($err, $result, $response);
         });
-        
+
         return $response;
     }
-    
+
     /**
      * GET /rt/tags/:bucket?queryparams
      * The main method. Return the IDs for one or more tags. When more than one tag is supplied the query can be an
@@ -180,7 +180,7 @@ class TagController extends Controller
         $offset     = $request->offset ?? 0;
         $withscores = $request->withscores ?? 0;
         $order      = $request->order ?? 'desc';
-        
+
         $response = null;
         $error    = null;
 //                dd($tags);
@@ -197,7 +197,7 @@ class TagController extends Controller
                     'data' => $result,
                 ];
             }, $limit, $offset, $withscores, $order, $type);
-    
+
         if (isset($error)) {
             return response()->json($error, Response::HTTP_GONE);
         }
@@ -207,7 +207,7 @@ class TagController extends Controller
         ];
         return response()->json($response, Response::HTTP_OK, $header, JSON_UNESCAPED_UNICODE);
     }
-    
+
     public function flush(Request $request)
     {
         abort(404);
@@ -215,7 +215,7 @@ class TagController extends Controller
             return $result;
         });
     }
-    
+
     /**
      * @param $result
      */
@@ -225,7 +225,7 @@ class TagController extends Controller
             mb_convert_encoding($result, 'UTF-8', 'UTF-8');
         }
     }
-    
+
     /**
      * @param $tags
      *
