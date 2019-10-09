@@ -2,6 +2,11 @@
 
 @section('page-css')
     <link href="{{ mix('/css/admin-all.css') }}" rel="stylesheet" type="text/css"/>
+    <style>
+        .bootstrap-tagsinput .tag {
+            background: #36a3f7;
+        }
+    </style>
 @endsection
 
 @section('pageBar')
@@ -173,6 +178,37 @@
             {!! Form::open(['method'=>'POST' , 'url'=>route('web.bot.introContentTags') , 'target'=>'_blank']) !!}
                 <input type="text" name="product" value="" placeholder="شماره محصول" dir="ltr">
                 <input type="text" name="contents" value="" placeholder="شماره کانتنتها جدا شده با کاما" dir="ltr">
+                <button type="submit" class = "btn btn-info">درست کن</button>
+            {!! Form::close() !!}
+        </div>
+    </div>
+    <div class = "m-portlet m-portlet--mobile m-portlet--body-progress-">
+        <div class="m-portlet__head">
+            <div class="m-portlet__head-caption">
+                <div class="m-portlet__head-title">
+                            <span class="m-portlet__head-icon">
+                                <i class="fa fa-list-ul"></i>
+                            </span>
+                    <h3 class="m-portlet__head-text">
+                        درست کردن تگ ها
+                    </h3>
+                </div>
+            </div>
+        </div>
+        <div class = "m-portlet__body">
+            {!! Form::open(['method'=>'POST' , 'url'=>route('web.bot.fixtag') , 'target'=>'_blank']) !!}
+                <div class = "form-group">
+                    <div class = "row">
+                        <div class = "col">
+                            <input type="text" name="contentset_id" value="" placeholder="شماره ست" dir="ltr">
+                        </div>
+                    </div>
+                    <div class = "row">
+                        <div class = "col">
+                            <input type="text" name="tags" value="" class="form-control" data-role="tagsinput" placeholder="تگها" >
+                        </div>
+                    </div>  
+                </div>
                 <button type="submit" class = "btn btn-info">درست کن</button>
             {!! Form::close() !!}
         </div>
