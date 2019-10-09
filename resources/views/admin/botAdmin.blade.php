@@ -207,7 +207,7 @@
                         <div class = "col">
                             <input type="text" name="tags" value="" class="form-control" data-role="tagsinput" placeholder="تگها" >
                         </div>
-                    </div>
+                    </div>  
                 </div>
                 <button type="submit" class = "btn btn-info">درست کن</button>
             {!! Form::close() !!}
