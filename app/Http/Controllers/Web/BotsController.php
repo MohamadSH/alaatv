@@ -125,62 +125,6 @@ class BotsController extends Controller
                 dd("DONE!");
             }
 
-            if ($request->has("tagfix")) {
-                $contentsetId = 159;
-                $contentset   = Contentset::where("id", $contentsetId)
-                    ->first();
-
-                $tags = $contentset->tags->tags;
-                array_push($tags, "نادریان");
-                $bucket           = "contentset";
-                $tagsJson         = [
-                    "bucket" => $bucket,
-                    "tags"   => $tags,
-                ];
-                $contentset->tags = json_encode($tagsJson, JSON_UNESCAPED_UNICODE);
-
-                if ($contentset->update()) {
-                    $params = [
-                        "tags" => json_encode($contentset->tags->tags, JSON_UNESCAPED_UNICODE),
-                    ];
-                    if (isset($contentset->created_at) && strlen($contentset->created_at) > 0) {
-                        $params["score"] = Carbon::createFromFormat("Y-m-d H:i:s", $contentset->created_at)->timestamp;
-                    }
-
-                    $response = $this->sendRequest(config("constants.TAG_API_URL")."id/$bucket/".$contentset->id, "PUT",
-                        $params);
-                } else {
-                    dump("Error on updating #".$contentset->id);
-                }
-
-                $contents = $contentset->contents;
-
-                foreach ($contents as $content) {
-                    $tags = $content->tags->tags;
-                    array_push($tags, "نادریان");
-                    $bucket        = "content";
-                    $tagsJson      = [
-                        "bucket" => $bucket,
-                        "tags"   => $tags,
-                    ];
-                    $content->tags = json_encode($tagsJson, JSON_UNESCAPED_UNICODE);
-                    if ($content->update()) {
-                        $params = [
-                            "tags" => json_encode($content->tags->tags, JSON_UNESCAPED_UNICODE),
-                        ];
-                        if (isset($content->created_at) && strlen($content->created_at) > 0) {
-                            $params["score"] = Carbon::createFromFormat("Y-m-d H:i:s", $content->created_at)->timestamp;
-                        }
-
-                        $response = $this->sendRequest(config("constants.TAG_API_URL")."id/$bucket/".$content->id,
-                            "PUT", $params);
-                    } else {
-                        dump("Error on updating #".$content->id);
-                    }
-                }
-                dd("Tags DONE!");
-            }
-
             if($request->has('checkghesdi')){
                 $orders = Order::whereIn('paymentstatus_id', [config('constants.PAYMENT_STATUS_INDEBTED') ,config('constants.PAYMENT_STATUS_UNPAID') ])
                                 ->whereDoesntHave('orderproducts' , function ($q){
@@ -2045,6 +1989,29 @@ class BotsController extends Controller
             echo '<br>';
         }
 
-        dd("DONE");
+        return response()->json([
+            'message' => 'Coupons successfully generated',
+        ]);
+    }
+
+    public function fixtag(Request $request){
+        $contentset   = Contentset::Find($request->get('contentset_id'));
+        if(!isset($contentset)){
+            return response()->json([
+                'message' => 'contentset not found'
+            ] , Response::HTTP_NOT_FOUND);
+        }
+
+        $tagString  = $request->get('tags');
+        $tags       = convertTagStringToArray($tagString);
+        $contents   = $contentset->contents;
+        foreach ($contents as $content) {
+            $content->tags = $tags;
+            $content->update();
+        }
+
+        return response()->json([
+            'message'   => 'Tags successfully inserted',
+        ]);
     }
 }
