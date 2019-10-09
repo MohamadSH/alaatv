@@ -104,7 +104,7 @@
                 <a target="_blank" href="https://www.instagram.com/alaa_sanatisharif" rel="noreferrer" class="m-menu__link ">
                     <span class="m-menu__item-here"></span>
                     <i class="m-menu__link-icon fab fa-instagram"></i>
-                    <span class="m-menu__link-text">صفحه اینستاگرام</span>
+                    <span class="m-menu__link-text">اینستاگرام</span>
                 </a>
             </li>
 
