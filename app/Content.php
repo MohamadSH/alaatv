@@ -710,7 +710,7 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
      *
      * @return Collection
      */
-    public function getPamphlets(): Collection
+    public function getPamphlets(): ?Collection
     {
         $file = $this->file;
         if ($file === null) {
