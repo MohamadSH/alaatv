@@ -3,10 +3,12 @@
 namespace App\Providers;
 
 use App\Events\Authenticated;
+use App\Events\ContentRedirected;
 use App\Events\MobileVerified;
 use App\Events\FreeInternetAccept;
 use App\Events\FillTmpShareOfOrder;
 use App\Events\UserAvatarUploaded;
+use App\Listeners\RedirectContentListener;
 use App\Listeners\RemoveOldUserAvatarListener;
 use Illuminate\Auth\Events\Registered;
 use App\Listeners\AuthenticatedListener;
@@ -50,6 +52,9 @@ class EventServiceProvider extends ServiceProvider
         ],
         UserAvatarUploaded::class      => [
             RemoveOldUserAvatarListener::class,
+        ],
+        ContentRedirected::class      => [
+            RedirectContentListener::class,
         ],
     ];
 
