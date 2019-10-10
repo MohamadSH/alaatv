@@ -23,6 +23,19 @@
                         </div>
                     </div>
                 </div>
+                <div class="form-group {{ $errors->has('name') ? ' has-danger' : '' }}">
+                    <div class="row">
+                        <label class="col-md-3 control-label" for="name">دسته کالا</label>
+                        <div class="col-md-9">
+                            {!! Form::text('category', null, ['class' => 'form-control', 'id' => 'category' ]) !!}
+                            @if ($errors->has('category'))
+                                <span class="form-control-feedback">
+                                    <strong>{{ $errors->first('category') }}</strong>
+                                </span>
+                            @endif
+                        </div>
+                    </div>
+                </div>
                 <div class="form-group {{ $errors->has('order') ? ' has-danger' : '' }}">
                     <div class="row">
                         <label class="col-md-3 control-label" for="name">ترتیب</label>
@@ -326,6 +339,19 @@
                             @if ($errors->has('name'))
                                 <span class="form-control-feedback">
                                     <strong>{{ $errors->first('name') }}</strong>
+                                </span>
+                            @endif
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group {{ $errors->has('name') ? ' has-danger' : '' }}">
+                    <div class="row">
+                        <label class="col-md-3 control-label" for="name">دسته کالا</label>
+                        <div class="col-md-9">
+                            {!! Form::text('category', null, ['class' => 'form-control', 'id' => 'category' ]) !!}
+                            @if ($errors->has('category'))
+                                <span class="form-control-feedback">
+                                    <strong>{{ $errors->first('category') }}</strong>
                                 </span>
                             @endif
                         </div>
