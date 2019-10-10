@@ -2,28 +2,28 @@
 
 namespace App;
 
-use App\Collection\UserCollection;
 use Eloquent;
 use Exception;
 use Carbon\Carbon;
 use App\Classes\Taggable;
 use App\Classes\Advertisable;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Laravel\Scout\Searchable;
 use App\Classes\LinkGenerator;
 use App\Traits\favorableTraits;
 use App\Traits\APIRequestCommon;
 use App\Classes\SEO\SeoInterface;
 use App\Traits\ModelTrackerTrait;
+use App\Collection\UserCollection;
 use Illuminate\Support\Collection;
 use App\Classes\FavorableInterface;
 use App\Collection\ContentCollection;
 use App\Collection\ProductCollection;
 use Stevebauman\Purify\Facades\Purify;
+use Illuminate\Database\Eloquent\Builder;
 use App\Classes\SEO\SeoMetaTagsGenerator;
 use App\Traits\Content\TaggableContentTrait;
 use Illuminate\Support\Facades\{Cache, Artisan};
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * App\Content
@@ -713,8 +713,9 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
     public function getPamphlets(): Collection
     {
         $file = $this->file;
-        if (is_null($file)) {
-            return null;
+        if ($file === null) {
+            
+            return collect();
         }
         $pamphlet = $file->get('pamphlet');
 
