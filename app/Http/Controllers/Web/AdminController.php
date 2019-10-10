@@ -10,6 +10,7 @@ use App\{Assignmentstatus,
     Checkoutstatus,
     Collection\OrderCollections,
     Consultationstatus,
+    Contenttype,
     Coupon,
     Coupontype,
     Gender,
@@ -947,7 +948,8 @@ class AdminController extends Controller
 
     public function adminBot(Request $request)
     {
-        return view('admin.botAdmin');
+        $contenttypes = Contenttype::whereIn('name' , ['video' , 'pamphlet'])->pluck('displayName' , 'id');
+        return view('admin.botAdmin' , compact('contenttypes'));
     }
 }
 
