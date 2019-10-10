@@ -201,13 +201,14 @@
                     <div class = "row">
                         <div class = "col">
                             <input type="text" name="contentset_id" value="" placeholder="شماره ست" dir="ltr">
+                            {!! Form::select('contenttype_id',$contenttypes,null) !!}
                         </div>
                     </div>
                     <div class = "row">
                         <div class = "col">
                             <input type="text" name="tags" value="" class="form-control" data-role="tagsinput" placeholder="تگها" >
                         </div>
-                    </div>  
+                    </div>
                 </div>
                 <button type="submit" class = "btn btn-info">درست کن</button>
             {!! Form::close() !!}
