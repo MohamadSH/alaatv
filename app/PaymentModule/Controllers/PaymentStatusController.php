@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Web;
 use App\Order;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Request;
 
 class PaymentStatusController extends Controller
@@ -63,6 +64,7 @@ class PaymentStatusController extends Controller
             ];
 
             foreach ($orderproducts as $orderproduct) {
+                Log::info('ecommerce category: '.$orderproduct->product->category);
                 $gtmEec['products'][] = [
                     'id'       => (string)$orderproduct->product->id,
                     'name'     => $orderproduct->product->name,
