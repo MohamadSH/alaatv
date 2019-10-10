@@ -69,7 +69,6 @@ class HomeController extends Controller
 
     public function debug(Request $request, BlockCollectionFormatter $formatter)
     {
-//        return (array) optional($request->user('alaatv'))->id;
     }
 
     public function search(Request $request)

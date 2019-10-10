@@ -4,9 +4,9 @@ namespace App\Observers;
 
 use App\Classes\Search\TaggingInterface;
 use App\Content;
+use App\Events\ContentRedirected;
 use App\Traits\TaggableTrait;
 use Illuminate\Support\Facades\Artisan;
-use Illuminate\Support\Facades\Storage;
 
 class ContentObserver
 {
@@ -108,23 +108,7 @@ class ContentObserver
     {
         if(isset($content->redirectUrl)){
             if($content->isFree && auth()->check() && auth()->user()->can(config('constants.REMOVE_EDUCATIONAL_CONTENT_FILE_ACCESS'))){
-                if($content->contenttype_id == config('constants.CONTENT_TYPE_VIDEO')){
-                    $CDNDisk = config('constants.DISK_FREE_CONTENT');
-                    foreach ($content->getVideos() as $video){
-                        $path = explode('cdn.alaatv.com', $video->link)[1];
-                        if(Storage::disk($CDNDisk)->exists($path)) {
-                             Storage::disk($CDNDisk)->delete($path);
-                        }
-                    }
-                }elseif($content->contenttype_id == config('constants.CONTENT_TYPE_PAMPHLET')){
-                    $CDNDisk = config('constants.DISK19_CLOUD');
-                    foreach ($content->getPamphlets() as $pamphlet){
-                        $path = basename($pamphlet->link);
-                        if(Storage::disk($CDNDisk)->exists($path)) {
-                             Storage::disk($CDNDisk)->delete($path);
-                        }
-                    }
-                }
+                event(new ContentRedirected($content));
             }
             $this->removeTagsOfTaggable($content, $this->tagging);
         }else{
