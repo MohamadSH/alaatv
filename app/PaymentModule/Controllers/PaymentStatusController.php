@@ -66,7 +66,7 @@ class PaymentStatusController extends Controller
                 $gtmEec['products'][] = [
                     'id'       => (string)$orderproduct->product->id,
                     'name'     => $orderproduct->product->name,
-                    'category' => '-',
+                    'category' => (isset($orderproduct->product->category))?$orderproduct->product->category:'-',
                     'variant'  => '-',
                     'brand'    => 'آلاء',
                     'quantity' => 1,
