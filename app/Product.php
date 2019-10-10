@@ -2,6 +2,8 @@
 
 namespace App;
 
+use App\Collection\UserCollection;
+use Eloquent;
 use Exception;
 use Carbon\Carbon;
 use Illuminate\Database\{Eloquent\Builder};
@@ -59,96 +61,94 @@ use App\Traits\{ProductCommon,
  *           نوع کالا
  * @property int|null                                                            $attributeset_id    آی دی مشخص کننده
  *           دسته صفتهای کالا
- * @property \Carbon\Carbon|null                                                 $created_at
- * @property \Carbon\Carbon|null                                                 $updated_at
- * @property \Carbon\Carbon|null                                                 $deleted_at
- * @property-read \App\Attributeset|null                                         $attributeset
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Attributevalue[] $attributevalues
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Bon[]            $bons
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Product[]        $children
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Product[]        $complimentaryproducts
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Coupon[]         $coupons
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Product[]        $gifts
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Orderproduct[]   $orderproducts
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Product[]        $parents
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Productphoto[]   $photos
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Productfile[]    $productfiles
- * @property-read \App\Producttype|null                                          $producttype
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Product configurable()
+ * @property Carbon|null                                                 $created_at
+ * @property Carbon|null                                                 $updated_at
+ * @property Carbon|null                                                 $deleted_at
+ * @property-read Attributeset|null                                         $attributeset
+ * @property-read \Illuminate\Database\Eloquent\Collection|Attributevalue[] $attributevalues
+ * @property-read \Illuminate\Database\Eloquent\Collection|Bon[] $bons
+ * @property-read \Illuminate\Database\Eloquent\Collection|Product[] $children
+ * @property-read \Illuminate\Database\Eloquent\Collection|Product[] $complimentaryproducts
+ * @property-read \Illuminate\Database\Eloquent\Collection|Coupon[] $coupons
+ * @property-read \Illuminate\Database\Eloquent\Collection|Product[] $gifts
+ * @property-read \Illuminate\Database\Eloquent\Collection|Orderproduct[] $orderproducts
+ * @property-read \Illuminate\Database\Eloquent\Collection|Product[] $parents
+ * @property-read \Illuminate\Database\Eloquent\Collection|Productphoto[] $photos
+ * @property-read \Illuminate\Database\Eloquent\Collection|Productfile[] $productfiles
+ * @property-read Producttype|null                                          $producttype
+ * @method static Builder|Product configurable()
  * @method static bool|null forceDelete()
- * @method static \Illuminate\Database\Query\Builder|\App\Product onlyTrashed()
+ * @method static \Illuminate\Database\Query\Builder|Product onlyTrashed()
  * @method static bool|null restore()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Product simple()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Product whereAmount($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Product whereAttributesetId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Product whereBasePrice($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Product whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Product whereDeletedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Product whereDiscount($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Product whereEnable($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Product whereFile($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Product whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Product whereImage($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Product whereIntroVideo($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Product whereIsFree($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Product whereLongDescription($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Product whereName($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Product whereOrder($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Product whereProducttypeId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Product whereShortDescription($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Product whereSlogan($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Product whereSpecialDescription($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Product whereTags($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Product whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Product whereValidSince($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Product whereValidUntil($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Product withTrashed()
- * @method static \Illuminate\Database\Query\Builder|\App\Product withoutTrashed()
- * @mixin \Eloquent
+ * @method static Builder|Product simple()
+ * @method static Builder|Product whereAmount($value)
+ * @method static Builder|Product whereAttributesetId($value)
+ * @method static Builder|Product whereBasePrice($value)
+ * @method static Builder|Product whereCreatedAt($value)
+ * @method static Builder|Product whereDeletedAt($value)
+ * @method static Builder|Product whereDiscount($value)
+ * @method static Builder|Product whereEnable($value)
+ * @method static Builder|Product whereFile($value)
+ * @method static Builder|Product whereId($value)
+ * @method static Builder|Product whereImage($value)
+ * @method static Builder|Product whereIntroVideo($value)
+ * @method static Builder|Product whereIsFree($value)
+ * @method static Builder|Product whereLongDescription($value)
+ * @method static Builder|Product whereName($value)
+ * @method static Builder|Product whereOrder($value)
+ * @method static Builder|Product whereProducttypeId($value)
+ * @method static Builder|Product whereShortDescription($value)
+ * @method static Builder|Product whereSlogan($value)
+ * @method static Builder|Product whereSpecialDescription($value)
+ * @method static Builder|Product whereTags($value)
+ * @method static Builder|Product whereUpdatedAt($value)
+ * @method static Builder|Product whereValidSince($value)
+ * @method static Builder|Product whereValidUntil($value)
+ * @method static \Illuminate\Database\Query\Builder|Product withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|Product withoutTrashed()
+ * @mixin Eloquent
  * @property string|null                                                         $page_view
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Product wherePageView($value)
+ * @method static Builder|Product wherePageView($value)
  * @property string|null                                                         $redirectUrl        آدرسی که صفحه محصول به آن به صورت همیشگی ریدایرکت می شود
  * @method static Builder|Product whereRedirectUrl($value)
  * @method static Builder|Product enable()
  * @method static Builder|Product valid()
- * @property-read \App\Collection\UserCollection|\App\User[]                     $favoriteBy
+ * @property-read UserCollection|User[] $favoriteBy
  * @property-read mixed                                                          $photo
  * @property-read null|string                                                    $price_text
  * @property-read mixed                                                          $sample_photos
  * @property-write mixed                                                         $long_description
  * @property-write mixed                                                         $short_description
  * @property-write mixed                                                         $special_description
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Product active()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Product newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Product newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Product query()
+ * @method static Builder|Product active()
+ * @method static Builder|Product newModelQuery()
+ * @method static Builder|Product newQuery()
+ * @method static Builder|Product query()
  * @property int|null                                                            $grand_id
  * @property-read \Collection|null                                               $attributes
  * @property-read mixed                                                          $gift
  * @property-read mixed                                                          $grand_parent
  * @property-read mixed                                                          $type
  * @property-read mixed                                                          $url
- * @property-read \App\Product                                                   $grand
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Product whereGrandId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel disableCache()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel withCacheCooldownSeconds($seconds)
+ * @property-read Product $grand
+ * @method static Builder|Product whereGrandId($value)
+ * @method static Builder|BaseModel disableCache()
+ * @method static Builder|BaseModel withCacheCooldownSeconds($seconds)
  * @property-read mixed                                                          $active
  * @property Product                                                             grandParent
  * @property-read mixed                                                          $api_url
  * @property-read array|string                                                   $price
  * @property-read mixed                                                          $redirect_url
- * @property-read \App\Collection\SetCollection|\App\Contentset[]                $sets
+ * @property-read SetCollection|Contentset[] $sets
  * @property-read mixed                                                          $cache_cooldown_seconds
  * @property mixed block
- * @property \Illuminate\Support\Collection intro_videos
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Product main()
+ * @property Collection intro_videos
+ * @method static Builder|Product main()
  * @property int|null $block_id بلاک مرتبط با این محصول
- * @property string|null $intro_videos کلیپ های معرفی محصول
- * @property-read \App\Block|null $block
  * @property-read int|null $bons_count
  * @property-read int|null $children_count
  * @property-read int|null $complimentaryproducts_count
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Contract[] $contracts
+ * @property-read \Illuminate\Database\Eloquent\Collection|Contract[] $contracts
  * @property-read int|null $contracts_count
  * @property-read int|null $coupons_count
  * @property-read int|null $favorite_by_count
@@ -170,8 +170,9 @@ use App\Traits\{ProductCommon,
  * @property-read int|null $productfiles_count
  * @property-read int|null $sets_count
  * @property mixed livedescriptions
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Product whereBlockId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Product whereIntroVideos($value)
+ * @property mixed category
+ * @method static Builder|Product whereBlockId($value)
+ * @method static Builder|Product whereIntroVideos($value)
  */
 class Product extends BaseModel implements Advertisable, Taggable, SeoInterface, FavorableInterface
 {
@@ -228,6 +229,7 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
         'isFree',
         'specialDescription',
         'redirectUrl',
+        'category',
     ];
 
     protected $appends = [
@@ -367,7 +369,7 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
     }
 
     /**
-     * @return \App\Collection\ProductCollection
+     * @return ProductCollection
      */
     public static function getProductsHaveBestOffer(): ProductCollection
     {
@@ -881,7 +883,7 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
     public function validProductfiles($fileType = '', $getValid = 1)
     {
         $product = $this;
-    
+
         $files = $product->hasMany(Productfile::class)
             ->enable();
         if ($getValid) {
@@ -904,9 +906,9 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
     /**
      * Scope a query to only include product without redirect url.
      *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @param Builder $query
      *
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @return Builder
      */
     public function scopeMain($query)
     {
