@@ -69,21 +69,25 @@ class FixOldContentsLinks extends Command
 
                                 $link = $video->url;
                                 $res = $video->res;
+                                $contentsetId = $content->contentset_id;
                                 if (strpos($link, '/media/') !== false) {
-                                    if ($res == '720p' && strpos($link, '/HD_720p/') === false) {
-                                        $splitted = explode('/media/', $link);
-                                        $subPath = '/media/HD_720p/' . $splitted[1];
-                                        $video->url = $splitted[0] . $subPath;
+                                    if ($res == '720p' && strpos($link, '/media/HD_720p/') !== false) {
+                                        $splitted1 = explode('/media/', $link);
+                                        $splitted = explode('/HD_720p/', $link);
+                                        $subPath = '/media/'.$contentsetId.'/HD_720p/'. basename($splitted[1]);
+                                        $video->url = $splitted1[0] . $subPath;
                                         $video->fileName = $subPath;
-                                    } elseif ($res == '480p' && strpos($link, '/hq/') === false) {
-                                        $splitted = explode('/media/', $link);
-                                        $subPath = '/media/hq/' . $splitted[1];
-                                        $video->url = $splitted[0] . $subPath;
+                                    } elseif ($res == '480p' && strpos($link, '/media/hq/') !== false) {
+                                        $splitted1 = explode('/media/', $link);
+                                        $splitted = explode('/hq/', $link);
+                                        $subPath = '/media/'.$contentsetId.'/hq/'. basename($splitted[1]);
+                                        $video->url = $splitted1[0] . $subPath;
                                         $video->fileName = $subPath;
-                                    } elseif ($res == '240p' && strpos($link, '/240p/') === false) {
-                                        $splitted = explode('/media/', $link);
-                                        $subPath = '/media/240p/' . $splitted[1];
-                                        $video->url = $splitted[0] . $subPath;
+                                    } elseif ($res == '240p' && strpos($link, '/media/240p/') !== false) {
+                                        $splitted1 = explode('/media/', $link);
+                                        $splitted = explode('/240p/', $link);
+                                        $subPath = '/media/'.$contentsetId.'/240p/'. basename($splitted[1]);
+                                        $video->url = $splitted1[0] . $subPath;
                                         $video->fileName = $subPath;
                                     }
                                 }
