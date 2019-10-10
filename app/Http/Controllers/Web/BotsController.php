@@ -1996,15 +1996,23 @@ class BotsController extends Controller
 
     public function fixtag(Request $request){
         $contentset   = Contentset::Find($request->get('contentset_id'));
+        $contenttype   = $request->get('contenttype_id');
         if(!isset($contentset)){
             return response()->json([
-                'message' => 'contentset not found'
+                'message' => 'Contentset not found'
             ] , Response::HTTP_NOT_FOUND);
         }
 
         $tagString  = $request->get('tags');
         $tags       = convertTagStringToArray($tagString);
-        $contents   = $contentset->contents;
+        $contents   = $contentset->contents->where('contenttype_id' , $contenttype);
+       if($contents->count() == 0){
+           return response()->json([
+               'message' => 'No contents found for this set'
+           ] , Response::HTTP_BAD_REQUEST);
+       }
+
+
         foreach ($contents as $content) {
             $content->tags = $tags;
             $content->update();
