@@ -26,7 +26,9 @@ class AlterTableEducationalcontentsAddRedirectUrl extends Migration
     public function down()
     {
         Schema::table('educationalcontents', function (Blueprint $table) {
-            $table->dropColumn('redirectUrl');
+            if (Schema::hasColumn('educationalcontents', 'redirectUrl')) {
+                $table->dropColumn('redirectUrl');
+            }
         });
     }
 }
