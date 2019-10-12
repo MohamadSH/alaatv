@@ -237,7 +237,7 @@ class ContentController extends Controller
         $tags           = optional($content->tags)->tags;
         $tags           = implode(',', isset($tags) ? $tags : []);
         $contentset     = $content->set;
-        $contenttypes = [ 8 => 'فیلم' , 1 =>    'جزوه'];
+        $contenttypes = [ 8 => 'فیلم' , 1 =>    'جزوه' , 9 => 'مقاله'];
 
         $result = compact('content', 'validSinceTime', 'tags', 'contentset' , 'contenttypes' );
         $view = view('content.edit', $result);
@@ -296,24 +296,22 @@ class ContentController extends Controller
         }
 
         $contenttypeId  = $request->get('contenttype_id');
-        if($content->contenttype_id == config('constants.CONTENT_TYPE_VIDEO')) {
-            $fileName       = basename($content->file_for_admin['video']->first()->fileName);
-        }elseif($content->contenttype_id == config('constants.CONTENT_TYPE_PAMPHLET')){
-            $fileName       = basename($content->file_for_admin['pamphlet']->first()->fileName);
-        }else{
-            session()->put('warning', 'محتوا باید فیلم یا جزوه باشد');
-            return redirect()->back();
+        if($content->contenttype_id == config('constants.CONTENT_TYPE_VIDEO') || $content->contenttype_id == config('constants.CONTENT_TYPE_PAMPHLET')){
+            if($content->contenttype_id == config('constants.CONTENT_TYPE_VIDEO')) {
+                $fileName       = basename($content->file_for_admin['video']->first()->fileName);
+            }elseif($content->contenttype_id == config('constants.CONTENT_TYPE_PAMPHLET')){
+                $fileName       = basename($content->file_for_admin['pamphlet']->first()->fileName);
+            }
+            $contentsetId           = $content->contentset_id;
+            $isFree                 = $request->has('isFree');
+            [$files , $thumbnail]   = $this->getFileLinks($isFree, $contenttypeId, $fileName, $contentsetId);
+
+            if(isset($thumbnail)) {
+                $content->thumbnail = $thumbnail;
+            }
+
+            $request->offsetSet('files', $files);
         }
-
-        $contentsetId           = $content->contentset_id;
-        $isFree                 = $request->has('isFree');
-        [$files , $thumbnail]   = $this->getFileLinks($isFree, $contenttypeId, $fileName, $contentsetId);
-
-        if(isset($thumbnail)) {
-            $content->thumbnail = $thumbnail;
-        }
-
-        $request->offsetSet('files', $files);
 
         $this->fillContentFromRequest($request->all(), $content);
 

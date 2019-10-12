@@ -273,6 +273,17 @@
                 </div>
             </div>
         </div>
+        @role((config("constants.ROLE_ADMIN")))
+        <div class="form-group">
+            <div class="row">
+                <label class="col-md-2 control-label" for="context">مقاله:
+                </label>
+                <div class="col-md-9">
+                    {!! Form::textarea('context', null, ['class' => 'form-control', 'id' => 'contextSummerNote', 'rows' => '5' ]) !!}
+                </div>
+            </div>
+        </div>
+        @endability
         <div class="form-group">
             <div class="row">
                 <label class="col-md-2 control-label" for="tags">
