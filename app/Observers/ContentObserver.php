@@ -101,6 +101,7 @@ class ContentObserver
                    Content::CONTENT_TYPE_PAMPHLET => Content::CONTENT_TEMPLATE_PAMPHLET,
                    Content::CONTENT_TYPE_EXAM     => Content::CONTENT_TEMPLATE_EXAM,
                    Content::CONTENT_TYPE_VIDEO    => Content::CONTENT_TEMPLATE_VIDEO,
+                   Content::CONTENT_TYPE_ARTICLE    => Content::CONTENT_TEMPLATE_ARTICLE,
                ][$content->contenttype_id] ?? null;
     }
 
