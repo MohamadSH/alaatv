@@ -167,7 +167,9 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
 
     public const CONTENT_TEMPLATE_PAMPHLET = 2;
 
-    public const CONTENT_TEMPLATE_EXAM = 2;
+    public const CONTENT_TEMPLATE_ARTICLE = 3;
+
+    public const CONTENT_TEMPLATE_EXAM = 4;
 
     protected static $purifyNullConfig = ['HTML.Allowed' => ''];
 
@@ -714,7 +716,7 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
     {
         $file = $this->file;
         if ($file === null) {
-            
+
             return collect();
         }
         $pamphlet = $file->get('pamphlet');
