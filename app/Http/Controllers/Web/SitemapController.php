@@ -14,8 +14,10 @@ class SitemapController extends Controller
     {
         // You can use the route helpers too.
         Sitemap::addSitemap(action('Web\SitemapController@products'));
-        
-        Sitemap::addSitemap(action('Web\SitemapController@eContents'));
+    
+        Sitemap::addSitemap(action('Web\SitemapController@contents'));
+    
+        Sitemap::addSitemap(action('Web\SitemapController@redirects'));
         
         // Return the sitemap to the client.
         return Sitemap::index();
@@ -71,7 +73,7 @@ class SitemapController extends Controller
     public function redirects()
     {
         $contents = Cache::tags(['content', 'product'])
-            ->remember('sitemap', config('constants.CACHE_600'), static
+            ->remember('sitemap-contents-redirected', config('constants.CACHE_600'), static
             function () {
                 return Content::select()
                     ->active()
