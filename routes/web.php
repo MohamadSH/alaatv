@@ -152,6 +152,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('thumbnailbot', [BotsController::class, 'fixthumbnail'])->name('web.bot.fixthumbnails');
     Route::post('introcontenttag', [BotsController::class, 'introContentTags'])->name('web.bot.introContentTags');
     Route::post('tagbot', [BotsController::class, 'fixtag'])->name('web.bot.fixtag');
+    Route::post('close-orders-bot', [BotsController::class, 'closeOrders'])->name('web.bot.closeOrders');
     Route::post('generateMassiveRandomCoupon', [BotsController::class, 'generateMassiveRandomCoupon'])->name('web.bot.massive.random.coupon');
     Route::get('v/asiatech', 'Web\VoucherController@voucherRequest');
     Route::put('v', 'Web\VoucherController@submitVoucherRequest');

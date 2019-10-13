@@ -2022,4 +2022,36 @@ class BotsController extends Controller
             'message'   => 'Tags successfully inserted',
         ]);
     }
+
+    public function closeOrders(Request $request)
+    {
+        $products = convertTagStringToArray($request->get('products'));
+        $tillDateTime = $request->get('tillDate').' '.$request->get('tillTime');
+
+        $orders = \App\Order::where('orderstatus_id' , config('constants.ORDER_STATUS_CLOSED'))
+                            ->where('paymentstatus_id' , config('constants.PAYMENT_STATUS_UNPAID'))
+                            ->where('completed_at' , '<' , $tillDateTime);
+
+        if(!empty($products)){
+            $orders->whereHas('orderproducts' , function ($q) use ($products) {
+                $q->whereIn('product_id' , $products);
+            });
+        }
+
+        $orders = $orders->get();
+
+        foreach ($orders as $order) {
+            $result = $order->update([
+                'orderstatus_id' => config('constants.ORDER_STATUS_CANCELED'),
+            ]);
+
+            if(!$result){
+                dump('Order #'.$order->id.' was not updated.');
+            }
+        }
+
+        return response()->json([
+            'message' => $orders->count().' orders were processed',
+        ]);
+    }
 }
