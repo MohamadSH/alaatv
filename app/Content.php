@@ -398,6 +398,14 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
         return $query->enable()
             ->valid();
     }
+    
+    public function scopeRedirected($query, $done = false)
+    {
+        if ($done) {
+            return $query->whereNotNull('redirectUrl');
+        }
+        return $query->whereNull('redirectUrl');
+    }
 
     public function scopeFree($query)
     {
