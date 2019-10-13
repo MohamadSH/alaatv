@@ -59,6 +59,7 @@ class SitemapController extends Controller
             ->remember('sitemap-contents', config('constants.CACHE_600'), static
             function () {
                 return Content::select()
+                    ->free()
                     ->active()
                     ->redirected()
                     ->orderBy('created_at', 'desc')
@@ -76,6 +77,7 @@ class SitemapController extends Controller
             ->remember('sitemap-contents-redirected', config('constants.CACHE_600'), static
             function () {
                 return Content::select()
+                    ->free()
                     ->active()
                     ->redirected(true)
                     ->orderBy('created_at', 'desc')
