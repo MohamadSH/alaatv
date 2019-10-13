@@ -222,6 +222,51 @@
                                 <i class="fa fa-list-ul"></i>
                             </span>
                     <h3 class="m-portlet__head-text">
+                        بستن سفارش ها
+                    </h3>
+                </div>
+            </div>
+        </div>
+        <div class = "m-portlet__body">
+            {!! Form::open(['method'=>'POST' , 'url'=>route('web.bot.closeOrders') , 'target'=>'_blank']) !!}
+            <div class = "form-group">
+                <div class = "row">
+                    <div class = "col">
+                        <input type="checkbox" name="specificProducts"  >
+                        <label>تمام سفارش ها</label>
+                    </div>
+                </div>
+            </div>
+            <div class = "form-group">
+                <div class = "row">
+                    <div class = "col">
+                        <input type="text" name="products" value="" id="closeOrdersProducts" class="form-control" data-role="tagsinput" placeholder="آیدی محصولات مورد نظر" >
+                    </div>
+                </div>
+            </div>
+            <div class = "form-group">
+                <div class = "row">
+                    <div class = "col">
+                        <label class = "control-label">تا تاریخ</label>
+                        <input id = "removeOrdesTillDate" type = "text" class = "form-control">
+                        <input name = "tillDate" id = "removeOrdesTillDateAlt" type = "text" class = "form-control d-none">
+                        <input name="tillTime" id="removeOrdesTillTime"   type = "text" class = "form-control">
+                    </div>
+                </div>
+            </div>
+
+            <button type="submit" class = "btn btn-info">سفارش ها را ببند</button>
+            {!! Form::close() !!}
+        </div>
+    </div>
+    <div class = "m-portlet m-portlet--mobile m-portlet--body-progress-">
+        <div class="m-portlet__head">
+            <div class="m-portlet__head-caption">
+                <div class="m-portlet__head-title">
+                            <span class="m-portlet__head-icon">
+                                <i class="fa fa-list-ul"></i>
+                            </span>
+                    <h3 class="m-portlet__head-text">
                         تولید انبوه کپن تصادفی نوع کلی
                     </h3>
                 </div>
@@ -382,6 +427,23 @@
                 d = d.substring(0, d.indexOf('T'));
                 return d;
             }
+        });
+
+        $("#removeOrdesTillDate").persianDatepicker({
+            altField: '#removeOrdesTillDateAlt',
+            altFormat: "YYYY MM DD",
+            observer: true,
+            format: 'YYYY/MM/DD',
+            altFieldFormatter: function (unixDate) {
+                var d = new Date(unixDate).toISOString();
+                d = d.substring(0, d.indexOf('T'));
+                return d;
+            }
+        });
+
+        $("#removeOrdesTillTime").inputmask("hh:mm", {
+            placeholder: "",
+            clearMaskOnLostFocus: true
         });
 
     </script>
