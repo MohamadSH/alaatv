@@ -14,8 +14,10 @@ class SitemapController extends Controller
     {
         // You can use the route helpers too.
         Sitemap::addSitemap(action('Web\SitemapController@products'));
-        
-        Sitemap::addSitemap(action('Web\SitemapController@eContents'));
+    
+        Sitemap::addSitemap(action('Web\SitemapController@contents'));
+    
+        Sitemap::addSitemap(action('Web\SitemapController@redirects'));
         
         // Return the sitemap to the client.
         return Sitemap::index();
