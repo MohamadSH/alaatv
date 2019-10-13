@@ -232,6 +232,7 @@ return [
     'DISK22'                                      => 'homeSlideShowPicSFTP',
     'DISK23'                                      => 'setImageSFTP',
     'DISK24'                                      => 'profileImageSFTP',
+    'DISK25'                                      => 'contentThumbnailSFTP',
 
     'DISK_FREE_CONTENT'              => 'alaaCdnSFTP',
     'DISK_PRODUCT_CONTENT'           => 'productFileSFTP',
