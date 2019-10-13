@@ -299,6 +299,14 @@ class ContentController extends Controller
         if($content->contenttype_id == config('constants.CONTENT_TYPE_VIDEO') || $content->contenttype_id == config('constants.CONTENT_TYPE_PAMPHLET')){
             if($content->contenttype_id == config('constants.CONTENT_TYPE_VIDEO')) {
                 $fileName       = basename($content->file_for_admin['video']->first()->fileName);
+                if($request->hasFile('thumbnail')){
+                    $file = $this->getRequestFile($request->all(), 'thumbnail');
+                    $fileName = pathinfo(parse_url($fileName)['path'], PATHINFO_FILENAME).'.jpg';
+
+                    if(Storage::disk(config('constants.DISK25'))->put('/'.$content->contentset_id.'/'.$fileName , File::get($file))){
+                        Storage::disk(config('constants.DISK25'))->delete('/'.$content->contentset_id.'/'.$fileName.'.webp');
+                    }
+                }
             }elseif($content->contenttype_id == config('constants.CONTENT_TYPE_PAMPHLET')){
                 $fileName       = basename($content->file_for_admin['pamphlet']->first()->fileName);
             }
