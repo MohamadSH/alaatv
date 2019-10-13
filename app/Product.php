@@ -2,13 +2,14 @@
 
 namespace App;
 
-use App\Collection\UserCollection;
+use Purify;
 use Eloquent;
 use Exception;
 use Carbon\Carbon;
 use Illuminate\Database\{Eloquent\Builder};
 use Laravel\Scout\Searchable;
 use App\Collection\SetCollection;
+use App\Collection\UserCollection;
 use Kalnoy\Nestedset\QueryBuilder;
 use App\Collection\ProductCollection;
 use Illuminate\Support\{Collection, Facades\Auth, Facades\Cache};
@@ -276,7 +277,9 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
         'productSet',
         'attributeset',
         'intro_videos',
-        'block_id'
+        'block_id',
+        'metaTitle',
+        'metaDescription',
     ];
 
     /**
@@ -284,7 +287,7 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
      *
      * @var array
      */
-    protected $touches = [
+    protected        $touches          = [
         'producttype',
         'attributeset',
         //      'validProductfiles',
@@ -292,6 +295,7 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
         'attributevalues',
         'gifts',
     ];
+    protected static $purifyNullConfig = ['HTML.Allowed' => ''];
 
     /**
      * Gets specific number of products
@@ -614,6 +618,32 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
     | Mutator
     |--------------------------------------------------------------------------
     */
+    
+    /**
+     * Get the content's meta title .
+     *
+     * @param $value
+     *
+     * @return string
+     */
+    public function getMetaTitleAttribute(): string
+    {
+        return Purify::clean(mb_substr($this->name, 0, config('constants.META_TITLE_LIMIT'), 'utf-8'),
+            self::$purifyNullConfig);
+    }
+    
+    /**
+     * Get the content's meta description .
+     *
+     * @param $value
+     *
+     * @return string
+     */
+    public function getMetaDescriptionAttribute(): string
+    {
+        return Purify::clean(mb_substr($this->shortDescription, 0, config('constants.META_DESCRIPTION_LIMIT'), 'utf-8'),
+            self::$purifyNullConfig);
+    }
 
     /**
      * Gets product's meta tags array
@@ -623,8 +653,8 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
     public function getMetaTags(): array
     {
         return [
-            'title'       => $this->name,
-            'description' => $this->shortDescription,
+            'title'       => $this->metaTitle,
+            'description' => $this->metaDescription,
             'url'         => action('Web\ProductController@show', $this),
             'canonical'   => action('Web\ProductController@show', $this),
             'site'        => 'آلاء',

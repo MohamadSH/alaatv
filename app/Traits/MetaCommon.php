@@ -1,40 +1,40 @@
 <?php namespace App\Traits;
 
-use App\Classes\SEO\SeoInterface;
-use App\Classes\SEO\SeoMetaTagsGenerator;
-use App\Helpers\colossalMindMbKeywordGen;
 use SEO;
+use App\Classes\SEO\SeoInterface;
+use App\Helpers\colossalMindMbKeywordGen;
+use App\Classes\SEO\SeoMetaTagsGenerator;
 
 trait MetaCommon
 {
     public function generateCustomMeta($metaData)
     {
-        if (isset($metaData["title"])) {
-            SEO::setTitle($metaData["title"]);
+        if (isset($metaData['title'])) {
+            SEO::setTitle($metaData['title']);
         }
         
-        if (isset($metaData["url"])) {
+        if (isset($metaData['url'])) {
             SEO::opengraph()
-                ->setUrl($metaData["url"]);
-            SEO::setCanonical($metaData["url"]);
+                ->setUrl($metaData['url']);
+            SEO::setCanonical($metaData['url']);
         }
         
-        if (isset($metaData["siteName"])) {
+        if (isset($metaData['siteName'])) {
             SEO::twitter()
-                ->setSite(isset($metaData["siteName"]));
+                ->setSite(isset($metaData['siteName']));
         }
         
-        if (isset($metaData["description"])) {
-            SEO::setDescription($metaData["description"]);
+        if (isset($metaData['description'])) {
+            SEO::setDescription($metaData['description']);
         }
         
-        if (isset($metaData["image"])) {
+        if (isset($metaData['image'])) {
             SEO::opengraph()
                 ->addImage(route('image', [
                     'category' => '11',
                     'w'        => '100',
                     'h'        => '100',
-                    'filename' => $metaData["image"],
+                    'filename' => $metaData['image'],
                 ]), [
                     'height' => 100,
                     'width'  => 100,
