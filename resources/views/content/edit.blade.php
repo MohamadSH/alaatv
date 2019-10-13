@@ -46,6 +46,11 @@
 @section('content')
     <div class = "row">
         <div class = "col">
+            <a class="btn btn-focus" href="{{route('web.set.list.contents' , $content->contentset_id)}}">رفتن به ست این محتوا</a>
+        </div>
+    </div>
+    <div class = "row">
+        <div class = "col">
             @include("systemMessage.flash")
             {{--@if(!$errors->isEmpty())--}}
             {{--<div  class="custom-alerts alert alert-warning fade in margin-top-10">--}}

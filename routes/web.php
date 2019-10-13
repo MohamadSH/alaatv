@@ -258,7 +258,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('donate', 'Web\DonateController');
     Route::post('donateOrder', 'Web\OrderController@donateOrder');
 
-    Route::get('listContents/{set}', 'Web\SetController@indexContent');
+    Route::get('listContents/{set}', 'Web\SetController@indexContent')->name('web.set.list.contents');
     Route::resource('set', 'Web\SetController');
 
     Route::get('live' , '\\'.LiveController::class)->name('live');
