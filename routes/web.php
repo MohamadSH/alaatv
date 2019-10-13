@@ -1,32 +1,31 @@
 <?php
 
 
-use App\Http\Controllers\Web\AdminController;
 use App\Http\Controllers\Web\BotsController;
-use App\Http\Controllers\Web\ConsultationController;
-use App\Http\Controllers\Web\ContentController;
-use App\Http\Controllers\Web\DashboardPageController;
-use App\Http\Controllers\Web\EmployeetimesheetController;
-use App\Http\Controllers\Web\ErrorPageController;
 use App\Http\Controllers\Web\HomeController;
-use App\Http\Controllers\Web\IndexPageController;
-use App\Http\Controllers\Web\LiveDescriptionController;
-use App\Http\Controllers\Web\LotteryController;
-use App\Http\Controllers\Web\MobileVerificationController;
-use App\Http\Controllers\Web\OrderproductController;
-use App\Http\Controllers\Web\ProductLandingController;
-use App\Http\Controllers\Web\SharifSchoolController;
 use App\Http\Controllers\Web\LiveController;
-use App\Http\Controllers\Web\PaymentStatusController;
-use App\Http\Controllers\Web\SalesReportController;
-use App\Http\Controllers\Web\ShopPageController;
-use App\Http\Controllers\Web\SurveyController;
 use App\Http\Controllers\Web\UserController;
+use App\Http\Controllers\Web\AdminController;
+use App\Http\Controllers\Web\SurveyController;
 use App\Http\Controllers\Web\WalletController;
+use App\Http\Controllers\Web\ContentController;
+use App\Http\Controllers\Web\LotteryController;
+use App\Http\Controllers\Web\ShopPageController;
+use App\Http\Controllers\Web\ErrorPageController;
+use App\Http\Controllers\Web\IndexPageController;
+use App\Http\Controllers\Web\SalesReportController;
+use App\Http\Controllers\Web\ConsultationController;
+use App\Http\Controllers\Web\OrderproductController;
+use App\Http\Controllers\Web\SharifSchoolController;
+use App\Http\Controllers\Web\DashboardPageController;
+use App\Http\Controllers\Web\PaymentStatusController;
+use App\Http\Controllers\Web\ProductLandingController;
+use App\Http\Controllers\Web\LiveDescriptionController;
+use App\Http\Controllers\Web\EmployeetimesheetController;
+use App\Http\Controllers\Web\MobileVerificationController;
 use App\PaymentModule\Controllers\RedirectUserToPaymentPage;
 use App\PaymentModule\Controllers\PaymentVerifierController;
 use App\PaymentModule\Controllers\RedirectAPIUserToPaymentRoute;
-
 
 
 Route::get('embed/c/{content}', 'Web\ContentController@embed');
@@ -68,7 +67,8 @@ Route::get('sitemap.xml', [HomeController::class , 'siteMapXML']);
 Route::group(['prefix' => 'sitemap'], function () {
     Route::get('/index.xml', 'Web\SitemapController@index');
     Route::get('products.xml', 'Web\SitemapController@products');
-    Route::get('contents.xml', 'Web\SitemapController@eContents');
+    Route::get('contents.xml', 'Web\SitemapController@contents');
+    Route::get('redirects.xml', 'Web\SitemapController@redirects');
 });
 
 Route::group(['prefix' => 'checkout'], function () {
