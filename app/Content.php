@@ -382,6 +382,21 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
         return $query->where('contenttype_id', self::CONTENT_TYPE_VIDEO);
     }
     
+    public function isVideo(): bool
+    {
+        return $this->contenttype_id === self::CONTENT_TYPE_VIDEO;
+    }
+    
+    public function isArticle(): bool
+    {
+        return $this->contenttype_id === self::CONTENT_TYPE_ARTICLE;
+    }
+    
+    public function isPamphlet(): bool
+    {
+        return $this->contenttype_id === self::CONTENT_TYPE_PAMPHLET;
+    }
+    
     /**
      * @param  Builder  $query
      *
