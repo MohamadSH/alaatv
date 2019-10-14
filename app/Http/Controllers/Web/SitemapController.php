@@ -7,6 +7,7 @@ use App\Product;
 use Illuminate\Support\Facades\{Cache};
 use Watson\Sitemap\Facades\Sitemap;
 use App\Http\Controllers\Controller;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 class SitemapController extends Controller
 {
@@ -17,10 +18,9 @@ class SitemapController extends Controller
         Sitemap::addSitemap(action('Web\SitemapController@redirects'));
     
     
-        Sitemap::addSitemap(action('Web\SitemapController@videos', ['page' => 1]));
-        Sitemap::addSitemap(action('Web\SitemapController@pamphlets', ['page' => 1]));
-        Sitemap::addSitemap(action('Web\SitemapController@articles', ['page' => 1]));
-    
+        $this->addContentsSiteMapUrl('video');
+        $this->addContentsSiteMapUrl('pamphlet');
+        $this->addContentsSiteMapUrl('article');
     
         // Return the sitemap to the client.
         return Sitemap::index();
@@ -55,24 +55,42 @@ class SitemapController extends Controller
         return Sitemap::render();
     }
     
-    public function videos($page = 1)
+    public function video($page = 1)
     {
         $contents = $this->getContentByType('video', $page);
         $this->addContentsTagLine($contents);
         return Sitemap::render();
     }
     
-    public function pamphlets($page = 1)
+    public function pamphlet($page = 1)
     {
         $contents = $this->getContentByType('pamphlet', $page);
         $this->addContentsTagLine($contents);
         return Sitemap::render();
     }
     
-    public function articles($page = 1)
+    public function article($page = 1)
     {
         $contents = $this->getContentByType('article', $page);
         $this->addContentsTagLine($contents);
+        return Sitemap::render();
+    }
+    
+    public function redirect()
+    {
+        $contents = Cache::tags(['content', 'product'])
+            ->remember('sitemap-contents-redirected', config('constants.CACHE_600'), static
+            function () {
+                return Content::select()
+                    ->free()
+                    ->active()
+                    ->redirected(true)
+                    ->orderBy('created_at', 'desc')
+                    ->get();
+            });
+        
+        $this->addContentsTagLine($contents);
+        
         return Sitemap::render();
     }
     
@@ -82,7 +100,7 @@ class SitemapController extends Controller
      *
      * @return mixed
      */
-    function getContentByType($type, $page)
+    function getContentByType($type, $page = 1): LengthAwarePaginator
     {
         $key = 'sitemap-contents/NotRedirected/'.$type.'page/'.$this->getPageNameByContentType($type).':'.$page;
         return Cache::tags(['content'])
@@ -109,24 +127,6 @@ class SitemapController extends Controller
         return 'c-'.$type;
     }
     
-    public function redirects()
-    {
-        $contents = Cache::tags(['content', 'product'])
-            ->remember('sitemap-contents-redirected', config('constants.CACHE_600'), static
-            function () {
-                return Content::select()
-                    ->free()
-                    ->active()
-                    ->redirected(true)
-                    ->orderBy('created_at', 'desc')
-                    ->get();
-            });
-        
-        $this->addContentsTagLine($contents);
-        
-        return Sitemap::render();
-    }
-    
     /**
      * @param $contents
      */
@@ -138,6 +138,17 @@ class SitemapController extends Controller
             $tag     = Sitemap::addTag(route('c.show', $content), $content->updated_at, 'monthly', '0.9');
             if (isset($image)) {
                 $tag->addImage($image, $caption);
+            }
+        }
+    }
+    
+    private function addContentsSiteMapUrl($type): void
+    {
+        $paginate = $this->getContentByType($type);
+        $lastPage = $paginate->lastPage();
+        for ($i = 1; $i <= $lastPage; $i++) {
+            if ($paginate->isNotEmpty()) {
+                Sitemap::addSitemap(action([__CLASS__, $type], ['page' => $i]));
             }
         }
     }
