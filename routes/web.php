@@ -10,6 +10,7 @@ use App\Http\Controllers\Web\SurveyController;
 use App\Http\Controllers\Web\WalletController;
 use App\Http\Controllers\Web\ContentController;
 use App\Http\Controllers\Web\LotteryController;
+use App\Http\Controllers\Web\SitemapController;
 use App\Http\Controllers\Web\ShopPageController;
 use App\Http\Controllers\Web\ErrorPageController;
 use App\Http\Controllers\Web\IndexPageController;
@@ -67,7 +68,9 @@ Route::get('sitemap.xml', [HomeController::class , 'siteMapXML']);
 Route::group(['prefix' => 'sitemap'], function () {
     Route::get('/index.xml', 'Web\SitemapController@index');
     Route::get('products.xml', 'Web\SitemapController@products');
-    Route::get('contents.xml', 'Web\SitemapController@contents');
+    Route::get('videos.xml', [SitemapController::class, 'videos']);
+    Route::get('pamphlets.xml', 'Web\SitemapController@pamphlets');
+    Route::get('articles.xml', 'Web\SitemapController@articles');
     Route::get('redirects.xml', 'Web\SitemapController@redirects');
 });
 

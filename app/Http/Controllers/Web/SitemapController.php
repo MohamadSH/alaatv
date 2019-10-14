@@ -15,7 +15,9 @@ class SitemapController extends Controller
         // You can use the route helpers too.
         Sitemap::addSitemap(action('Web\SitemapController@products'));
     
-        Sitemap::addSitemap(action('Web\SitemapController@contents'));
+        Sitemap::addSitemap(action('Web\SitemapController@videos'));
+        Sitemap::addSitemap(action('Web\SitemapController@articles'));
+        Sitemap::addSitemap(action('Web\SitemapController@pamphlets'));
     
         Sitemap::addSitemap(action('Web\SitemapController@redirects'));
         
@@ -52,23 +54,42 @@ class SitemapController extends Controller
         return Sitemap::render();
     }
     
-    public function contents()
+    public function videos()
     {
+        $contents = $this->getContentByType('video');
+        $this->addContentsTagLine($contents);
+        return Sitemap::render();
+    }
     
-        $contents = Cache::tags(['content'])
-            ->remember('sitemap-contents', config('constants.CACHE_600'), static
-            function () {
+    public function pamphlets()
+    {
+        $contents = $this->getContentByType('pamphlet');
+        $this->addContentsTagLine($contents);
+        return Sitemap::render();
+    }
+    
+    public function articles()
+    {
+        $contents = $this->getContentByType('article');
+        $this->addContentsTagLine($contents);
+        return Sitemap::render();
+    }
+    
+    /**
+     * @return mixed
+     */
+    function getContentByType($type)
+    {
+        return Cache::tags(['content'])
+            ->remember('sitemap-contents/'.$type, config('constants.CACHE_600'), static function () use ($type) {
                 return Content::select()
                     ->free()
                     ->active()
+                    ->$type()
                     ->redirected()
                     ->orderBy('created_at', 'desc')
                     ->get();
             });
-    
-        $this->addContentsTagLine($contents);
-        
-        return Sitemap::render();
     }
     
     public function redirects()
