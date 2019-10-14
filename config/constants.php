@@ -11,6 +11,7 @@ return [
     'ROLE_ADMIN'                                  => 'admin',
     'ROLE_CONSULTANT'                             => 'consultant',
     'ROLE_TECH'                                   => 'tech',
+    'ROLE_FINANCE_EMPLOYEE'                       => 'financeEmployee',
     'EMPLOYEE_ROLE'                               => 'employee',
     'ROLE_EMPLOYEE'                               => 6,
     'ROLE_TEACHER'                                => 'teacher',

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Web;
 
+use App\Http\Requests\IndexOrderRequest;
 use App\Repositories\TransactionGatewayRepo;
 use App\User;
 use App\Order;
@@ -88,7 +89,7 @@ class OrderController extends Controller
         $this->setting = $setting->setting;
     }
 
-    public function index()
+    public function index(IndexOrderRequest $request)
     {
         $user = Auth::user();
         if ($user->can(config('constants.SHOW_OPENBYADMIN_ORDER'))) {
