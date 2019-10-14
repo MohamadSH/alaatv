@@ -616,7 +616,7 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
             return Purify::clean($value, self::$purifyNullConfig);
         }
 
-        return Purify::clean(mb_substr($this->description, 0, config('constants.META_DESCRIPTION_LIMIT'), 'utf-8'),
+        return Purify::clean(mb_substr($this->description.' '.$this->getSetName().' '.$this->displayName, 0, config('constants.META_DESCRIPTION_LIMIT'), 'utf-8'),
             self::$purifyNullConfig);
     }
 
@@ -793,6 +793,17 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
         return isset($video) ? $video : collect();
     }
 
+    public function getSetName()
+    {
+        $key     = 'content:getSetName:'.$this->cacheKey();
+        return Cache::tags(['content'])
+            ->remember($key, config('constants.CACHE_60'), function ()  {
+                $contentSet     = $this->set;
+                return isset($contentSet) ? $contentSet->name : null;
+            });
+        
+        
+    }
     /**
      * Gets content's set mates (contents which has same content set as this content
      *
@@ -806,7 +817,7 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
         $setMates = Cache::tags(['content'])
             ->remember($key, config('constants.CACHE_60'), function () use ($content) {
                 $contentSet     = $content->set;
-                $contentSetName = isset($contentSet) ? $contentSet->name : null;
+                $contentSetName = $content->getSetName();
                 if (isset($contentSet)) {
                     $sameContents = $contentSet->getActiveContents()
                         ->sortBy('order')
