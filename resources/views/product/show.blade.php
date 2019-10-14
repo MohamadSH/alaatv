@@ -118,18 +118,22 @@
         "@context" : "http://schema.org",
         "@type" : "Product",
         "name" : " {{ $product->name }}",
-        "image" : "{{$product->photo}}?w=400&h=400",
+        "image" : "{{ $product->photo }}?w=400&h=400",
+        
         "brand" : {
-        "@type" : "Brand",
-        "name" : "آلاء",
-        "logo": {
+            "@type" : "Brand",
+            
+            "name" : "آلاء",
+            "logo": {
                 "@type": "ImageObject",
                 "url": "https://cdn.alaatv.com/upload/Alaa-logo.png?w=182&h=224"
               }
         },
         "offers" : {
-        "@type" : "Offer",
-        "price" : "{{ $product->priceText['basePriceText'] }}"
+            "@type" : "Offer",
+            "price" : "{{ $product->price['final'] }}",
+            "priceCurrency" : "IRR",
+            "url" : "{{ $product->url }}",
         }
     }
     
