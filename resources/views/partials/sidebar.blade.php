@@ -153,6 +153,9 @@
                             <span class="m-menu__link-text"> سفارش ها</span>
                         </a>
                     </li>
+                    @endpermission
+
+                    @role((config("constants.ROLE_ADMIN")))
                     <li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1">
                         <a href="{{ action("Web\AdminController@adminSalesReport") }}" class="m-menu__link ">
                             <span class="m-menu__item-here"></span>
@@ -160,7 +163,7 @@
                             <span class="m-menu__link-text"> گزارش فروش</span>
                         </a>
                     </li>
-                    @endpermission
+                    @endrole
 
                     @permission((config('constants.LIST_BLOCK_ACCESS')))
                     <li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1">
