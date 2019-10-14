@@ -58,7 +58,10 @@
           "publisher" : {
             "@type" : "Organization",
             "name" : "آلاء",
-            "logo" : "https://cdn.alaatv.com/upload/Alaa-logo.png?w=182&h=224"
+              "logo": {
+                "@type": "ImageObject",
+                "url": "https://cdn.alaatv.com/upload/Alaa-logo.png?w=182&h=224"
+              }
           },
           "datePublished" : "{{ $content->created_at }}",
           "dateModified" : "{{ $content->updated_at }}"
