@@ -14,13 +14,14 @@ class SitemapController extends Controller
     {
         // You can use the route helpers too.
         Sitemap::addSitemap(action('Web\SitemapController@products'));
-    
-        Sitemap::addSitemap(action('Web\SitemapController@videos'));
-        Sitemap::addSitemap(action('Web\SitemapController@articles'));
-        Sitemap::addSitemap(action('Web\SitemapController@pamphlets'));
-    
         Sitemap::addSitemap(action('Web\SitemapController@redirects'));
-        
+    
+    
+        Sitemap::addSitemap(action('Web\SitemapController@videos', ['page' => 1]));
+        Sitemap::addSitemap(action('Web\SitemapController@pamphlets', ['page' => 1]));
+        Sitemap::addSitemap(action('Web\SitemapController@articles', ['page' => 1]));
+    
+    
         // Return the sitemap to the client.
         return Sitemap::index();
     }
@@ -54,42 +55,58 @@ class SitemapController extends Controller
         return Sitemap::render();
     }
     
-    public function videos()
+    public function videos($page = 1)
     {
-        $contents = $this->getContentByType('video');
+        $contents = $this->getContentByType('video', $page);
         $this->addContentsTagLine($contents);
         return Sitemap::render();
     }
     
-    public function pamphlets()
+    public function pamphlets($page = 1)
     {
-        $contents = $this->getContentByType('pamphlet');
+        $contents = $this->getContentByType('pamphlet', $page);
         $this->addContentsTagLine($contents);
         return Sitemap::render();
     }
     
-    public function articles()
+    public function articles($page = 1)
     {
-        $contents = $this->getContentByType('article');
+        $contents = $this->getContentByType('article', $page);
         $this->addContentsTagLine($contents);
         return Sitemap::render();
     }
     
     /**
+     * @param $type
+     * @param $page
+     *
      * @return mixed
      */
-    function getContentByType($type)
+    function getContentByType($type, $page)
     {
+        $key = 'sitemap-contents/NotRedirected/'.$type.'page/'.$this->getPageNameByContentType($type).':'.$page;
         return Cache::tags(['content'])
-            ->remember('sitemap-contents/'.$type, config('constants.CACHE_600'), static function () use ($type) {
+            ->remember($key, config('constants.CACHE_600'),
+                function ()
+                use ($type, $page) {
                 return Content::select()
                     ->free()
                     ->active()
                     ->$type()
                     ->redirected()
-                    ->orderBy('created_at', 'desc')
-                    ->get();
+                    ->orderBy('id')
+                    ->paginate(5, ['*'], $this->getPageNameByContentType($type), $page);
             });
+    }
+    
+    /**
+     * @param $type
+     *
+     * @return string
+     */
+    function getPageNameByContentType($type): string
+    {
+        return 'c-'.$type;
     }
     
     public function redirects()
