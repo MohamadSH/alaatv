@@ -10,30 +10,21 @@
     @if($content->isVideo())
             {
                 "@context" : "http://schema.org",
-                @if(isset($contentSetName))
-                "@type" : "TVEpisode",
-                "partOfTVSeries" : {
-                  "@type" : "TVSeries",
-                  "name" : "{{ $contentSetName  }}"
-                  },
-                  "episodeNumber" : "{{ $content->order }}",
-                 @else
-                "@type" : "Movie",
-@endif
-            "datePublished" : "{{ $content->created_at }}",
-            "name" : "{{ $content->displayName }}",
-                  "image" : "{{ $content->thumbnail }}",
-                  "url" : "{{ $content->url }}",
-                  @if(isset($content->author_id))
-                "actor" : {
-                  "@type" : "Person",
-                  "name" : "{{ $author }}"
-                     },
-                  @endif
-            "director" : {
-              "@type" : "Person",
-              "name" : "آلاء"
-            }
+                "@type": "VideoObject",
+                "uploadDate" : "{{ $content->created_at }}",
+                "name" : "{{ $content->displayName }}",
+                "thumbnailUrl" : "{{ $content->thumbnail }}",
+                "description" : "{{ $content->metaDescription }}",
+                "contentUrl" : "{{ $content->url }}",
+                "embedUrl" : "{{ action("Web\ContentController@embed" , $content) }}",
+                "publisher" : {
+                    "@type" : "Organization",
+                    "name" : "آلاء",
+                    "logo": {
+                        "@type": "ImageObject",
+                        "url": "https://cdn.alaatv.com/upload/Alaa-logo.png?w=182&h=224"
+                    }
+                }
         }
 @endif
         @if($content->isArticle())
