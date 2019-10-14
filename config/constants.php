@@ -10,23 +10,23 @@ return [
     // Default Roles
     'ROLE_ADMIN'                                  => 'admin',
     'ROLE_CONSULTANT'                             => 'consultant',
-    'ROLE_TECH'                                   => 'tech',
-    'ROLE_FINANCE_EMPLOYEE'                       => 'financeEmployee',
-    'EMPLOYEE_ROLE'                               => 'employee',
-    'ROLE_EMPLOYEE'                               => 6,
-    'ROLE_TEACHER'                                => 'teacher',
-    'ROLE_TEACHER_ID'                             => 10,
-    'BOOK_POST_MAN_ROLE'                          => 'bookPostMan',
-    'SHARIF_SCHOOL_REGISTER'                      => 'sharifSchoolRegister',
-
+    'ROLE_TECH'                  => 'tech',
+    'ROLE_FINANCE_EMPLOYEE'      => 'financeEmployee',
+    'EMPLOYEE_ROLE'              => 'employee',
+    'ROLE_EMPLOYEE'              => 6,
+    'ROLE_TEACHER'               => 'teacher',
+    'ROLE_TEACHER_ID'            => 10,
+    'BOOK_POST_MAN_ROLE'         => 'bookPostMan',
+    'SHARIF_SCHOOL_REGISTER'     => 'sharifSchoolRegister',
+    
     // Permissions :
-    'ADMIN_PANEL_ACCESS'                          => 'adminPanel',
-    'GIVE_SYSTEM_ROLE'                            => 'giveSystemRole',
-    'USER_ADMIN_PANEL_ACCESS'                     => 'userAdminPanel',
-    'PRODUCT_ADMIN_PANEL_ACCESS'                  => 'productAdminPanel',
-    'CONTENT_ADMIN_PANEL_ACCESS'                  => 'contentAdminPanel',
-    'SMS_ADMIN_PANEL_ACCESS'                      => 'smsAdminPanel',
-    'ORDER_ADMIN_PANEL_ACCESS'                    => 'orderAdminPanel',
+    'ADMIN_PANEL_ACCESS'         => 'adminPanel',
+    'GIVE_SYSTEM_ROLE'           => 'giveSystemRole',
+    'USER_ADMIN_PANEL_ACCESS'    => 'userAdminPanel',
+    'PRODUCT_ADMIN_PANEL_ACCESS' => 'productAdminPanel',
+    'CONTENT_ADMIN_PANEL_ACCESS' => 'contentAdminPanel',
+    'SMS_ADMIN_PANEL_ACCESS'     => 'smsAdminPanel',
+    'ORDER_ADMIN_PANEL_ACCESS'   => 'orderAdminPanel',
     'SITE_CONFIG_ADMIN_PANEL_ACCESS'              => 'siteConfigAdminPanel',
     'PARTICULAR_ADMIN_PANELS'                     => 'particularAdminPanel',
     'WALLET_ADMIN_PANEL'                          => 'walletAdminPanel',
@@ -187,32 +187,33 @@ return [
     'INSERT_CONTENT_SET_ACCESS'                   => 'insertContentset',
     'EDIT_CONTENT_SET_ACCESS'                     => 'editContentset',
     'REMOVE_CONTENT_SET_ACCESS'                   => 'removeContentset',
-    'SHOW_SALES_REPORT'                           => 'showSalesReport',
-    'LIST_BLOCK_ACCESS'                           => 'listBlock',
-    'INSERT_BLOCK_ACCESS'                         => 'insertBlock',
-    'EDIT_BLOCK_ACCESS'                           => 'editBlock',
-    'REMOVE_BLOCK_ACCESS'                         => 'removeBlock',
-    'LIVE_STOP_ACCESS'                            => 'stopLive',
-    'LIVE_PLAY_ACCESS'                            => 'playLive',
-    'GIVE_WALLET_CREDIT'                          => 'giveWalletCredit',
-
-
+    'SHOW_SALES_REPORT'          => 'showSalesReport',
+    'LIST_BLOCK_ACCESS'          => 'listBlock',
+    'INSERT_BLOCK_ACCESS'        => 'insertBlock',
+    'EDIT_BLOCK_ACCESS'          => 'editBlock',
+    'REMOVE_BLOCK_ACCESS'        => 'removeBlock',
+    'LIVE_STOP_ACCESS'           => 'stopLive',
+    'LIVE_PLAY_ACCESS'           => 'playLive',
+    'GIVE_WALLET_CREDIT'         => 'giveWalletCredit',
+    'SEE_ORDER_FILTERS'          => 'seeOrderFilters',
+    'SEE_ORDER_IDENTITY_FILTERS' => 'seeOrderIdentityFilters',
+    
     //Technician
-    'SET_TECH_CODE'                               => 'insertTechCode',
-    'UPDATE_TECH_CODE'                            => 'updateTechCode',
-
+    'SET_TECH_CODE'              => 'insertTechCode',
+    'UPDATE_TECH_CODE'           => 'updateTechCode',
+    
     //bons
-    'BON1'                                        => 'alaa',
-    'BON2'                                        => 'alaaPoint',
-
+    'BON1'                       => 'alaa',
+    'BON2'                       => 'alaaPoint',
+    
     //fileSystem disks
-    'DISK1'                                       => 'profileImage',
-    'DISK2'                                       => 'assignmentQuestionFile',
-    'DISK3'                                       => 'assignmentSolutionFile',
-    'DISK4'                                       => 'productImage',
-    'DISK5'                                       => 'productCatalog_PDF',
-    'DISK6'                                       => 'consultingAudioQuestions',
-    'DISK7'                                       => 'consultationThumbnail',
+    'DISK1'                      => 'profileImage',
+    'DISK2'                      => 'assignmentQuestionFile',
+    'DISK3'                      => 'assignmentSolutionFile',
+    'DISK4'                      => 'productImage',
+    'DISK5'                      => 'productCatalog_PDF',
+    'DISK6'                      => 'consultingAudioQuestions',
+    'DISK7'                      => 'consultationThumbnail',
     'DISK8'                                       => 'articleImage',
     'DISK9'                                       => 'homeSlideShowPic',
     'DISK10'                                      => 'orderFile',
@@ -226,42 +227,42 @@ return [
     'DISK18'                                      => 'exam',
     'DISK18_CLOUD'                                => 'examSftp',
     'DISK19'                                      => 'pamphlet',
-    'DISK19_CLOUD'                                => 'pamphletSftp',
-    'DISK20'                                      => 'book',
-    'DISK20_CLOUD'                                => 'bookSftp',
-    'DISK21'                                      => 'productImageSFTP',
-    'DISK22'                                      => 'homeSlideShowPicSFTP',
-    'DISK23'                                      => 'setImageSFTP',
-    'DISK24'                                      => 'profileImageSFTP',
-    'DISK25'                                      => 'contentThumbnailSFTP',
-
+    'DISK19_CLOUD'               => 'pamphletSftp',
+    'DISK20'                     => 'book',
+    'DISK20_CLOUD'               => 'bookSftp',
+    'DISK21'                     => 'productImageSFTP',
+    'DISK22'                     => 'homeSlideShowPicSFTP',
+    'DISK23'                     => 'setImageSFTP',
+    'DISK24'                     => 'profileImageSFTP',
+    'DISK25'                     => 'contentThumbnailSFTP',
+    
     'DISK_FREE_CONTENT'              => 'alaaCdnSFTP',
     'DISK_PRODUCT_CONTENT'           => 'productFileSFTP',
-
+    
     //Profile default image
     'PROFILE_DEFAULT_IMAGE'          => 'default_avatar.png',
     'CONSULTATION_DEFAULT_IMAGE'     => 'default_consultant_thumbnail.jpg',
     'ARTICLE_DEFAULT_IMAGE'          => 'default_article_image.png',
-
+    
     //Mobile verification code wait expiration (in minutes)
     'MOBILE_VERIFICATION_TIME_LIMIT' => '30',
     'MOBILE_VERIFICATION_WAIT_TIME'  => '4',
     //waiting time between sending two mobile verification code sms
     'GENERATE_PASSWORD_WAIT_TIME'    => '14',
     //waiting time between sending two password sms
-
+    
     //Number of mbti questions (it is temporary)
     'MBTI_NUMBER_OF_QUESTIONS'       => '80',
-
+    
     //loading gif
     'FILTER_LOADING_GIF'             => '/acm/extra/loading-cogs.gif',
     'ADMIN_LOADING_BAR_GIF'          => '/acm/extra/filter-loading-bar.gif',
-
+    
     //sms payment
     'COST_PER_SMS_1'                 => 100,
     'COST_PER_SMS_2'                 => 110,
     'COST_PER_SMS_3'                 => 130,
-
+    
     'SMS_PROVIDER_NUMBER' => [
         'phone' => [
             98100020400      => 98100020400,
@@ -271,7 +272,7 @@ return [
             981000958        => 981000958,
             985000189        => 985000189,
             985000958        => 985000958,
-//            '98sim'          => '98sim',
+            //            '98sim'          => '98sim',
         ],
         'cost'  => [
             98100020400      => 100,
@@ -281,21 +282,21 @@ return [
             981000958        => 100,
             985000189        => 85,
             985000958        => 85,
-//            '98sim'          => ,
+            //            '98sim'          => ,
         ],
     ],
     'google'              => [
         'analytics' => env('GOOGLE_ANALYTICS', 'UA-43695756-1'),
     ],
-
-
+    
+    
     'UI_META_TITLE_LIMIT'       => 70,
     'UI_META_KEYWORD_LIMIT'     => 155,
     'UI_META_DESCRIPTION_LIMIT' => 155,
     'META_TITLE_LIMIT'          => 129,
     'META_KEYWORDS_LIMIT'       => 286,
     'META_DESCRIPTION_LIMIT'    => 286,
-
+    
     'WORKDAY_ID_USUAL'                                    => 1,
     'WORKDAY_ID_EXTRA'                                    => 2,
     'HAMAYESH_PRODUCT'                                    => [
@@ -379,234 +380,234 @@ return [
         159,
         163,
     ],
-
-    'ASIATECH_FREE_ADSL'                       => 224,
-    'LOTTERY_NAME'                             => '10tir',
-    'HAMAYESH_LOTTERY_EXCHANGE_AMOUNT'         => 30000,
-
+    
+    'ASIATECH_FREE_ADSL'                 => 224,
+    'LOTTERY_NAME'                       => '10tir',
+    'HAMAYESH_LOTTERY_EXCHANGE_AMOUNT'   => 30000,
+    
     //Cache
-    'CACHE_600'                                => env('CACHE_600',0),
-    'CACHE_300'                                => env('CACHE_300',0),
-    'CACHE_60'                                 => env('CACHE_60' ,0),
-    'CACHE_10'                                 => env('CACHE_10' ,0),
-    'CACHE_5'                                  => env('CACHE_5'  ,0),
-    'CACHE_3'                                  => env('CACHE_3'  ,0),
-    'CACHE_1'                                  => env('CACHE_1'  ,0),
-    'CACHE_0'                                  => env('CACHE_0'  ,0),
-
+    'CACHE_600'                          => env('CACHE_600', 0),
+    'CACHE_300'                          => env('CACHE_300', 0),
+    'CACHE_60'                           => env('CACHE_60', 0),
+    'CACHE_10'                           => env('CACHE_10', 0),
+    'CACHE_5'                            => env('CACHE_5', 0),
+    'CACHE_3'                            => env('CACHE_3', 0),
+    'CACHE_1'                            => env('CACHE_1', 0),
+    'CACHE_0'                            => env('CACHE_0', 0),
+    
     //
-    'TAG_API_URL'                              => env('TAG_API_URL', null),
-    'SERVER'                                   => env('SERVER'),
-    'CDN_SERVER_NAME'                          => env('CDN_SERVER_NAME', null),
-    'PAID_SERVER_NAME'                         => env('PAID_SERVER_NAME', null),
-    'DOWNLOAD_SERVER_ROOT'                     => env('DOWNLOAD_SERVER_ROOT', null),
-    'DOWNLOAD_SERVER_PROTOCOL'                 => env('DOWNLOAD_SERVER_PROTOCOL', null),
-    'DOWNLOAD_SERVER_MEDIA_PARTIAL_PATH'       => env('DOWNLOAD_SERVER_MEDIA_PARTIAL_PATH', null),
-
+    'TAG_API_URL'                        => env('TAG_API_URL', null),
+    'SERVER'                             => env('SERVER'),
+    'CDN_SERVER_NAME'                    => env('CDN_SERVER_NAME', null),
+    'PAID_SERVER_NAME'                   => env('PAID_SERVER_NAME', null),
+    'DOWNLOAD_SERVER_ROOT'               => env('DOWNLOAD_SERVER_ROOT', null),
+    'DOWNLOAD_SERVER_PROTOCOL'           => env('DOWNLOAD_SERVER_PROTOCOL', null),
+    'DOWNLOAD_SERVER_MEDIA_PARTIAL_PATH' => env('DOWNLOAD_SERVER_MEDIA_PARTIAL_PATH', null),
+    
     //OrderStatus
-    'ORDER_STATUS_OPEN'                        => 1,
-    'ORDER_STATUS_CLOSED'                      => 2,
-    'ORDER_STATUS_CANCELED'                    => 3,
-    'ORDER_STATUS_OPEN_BY_ADMIN'               => 4,
-    'ORDER_STATUS_POSTED'                      => 5,
-    'ORDER_STATUS_REFUNDED'                    => 6,
-    'ORDER_STATUS_READY_TO_POST'               => 7,
-    'ORDER_STATUS_OPEN_DONATE'                 => 8,
-    'ORDER_STATUS_PENDING'                     => 9,
-
-    'OPEN_ORDER_STATUSES'                      => [ 1 , 4 , 8] ,
-
+    'ORDER_STATUS_OPEN'                  => 1,
+    'ORDER_STATUS_CLOSED'                => 2,
+    'ORDER_STATUS_CANCELED'              => 3,
+    'ORDER_STATUS_OPEN_BY_ADMIN'         => 4,
+    'ORDER_STATUS_POSTED'                => 5,
+    'ORDER_STATUS_REFUNDED'              => 6,
+    'ORDER_STATUS_READY_TO_POST'         => 7,
+    'ORDER_STATUS_OPEN_DONATE'           => 8,
+    'ORDER_STATUS_PENDING'               => 9,
+    
+    'OPEN_ORDER_STATUSES'                    => [1, 4, 8],
+    
     //TRANSACTION STATUSES CONSTANTS
-    'TRANSACTION_STATUS_TRANSFERRED_TO_PAY'    => 1,
-    'TRANSACTION_STATUS_UNSUCCESSFUL'          => 2,
-    'TRANSACTION_STATUS_SUCCESSFUL'            => 3,
-    'TRANSACTION_STATUS_PENDING'               => 4,
-    'TRANSACTION_STATUS_ARCHIVED_SUCCESSFUL'   => 5,
-    'TRANSACTION_STATUS_UNPAID'                => 6,
-    'TRANSACTION_STATUS_SUSPENDED'             => 7,
-
+    'TRANSACTION_STATUS_TRANSFERRED_TO_PAY'  => 1,
+    'TRANSACTION_STATUS_UNSUCCESSFUL'        => 2,
+    'TRANSACTION_STATUS_SUCCESSFUL'          => 3,
+    'TRANSACTION_STATUS_PENDING'             => 4,
+    'TRANSACTION_STATUS_ARCHIVED_SUCCESSFUL' => 5,
+    'TRANSACTION_STATUS_UNPAID'              => 6,
+    'TRANSACTION_STATUS_SUSPENDED'           => 7,
+    
     //PAYMENT METHODS CONSTANTS
-    'PAYMENT_METHOD_ONLINE'                    => 1,
-    'PAYMENT_METHOD_ATM'                       => 2,
-    'PAYMENT_METHOD_POS'                       => 3,
-    'PAYMENT_METHOD_PAYCHECK'                  => 4,
-    'PAYMENT_METHOD_WALLET'                    => 5,
-
+    'PAYMENT_METHOD_ONLINE'                  => 1,
+    'PAYMENT_METHOD_ATM'                     => 2,
+    'PAYMENT_METHOD_POS'                     => 3,
+    'PAYMENT_METHOD_PAYCHECK'                => 4,
+    'PAYMENT_METHOD_WALLET'                  => 5,
+    
     //PAYMENT STATUSES CONSTANTS
-    'PAYMENT_STATUS_UNPAID'                    => 1,
-    'PAYMENT_STATUS_INDEBTED'                  => 2,
-    'PAYMENT_STATUS_PAID'                      => 3,
-    'PAYMENT_STATUS_VERIFIED_INDEBTED'         => 4,
-
-    'ORDERPRODUCT_CHECKOUT_STATUS_UNPAID'      =>1,
-    'ORDERPRODUCT_CHECKOUT_STATUS_PAID'        =>2,
-
+    'PAYMENT_STATUS_UNPAID'                  => 1,
+    'PAYMENT_STATUS_INDEBTED'                => 2,
+    'PAYMENT_STATUS_PAID'                    => 3,
+    'PAYMENT_STATUS_VERIFIED_INDEBTED'       => 4,
+    
+    'ORDERPRODUCT_CHECKOUT_STATUS_UNPAID'      => 1,
+    'ORDERPRODUCT_CHECKOUT_STATUS_PAID'        => 2,
+    
     //USER BON STATUSES CONSTANTS
     'USERBON_STATUS_ACTIVE'                    => 1,
     'USERBON_STATUS_EXPIRED'                   => 2,
     'USERBON_STATUS_USED'                      => 3,
-
+    
     //PRODUCT TYPES CONSTANTS
     'PRODUCT_TYPE_SIMPLE'                      => 1,
     'PRODUCT_TYPE_CONFIGURABLE'                => 2,
     'PRODUCT_TYPE_SELECTABLE'                  => 3,
-
+    
     //CONTROLS CONSTANTS
     'CONTROL_SELECT'                           => 1,
     'CONTROL_GROUPED_CHECKBOX'                 => 2,
     'CONTROL_SWITCH'                           => 3,
-
+    
     //ORDERPRODUCT TYPES CONSTANTS
     'ORDER_PRODUCT_TYPE_DEFAULT'               => 1,
     'ORDER_PRODUCT_GIFT'                       => 2,
-
+    
     //ORDERPRODUCT INTERRELATIONS
     'ORDER_PRODUCT_INTERRELATION_PARENT_CHILD' => 1,
-
+    
     //TRANSACTION INTERRELATIONS
     'TRANSACTION_INTERRELATION_PARENT_CHILD'   => 1,
-
+    
     //PRODUCT INTERRELATIONS
     'PRODUCT_INTERRELATION_GIFT'               => 1,
-
+    
     //DISCOUNT TYPES
     'DISCOUNT_TYPE_PERCENTAGE'                 => 1,
     'DISCOUNT_TYPE_COST'                       => 2,
-
+    
     //PRODUCT FILE TYPES
     'PRODUCT_FILE_TYPE_PAMPHLET'               => 1,
     'PRODUCT_FILE_TYPE_VIDEO'                  => 2,
-
+    
     //CONTENT TYPES
     'CONTENT_TYPE_PAMPHLET'                    => 1,
     'CONTENT_TYPE_VIDEO'                       => 8,
-
+    
     //WALLET TYPES
     'WALLET_TYPE_MAIN'                         => 1,
     'WALLET_TYPE_GIFT'                         => 2,
-
+    
     //USER STATUSES
     'USER_STATUS_ACTIVE'                       => 1,
     'USER_STATUS_INACTIVE'                     => 2,
-
+    
     //COUPON TYPES
     'COUPON_TYPE_OVERALL'                      => 1,
     'COUPON_TYPE_PARTIAL'                      => 2,
-
-    'ATTRIBUTE_TYPE_MAIN'                      => 1,
-    'ATTRIBUTE_TYPE_EXTRA'                     => 2,
-    'ATTRIBUTE_TYPE_INFORMATION'               => 3,
-
-    'EMPLOYEE_OVERTIME_STATUS_UNCONFIRMED'     => 1,
-    'EMPLOYEE_OVERTIME_STATUS_CONFIRMED'       => 2,
-    'EMPLOYEE_OVERTIME_STATUS_REJECTED'        => 3,
-
-    'JALALI_CALENDER'                          => [
-                                [
-                                    'month'       => 'مهر',
-                                    'periodBegin' => '2019-09-23',
-                                    'periodEnd'   => '2019-10-23',
-                                ],
-                                [
-                                    'month'       => 'آبان',
-                                    'periodBegin' => '2019-10-23',
-                                    'periodEnd'   => '2019-11-22',
-                                ],
-                                [
-                                    'month'       => 'آذر',
-                                    'periodBegin' => '2019-11-22',
-                                    'periodEnd'   => '2019-12-22',
-                                ],
-                                [
-                                    'month'       => 'دی',
-                                    'periodBegin' => '2019-12-22',
-                                    'periodEnd'   => '2020-01-21',
-                                ],
-                                [
-                                    'month'       => 'بهمن',
-                                    'periodBegin' => '2020-01-21',
-                                    'periodEnd'   => '2020-02-20',
-                                ],
-                                [
-                                    'month'       => 'اسفند',
-                                    'periodBegin' => '2020-02-20',
-                                    'periodEnd'   => '2020-03-20',
-                                ],
-                                [
-                                    'month'       => 'فروردین',
-                                    'periodBegin' => '2020-03-20',
-                                    'periodEnd'   => '2020-04-20',
-                                ],
-                                [
-                                    'month'       => 'اردیبهشت',
-                                    'periodBegin' => '2020-04-20',
-                                    'periodEnd'   => '2020-05-21',
-                                ],
-                                [
-                                    'month'       => 'خرداد',
-                                    'periodBegin' => '2020-05-21',
-                                    'periodEnd'   => '2020-06-21',
-                                ],
-                                [
-                                    'month'       => 'تیر',
-                                    'periodBegin' => '2020-06-21',
-                                    'periodEnd'   => '2020-07-22',
-                                ],
-                                [
-                                    'month'       => 'مرداد',
-                                    'periodBegin' => '2020-07-22',
-                                    'periodEnd'   => '2020-08-22',
-                                ],
-                                [
-                                    'month'       => 'شهریور',
-                                    'periodBegin' => '2020-08-22',
-                                    'periodEnd'   => '2020-09-22',
-                                ],
-                            ],
-    'JALALI_ALL_MONTHS'                        => [
-                                            'مهر',
-                                            'آبان',
-                                            'آذر',
-                                            'دی',
-                                            'بهمن',
-                                            'اسفند',
-                                            'فروردین',
-                                            'اردیبهشت',
-                                            'خرداد',
-                                            'تیر',
-                                            'مرداد',
-                                            'شهریور',
-                                        ],
-    'ALL_DAYS_OF_MONTH'                        => [
-                                        '1',
-                                        '2',
-                                        '3',
-                                        '4',
-                                        '5',
-                                        '6',
-                                        '7',
-                                        '8',
-                                        '9',
-                                        '10',
-                                        '11',
-                                        '12',
-                                        '13',
-                                        '14',
-                                        '15',
-                                        '16',
-                                        '17',
-                                        '18',
-                                        '19',
-                                        '20',
-                                        '21',
-                                        '22',
-                                        '23',
-                                        '24',
-                                        '25',
-                                        '26',
-                                        '27',
-                                        '28',
-                                        '29',
-                                        '30',
-                                    ]
+    
+    'ATTRIBUTE_TYPE_MAIN'        => 1,
+    'ATTRIBUTE_TYPE_EXTRA'       => 2,
+    'ATTRIBUTE_TYPE_INFORMATION' => 3,
+    
+    'EMPLOYEE_OVERTIME_STATUS_UNCONFIRMED' => 1,
+    'EMPLOYEE_OVERTIME_STATUS_CONFIRMED'   => 2,
+    'EMPLOYEE_OVERTIME_STATUS_REJECTED'    => 3,
+    
+    'JALALI_CALENDER'   => [
+        [
+            'month'       => 'مهر',
+            'periodBegin' => '2019-09-23',
+            'periodEnd'   => '2019-10-23',
+        ],
+        [
+            'month'       => 'آبان',
+            'periodBegin' => '2019-10-23',
+            'periodEnd'   => '2019-11-22',
+        ],
+        [
+            'month'       => 'آذر',
+            'periodBegin' => '2019-11-22',
+            'periodEnd'   => '2019-12-22',
+        ],
+        [
+            'month'       => 'دی',
+            'periodBegin' => '2019-12-22',
+            'periodEnd'   => '2020-01-21',
+        ],
+        [
+            'month'       => 'بهمن',
+            'periodBegin' => '2020-01-21',
+            'periodEnd'   => '2020-02-20',
+        ],
+        [
+            'month'       => 'اسفند',
+            'periodBegin' => '2020-02-20',
+            'periodEnd'   => '2020-03-20',
+        ],
+        [
+            'month'       => 'فروردین',
+            'periodBegin' => '2020-03-20',
+            'periodEnd'   => '2020-04-20',
+        ],
+        [
+            'month'       => 'اردیبهشت',
+            'periodBegin' => '2020-04-20',
+            'periodEnd'   => '2020-05-21',
+        ],
+        [
+            'month'       => 'خرداد',
+            'periodBegin' => '2020-05-21',
+            'periodEnd'   => '2020-06-21',
+        ],
+        [
+            'month'       => 'تیر',
+            'periodBegin' => '2020-06-21',
+            'periodEnd'   => '2020-07-22',
+        ],
+        [
+            'month'       => 'مرداد',
+            'periodBegin' => '2020-07-22',
+            'periodEnd'   => '2020-08-22',
+        ],
+        [
+            'month'       => 'شهریور',
+            'periodBegin' => '2020-08-22',
+            'periodEnd'   => '2020-09-22',
+        ],
+    ],
+    'JALALI_ALL_MONTHS' => [
+        'مهر',
+        'آبان',
+        'آذر',
+        'دی',
+        'بهمن',
+        'اسفند',
+        'فروردین',
+        'اردیبهشت',
+        'خرداد',
+        'تیر',
+        'مرداد',
+        'شهریور',
+    ],
+    'ALL_DAYS_OF_MONTH' => [
+        '1',
+        '2',
+        '3',
+        '4',
+        '5',
+        '6',
+        '7',
+        '8',
+        '9',
+        '10',
+        '11',
+        '12',
+        '13',
+        '14',
+        '15',
+        '16',
+        '17',
+        '18',
+        '19',
+        '20',
+        '21',
+        '22',
+        '23',
+        '24',
+        '25',
+        '26',
+        '27',
+        '28',
+        '29',
+        '30',
+    ],
 ];
