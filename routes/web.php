@@ -68,9 +68,9 @@ Route::get('sitemap.xml', [HomeController::class , 'siteMapXML']);
 Route::group(['prefix' => 'sitemap'], function () {
     Route::get('/index.xml', 'Web\SitemapController@index');
     Route::get('products.xml', 'Web\SitemapController@products');
-    Route::get('videos.xml', [SitemapController::class, 'videos']);
-    Route::get('pamphlets.xml', 'Web\SitemapController@pamphlets');
-    Route::get('articles.xml', 'Web\SitemapController@articles');
+    Route::get('videos-{page?}.xml', [SitemapController::class, 'videos']);
+    Route::get('pamphlets-{page?}.xml', 'Web\SitemapController@pamphlets');
+    Route::get('articles-{page?}.xml', 'Web\SitemapController@articles');
     Route::get('redirects.xml', 'Web\SitemapController@redirects');
 });
 
