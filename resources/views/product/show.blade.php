@@ -119,6 +119,7 @@
         "@type" : "Product",
         "name" : " {{ $product->name }}",
         "image" : "{{ $product->photo }}?w=400&h=400",
+        "sku": "{{ $product->id }}",
         "brand" : {
             "@type" : "Brand",
             
@@ -132,7 +133,9 @@
             "@type" : "Offer",
             "price" : "{{ $product->price['final'] }}",
             "priceCurrency" : "IRR",
-            "url" : "{{ $product->url }}"
+            "url" : "{{ $product->url }}",
+            "availability": "https://schema.org/InStock",
+            "itemCondition": "https://schema.org/NewCondition"
         }
     }
     
