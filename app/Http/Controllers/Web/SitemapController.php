@@ -14,8 +14,8 @@ class SitemapController extends Controller
     public function index()
     {
         // You can use the route helpers too.
-        Sitemap::addSitemap(action('Web\SitemapController@products'));
-        Sitemap::addSitemap(action('Web\SitemapController@redirects'));
+        Sitemap::addSitemap(action('Web\SitemapController@product'));
+        Sitemap::addSitemap(action('Web\SitemapController@redirect'));
     
     
         $this->addContentsSiteMapUrl('video');
@@ -26,7 +26,7 @@ class SitemapController extends Controller
         return Sitemap::index();
     }
     
-    public function products()
+    public function product()
     {
         $products = Cache::tags(['product'])
             ->remember('sitemap-products-1', config('constants.CACHE_600'), static
