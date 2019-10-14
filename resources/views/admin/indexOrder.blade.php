@@ -119,6 +119,13 @@
                     <div class="portlet-body form" style="border-top: #3598dc solid 1px">
                         {!! Form::open(['class'=>'form-horizontal form-row-seperated' , 'id' => 'filterOrderForm']) !!}
                         <div class="form-body m--padding-15" style="background: #e7ecf1">
+                            @permission((config('constants.SEE_ORDER_IDENTITY_FILTERS')))
+                            <div class="form-group">
+                                @include('admin.filters.identityFilter')
+                            </div>
+                            @endpermission
+    
+                            @permission((config('constants.SEE_ORDER_FILTERS')))
                             <div class="form-group">
                                 <div class="row">
                                     <div class="col-md-4">
@@ -185,9 +192,6 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                @include('admin.filters.identityFilter')
-                            </div>
-                            <div class="form-group">
                                 <div class="row">
                                     <div class="col-md-6">
                                         @include('admin.filters.orderCustomerDescriptionFilter')
@@ -241,6 +245,7 @@
                                     </div>
                                 </div>
                             </div>
+                            @endpermission
                         </div>
                         {!! Form::close() !!}
                     </div>
