@@ -44,11 +44,15 @@
 @endsection
 
 @section('content')
-    <div class = "row">
-        <div class = "col">
-            <a class="btn btn-focus" href="{{route('web.set.list.contents' , $content->contentset_id)}}">رفتن به ست این محتوا</a>
+    @if (isset($content->contentset_id))
+        <div class="row">
+            <div class="col">
+                <a class="btn btn-focus" href="{{route('web.set.list.contents' , $content->contentset_id)}}">رفتن به ست
+                    این محتوا</a>
+            </div>
         </div>
-    </div>
+    @endif
+    
     <div class = "row">
         <div class = "col">
             @include("systemMessage.flash")
