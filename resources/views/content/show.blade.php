@@ -20,6 +20,7 @@
                  @else
                 "@type" : "Movie",
 @endif
+            "datePublished" : "{{ $content->created_at }}",
             "name" : "{{ $content->displayName }}",
                   "image" : "{{ $content->thumbnail }}",
                   "url" : "{{ $content->url }}",
@@ -40,8 +41,9 @@
               "@context" : "http://schema.org",
               "@type" : "Article",
               "name" : "{{ $content->displayName }}",
+              "headline" : "{{ $content->displayName }}",
           @if(isset($content->author_id))
-                "actor" : {
+                "author" : {
                   "@type" : "Person",
                   "name" : "{{ $author }}"
                  },
@@ -55,8 +57,11 @@
             "url" : "{{ $content->url }}",
           "publisher" : {
             "@type" : "Organization",
-            "name" : "آلاء"
-          }
+            "name" : "آلاء",
+            "logo" : "https://cdn.alaatv.com/upload/Alaa-logo.png?w=182&h=224"
+          },
+          "datePublished" : "{{ $content->created_at }}",
+          "dateModified" : "{{ $content->updated_at }}"
         }
     @endif
     </script>
