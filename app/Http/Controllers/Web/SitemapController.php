@@ -113,7 +113,7 @@ class SitemapController extends Controller
                     ->$type()
                     ->redirected()
                     ->orderBy('id')
-                    ->paginate(5, ['*'], $this->getPageNameByContentType($type), $page);
+                    ->paginate(500, ['*'], $this->getPageNameByContentType($type), $page);
             });
     }
     
