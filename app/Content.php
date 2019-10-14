@@ -371,6 +371,36 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
     {
         return $query->where('enable', $enable);
     }
+    
+    /**
+     * @param  Builder  $query
+     *
+     * @return Builder
+     */
+    public function scopeVideo($query)
+    {
+        return $query->where('contenttype_id', self::CONTENT_TYPE_VIDEO);
+    }
+    
+    /**
+     * @param  Builder  $query
+     *
+     * @return Builder
+     */
+    public function scopePamphlet($query)
+    {
+        return $query->where('contenttype_id', self::CONTENT_TYPE_PAMPHLET);
+    }
+    
+    /**
+     * @param  Builder  $query
+     *
+     * @return Builder
+     */
+    public function scopeArticle($query)
+    {
+        return $query->where('contenttype_id', self::CONTENT_TYPE_ARTICLE);
+    }
 
     /**
      * Scope a query to only include Valid Contents.
@@ -397,6 +427,14 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
     {
         return $query->enable()
             ->valid();
+    }
+    
+    public function scopeRedirected($query, $done = false)
+    {
+        if ($done) {
+            return $query->whereNotNull('redirectUrl');
+        }
+        return $query->whereNull('redirectUrl');
     }
 
     public function scopeFree($query)
@@ -782,14 +820,18 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
         try {
             $key = 'content:getDisplayName'.$this->cacheKey();
             $c   = $this;
-
-            return Cache::remember($key, config('constants.CACHE_60'), function () use ($c) {
+    
+            return Cache::remember($key, config('constants.CACHE_60'), static function () use ($c) {
                 $displayName   = '';
                 $sessionNumber = $c->order;
                 if (isset($c->contenttype)) {
                     $displayName .= $c->contenttype->displayName.' ';
                 }
-                $displayName .= (isset($sessionNumber) && $sessionNumber > -1 ? 'جلسه '.$sessionNumber.' - ' : '').' '.(isset($c->name) ? $c->name : $c->user->name);
+                $displayName .= (isset($sessionNumber) && $sessionNumber > -1 && $c->contenttype_id !==
+                    self::CONTENT_TYPE_ARTICLE ?
+                        'جلسه '
+                        .$sessionNumber.' - ' : '')
+                    .' '.(isset($c->name) ? $c->name : $c->user->name);
 
                 return $displayName;
             });
