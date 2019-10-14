@@ -8,9 +8,9 @@
 
 namespace App\Classes\Search;
 
+use LogicException;
 use App\Classes\Search\Filters\Filter;
 use Illuminate\Database\Eloquent\Builder;
-use LogicException;
 
 abstract class SearchAbstract
 {
@@ -40,7 +40,7 @@ abstract class SearchAbstract
         
         $this->dummyFilterCallBack = new DummyFilterCallBack();
         $this->cacheKey            = get_class($this).':';
-        $this->cacheTime           = config("constants.CACHE_60");
+        $this->cacheTime           = config('constants.CACHE_60');
         $this->pageNum             = self::DEFAULT_PAGE_NUMBER;
         $this->model               = (new $this->model);
     }

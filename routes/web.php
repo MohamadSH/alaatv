@@ -67,11 +67,11 @@ Route::post('registerForSanatiSharifHighSchool', [SharifSchoolController::class 
 Route::get('sitemap.xml', [HomeController::class , 'siteMapXML']);
 Route::group(['prefix' => 'sitemap'], function () {
     Route::get('/index.xml', 'Web\SitemapController@index');
-    Route::get('products.xml', 'Web\SitemapController@products');
-    Route::get('videos.xml', [SitemapController::class, 'videos']);
-    Route::get('pamphlets.xml', 'Web\SitemapController@pamphlets');
-    Route::get('articles.xml', 'Web\SitemapController@articles');
-    Route::get('redirects.xml', 'Web\SitemapController@redirects');
+    Route::get('product.xml', 'Web\SitemapController@product');
+    Route::get('video-{page?}.xml', [SitemapController::class, 'video']);
+    Route::get('pamphlet-{page?}.xml', 'Web\SitemapController@pamphlet');
+    Route::get('article-{page?}.xml', 'Web\SitemapController@article');
+    Route::get('redirect.xml', 'Web\SitemapController@redirect');
 });
 
 Route::group(['prefix' => 'checkout'], function () {
