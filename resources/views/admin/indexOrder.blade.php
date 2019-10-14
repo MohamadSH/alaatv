@@ -237,6 +237,7 @@
                                     </div>
                                 </div>
                             </div>
+                            @endpermission
                             <div class="form-group">
                                 <div class="row">
                                     <div class="col">
@@ -245,7 +246,6 @@
                                     </div>
                                 </div>
                             </div>
-                            @endpermission
                         </div>
                         {!! Form::close() !!}
                     </div>
