@@ -123,6 +123,16 @@
                             <div class="form-group">
                                 @include('admin.filters.identityFilter')
                             </div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        @include("admin.filters.columnFilter" , ["id" => "orderTableColumnFilter" , "tableDefaultColumns" => $orderTableDefaultColumns])
+                                    </div>
+                                    <div class="col-md-9">
+                                        @include('admin.filters.sort')
+                                    </div>
+                                </div>
+                            </div>
                             @endpermission
     
                             @permission((config('constants.SEE_ORDER_FILTERS')))
@@ -227,16 +237,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="form-group">
-                                <div class="row">
-                                    <div class="col-md-3">
-                                        @include("admin.filters.columnFilter" , ["id" => "orderTableColumnFilter" , "tableDefaultColumns" => $orderTableDefaultColumns])
-                                    </div>
-                                    <div class="col-md-9">
-                                        @include('admin.filters.sort')
-                                    </div>
-                                </div>
-                            </div>
+                            @endpermission
                             <div class="form-group">
                                 <div class="row">
                                     <div class="col">
@@ -245,7 +246,6 @@
                                     </div>
                                 </div>
                             </div>
-                            @endpermission
                         </div>
                         {!! Form::close() !!}
                     </div>

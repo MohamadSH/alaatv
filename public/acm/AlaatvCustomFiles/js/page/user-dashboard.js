@@ -255,6 +255,7 @@ $(document).ready(function () {
                 gtmEecProductObserver.observe();
             }
         },
+        defaultView: 'grid',
     };
     $('#owlCarouselMyProduct').OwlCarouselType2(OwlCarouselType2Option);
     $('#owlCarouselMyFavoritSet').OwlCarouselType2(OwlCarouselType2Option);

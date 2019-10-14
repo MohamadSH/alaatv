@@ -26,8 +26,10 @@ class IndexOrderRequest extends FormRequest
     {
         if($request->user()->hasRole(config('constants.ROLE_FINANCE_EMPLOYEE'))){
             return [
-                'mobile' => 'required_without:nationalCode',
-                'nationalCode' => 'required_without:mobile',
+                'mobile'       => 'required_without_all:nationalCode,firstName,lastName',
+                'nationalCode' => 'required_without_all:mobile,firstName,lastName',
+                'firstName'    => 'required_without_all:mobile,nationalCode,lastName',
+                'lastName'     => 'required_without_all:mobile,nationalCode,firstName',
             ];
         }
 
