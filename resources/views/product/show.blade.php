@@ -122,7 +122,10 @@
         "brand" : {
         "@type" : "Brand",
         "name" : "آلاء",
-        "logo" : "https://cdn.alaatv.com/upload/Alaa-logo.png?w=182&h=224"
+        "logo": {
+                "@type": "ImageObject",
+                "url": "https://cdn.alaatv.com/upload/Alaa-logo.png?w=182&h=224"
+              }
         },
         "offers" : {
         "@type" : "Offer",
