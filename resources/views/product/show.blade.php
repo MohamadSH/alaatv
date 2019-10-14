@@ -111,6 +111,23 @@
     </style>
 @endsection
 
+@section('page-head')
+    {
+    "@context" : "http://schema.org",
+    "@type" : "Product",
+    "name" : " {{ $product->name }}",
+    "image" : "{{$product->photo}}?w=400&h=400",
+    "brand" : {
+    "@type" : "Brand",
+    "name" : "آلاء",
+    "logo" : "https://cdn.alaatv.com/upload/Alaa-logo.png?w=182&h=224"
+    },
+    "offers" : {
+    "@type" : "Offer",
+    "price" : "{{ $product->priceText['basePriceText'] }}"
+    }
+    }
+@endsection
 @section('pageBar')
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">

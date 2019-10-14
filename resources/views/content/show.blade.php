@@ -30,7 +30,7 @@
                      },
                   @endif
             "director" : {
-              "@type" : "Organization",
+              "@type" : "Person",
               "name" : "آلاء"
             }
         }
