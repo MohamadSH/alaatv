@@ -596,11 +596,11 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
     public function getMetaTitleAttribute($value): string
     {
         if (isset($value[0])) {
-            return Purify::clean($value, self::$purifyNullConfig);
+            return $this->getCleanTextForMetaTags($value);
         }
-
-        return Purify::clean(mb_substr($this->display_name, 0, config('constants.META_TITLE_LIMIT'), 'utf-8'),
-            self::$purifyNullConfig);
+    
+        return mb_substr($this->getCleanTextForMetaTags($this->display_name), 0, config('constants.META_TITLE_LIMIT'),
+            'utf-8');
     }
 
     /**
@@ -613,11 +613,20 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
     public function getMetaDescriptionAttribute($value): string
     {
         if (isset($value[0])) {
-            return Purify::clean($value, self::$purifyNullConfig);
+            return $this->getCleanTextForMetaTags($value);
         }
-
-        return Purify::clean(mb_substr($this->description.' '.$this->getSetName().' '.$this->displayName, 0, config('constants.META_DESCRIPTION_LIMIT'), 'utf-8'),
-            self::$purifyNullConfig);
+        return mb_substr($this->getCleanTextForMetaTags($this->description.' '.$this->getSetName().' '.$this->displayName),
+            0, config('constants.META_TITLE_LIMIT'), 'utf-8');
+    }
+    
+    /**
+     * @param  string  $text
+     *
+     * @return mixed
+     */
+    private function getCleanTextForMetaTags(string $text)
+    {
+        return Purify::clean($text, self::$purifyNullConfig);
     }
 
     /**
