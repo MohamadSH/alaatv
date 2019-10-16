@@ -371,7 +371,7 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
     {
         return $query->where('enable', $enable);
     }
-    
+
     /**
      * @param  Builder  $query
      *
@@ -381,7 +381,7 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
     {
         return $query->where('contenttype_id', self::CONTENT_TYPE_VIDEO);
     }
-    
+
     /**
      * @param  Builder  $query
      *
@@ -391,7 +391,7 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
     {
         return $query->where('contenttype_id', self::CONTENT_TYPE_PAMPHLET);
     }
-    
+
     /**
      * @param  Builder  $query
      *
@@ -428,7 +428,7 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
         return $query->enable()
             ->valid();
     }
-    
+
     public function scopeRedirected($query, $done = false)
     {
         if ($done) {
@@ -820,7 +820,7 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
         try {
             $key = 'content:getDisplayName'.$this->cacheKey();
             $c   = $this;
-    
+
             return Cache::remember($key, config('constants.CACHE_60'), static function () use ($c) {
                 $displayName   = '';
                 $sessionNumber = $c->order;
@@ -937,7 +937,11 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
      */
     public function setThumbnailAttribute($input)
     {
-        $this->attributes['thumbnail'] = json_encode($input, JSON_UNESCAPED_UNICODE);
+        if(is_null($input)){
+            $this->attributes['thumbnail'] = null;
+        }else{
+            $this->attributes['thumbnail'] = json_encode($input, JSON_UNESCAPED_UNICODE);
+        }
     }
 
     /**
