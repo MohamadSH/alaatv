@@ -30,7 +30,6 @@
 @endsection
 
 @section('pageBar')
-
     <nav aria-label = "breadcrumb">
         <ol class = "breadcrumb">
             <li class = "breadcrumb-item">
@@ -38,14 +37,13 @@
                 <a class = "m-link" href = "{{route('web.index')}}">@lang('page.Home')</a>
             </li>
             <li class = "breadcrumb-item">
-                <a class = "m-link" href = "{{action("Web\AdminController@adminContent")}}">مدیریت محتوا</a>
+                <a class = "m-link" href = "{{route('web.admin.content')}}">مدیریت محتوا</a>
             </li>
             <li class = "breadcrumb-item active" aria-current = "page">
-                <a class = "m-link" href = "#">درج محتوای آموزشی</a>
+                <a class = "m-link" href = "#">آپلود محتوا</a>
             </li>
         </ol>
     </nav>
-
 @endsection
 
 @section('content')

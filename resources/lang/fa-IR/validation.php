@@ -230,6 +230,7 @@ return [
         'introducedBy'             => 'معرف',
         'address'                  => 'آدرس',
         'credit'                  => 'اعتبار',
+        'context'                 => 'متن',
     ],
 
     "FileArray" => [
