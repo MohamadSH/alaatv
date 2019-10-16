@@ -38,7 +38,7 @@
 @endsection
 
 @section('content')
-        <div class="col-lg-7 mx-auto">
+        <div class="col-lg-8 mx-auto">
             <div class="m-portlet m-portlet--full-height ">
         <div class="m-portlet__head">
             <div class="m-portlet__head-caption">
@@ -68,14 +68,14 @@
                 @foreach($videos as $video)
                     <div class="m-widget5__item">
                         <div class="m-widget5__content">
-                            <a href="#" style="display: inherit">
-                                <div class="m-widget5__pic lazy-image a--full-width " style="display: contents" >
-                                    <img class="m-widget7__img a--full-width " src="{{$video->thumbnail}}" alt="{{$video->displayName}}" >
+                            <a href="{{ route('c.show' , ['content'=>$video]) }}" style="display: inherit">
+                                <div class="m-widget5__pic  a--full-width" style="display: contents" >
+                                    <img class="img-fluid a--full-width lazy-image " width="112" height="63"  src="https://cdn.alaatv.com/loder.jpg?w=1&h=1" data-src="{{$video->thumbnail}}" alt="{{$video->displayName}}">
                                 </div>
                             </a>
                             <div class="m-widget5__section">
                                 <h2 class="m-widget5__title m--margin-top-10-mobile">
-                                    <a href="{{route('c.show' , ['content'=>$video])}}">{{$video->displayName}}</a>
+                                    <a href="{{ route('c.show' , ['content'=>$video]) }}">{{$video->displayName}}</a>
                                 </h2>
                                 <div class="m-widget5__info font-weight-bold">
                                     @if($video->isFree)
@@ -90,6 +90,7 @@
                                 <span class="m-widget5__desc">
                                                     {!! $video->metaDescription !!}...
                                                 </span>
+                                <div class="m--clearfix"></div>
                             </div>
                         </div>
                         <div class="m-widget5__content">
