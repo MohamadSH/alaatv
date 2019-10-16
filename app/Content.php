@@ -951,19 +951,6 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
     */
 
     /**
-     *  Converts content's validSince to Jalali
-     *
-     * @return string
-     */
-    public function validSince_Jalali(): string
-    {
-        $explodedDateTime = explode(' ', $this->validSince);
-        $explodedTime     = $explodedDateTime[1];
-
-        return $this->convertDate($this->validSince, 'toJalali').' '.$explodedTime;
-    }
-
-    /**
      * Set the content's thumbnail.
      *
      * @param $input

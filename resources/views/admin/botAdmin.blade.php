@@ -2,11 +2,6 @@
 
 @section('page-css')
     <link href="{{ mix('/css/admin-all.css') }}" rel="stylesheet" type="text/css"/>
-    <style>
-        .bootstrap-tagsinput .tag {
-            background: #36a3f7;
-        }
-    </style>
 @endsection
 
 @section('pageBar')
@@ -369,6 +364,10 @@
 @section('page-js')
     <script src="{{ mix('/js/admin-all.js') }}" type="text/javascript"></script>
     <script>
+        $("input[data-role=tagsinput], select[multiple][data-role=tagsinput]").tagsinput({
+            tagClass: 'm-badge m-badge--info m-badge--wide m-badge--rounded'
+        });
+
         $("#checkGhesdiSinceDate").persianDatepicker({
             altField: '#checkGhesdiSinceDateAlt',
             altFormat: "YYYY MM DD",
