@@ -382,6 +382,21 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
         return $query->where('contenttype_id', self::CONTENT_TYPE_VIDEO);
     }
 
+    public function isVideo(): bool
+    {
+        return $this->contenttype_id === self::CONTENT_TYPE_VIDEO;
+    }
+
+    public function isArticle(): bool
+    {
+        return $this->contenttype_id === self::CONTENT_TYPE_ARTICLE;
+    }
+
+    public function isPamphlet(): bool
+    {
+        return $this->contenttype_id === self::CONTENT_TYPE_PAMPHLET;
+    }
+
     /**
      * @param  Builder  $query
      *
@@ -581,11 +596,11 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
     public function getMetaTitleAttribute($value): string
     {
         if (isset($value[0])) {
-            return Purify::clean($value, self::$purifyNullConfig);
+            return $this->getCleanTextForMetaTags($value);
         }
 
-        return Purify::clean(mb_substr($this->display_name, 0, config('constants.META_TITLE_LIMIT'), 'utf-8'),
-            self::$purifyNullConfig);
+        return mb_substr($this->getCleanTextForMetaTags($this->display_name), 0, config('constants.META_TITLE_LIMIT'),
+            'utf-8');
     }
 
     /**
@@ -598,11 +613,20 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
     public function getMetaDescriptionAttribute($value): string
     {
         if (isset($value[0])) {
-            return Purify::clean($value, self::$purifyNullConfig);
+            return $this->getCleanTextForMetaTags($value);
         }
+        return mb_substr($this->getCleanTextForMetaTags($this->description.' '.$this->getSetName().' '.$this->displayName),
+            0, config('constants.META_TITLE_LIMIT'), 'utf-8');
+    }
 
-        return Purify::clean(mb_substr($this->description, 0, config('constants.META_DESCRIPTION_LIMIT'), 'utf-8'),
-            self::$purifyNullConfig);
+    /**
+     * @param  string  $text
+     *
+     * @return mixed
+     */
+    private function getCleanTextForMetaTags(string $text)
+    {
+        return Purify::clean($text, self::$purifyNullConfig);
     }
 
     /**
@@ -778,6 +802,17 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
         return isset($video) ? $video : collect();
     }
 
+    public function getSetName()
+    {
+        $key     = 'content:getSetName:'.$this->cacheKey();
+        return Cache::tags(['content'])
+            ->remember($key, config('constants.CACHE_60'), function ()  {
+                $contentSet     = $this->set;
+                return isset($contentSet) ? $contentSet->name : null;
+            });
+
+
+    }
     /**
      * Gets content's set mates (contents which has same content set as this content
      *
@@ -791,7 +826,7 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
         $setMates = Cache::tags(['content'])
             ->remember($key, config('constants.CACHE_60'), function () use ($content) {
                 $contentSet     = $content->set;
-                $contentSetName = isset($contentSet) ? $contentSet->name : null;
+                $contentSetName = $content->getSetName();
                 if (isset($contentSet)) {
                     $sameContents = $contentSet->getActiveContents()
                         ->sortBy('order')
