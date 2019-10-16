@@ -169,13 +169,17 @@ trait DateTrait
      *
      * @return string
      */
-    public function ValidSince_Jalali()
+    public function ValidSince_Jalali($withTime=true):string
     {
         $explodedDateTime = explode(" ", $this->validSince);
         $explodedTime     = $explodedDateTime[1];
         $explodedDate     = $this->convertDate($this->validSince, "toJalali");
 
-        return ($explodedDate." ".$explodedTime);
+        if($withTime) {
+            return ($explodedDate." ".$explodedTime);
+        }else{
+            return $explodedDate.'';
+        }
     }
 
     /**

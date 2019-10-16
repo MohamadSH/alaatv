@@ -2,6 +2,8 @@
 
 namespace App;
 
+use App\Traits\DateTrait;
+
 /**
  * App\Productfiletype
  *
@@ -36,6 +38,7 @@ namespace App;
  */
 class Productfiletype extends BaseModel
 {
+    use DateTrait;
     /**
      * @var array
      */
@@ -44,7 +47,7 @@ class Productfiletype extends BaseModel
         'description',
         'displayName',
     ];
-    
+
     /**
      * @return array
      */
@@ -54,24 +57,13 @@ class Productfiletype extends BaseModel
             ->toArray();
         $productFileTypes = array_add($productFileTypes, 0, "انتخاب کنید");
         $productFileTypes = array_sort_recursive($productFileTypes);
-        
+
         return $productFileTypes;
     }
-    
+
     public function productfiles()
     {
         return $this->hasMany('\App\Productfile');
     }
-    
-    /**
-     * @return string
-     * Converting Created_at field to jalali
-     */
-    public function validSince_Jalali()
-    {
-        $explodedDateTime = explode(" ", $this->validSince);
-        $explodedTime     = $explodedDateTime[1];
-        
-        return $this->convertDate($this->validSince, "toJalali")." ".$explodedTime;
-    }
+
 }

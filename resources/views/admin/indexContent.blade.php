@@ -123,18 +123,21 @@
 
                                 <div class="btn-group">
                                     @permission((config('constants.INSERT_EDUCATIONAL_CONTENT_ACCESS')))
-                                    {{--                                        <a  class="btn btn-outline red" target="_blank" href="{{action("Web\ContentController@create2")}}"><i class="fa fa-plus"></i> افزودن محتوا </a>--}}
-                                    <a class="btn m-btn--pill m-btn--air btn-outline-danger" target="_blank" href="{{action("Web\ContentController@create2")}}">
+                                    <a class="btn m-btn--pill m-btn--air btn-outline-danger" target="_blank" href="{{route('c.create')}}">
                                         <i class="fa fa-plus"></i>
                                         افزودن محتوا
                                     </a>
-                                    <a class="btn m-btn--pill m-btn--air btn-outline-danger" target="_blank" href="{{action("Web\ContentController@create")}}">
+                                    <a class="btn m-btn--pill m-btn--air btn-outline-danger" target="_blank" href="{{route('c.create.article')}}">
                                         <i class="fa fa-plus"></i>
-                                        آپلود محتوا
+                                        افزودن مقاله
                                     </a>
-                                    <a class="btn m-btn--pill m-btn--air btn-outline-danger" target="_blank" href="{{action("Web\SetController@create")}}">
+{{--                                    <a class="btn m-btn--pill m-btn--air btn-outline-danger" target="_blank" href="{{action("Web\ContentController@uploadContent")}}">--}}
+{{--                                        <i class="fa fa-plus"></i>--}}
+{{--                                        آپلود محتوا--}}
+{{--                                    </a>--}}
+                                    <a class="btn m-btn--pill m-btn--air btn-outline-accent" target="_blank" href="{{route('set.create')}}">
                                         <i class="fa fa-plus"></i>
-                                        دسته محتوای جدید
+                                        افزودن دسته محتوا
                                     </a>
                                     @endpermission
                                 </div>

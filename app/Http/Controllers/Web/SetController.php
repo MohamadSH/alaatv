@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Web;
 
+use App\Content;
 use App\Contentset;
 use App\Websitesetting;
 use App\Traits\FileCommon;
@@ -206,17 +207,25 @@ class SetController extends Controller
         }
     }
 
-    public function show(Request $request, Contentset $set)
+    public function show(Request $request, Contentset $contentSet)
     {
-        if (isset($set->redirectUrl)) {
-            return redirect($set->redirectUrl, Response::HTTP_FOUND, $request->headers->all());
+        if (isset($contentSet->redirectUrl)) {
+            return redirect($contentSet->redirectUrl, Response::HTTP_FOUND, $request->headers->all());
         }
 
         if ($request->expectsJson()) {
-            return response()->json($set);
+            return response()->json($contentSet);
         }
-    
-        return redirect($set->url);
+
+        $contents = $contentSet->getActiveContents2();
+        if($contents->isEmpty()){
+            return redirect(route('web.home'));
+        }
+
+        $pamphlets = $contents->where('contenttype_id' , Content::CONTENT_TYPE_PAMPHLET);
+        $videos    = $contents->where('contenttype_id' , Content::CONTENT_TYPE_VIDEO);
+
+        return view('set.show' , compact('contentSet' , 'videos' , 'pamphlets' ));
     }
 
     public function edit(Contentset $set) {

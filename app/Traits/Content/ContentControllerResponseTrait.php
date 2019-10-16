@@ -78,11 +78,10 @@ trait ContentControllerResponseTrait
      *
      * @return array
      */
-    private function makeThumbanilFile($thumbnailUrl): array
+    private function makeThumbnailFile($thumbnailUrl): array
     {
         return [
-            "uuid"     => Str::uuid()
-                ->toString(),
+            "uuid"     => Str::uuid()->toString(),
             "disk"     => config('constants.DISK_FREE_CONTENT'),
             "url"      => $thumbnailUrl,
             "fileName" => parse_url($thumbnailUrl)['path'],
@@ -145,92 +144,7 @@ trait ContentControllerResponseTrait
     private function makeThumbnailUrlFromFileName(string $fileName, int $contentset_id): string
     {
         $baseUrl = config('constants.DOWNLOAD_SERVER_PROTOCOL').config('constants.CDN_SERVER_NAME').config('constants.DOWNLOAD_SERVER_MEDIA_PARTIAL_PATH');
-        $thumbnailFileName = pathinfo($fileName, PATHINFO_FILENAME).".jpg";
-        $thumbnailUrl      = $baseUrl."thumbnails/".$contentset_id."/".$thumbnailFileName;
-
-        return $thumbnailUrl;
-    }
-
-    /**
-     * @param string $fileName
-     * @param string $disk
-     * @param int $contentsetId
-     * @return array
-     */
-    public function makeFreeVideoFileArray(string $fileName , string $disk, int $contentsetId): array
-    {
-        $serverUrl = config('constants.DOWNLOAD_SERVER_PROTOCOL').config('constants.CDN_SERVER_NAME');
-        $mediaPartialPath =config('constants.DOWNLOAD_SERVER_MEDIA_PARTIAL_PATH');
-
-        $fileUrl = [
-            '720p' => [
-                'url' => $serverUrl.$mediaPartialPath.$contentsetId.'/HD_720p/'.$fileName,
-                'partialPath'=> $mediaPartialPath.$contentsetId.'/HD_720p/'.$fileName,
-            ],
-            '480p' => [
-                'url' => $serverUrl.$mediaPartialPath.$contentsetId.'/hq/'.$fileName,
-                'partialPath'=> $mediaPartialPath.$contentsetId.'/hq/'.$fileName,
-            ],
-            '240p' => [
-                'url' => $serverUrl.$mediaPartialPath.$contentsetId.'/240p/'.$fileName,
-                'partialPath'=> $mediaPartialPath.$contentsetId.'/240p/'.$fileName,
-            ]
-        ];
-
-        $files = $this->makeFilesArray($fileUrl , $disk);
-
-        return $files;
-    }
-
-    /**
-     * @param string $fileName
-     * @param string $disk
-     * @param int $productId
-     * @return array
-     */
-    public function makePaidVideoFileArray(string $fileName , string $disk , int $productId): array
-    {
-        $fileUrl = [
-            '720p' => [
-                'partialPath' =>'/paid/'.$productId.'/video/HD_720p/'.$fileName,
-                'url'   => null,
-                ],
-            '480p' => [
-                'partialPath' =>'/paid/'.$productId.'/video/hq/'.$fileName,
-                'url'   => null,
-                ],
-            '240p' => [
-                'partialPath' =>'/paid/'.$productId.'/video/240p/'.$fileName,
-                'url'   => null,
-                ]
-        ];
-
-        $files = $this->makeFilesArray($fileUrl , $disk);
-
-        return $files;
-    }
-
-    /**
-     * @param string $fileName
-     * @param string $disk
-     * @return array
-     */
-    public function makeFreePamphletFileArray(string $fileName , string $disk): array
-    {
-        $files[] = $this->makePamphletFileStdClass($fileName , $disk);
-        return $files;
-    }
-
-    /**
-     * @param string $fileName
-     * @param string $disk
-     * @param int $productId
-     * @return array
-     */
-    public function makePaidPamphletFileArray(string $fileName , string $disk, int $productId): array
-    {
-        $files[] = $this->makePamphletFileStdClass("/paid/".$productId."/".$fileName , $disk);
-        return $files;
+        return $baseUrl."thumbnails/".$contentset_id."/".$fileName;
     }
 
     /**

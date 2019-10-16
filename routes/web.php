@@ -262,7 +262,6 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('donateOrder', 'Web\OrderController@donateOrder');
 
     Route::get('listContents/{set}', 'Web\SetController@indexContent')->name('web.set.list.contents');
-    Route::resource('set', 'Web\SetController');
 
     Route::get('live' , '\\'.LiveController::class)->name('live');
     Route::post('startlive' , [LiveController::class, 'startLive'])->name('web.start.live');
@@ -276,7 +275,8 @@ Route::group(['middleware' => 'auth'], function () {
 Route::group(['prefix' => 'c'], function () {
 
     Route::get('search', 'Web\ContentController@search');
-    Route::get('create2', [ContentController::class, 'create2']);
+    Route::get('uploadContent', [ContentController::class, 'uploadContent'])->name('c.upload.content');
+    Route::get('createArticle', [ContentController::class, 'createArticle'])->name('c.create.article');
 
     Route::get('{c}/favored', 'Web\FavorableController@getUsersThatFavoredThisFavorable');
     Route::post('{c}/favored', 'Web\FavorableController@markFavorableFavorite');
@@ -293,7 +293,7 @@ Route::group(['prefix' => 'product'], function () {
 });
 
 Route::resource('product', 'Web\ProductController');
-
+Route::resource('set', 'Web\SetController');
 Route::resource('c', 'Web\ContentController')->names([
     'index' => 'content.index'
 ]);;
