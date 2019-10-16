@@ -18,7 +18,7 @@ return [
     'ROLE_TEACHER_ID'            => 10,
     'BOOK_POST_MAN_ROLE'         => 'bookPostMan',
     'SHARIF_SCHOOL_REGISTER'     => 'sharifSchoolRegister',
-    
+
     // Permissions :
     'ADMIN_PANEL_ACCESS'         => 'adminPanel',
     'GIVE_SYSTEM_ROLE'           => 'giveSystemRole',
@@ -197,15 +197,15 @@ return [
     'GIVE_WALLET_CREDIT'         => 'giveWalletCredit',
     'SEE_ORDER_FILTERS'          => 'seeOrderFilters',
     'SEE_ORDER_IDENTITY_FILTERS' => 'seeOrderIdentityFilters',
-    
+
     //Technician
     'SET_TECH_CODE'              => 'insertTechCode',
     'UPDATE_TECH_CODE'           => 'updateTechCode',
-    
+
     //bons
     'BON1'                       => 'alaa',
     'BON2'                       => 'alaaPoint',
-    
+
     //fileSystem disks
     'DISK1'                      => 'profileImage',
     'DISK2'                      => 'assignmentQuestionFile',
@@ -235,34 +235,34 @@ return [
     'DISK23'                     => 'setImageSFTP',
     'DISK24'                     => 'profileImageSFTP',
     'DISK25'                     => 'contentThumbnailSFTP',
-    
+
     'DISK_FREE_CONTENT'              => 'alaaCdnSFTP',
     'DISK_PRODUCT_CONTENT'           => 'productFileSFTP',
-    
+
     //Profile default image
     'PROFILE_DEFAULT_IMAGE'          => 'default_avatar.png',
     'CONSULTATION_DEFAULT_IMAGE'     => 'default_consultant_thumbnail.jpg',
     'ARTICLE_DEFAULT_IMAGE'          => 'default_article_image.png',
-    
+
     //Mobile verification code wait expiration (in minutes)
     'MOBILE_VERIFICATION_TIME_LIMIT' => '30',
     'MOBILE_VERIFICATION_WAIT_TIME'  => '4',
     //waiting time between sending two mobile verification code sms
     'GENERATE_PASSWORD_WAIT_TIME'    => '14',
     //waiting time between sending two password sms
-    
+
     //Number of mbti questions (it is temporary)
     'MBTI_NUMBER_OF_QUESTIONS'       => '80',
-    
+
     //loading gif
     'FILTER_LOADING_GIF'             => '/acm/extra/loading-cogs.gif',
     'ADMIN_LOADING_BAR_GIF'          => '/acm/extra/filter-loading-bar.gif',
-    
+
     //sms payment
     'COST_PER_SMS_1'                 => 100,
     'COST_PER_SMS_2'                 => 110,
     'COST_PER_SMS_3'                 => 130,
-    
+
     'SMS_PROVIDER_NUMBER' => [
         'phone' => [
             98100020400      => 98100020400,
@@ -288,15 +288,15 @@ return [
     'google'              => [
         'analytics' => env('GOOGLE_ANALYTICS', 'UA-43695756-1'),
     ],
-    
-    
+
+
     'UI_META_TITLE_LIMIT'       => 70,
     'UI_META_KEYWORD_LIMIT'     => 155,
     'UI_META_DESCRIPTION_LIMIT' => 155,
     'META_TITLE_LIMIT'          => 129,
     'META_KEYWORDS_LIMIT'       => 286,
     'META_DESCRIPTION_LIMIT'    => 286,
-    
+
     'WORKDAY_ID_USUAL'                                    => 1,
     'WORKDAY_ID_EXTRA'                                    => 2,
     'HAMAYESH_PRODUCT'                                    => [
@@ -380,11 +380,11 @@ return [
         159,
         163,
     ],
-    
+
     'ASIATECH_FREE_ADSL'                 => 224,
     'LOTTERY_NAME'                       => '10tir',
     'HAMAYESH_LOTTERY_EXCHANGE_AMOUNT'   => 30000,
-    
+
     //Cache
     'CACHE_600'                          => env('CACHE_600', 0),
     'CACHE_300'                          => env('CACHE_300', 0),
@@ -394,7 +394,7 @@ return [
     'CACHE_3'                            => env('CACHE_3', 0),
     'CACHE_1'                            => env('CACHE_1', 0),
     'CACHE_0'                            => env('CACHE_0', 0),
-    
+
     //
     'TAG_API_URL'                        => env('TAG_API_URL', null),
     'SERVER'                             => env('SERVER'),
@@ -403,7 +403,7 @@ return [
     'DOWNLOAD_SERVER_ROOT'               => env('DOWNLOAD_SERVER_ROOT', null),
     'DOWNLOAD_SERVER_PROTOCOL'           => env('DOWNLOAD_SERVER_PROTOCOL', null),
     'DOWNLOAD_SERVER_MEDIA_PARTIAL_PATH' => env('DOWNLOAD_SERVER_MEDIA_PARTIAL_PATH', null),
-    
+
     //OrderStatus
     'ORDER_STATUS_OPEN'                  => 1,
     'ORDER_STATUS_CLOSED'                => 2,
@@ -414,9 +414,9 @@ return [
     'ORDER_STATUS_READY_TO_POST'         => 7,
     'ORDER_STATUS_OPEN_DONATE'           => 8,
     'ORDER_STATUS_PENDING'               => 9,
-    
+
     'OPEN_ORDER_STATUSES'                    => [1, 4, 8],
-    
+
     //TRANSACTION STATUSES CONSTANTS
     'TRANSACTION_STATUS_TRANSFERRED_TO_PAY'  => 1,
     'TRANSACTION_STATUS_UNSUCCESSFUL'        => 2,
@@ -425,83 +425,84 @@ return [
     'TRANSACTION_STATUS_ARCHIVED_SUCCESSFUL' => 5,
     'TRANSACTION_STATUS_UNPAID'              => 6,
     'TRANSACTION_STATUS_SUSPENDED'           => 7,
-    
+
     //PAYMENT METHODS CONSTANTS
     'PAYMENT_METHOD_ONLINE'                  => 1,
     'PAYMENT_METHOD_ATM'                     => 2,
     'PAYMENT_METHOD_POS'                     => 3,
     'PAYMENT_METHOD_PAYCHECK'                => 4,
     'PAYMENT_METHOD_WALLET'                  => 5,
-    
+
     //PAYMENT STATUSES CONSTANTS
     'PAYMENT_STATUS_UNPAID'                  => 1,
     'PAYMENT_STATUS_INDEBTED'                => 2,
     'PAYMENT_STATUS_PAID'                    => 3,
     'PAYMENT_STATUS_VERIFIED_INDEBTED'       => 4,
-    
+
     'ORDERPRODUCT_CHECKOUT_STATUS_UNPAID'      => 1,
     'ORDERPRODUCT_CHECKOUT_STATUS_PAID'        => 2,
-    
+
     //USER BON STATUSES CONSTANTS
     'USERBON_STATUS_ACTIVE'                    => 1,
     'USERBON_STATUS_EXPIRED'                   => 2,
     'USERBON_STATUS_USED'                      => 3,
-    
+
     //PRODUCT TYPES CONSTANTS
     'PRODUCT_TYPE_SIMPLE'                      => 1,
     'PRODUCT_TYPE_CONFIGURABLE'                => 2,
     'PRODUCT_TYPE_SELECTABLE'                  => 3,
-    
+
     //CONTROLS CONSTANTS
     'CONTROL_SELECT'                           => 1,
     'CONTROL_GROUPED_CHECKBOX'                 => 2,
     'CONTROL_SWITCH'                           => 3,
-    
+
     //ORDERPRODUCT TYPES CONSTANTS
     'ORDER_PRODUCT_TYPE_DEFAULT'               => 1,
     'ORDER_PRODUCT_GIFT'                       => 2,
-    
+
     //ORDERPRODUCT INTERRELATIONS
     'ORDER_PRODUCT_INTERRELATION_PARENT_CHILD' => 1,
-    
+
     //TRANSACTION INTERRELATIONS
     'TRANSACTION_INTERRELATION_PARENT_CHILD'   => 1,
-    
+
     //PRODUCT INTERRELATIONS
     'PRODUCT_INTERRELATION_GIFT'               => 1,
-    
+
     //DISCOUNT TYPES
     'DISCOUNT_TYPE_PERCENTAGE'                 => 1,
     'DISCOUNT_TYPE_COST'                       => 2,
-    
+
     //PRODUCT FILE TYPES
     'PRODUCT_FILE_TYPE_PAMPHLET'               => 1,
     'PRODUCT_FILE_TYPE_VIDEO'                  => 2,
-    
+
     //CONTENT TYPES
     'CONTENT_TYPE_PAMPHLET'                    => 1,
     'CONTENT_TYPE_VIDEO'                       => 8,
-    
+    'CONTENT_TYPE_ARTICLE'                     => 9,
+
     //WALLET TYPES
     'WALLET_TYPE_MAIN'                         => 1,
     'WALLET_TYPE_GIFT'                         => 2,
-    
+
     //USER STATUSES
     'USER_STATUS_ACTIVE'                       => 1,
     'USER_STATUS_INACTIVE'                     => 2,
-    
+
     //COUPON TYPES
     'COUPON_TYPE_OVERALL'                      => 1,
     'COUPON_TYPE_PARTIAL'                      => 2,
-    
+
     'ATTRIBUTE_TYPE_MAIN'        => 1,
     'ATTRIBUTE_TYPE_EXTRA'       => 2,
     'ATTRIBUTE_TYPE_INFORMATION' => 3,
-    
+
     'EMPLOYEE_OVERTIME_STATUS_UNCONFIRMED' => 1,
     'EMPLOYEE_OVERTIME_STATUS_CONFIRMED'   => 2,
     'EMPLOYEE_OVERTIME_STATUS_REJECTED'    => 3,
-    
+
     'JALALI_CALENDER'   => [
         [
             'month'       => 'مهر',

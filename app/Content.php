@@ -371,7 +371,7 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
     {
         return $query->where('enable', $enable);
     }
-    
+
     /**
      * @param  Builder  $query
      *
@@ -381,22 +381,22 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
     {
         return $query->where('contenttype_id', self::CONTENT_TYPE_VIDEO);
     }
-    
+
     public function isVideo(): bool
     {
         return $this->contenttype_id === self::CONTENT_TYPE_VIDEO;
     }
-    
+
     public function isArticle(): bool
     {
         return $this->contenttype_id === self::CONTENT_TYPE_ARTICLE;
     }
-    
+
     public function isPamphlet(): bool
     {
         return $this->contenttype_id === self::CONTENT_TYPE_PAMPHLET;
     }
-    
+
     /**
      * @param  Builder  $query
      *
@@ -406,7 +406,7 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
     {
         return $query->where('contenttype_id', self::CONTENT_TYPE_PAMPHLET);
     }
-    
+
     /**
      * @param  Builder  $query
      *
@@ -443,7 +443,7 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
         return $query->enable()
             ->valid();
     }
-    
+
     public function scopeRedirected($query, $done = false)
     {
         if ($done) {
@@ -596,11 +596,11 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
     public function getMetaTitleAttribute($value): string
     {
         if (isset($value[0])) {
-            return Purify::clean($value, self::$purifyNullConfig);
+            return $this->getCleanTextForMetaTags($value);
         }
 
-        return Purify::clean(mb_substr($this->display_name, 0, config('constants.META_TITLE_LIMIT'), 'utf-8'),
-            self::$purifyNullConfig);
+        return mb_substr($this->getCleanTextForMetaTags($this->display_name), 0, config('constants.META_TITLE_LIMIT'),
+            'utf-8');
     }
 
     /**
@@ -613,11 +613,20 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
     public function getMetaDescriptionAttribute($value): string
     {
         if (isset($value[0])) {
-            return Purify::clean($value, self::$purifyNullConfig);
+            return $this->getCleanTextForMetaTags($value);
         }
+        return mb_substr($this->getCleanTextForMetaTags($this->description.' '.$this->getSetName().' '.$this->displayName),
+            0, config('constants.META_TITLE_LIMIT'), 'utf-8');
+    }
 
-        return Purify::clean(mb_substr($this->description.' '.$this->getSetName().' '.$this->displayName, 0, config('constants.META_DESCRIPTION_LIMIT'), 'utf-8'),
-            self::$purifyNullConfig);
+    /**
+     * @param  string  $text
+     *
+     * @return mixed
+     */
+    private function getCleanTextForMetaTags(string $text)
+    {
+        return Purify::clean($text, self::$purifyNullConfig);
     }
 
     /**
@@ -801,8 +810,8 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
                 $contentSet     = $this->set;
                 return isset($contentSet) ? $contentSet->name : null;
             });
-        
-        
+
+
     }
     /**
      * Gets content's set mates (contents which has same content set as this content
@@ -846,7 +855,7 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
         try {
             $key = 'content:getDisplayName'.$this->cacheKey();
             $c   = $this;
-    
+
             return Cache::remember($key, config('constants.CACHE_60'), static function () use ($c) {
                 $displayName   = '';
                 $sessionNumber = $c->order;
@@ -942,19 +951,6 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
     */
 
     /**
-     *  Converts content's validSince to Jalali
-     *
-     * @return string
-     */
-    public function validSince_Jalali(): string
-    {
-        $explodedDateTime = explode(' ', $this->validSince);
-        $explodedTime     = $explodedDateTime[1];
-
-        return $this->convertDate($this->validSince, 'toJalali').' '.$explodedTime;
-    }
-
-    /**
      * Set the content's thumbnail.
      *
      * @param $input
@@ -963,7 +959,11 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
      */
     public function setThumbnailAttribute($input)
     {
-        $this->attributes['thumbnail'] = json_encode($input, JSON_UNESCAPED_UNICODE);
+        if(is_null($input)){
+            $this->attributes['thumbnail'] = null;
+        }else{
+            $this->attributes['thumbnail'] = json_encode($input, JSON_UNESCAPED_UNICODE);
+        }
     }
 
     /**

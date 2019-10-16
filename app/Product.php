@@ -19,7 +19,8 @@ use App\Classes\{Taggable,
     FavorableInterface,
     SEO\SeoMetaTagsGenerator,
     Checkout\Alaa\AlaaProductPriceCalculator};
-use App\Traits\{ProductCommon,
+use App\Traits\{DateTrait,
+    ProductCommon,
     favorableTraits,
     APIRequestCommon,
     ModelTrackerTrait,
@@ -31,51 +32,51 @@ use App\Traits\{ProductCommon,
 /**
  * App\Product
  *
- * @property int                                                                 $id
- * @property string|null                                                         $name               نام  کالا
- * @property int                                                                 $basePrice          قیمت پایه  کالا
- * @property float                                                               $discount           میزان تخفیف کالا
+ * @property int                                                            $id
+ * @property string|null                                                    $name               نام  کالا
+ * @property int                                                            $basePrice          قیمت پایه  کالا
+ * @property float                                                          $discount           میزان تخفیف کالا
  *           برای همه به درصد
- * @property int                                                                 $isFree             رایگان بودن یا
+ * @property int                                                            $isFree             رایگان بودن یا
  *           نبودن محصول
- * @property int|null                                                            $amount             تعدا موجود از این
+ * @property int|null                                                       $amount             تعدا موجود از این
  *           محصول - نال به معنای بینهایت است
- * @property string|null                                                         $shortDescription   توضیحات مختصر کالا
- * @property string|null                                                         $longDescription    توضیحات کالا
- * @property string|null                                                         $specialDescription توضیحات خاص برای
+ * @property string|null                                                    $shortDescription   توضیحات مختصر کالا
+ * @property string|null                                                    $longDescription    توضیحات کالا
+ * @property string|null                                                    $specialDescription توضیحات خاص برای
  *           محصول
- * @property string|null                                                         $tags               تگ ها
- * @property string|null                                                         $slogan             یک جمله ی خاص
+ * @property string|null                                                    $tags               تگ ها
+ * @property string|null                                                    $slogan             یک جمله ی خاص
  *           درباره این کالا
- * @property string|null                                                         $image              تصویر اصلی کالا
- * @property string|null                                                         $file               فایل مربوط به کالا
- * @property string|null                                                         $introVideo         فیلم معرفی محصول
- * @property string|null                                                         $validSince         تاریخ شروع فروش
+ * @property string|null                                                    $image              تصویر اصلی کالا
+ * @property string|null                                                    $file               فایل مربوط به کالا
+ * @property string|null                                                    $introVideo         فیلم معرفی محصول
+ * @property string|null                                                    $validSince         تاریخ شروع فروش
  *           کالا
- * @property string|null                                                         $validUntil         تاریخ پایان فروش
+ * @property string|null                                                    $validUntil         تاریخ پایان فروش
  *           کالا
- * @property int                                                                 $enable             فعال بودن یا نبودن
+ * @property int                                                            $enable             فعال بودن یا نبودن
  *           کالا
- * @property int                                                                 $order              ترتیب کالا - در
+ * @property int                                                            $order              ترتیب کالا - در
  *           صورت نیاز به استفاده
- * @property int|null                                                            $producttype_id     آی دی مشخص کننده
+ * @property int|null                                                       $producttype_id     آی دی مشخص کننده
  *           نوع کالا
- * @property int|null                                                            $attributeset_id    آی دی مشخص کننده
+ * @property int|null                                                       $attributeset_id    آی دی مشخص کننده
  *           دسته صفتهای کالا
- * @property Carbon|null                                                 $created_at
- * @property Carbon|null                                                 $updated_at
- * @property Carbon|null                                                 $deleted_at
+ * @property Carbon|null                                                    $created_at
+ * @property Carbon|null                                                    $updated_at
+ * @property Carbon|null                                                    $deleted_at
  * @property-read Attributeset|null                                         $attributeset
  * @property-read \Illuminate\Database\Eloquent\Collection|Attributevalue[] $attributevalues
- * @property-read \Illuminate\Database\Eloquent\Collection|Bon[] $bons
- * @property-read \Illuminate\Database\Eloquent\Collection|Product[] $children
- * @property-read \Illuminate\Database\Eloquent\Collection|Product[] $complimentaryproducts
- * @property-read \Illuminate\Database\Eloquent\Collection|Coupon[] $coupons
- * @property-read \Illuminate\Database\Eloquent\Collection|Product[] $gifts
- * @property-read \Illuminate\Database\Eloquent\Collection|Orderproduct[] $orderproducts
- * @property-read \Illuminate\Database\Eloquent\Collection|Product[] $parents
- * @property-read \Illuminate\Database\Eloquent\Collection|Productphoto[] $photos
- * @property-read \Illuminate\Database\Eloquent\Collection|Productfile[] $productfiles
+ * @property-read \Illuminate\Database\Eloquent\Collection|Bon[]            $bons
+ * @property-read \Illuminate\Database\Eloquent\Collection|Product[]        $children
+ * @property-read \Illuminate\Database\Eloquent\Collection|Product[]        $complimentaryproducts
+ * @property-read \Illuminate\Database\Eloquent\Collection|Coupon[]         $coupons
+ * @property-read \Illuminate\Database\Eloquent\Collection|Product[]        $gifts
+ * @property-read \Illuminate\Database\Eloquent\Collection|Orderproduct[]   $orderproducts
+ * @property-read \Illuminate\Database\Eloquent\Collection|Product[]        $parents
+ * @property-read \Illuminate\Database\Eloquent\Collection|Productphoto[]   $photos
+ * @property-read \Illuminate\Database\Eloquent\Collection|Productfile[]    $productfiles
  * @property-read Producttype|null                                          $producttype
  * @method static Builder|Product configurable()
  * @method static bool|null forceDelete()
@@ -108,70 +109,70 @@ use App\Traits\{ProductCommon,
  * @method static \Illuminate\Database\Query\Builder|Product withTrashed()
  * @method static \Illuminate\Database\Query\Builder|Product withoutTrashed()
  * @mixin Eloquent
- * @property string|null                                                         $page_view
+ * @property string|null                                                    $page_view
  * @method static Builder|Product wherePageView($value)
- * @property string|null                                                         $redirectUrl        آدرسی که صفحه محصول به آن به صورت همیشگی ریدایرکت می شود
+ * @property string|null                                                    $redirectUrl        آدرسی که صفحه محصول به آن به صورت همیشگی ریدایرکت می شود
  * @method static Builder|Product whereRedirectUrl($value)
  * @method static Builder|Product enable()
  * @method static Builder|Product valid()
- * @property-read UserCollection|User[] $favoriteBy
- * @property-read mixed                                                          $photo
- * @property-read null|string                                                    $price_text
- * @property-read mixed                                                          $sample_photos
- * @property-write mixed                                                         $long_description
- * @property-write mixed                                                         $short_description
- * @property-write mixed                                                         $special_description
+ * @property-read UserCollection|User[]                                     $favoriteBy
+ * @property-read mixed                                                     $photo
+ * @property-read null|string                                               $price_text
+ * @property-read mixed                                                     $sample_photos
+ * @property-write mixed                                                    $long_description
+ * @property-write mixed                                                    $short_description
+ * @property-write mixed                                                    $special_description
  * @method static Builder|Product active()
  * @method static Builder|Product newModelQuery()
  * @method static Builder|Product newQuery()
  * @method static Builder|Product query()
- * @property int|null                                                            $grand_id
- * @property-read \Collection|null                                               $attributes
- * @property-read mixed                                                          $gift
- * @property-read mixed                                                          $grand_parent
- * @property-read mixed                                                          $type
- * @property-read mixed                                                          $url
- * @property-read Product $grand
+ * @property int|null                                                       $grand_id
+ * @property-read \Collection|null                                          $attributes
+ * @property-read mixed                                                     $gift
+ * @property-read mixed                                                     $grand_parent
+ * @property-read mixed                                                     $type
+ * @property-read mixed                                                     $url
+ * @property-read Product                                                   $grand
  * @method static Builder|Product whereGrandId($value)
  * @method static Builder|BaseModel disableCache()
  * @method static Builder|BaseModel withCacheCooldownSeconds($seconds)
- * @property-read mixed                                                          $active
- * @property Product                                                             grandParent
- * @property-read mixed                                                          $api_url
- * @property-read array|string                                                   $price
- * @property-read mixed                                                          $redirect_url
- * @property-read SetCollection|Contentset[] $sets
- * @property-read mixed                                                          $cache_cooldown_seconds
- * @property mixed block
- * @property Collection intro_videos
+ * @property-read mixed                                                     $active
+ * @property Product                                                        grandParent
+ * @property-read mixed                                                     $api_url
+ * @property-read array|string                                              $price
+ * @property-read mixed                                                     $redirect_url
+ * @property-read SetCollection|Contentset[]                                $sets
+ * @property-read mixed                                                     $cache_cooldown_seconds
+ * @property mixed                                                          block
+ * @property Collection                                                     intro_videos
  * @method static Builder|Product main()
- * @property int|null $block_id بلاک مرتبط با این محصول
- * @property-read int|null $bons_count
- * @property-read int|null $children_count
- * @property-read int|null $complimentaryproducts_count
- * @property-read \Illuminate\Database\Eloquent\Collection|Contract[] $contracts
- * @property-read int|null $contracts_count
- * @property-read int|null $coupons_count
- * @property-read int|null $favorite_by_count
- * @property-read mixed $attribute_set
- * @property-read mixed $bon_discount
- * @property-read mixed $bon_plus
- * @property-read mixed $edit_link
- * @property-read mixed $intro_video
- * @property-read mixed $intro_video_thumbnail
- * @property-read mixed $jalali_created_at
- * @property-read mixed $jalali_updated_at
- * @property-read mixed $jalali_valid_since
- * @property-read mixed $jalali_valid_until
- * @property-read mixed $remove_link
- * @property-read int|null $gifts_count
- * @property-read int|null $orderproducts_count
- * @property-read int|null $parents_count
- * @property-read int|null $photos_count
- * @property-read int|null $productfiles_count
- * @property-read int|null $sets_count
- * @property mixed livedescriptions
- * @property mixed category
+ * @property int|null                                                       $block_id           بلاک مرتبط با این محصول
+ * @property-read int|null                                                  $bons_count
+ * @property-read int|null                                                  $children_count
+ * @property-read int|null                                                  $complimentaryproducts_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|Contract[]       $contracts
+ * @property-read int|null                                                  $contracts_count
+ * @property-read int|null                                                  $coupons_count
+ * @property-read int|null                                                  $favorite_by_count
+ * @property-read mixed                                                     $attribute_set
+ * @property-read mixed                                                     $bon_discount
+ * @property-read mixed                                                     $bon_plus
+ * @property-read mixed                                                     $edit_link
+ * @property-read mixed                                                     $intro_video
+ * @property-read mixed                                                     $intro_video_thumbnail
+ * @property-read mixed                                                     $jalali_created_at
+ * @property-read mixed                                                     $jalali_updated_at
+ * @property-read mixed                                                     $jalali_valid_since
+ * @property-read mixed                                                     $jalali_valid_until
+ * @property-read mixed                                                     $remove_link
+ * @property-read int|null                                                  $gifts_count
+ * @property-read int|null                                                  $orderproducts_count
+ * @property-read int|null                                                  $parents_count
+ * @property-read int|null                                                  $photos_count
+ * @property-read int|null                                                  $productfiles_count
+ * @property-read int|null                                                  $sets_count
+ * @property mixed                                                          livedescriptions
+ * @property mixed                                                          category
  * @method static Builder|Product whereBlockId($value)
  * @method static Builder|Product whereIntroVideos($value)
  */
@@ -190,6 +191,7 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
     use ModelTrackerTrait;
     use ProductAttributeTrait, ProductBonTrait, ProductPhotoTrait;
     use TaggableProductTrait;
+    use DateTrait;
     /*
     |--------------------------------------------------------------------------
     | Properties
@@ -526,7 +528,7 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
     }
 
     /**
-     * @param User|null $user
+     * @param  User|null  $user
      *
      * @return array
      */
@@ -538,19 +540,20 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
 
         $priceInfo = $this->price;
 
-        if(is_null($priceInfo['base']))
+        if (is_null($priceInfo['base'])) {
             $basePriceText = 'پس از انتخاب محصول';
-        else
-            $basePriceText  = number_format($priceInfo['base']).' تومان';
+        } else {
+            $basePriceText = number_format($priceInfo['base']).' تومان';
+        }
 
-        $finalPriceText = number_format($priceInfo['final']).' تومان';
+        $finalPriceText   = number_format($priceInfo['final']).' تومان';
         $customerDiscount = $priceInfo['discount'];
 
         return [
-                'basePriceText'     => $basePriceText,
-                'finalPriceText'    => $finalPriceText,
-                'discount'          => $customerDiscount
-            ];
+            'basePriceText'  => $basePriceText,
+            'finalPriceText' => $finalPriceText,
+            'discount'       => $customerDiscount,
+        ];
     }
 
     public function calculatePayablePrice(User $user = null)
@@ -596,8 +599,9 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
     {
         //ToDo : Doesn't work for app
         $user = null;
-        if(Auth::check())
+        if (Auth::check()) {
             $user = Auth::user();
+        }
 
         $costArray     = $this->calculatePayablePrice($user);
         $cost          = $costArray['cost'];
@@ -618,7 +622,7 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
     | Mutator
     |--------------------------------------------------------------------------
     */
-    
+
     /**
      * Get the content's meta title .
      *
@@ -628,10 +632,10 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
      */
     public function getMetaTitleAttribute(): string
     {
-        return Purify::clean(mb_substr($this->name, 0, config('constants.META_TITLE_LIMIT'), 'utf-8'),
-            self::$purifyNullConfig);
+        $text = $this->getCleanTextForMetaTags($this->name);
+        return mb_substr($text, 0, config('constants.META_TITLE_LIMIT'), 'utf-8');
     }
-    
+
     /**
      * Get the content's meta description .
      *
@@ -641,8 +645,8 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
      */
     public function getMetaDescriptionAttribute(): string
     {
-        return Purify::clean(mb_substr($this->shortDescription, 0, config('constants.META_DESCRIPTION_LIMIT'), 'utf-8'),
-            self::$purifyNullConfig);
+        $text = $this->getCleanTextForMetaTags($this->shortDescription.' '.$this->longDescription);
+        return mb_substr($text, 0, config('constants.META_DESCRIPTION_LIMIT'), 'utf-8');
     }
 
     /**
@@ -666,17 +670,6 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
         ];
     }
 
-    /**
-     * Converts content's validSince to Jalali
-     *
-     * @return string
-     */
-    public function validSince_Jalali(): string
-    {
-        /*$explodedDateTime = explode(" ", $this->validSince);*/
-        //        $explodedTime = $explodedDateTime[1] ;
-        return $this->convertDate($this->validSince, 'toJalali');
-    }
 
     /*
     |--------------------------------------------------------------------------
@@ -850,11 +843,13 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
         return $this->belongsTo(Block::class);
     }
 
-    public function contracts(){
+    public function contracts()
+    {
         return $this->hasMany(Contract::Class);
     }
 
-    public function livedescriptions(){
+    public function livedescriptions()
+    {
         return $this->hasMany(LiveDescription::class);
     }
 
@@ -936,7 +931,7 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
     /**
      * Scope a query to only include product without redirect url.
      *
-     * @param Builder $query
+     * @param  Builder  $query
      *
      * @return Builder
      */
@@ -1428,21 +1423,22 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
                             } else {
                                 $cost = $this->basePrice;
                             }
-                        } elseif ($this->producttype_id == config('constants.PRODUCT_TYPE_SELECTABLE'))
-                        {
-                                $allChildren = $this->getAllChildren()
-                                    ->where('pivot.isDefault', 1);
-                                if ($allChildren->isNotEmpty()) {
-                                    $cost = 0;
-                                    foreach ($allChildren as $product) {
-                                        /** @var Product $product */
-                                        $cost += $product->obtainPrice();
-                                    }
-                                } else if ($this->basePrice != 0) {
-                                        $cost = $this->basePrice;
-                                }else{
+                        } elseif ($this->producttype_id == config('constants.PRODUCT_TYPE_SELECTABLE')) {
+                            $allChildren = $this->getAllChildren()
+                                ->where('pivot.isDefault', 1);
+                            if ($allChildren->isNotEmpty()) {
+                                $cost = 0;
+                                foreach ($allChildren as $product) {
+                                    /** @var Product $product */
+                                    $cost += $product->obtainPrice();
+                                }
+                            } else {
+                                if ($this->basePrice != 0) {
+                                    $cost = $this->basePrice;
+                                } else {
                                     $cost = null;
                                 }
+                            }
 
                         } else {
                             $cost = $this->basePrice;
@@ -1464,7 +1460,7 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
                                 if (isset($attributevalue->pivot->extraCost))
                                     $cost += $attributevalue->pivot->extraCost;
                             }*/
-                        }elseif ($grandParentProductType == config('constants.PRODUCT_TYPE_SELECTABLE')) {
+                        } elseif ($grandParentProductType == config('constants.PRODUCT_TYPE_SELECTABLE')) {
                             if ($this->basePrice == 0) {
                                 $children = $this->children;
                                 $cost     = 0;
@@ -1474,11 +1470,11 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
                             } else {
                                 $cost = $this->basePrice;
                             }
-                        }else{
+                        } else {
                             $cost = 0;
                         }
                     }
-                }else{
+                } else {
                     $cost = 0;
                 }
 
@@ -1532,15 +1528,15 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
 
         return Cache::tags(['product'])
             ->remember($key, config('constants.CACHE_600'), function () use ($myProduct) {
-            $parents = collect();
-            while ($myProduct->hasParents()) {
-                $myparent = $myProduct->parents->first();
-                $parents->push($myparent);
-                $myProduct = $myparent;
-            }
+                $parents = collect();
+                while ($myProduct->hasParents()) {
+                    $myparent = $myProduct->parents->first();
+                    $parents->push($myparent);
+                    $myProduct = $myparent;
+                }
 
-            return $parents;
-        });
+                return $parents;
+            });
     }
 
     /**
@@ -1827,48 +1823,68 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
         return null;
     }
 
-    public function getChildrenAttribute(){
+    public function getChildrenAttribute()
+    {
         $product = $this;
         $key     = 'product:children:'.$product->cacheKey();
         return Cache::tags(['product'])
             ->remember($key, config('constants.CACHE_600'), function () use ($product) {
-                return $this->children()->get();
+                return $this->children()
+                    ->get();
             });
 
     }
 
-    public function getIntroVideoAttribute(){
+    public function getIntroVideoAttribute()
+    {
         $intro = $this->intro_videos;
-        if(is_null($intro))
+        if (is_null($intro)) {
             return null;
+        }
 
         $intro = json_decode($intro);
 
-        if(!isset($intro[0]) || !isset($intro[0]->video))
+        if (!isset($intro[0]) || !isset($intro[0]->video)) {
             return null;
+        }
 
         $videos = $intro[0]->video;
 
-        if( !isset($videos[0]) || !isset($videos[0]->url))
+        if (!isset($videos[0]) || !isset($videos[0]->url)) {
             return null;
+        }
 
         return $videos[0]->url;
     }
 
-    public function getIntroVideoThumbnailAttribute(){
+    public function getIntroVideoThumbnailAttribute()
+    {
         $intro = $this->intro_videos;
-        if(is_null($intro))
+        if (is_null($intro)) {
             return null;
+        }
 
         $intro = json_decode($intro);
-        if(!isset($intro[0]) || !isset($intro[0]->thumbnail))
+        if (!isset($intro[0]) || !isset($intro[0]->thumbnail)) {
             return null;
+        }
 
         $thumbnail = $intro[0]->thumbnail;
 
-        if(!isset($thumbnail->url))
+        if (!isset($thumbnail->url)) {
             return null;
+        }
 
         return $thumbnail->url;
+    }
+
+    /**
+     * @param  string  $text
+     *
+     * @return mixed
+     */
+    private function getCleanTextForMetaTags(string $text)
+    {
+        return Purify::clean($text, self::$purifyNullConfig);
     }
 }
