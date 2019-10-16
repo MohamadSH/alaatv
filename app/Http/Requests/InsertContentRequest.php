@@ -15,17 +15,28 @@ class InsertContentRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
+     * @param Request $request
      * @return array
-     * @throws \Exception
      */
-    public function rules()
+    public function rules(Request $request)
     {
-        return [
-            'order'          => 'required|numeric',
-            'name'           => 'required',
-            'contenttype_id' => 'required|exists:contenttypes,id',
-            'contentset_id' =>  'required|exists:contentsets,id',
-            'fileName'       => 'required',
-        ];
+        if($request->get('contenttype_id') == config('constants.CONTENT_TYPE_ARTICLE')){
+            $rules = [
+//                'order'          => 'numeric',
+                'name'           => 'required',
+                'context'        => 'required',
+                'contenttype_id' => 'required|exists:contenttypes,id',
+            ];
+        }else{
+            $rules = [
+                'order'          => 'required|numeric',
+                'name'           => 'required',
+                'contenttype_id' => 'required|exists:contenttypes,id',
+                'contentset_id' =>  'required|exists:contentsets,id',
+                'fileName'       => 'required',
+            ];
+        }
+
+        return $rules;
     }
 }

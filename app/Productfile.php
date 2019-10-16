@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Traits\DateTrait;
 use Carbon\Carbon;
 use App\Traits\Helper;
 use Kalnoy\Nestedset\QueryBuilder;
@@ -60,7 +61,7 @@ use Kalnoy\Nestedset\QueryBuilder;
  */
 class Productfile extends BaseModel
 {
-    use Helper;
+    use Helper,DateTrait;
     /**
      * @var array
      */
@@ -96,17 +97,6 @@ class Productfile extends BaseModel
         return $this->belongsTo('\App\Productfiletype');
     }
 
-    /**
-     * @return string
-     * Converting Created_at field to jalali
-     */
-    public function validSince_Jalali()
-    {
-        $explodedDateTime = explode(' ', $this->validSince);
-        $explodedTime     = $explodedDateTime[1];
-
-        return $this->convertDate($this->validSince, 'toJalali').' '.$explodedTime;
-    }
 
     /**
      * Scope a query to only include enable(or disable) Products.
