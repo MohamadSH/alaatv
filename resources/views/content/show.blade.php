@@ -77,7 +77,7 @@
             @if(isset($contentSetName))
                 <li class="breadcrumb-item">
                     <i class="fa fa-video-camera m--padding-right-5"></i>
-                    <a class="m-link" href="#">{{ $contentSetName }}</a>
+                    <a class="m-link" href="/set/{{$content->contentset_id}}">{{ $contentSetName }}</a>
                 </li>
             @endif
             <li class="breadcrumb-item active" aria-current="page">
@@ -95,9 +95,9 @@
 
 @section('content')
     <div class="row">
-    
+
         <div class="col-12 col-sm-12 col-md-12 col-lg-8 mx-auto">
-        
+
             @if(!$user_can_see_content)
                 <div
                     class="m-alert m-alert--icon m-alert--icon-solid m-alert--outline alert alert-info alert-dismissible fade show"
@@ -122,13 +122,13 @@
                     </div>
                 </div>
             @endif
-        
+
             {{--            @if(!isset($videosWithSameSet) or $videosWithSameSet->count() === 0)--}}
             {{--                <div class="alert alert-info" role="alert">--}}
             {{--                    <strong>حیف!</strong> این مجموعه فیلم ندارد.--}}
             {{--                </div>--}}
             {{--            @endif--}}
-        
+
             @if(isset($content->template))
                 @if(optional($content->template)->name == "video1")
                 <!--begin::Portlet-->
@@ -164,20 +164,20 @@
                                                 </a>
                                             </li>
                                             @foreach($videosWithSameSetL->take(-5) as $item)
-        
+
                                                 <li class="page-item @if($item["content"]->id == $content->id) active @endif">
                                                     <a class="page-link"
                                                        href="{{action("Web\ContentController@show" , $item["content"])}}">{{ $item["content"]->order }}</a>
                                                 </li>
-    
+
                                             @endforeach
                                             @foreach($videosWithSameSetR->take(6) as $item)
-        
+
                                                 <li class="page-item @if($item["content"]->id == $content->id) active @endif">
                                                     <a class="page-link"
                                                        href="{{action("Web\ContentController@show" , $item["content"])}}">{{ $item["content"]->order }}</a>
                                                 </li>
-    
+
                                             @endforeach
                                             <li class="page-item">
                                                 <a class="page-link"
@@ -219,7 +219,7 @@
                                         @endif
                                     @endforeach
                                 @endif
-    
+
                                 @if(!$user_can_see_content && $productsThatHaveThisContent->isNotEmpty())
                                     @foreach($productsThatHaveThisContent as $productKey=>$product)
                                         @if($product->type['type'] === 'simple')
@@ -252,7 +252,7 @@
                             </div>
                         </div>
                     </div>
-    
+
                     <div class="row">
                         <div class="col text-center m--margin-bottom-5">
                             {{--                            <a href="{{ route('landing.5') }}"--}}
@@ -266,10 +266,10 @@
                             {{--                            </a>--}}
                         </div>
                     </div>
-    
+
                     <div class="m-portlet m-portlet--mobile">
                         <div class="m-portlet__body a--nuevo-alaa-theme">
-    
+
                             <h1 class="m--regular-font-size-lg3 m--font-bold m--font-focus">{{ $content->displayName }}</h1>
                             @if(isset($content->author_id))
                                 <div class="m-widget3">
@@ -299,7 +299,7 @@
                                         </div>
                                         <div class="m-widget3__body">
                                             <div class="m-widget3__text">
-    
+
                                                 @if(strlen($content->description) > 2000)
                                                     <div class="a--summarize-text">
                                                         <div class="a--summarize-text-toggleBtn">
@@ -329,7 +329,7 @@
                                 <div class="row">
                                     @if(isset($content->file) and $content->file->isNotEmpty())
                                         <div class="col-md-4 text-justify">
-    
+
                                             <p>
                                                 با IDM یا ADM و یا wget دانلود کنید.
                                             </p>
@@ -362,7 +362,7 @@
                                         </div>
                                     @endif
                                     <div class="col-md-8">
-    
+
                                         <div class="row">
                                             <div class="col-md-6 text-center m--margin-bottom-5">
                                                 {{--                                                <a href="{{ route('landing.8') }}"--}}
@@ -391,7 +391,7 @@
                                     </div>
                                 </div>
                             @endif
-    
+
                             <div class="m-separator m-separator--space m-separator--dashed"></div>
                             @if(!empty($tags))
                                 @include("partials.search.tagLabel" , ["tags"=>$tags])
@@ -443,7 +443,7 @@
                         </div>
                     </div>
                     <!--end::Portlet-->
-    
+
                     <div class="row">
                         <div class="col text-center m--margin-bottom-5">
                             {{--                            <a href="{{ route('landing.5') }}"--}}
@@ -456,7 +456,7 @@
                             {{--                            </a>--}}
                         </div>
                     </div>
-    
+
                     @if(isset($content->description[0]))
                     <!--begin::Portlet-->
                         <div class="m-portlet m-portlet--mobile">
@@ -476,7 +476,7 @@
                             </div>
                             <div class="m-portlet__body">
                                 <div>
-    
+
                                     @if(strlen($content->description) > 2000)
                                         <div class="a--summarize-text">
                                             <div class="a--summarize-text-toggleBtn">
@@ -498,7 +498,7 @@
                         </div>
                         <!--end::Portlet-->
                     @endif
-            
+
                 @elseif(optional($content->template)->name == "article1")
                 <!--begin::Portlet-->
                     <div class="m-portlet">
@@ -523,7 +523,7 @@
                         </div>
                     </div>
                     <!--end::Portlet-->
-    
+
                     <div class="row">
                         <div class="col text-center m--margin-bottom-5">
                             {{--                            <a href="{{ route('landing.5') }}"--}}
@@ -631,7 +631,7 @@
                              data-height="360"
                              data-scrollbar-shown="true">
                             <div class="m-portlet__body-progress">Loading</div>
-    
+
                             <!--begin::m-widget5-->
                             <div class="a-widget5">
                                 @foreach($videosWithSameSet as $item)
@@ -725,7 +725,7 @@
                         </div>
                     </div>
                     <div class="m-portlet__body m-portlet__body--no-padding a--owl-carousel-body">
-    
+
                         <div class="a--owl-carousel-init-loading">
                             <div class="lds-roller">
                                 <div></div>
@@ -738,7 +738,7 @@
                                 <div></div>
                             </div>
                         </div>
-    
+
                         <div
                             class="m-widget_head-owlcarousel-items owl-carousel a--owl-carousel-type-2 carousel_block_owlCarouselParentProducts">
                             @foreach($productsThatHaveThisContent as $productKey=>$product)
@@ -752,7 +752,7 @@
                                      data-gtm-eec-product-variant="-"
                                      data-gtm-eec-product-position="{{ $productKey }}"
                                      data-gtm-eec-product-list="محصولاتی که شامل این محتوا هستند">
-    
+
                                     <div class="a--block-imageWrapper">
                                         <a href="{{ $product->url }}"
                                            class="a--block-imageWrapper-image a--gtm-eec-product a--gtm-eec-product-click d-block"
