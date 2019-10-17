@@ -154,7 +154,7 @@ var Alaasearch = function () {
                 full_name: data.author.full_name
             },
             widgetCount: data.active_contents_count,
-            widgetLink: data.url
+            widgetLink: '/set/'+data.id
         };
 
         let widgetPic = inputData.widgetPic,

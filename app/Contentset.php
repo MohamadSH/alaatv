@@ -300,6 +300,11 @@ class Contentset extends BaseModel implements Taggable
         return isset($contentId) ? action("Web\ContentController@show", $contentId) : '';
     }
 
+    public function getWebUrlAttribute($value): string
+    {
+        return route('set.show' , ['set'=>$this->id]);
+    }
+
     public function getLastActiveContent(): Content
     {
         $key = 'ContentSet:getLastActiveContent'.$this->cacheKey();
