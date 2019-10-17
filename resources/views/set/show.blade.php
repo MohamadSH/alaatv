@@ -50,6 +50,20 @@
             </div>
             <div class="m-portlet__head-tools">
                 <ul class="nav nav-pills nav-pills--brand m-nav-pills--align-right m-nav-pills--btn-pill m-nav-pills--btn-sm" role="tablist">
+                    <li  class="nav-item m-tabs__item ">
+                        <a href="?order=asc" id="sort-ascending">
+                            <i class="fa fa-arrow-up"></i>
+                        </a>
+                    </li>
+                    <li  class="nav-item m-tabs__item ">
+                        <a href="?order=desc" id="sort-descending">
+                            <i class="fa fa-arrow-down"></i>
+                        </a>
+                    </li>
+                    <li  class="nav-item m-tabs__item font-weight-bold">
+                        |
+                    </li>
+
                     @if($videos->isNotEmpty())
                         <li class="nav-item m-tabs__item font-weight-bold">
                                 فیلم ها : {{$videos->count()}} @if($pamphlets->isNotEmpty())|@endif
@@ -149,8 +163,3 @@
     </div>
         </div>
 @endsection
-
-@section('page-js')
-    <script type="text/javascript" defer></script>
-@endsection
-
