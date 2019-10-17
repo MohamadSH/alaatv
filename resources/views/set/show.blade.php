@@ -57,7 +57,12 @@
                     @endif
                     @if($pamphlets->isNotEmpty())
                         <li class="nav-item m-tabs__item font-weight-bold">
-                                جزوه ها: {{$pamphlets->count()}}
+                                جزوه ها: {{$pamphlets->count()}} @if($articles->isNotEmpty())|@endif
+                        </li>
+                    @endif
+                    @if($articles->isNotEmpty())
+                        <li class="nav-item m-tabs__item font-weight-bold">
+                                جزوه ها: {{$articles->count()}}
                         </li>
                     @endif
                 </ul>
@@ -99,6 +104,41 @@
                                 @foreach($pamphlets->where('session' , $video->session) as $pamphlet)
                                     <button type="button" class="btn m-btn--pill  btn-focus btn-block" onclick="window.location = '{{route('c.show' , ['content'=>$pamphlet])}}';" >جزوه</button>
                                 @endforeach
+                            </div>
+                        </div>
+                    </div>
+                @endforeach
+                @foreach($articles as $article)
+                    <div class="m-widget5__item">
+                        <div class="m-widget5__content">
+                            <a href="{{ route('c.show' , ['content'=>$article]) }}" style="display: inherit">
+                                <div class="m-widget5__pic  a--full-width" style="display: contents" >
+                                    <img class="img-fluid a--full-width lazy-image " width="112" height="63"  src="https://cdn.alaatv.com/loder.jpg?w=1&h=1" data-src="{{$article->thumbnail}}" alt="{{$article->name}}">
+                                </div>
+                            </a>
+                            <div class="m-widget5__section">
+                                <h2 class="m-widget5__title m--margin-top-10-mobile">
+                                    <a href="{{ route('c.show' , ['content'=>$article]) }}">{{$article->name}}</a>
+                                </h2>
+                                <div class="m-widget5__info font-weight-bold">
+                                    @if($article->isFree)
+                                        <span class="m-badge m-badge--accent m-badge--wide">رایگان</span>
+                                    @else
+                                        <span class="m-badge m-badge--warning m-badge--wide">ویژه شما</span>
+                                    @endif
+                                    <span>|</span>
+                                    <span class="m-widget5__info-date m--font-info">انتشار: {{$article->ValidSince_Jalali(false)}}</span>
+                                    <span>| آلاء</span>
+                                </div>
+                                <span class="m-widget5__desc">
+                                         {!! $article->metaDescription !!}...
+                                </span>
+                                <div class="m--clearfix"></div>
+                            </div>
+                        </div>
+                        <div class="m-widget5__content">
+                            <div>
+                                <button type="button" class="btn m-btn--pill  btn-primary btn-block"  onclick="window.location = '{{route('c.show' , ['content'=>$article])}}';" >خواندن</button>
                             </div>
                         </div>
                     </div>

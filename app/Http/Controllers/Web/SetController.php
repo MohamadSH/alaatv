@@ -183,6 +183,50 @@ class SetController extends Controller
         }
     }
 
+    public function show(Request $request, Contentset $contentSet)
+    {
+        if (isset($contentSet->redirectUrl)) {
+            return redirect($contentSet->redirectUrl, Response::HTTP_FOUND, $request->headers->all());
+        }
+
+        if ($request->expectsJson()) {
+            return response()->json($contentSet);
+        }
+
+        $contents = $contentSet->getActiveContents2();
+        if($contents->isEmpty()){
+            return redirect(route('web.home'));
+        }
+
+        $pamphlets = $contents->where('contenttype_id' , Content::CONTENT_TYPE_PAMPHLET);
+        $videos    = $contents->where('contenttype_id' , Content::CONTENT_TYPE_VIDEO);
+        $articles  = $contents->where('contenttype_id' , Content::CONTENT_TYPE_ARTICLE);
+
+        return view('set.show' , compact('contentSet' , 'videos' , 'pamphlets' , 'articles' ));
+    }
+
+    public function edit(Contentset $set) {
+        $setProducts = $set->products;
+        $products = $this->makeProductCollection();
+        return view('set.edit', compact('set', 'setProducts', 'products'));
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return Response
+     */
+    public function create()
+    {
+        $products = $this->makeProductCollection();
+        return view('set.create', compact('products'));
+    }
+
+    public function indexContent (Request $request, Contentset $set){
+        $contents = optional($set->contents)->sortBy('order');
+        return view('set.listContents',compact('set','contents'));
+    }
+
     /**
      * @param  FormRequest  $inputData
      * @param  Contentset   $contentset
@@ -205,49 +249,6 @@ class SetController extends Controller
         {
             $this->storePhotoOfSet($contentset , Arr::get($inputData , 'photo'));
         }
-    }
-
-    public function show(Request $request, Contentset $contentSet)
-    {
-        if (isset($contentSet->redirectUrl)) {
-            return redirect($contentSet->redirectUrl, Response::HTTP_FOUND, $request->headers->all());
-        }
-
-        if ($request->expectsJson()) {
-            return response()->json($contentSet);
-        }
-
-        $contents = $contentSet->getActiveContents2();
-        if($contents->isEmpty()){
-            return redirect(route('web.home'));
-        }
-
-        $pamphlets = $contents->where('contenttype_id' , Content::CONTENT_TYPE_PAMPHLET);
-        $videos    = $contents->where('contenttype_id' , Content::CONTENT_TYPE_VIDEO);
-
-        return view('set.show' , compact('contentSet' , 'videos' , 'pamphlets' ));
-    }
-
-    public function edit(Contentset $set) {
-        $setProducts = $set->products;
-        $products = $this->makeProductCollection();
-        return view('set.edit', compact('set', 'setProducts', 'products'));
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return Response
-     */
-    public function create()
-    {
-        $products = $this->makeProductCollection();
-        return view('set.create', compact('products'));
-    }
-
-    public function indexContent (\App\Http\Requests\Request $request, Contentset $set){
-        $contents = optional($set->contents)->sortBy('order');
-        return view('set.listContents',compact('set','contents'));
     }
 
     private function syncProducts(array $products , Contentset $contentset){
