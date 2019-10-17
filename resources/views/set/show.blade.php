@@ -75,7 +75,7 @@
                         <div class="m-widget5__content">
                             <a href="{{ route('c.show' , ['content'=>$video]) }}" style="display: inherit">
                                 <div class="m-widget5__pic  a--full-width" style="display: contents" >
-                                    <img class="img-fluid a--full-width lazy-image " width="112" height="63"  src="https://cdn.alaatv.com/loder.jpg?w=1&h=1" data-src="{{$video->thumbnail}}" alt="{{$video->displayName}}">
+                                    <img class="img-fluid a--full-width lazy-image " width="112" height="63"  src="https://cdn.alaatv.com/loder.jpg?w=1&h=1" data-src="{{$video->thumbnail}}" alt="{{$video->displayName}}" data-container="body" data-toggle="m-tooltip" data-placement="top" title="دانلود یا تماشا فیلم">
                                 </div>
                             </a>
                             <div class="m-widget5__section">
@@ -100,9 +100,9 @@
                         </div>
                         <div class="m-widget5__content">
                             <div>
-                                <button type="button" class="btn m-btn--pill  btn-primary btn-block"  onclick="window.location = '{{route('c.show' , ['content'=>$video])}}';" >فیلم</button>
+                                <button type="button" class="btn m-btn--pill  btn-primary btn-block"  onclick="window.location = '{{route('c.show' , ['content'=>$video])}}';" data-container="body" data-toggle="m-tooltip" data-placement="top" title="دانلود یا تماشا فیلم">فیلم</button>
                                 @foreach($pamphlets->where('session' , $video->session) as $pamphlet)
-                                    <button type="button" class="btn m-btn--pill  btn-focus btn-block" onclick="window.location = '{{route('c.show' , ['content'=>$pamphlet])}}';" >جزوه</button>
+                                    <button type="button" class="btn m-btn--pill  btn-focus btn-block" onclick="window.location = '{{route('c.show' , ['content'=>$pamphlet])}}';" data-container="body" data-toggle="m-tooltip" data-placement="top" title="دانلود جزوه">جزوه</button>
                                 @endforeach
                             </div>
                         </div>
@@ -113,7 +113,7 @@
                         <div class="m-widget5__content">
                             <a href="{{ route('c.show' , ['content'=>$article]) }}" style="display: inherit">
                                 <div class="m-widget5__pic  a--full-width" style="display: contents" >
-                                    <img class="img-fluid a--full-width lazy-image " width="112" height="63"  src="https://cdn.alaatv.com/loder.jpg?w=1&h=1" data-src="{{$article->thumbnail}}" alt="{{$article->name}}">
+                                    <img class="img-fluid a--full-width lazy-image " width="112" height="63"  src="https://cdn.alaatv.com/loder.jpg?w=1&h=1" data-src="{{$article->thumbnail}}" alt="{{$article->name}}" data-container="body" data-toggle="m-tooltip" data-placement="top" title="خواندن مقاله">
                                 </div>
                             </a>
                             <div class="m-widget5__section">
@@ -138,7 +138,7 @@
                         </div>
                         <div class="m-widget5__content">
                             <div>
-                                <button type="button" class="btn m-btn--pill  btn-primary btn-block"  onclick="window.location = '{{route('c.show' , ['content'=>$article])}}';" >خواندن</button>
+                                <button type="button" class="btn m-btn--pill  btn-primary btn-block"  onclick="window.location = '{{route('c.show' , ['content'=>$article])}}';" data-container="body" data-toggle="m-tooltip" data-placement="top" title="خواندن مقاله">خواندن</button>
                             </div>
                         </div>
                     </div>
