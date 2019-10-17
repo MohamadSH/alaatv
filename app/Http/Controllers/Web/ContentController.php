@@ -25,7 +25,7 @@ use App\Classes\Search\ContentSearch;
 use App\Classes\Search\ProductSearch;
 use Illuminate\Http\RedirectResponse;
 use App\Classes\Search\ContentsetSearch;
-use App\Http\Requests\{Request, EditContentRequest, ContentIndexRequest, InsertContentRequest};
+use App\Http\Requests\{Request, EditContentRequest, ContentIndexRequest, InsertContentRequest, UpdateContentSetRequest};
 use App\Traits\{Helper,
     FileCommon,
     MetaCommon,
@@ -396,40 +396,40 @@ class ContentController extends Controller
     }
 
     /**
-     * @param  Request  $request
+     * @param Request $request
      *
+     * @param Content $content
      * @return RedirectResponse|Redirector
-     * @throws Exception
+     * @throws FileNotFoundException
      */
-    public function updateSet(Request $request)
+    public function updateSet(UpdateContentSetRequest $request , Content $content)
     {
-        $educationalContentId =  $request->get("educationalContentId");
         $newContetnsetId = $request->get("newContetnsetId");
         $newFileFullName = $request->get("newFileFullName") ;
+        $contentTypeId = $content->contenttype_id;
+        $contentsetId = $content->contentset_id;
 
-        $educationalContent = Content::FindOrFail($educationalContentId);
-        $contentTypeId = $educationalContent->contenttype_id;
-        $currentContentset = $educationalContent->set;
-
-        if($newContetnsetId != $currentContentset->id)
-        {
-            $educationalContent->contentset_id = $newContetnsetId;
+        if($newContetnsetId != $content->contentset_id){
+            $contentsetId = $newContetnsetId;
         }
 
-        $files = [];
-        $thumbnail = null;
-        if(isset($newFileFullName[0]))
-        {
-            $files =$this->makeContentFilesArray($contentTypeId,$newContetnsetId,$newFileFullName, $educationalContent->isFree);
-            $thumbnailFileName = pathinfo(parse_url($newFileFullName)['path'], PATHINFO_FILENAME) . '.jpg';
-            $thumbnail = $this->makeContentThumbnailStd($newContetnsetId,$thumbnailFileName);
+        if(!isset($newFileFullName)){
+            $newFileFullName       = basename(optional(optional($content->file_for_admin[$content->contenttype->name])->first())->fileName);
         }
 
-        $this->makeFilesCollection($educationalContent, $files);
-        if(isset($thumbnail)) {
-            $educationalContent->thumbnail = $thumbnail;
+        $files =$this->makeContentFilesArray($contentTypeId,$contentsetId,$newFileFullName,$content->isFree);
+
+        $thumbnailFileName = pathinfo(parse_url($newFileFullName)['path'], PATHINFO_FILENAME) . '.jpg' ;
+        $thumbnail = $this->makeContentThumbnailStd($contentsetId,$thumbnailFileName);
+        if(isset($thumbnail)){
+            $content->thumbnail = $thumbnail;
         }
-        $educationalContent->update();
+
+        if(!empty($files)) {
+            $this->makeFilesCollection($content, $files);
+        }
+        $content->contentset_id = $contentsetId;
+        $content->update();
 
         Cache::tags('content')->flush();
         session()->flash('success', 'تغییر نام با موفقیت انجام شد');

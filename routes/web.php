@@ -268,7 +268,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('startlive' , [LiveController::class, 'startLive'])->name('web.start.live');
     Route::post('endlive'   , [LiveController::class, 'endLive'])->name('web.end.live');
 
-    Route::post('updateSet' , [ContentController::class, 'updateSet']);
+    Route::post('updateSet/{c}' , [ContentController::class, 'updateSet'])->name('c.updateSet');
     Route::get('atest' , [HomeController::class, 'adTest']);
     Route::get('block/detach/{block}/{type}/{id}', 'Web\BlockController@detachFromBlock');
 });
