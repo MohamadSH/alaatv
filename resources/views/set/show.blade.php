@@ -76,7 +76,7 @@
                     @endif
                     @if($articles->isNotEmpty())
                         <li class="nav-item m-tabs__item font-weight-bold">
-                                جزوه ها: {{$articles->count()}}
+                                مقاله ها: {{$articles->count()}}
                         </li>
                     @endif
                 </ul>
