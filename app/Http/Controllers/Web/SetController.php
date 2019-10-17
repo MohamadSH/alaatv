@@ -185,6 +185,7 @@ class SetController extends Controller
 
     public function show(Request $request, Contentset $contentSet)
     {
+        $order = $request->get('order');
         if (isset($contentSet->redirectUrl)) {
             return redirect($contentSet->redirectUrl, Response::HTTP_FOUND, $request->headers->all());
         }
@@ -194,6 +195,10 @@ class SetController extends Controller
         }
 
         $contents = $contentSet->getActiveContents2();
+        if($order === 'desc'){
+            $contents = $contents->sortByDesc('order');
+        }
+
         if($contents->isEmpty()){
             return redirect(route('web.home'));
         }
