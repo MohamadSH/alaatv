@@ -35,6 +35,7 @@ namespace App;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel disableCache()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel withCacheCooldownSeconds($seconds)
  * @property-read mixed                                                        $cache_cooldown_seconds
+ * @property-read int|null $consultations_count
  */
 class Consultationstatus extends BaseModel
 {

@@ -57,7 +57,7 @@
         @permission((config('constants.LIVE_STOP_ACCESS')))
         <div class="row">
             <div class="col text-center">
-                <button type="button" class="btn m-btn--pill m-btn--air m-btn m-btn--gradient-from-danger m-btn--gradient-to-warning btnStopLive">
+                <button type="button" class="btn m-btn--pill m-btn--air m-btn m-btn--gradient-from-danger m-btn--gradient-to-warning" id="btnStopLive">
                     <i class="fa fa-stop"></i>
                     توقف
                 </button>
@@ -71,7 +71,8 @@
         @permission((config('constants.LIVE_PLAY_ACCESS')))
         <div class="row">
             <div class="col text-center">
-                <button type="button" class="btn m-btn--pill m-btn--air m-btn m-btn--gradient-from-primary m-btn--gradient-to-info mx-auto btnPlayLive">
+                <input type="text" name="title" placeholder="عنوان" id="startLiveTitle">
+                <button type="button" class="btn m-btn--pill m-btn--air m-btn m-btn--gradient-from-primary m-btn--gradient-to-info mx-auto" id="btnPlayLive">
                     <i class="fa fa-play"></i>
                     پخش
                 </button>

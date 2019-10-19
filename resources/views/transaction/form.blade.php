@@ -39,7 +39,8 @@
             <div class="row">
                 <label class="col-md-3 control-label" for="transactionDeadlineAt">
                     @if(isset($withCheckbox) && in_array("deadline_at" , $withCheckbox))
-                        <input type="checkbox" name="deadlineAtEnable" value="1" id="transactionDeadlineAtEnable">@endif
+                        <input type="checkbox" name="deadlineAtEnable" value="1" id="transactionDeadlineAtEnable">
+                    @endif
                     مهلت پرداخت:
                 </label>
                 <div class="col-md-6">
@@ -94,24 +95,24 @@
     </div>
 @endif
 <div class="row static-info margin-top-20">
-    <div class="col form-group {{ ($errors->has('paymentmethod_id') || $errors->has('paymentMethodName')) ? ' has-danger' : '' }}">
+    <div class="col form-group {{ ($errors->has('paymentmethod_id')) ? ' has-danger' : '' }}">
         <div class="row">
             <label class="col-md-3 control-label" for="{{(isset($name["paymentmethod"]))?$name["paymentmethod"]:'paymentmethod_id'}}">
                 روش پرداخت:
             </label>
             <div class="col-md-6">
                 {!! Form::select( (isset($name["paymentmethod"]))?$name["paymentmethod"]:'paymentmethod_id',$transactionPaymentmethods,old((isset($name["paymentmethod"]))?$name["paymentmethod"]:'paymentmethod_id'),[ 'class' => (isset($class["paymentmethod"]))?'form-control '.$class["paymentmethod"]:'form-control' , 'id' => (isset($id["paymentmethod"]))?$id["paymentmethod"]:'' , 'placeholder'=>'نامشخص']) !!}
-                @if ($errors->has('paymentMethodName'))
-                    <span class="form-control-feedback">
-                            <strong>{{ $errors->first('paymentMethodName') }}</strong>
-                    </span>
-                @endif
                 @if ($errors->has('paymentmethod_id'))
                     <span class="form-control-feedback">
                         <strong>{{ $errors->first('paymentmethod_id') }}</strong>
                     </span>
                 @endif
             </div>
+            @if(isset($options['withWalletWithdrawCheckbox']))
+            <div class="col-md-2">
+                <input type="checkbox" name="walletWithdraw" value="1" >برداشت از کیف پول(مخصوص تراکنش کیف پول)
+            </div>
+            @endif
         </div>
     </div>
 </div>

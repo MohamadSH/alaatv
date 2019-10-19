@@ -36,6 +36,8 @@ use Laratrust\Models\LaratrustRole;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Role newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Role newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Role query()
+ * @property-read int|null $permissions_count
+ * @property-read int|null $users_count
  */
 class Role extends LaratrustRole
 {

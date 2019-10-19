@@ -13,6 +13,15 @@ use App\BaseModel;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\HelpDesk\Models\Status newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\HelpDesk\Models\Status query()
  * @mixin \Eloquent
+ * @property int $id
+ * @property string $name
+ * @property string $color
+ * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property-read int|null $tickets_count
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\HelpDesk\Models\Status whereColor($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\HelpDesk\Models\Status whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\HelpDesk\Models\Status whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\HelpDesk\Models\Status whereName($value)
  */
 class Status extends BaseModel
 {

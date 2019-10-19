@@ -59,6 +59,7 @@ namespace App;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel withCacheCooldownSeconds($seconds)
  * @property-read mixed                                                       $cache_cooldown_seconds
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Transactiongateway name($name)
+ * @property-read int|null $transactions_count
  */
 class Transactiongateway extends BaseModel
 {

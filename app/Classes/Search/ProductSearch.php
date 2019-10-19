@@ -16,17 +16,18 @@ use Illuminate\Support\Facades\{Cache};
 class ProductSearch extends SearchAbstract
 {
     protected $model = "App\Product";
-    
+
     protected $pageName = 'productPage';
-    
+
     protected $numberOfItemInEachPage = 5;
-    
+
     protected $validFilters = [
         'name',
         'tags',
-        'active'
+        'active',
+        'doesntHaveGrand',
     ];
-    
+
     /**
      * @param  array  $filters
      *
@@ -48,7 +49,7 @@ class ProductSearch extends SearchAbstract
                 return $this->getResults($query);
             });
     }
-    
+
     /**
      * @param  Builder  $query
      *
@@ -57,15 +58,14 @@ class ProductSearch extends SearchAbstract
     protected function getResults(Builder $query)
     {
         $result = $query
-            ->whereNull('grand_id')
             ->whereNull('deleted_at')
             ->orderBy("created_at", "desc")
             ->paginate($this->numberOfItemInEachPage, ['*'],
                 $this->pageName, $this->pageNum);
-        
+
         return $result;
     }
-    
+
     /**
      * @param $decorator
      *
@@ -77,7 +77,7 @@ class ProductSearch extends SearchAbstract
         if ($decorator instanceof Tags) {
             $decorator->setTagManager(new ProductTagManagerViaApi());
         }
-        
+
         return $decorator;
     }
 }

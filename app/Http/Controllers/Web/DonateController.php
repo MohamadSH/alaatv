@@ -18,9 +18,9 @@ class DonateController extends Controller
 {
     use MetaCommon;
     use DateTrait;
-    
+
     private $setting;
-    
+
     public function __construct(Websitesetting $setting)
     {
         $this->setting = $setting->setting;
@@ -37,22 +37,22 @@ class DonateController extends Controller
                 'h'        => '100',
                 'filename' => $this->setting->site->siteLogo,
             ]), '100', '100', null));
-        
+
         return $this->makeDonatePage();
     }
 
     private function makeDonatePage()
     {
         /** INITIAL VALUES    */
-        
+
         $monthToPeriodConvert = collect(config('constants.JALALI_CALENDER'));
         $firstMonth           = $monthToPeriodConvert->first()["month"];
-        $MONTH_SPEND          = 25000000;
+        $MONTH_SPEND          = 60000000;
         $LATEST_WEEK_NUMBER   = 3;
         $LATEST_MAX_NUMBER    = 3;
-        
+
         /** END OF INITIALIZING   */
-        
+
         $donateProductArray = [
             Product::CUSTOM_DONATE_PRODUCT,
             Product::DONATE_PRODUCT_5_HEZAR,
@@ -63,9 +63,9 @@ class DonateController extends Controller
         list($currentJalaliYear, $currentJalaliMonth, $currentJalaliDay) = $this->todayJalaliSplittedDate();
         $currentJalaliMonthString = $this->convertToJalaliMonth($currentJalaliMonth);
         $currentJalaliMonthDays   = $this->getJalaliMonthDays($currentJalaliMonthString);
-        
+
         $currentJalaliDateString = $currentJalaliDay." ".$currentJalaliMonthString;
-        
+
         /** THIS WEEK/TODAY LATEST DONATES **/
         $latestDonors = collect();
         $donates      = $orders->take($LATEST_WEEK_NUMBER);
@@ -75,13 +75,13 @@ class DonateController extends Controller
                 $lastName  = $donate->user->lastName;
                 $avatar    = $donate->user->getCustomSizePhoto(150,150);
             }
-            
+
             $donateAmount = $donate->orderproducts(config('constants.ORDER_PRODUCT_TYPE_DEFAULT'))
                 ->whereIn("product_id",
                     $donateProductArray)
                 ->get()
                 ->sum("cost");
-            
+
             $latestDonors->push([
                 "firstName"    => (isset($firstName)) ? $firstName : "",
                 "lastName"     => (isset($lastName)) ? $lastName : "",
@@ -90,7 +90,7 @@ class DonateController extends Controller
             ]);
         }
         /** END **/
-        
+
         /** CURRENT MONTH MAXIMUM DONATES **/
         $today            = $monthToPeriodConvert->where("month", $currentJalaliMonthString)->first();
         $today            = $today["periodBegin"];
@@ -108,9 +108,9 @@ class DonateController extends Controller
                 $lastName  = $maxDonate->order->user->lastName;
                 $avatar    = $donate->user->getCustomSizePhoto(150,150);
             }
-            
+
             $donateAmount = $maxDonate->cost;
-            
+
             $maxDonors->push([
                 "firstName"    => (isset($firstName)) ? $firstName : "",
                 "lastName"     => (isset($lastName)) ? $lastName : "",
@@ -119,26 +119,27 @@ class DonateController extends Controller
             ]);
         }
         /** END **/
-        
+
         /** DONATES CHART **/
         $allMonths = config('constants.JALALI_ALL_MONTHS');
         $allDays   = config('constants.ALL_DAYS_OF_MONTH');
-        
+
         $chartData   = collect();
         $totalSpend  = 0;
         $totalIncome = 0;
-        
+
         if ($currentJalaliMonthString == $firstMonth) {
+            $months=array();
             $currentDayKey = array_search($currentJalaliDay, $allDays);
             $days          = array_splice($allDays, 0, $currentDayKey + 1);
             $date          = $monthToPeriodConvert->where("month", $currentJalaliMonthString)->first();
             foreach ($days as $day) {
                 $mehrGregorianMonth = Carbon::createFromFormat("Y-m-d", $date["periodBegin"])
                     ->setTimezone("Asia/Tehran")->month;
-                
+
                 $mehrGregorianEndDay = Carbon::createFromFormat("Y-m-d", $date["periodEnd"])
                         ->setTimezone("Asia/Tehran")->day + ($day - 1);
-                
+
                 if ($mehrGregorianEndDay > 30) {
                     $mehrGregorianMonth++;
                     $mehrGregorianEndDay = $mehrGregorianEndDay - 30;
@@ -149,25 +150,25 @@ class DonateController extends Controller
                 if ($mehrGregorianMonth < 10) {
                     $mehrGregorianMonth = "0".$mehrGregorianMonth;
                 }
-                
+
                 $donates = $orders->where("completed_at", ">=",
                     "2018-$mehrGregorianMonth-$mehrGregorianEndDay 00:00:00")
                     ->where("completed_at", "<=",
                         "2018-$mehrGregorianMonth-$mehrGregorianEndDay 23:59:59");
-                
+
                 $totalMonthIncome = 0;
                 foreach ($donates as $donate) {
-    
+
                     $amount = $this->repo_getTotal($donate, $donateProductArray);
 
                     $totalMonthIncome += $amount;
                 }
                 $dayRatio        = 1 / $currentJalaliMonthDays;
                 $totalMonthSpend = (int) round($MONTH_SPEND * $dayRatio);
-                
+
                 $totalIncome += $totalMonthIncome;
                 $totalSpend  += $totalMonthSpend;
-                
+
                 $monthData = $day." ".$currentJalaliMonthString;
                 $chartData->push([
                     "month"       => $monthData,
@@ -175,11 +176,10 @@ class DonateController extends Controller
                     "totalSpend"  => $totalMonthSpend,
                 ]);
             }
-        }
-        else {
+        } else {
             $currentMonthKey = array_search($currentJalaliMonthString, $allMonths);
             $months          = array_splice($allMonths, 0, $currentMonthKey + 1);
-            
+
             foreach ($months as $month) {
                 switch ($month) {
                     // Example for static data
@@ -192,11 +192,11 @@ class DonateController extends Controller
                             ->first();
                         $donates = $orders->where("completed_at", ">=", $date["periodBegin"])
                             ->where("completed_at", "<=", $date["periodEnd"]);
-                        
+
                         $totalMonthIncome = 0;
                         foreach ($donates as $donate) {
                             $amount = $this->repo_getTotal($donate, $donateProductArray);
-                            
+
                             $totalMonthIncome += $amount;
                         }
                         if ($month == $currentJalaliMonthString) {
@@ -215,7 +215,7 @@ class DonateController extends Controller
                 } else {
                     $monthData = $month;
                 }
-                
+
                 $chartData->push([
                     "month"       => $monthData,
                     "totalIncome" => $totalMonthIncome,
@@ -224,17 +224,17 @@ class DonateController extends Controller
             }
         }
         /** END **/
-        
+
         if (Auth::check()) {
             $baseUrl     = url("/");
             $contentPath = str_replace($baseUrl, "", action("Web\DonateController"));
         }
-        
+
         return view("pages.donate",
             compact("latestDonors", "maxDonors", "months", "chartData", "totalSpend", "totalIncome",
                 "currentJalaliDateString", "currentJalaliMonthString"));
     }
-    
+
     /**
      * @param  array  $donateProductArray
      *
@@ -251,7 +251,7 @@ class DonateController extends Controller
             ->orderBy("completed_at", "DESC")
             ->get();
     }
-    
+
     /**
      * @param  array  $thisMonthDonates
      * @param  array  $donateProductArray
@@ -270,10 +270,10 @@ class DonateController extends Controller
             ->orderBy("created_at", "DESC")
             ->take($LATEST_MAX_NUMBER)
             ->get();
-        
+
         return $maxDonates;
     }
-    
+
     /**
      * @param $orders
      * @param $date
@@ -285,10 +285,10 @@ class DonateController extends Controller
         $thisMonthDonates = $orders->where("completed_at", ">=", $date)
             ->pluck("id")
             ->toArray();
-        
+
         return $thisMonthDonates;
     }
-    
+
     /**
      * @param         $donate
      * @param  array  $donateProductArray
@@ -301,7 +301,7 @@ class DonateController extends Controller
             ->whereIn("product_id", $donateProductArray)
             ->get()
             ->sum("cost");
-        
+
         return $amount;
     }
 }

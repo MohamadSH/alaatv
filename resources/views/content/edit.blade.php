@@ -44,6 +44,15 @@
 @endsection
 
 @section('content')
+    @if (isset($content->contentset_id))
+        <div class="row">
+            <div class="col">
+                <a class="btn btn-focus" href="{{route('web.set.list.contents' , $content->contentset_id)}}">رفتن به ست
+                    این محتوا</a>
+            </div>
+        </div>
+    @endif
+
     <div class = "row">
         <div class = "col">
             @include("systemMessage.flash")
@@ -66,19 +75,26 @@
                 </div>
                 <div class = "m-portlet__body">
 
-                    {!! Form::open(['method' => 'POST','action' => ['Web\ContentController@updateSet'], 'class'=>'form-horizontal'  ,'accept-charset'=>'UTF-8']) !!}
-                    <div class = "row">
-                        <div class = "col">
-                            {!! Form::hidden('educationalContentId',$content->id) !!}
-                            <div class = "col-md-6">
-                                {!! Form::text('newFileFullName', null, ['class' => 'form-control', 'placeholder'=>'نام فایل کامل ( با دات ام پی فر)', 'dir'=>'ltr']) !!}
-                                {!! Form::text('newContetnsetId', optional($contentset)->id, ['class' => 'form-control', 'placeholder'=>'شماره درس', 'dir'=>'ltr']) !!}
-                            </div>
-                            <div class = "col-md-4">
-                                <button type = "submit" class = "btn btn-success">ذخیره</button>
-                            </div>
-                        </div>
+                    {!! Form::open(['method' => 'POST', 'url'=>route('c.updateSet' , ['c'=>$content]) , 'class'=>'form-horizontal'  ,'accept-charset'=>'UTF-8']) !!}
+                    <div class = "form-group {{ $errors->has('newFileFullName') ? ' has-danger' : '' }}">
+                        <label class = "control-label" for = "name">نام فایل کامل ( با دات ام پی فر) :</label>
+                        {!! Form::text('newFileFullName', null, ['class' => 'form-control', 'id' => 'newFileFullName', 'dir'=>'ltr' ]) !!}
+                        @if ($errors->has('newFileFullName'))
+                            <span class="form-control-feedback">
+                                <strong>{{ $errors->first('newFileFullName') }}</strong>
+                            </span>
+                        @endif
                     </div>
+                    <div class = "form-group {{ $errors->has('newContetnsetId') ? ' has-danger' : '' }}">
+                        <label class = "control-label" for = "name">شماره ست :</label>
+                        {!! Form::text('newContetnsetId', optional($contentset)->id, ['class' => 'form-control', 'id' => 'newContetnsetId', 'dir'=>'ltr' ]) !!}
+                        @if ($errors->has('newContetnsetId'))
+                            <span class="form-control-feedback">
+                                     <strong>{{ $errors->first('newContetnsetId') }}</strong>
+                            </span>
+                        @endif
+                    </div>
+                    <button type = "submit" class = "btn btn-success">ذخیره</button>
                     {!! Form::close() !!}
 
 

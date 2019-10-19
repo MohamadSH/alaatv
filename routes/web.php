@@ -1,31 +1,33 @@
 <?php
 
 
-use App\Http\Controllers\Web\AdminController;
 use App\Http\Controllers\Web\BotsController;
-use App\Http\Controllers\Web\ConsultationController;
-use App\Http\Controllers\Web\ContentController;
-use App\Http\Controllers\Web\DashboardPageController;
-use App\Http\Controllers\Web\EmployeetimesheetController;
-use App\Http\Controllers\Web\ErrorPageController;
 use App\Http\Controllers\Web\HomeController;
-use App\Http\Controllers\Web\IndexPageController;
-use App\Http\Controllers\Web\LotteryController;
-use App\Http\Controllers\Web\MobileVerificationController;
-use App\Http\Controllers\Web\OrderproductController;
-use App\Http\Controllers\Web\ProductLandingController;
-use App\Http\Controllers\Web\SharifSchoolController;
 use App\Http\Controllers\Web\LiveController;
-use App\Http\Controllers\Web\PaymentStatusController;
-use App\Http\Controllers\Web\SalesReportController;
-use App\Http\Controllers\Web\ShopPageController;
-use App\Http\Controllers\Web\SurveyController;
+use App\Http\Controllers\Web\SetController;
 use App\Http\Controllers\Web\UserController;
+use App\Http\Controllers\Web\AdminController;
+use App\Http\Controllers\Web\SurveyController;
 use App\Http\Controllers\Web\WalletController;
+use App\Http\Controllers\Web\ContentController;
+use App\Http\Controllers\Web\LotteryController;
+use App\Http\Controllers\Web\SitemapController;
+use App\Http\Controllers\Web\ShopPageController;
+use App\Http\Controllers\Web\ErrorPageController;
+use App\Http\Controllers\Web\IndexPageController;
+use App\Http\Controllers\Web\SalesReportController;
+use App\Http\Controllers\Web\ConsultationController;
+use App\Http\Controllers\Web\OrderproductController;
+use App\Http\Controllers\Web\SharifSchoolController;
+use App\Http\Controllers\Web\DashboardPageController;
+use App\Http\Controllers\Web\PaymentStatusController;
+use App\Http\Controllers\Web\ProductLandingController;
+use App\Http\Controllers\Web\LiveDescriptionController;
+use App\Http\Controllers\Web\EmployeetimesheetController;
+use App\Http\Controllers\Web\MobileVerificationController;
 use App\PaymentModule\Controllers\RedirectUserToPaymentPage;
 use App\PaymentModule\Controllers\PaymentVerifierController;
 use App\PaymentModule\Controllers\RedirectAPIUserToPaymentRoute;
-
 
 
 Route::get('embed/c/{content}', 'Web\ContentController@embed');
@@ -42,7 +44,6 @@ Route::get('contactUs', 'Web\ContactUsController');
 Route::get('rules', 'Web\RulesPageController');
 Route::get('articleList', 'Web\ArticleController@showList');
 Route::get('debug', 'Web\HomeController@debug');
-Route::get('telgramAgent2', 'Web\HomeController@telgramAgent');
 Route::post('sendMail', [HomeController::class , 'sendMail']);
 Route::get('product/search', 'Web\ProductController@search');
 Route::get('showPartial/{product}', 'Web\ProductController@showPartial');
@@ -67,8 +68,11 @@ Route::post('registerForSanatiSharifHighSchool', [SharifSchoolController::class 
 Route::get('sitemap.xml', [HomeController::class , 'siteMapXML']);
 Route::group(['prefix' => 'sitemap'], function () {
     Route::get('/index.xml', 'Web\SitemapController@index');
-    Route::get('products.xml', 'Web\SitemapController@products');
-    Route::get('contents.xml', 'Web\SitemapController@eContents');
+    Route::get('product.xml', 'Web\SitemapController@product');
+    Route::get('video-{page?}.xml', [SitemapController::class, 'video']);
+    Route::get('pamphlet-{page?}.xml', 'Web\SitemapController@pamphlet');
+    Route::get('article-{page?}.xml', 'Web\SitemapController@article');
+    Route::get('redirect.xml', 'Web\SitemapController@redirect');
 });
 
 Route::group(['prefix' => 'checkout'], function () {
@@ -151,6 +155,9 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('zarinpalbot', [BotsController::class, 'ZarinpalVerifyPaymentBot'])->name('web.bot.verifyZarinpal');
     Route::post('thumbnailbot', [BotsController::class, 'fixthumbnail'])->name('web.bot.fixthumbnails');
     Route::post('introcontenttag', [BotsController::class, 'introContentTags'])->name('web.bot.introContentTags');
+    Route::post('tagbot', [BotsController::class, 'fixtag'])->name('web.bot.fixtag');
+    Route::post('close-orders-bot', [BotsController::class, 'closeOrders'])->name('web.bot.closeOrders');
+    Route::post('generateMassiveRandomCoupon', [BotsController::class, 'generateMassiveRandomCoupon'])->name('web.bot.massive.random.coupon');
     Route::get('v/asiatech', 'Web\VoucherController@voucherRequest');
     Route::put('v', 'Web\VoucherController@submitVoucherRequest');
 
@@ -176,8 +183,8 @@ Route::group(['middleware' => 'auth'], function () {
         Route::post('{user}/completeInfo', [UserController::class, 'completeInformation']);
         Route::get('orders', 'Web\UserController@userOrders');
         Route::get('question', 'Web\UserController@uploads');
-        Route::post('submitWorkTime/{employeetimesheet}', [EmployeetimesheetController::class, 'submitWorkTime']);
-        Route::post('submitWorkTime', [EmployeetimesheetController::class, 'submitWorkTime']);
+        Route::post('submitWorkTime/{employeetimesheet}', [EmployeetimesheetController::class, 'submitWorkTime'])->name('web.user.employeetime.submit.update');
+        Route::post('submitWorkTime', [EmployeetimesheetController::class, 'submitWorkTime'])->name('web.user.employeetime.submit');
         Route::post('removeFromLottery', [LotteryController::class, 'removeFromLottery']);
         Route::get('uploadQuestion', [ConsultationController::class, 'uploadConsultingQuestion']);
         Route::get('orders', [UserController::class, 'userOrders']);
@@ -241,6 +248,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::resource('employeetimesheet', 'Web\EmployeetimesheetController');
     Route::resource('lottery', 'Web\LotteryController');
     Route::resource('cat', 'Web\CategoryController');
+    Route::resource('livedescription', '\\'.LiveDescriptionController::class );
 
     Route::get('copylessonfromremote', 'Web\RemoteDataCopyController@copyLesson');
     Route::get('copydepartmentfromremote', 'Web\RemoteDataCopyController@copyDepartment');
@@ -254,14 +262,13 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('donate', 'Web\DonateController');
     Route::post('donateOrder', 'Web\OrderController@donateOrder');
 
-    Route::get('listContents/{set}', 'Web\SetController@indexContent');
-    Route::resource('set', 'Web\SetController');
+    Route::get('listContents/{set}', [SetController::class, 'indexContent'])->name('web.set.list.contents');
 
     Route::get('live' , '\\'.LiveController::class)->name('live');
-    Route::post('startlive' , [LiveController::class, 'startLive']);
-    Route::post('endlive'   , [LiveController::class, 'endLive']);
+    Route::post('startlive' , [LiveController::class, 'startLive'])->name('web.start.live');
+    Route::post('endlive'   , [LiveController::class, 'endLive'])->name('web.end.live');
 
-    Route::post('updateSet' , [ContentController::class, 'updateSet']);
+    Route::post('updateSet/{c}' , [ContentController::class, 'updateSet'])->name('c.updateSet');
     Route::get('atest' , [HomeController::class, 'adTest']);
     Route::get('block/detach/{block}/{type}/{id}', 'Web\BlockController@detachFromBlock');
 });
@@ -269,7 +276,8 @@ Route::group(['middleware' => 'auth'], function () {
 Route::group(['prefix' => 'c'], function () {
 
     Route::get('search', 'Web\ContentController@search');
-    Route::get('create2', [ContentController::class, 'create2']);
+    Route::get('uploadContent', [ContentController::class, 'uploadContent'])->name('c.upload.content');
+    Route::get('createArticle', [ContentController::class, 'createArticle'])->name('c.create.article');
 
     Route::get('{c}/favored', 'Web\FavorableController@getUsersThatFavoredThisFavorable');
     Route::post('{c}/favored', 'Web\FavorableController@markFavorableFavorite');
@@ -285,9 +293,8 @@ Route::group(['prefix' => 'product'], function () {
     Route::post('{product}/favored', 'Web\FavorableController@markFavorableFavorite');
 });
 
-Route::get('ctag', 'Web\ContentController@retrieveTags');
 Route::resource('product', 'Web\ProductController');
-
+Route::resource('set', 'Web\SetController');
 Route::resource('c', 'Web\ContentController')->names([
     'index' => 'content.index'
 ]);;

@@ -11,11 +11,11 @@ use Illuminate\Support\Facades\Redis;
 class RedisTagging extends Singleton
 {
     public const CONST_TYPE_INTER = 'inter';
-    
+
     public const CONST_ORDER_DESC = 'desc';
-    
+
     protected $prefix = 'tagging';
-    
+
     /**
      * Get all tags for an ID
      *
@@ -33,7 +33,7 @@ class RedisTagging extends Singleton
                 'error' => '',
             ];
         }
-    
+
         $ns       = $this->prefix.':'.$bucket;
         $id_index = $ns.':ID:'.$id;
 
@@ -44,7 +44,7 @@ class RedisTagging extends Singleton
                 'msg' => 'Error!',
             ]);
         }
-        
+
         $cb(null, [
             'total_items' => count($tags),
             'id'          => $id,
@@ -52,7 +52,7 @@ class RedisTagging extends Singleton
             'tags'        => $tags,
         ]);
     }
-    
+
     /**
      * @param $bucket
      *
@@ -62,21 +62,21 @@ class RedisTagging extends Singleton
     {
         return true;
     }
-    
+
     /**
      * Remove / Delete an item
      *
-     * @param  string  $bucket
-     * @param  string  $id
+     * @param string $bucket
+     * @param string $id
      * @param          $cb
      *
-     * @return bool Returns `true` even if that id did not exist.
+     * @return void Returns `true` even if that id did not exist.
      */
     public function remove($bucket, $id, $cb)
     {
-        $this->set($bucket, $id, [], 0, $cb);
+        $this->set($bucket, $id, [], $cb);
     }
-    
+
     /**
      * Set (insert or update) an item
      *
@@ -88,16 +88,16 @@ class RedisTagging extends Singleton
      *
      * @return bool Returns `true` when the item was set.
      */
-    public function set($bucket, $id, $tags, $score = 0, $cb)
+    public function set($bucket, $id, $tags,  $cb , $score = 0)
     {
         $redis = Redis::connection('redisDB');
         if (!$this->validation($bucket)) {
             return false;
         }
-    
+
         $ns       = $this->prefix.':'.$bucket;
         $id_index = $ns.':ID:'.$id;
-        
+
         $this->delete($ns, $id);
         try {
             $redis->pipeline(function ($pipe) use ($tags, $score, $id, $id_index, $ns) {
@@ -115,14 +115,14 @@ class RedisTagging extends Singleton
         }
         $cb(null, true);
     }
-    
+
     private function delete($ns, $id)
     {
         $redis = Redis::connection('redisDB');
         try {
             $id_index = $ns.':ID:'.$id;
             $tags     = $redis->sMembers($id_index);
-            
+
             $redis->pipeline(function ($pipe) use ($tags, $id, $id_index, $ns) {
                 # This ID already has tags. We will delete them first
                 foreach ($tags as $tag) {
@@ -130,7 +130,7 @@ class RedisTagging extends Singleton
                     $pipe->zRem($ns.':TAGS:'.$tag, $id);
                 }
                 # Also delete the index for this ID
-                $pipe->delete($id_index);
+                $pipe->unlink($id_index);
                 # Delete the id in the IDS list
                 $pipe->sRem($ns.':IDs', $id);
                 # Clean up the TAGCOUNT
@@ -140,7 +140,7 @@ class RedisTagging extends Singleton
             return false;
         }
     }
-    
+
     /**
      * Return the IDs of an either a single tag or an intersection/union of two or more tags
      *
@@ -153,17 +153,18 @@ class RedisTagging extends Singleton
      * @param  string  $type        *optional* Default ="desc"
      * @param          $cb
      */
-    public function tags($bucket, $tags, $limit = 100, $offset = 0, $withScores = 0, $order = 'desc', $type = 'inter', $cb)
+    public function tags($bucket, $tags, $cb, $limit = 100, $offset = 0, $withScores = 0, $order = 'desc', $type =
+    'inter'): void
     {
-    
+
         $redis  = Redis::connection('redisDB');
         $ns     = $this->prefix.':'.$bucket;
         $prefix = $ns.':TAGS:';
         # The last element to get
         $lastElement = $offset + $limit - 1;
-        
+
         $cTags = count($tags);
-        if ($cTags == 0) {
+        if ($cTags === 0) {
             $cb(null, [
                 'total_items_result' => 0,
                 'total_items_db'     => 0,
@@ -175,81 +176,78 @@ class RedisTagging extends Singleton
                 'order'              => $order,
                 'type'               => $type,
             ]);
-            
+
             return;
         }
-        else {
-            if ($cTags > 1) {
-                $randKey = $ns.str_random(10).'_'.Carbon::now()->micro;
-                $keys    = [];
-                foreach ($tags as $tag) {
-                    array_push($keys, $prefix.$tag);
-                }
-                try {
-                    if (strcmp($type, self::CONST_TYPE_INTER) == 0) {
-                        $redis->zInter($randKey, $keys, null, 'MIN');
-                    }
-                    else {
-                        $redis->zUnion($randKey, $keys, null, 'MIN');
-                    }
-                } catch (Exception $e) {
-                    $cb($e, [
-                        'msg' => 'Error!',
-                    ]);
-                    
-                    return;
-                }
-                $resultkey = $randKey;
+
+        if ($cTags > 1) {
+            $randKey = $ns.str_random(10).'_'.Carbon::now()->micro;
+            $keys    = [];
+            foreach ($tags as $tag) {
+                $keys[] = $prefix.$tag;
             }
-            else {
-                if ($cTags == 1) {
-                    $resultkey = $prefix.$tags[0];
+            try {
+                if (strcmp($type, self::CONST_TYPE_INTER) === 0) {
+//                        $redis->zInter($randKey, $keys, null, 'MIN');
+                    $redis->zinterstore($randKey, $keys, ['min']);
+                } else {
+                    $redis->zUnion($randKey, $keys, null, 'MIN');
                 }
+            } catch (Exception $e) {
+                $cb($e, [
+                    'msg' => 'Error!',
+                ]);
+
+                return;
+            }
+            $resultkey = $randKey;
+        } else {
+            if ($cTags == 1) {
+                $resultkey = $prefix.$tags[0];
             }
         }
-        
+
         try {
             $total_items_db = $redis->zCount($resultkey, '-inf', '+inf');
-            if (strcmp($order, self::CONST_ORDER_DESC) == 0) {
-                $tagsresult = $redis->zRevRange($resultkey, $offset, $lastElement, $withScores);
-            }
-            else {
-                $tagsresult = $redis->zRange($resultkey, $offset, $lastElement, $withScores);
+            if (strcmp($order, self::CONST_ORDER_DESC) === 0) {
+                $tagsresult = $redis->zRevRange($resultkey, $offset, $lastElement, ['withscores' => $withScores]);
+            } else {
+                $tagsresult = $redis->zRange($resultkey, $offset, $lastElement, ['withscores' => $withScores]);
             }
         } catch (Exception $e) {
             $total_items_db = 0;
             $cb($e, [
                 'msg' => 'Error!',
             ]);
-            
+
             return;
         }
-        
+
         if ($cTags > 1) {
-            $redis->delete($resultkey);
+            $redis->unlink($resultkey);
         }
-        
+
         $result = [];
-        
+
         if ($withScores) {
             foreach ($tagsresult as $id => $score) {
-                $temp = [
+                $temp     = [
                     'bucket' => $bucket,
                     'id'     => $id,
                     'score'  => $score,
-                
+
                 ];
-                array_push($result, $temp);
+                $result[] = $temp;
             }
         }
         else {
             foreach ($tagsresult as $id) {
-                $temp = [
+                $temp     = [
                     'bucket' => $bucket,
                     'id'     => $id,
                     'score'  => 0,
                 ];
-                array_push($result, $temp);
+                $result[] = $temp;
             }
         }
         $cb(null, [
@@ -264,14 +262,14 @@ class RedisTagging extends Singleton
             'type'               => $type,
         ]);
     }
-    
+
     public function flushDB($cb)
     {
         $redis = Redis::connection('redisDB');
         $redis->command('FLUSHDB');
         $cb(null, true);
     }
-    
+
     /**
      *  Get all IDs for a single bucket
      *
@@ -290,7 +288,7 @@ class RedisTagging extends Singleton
         }
         $cb(null, $ids);
     }
-    
+
     /**
      * TopTags
      *
@@ -305,19 +303,19 @@ class RedisTagging extends Singleton
         if (!$this->validation($bucket)) {
             return ['error' => 'bucket should not Equal to " TAGS " '];
         }
-    
+
         $ns       = $this->prefix.':'.$bucket;
         $amount   = $amount - 1;
         $redisKey = $ns.':TagCount';
         $num      = $redisKey->zCard($redisKey);
         $result   = $redis->zRevRange($redisKey, 0, $amount, true);
-        
+
         $cb(null, [
             'total_items' => $num,
             'items'       => $result,
         ]);
     }
-    
+
     /**
      *  Returns all buckets.
      *  Use with care: Uses redis.keys
@@ -328,7 +326,7 @@ class RedisTagging extends Singleton
     {
         return [];
     }
-    
+
     /**
      * Remove a bucket and all its keys
      * Use with care: Uses redis.keys

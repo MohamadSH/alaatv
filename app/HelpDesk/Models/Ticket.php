@@ -28,6 +28,31 @@ use App\HelpDesk\Collection\TicketCollection;
  * @method static Builder|Ticket query()
  * @method static Builder|Ticket userTickets($id)
  * @mixin Eloquent
+ * @property int $id
+ * @property string $subject
+ * @property string|null $content
+ * @property int $status_id
+ * @property int $priority_id
+ * @property int $user_id
+ * @property int $agent_id
+ * @property int $category_id
+ * @property \Illuminate\Support\Carbon|null $close_at
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property-read int|null $comments_count
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\HelpDesk\Models\Ticket whereAgentId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\HelpDesk\Models\Ticket whereCategoryId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\HelpDesk\Models\Ticket whereCloseAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\HelpDesk\Models\Ticket whereContent($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\HelpDesk\Models\Ticket whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\HelpDesk\Models\Ticket whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\HelpDesk\Models\Ticket whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\HelpDesk\Models\Ticket wherePriorityId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\HelpDesk\Models\Ticket whereStatusId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\HelpDesk\Models\Ticket whereSubject($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\HelpDesk\Models\Ticket whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\HelpDesk\Models\Ticket whereUserId($value)
  */
 class Ticket extends BaseModel
 {

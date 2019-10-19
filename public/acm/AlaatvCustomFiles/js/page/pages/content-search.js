@@ -153,8 +153,8 @@ var Alaasearch = function () {
                 name: data.author.firstName,
                 full_name: data.author.full_name
             },
-            widgetCount: data.contents_count,
-            widgetLink: data.url
+            widgetCount: data.active_contents_count,
+            widgetLink: '/set/'+data.id
         };
 
         let widgetPic = inputData.widgetPic,

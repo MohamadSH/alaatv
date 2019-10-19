@@ -5,11 +5,11 @@
 @endsection
 
 @section('content')
-    
+
     @include('systemMessage.flash')
-    
+
 {{--    @include("partials.checkoutSteps" , ["step"=>2])--}}
-    
+
     @if(isset($invoiceInfo['orderproductCount']) && $invoiceInfo['orderproductCount']>0)
         <div class="row">
             <div class="col-xl-8 a--userCartList">
@@ -38,7 +38,7 @@
                             </button>
                         </div>
                     </div>
-                    
+
                     <div class="m-portlet__body">
                         <!--begin::Content-->
                         <div class="tab-content">
@@ -65,7 +65,7 @@
                                                                     data-gtm-eec-product-category="-"
                                                                     data-gtm-eec-product-variant="-"
                                                                     data-gtm-eec-product-quantity="1"
-                                                                    
+
                                                                     class="btn btn-sm m-btn--pill m-btn--air btn-danger d-none d-md-block d-lg-block d-xl-block m--margin-right-5 btnRemoveOrderproduct">
                                                                     <span>
                                                                         <i class="flaticon-circle"></i>
@@ -141,8 +141,8 @@
                                                         @endif
                                                     </div>
                                                     <div class="m-widget5__content">
-    
-    
+
+
                                                         <span class="m-badge m-badge--primary m-badge--wide m-badge--rounded notIncludedProductsInCoupon notIncludedProductsInCoupon-{{ $simpleOrderProductItem->product->id }} a--d-none">شامل کد تخفیف نمی شود</span>
                                                         <div class="m-widget5__stats1">
                                                             <span class="m-nav__link-badge">
@@ -173,7 +173,7 @@
                                             @endforeach
                                         @else
                                             <div class="orderproductWithChildWarper">
-                                                
+
                                                 <div class="m-widget5__item hasChild">
                                                     <div class="m-widget5__content">
                                                         <div class="m-widget5__pic">
@@ -193,7 +193,7 @@
                                                                      alt="">
                                                             </a>
                                                         </div>
-                                                        
+
                                                         {{--attribute value in desktop--}}
                                                         <div class="m-widget5__section">
                                                             <div class=" d-none d-md-block d-lg-block d-xl-block">
@@ -215,7 +215,7 @@
                                                                             @endforeach
                                                                         @endforeach
                                                                     @endif
-                                                                    
+
                                                                     @if(optional($orderProductItem['grand']->attributes)->get('information'))
                                                                         @foreach($orderProductItem['grand']->attributes->get('information') as $attributeGroupKey=>$attributeItem)
                                                                             <span class="m-badge m-badge--info m-badge--wide m-badge--rounded m--margin-bottom-5">{{ $attributeItem->title }} : {{ $attributeItem->data[0]->name }}</span>
@@ -224,7 +224,7 @@
                                                                 </span>
                                                             </div>
                                                         </div>
-                                                        
+
                                                         {{--attribute value in mobile--}}
                                                         <div class="d-sm-none d-md-none d-lg-none m--margin-top-10">
                                                             <h4 class="m-widget5__title">
@@ -248,23 +248,23 @@
                                                                 @endif
                                                             </span>
                                                         </div>
-                                                        
+
                                                     </div>
                                                     <div class="m-widget5__content">
-                                                        
+
                                                         <div class="m-widget5__stats1">
-                                                        
+
                                                         </div>
                                                         <div class="m-widget5__stats2">
-                                                        
+
                                                         </div>
                                                     </div>
                                                 </div>
-                                                
+
                                                 <div class="m-widget5__item childOfParent">
                                                     @foreach($orderProductItem['orderproducts'] as $keyChild=>$orderProductItemChild)
                                                         <div class="childItem">
-                                                            
+
                                                             <div class="childRemoveBtnWarper">
                                                                 <button type="button"
                                                                         data-action="{{action("Web\OrderproductController@destroy", $orderProductItemChild->id)}}"
@@ -279,7 +279,7 @@
                                                                 </span>
                                                                 </button>
                                                             </div>
-                                                            
+
                                                             <button type="button"
                                                                     data-action="{{action("Web\OrderproductController@destroy", $orderProductItemChild->id)}}"
                                                                     data-name="{{ $orderProductItemChild->product->name  }}"
@@ -289,7 +289,7 @@
                                                                     class="btn btn-default m-btn m-btn--icon btn-sm m-btn--icon-only m-btn--pill btnRemoveOrderproduct btnRemoveOrderproduct-child">
                                                                 <i class="fa fa-times"></i>
                                                             </button>
-                                                            
+
                                                             <div class="childTitle">
                                                                 {{ $orderProductItemChild->product->name }}
                                                             </div>
@@ -304,11 +304,11 @@
                                                                     @endif
                                                                 </span>
                                                             </div>
-                                                            
+
                                                             <div class="clearfix"></div>
                                                             <span class="m-badge m-badge--primary m-badge--wide m-badge--rounded notIncludedProductsInCoupon notIncludedProductsInCoupon-{{ $orderProductItemChild->product->id }} float-right a--d-none">شامل کد تخفیف نمی شود</span>
                                                             <div class="clearfix"></div>
-                                                            
+
                                                             @if($orderProductItemChild->attached_bons_number > 0)
                                                                 <span class="m-badge m-badge--info m-badge--wide m-badge--rounded m--margin-top-5">
                                                                     <i class="flaticon-interface-9"></i>
@@ -316,7 +316,7 @@
                                                                     {{ $orderProductItemChild->attached_bons_number }}
                                                                 </span>
                                                             @endif
-                                                            
+
                                                         </div>
                                                     @endforeach
                                                 </div>
@@ -333,13 +333,13 @@
                 <!--end:: Widgets/Best Sellers-->
             </div>
             <div class="col-xl-4">
-    
+
                 <form method="GET" action="" id="frmGotoGateway">
                     <!--begin:: Widgets/Authors Profit-->
                     <div class="m-portlet m-portlet--bordered-semi CheckoutReviewTotalPriceWarper">
                         <div class="m-portlet__body" @if(optional(Auth::user())->id === null) style="padding-bottom: 0px !important;" @endif>
                             <div class="m-widget1 m--padding-5 costReportWraper">
-        
+
                                 @if(optional(Auth::user())->id !== null)
                                 <div class="m-widget1__item">
                                     <div class="form-group m-form__group discountCodeWraper">
@@ -356,8 +356,8 @@
                                             </div>
                                         </div>
                                     </div>
-        
-        
+
+
                                     <div class="alert alert-success alert-dismissible fade show couponReportWarper @if(!isset($coupon)) a--d-none @endif"
                                          role="alert">
                                         {{--<button type="button" class="close" data-dismiss="alert" aria-label="Close"></button>--}}
@@ -378,7 +378,7 @@
                                             @endif
                                         </div>
                                     </div>
-                                    
+
                                 </div>
                                 <div class="m-widget1__item">
                                     <div class="row align-items-center">
@@ -489,7 +489,7 @@
                                         <div class="m-form__group form-group text-center m--margin-top-10">
                                             <div class="m-radio-inline">
                                                 <label class="m-radio m-radio--check-bold m-radio--state-info">
-                                                    <input type="radio" name="radioBankType" value="{{route('redirectToBank', ['paymentMethod'=>'zarinpal', 'device'=>'web'])}}" data-bank-type="zarinpal">
+                                                    <input type="radio" name="radioBankType" value="{{route('redirectToBank', ['paymentMethod'=>'zarinpal', 'device'=>'web'])}}" data-bank-type="zarinpal" >
                                                     <img src="/acm/extra/payment/gateway/zarinpal-logo.png" class="img-thumbnail bankLogo" alt="bank-logo" width="60">
                                                     <span></span>
                                                 </label>
@@ -506,7 +506,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    
+
                                     <div class="m-widget1__item">
                                         <div class="form-group m-form__group">
                                             <label for="customerDescription">
@@ -539,7 +539,7 @@
                                         </div>
                                     </div>
                                 @endif
-                                
+
                             </div>
                             @if(optional(Auth::user())->id !== null)
                             <button type="submit"
@@ -552,9 +552,9 @@
                     </div>
                     <!--end:: Widgets/Authors Profit-->
                 </form>
-    
+
                 @if(optional(Auth::user())->id === null)
-        
+
                     <div class="m-portlet m-portlet--bordered-semi CheckoutReviewTotalPriceWarper">
                         <div class="m-portlet__body">
                             <div class="alert alert-info alert-dismissible fade show" role="alert">
@@ -562,7 +562,7 @@
                                 <br>
                                 با کد ملی ایران نیازی به ثبت نام نیست.
                             </div>
-                            
+
                             <form class="m-login__form m-form" action="{{ action("Auth\LoginController@login") }}" method="post">
                                 @if($errors->login->has('validation'))
                                     <div class="alert alert-danger">
@@ -626,7 +626,7 @@
             </div>
         </div>
     @endif
-    
+
     <div class="m-portlet btnGotoCheckoutPayment_mobile">
         <div class="m-portlet__body">
             <div class="row">
@@ -653,7 +653,7 @@
             </div>
         </div>
     </div>
-    
+
 @endsection
 
 @section('page-js')

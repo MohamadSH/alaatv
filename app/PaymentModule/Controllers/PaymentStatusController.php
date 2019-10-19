@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Web;
 use App\Order;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Request;
 
 class PaymentStatusController extends Controller
@@ -20,22 +21,22 @@ class PaymentStatusController extends Controller
     public function show(string $status, string $paymentMethod, string $device)
     {
         $result = Request::session()->pull('verifyResult');
-    
+
         $gtmEec = $this->generateGtmEec($device, $result);
-        
+
         Cache::tags('bon')->flush();
         Cache::tags('order')->flush();
         Cache::tags('user')->flush();
         Cache::tags('orderproduct')->flush();
-        
+
         if ($result != null) {
             return view('order.checkout.verification', compact('status', 'paymentMethod', 'device', 'result', 'gtmEec'));
         }
 
-        
+
         return redirect()->action('Web\UserController@userOrders');
     }
-    
+
     /**
      * @param  string  $device
      * @param          $result
@@ -47,7 +48,9 @@ class PaymentStatusController extends Controller
         $gtmEec = [];
         if (isset($result['orderId'])) {
             $order         = Order::find($result['orderId']);
-            $orderproducts = $order->products();
+            $orderproducts = $order->orderproducts;
+            $orderproducts->loadMissing('product');
+
             $gtmEec        = [
                 'actionField' => [
                     'id'          => (string)$order->id,
@@ -59,15 +62,17 @@ class PaymentStatusController extends Controller
                 ],
                 'products'    => []
             ];
-            foreach ($orderproducts as $product) {
+
+            foreach ($orderproducts as $orderproduct) {
+                Log::info('ecommerce category: '.$orderproduct->product->category);
                 $gtmEec['products'][] = [
-                    'id'       => (string)$product->id,
-                    'name'     => $product->name,
-                    'category' => '-',
+                    'id'       => (string)$orderproduct->product->id,
+                    'name'     => $orderproduct->product->name,
+                    'category' => (isset($orderproduct->product->category))?$orderproduct->product->category:'-',
                     'variant'  => '-',
                     'brand'    => 'آلاء',
                     'quantity' => 1,
-                    'price'    => (string)number_format($product->price['final'] ?? 0, 2, '.', ''),
+                    'price'    => (string)number_format($orderproduct->getSharedCostOfTransaction() ?? 0, 2, '.', ''),
                 ];
             }
         }

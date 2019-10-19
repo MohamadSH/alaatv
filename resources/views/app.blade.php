@@ -3,6 +3,7 @@
     <!-- begin::Head -->
     <head>
         @include('partials.html-head')
+        @yield('page-head')
     </head>
     <!-- end::Head -->
     

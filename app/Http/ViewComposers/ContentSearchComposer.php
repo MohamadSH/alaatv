@@ -10,10 +10,10 @@ use Illuminate\View\View;
 class ContentSearchComposer
 {
     use CharacterCommon;
-    
-    
+
+
     protected $request;
-    
+
     /**
      * Create a new ContentSearch composer.
      *
@@ -23,7 +23,7 @@ class ContentSearchComposer
     {
         $this->request = $request;
     }
-    
+
     /**
      * Bind data to the view.
      *
@@ -35,10 +35,10 @@ class ContentSearchComposer
     {
         $sideBarMode = "closed";
         list($ads1, $ads2, $tags, $extraTags, $filterData) = $this->getData();
-        
+
         $view->with(compact('sideBarMode', 'ads1', 'ads2', 'tags', 'extraTags', 'filterData'));
     }
-    
+
     /**
      * @return array
      */
@@ -52,7 +52,7 @@ class ContentSearchComposer
             $tags,
             $extraTags,
         ] = $this->getTags();
-        
+
         $filterData = $this->getFilterdData();
         return [
             $ads1,
@@ -62,7 +62,7 @@ class ContentSearchComposer
             $filterData,
         ];
     }
-    
+
     /**
      * @return array
      */
@@ -84,7 +84,7 @@ class ContentSearchComposer
             $ads2,
         ];
     }
-    
+
     /**
      * @return array
      */
@@ -97,14 +97,14 @@ class ContentSearchComposer
         if ($this->request->has("tags")) {
             $tags = $this->request->tags;
         }
-        
+
         $extraTags = [];
         return [
             $tags,
             $extraTags,
         ];
     }
-    
+
     /**
      * @return array
      */
@@ -437,6 +437,11 @@ class ContentSearchComposer
                     "firstName" => "امید",
                     "value"     => "امید_زاهدی",
                 ],
+                [
+                    "lastName"  => "محمد رضا",
+                    "firstName" => "یاری",
+                    "value"     => "محمد_رضا_یاری",
+                ],
             ])
                 ->sortBy("lastName")
                 ->values(),
@@ -659,6 +664,11 @@ class ContentSearchComposer
                     "firstName" => "علی",
                     "value"     => "علی_صدری",
                 ],
+                [
+                    "lastName"  => "ثابتی",
+                    "firstName" => "محمد صادق",
+                    "value"     => "محمد_صادق_ثابتی",
+                ]
             ])
                 ->sortBy("lastName")
                 ->values(),
@@ -817,6 +827,11 @@ class ContentSearchComposer
                     "lastName"  => "جهانبخش",
                     "firstName" => "",
                     "value"     => "جهانبخش",
+                ],
+                [
+                    "lastName"  => "یاری",
+                    "firstName" => "محمد رضا",
+                    "value"     => "محمد_رضا_یاری",
                 ],
             ])
                 ->sortBy("lastName")
@@ -1345,7 +1360,7 @@ class ContentSearchComposer
         ])
             ->sortBy("index")
             ->values();
-        
+
         $filterData = [
             'lessonTeacher' => $lessonTeacher,
             'lessons'       => [
@@ -1357,7 +1372,7 @@ class ContentSearchComposer
         ];
         return $filterData;
     }
-    
+
     /**
      * @param $tags
      * @param $inputs
@@ -1372,10 +1387,10 @@ class ContentSearchComposer
         $default   = array_intersect($tags, $inputSlug);
         if (is_array($default)) {
             $default = array_first($default);
-            
+
             return array_search($default, $inputSlug);
         }
-        
+
         return null;
     }
 }

@@ -107,9 +107,9 @@ class EmployeetimesheetController extends Controller
         $toDayJalali = $this->convertToJalaliDay(Carbon::today('Asia/Tehran')->format('l'));
         /** @var Employeeschedule $employeeSchedule */
         $employeeSchedule = Employeeschedule::where('user_id', $user->id)
-                            ->where('day', $toDayJalali)
-                            ->get()
-                            ->first();
+            ->where('day', $toDayJalali)
+            ->get()
+            ->first();
 
         $employeeTimeSheet = Employeetimesheet::where('date', Carbon::today('Asia/Tehran'))
             ->where('user_id', $user->id)
@@ -119,8 +119,8 @@ class EmployeetimesheetController extends Controller
             $isExtra = true;
         }
         $employees    = User::select()
-                            ->role([config('constants.ROLE_EMPLOYEE')])
-                            ->pluck('lastName', 'id');
+            ->role([config('constants.ROLE_EMPLOYEE')])
+            ->pluck('lastName', 'id');
 
         $workdayTypes = Workdaytype::all()->pluck('displayName', 'id');
 
@@ -315,8 +315,8 @@ class EmployeetimesheetController extends Controller
         elseif ($userTimeSheets->count() == 1) {
             $done = $userTimeSheets->first()->update([
                 $actionMap[
-                    $request->get('action' , 'action-clockIn')] => $presentTime ,
-                    'modifier_id'           => $userId,
+                $request->get('action' , 'action-clockIn')] => $presentTime ,
+                'modifier_id'           => $userId,
             ]);
         } else {
             session()->flash('error', 'شما بیش از یک ساعت کاری برای امروز ثبت نموده اید!');

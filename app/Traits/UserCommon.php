@@ -1,6 +1,11 @@
 <?php namespace App\Traits;
 
+use App\Events\UserAvatarUploaded;
 use App\User;
+use App\Transaction;
+use Illuminate\Validation\Rule;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 
@@ -14,7 +19,7 @@ trait UserCommon
      *
      * @return array
      */
-    public function exchangeLottery($user, $points)
+    public function exchangeLottery($user, $points):array
     {
         /**   giving coupon */ /**do {
      * $couponCode = str_random(5);
@@ -45,16 +50,16 @@ trait UserCommon
      * $prizeName = "کد تخفیف ".$couponCode." با ".config("constants.HAMAYESH_LOTTERY_EXCHANGE_AMOUNT")."% تخفیف( تا تاریخ 1396/09/28 اعتبار دارد )" ;
      * }
      */
-        
+
         /**   giving credit */
-        $unitAmount    = config("constants.HAMAYESH_LOTTERY_EXCHANGE_AMOUNT");
+        $unitAmount    = config('constants.HAMAYESH_LOTTERY_EXCHANGE_AMOUNT');
         $amount        = $unitAmount * $points;
-        $depositResult = $user->deposit($amount, config("constants.WALLET_TYPE_GIFT"));
-        $done          = $depositResult["result"];
-        $responseText  = $depositResult["responseText"];
-        $objectId      = $depositResult["wallet"];
-        $prizeName     = "مبلغ ".number_format($amount)." تومان اعتبار هدیه";
-        
+        $depositResult = $user->deposit($amount, config('constants.WALLET_TYPE_GIFT'));
+        $done          = $depositResult['result'];
+        $responseText  = $depositResult['responseText'];
+        $objectId      = $depositResult['wallet'];
+        $prizeName     = 'مبلغ '.number_format($amount).' تومان اعتبار هدیه';
+
         return [
             $done,
             $responseText,
@@ -62,7 +67,7 @@ trait UserCommon
             $objectId,
         ];
     }
-    
+
     /**
      * Validates national code
      *
@@ -70,84 +75,45 @@ trait UserCommon
      *
      * @return bool
      */
-    public function validateNationalCode($value)
+    public function validateNationalCode($value):bool
     {
         $flag = false;
         if (!preg_match('/^[0-9]{10}$/', $value)) {
             $flag = false;
         }
-        
+
         for ($i = 0; $i < 10; $i++) {
             if (preg_match('/^'.$i.'{10}$/', $value)) {
                 $flag = false;
             }
         }
-        
+
         for ($i = 0, $sum = 0; $i < 9; $i++) {
             $sum += ((10 - $i) * intval(substr($value, $i, 1)));
         }
-        
+
         $ret    = $sum % 11;
         $parity = intval(substr($value, 9, 1));
         if (($ret < 2 && $ret == $parity) || ($ret >= 2 && $ret == 11 - $parity)) {
             $flag = true;
         }
-        
+
         return $flag;
     }
-    
-    /**
-     * Determines oldPassword and newPassword confirmation of the user
-     *
-     * @param  \App\User  $user
-     * @param  string     $claimedOldPassword
-     * @param  string     $newPassword
-     *
-     * @return array
-     */
-    public function userPasswordConfirmation(\App\User $user, $claimedOldPassword, $newPassword): array
-    {
-        [$confirmed, $message] = $this->getMsg($user, $claimedOldPassword, $newPassword);
-        
-        return [
-            "confirmed" => $confirmed,
-            "message"   => $message,
-        ];
-    }
-    
-    /**
-     * @param  \App\User  $user
-     * @param             $claimedOldPassword
-     * @param             $newPassword
-     *
-     * @return array
-     */
-    private function getMsg(\App\User $user, $claimedOldPassword, $newPassword): array
-    {
-        if (!$user->compareWithCurrentPassword($claimedOldPassword)) {
-            return [false, \Lang::get('confirmation.Claimed old password is not correct')];
-        }
-        
-        if (!$user->compareWithCurrentPassword($newPassword)) {
-            return [true, \Lang::get('confirmation.Confirmed.')];
-        }
-        
-        return [false, \Lang::get('confirmation.Current password and new password are the same.')];
-    }
-    
+
     /**
      * @param $orders
      *
-     * @return \App\Transaction|\Illuminate\Database\Eloquent\Builder
+     * @return Transaction|Builder
      */
-    public function getInstalments($orders): \Illuminate\Database\Eloquent\Builder
+    public function getInstalments($orders): Builder
     {
-        return \App\Transaction::whereIn("order_id", $orders->pluck("id"))
-            ->whereDoesntHave("parents")
-            ->where("transactionstatus_id",
-                config("constants.TRANSACTION_STATUS_UNPAID"));
+        return Transaction::whereIn('order_id', $orders->pluck('id'))
+            ->whereDoesntHave('parents')
+            ->where('transactionstatus_id',
+                config('constants.TRANSACTION_STATUS_UNPAID'));
     }
-    
+
     /**
      * Returns validation rules for inserting a user
      *
@@ -163,12 +129,12 @@ trait UserCommon
             'mobile'        => [
                 'required',
                 'digits:11',
-                \Illuminate\Validation\Rule::phone()
+                Rule::phone()
                     ->mobile()
                     ->country('AUTO,IR'),
-                \Illuminate\Validation\Rule::unique('users')
-                    ->where(function ($query) use ($data) {
-                        $query->where('nationalCode', array_get($data, "nationalCode"))
+                Rule::unique('users')
+                    ->where(static function ($query) use ($data) {
+                        $query->where('nationalCode', array_get($data, 'nationalCode'))
                             ->where('deleted_at', null);
                     }),
             ],
@@ -177,9 +143,9 @@ trait UserCommon
                 'required',
                 'digits:10',
                 'validate:nationalCode',
-                \Illuminate\Validation\Rule::unique('users')
-                    ->where(function ($query) use ($data) {
-                        $query->where('mobile', array_get($data, "mobile"))
+                Rule::unique('users')
+                    ->where(static function ($query) use ($data) {
+                        $query->where('mobile', array_get($data, 'mobile'))
                             ->where('deleted_at', null);
                     }),
             ],
@@ -190,43 +156,29 @@ trait UserCommon
             'gender_id'     => 'sometimes|nullable|exists:genders,id',
             'email'         => 'sometimes|nullable|email',
         ];
-        
+
         return $rules;
     }
-    
+
     /**
-     * @param  User  $user
+     * @param User $user
      * @param        $file
-     *
-     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
+     * @return string|null
+     * @throws FileNotFoundException
      */
-    protected function storePhotoOfUser(User &$user, $file): void
+    protected function storePhotoOfUser(User $user, $file): ?string
     {
         $extension = $file->getClientOriginalExtension();
-        $fileName  = basename($file->getClientOriginalName(), ".".$extension)."_".date("YmdHis").'.'.$extension;
-        if (Storage::disk(config('constants.DISK1'))
-            ->put($fileName, File::get($file))) {
-            $oldPhoto = $user->photo;
-            if (!$this->userHasDefaultAvatar($oldPhoto)) {
-                Storage::disk(config('constants.DISK1'))
-                    ->delete($oldPhoto);
-            }
-            $user->photo = $fileName;
+        $fileName  = basename($file->getClientOriginalName(), '.'.$extension).'_'.date('YmdHis').'.'.$extension;
+        if (Storage::disk(config('constants.DISK24'))->put($fileName, File::get($file))) {
+            $path = 'upload/images/profile/'.$fileName;
+            event(new UserAvatarUploaded($user , $path));
+            return $path;
         }
+
+        return null;
     }
-    
-    /**
-     * Checks whether user has default avatar or not
-     *
-     * @param $photo
-     *
-     * @return bool
-     */
-    public function userHasDefaultAvatar($photo): bool
-    {
-        return strcmp($photo, config('constants.PROFILE_DEFAULT_IMAGE')) != 0;
-    }
-    
+
     /**
      * @param  array  $newRoleIds
      * @param  User   $staffUser
@@ -234,9 +186,9 @@ trait UserCommon
      */
     protected function syncRoles(array $newRoleIds, User $user): void
     {
-        $oldRolesIds = $user->roles->pluck("id")->toArray();
-        if(!empty($oldRolesIds))
-        {
+        $oldRolesIds = $user->roles->pluck('id')
+            ->toArray();
+        if(!empty($oldRolesIds)) {
             $user->roles()->detach($oldRolesIds);
         }
         $user->roles()->attach($newRoleIds);

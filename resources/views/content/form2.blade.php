@@ -136,6 +136,12 @@
                 <li class="list-group-item text-center m--font-danger " style="font-size: small">فایلی درج نشده است</li>
             @endif
         </ul>
+        <div class="row">
+            <div class="col-md-12">
+                <img src="{{$content->thumbnail}}" width="100%">
+                <input type="file" name="thumbnail">
+            </div>
+        </div>
         @if($content->isFree && $content->contenttype_id == config('constants.CONTENT_TYPE_PAMPHLET'))
             <div class="row">
                 <label class=" col-md-4 control-label red" for="pamphlet">آپلود فایل جزوه</label>
@@ -212,12 +218,39 @@
             </div>
         </div>
 
+        @permission((config('constants.REDIRECT_EDUCATIONAL_CONTENT_ACCESS')))
+        <div class="form-group">
+            <div class="row">
+                <label class="col-md-2 control-label" for="redirectUrl">لینک ریدایرکت :
+                </label>
+                <div class="col-md-9">
+                    {!! Form::text('redirectUrl', null, ['class' => 'form-control', 'id' => 'redirectUrl' , 'dir'=>'ltr']) !!}
+                    <span class="form-control-feedback">
+                       <strong></strong>
+                   </span>
+                </div>
+            </div>
+        </div>
+        @endpermission
+
         <div class="form-group">
             <div class="row">
                 <label class="col-md-2 control-label" for="name">ترتیب :
                 </label>
                 <div class="col-md-9">
                     {!! Form::text('order', null, ['class' => 'form-control', 'id' => 'order', 'maxlength'=>'100' ]) !!}
+                    <span class="form-control-feedback">
+                               <strong></strong>
+                   </span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="row">
+                <label class="col-md-2 control-label" for="name">نوع محتوا :
+                </label>
+                <div class="col-md-9">
+                    {!! Form::select('contenttype_id', $contenttypes, null ,['class' => 'form-control m-input m-input--air', 'id' => 'contenttypes']) !!}
                     <span class="form-control-feedback">
                                <strong></strong>
                    </span>
@@ -246,6 +279,17 @@
                 </div>
             </div>
         </div>
+        @role((config("constants.ROLE_ADMIN")))
+        <div class="form-group">
+            <div class="row">
+                <label class="col-md-2 control-label" for="context">مقاله:
+                </label>
+                <div class="col-md-9">
+                    {!! Form::textarea('context', null, ['class' => 'form-control', 'id' => 'contextSummerNote', 'rows' => '5' ]) !!}
+                </div>
+            </div>
+        </div>
+        @endability
         <div class="form-group">
             <div class="row">
                 <label class="col-md-2 control-label" for="tags">

@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
 use App\Http\Requests\Request;
+use App\Http\Controllers\Controller;
 
 class AppVersionController extends Controller
 {
@@ -29,8 +29,8 @@ class AppVersionController extends Controller
                     'hint' => 'optional',
                 ],
                 'url'          => [
-                    'app_store' => "",
-                    'direct'    => "",
+                    'app_store' => '',
+                    'direct'    => '',
                 ],
             ],
         ]);

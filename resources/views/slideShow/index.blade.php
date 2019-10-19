@@ -31,7 +31,14 @@
                 <span class="m-badge m-badge--wide label-sm m-badge--info">ندارد</span>
             @endif
         </td>
-        
+        <td>
+            @if($slide->in_new_tab)
+                <span class="m-badge m-badge--wide label-sm m-badge--success"> بله </span>
+            @else
+                <span class="m-badge m-badge--wide label-sm m-badge--warning"> خیر </span>
+            @endif
+        </td>
+
         <td>
             @if(isset($slide->photo) && strlen($slide->photo)>0)
                 <div class="mt-element-overlay">

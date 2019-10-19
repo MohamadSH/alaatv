@@ -85,16 +85,35 @@
             </div>
         </div>
     </div>
+    <div class = "form-group">
+        <div class = "row">
+            <div class = "col-md-3"></div>
+            <div class = "col-md-9">
+                <label class = "mt-checkbox mt-checkbox-outline">
+                    <div class = "md-checkbox">
+                        {!! Form::checkbox('in_new_tab', '1', null,  ['value' => '1' , 'id' => 'checkbox_in_new_tab' , 'class'=>'md-check']) !!}
+                        <label for = "checkbox_in_new_tab">
+                            <span></span>
+                            <span class = "check"></span>
+                            <span class = "box"></span>
+                            در تب جدید باز شود
+                            <span></span>
+                        </label>
+                    </div>
+                </label>
+            </div>
+        </div>
+    </div>
     <div class = "form-group {{ $errors->has('isEnable') ? ' has-danger' : '' }}">
         <div class = "row">
             <div class = "col-md-3"></div>
             <div class = "col-md-9">
                 <label class = "mt-checkbox mt-checkbox-outline">
                     <div class = "md-checkbox">
-                        @if(!isset($slide))
-                            {!! Form::checkbox('isEnable', '1', null,  ['value' => '1' , 'id' => 'checkbox_isEnable' , 'class'=>'md-check' , 'checked']) !!}
-                        @else
+                        @if(isset($slide))
                             {!! Form::checkbox('isEnable', '1', null,  ['value' => '1' , 'id' => 'checkbox_isEnable' , 'class'=>'md-check']) !!}
+                        @else
+                            {!! Form::checkbox('isEnable', '1', null,  ['value' => '1' , 'id' => 'checkbox_isEnable' , 'class'=>'md-check' , 'checked']) !!}
                         @endif
                         <label for = "checkbox_isEnable">
                             <span></span>

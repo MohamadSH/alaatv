@@ -46,6 +46,9 @@ use Illuminate\Support\Facades\Schema;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel disableCache()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel withCacheCooldownSeconds($seconds)
  * @property-read mixed                                                   $cache_cooldown_seconds
+ * @property-read int|null $products_count
+ * @property-read int|null $userbons_count
+ * @property-read int|null $users_count
  */
 class Bon extends BaseModel
 {

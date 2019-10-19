@@ -2,6 +2,21 @@
 
 namespace App\Providers;
 
+use App\Events\Authenticated;
+use App\Events\ContentRedirected;
+use App\Events\MobileVerified;
+use App\Events\FreeInternetAccept;
+use App\Events\FillTmpShareOfOrder;
+use App\Events\UserAvatarUploaded;
+use App\Listeners\RedirectContentListener;
+use App\Listeners\RemoveOldUserAvatarListener;
+use Illuminate\Auth\Events\Registered;
+use App\Listeners\AuthenticatedListener;
+use App\Listeners\MobileVerifiedListener;
+use App\Listeners\FreeInternetAcceptListener;
+use App\Listeners\FillTmpShareOfOrderListener;
+use Laravel\Passport\Events\AccessTokenCreated;
+use Laravel\Passport\Events\RefreshTokenCreated;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 
 class EventServiceProvider extends ServiceProvider
@@ -12,28 +27,37 @@ class EventServiceProvider extends ServiceProvider
      * @var array
      */
     protected $listen = [
-        'Illuminate\Auth\Events\Registered'          => [
+        Authenticated::class       => [
+            AuthenticatedListener::class,
+        ],
+        Registered::class          => [
             //            SendMobileVerificationNotification::class,
             //            SendEmailVerificationNotification::class,
         ],
-        'App\Events\MobileVerified'                  => [
-            'App\Listeners\MobileVerifiedListener',
+        MobileVerified::class      => [
+            MobileVerifiedListener::class,
         ],
-        'App\Events\FillTmpShareOfOrder'                  => [
-            'App\Listeners\FillTmpShareOfOrderListener',
+        FillTmpShareOfOrder::class => [
+            FillTmpShareOfOrderListener::class,
         ],
-        'App\Events\FreeInternetAccept'              => [
-            'App\Listeners\FreeInternetAcceptListener',
+        FreeInternetAccept::class  => [
+            FreeInternetAcceptListener::class,
         ],
-        'Laravel\Passport\Events\AccessTokenCreated' => [
+        AccessTokenCreated::class  => [
 //            'App\Listeners\RevokeOldTokens',
         ],
-        
-        'Laravel\Passport\Events\RefreshTokenCreated' => [
+
+        RefreshTokenCreated::class => [
 //            'App\Listeners\PruneOldTokens',
         ],
+        UserAvatarUploaded::class      => [
+            RemoveOldUserAvatarListener::class,
+        ],
+        ContentRedirected::class      => [
+            RedirectContentListener::class,
+        ],
     ];
-    
+
     /**
      * Register any events for your application.
      *

@@ -108,3 +108,12 @@ if (! function_exists('alaaSetting')) {
         return app('App\Websitesetting');
     }
 }
+
+if(! function_exists('convertRedirectUrlToApiVersion')){
+    function convertRedirectUrlToApiVersion($url)
+    {
+        $url = parse_url($url);
+
+        return url('/api/v1'.$url['path']);
+    }
+}

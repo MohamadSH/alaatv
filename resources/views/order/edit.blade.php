@@ -4,6 +4,9 @@
 
 @section('page-css')
     <link href="{{ mix('/css/admin-all.css') }}" rel="stylesheet" type="text/css"/>
+    <style>
+        .datepicker-plot-area{z-index:1600 !important;}
+    </style>
 @endsection
 
 @section('pageBar')
@@ -46,7 +49,7 @@
                 </div>
                 {!! Form::open(['files'=>true,'method' => 'POST','action' => ['Web\TransactionController@store'], 'class'=>'nobottommargin' ]) !!}
                 <div class="modal-body">
-                    @include('transaction.form' , ["class"=>["paymentmethod"=>"paymentMethodName"] , "name"=>["paymentmethod"=>"paymentMethodName"] , "id"=>["paymentmethod"=>"paymentMethodName"]])
+                    @include('transaction.form' , ["class"=>["paymentmethod"=>"paymentMethodName"] , "name"=>["paymentmethod"=>"paymentmethod_id"] , "id"=>["paymentmethod"=>"paymentMethodName"] , "options" => ["withWalletWithdrawCheckbox"=>1] ])
                     {{--<span class="form-control-feedback m--font-info">( دقت شود از میان اطلاعات شماره مرجع ، شماره پیگیری و شماره چک که اطلاعات بانکی یک تراکنش محسوب می شوند ، تمامی آنها برای هر تراکنش وجود ندارد و نیاز به وارد نمودن همه ی آنها نیست)</span>--}}
                 </div>
                 <div class="modal-footer">
@@ -697,7 +700,6 @@
                             </table>
                         </div>
                         <div class="tab-pane" id="portlet_tab4" role="tabpanel">
-
                             <div class="alert alert-success alert-dismissible fade show removeTransactionSuccess d-none" role="alert">
                                 <button type="button" class="close" data-dismiss="alert" aria-label="Close"></button>
                                 تراکنش با موفقیت اصلاح شد

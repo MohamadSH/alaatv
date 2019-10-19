@@ -684,6 +684,11 @@ var contentSearchFilterData = {
                 "lastName": "کازرانیان",
                 "firstName": "",
                 "value": "کازرانیان"
+            },
+            {
+                "lastName": "یاری",
+                "firstName": "محمد رضا",
+                "value": "محمد_رضا_یاری"
             }
         ],
         "زبان_انگلیسی": [

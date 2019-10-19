@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Web;
 
 use App\Order;
-use App\Product;
 use App\Repositories\TransactionGatewayRepo;
 use Carbon\Carbon;
 use App\Transaction;
@@ -13,14 +12,12 @@ use App\Traits\Helper;
 use Zarinpal\Zarinpal;
 use App\Transactionstatus;
 use App\Traits\OrderCommon;
-use App\Transactiongateway;
 use Illuminate\Http\Request;
 use App\Traits\RequestCommon;
 use Illuminate\Http\Response;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\View;
 use App\Repositories\TransactionRepo;
-use Illuminate\Support\Facades\Input;
 use App\Http\Requests\EditTransactionRequest;
 use App\Http\Requests\InsertTransactionRequest;
 
@@ -35,15 +32,15 @@ class TransactionController extends Controller
         $this->middleware('permission:'.config('constants.LIST_TRANSACTION_ACCESS'), ['only' => 'index']);
         $this->middleware('permission:'.config('constants.SHOW_TRANSACTION_ACCESS'), ['only' => 'edit']);
         $this->middleware('permission:'.config('constants.EDIT_TRANSACTION_ACCESS'), ['only' => 'update']);
+        $this->middleware('permission:'.config('constants.INSERT_TRANSACTION_ACCESS'),['only'=>'store']);
         $this->middleware('role:admin', ['only' => 'getUnverifiedTransactions']);
-        //        $this->middleware('permission:'.config('constants.INSERT_TRANSACTION_ACCESS'),['only'=>'store']);
     }
 
     public function index(Request $request)
     {
         try {
             $transactions = Transaction::orderBy('created_at', 'Desc');
-            
+
             $createdSinceDate  = $request->get('createdSinceDate');
             $createdTillDate   = $request->get('createdTillDate');
             $createdTimeEnable = $request->get('createdTimeEnable');
@@ -51,7 +48,7 @@ class TransactionController extends Controller
                 $transactions = $this->timeFilterQuery($transactions, $createdSinceDate, $createdTillDate,
                     'completed_at');
             }
-            
+
             $deadlineSinceDate  = $request->get('DeadlineSinceDate');
             $deadlineTillDate   = $request->get('DeadlineTillDate');
             $deadlineTimeEnable = $request->get('DeadlineTimeEnable');
@@ -59,7 +56,7 @@ class TransactionController extends Controller
                 $transactions = $this->timeFilterQuery($transactions, $deadlineSinceDate, $deadlineTillDate,
                     'deadline_at');
             }
-            
+
             if ($request->has('transactionStatus')) {
                 $transactionStatusFilter = $request->get('transactionStatus');
                 $transactions            = $transactions->where('transactionstatus_id', $transactionStatusFilter);
@@ -81,14 +78,14 @@ class TransactionController extends Controller
                             '%'.$transactionCode.'%');
                 });
             }
-            
+
             $transactionManagerComment = $request->get('transactionManagerComment');
             if (isset($transactionManagerComment[0])) {
                 $transactions = $transactions->where(function ($q) use ($transactionManagerComment) {
                     $q->where('managerComment', 'like', '%'.$transactionManagerComment.'%');
                 });
             }
-            
+
             $firstName = trim($request->get('firstName'));
             if (isset($firstName) && strlen($firstName) > 0) {
                 $transactions = $transactions->whereHas('order', function ($query) use ($firstName) {
@@ -97,7 +94,7 @@ class TransactionController extends Controller
                     });
                 });
             }
-            
+
             $lastName = trim($request->get('lastName'));
             if (isset($lastName) && strlen($lastName) > 0) {
                 $transactions = $transactions->whereHas('order', function ($query) use ($lastName) {
@@ -106,7 +103,7 @@ class TransactionController extends Controller
                     });
                 });
             }
-            
+
             $nationalCode = trim($request->get('nationalCode'));
             if (isset($nationalCode) && strlen($nationalCode) > 0) {
                 $transactions = $transactions->whereHas('order', function ($query) use ($nationalCode) {
@@ -115,7 +112,7 @@ class TransactionController extends Controller
                     });
                 });
             }
-            
+
             $mobile = trim($request->get('mobile'));
             if (isset($mobile) && strlen($mobile) > 0) {
                 $transactions = $transactions->whereHas('order', function ($query) use ($mobile) {
@@ -133,12 +130,12 @@ class TransactionController extends Controller
                     })
                         ->pluck('order_id'));
             }
-            
+
             if ($request->has('paymentMethods')) {
                 $paymentMethodsId = $request->get('paymentMethods');
                 $transactions     = $transactions->whereIn('paymentmethod_id', $paymentMethodsId);
             }
-            
+
             if ($request->has('orderStatuses')) {
                 $orderStatusesId = $request->get('orderStatuses');
                 //            $orders = Order::orderStatusFilter($orders, $orderStatusesId);
@@ -146,14 +143,14 @@ class TransactionController extends Controller
                     $q->whereIn('orderstatus_id', $orderStatusesId);
                 });
             }
-            
+
             if ($request->has('paymentStatuses')) {
                 $paymentStatusesId = $request->get('paymentStatuses');
                 $transactions      = $transactions->whereHas('order', function ($q) use ($paymentStatusesId) {
                     $q->whereIn('paymentstatus_id', $paymentStatusesId);
                 });
             }
-            
+
             $transactionType = $request->get('transactionType');
             if (isset($transactionType) && strlen($transactionType) > 0) {
                 if ($transactionType == 0) {
@@ -165,11 +162,11 @@ class TransactionController extends Controller
                     }
                 }
             }
-            
+
             $transactions = $transactions->get();
-            
+
             $totaolCost = number_format($transactions->sum('cost'));
-            
+
             return json_encode([
                 'index'                      => View::make('transaction.index',
                     compact('transactions'))
@@ -185,7 +182,7 @@ class TransactionController extends Controller
             ] , Response::HTTP_SERVICE_UNAVAILABLE);
         }
     }
-    
+
     /**
      * @param  Transaction  $transaction
      * @param  array        $data
@@ -199,7 +196,7 @@ class TransactionController extends Controller
             'message'     => '',
             'transaction' => $transaction,
         ];
-        
+
         $transaction->fill($data);
         $props = [
             'referenceNumber',
@@ -210,25 +207,25 @@ class TransactionController extends Controller
             'managerComment',
             'paymentmethod_id',
         ];
-        
+
         foreach ($props as $prop) {
             if (strlen($transaction->$prop) == 0) {
                 $transaction->$prop = null;
             }
         }
-        
+
         if (isset($data['deadline_at']) && strlen($data['deadline_at']) > 0) {
             $transaction->deadline_at = Carbon::parse($data['deadline_at'])
                 ->addDay()
                 ->format('Y-m-d');
         }
-        
+
         if (isset($data['completed_at']) && strlen($data['completed_at']) > 0) {
             $transaction->completed_at = Carbon::parse($data['completed_at'])
                 ->addDay()
                 ->format('Y-m-d');
         }
-        
+
         if ($transaction->update()) {
             $result['statusCode'] = Response::HTTP_OK;
             $result['message']    = 'تراکنش با موفقیت اصلاح شد';
@@ -237,9 +234,9 @@ class TransactionController extends Controller
             $result['statusCode'] = Response::HTTP_SERVICE_UNAVAILABLE;
             $result['message']    = 'خطای پایگاه داده';
         }
-        
+
         $result['transaction'] = $transaction;
-        
+
         return $result;
     }
 
@@ -247,48 +244,39 @@ class TransactionController extends Controller
     {
         $order = Order::find($request->get('order_id'));
         if (!isset($order)) {
-            $result = [
-                'statusCode' => Response::HTTP_NOT_FOUND,
-                'message'    => 'سفارش شما یافت نشد.',
-            ];
-            
             return response()->json([
-                'error' => $result['message'],
-            ], $result['statusCode']);
+                'error' => 'سفارش شما یافت نشد.',
+            ], Response::HTTP_NOT_FOUND);
         }
-        
-        // ToDo: just admin can insert payed transaction (check request and user permission)
-        
-        $canInsertTransaction = $request->user()
-            ->can(config('constants.INSERT_TRANSACTION_ACCESS'));
-        $isOrderOwner         = ($order->user_id == $request->user()->id);
-        
-        if (!$canInsertTransaction && !$isOrderOwner) {
-            $result = [
-                'statusCode' => Response::HTTP_FORBIDDEN,
-                'message'    => 'سفارش مورد نظر متعلق به شما نمی باشد',
-            ];
-            
-            return response()->json([
-                'error' => $result['message'],
-            ], $result['statusCode']);
+
+        if($request->get('paymentmethod_id') == config('constants.PAYMENT_METHOD_WALLET') && $request->has('walletWithdraw')){
+            if(!isset($order->user)){
+                return response()->json([
+                    'error' => 'کاربر صاحب سفارش یافت نشد',
+                ], Response::HTTP_NOT_FOUND);
+            }
+            /** @var \App\Wallet $wallet */
+            $wallet = $order->user->wallets->where("wallettype_id", config('constants.WALLET_TYPE_GIFT'))->first();
+            $request->offsetSet('wallet_id', $wallet->id);
+            $withdrawResult = $wallet->withdraw($request->get('cost') , $order->id , true , false);
+            if(!$withdrawResult['result']){
+                session()->flash('error' , 'امکان برداشت مبلغ مورد نظر از کیف پول وجود ندارد');
+                return redirect()->back();
+            }
         }
 
         $result = $this->new($request->all());
 
-        if($request->ajax() || $request->expectsJson())
-            return response()->json([
-                'error' => $result['message'],
-            ], $result['statusCode']);
-
-        if($result['statusCode'] == Response::HTTP_OK)
+        if($result['statusCode'] == Response::HTTP_OK) {
             session()->flash('success' , $result['message']);
-        else
+        }
+        else {
             session()->flash('error' , $result['message']);
+        }
 
         return redirect()->back();
     }
-    
+
     /**
      * @param  array  $data
      *
@@ -301,10 +289,10 @@ class TransactionController extends Controller
             'message'     => '',
             'transaction' => null,
         ];
-        
+
         $transaction = new Transaction();
         $transaction->fill($data);
-        
+
         if ($transaction->save()) {
             $result['statusCode']  = Response::HTTP_OK;
             $result['message']     = 'تراکنش با موفقیت ثبت شد.';
@@ -314,7 +302,7 @@ class TransactionController extends Controller
             $result['statusCode'] = Response::HTTP_INTERNAL_SERVER_ERROR;
             $result['message']    = 'خطای پایگاه داده در ثبت تراکنش';
         }
-        
+
         return $result;
     }
 
@@ -338,7 +326,7 @@ class TransactionController extends Controller
         }
 
         $transactionGateways = TransactionGatewayRepo::getTransactionGateways(['enable'=>1])->get()->pluck('displayName' , 'id');
-        
+
         return view('transaction.edit',
             compact('transaction', 'transactionPaymentmethods', 'transactionStatuses',
                 'deadlineAt', 'completedAt' , 'transactionGateways'));
@@ -353,9 +341,9 @@ class TransactionController extends Controller
         if ($order->id != $transaction->order_id) {
             abort(404);
         }
-        
+
         $editRequest = new EditTransactionRequest();
-        
+
         $paymentImplied = false;
         if ($request->has('referenceNumber')) {
             $editRequest->offsetSet('referenceNumber', $request->get('referenceNumber'));
@@ -365,11 +353,11 @@ class TransactionController extends Controller
             $editRequest->offsetSet('traceNumber', $request->get('traceNumber'));
             $paymentImplied = true;
         }
-        
+
         if ($request->has('paymentmethod_id')) {
             $editRequest->offsetSet('paymentmethod_id', $request->get('paymentmethod_id'));
         }
-        
+
         if ($paymentImplied) {
             $editRequest->offsetSet('transactionstatus_id', config('constants.TRANSACTION_STATUS_PENDING'));
             $editRequest->offsetSet('completed_at', Carbon::now());
@@ -387,15 +375,15 @@ class TransactionController extends Controller
                 }
             }
         }
-        
+
         return redirect()->back();
     }
 
     public function update(EditTransactionRequest $request, Transaction $transaction)
     {
         $result = [];
-    
-    
+
+
         $this->checkOffsetDependency($request, 'deadlineAtEnable', 'deadline_at');
         $this->checkOffsetDependency($request, 'completedAtEnable', 'completed_at');
 
@@ -407,12 +395,12 @@ class TransactionController extends Controller
             $result['statusCode'] = Response::HTTP_SERVICE_UNAVAILABLE;
             $result['message']    = 'خطای پایگاه داده';
         }
-        
+
         if ($request->expectsJson()) {
             return response()->json([],$result['statusCode']);
         }
         session()->put('success', $result['message']);
-        
+
         return redirect()->back();
     }
 
@@ -424,13 +412,13 @@ class TransactionController extends Controller
         else {
             session()->put('error', 'خطای پایگاه داده');
         }
-        
+
         //        $transaction->delete();
         return response()->json([
             'sessionData' => session()->all(),
         ]);
     }
-    
+
     public function getUnverifiedTransactions()
     {
         try {
@@ -461,7 +449,7 @@ class TransactionController extends Controller
                             $mobile    = $user->mobile;
                         }
                     }
-                    
+
                     $transactions->push([
                         'userId'     => $userId,
                         'firstName'  => $firstName,
@@ -477,7 +465,7 @@ class TransactionController extends Controller
                 $error = $result['error'];
             }
             $pageName = 'admin';
-            
+
             return view('transaction.unverifiedTransactions', compact('transactions', 'error', 'pageName'));
         } catch (\Exception    $e) {
             return response()->json([
@@ -488,7 +476,7 @@ class TransactionController extends Controller
             ] , Response::HTTP_SERVICE_UNAVAILABLE);
         }
     }
-    
+
     public function convertToDonate(Transaction $transaction)
     {
         if ($transaction->cost >= 0 || isset($transaction->traceNumber)) {
@@ -519,7 +507,7 @@ class TransactionController extends Controller
             return response()->json( ['message' => 'خطا در بروز رسانی سفارش . لطفا سفارش را دستی اصلاح نمایید.'] , Response::HTTP_SERVICE_UNAVAILABLE);
         }
     }
-    
+
     public function completeTransaction(\Illuminate\Http\Request $request, Transaction $transaction)
     {
         if (isset($transaction->traceNumber)) {

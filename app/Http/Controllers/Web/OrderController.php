@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Web;
 
+use App\Http\Requests\IndexOrderRequest;
 use App\Repositories\TransactionGatewayRepo;
 use App\User;
 use App\Order;
@@ -88,7 +89,7 @@ class OrderController extends Controller
         $this->setting = $setting->setting;
     }
 
-    public function index()
+    public function index(IndexOrderRequest $request)
     {
         $user = Auth::user();
         if ($user->can(config('constants.SHOW_OPENBYADMIN_ORDER'))) {
@@ -549,7 +550,7 @@ class OrderController extends Controller
             ->toArray();
         $paymentstatuses = Paymentstatus::pluck('displayName', 'id')
             ->toArray();
-        $transactionPaymentmethods        = Paymentmethod::pluck('displayName', 'name')->toArray();
+        $transactionPaymentmethods        = Paymentmethod::pluck('displayName', 'id')->toArray();
         $offlineTransactionPaymentMethods = Paymentmethod::where('id', '<>', config('constants.PAYMENT_METHOD_ONLINE'))
             ->pluck('displayName', 'id')
             ->toArray();

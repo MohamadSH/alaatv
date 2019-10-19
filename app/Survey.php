@@ -32,6 +32,9 @@ namespace App;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel disableCache()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel withCacheCooldownSeconds($seconds)
  * @property-read mixed                                                            $cache_cooldown_seconds
+ * @property-read int|null $events_count
+ * @property-read int|null $questions_count
+ * @property-read int|null $usersurveyanswer_count
  */
 class Survey extends BaseModel
 {

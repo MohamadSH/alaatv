@@ -23,10 +23,10 @@
 @endsection
 
 @section('content')
-
+    
     @include('systemMessage.flash')
-
-
+    
+    
     <div class="row blockWraper a--owl-carousel-row">
         <div class="col">
             <div class="m-portlet a--owl-carousel-Wraper" id="owlCarouselMyProduct">
@@ -41,25 +41,30 @@
                     </div>
                     <div class="m-portlet__head-tools">
                         <a href="#"
-                           class="btn btn-outline-metal m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill m-btn--air btn-viewGrid" title="نمایش شبکه ای">
+                           class="btn btn-outline-metal m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill m-btn--air btn-viewGrid"
+                           title="نمایش شبکه ای">
                             <i class="fa fa-th"></i>
                         </a>
                         <a href="#"
-                           class="btn btn-outline-metal m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill m-btn--air btn-viewOwlCarousel" title="نمایش افقی">
+                           class="btn btn-outline-metal m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill m-btn--air btn-viewOwlCarousel"
+                           title="نمایش افقی">
                             <i class="fa fa-exchange-alt"></i>
                         </a>
                     </div>
                 </div>
                 <div class="m-portlet__body m-portlet__body--no-padding a--owl-carousel-body">
-
+    
                     @if($user->completion() < 60)
                         <div class="alert alert-warning" role="alert">
-                            <strong>برای دانلود محصولات خریداری شده ، درصد تکمیل پروفایل شما باید حداقل 60 درصد باشد </strong>
-                            <a href="{{action('Web\UserController@show' , $user)}}" class="btn m-btn--pill m-btn--air m-btn m-btn--gradient-from-info m-btn--gradient-to-accent">تکمیل پروفایل</a>
+                            <strong>برای دانلود محصولات خریداری شده ، درصد تکمیل پروفایل شما باید حداقل 60 درصد
+                                باشد </strong>
+                            <a href="{{action('Web\UserController@show' , $user)}}"
+                               class="btn m-btn--pill m-btn--air m-btn m-btn--gradient-from-info m-btn--gradient-to-accent">تکمیل
+                                پروفایل</a>
                         </div>
                     @else
-
-
+        
+        
                         <div class="a--owl-carousel-init-loading">
                             <div class="lds-roller">
                                 <div></div>
@@ -72,24 +77,22 @@
                                 <div></div>
                             </div>
                         </div>
-
+        
                         <div class="m-widget_head-owlcarousel-items owl-carousel a--owl-carousel-type-2 myProduct">
-
                             @foreach($userAssetsCollection as $userAssetKey=>$userAsset)
                                 @foreach($userAsset->products as $productKey=>$product)
                                     @include('block.partials.purchasedProducts')
                                 @endforeach
                             @endforeach
-
                         </div>
-
+        
                         @if(count($userAssetsCollection->filter(function ($value, $key) {return $value->title === 'محصولات من'; })->all())===0)
                             <div class="alert alert-info" role="alert">
                                 <strong> هنوز از آلاء خرید نکرده اید. </strong>
                                 بعد از اینکه از آلاء خرید کنید، امکان مشاهده خریدهای شما در این قسمت فراهم می شود.
                             </div>
                         @endif
-
+        
                         <div class="m-portlet a--owl-carousel-slide-detailes">
                             <div class="m-portlet__head">
                                 <div class="m-portlet__head-caption">
@@ -105,12 +108,13 @@
                                     </a>
                                 </div>
                             </div>
-
+            
                             @foreach($userAssetsCollection as $userAssetKey=>$userAsset)
                                 @if($userAsset->title === 'محصولات من')
                                     @foreach($userAsset->products as $productKey=>$product)
                                         @if(count($product->sets)>1)
-                                            <div class="m-portlet__body subCategoryWarper a--owl-carousel-slide-iteDetail-{{ $productKey }}">
+                                            <div
+                                                class="m-portlet__body subCategoryWarper a--owl-carousel-slide-iteDetail-{{ $productKey }}">
                                                 <div class="row justify-content-center">
                                                     @foreach($product->sets as $setKey=>$set)
                                                         <div class="col-12 col-sm-6 col-md-4 col-lg-3">
@@ -119,8 +123,9 @@
                                                                     {{ $set->name }}
                                                                 </div>
                                                                 <hr>
-                                                                <div class="m-btn-group m-btn-group--pill btn-group m-btn-group m-btn-group--pill btn-group-sm"
-                                                                     role="group" aria-label="Small button group">
+                                                                <div
+                                                                    class="m-btn-group m-btn-group--pill btn-group m-btn-group m-btn-group--pill btn-group-sm"
+                                                                    role="group" aria-label="Small button group">
                                                                     @if($set->getActiveContents2(config('constants.CONTENT_TYPE_PAMPHLET'))->isNotEmpty())
                                                                         <button type="button"
                                                                                 class="btn btn-warning btnViewPamphlet"
@@ -131,13 +136,13 @@
                                                                         </button>
                                                                     @endif
                                                                     @if($set->getActiveContents2(config('constants.CONTENT_TYPE_VIDEO'))->isNotEmpty())
-                                                                            <button type="button"
-                                                                                    class="btn btn-success btnViewVideo"
-                                                                                    data-content-type="video"
-                                                                                    data-content-url="{{ $set->contentUrl.'&orderBy=order' }}">
-                                                                                <i class="fa fa-film"></i>
-                                                                                فیلم ها
-                                                                            </button>
+                                                                        <button type="button"
+                                                                                class="btn btn-success btnViewVideo"
+                                                                                data-content-type="video"
+                                                                                data-content-url="{{ $set->contentUrl.'&orderBy=order' }}">
+                                                                            <i class="fa fa-film"></i>
+                                                                            فیلم ها
+                                                                        </button>
                                                                     @endif
                                                                 </div>
                                                             </div>
@@ -157,7 +162,7 @@
             </div>
         </div>
     </div>
-
+    
     <!--begin::Modal-->
     <div class="modal fade" id="pamphletModal" tabindex="-1" role="dialog" aria-labelledby="pamphletModalModalLabel"
          aria-hidden="true">
@@ -173,7 +178,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-
+    
                     <div class="row">
                         <div class="col-12">
                             <div class="m-widget6">
@@ -192,7 +197,7 @@
                                 </div>
                             </div>
                         </div>
-
+        
                         <div class="col-12 text-center">
                             <input type="hidden" id="pamphletContentNextPageUrl">
                             <button type="button"
@@ -224,7 +229,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-
+    
                     <div class="row">
                         <div class="col-12">
                             <div class="m-widget6">
@@ -243,7 +248,7 @@
                                 </div>
                             </div>
                         </div>
-
+        
                         <div class="col-12 text-center">
                             <input type="hidden" id="videoContentNextPageUrl">
                             <button type="button"

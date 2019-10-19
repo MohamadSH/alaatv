@@ -2,23 +2,24 @@
 
 namespace App\Http\Controllers\Web;
 
-use App\Adapter\AlaaSftpAdapter;
+use App\Content;
 use App\Contentset;
-use App\Traits\FileCommon;
 use App\Websitesetting;
+use App\Traits\FileCommon;
 use App\Traits\MetaCommon;
 use Illuminate\Support\Arr;
 use Illuminate\Http\Request;
 use App\Traits\ProductCommon;
 use App\Traits\RequestCommon;
 use Illuminate\Http\Response;
+use App\Adapter\AlaaSftpAdapter;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
 use App\Classes\Search\ContentsetSearch;
 use Illuminate\Foundation\Http\FormRequest;
 use App\Http\Requests\ContentsetIndexRequest;
 use App\Http\Requests\InsertContentsetRequest;
-use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Storage;
 
 class SetController extends Controller
 {
@@ -54,8 +55,8 @@ class SetController extends Controller
     private function getAuthExceptionArray(): array
     {
         $authException = [
-            "index",
-            "show",
+            'index',
+            'show',
         ];
 
         return $authException;
@@ -124,7 +125,7 @@ class SetController extends Controller
                 'tags'   => $tags,
             ]);
         }
-        return view("set.index", compact("sets", 'tags'));
+        return view('set.index', compact('sets', 'tags'));
     }
 
     public function store(InsertContentsetRequest $request)
@@ -158,6 +159,14 @@ class SetController extends Controller
 
         if ($contentSet->update()) {
 
+            if($request->has('redirectAllContents')){
+                foreach ($contentSet->contents as $content) {
+                    $content->update([
+                       'redirectUrl' => $request->get('redirectUrl'),
+                    ]);
+                }
+            }
+
             if($request->has('products'))
             {
                 $products = $request->get('products');
@@ -168,11 +177,59 @@ class SetController extends Controller
 
             session()->put('success' , 'دسته با موفقیت اصلاح شد');
             return redirect()->back();
-        }
-        else {
+        } else {
             session()->put('error' , 'خطای پایگاه داده');
             return redirect()->back();
         }
+    }
+
+    public function show(Request $request, Contentset $contentSet)
+    {
+        $order = $request->get('order');
+        if (isset($contentSet->redirectUrl)) {
+            return redirect($contentSet->redirectUrl, Response::HTTP_FOUND, $request->headers->all());
+        }
+
+        if ($request->expectsJson()) {
+            return response()->json($contentSet);
+        }
+
+        $contents = $contentSet->getActiveContents2();
+        if($order === 'desc'){
+            $contents = $contents->sortByDesc('order');
+        }
+
+        if($contents->isEmpty()){
+            return redirect(route('web.home'));
+        }
+
+        $pamphlets = $contents->where('contenttype_id' , Content::CONTENT_TYPE_PAMPHLET);
+        $videos    = $contents->where('contenttype_id' , Content::CONTENT_TYPE_VIDEO);
+        $articles  = $contents->where('contenttype_id' , Content::CONTENT_TYPE_ARTICLE);
+
+        return view('set.show' , compact('contentSet' , 'videos' , 'pamphlets' , 'articles' ));
+    }
+
+    public function edit(Contentset $set) {
+        $setProducts = $set->products;
+        $products = $this->makeProductCollection();
+        return view('set.edit', compact('set', 'setProducts', 'products'));
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return Response
+     */
+    public function create()
+    {
+        $products = $this->makeProductCollection();
+        return view('set.create', compact('products'));
+    }
+
+    public function indexContent (Request $request, Contentset $set){
+        $contents = optional($set->contents)->sortBy('order');
+        return view('set.listContents',compact('set','contents'));
     }
 
     /**
@@ -199,39 +256,6 @@ class SetController extends Controller
         }
     }
 
-    public function show(Request $request, Contentset $set)
-    {
-        if ($request->expectsJson()) {
-            return response()->json($set);
-        }
-
-        $contents = $set->getActiveContents();
-
-        return view('listTest', compact('set', 'contents'));
-    }
-
-    public function edit(Contentset $set) {
-        $setProducts = $set->products;
-        $products = $this->makeProductCollection();
-        return view('set.edit', compact('set', 'setProducts', 'products'));
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return Response
-     */
-    public function create()
-    {
-        $products = $this->makeProductCollection();
-        return view('set.create', compact('products'));
-    }
-
-    public function indexContent (\App\Http\Requests\Request $request, Contentset $set){
-        $contents = optional($set->contents)->sortBy('order');
-        return view('set.listContents',compact('set','contents'));
-    }
-
     private function syncProducts(array $products , Contentset $contentset){
         $contentset->products()->sync($products);
     }
@@ -239,8 +263,8 @@ class SetController extends Controller
     private function storePhotoOfSet(Contentset $contentSet, $file): void
     {
         $extension = $file->getClientOriginalExtension();
-        $fileName  = basename($file->getClientOriginalName(), ".".$extension)."_".date("YmdHis").'.'.$extension;
-        $disk = Storage::disk(config('constants.DISK23'));
+        $fileName  = basename($file->getClientOriginalName(), '.'.$extension).'_'.date('YmdHis').'.'.$extension;
+        $disk      = Storage::disk(config('constants.DISK23'));
         /** @var AlaaSftpAdapter $adaptor */
         if ($disk->put($fileName, File::get($file))) {
             $fullPath = $disk->getAdapter()->getRoot();

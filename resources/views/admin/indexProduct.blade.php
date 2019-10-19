@@ -582,7 +582,7 @@
                     "title": "عکس",
                     defaultContent: defaultContent,
                     "render": function ( data, type, row ) {
-                        return '<img data-product-name="'+row.name+'" alt = "عکس محصول '+row.name+'" src="'+row.photo+'" class="a--full-width imgShowProductPhoto"/>';
+                        return '<img data-product-name="'+row.name+'" alt = "عکس محصول '+row.name+'" src="'+row.photo+'?w=250&h=250" class="a--full-width imgShowProductPhoto"/>';
                     },
                 },
                 {
@@ -685,6 +685,7 @@
                     state: "info",
                 });
                 data.productPage = getNextPageParam(data.start, data.length);
+                data.moderator = 1;
                 delete data.columns;
                 return data;
             };

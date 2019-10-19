@@ -1364,11 +1364,13 @@ class UserController extends Controller
 
         if($user->isUserProfileLocked() && !$authenticatedUser->can(config('constants.EDIT_USER_ACCESS')))
             return response(['message'=>'User profile is locked'] , Response::HTTP_LOCKED);
-
         try {
             if($request->has('moderator') && $authenticatedUser->can(config('constants.EDIT_USER_ACCESS')))
             {
                 $this->fillUserFromModeratorRequest($request->all(), $user);
+                if ($authenticatedUser->can(config('constants.INSET_USER_ROLE'))) {
+                    $this->syncRoles($request->get('roles' , []), $user);
+                }
             }else{
                 $this->fillUserFromRequest($request->all(), $user);
             }
@@ -1388,11 +1390,6 @@ class UserController extends Controller
         }
 
         if ($user->update()) {
-
-            if ($authenticatedUser->can(config('constants.INSET_USER_ROLE'))) {
-                $this->syncRoles($request->get('roles' , []), $user);
-            }
-
             $message = 'اطلاعات با موفقیت اصلاح شد';
             $status  = Response::HTTP_OK;
         }
@@ -1482,13 +1479,16 @@ class UserController extends Controller
      * @return void
      * @throws FileNotFoundException
      */
-    private function fillUserFromRequest(array $inputData, User &$user): void
+    private function fillUserFromRequest(array $inputData, User $user): void
     {
         $user->fillByPublic($inputData);
 
         $file = $this->getRequestFile($inputData, 'photo');
         if ($file !== false) {
-            $this->storePhotoOfUser($user, $file);
+            $storePicResult = $this->storePhotoOfUser($user, $file);
+            if(isset($storePicResult)){
+                $user->photo = $storePicResult;
+            }
         }
     }
 
@@ -1499,7 +1499,7 @@ class UserController extends Controller
      * @return void
      * @throws FileNotFoundException
      */
-    private function fillUserFromModeratorRequest(array $inputData, User &$user): void
+    private function fillUserFromModeratorRequest(array $inputData, User $user): void
     {
         // Checks both if $inputData has password index and it is not null
         $hasPassword = isset($inputData['password']);

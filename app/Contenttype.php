@@ -40,6 +40,9 @@ use Illuminate\Support\Facades\Cache;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel disableCache()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel withCacheCooldownSeconds($seconds)
  * @property-read mixed                                                       $cache_cooldown_seconds
+ * @property-read int|null $children_count
+ * @property-read int|null $contents_count
+ * @property-read int|null $parents_count
  */
 class Contenttype extends BaseModel
 {

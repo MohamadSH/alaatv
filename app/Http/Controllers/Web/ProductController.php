@@ -88,6 +88,7 @@ class ProductController extends Controller
         $tags          = $request->get('tags');
         $filters       = $request->all();
         $pageName      = 'productPage';
+        $filters['doesntHaveGrand']  = 1;
         if(!$request->has('moderator')) {
             $filters['active'] = 1 ;
         }
@@ -186,7 +187,14 @@ class ProductController extends Controller
 
         $block = optional($product)->block;
 
-        return view('product.show', compact('product', 'block', 'purchasedProductIdArray', 'allChildIsPurchased'));
+        $liveDescriptions = $product->livedescriptions->sortByDesc('created_at');
+
+        $children = collect();
+        if(is_null($product->grand_id)){
+            $children = $product->children()->enable()->get();
+        }
+
+        return view('product.show', compact('product', 'block', 'purchasedProductIdArray', 'allChildIsPurchased' , 'liveDescriptions' , 'children'));
     }
 
     public function edit(Product $product)
@@ -236,11 +244,17 @@ class ProductController extends Controller
         $tags = optional($product->tags)->tags;
         $tags = implode(',', isset($tags) ? $tags : []);
 
+
+        $liveDescriptions = collect();
+        if($product->id == 347){
+            $liveDescriptions = $product->livedescriptions->sortByDesc('created_at');
+        }
+
         return view('product.edit',
             compact('product', 'amountLimit', 'defaultAmountLimit', 'enableStatus', 'defaultEnableStatus',
                 'attributesets', 'bons', 'productFiles',
                 'productFileTypes', 'defaultProductFileOrders', 'products', 'producttype', 'productPhotos',
-                'defaultProductPhotoOrder', 'tags'));
+                'defaultProductPhotoOrder', 'tags' , 'liveDescriptions'));
     }
 
     public function update(EditProductRequest $request, Product $product)

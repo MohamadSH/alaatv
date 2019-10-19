@@ -62,6 +62,15 @@ use Illuminate\Database\Eloquent\Builder;
  * @property-read mixed                       $cache_cooldown_seconds
  * @property-read ContentCollection|Content[] $contents2
  * @property-read ProductCollection|Product[] $products
+ * @property-read int|null $contents_count
+ * @property-read int|null $favorite_by_count
+ * @property-read mixed $edit_link
+ * @property-read mixed $remove_link
+ * @property-read \App\Collection\ContentCollection|\App\Content[] $oldContents
+ * @property-read int|null $old_contents_count
+ * @property-read int|null $products_count
+ * @property mixed redirectUrl
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Contentset display()
  */
 class Contentset extends BaseModel implements Taggable
 {
@@ -73,6 +82,7 @@ class Contentset extends BaseModel implements Taggable
      * @var array
      */
     protected $fillable = [
+        'redirectUrl',
         'name',
         'small_name',
         'description',
@@ -83,6 +93,7 @@ class Contentset extends BaseModel implements Taggable
 
     protected $withCount = [
         'contents',
+        'activeContents',
     ];
 
     protected $appends = [
@@ -289,6 +300,11 @@ class Contentset extends BaseModel implements Taggable
         return isset($contentId) ? action("Web\ContentController@show", $contentId) : '';
     }
 
+    public function getWebUrlAttribute($value): string
+    {
+        return route('set.show' , ['set'=>$this->id]);
+    }
+
     public function getLastActiveContent(): Content
     {
         $key = 'ContentSet:getLastActiveContent'.$this->cacheKey();
@@ -339,7 +355,7 @@ class Contentset extends BaseModel implements Taggable
         $key = 'ContentSet:type-'.$type.':getActiveContents2:'.$this->cacheKey();
         return Cache::tags('set')
             ->remember($key, config('constants.CACHE_300'), function () use ($type){
-                $contents =  $this->contents()->active();
+                $contents =  $this->activeContents();
 
                 if(isset($type)){
                     $contents->type($type);
@@ -374,6 +390,11 @@ class Contentset extends BaseModel implements Taggable
     public function contents()
     {
         return $this->hasMany(Content::class);
+    }
+
+    public function activeContents()
+    {
+        return $this->contents()->active();
     }
 
     public function getApiUrlAttribute($value): array

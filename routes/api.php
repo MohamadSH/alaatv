@@ -4,11 +4,13 @@
     These routes are loaded by the RouteServiceProvider within a group which is assigned the "api" middleware group.
 */
 
-use App\Http\Controllers\Api\ContentController;
 use App\Http\Controllers\Api\OrderController;
+use App\Http\Controllers\Api\ContentController;
 use App\Http\Controllers\Api\GetPaymentRedirectEncryptedLink;
 
-Auth::routes(['verify' => true]);
+Route::group(['middleware' => 'web'], function () {
+    Auth::routes(['verify' => true]);
+});
 
 Route::post('uploadFile', 'Web\HomeController@uploadFile');
 

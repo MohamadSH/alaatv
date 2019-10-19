@@ -57,6 +57,7 @@ use Illuminate\Support\Facades\Config;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel disableCache()
  * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel withCacheCooldownSeconds($seconds)
  * @property-read mixed                                                        $cache_cooldown_seconds
+ * @property-read int|null $orderproducts_count
  */
 class Userbon extends BaseModel
 {
@@ -73,64 +74,39 @@ class Userbon extends BaseModel
         'orderproduct_id',
         'userbonstatus_id',
     ];
-    
+
     public function userbonstatus()
     {
         return $this->belongsTo('App\Userbonstatus');
     }
-    
+
     public function bon()
     {
         return $this->belongsTo('\App\Bon');
     }
-    
+
     public function user()
     {
         return $this->belongsTo('\App\User');
     }
-    
+
     public function orderproducts()
     {
         return $this->belongsToMany('\App\Orderproduct');
     }
-    
+
     public function orderproduct()
     {
         return $this->belongsTo('\App\Orderproduct');
     }
-    
-    /**
-     * Validates a bon
-     *
-     * @return int
-     */
-    public function validateBon()
-    {
-        if ($this->totalNumber <= $this->usedNumber) {
-            return 0;
-        }
-        else {
-            if (isset($this->validSince) && Carbon::now() < $this->validSince) {
-                return 0;
-            }
-            else {
-                if (isset($this->validUntil) && Carbon::now() > $this->validUntil) {
-                    return 0;
-                }
-                else {
-                    return $this->totalNumber - $this->usedNumber;
-                }
-            }
-        }
-    }
-    
+
     public function void()
     {
         $remainBonNumber        = $this->totalNumber - $this->usedNumber;
         $this->usedNumber       = $this->totalNumber;
         $this->userbonstatus_id = config("constants.USERBON_STATUS_USED");
         $this->update();
-        
+
         return $remainBonNumber;
     }
 }
