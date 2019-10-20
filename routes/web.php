@@ -4,6 +4,7 @@
 use App\Http\Controllers\Web\BotsController;
 use App\Http\Controllers\Web\HomeController;
 use App\Http\Controllers\Web\LiveController;
+use App\Http\Controllers\Web\SetController;
 use App\Http\Controllers\Web\UserController;
 use App\Http\Controllers\Web\AdminController;
 use App\Http\Controllers\Web\SurveyController;
@@ -261,15 +262,17 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('donate', 'Web\DonateController');
     Route::post('donateOrder', 'Web\OrderController@donateOrder');
 
-    Route::get('listContents/{set}', 'Web\SetController@indexContent')->name('web.set.list.contents');
+    Route::get('listContents/{set}', [SetController::class, 'indexContent'])->name('web.set.list.contents');
 
     Route::get('live' , '\\'.LiveController::class)->name('live');
     Route::post('startlive' , [LiveController::class, 'startLive'])->name('web.start.live');
     Route::post('endlive'   , [LiveController::class, 'endLive'])->name('web.end.live');
 
-    Route::post('updateSet' , [ContentController::class, 'updateSet']);
+    Route::post('updateSet/{c}' , [ContentController::class, 'updateSet'])->name('c.updateSet');
     Route::get('atest' , [HomeController::class, 'adTest']);
     Route::get('block/detach/{block}/{type}/{id}', 'Web\BlockController@detachFromBlock');
+    Route::get('serpSim' , [AdminController::class, 'serpSim'] );
+    Route::get('process_serpsim' , [AdminController::class, 'processSerpsim'] );
 });
 
 Route::group(['prefix' => 'c'], function () {

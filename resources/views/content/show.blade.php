@@ -77,7 +77,7 @@
             @if(isset($contentSetName))
                 <li class="breadcrumb-item">
                     <i class="fa fa-video-camera m--padding-right-5"></i>
-                    <a class="m-link" href="/set/{{$content->contentset_id}}">{{ $contentSetName }}</a>
+                    <a class="m-link" href="{{route('set.show' , ['set'=>$content->contentset_id])}}">{{ $contentSetName }}</a>
                 </li>
             @endif
             <li class="breadcrumb-item active" aria-current="page">
@@ -287,7 +287,7 @@
                                                 @if(isset($contentSetName))
                                                     <br>
                                                     <h3 class="m-widget3__time m--font-info">
-                                                        {{ $contentSetName }}
+                                                        <a href="{{route('set.show' , ['set'=>$content->contentset_id])}}">{{ $contentSetName }}</a>
                                                     </h3>
                                                 @endif
                                             </div>
