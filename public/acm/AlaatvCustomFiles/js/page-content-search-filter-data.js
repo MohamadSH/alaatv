@@ -366,6 +366,11 @@ var contentSearchFilterData = {
                 "value": "رضا_شامیزاده"
             },
             {
+                "lastName": "ثابتی",
+                "firstName": "محمد صادق",
+                "value": "محمد_صادق_ثابتی"
+            },
+            {
                 "lastName": "مؤذنی پور",
                 "firstName": "بهمن",
                 "value": "بهمن_مؤذنی_پور"
@@ -420,6 +425,11 @@ var contentSearchFilterData = {
                 "value": "رضا_شامیزاده"
             },
             {
+                "lastName": "ثابتی",
+                "firstName": "محمد صادق",
+                "value": "محمد_صادق_ثابتی"
+            },
+            {
                 "lastName": "مرصعی",
                 "firstName": "حسن",
                 "value": "حسن_مرصعی"
@@ -428,6 +438,22 @@ var contentSearchFilterData = {
                 "lastName": "کبریایی",
                 "firstName": "وحید",
                 "value": "وحید_کبریایی"
+            }
+        ],"هندسه_کنکور": [
+            {
+                "lastName": "همه دبیرها",
+                "firstName": "",
+                "value": "همه_دبیرها"
+            },
+            {
+                "lastName": "شامیزاده",
+                "firstName": "رضا",
+                "value": "رضا_شامیزاده"
+            },
+            {
+                "lastName": "ثابتی",
+                "firstName": "محمد صادق",
+                "value": "محمد_صادق_ثابتی"
             }
         ],
         "حسابان": [
@@ -513,14 +539,19 @@ var contentSearchFilterData = {
                 "value": "مهدی_امینی_راد"
             },
             {
-                "lastName": "حسینی فرد",
-                "firstName": "محمد رضا",
-                "value": "محمد_رضا_حسینی_فرد"
+                "lastName": "ثابتی",
+                "firstName": "محمد صادق",
+                "value": "محمد_صادق_ثابتی"
             },
             {
                 "lastName": "شامیزاده",
                 "firstName": "رضا",
                 "value": "رضا_شامیزاده"
+            },
+            {
+                "lastName": "حسینی فرد",
+                "firstName": "محمد رضا",
+                "value": "محمد_رضا_حسینی_فرد"
             },
             {
                 "lastName": "صدری",
@@ -1001,6 +1032,10 @@ var contentSearchFilterData = {
             "index": "هندسه پایه"
         },
         {
+            "value": "هندسه_کنکور",
+            "index": "هندسه کنکور"
+        },
+        {
             "value": "گسسته",
             "index": "گسسته"
         }
@@ -1073,6 +1108,10 @@ var contentSearchFilterData = {
         {
             "value": "هندسه_پایه",
             "index": "هندسه پایه"
+        },
+        {
+            "value": "هندسه_کنکور",
+            "index": "هندسه کنکور"
         },
         {
             "value": "گسسته",
