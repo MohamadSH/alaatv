@@ -951,5 +951,19 @@ class AdminController extends Controller
         $contenttypes = Contenttype::whereIn('name' , ['video' , 'pamphlet'])->pluck('displayName' , 'id');
         return view('admin.botAdmin' , compact('contenttypes'));
     }
+
+    public function serpSim()
+    {
+        return view('admin.serpSim');
+    }
+
+    public function processSerpsim(Request $request)
+    {
+        return response()->json([
+            'meta' => ' کلاس گسسته کامل کنکور (نظام آموزشی جدید) (99-1398) رضا شامیزاده فیلم جلسه 1 - فصل اول: نظریۀ اعداد (قسمت اول)، بخش پذیری، عاد ک',
+            'title' => 'فیلم جلسه 1 - فصل اول: نظریۀ اعداد (قسمت اول)، بخش پذیری، عاد کردن (قسمت اول)',
+            'url' => 'https://alaatv.com/c/16320'
+        ]);
+    }
 }
 
