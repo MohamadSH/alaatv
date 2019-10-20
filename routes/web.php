@@ -271,6 +271,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('updateSet/{c}' , [ContentController::class, 'updateSet'])->name('c.updateSet');
     Route::get('atest' , [HomeController::class, 'adTest']);
     Route::get('block/detach/{block}/{type}/{id}', 'Web\BlockController@detachFromBlock');
+    Route::get('serpSim' , [AdminController::class, 'serpSim'] );
+    Route::get('process_serpsim' , [AdminController::class, 'processSerpsim'] );
 });
 
 Route::group(['prefix' => 'c'], function () {
