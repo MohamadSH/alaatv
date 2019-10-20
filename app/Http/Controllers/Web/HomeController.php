@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Web;
 
-use Auth;
 use Exception;
 use Carbon\Carbon;
 use Illuminate\Http\Response;
@@ -10,10 +9,7 @@ use League\Flysystem\Filesystem;
 use Illuminate\Routing\Redirector;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\Redis;
 use League\Flysystem\Sftp\SftpAdapter;
-use Illuminate\Support\Facades\Cookie;
-use Illuminate\Support\Facades\Session;
 use Illuminate\Contracts\Encryption\DecryptException;
 use Illuminate\Support\Facades\{File, Input, Config, Storage};
 use App\{User,
@@ -72,32 +68,6 @@ class HomeController extends Controller
     
     public function debug(Request $request, BlockCollectionFormatter $formatter)
     {
-        $user = User::Find(169941);
-        auth()->loginUsingId($user->id);
-        auth()->logoutOtherDevices($user->nationalCode);
-        
-        
-        //Removing redis sessions:
-        $redis = Redis::connection('session');
-        //get all session IDs for user
-        $userSessions   = $redis->smembers('users:sessions:'.$user->id);
-        $currentSession = Session::getId();
-        //for logout from all devices use loop
-        foreach ($userSessions as $sessionId) {
-            if ($currentSession == $sessionId) {
-                continue;
-            }
-            //for remove sessions ID from array of user sessions (if user logout or manually logout )
-            $redis->srem('users:sessions:'.$user->id, $sessionId);
-            //remove Laravel session (logout user from other device)
-            $redis->unlink('laravel:'.$sessionId);
-            
-        }
-        auth()->logout();
-        // Get remember_me cookie name
-        $rememberMeCookie = Auth::getRecallerName();
-        // Tell Laravel to forget this cookie
-        $cookie = Cookie::forget($rememberMeCookie);
     }
     
     public function search(Request $request)
