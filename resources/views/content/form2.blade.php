@@ -136,12 +136,14 @@
                 <li class="list-group-item text-center m--font-danger " style="font-size: small">فایلی درج نشده است</li>
             @endif
         </ul>
-        <div class="row">
-            <div class="col-md-12">
-                <img src="{{$content->thumbnail}}" width="100%">
-                <input type="file" name="thumbnail">
+        @if($content->contenttype_id != config('constants.CONTENT_TYPE_PAMPHLET'))
+            <div class="row">
+                <div class="col-md-12">
+                    <img src="{{$content->thumbnail}}" width="100%">
+                    <input type="file" name="thumbnail">
+                </div>
             </div>
-        </div>
+        @endif
         @if($content->isFree && $content->contenttype_id == config('constants.CONTENT_TYPE_PAMPHLET'))
             <div class="row">
                 <label class=" col-md-4 control-label red" for="pamphlet">آپلود فایل جزوه</label>
