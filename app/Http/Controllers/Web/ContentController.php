@@ -283,11 +283,13 @@ class ContentController extends Controller
 
         $files =$this->makeContentFilesArray($contentTypeId,$contentsetId,$fileName,$isFree);
 
-        $thumbnailFileName = pathinfo(parse_url($fileName)['path'], PATHINFO_FILENAME) . '.jpg' ;
-        $thumbnail = $this->makeContentThumbnailStd($contentsetId,$thumbnailFileName);
+        if($content->contenttype_id != Content::CONTENT_TYPE_PAMPHLET){
+            $thumbnailFileName = pathinfo(parse_url($fileName)['path'], PATHINFO_FILENAME) . '.jpg' ;
+            $thumbnail = $this->makeContentThumbnailStd($contentsetId,$thumbnailFileName);
 
-        if(isset($thumbnail)){
-            $content->thumbnail = $thumbnail;
+            if(isset($thumbnail)){
+                $content->thumbnail = $thumbnail;
+            }
         }
 
         if(isset($files)) {
@@ -340,19 +342,21 @@ class ContentController extends Controller
             $thumbnailFileName = pathinfo(parse_url($fileName)['path'], PATHINFO_FILENAME) . '.jpg';
         }
 
-        if($request->hasFile('thumbnail') && isset($content->contentset_id)){
-            $thumbnailFile = $this->getRequestFile($request->all(), 'thumbnail');
-            if(!isset($thumbnailFileName)) {
-                $thumbnailFileName = $thumbnailFile->getClientOriginalName();
+        if($content->contenttype_id != Content::CONTENT_TYPE_PAMPHLET){
+            if($request->hasFile('thumbnail') && isset($content->contentset_id)){
+                $thumbnailFile = $this->getRequestFile($request->all(), 'thumbnail');
+                if(!isset($thumbnailFileName)) {
+                    $thumbnailFileName = $thumbnailFile->getClientOriginalName();
+                }
+
+                if(Storage::disk(config('constants.DISK25'))->put('/'.$content->contentset_id.'/'.$thumbnailFileName , File::get($thumbnailFile))){
+                    Storage::disk(config('constants.DISK25'))->delete('/'.$content->contentset_id.'/'.$thumbnailFileName.'.webp');
+                }
             }
 
-            if(Storage::disk(config('constants.DISK25'))->put('/'.$content->contentset_id.'/'.$thumbnailFileName , File::get($thumbnailFile))){
-                Storage::disk(config('constants.DISK25'))->delete('/'.$content->contentset_id.'/'.$thumbnailFileName.'.webp');
+            if(isset($thumbnailFileName)) {
+                $content->thumbnail = $this->makeContentThumbnailStd($contentsetId,$thumbnailFileName);
             }
-        }
-
-        if(isset($thumbnailFileName)) {
-            $content->thumbnail = $this->makeContentThumbnailStd($contentsetId,$thumbnailFileName);
         }
 
         if(isset($files)){
@@ -419,10 +423,13 @@ class ContentController extends Controller
 
         $files =$this->makeContentFilesArray($contentTypeId,$contentsetId,$newFileFullName,$content->isFree);
 
-        $thumbnailFileName = pathinfo(parse_url($newFileFullName)['path'], PATHINFO_FILENAME) . '.jpg' ;
-        $thumbnail = $this->makeContentThumbnailStd($contentsetId,$thumbnailFileName);
-        if(isset($thumbnail)){
-            $content->thumbnail = $thumbnail;
+        if($content->contenttype_id != Content::CONTENT_TYPE_PAMPHLET){
+            $thumbnailFileName = pathinfo(parse_url($newFileFullName)['path'], PATHINFO_FILENAME) . '.jpg' ;
+            $thumbnail = $this->makeContentThumbnailStd($contentsetId,$thumbnailFileName);
+            if(isset($thumbnail)){
+                $content->thumbnail = $thumbnail;
+            }
+
         }
 
         if(!empty($files)) {
