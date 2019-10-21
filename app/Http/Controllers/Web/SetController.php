@@ -172,7 +172,9 @@ class SetController extends Controller
                 $products = $request->get('products');
                 if(is_null($products))
                     $products = [];
-                $this->syncProducts($products , $contentSet);
+                if($request->user()->can(config('constants.ADD_PRODUCT_TO_SET_ACCESS'))){
+                    $this->syncProducts($products , $contentSet);
+                }
             }
 
             session()->put('success' , 'دسته با موفقیت اصلاح شد');
