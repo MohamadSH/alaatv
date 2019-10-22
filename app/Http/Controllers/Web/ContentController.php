@@ -4,8 +4,8 @@ namespace App\Http\Controllers\Web;
 
 use App\Block;
 use App\Classes\Search\RelatedProductSearch;
-use App\Collection\BlockCollection;
 use App\Collection\ContentCollection;
+use App\Section;
 use App\User;
 use Exception;
 use App\Content;
@@ -263,10 +263,18 @@ class ContentController extends Controller
         $tags           = implode(',', isset($tags) ? $tags : []);
         $contentset     = $content->set;
         $contenttypes = [ 8 => 'فیلم' , 1 =>    'جزوه' , 9 => 'مقاله'];
+        $sections    = Section::all()->pluck('name' , 'id')->toArray();
+        $sections[0] = 'ندارد';
+        $sections    = array_sort_recursive($sections);
 
-        $result = compact('content', 'validSinceTime', 'tags', 'contentset' , 'contenttypes' );
+        $result = compact('content', 'validSinceTime', 'tags', 'contentset' , 'contenttypes' , 'sections' );
         $view = view('content.edit', $result);
         return httpResponse(null, $view);
+    }
+
+    public function editDescription(Content $content)
+    {
+        return view('content.editDescription' , compact('content'));
     }
 
     /**
@@ -366,9 +374,29 @@ class ContentController extends Controller
 
         $this->fillContentFromRequest($request->all(), $content);
 
+        if($request->has('acceptTmpDescription') && $user->can(config('constants.ACCEPT_CONTENT_TMP_DESCRIPTION_ACCESS')) && !is_null($content->tmp_description)){
+            $content->description     = $content->tmp_description;
+            $content->tmp_description = null;
+        }
+
         if ($content->update()) {
             session()->put('success', 'اصلاح محتوا با موفقیت انجام شد');
         } else {
+            session()->put('error', 'خطای پایگاه داده');
+        }
+
+        return redirect()->back();
+    }
+
+    public function updatePendingDescription(Request $request , Content $content)
+    {
+        $updateResult = $content->update([
+            'temp_description' => $request->get('description'),
+        ]);
+
+        if($updateResult){
+            session()->put('success', 'اصلاح محتوا با موفقیت انجام شد');
+        }else{
             session()->put('error', 'خطای پایگاه داده');
         }
 
@@ -441,6 +469,13 @@ class ContentController extends Controller
         Cache::tags('content')->flush();
         session()->flash('success', 'تغییر نام با موفقیت انجام شد');
         return redirect()->back();
+    }
+
+    public function indexPendingDescriptionContent()
+    {
+        $contents = Content::whereNotNull('tmp_description')->paginate(10 , ['*']);
+
+        return view('content.listPendingDescription' , compact('contents'));
     }
 
     /*
@@ -526,6 +561,10 @@ class ContentController extends Controller
         $content->enable     = $enabled ? 1 : 0;
         $content->isFree     = $isFree ? 1 : 0;
         $content->tags       = convertTagStringToArray($tagString);
+
+        if(array_get($inputData , 'section_id') == 0){
+            $content->section_id = null;
+        }
 
         if(isset($pamphlet)){
             $files =$this->storePamphletOfContent( $content , $pamphlet);

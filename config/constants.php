@@ -161,6 +161,7 @@ return [
     'SHOW_EDUCATIONAL_CONTENT_ACCESS'             => 'showEducationalContent',
     'REDIRECT_EDUCATIONAL_CONTENT_ACCESS'         => 'redirectEducationalContent',
     'REMOVE_EDUCATIONAL_CONTENT_FILE_ACCESS'      => 'removeEducationalContentFile',
+    'ACCEPT_CONTENT_TMP_DESCRIPTION_ACCESS'       => 'acceptContentTmpDescription',
     'REPORT_ADMIN_PANEL_ACCESS'                   => 'reportAdminPanelAccess',
     'INSERT_EMPLOPYEE_WORK_SHEET'                 => 'insertEmployeeWorkSheet',
     'LIST_EMPLOPYEE_WORK_SHEET'                   => 'listEmployeeWorkSheet',

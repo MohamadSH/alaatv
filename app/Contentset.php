@@ -70,6 +70,7 @@ use Illuminate\Database\Eloquent\Builder;
  * @property-read int|null $old_contents_count
  * @property-read int|null $products_count
  * @property mixed redirectUrl
+ * @property mixed activeContents
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Contentset display()
  */
 class Contentset extends BaseModel implements Taggable
@@ -212,6 +213,10 @@ class Contentset extends BaseModel implements Taggable
             'contentOnly' => true,
             'free'        => [0, 1],
         ]);
+    }
+
+    public function getContentsBySectionAttribute(){
+        return $this->activeContents->groupBy('section_name');
     }
 
     public function getProducts($onlyActiveProduct = true): ProductCollection
