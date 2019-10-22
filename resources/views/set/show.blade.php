@@ -103,7 +103,7 @@
                                         <span class="m-badge m-badge--warning m-badge--wide">ویژه شما</span>
                                     @endif
                                     <span>|</span>
-                                    <span class="m-widget5__info-date m--font-info">انتشار: {{$video->ValidSince_Jalali(false)}}</span>
+                                        <span class="m-widget5__info-date m--font-info">آخرین به روز رسانی: {{$video->UpdatedAt_Jalali()}}</span>
                                     <span>| آلاء</span>
                                 </div>
                                 <span class="m-widget5__desc">
@@ -141,7 +141,7 @@
                                         <span class="m-badge m-badge--warning m-badge--wide">ویژه شما</span>
                                     @endif
                                     <span>|</span>
-                                    <span class="m-widget5__info-date m--font-info">انتشار: {{$article->ValidSince_Jalali(false)}}</span>
+                                    <span class="m-widget5__info-date m--font-info">آخرین به روز رسانی: {{$article->UpdatedAt_Jalali()}}</span>
                                     <span>| آلاء</span>
                                 </div>
                                 <span class="m-widget5__desc">
