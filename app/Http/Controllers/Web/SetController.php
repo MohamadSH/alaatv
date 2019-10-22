@@ -167,14 +167,12 @@ class SetController extends Controller
                 }
             }
 
-            if($request->has('products'))
-            {
-                $products = $request->get('products');
-                if(is_null($products))
-                    $products = [];
-                if($request->user()->can(config('constants.ADD_PRODUCT_TO_SET_ACCESS'))){
-                    $this->syncProducts($products , $contentSet);
-                }
+            $products = $request->get('products');
+            if(is_null($products))
+                $products = [];
+
+            if($request->user()->can(config('constants.ADD_PRODUCT_TO_SET_ACCESS'))){
+                $this->syncProducts($products , $contentSet);
             }
 
             session()->put('success' , 'دسته با موفقیت اصلاح شد');
@@ -217,7 +215,7 @@ class SetController extends Controller
     }
 
     public function edit(Contentset $set) {
-        $setProducts = $set->products;
+        $setProducts = $set->products()->whereNull('contentset_product.deleted_at')->get();
         $products = $this->makeProductCollection();
         return view('set.edit', compact('set', 'setProducts', 'products'));
     }
