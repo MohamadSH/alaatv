@@ -299,7 +299,7 @@
             </div>
             @endpermission
         @endif
-        @if(isset($content) && $content->contenttype == config('constants.CONTENT_TYPE_ARTICLE'))
+        @if(isset($content) && $content->contenttype_id == config('constants.CONTENT_TYPE_ARTICLE'))
             @permission((config('constants.EDIT_ARTICLE_ACCESS')))
             <div class="form-group">
                 <div class="row">
