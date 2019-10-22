@@ -278,8 +278,9 @@ Route::group(['middleware' => 'auth'], function () {
 Route::group(['prefix' => 'c'], function () {
 
     Route::get('search', 'Web\ContentController@search');
-    Route::get('uploadContent', [ContentController::class, 'uploadContent'])->name('c.upload.content');
-    Route::get('createArticle', [ContentController::class, 'createArticle'])->name('c.create.article');
+    Route::get('uploadContent',         [ContentController::class, 'uploadContent'])->name('c.upload.content');
+    Route::get('createArticle',         [ContentController::class, 'createArticle'])->name('c.create.article');
+    Route::post('updateTmpDescription',  [ContentController::class, 'createArticle'])->name('c.update.pending.description');
 
     Route::get('{c}/favored', 'Web\FavorableController@getUsersThatFavoredThisFavorable');
     Route::post('{c}/favored', 'Web\FavorableController@markFavorableFavorite');

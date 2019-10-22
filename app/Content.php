@@ -127,13 +127,16 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property-read int|null $favorite_by_count
  * @property-read int|null $files_count
  * @property-read mixed $edit_link
- * @property-read \Collection $file_for_admin
+ * @property-read Collection $file_for_admin
  * @property-read mixed $remove_link
  * @property-read int|null $grades_count
  * @property-read int|null $majors_count
  * @property mixed redirectUrl
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Content free()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Content type($type)
+ * @property mixed section_id
+ * @property mixed section
+ * @property mixed tmp_description
+ * @method static Builder|Content free()
+ * @method static Builder|Content type($type)
  */
 class Content extends BaseModel implements Advertisable, Taggable, SeoInterface, FavorableInterface
 {
@@ -201,6 +204,8 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
         'contentset_id',
         'isFree',
         'enable',
+        'section_id',
+        'tmp_description',
     ];
 
     /**
@@ -769,6 +774,15 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
         return $this->order;
     }
 
+    public function getSectionNameAttribute()
+    {
+        if(isset($this->section_id)){
+            return $this->section->name;
+        }
+
+        return null;
+    }
+
     /**
      * Gets content's pamphlets
      *
@@ -1117,6 +1131,11 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
     {
         return $this->belongsTo("\App\User", 'author_id', 'id')
             ->withDefault();
+    }
+
+    public function section()
+    {
+        return $this->belongsTo(Section::Class);
     }
 
     /*
