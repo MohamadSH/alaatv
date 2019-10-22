@@ -16,7 +16,7 @@
     "alaatv/payment-gateways": "1.*",
     "alaatv/zarinpal": "1.*",
     "algolia/algoliasearch-client-php": "^2.2",
-    "artesaos/seotools": "^0.14.0",
+      "artesaos/seotools": "^0.16.0",
     "cloned/luckybox": "^0.9.0",
     "doctrine/dbal": "^2.9",
     "econea/nusoap": "v0.9.5.3",
