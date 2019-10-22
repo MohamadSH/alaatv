@@ -283,7 +283,7 @@ class ContentController extends Controller
 
         $files =$this->makeContentFilesArray($contentTypeId,$contentsetId,$fileName,$isFree);
 
-        if($content->contenttype_id != Content::CONTENT_TYPE_PAMPHLET){
+        if($contentTypeId != Content::CONTENT_TYPE_PAMPHLET){
             $thumbnailFileName = pathinfo(parse_url($fileName)['path'], PATHINFO_FILENAME) . '.jpg' ;
             $thumbnail = $this->makeContentThumbnailStd($contentsetId,$thumbnailFileName);
 
