@@ -1,10 +1,5 @@
 @extends("app")
 
-@section("css")
-{{--    <link rel="stylesheet" href="{{ mix('/css/all.css') }}">--}}
-@endsection
-
-
 @section("content")
     <div class="row">
         <div class="col-md-12">
@@ -25,10 +20,10 @@
                         </div>
                     </div>
                     <div class="m-portlet__head-tools">
-                        <a target="_blank" href="{{ action('Web\ContentController@create', ['set'=>$set->id]) }}">
+                        <a target="_blank" href="{{ route('c.create', ['set'=>$set->id]) }}">
                             <button type="button" class="btn m-btn--pill m-btn--air btn-primary">افزودن محتوا</button>
                         </a>
-                        <a href="{{ action('Web\SetController@edit', ['set'=>$set->id]) }}">
+                        <a href="{{ route('set.edit', ['set'=>$set->id]) }}">
                             <button type="button" class="btn m-btn--pill m-btn--air btn-warning">ویرایش</button>
                         </a>
                     </div>
@@ -55,7 +50,7 @@
                                     <tr>
                                         <td>
                                             <a target="_blank"
-                                               href="{{action("Web\ContentController@edit" , $content->id)}}">{{ $content->id }}</a>
+                                               href="{{route('c.edit' , $content->id)}}">{{ $content->id }}</a>
                                         </td>
                                         <td>
                                             <img src="{{ $content->thumbnail }}?w=400&h=235" class="img-responsive a--full-width"/>
@@ -63,7 +58,7 @@
                                         <td> {{ $content->order }}</td>
                                         <td> {{ $content->name }}</td>
                                         <td>{!!   $content->description !!}</td>
-                                        <td>{{ $content->enable }}</td>
+                                        <td>{{($content->enable)?'بله':'خیر'}}</td>
                                         <td>{{ $content->validSince }}</td>
                                         @if($content->template_id == 1)
                                             <td>فیلم</td>

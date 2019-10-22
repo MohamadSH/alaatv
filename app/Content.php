@@ -774,16 +774,7 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
     {
         return $this->order;
     }
-    
-    public function getSectionNameAttribute()
-    {
-        if (isset($this->section_id)) {
-            return $this->section->name;
-        }
-    
-        return null;
-    }
-    
+
     /**
      * Gets content's pamphlets
      *

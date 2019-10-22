@@ -59,16 +59,19 @@
             </div>
             <div class="m-portlet__head-tools">
                 <ul class="nav nav-pills nav-pills--brand m-nav-pills--align-right m-nav-pills--btn-pill m-nav-pills--btn-sm" role="tablist">
+                    @if($order == 'desc')
                     <li  class="nav-item m-tabs__item ">
                         <a href="?order=asc" id="sort-ascending">
                             <i class="fa fa-arrow-up"></i>
                         </a>
                     </li>
+                    @else
                     <li  class="nav-item m-tabs__item ">
                         <a href="?order=desc" id="sort-descending">
                             <i class="fa fa-arrow-down"></i>
                         </a>
                     </li>
+                    @endif
                     <li  class="nav-item m-tabs__item font-weight-bold">
                         |
                     </li>

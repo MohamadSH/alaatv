@@ -165,16 +165,13 @@ class SetController extends Controller
                     ]);
                 }
             }
-        
-            if ($request->has('products')) {
-                $products = $request->get('products');
-                if ($products === null) {
-                    $products = [];
-                }
-                if ($request->user()
-                    ->can(config('constants.ADD_PRODUCT_TO_SET_ACCESS'))) {
-                    $this->syncProducts($products, $contentSet);
-                }
+          
+            $products = $request->get('products');
+            if(is_null($products))
+                $products = [];
+
+            if($request->user()->can(config('constants.ADD_PRODUCT_TO_SET_ACCESS'))){
+                $this->syncProducts($products , $contentSet);
             }
         
             session()->put('success', 'دسته با موفقیت اصلاح شد');
@@ -187,7 +184,7 @@ class SetController extends Controller
     
     public function show(Request $request, Contentset $contentSet)
     {
-        $order = $request->get('order');
+        $order = $request->get('order' , 'asc');
         if (isset($contentSet->redirectUrl)) {
             return redirect($contentSet->redirectUrl, Response::HTTP_FOUND, $request->headers->all());
         }
@@ -200,24 +197,30 @@ class SetController extends Controller
         if ($order === 'desc') {
             $contents = $contents->sortByDesc('order');
         }
-    
-        if ($contents->isEmpty()) {
+
+
+        // ToDo : To get sorted contents grouped by section
+//        Note : can't add sortBy to this
+//        $contents = $contentSet->active_contents_by_section;
+
+        if($contents->isEmpty()){
             return redirect(route('web.home'));
         }
-    
-        $pamphlets = $contents->where('contenttype_id', Content::CONTENT_TYPE_PAMPHLET);
-        $videos    = $contents->where('contenttype_id', Content::CONTENT_TYPE_VIDEO);
-        $articles  = $contents->where('contenttype_id', Content::CONTENT_TYPE_ARTICLE);
-    
-        $jsonLdArray = $this->getJsonLdArray($videos, $pamphlets, $articles);
+
+        $pamphlets = $contents->where('contenttype_id' , Content::CONTENT_TYPE_PAMPHLET);
+        $videos    = $contents->where('contenttype_id' , Content::CONTENT_TYPE_VIDEO);
+        $articles  = $contents->where('contenttype_id' , Content::CONTENT_TYPE_ARTICLE);
+      
+       $jsonLdArray = $this->getJsonLdArray($videos, $pamphlets, $articles);
     
         $this->generateSeoMetaTags($contentSet);
+
         return view('set.show', compact('contentSet', 'videos', 'pamphlets', 'articles', 'jsonLdArray'));
     }
     
     public function edit(Contentset $set)
     {
-        $setProducts = $set->products;
+        $setProducts = $set->products()->whereNull('contentset_product.deleted_at')->get();
         $products    = $this->makeProductCollection();
         return view('set.edit', compact('set', 'setProducts', 'products'));
     }
