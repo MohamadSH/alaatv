@@ -182,7 +182,7 @@ class SitemapController extends Controller
         foreach ($sets as $set) {
             $caption = $set->metaTitle;
             $image = $set->photo;
-            $tag = Sitemap::addTag(route('set.show', $set), $set->updated_at, 'monthly', '0.9');
+            $tag = Sitemap::addTag(route('set.show', $set), $set->updated_at, 'daily', '0.9');
             if (isset($image)) {
                 $tag->addImage($image, $caption);
             }
