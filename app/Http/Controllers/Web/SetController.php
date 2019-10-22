@@ -202,7 +202,7 @@ class SetController extends Controller
         }
 
         // ToDo : To get sorted contents grouped by section
-        //Note : can't add sortBy to this
+//        Note : can't add sortBy to this
 //        $contents = $contentSet->active_contents_by_section;
 
         if($contents->isEmpty()){
