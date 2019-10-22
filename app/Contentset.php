@@ -66,12 +66,13 @@ use Illuminate\Database\Eloquent\Builder;
  * @property-read int|null $favorite_by_count
  * @property-read mixed $edit_link
  * @property-read mixed $remove_link
- * @property-read \App\Collection\ContentCollection|\App\Content[] $oldContents
+ * @property-read ContentCollection|Content[] $oldContents
  * @property-read int|null $old_contents_count
  * @property-read int|null $products_count
  * @property mixed redirectUrl
  * @property mixed activeContents
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Contentset display()
+ * @property mixed active_contents_by_section
+ * @method static Builder|Contentset display()
  */
 class Contentset extends BaseModel implements Taggable
 {
@@ -215,8 +216,8 @@ class Contentset extends BaseModel implements Taggable
         ]);
     }
 
-    public function getContentsBySectionAttribute(){
-        return $this->activeContents->groupBy('section_name');
+    public function getActiveContentsBySectionAttribute(){
+        return $this->getActiveContents2()->groupBy('section_name');
     }
 
     public function getProducts($onlyActiveProduct = true): ProductCollection
