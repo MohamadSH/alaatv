@@ -187,7 +187,7 @@ class SetController extends Controller
 
     public function show(Request $request, Contentset $contentSet)
     {
-        $order = $request->get('order');
+        $order = $request->get('order' , 'asc');
         if (isset($contentSet->redirectUrl)) {
             return redirect($contentSet->redirectUrl, Response::HTTP_FOUND, $request->headers->all());
         }
@@ -209,7 +209,7 @@ class SetController extends Controller
         $videos    = $contents->where('contenttype_id' , Content::CONTENT_TYPE_VIDEO);
         $articles  = $contents->where('contenttype_id' , Content::CONTENT_TYPE_ARTICLE);
 
-        return view('set.show' , compact('contentSet' , 'videos' , 'pamphlets' , 'articles' ));
+        return view('set.show' , compact('contentSet' , 'videos' , 'pamphlets' , 'articles' , 'order' ));
     }
 
     public function edit(Contentset $set) {
