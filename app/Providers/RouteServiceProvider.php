@@ -7,6 +7,7 @@ use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvi
 use App\{City,
     LiveDescription,
     Role,
+    Section,
     User,
     Order,
     Phone,
@@ -466,6 +467,18 @@ class RouteServiceProvider extends ServiceProvider
                 $key,
             ])->remember($key, config('constants.CACHE_5'), function () use ($value) {
                 return LiveDescription::where('id', $value)
+                        ->first() ?? abort(404);
+            });
+        });
+
+        Route::bind('section', function ($value) {
+            $key = 'Section:'.$value;
+
+            return Cache::tags([
+                'section',
+                $key,
+            ])->remember($key, config('constants.CACHE_5'), function () use ($value) {
+                return Section::where('id', $value)
                         ->first() ?? abort(404);
             });
         });

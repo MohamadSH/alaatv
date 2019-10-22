@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Web;
 
+use App\Http\Controllers\Controller;
 use App\Section;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -15,7 +16,8 @@ class SectionController extends Controller
      */
     public function index()
     {
-        return Section::all();
+        $sections = Section::all();
+        return view('content.section.index' , compact('sections'));
     }
 
     /**
@@ -37,6 +39,7 @@ class SectionController extends Controller
     public function store(Request $request)
     {
         $section = Section::create($request->all());
+        session()->put('success' , 'سکشن با موفقیت اصلاح شد');
         return redirect()->back();
     }
 
