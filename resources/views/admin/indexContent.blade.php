@@ -131,6 +131,10 @@
                                         <i class="fa fa-plus"></i>
                                         افزودن مقاله
                                     </a>
+                                    <a target="_blank" class="btn m-btn--pill m-btn--air btn-outline-brand" target="_blank" href="{{route('section.index')}}">
+                                        <i class="fa fa-plus"></i>
+                                        سکشن ها
+                                    </a>
 {{--                                    <a class="btn m-btn--pill m-btn--air btn-outline-danger" target="_blank" href="{{action("Web\ContentController@uploadContent")}}">--}}
 {{--                                        <i class="fa fa-plus"></i>--}}
 {{--                                        آپلود محتوا--}}
