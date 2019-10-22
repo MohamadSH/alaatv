@@ -19,9 +19,4 @@ class Section extends Model
     {
         return $this->hasMany(Content::Class);
     }
-
-    public function scopeEnable($query)
-    {
-        return $query->where('enable' , 1);
-    }
 }

@@ -217,7 +217,7 @@ class Contentset extends BaseModel implements Taggable
     }
 
     public function getActiveContentsBySectionAttribute(){
-        return $this->getActiveContents2()->groupBy('section_name');
+        return $this->getActiveContents2()->groupBy('section.name');
     }
 
     public function getProducts($onlyActiveProduct = true): ProductCollection
@@ -400,7 +400,7 @@ class Contentset extends BaseModel implements Taggable
 
     public function activeContents()
     {
-        return $this->contents()->active();
+        return $this->contents()->with('section')->active();
     }
 
     public function getApiUrlAttribute($value): array
