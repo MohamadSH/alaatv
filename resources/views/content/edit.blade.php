@@ -46,7 +46,7 @@
 @section('content')
     @include("systemMessage.flash")
 
-    @if(auth()->user()->hasRole(config('constants.')))
+    @if(auth()->user()->hasRole('editContentDescription'))
         <div class = "m-portlet m-portlet--mobile">
             <div class = "m-portlet__head">
                 <div class = "m-portlet__head-caption">
