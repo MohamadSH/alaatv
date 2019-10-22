@@ -73,6 +73,7 @@ Route::group(['prefix' => 'sitemap'], function () {
     Route::get('video-{page?}.xml', [SitemapController::class, 'video']);
     Route::get('pamphlet-{page?}.xml', 'Web\SitemapController@pamphlet');
     Route::get('article-{page?}.xml', 'Web\SitemapController@article');
+    Route::get('set-{page?}.xml', 'Web\SitemapController@set');
     Route::get('redirect.xml', 'Web\SitemapController@redirect');
 });
 

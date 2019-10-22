@@ -28,27 +28,27 @@ class SetController extends Controller
     | Traits
     |--------------------------------------------------------------------------
     */
-    
+
     use ProductCommon;
     use RequestCommon;
     use MetaCommon;
     use FileCommon;
-    
+
     /*
     |--------------------------------------------------------------------------
     | Properties
     |--------------------------------------------------------------------------
     */
-    
+
     protected $setting;
-    
+
     public function __construct(Websitesetting $setting)
     {
         $this->setting = $setting->setting;
         $authException = $this->getAuthExceptionArray();
         $this->callMiddlewares($authException);
     }
-    
+
     /**
      * @return array
      */
@@ -58,10 +58,10 @@ class SetController extends Controller
             'index',
             'show',
         ];
-    
+
         return $authException;
     }
-    
+
     /**
      * @param $authException
      */
@@ -78,29 +78,29 @@ class SetController extends Controller
                 'update',
             ],
         ]);
-    
+
         $this->middleware('permission:'.config('constants.INSERT_CONTENT_SET_ACCESS'), [
             'only' => [
                 'store',
             ],
         ]);
-    
+
         $this->middleware('permission:'.config('constants.LIST_CONTENT_SET_ACCESS'), [
             'only' => [
 //                'index',
             ],
         ]);
-    
+
         $this->middleware('permission:'.config('constants.SHOW_CONTENT_SET_ACCESS'), [
             'only' => [
                 'edit',
                 //                'show',
             ],
         ]);
-    
-    
+
+
     }
-    
+
     /**
      * Display a listing of the resource.
      *
@@ -111,14 +111,14 @@ class SetController extends Controller
      */
     public function index(ContentsetIndexRequest $request, ContentsetSearch $setSearch)
     {
-    
+
         $tags     = $request->get('tags');
         $filters  = $request->all();
         $pageName = 'setPage';
-    
+
         $sets = $setSearch->setPageName($pageName)
             ->get($filters);
-    
+
         if (request()->expectsJson()) {
             return response()->json([
                 'result' => $sets,
@@ -127,37 +127,37 @@ class SetController extends Controller
         }
         return view('set.index', compact('sets', 'tags'));
     }
-    
+
     public function store(InsertContentsetRequest $request)
     {
         $contentSet = new Contentset();
         $this->fillContentFromRequest($request->all(), $contentSet);
-    
+
         if ($contentSet->save()) {
-        
+
             if ($request->has('products')) {
                 $products = $request->get('products');
                 if ($products === null) {
                     $products = [];
                 }
-            
+
                 $this->syncProducts($products, $contentSet);
             }
-        
+
             session()->put('success', 'دسته با موفقیت درج شد . شماره دسته : '.$contentSet->id);
             return redirect()->back();
         }
-    
+
         session()->put('error', 'خطای پایگاه داده');
         return redirect()->back();
     }
-    
+
     public function update(Request $request, Contentset $contentSet)
     {
         $this->fillContentFromRequest($request->all(), $contentSet);
-    
+
         if ($contentSet->update()) {
-        
+
             if ($request->has('redirectAllContents')) {
                 foreach ($contentSet->contents as $content) {
                     $content->update([
@@ -165,7 +165,7 @@ class SetController extends Controller
                     ]);
                 }
             }
-          
+
             $products = $request->get('products');
             if(is_null($products))
                 $products = [];
@@ -173,26 +173,26 @@ class SetController extends Controller
             if($request->user()->can(config('constants.ADD_PRODUCT_TO_SET_ACCESS'))){
                 $this->syncProducts($products , $contentSet);
             }
-        
+
             session()->put('success', 'دسته با موفقیت اصلاح شد');
             return redirect()->back();
         }
-    
+
         session()->put('error', 'خطای پایگاه داده');
         return redirect()->back();
     }
-    
+
     public function show(Request $request, Contentset $contentSet)
     {
         $order = $request->get('order' , 'asc');
         if (isset($contentSet->redirectUrl)) {
             return redirect($contentSet->redirectUrl, Response::HTTP_FOUND, $request->headers->all());
         }
-    
+
         if ($request->expectsJson()) {
             return response()->json($contentSet);
         }
-    
+
         $contents = $contentSet->getActiveContents2();
         if ($order === 'desc') {
             $contents = $contents->sortByDesc('order');
@@ -210,21 +210,21 @@ class SetController extends Controller
         $pamphlets = $contents->where('contenttype_id' , Content::CONTENT_TYPE_PAMPHLET);
         $videos    = $contents->where('contenttype_id' , Content::CONTENT_TYPE_VIDEO);
         $articles  = $contents->where('contenttype_id' , Content::CONTENT_TYPE_ARTICLE);
-      
+
        $jsonLdArray = $this->getJsonLdArray($videos, $pamphlets, $articles);
-    
+
         $this->generateSeoMetaTags($contentSet);
 
-        return view('set.show', compact('contentSet', 'videos', 'pamphlets', 'articles', 'jsonLdArray'));
+        return view('set.show', compact('contentSet', 'videos', 'pamphlets', 'articles', 'jsonLdArray' , 'order'));
     }
-    
+
     public function edit(Contentset $set)
     {
         $setProducts = $set->products()->whereNull('contentset_product.deleted_at')->get();
         $products    = $this->makeProductCollection();
         return view('set.edit', compact('set', 'setProducts', 'products'));
     }
-    
+
     /**
      * Show the form for creating a new resource.
      *
@@ -235,13 +235,13 @@ class SetController extends Controller
         $products = $this->makeProductCollection();
         return view('set.create', compact('products'));
     }
-    
+
     public function indexContent(Request $request, Contentset $set)
     {
         $contents = optional($set->contents)->sortBy('order');
         return view('set.listContents', compact('set', 'contents'));
     }
-    
+
     /**
      * @param  FormRequest  $inputData
      * @param  Contentset   $contentset
@@ -253,24 +253,24 @@ class SetController extends Controller
         $enabled   = Arr::has($inputData, 'enable');
         $display   = Arr::has($inputData, 'display');
         $tagString = Arr::get($inputData, 'tags');
-        
+
         $contentset->fill($inputData);
         $contentset->tags = convertTagStringToArray($tagString);
-        
+
         $contentset->enable  = $enabled ? 1 : 0;
         $contentset->display = $display ? 1 : 0;
-    
+
         if (Arr::has($inputData, 'photo')) {
             $this->storePhotoOfSet($contentset, Arr::get($inputData, 'photo'));
         }
     }
-    
+
     private function syncProducts(array $products, Contentset $contentset)
     {
         $contentset->products()
             ->sync($products);
     }
-    
+
     private function storePhotoOfSet(Contentset $contentSet, $file): void
     {
         $extension = $file->getClientOriginalExtension();
@@ -284,7 +284,7 @@ class SetController extends Controller
             $contentSet->photo = config('constants.DOWNLOAD_SERVER_PROTOCOL').config('constants.CDN_SERVER_NAME').'/'.$partialPath.$fileName;
         }
     }
-    
+
     /**
      * @param $videos
      * @param $pamphlets
@@ -297,7 +297,7 @@ class SetController extends Controller
         $jsonLdItems = [];
         if ($videos->isNotEmpty()) {
             foreach ($videos as $item) {
-                $jsonLdItems += [
+                $jsonLdItems[] = [
                     '@type'    => 'ListItem',
                     'position' => $item->order,
                     'url'      => action([ContentController::class, 'show'], $item),
@@ -305,7 +305,7 @@ class SetController extends Controller
             }
         } elseif ($pamphlets->isNotEmpty()) {
             foreach ($pamphlets as $item) {
-                $jsonLdItems += [
+                $jsonLdItems[] = [
                     '@type'    => 'ListItem',
                     'position' => $item->order,
                     'url'      => action([ContentController::class, 'show'], $item),
@@ -313,14 +313,14 @@ class SetController extends Controller
             }
         } elseif ($articles->isNotEmpty()) {
             foreach ($articles as $item) {
-                $jsonLdItems += [
+                $jsonLdItems[] = [
                     '@type'    => 'ListItem',
                     'position' => $item->order,
                     'url'      => action([ContentController::class, 'show'], $item),
                 ];
             }
         }
-        $jsonLdArray = null;
+            $jsonLdArray = null;
         if (!empty($jsonLdItems)) {
             $jsonLdArray = [
                 '@context'        => 'https://schema.org',
