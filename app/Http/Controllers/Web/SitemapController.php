@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Web;
 
 use App\Content;
+use App\Contentset;
 use App\Product;
 use Illuminate\Support\Facades\{Cache};
 use Watson\Sitemap\Facades\Sitemap;
@@ -16,16 +17,17 @@ class SitemapController extends Controller
         // You can use the route helpers too.
         Sitemap::addSitemap(action('Web\SitemapController@product'));
         Sitemap::addSitemap(action('Web\SitemapController@redirect'));
-    
-    
+
+
         $this->addContentsSiteMapUrl('video');
+        $this->addSetsSiteMapUrl();
         $this->addContentsSiteMapUrl('pamphlet');
         $this->addContentsSiteMapUrl('article');
-    
+
         // Return the sitemap to the client.
         return Sitemap::index();
     }
-    
+
     public function product()
     {
         $products = Cache::tags(['product'])
@@ -35,11 +37,11 @@ class SitemapController extends Controller
                     ->orderBy('order')
                     ->get();
             });
-        
+
         foreach ($products as $product) {
             Sitemap::addTag(route('product.show', $product), $product->updated_at, 'monthly', '0.8');
         }
-    
+
         $products = Cache::tags(['product'])
             ->remember('sitemap-products-2', config('constants.CACHE_600'), static
             function () {
@@ -47,35 +49,35 @@ class SitemapController extends Controller
                     ->orderBy('order')
                     ->get();
             });
-        
+
         foreach ($products as $product) {
             Sitemap::addTag(route('product.show', $product), $product->updated_at, 'monthly', '0.8');
         }
-        
+
         return Sitemap::render();
     }
-    
+
     public function video($page = 1)
     {
         $contents = $this->getContentByType('video', $page);
         $this->addContentsTagLine($contents);
         return Sitemap::render();
     }
-    
+
     public function pamphlet($page = 1)
     {
         $contents = $this->getContentByType('pamphlet', $page);
         $this->addContentsTagLine($contents);
         return Sitemap::render();
     }
-    
+
     public function article($page = 1)
     {
         $contents = $this->getContentByType('article', $page);
         $this->addContentsTagLine($contents);
         return Sitemap::render();
     }
-    
+
     public function redirect()
     {
         $contents = Cache::tags(['content', 'product'])
@@ -88,12 +90,19 @@ class SitemapController extends Controller
                     ->orderBy('created_at', 'desc')
                     ->get();
             });
-        
+
         $this->addContentsTagLine($contents);
-        
+
         return Sitemap::render();
     }
-    
+
+    public function set($page = 1)
+    {
+        $sets = $this->getSet($page);
+        $this->addSetTagLine($sets);
+        return Sitemap::render();
+    }
+
     /**
      * @param $type
      * @param $page
@@ -116,7 +125,7 @@ class SitemapController extends Controller
                     ->paginate(500, ['*'], $this->getPageNameByContentType($type), $page);
             });
     }
-    
+
     /**
      * @param $type
      *
@@ -126,7 +135,7 @@ class SitemapController extends Controller
     {
         return 'c-'.$type;
     }
-    
+
     /**
      * @param $contents
      */
@@ -141,7 +150,7 @@ class SitemapController extends Controller
             }
         }
     }
-    
+
     private function addContentsSiteMapUrl($type): void
     {
         $paginate = $this->getContentByType($type);
@@ -149,6 +158,44 @@ class SitemapController extends Controller
         for ($i = 1; $i <= $lastPage; $i++) {
             if ($paginate->isNotEmpty()) {
                 Sitemap::addSitemap(action([__CLASS__, $type], ['page' => $i]));
+            }
+        }
+    }
+
+    private function getSet(int $page = 1): LengthAwarePaginator
+    {
+        $key = 'sitemap-sets/NotRedirected/page/'.$page;
+        return Cache::tags(['set'])
+            ->remember($key, config('constants.CACHE_600'),
+                function ()
+                use ($page) {
+                    return Contentset::select()
+                        ->active()
+                        ->redirected()
+                        ->orderBy('id')
+                        ->paginate(500, ['*'], 'set', $page);
+                });
+    }
+
+    private function addSetTagLine(LengthAwarePaginator $sets):void
+    {
+        foreach ($sets as $set) {
+            $caption = $set->metaTitle;
+            $image = $set->photo;
+            $tag = Sitemap::addTag(route('set.show', $set), $set->updated_at, 'monthly', '0.9');
+            if (isset($image)) {
+                $tag->addImage($image, $caption);
+            }
+        }
+    }
+
+    private function addSetsSiteMapUrl()
+    {
+        $paginate = $this->getSet();
+        $lastPage = $paginate->lastPage();
+        for ($i = 1; $i <= $lastPage; $i++) {
+            if ($paginate->isNotEmpty()) {
+                Sitemap::addSitemap(action([__CLASS__, 'set'], ['page' => $i]));
             }
         }
     }
