@@ -21,16 +21,6 @@ class SectionController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return Response
-     */
-    public function create()
-    {
-        return view('section.create');
-    }
-
-    /**
      * Store a newly created resource in storage.
      *
      * @param Request $request
@@ -39,7 +29,12 @@ class SectionController extends Controller
     public function store(Request $request)
     {
         $section = Section::create($request->all());
-        session()->put('success' , 'سکشن با موفقیت اصلاح شد');
+        if(isset($section)){
+            session()->put('success' , 'سکشن با موفقیت درج شد');
+        }else{
+            session()->put('error' , 'خطا در درج سکشن');
+        }
+
         return redirect()->back();
     }
 
@@ -62,7 +57,7 @@ class SectionController extends Controller
      */
     public function edit(Section $section)
     {
-        return view('section.create' , compact('section'));
+        return view('content.section.edit' , compact('section'));
     }
 
     /**
@@ -74,7 +69,12 @@ class SectionController extends Controller
      */
     public function update(Request $request, Section $section)
     {
-        $section->update($request->all());
+        $updateResult = $section->update($request->all());
+        if(isset($updateResult)){
+            session()->put('success' , 'سکشن با موفقیت اصلاح شد');
+        }else{
+            session()->put('error' , 'خطا در اصلاح سکشن');
+        }
         return redirect()->back();
     }
 
