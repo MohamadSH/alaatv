@@ -8,7 +8,10 @@ use Illuminate\Http\Resources\Json\JsonResource;
  * Class Block
  *
  * @mixin \App\Block
- * */
+ *
+ * @property mixed notRedirectedContents
+ * @property mixed notRedirectedSets
+ */
 class Block extends JsonResource
 {
     /**
