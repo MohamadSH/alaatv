@@ -15,7 +15,7 @@ class OrderStatusChanged extends Notification implements ShouldQueue
 {
     use Queueable, SerializesModels;
 
-    const MEDIANA_PATTERN_CODE_ORDER_STATUS_CHANGED = 802;
+    const MEDIANA_PATTERN_CODE_ORDER_STATUS_CHANGED = '55r2ghkmi1';
 
     public $timeout = 120;
 
@@ -71,7 +71,11 @@ class OrderStatusChanged extends Notification implements ShouldQueue
     private function getInputData(): array
     {
         return [
-            'name' => $this->orderStatus,
+            'name' => 'آلایی',
+            'request' => 'سفارش',
+            'status' => $this->orderStatus,
+            'site' => 'آلاء',
+            'supportLink' => '',
         ];
     }
 }
