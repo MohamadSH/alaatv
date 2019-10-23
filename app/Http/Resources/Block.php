@@ -8,7 +8,10 @@ use Illuminate\Http\Resources\Json\JsonResource;
  * Class Block
  *
  * @mixin \App\Block
- * */
+ *
+ * @property mixed notRedirectedContents
+ * @property mixed notRedirectedSets
+ */
 class Block extends JsonResource
 {
     /**
@@ -25,8 +28,8 @@ class Block extends JsonResource
 
             ];
         }
-        $contests = $this->contents()->notRedirected()->get();
-        $sets     = $this->sets()->notRedirected()->get();
+        $contests = $this->notRedirectedContents;
+        $sets     = $this->notRedirectedSets;
         $products = $this->products;
         $banners  = $this->banners;
         $array    = [
