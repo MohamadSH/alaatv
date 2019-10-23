@@ -209,8 +209,8 @@ class Block extends BaseModel
                     ->orderBy('order')
                     ->get()
                     ->loadMissing([
-                        'contents',
-                        'sets',
+                        'notRedirectedContents',
+                        'notRedirectedSets',
                         'products',
                         'banners',
                     ]);
@@ -341,12 +341,22 @@ class Block extends BaseModel
             ->orderBy('blockables.order');
     }
 
+    public function notRedirectedContents()
+    {
+        return $this->contents()->notRedirected();
+    }
+
     public function sets()
     {
         return $this->morphedByMany(Contentset::class, 'blockable')
             ->withTimestamps()
             ->withPivot(['order'])
             ->orderBy('blockables.order');
+    }
+
+    public function notRedirectedSets()
+    {
+        return $this->sets()->notRedirected();
     }
 
     public function products()

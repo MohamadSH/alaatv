@@ -25,8 +25,8 @@ class Block extends JsonResource
 
             ];
         }
-        $contests = $this->contents()->notRedirected()->get();
-        $sets     = $this->sets()->notRedirected()->get();
+        $contests = $this->notRedirectedContents;
+        $sets     = $this->notRedirectedSets;
         $products = $this->products;
         $banners  = $this->banners;
         $array    = [
