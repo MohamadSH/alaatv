@@ -61,7 +61,7 @@
                     </div>
                     <div class="m--margin-bottom-10">
                         <span class="m-badge m-badge--light m-badge--bordered m-badge-bordered--brand">7</span>
-                        پس از خرید محصولات دانلودی امکان تغییر سفارش وجود ندارد.
+                        پس از خرید محصولات دانلودی امکان تغییر یا لغو کردن سفارش وجود ندارد و سفارش قابل عودت نمی باشد
                     </div>
                     <div class="m--margin-bottom-10">
                         <span class="m-badge m-badge--light m-badge--bordered m-badge-bordered--info">8</span>
