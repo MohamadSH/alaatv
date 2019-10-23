@@ -343,7 +343,7 @@ class Block extends BaseModel
 
     public function notRedirectedContents()
     {
-        return $this->contents()->notRedirected();
+        return $this->contents()->active()->notRedirected();
     }
 
     public function sets()
@@ -356,7 +356,7 @@ class Block extends BaseModel
 
     public function notRedirectedSets()
     {
-        return $this->sets()->notRedirected();
+        return $this->sets()->active()->notRedirected();
     }
 
     public function products()
