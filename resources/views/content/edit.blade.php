@@ -27,7 +27,7 @@
                 <a class = "m-link" href = "{{route('web.index')}}">@lang('page.Home')</a>
             </li>
             <li class = "breadcrumb-item" aria-current = "page">
-                <a class = "m-link" href = "{{action("Web\AdminController@adminContent")}}">پنل مدیریتی</a>
+                <a class = "m-link" href = "{{route('web.admin.content')}}">پنل مدیریتی</a>
             </li>
             <li class = "breadcrumb-item" aria-current = "page">
                 <a class = "m-link" href = "#">
@@ -35,7 +35,7 @@
                 </a>
             </li>
             <li class = "breadcrumb-item active" aria-current = "page">
-                <a class = "m-link" href = "{{action("Web\ContentController@show" , $content->id)}}">
+                <a class = "m-link" href = "{{route('c.show' , $content->id)}}">
                     {{$content->name}}
                 </a>
             </li>
