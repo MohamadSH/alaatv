@@ -22,11 +22,11 @@ class Block extends JsonResource
     {
         if (!($this->resource instanceof \App\Block)) {
             return [
-            
+
             ];
         }
-        $contests = $this->contents;
-        $sets     = $this->sets;
+        $contests = $this->contents()->notRedirected()->get();
+        $sets     = $this->sets()->notRedirected()->get();
         $products = $this->products;
         $banners  = $this->banners;
         $array    = [
