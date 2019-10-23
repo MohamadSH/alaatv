@@ -7,6 +7,7 @@ use App\Classes\Search\RelatedProductSearch;
 use App\Collection\ContentCollection;
 use App\Section;
 use App\User;
+use Carbon\Carbon;
 use Exception;
 use App\Content;
 use App\Contentset;
@@ -557,7 +558,13 @@ class ContentController extends Controller
         $pamphlet   = array_get($inputData , 'pamphlet');
 
         $content->fill($inputData);
-        $content->validSince = explode(' ', $validSinceDateTime)[0];
+
+        if(!$content->isEnable() && $enabled){
+            $content->validSince = Carbon::now('Asia/Tehran');
+        }else{
+            $content->validSince = explode(' ', $validSinceDateTime)[0];
+        }
+
         $content->enable     = $enabled ? 1 : 0;
         $content->isFree     = $isFree ? 1 : 0;
         $content->tags       = convertTagStringToArray($tagString);
