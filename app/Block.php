@@ -55,7 +55,6 @@ use Iatstuti\Database\Support\CascadeSoftDeletes;
  * @property mixed                                                     $offer
  * @property-read mixed                                                $cache_cooldown_seconds
  * @property mixed customUrl
- * @property string|null $customUrl یک آدرس دلخواه برای ریدایرکت شدن تایتل
  * @property-read int|null $banners_count
  * @property-read int|null $contents_count
  * @property-read mixed $edit_link
@@ -63,11 +62,11 @@ use Iatstuti\Database\Support\CascadeSoftDeletes;
  * @property-read int|null $products_count
  * @property-read int|null $sets_count
  * @method static bool|null forceDelete()
- * @method static \Illuminate\Database\Query\Builder|\App\Block onlyTrashed()
+ * @method static \Illuminate\Database\Query\Builder|Block onlyTrashed()
  * @method static bool|null restore()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Block whereCustomUrl($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Block withTrashed()
- * @method static \Illuminate\Database\Query\Builder|\App\Block withoutTrashed()
+ * @method static Builder|Block whereCustomUrl($value)
+ * @method static \Illuminate\Database\Query\Builder|Block withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|Block withoutTrashed()
  */
 class Block extends BaseModel
 {

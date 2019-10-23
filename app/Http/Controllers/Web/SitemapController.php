@@ -86,7 +86,7 @@ class SitemapController extends Controller
                 return Content::select()
                     ->free()
                     ->active()
-                    ->redirected(true)
+                    ->redirected()
                     ->orderBy('created_at', 'desc')
                     ->get();
             });
@@ -120,7 +120,7 @@ class SitemapController extends Controller
                     ->free()
                     ->active()
                     ->$type()
-                    ->redirected()
+                    ->notRedirected()
                     ->orderBy('id')
                     ->paginate(500, ['*'], $this->getPageNameByContentType($type), $page);
             });
@@ -171,7 +171,7 @@ class SitemapController extends Controller
                 use ($page) {
                     return Contentset::select()
                         ->active()
-                        ->redirected()
+                        ->notRedirected()
                         ->orderBy('id')
                         ->paginate(500, ['*'], 'set', $page);
                 });
