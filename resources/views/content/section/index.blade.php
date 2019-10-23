@@ -1,5 +1,24 @@
 @extends("app")
 
+@section('pageBar')
+
+    <nav aria-label = "breadcrumb">
+        <ol class = "breadcrumb">
+            <li class = "breadcrumb-item">
+                <i class = "fa fa-home m--padding-right-5"></i>
+                <a class = "m-link" href = "{{route('web.index')}}">@lang('page.Home')</a>
+            </li>
+            <li class = "breadcrumb-item">
+                <a class = "m-link" href = "{{route('web.admin.content')}}">مدیریت محتوا</a>
+            </li>
+            <li class = "breadcrumb-item active" aria-current = "page">
+                <a class = "m-link" href = "#">لیست سکشن ها</a>
+            </li>
+        </ol>
+    </nav>
+
+@endsection
+
 @section("content")
     @include("systemMessage.flash")
     <div class="m-portlet m-portlet--tabs productDetailes">
@@ -15,8 +34,7 @@
 
         <div class="m-portlet__body">
             {!! Form::open(['method'=>'POST' , 'url'=>route('section.store')]) !!}
-            {!! Form::text('name' , null , ['placeholder'=>'نام شکسن']) !!}
-            {!! Form::submit('ذخیره') !!}
+                @include('content.section.form')
             {!! Form::close() !!}
         </div>
     </div>
@@ -53,7 +71,7 @@
                                 <td> {{ $section->name }}</td>
                                 <td>{{($section->enable)?'بله':'خیر'}}</td>
                                 <td>
-                                    <a class="btn btn-accent" target="_blank" href="{{route('section.edit' , $section->id)}}">اصلاح</a>
+                                    <a target="_blank" class="btn btn-accent"  href="{{route('section.edit' , $section->id)}}">اصلاح</a>
                                 </td>
                             </tr>
                         @endforeach
