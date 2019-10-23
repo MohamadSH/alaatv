@@ -32,7 +32,7 @@
                 </div>
                 <div class="col d-flex align-items-center justify-content-center">
                     <a onclick='window.open("https://trustseal.enamad.ir/Verify.aspx?id=125806&amp;p=gCsnIb3IATIJnVIY", "Popup","toolbar=no, location=no, statusbar=no, menubar=no, scrollbars=1, resizable=0, width=580, height=600, top=30")'>
-                        <img class="img-fluid m--img-centered certificatesLogo lazy-image" src="https://cdn.alaatv.com/loder.jpg?w=1&h=1" data-src="https://cdn.alaatv.com/upload/enamad-logo3.png" alt="enamad.ir" data-name="enamad" width="183" height="174">
+                        <img class="img-fluid m--img-centered certificatesLogo lazy-image" src="https://cdn.alaatv.com/loder.jpg?w=1&h=1" data-src="https://cdn.alaatv.com/upload/enamad-logo3.png" alt="enamad.ir" data-name="enamad" width="183" height="230">
                     </a>
                 </div>
                 <div class="col d-flex align-items-center justify-content-center">
