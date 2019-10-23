@@ -206,11 +206,13 @@ class Contentset extends BaseModel implements Taggable, SeoInterface
         return $query->where('display', 1);
     }
 
-    public function scopeRedirected($query, $done = false)
+    public function scopeRedirected($query)
     {
-        if ($done) {
-            return $query->whereNotNull('redirectUrl');
-        }
+        return $query->whereNotNull('redirectUrl');
+    }
+
+    public function scopeNotRedirected($query)
+    {
         return $query->whereNull('redirectUrl');
     }
 
