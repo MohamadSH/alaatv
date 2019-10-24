@@ -88,6 +88,7 @@
                         <tr>
                             <th></th>
                             <th class="all"> دانش آموز</th>
+                            <th class="min-tablet">رشته</th>
                             <th class="min-tablet"> شماره تماس</th>
                             <th class="min-tablet"> شهر</th>
                             <th class="min-tablet"> فایل کارنامه</th>
@@ -172,6 +173,7 @@
                         <tr>
                             <th></th>
                             <th class="all"> دانش آموز</th>
+                            <th class="min-tablet">رشته</th>
                             <th class="min-tablet"> شماره تماس</th>
                             <th class="min-tablet"> شهر</th>
                             <th class="min-tablet"> فایل کارنامه</th>
@@ -256,6 +258,7 @@
                         <tr>
                             <th></th>
                             <th class="all"> دانش آموز</th>
+                            <th class="min-tablet">رشته</th>
                             <th class="min-tablet"> شماره تماس</th>
                             <th class="min-tablet"> شهر</th>
                             <th class="min-tablet"> فایل کارنامه</th>
