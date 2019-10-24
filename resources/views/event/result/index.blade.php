@@ -60,6 +60,13 @@
                         <span class = "m-badge m-badge--wide label-sm m-badge--danger"> کاربر ناشناس </span>@endif
                 @endif
             </td>
+            <td>
+                @if(isset($eventresult->user->major_id))
+                    {{$eventresult->user->major->name}}
+                @else
+                    <span class = "m-badge m-badge--wide label-sm m-badge--danger"> ثبت نشده </span>
+                @endif
+            </td>
             <td>@if(isset($eventresult->user->mobile))  {{$eventresult->user->mobile}} @else
                     <span class = "m-badge m-badge--wide label-sm m-badge--danger">درج نشده </span> @endif</td>
             <td>@if(isset($eventresult->user->city) && strlen($eventresult->user->city)>0) {{$eventresult->user->city}} @else
