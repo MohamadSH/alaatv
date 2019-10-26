@@ -42,7 +42,7 @@
                 col-md-12
             @endif">
             <!-- BEGIN SAMPLE FORM PORTLET-->
-            <div class="m-portlet m-portlet--mobile m-portlet--body-progress-">
+            <div class="m-portlet">
                 <div class="m-portlet__head">
                     <div class="m-portlet__head-caption">
                         <div class="m-portlet__head-title">
@@ -418,6 +418,33 @@
             $('#removeProductPhoto img').attr('src', photoAddress);
             $('#removeProductPhoto').modal('show');
         }
+        
+        function iterateTagsArray(tagsFromTree) {
+
+            tagsFromTree = tagsFromTree.flat(1);
+            var uniqueTagsFromTree = [...new Set(tagsFromTree)];
+            var tagsFromTreeLength = uniqueTagsFromTree.length;
+            for (var i = 0; i < tagsFromTreeLength; i++) {
+                uniqueTagsFromTree[i] = filterTagString(uniqueTagsFromTree[i]);
+            }
+
+            var oldTags = $("input.productTags").tagsinput()[0].itemsArray;
+            var oldTagsLength = oldTags.length;
+            for (var i = 0; i < oldTagsLength; i++) {
+                oldTags[i] = filterTagString(oldTags[i]);
+            }
+
+            var newTags = oldTags.concat(uniqueTagsFromTree);
+            var uniqueNewTags = [...new Set(newTags)];
+
+            return uniqueNewTags;
+        }
+        
+        function filterTagString(tagString) {
+            tagString = persianJs(tagString).arabicChar().toEnglishNumber().toString();
+            tagString = tagString.split(' ').join('_');
+            return tagString;
+        }
 
         $("input.productTags").tagsinput({
             tagClass: 'm-badge m-badge--info m-badge--wide m-badge--rounded'
@@ -426,6 +453,22 @@
          * Start up jquery
          */
         jQuery(document).ready(function () {
+
+            $('form.form-horizontal').submit(function(e) {
+                
+                
+                
+                var stringTagsFromTree = $('#tagsString').val();
+                var tagsArray = iterateTagsArray(JSON.parse(stringTagsFromTree));
+                $("input.productTags").tagsinput('removeAll');
+
+                var tagsArrayLength = tagsArray.length;
+                for (var i = 0; i < tagsArrayLength; i++) {
+                    $("input.productTags").tagsinput('add', tagsArray[i]);
+                }
+                
+            });
+            
             /*
              validdSince
              */
@@ -439,11 +482,42 @@
                     return d;
                 }
             });
-
-            $('#productShortDescriptionSummerNote').summernote({height: 300});
-            $('#productLongDescriptionSummerNote').summernote({height: 300});
-            $('#productSpecialDescriptionSummerNote').summernote({height: 300});
-            $('#productLiveDescriptionSummerNote').summernote({height: 300});
+            $('#productShortDescriptionSummerNote').summernote({
+                lang: 'fa-IR',
+                height: 300,
+                popover: {
+                    image: [],
+                    link: [],
+                    air: []
+                }
+            });
+            $('#productLongDescriptionSummerNote').summernote({
+                lang: 'fa-IR',
+                height: 300,
+                popover: {
+                    image: [],
+                    link: [],
+                    air: []
+                }
+            });
+            $('#productSpecialDescriptionSummerNote').summernote({
+                lang: 'fa-IR',
+                height: 300,
+                popover: {
+                    image: [],
+                    link: [],
+                    air: []
+                }
+            });
+            $('#productLiveDescriptionSummerNote').summernote({
+                lang: 'fa-IR',
+                height: 300,
+                popover: {
+                    image: [],
+                    link: [],
+                    air: []
+                }
+            });
 
 
         });
