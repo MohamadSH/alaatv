@@ -4,6 +4,7 @@
 use App\Http\Controllers\Web\BotsController;
 use App\Http\Controllers\Web\HomeController;
 use App\Http\Controllers\Web\LiveController;
+use App\Http\Controllers\Web\SectionController;
 use App\Http\Controllers\Web\SetController;
 use App\Http\Controllers\Web\UserController;
 use App\Http\Controllers\Web\AdminController;
@@ -72,6 +73,7 @@ Route::group(['prefix' => 'sitemap'], function () {
     Route::get('video-{page?}.xml', [SitemapController::class, 'video']);
     Route::get('pamphlet-{page?}.xml', 'Web\SitemapController@pamphlet');
     Route::get('article-{page?}.xml', 'Web\SitemapController@article');
+    Route::get('set-{page?}.xml', 'Web\SitemapController@set');
     Route::get('redirect.xml', 'Web\SitemapController@redirect');
 });
 
@@ -249,6 +251,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::resource('lottery', 'Web\LotteryController');
     Route::resource('cat', 'Web\CategoryController');
     Route::resource('livedescription', '\\'.LiveDescriptionController::class );
+    Route::resource('section', '\\'.SectionController::class );
 
     Route::get('copylessonfromremote', 'Web\RemoteDataCopyController@copyLesson');
     Route::get('copydepartmentfromremote', 'Web\RemoteDataCopyController@copyDepartment');
@@ -271,13 +274,16 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('updateSet/{c}' , [ContentController::class, 'updateSet'])->name('c.updateSet');
     Route::get('atest' , [HomeController::class, 'adTest']);
     Route::get('block/detach/{block}/{type}/{id}', 'Web\BlockController@detachFromBlock');
+    Route::get('serpSim' , [AdminController::class, 'serpSim'] );
+    Route::get('process_serpsim' , [AdminController::class, 'processSerpsim'] );
 });
 
 Route::group(['prefix' => 'c'], function () {
 
     Route::get('search', 'Web\ContentController@search');
-    Route::get('uploadContent', [ContentController::class, 'uploadContent'])->name('c.upload.content');
-    Route::get('createArticle', [ContentController::class, 'createArticle'])->name('c.create.article');
+    Route::get('uploadContent',         [ContentController::class, 'uploadContent'])->name('c.upload.content');
+    Route::get('createArticle',         [ContentController::class, 'createArticle'])->name('c.create.article');
+    Route::post('updateTmpDescription',  [ContentController::class, 'createArticle'])->name('c.update.pending.description');
 
     Route::get('{c}/favored', 'Web\FavorableController@getUsersThatFavoredThisFavorable');
     Route::post('{c}/favored', 'Web\FavorableController@markFavorableFavorite');

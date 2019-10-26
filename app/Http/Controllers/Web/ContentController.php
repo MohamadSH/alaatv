@@ -4,9 +4,10 @@ namespace App\Http\Controllers\Web;
 
 use App\Block;
 use App\Classes\Search\RelatedProductSearch;
-use App\Collection\BlockCollection;
 use App\Collection\ContentCollection;
+use App\Section;
 use App\User;
+use Carbon\Carbon;
 use Exception;
 use App\Content;
 use App\Contentset;
@@ -263,10 +264,18 @@ class ContentController extends Controller
         $tags           = implode(',', isset($tags) ? $tags : []);
         $contentset     = $content->set;
         $contenttypes = [ 8 => 'فیلم' , 1 =>    'جزوه' , 9 => 'مقاله'];
+        $sections    = Section::all()->pluck('name' , 'id')->toArray();
+        $sections[0] = 'ندارد';
+        $sections    = array_sort_recursive($sections);
 
-        $result = compact('content', 'validSinceTime', 'tags', 'contentset' , 'contenttypes' );
+        $result = compact('content', 'validSinceTime', 'tags', 'contentset' , 'contenttypes' , 'sections' );
         $view = view('content.edit', $result);
         return httpResponse(null, $view);
+    }
+
+    public function editDescription(Content $content)
+    {
+        return view('content.editDescription' , compact('content'));
     }
 
     /**
@@ -283,11 +292,13 @@ class ContentController extends Controller
 
         $files =$this->makeContentFilesArray($contentTypeId,$contentsetId,$fileName,$isFree);
 
-        $thumbnailFileName = pathinfo(parse_url($fileName)['path'], PATHINFO_FILENAME) . '.jpg' ;
-        $thumbnail = $this->makeContentThumbnailStd($contentsetId,$thumbnailFileName);
+        if($contentTypeId != Content::CONTENT_TYPE_PAMPHLET){
+            $thumbnailFileName = pathinfo(parse_url($fileName)['path'], PATHINFO_FILENAME) . '.jpg' ;
+            $thumbnail = $this->makeContentThumbnailStd($contentsetId,$thumbnailFileName);
 
-        if(isset($thumbnail)){
-            $content->thumbnail = $thumbnail;
+            if(isset($thumbnail)){
+                $content->thumbnail = $thumbnail;
+            }
         }
 
         if(isset($files)) {
@@ -340,19 +351,21 @@ class ContentController extends Controller
             $thumbnailFileName = pathinfo(parse_url($fileName)['path'], PATHINFO_FILENAME) . '.jpg';
         }
 
-        if($request->hasFile('thumbnail') && isset($content->contentset_id)){
-            $thumbnailFile = $this->getRequestFile($request->all(), 'thumbnail');
-            if(!isset($thumbnailFileName)) {
-                $thumbnailFileName = $thumbnailFile->getClientOriginalName();
+        if($content->contenttype_id != Content::CONTENT_TYPE_PAMPHLET){
+            if($request->hasFile('thumbnail') && isset($content->contentset_id)){
+                $thumbnailFile = $this->getRequestFile($request->all(), 'thumbnail');
+                if(!isset($thumbnailFileName)) {
+                    $thumbnailFileName = $thumbnailFile->getClientOriginalName();
+                }
+
+                if(Storage::disk(config('constants.DISK25'))->put('/'.$content->contentset_id.'/'.$thumbnailFileName , File::get($thumbnailFile))){
+                    Storage::disk(config('constants.DISK25'))->delete('/'.$content->contentset_id.'/'.$thumbnailFileName.'.webp');
+                }
             }
 
-            if(Storage::disk(config('constants.DISK25'))->put('/'.$content->contentset_id.'/'.$thumbnailFileName , File::get($thumbnailFile))){
-                Storage::disk(config('constants.DISK25'))->delete('/'.$content->contentset_id.'/'.$thumbnailFileName.'.webp');
+            if(isset($thumbnailFileName)) {
+                $content->thumbnail = $this->makeContentThumbnailStd($contentsetId,$thumbnailFileName);
             }
-        }
-
-        if(isset($thumbnailFileName)) {
-            $content->thumbnail = $this->makeContentThumbnailStd($contentsetId,$thumbnailFileName);
         }
 
         if(isset($files)){
@@ -362,9 +375,29 @@ class ContentController extends Controller
 
         $this->fillContentFromRequest($request->all(), $content);
 
+        if($request->has('acceptTmpDescription') && $user->can(config('constants.ACCEPT_CONTENT_TMP_DESCRIPTION_ACCESS')) && !is_null($content->tmp_description)){
+            $content->description     = $content->tmp_description;
+            $content->tmp_description = null;
+        }
+
         if ($content->update()) {
             session()->put('success', 'اصلاح محتوا با موفقیت انجام شد');
         } else {
+            session()->put('error', 'خطای پایگاه داده');
+        }
+
+        return redirect()->back();
+    }
+
+    public function updatePendingDescription(Request $request , Content $content)
+    {
+        $updateResult = $content->update([
+            'temp_description' => $request->get('description'),
+        ]);
+
+        if($updateResult){
+            session()->put('success', 'اصلاح محتوا با موفقیت انجام شد');
+        }else{
             session()->put('error', 'خطای پایگاه داده');
         }
 
@@ -419,10 +452,13 @@ class ContentController extends Controller
 
         $files =$this->makeContentFilesArray($contentTypeId,$contentsetId,$newFileFullName,$content->isFree);
 
-        $thumbnailFileName = pathinfo(parse_url($newFileFullName)['path'], PATHINFO_FILENAME) . '.jpg' ;
-        $thumbnail = $this->makeContentThumbnailStd($contentsetId,$thumbnailFileName);
-        if(isset($thumbnail)){
-            $content->thumbnail = $thumbnail;
+        if($content->contenttype_id != Content::CONTENT_TYPE_PAMPHLET){
+            $thumbnailFileName = pathinfo(parse_url($newFileFullName)['path'], PATHINFO_FILENAME) . '.jpg' ;
+            $thumbnail = $this->makeContentThumbnailStd($contentsetId,$thumbnailFileName);
+            if(isset($thumbnail)){
+                $content->thumbnail = $thumbnail;
+            }
+
         }
 
         if(!empty($files)) {
@@ -434,6 +470,13 @@ class ContentController extends Controller
         Cache::tags('content')->flush();
         session()->flash('success', 'تغییر نام با موفقیت انجام شد');
         return redirect()->back();
+    }
+
+    public function indexPendingDescriptionContent()
+    {
+        $contents = Content::whereNotNull('tmp_description')->paginate(10 , ['*']);
+
+        return view('content.listPendingDescription' , compact('contents'));
     }
 
     /*
@@ -515,10 +558,20 @@ class ContentController extends Controller
         $pamphlet   = array_get($inputData , 'pamphlet');
 
         $content->fill($inputData);
-        $content->validSince = explode(' ', $validSinceDateTime)[0];
+
+        if(!$content->isEnable() && $enabled){
+            $content->validSince = Carbon::now('Asia/Tehran');
+        }else{
+            $content->validSince = explode(' ', $validSinceDateTime)[0];
+        }
+
         $content->enable     = $enabled ? 1 : 0;
         $content->isFree     = $isFree ? 1 : 0;
         $content->tags       = convertTagStringToArray($tagString);
+
+        if(array_get($inputData , 'section_id') == 0){
+            $content->section_id = null;
+        }
 
         if(isset($pamphlet)){
             $files =$this->storePamphletOfContent( $content , $pamphlet);

@@ -157,6 +157,7 @@
                         </div>
                     </div>
                 </div>
+                @permission((config('constants.ADD_PRODUCT_TO_SET_ACCESS')))
                 <div>
 
                     <div class="m-divider m--margin-top-50">
@@ -174,7 +175,6 @@
                 </div>
 
                 @if($editForm)
-
                 <div>
                     <div class="m-divider m--margin-top-50">
                         <span></span>
@@ -213,6 +213,7 @@
                     </table>
                 </div>
                 @endif
+                @endpermission
 
                 <button type="submit" class="btn m-btn--pill m-btn--air btn-warning a--full-width m--margin-top-30">
                     @if($editForm)

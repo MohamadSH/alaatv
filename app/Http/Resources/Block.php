@@ -8,7 +8,10 @@ use Illuminate\Http\Resources\Json\JsonResource;
  * Class Block
  *
  * @mixin \App\Block
- * */
+ *
+ * @property mixed notRedirectedContents
+ * @property mixed notRedirectedSets
+ */
 class Block extends JsonResource
 {
     /**
@@ -22,11 +25,11 @@ class Block extends JsonResource
     {
         if (!($this->resource instanceof \App\Block)) {
             return [
-            
+
             ];
         }
-        $contests = $this->contents;
-        $sets     = $this->sets;
+        $contests = $this->notRedirectedContents;
+        $sets     = $this->notRedirectedSets;
         $products = $this->products;
         $banners  = $this->banners;
         $array    = [

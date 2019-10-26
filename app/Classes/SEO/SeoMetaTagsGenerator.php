@@ -22,11 +22,11 @@ class SeoMetaTagsGenerator
     
     public const SEO_MOD_GENERAL_TAGS = 5;
     
-    private const SEO_TYPE_VIDEO = "video";
+    private const SEO_TYPE_VIDEO = 'video';
     
-    private const SEO_TYPE_WEBSITE = "website";
+    private const SEO_TYPE_WEBSITE = 'website';
     
-    private const SEO_TYPE_ARTICLE = "article";
+    private const SEO_TYPE_ARTICLE = 'article';
     
     protected $title;
     
@@ -120,7 +120,7 @@ class SeoMetaTagsGenerator
                     ->setType(self::SEO_TYPE_WEBSITE);
                 break;
             default:
-                throw new \Exception("seoMod should be set!");
+                throw new \Exception('seoMod should be set!');
         }
     }
     

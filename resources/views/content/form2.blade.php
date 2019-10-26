@@ -136,12 +136,14 @@
                 <li class="list-group-item text-center m--font-danger " style="font-size: small">فایلی درج نشده است</li>
             @endif
         </ul>
-        <div class="row">
-            <div class="col-md-12">
-                <img src="{{$content->thumbnail}}" width="100%">
-                <input type="file" name="thumbnail">
+        @if($content->contenttype_id != config('constants.CONTENT_TYPE_PAMPHLET'))
+            <div class="row">
+                <div class="col-md-12">
+                    <img src="{{$content->thumbnail}}" width="100%">
+                    <input type="file" name="thumbnail">
+                </div>
             </div>
-        </div>
+        @endif
         @if($content->isFree && $content->contenttype_id == config('constants.CONTENT_TYPE_PAMPHLET'))
             <div class="row">
                 <label class=" col-md-4 control-label red" for="pamphlet">آپلود فایل جزوه</label>
@@ -239,9 +241,6 @@
                 </label>
                 <div class="col-md-9">
                     {!! Form::text('order', null, ['class' => 'form-control', 'id' => 'order', 'maxlength'=>'100' ]) !!}
-                    <span class="form-control-feedback">
-                               <strong></strong>
-                   </span>
                 </div>
             </div>
         </div>
@@ -251,9 +250,15 @@
                 </label>
                 <div class="col-md-9">
                     {!! Form::select('contenttype_id', $contenttypes, null ,['class' => 'form-control m-input m-input--air', 'id' => 'contenttypes']) !!}
-                    <span class="form-control-feedback">
-                               <strong></strong>
-                   </span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="row">
+                <label class="col-md-2 control-label" for="name">سکشن محتوا :
+                </label>
+                <div class="col-md-9">
+                    {!! Form::select('section_id', $sections, null ,['class' => 'form-control m-input m-input--air', 'id' => 'sections']) !!}
                 </div>
             </div>
         </div>
@@ -264,9 +269,6 @@
                 </label>
                 <div class="col-md-9">
                     {!! Form::text('name', null, ['class' => 'form-control', 'id' => 'name', 'maxlength'=>'100' ]) !!}
-                    <span class="form-control-feedback">
-                                                   <strong></strong>
-                                           </span>
                 </div>
             </div>
         </div>
@@ -279,17 +281,37 @@
                 </div>
             </div>
         </div>
-        @role((config("constants.ROLE_ADMIN")))
-        <div class="form-group">
-            <div class="row">
-                <label class="col-md-2 control-label" for="context">مقاله:
-                </label>
-                <div class="col-md-9">
-                    {!! Form::textarea('context', null, ['class' => 'form-control', 'id' => 'contextSummerNote', 'rows' => '5' ]) !!}
+        @if(isset($content) && isset($content->tmp_description))
+            @permission((config('constants.ACCEPT_CONTENT_TMP_DESCRIPTION_ACCESS')))
+            <div class="form-group">
+                <div class="row">
+                    <label class="col-md-2 control-label" for="description">توضیح تایید نشده:</label>
+                    <div class="col-md-9">
+                        {!! Form::textarea('tmp_description', null, ['class' => 'form-control', 'id' => 'descriptionSummerNote', 'rows' => '5' ]) !!}
+                    </div>
                 </div>
             </div>
-        </div>
-        @endability
+            <div class="form-group">
+                <div class="row">
+                    <label class="col-md-2 control-label" for="description">تایید کردن توضیح :</label>
+                    {!!Form::checkbox('acceptTmpDescription',null,null,['value' => '1'])!!}
+                </div>
+            </div>
+            @endpermission
+        @endif
+        @if(isset($content) && $content->contenttype_id == config('constants.CONTENT_TYPE_ARTICLE'))
+            @permission((config('constants.EDIT_ARTICLE_ACCESS')))
+            <div class="form-group">
+                <div class="row">
+                    <label class="col-md-2 control-label" for="context">مقاله:
+                    </label>
+                    <div class="col-md-9">
+                        {!! Form::textarea('context', null, ['class' => 'form-control', 'id' => 'contextSummerNote', 'rows' => '5' ]) !!}
+                    </div>
+                </div>
+            </div>
+            @endpermission
+        @endif
         <div class="form-group">
             <div class="row">
                 <label class="col-md-2 control-label" for="tags">
