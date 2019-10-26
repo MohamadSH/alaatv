@@ -8,6 +8,9 @@ use Auth;
 use Carbon\Carbon;
 use App\Traits\Helper;
 use App\Traits\ProductCommon;
+use Eloquent;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Collection;
 use App\Collection\OrderCollections;
 use App\Collection\ProductCollection;
@@ -46,57 +49,57 @@ use App\Classes\Checkout\Alaa\ReObtainOrderFromRecords;
  *           تکمیلی مشتری برای این سفارش
  * @property string|null                                                              $checkOutDateTime     تاریخ تسویه
  *           حساب کامل
- * @property \Carbon\Carbon|null                                                      $created_at
- * @property \Carbon\Carbon|null                                                      $updated_at
+ * @property Carbon|null                                                      $created_at
+ * @property Carbon|null                                                      $updated_at
  * @property string|null                                                              $completed_at         مشخص کننده
  *           زمان تکمیل سفارش کاربر
- * @property \Carbon\Carbon|null                                                      $deleted_at
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Transaction[]         $archivedSuccessfulTransactions
- * @property-read \App\Coupon|null                                                    $coupon
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Orderfile[]           $files
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Orderproduct[]        $normalOrderproducts
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Transaction[]         $onlinetransactions
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Ordermanagercomment[] $ordermanagercomments
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Orderpostinginfo[]    $orderpostinginfos
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Orderproduct[]        $orderproducts
- * @property-read \App\Orderstatus|null                                               $orderstatus
- * @property-read \App\Paymentstatus|null                                             $paymentstatus
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Transaction[]         $pendingTransactions
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Transaction[]         $successfulTransactions
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Transaction[]         $suspendedTransactions
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Transaction[]         $transactions
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Transaction[]         $unpaidTransactions
- * @property-read \App\User|null                                                      $user
+ * @property Carbon|null                                                      $deleted_at
+ * @property-read \Illuminate\Database\Eloquent\Collection|Transaction[] $archivedSuccessfulTransactions
+ * @property-read Coupon|null                                                    $coupon
+ * @property-read \Illuminate\Database\Eloquent\Collection|Orderfile[] $files
+ * @property-read \Illuminate\Database\Eloquent\Collection|Orderproduct[] $normalOrderproducts
+ * @property-read \Illuminate\Database\Eloquent\Collection|Transaction[] $onlinetransactions
+ * @property-read \Illuminate\Database\Eloquent\Collection|Ordermanagercomment[] $ordermanagercomments
+ * @property-read \Illuminate\Database\Eloquent\Collection|Orderpostinginfo[] $orderpostinginfos
+ * @property-read \Illuminate\Database\Eloquent\Collection|Orderproduct[] $orderproducts
+ * @property-read Orderstatus|null                                               $orderstatus
+ * @property-read Paymentstatus|null                                             $paymentstatus
+ * @property-read \Illuminate\Database\Eloquent\Collection|Transaction[] $pendingTransactions
+ * @property-read \Illuminate\Database\Eloquent\Collection|Transaction[] $successfulTransactions
+ * @property-read \Illuminate\Database\Eloquent\Collection|Transaction[] $suspendedTransactions
+ * @property-read \Illuminate\Database\Eloquent\Collection|Transaction[] $transactions
+ * @property-read \Illuminate\Database\Eloquent\Collection|Transaction[] $unpaidTransactions
+ * @property-read User|null                                                      $user
  * @method static bool|null forceDelete()
  * @method static \Illuminate\Database\Query\Builder|Order onlyTrashed()
  * @method static bool|null restore()
- * @method static \Illuminate\Database\Eloquent\Builder|Order whereCheckOutDateTime($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Order whereCompletedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Order whereCost($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Order whereCostwithoutcoupon($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Order whereCouponDiscount($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Order whereCouponDiscountAmount($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Order whereCouponId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Order whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Order whereCustomerDescription($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Order whereCustomerExtraInfo($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Order whereDeletedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Order whereDiscount($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Order whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Order whereOrderstatusId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Order wherePaymentstatusId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Order whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Order whereUserId($value)
+ * @method static Builder|Order whereCheckOutDateTime($value)
+ * @method static Builder|Order whereCompletedAt($value)
+ * @method static Builder|Order whereCost($value)
+ * @method static Builder|Order whereCostwithoutcoupon($value)
+ * @method static Builder|Order whereCouponDiscount($value)
+ * @method static Builder|Order whereCouponDiscountAmount($value)
+ * @method static Builder|Order whereCouponId($value)
+ * @method static Builder|Order whereCreatedAt($value)
+ * @method static Builder|Order whereCustomerDescription($value)
+ * @method static Builder|Order whereCustomerExtraInfo($value)
+ * @method static Builder|Order whereDeletedAt($value)
+ * @method static Builder|Order whereDiscount($value)
+ * @method static Builder|Order whereId($value)
+ * @method static Builder|Order whereOrderstatusId($value)
+ * @method static Builder|Order wherePaymentstatusId($value)
+ * @method static Builder|Order whereUpdatedAt($value)
+ * @method static Builder|Order whereUserId($value)
  * @method static \Illuminate\Database\Query\Builder|Order withTrashed()
  * @method static \Illuminate\Database\Query\Builder|Order withoutTrashed()
- * @mixin \Eloquent
- * @method static \Illuminate\Database\Eloquent\Builder|Order newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Order newQuery()
+ * @mixin Eloquent
+ * @method static Builder|Order newModelQuery()
+ * @method static Builder|Order newQuery()
  * @property-read array|bool                                                          $coupon_discount_type
  * @property-read mixed                                                               $number_of_products
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Order query()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel disableCache()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel withCacheCooldownSeconds($seconds)
+ * @method static Builder|Order query()
+ * @method static Builder|BaseModel disableCache()
+ * @method static Builder|BaseModel withCacheCooldownSeconds($seconds)
  * @property-read mixed                                                               $invoice
  * @property-read mixed                                                               $info
  * @property mixed           donates
@@ -122,8 +125,6 @@ use App\Classes\Checkout\Alaa\ReObtainOrderFromRecords;
  * @property-read mixed                                                               $cache_cooldown_seconds
  * @property-read int|null $archived_successful_transactions_count
  * @property-read int|null $files_count
- * @property-read int $donate_amount
- * @property-read \Collection $donates
  * @property-read mixed $edit_link
  * @property-read mixed $none_wallet_successful_transactions
  * @property-read mixed $purchased_orderproducts
@@ -224,7 +225,6 @@ class Order extends BaseModel
         'user_id',
         'updated_at',
         'deleted_at',
-        'created_at',
     ];
 
     public static function orderStatusFilter($orders, $orderStatusesId)
@@ -309,7 +309,7 @@ class Order extends BaseModel
      * @param  null   $type
      * @param  array  $filters
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany|Orderproduct
+     * @return HasMany|Orderproduct
      */
     public function orderproducts($type = null, $filters = [])
     {
@@ -462,7 +462,7 @@ class Order extends BaseModel
      *
      * @param  array  $orderproductTypes
      *
-     * @return \Illuminate\Database\Eloquent\Collection|\Illuminate\Support\Collection
+     * @return \Illuminate\Database\Eloquent\Collection|Collection
      */
     public function products(array $orderproductTypes = [])
     {
@@ -758,7 +758,7 @@ class Order extends BaseModel
     }
 
     /**
-     * @return \Illuminate\Support\Collection|null
+     * @return Collection|null
      */
     public function reviewCouponProducts(): ?Collection
     {
@@ -815,7 +815,7 @@ class Order extends BaseModel
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany|Transaction
+     * @return HasMany|Transaction
      */
     public function suspendedTransactions()
     {
