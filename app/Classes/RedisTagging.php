@@ -157,6 +157,7 @@ class RedisTagging extends Singleton
     'inter'): void
     {
 
+        
         $redis  = Redis::connection('redisDB');
         $ns     = $this->prefix.':'.$bucket;
         $prefix = $ns.':TAGS:';
@@ -186,9 +187,9 @@ class RedisTagging extends Singleton
             foreach ($tags as $tag) {
                 $keys[] = $prefix.$tag;
             }
+            
             try {
                 if (strcmp($type, self::CONST_TYPE_INTER) === 0) {
-//                        $redis->zInter($randKey, $keys, null, 'MIN');
                     $redis->zinterstore($randKey, $keys, ['min']);
                 } else {
                     $redis->zUnion($randKey, $keys, null, 'MIN');
