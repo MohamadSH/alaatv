@@ -3,6 +3,9 @@
 namespace App;
 
 use App\Adapter\AlaaSftpAdapter;
+use Carbon\Carbon;
+use Eloquent;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
 use Storage;
@@ -10,41 +13,41 @@ use Storage;
 /**
  * App\Slideshow
  *
- * @property int         $id
- * @property int|null    $websitepage_id آی دی مشخص کننده صفحه محل نمایش اسلاید
- * @property string|null $title
- * @property string|null $shortDescription
- * @property string|null $photo
- * @property string|null $link
- * @property int         $order
- * @property int         $isEnable
- * @property \Carbon\Carbon|null        $created_at
- * @property \Carbon\Carbon|null        $updated_at
- * @property \Carbon\Carbon|null        $deleted_at
- * @property-read \App\Websitepage|null $websitepage
+ * @property int                   $id
+ * @property int|null              $websitepage_id آی دی مشخص کننده صفحه محل نمایش اسلاید
+ * @property string|null           $title
+ * @property string|null           $shortDescription
+ * @property string|null           $photo
+ * @property string|null           $link
+ * @property int                   $order
+ * @property int                   $isEnable
+ * @property Carbon|null   $created_at
+ * @property Carbon|null   $updated_at
+ * @property Carbon|null   $deleted_at
+ * @property-read Websitepage|null $websitepage
  * @method static bool|null forceDelete()
- * @method static \Illuminate\Database\Query\Builder|\App\Slideshow onlyTrashed()
+ * @method static \Illuminate\Database\Query\Builder|Slideshow onlyTrashed()
  * @method static bool|null restore()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Slideshow whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Slideshow whereDeletedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Slideshow whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Slideshow whereIsEnable($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Slideshow whereLink($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Slideshow whereOrder($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Slideshow wherePhoto($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Slideshow whereShortDescription($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Slideshow whereTitle($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Slideshow whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Slideshow whereWebsitepageId($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Slideshow withTrashed()
- * @method static \Illuminate\Database\Query\Builder|\App\Slideshow withoutTrashed()
- * @mixin \Eloquent
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Slideshow newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Slideshow newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Slideshow query()
+ * @method static Builder|Slideshow whereCreatedAt($value)
+ * @method static Builder|Slideshow whereDeletedAt($value)
+ * @method static Builder|Slideshow whereId($value)
+ * @method static Builder|Slideshow whereIsEnable($value)
+ * @method static Builder|Slideshow whereLink($value)
+ * @method static Builder|Slideshow whereOrder($value)
+ * @method static Builder|Slideshow wherePhoto($value)
+ * @method static Builder|Slideshow whereShortDescription($value)
+ * @method static Builder|Slideshow whereTitle($value)
+ * @method static Builder|Slideshow whereUpdatedAt($value)
+ * @method static Builder|Slideshow whereWebsitepageId($value)
+ * @method static \Illuminate\Database\Query\Builder|Slideshow withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|Slideshow withoutTrashed()
+ * @mixin Eloquent
+ * @method static Builder|Slideshow newModelQuery()
+ * @method static Builder|Slideshow newQuery()
+ * @method static Builder|Slideshow query()
  * @property-read mixed                 $url
- * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel disableCache()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel withCacheCooldownSeconds($seconds)
+ * @method static Builder|BaseModel disableCache()
+ * @method static Builder|BaseModel withCacheCooldownSeconds($seconds)
  * @property-read mixed  $cache_cooldown_seconds
  * @property int in_new_tab
  */
@@ -83,12 +86,15 @@ class Slideshow extends BaseModel
             'page',
         ])
             ->remember('getMainBanner', config('constants.CACHE_600'), function () {
-                return Websitepage::where('url', "/home")
-                    ->first()
-                    ->slides()
-                    ->where("isEnable", 1)
-                    ->orderBy("order")
-                    ->get();
+    
+                $page = Websitepage::where('url', "/home")
+                    ->first();
+                
+                return !isset($page) ? collect() : $page
+                        ->slides()
+                        ->where("isEnable", 1)
+                        ->orderBy("order")
+                        ->get() ?? collect();
             });
     }
 
