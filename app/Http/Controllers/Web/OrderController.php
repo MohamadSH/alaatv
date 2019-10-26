@@ -309,23 +309,6 @@ class OrderController extends Controller
             }
         }
 
-        //        $withoutAddress = Input::get("withoutAddress");
-        //        if(isset($withoutAddress)) {
-        //            $orders = $orders->whereHas("user" , function ($q){
-        //                $q->where(function ($q){
-        //                    $q->whereNull("address")->orWhere("address" , "");
-        //                });
-        //            });
-        //        }
-        //        else{
-        //            $address = Input::get("address");
-        //            if(isset($address) && strlen($address) > 0) {
-        //                $orders = $orders->whereHas("user" , function ($q) use ($address){
-        //                    $q->where('address', 'like', '%' . $address . '%');
-        //                });
-        //            }
-        //        }
-
         $addressSpecialFilter = Input::get('addressSpecialFilter');
         if (isset($addressSpecialFilter)) {
             switch ($addressSpecialFilter) {
@@ -452,10 +435,6 @@ class OrderController extends Controller
                         ->orderBy('users.firstName', $sortType)
                         ->select('orders.*');
                 }
-                //            elseif(strcmp($sortBy, "productName") == 0){
-                //                $orders = $orders->join('orderproducts', 'orders.id', '=', 'orderproducts.order_id')->join('products' , 'products.id', '=', 'orderproducts.product_id')->orderBy('products.name' , $sortType)
-                //                    ->select('orders.*');
-                //            }
                 else {
                     $orders = $orders->orderBy($sortBy, $sortType);
                 }
@@ -466,32 +445,6 @@ class OrderController extends Controller
 
         $orders = $orders->paginate(10, ['*'], 'orders');
         return $orders;
-        /**
-         *  obtaining orderproducts for checkout
-         */
-        $myOrderproducts = [];
-        if (isset($productsId)) {
-            foreach ($orders as $order) {
-                $checkoutOrderproducts = $order->orderproducts(config('constants.ORDER_PRODUCT_TYPE_DEFAULT'))
-                    ->where(function ($q) {
-                        $q->where('checkoutstatus_id', 1)
-                            ->orWhereNull('checkoutstatus_id');
-                    });
-                if (!in_array(0, $productsId)) {
-                    $checkoutOrderproducts->whereIn('product_id', $productsId)
-                        ->get();
-                }
-
-                $myOrderproducts = array_merge($myOrderproducts, $checkoutOrderproducts->pluck('id')
-                    ->toArray());
-            }
-        }
-        $result = [
-            'index'           => View::make('order.index', compact('orders', 'orderstatuses'))
-                ->render(),
-            'myOrderproducts' => $myOrderproducts,
-        ];
-        return response(json_encode($result, JSON_UNESCAPED_UNICODE), Response::HTTP_OK)->header('Content-Type', 'application/json');
     }
 
     public function create()

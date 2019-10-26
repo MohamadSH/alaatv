@@ -94,7 +94,7 @@
                                 <i class="fa fa-cogs"></i>
                             </span>
                             <h3 class="m-portlet__head-text">
-                                مدیریت سفارش های بسته شده
+                                مدیریت سفارش های
                             </h3>
                         </div>
                     </div>
@@ -134,7 +134,7 @@
                                 </div>
                             </div>
                             @endpermission
-    
+
                             @permission((config('constants.SEE_ORDER_FILTERS')))
                             <div class="form-group">
                                 <div class="row">
