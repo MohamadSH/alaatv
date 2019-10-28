@@ -283,20 +283,25 @@
         </div>
         @if(isset($content) && isset($content->tmp_description))
             @permission((config('constants.ACCEPT_CONTENT_TMP_DESCRIPTION_ACCESS')))
+            <hr>
             <div class="form-group">
                 <div class="row">
-                    <label class="col-md-2 control-label" for="description">توضیح تایید نشده:</label>
+                    <label class="col-md-2 control-label font-weight-bold" for="description">توضیح تایید نشده:</label>
                     <div class="col-md-9">
-                        {!! Form::textarea('tmp_description', null, ['class' => 'form-control', 'id' => 'descriptionSummerNote', 'rows' => '5' ]) !!}
+                        {!! Form::textarea('tmp_description', null, ['class' => 'form-control', 'id' => 'tempDescriptionSummerNote', 'rows' => '5' ]) !!}
                     </div>
                 </div>
             </div>
             <div class="form-group">
                 <div class="row">
-                    <label class="col-md-2 control-label" for="description">تایید کردن توضیح :</label>
-                    {!!Form::checkbox('acceptTmpDescription',null,null,['value' => '1'])!!}
+                    <label class="col-md-2 control-label" for="description">{!!Form::checkbox('acceptTmpDescription',null,null,['value' => '1'])!!}تایید کردن توضیح</label>
+                    <input class="btn btn-info" type="button" onClick="launch()" VALUE="توضیحات را مقایسه کن">
                 </div>
             </div>
+
+            <div id="descriptionComparisonOutput">
+            </div>
+            <hr>
             @endpermission
         @endif
         @if(isset($content) && $content->contenttype_id == config('constants.CONTENT_TYPE_ARTICLE'))
