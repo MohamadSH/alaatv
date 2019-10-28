@@ -321,6 +321,20 @@
                         </div>
                     </div>
                     @include('product.partials.tagsInput' )
+    
+                    <br>
+                    
+                    <div class="form-group ">
+                        <div class="row">
+                            <label class="col-md-3 control-label" for="tagsString">متن تگ ها: </label>
+                            <div class="col-md-9">
+                                <input class="form-control" id="tagsString" dir="ltr"
+                                                         name="tagsString" type="text"
+                                                         value="">
+                            </div>
+                        </div>
+                    </div>
+    
                     @include('product.partials.productBlock' )
                     <div class="form-actions">
                         <div class="row">

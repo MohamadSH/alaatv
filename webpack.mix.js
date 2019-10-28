@@ -1,6 +1,8 @@
 class Mix {
 
     constructor() {
+        require('dotenv').config();
+        this.appEnv = process.env.APP_ENV;
         this.outputCssFile = [];
         this.mix = require('laravel-mix');
         this.purify = require("purify-css");
@@ -42,8 +44,11 @@ class Mix {
 
         this.mix
             .scripts(jsArray, jsName)
-            .styles(cssArray, cssName)
-            .version();
+            .styles(cssArray, cssName);
+
+        if (this.mix.inProduction()) {
+            this.mix.version();
+        }
 
         this.outputCssFile.push({
             cssName: cssName,
@@ -64,18 +69,37 @@ class Mix {
         this.mixAdmin();
         this.mixCopyDirectory();
 
-        this.mix.then(() => {
-            this.purifyCss();
+        // if (this.mix.inProduction()) {
+        //     this.mix.then(() => {
+        //         this.purifyCss();
+        //
+        //         console.log('' +
+        //             '              ##       ##              ##             ##       ############## ##          ##          ####           ####      ##          ##\n' +
+        //             '             ####      ##             ####           ####            ##        ##        ##         ##    ##       ##    ##    ###        ###\n' +
+        //             '            ##  ##     ##            ##  ##         ##  ##           ##         ##      ##        ##             ##        ##  ####      ####\n' +
+        //             '           ##    ##    ##           ##    ##       ##    ##          ##          ##    ##        ##             ##          ## ## ##    ## ##\n' +
+        //             '          ##########   ##          ##########     ##########         ##           ##  ##          ##             ##        ##  ##  ##  ##  ##\n' +
+        //             '         ##        ##  ##         ##        ##   ##        ##        ##            ####      ###    ##    ##       ##    ##    ##   ####   ##\n' +
+        //             '        ##          ## ######### ##          ## ##          ##       ##             ##       ###      ####           ####      ##    ##    ##\n');
+        //     });
+        // }
 
-            console.log('' +
-                '              ##       ##              ##             ##       ############## ##          ##          ####           ####      ##          ##\n' +
-                '             ####      ##             ####           ####            ##        ##        ##         ##    ##       ##    ##    ###        ###\n' +
-                '            ##  ##     ##            ##  ##         ##  ##           ##         ##      ##        ##             ##        ##  ####      ####\n' +
-                '           ##    ##    ##           ##    ##       ##    ##          ##          ##    ##        ##             ##          ## ## ##    ## ##\n' +
-                '          ##########   ##          ##########     ##########         ##           ##  ##          ##             ##        ##  ##  ##  ##  ##\n' +
-                '         ##        ##  ##         ##        ##   ##        ##        ##            ####      ###    ##    ##       ##    ##    ##   ####   ##\n' +
-                '        ##          ## ######### ##          ## ##          ##       ##             ##       ###      ####           ####      ##    ##    ##\n');
-        });
+        if (this.appEnv === 'development') {
+
+        } else {
+            this.mix.then(() => {
+                this.purifyCss();
+
+                console.log('' +
+                    '              ##       ##              ##             ##       ############## ##          ##          ####           ####      ##          ##\n' +
+                    '             ####      ##             ####           ####            ##        ##        ##         ##    ##       ##    ##    ###        ###\n' +
+                    '            ##  ##     ##            ##  ##         ##  ##           ##         ##      ##        ##             ##        ##  ####      ####\n' +
+                    '           ##    ##    ##           ##    ##       ##    ##          ##          ##    ##        ##             ##          ## ## ##    ## ##\n' +
+                    '          ##########   ##          ##########     ##########         ##           ##  ##          ##             ##        ##  ##  ##  ##  ##\n' +
+                    '         ##        ##  ##         ##        ##   ##        ##        ##            ####      ###    ##    ##       ##    ##    ##   ####   ##\n' +
+                    '        ##          ## ######### ##          ## ##          ##       ##             ##       ###      ####           ####      ##    ##    ##\n');
+            });
+        }
     }
 
     purifyCss() {
@@ -608,6 +632,7 @@ class Mix {
             ],
             'public/css/admin-all.css',
             [
+                    'node_modules/persianjs/persian.min.js',
                     'node_modules/summernote/dist/summernote.js',
                     'node_modules/block-ui/jquery.blockUI.js',
                     'node_modules/tooltip/dist/Tooltip.js',
