@@ -697,9 +697,20 @@ class Mix {
                 'public/js/admin-content-create.js'
             );
     }
+    mixAdminContentEdit() {
+        this.mixCssAndJs([
+            ],
+                'public/css/admin-content-edit.css',
+            [
+                'node_modules/diff-match-patch/index.js',
+                ],
+                'public/js/admin-content-edit.js'
+            );
+    }
     mixAdmin() {
         this.mixAdminBase();
         this.mixAdminContentCreate();
+        this.mixAdminContentEdit();
     }
 
     mixCopyDirectory() {

@@ -266,6 +266,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('donateOrder', 'Web\OrderController@donateOrder');
 
     Route::get('listContents/{set}', [SetController::class, 'indexContent'])->name('web.set.list.contents');
+    Route::get('listPendingDescriptionContents', [ContentController::class, 'indexPendingDescriptionContent'])->name('web.list.pending.description.content');
 
     Route::get('live' , '\\'.LiveController::class)->name('live');
     Route::post('startlive' , [LiveController::class, 'startLive'])->name('web.start.live');
