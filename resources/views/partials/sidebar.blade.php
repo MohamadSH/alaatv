@@ -123,7 +123,7 @@
                             <span class="m-menu__link-text m--font-bold m--font-focus">خالی کردن کش</span>
                         </a>
                     </li>
-                    @endability
+                    @endrole
 
                     @ability(config('constants.ROLE_ADMIN'),config('constants.USER_ADMIN_PANEL_ACCESS'))
                     <li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1">
