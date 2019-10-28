@@ -161,6 +161,14 @@
             var ds = dmp.diff_prettyHtml(d);
             document.getElementById('descriptionComparisonOutput').innerHTML = ds;
         }
+
+        function showTempDescription(){
+            $('#tempDescriptionCol').removeClass('d-none');
+        }
+
+        $(document).ready(function () {
+            launch();
+        });
         @endpermission
     </script>
 @endsection

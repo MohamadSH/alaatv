@@ -284,22 +284,21 @@
         @if(isset($content) && isset($content->tmp_description))
             @permission((config('constants.ACCEPT_CONTENT_TMP_DESCRIPTION_ACCESS')))
             <hr>
+            <textarea class="d-none"  id="tempDescriptionSummerNote">{{$content->tmp_description}}</textarea>
+            <div id="descriptionComparisonOutput">
+            </div>
             <div class="form-group">
                 <div class="row">
-                    <label class="col-md-2 control-label font-weight-bold" for="description">توضیح تایید نشده:</label>
-                    <div class="col-md-9">
-                        {!! Form::textarea('tmp_description', null, ['class' => 'form-control', 'id' => 'tempDescriptionSummerNote', 'rows' => '5' ]) !!}
+                    <label class="col-md-2 control-label" for="description">{!!Form::checkbox('acceptTmpDescription',null,null,['value' => '1'])!!}  تایید کردن توضیح</label>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="row">
+                    <input class="btn btn-info" type="button" onClick="showTempDescription()" VALUE="نمایش توضیحات موقت">
+                    <div class="col-md-12 d-none" id="tempDescriptionCol" >
+                        {!! $content->tmp_description !!}
                     </div>
                 </div>
-            </div>
-            <div class="form-group">
-                <div class="row">
-                    <label class="col-md-2 control-label" for="description">{!!Form::checkbox('acceptTmpDescription',null,null,['value' => '1'])!!}تایید کردن توضیح</label>
-                    <input class="btn btn-info" type="button" onClick="launch()" VALUE="توضیحات را مقایسه کن">
-                </div>
-            </div>
-
-            <div id="descriptionComparisonOutput">
             </div>
             <hr>
             @endpermission

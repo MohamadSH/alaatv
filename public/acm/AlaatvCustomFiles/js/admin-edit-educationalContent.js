@@ -15,7 +15,6 @@ var $modal = $('#ajax-modal');
 
 $('#descriptionSummerNote').summernote({height: 300});
 $('#descriptionSummerNote').summernote({height: 300});
-$('#tempDescriptionSummerNote').summernote({height: 300});
 function initialContentTypeSelect() {
     var selected = $("#rootContentTypes option:selected").text();
     if(selected == "آزمون")
