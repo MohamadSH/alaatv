@@ -9,9 +9,9 @@
         {{ $block->title }}
     </div>
     <div class="col-md-6">
-        <a href="#">
-            <button type="button" class="btn m-btn--pill m-btn--air btn-danger">حذف بلاک</button>
-        </a>
+{{--        <a href="#">--}}
+{{--            <button type="button" class="btn m-btn--pill m-btn--air btn-danger">حذف بلاک</button>--}}
+{{--        </a>--}}
         <a href="{{ route('block.edit', $block->id) }}" target="_blank">
             <button type="button" class="btn m-btn--pill m-btn--air btn-warning">ویرایش بلاک</button>
         </a>
