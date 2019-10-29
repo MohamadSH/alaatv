@@ -37,6 +37,7 @@
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00ffffff', endColorstr='#ffffff',GradientType=1 );
     /* IE6-9 */
     border-left:1px solid #fff;
+    top: 0;
 }
 
 .ribbon {
