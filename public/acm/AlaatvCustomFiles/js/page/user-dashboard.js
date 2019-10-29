@@ -21,7 +21,7 @@ var UserAssets = function () {
         }
 
         mApp.block('#'+modalId+' .modal-body', {
-            // overlayColor: "#000000",
+            overlayColor: "#000000",
             type: "loader",
             state: "success",
             message: "کمی صبر کنید..."
