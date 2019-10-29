@@ -2,10 +2,394 @@
 
 @section('page-css')
     <link href="{{ mix('/css/content-search.css') }}" rel="stylesheet" type="text/css"/>
-{{--    <link href="{{ asset('/acm/AlaatvCustomFiles/components/SearchBoxFilter/style.css') }}" rel="stylesheet">--}}
+    <link href="{{ asset('/acm/AlaatvCustomFiles/components/SearchBoxFilter/style.css') }}" rel="stylesheet">
+    <link href="{{ asset('/acm/AlaatvCustomFiles/components/SearchBoxFilter/searchResult.css') }}" rel="stylesheet">
 @endsection
 
 @section('content')
+    
+    <div class="row">
+        <div class="col-md-3">
+            <div class="SearchBoxFilter">
+                <div class="GroupFilters status-close">
+                    <div class="head">
+                        <div class="title">
+                            title
+                        </div>
+                        <div class="tools">
+                            <div class="openMode">
+                                <i class="fa fa-angle-up" aria-hidden="true"></i>
+                            </div>
+                            <div class="closeMode">
+                                <i class="fa fa-angle-down" aria-hidden="true"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="body">
+                        
+                        <div class="m-form">
+                            <div class="m-form__group form-group">
+                                <div class="m-checkbox-list">
+                                    <label class="m-checkbox m-checkbox--bold m-checkbox--state-warning">
+                                        <input type="checkbox"> جزوات
+                                        <span></span>
+                                    </label>
+                                    <label class="m-checkbox m-checkbox--bold m-checkbox--state-warning">
+                                        <input type="checkbox"> مقالات
+                                        <span></span>
+                                    </label>
+                                    <label class="m-checkbox m-checkbox--bold m-checkbox--state-warning">
+                                        <input type="checkbox"> محصولات
+                                        <span></span>
+                                    </label>
+                                    <label class="m-checkbox m-checkbox--bold m-checkbox--state-warning">
+                                        <input type="checkbox"> دوره های آموزشی
+                                        <span></span>
+                                    </label>
+                                    <label class="m-checkbox m-checkbox--bold m-checkbox--state-warning">
+                                        <input type="checkbox"> فیلم های آموزشی
+                                        <span></span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    
+                    </div>
+                </div>
+                <div class="GroupFilters status-close">
+                    <div class="head">
+                        <div class="title">
+                            title
+                        </div>
+                        <div class="tools">
+                            <div class="openMode">
+                                <i class="fa fa-angle-up" aria-hidden="true"></i>
+                            </div>
+                            <div class="closeMode">
+                                <i class="fa fa-angle-down" aria-hidden="true"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="body">
+                        
+                        <div class="m-form">
+                            <div class="m-form__group form-group">
+                                <div class="m-checkbox-list">
+                                    <label class="m-checkbox m-checkbox--bold m-checkbox--state-warning">
+                                        <input type="checkbox"> جزوات
+                                        <span></span>
+                                    </label>
+                                    <label class="m-checkbox m-checkbox--bold m-checkbox--state-warning">
+                                        <input type="checkbox"> مقالات
+                                        <span></span>
+                                    </label>
+                                    <label class="m-checkbox m-checkbox--bold m-checkbox--state-warning">
+                                        <input type="checkbox"> محصولات
+                                        <span></span>
+                                    </label>
+                                    <label class="m-checkbox m-checkbox--bold m-checkbox--state-warning">
+                                        <input type="checkbox"> دوره های آموزشی
+                                        <span></span>
+                                    </label>
+                                    <label class="m-checkbox m-checkbox--bold m-checkbox--state-warning">
+                                        <input type="checkbox"> فیلم های آموزشی
+                                        <span></span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    
+                    </div>
+                </div>
+                <div class="GroupFilters status-open">
+                    <div class="head">
+                        <div class="title">
+                            title
+                        </div>
+                        <div class="tools">
+                            <div class="openMode">
+                                <i class="fa fa-angle-up" aria-hidden="true"></i>
+                            </div>
+                            <div class="closeMode">
+                                <i class="fa fa-angle-down" aria-hidden="true"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="body">
+                        
+                        <div class="tools">
+                            <div class="m-input-icon m-input-icon--left m-input-icon--right">
+                                <input type="text" class="form-control m-input GroupFilters-Search" placeholder="جستجو..">
+                                <span class="m-input-icon__icon m-input-icon__icon--left">
+                                    <span>
+                                        <i class="fa fa-search" aria-hidden="true"></i>
+                                    </span>
+                                </span>
+                            </div>
+                        </div>
+                        
+                        <div class="m-form">
+                            <div class="m-form__group form-group">
+                                <div class="m-checkbox-list">
+                                    <label class="m-checkbox m-checkbox--bold m-checkbox--state-warning GroupFilters-item">
+                                        <input type="checkbox"> جزوات
+                                        <span></span>
+                                    </label>
+                                    <label class="m-checkbox m-checkbox--bold m-checkbox--state-warning GroupFilters-item">
+                                        <input type="checkbox"> مقالات
+                                        <span></span>
+                                    </label>
+                                    <label class="m-checkbox m-checkbox--bold m-checkbox--state-warning GroupFilters-item">
+                                        <input type="checkbox"> محصولات
+                                        <span></span>
+                                    </label>
+                                    <label class="m-checkbox m-checkbox--bold m-checkbox--state-warning GroupFilters-item">
+                                        <input type="checkbox"> دوره های آموزشی
+                                        <span></span>
+                                    </label>
+                                    <label class="m-checkbox m-checkbox--bold m-checkbox--state-warning GroupFilters-item">
+                                        <input type="checkbox"> فیلم های آموزشی
+                                        <span></span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    
+                    </div>
+                </div>
+                <div class="GroupFilters status-close">
+                    <div class="head">
+                        <div class="title">
+                            title
+                        </div>
+                        <div class="tools">
+                            <div class="openMode">
+                                <i class="fa fa-angle-up" aria-hidden="true"></i>
+                            </div>
+                            <div class="closeMode">
+                                <i class="fa fa-angle-down" aria-hidden="true"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="body">
+                        
+                        <div class="m-form">
+                            <div class="m-form__group form-group">
+                                <div class="m-checkbox-list">
+                                    <label class="m-checkbox m-checkbox--bold m-checkbox--state-warning">
+                                        <input type="checkbox"> جزوات
+                                        <span></span>
+                                    </label>
+                                    <label class="m-checkbox m-checkbox--bold m-checkbox--state-warning">
+                                        <input type="checkbox"> مقالات
+                                        <span></span>
+                                    </label>
+                                    <label class="m-checkbox m-checkbox--bold m-checkbox--state-warning">
+                                        <input type="checkbox"> محصولات
+                                        <span></span>
+                                    </label>
+                                    <label class="m-checkbox m-checkbox--bold m-checkbox--state-warning">
+                                        <input type="checkbox"> دوره های آموزشی
+                                        <span></span>
+                                    </label>
+                                    <label class="m-checkbox m-checkbox--bold m-checkbox--state-warning">
+                                        <input type="checkbox"> فیلم های آموزشی
+                                        <span></span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    
+                    </div>
+                </div>
+                <div class="GroupFilters status-close">
+                    <div class="head">
+                        <div class="title">
+                            title
+                        </div>
+                        <div class="tools">
+                            <div class="openMode">
+                                <i class="fa fa-angle-up" aria-hidden="true"></i>
+                            </div>
+                            <div class="closeMode">
+                                <i class="fa fa-angle-down" aria-hidden="true"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="body">
+                        
+                        <div class="m-form">
+                            <div class="m-form__group form-group">
+                                <div class="m-checkbox-list">
+                                    <label class="m-checkbox m-checkbox--bold m-checkbox--state-warning">
+                                        <input type="checkbox"> جزوات
+                                        <span></span>
+                                    </label>
+                                    <label class="m-checkbox m-checkbox--bold m-checkbox--state-warning">
+                                        <input type="checkbox"> مقالات
+                                        <span></span>
+                                    </label>
+                                    <label class="m-checkbox m-checkbox--bold m-checkbox--state-warning">
+                                        <input type="checkbox"> محصولات
+                                        <span></span>
+                                    </label>
+                                    <label class="m-checkbox m-checkbox--bold m-checkbox--state-warning">
+                                        <input type="checkbox"> دوره های آموزشی
+                                        <span></span>
+                                    </label>
+                                    <label class="m-checkbox m-checkbox--bold m-checkbox--state-warning">
+                                        <input type="checkbox"> فیلم های آموزشی
+                                        <span></span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-9">
+            <div class="searchResult">
+                <div class="carouselType"></div>
+                <div class="listType">
+                    <div class="item">
+                        <div class="pic">
+                            <img data-src="https://cdn.alaatv.com/upload/contentset/departmentlesson/tavarogh_zist11_201927071808.jpg" alt="" class="lazy-image" width="453" height="254">
+                        </div>
+                        <div class="content">
+                            <div class="title">
+                                <h2>صفر تا صد فیزیک یازدهم (نظام آموزشی جدید) (98-1397) فرشید داداشی</h2>
+                            </div>
+                            <div class="detailes">
+                                <div class="lesson">
+                                    فیلم جلسه 2 - فصل اول: الکتریستۀ ساکن (قسمت دوم)، روش باردار کردن اجسام
+                                </div>
+                                <div class="publishedDate">
+                                    آخرین به روز رسانی: 1398/2/12
+                                </div>
+                            </div>
+                            <div class="contentHover"></div>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <div class="pic">
+                            <img data-src="https://cdn.alaatv.com/upload/contentset/departmentlesson/tavarogh_zist11_201927071808.jpg" alt="" class="lazy-image" width="453" height="254">
+                        </div>
+                        <div class="content">
+                            <div class="title">
+                                <h2>صفر تا صد فیزیک یازدهم (نظام آموزشی جدید) (98-1397) فرشید داداشی</h2>
+                            </div>
+                            <div class="detailes">
+                                <div class="lesson">
+                                    فیلم جلسه 2 - فصل اول: الکتریستۀ ساکن (قسمت دوم)، روش باردار کردن اجسام
+                                </div>
+                                <div class="publishedDate">
+                                    آخرین به روز رسانی: 1398/2/12
+                                </div>
+                            </div>
+                            <div class="contentHover"></div>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <div class="pic">
+                            <img data-src="https://cdn.alaatv.com/upload/contentset/departmentlesson/tavarogh_zist11_201927071808.jpg" alt="" class="lazy-image" width="453" height="254">
+                        </div>
+                        <div class="content">
+                            <div class="title">
+                                <h2>صفر تا صد فیزیک یازدهم (نظام آموزشی جدید) (98-1397) فرشید داداشی</h2>
+                            </div>
+                            <div class="detailes">
+                                <div class="lesson">
+                                    فیلم جلسه 2 - فصل اول: الکتریستۀ ساکن (قسمت دوم)، روش باردار کردن اجسام
+                                </div>
+                                <div class="publishedDate">
+                                    آخرین به روز رسانی: 1398/2/12
+                                </div>
+                            </div>
+                            <div class="contentHover"></div>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <div class="pic">
+                            <img data-src="https://cdn.alaatv.com/upload/contentset/departmentlesson/tavarogh_zist11_201927071808.jpg" alt="" class="lazy-image" width="453" height="254">
+                        </div>
+                        <div class="content">
+                            <div class="title">
+                                <h2>صفر تا صد فیزیک یازدهم (نظام آموزشی جدید) (98-1397) فرشید داداشی</h2>
+                            </div>
+                            <div class="detailes">
+                                <div class="lesson">
+                                    فیلم جلسه 2 - فصل اول: الکتریستۀ ساکن (قسمت دوم)، روش باردار کردن اجسام
+                                </div>
+                                <div class="publishedDate">
+                                    آخرین به روز رسانی: 1398/2/12
+                                </div>
+                            </div>
+                            <div class="contentHover"></div>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <div class="pic">
+                            <img data-src="https://cdn.alaatv.com/upload/contentset/departmentlesson/tavarogh_zist11_201927071808.jpg" alt="" class="lazy-image" width="453" height="254">
+                        </div>
+                        <div class="content">
+                            <div class="title">
+                                <h2>صفر تا صد فیزیک یازدهم (نظام آموزشی جدید) (98-1397) فرشید داداشی</h2>
+                            </div>
+                            <div class="detailes">
+                                <div class="lesson">
+                                    فیلم جلسه 2 - فصل اول: الکتریستۀ ساکن (قسمت دوم)، روش باردار کردن اجسام
+                                </div>
+                                <div class="publishedDate">
+                                    آخرین به روز رسانی: 1398/2/12
+                                </div>
+                            </div>
+                            <div class="contentHover"></div>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <div class="pic">
+                            <img data-src="https://cdn.alaatv.com/upload/contentset/departmentlesson/tavarogh_zist11_201927071808.jpg" alt="" class="lazy-image" width="453" height="254">
+                        </div>
+                        <div class="content">
+                            <div class="title">
+                                <h2>صفر تا صد فیزیک یازدهم (نظام آموزشی جدید) (98-1397) فرشید داداشی</h2>
+                            </div>
+                            <div class="detailes">
+                                <div class="lesson">
+                                    فیلم جلسه 2 - فصل اول: الکتریستۀ ساکن (قسمت دوم)، روش باردار کردن اجسام
+                                </div>
+                                <div class="publishedDate">
+                                    آخرین به روز رسانی: 1398/2/12
+                                </div>
+                            </div>
+                            <div class="contentHover"></div>
+                        </div>
+                    </div>
+                    <div class="item">
+                        <div class="pic">
+                            <img data-src="https://cdn.alaatv.com/upload/contentset/departmentlesson/tavarogh_zist11_201927071808.jpg" alt="" class="lazy-image" width="453" height="254">
+                        </div>
+                        <div class="content">
+                            <div class="title">
+                                <h2>صفر تا صد فیزیک یازدهم (نظام آموزشی جدید) (98-1397) فرشید داداشی</h2>
+                            </div>
+                            <div class="detailes">
+                                <div class="lesson">
+                                    فیلم جلسه 2 - فصل اول: الکتریستۀ ساکن (قسمت دوم)، روش باردار کردن اجسام
+                                </div>
+                                <div class="publishedDate">
+                                    آخرین به روز رسانی: 1398/2/12
+                                </div>
+                            </div>
+                            <div class="contentHover"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     
     <div class="row">
         <div class="col a--multi-level-search" id="contentSearchFilter">
@@ -30,6 +414,7 @@
 
         </div>
     </div>
+    
     
     <div class="row">
         <div class="col notFoundMessage">

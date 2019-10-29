@@ -1,0 +1,55 @@
+.searchResult {
+  .listType {
+    .item:hover {
+      .contentHover {
+        background-color: #ff9000;
+        width: 100% !important;
+      }
+    }
+    .item {
+      position: relative;
+      z-index: 3;
+      background: white;
+      display: flex;
+      justify-content: flex-start;
+      cursor: pointer;
+      .pic {
+        width: 25%;
+        img {
+          max-width: 100%;
+        }
+      }
+      .content {
+        position: relative;
+        padding: 15px 5px;
+        width: 75%;
+        .title {
+          z-index: 2;
+          position: relative;
+          h2 {
+            font-size: 1.5rem;
+          }
+        }
+        .detailes {
+          z-index: 2;
+          position: relative;
+          .lesson {
+
+          }
+          .publishedDate {
+
+          }
+        }
+        .contentHover {
+          position: absolute;
+          top: 0;
+          right: 0;
+          width: 0;
+          height: 100%;
+          z-index: 1;
+          transition: all 0.5s;
+        }
+      }
+    }
+  }
+}

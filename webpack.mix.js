@@ -9,6 +9,7 @@ class Mix {
         this.mix.sass('public/acm/AlaatvCustomFiles/components/OwlCarouselType2/style.scss', 'public/acm/AlaatvCustomFiles/components/OwlCarouselType2');
         this.mix.sass('public/acm/AlaatvCustomFiles/components/MultiLevelSearch/style.scss', 'public/acm/AlaatvCustomFiles/components/MultiLevelSearch');
         this.mix.sass('public/acm/AlaatvCustomFiles/components/SearchBoxFilter/style.scss', 'public/acm/AlaatvCustomFiles/components/SearchBoxFilter');
+        this.mix.sass('public/acm/AlaatvCustomFiles/components/SearchBoxFilter/searchResult.scss', 'public/acm/AlaatvCustomFiles/components/SearchBoxFilter');
     }
 
     static getBaseCss() {
@@ -283,8 +284,8 @@ class Mix {
                     'node_modules/owl.carousel/dist/owl.carousel.js',
 
 
-                    // 'node_modules/persianjs/persian.min.js',
-                    // 'public/acm/AlaatvCustomFiles/components/SearchBoxFilter/script.js',
+                    'node_modules/persianjs/persian.min.js',
+                    'public/acm/AlaatvCustomFiles/components/SearchBoxFilter/script.js',
 
                     'public/acm/AlaatvCustomFiles/components/MultiLevelSearch/js.js',
                     'public/acm/AlaatvCustomFiles/js/page-content-search-filter-data.js',
