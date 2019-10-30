@@ -182,7 +182,7 @@
     <script type="text/javascript" defer>
     
     </script>
-    <script src="{{ mix('/js/content-show.js') }}" type="text/javascript"></script>
+    <script src="{{ mix('/js/set-show.js') }}" type="text/javascript"></script>
     <script src="{{ asset('/acm/AlaatvCustomFiles/components/SearchBoxFilter/script.js') }}" type="text/javascript"></script>
 @endsection
 
