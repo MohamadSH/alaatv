@@ -2,6 +2,7 @@
 
 @section('page-css')
     <link href="{{ mix('/css/content-search.css') }}" rel="stylesheet" type="text/css"/>
+{{--    <link href="{{ asset('/acm/AlaatvCustomFiles/components/SearchBoxFilter/style.css') }}" rel="stylesheet">--}}
 @endsection
 
 @section('content')
@@ -54,7 +55,6 @@
             @else
                 col
             @endif">
-
             <div class="row a--owl-carousel-row" id="product-carousel-warper">
                 @include('partials.search.video',[
                 'items' => $result->get('product'),
@@ -78,7 +78,6 @@
                 'loadChild' => false
                 ])
             </div>
-
         </div>
 
         <div class="PamphletAndArticleWraper
@@ -88,7 +87,6 @@
                 col-md-3
             @endif">
             <div class="row">
-
                 <div class="m-portlet m-portlet--tabs a--full-width">
                     <div class="m-portlet__head">
                         <div class="m-portlet__head-tools">
@@ -125,7 +123,6 @@
                         </div>
                     </div>
                 </div>
-
             </div>
         </div>
 
