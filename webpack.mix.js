@@ -427,7 +427,7 @@ class Mix {
             [
                 'public/acm/AlaatvCustomFiles/js/page/set-show.js'
             ],
-            'public/js/content-show.js'
+            'public/js/set-show.js'
         );
     }
 
