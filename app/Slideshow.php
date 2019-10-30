@@ -105,8 +105,10 @@ class Slideshow extends BaseModel
             'page',
         ])
             ->remember('getShopBanner', config('constants.CACHE_600'), function () {
-                return Websitepage::where('url', "/shop")
-                    ->first()
+    
+                $page = Websitepage::where('url', "/shop")
+                    ->first();
+                return !isset($page) ? collect() : $page
                     ->slides()
                     ->where("isEnable", 1)
                     ->orderBy("order")

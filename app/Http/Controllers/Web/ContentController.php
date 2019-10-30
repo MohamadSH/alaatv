@@ -273,11 +273,6 @@ class ContentController extends Controller
         return httpResponse(null, $view);
     }
 
-    public function editDescription(Content $content)
-    {
-        return view('content.editDescription' , compact('content'));
-    }
-
     /**
      * @param InsertContentRequest $request
      * @return RedirectResponse|null

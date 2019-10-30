@@ -15,7 +15,7 @@ class CounselingStatusChanged extends Notification implements ShouldQueue
 {
     use Queueable, SerializesModels;
 
-    const MEDIANA_PATTERN_CODE_COUNSELING_STATUS_CHANGED = '55r2ghkmi1';
+    const MEDIANA_PATTERN_CODE_COUNSELING_STATUS_CHANGED = '88vrw6uktl';
 
     public $timeout = 120;
 
@@ -74,7 +74,6 @@ class CounselingStatusChanged extends Notification implements ShouldQueue
             'name' => 'آلایی',
             'request' => 'سوال مشاوره ای',
             'status' => $this->orderStatus,
-            'site' => 'آلاء',
             'supportLink' => '',
         ];
     }

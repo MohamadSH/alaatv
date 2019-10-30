@@ -838,9 +838,11 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
         return $this->belongsToMany(Coupon::class);
     }
 
-    public function block()
-    {
-        return $this->belongsTo(Block::class);
+    public function blocks(){
+        return $this->belongsToMany(Block::Class)
+                    ->withPivot('order', 'enable')
+                    ->withTimestamps()
+                    ->orderBy('order');
     }
 
     public function contracts()
