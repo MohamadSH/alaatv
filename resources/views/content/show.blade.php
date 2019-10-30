@@ -278,7 +278,9 @@
                                             <div class="m-widget3__user-img">
                                                 <img class="m-widget3__img lazy-image"
                                                      data-src="{{ $content->author->photo }}"
-                                                     alt="{{ $author }}">
+                                                     alt="{{ $author }}"
+                                                     width="1"
+                                                     height="1">
                                             </div>
                                             <div class="m-widget3__info">
                                                 <span class="m-widget3__username">
