@@ -70,6 +70,7 @@ public/js/checkout-verification.js
 public/js/product-content-embed.js
 public/js/checkout-completeInfo.js
 public/js/user-profile-salesReport.js
+public/js/admin-content-edit.js
 
 
 public/css/all.css
@@ -100,6 +101,7 @@ public/css/product-content-embed.css
 public/css/checkout-verification.css
 public/css/user-profile-salesReport.css
 public/acm/AlaatvCustomFiles/components/OwlCarouselType2/style.css
+public/css/admin-content-edit.css
 
 public/.well-known/
 chown.sh

@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Traits\DateTrait;
 use Eloquent;
 use Exception;
 use Carbon\Carbon;
@@ -150,6 +151,7 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
     use favorableTraits;
     use ModelTrackerTrait;
     use TaggableContentTrait;
+    use DateTrait;
     /*
     |--------------------------------------------------------------------------
     | Properties

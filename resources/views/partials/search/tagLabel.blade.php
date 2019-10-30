@@ -1,8 +1,11 @@
 <div class="m-list-badge m--margin-bottom-10">
     @if(!isset($inlineTags))
-        <div class="m-list-badge__label m--font-brand">تگ ها</div>
+        <div class="m-list-badge__label m--font-brand tagLabelTitle">
+            @if(!empty($tags))
+                تگ ها
+            @endif
+        </div>
     @endif
-    
     
     @if(!empty($tags))
         @foreach($tags as $key=>$tag)

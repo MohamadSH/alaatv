@@ -8,7 +8,7 @@
 @section("content")
     <div class="row">
         <div class="col-md-12">
-            <div class="m-portlet m-portlet--tabs productDetailes">
+            <div class="m-portlet m-portlet--tabs">
                 <div class="m-portlet__head">
                     <div class="m-portlet__head-caption">
                         <div class="m-portlet__head-title">
@@ -72,7 +72,6 @@
                     </div>
                 </div>
             </div>
-
         </div>
     </div>
 @endsection

@@ -238,7 +238,7 @@ var Alaasearch = function () {
             widgetAuthor.photo.length !== 0
         ) {
             widgetAuthorPhoto =
-                '    <div class="m-widget4__img m-widget4__img--pic">\n' +
+                '    <div class="m-widget4__img m-widget4__img--pic d-none">\n' +
                 '        <img src="' + widgetAuthor.photo + '" alt="">\n' +
                 '    </div>\n';
         } else {
