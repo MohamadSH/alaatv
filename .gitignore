@@ -102,6 +102,8 @@ public/css/checkout-verification.css
 public/css/user-profile-salesReport.css
 public/acm/AlaatvCustomFiles/components/OwlCarouselType2/style.css
 public/css/admin-content-edit.css
+public/css/set-show.css
+public/acm/AlaatvCustomFiles/components/SearchBoxFilter/style.css
 
 public/.well-known/
 chown.sh
