@@ -98,7 +98,8 @@
                     @endif
                     @foreach($products as $product)
                         @if($product->producttype_id == config("constants.PRODUCT_TYPE_SIMPLE") ||
-                            $product->producttype_id == config("constants.PRODUCT_TYPE_CONFIGURABLE"))
+                            $product->producttype_id == config("constants.PRODUCT_TYPE_CONFIGURABLE") ||
+                            (isset($canChooseSelectable) && $canChooseSelectable))
                             <option value="{{$product->id}}" class="bold" @if(isset($defaultProductFilter) && in_array($product->id, $defaultProductFilter)) selected="selected" @endif>{{$product->name}}{{(!$product->enable)?"(غیرفعال)":""}}</option>
                         @else
                             <optgroup label="{{$product->name}}{{(!$product->enable)?"(غیرفعال)":""}}" class="bold"></optgroup>

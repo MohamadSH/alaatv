@@ -382,7 +382,7 @@
 
                             <li class="m-nav__item m--hidden-tablet-and-mobile">
                                 <a href="{{ route('live') }}" class="m-nav__link" title="پخش زنده">
-                                    <span class="m-nav__link-icon">
+                                    <span class="m-nav__link-icon nav__link-icon-livePage">
                                         <span class="m-nav__link-icon-wrapper">
                                             <img class="a--full-width lazy-image
                                                  @if($live)

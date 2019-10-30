@@ -1,0 +1,79 @@
+.SearchBoxFilter {
+  .GroupFilters {
+    background: white;
+    margin-bottom: 10px;
+    .head {
+      border-bottom: 1px solid #f2f2f2;
+      display: flex;
+      justify-content: space-between;
+      padding: 5px 10px;
+      cursor: pointer;
+      .title {
+
+      }
+      .tools {
+        .openMode {
+
+        }
+        .closeMode {
+
+        }
+      }
+    }
+    .body {
+      padding: 5px 10px;
+      .tools {
+        margin-bottom: 10px;
+      }
+
+      .GroupFilters-Search {
+
+      }
+
+      .GroupFilters-item {
+        transition: background-color 0.5s;
+      }
+      .GroupFilters-item:hover {
+        background-color: #f2f3f8;
+      }
+
+    }
+  }
+
+  .GroupFilters.status-open {
+    .head {
+      .title {
+
+      }
+      .tools {
+        .openMode {
+          display: block;
+        }
+        .closeMode {
+          display: none;
+        }
+      }
+    }
+    .body {
+      display: block;
+    }
+  }
+  .GroupFilters.status-close {
+    .head {
+      .title {
+
+      }
+      .tools {
+        .openMode {
+          display: none;
+        }
+        .closeMode {
+          display: block;
+        }
+      }
+    }
+    .body {
+      display: none;
+    }
+  }
+}
