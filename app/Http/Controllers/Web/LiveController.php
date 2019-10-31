@@ -50,6 +50,12 @@ class LiveController extends Controller
 
         $schedule = LiveStreamAssistant::makeScheduleOfTheWeekCollection()->toJson();
 
+        if($user->hasRole('admin')){
+            Cache::tags('live')->flush();
+            $live = true;
+            return view('pages.liveView' , compact( 'nowTime', 'schedule' , 'live' ,'poster' , 'xMpegURL' , 'dashXml' , 'fullVideo' , 'title', 'playLiveAjaxUrl', 'stopLiveAjaxUrl' ));
+        }
+
         LiveStreamAssistant::closeFinishedPrograms($todayStringDate, $nowTime);
 
         /** @var Conductor $liveStream */
