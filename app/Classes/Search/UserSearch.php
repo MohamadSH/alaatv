@@ -14,9 +14,9 @@ use Illuminate\{Contracts\Pagination\LengthAwarePaginator, Database\Eloquent\Bui
 class UserSearch extends SearchAbstract
 {
     protected $model = "App\User";
-    
+
     protected $pageName = 'userPage';
-    
+
     protected $validFilters = [
         'firstName',
         'lastName',
@@ -72,32 +72,28 @@ class UserSearch extends SearchAbstract
         'hasClosedOrder',
         'hasSeenSitePages',
     ];
-    
+
     protected function apply(array $filters): LengthAwarePaginator
     {
         $this->pageNum = $this->setPageNum($filters);
         $key           = $this->makeCacheKey($filters);
-        
-        return Cache::tags([
-            'user',
-            'search',
-        ])
+
+        return Cache::tags(['user' , 'user_search' , 'search'])
             ->remember($key, $this->cacheTime, function () use ($filters) {
-                //            dump("in cache");
                 $query = $this->applyDecoratorsFromFiltersArray($filters, $this->model->newQuery());
-                
+
                 return $this->getResults($query);
             });
     }
-    
+
     protected function getResults(Builder $query)
     {
         $result = $query->orderBy("created_at", "desc")
             ->paginate($this->numberOfItemInEachPage, ['*'], $this->pageName, $this->pageNum);
-        
+
         return $result;
     }
-    
+
     /**
      * @param $decorator
      *
@@ -109,7 +105,7 @@ class UserSearch extends SearchAbstract
         if ($decorator instanceof Tags) {
             $decorator->setTagManager(new UserTagManagerViaApi());
         }
-        
+
         return $decorator;
     }
 }

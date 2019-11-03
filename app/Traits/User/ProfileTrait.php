@@ -21,11 +21,11 @@ use Illuminate\Support\Facades\Schema;
 trait ProfileTrait
 {
     use WalletTrait;
-    
+
     private static $beProtected = [
         'roles',
     ];
-    
+
     /**
      * @return array
      */
@@ -53,33 +53,33 @@ trait ProfileTrait
     {
         return $this->belongsTo(Gender::class);
     }
-    
+
     public function returnLockProfileItems()
     {
         return $this->lockProfileColumns;
     }
-    
+
     public function returnCompletionItems()
     {
         return $this->completeInfoColumns;
     }
-    
+
     public function returnMedicalItems()
     {
         return $this->medicalInfoColumns;
     }
-    
+
     public function getInfoAttribute()
     {
         return Cache::tags([
             'user',
-            'major',
-            'grade',
-            'gender',
-            'completion',
-            'wallet',
-        ])
-            ->remember($this->cacheKey(), config('constants.CACHE_600'), function () {
+            'user_'.$this->id ,
+            'user_major',
+            'user_grade',
+            'user_gender',
+            'user_completion',
+            'user_wallet',
+        ])->remember($this->cacheKey(), config('constants.CACHE_600'), function () {
                 return [
                     'major'      => $this->getMajor(),
                     'grade'      => $this->getGrade(),
@@ -89,7 +89,7 @@ trait ProfileTrait
                 ];
             });
     }
-    
+
     /**
      * Gets an information array of user's major
      *
@@ -109,10 +109,10 @@ trait ProfileTrait
         else {
             $majorReturn = null;
         }
-        
+
         return $majorReturn;
     }
-    
+
     /**
      * Gets an information array of user's grade
      *
@@ -120,7 +120,7 @@ trait ProfileTrait
      */
     protected function getGrade()
     {
-        
+
         /** @var User $this */
         $grade = $this->grade;
         if (isset($grade)) {
@@ -134,10 +134,10 @@ trait ProfileTrait
         else {
             $gradeReturn = null;
         }
-        
+
         return $gradeReturn;
     }
-    
+
     /**
      * Gets an information array of user's gender
      *
@@ -157,10 +157,10 @@ trait ProfileTrait
         else {
             $genderReturn = null;
         }
-        
+
         return $genderReturn;
     }
-    
+
     /**
      * Calculates user profile completion percentage based on passed mode
      *
@@ -219,7 +219,7 @@ trait ProfileTrait
                 $importantColumns = [];
                 break;
         }
-        
+
         $numberOfColumns = count($importantColumns);
         $unsetColumns    = 0;
         if ($numberOfColumns > 0) {
@@ -235,14 +235,14 @@ trait ProfileTrait
                     }
                 }
             }
-            
+
             return (1 - ($unsetColumns / $numberOfColumns)) * 100;
         }
         else {
             return 100;
         }
     }
-    
+
     /**
      * @return string
      * Converting Updated_at field to jalali
@@ -251,11 +251,11 @@ trait ProfileTrait
     {
         $explodedDateTime = explode(' ', $this->birthdate);
         $explodedDate     = $explodedDateTime[0];
-        
+
         //        $explodedTime = $explodedDateTime[1] ;
         return $this->convertDate($explodedDate, 'toJalali');
     }
-    
+
     /**
      * Locks user's profile
      */
@@ -263,7 +263,7 @@ trait ProfileTrait
     {
         $this->lockProfile = 1;
     }
-    
+
     /**
      *  Determines whether user's profile is locked or not
      *
@@ -273,7 +273,7 @@ trait ProfileTrait
     {
         return $this->lockProfile == 1;
     }
-    
+
     /**
      * Fills model from data provided by user
      *
@@ -288,7 +288,7 @@ trait ProfileTrait
             }
         }
     }
-    
+
     /**
      * Determines whether user's profile should be locked or not
      *
@@ -303,7 +303,7 @@ trait ProfileTrait
     {
         $user = $this;
         $key  = 'user:userstatus'.$user->cacheKey();
-        return \Cache::tags(['user'])
+        return Cache::tags(['user' , 'userstatus' , 'user_'.$user->id , 'user_'.$user->id.'_userstatus'])
             ->remember($key, config('constants.CACHE_600'), function () use ($user) {
                 return optional($this->userstatus()
                     ->first())
@@ -337,8 +337,8 @@ trait ProfileTrait
 
     public function getRolesAttribute($value){
         $user = $this;
-        $key  = 'user:roles'.$user->cacheKey();
-        return \Cache::tags(['user'])
+        $key  = 'user:role'.$user->cacheKey();
+        return Cache::tags(['user', 'role' , 'user_'.$user->id , 'user_'.$user->id.'_role'])
             ->remember($key, config('constants.CACHE_600'), function () use ($user) {
                 if (hasAuthenticatedUserPermission(config('constants.SHOW_USER_ROLE')))
                     return $this->roles()->get();
@@ -350,7 +350,7 @@ trait ProfileTrait
     public function getTotalBonNumberAttribute($value){
         $user = $this;
         $key  = 'user:totalBonNumber'.$user->cacheKey();
-        return \Cache::tags(['user'])
+        return Cache::tags(['user' , 'bon' , 'user_'.$user->id , 'user_'.$user->id.'_totalBonNumber'])
             ->remember($key, config('constants.CACHE_600'), function () use ($user) {
                 if (hasAuthenticatedUserPermission(config('constants.SHOW_USER_TOTAL_BON_NUMBER')))
                     return $this->userHasBon();
@@ -363,7 +363,7 @@ trait ProfileTrait
     {
         $user = $this;
         $key  = 'user:jalaliUpdatedAt:'.$user->cacheKey();
-        return Cache::tags(['user'])
+        return Cache::tags(['user' , 'jalaliUpdatedAt' , 'user_'.$user->id , 'user_'.$user->id.'_jalaliUpdatedAt'])
             ->remember($key, config('constants.CACHE_600'), function () use ($user) {
                 if(isset($user->updated_at))
                     if (hasAuthenticatedUserPermission(config('constants.SHOW_USER_ACCESS'))) {
@@ -380,7 +380,7 @@ trait ProfileTrait
     {
         $user = $this;
         $key  = 'user:jalaliCreatedAt:'.$user->cacheKey();
-        return Cache::tags(['user'])
+        return Cache::tags(['user' , 'jalaliCreatedAt' , 'user_'.$user->id , 'user_'.$user->id.'_jalaliCreatedAt'])
             ->remember($key, config('constants.CACHE_600'), function () use ($user) {
                 if(isset($user->created_at))
                     if (hasAuthenticatedUserPermission(config('constants.SHOW_USER_ACCESS'))) {

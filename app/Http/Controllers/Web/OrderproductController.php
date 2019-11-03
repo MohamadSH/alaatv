@@ -305,8 +305,11 @@ class OrderproductController extends Controller
         foreach ($orderproduct->children as $child) {
             $child->delete();
         }
-        Cache::tags('bon')
-            ->flush();
+        Cache::tags([
+            'order_'.$orderproduct->order_id.'_products' ,
+            'order_'.$orderproduct->order_id.'_orderproducts' ,
+            'order_'.$orderproduct->order_id.'_cost' ,
+            'order_'.$orderproduct->order_id.'_bon' ])->flush();
 
         return response()->json(['message' => 'محصول سفارش با موفقیت حذف شد!']);
     }

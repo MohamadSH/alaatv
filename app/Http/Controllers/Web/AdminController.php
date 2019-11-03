@@ -41,7 +41,6 @@ use App\{Assignmentstatus,
     Userstatus,
     Userupload,
     Useruploadstatus,
-    Websitepage,
     Websitesetting,
     Http\Controllers\Controller};
 use Auth;
@@ -49,6 +48,7 @@ use Carbon\Carbon;
 use Exception;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Http\{Request, Response};
 use Illuminate\Support\Facades\Input;
 use Illuminate\View\View;
@@ -942,8 +942,31 @@ class AdminController extends Controller
 
     public function adminCacheClear(Request $request)
     {
-        Artisan::call('cache:clear');
-        dd('Cache successfully cleared');
+        if($request->has('product')){
+            Cache::tags('product')->flush();
+            dd('product Cache successfully cleared');
+        }elseif($request->has('order')){
+            Cache::tags('order')->flush();
+            dd('order Cache successfully cleared');
+        }elseif($request->has('orderproduct')){
+            Cache::tags('orderproduct')->flush();
+            dd('orderproduct Cache successfully cleared');
+        }elseif($request->has('user')){
+            Cache::tags('user')->flush();
+            dd('user Cache successfully cleared');
+        }elseif($request->has('transaction')){
+            Cache::tags('transaction')->flush();
+            dd('transaction Cache successfully cleared');
+        }elseif($request->has('content')){
+            Cache::tags('content')->flush();
+            dd('content Cache successfully cleared');
+        }elseif($request->has('set')){
+            Cache::tags('set')->flush();
+            dd('set Cache successfully cleared');
+        }else{
+            Artisan::call('cache:clear');
+            dd('Total Cache successfully cleared');
+        }
     }
 
     public function adminBot(Request $request)

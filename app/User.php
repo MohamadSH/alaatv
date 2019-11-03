@@ -282,7 +282,6 @@ use Laravel\Passport\Token;
  * @property string                                                                   photo
  * @property mixed                                                                    roles
  * @property null                                                              mobile_verified_at
- * @property mixed                                                                    closed_orders
  * @property mixed                                                                    email
  * @property-read OrderCollections|Order[] $closedOrders
  * @property-read Collection|Firebasetoken[] $firebasetokens
@@ -297,7 +296,6 @@ use Laravel\Passport\Token;
  * @property-read int|null $agent_tickets_count
  * @property-read int|null $bankaccounts_count
  * @property-read int|null $clients_count
- * @property-read int|null $closed_orders_count
  * @property-read int|null $closedorderproducts_count
  * @property-read int|null $contacts_count
  * @property-read int|null $contents_count

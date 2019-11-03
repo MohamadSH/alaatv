@@ -19,7 +19,7 @@ use Illuminate\{
     Support\Facades\Cache,
     Contracts\Filesystem\FileNotFoundException,
     Validation\ValidationException};
-use App\{
+use App\{Collection\OrderCollections,
     Contacttype,
     Http\Requests\EditOrderRequest,
     Http\Requests\InsertContactRequest,
@@ -49,8 +49,6 @@ use App\{
     Traits\RequestCommon,
     Afterloginformcontrol,
     Traits\CharacterCommon,
-    Classes\SEO\SeoDummyTags,
-    Classes\Search\UserSearch,
     Http\Requests\EditUserRequest,
     Http\Requests\UserIndexRequest,
     Http\Requests\InsertUserRequest};
@@ -611,66 +609,6 @@ class UserController extends Controller
         ];
 
         return response(json_encode($result), Response::HTTP_OK)->header('Content-Type', 'application/json');
-
-        //======================================================================
-        //=============================REFACTOR=================================
-        //======================================================================
-
-        /*$tags = $request->get('tags');*/
-        $filters    = array_filter($request->all()); //Removes null fields
-        $isApp      = $this->isRequestFromApp($request);
-        $items      = collect();
-        $pageName   = 'userPage';
-        $userResult = (new UserSearch)->setPageName($pageName)
-            ->get($filters);
-        if ($isApp) {
-            $items->push($userResult->getCollection());
-        }
-        else {
-            if ($userResult->total() > 0) {
-                $mainIndex = $this->getPartialSearchFromIds($userResult, 'user.index');
-                $smsIndex  = $this->getPartialSearchFromIds($userResult, 'user.index2');
-            }
-            else {
-                $mainIndex   = null;
-                $smsIndex    = null;
-                $reportIndex = null;
-            }
-
-            $uniqueUsers = $userResult->getCollection()
-                ->getUniqueUsers();
-
-            $items->push([
-                'totalitems'       => $userResult->total(),
-                'totalUniqueItems' => $uniqueUsers->count(),
-                'itemIds'          => $userResult->pluck('id'),
-                'uniqueItemsIds'   => $uniqueUsers->pluck('id'),
-                'mainIndex'        => $mainIndex,
-                'smsIndex'         => $smsIndex,
-                //                'reportIndex'  => $reportIndex,
-            ]);
-        }
-        if ($isApp) {
-            $response = $this->makeJsonForAndroidApp($items);
-
-            return response()->json($response, Response::HTTP_OK);
-        }
-        if (request()->expectsJson()) {
-            return response([
-                'items' => $items,
-            ], Response::HTTP_OK);
-        }
-
-        $url = $request->url();
-        $this->generateSeoMetaTags(new SeoDummyTags('مدیریت کاربران', 'مدیریت کاربران سایت', $url, $url,
-            route('image', [
-                'category' => '11',
-                'w'        => '100',
-                'h'        => '100',
-                'filename' => $this->setting->site->siteLogo,
-            ]), '100', '100', null));
-
-        return redirect()->back();
     }
 
     public function store(InsertUserRequest $request)
@@ -844,23 +782,18 @@ class UserController extends Controller
         /** @var User $user */
         $user = $request->user();
 
-        $key    = 'user:orders:'.$user->cacheKey();
-        $orders = Cache::tags('user')->remember($key, config('constants.CACHE_60'), function () use ($user) {
-            return $user->closedOrders()
-                ->get()
-//                ->append('created_at')
-                ->sortByDesc('completed_at');
-        });
+        /** @var OrderCollections $orders */
+        $orders = $user->getClosedOrders($request->get('orders' , 1));
 
         $key          = 'user:transactions:'.$user->cacheKey();
-        $transactions = Cache::tags('user')->remember($key, config('constants.CACHE_60'), function () use ($user) {
+        $transactions = Cache::tags(['user' , 'transaction' ,  'user_'.$user->id , 'user_'.$user->id.'_transactions'])->remember($key, config('constants.CACHE_60'), function () use ($user) {
             return $user->getShowableTransactions()
-                ->get()
-                ->groupBy('order_id');
+                        ->get()
+                        ->groupBy('order_id');
         });
 
         $key         = 'user:instalments:'.$user->cacheKey();
-        $instalments = Cache::tags('user')->remember($key, config('constants.CACHE_60'), function () use ($user) {
+        $instalments = Cache::tags(['user' , 'instalment' , 'user_'.$user->id , 'user_'.$user->id.'_instalments'])->remember($key, config('constants.CACHE_60'), function () use ($user) {
             return $user->getInstalments()
                 ->get()
                 ->sortBy('deadline_at');
@@ -875,9 +808,14 @@ class UserController extends Controller
             $gateways[route('redirectToBank', ['paymentMethod'=> $gateway->name, 'device'=>'web'])] = $gateway->displayName;
         }
 
-        $key          = 'user:orderCoupons:'.$user->cacheKey().':Orders='.md5($orders->pluck('id')
-                ->implode('-'));
-        $orderCoupons = Cache::remember($key, config('constants.CACHE_60'), function () use ($orders) {
+        $orderIdString = $orders->pluck('id')->implode('-');
+        $key          = 'orders:coupons:'.md5($orderIdString);
+        $cacheTags = ['order' , 'coupon'];
+        foreach ($orders as $order) {
+            $cacheTags[] = 'order_'.$order->id;
+            $cacheTags[] = 'order_'.$order->id.'_coupon';
+        }
+        $orderCoupons = Cache::tags($cacheTags)->remember($key, config('constants.CACHE_60'), function () use ($orders) {
             return $orders->getCoupons();
         });
 
@@ -1398,8 +1336,6 @@ class UserController extends Controller
             $status  = Response::HTTP_SERVICE_UNAVAILABLE;
         }
 
-        Cache::tags('user')->flush();
-
         if ($request->expectsJson()) {
             if ($status == Response::HTTP_OK) {
                 $response = [
@@ -1453,23 +1389,6 @@ class UserController extends Controller
         $this->middleware('permission:'.config('constants.INSERT_USER_ACCESS'), ['only' => 'create']);
         $this->middleware('permission:'.config('constants.REMOVE_USER_ACCESS'), ['only' => 'destroy']);
         $this->middleware('permission:'.config('constants.SHOW_USER_ACCESS'), ['only' => 'edit']);
-    }
-
-    /**
-     * @param  Collection  $items
-     *
-     * @return Response
-     */
-    private function makeJsonForAndroidApp(Collection $items)
-    {
-        $items    = $items->pop();
-        $key      = md5($items->pluck('id')
-            ->implode(','));
-        $response = Cache::remember($key, config('constants.CACHE_60'), function () use ($items) {
-            $response = collect();
-        });
-
-        return $response;
     }
 
     /**

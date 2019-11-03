@@ -2,12 +2,14 @@
 
 namespace App\PaymentModule\Controllers;
 
+use App\Events\UserRedirectedToPayment;
 use App\Product;
 use Cache;
 use App\User;
 use App\Order;
 use App\Transaction;
 use AlaaTV\Gateways\Money;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\PaymentModule\Responses;
@@ -19,7 +21,9 @@ use App\Repositories\TransactionGatewayRepo;
 use App\PaymentModule\Repositories\OrdersRepo;
 use App\Http\Controllers\Web\TransactionController;
 use App\Classes\Payment\RefinementRequest\RefinementLauncher;
+use Illuminate\Routing\Redirector;
 use Illuminate\Support\Collection;
+use ImanGhafoori\Terminator\TerminateException;
 
 class RedirectUserToPaymentPage extends Controller
 {
@@ -30,13 +34,10 @@ class RedirectUserToPaymentPage extends Controller
      * @param  string   $paymentMethod
      * @param  string   $device
      *
-     * @return JsonResponse|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     * @return JsonResponse|RedirectResponse|Redirector
      */
     public function __invoke(string $paymentMethod, string $device, Request $request)
     {
-        Cache::tags('bon')->flush();
-        Cache::tags('order')->flush();
-        Cache::tags('orderproduct')->flush();
 
         $data = $this->getRefinementData($request->all(), $request->user());
 
@@ -54,6 +55,8 @@ class RedirectUserToPaymentPage extends Controller
         $cost = Money::fromTomans((int) $data['cost']);
         /** @var Transaction $transaction */
         $transaction = $data['transaction'];
+
+        event(new UserRedirectedToPayment($user));
 
         $customerDescription = $request->get('customerDescription');
 
@@ -100,7 +103,7 @@ class RedirectUserToPaymentPage extends Controller
      * @param int $statusCode
      *
      * @return JsonResponse
-     * @throws \ImanGhafoori\Terminator\TerminateException
+     * @throws TerminateException
      */
     private function sendErrorResponse(string $msg, int $statusCode)
     {
@@ -229,12 +232,12 @@ class RedirectUserToPaymentPage extends Controller
     }
 
     /**
-     * @param \Illuminate\Support\Collection $totalCookie
+     * @param Collection $totalCookie
      * @param $grandProduct
      * @param $myProduct
      * @param $extraAttributesIds
      */
-    private function makeCookieForSelectableGrand(\Illuminate\Support\Collection $totalCookie, Product $grandProduct, Product $myProduct, array $extraAttributesIds): void
+    private function makeCookieForSelectableGrand(Collection $totalCookie, Product $grandProduct, Product $myProduct, array $extraAttributesIds): void
     {
         $isAdded = $totalCookie->where('product_id', $grandProduct->id);
         if ($isAdded->isEmpty()) {
@@ -253,12 +256,12 @@ class RedirectUserToPaymentPage extends Controller
     }
 
     /**
-     * @param \Illuminate\Support\Collection $totalCookie
+     * @param Collection $totalCookie
      * @param $myProduct
      * @param $grandProduct
      * @param $extraAttributesIds
      */
-    private function makeCookieForConfigurableGrand(\Illuminate\Support\Collection $totalCookie,Product $myProduct,Product $grandProduct, array $extraAttributesIds): void
+    private function makeCookieForConfigurableGrand(Collection $totalCookie, Product $myProduct, Product $grandProduct, array $extraAttributesIds): void
     {
         $attributeValueIds = $this->getProductAttributes($myProduct);
 
