@@ -157,7 +157,7 @@
         </div>
 
         <div class="col-md-12">
-        @role((config("constants.ROLE_ADMIN")))
+        @permission((config('constants.INSERT_LIVE_DESCRIPTION_ACCESS')))
         <!-- BEGIN LIVE DESCRIPTION TABLE PORTLET-->
         <div class="m-portlet m-portlet--head-solid-bg m-portlet--accent m-portlet--collapsed m-portlet--head-sm" m-portlet="true" id="productFiles-portlet">
             <div class="m-portlet__head">
@@ -222,7 +222,7 @@
             </div>
         </div>
         <!-- END SAMPLE TABLE PORTLET-->
-        @endrole
+        @endpermission
         </div>
 
 
