@@ -231,6 +231,7 @@ return [
         'address'                  => 'آدرس',
         'credit'                  => 'اعتبار',
         'context'                 => 'متن',
+        'birthdate'               => 'تاریخ تولد'
     ],
 
     "FileArray" => [

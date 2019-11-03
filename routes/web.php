@@ -4,6 +4,7 @@
 use App\Http\Controllers\Web\BotsController;
 use App\Http\Controllers\Web\FavorableController;
 use App\Http\Controllers\Web\HomeController;
+use App\Http\Controllers\Web\LandingPageController;
 use App\Http\Controllers\Web\LiveController;
 use App\Http\Controllers\Web\SectionController;
 use App\Http\Controllers\Web\SetController;
@@ -103,6 +104,7 @@ Route::group(['prefix' => 'landing'], function () {
     Route::get('8' , [ProductLandingController::class, 'landing8'])->name('landing.8');
     Route::get('9' , [ProductLandingController::class, 'landing9'])->name('landing.9');
     Route::get('10', [ProductLandingController::class, 'landing10'])->name('landing.10');
+    Route::get('13Aban', [LandingPageController::class, 'roozeDaneshAmooz'])->name('landing.13Aban');
 });
 
 Route::group(['middleware' => 'auth'], function () {
@@ -193,6 +195,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('orders', [UserController::class, 'userOrders']);
         Route::get('question', [UserController::class, 'userQuestions']);
         Route::post('sendSMS', [UserController::class, 'sendSMS']);
+        Route::post('user/update/partialInfo', [UserController::class, 'partialUpdate']);
     });
     Route::group(['prefix' => 'order'], function () {
         Route::post('detachorderproduct', 'Web\OrderController@detachOrderproduct');

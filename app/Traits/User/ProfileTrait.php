@@ -225,12 +225,9 @@ trait ProfileTrait
         if ($numberOfColumns > 0) {
             foreach ($tableColumns as $tableColumn) {
                 if (in_array($tableColumn, $importantColumns)) {
-                    if (strcmp($tableColumn, 'photo') == 0 && strcmp(Auth::user()->photo,
-                            config('constants.PROFILE_DEFAULT_IMAGE')) == 0) {
+                    if (strcmp($tableColumn, 'photo') == 0 && strcmp(Auth::user()->photo, config('constants.PROFILE_DEFAULT_IMAGE')) == 0) {
                         $unsetColumns++;
-                    }
-                    elseif (!isset($this->$tableColumn) || strlen(preg_replace('/\s+/', '',
-                            $this->$tableColumn)) == 0) {
+                    } elseif (!isset($this->$tableColumn) || strlen(preg_replace('/\s+/', '', $this->$tableColumn)) == 0) {
                         $unsetColumns++;
                     }
                 }
@@ -282,8 +279,7 @@ trait ProfileTrait
     public function fillByPublic(array $data)
     {
         foreach ($data as $key => $datum) {
-            if ((array_key_exists($key, $this->getAttributes()) && !isset($this->$key)) || in_array($key,
-                    $this->fillableByPublic)) {
+            if ((array_key_exists($key, $this->getAttributes()) && !isset($this->$key)) || in_array($key, $this->fillableByPublic)) {
                 $this->$key = $datum;
             }
         }
