@@ -459,11 +459,16 @@ class ContentController extends Controller
         if(!empty($files)) {
             $this->makeFilesCollection($content, $files);
         }
+        Cache::tags(['content_'.$content->id ,
+                    'set_'.$newContetnsetId ,
+                    'set_'.$content->contentset_id ,])->flush();
         $content->contentset_id = $contentsetId;
-        $content->update();
+        if($content->update()){
+            session()->flash('success', 'تغییر نام با موفقیت انجام شد');
+        }else{
+            session()->flash('error', 'خطا در اصلاح ست');
+        }
 
-        Cache::tags('content')->flush();
-        session()->flash('success', 'تغییر نام با موفقیت انجام شد');
         return redirect()->back();
     }
 
@@ -585,7 +590,10 @@ class ContentController extends Controller
     private function getContentInformation(Content $content): array
     {
         $key = 'getContentInformation: '.$content->id;
-        return Cache::tags('set')
+        $cacheTags = [ 'content' , 'content_'.$content->id] ;
+        $cacheTags = (isset($content->contentset_id))?  array_merge($cacheTags , ['set_'.$content->contentset_id ]):$cacheTags;
+        $cacheTags = (isset($content->author_id))?  array_merge($cacheTags , ['user_'.$content->author_id ]):$cacheTags;
+        return Cache::tags($cacheTags)
             ->remember($key, config('constants.CACHE_600'), function () use ($content) {
                 $author = $content->authorName;
 

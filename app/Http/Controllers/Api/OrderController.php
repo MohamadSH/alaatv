@@ -9,6 +9,9 @@ use App\Order;
 use App\Coupon;
 use App\Orderproduct;
 use App\Product;
+use Exception;
+use Illuminate\Contracts\Routing\ResponseFactory;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Http\Controllers\Controller;
@@ -32,8 +35,8 @@ class OrderController extends Controller
      *
      * @param  Request  $request
      *
-     * @return \Illuminate\Http\Response
-     * @throws \Exception
+     * @return Response
+     * @throws Exception
      */
     public function checkoutReview(Request $request)
     {
@@ -54,8 +57,8 @@ class OrderController extends Controller
      *
      * @param  Request  $request
      *
-     * @return \Illuminate\Http\Response
-     * @throws \Exception
+     * @return Response
+     * @throws Exception
      */
     public function checkoutPayment(Request $request)
     {
@@ -102,17 +105,16 @@ class OrderController extends Controller
     /**
      * Submits a coupon for the order
      *
-     * @param  \App\Http\Requests\SubmitCouponRequest  $request
+     * @param SubmitCouponRequest $request
      *
      * @param  AlaaInvoiceGenerator                    $invoiceGenerator
      *
-     * @return \Illuminate\Http\Response
-     * @throws \Exception
+     * @return Response
+     * @throws Exception
      */
     public function submitCoupon(SubmitCouponRequest $request, AlaaInvoiceGenerator $invoiceGenerator)
     {
-        $coupon = Coupon::code($request->get('code'))
-            ->first();
+        $coupon = Coupon::code($request->get('code'))->first();
         if ($request->has('openOrder')) {
             $order = $request->get('openOrder');
         }
@@ -138,15 +140,17 @@ class OrderController extends Controller
             ];
         }
 
-        Cache::tags('order')->flush();
+        Cache::tags([
+            'order_'.$order->id.'_coupon' ,
+            'order_'.$order->id.'_cost'])->flush();
 
         return response($response, Response::HTTP_OK);
     }
 
     /**
-     * @param  \Illuminate\Http\Request  $request
+     * @param Request $request
      *
-     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
+     * @return ResponseFactory|Response
      */
     public function removeCoupon(Request $request)
     {
@@ -203,10 +207,10 @@ class OrderController extends Controller
     /**
      * Makes a donate request
      *
-     * @param  \App\Http\Requests\DonateRequest  $request
+     * @param DonateRequest $request
      * @param  OrderproductController            $orderproductController
      *
-     * @return \Illuminate\Http\RedirectResponse
+     * @return RedirectResponse
      */
     public function donateOrder(DonateRequest $request)
     {
@@ -257,12 +261,12 @@ class OrderController extends Controller
     }
 
     /**
-     * @param  \App\Classes\Pricing\Alaa\AlaaInvoiceGenerator  $invoiceGenerator
+     * @param AlaaInvoiceGenerator $invoiceGenerator
      * @param                                                  $coupon
      * @param                                                  $order
      *
      * @return array
-     * @throws \Exception
+     * @throws Exception
      */
     private function processCoupon(AlaaInvoiceGenerator $invoiceGenerator, $coupon, $order): array
     {
@@ -285,12 +289,12 @@ class OrderController extends Controller
     }
 
     /**
-     * @param  \App\Classes\Pricing\Alaa\AlaaInvoiceGenerator  $invoiceGenerator
+     * @param AlaaInvoiceGenerator $invoiceGenerator
      * @param                                                  $coupon
      * @param                                                  $order
      *
      * @return array
-     * @throws \Exception
+     * @throws Exception
      */
     private function handleValidCoupon(AlaaInvoiceGenerator $invoiceGenerator, $coupon, $order): array
     {

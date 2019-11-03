@@ -24,11 +24,6 @@ class PaymentStatusController extends Controller
 
         $gtmEec = $this->generateGtmEec($device, $result);
 
-        Cache::tags('bon')->flush();
-        Cache::tags('order')->flush();
-        Cache::tags('user')->flush();
-        Cache::tags('orderproduct')->flush();
-
         if ($result != null) {
             return view('order.checkout.verification', compact('status', 'paymentMethod', 'device', 'result', 'gtmEec'));
         }

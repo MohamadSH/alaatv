@@ -5,19 +5,19 @@ namespace App\Observers;
 use App\Classes\Search\TaggingInterface;
 use App\Product;
 use App\Traits\TaggableTrait;
-use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Cache;
 
 class ProductObserver
 {
     private $tagging;
-    
+
     use TaggableTrait;
-    
+
     public function __construct(TaggingInterface $tagging)
     {
         $this->tagging = $tagging;
     }
-    
+
     /**
      * Handle the product "created" event.
      *
@@ -27,9 +27,9 @@ class ProductObserver
      */
     public function created(Product $product)
     {
-        
+
     }
-    
+
     /**
      * Handle the product "updated" event.
      *
@@ -40,7 +40,7 @@ class ProductObserver
     public function updated(Product $product)
     {
     }
-    
+
     /**
      * Handle the product "deleted" event.
      *
@@ -52,7 +52,7 @@ class ProductObserver
     {
         //
     }
-    
+
     /**
      * Handle the product "restored" event.
      *
@@ -64,7 +64,7 @@ class ProductObserver
     {
         //
     }
-    
+
     /**
      * Handle the product "force deleted" event.
      *
@@ -76,7 +76,7 @@ class ProductObserver
     {
         //
     }
-    
+
     /**
      * When issuing a mass update via Eloquent,
      * the saved and updated model events will not be fired for the updated models.
@@ -86,17 +86,20 @@ class ProductObserver
      */
     public function saving(Product $product)
     {
-        
-        
+
+
     }
-    
+
     public function saved(Product $product)
     {
         //todo
 //        self::shiftProductOrders($product->order);
 
         $this->sendTagsOfTaggableToApi($product, $this->tagging);
-        Artisan::call('cache:clear');
+        Cache::tags([
+            'product_'.$product->id ,
+            'product_search' ,
+            'relatedProduct_search' ])->flush();
     }
 
     /**

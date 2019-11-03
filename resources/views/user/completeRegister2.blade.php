@@ -5,9 +5,9 @@
 @endsection
 
 @section('content')
-    
-    @include('systemMessage.flash')
 
+    @include('systemMessage.flash')
+    @if(!$hadGotGiftBefore &&  !$hasGotGiftBefore)
     <div class="row">
         <div class="col-md-4 mx-auto">
             <div class="m-alert m-alert--outline m-alert--outline-2x alert alert-warning alert-dismissible fade show" role="alert">
@@ -19,11 +19,13 @@
             </div>
         </div>
     </div>
-    
+    @endif
+
     <div class="row">
+        @if(!$hadGotGiftBefore &&  !$hasGotGiftBefore)
         <div class="col-md-6 mx-auto">
-    
-    
+
+
             <div class="m-portlet m-portlet--creative m-portlet--bordered-semi profileMenuPage profileMenuPage-setting">
                 <div class="m-portlet__head">
                     <div class="m-portlet__head-caption">
@@ -40,18 +42,19 @@
                         </div>
                     </div>
                     <div class="m-portlet__head-tools">
-            
+
                     </div>
                 </div>
                 <div class="m-portlet__body">
-            
-                    {!! Form::model($user,['method' => 'POST','url' => [(isset($formAction))?$formAction:route('web.authenticatedUser.profile.update')] , 'role'=>'form' , 'id' => 'profileForm-setting']) !!}
+
+                    {!! Form::model($user,['method' => 'POST','url' => route('web.user.update.partial') , 'role'=>'form' , 'id' => 'profileForm-setting']) !!}
                     {!! Form::hidden('updateType',"profile") !!}
-                        
+
                         <div class="row">
                             <div class="col-md-6">
-                                @if(!isset($user->firstName))
-                                    <div class="form-group m-form__group {{ $errors->has('firstName') ? ' has-danger' : '' }}">
+
+                                    <div class="form-group m-form__group {{ $errors->has('firstName') ? ' has-danger' : '' }}
+                                    @if(isset($user->firstName)) d-none @endif">
                                         <label for="firstName">نام</label>
                                         <div class="m-input-icon m-input-icon--left">
                                             <input type="text" name="firstName" id="firstName" class="form-control m-input m-input--air" placeholder="نام" @if(isset($user->firstName))value="{{ $user->firstName }}"@endif>
@@ -62,11 +65,12 @@
                                 </span>
                                         </div>
                                     </div>
-                                @endif
+
                             </div>
                             <div class="col-md-6">
-                                @if(!isset($user->lastName))
-                                    <div class="form-group m-form__group {{ $errors->has('lastName') ? ' has-danger' : '' }}">
+
+                                    <div class="form-group m-form__group {{ $errors->has('lastName') ? ' has-danger' : '' }}
+                                    @if(isset($user->lastName)) d-none @endif">
                                         <label for="lastName">نام خانوادگی</label>
                                         <div class="m-input-icon m-input-icon--left">
                                             <input type="text" name="lastName" id="lastName" class="form-control m-input m-input--air" placeholder="نام خانوادگی" @if(isset($user->lastName))value="{{ $user->lastName }}"@endif>
@@ -77,13 +81,13 @@
                                 </span>
                                         </div>
                                     </div>
-                                @endif
                             </div>
                         </div>
-                        
+
                         <div class="row">
                             <div class="col-md-6">
-                                <div class="form-group m-form__group {{ $errors->has('province') ? ' has-danger' : '' }}">
+
+                                <div class="form-group m-form__group {{ $errors->has('province') ? ' has-danger' : '' }} @if(isset($user->province)) d-none @endif ">
                                     <label for="province">استان</label>
                                     <div class="m-input-icon m-input-icon--left">
                                         <input type="text" name="province" id="province" class="form-control m-input m-input--air" placeholder="استان" @if(isset($user->province))value="{{ $user->province }}"@endif>
@@ -96,7 +100,8 @@
                                 </div>
                             </div>
                             <div class="col-md-6">
-                                <div class="form-group m-form__group {{ $errors->has('city') ? ' has-danger' : '' }}">
+
+                                <div class="form-group m-form__group {{ $errors->has('city') ? ' has-danger' : '' }} @if(isset($user->city)) d-none @endif">
                                     <label for="city">شهر</label>
                                     <div class="m-input-icon m-input-icon--left">
                                         <input type="text" name="city" id="city" class="form-control m-input m-input--air" placeholder="شهر" @if(isset($user->city))value="{{ $user->city }}"@endif>
@@ -109,11 +114,12 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div class="row">
                             <div class="col-md-6">
-    
-                                <div class="form-group m-form__group {{ $errors->has('gender_id') ? ' has-danger' : '' }}">
+
+
+                                <div class="form-group m-form__group {{ $errors->has('gender_id') ? ' has-danger' : '' }} @if(isset($user->gender_id)) d-none @endif">
                                     <label for="gender_id">جنسیت</label>
                                     <div class="m-input-icon m-input-icon--left">
                                         {!! Form::select('gender_id',$genders,null,['class' => 'form-control m-input m-input--air', 'id' => 'gender_id']) !!}
@@ -124,11 +130,12 @@
                                         </span>
                                     </div>
                                 </div>
-                                
+
                             </div>
                             <div class="col-md-6">
-                                
-                                <div class="form-group m-form__group {{ $errors->has('major_id') ? ' has-danger' : '' }}">
+
+
+                                <div class="form-group m-form__group {{ $errors->has('major_id') ? ' has-danger' : '' }} @if(isset($user->major_id)) d-none @endif">
                                     <label for="major_id">رشته</label>
                                     <div class="m-input-icon m-input-icon--left">
                                         {!! Form::select('major_id',$majors,null,['class' => 'form-control m-input m-input--air', 'id' => 'major_id']) !!}
@@ -139,14 +146,15 @@
                                         </span>
                                     </div>
                                 </div>
-                                
+
                             </div>
                         </div>
-        
+
                         <div class="row">
                             <div class="col-md-6">
-        
-                                <div class = "form-group m-form__group {{ $errors->has('birthdate') ? ' has-danger' : '' }}">
+
+
+                                <div class = "form-group m-form__group {{ $errors->has('birthdate') ? ' has-danger' : '' }} @if(isset($user->birthdate)) d-none @endif">
                                     <label for = "birthdate">تاریخ تولد</label>
                                     <div class = "m-input-icon m-input-icon--left">
                                         <input class = "form-control m-input m-input--air" name = "birthdate" id = "birthdate"/>
@@ -160,7 +168,7 @@
                                 </div>
                             </div>
                             <div class="col-md-6">
-    
+
                                 <div class="text-center">
                                     <span class="m-badge m-badge--success mobileVerifyMessage @if(!$user->hasVerifiedMobile()) d-none @endif">
                                         شماره موبایل تایید شده است.
@@ -173,7 +181,7 @@
                                         @if(isset($user->mobile)){{ $user->mobile }} @endif
                                     </span>
                                 </div>
-    
+
                                 @if(!$user->hasVerifiedMobile() )
                                     <div class="row SendMobileVerificationCodeWarper">
                                         <div class="col-12 text-center">
@@ -184,7 +192,7 @@
                                             <div class="form-group m-form__group">
                                                 <label for="txtMobileVerificationCode">کد تاییدیه ارسال شده:</label>
                                                 <div class="m-input-icon m-input-icon--left">
-                                                    <input type="text" name="postalCode" id="txtMobileVerificationCode" class="form-control m-input m-input--air" placeholder="کد تایید">
+                                                    <input type="text" name="txtMobileVerificationCode" id="txtMobileVerificationCode" class="form-control m-input m-input--air" placeholder="کد تایید">
                                                     <span class="m-input-icon__icon m-input-icon__icon--left">
                                                     <span>
                                                         <i class="fa fa-mobile-alt"></i>
@@ -197,25 +205,36 @@
                                         </div>
                                     </div>
                                 @endif
-                                
+
                             </div>
                         </div>
-        
-                    
+
+
                         <input type="hidden" id="userUpdateProfileUrl" value="{{ action((isset($formAction))?$formAction:'Web\UserController@update' , Auth::user()) }}">
-                
+
                     {!! Form::close() !!}
-    
-    
+
+
                     <button type="button" class="btn m-btn--pill m-btn--air btn-primary btnSubmitCompleteInfo">
                         تایید اطلاعات
                     </button>
-                    
+
                 </div>
             </div>
-            
-            
+
+
         </div>
+        @else
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <strong>تبریک!</strong>
+                @if($hadGotGiftBefore)
+                شما هدیه ۱۴ هزار تومانی را پیش از این دریافت کرده اید
+                @else
+                    مبلغ 14 هزار تومان هدیه به کیف پول شما افزوده شد.
+                @endif
+                <strong>این هدیه تا تاریخ 5 آذر اعتبار دارد.</strong>
+            </div>
+        @endif
     </div>
 
     <div class="modal" id="completeRegisterMessage" >
@@ -223,7 +242,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">
-                    
+
                     </h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
@@ -233,20 +252,20 @@
                     <div class="alert alert-success alert-dismissible fade show" role="alert">
                         <strong>تبریک!</strong>
                         مبلغ 14000 تومان هدیه به کیف پول شما افزوده شد.
-                        <strong>این هدیه تا 4 روز دیگر اعتبار دارد.</strong>
+                        <strong>این هدیه تا 5 آذر دیگر اعتبار دارد.</strong>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    
+
 @endsection
 
 @section('page-js')
     <script src = "{{ mix('/js/user-completeInfo.js') }}"></script>
     <script>
         var todayBirthDay = '';
-        
+
         function getFormData($form) {
             var unindexed_array = $form.serializeArray();
             var indexed_array = {};
@@ -281,58 +300,58 @@
             let $gender_id = $('#gender_id');
             let $major_id = $('#major_id');
             let $birthdate = $('#birthdate');
-            
-            
-            if($name.val().trim().length === 0) {
+
+
+            if(typeof $name.val() !== 'undefined' && $name.val().trim().length === 0) {
                 status = false;
                 message += 'نام خود را وارد کنید.'+'<br>';
                 $name.parents('.form-group').addClass('has-danger');
             } else {
                 $name.parents('.form-group').removeClass('has-danger');
             }
-            if($lastname.val().trim().length === 0) {
+            if(typeof $lastname.val() !== 'undefined' && $lastname.val().trim().length === 0) {
                 status = false;
                 message += 'نام خانوادگی خود را وارد کنید.'+'<br>';
                 $lastname.parents('.form-group').addClass('has-danger');
             } else {
                 $lastname.parents('.form-group').removeClass('has-danger');
             }
-            if($province.val().trim().length === 0) {
+            if(typeof $province.val() !== 'undefined' && $province.val().trim().length === 0) {
                 status = false;
                 message += 'استان خود را مشخص کنید.'+'<br>';
                 $province.parents('.form-group').addClass('has-danger');
             } else {
                 $province.parents('.form-group').removeClass('has-danger');
             }
-            if($city.val().trim().length === 0) {
+            if(typeof $city.val() !== 'undefined' && $city.val().trim().length === 0) {
                 status = false;
                 message += 'شهر خود را مشخص کنید.'+'<br>';
                 $city.parents('.form-group').addClass('has-danger');
             } else {
                 $city.parents('.form-group').removeClass('has-danger');
             }
-            if($gender_id.val() == 0) {
+            if(typeof $gender_id.val() !== 'undefined' && $gender_id.val() == 0) {
                 status = false;
                 message += 'جنسیت را مشخص کنید.'+'<br>';
                 $gender_id.parents('.form-group').addClass('has-danger');
             } else {
                 $gender_id.parents('.form-group').removeClass('has-danger');
             }
-            if($major_id.val() == 0) {
+            if(typeof $major_id.val() !== 'undefined' && $major_id.val() == 0) {
                 status = false;
                 message += 'رشته خود را مشخص کنید.'+'<br>';
                 $major_id.parents('.form-group').addClass('has-danger');
             } else {
                 $major_id.parents('.form-group').removeClass('has-danger');
             }
-            if($birthdate.val().trim() === todayBirthDay) {
+            if(typeof $birthdate.val() !== 'undefined' && $birthdate.val().trim() === todayBirthDay) {
                 status = false;
                 message += 'تاریخ تولد خود را مشخص کنید.'+'<br>';
                 $birthdate.parents('.form-group').addClass('has-danger');
             } else {
                 $birthdate.parents('.form-group').removeClass('has-danger');
             }
-            
+
             return {
                 status: status,
                 message: message
@@ -340,28 +359,35 @@
         }
 
         $(document).ready(function () {
-            
-            @if($bool)
+
+            @if($hasGotGiftBefore)
                     $('#completeRegisterMessage').modal('show');
             @endif
-            
+
             todayBirthDay =  $('#birthdate').val();
 
+            @if(!$user->hasVerifiedMobile() )
             $('.btnSubmitCompleteInfo').fadeOut();
-            
+            @endif
+
             $("#birthdate").persianDatepicker({
                 altField: '#birthdateAlt',
                 altFormat: "YYYY-MM-DD",
                 observer: true,
                 format: 'YYYY/MM/DD',
+                // altFieldFormatter: function (unixDate) {
+                //     // var d = new Date(unixDate).toISOString();
+                //     let targetDatetime = new Date(unixDate);
+                //     let formatted_date = targetDatetime.getFullYear() + "-" + (targetDatetime.getMonth() + 1) + "-" + targetDatetime.getDate();
+                //     return formatted_date;
+                // }
                 altFieldFormatter: function (unixDate) {
-                    // var d = new Date(unixDate).toISOString();
-                    let targetDatetime = new Date(unixDate);
-                    let formatted_date = targetDatetime.getFullYear() + "-" + (targetDatetime.getMonth() + 1) + "-" + targetDatetime.getDate();
-                    return formatted_date;
+                    var d = new Date(unixDate).toISOString();
+                    d = d.substring(0, d.indexOf('T'));
+                    return d;
                 }
             });
-            
+
 
             $(document).on('click', '.btnSubmitCompleteInfo', function () {
 
@@ -376,7 +402,7 @@
 
                 var $form = $("#profileForm-setting");
                 var data = getFormData($form);
-                
+                data['birthdate'] = data['birthdateAlt'];
                 mApp.block('.profileMenuPage.profileMenuPage-setting', {
                     overlayColor: "#000000",
                     type: "loader",
@@ -430,7 +456,7 @@
                     state: "success",
                     message: "کمی صبر کنید..."
                 });
-                
+
                 $.ajax({
                     type: 'GET',
                     url: $('#SendMobileVerificationCodeActionUrl').val(),
@@ -492,70 +518,70 @@
                 });
 
 
-                $('.inputVerificationWarper').fadeOut();
-                $('.SendMobileVerificationCodeWarper').fadeOut();
-                $('.mobileUnVerifyMessage').removeClass('d-block');
-                $('.mobileUnVerifyMessage').addClass('d-none');
-                $('.mobileVerifyMessage').removeClass('d-none');
-                $('.mobileVerifyMessage').addClass('d-block');
-                $('.btnSubmitCompleteInfo').fadeIn();
-                updateUserCompletionProgress(data.user.info.completion);
-                toastr.success('شماره موبایل شما تایید شد.');
-                mApp.unblock('.SendMobileVerificationCodeWarper');
-                mUtil.scrollTo('.SendMobileVerificationCodeWarper', 300);
-                
-                
-                
-                
-                
-                
-                // $.ajax({
-                //     type: 'POST',
-                //     url: $('#VerifyMobileVerificationCodeActionUrl').val(),
-                //     data: {
-                //         code: verificationCode
-                //     },
-                //     // dataType: 'text',
-                //     dataType: 'json',
-                //     success: function (data) {
-                //         if (data.error) {
+                // $('.inputVerificationWarper').fadeOut();
+                // $('.SendMobileVerificationCodeWarper').fadeOut();
+                // $('.mobileUnVerifyMessage').removeClass('d-block');
+                // $('.mobileUnVerifyMessage').addClass('d-none');
+                // $('.mobileVerifyMessage').removeClass('d-none');
+                // $('.mobileVerifyMessage').addClass('d-block');
+                // $('.btnSubmitCompleteInfo').fadeIn();
+                // updateUserCompletionProgress(data.user.info.completion);
+                // toastr.success('شماره موبایل شما تایید شد.');
+                // mApp.unblock('.SendMobileVerificationCodeWarper');
+                // mUtil.scrollTo('.SendMobileVerificationCodeWarper', 300);
                 //
-                //             // let message = 'مشکلی رخ داده است. لطفا مجدد سعی کنید';
-                //             let message = data.error.message;
-                //
-                //             toastr.error('خطای سیستمی رخ داده است.' + '<br>' + message);
-                //
-                //
-                //         } else {
-                //             $('.inputVerificationWarper').fadeOut();
-                //             $('.SendMobileVerificationCodeWarper').fadeOut();
-                //             $('.mobileUnVerifyMessage').removeClass('d-block');
-                //             $('.mobileUnVerifyMessage').addClass('d-none');
-                //             $('.mobileVerifyMessage').removeClass('d-none');
-                //             $('.mobileVerifyMessage').addClass('d-block');
-                //             $('.btnSubmitCompleteInfo').fadeIn();
-                //             updateUserCompletionProgress(data.user.info.completion);
-                //             toastr.success('شماره موبایل شما تایید شد.');
-                //         }
-                //
-                //         mApp.unblock('.SendMobileVerificationCodeWarper');
-                //         mUtil.scrollTo('.SendMobileVerificationCodeWarper', 300);
-                //     },
-                //     error: function (jqXHR, textStatus, errorThrown) {
-                //         let message = '';
-                //         if (jqXHR.status === 403) {
-                //             message = 'کد وارد شده اشتباه است.';
-                //         } else if (jqXHR.status === 422) {
-                //             message = 'کد را وارد نکرده اید.';
-                //         } else {
-                //             message = 'خطای سیستمی رخ داده است.';
-                //         }
-                //
-                //         toastr.error(message);
-                //
-                //         mApp.unblock('.SendMobileVerificationCodeWarper');
-                //     }
-                // });
+
+
+
+
+
+                $.ajax({
+                    type: 'POST',
+                    url: $('#VerifyMobileVerificationCodeActionUrl').val(),
+                    data: {
+                        code: verificationCode
+                    },
+                    // dataType: 'text',
+                    dataType: 'json',
+                    success: function (data) {
+                        if (data.error) {
+
+                            // let message = 'مشکلی رخ داده است. لطفا مجدد سعی کنید';
+                            let message = data.error.message;
+
+                            toastr.error('خطای سیستمی رخ داده است.' + '<br>' + message);
+
+
+                        } else {
+                            $('.inputVerificationWarper').fadeOut();
+                            $('.SendMobileVerificationCodeWarper').fadeOut();
+                            $('.mobileUnVerifyMessage').removeClass('d-block');
+                            $('.mobileUnVerifyMessage').addClass('d-none');
+                            $('.mobileVerifyMessage').removeClass('d-none');
+                            $('.mobileVerifyMessage').addClass('d-block');
+                            $('.btnSubmitCompleteInfo').fadeIn();
+                            updateUserCompletionProgress(data.user.info.completion);
+                            toastr.success('شماره موبایل شما تایید شد.');
+                        }
+
+                        mApp.unblock('.SendMobileVerificationCodeWarper');
+                        mUtil.scrollTo('.SendMobileVerificationCodeWarper', 300);
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        let message = '';
+                        if (jqXHR.status === 403) {
+                            message = 'کد وارد شده اشتباه است.';
+                        } else if (jqXHR.status === 422) {
+                            message = 'کد را وارد نکرده اید.';
+                        } else {
+                            message = 'خطای سیستمی رخ داده است.';
+                        }
+
+                        toastr.error(message);
+
+                        mApp.unblock('.SendMobileVerificationCodeWarper');
+                    }
+                });
             });
         });
     </script>

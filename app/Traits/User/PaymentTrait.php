@@ -19,20 +19,20 @@ trait PaymentTrait
     public function getOpenOrder(): Order
     {
         $openOrder = $this->firstOrCreateOpenOrder($this);
-        
+
         return $openOrder;
     }
-    
+
     public function getNumberOfProductsInBasketAttribute()
     {
         return $this->openOrders->getNumberOfProductsInThisOrderCollection();
     }
-    
+
     public function ordermanagercomments()
     {
         return $this->hasMany('App\Ordermanagercomment');
     }
-    
+
     /*
     |--------------------------------------------------------------------------
     | relations
@@ -42,13 +42,13 @@ trait PaymentTrait
     {
         return $this->hasMany('\App\Bankaccount');
     }
-    
+
     public function openOrders()
     {
         return $this->hasMany('App\Order')
             ->where("orderstatus_id", config("constants.ORDER_STATUS_OPEN"));
     }
-    
+
     /**
      * Gets user's transactions that he is allowed to see
      *
@@ -67,10 +67,10 @@ trait PaymentTrait
                 /** @var QueryBuilder $q */
                 $q->whereIn("transactionstatus_id", $showableTransactionStatuses);
             });
-        
+
         return $transactions;
     }
-    
+
     /**
      * Retrieve only order ralated transactions of this user
      */
@@ -78,7 +78,7 @@ trait PaymentTrait
     {
         return $this->hasManyThrough("\App\Transaction", "\App\Order");
     }
-    
+
     /**
      * Gets user's instalments
      *
@@ -91,18 +91,18 @@ trait PaymentTrait
             ->whereDoesntHave("parents")
             ->where("transactionstatus_id", config("constants.TRANSACTION_STATUS_UNPAID"));
     }
-    
+
     public function orderproducts()
     {
         return $this->hasManyThrough("\App\Orderproduct", "\App\Order");
     }
-    
+
     public function closedorderproducts()
     {
         return $this->hasManyThrough("\App\Orderproduct", "\App\Order")
             ->whereNotIn("orders.orderstatus_id", Order::OPEN_ORDER_STATUSES);
     }
-    
+
     /**
      * Retrieve only order ralated transactions of this user
      */
@@ -110,7 +110,7 @@ trait PaymentTrait
     {
         return $this->hasManyThrough("\App\Transaction", "\App\Wallet");
     }
-    
+
     /**
      * Retrieve all transactions of this user
      */
@@ -118,19 +118,7 @@ trait PaymentTrait
     {
         return $this->hasManyThrough("\App\Transaction", "\App\Wallet");
     }
-    
-    public function getClosedOrdersAttribute()
-    {
-        $user = $this;
-        $key  = "user:closeOrders:".$user->cacheKey();
-        
-        return Cache::tags(['order' , 'user'])->remember($key, config("constants.CACHE_10"), function () use ($user) {
-            return $this->closedOrders()
-                ->orderBy('completed_at', 'desc')
-                ->paginate(10, ['*'], 'orders');
-        });
-    }
-    
+
     /**
      * Get user's orders that he is allowed to see
      *
@@ -141,9 +129,21 @@ trait PaymentTrait
         return $this->orders()
             ->whereNotIn("orderstatus_id", Order::OPEN_ORDER_STATUSES);
     }
-    
+
     public function orders()
     {
         return $this->hasMany('App\Order');
+    }
+
+    public function getClosedOrders($pageNumber=1)
+    {
+        $user   = $this;
+        $key    = 'user:closedOrders:page-'.$pageNumber.':'.$user->cacheKey();
+
+        return Cache::tags(['user', 'order' , 'closedOrder' , 'user_'.$user->id , 'user_'.$user->id.'_closedOrders'])->remember($key, config("constants.CACHE_10"), function () use ($user , $pageNumber) {
+            return $user->closedOrders()
+                ->orderBy('completed_at', 'desc')
+                ->paginate(10, ['*'], 'orders',$pageNumber);
+        });
     }
 }
