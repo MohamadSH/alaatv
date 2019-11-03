@@ -53,11 +53,10 @@
                         <div class="row">
                             <div class="col-md-6">
 
-                                    <div class="form-group m-form__group {{ $errors->has('firstName') ? ' has-danger' : '' }}
-                                    @if(isset($user->firstName)) d-none @endif">
+                                    <div class="form-group m-form__group {{ $errors->has('firstName') ? ' has-danger' : '' }}">
                                         <label for="firstName">نام</label>
                                         <div class="m-input-icon m-input-icon--left">
-                                            <input type="text" name="firstName" id="firstName" class="form-control m-input m-input--air" placeholder="نام" @if(isset($user->firstName))value="{{ $user->firstName }}"@endif>
+                                            <input type="text" name="firstName" id="firstName" class="form-control m-input m-input--air" placeholder="نام" @if(isset($user->firstName))value="{{ $user->firstName }}"@endif @if(isset($user->firstName)) disabled="disabled" @endif>
                                             <span class="m-input-icon__icon m-input-icon__icon--left">
                                     <span>
                                         <i class="fa fa-user"></i>
@@ -69,11 +68,10 @@
                             </div>
                             <div class="col-md-6">
 
-                                    <div class="form-group m-form__group {{ $errors->has('lastName') ? ' has-danger' : '' }}
-                                    @if(isset($user->lastName)) d-none @endif">
+                                    <div class="form-group m-form__group {{ $errors->has('lastName') ? ' has-danger' : '' }}">
                                         <label for="lastName">نام خانوادگی</label>
                                         <div class="m-input-icon m-input-icon--left">
-                                            <input type="text" name="lastName" id="lastName" class="form-control m-input m-input--air" placeholder="نام خانوادگی" @if(isset($user->lastName))value="{{ $user->lastName }}"@endif>
+                                            <input type="text" name="lastName" id="lastName" class="form-control m-input m-input--air" placeholder="نام خانوادگی" @if(isset($user->lastName))value="{{ $user->lastName }}"@endif @if(isset($user->lastName)) disabled="disabled" @endif>
                                             <span class="m-input-icon__icon m-input-icon__icon--left">
                                     <span>
                                         <i class="fa fa-user"></i>
@@ -87,10 +85,10 @@
                         <div class="row">
                             <div class="col-md-6">
 
-                                <div class="form-group m-form__group {{ $errors->has('province') ? ' has-danger' : '' }} @if(isset($user->province)) d-none @endif ">
+                                <div class="form-group m-form__group {{ $errors->has('province') ? ' has-danger' : '' }}">
                                     <label for="province">استان</label>
                                     <div class="m-input-icon m-input-icon--left">
-                                        <input type="text" name="province" id="province" class="form-control m-input m-input--air" placeholder="استان" @if(isset($user->province))value="{{ $user->province }}"@endif>
+                                        <input type="text" name="province" id="province" class="form-control m-input m-input--air" placeholder="استان" @if(isset($user->province))value="{{ $user->province }}"@endif @if(isset($user->province)) disabled="disabled" @endif>
                                         <span class="m-input-icon__icon m-input-icon__icon--left">
                                             <span>
                                                 <i class="fa fa-location-arrow"></i>
@@ -101,10 +99,10 @@
                             </div>
                             <div class="col-md-6">
 
-                                <div class="form-group m-form__group {{ $errors->has('city') ? ' has-danger' : '' }} @if(isset($user->city)) d-none @endif">
+                                <div class="form-group m-form__group {{ $errors->has('city') ? ' has-danger' : '' }}">
                                     <label for="city">شهر</label>
                                     <div class="m-input-icon m-input-icon--left">
-                                        <input type="text" name="city" id="city" class="form-control m-input m-input--air" placeholder="شهر" @if(isset($user->city))value="{{ $user->city }}"@endif>
+                                        <input type="text" name="city" id="city" class="form-control m-input m-input--air" placeholder="شهر" @if(isset($user->city))value="{{ $user->city }}"@endif @if(isset($user->city)) disabled="disabled" @endif>
                                         <span class="m-input-icon__icon m-input-icon__icon--left">
                                             <span>
                                                 <i class="fa fa-location-arrow"></i>
@@ -119,10 +117,14 @@
                             <div class="col-md-6">
 
 
-                                <div class="form-group m-form__group {{ $errors->has('gender_id') ? ' has-danger' : '' }} @if(isset($user->gender_id)) d-none @endif">
+                                <div class="form-group m-form__group {{ $errors->has('gender_id') ? ' has-danger' : '' }}">
                                     <label for="gender_id">جنسیت</label>
                                     <div class="m-input-icon m-input-icon--left">
+                                        @if(isset($user->gender_id))
+                                        {!! Form::select('gender_id',$genders,null,['class' => 'form-control m-input m-input--air', 'id' => 'gender_id', 'disabled' => 'disabled']) !!}
+                                        @else
                                         {!! Form::select('gender_id',$genders,null,['class' => 'form-control m-input m-input--air', 'id' => 'gender_id']) !!}
+                                        @endif
                                         <span class="m-input-icon__icon m-input-icon__icon--left">
                                             <span>
                                                 <i class="fa fa-user"></i>
@@ -135,10 +137,14 @@
                             <div class="col-md-6">
 
 
-                                <div class="form-group m-form__group {{ $errors->has('major_id') ? ' has-danger' : '' }} @if(isset($user->major_id)) d-none @endif">
+                                <div class="form-group m-form__group {{ $errors->has('major_id') ? ' has-danger' : '' }}">
                                     <label for="major_id">رشته</label>
                                     <div class="m-input-icon m-input-icon--left">
+                                        @if(isset($user->major_id))
+                                        {!! Form::select('major_id',$majors,null,['class' => 'form-control m-input m-input--air', 'id' => 'major_id', 'disabled' => 'disabled']) !!}
+                                        @else
                                         {!! Form::select('major_id',$majors,null,['class' => 'form-control m-input m-input--air', 'id' => 'major_id']) !!}
+                                        @endif
                                         <span class="m-input-icon__icon m-input-icon__icon--left">
                                             <span>
                                                 <i class="fa fa-graduation-cap"></i>
@@ -157,8 +163,8 @@
                                 <div class = "form-group m-form__group {{ $errors->has('birthdate') ? ' has-danger' : '' }} @if(isset($user->birthdate)) d-none @endif">
                                     <label for = "birthdate">تاریخ تولد</label>
                                     <div class = "m-input-icon m-input-icon--left">
-                                        <input class = "form-control m-input m-input--air" name = "birthdate" id = "birthdate"/>
-                                        <input name = "birthdateAlt" id = "birthdateAlt" type = "hidden"/>
+                                        <input class = "form-control m-input m-input--air" name = "birthdate" id = "birthdate" @if(isset($user->birthdate)) disabled="disabled" @endif/>
+                                        <input name = "birthdateAlt" id = "birthdateAlt" type = "hidden" @if(isset($user->birthdate)) disabled="disabled" @endif/>
                                         <span class = "m-input-icon__icon m-input-icon__icon--left">
                                             <span>
                                                 <i class = "fa fa-calendar-alt"></i>
@@ -208,7 +214,6 @@
 
                             </div>
                         </div>
-
 
                         <input type="hidden" id="userUpdateProfileUrl" value="{{ action((isset($formAction))?$formAction:'Web\UserController@update' , Auth::user()) }}">
 
@@ -364,10 +369,8 @@
                     $('#completeRegisterMessage').modal('show');
             @endif
 
-            todayBirthDay =  $('#birthdate').val();
-
             @if(!$user->hasVerifiedMobile() )
-            $('.btnSubmitCompleteInfo').fadeOut();
+                // $('.btnSubmitCompleteInfo').fadeOut();
             @endif
 
             $("#birthdate").persianDatepicker({
@@ -387,7 +390,8 @@
                     return d;
                 }
             });
-
+            
+            todayBirthDay =  $('#birthdate').val();
 
             $(document).on('click', '.btnSubmitCompleteInfo', function () {
 
@@ -516,23 +520,6 @@
                     state: "success",
                     message: "کمی صبر کنید..."
                 });
-
-
-                // $('.inputVerificationWarper').fadeOut();
-                // $('.SendMobileVerificationCodeWarper').fadeOut();
-                // $('.mobileUnVerifyMessage').removeClass('d-block');
-                // $('.mobileUnVerifyMessage').addClass('d-none');
-                // $('.mobileVerifyMessage').removeClass('d-none');
-                // $('.mobileVerifyMessage').addClass('d-block');
-                // $('.btnSubmitCompleteInfo').fadeIn();
-                // updateUserCompletionProgress(data.user.info.completion);
-                // toastr.success('شماره موبایل شما تایید شد.');
-                // mApp.unblock('.SendMobileVerificationCodeWarper');
-                // mUtil.scrollTo('.SendMobileVerificationCodeWarper', 300);
-                //
-
-
-
 
 
                 $.ajax({
