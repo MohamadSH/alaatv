@@ -195,7 +195,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('orders', [UserController::class, 'userOrders']);
         Route::get('question', [UserController::class, 'userQuestions']);
         Route::post('sendSMS', [UserController::class, 'sendSMS']);
-        Route::post('user/update/partialInfo', [UserController::class, 'partialUpdate']);
+        Route::post('update/partialInfo', [UserController::class , 'partialUpdate'])->name('web.user.update.partial');
     });
     Route::group(['prefix' => 'order'], function () {
         Route::post('detachorderproduct', 'Web\OrderController@detachOrderproduct');
