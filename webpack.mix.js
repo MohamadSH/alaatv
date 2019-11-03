@@ -327,15 +327,34 @@ class Mix {
             ],
             'public/css/user-profile.css',
             [
-                    'node_modules/toastr/build/toastr.min.js',
-                    'node_modules/block-ui/jquery.blockUI.js',
-                    'node_modules/bootstrap-fileinput/js/fileinput.js',
-                    'node_modules/persian-date/dist/persian-date.js',
-                    'node_modules/persian-datepicker/dist/js/persian-datepicker.js',
-                    'public/acm/AlaatvCustomFiles/js/page/user-profile.js'
-                ],
-                'public/js/user-profile.js'
-            );
+                'node_modules/toastr/build/toastr.min.js',
+                'node_modules/block-ui/jquery.blockUI.js',
+                'node_modules/bootstrap-fileinput/js/fileinput.js',
+                'node_modules/persian-date/dist/persian-date.js',
+                'node_modules/persian-datepicker/dist/js/persian-datepicker.js',
+                'public/acm/AlaatvCustomFiles/js/page/user-profile.js'
+            ],
+            'public/js/user-profile.js'
+        );
+    }
+    mixPageCompleteUserProfile() {
+        this.mixCssAndJs(
+            [
+                'node_modules/toastr/build/toastr.css',
+                'node_modules/animate.css/animate.css',
+                'node_modules/persian-datepicker/dist/css/persian-datepicker.css',
+                'public/acm/AlaatvCustomFiles/css/page/user-profile.css',
+            ],
+            'public/css/user-completeInfo.css',
+            [
+                'node_modules/toastr/build/toastr.min.js',
+                'node_modules/block-ui/jquery.blockUI.js',
+                'node_modules/persian-date/dist/persian-date.js',
+                'node_modules/persian-datepicker/dist/js/persian-datepicker.js',
+                // 'public/acm/AlaatvCustomFiles/js/page/user-profile.js'
+            ],
+            'public/js/user-completeInfo.js'
+        );
     }
     mixPageUserDashboard() {
         this.mixCssAndJs([
@@ -376,6 +395,7 @@ class Mix {
     mixUser() {
         this.mixPageUserOrders();
         this.mixPageUserProfile();
+        this.mixPageCompleteUserProfile();
         this.mixPageUserDashboard();
         this.mixPageUserProfileSalesReport();
     }
