@@ -1362,7 +1362,7 @@ class UserController extends Controller
         }
     }
 
-    public function partialUpdate(EditUserPartialInfoRequest $request){
+    public function partialUpdate(Request $request){
         $user = $request->user();
         $this->fillUserFromRequest($request->all(), $user);
 
