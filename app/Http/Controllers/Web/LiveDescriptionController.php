@@ -91,7 +91,7 @@ class LiveDescriptionController extends Controller
     public function update(Request $request, LiveDescription $liveDescription)
     {
         if($liveDescription->update($request->all())){
-            Cache::tags('Livedescription:'.$liveDescription->id)->flush();
+            Cache::tags('livedescription_'.$liveDescription->id)->flush();
             session()->flash('success' , 'توضیح لحظه ای با موفقیت اصلاح شد');
         }else{
             session()->flash('error' , 'خطا در اصلاح توصیح لحظه ای');

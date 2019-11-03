@@ -15,7 +15,7 @@ use App\Classes\Search\{Filters\Tags, Tag\ContentsetTagManagerViaApi};
 class ContentsetSearch extends SearchAbstract
 {
     protected $model = "App\Contentset";
-    
+
     protected $pageName = 'contentsetPage';
 
 //    protected $numberOfItemInEachPage = 2;
@@ -26,7 +26,7 @@ class ContentsetSearch extends SearchAbstract
         'enable',
         'display'
     ];
-    
+
     /**
      * @param  array  $filters
      *
@@ -36,19 +36,16 @@ class ContentsetSearch extends SearchAbstract
     {
         $this->pageNum = $this->setPageNum($filters);
         $key = $this->makeCacheKey($filters);
-        
-        return Cache::tags([
-            'contentset',
-            'search',
-        ])
+
+        return Cache::tags(['set' , 'set_search' , 'search'])
             ->remember($key, $this->cacheTime, function () use ($filters) {
                 $query = $this->applyDecoratorsFromFiltersArray($filters, $this->model->newQuery());
-                
+
                 return $this->getResults($query)
                     ->appends($filters);
             });
     }
-    
+
     /**
      * @param  Builder  $query
      *
@@ -59,10 +56,10 @@ class ContentsetSearch extends SearchAbstract
         $result = $query
             ->orderBy('created_at', 'desc')
             ->paginate($this->numberOfItemInEachPage, ['*'], $this->pageName, $this->pageNum);
-        
+
         return $result;
     }
-    
+
     /**
      * @param $decorator
      *
@@ -74,7 +71,7 @@ class ContentsetSearch extends SearchAbstract
         if ($decorator instanceof Tags) {
             $decorator->setTagManager(new ContentsetTagManagerViaApi());
         }
-        
+
         return $decorator;
     }
 }

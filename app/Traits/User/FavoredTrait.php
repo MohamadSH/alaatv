@@ -8,6 +8,10 @@
 
 namespace App\Traits\User;
 
+use App\Content;
+use App\Contentset;
+use App\Product;
+
 trait FavoredTrait
 {
     /*
@@ -15,21 +19,18 @@ trait FavoredTrait
     | relations
     |--------------------------------------------------------------------------
     */
-    public function favoredContent()
+    public function favoredContents()
     {
-        return $this->morphedByMany('App\Content', 'favorable')
-            ->withTimestamps();
+        return $this->morphedByMany(Content::class, 'favorable')->withTimestamps();
     }
-    
-    public function favoredSet()
+
+    public function favoredSets()
     {
-        return $this->morphedByMany('App\Contentset', 'favorable')
-            ->withTimestamps();
+        return $this->morphedByMany(Contentset::class, 'favorable')->withTimestamps();
     }
-    
-    public function favoredProduct()
+
+    public function favoredProducts()
     {
-        return $this->morphedByMany('App\Product', 'favorable')
-            ->withTimestamps();
+        return $this->morphedByMany(Product::class, 'favorable')->withTimestamps();
     }
 }

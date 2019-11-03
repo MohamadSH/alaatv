@@ -109,3 +109,6 @@ public/.well-known/
 chown.sh
 ga-service_account-0d4476d84562.json
 !/public/js/page-live.js
+/public/css/user-completeInfo.css
+/public/js/set-show.js
+/public/js/user-completeInfo.js

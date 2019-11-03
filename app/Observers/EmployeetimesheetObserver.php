@@ -3,7 +3,7 @@
 namespace App\Observers;
 
 use App\Employeetimesheet;
-use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Cache;
 
 class EmployeetimesheetObserver
 {
@@ -79,6 +79,6 @@ class EmployeetimesheetObserver
 
     public function saved(Employeetimesheet $employeetimesheet)
     {
-        Artisan::call('cache:clear');
+        Cache::tags(['employeetimesheet_'.$employeetimesheet->id])->flush();
     }
 }
