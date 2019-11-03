@@ -15,7 +15,7 @@ class PostCodeNotification extends Notification implements ShouldQueue
 {
     use Queueable, SerializesModels;
 
-    const MEDIANA_PATTERN_CODE_POST_CODE = 'h6m9je9z4i';
+    const MEDIANA_PATTERN_CODE_POST_CODE = '6zgudygzau';
 
     public $timeout = 120;
 
@@ -78,7 +78,6 @@ class PostCodeNotification extends Notification implements ShouldQueue
         return [
             'name' => 'آلایی',
             'code'  => $this->code,
-            'site' => 'آلاء',
             'supportLink' => '',
         ];
     }
