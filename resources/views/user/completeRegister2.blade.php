@@ -6,6 +6,15 @@
 
 @section('content')
 
+    <div class="row">
+        <div class="col-md-4 mx-auto">
+            <div class="m-alert m-alert--outline m-alert--outline-2x alert alert-success alert-dismissible fade show" role="alert">
+                <strong>
+                    هدیه آلاء به دانش‌آموز امروز، دانشجوی فردا
+                    ۱۳ آبان تا ۱۶ آذر                </strong>
+            </div>
+        </div>
+    </div>
     @include('systemMessage.flash')
     @if(!$hadGotGiftBefore &&  !$hasGotGiftBefore)
     <div class="row">
@@ -160,7 +169,7 @@
                             <div class="col-md-6">
 
 
-                                <div class = "form-group m-form__group {{ $errors->has('birthdate') ? ' has-danger' : '' }} @if(isset($user->birthdate)) d-none @endif">
+                                <div class = "form-group m-form__group {{ $errors->has('birthdate') ? ' has-danger' : '' }}">
                                     <label for = "birthdate">تاریخ تولد</label>
                                     <div class = "m-input-icon m-input-icon--left">
                                         <input class = "form-control m-input m-input--air" name = "birthdate" id = "birthdate" @if(isset($user->birthdate)) disabled="disabled" @endif/>
@@ -237,7 +246,7 @@
                 @else
                     مبلغ 14 هزار تومان هدیه به کیف پول شما افزوده شد.
                 @endif
-                <strong>این هدیه تا تاریخ 5 آذر اعتبار دارد.</strong>
+                <strong>این هدیه تا تاریخ 16 آذر اعتبار دارد.</strong>
             </div>
         @endif
     </div>
@@ -257,7 +266,7 @@
                     <div class="alert alert-success alert-dismissible fade show" role="alert">
                         <strong>تبریک!</strong>
                         مبلغ 14000 تومان هدیه به کیف پول شما افزوده شد.
-                        <strong>این هدیه تا 5 آذر دیگر اعتبار دارد.</strong>
+                        <strong>این هدیه تا 16 آذر دیگر اعتبار دارد.</strong>
                     </div>
                 </div>
             </div>
@@ -370,7 +379,7 @@
             @endif
 
             @if(!$user->hasVerifiedMobile() )
-                // $('.btnSubmitCompleteInfo').fadeOut();
+                $('.btnSubmitCompleteInfo').fadeOut();
             @endif
 
             $("#birthdate").persianDatepicker({
@@ -390,7 +399,7 @@
                     return d;
                 }
             });
-            
+
             todayBirthDay =  $('#birthdate').val();
 
             $(document).on('click', '.btnSubmitCompleteInfo', function () {
