@@ -26,9 +26,9 @@ trait BonTrait
      */
     public function userValidBons(Bon $bon)
     {
-        $key = "user:userValidBons:".$this->cacheKey()."-".(isset($bon) ? $bon->cacheKey() : "");
+        $key = 'user:userValidBons:'.$this->cacheKey()."-".(isset($bon) ? $bon->cacheKey() : '');
 
-        return Cache::tags('bon')
+        return Cache::tags(['user' , 'bon' , 'user_'.$this->id , 'user_'.$this->id.'_validBons'])
             ->remember($key, config("constants.CACHE_60"), function () use ($bon) {
                 return Userbon::where("user_id", $this->id)
                     ->where("bon_id", $bon->id)
@@ -57,11 +57,11 @@ trait BonTrait
     public function userHasBon($bonName = null): int
     {
         if (is_null($bonName)) {
-            $bonName = config("constants.BON1");
+            $bonName = config('constants.BON1');
         }
-        $key = "user:userHasBon:".$this->cacheKey()."-".$bonName;
+        $key = 'user:userHasBon:'.$this->cacheKey().'-'.$bonName;
 
-        return Cache::tags('bon')
+        return Cache::tags(['user' , 'bon' , 'user_'.$this->id , 'user_'.$this->id.'_hasBon'])
             ->remember($key, config("constants.CACHE_60"), function () use ($bonName) {
 
                 $bon = Bon::all()

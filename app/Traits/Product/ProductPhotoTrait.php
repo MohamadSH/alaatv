@@ -23,9 +23,9 @@ trait ProductPhotoTrait
      */
     public function getRootImage(): string
     {
-        $key = "product:getRootImage:".$this->cacheKey();
+        $key = "product:rootImage:".$this->cacheKey();
 
-        return Cache::tags(["product"])
+        return Cache::tags(['product' , 'photo' , 'productPhoto' , 'product_'.$this->id , 'product_'.$this->id.'_photo'])
             ->remember($key, config('constants.CACHE_600'), function () {
                 $image       = "";
                 $grandParent = $this->grandParent;
@@ -59,7 +59,7 @@ trait ProductPhotoTrait
     public function getSamplePhotosAttribute(): ?Collection
     {
         $key                 = "product:SamplePhotos:".$this->cacheKey();
-        $productSamplePhotos = Cache::tags(["product"])
+        $productSamplePhotos = Cache::tags(['product' , 'photo' , 'samplePhoto' , 'product_'.$this->id , 'product_'.$this->id.'_samplePhotos'])
             ->remember($key, config("constants.CACHE_60"), function () {
                 $photos = collect();
 

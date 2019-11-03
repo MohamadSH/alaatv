@@ -6,7 +6,7 @@ use App\Classes\Search\TaggingInterface;
 use App\Content;
 use App\Events\ContentRedirected;
 use App\Traits\TaggableTrait;
-use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Cache;
 
 class ContentObserver
 {
@@ -115,6 +115,9 @@ class ContentObserver
         }else{
             $this->sendTagsOfTaggableToApi($content, $this->tagging);
         }
-        Artisan::call('cache:clear');
+
+        Cache::tags(['content_'.$content->id ,
+                    'set_'.$content->contentset_id ,
+                    'content_search' ])->flush();
     }
 }

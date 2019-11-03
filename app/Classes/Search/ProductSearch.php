@@ -36,16 +36,11 @@ class ProductSearch extends SearchAbstract
     protected function apply(array $filters): LengthAwarePaginator
     {
         $this->pageNum = $this->setPageNum($filters);
-//        dd($this->pageNum);
         $key = $this->makeCacheKey($filters);
 
-        return Cache::tags([
-            'product',
-            'search',
-        ])->remember($key, $this->cacheTime, function () use ($filters) {
+        return Cache::tags(['product' , 'product_search' , 'search'])->remember($key, $this->cacheTime, function () use ($filters) {
                 $query = $this->applyDecoratorsFromFiltersArray($filters, $this->model->newQuery());
 
-//                        dd($this->getResults($query));
                 return $this->getResults($query);
             });
     }

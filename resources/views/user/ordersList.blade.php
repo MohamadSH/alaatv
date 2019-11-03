@@ -24,33 +24,33 @@
 
     @include("systemMessage.flash")
 
-    <div class="row">
-        <div class="col">
+{{--    <div class="row">--}}
+{{--        <div class="col">--}}
 
-            @if(isset($debitCard))
-                <div class="alert alert-info text-center" role="alert">
-                    شماره کارت برای واریز کارت به کارت مبلغ:
-                    <br>
-                    <strong>{{$debitCard->cardNumber}}</strong>
-                    <br>
-                    به نام
-                    @if(!isset($debitCard->user->firstName) && !isset($debitCard->user->lastName))
-                        کاربر
-                        ناشناس
-                    @else
-                        @if(isset($debitCard->user->firstName))
-                            {{$debitCard->user->firstName}}
-                        @endif
-                        @if(isset($debitCard->user->lastName))
-                            {{$debitCard->user->lastName}}
-                        @endif
-                    @endif
-                    - بانک {{ optional($debitCard->bank)->name}}
-                </div>
-            @endif
+{{--            @if(isset($debitCard))--}}
+{{--                <div class="alert alert-info text-center" role="alert">--}}
+{{--                    شماره کارت برای واریز کارت به کارت مبلغ:--}}
+{{--                    <br>--}}
+{{--                    <strong>{{$debitCard->cardNumber}}</strong>--}}
+{{--                    <br>--}}
+{{--                    به نام--}}
+{{--                    @if(!isset($debitCard->user->firstName) && !isset($debitCard->user->lastName))--}}
+{{--                        کاربر--}}
+{{--                        ناشناس--}}
+{{--                    @else--}}
+{{--                        @if(isset($debitCard->user->firstName))--}}
+{{--                            {{$debitCard->user->firstName}}--}}
+{{--                        @endif--}}
+{{--                        @if(isset($debitCard->user->lastName))--}}
+{{--                            {{$debitCard->user->lastName}}--}}
+{{--                        @endif--}}
+{{--                    @endif--}}
+{{--                    - بانک {{ optional($debitCard->bank)->name}}--}}
+{{--                </div>--}}
+{{--            @endif--}}
 
-        </div>
-    </div>
+{{--        </div>--}}
+{{--    </div>--}}
 
     <div class="row">
         <div class="col">
@@ -400,6 +400,7 @@
                                         </div>
                                     </div>
                                 </div>
+                                {{$orders->links()}}
                             @endif
 
                         </div>
