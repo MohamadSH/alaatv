@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Classes\FavorableInterface;
 use Eloquent;
 use Carbon\Carbon;
 use App\Classes\Taggable;
@@ -78,7 +79,7 @@ use App\Http\Controllers\Web\SetController;
  * @property mixed shortName
  * @method static Builder|Contentset display()
  */
-class Contentset extends BaseModel implements Taggable, SeoInterface
+class Contentset extends BaseModel implements Taggable, SeoInterface , FavorableInterface
 {
     use favorableTraits;
     use Searchable;

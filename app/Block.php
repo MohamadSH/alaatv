@@ -336,9 +336,9 @@ class Block extends BaseModel
     public function contents()
     {
         return $this->morphedByMany(Content::class, 'blockable')
-            ->withTimestamps()
-            ->withPivot(['order'])
-            ->orderBy('blockables.order');
+                    ->withTimestamps()
+                    ->withPivot(['order'])
+                    ->orderBy('blockables.order');
     }
 
     public function notRedirectedContents()

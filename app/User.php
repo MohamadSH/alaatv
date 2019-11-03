@@ -238,11 +238,11 @@ use Laravel\Passport\Token;
  * @property string|null
  *               $mobile_verified_at       تاریخ تایید شماره موبایل
  * @property-read ContentCollection|Content[]
- *                    $favoredContent
+ *                    $favoredContents
  * @property-read ProductCollection|Product[]
- *                    $favoredProduct
+ *                    $favoredProducts
  * @property-read Collection|Contentset[]
- *                    $favoredSet
+ *                    $favoredSets
  * @method static Builder|User whereMobileVerifiedAt($value)
  * @method static Builder|User whereMobileVerifiedCode($value)
  * @property string|null                                                              $email_verified_at
@@ -302,9 +302,9 @@ use Laravel\Passport\Token;
  * @property-read Collection|Contract[] $contracts
  * @property-read int|null $contracts_count
  * @property-read int|null $eventresults_count
- * @property-read int|null $favored_content_count
- * @property-read int|null $favored_product_count
- * @property-read int|null $favored_set_count
+ * @property-read int|null $favored_contents_count
+ * @property-read int|null $favored_products_count
+ * @property-read int|null $favored_sets_count
  * @property-read int|null $firebasetokens_count
  * @property-read mixed $edit_link
  * @property-read mixed $jalali_created_at
@@ -759,6 +759,7 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber, 
     {
         return $this->belongsToMany(Category::class, 'help_categories_users',  'user_id','category_id');
     }
+
 
     /**
      * Checks whether user has default avatar or not
