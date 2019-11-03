@@ -92,7 +92,7 @@ use App\Classes\Checkout\Alaa\OrderproductCheckout;
 class Orderproduct extends BaseModel
 {
     use ProductCommon;
-    
+
     /**
      * @var array
      */
@@ -110,7 +110,7 @@ class Orderproduct extends BaseModel
         'includedInCoupon',
         'checkoutstatus_id',
     ];
-    
+
     protected $touches = [
         // ToDo: Query reduction
         /**
@@ -120,7 +120,7 @@ class Orderproduct extends BaseModel
          */
         'attributevalues',
     ];
-    
+
     protected $appends = [
         'orderproducttype',
         'product',
@@ -131,7 +131,7 @@ class Orderproduct extends BaseModel
         'photo',
         'grandProduct',
     ];
-    
+
     protected $hidden = [
         'product_id',
         'cost',
@@ -145,7 +145,7 @@ class Orderproduct extends BaseModel
         'updated_at',
         'deleted_at',
     ];
-    
+
     public static function deleteOpenedTransactions(array $intendedProductsId, array $intendedOrderStatuses): void
     {
         Orderproduct::whereIn('product_id', $intendedProductsId)
@@ -157,18 +157,18 @@ class Orderproduct extends BaseModel
             })
             ->delete();
     }
-    
+
     public function order()
     {
         return $this->belongsTo(Order::class);
     }
-    
+
     public function getOrderproducttypeAttribute()
     {
         $orderproduct = $this;
         $key          = 'orderproduct:type:'.$orderproduct->cacheKey();
-    
-        return Cache::tags(['orderproduct'])
+
+        return Cache::tags(['orderproduct' , 'orderproductType' , 'order_'.$orderproduct->id , 'order_'.$orderproduct->id.'_orderproductType'])
             ->remember($key, config('constants.CACHE_600'), function () use ($orderproduct) {
                 return optional($this->orderproducttype()
                     ->first())->setVisible([
@@ -177,31 +177,31 @@ class Orderproduct extends BaseModel
                 ]);
             });
     }
-    
+
     public function cacheKey()
     {
         $key  = $this->getKey();
         $time = isset($this->update) ? $this->updated_at->timestamp : $this->created_at->timestamp;
-    
+
         return sprintf('%s-%s', //$this->getTable(),
             $key, $time);
     }
-    
+
     public function orderproducttype()
     {
         return $this->belongsTo(Orderproducttype::class);
     }
-    
+
     public function insertedUserbons()
     {
         return $this->hasMany(Userbon::class);
     }
-    
+
     public function checkoutstatus()
     {
         return $this->belongsTo(Checkoutstatus::class);
     }
-    
+
     public function children()
     {
         return $this->belongsToMany(Orderproduct::class, 'orderproduct_orderproduct', 'op1_id',
@@ -211,13 +211,14 @@ class Orderproduct extends BaseModel
                 'orderproductinterrelations.id')
             ->where('relationtype_id', config('constants.ORDER_PRODUCT_INTERRELATION_PARENT_CHILD'));
     }
-    
+
     public function getExtraCost($extraAttributevaluesId = null):int
     {
-        $key = 'Orderproduct:getExtraCost:'.$this->cacheKey()."\\".(isset($extraAttributevaluesId) ? implode('.',
+        $orderproduct = $this;
+        $key = 'orderproduct:getExtraCost:'.$this->cacheKey()."\\".(isset($extraAttributevaluesId) ? implode('.',
                 $extraAttributevaluesId) : '-');
-    
-        return (int) Cache::tags(['orderproduct'])
+
+        return (int) Cache::tags(['orderproduct' , 'attribute' , 'orderproductExtraCost' , 'orderproduct_'.$orderproduct->id , 'orderproduct_'.$orderproduct->id.'_orderproductExtraCost'])
             ->remember($key, config('constants.CACHE_60'), function () use ($extraAttributevaluesId) {
             $extraCost = 0;
             if (isset($extraAttributevaluesId)) {
@@ -229,11 +230,11 @@ class Orderproduct extends BaseModel
             foreach ($extraAttributevalues as $attributevalue) {
                 $extraCost += $attributevalue->pivot->extraCost;
             }
-            
+
             return (int)$extraCost;
         });
     }
-    
+
     /**
      * Get orderproduct's total bon discount
      *
@@ -242,10 +243,10 @@ class Orderproduct extends BaseModel
     public function getTotalBonDiscountPercentage()
     {
         $totalBonDiscountValue = $this->getTotalBonDiscountDecimalValue();
-        
+
         return min($totalBonDiscountValue / 100, 1);
     }
-    
+
     /**
      * Obtains orderproduct's total bon discount decimal value
      *
@@ -257,19 +258,19 @@ class Orderproduct extends BaseModel
         foreach ($this->userbons as $userbon) {
             $totalBonNumber += $userbon->pivot->discount * $userbon->pivot->usageNumber;
         }
-        
+
         return $totalBonNumber;
     }
-    
+
     public function isNormalType()
     {
         if ($this->orderproducttype_id == config('constants.ORDER_PRODUCT_TYPE_DEFAULT') || !isset($this->orderproductstatus_id)) {
             return true;
         }
-    
+
         return false;
     }
-    
+
     public function fillCostValues($costArray)
     {
         if (isset($costArray['cost'])) {
@@ -278,7 +279,7 @@ class Orderproduct extends BaseModel
         else {
             $this->cost = null;
         }
-        
+
         if ($this->isGiftType()) {
             $this->discountPercentage = 100;
             $this->discountAmount     = 0;
@@ -292,16 +293,16 @@ class Orderproduct extends BaseModel
             }
         }
     }
-    
+
     public function isGiftType()
     {
         if ($this->orderproducttype_id == config('constants.ORDER_PRODUCT_GIFT')) {
             return true;
         }
-    
+
         return false;
     }
-    
+
     /**
      * @return BelongsToMany|Orderproduct|Collection
      */
@@ -314,7 +315,7 @@ class Orderproduct extends BaseModel
                 'orderproductinterrelations.id')
             ->where('relationtype_id', config('constants.ORDER_PRODUCT_INTERRELATION_PARENT_CHILD'));
     }
-    
+
     /**
      * Create a new Eloquent Collection instance.
      *
@@ -326,7 +327,7 @@ class Orderproduct extends BaseModel
     {
         return new OrderproductCollection($models);
     }
-    
+
     /**
      * @param $value
      *
@@ -336,7 +337,7 @@ class Orderproduct extends BaseModel
     {
         return $value / 100;
     }
-    
+
     /**
      * Sets orderproduct including in coupon
      *
@@ -346,7 +347,7 @@ class Orderproduct extends BaseModel
         $this->includedInCoupon = 1;
         $this->update();
     }
-    
+
     /** change type of orderproduct to Gift type
      *
      * @param  Product  $gift
@@ -361,7 +362,7 @@ class Orderproduct extends BaseModel
 //
 //        return $orderproduct;
 //    }
-    
+
     /**
      * Sets orderproduct excluding from coupon
      *
@@ -371,7 +372,7 @@ class Orderproduct extends BaseModel
         $this->includedInCoupon = 0;
         $this->update();
     }
-    
+
     /**
      * Determines whether orderproduct is available to purchase or not
      *
@@ -381,7 +382,7 @@ class Orderproduct extends BaseModel
     {
         return $this->product->isEnableToPurchase();
     }
-    
+
     /**
      * Updates orderproduct's attribute values
      *
@@ -390,12 +391,12 @@ class Orderproduct extends BaseModel
     {
         $extraAttributes = $this->attributevalues;
         $myParent        = $this->product->grandParent;
-        
+
         if (isset($myParent)) {
             foreach ($extraAttributes as $extraAttribute) {
                 $productAttributevalue = $myParent->attributevalues->where('id', $extraAttribute->id)
                     ->first();
-                
+
                 if (!isset($productAttributevalue)) {
                     $this->attributevalues()
                         ->detach($productAttributevalue);
@@ -408,7 +409,7 @@ class Orderproduct extends BaseModel
             }
         }
     }
-    
+
     /**
      * @return BelongsToMany|Attributevalue|Collection
      */
@@ -417,20 +418,20 @@ class Orderproduct extends BaseModel
         return $this->belongsToMany(Attributevalue::class, 'attributevalue_orderproduct', 'orderproduct_id', 'value_id')
             ->withPivot('extraCost');
     }
-    
+
     public function renewUserBons()
     {
         $userbons = $this->userbons;
         if ($userbons->isNotEmpty()) {
             $bonName = config('constants.BON1');
-            
+
             $bons = $this->product->getTotalBons($bonName);
-            
+
             if ($bons->isEmpty()) {
                 foreach ($userbons as $userBon) {
                     $this->userbons()
                         ->detach($userBon);
-                    
+
                     $userBon->usedNumber       = 0;
                     $userBon->userbonstatus_id = config('constants.USERBON_STATUS_ACTIVE');
                     $userBon->update();
@@ -446,7 +447,7 @@ class Orderproduct extends BaseModel
             }
         }
     }
-    
+
     /**
      * @return BelongsToMany
      */
@@ -460,12 +461,12 @@ class Orderproduct extends BaseModel
         $orderproduct = $this;
         $key          = 'orderproduct:attachedBonsNumber:'.$orderproduct->cacheKey();
 
-        return Cache::tags(['orderproduct'])
+        return Cache::tags(['orderproduct' , 'bon' , 'orderproduct_'.$orderproduct->id , 'orderproduct_'.$orderproduct->id.'_bon'])
             ->remember($key, config('constants.CACHE_60'), function () use ($orderproduct) {
                 return $orderproduct->userbons->sum('usedNumber');
             });
     }
-    
+
     /**
      * @param       $userBons
      * @param  Bon  $bon
@@ -480,16 +481,21 @@ class Orderproduct extends BaseModel
                     'discount'    => $bon->pivot->discount,
                 ]);
         }
-        Cache::tags('bon')
-            ->flush();
+        Cache::tags([
+            'user_'.$userBons->first()->user_id.'_totalBonNumber' ,
+            'user_'.$userBons->first()->user_id.'_validBons' ,
+            'user_'.$userBons->first()->user_id.'_hasBon' ,
+            'orderproduct_'.$this->id.'_bon' ,
+            'orderproduct_'.$this->id.'_cost' ,
+            'order_'.$this->id.'_cost'])->flush();
     }
-    
+
     public function getProductAttribute()
     {
         $orderproduct = $this;
         $key          = 'orderproduct:product'.$orderproduct->cacheKey();
-    
-        return Cache::tags(['orderproduct'])
+
+        return Cache::tags(['orderproduct' , 'product' , 'orderproduct_'.$orderproduct->id , 'orderproduct_'.$orderproduct->id.'_product'])
             ->remember($key, config('constants.CACHE_60'), function () use ($orderproduct) {
                 return optional($this->product()
                     ->first())->setVisible([
@@ -502,19 +508,19 @@ class Orderproduct extends BaseModel
                 ]);
             });
     }
-    
+
     public function product()
     {
         return $this->belongsTo(Product::class)//                    ->with('parents')
             ;
     }
-    
+
     public function getGrandProductAttribute()
     {
         $orderproduct = $this;
         $key          = 'orderproduct:grandProduct:'.$orderproduct->cacheKey();
-    
-        return Cache::tags(['orderproduct'])
+
+        return Cache::tags(['orderproduct' , 'product' , 'grandProduct' , 'orderproduct_'.$orderproduct->id , 'orderproduct_'.$orderproduct->id.'_grandProduct'])
             ->remember($key, config('constants.CACHE_60'), function () use ($orderproduct) {
                 return optional(optional($this->product)->grand)->setVisible([
                     'id',
@@ -526,29 +532,29 @@ class Orderproduct extends BaseModel
                 ]);
             });
     }
-    
+
     public function getGrandIdAttribute()
     {
         $orderproduct = $this;
         $key          = 'orderproduct:grandProductId:'.$orderproduct->cacheKey();
-    
-        return Cache::tags(['orderproduct'])
+
+        return Cache::tags(['orderproduct' , 'product' , 'grandProduct' , 'orderproduct_'.$orderproduct->id , 'orderproduct_'.$orderproduct->id.'_grandProduct'])
             ->remember($key, config('constants.CACHE_60'), function () use ($orderproduct) {
                 return optional($orderproduct->product)->grand_id;
             });
     }
-    
+
     public function getPriceAttribute()
     {
         $orderproduct = $this;
-        $key          = 'orderproduct:price:'.$orderproduct->cacheKey();
-    
-        return Cache::tags(['orderproduct'])
+        $key          = 'orderproduct:cost:'.$orderproduct->cacheKey();
+
+        return Cache::tags(['orderproduct' , 'orderproductCost' , 'cost' , 'orderproduct_'.$orderproduct->id , 'orderproduct_'.$orderproduct->id.'_cost'])
             ->remember($key, config('constants.CACHE_60'), function () use ($orderproduct) {
                 return $this->obtainOrderproductCost(false);
             });
     }
-    
+
     /**
      * Obtain order total cost
      *
@@ -559,7 +565,7 @@ class Orderproduct extends BaseModel
     public function obtainOrderproductCost($calculateCost = true)
     {
         $priceInfo = $this->calculatePayableCost($calculateCost);
-        
+
         return [
             'discountDetail' => [
                 'productDiscount'       => $priceInfo['productDiscount'],
@@ -574,7 +580,7 @@ class Orderproduct extends BaseModel
             //            'totalPrice'            => $priceInfo['totalCost'],
         ];
     }
-    
+
     private function calculatePayableCost($calculateCost = true)
     {
         $alaaCashierFacade       = new OrderproductCheckout($this, $calculateCost);
@@ -582,46 +588,45 @@ class Orderproduct extends BaseModel
         $calculatedOrderproducts = $priceInfo['orderproductsInfo']['calculatedOrderproducts'];
         /** @var OrderproductCollection $calculatedOrderproducts */
         $orderproductPriceInfo = $calculatedOrderproducts->getNewPriceForItem($calculatedOrderproducts->first());
-        
+
         return $orderproductPriceInfo;
     }
-    
+
     public function getBonsAttribute()
     {
         $orderproduct = $this;
         $key          = 'orderproduct:bons:'.$orderproduct->cacheKey();
-    
-        return Cache::tags(['orderproduct'])
+
+        return Cache::tags(['orderproduct' , 'bon' , 'cost' , 'orderproduct_'.$orderproduct->id , 'orderproduct_'.$orderproduct->id.'_bon'])
             ->remember($key, config('constants.CACHE_60'), function () use ($orderproduct) {
                 $userbons = $this->userbons()
                     ->get();
-                
+
                 return $userbons;
             });
     }
-    
+
     public function getAttributevaluesAttribute()
     {
         $orderproduct = $this;
         $key          = 'orderproduct:attributevalues:'.$orderproduct->cacheKey();
-    
-        return Cache::tags(['orderproduct'])
+
+        return Cache::tags(['orderproduct' , 'attribute' , 'attributevalues' , 'orderproduct_'.$orderproduct->id , 'orderproduct_'.$orderproduct->id.'_attributevalues'])
             ->remember($key, config('constants.CACHE_60'), function () use ($orderproduct) {
                 //ToDo : set visible
                 $attributevalues = $orderproduct->attributevalues()
                     ->get();
-                
+
                 return $attributevalues;
             });
     }
-    
+
     public function getPhotoAttribute()
     {
         $orderproduct = $this;
         $key          = 'orderproduct:photo:'.$orderproduct->cacheKey();
-    
-//        dd($this->id);
-        return Cache::tags(['orderproduct'])
+
+        return Cache::tags(['orderproduct' , 'photo' , 'orderproduct_'.$orderproduct->id , 'orderproduct_'.$orderproduct->id.'_photo'])
             ->remember($key, config('constants.CACHE_60'), function () use ($orderproduct) {
                 return optional(optional($this->product)->grand)->photo;
             });

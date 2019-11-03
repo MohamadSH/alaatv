@@ -16,7 +16,7 @@ class UserController extends Controller
 {
     use RequestCommon;
     use UserCommon;
-    
+
     /**
      * Update the specified resource in storage.
      * Note: Requests to this method must pass \App\Http\Middleware\trimUserRequest middle ware
@@ -47,14 +47,14 @@ class UserController extends Controller
                 ],
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
-        
+
         //ToDo : place in UserObserver
         if ($user->checkUserProfileForLocking()) {
             $user->lockHisProfile();
         }
-        
+
         if ($user->update()) {
-            
+
             $message = 'User profile updated successfully';
             $status  = Response::HTTP_OK;
         }
@@ -62,7 +62,7 @@ class UserController extends Controller
             $message = 'Database error on updating user';
             $status  = Response::HTTP_SERVICE_UNAVAILABLE;
         }
-        
+
         if ($status == Response::HTTP_OK) {
             $response = [
                 'user'    => $user,
@@ -78,7 +78,7 @@ class UserController extends Controller
             ];
         }
 
-        Cache::tags('user')->flush();
+        Cache::tags('user_'.$user->id)->flush();
 
         return response($response, Response::HTTP_OK);
     }
@@ -86,7 +86,7 @@ class UserController extends Controller
     public function show(Request $request, User $user)
     {
         $authenticatedUser = $request->user('api');
-        
+
         if ($authenticatedUser->id != $user->id) {
             return response([
                 'error' => [
@@ -95,10 +95,10 @@ class UserController extends Controller
                 ],
             ], 403);
         }
-        
+
         return response($user, Response::HTTP_OK);
     }
-    
+
     /**
      * Gets a list of user orders
      *
@@ -112,7 +112,7 @@ class UserController extends Controller
     {
         /** @var User $user */
         $authenticatedUser = $request->user('api');
-        
+
         if ($authenticatedUser->id != $user->id) {
             return response([
                 'error' => [
@@ -121,39 +121,12 @@ class UserController extends Controller
                 ],
             ], Response::HTTP_OK);
         }
-        
-        $orders = $user->closed_orders;
-        
+
+        $orders = $user->getClosedOrders($request->get('orders' , 1));
+
         return response()->json($orders);
     }
-    
-    /**
-     * Gets a list of transactions
-     *
-     * @return
-     */
-    public function getTransactions()
-    {
-        //ToDo
-        return response();
-        /*$key = "user:transactions:" . $user->cacheKey();
-        $transactions = Cache::remember($key, config("constants.CACHE_60"), function () use ($user) {
-            return $user->getShowableTransactions()
-                ->get()
-                ->sortByDesc("completed_at")
-                ->groupBy("order_id");
-        });
 
-        $key = "user:instalments:" . $user->cacheKey();
-        $instalments = Cache::remember($key, config("constants.CACHE_60"), function () use ($user) {
-            return $user->getInstalments()
-                ->get()
-                ->sortBy("deadline_at");
-        });
-
-        return response()->json($product);*/
-    }
-    
     public function getAuth2Profile(Request $request)
     {
         $user = $request->user();
@@ -161,7 +134,7 @@ class UserController extends Controller
             'id'    => $user->id,
             'name'  => $user->fullName,
             'email' => md5($user->mobile).'@sanatisharif.ir',
-        
+
         ]);
     }
 }

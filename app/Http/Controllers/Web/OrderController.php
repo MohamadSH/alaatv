@@ -740,7 +740,12 @@ class OrderController extends Controller
             $order = Order::Find($request->order_id);
 
             if (isset($order)) {
-                Cache::tags('order')->flush();
+                Cache::tags([
+                    'order_'.$order->id ,
+                    'user_'.$user->id.'_totalBonNumber' ,
+                    'user_'.$user->id.'_validBons',
+                    'user_'.$user->id.'_hasBon'])->flush();
+
                 $credit         = optional($order->user)->getTotalWalletBalance();
                 $orderHasDonate = $order->hasTheseProducts([
                     Product::CUSTOM_DONATE_PRODUCT,
@@ -1016,7 +1021,11 @@ class OrderController extends Controller
             ];
         }
 
-        Cache::tags('order')->flush();
+        if(isset($order)){
+            Cache::tags([
+                'order_'.$order->id.'_coupon' ,
+                'order_'.$order->id.'_cost'])->flush();
+        }
 
         return response($response, Response::HTTP_OK);
     }

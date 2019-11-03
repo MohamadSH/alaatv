@@ -12,7 +12,9 @@ use Illuminate\Http\RedirectResponse;
 use League\Flysystem\Sftp\SftpAdapter;
 use Illuminate\Contracts\Encryption\DecryptException;
 use Illuminate\Support\Facades\{File, Input, Config, Storage};
-use App\{User,
+use App\{Gender,
+    Major,
+    User,
     Product,
     Productfile,
     Traits\Helper,
@@ -66,8 +68,45 @@ class HomeController extends Controller
         $this->middleware('role:admin', ['only' => ['debug'] ]);
     }
     
-    public function debug(Request $request, BlockCollectionFormatter $formatter)
+    public function debug(Request $request, User $user = null)
     {
+        if ($user === null) {
+            $user = $request->user();
+        }
+    
+        /** @var User $autheiticatedUser */
+        $autheiticatedUser = $request->user();
+        
+    
+        if ($request->expectsJson()) {
+            return response($user, Response::HTTP_OK);
+        }
+        $userCompletion = $user->info['completion'];
+    
+        $genders     = Gender::pluck('name', 'id')->prepend('نامشخص');
+        $majors      = Major::pluck('name', 'id')->prepend('نامشخص');
+
+//        /** LOTTERY */
+//        [
+//            $exchangeAmount,
+//            $userPoints,
+//            $userLottery,
+//            $prizeCollection,
+//            $lotteryRank,
+//            $lottery,
+//            $lotteryMessage,
+//            $lotteryName,
+//        ] = $user->getLottery();
+    
+    
+        $sideBarMode = 'closed';
+        $pageType = 'profile';
+        
+        $bool = false;
+        return view('user.completeRegister2',
+            compact('user', 'genders', 'majors', 'sideBarMode',  'userCompletion' , 'pageType', 'bool'
+            /*'exchangeAmount', 'userPoints', 'userLottery', 'prizeCollection', 'lotteryRank', 'lottery', 'lotteryMessage', 'lotteryName' , */
+            ));
     }
     
     public function search(Request $request)

@@ -71,7 +71,7 @@ class RouteServiceProvider extends ServiceProvider
 
             return Cache::tags([
                 'user',
-                $key,
+                'user_'.$value,
             ])
                 ->remember($key, config('constants.CACHE_5'), function () use ($value) {
                     return User::where('id', $value)
@@ -83,7 +83,7 @@ class RouteServiceProvider extends ServiceProvider
 
             return Cache::tags([
                 'assignment',
-                $key,
+                'assignment_'.$value,
             ])->remember($key, config('constants.CACHE_5'), function () use ($value) {
                 return Assignment::where('id', $value)
                         ->first() ?? abort(404);
@@ -94,7 +94,7 @@ class RouteServiceProvider extends ServiceProvider
 
             return Cache::tags([
                 'consultation',
-                $key,
+                'consultation_'.$value,
             ])->remember($key, config('constants.CACHE_5'), function () use ($value) {
                 return Consultation::where('id', $value)
                         ->first() ?? abort(404);
@@ -105,7 +105,7 @@ class RouteServiceProvider extends ServiceProvider
 
             return Cache::tags([
                 'order',
-                $key,
+                'order_'.$value,
             ])->remember($key, config('constants.CACHE_5'), function () use ($value) {
                 return Order::where('id', $value)
                         ->first() ?? abort(404);
@@ -116,7 +116,7 @@ class RouteServiceProvider extends ServiceProvider
 
             return Cache::tags([
                 'product',
-                $key,
+                'product_'.$value,
             ])->remember($key, config('constants.CACHE_5'), function () use ($value) {
                 $product = Product::where('id', $value)
                     ->first();
@@ -144,7 +144,7 @@ class RouteServiceProvider extends ServiceProvider
 
             return Cache::tags([
                 'orderproduct',
-                $key,
+                'orderproduct_'.$value,
             ])->remember($key, config('constants.CACHE_5'), function () use ($value) {
                 return Orderproduct::where('id', $value)
                         ->first() ?? abort(404);
@@ -155,7 +155,7 @@ class RouteServiceProvider extends ServiceProvider
 
             return Cache::tags([
                 'attributevalue',
-                $key,
+                'attributevalue_'.$value,
             ])->remember($key, config('constants.CACHE_5'), function () use ($value) {
                 return Attributevalue::where('id', $value)
                         ->first() ?? abort(404);
@@ -166,7 +166,7 @@ class RouteServiceProvider extends ServiceProvider
 
             return Cache::tags([
                 'permissoin',
-                $key,
+                'permissoin_'.$value,
             ])->remember($key, config('constants.CACHE_5'), function () use ($value) {
                 return Permission::where('id', $value)
                         ->first() ?? abort(404);
@@ -177,7 +177,7 @@ class RouteServiceProvider extends ServiceProvider
 
             return Cache::tags([
                 'role',
-                $key,
+                'role_'.$value,
             ])->remember($key, config('constants.CACHE_5'), function () use ($value) {
                 return Role::where('id', $value)
                         ->first() ?? abort(404);
@@ -188,7 +188,7 @@ class RouteServiceProvider extends ServiceProvider
 
             return Cache::tags([
                 'coupon',
-                $key,
+                'coupon_'.$value,
             ])->remember($key, config('constants.CACHE_5'), function () use ($value) {
                 return Coupon::where('id', $value)
                         ->first() ?? abort(404);
@@ -199,7 +199,7 @@ class RouteServiceProvider extends ServiceProvider
 
             return Cache::tags([
                 'userupload',
-                $key,
+                'userupload_'.$value,
             ])->remember($key, config('constants.CACHE_5'), function () use ($value) {
                 return Userupload::where('id', $value)
                         ->first() ?? abort(404);
@@ -210,7 +210,7 @@ class RouteServiceProvider extends ServiceProvider
 
             return Cache::tags([
                 'attribute',
-                $key,
+                'attribute_'.$value,
             ])->remember($key, config('constants.CACHE_5'), function () use ($value) {
                 return Attribute::where('id', $value)
                         ->first() ?? abort(404);
@@ -221,7 +221,7 @@ class RouteServiceProvider extends ServiceProvider
 
             return Cache::tags([
                 'attributeset',
-                $key,
+                'attributeset_'.$value,
             ])->remember($key, config('constants.CACHE_5'), function () use ($value) {
                 return Attributeset::where('id', $value)
                         ->first() ?? abort(404);
@@ -232,7 +232,7 @@ class RouteServiceProvider extends ServiceProvider
 
             return Cache::tags([
                 'attributegroup',
-                $key,
+                'attributegroup_'.$value,
             ])->remember($key, config('constants.CACHE_5'), function () use ($value) {
                 return Attributegroup::where('id', $value)
                         ->first() ?? abort(404);
@@ -243,7 +243,7 @@ class RouteServiceProvider extends ServiceProvider
 
             return Cache::tags([
                 'userbon',
-                $key,
+                'userbon_'.$value,
             ])->remember($key, config('constants.CACHE_5'), function () use ($value) {
                 return Userbon::where('id', $value)
                         ->first() ?? abort(404);
@@ -254,7 +254,7 @@ class RouteServiceProvider extends ServiceProvider
 
             return Cache::tags([
                 'mbtianswer',
-                $key,
+                'mbtianswer_'.$value,
             ])->remember($key, config('constants.CACHE_5'), function () use ($value) {
                 return Mbtianswer::where('id', $value)
                         ->first() ?? abort(404);
@@ -265,7 +265,7 @@ class RouteServiceProvider extends ServiceProvider
 
             return Cache::tags([
                 'contact',
-                $key,
+                'contact_'.$value,
             ])->remember($key, config('constants.CACHE_5'), function () use ($value) {
                 return Contact::where('id', $value)
                         ->first() ?? abort(404);
@@ -276,7 +276,7 @@ class RouteServiceProvider extends ServiceProvider
 
             return Cache::tags([
                 'phone',
-                $key,
+                'phone_'.$value,
             ])->remember($key, config('constants.CACHE_5'), function () use ($value) {
                 return Phone::where('id', $value)
                         ->first() ?? abort(404);
@@ -287,7 +287,7 @@ class RouteServiceProvider extends ServiceProvider
 
             return Cache::tags([
                 'afterloginformcontrol',
-                $key,
+                'afterloginformcontrol_'.$value,
             ])->remember($key, config('constants.CACHE_5'), function () use ($value) {
                 return Afterloginformcontrol::where('id', $value)
                         ->first() ?? abort(404);
@@ -298,7 +298,7 @@ class RouteServiceProvider extends ServiceProvider
 
             return Cache::tags([
                 'article',
-                $key,
+                'article_'.$value,
             ])->remember($key, config('constants.CACHE_5'), function () use ($value) {
                 return Article::where('id', $value)
                         ->first() ?? abort(404);
@@ -309,7 +309,7 @@ class RouteServiceProvider extends ServiceProvider
 
             return Cache::tags([
                 'atriclecategory',
-                $key,
+                'atriclecategory_'.$value,
             ])->remember($key, config('constants.CACHE_5'), function () use ($value) {
                 return Articlecategory::where('id', $value)
                         ->first() ?? abort(404);
@@ -320,7 +320,7 @@ class RouteServiceProvider extends ServiceProvider
 
             return Cache::tags([
                 'slideshow',
-                $key,
+                'slideshow_'.$value,
             ])->remember($key, config('constants.CACHE_5'), function () use ($value) {
                 return Slideshow::where('id', $value)
                         ->first() ?? abort(404);
@@ -331,7 +331,7 @@ class RouteServiceProvider extends ServiceProvider
 
             return Cache::tags([
                 'websiteSetting',
-                $key,
+                'websiteSetting_'.$value,
             ])->remember($key, config('constants.CACHE_5'), function () use ($value) {
                 return Websitesetting::where('id', $value)
                         ->first() ?? abort(404);
@@ -342,7 +342,7 @@ class RouteServiceProvider extends ServiceProvider
 
             return Cache::tags([
                 'productfile',
-                $key,
+                'productfile_'.$value,
             ])->remember($key, config('constants.CACHE_5'), function () use ($value) {
                 return Productfile::where('id', $value)
                         ->first() ?? abort(404);
@@ -353,7 +353,7 @@ class RouteServiceProvider extends ServiceProvider
 
             return Cache::tags([
                 'city',
-                $key,
+                'city_'.$value,
             ])->remember($key, config('constants.CACHE_5'), function () use ($value) {
                 return City::where('id', $value)
                         ->first() ?? abort(404);
@@ -380,7 +380,7 @@ class RouteServiceProvider extends ServiceProvider
 
             return Cache::tags([
                 'content',
-                $key,
+                'content_'.$value,
             ])->remember($key, config('constants.CACHE_60'), function () use ($value) {
                 $c = Content::where('id', $value)
                     ->first();
@@ -405,7 +405,7 @@ class RouteServiceProvider extends ServiceProvider
 
             return Cache::tags([
                 'set',
-                $key,
+                'set_'.$value,
             ])->remember($key, config('constants.CACHE_60'), function () use ($value) {
                 $set = Contentset::where('id', $value)
                     ->first();
@@ -419,7 +419,7 @@ class RouteServiceProvider extends ServiceProvider
 
             return Cache::tags([
                 'employeetimesheet',
-                $key,
+                'employeetimesheet_'.$value,
             ])->remember($key, config('constants.CACHE_5'), function () use ($value) {
                 return Employeetimesheet::where('id', $value)
                         ->first() ?? abort(404);
@@ -430,7 +430,7 @@ class RouteServiceProvider extends ServiceProvider
 
             return Cache::tags([
                 'productphoto',
-                $key,
+                'productphoto_'.$value,
             ])->remember($key, config('constants.CACHE_5'), function () use ($value) {
                 return Productphoto::where('id', $value)
                         ->first() ?? abort(404);
@@ -441,7 +441,7 @@ class RouteServiceProvider extends ServiceProvider
 
             return Cache::tags([
                 'wallet',
-                $key,
+                'wallet_'.$value,
             ])->remember($key, config('constants.CACHE_5'), function () use ($value) {
                 return Wallet::where('id', $value)
                         ->first() ?? abort(404);
@@ -452,7 +452,7 @@ class RouteServiceProvider extends ServiceProvider
 
             return Cache::tags([
                 'eventresult',
-                $key,
+                'eventresult_'.$value,
             ])->remember($key, config('constants.CACHE_5'), function () use ($value) {
                 return Eventresult::where('id', $value)
                         ->first() ?? abort(404);
@@ -460,11 +460,11 @@ class RouteServiceProvider extends ServiceProvider
         });
 
         Route::bind('livedescription', function ($value) {
-            $key = 'Livedescription:'.$value;
+            $key = 'livedescription:'.$value;
 
             return Cache::tags([
                 'livedescription',
-                $key,
+                'livedescription_'.$value,
             ])->remember($key, config('constants.CACHE_5'), function () use ($value) {
                 return LiveDescription::where('id', $value)
                         ->first() ?? abort(404);
@@ -476,7 +476,7 @@ class RouteServiceProvider extends ServiceProvider
 
             return Cache::tags([
                 'section',
-                $key,
+                'section_'.$value,
             ])->remember($key, config('constants.CACHE_5'), function () use ($value) {
                 return Section::where('id', $value)
                         ->first() ?? abort(404);

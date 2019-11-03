@@ -36,8 +36,9 @@ class webSetCollectionFormatter implements SetCollectionFormatter
      */
     private function formatSet(Contentset $set): array
     {
-        return Cache::tags(['content', 'set'])
-            ->remember('format-set:'.$set->id, config('constants.CACHE_60'), function () use ($set) {
+        $key = 'set:formatSet:'.$set->id;
+        return Cache::tags([ 'set' , 'set_'.$set->id , 'set_'.$set->id.'_formatSet'])
+            ->remember($key , config('constants.CACHE_60'), function () use ($set) {
                 $content = $set->getLastActiveContent();
                 $lesson  = [
                     "displayName"   => $set->shortName,

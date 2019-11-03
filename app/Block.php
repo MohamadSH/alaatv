@@ -118,7 +118,7 @@ class Block extends BaseModel
 
     public static function getShopBlocks(): ?BlockCollection
     {
-        $blocks = Cache::tags('block')
+        $blocks = Cache::tags(['block' , 'shop'])
             ->remember('getShopBlocks', config('constants.CACHE_600'), function () {
                 $offerBlock = self::getOfferBlock();
                 $blocks     = self::shop()
@@ -202,7 +202,7 @@ class Block extends BaseModel
 
     public static function getMainBlocks(): ?BlockCollection
     {
-        $blocks = Cache::tags('block')
+        $blocks = Cache::tags(['block' , 'home'])
             ->remember('getMainBlocks', config('constants.CACHE_600'), function () {
                 $blocks = self::main()
                     ->enable()
@@ -221,7 +221,7 @@ class Block extends BaseModel
     }
 
     public static function getContentBlocks(): ?BlockCollection{
-        $blocks = Cache::tags('block')
+        $blocks = Cache::tags(['block' , 'content'])
             ->remember('getContentBlocks', config('constants.CACHE_600'), function () {
                 $blocks = self::findMany([13])
                     ->loadMissing([
@@ -336,9 +336,9 @@ class Block extends BaseModel
     public function contents()
     {
         return $this->morphedByMany(Content::class, 'blockable')
-            ->withTimestamps()
-            ->withPivot(['order'])
-            ->orderBy('blockables.order');
+                    ->withTimestamps()
+                    ->withPivot(['order'])
+                    ->orderBy('blockables.order');
     }
 
     public function notRedirectedContents()

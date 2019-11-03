@@ -3,15 +3,15 @@
 namespace App\Observers;
 
 use App\Orderproduct;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Cache;
 
 class OrderproductObserver
 {
+
     /**
      * Handle the orderproduct "created" event.
      *
-     * @param  \App\Orderproduct  $orderproduct
+     * @param Orderproduct $orderproduct
      * @return void
      */
     public function created(Orderproduct $orderproduct)
@@ -21,7 +21,7 @@ class OrderproductObserver
     /**
      * Handle the orderproduct "updated" event.
      *
-     * @param  \App\Orderproduct  $orderproduct
+     * @param Orderproduct $orderproduct
      * @return void
      */
     public function updated(Orderproduct $orderproduct)
@@ -32,7 +32,7 @@ class OrderproductObserver
     /**
      * Handle the orderproduct "deleted" event.
      *
-     * @param  \App\Orderproduct  $orderproduct
+     * @param Orderproduct $orderproduct
      * @return void
      */
     public function deleted(Orderproduct $orderproduct)
@@ -42,7 +42,7 @@ class OrderproductObserver
     /**
      * Handle the orderproduct "restored" event.
      *
-     * @param  \App\Orderproduct  $orderproduct
+     * @param Orderproduct $orderproduct
      * @return void
      */
     public function restored(Orderproduct $orderproduct)
@@ -53,28 +53,24 @@ class OrderproductObserver
     /**
      * Handle the orderproduct "force deleted" event.
      *
-     * @param  \App\Orderproduct  $orderproduct
+     * @param Orderproduct $orderproduct
      * @return void
      */
     public function forceDeleted(Orderproduct $orderproduct)
     {
         //
     }
-    
+
     public function saving(Orderproduct $orderproduct)
     {
-    
-    
+
+
     }
 
     public function saved(Orderproduct $orderproduct)
     {
-        Cache::tags('bon')
-            ->flush();
-        Cache::tags('order')
-            ->flush();
-        Cache::tags('orderproduct')
-            ->flush();
+        Cache::tags([
+            'order_'.$orderproduct->order_id , 'orderproduct_'.$orderproduct->id ])->flush();
     }
 
 }

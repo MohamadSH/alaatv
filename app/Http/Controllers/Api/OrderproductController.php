@@ -17,9 +17,9 @@ class OrderproductController extends Controller
 {
     use OrderCommon;
     use ProductCommon;
-    
+
     private $orderproductController;
-    
+
     function __construct(\App\Http\Controllers\Web\OrderproductController $orderproductController)
     {
         $this->middleware(['CheckPermissionForSendOrderId',], ['only' => ['store'],]);
@@ -38,13 +38,13 @@ class OrderproductController extends Controller
                 $request->offsetSet('parentProduct', $product);
             }
         }
-        
+
         $result        = $this->orderproductController->new($request->all());
         $orderproducts = new OrderproductCollection();
         if (isset($result['data']['storedOrderproducts'])) {
             $orderproducts = $result['data']['storedOrderproducts'];
         }
-        
+
         if ($orderproducts->isEmpty()) {
             $responseContent = [
                 'error' => [
@@ -58,7 +58,7 @@ class OrderproductController extends Controller
                 'orderproducts' => $orderproducts,
             ];
         }
-        
+
         return response($responseContent, Response::HTTP_OK);
     }
 
@@ -75,11 +75,11 @@ class OrderproductController extends Controller
     {
         $authenticatedUser = $request->user('api');
         $orderUser         = optional(optional($orderproduct)->order)->user;
-        
+
         if ($authenticatedUser->id != $orderUser->id) {
             abort(Response::HTTP_FORBIDDEN, 'Orderproduct does not belong to this user.');
         }
-        
+
         $orderproduct_userbons = $orderproduct->userbons;
         foreach ($orderproduct_userbons as $orderproduct_userbon) {
             $orderproduct_userbon->usedNumber       = $orderproduct_userbon->usedNumber - $orderproduct_userbon->pivot->usageNumber;
@@ -88,14 +88,18 @@ class OrderproductController extends Controller
                 $orderproduct_userbon->update();
             }
         }
-        
+
         if ($orderproduct->delete()) {
             foreach ($orderproduct->children as $child) {
                 $child->delete();
             }
-            Cache::tags('bon')
-                ->flush();
-            
+
+            Cache::tags([
+                'order_'.$orderproduct->order_id.'_products' ,
+                'order_'.$orderproduct->order_id.'_orderproducts' ,
+                'order_'.$orderproduct->order_id.'_cost' ,
+                'order_'.$orderproduct->order_id.'_bon' ])->flush();
+
             return response([
                 'message' => 'Orderproduct removed successfully',
             ], Response::HTTP_OK);

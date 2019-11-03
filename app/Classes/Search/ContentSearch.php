@@ -17,7 +17,7 @@ use App\Classes\Search\{Filters\Tags, Tag\ContentTagManagerViaApi};
 class ContentSearch extends SearchAbstract
 {
     protected $model = Content::class;
-    
+
     protected $pageName = 'contentPage';
 
 //    protected $numberOfItemInEachPage = 2;
@@ -33,7 +33,7 @@ class ContentSearch extends SearchAbstract
         'free',
         'orderBy'
     ];
-    
+
     public function get(array ...$params)
     {
         $filters      = $this->getFromParams($params, 'filters');
@@ -43,10 +43,10 @@ class ContentSearch extends SearchAbstract
             ${$contentType.'Result'} = $this->getFiltered($filters, ['contentType' => (array) $contentType]);
             $items->offsetSet($contentType, $this->normalizeResult(${$contentType.'Result'}));
         }
-        
+
         return $items;
     }
-    
+
     /**
      * @param  array  ...$filters
      *
@@ -59,16 +59,16 @@ class ContentSearch extends SearchAbstract
         if ($contentType === null) {
             throw new \InvalidArgumentException('filters[contentType] should be set.');
         }
-        
+
         return $this->setPageName($contentType[0].'Page')
             ->apply($filters);
     }
-    
+
     private function normalizeResult(LengthAwarePaginator $resutl)
     {
         return $resutl->count() > 0 ? $resutl : null;
     }
-    
+
     /**
      * @param  array  $filters
      *
@@ -78,19 +78,15 @@ class ContentSearch extends SearchAbstract
     {
         $this->pageNum = $this->setPageNum($filters);
         $key           = $this->makeCacheKey($filters);
-        
-        return Cache::tags([
-            'content',
-            'search',
-        ])
+
+        return Cache::tags(['content' , 'content_search' , 'search'])
             ->remember($key, $this->cacheTime, function () use ($filters) {
-                //            dump("in cache");
                 $query = $this->applyDecoratorsFromFiltersArray($filters, $this->model->newQuery());
                 return $this->getResults($query)
                     ->appends($filters);
             });
     }
-    
+
     protected function getResults(Builder $query)
     {
         //ToDo: Active condition has conflict with admin
@@ -98,10 +94,10 @@ class ContentSearch extends SearchAbstract
 //            ->free()
             ->orderBy('created_at', 'desc')
             ->paginate($this->numberOfItemInEachPage, ['*'], $this->pageName, $this->pageNum);
-        
+
         return $result;
     }
-    
+
     /**
      * @param $decorator
      *
@@ -113,7 +109,7 @@ class ContentSearch extends SearchAbstract
         if ($decorator instanceof Tags) {
             $decorator->setTagManager(new ContentTagManagerViaApi());
         }
-        
+
         return $decorator;
     }
 }
