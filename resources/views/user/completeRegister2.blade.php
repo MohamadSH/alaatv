@@ -364,13 +364,13 @@
             } else {
                 $birthdate.parents('.form-group').removeClass('has-danger');
             }
-            if(typeof $birthdate.val() !== 'undefined' && $birthdate.val().trim() === todayBirthDay) {
-                status = false;
-                message += 'تاریخ تولد خود را مشخص کنید.'+'<br>';
-                $birthdate.parents('.form-group').addClass('has-danger');
-            } else {
-                $birthdate.parents('.form-group').removeClass('has-danger');
-            }
+            // if(typeof $birthdate.val() !== 'undefined' && $birthdate.val().trim() === todayBirthDay) {
+            //     status = false;
+            //     message += 'تاریخ تولد خود را مشخص کنید.'+'<br>';
+            //     $birthdate.parents('.form-group').addClass('has-danger');
+            // } else {
+            //     $birthdate.parents('.form-group').removeClass('has-danger');
+            // }
 
             return {
                 status: status,
