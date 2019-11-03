@@ -168,12 +168,11 @@
                         <div class="row">
                             <div class="col-md-6">
 
-
-                                <div class = "form-group m-form__group {{ $errors->has('birthdate') ? ' has-danger' : '' }}">
+                                <div class = "form-group m-form__group {{ $errors->has('birthdate') ? ' has-danger' : '' }}>
                                     <label for = "birthdate">تاریخ تولد</label>
                                     <div class = "m-input-icon m-input-icon--left">
-                                        <input class = "form-control m-input m-input--air" name = "birthdate" id = "birthdate" @if(isset($user->birthdate)) disabled="disabled" @endif/>
-                                        <input name = "birthdateAlt" id = "birthdateAlt" type = "hidden" @if(isset($user->birthdate)) disabled="disabled" @endif/>
+                                        <input class = "form-control m-input m-input--air" name = "birthdate" id = "birthdate" @if(isset($user->birthdate)) value="{{$user->birthdate}}" disabled="disabled" @endif/>
+                                        <input name = "birthdateAlt" id = "birthdateAlt" type = "hidden" @if(isset($user->birthdate)) value="{{$user->birthdate}}" disabled="disabled" @endif/>
                                         <span class = "m-input-icon__icon m-input-icon__icon--left">
                                             <span>
                                                 <i class = "fa fa-calendar-alt"></i>
@@ -358,6 +357,13 @@
             } else {
                 $major_id.parents('.form-group').removeClass('has-danger');
             }
+            if(typeof $birthdate.val() !== 'undefined' && $birthdate.val().trim().length === 0) {
+                status = false;
+                message += 'تاریخ تولد خود را مشخص کنید.'+'<br>';
+                $birthdate.parents('.form-group').addClass('has-danger');
+            } else {
+                $birthdate.parents('.form-group').removeClass('has-danger');
+            }
             if(typeof $birthdate.val() !== 'undefined' && $birthdate.val().trim() === todayBirthDay) {
                 status = false;
                 message += 'تاریخ تولد خود را مشخص کنید.'+'<br>';
@@ -387,6 +393,7 @@
                 altFormat: "YYYY-MM-DD",
                 observer: true,
                 format: 'YYYY/MM/DD',
+                // initialValue: false,
                 // altFieldFormatter: function (unixDate) {
                 //     // var d = new Date(unixDate).toISOString();
                 //     let targetDatetime = new Date(unixDate);
