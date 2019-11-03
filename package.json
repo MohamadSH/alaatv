@@ -74,6 +74,7 @@
     "summernote": "^0.8.12",
     "toastr": "^2.1.4",
     "tooltip": "^1.6.1",
+    "truncatise": "0.0.8",
     "video.js": "^7.6.0",
     "videojs-flash": "^2.2.0",
     "videojs-swf": "^5.4.2",

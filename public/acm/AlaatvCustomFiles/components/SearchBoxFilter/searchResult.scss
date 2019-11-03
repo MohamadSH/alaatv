@@ -1,8 +1,8 @@
 .searchResult {
   .listType {
     .item:hover {
-      .contentHover {
-        background-color: #ff9000;
+      .itemHover {
+        background-color: #ff8e0017;
         width: 100% !important;
       }
     }
@@ -14,26 +14,24 @@
       //justify-content: flex-start;
       cursor: pointer;
       margin-bottom: 10px;
-      * {
+      display: flex;
+      .pic {
         position: relative;
         z-index: 3;
-      }
-      .pic {
         width: 25%;
-        float: right;
         img {
           max-width: 100%;
         }
       }
       .content {
         position: relative;
+        z-index: 3;
         padding: 15px 5px;
         width: 75%;
         display: flex;
         align-items: stretch;
         flex-flow: column;
         justify-content: flex-start;
-        float: right;
         .title {
           z-index: 2;
           position: relative;
@@ -49,8 +47,6 @@
           align-items: stretch;
           align-self: stretch;
           height: 100%;
-          padding-bottom: 40px;
-          max-height: calc(100% - 110px);
           .lesson {
             width: 100%;
           }
@@ -70,46 +66,19 @@
           }
         }
 
-        .contentHover {
-          position: absolute;
-          top: 0;
-          right: 0;
-          width: 0;
-          height: 100%;
-          z-index: 1;
-          transition: all 0.5s;
-        }
+      }
+      .itemHover {
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 0;
+        height: 100%;
+        z-index: 1;
+        transition: all 0.5s;
       }
     }
   }
   .carouselType {
-    display: flex;
-    flex-wrap: nowrap;
-    overflow-x: scroll;
-    overflow-y: hidden;
-    .item {
-      .pic {
-        img {
-          max-width: 100%;
-          min-width: 100%;
-        }
-      }
-      .content {
-        .title {
 
-        }
-        .detailes {
-          .lesson {
-
-          }
-          .summary {
-
-          }
-          .publishedDate {
-
-          }
-        }
-      }
-    }
   }
 }
