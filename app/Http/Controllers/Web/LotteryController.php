@@ -389,10 +389,7 @@ class LotteryController extends Controller
                     "rank"   => 0,
                     "prizes" => $prizes,
                 ]);
-
-            /**  clearing cache */
-            Cache::tags('bon')
-                ->flush();
+            ;
             $done = true;
         }
         else {

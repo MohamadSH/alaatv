@@ -44,7 +44,7 @@ trait HandleOrderPayment
 
         //refreshing order after closing it's wallet transactions
         // issue #1763
-        Cache::tags('Order:'.$order->id)->flush();
+        Cache::tags('order_'.$order->id)->flush();
         $order = Order::Find($order->id);
 
         $updateOrderPaymentStatusResult = $this->updateOrderPaymentStatus($order);

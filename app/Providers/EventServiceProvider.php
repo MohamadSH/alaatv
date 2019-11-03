@@ -8,8 +8,10 @@ use App\Events\MobileVerified;
 use App\Events\FreeInternetAccept;
 use App\Events\FillTmpShareOfOrder;
 use App\Events\UserAvatarUploaded;
+use App\Events\UserRedirectedToPayment;
 use App\Listeners\RedirectContentListener;
 use App\Listeners\RemoveOldUserAvatarListener;
+use App\Listeners\UserRedirectedToPaymentListener;
 use Illuminate\Auth\Events\Registered;
 use App\Listeners\AuthenticatedListener;
 use App\Listeners\MobileVerifiedListener;
@@ -55,6 +57,9 @@ class EventServiceProvider extends ServiceProvider
         ],
         ContentRedirected::class      => [
             RedirectContentListener::class,
+        ],
+        UserRedirectedToPayment::class      => [
+            UserRedirectedToPaymentListener::class,
         ],
     ];
 

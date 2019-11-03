@@ -2,7 +2,9 @@
 
 
 use App\Http\Controllers\Web\BotsController;
+use App\Http\Controllers\Web\FavorableController;
 use App\Http\Controllers\Web\HomeController;
+use App\Http\Controllers\Web\LandingPageController;
 use App\Http\Controllers\Web\LiveController;
 use App\Http\Controllers\Web\SectionController;
 use App\Http\Controllers\Web\SetController;
@@ -102,6 +104,7 @@ Route::group(['prefix' => 'landing'], function () {
     Route::get('8' , [ProductLandingController::class, 'landing8'])->name('landing.8');
     Route::get('9' , [ProductLandingController::class, 'landing9'])->name('landing.9');
     Route::get('10', [ProductLandingController::class, 'landing10'])->name('landing.10');
+    Route::get('13Aban', [LandingPageController::class, 'roozeDaneshAmooz'])->name('landing.13Aban');
 });
 
 Route::group(['middleware' => 'auth'], function () {
@@ -192,6 +195,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('orders', [UserController::class, 'userOrders']);
         Route::get('question', [UserController::class, 'userQuestions']);
         Route::post('sendSMS', [UserController::class, 'sendSMS']);
+        Route::post('update/partialInfo', [UserController::class , 'partialUpdate'])->name('web.user.update.partial');
     });
     Route::group(['prefix' => 'order'], function () {
         Route::post('detachorderproduct', 'Web\OrderController@detachOrderproduct');
@@ -265,18 +269,22 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('donate', 'Web\DonateController');
     Route::post('donateOrder', 'Web\OrderController@donateOrder');
 
-    Route::get('listContents/{set}', [SetController::class, 'indexContent'])->name('web.set.list.contents');
     Route::get('listPendingDescriptionContents', [ContentController::class, 'indexPendingDescriptionContent'])->name('web.c.list.pending.description.content');
 
     Route::get('live' , '\\'.LiveController::class)->name('live');
     Route::post('startlive' , [LiveController::class, 'startLive'])->name('web.start.live');
     Route::post('endlive'   , [LiveController::class, 'endLive'])->name('web.end.live');
 
-    Route::post('updateSet/{c}' , [ContentController::class, 'updateSet'])->name('c.updateSet');
     Route::get('atest' , [HomeController::class, 'adTest']);
     Route::get('block/detach/{block}/{type}/{id}', 'Web\BlockController@detachFromBlock');
     Route::get('serpSim' , [AdminController::class, 'serpSim'] );
     Route::get('process_serpsim' , [AdminController::class, 'processSerpsim'] );
+});
+
+Route::group(['prefix' => 'set'], function () {
+    Route::get('{set}/listContents', [SetController::class, 'indexContent'])->name('web.set.list.contents');
+    Route::get('{set}/favored', [FavorableController::class, 'getUsersThatFavoredThisFavorable']);
+    Route::post('{set}/favored', [FavorableController::class, 'markFavorableFavorite']);
 });
 
 Route::group(['prefix' => 'c'], function () {
@@ -286,8 +294,10 @@ Route::group(['prefix' => 'c'], function () {
     Route::get('createArticle',         [ContentController::class, 'createArticle'])->name('c.create.article');
     Route::post('updateTmpDescription',  [ContentController::class, 'createArticle'])->name('c.update.pending.description');
 
-    Route::get('{c}/favored', 'Web\FavorableController@getUsersThatFavoredThisFavorable');
-    Route::post('{c}/favored', 'Web\FavorableController@markFavorableFavorite');
+    Route::get('{c}/favored', [FavorableController::class, 'getUsersThatFavoredThisFavorable']);
+    Route::post('{c}/favored', [FavorableController::class, 'markFavorableFavorite']);
+
+    Route::post('{c}/updateSet' , [ContentController::class, 'updateSet'])->name('c.updateSet');
 
     Route::group(['prefix' => '{c}/attach'], function () {
         Route::post('set/{set}', 'Web\ContentController@attachContentToContentSet');
@@ -296,8 +306,8 @@ Route::group(['prefix' => 'c'], function () {
 });
 
 Route::group(['prefix' => 'product'], function () {
-    Route::get('{product}/favored', 'Web\FavorableController@getUsersThatFavoredThisFavorable');
-    Route::post('{product}/favored', 'Web\FavorableController@markFavorableFavorite');
+    Route::get('{product}/favored', [FavorableController::class, 'getUsersThatFavoredThisFavorable']);
+    Route::post('{product}/favored', [FavorableController::class, 'markFavorableFavorite']);
 });
 
 Route::resource('product', 'Web\ProductController');

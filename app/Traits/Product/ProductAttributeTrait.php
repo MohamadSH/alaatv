@@ -23,7 +23,7 @@ trait ProductAttributeTrait
     {
         return $this->attributevalues->whereIn("id", $attributesId);
     }
-    
+
     public function attributevalues($attributeType = null)
     {
         //ToDo : Shouls be deprecated . It is being used in some blades
@@ -35,7 +35,7 @@ trait ProductAttributeTrait
                          ->where("attributetype_id", $attributeType->id) as $attribute) {
                 array_push($attributesArray, $attribute->id);
             }
-            
+
             return $this->belongsToMany('App\Attributevalue')
                 ->whereIn("attribute_id", $attributesArray)
                 ->withPivot("extraCost", "description");
@@ -45,11 +45,11 @@ trait ProductAttributeTrait
                 ->withPivot("extraCost", "description");
         }
     }
-    
+
     public function attributevalueTree($attributeType = null)
     {
         $key = "product:attributevalueTree:".$attributeType.$this->cacheKey();
-        
+
         return Cache::tags(["product"])
             ->remember($key, config("constants.CACHE_60"), function () use ($attributeType) {
                 if ($attributeType) {
@@ -81,11 +81,11 @@ trait ProductAttributeTrait
                         }
                     }
                 }
-                
+
                 return $attributes;
             });
     }
-    
+
     /**
      * @return Collection|null
      */
@@ -93,7 +93,7 @@ trait ProductAttributeTrait
     {
         return $this->getAllAttributes();
     }
-    
+
     /**
      * Gets product's all attributes
      *
@@ -102,11 +102,11 @@ trait ProductAttributeTrait
     protected function getAllAttributes(): ?Collection
     {
         $product = $this;
-        $key     = 'product:'."getAllAttributes:".$product->id;
-        
-        return Cache::tags(["product"])
+        $key     = 'product:getAllAttributes:'.$product->id;
+
+        return Cache::tags(['product' , 'attribute' , 'product_'.$this->id , 'product_'.$this->id.'_attributes'])
             ->remember($key, config('constants.CACHE_600'), function () use ($product) {
-                
+
                 $selectCollection          = collect();
                 $groupedCheckboxCollection = collect();
                 $extraSelectCollection     = collect();
@@ -119,19 +119,19 @@ trait ProductAttributeTrait
                 if (!$product->relationLoaded('attributevalues')) {
                     $product->load('attributevalues');
                 }
-    
+
                 if (!isset($attributes)) {
                     return null;
                 }
 
                 $attributes->load('attributetype', 'attributecontrol');
-                
+
                 foreach ($attributes as $attribute) {
                     $attributeType   = $attribute->attributetype;
                     $controlName     = $attribute->attributecontrol->name;
                     $attributevalues = $product->attributevalues->where("attribute_id", $attribute->id)
                         ->sortBy("pivot.order");
-                    
+
                     if (!$attributevalues->isEmpty()) {
                         switch ($controlName) {
                             case "select":
@@ -177,7 +177,7 @@ trait ProductAttributeTrait
                                         if (isset($attributevalue->pivot->description) && strlen($attributevalue->pivot->description) > 0) {
                                             $attributevalueIndex .= "( ".$attributevalue->pivot->description." )";
                                         }
-                                        
+
                                         if (isset($attributevalue->pivot->extraCost)) {
                                             if ($attributevalue->pivot->extraCost > 0) {
                                                 $attributevalueIndex .= "(+".number_format($attributevalue->pivot->extraCost)." تومان)";
@@ -186,7 +186,7 @@ trait ProductAttributeTrait
                                                 $attributevalueIndex .= "(-".number_format($attributevalue->pivot->extraCost)." تومان)";
                                             }
                                         }
-                                        
+
                                         $groupedCheckbox->put($attributevalue->id, [
                                             "index"       => $attributevalueIndex,
                                             'displayName' => $attribute->displayName,
@@ -213,7 +213,7 @@ trait ProductAttributeTrait
                                                 if (isset($attributevalue->pivot->description) && strlen($attributevalue->pivot->description) > 0) {
                                                     $attributevalueIndex .= "( ".$attributevalue->pivot->description." )";
                                                 }
-                                                
+
                                                 $attributevalueExtraCost             = "";
                                                 $attributevalueExtraCostWithDiscount = "";
                                                 if (isset($attributevalue->pivot->extraCost)) {
@@ -266,20 +266,20 @@ trait ProductAttributeTrait
                         }
                     }
                 }
-                
+
                 $productAttributes = [
                     //main Attribute
                     "dropDown"   => $selectCollection,
                     "checkBox"   => $groupedCheckboxCollection,
-                    
+
                     //info Attribute
                     "simple"     => $simpleInfoAttributes,
                     "check_box_" => $checkboxInfoAttributes,
-                    
+
                     //extra Attribute
                     "check_box"  => $extraCheckboxCollection,
                     "drop_down"  => $extraSelectCollection,
-                
+
                 ];
 
 //            return $productAttributes;
@@ -307,11 +307,11 @@ trait ProductAttributeTrait
                         }
                     }
                 }
-                
+
                 return $attributesResult->count() > 0 ? $attributesResult : null;
             });
     }
-    
+
     private function makeSelectAttributes(&$attributevalues, &$result, $type = 'main')
     {
         foreach ($attributevalues as $attributevalue) {
@@ -319,7 +319,7 @@ trait ProductAttributeTrait
             if (isset($attributevalue->pivot->description) && strlen($attributevalue->pivot->description) > 0) {
                 $attributevalueIndex .= "( ".$attributevalue->pivot->description." )";
             }
-            
+
             if (isset($attributevalue->pivot->extraCost)) {
                 if ($attributevalue->pivot->extraCost > 0) {
                     $attributevalueIndex .= "(+".number_format($attributevalue->pivot->extraCost)." تومان)";
@@ -330,7 +330,7 @@ trait ProductAttributeTrait
                     }
                 }
             }
-            
+
             $result = array_merge($result, [
                 $attributevalue->id => [
                     "value" => $attributevalue->id,
@@ -342,12 +342,12 @@ trait ProductAttributeTrait
 //            $result = array_add($result, $attributevalue->id, $attributevalueIndex);
         }
     }
-    
+
     private function makeSimpleInfoAttributes(&$attributevalues, &$attribute, &$attributeType, Collection &$simpleInfoAttributes)
     {
         $infoAttributeArray = [];
         foreach ($attributevalues as $attributevalue) {
-            
+
             array_push($infoAttributeArray, [
                 "displayName" => $attribute->displayName,
                 "name"        => $attributevalue->name,
