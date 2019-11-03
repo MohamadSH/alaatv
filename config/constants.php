@@ -58,6 +58,7 @@ return [
     'REMOVE_PRODUCT_ACCESS'                       => 'removeProduct',
     'COPY_PRODUCT_ACCESS'                         => 'copyProduct',
     'SHOW_PRODUCT_ACCESS'                         => 'showProduct',
+    'INSERT_LIVE_DESCRIPTION_ACCESS'              => 'insertLiveDescription' ,
     'LIST_ORDER_ACCESS'                           => 'listOrder',
     'INSERT_ORDER_ACCESS'                         => 'insertOrder',
     'EDIT_ORDER_ACCESS'                           => 'editOrder',
