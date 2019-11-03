@@ -6,6 +6,15 @@
 
 @section('content')
 
+    <div class="row">
+        <div class="col-md-4 mx-auto">
+            <div class="m-alert m-alert--outline m-alert--outline-2x alert alert-success alert-dismissible fade show" role="alert">
+                <strong>
+                    هدیه آلاء به دانش‌آموز امروز، دانشجوی فردا
+                    ۱۳ آبان تا ۱۶ آذر                </strong>
+            </div>
+        </div>
+    </div>
     @include('systemMessage.flash')
     @if(!$hadGotGiftBefore &&  !$hasGotGiftBefore)
     <div class="row">
@@ -236,7 +245,7 @@
                 @else
                     مبلغ 14 هزار تومان هدیه به کیف پول شما افزوده شد.
                 @endif
-                <strong>این هدیه تا تاریخ 5 آذر اعتبار دارد.</strong>
+                <strong>این هدیه تا تاریخ 16 آذر اعتبار دارد.</strong>
             </div>
         @endif
     </div>
@@ -256,7 +265,7 @@
                     <div class="alert alert-success alert-dismissible fade show" role="alert">
                         <strong>تبریک!</strong>
                         مبلغ 14000 تومان هدیه به کیف پول شما افزوده شد.
-                        <strong>این هدیه تا 5 آذر دیگر اعتبار دارد.</strong>
+                        <strong>این هدیه تا 16 آذر دیگر اعتبار دارد.</strong>
                     </div>
                 </div>
             </div>
@@ -355,13 +364,13 @@
             } else {
                 $birthdate.parents('.form-group').removeClass('has-danger');
             }
-            if(typeof $birthdate.val() !== 'undefined' && $birthdate.val().trim() === todayBirthDay) {
-                status = false;
-                message += 'تاریخ تولد خود را مشخص کنید.'+'<br>';
-                $birthdate.parents('.form-group').addClass('has-danger');
-            } else {
-                $birthdate.parents('.form-group').removeClass('has-danger');
-            }
+            // if(typeof $birthdate.val() !== 'undefined' && $birthdate.val().trim() === todayBirthDay) {
+            //     status = false;
+            //     message += 'تاریخ تولد خود را مشخص کنید.'+'<br>';
+            //     $birthdate.parents('.form-group').addClass('has-danger');
+            // } else {
+            //     $birthdate.parents('.form-group').removeClass('has-danger');
+            // }
 
             return {
                 status: status,
@@ -397,7 +406,7 @@
                     return d;
                 }
             });
-            
+
             todayBirthDay =  $('#birthdate').val();
 
             $(document).on('click', '.btnSubmitCompleteInfo', function () {
