@@ -92,7 +92,7 @@ class ProductLandingController extends Controller
      */
     public function landing2(Request $request)
     {
-        return redirect()->route('landing.5', $request->all());
+        return redirect()->route('web.landing.5', $request->all());
 
         $gheireHozoori = config('constants.ORDOO_GHEIRE_HOZOORI_NOROOZ_97_PRODUCT_ALLTOGHETHER');
         if (Input::has('utm_term')) {
@@ -135,7 +135,7 @@ class ProductLandingController extends Controller
      */
     public function landing3(Request $request)
     {
-        return redirect()->route('landing.5', $request->all());
+        return redirect()->route('web.landing.5', $request->all());
 
         $url = $request->url();
         $this->generateSeoMetaTags(new SeoDummyTags('آلاء | همایش های طلایی کنکور 97',
@@ -159,7 +159,7 @@ class ProductLandingController extends Controller
      */
     public function landing4(Request $request)
     {
-        return redirect()->route('landing.5', $request->all());
+        return redirect()->route('web.landing.5', $request->all());
 
         $url = $request->url();
         $this->generateSeoMetaTags(new SeoDummyTags('آلاء | همایش های طلایی کنکور 97',
@@ -306,7 +306,7 @@ class ProductLandingController extends Controller
      */
     public function landing6(Request $request)
     {
-        return redirect()->route('landing.9', $request->all());
+        return redirect()->route('web.landing.9', $request->all());
 
         $url = $request->url();
         $this->generateSeoMetaTags(new SeoDummyTags('آلاء| جمع بندی نیم سال اول',
@@ -372,7 +372,7 @@ class ProductLandingController extends Controller
      */
     public function landing7(Request $request)
     {
-        return redirect()->route('landing.9', $request->all());
+        return redirect()->route('web.landing.9', $request->all());
         $url = $request->url();
         $this->generateSeoMetaTags(new SeoDummyTags('از پایه تا کنکور با آلاء',
             'از پایه تا کنکور با همایش های دانلودی آلا', $url,

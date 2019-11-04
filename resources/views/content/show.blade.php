@@ -255,7 +255,7 @@
 
                     <div class="row">
                         <div class="col text-center m--margin-bottom-5">
-                            {{--                            <a href="{{ route('landing.5') }}"--}}
+                            {{--                            <a href="{{ route('web.landing.5') }}"--}}
                             {{--                               class="a--gtm-eec-advertisement a--gtm-eec-advertisement-click"--}}
                             {{--                               data-gtm-eec-promotion-id="contentShowPage-rightSide-0"--}}
                             {{--                               data-gtm-eec-promotion-name="همایش های دانلودی آلاء"--}}
@@ -367,7 +367,7 @@
 
                                         <div class="row">
                                             <div class="col-md-6 text-center m--margin-bottom-5">
-                                                {{--                                                <a href="{{ route('landing.8') }}"--}}
+                                                {{--                                                <a href="{{ route('web.landing.8') }}"--}}
                                                 {{--                                                   class="a--gtm-eec-advertisement a--gtm-eec-advertisement-click"--}}
                                                 {{--                                                   data-gtm-eec-promotion-id="contentShowPage-rightSide-1"--}}
                                                 {{--                                                   data-gtm-eec-promotion-name="قرعه کشی گوشی"--}}
@@ -378,7 +378,7 @@
                                                 {{--                                                </a>--}}
                                             </div>
                                             <div class="col-md-6 text-center m--margin-bottom-5">
-                                                {{--                                                <a href="{{ route('landing.5') }}"--}}
+                                                {{--                                                <a href="{{ route('web.landing.5') }}"--}}
                                                 {{--                                                   class="a--gtm-eec-advertisement a--gtm-eec-advertisement-click"--}}
                                                 {{--                                                   data-gtm-eec-promotion-id="contentShowPage-rightSide-2"--}}
                                                 {{--                                                   data-gtm-eec-promotion-name="همایش های دانلودی آلاء"--}}
@@ -448,7 +448,7 @@
 
                     <div class="row">
                         <div class="col text-center m--margin-bottom-5">
-                            {{--                            <a href="{{ route('landing.5') }}"--}}
+                            {{--                            <a href="{{ route('web.landing.5') }}"--}}
                             {{--                               class="a--gtm-eec-advertisement a--gtm-eec-advertisement-click "--}}
                             {{--                               data-gtm-eec-promotion-id="contentShowPage-rightSide-0"--}}
                             {{--                               data-gtm-eec-promotion-name="همایش های دانلودی آلاء"--}}
@@ -528,7 +528,7 @@
 
                     <div class="row">
                         <div class="col text-center m--margin-bottom-5">
-                            {{--                            <a href="{{ route('landing.5') }}"--}}
+                            {{--                            <a href="{{ route('web.landing.5') }}"--}}
                             {{--                               class="a--gtm-eec-advertisement a--gtm-eec-advertisement-click "--}}
                             {{--                               data-gtm-eec-promotion-id="contentShowPage-rightSide-0"--}}
                             {{--                               data-gtm-eec-promotion-name="همایش های دانلودی آلاء"--}}
