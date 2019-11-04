@@ -191,6 +191,7 @@ class ContentController extends Controller
 
     public function show(Request $request, Content $content, RelatedProductSearch $relatedProductSearch)
     {
+        $user = $request->user();
         if (isset($content->redirectUrl)) {
             return redirect($content->redirectUrl, Response::HTTP_FOUND, $request->headers->all());
         }
@@ -229,7 +230,7 @@ class ContentController extends Controller
 
         $seenCount = $content->pageView;
 
-        $userCanSeeCounter = optional(auth()->user())->CanSeeCounter();
+        $userCanSeeCounter = optional($user)->CanSeeCounter();
         $apiResponse       = response()->json($content, Response::HTTP_OK);
 
         $key = 'relatedProduct:content:'.$content->cacheKey();
@@ -248,11 +249,13 @@ class ContentController extends Controller
 
         $contentBlocks = Block::getContentBlocks();
 
+        $isFavored = optional($user)->favoredContents()->where('id' , $content->id)->get()->isNotEmpty();
+
         $viewResponse      = view('content.show',
             compact('seenCount', 'author', 'content', 'contentsWithSameSet', 'videosWithSameSet',
                 'pamphletsWithSameSet', 'contentSetName', 'tags',
                 'userCanSeeCounter', 'adItems', 'videosWithSameSetL', 'videosWithSameSetR',
-                'productsThatHaveThisContent', 'user_can_see_content', 'message', 'productsHasThisContentThroughBlockCollection' , 'contentBlocks'));
+                'productsThatHaveThisContent', 'user_can_see_content', 'message', 'productsHasThisContentThroughBlockCollection' , 'contentBlocks' , 'isFavored'));
 
         return httpResponse($apiResponse, $viewResponse);
     }

@@ -34,8 +34,19 @@ class FavorableController extends Controller
 
     public function markFavorableFavorite(Request $request, FavorableInterface $favorable)
     {
-        Cache::tags('favorite_'.$favorable->id)->flush();
-        $favorable->favoring($request->user());
+        $favoredResult =  $favorable->favoring($request->user());
+        if($favoredResult){
+            Cache::tags('favorite_'.$favorable->id)->flush();
+            return response()->json([
+                'message'   =>  'Favorable added successfully',
+            ]);
+        }
+
+        return response()->json([
+            'error' => [
+                'message' => 'Error on adding favorable',
+            ]
+        ]);
     }
 
     public function getUsersThatFavoredThisFavorable(Request $request, FavorableInterface $favorable)

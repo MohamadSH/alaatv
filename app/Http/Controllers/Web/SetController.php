@@ -184,6 +184,7 @@ class SetController extends Controller
 
     public function show(Request $request, Contentset $contentSet)
     {
+        $user = $request->user();
         $order = $request->get('order' , 'asc');
         if (isset($contentSet->redirectUrl)) {
             return redirect($contentSet->redirectUrl, Response::HTTP_FOUND, $request->headers->all());
@@ -215,7 +216,9 @@ class SetController extends Controller
 
         $this->generateSeoMetaTags($contentSet);
 
-        return view('set.show', compact('contentSet', 'videos', 'pamphlets', 'articles', 'jsonLdArray' , 'order'));
+        $isFavored = optional($user)->favoredSets()->where('id' , $contentSet->id)->get()->isNotEmpty();
+
+        return view('set.show', compact('contentSet', 'videos', 'pamphlets', 'articles', 'jsonLdArray' , 'order' , 'isFavored'));
     }
 
     public function edit(Contentset $set)
