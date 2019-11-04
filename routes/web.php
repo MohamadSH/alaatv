@@ -105,6 +105,7 @@ Route::group(['prefix' => 'landing'], function () {
     Route::get('9' , [ProductLandingController::class, 'landing9'])->name('landing.9');
     Route::get('10', [ProductLandingController::class, 'landing10'])->name('landing.10');
     Route::get('13Aban', [LandingPageController::class, 'roozeDaneshAmooz'])->name('landing.13Aban');
+    Route::get('13aban', [LandingPageController::class, 'roozeDaneshAmooz'])->name('landing.13Aban');
 });
 
 Route::group(['middleware' => 'auth'], function () {
