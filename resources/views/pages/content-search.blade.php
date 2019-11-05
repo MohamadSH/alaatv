@@ -27,9 +27,31 @@
 
 @section('content')
     
+    <div class="row showSearchBoxBtnWrapper">
+        <div class="col showSearchBoxBtnWrapperColumn">
+            <button class="btn btn-outline-accent btn-lg m-btn m-btn--icon m-btn--outline-2x btnShowSearchBoxInMobileView">
+                <span>
+                    <span>جستجوی پیشرفته</span>
+                    <i class="fa fa-sliders-h m--padding-left-5"></i>
+                </span>
+            </button>
+        </div>
+    </div>
+    
     <div class="row">
-        <div class="col notFoundMessage">
-            <div class="m-alert m-alert--icon m-alert--icon-solid m-alert--outline alert alert-warning alert-dismissible fade show" role="alert">
+        <div class="SearchBoxFilterColumn filterStatus-close">
+            <div class="SearchBoxFilterColumn-tools">
+                <button class="btn btn-outline-danger m-btn m-btn--icon btn-lg m-btn--icon-only m-btn--pill m-btn--air m-btn--outline-2x btnHideSearchBoxInMobileView">
+                    <i class="fa fa-times" aria-hidden="true"></i>
+                </button>
+            </div>
+            <div class="SearchBoxFilter">
+            
+            </div>
+        </div>
+        <div class="searchResultColumn">
+    
+            <div class="m-alert m-alert--icon m-alert--icon-solid m-alert--outline alert alert-warning alert-dismissible fade show notFoundMessage" role="alert">
                 <div class="m-alert__icon">
                     <i class="fa fa-sad-tear"></i>
                     <span></span>
@@ -41,54 +63,22 @@
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close"></button>
                 </div>
             </div>
-        </div>
-    </div>
-    
-    <div class="row">
-        <div class="col-md-2">
-            <div class="SearchBoxFilter">
             
-            </div>
-        </div>
-        <div class="col-md-10">
             <div class="searchResult">
                 <div class="carouselType">
                     <div class="ScrollCarousel">
                         
                     </div>
                 </div>
-                <hr>
+                
                 <div class="listType">
-{{--                    <div class="item">--}}
-{{--                        <div class="pic">--}}
-{{--                            <img data-src="https://cdn.alaatv.com/upload/contentset/departmentlesson/tavarogh_zist11_201927071808.jpg" alt="" class="lazy-image" width="453" height="254">--}}
-{{--                        </div>--}}
-{{--                        <div class="content">--}}
-{{--                            <div class="title">--}}
-{{--                                <h2>صفر تا صد فیزیک یازدهم (نظام آموزشی جدید) (98-1397) فرشید داداشی</h2>--}}
-{{--                            </div>--}}
-{{--                            <div class="detailes">--}}
-{{--                                <div class="lesson">--}}
-{{--                                    فیلم جلسه 2 - فصل اول: الکتریستۀ ساکن (قسمت دوم)، روش باردار کردن اجسام--}}
-{{--                                </div>--}}
-{{--                                <div class="summary">--}}
-{{--                                    تو سری جدیدی که براتون تو آلا تتو بعضی از موارسابی واتر میره.--}}
-{{--                                </div>--}}
-{{--                                <div class="publishedDate">--}}
-{{--                                    آخرین به روز رسانی: 1398/2/12--}}
-{{--                                </div>--}}
-{{--                            </div>--}}
-{{--                        </div>--}}
-{{--                        <div class="itemHover"></div>--}}
-{{--                        <div class="clearfix"></div>--}}
-{{--                    </div>--}}
                 
                     
                 </div>
     
                 <div class="row">
                     <div class="col pageTags">
-                        @include("partials.search.tagLabel" , ["tags"=>$tags])
+                        @include('partials.search.tagLabel' , ['tags'=>$tags])
                     </div>
                 </div>
             </div>

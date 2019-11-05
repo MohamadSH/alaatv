@@ -67,13 +67,13 @@ class Mix {
     mixAll() {
         this.mixBase();
         this.mixPages();
-        // this.mixUser();
-        // this.mixLanding();
-        // this.mixProduct();
-        // this.mixPageContentShow();
-        // this.mixPageSetShow();
-        // this.mixCheckout();
-        // this.mixAdmin();
+        this.mixUser();
+        this.mixLanding();
+        this.mixProduct();
+        this.mixPageContentShow();
+        this.mixPageSetShow();
+        this.mixCheckout();
+        this.mixAdmin();
         this.mixCopyDirectory();
 
         // if (this.mix.inProduction()) {
@@ -301,12 +301,12 @@ class Mix {
             );
     }
     mixPages() {
-        // this.mixPageLive();
-        // this.mixPageShop();
-        // this.mixPageError();
-        // this.mixAuthLogin();
-        // this.mixPageHomePage();
-        // this.mixPageContactUs();
+        this.mixPageLive();
+        this.mixPageShop();
+        this.mixPageError();
+        this.mixAuthLogin();
+        this.mixPageHomePage();
+        this.mixPageContactUs();
         this.mixPageContentSearch();
     }
 

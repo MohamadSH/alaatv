@@ -1,17 +1,11 @@
 var Alaasearch = function () {
 
-    var productAjaxLock = 0;
-    var videoAjaxLock = 0;
-    var setAjaxLock = 0;
-    var articleAjaxLock = 0;
-    var pamphletAjaxLock = 0;
-
-    var videoRepository = [];
-    var productRepository = [];
-    var videoRepositoryCounter = 5;
-    var productRepositoryCounter = 1;
-
-    var setLoadType = 'carouselType';
+    var videoRepository = [],
+        productRepository = [],
+        videoRepositoryCounter = 5,
+        productRepositoryCounter = 1,
+        carouselHasItem = true,
+        listTypeHasItem = true;
 
     function ajaxSetup() {
         $.ajaxSetup({
@@ -53,61 +47,12 @@ var Alaasearch = function () {
         );
     }
 
-    function loadAjaxContent(contentData, isInit) {
-
-        var hasItem = false,
-            hasSet = false,
-            hasProduct = false,
-            hasVideo = false;
-
-        if (typeof contentData.product !== 'undefined' && contentData.product !== null && contentData.product.total>0) {
-            hasProduct = true;
-            hasItem = true;
-        }
-        if (typeof contentData.video !== 'undefined' && contentData.video !== null && contentData.video.total>0) {
-            hasVideo = true;
-            hasItem = true;
-        }
-        if (typeof contentData.set !== 'undefined' && contentData.set !== null && contentData.set.total>0) {
-            hasSet = true;
-            hasItem = true;
-        }
-
-        if (isInit && hasSet && (hasProduct || hasVideo)) {
-            setLoadType = 'carouselType';
-            $('.searchResult .carouselType').fadeIn();
-        } else if (isInit && hasSet) {
-            setLoadType = 'listType';
-            $('.searchResult .carouselType').fadeOut();
-        }
-
-        if (hasSet) {
-            appendToSet(contentData.set, setLoadType);
-        }
-        if (hasVideo) {
-            videoRepository = videoRepository.concat(contentData.video.data);
-            appendToVideo();
-        }
-        if (hasProduct) {
-            productRepository = productRepository.concat(contentData.product.data);
-            appendToProduct();
-        }
-
-        addSensorItem('carouselType');
-        addSensorItem('listType');
-
-        if (hasSet) {
-            setNextPageUrl('set', contentData.set.next_page_url);
-        }
-        if (hasProduct) {
-            setNextPageUrl('product', contentData.product.next_page_url);
-        }
-        if (hasVideo) {
-            setNextPageUrl('video', contentData.video.next_page_url);
-        }
-
-        gtmEecProductObserver.observe();
-        imageObserver.observe();
+    function loadAjaxContent(contentData) {
+        fillVideoRepositoryAndSetNextPage(contentData.video);
+        fillProductRepositoryAndSetNextPage(contentData.product);
+        appendToCarouselTypeAndSetNextPage(contentData.set);
+        appendToListType();
+        checkToShowNotFoundMessage();
     }
 
     function appendToProduct() {
@@ -117,7 +62,8 @@ var Alaasearch = function () {
             if (productRepository[i] === null) {
                 continue;
             }
-            $('.searchResult .listType').append(makeWidgetFromJsonResponse(productRepository[i], 'product', i));
+            listTypeHasItem = true;
+            $('.searchResult .listType').append(getProductItem(productRepository[i], i));
             productRepository[i] = null;
             counter++;
             if (counter === productRepositoryCounter) {
@@ -133,7 +79,8 @@ var Alaasearch = function () {
             if (videoRepository[i] === null) {
                 continue;
             }
-            $('.searchResult .listType').append(makeWidgetFromJsonResponse(videoRepository[i], 'video', i));
+            listTypeHasItem = true;
+            $('.searchResult .listType').append(getContentItem(videoRepository[i]));
             videoRepository[i] = null;
             counter++;
             if (counter === videoRepositoryCounter) {
@@ -145,23 +92,14 @@ var Alaasearch = function () {
     function appendToSet(data, loadType) {
         $.each(data.data, function (index, value) {
             if (loadType === 'carouselType') {
-                $('.searchResult .carouselType .ScrollCarousel').append(makeWidgetFromJsonResponse(value, 'set-carouselType', index));
+                carouselHasItem = true;
+                $('.searchResult .carouselType .ScrollCarousel').append(getSetCarouselItem(value));
             } else if (loadType === 'listType') {
 
             }
         });
     }
 
-    function makeWidgetFromJsonResponse(data, type, itemKey) {
-        switch (type) {
-            case 'product':
-                return getProductItem(data, itemKey);
-            case 'video':
-                return getContentItem(data);
-            case 'set-carouselType':
-                return getSetCarouselItem(data);
-        }
-    }
     function getSetCarouselItem(data) {
         let inputData = {
             widgetPic: (typeof (data.photo) === 'undefined' || data.photo == null) ? data.thumbnail + '?w=253&h=142' : data.photo + '?w=253&h=142',
@@ -237,16 +175,16 @@ var Alaasearch = function () {
     function getListTypeItem(data) {
         return '\n' +
             '<div class="item '+data.class+'" '+data.itemGtm+'>\n' +
-            data.ribbon +
+                    data.ribbon +
             '    <div class="pic">\n' +
-            data.widgetPic +
+                    data.widgetPic +
             '    </div>\n' +
             '    <div class="content">\n' +
             '        <div class="title">\n' +
             '            <h2>'+data.widgetTitle+'</h2>\n' +
             '        </div>\n' +
             '        <div class="detailes">\n' +
-            data.widgetDetailes +
+                        data.widgetDetailes +
             '        </div>\n' +
             '    </div>\n' +
             '    <div class="itemHover"></div>\n' +
@@ -298,6 +236,7 @@ var Alaasearch = function () {
 
         var itemData = {
             class: 'a--gtm-eec-product',
+            widgetLink: widgetActionLink,
             itemGtm:
                 '     data-position="'+itemKey+'"\n' +
                 '     data-gtm-eec-product-id="'+gtmEecProductId+'"\n' +
@@ -334,10 +273,10 @@ var Alaasearch = function () {
                 '    '+widgetTitle+'\n' +
                 '</a>\n',
             widgetDetailes: '' +
-                '<div>' +
+                '<div class="productPriceWrapper">' +
                 priceHtml+
                 '</div>'+
-                '<div class="m--margin-top-20">' +
+                '<div class="m--margin-top-40">' +
                 truncatise(shortDescription.replace(/<a .*>.*<\/a>/i, ''), options) +
                 '</div>',
             ribbon: discountRibbon
@@ -362,12 +301,12 @@ var Alaasearch = function () {
             widgetLink = data.url,
             description = data.description,
             videoOrder = data.order,
-            setName = data.set.name,
-            setUrl = data.set.contentUrl,
-            widgetAuthorFullameHtml = '' +
+            setName = (typeof data.set !== 'undefined') ? data.set.name : '-',
+            setUrl = (typeof data.set !== 'undefined') ? data.set.contentUrl : '-',
+            videoOrderHtml = '<div class="videoOrder"><div class="videoOrder-title">جلسه</div><div class="videoOrder-number">'+videoOrder+'</div></div>',
+            widgetDetailes = '' +
+                videoOrderHtml +
                 '<div>' +
-                '   <span>جلسه </span>' +
-                '   <span>'+videoOrder+'</span>' +
                 '   <span> از دوره </span>' +
                 '   <span>'+setName+'</span>' +
                 '   <br>' +
@@ -379,12 +318,16 @@ var Alaasearch = function () {
         var itemData = {
             class: '',
             itemGtm:'',
+            widgetLink: widgetLink,
             widgetPic:
                 '        <a href="'+widgetLink+'" class="d-block">\n' +
                 '            <img src="https://cdn.alaatv.com/loder.jpg?w=16&h=9" data-src="'+widgetPic+'" alt="'+widgetTitle+'" class="a--full-width lazy-image videoImage" width="253" height="142" />\n' +
                 '        </a>\n',
-            widgetTitle: widgetTitle,
-            widgetDetailes: widgetAuthorFullameHtml,
+            widgetTitle:
+                '<a href="' + widgetLink + '" class="m-link">\n' +
+                '    '+widgetTitle+'\n' +
+                '</a>\n',
+            widgetDetailes: widgetDetailes,
             ribbon: ''
         };
         return getListTypeItem(itemData);
@@ -392,30 +335,18 @@ var Alaasearch = function () {
 
     function addLoadingItem(itemType) {
         var loadingHtml = '<div style="width: 30px; display: inline-block;" class="m-loader m-loader--primary m-loader--lg"></div>';
-        var itemData = {
-            loadingHtml: loadingHtml,
-            photo:'',
-            name:'',
-            author:{
-                photo:'',
-                firstName:'',
-                full_name:''
-            },
-            active_contents_count:'',
-            id:''
-        };
         if (itemType === 'carouselType') {
-            $('.searchResult .carouselType .ScrollCarousel').append(getSetCarouselItem(itemData));
+            $('.searchResult .carouselType .ScrollCarousel').append('<div class="item loadingItem w-66534321">\n' + loadingHtml + '</div>');
         } else if (itemType === 'listType') {
-             itemData = {
-                class: 'loadingItem',
-                itemGtm:'',
-                widgetPic: loadingHtml,
-                widgetTitle: '',
-                widgetDetailes: loadingHtml,
-                ribbon: ''
-            };
-            $('.searchResult .listType').append(getListTypeItem(itemData));
+            $('.searchResult .listType').append('\n' +
+                '<div class="item loadingItem">\n' +
+                '    <div class="pic">\n' +
+                '        <i class="fa fa-image"></i>' +
+                '    </div>\n' +
+                '    <div class="content">\n' +
+                        loadingHtml +
+                '    </div>\n' +
+                '</div>');
         }
     }
     function removeLoadingItem(itemType) {
@@ -424,6 +355,25 @@ var Alaasearch = function () {
         } else if (itemType === 'listType') {
             $('.searchResult .listType .loadingItem').remove();
         }
+    }
+
+    function clearCarousel() {
+        $('.searchResult .carouselType .ScrollCarousel .item').remove();
+    }
+    function clearListType() {
+        $('.searchResult .listType .item').remove();
+    }
+    function clearRepositories() {
+        videoRepository = [];
+        productRepository = [];
+    }
+    function cleatAllItems() {
+        hideNotFoundMessage();
+        clearRepositories();
+        clearCarousel();
+        clearListType();
+        carouselHasItem = false;
+        listTypeHasItem = false;
     }
 
     function addSensorItem(itemType) {
@@ -455,34 +405,26 @@ var Alaasearch = function () {
     }
 
     function setNextPageUrl(type, url) {
-        if (type === 'set') {
-            $('.searchResult .InputOfAllNextPageUrl .nextPageUrl-set').val(url);
-        } else if (type === 'product') {
-            $('.searchResult .InputOfAllNextPageUrl .nextPageUrl-product').val(url);
-        } else if (type === 'video') {
-            $('.searchResult .InputOfAllNextPageUrl .nextPageUrl-video').val(url);
-        }
+        // type : set - product - video
+        $('.searchResult .InputOfAllNextPageUrl .nextPageUrl-'+type).val(url);
     }
     function getNextPageUrl(type) {
-        if (type === 'set') {
-            return $('.searchResult .InputOfAllNextPageUrl .nextPageUrl-set').val();
-        } else if (type === 'product') {
-            return $('.searchResult .InputOfAllNextPageUrl .nextPageUrl-product').val();
-        } else if (type === 'video') {
-            return $('.searchResult .InputOfAllNextPageUrl .nextPageUrl-video').val();
-        }
+        // type : set - product - video
+        return $('.searchResult .InputOfAllNextPageUrl .nextPageUrl-'+type).val();
     }
 
     function loadDataBasedOnNewFilter(urlAction) {
-
+        cleatAllItems();
         addLoadingItem('carouselType');
-        getAjaxContent(nextPageUrl, function (response) {
-            appendToCarouselType(response);
-            fillVideoRepositoryAndSetNextPage(response.result.video);
-
+        addLoadingItem('listType');
+        mApp.block('.SearchBoxFilter .GroupFilters .body', {
+            type: "loader",
+            state: "success",
         });
-
-
+        getAjaxContent(urlAction, function (response) {
+            loadAjaxContent(response.result);
+            mApp.unblock('.SearchBoxFilter .GroupFilters .body');
+        });
     }
 
     function fetchNewCarousel() {
@@ -490,7 +432,7 @@ var Alaasearch = function () {
         if (nextPageUrl !== null && nextPageUrl.length > 0) {
             addLoadingItem('carouselType');
             getAjaxContent(nextPageUrl, function (response) {
-                appendToCarouselType(response);
+                appendToCarouselTypeAndSetNextPage(response.result.set);
             });
         }
         removeSensorItem('carouselType');
@@ -524,14 +466,29 @@ var Alaasearch = function () {
         imageObserver.observe();
         gtmEecProductObserver.observe();
     }
-    function appendToCarouselType(response) {
-        if (typeof response.result.set !== 'undefined' && response.result.set !== null && response.result.set.total>0) {
-            removeLoadingItem('carouselType');
-            appendToSet(response.result.set, 'carouselType');
+    function appendToCarouselTypeAndSetNextPage(data) {
+        removeLoadingItem('carouselType');
+        if (typeof data !== 'undefined' && data !== null && data.total>0) {
+            appendToSet(data, 'carouselType');
             addSensorItem('carouselType');
-            setNextPageUrl('set', response.result.set.next_page_url);
+            setNextPageUrl('set', data.next_page_url);
+        } else {
+            setNextPageUrl('set', '');
         }
         imageObserver.observe();
+    }
+    function checkToShowNotFoundMessage() {
+        if (!carouselHasItem && !listTypeHasItem) {
+            showNotFoundMessage();
+        } else {
+            hideNotFoundMessage();
+        }
+    }
+    function showNotFoundMessage() {
+        $('.notFoundMessage').fadeIn();
+    }
+    function hideNotFoundMessage() {
+        $('.notFoundMessage').fadeOut();
     }
 
     function priceToStringWithTwoDecimal(price) {
@@ -572,12 +529,16 @@ var Alaasearch = function () {
         if (typeof data !== 'undefined' && data !== null && data.total>0) {
             fillProductRepository(data.data);
             setNextPageUrl('product', data.next_page_url);
+        } else {
+            setNextPageUrl('product', '');
         }
     }
     function fillVideoRepositoryAndSetNextPage(data) {
         if (typeof data !== 'undefined' && data !== null && data.total > 0) {
             fillVideoRepository(data.data);
             setNextPageUrl('video', data.next_page_url);
+        } else {
+            setNextPageUrl('video', '');
         }
     }
 
@@ -637,14 +598,12 @@ var Alaasearch = function () {
 
     return {
         init: function (contentData) {
+            cleatAllItems();
             $('.searchResult').append(getInputOfAllNextPageUrl());
-            loadAjaxContent(contentData, true);
-            $(document).on('change', '.GroupFilters-item input[type="checkbox"]', function () {
-                TagManager.refreshTags();
-            });
+            loadAjaxContent(contentData);
         },
-        loadData: function (contentData) {
-            loadAjaxContent(contentData, true);
+        loadDataBasedOnNewFilter: function (urlAction) {
+            loadDataBasedOnNewFilter(urlAction);
         },
         clearFields: function () {
             clearOwlcarousel($('#product-carousel-warper .a--owl-carousel-type-1'));
@@ -1014,8 +973,8 @@ var CustomInitMultiLevelSearch = function () {
 
 var TagManager = function () {
 
-    function refreshTags() {
-        var selectedItems = getSelectedItems();
+    function refreshUrlBasedOnSelectedTags() {
+        var selectedItems = getSelectedTags();
         var pageTagsListBadge = '.pageTags .m-list-badge__items';
         $(pageTagsListBadge).find('.m-list-badge__item').remove();
 
@@ -1038,10 +997,10 @@ var TagManager = function () {
         // To change the URL in place without adding a new entry to history use
         history.replaceState('data to be passed', 'Title of the page', url);
 
-        return tagsValue;
+        return url;
     }
 
-    function getSelectedItems() {
+    function getSelectedTags() {
         var checkedItems = $('.GroupFilters-item input[type="checkbox"]:checked'),
             checkedItemsLength = checkedItems.length,
             tagsArray = [];
@@ -1051,6 +1010,19 @@ var TagManager = function () {
         return tagsArray;
     }
 
+    function refreshPageTagsBadge() {
+        var tags = getSelectedTags();
+        var tagsLength = tags.length;
+        $('.pageTags .m-badge').remove();
+        if(tagsLength === 0) {
+            $('.pageTags').fadeOut();
+        } else {
+            $('.pageTags').fadeIn();
+            for(var i = 0; i < tagsLength; i++) {
+                $('.pageTags .m-list-badge').append('<span class="m-badge m-badge--info m-badge--wide m-badge--rounded m--margin-left-10 tag_0"><a class="m-link m--font-light" href="http://192.168.5.30/c?tags[0]='+tags[i]+'">'+tags[i].split('_').join(' ')+'</a></span>');
+            }
+        }
+    }
 
     function runWaiting() {
         Alaasearch.clearFields();
@@ -1083,7 +1055,7 @@ var TagManager = function () {
 
         // document.location.href
 
-        var tagsValue = refreshTags(contentSearchFilterData);
+        var tagsValue = refreshUrlBasedOnSelectedTags(contentSearchFilterData);
 
 
         var originUrl = document.location.origin;
@@ -1129,8 +1101,14 @@ var TagManager = function () {
     }
 
     return {
-        refreshTags: function () {
-            refreshTags();
+        refreshUrlBasedOnSelectedTags: function () {
+            return refreshUrlBasedOnSelectedTags();
+        },
+        getSelectedTags: function () {
+            return getSelectedTags();
+        },
+        refreshPageTagsBadge: function () {
+            refreshPageTagsBadge();
         },
         getNewDataBaseOnTags: function (contentSearchFilterData) {
             getNewDataBaseOnTags(contentSearchFilterData);
@@ -1272,10 +1250,71 @@ var initFilterOptions = function () {
         return optionsHtml;
     }
 
+    function checkFilterBasedOnUrlTags(urlTags) {
+        $('.GroupFilters-item input[type="checkbox"]').each(function () {
+            if (urlTags.indexOf($(this).val()) !== -1) {
+                $(this).prop('checked', true);
+            }
+        });
+    }
+
+    function sortSelectedItems() {
+        $('.GroupFilters').each(function () {
+            var $groupFilter = $(this),
+                $checkBoxWrapperArray = [];
+            console.log('$groupFilter: ', $groupFilter);
+            $groupFilter.find('input[type="checkbox"]:checked').each(function () {
+                var mCheckbox = $(this).parents('.m-checkbox');
+                console.log('mCheckbox: ', mCheckbox);
+                $checkBoxWrapperArray.push(mCheckbox);
+                mCheckbox.remove();
+            });
+            var checkBoxWrapperArrayLength = $checkBoxWrapperArray.length;
+            for (var i = 0; i < checkBoxWrapperArrayLength; i++) {
+                $groupFilter.find('.body .m-checkbox-list').prepend($checkBoxWrapperArray[i]);
+            }
+        });
+    }
+
     return {
         init: function (data) {
             contentSearchFilterData = data.contentSearchFilterData;
             $(data.containerSelector).html(initGroupsField());
+
+            $(document).on('change', '.GroupFilters-item input[type="checkbox"]', function () {
+                var thisCheckedStatus = $(this).is(':checked');
+                $(this).parents('.GroupFilters').find('input[type="checkbox"]').prop('checked', false);
+                if (thisCheckedStatus) {
+                    $(this).prop('checked', true);
+                } else {
+                    $(this).prop('checked', false);
+                }
+                var newUrl = TagManager.refreshUrlBasedOnSelectedTags();
+                TagManager.refreshPageTagsBadge();
+                sortSelectedItems();
+                Alaasearch.loadDataBasedOnNewFilter(newUrl);
+            });
+
+            $('.SearchBoxFilter').sticky({
+                topSpacing: $('#m_header').height(),
+                bottomSpacing: 60,
+                scrollDirectionSensitive: true,
+                unstickUnder: 1025,
+                zIndex: 98
+            });
+
+            $('.showSearchBoxBtnWrapperColumn').sticky({
+                topSpacing: $('#m_header').height(),
+                unstickUnder: false,
+                zIndex: 98
+            });
+
+            $(document).on('click', '#m_aside_left_hide_toggle', function () {
+                $('.SearchBoxFilter').update();
+            });
+
+            checkFilterBasedOnUrlTags(data.tags);
+            sortSelectedItems();
         }
     }
 }();
@@ -1286,14 +1325,18 @@ jQuery(document).ready(function () {
 
     initFilterOptions.init({
         contentSearchFilterData: contentSearchFilterData,
-        containerSelector: '.SearchBoxFilter'
+        containerSelector: '.SearchBoxFilter',
+        tags: tags
     });
 
-    $('.SearchBoxFilter').sticky({
-        topSpacing: $('#m_header').height(),
-        bottomSpacing: 60,
-        scrollDirectionSensitive: true,
-        zIndex: 98
+
+    $(document).on('click',  '.btnShowSearchBoxInMobileView', function () {
+        $('.SearchBoxFilterColumn').removeClass('filterStatus-close');
+        $('.SearchBoxFilterColumn').addClass('filterStatus-open');
+    });
+    $(document).on('click',  '.btnHideSearchBoxInMobileView', function () {
+        $('.SearchBoxFilterColumn').addClass('filterStatus-close');
+        $('.SearchBoxFilterColumn').removeClass('filterStatus-open');
     });
 
 
@@ -1351,6 +1394,7 @@ jQuery(document).ready(function () {
             responsiveClass:true,
             responsive: otherResponsive
         };
+
     function slideChanged1(event) {
         gtmEecProductObserver.observe();
         imageObserver.observe();
@@ -1372,7 +1416,6 @@ jQuery(document).ready(function () {
         $(this).owlCarousel(config);
         $(this).trigger('refresh.owl.carousel');
     });
-
 
     Alaasearch.init(contentData);
 
