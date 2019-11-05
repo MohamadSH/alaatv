@@ -77,13 +77,9 @@ class SlideShowController extends Controller
             }
         }
 
-        $isEnable = $request->get("isEnable");
-        if (isset($isEnable)) {
-            $slide->isEnable = 1;
-        }
-        else {
-            $slide->isEnable = 0;
-        }
+        $slide->isEnable = ($request->has("isEnable"))?1:0;
+        $slide->in_new_tab = ($request->has("in_new_tab"))?1:0;
+
 
         if ($slide->save()) {
             session()->put('success', 'اسلاید با موفقیت افزوده شد!');

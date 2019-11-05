@@ -8,12 +8,14 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\{Auth, Schema, Storage, Validator};
 use App\{Content,
+    Observers\SlideshowObserver,
     Observers\TransactionObserver,
     Observers\UserObserver,
     Product,
     Contentset,
     Orderproduct,
     Employeetimesheet,
+    Slideshow,
     Traits\UserCommon,
     Observers\SetObserver,
     Adapter\AlaaSftpAdapter,
@@ -65,6 +67,7 @@ class AppServiceProvider extends ServiceProvider
         Orderproduct::observe(OrderproductObserver::class);
         Transaction::observe(TransactionObserver::class);
         User::observe(UserObserver::class);
+        Slideshow::observe(SlideshowObserver::class);
         $this->defineValidationRules();
     }
 

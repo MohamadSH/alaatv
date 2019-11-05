@@ -161,15 +161,9 @@ class ProductController extends Controller
 
     public function show(Request $request, Product $product)
     {
-        //$user = $request->user();
-        $user = null;
-         if ($user) {
-             $purchasedProductIdArray = $this->searchInUserAssetsCollection($product, $user);
-             $allChildIsPurchased = $this->allChildIsPurchased($product, $purchasedProductIdArray);
-         } else {
-             $purchasedProductIdArray = [];
-             $allChildIsPurchased = false;
-         }
+        $user = $request->user();
+        $purchasedProductIdArray = [];
+        $allChildIsPurchased = false;
 
         if (isset($product->redirectUrl)) {
             return redirect($product->redirectUrl, Response::HTTP_FOUND, $request->headers->all());
@@ -194,7 +188,10 @@ class ProductController extends Controller
             $children = $product->children()->enable()->get();
         }
 
-        return view('product.show', compact('product', 'block', 'purchasedProductIdArray', 'allChildIsPurchased' , 'liveDescriptions' , 'children'));
+//        $isFavored = optional(optional(optional(optional($user)->favoredProducts())->where('id' , $product->id))->get())->isNotEmpty();
+        $isFavored = null;
+
+        return view('product.show', compact('product', 'block', 'purchasedProductIdArray', 'allChildIsPurchased' , 'liveDescriptions' , 'children' , 'isFavored'));
     }
 
     public function edit(Product $product)

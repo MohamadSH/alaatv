@@ -2,6 +2,10 @@
 
 namespace App;
 
+use Carbon\Carbon;
+use Eloquent;
+use Illuminate\Database\Eloquent\Builder;
+
 /**
  * App\Sanatisharifmerge
  *
@@ -43,64 +47,64 @@ namespace App;
  * @property string|null            $pageOldAddress              آدرس قدیم صفحه
  * @property string|null            $pageNewAddress              آدرس جدید صفحه
  * @property int|null               $content_id                  آدرس محتوای نظیر در صورت وجود
- * @property \Carbon\Carbon|null    $created_at
- * @property \Carbon\Carbon|null    $updated_at
- * @property \Carbon\Carbon|null    $deleted_at
- * @property-read \App\Content|null $content
+ * @property Carbon|null    $created_at
+ * @property Carbon|null    $updated_at
+ * @property Carbon|null    $deleted_at
+ * @property-read Content|null $content
  * @method static bool|null forceDelete()
- * @method static \Illuminate\Database\Query\Builder|\App\Sanatisharifmerge onlyTrashed()
+ * @method static \Illuminate\Database\Query\Builder|Sanatisharifmerge onlyTrashed()
  * @method static bool|null restore()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Sanatisharifmerge whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Sanatisharifmerge whereDeletedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Sanatisharifmerge whereDepartmentTransferred($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Sanatisharifmerge whereDepartmentlessonEnable($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Sanatisharifmerge whereDepartmentlessonTransferred($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Sanatisharifmerge whereDepartmentlessonid($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Sanatisharifmerge whereDepid($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Sanatisharifmerge whereDepname($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Sanatisharifmerge whereDepyear($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Sanatisharifmerge whereContentId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Sanatisharifmerge whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Sanatisharifmerge whereIsexercise($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Sanatisharifmerge whereKeywords($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Sanatisharifmerge whereLessonEnable($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Sanatisharifmerge whereLessonTransferred($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Sanatisharifmerge whereLessonid($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Sanatisharifmerge whereLessonname($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Sanatisharifmerge wherePageNewAddress($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Sanatisharifmerge wherePageOldAddress($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Sanatisharifmerge wherePamphletEnable($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Sanatisharifmerge wherePamphletTransferred($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Sanatisharifmerge wherePamphletaddress($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Sanatisharifmerge wherePamphletdescrip($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Sanatisharifmerge wherePamphletid($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Sanatisharifmerge wherePamphletname($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Sanatisharifmerge wherePamphletsession($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Sanatisharifmerge wherePic($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Sanatisharifmerge whereTeacherfirstname($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Sanatisharifmerge whereTeacherlastname($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Sanatisharifmerge whereThumbnail($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Sanatisharifmerge whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Sanatisharifmerge whereVideoEnable($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Sanatisharifmerge whereVideoTransferred($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Sanatisharifmerge whereVideodescrip($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Sanatisharifmerge whereVideoid($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Sanatisharifmerge whereVideolink($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Sanatisharifmerge whereVideolink240p($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Sanatisharifmerge whereVideolinkhq($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Sanatisharifmerge whereVideolinktakhtesefid($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Sanatisharifmerge whereVideoname($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Sanatisharifmerge whereVideosession($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Sanatisharifmerge withTrashed()
- * @method static \Illuminate\Database\Query\Builder|\App\Sanatisharifmerge withoutTrashed()
- * @mixin \Eloquent
+ * @method static Builder|Sanatisharifmerge whereCreatedAt($value)
+ * @method static Builder|Sanatisharifmerge whereDeletedAt($value)
+ * @method static Builder|Sanatisharifmerge whereDepartmentTransferred($value)
+ * @method static Builder|Sanatisharifmerge whereDepartmentlessonEnable($value)
+ * @method static Builder|Sanatisharifmerge whereDepartmentlessonTransferred($value)
+ * @method static Builder|Sanatisharifmerge whereDepartmentlessonid($value)
+ * @method static Builder|Sanatisharifmerge whereDepid($value)
+ * @method static Builder|Sanatisharifmerge whereDepname($value)
+ * @method static Builder|Sanatisharifmerge whereDepyear($value)
+ * @method static Builder|Sanatisharifmerge whereContentId($value)
+ * @method static Builder|Sanatisharifmerge whereId($value)
+ * @method static Builder|Sanatisharifmerge whereIsexercise($value)
+ * @method static Builder|Sanatisharifmerge whereKeywords($value)
+ * @method static Builder|Sanatisharifmerge whereLessonEnable($value)
+ * @method static Builder|Sanatisharifmerge whereLessonTransferred($value)
+ * @method static Builder|Sanatisharifmerge whereLessonid($value)
+ * @method static Builder|Sanatisharifmerge whereLessonname($value)
+ * @method static Builder|Sanatisharifmerge wherePageNewAddress($value)
+ * @method static Builder|Sanatisharifmerge wherePageOldAddress($value)
+ * @method static Builder|Sanatisharifmerge wherePamphletEnable($value)
+ * @method static Builder|Sanatisharifmerge wherePamphletTransferred($value)
+ * @method static Builder|Sanatisharifmerge wherePamphletaddress($value)
+ * @method static Builder|Sanatisharifmerge wherePamphletdescrip($value)
+ * @method static Builder|Sanatisharifmerge wherePamphletid($value)
+ * @method static Builder|Sanatisharifmerge wherePamphletname($value)
+ * @method static Builder|Sanatisharifmerge wherePamphletsession($value)
+ * @method static Builder|Sanatisharifmerge wherePic($value)
+ * @method static Builder|Sanatisharifmerge whereTeacherfirstname($value)
+ * @method static Builder|Sanatisharifmerge whereTeacherlastname($value)
+ * @method static Builder|Sanatisharifmerge whereThumbnail($value)
+ * @method static Builder|Sanatisharifmerge whereUpdatedAt($value)
+ * @method static Builder|Sanatisharifmerge whereVideoEnable($value)
+ * @method static Builder|Sanatisharifmerge whereVideoTransferred($value)
+ * @method static Builder|Sanatisharifmerge whereVideodescrip($value)
+ * @method static Builder|Sanatisharifmerge whereVideoid($value)
+ * @method static Builder|Sanatisharifmerge whereVideolink($value)
+ * @method static Builder|Sanatisharifmerge whereVideolink240p($value)
+ * @method static Builder|Sanatisharifmerge whereVideolinkhq($value)
+ * @method static Builder|Sanatisharifmerge whereVideolinktakhtesefid($value)
+ * @method static Builder|Sanatisharifmerge whereVideoname($value)
+ * @method static Builder|Sanatisharifmerge whereVideosession($value)
+ * @method static \Illuminate\Database\Query\Builder|Sanatisharifmerge withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|Sanatisharifmerge withoutTrashed()
+ * @mixin Eloquent
  * @property int|null               $educationalcontent_id       آدرس محتوای نظیر در صورت وجود
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Sanatisharifmerge whereEducationalcontentId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Sanatisharifmerge newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Sanatisharifmerge newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Sanatisharifmerge query()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel disableCache()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel withCacheCooldownSeconds($seconds)
+ * @method static Builder|Sanatisharifmerge whereEducationalcontentId($value)
+ * @method static Builder|Sanatisharifmerge newModelQuery()
+ * @method static Builder|Sanatisharifmerge newQuery()
+ * @method static Builder|Sanatisharifmerge query()
+ * @method static Builder|BaseModel disableCache()
+ * @method static Builder|BaseModel withCacheCooldownSeconds($seconds)
  * @property-read mixed             $cache_cooldown_seconds
  */
 class Sanatisharifmerge extends BaseModel
@@ -144,11 +148,11 @@ class Sanatisharifmerge extends BaseModel
         'teacherlastname',
         'pageOldAddress',
         'pageNewAddress',
-        'content_id',
+        'educationalcontent_id',
     ];
-    
+
     public function content()
     {
-        return $this->belongsTo('App\Content');
+        return $this->belongsTo(Content::Class , 'educationalcontent_id' , 'id');
     }
 }
