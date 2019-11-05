@@ -94,17 +94,18 @@ Route::group(['prefix' => 'checkout'], function () {
 });
 
 Route::group(['prefix' => 'landing'], function () {
-    Route::get('1' , [ProductLandingController::class, 'landing1'])->name('landing.1');
-    Route::get('2' , [ProductLandingController::class, 'landing2'])->name('landing.2');
-    Route::get('3' , [ProductLandingController::class, 'landing3'])->name('landing.3');
-    Route::get('4' , [ProductLandingController::class, 'landing4'])->name('landing.4');
-    Route::get('5' , [ProductLandingController::class, 'landing5'])->name('landing.5');
-    Route::get('6' , [ProductLandingController::class, 'landing6'])->name('landing.6');
-    Route::get('7' , [ProductLandingController::class, 'landing7'])->name('landing.7');
-    Route::get('8' , [ProductLandingController::class, 'landing8'])->name('landing.8');
-    Route::get('9' , [ProductLandingController::class, 'landing9'])->name('landing.9');
-    Route::get('10', [ProductLandingController::class, 'landing10'])->name('landing.10');
-    Route::get('13Aban', [LandingPageController::class, 'roozeDaneshAmooz'])->name('landing.13Aban');
+    Route::get('1' , [ProductLandingController::class, 'landing1'])->name('web.landing.1');
+    Route::get('2' , [ProductLandingController::class, 'landing2'])->name('web.landing.2');
+    Route::get('3' , [ProductLandingController::class, 'landing3'])->name('web.landing.3');
+    Route::get('4' , [ProductLandingController::class, 'landing4'])->name('web.landing.4');
+    Route::get('5' , [ProductLandingController::class, 'landing5'])->name('web.landing.5');
+    Route::get('6' , [ProductLandingController::class, 'landing6'])->name('web.landing.6');
+    Route::get('7' , [ProductLandingController::class, 'landing7'])->name('web.landing.7');
+    Route::get('8' , [ProductLandingController::class, 'landing8'])->name('web.landing.8');
+    Route::get('9' , [ProductLandingController::class, 'landing9'])->name('web.landing.9');
+    Route::get('10', [ProductLandingController::class, 'landing10'])->name('web.landing.10');
+    Route::get('13Aban', [LandingPageController::class, 'roozeDaneshAmooz'])->name('web.landing.13Aban');
+    Route::get('13aban', [LandingPageController::class, 'roozeDaneshAmooz2'])->name('web.landing.13aban');
 });
 
 Route::group(['middleware' => 'auth'], function () {

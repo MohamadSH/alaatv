@@ -5,9 +5,9 @@ namespace App\Http\Controllers\Web;
 use App\Collection\TransactionCollection;
 use App\Gender;
 use App\Major;
-use App\Websitesetting;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Response;
 
 class LandingPageController extends Controller
 {
@@ -75,5 +75,10 @@ class LandingPageController extends Controller
         }
 
         return view('user.completeRegister2' , compact('user' , 'hasGotGiftBefore' , 'hadGotGiftBefore' , 'genders' , 'majors' ));
+    }
+
+    public function roozeDaneshAmooz2()
+    {
+        return redirect(route('web.landing.13Aban') , Response::HTTP_MOVED_PERMANENTLY);
     }
 }

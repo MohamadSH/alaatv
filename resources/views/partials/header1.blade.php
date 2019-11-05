@@ -277,7 +277,7 @@
                                         </a>
                                     </li>
                                     <li class="m-menu__item " m-menu-link-redirect="1" aria-haspopup="true">
-                                        <a href="{{ route('landing.5') }}" class="m-menu__link ">
+                                        <a href="{{ route('web.landing.5') }}" class="m-menu__link ">
                                             {{--                                            <i class="m-menu__link-icon majorIcon"><img src="{{ asset('/acm/extra/ensani.gif') }}" alt="riazi" > </i>--}}
                                             <span class="m-menu__link-title">
                                                 <span class="m-menu__link-wrap">
@@ -306,7 +306,7 @@
                             <div class="m-menu__submenu m-menu__submenu--classic m-menu__submenu--left a-major-menu__submenu">
                                 <ul class="m-menu__subnav">
                                     <li class="m-menu__item " m-menu-link-redirect="1" aria-haspopup="true">
-                                        <a href="{{ route('landing.8') }}" class="m-menu__link ">
+                                        <a href="{{ route('web.landing.8') }}" class="m-menu__link ">
                                             {{--                                            <i class="m-menu__link-icon majorIcon"><img src="{{ asset('/acm/extra/riazi.gif') }}" alt="riazi" > </i>--}}
                                             <span class="m-menu__link-title">
                                                 <span class="m-menu__link-wrap">
@@ -323,7 +323,7 @@
                                         </a>
                                     </li>
                                     <li class="m-menu__item " m-menu-link-redirect="1" aria-haspopup="true">
-                                        <a href="{{ route('landing.9') }}" class="m-menu__link ">
+                                        <a href="{{ route('web.landing.9') }}" class="m-menu__link ">
                                             {{--                                            <i class="m-menu__link-icon majorIcon"><img src="{{ asset('/acm/extra/tajrobi.gif') }}" alt="riazi" > </i>--}}
                                             <span class="m-menu__link-title">
                                                 <span class="m-menu__link-wrap">
@@ -340,7 +340,7 @@
                                         </a>
                                     </li>
                                     <li class="m-menu__item " m-menu-link-redirect="1" aria-haspopup="true">
-                                        <a href="{{ route('landing.10') }}" class="m-menu__link ">
+                                        <a href="{{ route('web.landing.10') }}" class="m-menu__link ">
                                             {{--                                            <i class="m-menu__link-icon majorIcon"><img src="{{ asset('/acm/extra/ensani.gif') }}" alt="riazi" > </i>--}}
                                             <span class="m-menu__link-title">
                                                 <span class="m-menu__link-wrap">
@@ -357,7 +357,7 @@
                                         </a>
                                     </li>
                                     <li class="m-menu__item " m-menu-link-redirect="1" aria-haspopup="true">
-                                        <a href="{{ route('landing.5') }}" class="m-menu__link ">
+                                        <a href="{{ route('web.landing.5') }}" class="m-menu__link ">
                                             {{--                                            <i class="m-menu__link-icon majorIcon"><img src="{{ asset('/acm/extra/ensani.gif') }}" alt="riazi" > </i>--}}
                                             <span class="m-menu__link-title">
                                                 <span class="m-menu__link-wrap">
