@@ -626,6 +626,11 @@ var contentSearchFilterData = {
         ],
         "شیمی": [
             {
+                "lastName": "گودرزی",
+                "firstName": "احسان ",
+                "value": "احسان_گودرزی"
+            },
+            {
                 "lastName": "همه دبیرها",
                 "firstName": "",
                 "value": "همه_دبیرها"
@@ -672,6 +677,11 @@ var contentSearchFilterData = {
             }
         ],
         "فیزیک": [
+            {
+                "lastName": "یاری",
+                "firstName": "محمد رضا",
+                "value": "محمد_رضا_یاری"
+            },
             {
                 "lastName": "همه دبیرها",
                 "firstName": "",
