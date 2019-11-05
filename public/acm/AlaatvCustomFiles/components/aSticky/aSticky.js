@@ -388,7 +388,6 @@
             for (var i = 0, l = stickedLength; i < l; i++) {
                 var s = sticked[i];
                 var newWidth = null;
-                console.log(s);
                 if (s.unstickUnder!==false && $window.width()<s.unstickUnder) {
                     s.stickyElement
                         .css({

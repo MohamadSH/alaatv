@@ -249,6 +249,12 @@
       }
     }
 
+    .a--block-item-showMoreItem {
+      display: flex;
+      align-self: stretch;
+      justify-content: center;
+      align-items: center;
+    }
 
     //Grid view
     .a--owl-carousel-gridViewWarper {
@@ -259,6 +265,14 @@
         margin: 0;
         padding-left: 5px;
         padding-right: 5px;
+
+
+        .a--block-item-showMoreItem {
+          height: 90%;
+          background: transparent;
+          box-shadow: none !important;
+        }
+
       }
 
 

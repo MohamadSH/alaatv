@@ -191,15 +191,13 @@ class Mix {
                 'node_modules/slick-carousel/slick/slick.css',
                 'node_modules/slick-carousel/slick/slick-theme.css',
                 'public/acm/AlaatvCustomFiles/components/ribbon/style.css',
-                'node_modules/owl.carousel/dist/assets/owl.carousel.css',
-                'node_modules/owl.carousel/dist/assets/owl.theme.default.css',
+                'public/acm/AlaatvCustomFiles/components/ScrollCarousel/style.css',
                 'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/style.css',
                 'public/acm/AlaatvCustomFiles/css/certificates.css',
                 'public/acm/AlaatvCustomFiles/css/page/pages/shop.css',
             ],
             'public/css/page-shop.css',
             [
-                    'node_modules/owl.carousel/dist/owl.carousel.js',
                     'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/js.js',
                     'public/acm/AlaatvCustomFiles/components/aSticky/aSticky.js',
                     'public/acm/AlaatvCustomFiles/js/certificates.js',
@@ -234,19 +232,17 @@ class Mix {
     }
     mixPageHomePage() {
         this.mixCssAndJs([
-                'node_modules/owl.carousel/dist/assets/owl.carousel.css',
-                'node_modules/owl.carousel/dist/assets/owl.theme.default.css',
                 'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/style.css',
+                'public/acm/AlaatvCustomFiles/components/ScrollCarousel/style.css',
                 'public/acm/AlaatvCustomFiles/components/ribbon/style.css',
                 'public/acm/AlaatvCustomFiles/css/certificates.css',
                 'public/acm/AlaatvCustomFiles/css/page/pages/homePage.css',
             ],
             'public/css/page-homePage.css',
             [
-                'node_modules/owl.carousel/dist/owl.carousel.js',
-                'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/js.js',
                 'public/acm/AlaatvCustomFiles/components/aSticky/aSticky.js',
                 'public/acm/AlaatvCustomFiles/js/certificates.js',
+                'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/js.js',
                 'public/acm/AlaatvCustomFiles/js/page/pages/homePage.js',
             ],
             'public/js/page-homePage.js',
@@ -270,9 +266,6 @@ class Mix {
         this.mixCssAndJs([
                 'node_modules/select2/dist/css/select2.css',
                 'public/acm/AlaatvCustomFiles/components/ribbon/style.css',
-                'node_modules/owl.carousel/dist/assets/owl.carousel.css',
-                'node_modules/owl.carousel/dist/assets/owl.theme.default.css',
-
                 'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/style.css',
                 'public/acm/AlaatvCustomFiles/components/ribbon/style.css',
 
@@ -346,8 +339,7 @@ class Mix {
     }
     mixPageUserDashboard() {
         this.mixCssAndJs([
-                'node_modules/owl.carousel/dist/assets/owl.carousel.css',
-                'node_modules/owl.carousel/dist/assets/owl.theme.default.css',
+                'public/acm/AlaatvCustomFiles/components/ScrollCarousel/style.css',
                 'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/style.css',
                 'node_modules/animate.css/animate.css',
                 'public/acm/AlaatvCustomFiles/components/ribbon/style.css',
@@ -356,7 +348,6 @@ class Mix {
             'public/css/user-dashboard.css',
             [
                     'node_modules/block-ui/jquery.blockUI.js',
-                    'node_modules/owl.carousel/dist/owl.carousel.js',
                     'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/js.js',
                     'public/acm/AlaatvCustomFiles/js/page/user-dashboard.js',
                 ],
@@ -392,8 +383,7 @@ class Mix {
                 'node_modules/toastr/build/toastr.css',
                 'public/acm/AlaatvCustomFiles/components/ribbon/style.css',
                 'node_modules/block-ui/jquery.blockUI.js',
-                'node_modules/owl.carousel/dist/assets/owl.carousel.css',
-                'node_modules/owl.carousel/dist/assets/owl.theme.default.css',
+                'public/acm/AlaatvCustomFiles/components/ScrollCarousel/style.css',
                 'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/style.css',
                 'public/acm/videojs/skins/alaa-theme/videojs.css',
                 'public/acm/videojs/skins/nuevo/videojs.rtl.css',
@@ -408,7 +398,6 @@ class Mix {
                 'node_modules/tooltip/dist/Tooltip.js',
                 'node_modules/toastr/build/toastr.min.js',
                 'node_modules/block-ui/jquery.blockUI.js',
-                'node_modules/owl.carousel/dist/owl.carousel.js',
                 'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/js.js',
                 'public/acm/videojs/video.min.js',
                 'public/acm/videojs/plugins/pip/videojs.pip.min.js',
@@ -452,14 +441,12 @@ class Mix {
     }
     mixLanding7() {
         this.mixCssAndJs([
-                'node_modules/owl.carousel/dist/assets/owl.carousel.css',
-                'node_modules/owl.carousel/dist/assets/owl.theme.default.css',
+                'public/acm/AlaatvCustomFiles/components/ScrollCarousel/style.css',
                 'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/style.css',
                 'public/acm/AlaatvCustomFiles/css/page-product-landing7.css',
             ],
             'public/css/page-landing7.css',
             [
-                    'node_modules/owl.carousel/dist/owl.carousel.js',
                     'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/js.js',
                     'public/acm/AlaatvCustomFiles/js/page-landing7.js',
                 ],
@@ -486,15 +473,13 @@ class Mix {
                 'node_modules/slick-carousel/slick/slick.css',
                 'node_modules/slick-carousel/slick/slick-theme.css',
                 'public/acm/AlaatvCustomFiles/components/ribbon/style.css',
-                'node_modules/owl.carousel/dist/assets/owl.carousel.css',
-                'node_modules/owl.carousel/dist/assets/owl.theme.default.css',
+                'public/acm/AlaatvCustomFiles/components/ScrollCarousel/style.css',
                 'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/style.css',
                 'public/acm/AlaatvCustomFiles/css/page-product-landing7.css',
                 'public/acm/AlaatvCustomFiles/css/page-product-landing9.css',
             ],
             'public/css/page-landing9.css',
             [
-                    'node_modules/owl.carousel/dist/owl.carousel.js',
                     'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/js.js',
                     'public/acm/AlaatvCustomFiles/components/aSticky/aSticky.js',
                     'public/acm/AlaatvCustomFiles/js/page-product-landing9.js',
@@ -505,15 +490,13 @@ class Mix {
     mixLanding10() {
         this.mixCssAndJs([
                 'public/acm/AlaatvCustomFiles/components/ribbon/style.css',
-                'node_modules/owl.carousel/dist/assets/owl.carousel.css',
-                'node_modules/owl.carousel/dist/assets/owl.theme.default.css',
+                'public/acm/AlaatvCustomFiles/components/ScrollCarousel/style.css',
                 'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/style.css',
                 'public/acm/AlaatvCustomFiles/css/page-product-landing7.css',
                 'public/acm/AlaatvCustomFiles/css/page-product-landing9.css',
             ],
             'public/css/page-landing10.css',
             [
-                    'node_modules/owl.carousel/dist/owl.carousel.js',
                     'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/js.js',
                     'public/acm/AlaatvCustomFiles/components/aSticky/aSticky.js',
                     'public/acm/AlaatvCustomFiles/js/page-product-landing10.js',
@@ -540,8 +523,7 @@ class Mix {
                 'public/acm/videojs/plugins/seek-to-point.css',
                 'public/acm/AlaatvCustomFiles/components/imageWithCaption/style.css',
                 'public/acm/AlaatvCustomFiles/components/ribbon/style.css',
-                'node_modules/owl.carousel/dist/assets/owl.carousel.css',
-                'node_modules/owl.carousel/dist/assets/owl.theme.default.css',
+                'public/acm/AlaatvCustomFiles/components/ScrollCarousel/style.css',
                 'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/style.css',
                 'public/acm/AlaatvCustomFiles/css/page/product-show.css',
             ],
@@ -550,7 +532,6 @@ class Mix {
                     'node_modules/toastr/build/toastr.min.js',
                     'node_modules/block-ui/jquery.blockUI.js',
                     'node_modules/bootstrap-switch/dist/js/bootstrap-switch.js',
-                    'node_modules/owl.carousel/dist/owl.carousel.js',
                     'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/js.js',
                     'node_modules/lightgallery/src/js/lightgallery.js',
                     'node_modules/lightgallery/modules/lg-thumbnail.min.js',

@@ -6,24 +6,24 @@
         return this.each(function () { //Loop over each element in the set and return them to keep the chain alive.
             let $this = $(this);
             $.fn.OwlCarouselType2.carouselElement = $this;
-            let countOfChild = $this.find('.carousel').length;
+            let countOfChild = $this.find('.a--block-item').length;
 
             $this.find('.a--owl-carousel-init-loading').fadeOut(500, function() {
 
-                $this.find('.a--owl-carousel-type-2').owlCarousel($.fn.OwlCarouselType2.owlCarouselOptions.OwlCarousel);
+                // $this.find('.a--owl-carousel-type-2').owlCarousel($.fn.OwlCarouselType2.owlCarouselOptions.OwlCarousel);
 
                 $.fn.OwlCarouselType2.showAlaaOwlCarouselItemDetail();
 
-                $this.find('.carousel').attr('data-owlcarousel-id', $this.attr('id'));
+                $this.find('.a--block-item').attr('data-owlcarousel-id', $this.attr('id'));
                 $this.find('.btn-viewGrid').attr('data-owlcarousel-id', $this.attr('id'));
                 $this.find('.btn-viewOwlCarousel').attr('data-owlcarousel-id', $this.attr('id')).fadeOut(0);
                 $this.find('.a--owl-carousel-hide-detailes').attr('data-owlcarousel-id', $this.attr('id'));
                 $this.find('.a--owl-carousel-show-detailes').attr('data-owlcarousel-id', $this.attr('id'));
 
-                $($this).on('click', '.carousel', function () {
+                $($this).on('click', '.a--block-item', function () {
                     let $this = $('#' + $(this).attr('data-owlcarousel-id'));
                     let position = $(this).data('position');
-                    $this.find('.a--owl-carousel-type-2').trigger('to.owl.carousel', position);
+                    $this.find('.a--owl-carousel-type-2').trigger('to.owl.a--block-item', position);
                 });
                 $($this).on('click', '.btn-viewGrid', function (event) {
                     let $this = $('#' + $(this).attr('data-owlcarousel-id'));
@@ -57,7 +57,7 @@
 
                     $this.find('.detailesWarperPointerStyle').html('');
 
-                    $this.find('.a--owl-carousel-type-2').owlCarousel($.fn.OwlCarouselType2.owlCarouselOptions.OwlCarousel);
+                    // $this.find('.a--owl-carousel-type-2').owlCarousel($.fn.OwlCarouselType2.owlCarouselOptions.OwlCarousel);
                     $.fn.OwlCarouselType2.getGridViewWarper($this).fadeOut(0);
                     $this.find('.a--owl-carousel-type-2').fadeIn();
 
@@ -99,7 +99,7 @@
                             }
 
                             let detailesWarper = $this.find('.a--owl-carousel-slide-detailes');
-                            let target = $.fn.OwlCarouselType2.getGridViewWarper($this).find('.carousel[data-position="' + position + '"]');
+                            let target = $.fn.OwlCarouselType2.getGridViewWarper($this).find('.a--block-item[data-position="' + position + '"]');
                             let targetCol = target.parent();
                             targetCol.css({
                                 'margin-bottom': parseInt(detailesWarper.outerHeight()) + 50 + 'px'
@@ -152,8 +152,8 @@
         $OwlCarouselType2.find('.btn-viewOwlCarousel').fadeIn(0);
 
         $.fn.OwlCarouselType2.getGridViewWarper($OwlCarouselType2).html('');
-        $OwlCarouselType2.find('.a--owl-carousel-type-2').owlCarousel('destroy');
-        $OwlCarouselType2.find('.carousel').each(function () {
+        // $OwlCarouselType2.find('.a--owl-carousel-type-2').owlCarousel('destroy');
+        $OwlCarouselType2.find('.a--block-item').each(function () {
             $.fn.OwlCarouselType2.getGridViewWarper($OwlCarouselType2).append('<div class="'+$.fn.OwlCarouselType2.owlCarouselOptions.grid.columnClass+'">' + $(this)[0].outerHTML + '</div>');
         });
 
@@ -174,13 +174,13 @@
     $.fn.OwlCarouselType2.showAlaaOwlCarouselItemDetail = function (event) {
         let elementId = '';
         if (typeof event !== 'undefined') {
-            elementId = $(event.target).find('.carousel').attr('data-owlcarousel-id');
+            elementId = $(event.target).find('.a--block-item').attr('data-owlcarousel-id');
         } else {
             elementId = this.carouselElement.attr('id');
         }
         let $this = $('#' + elementId);
 
-        let alaaOwlCarouselItemDetailClass = 'a--owl-carousel-slide-iteDetail-' + $this.find('.a--owl-carousel-type-2 .owl-item.active.center .carousel').data('position');
+        let alaaOwlCarouselItemDetailClass = 'a--owl-carousel-slide-iteDetail-' + $this.find('.a--owl-carousel-type-2 .owl-item.active.center .a--block-item').data('position');
         $this.find('.subCategoryWarper').fadeOut();
         let aOwlCarouselSlideDetailes = $this.find('.a--owl-carousel-slide-detailes');
         let alaaOwlCarouselItemDetailObject = $this.find('.' + alaaOwlCarouselItemDetailClass);
