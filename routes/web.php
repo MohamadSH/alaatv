@@ -6,6 +6,7 @@ use App\Http\Controllers\Web\FavorableController;
 use App\Http\Controllers\Web\HomeController;
 use App\Http\Controllers\Web\LandingPageController;
 use App\Http\Controllers\Web\LiveController;
+use App\Http\Controllers\Web\SanatisharifmergeController;
 use App\Http\Controllers\Web\SectionController;
 use App\Http\Controllers\Web\SetController;
 use App\Http\Controllers\Web\UserController;
@@ -50,16 +51,17 @@ Route::get('debug', 'Web\HomeController@debug');
 Route::post('sendMail', [HomeController::class , 'sendMail']);
 Route::get('product/search', 'Web\ProductController@search');
 Route::get('showPartial/{product}', 'Web\ProductController@showPartial');
-Route::get('Sanati-Sharif-Lesson/{lId?}/{dId?}', 'Web\SanatisharifmergeController@redirectLesson');
-Route::get('sanati-sharif-lesson/{lId?}/{dId?}', 'Web\SanatisharifmergeController@redirectLesson');
-Route::get('Sanati-Sharif-Video/{lId?}/{dId?}/{vId?}', 'Web\SanatisharifmergeController@redirectVideo');
-Route::get('sanati-sharif-video/{lId?}/{dId?}/{vId?}', 'Web\SanatisharifmergeController@redirectVideo');
-Route::get('SanatiSharif-Video/{lId?}/{dId?}/{vId?}', 'Web\SanatisharifmergeController@redirectEmbedVideo');
-Route::get('sanatisharif-video/{lId?}/{dId?}/{vId?}', 'Web\SanatisharifmergeController@redirectEmbedVideo');
-Route::get('Sanati-Sharif-Pamphlet/{lId?}/{dId?}/{pId?}', 'Web\SanatisharifmergeController@redirectPamphlet');
-Route::get('sanati-sharif-pamphlet/{lId?}/{dId?}/{pId?}', 'Web\SanatisharifmergeController@redirectPamphlet');
+Route::get('Sanati-Sharif-Lesson/{lId?}/{dId?}', [SanatisharifmergeController::class , 'redirectLesson']);
+Route::get('sanati-sharif-lesson/{lId?}/{dId?}', [SanatisharifmergeController::class , 'redirectLesson']);
+Route::get('course.{lId?}.{dId?}.video', [SanatisharifmergeController::class , 'redirectLesson']);
+Route::get('Sanati-Sharif-Video/{lId?}/{dId?}/{vId?}', [SanatisharifmergeController::class , 'redirectVideo']);
+Route::get('sanati-sharif-video/{lId?}/{dId?}/{vId?}', [SanatisharifmergeController::class , 'redirectVideo']);
+Route::get('SanatiSharif-Video/{lId?}/{dId?}/{vId?}', [SanatisharifmergeController::class , 'redirectEmbedVideo']);
+Route::get('sanatisharif-video/{lId?}/{dId?}/{vId?}', [SanatisharifmergeController::class , 'redirectEmbedVideo']);
+Route::get('Sanati-Sharif-Pamphlet/{lId?}/{dId?}/{pId?}', [SanatisharifmergeController::class , 'redirectPamphlet']);
+Route::get('sanati-sharif-pamphlet/{lId?}/{dId?}/{pId?}', [SanatisharifmergeController::class , 'redirectPamphlet']);
 Route::get('SanatiSharif-News', 'Web\HomeController@home');
-Route::get('Alaa-App/{mod?}', 'Web\SanatisharifmergeController@AlaaApp');
+Route::get('Alaa-App/{mod?}', [SanatisharifmergeController::class , 'AlaaApp']);
 Route::get('image/{category}/{w}/{h}/{filename}', [
     'as'   => 'image',
     'uses' => 'Web\HomeController@getImage',
@@ -260,11 +262,11 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::get('copylessonfromremote', 'Web\RemoteDataCopyController@copyLesson');
     Route::get('copydepartmentfromremote', 'Web\RemoteDataCopyController@copyDepartment');
-    Route::get('copydepartmentlessonfromremote', 'Web\RemoteDataCopyController@copyDepartmentlesson');
+    Route::get('copydepartmentlessonfromremote', [SanatisharifmergeController::class , 'copyDepartmentlesson']);
     Route::get('copyvideofromremote', 'Web\RemoteDataCopyController@copyVideo');
     Route::get('copypamphletfromremote', 'Web\RemoteDataCopyController@copyPamphlet');
     Route::get('copydepartmentlessontotakhtekhak', 'Web\SanatisharifmergeController@copyDepartmentlesson');
-    Route::get('copycontenttotakhtekhak', 'Web\SanatisharifmergeController@copyContent');
+    Route::get('copycontenttotakhtekhak', [SanatisharifmergeController::class , 'copyContent']);
     Route::get('tagbot', 'Web\BotsController@tagbot');
 
     Route::get('donate', 'Web\DonateController');
