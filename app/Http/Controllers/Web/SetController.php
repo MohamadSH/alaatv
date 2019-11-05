@@ -216,7 +216,8 @@ class SetController extends Controller
 
         $this->generateSeoMetaTags($contentSet);
 
-        $isFavored = optional(optional(optional(optional($user)->favoredSets())->where('id' , $contentSet->id))->get())->isNotEmpty();
+//        $isFavored = optional(optional(optional(optional($user)->favoredSets())->where('id' , $contentSet->id))->get())->isNotEmpty();
+        $isFavored = null;
 
         return view('set.show', compact('contentSet', 'videos', 'pamphlets', 'articles', 'jsonLdArray' , 'order' , 'isFavored'));
     }
