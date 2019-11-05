@@ -10,24 +10,24 @@ namespace App\Traits;
 
 use App\Events\FavoriteEvent;
 use App\User;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 trait favorableTraits
 {
-    public function favoring(User $user)
+    public function favoring(User $user):bool
     {
-        $this->favoriteBy()
-            ->sync($user, false);
+        $syncResult = $this->favoriteBy()->sync($user, false);
         event(new FavoriteEvent($user, $this));
+        return !empty($syncResult['attached']);
     }
-    
+
     /**
      * Get all of the users that favorite this
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return HasMany
      */
     public function favoriteBy()
     {
-        return $this->morphToMany('App\User', 'favorable')
-            ->withTimestamps();
+        return $this->morphToMany('App\User', 'favorable')->withTimestamps();
     }
 }
