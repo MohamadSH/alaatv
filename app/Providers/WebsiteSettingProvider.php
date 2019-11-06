@@ -3,9 +3,9 @@
 namespace App\Providers;
 
 use App\Websitesetting;
-use Illuminate\Contracts\Support\DeferrableProvider;
+use Illuminate\Support\Facades\{Cache};
 use Illuminate\Support\ServiceProvider;
-use Illuminate\Support\Facades\{Cache, Config, Schema};
+use Illuminate\Contracts\Support\DeferrableProvider;
 
 class WebsiteSettingProvider extends ServiceProvider  implements DeferrableProvider
 {
@@ -16,7 +16,7 @@ class WebsiteSettingProvider extends ServiceProvider  implements DeferrableProvi
      */
     public function register()
     {
-        $this->app->singleton('App\Websitesetting', function ($app) {
+        $this->app->singleton(Websitesetting::class, function ($app) {
             return $this->getSetting();
         });
     }
@@ -26,9 +26,9 @@ class WebsiteSettingProvider extends ServiceProvider  implements DeferrableProvi
      */
     private function getSetting()
     {
-        $key = "AppServiceProvider:websitesettings";
-        return Cache::remember($key, config("constants.CACHE_600"), function () {
-            return Websitesetting::where("version", 1)
+        $key = 'AppServiceProvider:websitesettings';
+        return Cache::remember($key, config('constants.CACHE_600'), function () {
+            return Websitesetting::where('version', 1)
                 ->first();
         });
 

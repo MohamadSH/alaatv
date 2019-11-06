@@ -2,20 +2,28 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Classes\TagSplitter;
 use App\Classes\RedisTagging;
 use Illuminate\Http\Response;
 use App\Http\Requests\Request;
 use App\Http\Controllers\Controller;
+use App\Classes\TagSplitterInterface;
 
 //https://github.com/smrchy/rest-tagging
 
 class TagController extends Controller
 {
     protected $redis;
-
-    public function __construct()
+    /**
+     * @var TagSplitterInterface
+     */
+    protected $tagSplitter;
+    
+    public function __construct(TagSplitterInterface $tagSplitter)
     {
-        $this->redis = RedisTagging::getInstance();
+        $this->redis       = RedisTagging::getInstance();
+        $this->tagSplitter = $tagSplitter;
+    
     }
 
     /**
@@ -164,26 +172,28 @@ class TagController extends Controller
      * "limit":2,
      * "offset":4
      * }
-     * @param  Request  $request
+     * @param Request $request
+     * @param TagSplitter $tagSplitter
      * @param           $bucket
      *
      * @return null
      */
     public function index(Request $request, $bucket)
     {
-        $tags       = $request->tags;
-        $tags       = $this->normalizeTags($tags);
-        $tags       = str_replace('"', '', $tags);
-        $tags       = explode(',', mb_substr($tags, 1, -1));
-        $type       = $request->type ?? 'inter';
-        $limit      = $request->limit ?? 100;
-        $offset     = $request->offset ?? 0;
-        $withscores = $request->withscores ?? 0;
-        $order      = $request->order ?? 'desc';
+        $tags           = $request->tags;
+        $tags           = $this->normalizeTags($tags);
+        $tags           = str_replace('"', '', $tags);
+        $tags           = explode(',', mb_substr($tags, 1, -1));
+        $tagsCollection = $this->tagSplitter->group($tags);
+        $type           = $request->type ?? 'inter';
+        $limit          = $request->limit ?? 100;
+        $offset         = $request->offset ?? 0;
+        $withscores     = $request->withscores ?? 0;
+        $order          = $request->order ?? 'desc';
 
         $response = null;
         $error    = null;
-//                dd($tags);
+
         $this->redis->tags($bucket, $tags,
             function ($err, $result) use (& $response, &$error) {
                 if (isset($err)) {
