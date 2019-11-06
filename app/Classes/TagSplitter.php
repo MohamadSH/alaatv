@@ -4,7 +4,6 @@
 namespace App\Classes;
 
 
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
 
 class TagSplitter implements TagSplitterInterface
@@ -124,8 +123,8 @@ class TagSplitter implements TagSplitterInterface
 
     //Tree
     private const G5 = [];
-
-    public function group(array $tags):Collection
+    
+    public function group(array $tags): TagsGroup
     {
         return Cache::tags(['tagGroup'])
             ->remember('group_of_tags:/'.md5(implode(' ', $tags)), config('constants.CACHE_600'),
@@ -137,7 +136,10 @@ class TagSplitter implements TagSplitterInterface
                         $savedTags[] = $tag;
                         $groupedTags->put($groupNumber, $savedTags);
                     }
-                    return $groupedTags;
+                    $tags_group                    = new TagsGroup();
+                    $tags_group->tagsGroup         = $groupedTags;
+                    $tags_group->numberOfTotalTags = count($tags);
+                    return $tags_group;
                 });
     }
 

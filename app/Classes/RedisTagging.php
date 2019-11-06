@@ -140,6 +140,17 @@ class RedisTagging extends Singleton
             return false;
         }
     }
+    
+    public function getTaggableIdsFromTagsGroup($bucket, TagsGroup $tags_group, $limit = 100, $offset = 0,
+        $withScores = 0, $order = 'desc')
+    {
+        $redis  = Redis::connection('redisDB');
+        $ns     = $this->prefix.':'.$bucket;
+        $prefix = $ns.':TAGS:';
+        # The last element to get
+        $lastElement = $offset + $limit - 1;
+        
+    }
 
     /**
      * Return the IDs of an either a single tag or an intersection/union of two or more tags
