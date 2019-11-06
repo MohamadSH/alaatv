@@ -7,18 +7,23 @@ use App\Classes\RedisTagging;
 use Illuminate\Http\Response;
 use App\Http\Requests\Request;
 use App\Http\Controllers\Controller;
+use App\Classes\TagSplitterInterface;
 
 //https://github.com/smrchy/rest-tagging
 
 class TagController extends Controller
 {
     protected $redis;
+    /**
+     * @var TagSplitterInterface
+     */
     protected $tagSplitter;
     
-    public function __construct(TagSplitter $tagSplitter)
+    public function __construct(TagSplitterInterface $tagSplitter)
     {
         $this->redis       = RedisTagging::getInstance();
         $this->tagSplitter = $tagSplitter;
+    
     }
 
     /**

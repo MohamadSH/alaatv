@@ -7,20 +7,22 @@ namespace App\Classes;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
 
-class TagSplitter
+class TagSplitter implements TagSplitterInterface
 {
 
     //Nezame Amoozeshi
-    const G0=['نظام_آموزشی_جدید' , 'نظام_آموزشی_قدیم'];
+    private const G0 = ['نظام_آموزشی_جدید', 'نظام_آموزشی_قدیم'];
 
     //Maghtaa
-    const G1=['کنکور','دهم','یازدهم','دوازدهم','المپیاد','اول_دبیرستان','دوم_دبیرستان','سوم_دبیرستان','چهارم_دبیرستان'];
+    private const G1 = [
+        'کنکور', 'دهم', 'یازدهم', 'دوازدهم', 'المپیاد', 'اول_دبیرستان', 'دوم_دبیرستان', 'سوم_دبیرستان', 'چهارم_دبیرستان',
+    ];
 
     //Reshte
-    const G2=['رشته_ریاضی','رشته_تجربی','رشته_انسانی'];
+    private const G2 = ['رشته_ریاضی', 'رشته_تجربی', 'رشته_انسانی'];
 
     //Dars
-    const G3=[
+    private const G3 = [
         'آمار_و_مدلسازی',
         'اخلاق',
         'دین_و_زندگی',
@@ -51,7 +53,7 @@ class TagSplitter
         ];
 
     //Dabir
-    const G4=[
+    private const G4 = [
         'امید_زاهدی',
         'محمد_علی_امینی_راد',
         'یاشار_بهمند',
@@ -121,40 +123,47 @@ class TagSplitter
     ];
 
     //Tree
-    const G5=[];
+    private const G5 = [];
 
     public function group(array $tags):Collection
     {
-        $groupedTags = collect();
-        foreach ($tags as $tag) {
-            $groupNumber = $this->findGroupOfTag($tag);
-            $savedTags = ($groupedTags->has($groupNumber))?$groupedTags[$groupNumber]:[];
-            $savedTags[] = $tag;
-            $groupedTags->put($groupNumber, $savedTags);
-        }
-
-        return $groupedTags;
+        return Cache::tags(['tagGroup'])
+            ->remember('group_of_tags:/'.md5(implode(' ', $tags)), config('constants.CACHE_600'),
+                function () use ($tags) {
+                    $groupedTags = collect();
+                    foreach ($tags as $tag) {
+                        $groupNumber = $this->findGroupOfTag($tag);
+                        $savedTags   = ($groupedTags->has($groupNumber)) ? $groupedTags[$groupNumber] : [];
+                        $savedTags[] = $tag;
+                        $groupedTags->put($groupNumber, $savedTags);
+                    }
+                    return $groupedTags;
+                });
     }
 
     private function findGroupOfTag(string $tag) :int
     {
         return Cache::tags(['tagGroup'])
-            ->remember('شماره_گروه_'.$tag, config('constants.CACHE_600'), function () use ($tag) {
+            ->remember('group_number_'.$tag, config('constants.CACHE_600'), function () use ($tag) {
                 if(in_array($tag, self::G0)){
                     return 0 ;
-                }elseif(in_array($tag, self::G1)){
-                    return 1 ;
-                }elseif(in_array($tag, self::G2)){
-                    return 2 ;
-                }elseif(in_array($tag, self::G3)){
-                    return 3 ;
-                }elseif(in_array($tag, self::G4)){
-                    return 4 ;
-                }elseif(in_array($tag, self::G5)){
-                    return 5 ;
-                }else{
-                    return 6;
                 }
+                if (in_array($tag, self::G1)) {
+                    return 1 ;
+                }
+                if (in_array($tag, self::G2)) {
+                    return 2 ;
+                }
+                if (in_array($tag, self::G3)) {
+                    return 3 ;
+                }
+                if (in_array($tag, self::G4)) {
+                    return 4 ;
+                }
+                if (in_array($tag, self::G5)) {
+                    return 5 ;
+                }
+                return 6;
             });
 
     }
