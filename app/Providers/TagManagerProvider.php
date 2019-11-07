@@ -2,17 +2,19 @@
 
 namespace App\Providers;
 
-use App\Classes\Search\Tag\AuthorTagManagerViaApi;
-use App\Classes\Search\Tag\ContentsetTagManagerViaApi;
-use App\Classes\Search\Tag\ContentTagManagerViaApi;
-use App\Classes\Search\Tag\ProductTagManagerViaApi;
+use App\Classes\TagSplitter;
+use App\Observers\SetObserver;
+use App\Observers\ContentObserver;
+use App\Observers\ProductObserver;
+use App\Classes\TagSplitterInterface;
+use Illuminate\Support\ServiceProvider;
 use App\Classes\Search\TaggingInterface;
 use App\Console\Commands\AuthorTagCommand;
 use App\Console\Commands\ContentTagCommand;
-use App\Observers\ContentObserver;
-use App\Observers\ProductObserver;
-use App\Observers\SetObserver;
-use Illuminate\Support\ServiceProvider;
+use App\Classes\Search\Tag\AuthorTagManagerViaApi;
+use App\Classes\Search\Tag\ContentTagManagerViaApi;
+use App\Classes\Search\Tag\ProductTagManagerViaApi;
+use App\Classes\Search\Tag\ContentsetTagManagerViaApi;
 
 class TagManagerProvider extends ServiceProvider
 {
@@ -62,6 +64,8 @@ class TagManagerProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        $this->app->singleton(TagSplitter::class, function ($app) {
+            return new TagSplitter();
+        });
     }
 }
