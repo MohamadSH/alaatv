@@ -2,7 +2,7 @@ var Alaasearch = function () {
 
     var videoRepository = [],
         productRepository = [],
-        videoRepositoryCounter = 5,
+        videoRepositoryCounter = 4,
         productRepositoryCounter = 1,
         carouselHasItem = true,
         listTypeHasItem = true;
@@ -121,7 +121,7 @@ var Alaasearch = function () {
             loadingClass = (typeof data.loadingHtml !== 'undefined') ? 'loadingItem' : '';
 
         var htmlItemSet = '' +
-            '<div class="item carousel a--block-item a--block-type-set '+loadingClass+' w-66534321">\n' +
+            '<div class="item carousel a--block-item a--block-type-set '+loadingClass+' w-44333211">\n' +
             '    <div class="a--block-imageWrapper">\n' +
             '        \n' +
             '        <div class="a--block-detailesWrapper">\n' +
@@ -193,7 +193,7 @@ var Alaasearch = function () {
             '</div>';
     }
     function getProductItem(data, itemKey) {
-
+        console.log('product data:', data);
         var options = {
             TruncateLength: 80,
             TruncateBy : "words",
@@ -309,7 +309,6 @@ var Alaasearch = function () {
             setUrl = (typeof data.set !== 'undefined') ? data.set.contentUrl : '-',
             videoOrderHtml = '<div class="videoOrder"><div class="videoOrder-title">جلسه</div><div class="videoOrder-number">'+videoOrder+'</div><div class="videoOrder-om"> اُم </div></div>',
             widgetDetailes = '' +
-                '<div class="videoDescription">'+truncatise(description.replace(/<a .*>.*<\/a>/i, ''), options)+'</div>' +
                 '<div class="videoDetaileWrapper">' +
                 '   <span><svg viewBox="0 0 24 24" preserveAspectRatio="xMidYMid meet" focusable="false" class="style-scope yt-icon" <g class="style-scope yt-icon">\n' +
                 '        <path d="M3.67 8.67h14V11h-14V8.67zm0-4.67h14v2.33h-14V4zm0 9.33H13v2.34H3.67v-2.34zm11.66 0v7l5.84-3.5-5.84-3.5z" class="style-scope yt-icon"></path>\n' +
@@ -321,7 +320,8 @@ var Alaasearch = function () {
                 '   <span>تاریخ بروزرسانی: </span>' +
                 '   <span>'+new persianDate(new Date(data.updated_at)).format('YYYY/MM/DD HH:mm:ss')+'</span>' +
                     videoOrderHtml +
-                '</div>';
+                '</div>'+
+                '<div class="videoDescription">'+truncatise(description.replace(/<a .*>.*<\/a>/i, ''), options)+'</div>';
 
         var itemData = {
             class: '',
@@ -344,7 +344,7 @@ var Alaasearch = function () {
     function addLoadingItem(itemType) {
         var loadingHtml = '<div style="width: 30px; display: inline-block;" class="m-loader m-loader--primary m-loader--lg"></div>';
         if (itemType === 'carouselType') {
-            $('.searchResult .carouselType .ScrollCarousel').append('<div class="item loadingItem w-66534321">\n' + loadingHtml + '</div>');
+            $('.searchResult .carouselType .ScrollCarousel').append('<div class="item loadingItem w-44333211">\n' + loadingHtml + '</div>');
         } else if (itemType === 'listType') {
             $('.searchResult .listType').append('\n' +
                 '<div class="item loadingItem">\n' +
@@ -396,9 +396,9 @@ var Alaasearch = function () {
             $('.searchResult .carouselType .ScrollCarousel>.item:nth-child('+sensorPosition+')').after(sensorHtml);
             lazyLoadSensorItemCarousel();
         } else if (itemType === 'listType') {
-            sensorPosition = getListTypeChildCount() - 6;
-            if (sensorPosition < 6) {
-                sensorPosition = 6;
+            sensorPosition = getListTypeChildCount() - 3;
+            if (sensorPosition < 3) {
+                sensorPosition = 3;
             }
             $('.searchResult .listType>.item:nth-child('+sensorPosition+')').after(sensorHtml);
             lazyLoadSensorItemListType();
@@ -1270,10 +1270,8 @@ var initFilterOptions = function () {
         $('.GroupFilters').each(function () {
             var $groupFilter = $(this),
                 $checkBoxWrapperArray = [];
-            console.log('$groupFilter: ', $groupFilter);
             $groupFilter.find('input[type="checkbox"]:checked').each(function () {
                 var mCheckbox = $(this).parents('.m-checkbox');
-                console.log('mCheckbox: ', mCheckbox);
                 $checkBoxWrapperArray.push(mCheckbox);
                 mCheckbox.remove();
             });
@@ -1290,13 +1288,13 @@ var initFilterOptions = function () {
             $(data.containerSelector).html(initGroupsField());
 
             $(document).on('change', '.GroupFilters-item input[type="checkbox"]', function () {
-                var thisCheckedStatus = $(this).is(':checked');
-                $(this).parents('.GroupFilters').find('input[type="checkbox"]').prop('checked', false);
-                if (thisCheckedStatus) {
-                    $(this).prop('checked', true);
-                } else {
-                    $(this).prop('checked', false);
-                }
+                // var thisCheckedStatus = $(this).is(':checked');
+                // $(this).parents('.GroupFilters').find('input[type="checkbox"]').prop('checked', false);
+                // if (thisCheckedStatus) {
+                //     $(this).prop('checked', true);
+                // } else {
+                //     $(this).prop('checked', false);
+                // }
                 var newUrl = TagManager.refreshUrlBasedOnSelectedTags();
                 TagManager.refreshPageTagsBadge();
                 sortSelectedItems();
