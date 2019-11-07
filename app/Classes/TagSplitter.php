@@ -9,18 +9,18 @@ use Illuminate\Support\Facades\Cache;
 
 class TagSplitter
 {
-    
+
     //Nezame Amoozeshi
     private const G0 = ['نظام_آموزشی_جدید', 'نظام_آموزشی_قدیم'];
-    
+
     //Maghtaa
     private const G1 = [
         'کنکور', 'دهم', 'یازدهم', 'دوازدهم', 'المپیاد', 'اول_دبیرستان', 'دوم_دبیرستان', 'سوم_دبیرستان', 'چهارم_دبیرستان',
     ];
-    
+
     //Reshte
     private const G2 = ['رشته_ریاضی', 'رشته_تجربی', 'رشته_انسانی'];
-    
+
     //Dars
     private const G3 = [
         'آمار_و_مدلسازی',
@@ -51,7 +51,7 @@ class TagSplitter
         'تحلیلی',
         'المپیاد_نجوم',
     ];
-    
+
     //Dabir
     private const G4 = [
         'امید_زاهدی',
@@ -120,11 +120,12 @@ class TagSplitter
         'سیروس_نصیری',
         'محمد_رضا_یاری',
         'احسان_گودرزی',
+        'میثم_حسین_خانی',
     ];
-    
+
     //Tree
     private const G5 = [];
-    
+
     public function group(array $tags): Collection
     {
         return Cache::tags(['tagGroup'])
@@ -140,7 +141,7 @@ class TagSplitter
                     return $groupedTags;
                 });
     }
-    
+
     private function findGroupOfTag(string $tag) :int
     {
         return Cache::tags(['tagGroup'])
@@ -165,6 +166,6 @@ class TagSplitter
                 }
                 return 6;
             });
-        
+
     }
 }
