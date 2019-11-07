@@ -1,4 +1,4 @@
-<div class="item carousel a--block-item a--block-type-set w-66534321">
+<div class="item carousel a--block-item a--block-type-set w-44333211">
     <div class="a--block-imageWrapper">
 
         <div class="a--block-detailesWrapper">

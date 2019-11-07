@@ -173,11 +173,24 @@
   //  }
   //}
 
-  @include make-size-media('w-66534321',
+  @include make-size-media('w-44333211',
           4,
           4,
           3,
           3,
+          3,
+          2,
+          1,
+          1
+  );
+
+  //w-66534321
+
+  @include make-size-media('w-55443211',
+          5,
+          5,
+          4,
+          4,
           3,
           2,
           1,
@@ -363,6 +376,7 @@
 
   .a--block-infoWrapper {
     margin-bottom: 28px;
+    position: relative;
 
     .a--block-titleWrapper {
       padding: 5px 10px;
