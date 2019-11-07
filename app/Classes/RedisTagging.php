@@ -27,24 +27,28 @@ class RedisTagging extends Singleton
      */
     public function get($bucket, $id, $cb)
     {
-        $redis = Redis::connection('redisDB');
+    
         if (!$this->validation($bucket)) {
             return [
                 'error' => '',
             ];
         }
-
+        $redis    = Redis::connection('redisDB');
         $ns       = $this->prefix.':'.$bucket;
         $id_index = $ns.':ID:'.$id;
 
         try {
             $tags = $redis->sMembers($id_index);
         } catch (Exception $e) {
+            $redis->disconnect();
             $cb($e, [
                 'msg' => 'Error!',
             ]);
+            return [
+                'error' => '',
+            ];
         }
-
+        $redis->disconnect();
         $cb(null, [
             'total_items' => count($tags),
             'id'          => $id,
@@ -111,8 +115,10 @@ class RedisTagging extends Singleton
                 }
             });
         } catch (\Exception $e) {
+            $redis->disconnect();
             $cb($e, false);
         }
+        $redis->disconnect();
         $cb(null, true);
     }
 
@@ -136,7 +142,9 @@ class RedisTagging extends Singleton
                 # Clean up the TAGCOUNT
                 $pipe->zremrangebyscore($ns.':TagCount', 0, 0);
             });
+            $redis->disconnect();
         } catch (\Exception $e) {
+            $redis->disconnect();
             return false;
         }
     }
@@ -157,10 +165,12 @@ class RedisTagging extends Singleton
         $withScores = 0, $order = 'desc', $type = 'inter'): void
     {
         $redis  = Redis::connection('redisDB');
+    
         $ns     = $this->prefix.':'.$bucket;
         $prefix = $ns.':TAGS:';
         # The last element to get
         $lastElement = $offset + $limit - 1;
+    
     
         $cTags = $tags_group->getNumberOfTotalTags();
         if ($cTags === 0) {
@@ -177,7 +187,7 @@ class RedisTagging extends Singleton
             ]);
             return;
         }
-    
+        $pipe      = $redis->pipeline();
         $tagGroups = $tags_group->getTagsGroup();
     
         $resultKeyForGroups = [];
@@ -191,7 +201,7 @@ class RedisTagging extends Singleton
                     $keys[] = $prefix.$tag;
                 }
                 try {
-                    $redis->zunionstore($randKey, $keys, ['min']);
+                    $pipe->zunionstore($randKey, $keys, null, 'min');
                 } catch (Exception $e) {
                 }
                 $resultKeyForGroups[] = $randKey;
@@ -203,29 +213,33 @@ class RedisTagging extends Singleton
         $cTags     = $tags_group->getNumberOfTotalTags();
         $resultkey = $this->makeRandomKeyForRedis($ns);
         try {
-            $redis->zinterstore($resultkey, $resultKeyForGroups, ['min']);
-            $total_items_db = $redis->zCount($resultkey, '-inf', '+inf');
+            $pipe->zinterstore($resultkey, $resultKeyForGroups, null, 'min');
+            $pipe->zCount($resultkey, '-inf', '+inf');
             if (strcmp($order, self::CONST_ORDER_DESC) === 0) {
-                $tagsresult = $redis->zRevRange($resultkey, $offset, $lastElement, ['withscores' => $withScores]);
-//                $tagsresult = $redis->zRevRange($resultkey, $offset, $lastElement, $withScores);
+                $pipe->zRevRange($resultkey, $offset, $lastElement, ['withscores' => $withScores]);
             } else {
-                $tagsresult = $redis->zRange($resultkey, $offset, $lastElement, ['withscores' => $withScores]);
-//                $tagsresult = $redis->zRange($resultkey, $offset, $lastElement, $withScores);
+                $pipe->zRange($resultkey, $offset, $lastElement, ['withscores' => $withScores]);
             }
+            $pipeLineResult = $redis->exec();
         } catch (Exception $e) {
+            $redis->discard();
+            $redis->disconnect();
             $total_items_db = 0;
             $cb($e, [
                 'msg' => 'Error!',
             ]);
-        
             return;
         }
-    
+        $tagsresult     = end($pipeLineResult);
+        $total_items_db = count($tagsresult);
+
         if ($cTags > 1) {
-            $redis->unlink($resultkey);
-            $redis->unlink($shouldRemoveKeys);
+            $redis->pipeline(function ($pipe) use ($shouldRemoveKeys, $resultkey) {
+                $pipe->unlink($resultkey);
+                $pipe->unlink($shouldRemoveKeys);
+            });
         }
-    
+        $redis->disconnect();
         $result = [];
     
         if ($withScores) {
