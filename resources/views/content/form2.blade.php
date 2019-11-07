@@ -322,10 +322,25 @@
                     تگ ها :
                 </label>
                 <div class="col-md-9">
-                    <input name="tags" type="text" class="form-control input-large" value="{{$tags}}" data-role="tagsinput">
+                    <input name="tags" type="text" class="form-control input-large contentTags" value="{{$tags}}" data-role="tagsinput">
                 </div>
             </div>
         </div>
+    
+    
+        <br>
+    
+        <div class="form-group ">
+            <div class="row">
+                <label class="col-md-2 control-label" for="tagsString">متن تگ ها: </label>
+                <div class="col-md-9">
+                    <input class="form-control" id="tagsString" dir="ltr"
+                           name="tagsString" type="text"
+                           value="">
+                </div>
+            </div>
+        </div>
+        
         <div class="form-group">
             <div class="row">
                 <div class="col-md-12 text-center">
