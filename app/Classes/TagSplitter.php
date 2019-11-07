@@ -4,22 +4,23 @@
 namespace App\Classes;
 
 
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
 
-class TagSplitter implements TagSplitterInterface
+class TagSplitter
 {
-
+    
     //Nezame Amoozeshi
     private const G0 = ['نظام_آموزشی_جدید', 'نظام_آموزشی_قدیم'];
-
+    
     //Maghtaa
     private const G1 = [
         'کنکور', 'دهم', 'یازدهم', 'دوازدهم', 'المپیاد', 'اول_دبیرستان', 'دوم_دبیرستان', 'سوم_دبیرستان', 'چهارم_دبیرستان',
     ];
-
+    
     //Reshte
     private const G2 = ['رشته_ریاضی', 'رشته_تجربی', 'رشته_انسانی'];
-
+    
     //Dars
     private const G3 = [
         'آمار_و_مدلسازی',
@@ -49,8 +50,8 @@ class TagSplitter implements TagSplitterInterface
         'جبر_و_احتمال',
         'تحلیلی',
         'المپیاد_نجوم',
-        ];
-
+    ];
+    
     //Dabir
     private const G4 = [
         'امید_زاهدی',
@@ -120,11 +121,11 @@ class TagSplitter implements TagSplitterInterface
         'محمد_رضا_یاری',
         'احسان_گودرزی',
     ];
-
+    
     //Tree
     private const G5 = [];
     
-    public function group(array $tags): TagsGroup
+    public function group(array $tags): Collection
     {
         return Cache::tags(['tagGroup'])
             ->remember('group_of_tags:/'.md5(implode(' ', $tags)), config('constants.CACHE_600'),
@@ -136,13 +137,10 @@ class TagSplitter implements TagSplitterInterface
                         $savedTags[] = $tag;
                         $groupedTags->put($groupNumber, $savedTags);
                     }
-                    $tags_group                    = new TagsGroup();
-                    $tags_group->tagsGroup         = $groupedTags;
-                    $tags_group->numberOfTotalTags = count($tags);
-                    return $tags_group;
+                    return $groupedTags;
                 });
     }
-
+    
     private function findGroupOfTag(string $tag) :int
     {
         return Cache::tags(['tagGroup'])
@@ -167,6 +165,6 @@ class TagSplitter implements TagSplitterInterface
                 }
                 return 6;
             });
-
+        
     }
 }

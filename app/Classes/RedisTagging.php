@@ -141,22 +141,11 @@ class RedisTagging extends Singleton
         }
     }
     
-    public function getTaggableIdsFromTagsGroup($bucket, TagsGroup $tags_group, $limit = 100, $offset = 0,
-        $withScores = 0, $order = 'desc')
-    {
-        $redis  = Redis::connection('redisDB');
-        $ns     = $this->prefix.':'.$bucket;
-        $prefix = $ns.':TAGS:';
-        # The last element to get
-        $lastElement = $offset + $limit - 1;
-        
-    }
-
     /**
      * Return the IDs of an either a single tag or an intersection/union of two or more tags
      *
      * @param  string  $bucket      (String)
-     * @param          $tags        (Array) One or more tags
+     * @param          $tags_group  (TagsGroupContracts) One or more group of tags
      * @param  int     $limit       *optional* Default=100 (0 will return 0 items but will return the total_items!)
      * @param  int     $offset      *optional* Default=0
      * @param  int     $withScores  *optional* Default=0 Set this to 1 to output the scores
@@ -164,62 +153,55 @@ class RedisTagging extends Singleton
      * @param  string  $type        *optional* Default ="desc"
      * @param          $cb
      */
-    public function tags($bucket, $tags, $cb, $limit = 100, $offset = 0, $withScores = 0, $order = 'desc', $type =
-    'inter'): void
+    public function tags($bucket, TagsGroupContracts $tags_group, $cb, $limit = 100, $offset = 0,
+        $withScores = 0, $order = 'desc', $type = 'inter'): void
     {
-
-        
         $redis  = Redis::connection('redisDB');
         $ns     = $this->prefix.':'.$bucket;
         $prefix = $ns.':TAGS:';
         # The last element to get
         $lastElement = $offset + $limit - 1;
-
-        $cTags = count($tags);
+    
+        $cTags = $tags_group->getNumberOfTotalTags();
         if ($cTags === 0) {
             $cb(null, [
                 'total_items_result' => 0,
                 'total_items_db'     => 0,
                 'items'              => [],
-                'tags'               => $tags,
+                'tags'               => $tags_group->getTagsArray(),
                 'limit'              => $limit,
                 'offset'             => $offset,
                 'withScores'         => $withScores,
                 'order'              => $order,
                 'type'               => $type,
             ]);
-
             return;
         }
-
-        if ($cTags > 1) {
-            $randKey = $ns.str_random(10).'_'.Carbon::now()->micro;
-            $keys    = [];
-            foreach ($tags as $tag) {
-                $keys[] = $prefix.$tag;
-            }
-            
-            try {
-                if (strcmp($type, self::CONST_TYPE_INTER) === 0) {
-                    $redis->zinterstore($randKey, $keys, ['min']);
-                } else {
-                    $redis->zUnion($randKey, $keys, null, 'MIN');
+    
+        $tagGroups = $tags_group->getTagsGroup();
+    
+        $resultKeyForGroups = [];
+        foreach ($tagGroups as $tags) {
+            $cTags = count($tags);
+            if ($cTags > 1) {
+                $randKey = $this->makeRandomKeyForRedis($ns);
+                $keys    = [];
+                foreach ($tags as $tag) {
+                    $keys[] = $prefix.$tag;
                 }
-            } catch (Exception $e) {
-                $cb($e, [
-                    'msg' => 'Error!',
-                ]);
-
-                return;
-            }
-            $resultkey = $randKey;
-        } else {
-            if ($cTags == 1) {
-                $resultkey = $prefix.$tags[0];
+                try {
+                    $redis->zunionstore($randKey, $keys, ['min']);
+                } catch (Exception $e) {
+                }
+                $resultKeyForGroups[] = $randKey;
+            } elseif ($cTags === 1) {
+                $resultKeyForGroups[] = $prefix.$tags[0];
             }
         }
-
+        $cTags     = $tags_group->getNumberOfTotalTags();
+        $resultkey = $this->makeRandomKeyForRedis($ns);
         try {
+            $redis->zinterstore($resultkey, $resultKeyForGroups, ['min']);
             $total_items_db = $redis->zCount($resultkey, '-inf', '+inf');
             if (strcmp($order, self::CONST_ORDER_DESC) === 0) {
                 $tagsresult = $redis->zRevRange($resultkey, $offset, $lastElement, ['withscores' => $withScores]);
@@ -231,28 +213,27 @@ class RedisTagging extends Singleton
             $cb($e, [
                 'msg' => 'Error!',
             ]);
-
+        
             return;
         }
-
+    
         if ($cTags > 1) {
             $redis->unlink($resultkey);
         }
-
+    
         $result = [];
-
+    
         if ($withScores) {
             foreach ($tagsresult as $id => $score) {
                 $temp     = [
                     'bucket' => $bucket,
                     'id'     => $id,
                     'score'  => $score,
-
+            
                 ];
                 $result[] = $temp;
             }
-        }
-        else {
+        } else {
             foreach ($tagsresult as $id) {
                 $temp     = [
                     'bucket' => $bucket,
@@ -266,7 +247,7 @@ class RedisTagging extends Singleton
             'total_items_result' => count($tagsresult),
             'total_items_db'     => $total_items_db,
             'items'              => $result,
-            'tags'               => $tags,
+            'tags'               => $tags_group->getTagsArray(),
             'limit'              => $limit,
             'offset'             => $offset,
             'withScores'         => $withScores,
@@ -352,5 +333,16 @@ class RedisTagging extends Singleton
         if (!$this->validation($bucket)) {
             return false;
         }
+    }
+    
+    /**
+     * @param  string  $ns
+     *
+     * @return string
+     */
+    private function makeRandomKeyForRedis(string $ns): string
+    {
+        $randKey = $ns.str_random(10).'_'.Carbon::now()->micro;
+        return $randKey;
     }
 }

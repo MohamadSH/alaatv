@@ -11,7 +11,6 @@ use Illuminate\Support\ServiceProvider;
 use App\Classes\Search\TaggingInterface;
 use App\Console\Commands\AuthorTagCommand;
 use App\Console\Commands\ContentTagCommand;
-use App\Http\Controllers\Api\TagController;
 use App\Classes\Search\Tag\AuthorTagManagerViaApi;
 use App\Classes\Search\Tag\ContentTagManagerViaApi;
 use App\Classes\Search\Tag\ProductTagManagerViaApi;
@@ -55,12 +54,6 @@ class TagManagerProvider extends ServiceProvider
             ->needs(TaggingInterface::class)
             ->give(function () {
                 return (new AuthorTagManagerViaApi());
-            });
-    
-        $this->app->when(TagController::class)
-            ->needs(TagSplitterInterface::class)
-            ->give(function () {
-                return app(TagSplitter::class);
             });
     }
     
