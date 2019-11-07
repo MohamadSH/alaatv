@@ -2,28 +2,21 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Classes\TagSplitter;
+use App\Classes\TagsGroup;
 use App\Classes\RedisTagging;
 use Illuminate\Http\Response;
 use App\Http\Requests\Request;
 use App\Http\Controllers\Controller;
-use App\Classes\TagSplitterInterface;
 
 //https://github.com/smrchy/rest-tagging
 
 class TagController extends Controller
 {
     protected $redis;
-    /**
-     * @var TagSplitterInterface
-     */
-    protected $tagSplitter;
     
-    public function __construct(TagSplitterInterface $tagSplitter)
+    public function __construct()
     {
         $this->redis       = RedisTagging::getInstance();
-        $this->tagSplitter = $tagSplitter;
-    
     }
 
     /**
@@ -173,7 +166,6 @@ class TagController extends Controller
      * "offset":4
      * }
      * @param Request $request
-     * @param TagSplitter $tagSplitter
      * @param           $bucket
      *
      * @return null
@@ -184,7 +176,7 @@ class TagController extends Controller
         $tags           = $this->normalizeTags($tags);
         $tags           = str_replace('"', '', $tags);
         $tags           = explode(',', mb_substr($tags, 1, -1));
-        $tagsCollection = $this->tagSplitter->group($tags);
+    
         $type           = $request->type ?? 'inter';
         $limit          = $request->limit ?? 100;
         $offset         = $request->offset ?? 0;
@@ -193,8 +185,8 @@ class TagController extends Controller
 
         $response = null;
         $error    = null;
-
-        $this->redis->tags($bucket, $tags,
+    
+        $this->redis->tags($bucket, new TagsGroup($tags),
             function ($err, $result) use (& $response, &$error) {
                 if (isset($err)) {
                     $error = [
