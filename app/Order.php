@@ -896,7 +896,7 @@ class Order extends BaseModel
     public function getWalletSuccessfulTransactionsAttribute(){
        return $this->transactions
                     ->where('paymentmethod_id', config('constants.PAYMENT_METHOD_WALLET'))
-                    ->whereIn('transactionstatus_id', config('constants.TRANSACTION_STATUS_SUCCESSFUL'))
+                    ->whereIn('transactionstatus_id', [config('constants.TRANSACTION_STATUS_SUCCESSFUL')])
                     ->where('cost', '>', 0);
     }
 
