@@ -221,6 +221,7 @@ var Alaasearch = function () {
             discount = 100;
             price.final = 0;
         }
+      
         if (price.base !== price.final) {
             priceHtml += '    <span class="m-badge m-badge--warning a--productRealPrice">' + price.base.toLocaleString('fa') + '</span>\n';
             priceHtml += '    <span class="m-badge m-badge--info a--productDiscount">' + discount + '%</span>\n';
@@ -232,6 +233,7 @@ var Alaasearch = function () {
                 '                <span>تخفیف</span>\n' +
                 '            </span>\n' +
                 '        </div>';
+
         }
         priceHtml += '    ' + price.final.toLocaleString('fa') + ' تومان \n';
         priceHtml += '</span>';

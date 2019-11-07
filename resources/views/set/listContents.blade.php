@@ -36,12 +36,13 @@
                             <tr>
                                 <th>#</th>
                                 <th> عکس</th>
-                                <th>ترتیب</th>
+                                <th>جلسه</th>
                                 <th> تیتر</th>
                                 <th>توضیحات</th>
                                 <th>فعال</th>
-                                <th>تاریخ نمایش</th>
+                                <th>زمان نمایان شدن</th>
                                 <th>فیلم / جزوه</th>
+                                <th>عملیات</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -59,12 +60,19 @@
                                         <td> {{ $content->name }}</td>
                                         <td>{!!   $content->description !!}</td>
                                         <td>{{($content->enable)?'بله':'خیر'}}</td>
-                                        <td>{{ $content->validSince }}</td>
-                                        @if($content->template_id == 1)
-                                            <td>فیلم</td>
-                                        @else
-                                            <td>جزوه</td>
-                                        @endif
+                                        <td>{{ $content->ValidSince_Jalali() }}</td>
+                                        <td>
+                                            @if($content->contenttype_id == config('constants.CONTENT_TYPE_VIDEO'))
+                                                <span class = "m-badge m-badge--wide label-sm m-badge--info"> فیلم </span>
+                                            @elseif($content->contenttype_id == config('constants.CONTENT_TYPE_PAMPHLET'))
+                                                <span class = "m-badge m-badge--wide label-sm m-badge--brand"> جزوه </span>
+                                            @else
+                                                {{$content->contenttype->displayName}}
+                                            @endif
+                                        </td>
+                                        <td>
+                                            <a class="btn btn-accent" href="{{route('c.edit' , $content->id)}}">ویرایش</a>
+                                        </td>
                                     </tr>
                                 @endforeach
                             @endif

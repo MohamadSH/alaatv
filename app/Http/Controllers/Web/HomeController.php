@@ -12,7 +12,9 @@ use Illuminate\Http\RedirectResponse;
 use League\Flysystem\Sftp\SftpAdapter;
 use Illuminate\Contracts\Encryption\DecryptException;
 use Illuminate\Support\Facades\{File, Input, Config, Storage};
-use App\{User,
+use App\{Gender,
+    Major,
+    User,
     Product,
     Productfile,
     Traits\Helper,
@@ -36,21 +38,21 @@ class HomeController extends Controller
     use CharacterCommon;
     use UserCommon;
     use RequestCommon;
-    
+
     private static $TAG = HomeController::class;
-    
+
     /**
      * Create a new controller instance.
      *
      * @return void
      */
-    
+
     private $setting;
-    
+
     public function __construct(Websitesetting $setting)
     {
         $this->setting = $setting->setting;
-        
+
         $authException = [
 //            'debug',
 'newDownload',
@@ -65,21 +67,21 @@ class HomeController extends Controller
         $this->middleware('auth', ['except' => $authException]);
         $this->middleware('role:admin', ['only' => ['debug'] ]);
     }
-    
-    public function debug(Request $request, BlockCollectionFormatter $formatter)
+
+    public function debug(Request $request, User $user = null)
     {
     }
-    
+
     public function search(Request $request)
     {
         return redirect(action("Web\ContentController@index"), Response::HTTP_MOVED_PERMANENTLY);
     }
-    
+
     public function home()
     {
         return redirect('/', Response::HTTP_MOVED_PERMANENTLY);
     }
-    
+
     /**
      * @param  Request                                             $request
      * @param                                                      $data
@@ -112,17 +114,17 @@ class HomeController extends Controller
                 ->setStatusCode(Response::HTTP_FOUND);
         }
         $finalLink = $this->getSecureUrl($url);
-        
+
         return redirect($finalLink);
     }
-    
+
     public function download(Request $request , ErrorPageController $errorPageController)
     {
         $fileName    = $request->get('fileName');
         $contentType = $request->get('content');
         /** @var User $user */
         $user = auth()->user();
-        
+
         switch ($contentType) {
             case 'عکس پروفایل':
                 $diskName = config('constants.DISK1');
@@ -132,7 +134,7 @@ class HomeController extends Controller
                 break;
             case 'تمرین':
                 // check if he has permission for downloading the assignment :
-                
+
                 //if(!Auth::user()->permissions->contains(Permission::all()->where("name", config('constants.DOWNLOAD_ASSIGNMENT_ACCESS'))->first()->id)) return redirect(action(("ErrorPageController@error403"))) ;
                 //  checking permission through the user's role
                 //$user->hasRole('goldenUser');
@@ -162,11 +164,11 @@ class HomeController extends Controller
             case 'فایل محصول' :
                 $productId = Input::get('pId');
                 $diskName  = config('constants.DISK13');
-                
+
                 if (isset($user) && !$user->can(config('constants.DOWNLOAD_PRODUCT_FILE'))) {
                     $products    = ProductRepository::getProductsThatHaveValidProductFileByFileNameRecursively($fileName);
                     $validOrders = $user->getOrdersThatHaveSpecificProduct($products);
-                    
+
                     if (!$products->isEmpty()) {
                         if (!$validOrders->isEmpty()) {
                             $productId = (array) $productId;
@@ -228,7 +230,7 @@ class HomeController extends Controller
             if (isset($externalLink)) {
                 return redirect($externalLink);
             }
-            
+
             if (Storage::disk($diskName)
                 ->exists($fileName)) {
                 $filePrefixPath = Storage::drive($diskName)
@@ -238,7 +240,7 @@ class HomeController extends Controller
                     $fs     = Storage::disk($diskName)
                         ->getDriver();
                     $stream = $fs->readStream($fileName);
-                    
+
                     return \Illuminate\Support\Facades\Response::stream(function () use ($stream) {
                         fpassthru($stream);
                     }, Response::HTTP_OK, [
@@ -247,7 +249,7 @@ class HomeController extends Controller
                         'Content-disposition' => 'attachment; filename="'.basename($fileName).'"',
                     ]);
                 }
-                
+
                 $fileHost = Storage::drive($diskName)
                     ->getAdapter()
                     ->getHost();
@@ -256,17 +258,17 @@ class HomeController extends Controller
                         ->getAdapter()
                         ->getRoot();
                     //TODO: verify "$fileRemotePath = "http://" . $fileHost . ":8090" . "/public" . explode("public", $fileRoot)[1];"
-                    
+
                     $fileRemotePath = config('constants.DOWNLOAD_SERVER_PROTOCOL').config('constants.PAID_SERVER_NAME').'/public'.explode('public',
                             $fileRoot)[1];
-                    
+
                     return response()->redirectTo($fileRemotePath.$fileName);
                 }
-                
+
                 $fs     = Storage::disk($diskName)
                     ->getDriver();
                 $stream = $fs->readStream($fileName);
-                
+
                 return \Illuminate\Support\Facades\Response::stream(function () use ($stream) {
                     fpassthru($stream);
                 }, Response::HTTP_OK, [
@@ -290,11 +292,11 @@ class HomeController extends Controller
                         if (isset($url[0])) {
                             return response()->redirectTo($url);
                         }
-                        
+
                         $fs     = Storage::disk($diskName)
                             ->getDriver();
                         $stream = $fs->readStream($fileName);
-                        
+
                         return \Illuminate\Support\Facades\Response::stream(function () use ($stream) {
                             fpassthru($stream);
                         }, Response::HTTP_OK, [
@@ -303,13 +305,13 @@ class HomeController extends Controller
                             'Content-disposition' => 'attachment; filename="'.basename($fileName).'"',
                         ]);
                     }
-                    
+
                     break;
                 case 'Local' :
                     $fs     = Storage::disk($diskName)
                         ->getDriver();
                     $stream = $fs->readStream($fileName);
-                    
+
                     return \Illuminate\Support\Facades\Response::stream(function () use ($stream) {
                         fpassthru($stream);
                     }, Response::HTTP_OK, [
@@ -320,7 +322,7 @@ class HomeController extends Controller
                     break;
                 default:
                     break;
-                
+
             }
             abort(404);
         }
@@ -328,9 +330,9 @@ class HomeController extends Controller
             return redirect($externalLink);
         }
         abort(404);
-        
+
     }
-    
+
     public function getImage($category, $w, $h, $fileName)
     {
         switch ($category) {
@@ -365,7 +367,7 @@ class HomeController extends Controller
             $lastModified = Storage::disk($diskName)
                 ->lastModified($fileName);
             $size         = strlen($file);
-            
+
             return response($file, Response::HTTP_OK)
                 ->header('Content-Type', $type)
                 ->header('Content-Length',
@@ -375,15 +377,15 @@ class HomeController extends Controller
                 ->setEtag($etag)
                 ->setLastModified(Carbon::createFromTimestamp($lastModified));
         }
-        
+
         return redirect(action("Web\ErrorPageController@error404"));
     }
-    
+
     public function siteMapXML()
     {
         return redirect(action('Web\SitemapController@index'), 301);
     }
-    
+
     /**
      * Sends an email to the website's own email
      *
@@ -395,7 +397,7 @@ class HomeController extends Controller
     public function sendMail(ContactUsFormRequest $request , ErrorPageController $errorPageController)
     {
         $wSetting = $this->setting;
-        
+
         //        try {
         //            $sent = Mail::send('emailLayouts.contactUs',
         //                array(
@@ -427,19 +429,19 @@ class HomeController extends Controller
         //            $message = "با عرض پوزش مشکلی در ارسال پیام پیش آمده است . لطفا بعدا اقدام نمایید";
         //            return $errorPageController->errorPage($message) ;
         //        }
-        
+
         $email   = $request->get('email');
         $name    = $request->get('fullName');
         $phone   = $request->get('phone');
         $comment = $request->get('message');
-        
+
         //create a boundary for the email. This
         $boundary = uniqid('sh');
-        
+
         // multiple recipients
         //    $to  = 'info@sanatisharif.ir' . ', '; // note the comma
         //    $to .= 'foratmail@gmail.com';
-        
+
         if (isset($wSetting->branches->main->emails[0]->address)) {
             $to = $wSetting->branches->main->emails[0]->address;
         } else {
@@ -449,12 +451,12 @@ class HomeController extends Controller
         $headers = 'MIME-Version: 1.0'."\r\n";
         $headers .= 'Content-Type: multipart/alternative; boundary="'.$boundary."\"\r\n";//';charset=UTF-8' .
         $headers .= 'From: '.strip_tags(config('constants.MAIL_USERNAME'))."\r\n".'Reply-To: '.strip_tags($email)."\r\n".'X-Mailer: PHP/'.phpversion();
-        
+
         $orginaltext = $request->get('message');
-        
+
         $orginaltext = str_replace('\"', '"', $orginaltext);
         $orginaltext = str_replace('\\\\', '\\', $orginaltext);
-        
+
         $sender = '<p dir="rtl"> نام فرستنده: '.$name.'</p>';
         if (strlen($email) > 0) {
             $sender .= '<p dir="rtl"> ایمیل فرستنده: '.$email.'</p>';
@@ -462,21 +464,21 @@ class HomeController extends Controller
         if (strlen($phone) > 0) {
             $sender .= '<p dir="rtl">  شماره تماس فرستنده: '.$phone.'</p>';
         }
-        
+
         //plainText version
         $text = "\r\n\r\n--".$boundary."\r\n"; //header
         $text .= "Content-type: text/plain; charset=utf-8 \r\n\r\n"; //header
-        
+
         $text .= strip_tags($orginaltext)."\r\n".strip_tags($sender);
-        
+
         //htmlText version
-        
+
         $text .= "\r\n\r\n--".$boundary."\r\n"; //header
         $text .= "Content-type: text/html; charset=utf-8 \r\n\r\n"; //header
-        
+
         //            $text .= $sender.str_replace('\"','\'','<p dir="rtl" style="text-align: right">'.$orginaltext.'</p>') ;
         $text .= view('emailLayouts.contactUs', compact('email', 'phone', 'comment', 'name'));
-        
+
         /*$text .='
         <html>
             <head>
@@ -488,29 +490,29 @@ class HomeController extends Controller
             </body>
         </html>
             ';*/
-        
+
         $text .= "\r\n\r\n--".$boundary.'--';
-        
+
         $subject = 'آلاء - تماس با ما';
-        
+
         try {
             $numSent = mail($to, $subject, $text, $headers);
             if ($numSent) {
                 session()->put('success', 'پیام با موفقیت ارسال شد');
-                
+
                 return redirect()->back();
             } else {
                 session()->put('error', 'خطا در ارسال پیام ، لطفا دوباره اقدام نمایید');
-                
+
                 return redirect()->back();
             }
         } catch (Exception    $error) {
             $message = 'با عرض پوزش مشکلی در ارسال پیام پیش آمده است . لطفا بعدا اقدام نمایید';
-            
+
             return $errorPageController->errorPage($message);
         }
     }
-    
+
     /**
      * Send a custom SMS to the user
      *
@@ -526,18 +528,18 @@ class HomeController extends Controller
         $usersId   = explode(',', $usersId);
         $relatives = $request->get('relatives');
         $relatives = explode(',', $relatives);
-        
+
         $smsNumber = config('constants.SMS_PROVIDER_DEFAULT_NUMBER');
         $users     = User::whereIn('id', $usersId)
             ->get();
         if ($users->isEmpty()) {
             return response()->json([] , Response::HTTP_UNAVAILABLE_FOR_LEGAL_REASONS);
         }
-        
+
         if (!isset($from) || strlen($from) == 0) {
             $from = $smsNumber;
         }
-        
+
         $mobiles = [];
         foreach ($users as $user) {
             if (in_array(0, $relatives)) {
@@ -577,13 +579,13 @@ class HomeController extends Controller
 //        Notification::send($users, new GeneralNotice($message));
         if (!$response['error']) {
             $smsCredit = $this->medianaGetCredit();
-            
+
             return response()->json($smsCredit);
         } else {
             return response()->json( [] , Response::HTTP_SERVICE_UNAVAILABLE);
         }
     }
-    
+
     /**
      * Sends an email to the website's own email
      *
@@ -593,22 +595,22 @@ class HomeController extends Controller
      */
     public function uploadFile(Request $request)
     {
-        
+
         $filePath         = $request->header('X-File-Name');
         $originalFileName = $request->header('X-Dataname');
         $filePrefix       = '';
         $contentSetId     = $request->header('X-Dataid');
         $disk             = $request->header('X-Datatype');
         $done             = false;
-        
+
         //        dd($request->headers->all());
         try {
             $dirname  = pathinfo($filePath, PATHINFO_DIRNAME);
             $ext      = pathinfo($originalFileName, PATHINFO_EXTENSION);
             $fileName = basename($originalFileName, '.'.$ext).'_'.date('YmdHis').'.'.$ext;
-            
+
             $newFileNameDir = $dirname.'/'.$fileName;
-            
+
             //            dd([
             //                "filePath"=>$filePath,
             //                "newFileNameDir"=>$newFileNameDir
@@ -617,7 +619,7 @@ class HomeController extends Controller
                 File::delete($newFileNameDir);
             }
             File::move($filePath, $newFileNameDir);
-            
+
             if (strcmp($disk, 'product') == 0) {
                 if ($ext == 'mp4') {
                     $directory = 'video';
@@ -626,7 +628,7 @@ class HomeController extends Controller
                         $directory = 'pamphlet';
                     }
                 }
-                
+
                 $adapter    = new SftpAdapter([
                     'host'          => config('constants.SFTP_HOST'),
                     'port'          => config('constants.SFTP_PORT'),
@@ -642,7 +644,7 @@ class HomeController extends Controller
                     if (!$filesystem->has($directory)) {
                         $filesystem->createDir($directory);
                     }
-                    
+
                     $filePrefix = $directory.'/';
                     $filesystem = $filesystem->get($directory);
                     $path       = $filesystem->getPath();
@@ -700,12 +702,12 @@ class HomeController extends Controller
             ] , Response::HTTP_SERVICE_UNAVAILABLE);
         }
     }
-    
+
     public function adTest(Request $request){
         $uuid = $request->get('uuid' , '35b39d4b-517b-44bc-85c4-44f93242836f');
         return view('pages.adtest' , compact('uuid'));
     }
-    
+
     /**
      * @param $products
      *
@@ -735,7 +737,7 @@ class HomeController extends Controller
         }
         return $message;
     }
-    
+
     /**
      * @param $url
      *
@@ -750,7 +752,7 @@ class HomeController extends Controller
         $ipArray    = explode('.', $userIP);
         $ipArray[3] = 0;
         $userIP     = implode('.', $ipArray);
-        
+
         $linkHash  = $this->generateSecurePathHash($unixTime, $userIP, 'TakhteKhak', $url);
         $finalLink = $url.'?md5='.$linkHash.'&expires='.$unixTime;
         return $finalLink;

@@ -1,4 +1,4 @@
-@permission((Config::get('constants.EDIT_EDUCATIONAL_CONTENT')))@extends("app",["pageName"=>"admin"])
+@extends("app",["pageName"=>"admin"])
 
 @section('page-css')
 
@@ -141,11 +141,34 @@
 
 @section('page-js')
     <script src="{{ mix('/js/admin-all.js') }}" type="text/javascript"></script>
+    <script src="{{ mix('/js/admin-content-edit.js') }}" type="text/javascript"></script>
     <script src = "/acm/AlaatvCustomFiles/js/admin-edit-educationalContent.js" type = "text/javascript"></script>
     <script type="text/javascript">
         $("input[data-role=tagsinput], select[multiple][data-role=tagsinput]").tagsinput({
             tagClass: 'm-badge m-badge--info m-badge--wide m-badge--rounded'
         });
+
+        @permission((config('constants.ACCEPT_CONTENT_TMP_DESCRIPTION_ACCESS')))
+        var dmp = new diff_match_patch();
+        function launch() {
+            var text1 = document.getElementById('descriptionSummerNote').value;
+            var text2 = document.getElementById('tempDescriptionSummerNote').value;
+            dmp.Diff_Timeout = 1;
+
+            var d = dmp.diff_main(text1, text2);
+
+            dmp.diff_cleanupSemantic(d);
+            var ds = dmp.diff_prettyHtml(d);
+            document.getElementById('descriptionComparisonOutput').innerHTML = ds;
+        }
+
+        function showTempDescription(){
+            $('#tempDescriptionCol').removeClass('d-none');
+        }
+
+        $(document).ready(function () {
+            launch();
+        });
+        @endpermission
     </script>
 @endsection
-@endpermission

@@ -32,10 +32,7 @@ class RelatedProductSearch extends SearchAbstract
         $this->pageNum = $this->setPageNum($filters);
         $key = $this->makeCacheKey($filters);
 
-        return Cache::tags([
-            'relatedProduct',
-            'search',
-        ])->remember($key, $this->cacheTime, function () use ($filters) {
+        return Cache::tags(['relatedProduct' , 'relatedProduct_search' , 'search'])->remember($key, $this->cacheTime, function () use ($filters) {
             $query = $this->applyDecoratorsFromFiltersArray($filters, $this->model->newQuery());
 
             return $this->getResults($query);

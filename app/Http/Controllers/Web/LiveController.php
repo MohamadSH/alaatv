@@ -2,23 +2,23 @@
 
 namespace App\Http\Controllers\Web;
 
-use App\Classes\LiveStreamAssistant;
+use App\Live;
 use App\Conductor;
 use App\Dayofweek;
-use App\Live;
-use App\Repositories\ConductorRepo;
-use App\Repositories\LiveRepo;
-use App\Repositories\WeekRepo;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Response;
+use App\Repositories\LiveRepo;
+use App\Repositories\WeekRepo;
+use App\Repositories\ConductorRepo;
+use App\Classes\LiveStreamAssistant;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Cache;
 
 class LiveController extends Controller
 {
-    const XMPEG_URL = 'https://alaatv.arvanlive.com/hls/test/test.m3u8';
-    const DASH_XML = 'https://alaatv.arvanlive.com/dash/test/test.mpd';
+    const XMPEG_URL = 'https://alaatv.arvanlive.com/hls/math/math.m3u8';
+    const DASH_XML  = 'https://alaatv.arvanlive.com/dash/math/math.mpd';
 
     /**
      * Handle the incoming request.
@@ -49,6 +49,12 @@ class LiveController extends Controller
         }
 
         $schedule = LiveStreamAssistant::makeScheduleOfTheWeekCollection()->toJson();
+
+        if($user->hasRole('admin')){
+            Cache::tags('live')->flush();
+            $live = true;
+            return view('pages.liveView' , compact( 'nowTime', 'schedule' , 'live' ,'poster' , 'xMpegURL' , 'dashXml' , 'fullVideo' , 'title', 'playLiveAjaxUrl', 'stopLiveAjaxUrl' ));
+        }
 
         LiveStreamAssistant::closeFinishedPrograms($todayStringDate, $nowTime);
 

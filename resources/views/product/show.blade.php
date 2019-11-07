@@ -493,10 +493,11 @@
                                                         {{ $product->priceText['basePriceText'] }}
                                                     @else
                                                         قیمت محصول: <strike>{{ $product->priceText['basePriceText'] }} </strike><br>
-                                                        قیمت با تخفیف:  {{ $product->priceText['finalPriceText'] }}
+                                                        قیمت با تخفیف
+                                                        <span class="m-badge m-badge--info m-badge--wide m-badge--rounded" id="a_product-discount">{{ ($product->price['discount']*100/$product->price['base']) }}%</span>
+                                                        :  {{ $product->priceText['finalPriceText'] }}
                                                     @endif
                                                 </span>
-                                                <span id="a_product-discount"></span>
                                             </h5>
                                         @endif
 
@@ -676,7 +677,6 @@
                             <span class="m-badge m-badge--danger m-badge--wide m-badge--rounded">{{ $product->priceText['finalPriceText'] }}</span>
                         @endif
                     </span>
-                    <span id="a_product-discount_mobile"></span>
                 </div>
             @endif
 

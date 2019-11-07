@@ -44,17 +44,17 @@ trait HandleOrderPayment
 
         //refreshing order after closing it's wallet transactions
         // issue #1763
-        Cache::tags('Order:'.$order->id)->flush();
+        Cache::tags('order_'.$order->id)->flush();
         $order = Order::Find($order->id);
 
         $updateOrderPaymentStatusResult = $this->updateOrderPaymentStatus($order);
-        
+
         /** Attaching user bons for this order */
         if ($updateOrderPaymentStatusResult['paymentstatus_id'] == config('constants.PAYMENT_STATUS_PAID')) {
             $this->givesOrderBonsToUser($order);
         }
     }
-    
+
     /**
      * @param  \App\Order  $order
      *
@@ -62,8 +62,15 @@ trait HandleOrderPayment
      */
     protected function updateOrderPaymentStatus(Order $order): array
     {
-        $paymentstatus_id = $order->totalPaidCost() < $order->totalCost() ? config('constants.PAYMENT_STATUS_INDEBTED') : config('constants.PAYMENT_STATUS_PAID');
-        
+        if($order->totalPaidCost() < $order->totalCost()){
+            if($order->paymentstatus_id != config('constants.PAYMENT_STATUS_VERIFIED_INDEBTED'))
+            {
+                $paymentstatus_id = config('constants.PAYMENT_STATUS_INDEBTED');
+            }
+        }else{
+            $paymentstatus_id = config('constants.PAYMENT_STATUS_PAID');
+        }
+
         $result['paymentstatus_id'] = $paymentstatus_id;
 
 //        uncomment if you don't close order before redirecting to gateway
@@ -72,10 +79,10 @@ trait HandleOrderPayment
 
         $order->paymentstatus_id = $paymentstatus_id;
         $order->update();
-        
+
         return $result;
     }
-    
+
     /**
      * @param  \App\Order  $order
      *
@@ -86,12 +93,12 @@ trait HandleOrderPayment
         $bonName = config('constants.BON1');
         $bon     = Bon::ofName($bonName)
             ->first();
-        
+
         if (!isset($bon)) {
             return;
         }
-        
+
         list($givenBonNumber, $failedBonNumber) = $order->giveUserBons($bonName);
-        
+
     }
 }

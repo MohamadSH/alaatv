@@ -15,10 +15,10 @@ trait ProductCommon
      */
     public function productExtraCostFromAttributes(Product $product, $extraAttributeValues)
     {
-        $key = 'product:productExtraCostFromAttributes:Product'."\\".$product->cacheKey()."\\extraAttributeValues:".(isset($extraAttributeValues) ? implode('',
+        $key = 'product:productExtraCostFromAttributes:'."\\".$product->cacheKey()."\\extraAttributeValues:".(isset($extraAttributeValues) ? implode('',
                 $extraAttributeValues) : '-');
 
-        return (int)Cache::tags(['product'])->tags('bon')
+        return (int)Cache::tags(['product' , 'product_'.$product->id])
             ->remember($key, config('constants.CACHE_60'), function () use ($product, $extraAttributeValues) {
                 $totalExtraCost = 0;
                 foreach ($extraAttributeValues as $attributevalueId) {
@@ -100,7 +100,7 @@ trait ProductCommon
             $newPhoto             = $photo->replicate();
             $newPhoto->product_id = $destinationProduct->id;
             $newPhoto->save();
-    
+
             if (isset($newPhotoInfo['title'])) {
                 $newPhoto->title = $newPhotoInfo['title'];
                 $newPhoto->update();
@@ -122,12 +122,14 @@ trait ProductCommon
     protected function makeCostCollection(Collection $products)
     {
         $key = null;
+        $cacheTags = ['product'];
         foreach ($products as $product) {
             $key .= $product->cacheKey().'-';
+            $cacheTags[] = 'product_'.$product->id;
         }
         $key = 'product:makeCostCollection:'.md5($key);
 
-        return Cache::tags(['product'])
+        return Cache::tags($cacheTags)
             ->remember($key, config('constants.CACHE_60'), function () use ($products) {
             $costCollection = collect();
             foreach ($products as $product) {
@@ -181,14 +183,16 @@ trait ProductCommon
     protected function makeProductCollection($productsId = null)
     {
         $key = ':0-';
+        $cacheTags = ['product'];
         if (isset($productsId)) {
             foreach ($productsId as $product) {
+                $cacheTags[] = 'product_'.$product;
                 $key .= $product.'-';
             }
         }
         $key = 'product:makeProductCollection:'.$key;
 
-        return Cache::tags(['product'])
+        return Cache::tags($cacheTags)
             ->remember($key, config('constants.CACHE_60'), function () use ($productsId) {
             if (isset($productsId)) {
                 $allProducts = Product::getProducts()
@@ -213,12 +217,14 @@ trait ProductCommon
     protected function haveSameFamily($products)
     {
         $key = null;
+        $cacheTags = ['product'];
         foreach ($products as $product) {
             $key .= $product->cacheKey().'-';
+            $cacheTags[] = 'product_'.$product->id;
         }
         $key = 'product:haveSameFamily:'.$key;
 
-        return Cache::tags(['product'])
+        return Cache::tags($cacheTags)
             ->remember($key, config('constants.CACHE_60'), function () use ($products) {
             $flag = true;
             foreach ($products as $key => $product) {

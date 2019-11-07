@@ -21,14 +21,16 @@ class DashboardPageController extends Controller
         }
         $pageName             = "shop";
         $userAssetsCollection = $user->getDashboardBlocks();
-    
+//        $userFavoritesCollection = $user->getDashboardBlocks();
+        $userFavoritesCollection = collect();
+
         if ($request->expectsJson()) {
             return response()->json([
-                'user_id' => $user->id,
-                'data'    => $userAssetsCollection,
+                'user_id'   => $user->id,
+                'data'      => $userAssetsCollection,
             ]);
         }
-        
-        return view('user.dashboard', compact('user', 'pageName', 'userAssetsCollection'));
+
+        return view('user.dashboard', compact('user', 'pageName', 'userAssetsCollection' , 'userFavoritesCollection'));
     }
 }

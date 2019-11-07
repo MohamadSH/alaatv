@@ -8,17 +8,23 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\{Auth, Schema, Storage, Validator};
 use App\{Content,
+    Observers\SlideshowObserver,
+    Observers\TransactionObserver,
+    Observers\UserObserver,
     Product,
     Contentset,
     Orderproduct,
     Employeetimesheet,
+    Slideshow,
     Traits\UserCommon,
     Observers\SetObserver,
     Adapter\AlaaSftpAdapter,
     Observers\ProductObserver,
     Observers\ContentObserver,
     Observers\OrderproductObserver,
-    Observers\EmployeetimesheetObserver};
+    Observers\EmployeetimesheetObserver,
+    Transaction,
+    User};
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -36,7 +42,7 @@ class AppServiceProvider extends ServiceProvider
                     ->hasRole('admin'));
         });
         Schema::defaultStringLength(191);
-    
+
         Storage::extend('sftp', static function ($app, $config) {
             return new Filesystem(new AlaaSftpAdapter($config));
         });
@@ -59,6 +65,9 @@ class AppServiceProvider extends ServiceProvider
         Product::observe(ProductObserver::class);
         Contentset::observe(SetObserver::class);
         Orderproduct::observe(OrderproductObserver::class);
+        Transaction::observe(TransactionObserver::class);
+        User::observe(UserObserver::class);
+        Slideshow::observe(SlideshowObserver::class);
         $this->defineValidationRules();
     }
 

@@ -175,14 +175,13 @@ class Wallet extends BaseModel
             $result        = $this->update();
             if ($result) {
                 if (!$withoutTransaction) {
-                    $completed_at      = Carbon::now()->setTimezone('Asia/Tehran');
                     $transactionStatus = config('constants.TRANSACTION_STATUS_SUCCESSFUL');
                     $transaction = $this->transactions()
                                             ->create([
                                                 'wallet_id'            => $this->id,
                                                 'cost'                 => -$amount,
                                                 'transactionstatus_id' => $transactionStatus,
-                                                'completed_at'         => $completed_at,
+                                                'completed_at'         => Carbon::now('Asia/Tehran'),
                                             ]);
 
                     if(isset($transaction)){

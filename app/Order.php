@@ -143,10 +143,15 @@ use App\Classes\Checkout\Alaa\ReObtainOrderFromRecords;
  */
 class Order extends BaseModel
 {
+    const ORDER_STATUS_OPEN = 1;
+    const ORDER_STATUS_OPEN_BY_ADMIN = 4;
+    const ORDER_STATUS_OPEN_DONATE = 8;
+
+
     const OPEN_ORDER_STATUSES = [
-        1,
-        4,
-        8,
+        self::ORDER_STATUS_OPEN,
+        self::ORDER_STATUS_OPEN_BY_ADMIN,
+        self::ORDER_STATUS_OPEN_DONATE,
     ];
 
     /*
@@ -467,9 +472,9 @@ class Order extends BaseModel
     public function products(array $orderproductTypes = [])
     {
         $order = $this;
-        $key   = "order:products:".$order->cacheKey();
+        $key   = 'order:products:'.$order->cacheKey();
 
-        return Cache::tags(["order"])
+        return Cache::tags(['order' , 'product' , 'order_'.$this->id , 'order_'.$this->id.'_products'])
             ->remember($key, config("constants.CACHE_5"), function () use ($order,$orderproductTypes) {
                 $result = DB::table('products')
                     ->join('orderproducts', function ($join) use ($orderproductTypes) {
@@ -828,7 +833,7 @@ class Order extends BaseModel
         $order = $this;
         $key   = "order:orderstatus:".$order->cacheKey();
 
-        return Cache::tags(["order"])
+        return Cache::tags(['order' , 'orderstatus' , 'order_'.$order->id , 'order_'.$order->id.'_orderstatus'])
             ->remember($key, config("constants.CACHE_10"), function () use ($order) {
                 return optional($order->orderstatus()
                     ->first())->setVisible([
@@ -849,7 +854,7 @@ class Order extends BaseModel
         $order = $this;
         $key   = 'order:paymentstatus:'.$order->cacheKey();
 
-        return Cache::tags(['order'])
+        return Cache::tags(['order' , 'paymentstatus' , 'order_'.$order->id , 'order_'.$order->id.'_paymentstatus'])
             ->remember($key, config('constants.CACHE_10'), function () use ($order) {
                 return optional($order->paymentstatus()
                     ->first())->setVisible([
@@ -868,9 +873,9 @@ class Order extends BaseModel
     public function getCouponInfoAttribute()
     {
         $order = $this;
-        $key   = "order:coupon:".$order->cacheKey();
+        $key   = 'order:coupon:'.$order->cacheKey();
 
-        return Cache::tags(["order"])
+        return Cache::tags(['order' , 'coupon' , 'order_'.$order->id , 'order_'.$order->id.'_coupon'])
             ->remember($key, config("constants.CACHE_10"), function () use ($order) {
                 $coupon = $order->coupon()
                     ->first();
@@ -928,9 +933,9 @@ class Order extends BaseModel
     public function getOrderproductsAttribute(): Collection
     {
         $order = $this;
-        $key   = "order:orderproducts:".$order->cacheKey();
+        $key   = 'order:orderproducts:'.$order->cacheKey();
 
-        return Cache::tags(["order"])
+        return Cache::tags(['order' , 'orderproduct' , 'order_'.$order->id , 'order_'.$order->id.'_orderproducts'])
             ->remember($key, config("constants.CACHE_5"), function () use ($order) {
                 /** @var OrderproductCollection $orderproducts */
                 $orderproducts = $this->orderproducts()
@@ -968,9 +973,9 @@ class Order extends BaseModel
     public function totalPaidCost()
     {
         $order = $this;
-        $key   = "order:totalPaidCost:".$order->cacheKey();
+        $key   = 'order:totalPaidCost:'.$order->cacheKey();
 
-        return (int)Cache::tags(["order"])
+        return (int)Cache::tags(['order' , 'orderCost' ,  'cost' , 'order_'.$order->id , 'order_'.$order->id.'_cost'])
             ->remember($key, config("constants.CACHE_60"), function () use ($order) {
                 $totalPaidCost          = 0;
                 $successfulTransactions = $order->successfulTransactions;
@@ -986,9 +991,9 @@ class Order extends BaseModel
     public function totalRefund()
     {
         $order = $this;
-        $key   = "order:totalRefund:".$order->cacheKey();
+        $key   = 'order:totalRefund:'.$order->cacheKey();
 
-        return (int)Cache::tags(["order"])
+        return (int)Cache::tags(['order' , 'orderCost' , 'cost' , 'order_'.$order->id , 'order_'.$order->id.'_cost'])
             ->remember($key, config("constants.CACHE_60"), function () use ($order) {
                 $totalRefund            = 0;
                 $successfulTransactions = $order->successfulTransactions;
@@ -1015,9 +1020,9 @@ class Order extends BaseModel
     public function getDonatesAttribute(): Collection
     {
         $order = $this;
-        $key   = "order:donates:".$order->cacheKey();
+        $key   = 'order:donates:'.$order->cacheKey();
 
-        return Cache::tags(["order"])
+        return Cache::tags(['order' , 'orderproduct' , 'donate' , 'order_'.$order->id , 'order_'.$order->id.'_orderproducts'])
             ->remember($key, config("constants.CACHE_10"), function () use ($order) {
                 return $this->orderproducts->whereIn('product_id', [
                     Product::CUSTOM_DONATE_PRODUCT,
@@ -1044,9 +1049,9 @@ class Order extends BaseModel
     public function getSuccessfulTransactionsAttribute()
     {
         $order = $this;
-        $key   = "order:transactions:".$order->cacheKey();
+        $key   = 'order:transactions:'.$order->cacheKey();
 
-        return Cache::tags(["order"])
+        return Cache::tags(['order' , 'transaction' , 'order_'.$order->id , 'order_'.$order->id.'_transactions'])
             ->remember($key, config("constants.CACHE_60"), function () use ($order) {
                 /** @var TransactionCollection $successfulTransactions */
                 $successfulTransactions = $order->successfulTransactions()
@@ -1082,11 +1087,10 @@ class Order extends BaseModel
     }
 
     public function getPendingTransactionsAttribute()
-
     {
         $order = $this;
-        $key   = "order:pendingtransactions:".$order->cacheKey();
-        return Cache::tags(["order"])
+        $key   = 'order:pendingtransactions:'.$order->cacheKey();
+        return Cache::tags(['order' , 'transaction' , 'pendingTransaction' , 'order_'.$order->id , 'order_'.$order->id.'_pendingtransactions' , 'order_'.$order->id.'_transactions'])
             ->remember($key, config("constants.CACHE_60"), function () use ($order) {
                 /** @var TransactionCollection $pendingTransaction */
                 $pendingTransaction = $order->pendingTransactions()
@@ -1117,11 +1121,10 @@ class Order extends BaseModel
     }
 
     public function getUnpaidTransactionsAttribute()
-
     {
         $order = $this;
         $key   = "order:unpaidtransactions:".$order->cacheKey();
-        return Cache::tags(["order"])
+        return Cache::tags(['order' , 'transaction' , 'unpaidtransactions' , 'order_'.$order->id , 'order_'.$order->id.'_unpaidtransactions' , 'order_'.$order->id.'_transactions'])
             ->remember($key, config("constants.CACHE_60"), function () use ($order) {
                 /** @var TransactionCollection $unpaidTransaction */
                 $unpaidTransaction = $order->unpaidTransactions()
@@ -1157,7 +1160,7 @@ class Order extends BaseModel
         $order = $this;
         $key   = "order:postInfo:".$order->cacheKey();
 
-        return Cache::tags(["order"])
+        return Cache::tags(['order' , 'postingInfo' , 'order_'.$order->id , 'order_'.$order->id.'_postingInfo'])
             ->remember($key, config("constants.CACHE_600"), function () use ($order) {
                 return $order->orderpostinginfos()
                     ->get();
@@ -1178,7 +1181,7 @@ class Order extends BaseModel
     {
         $order = $this;
         $key   = "order:debt:".$order->cacheKey();
-        return (int)Cache::tags(["order"])
+        return (int)Cache::tags(['order' , 'transaction' , 'orderDebt' , 'order_'.$order->id , 'order_'.$order->id.'_orderDebt' , 'order_'.$order->id.'_transactions'])
             ->remember($key, config("constants.CACHE_60"), function () use ($order) {
                 if ($this->orderstatus_id == config("constants.ORDER_STATUS_REFUNDED")) {
                     return -($this->totalPaidCost() + $this->totalRefund());
@@ -1197,9 +1200,9 @@ class Order extends BaseModel
     public function usedBonSum()
     {
         $order = $this;
-        $key   = "order:usedBonSum:".$order->cacheKey();
+        $key   = 'order:usedBonSum:'.$order->cacheKey();
 
-        return (int)Cache::tags(["order"])
+        return (int)Cache::tags(['order' , 'bon' , 'order_'.$order->id , 'order_'.$order->id.'_usedBon', 'order_'.$order->id.'_bon'])
             ->remember($key, config("constants.CACHE_600"), function () use ($order) {
                 $bonSum = 0;
                 if (isset($this->orderproducts)) {
@@ -1220,9 +1223,9 @@ class Order extends BaseModel
     public function addedBonSum($intendedUser = null)
     {
         $order = $this;
-        $key   = "order:addedBonSum:".$order->cacheKey();
+        $key   = 'order:addedBonSum:'.$order->cacheKey();
 
-        return Cache::tags(["order"])
+        return Cache::tags(['order' , 'bon' , 'order_'.$order->id , 'order_'.$order->id.'_addedBon', 'order_'.$order->id.'_bon'])
             ->remember($key, config("constants.CACHE_600"), function () use ($order , $intendedUser) {
                 /** @var User $user */
                 if (isset($intendedUser)) {
@@ -1248,7 +1251,7 @@ class Order extends BaseModel
 
         $order = $this;
         $key   = "order:user:".$order->cacheKey();
-        return Cache::tags(["order"])
+        return Cache::tags(['order' , 'user' , 'order_'.$order->id , 'order_'.$order->id.'_user'])
             ->remember($key, config("constants.CACHE_600"), function () use ($order) {
                 $visibleColumns = [
                     'id',
@@ -1290,8 +1293,8 @@ class Order extends BaseModel
     public function getJalaliUpdatedAtAttribute()
     {
         $order = $this;
-        $key   = "order:jalaliUpdatedAt:".$order->cacheKey();
-        return Cache::tags(["order"])
+        $key   = 'order:jalaliUpdatedAt:'.$order->cacheKey();
+        return Cache::tags(['order' , 'jalaliUpdatedAt' , 'order_'.$order->id , 'order_'.$order->id.'_jalaliUpdatedAt'])
             ->remember($key, config("constants.CACHE_600"), function () use ($order) {
                 if(isset($order->updated_at))
                     if (hasAuthenticatedUserPermission(config('constants.SHOW_ORDER_ACCESS'))) {
@@ -1307,7 +1310,7 @@ class Order extends BaseModel
     {
         $order = $this;
         $key   = "order:jalaliCreatedAt:".$order->cacheKey();
-        return Cache::tags(["order"])
+        return Cache::tags(['order' , 'jalaliCreatedAt' , 'order_'.$order->id , 'order_'.$order->id.'_jalaliCreatedAt'])
             ->remember($key, config("constants.CACHE_600"), function () use ($order) {
                 if(isset($order->created_at))
                     if (hasAuthenticatedUserPermission(config('constants.SHOW_ORDER_ACCESS'))) {
@@ -1323,7 +1326,7 @@ class Order extends BaseModel
     {
         $order = $this;
         $key   = "order:jalaliCompletedAt:".$order->cacheKey();
-        return Cache::tags(["order"])
+        return Cache::tags(['order' , 'jalaliCompletedAt' , 'order_'.$order->id , 'order_'.$order->id.'_jalaliCompletedAt'])
             ->remember($key, config("constants.CACHE_600"), function () use ($order) {
                 if(isset($order->completed_at))
                     if (hasAuthenticatedUserPermission(config('constants.SHOW_ORDER_ACCESS'))) {
@@ -1351,7 +1354,7 @@ class Order extends BaseModel
     {
         $order = $this;
         $key   = "order:managerComment:".$order->cacheKey();
-        return Cache::tags(["order"])
+        return Cache::tags(['order' , 'managerComment' , 'order_'.$order->id , 'order_'.$order->id.'_managerComment'])
             ->remember($key, config("constants.CACHE_600"), function () use ($order) {
                 if (hasAuthenticatedUserPermission('constants.SHOW_ORDER_ACCESS')) {
                     return $order->ordermanagercomments()

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Classes\TagsGroup;
 use App\Classes\RedisTagging;
 use Illuminate\Http\Response;
 use App\Http\Requests\Request;
@@ -12,10 +13,10 @@ use App\Http\Controllers\Controller;
 class TagController extends Controller
 {
     protected $redis;
-
+    
     public function __construct()
     {
-        $this->redis = RedisTagging::getInstance();
+        $this->redis       = RedisTagging::getInstance();
     }
 
     /**
@@ -164,27 +165,28 @@ class TagController extends Controller
      * "limit":2,
      * "offset":4
      * }
-     * @param  Request  $request
+     * @param Request $request
      * @param           $bucket
      *
      * @return null
      */
     public function index(Request $request, $bucket)
     {
-        $tags       = $request->tags;
-        $tags       = $this->normalizeTags($tags);
-        $tags       = str_replace('"', '', $tags);
-        $tags       = explode(',', mb_substr($tags, 1, -1));
-        $type       = $request->type ?? 'inter';
-        $limit      = $request->limit ?? 100;
-        $offset     = $request->offset ?? 0;
-        $withscores = $request->withscores ?? 0;
-        $order      = $request->order ?? 'desc';
+        $tags           = $request->tags;
+        $tags           = $this->normalizeTags($tags);
+        $tags           = str_replace('"', '', $tags);
+        $tags           = explode(',', mb_substr($tags, 1, -1));
+    
+        $type           = $request->type ?? 'inter';
+        $limit          = $request->limit ?? 100;
+        $offset         = $request->offset ?? 0;
+        $withscores     = $request->withscores ?? 0;
+        $order          = $request->order ?? 'desc';
 
         $response = null;
         $error    = null;
-//                dd($tags);
-        $this->redis->tags($bucket, $tags,
+    
+        $this->redis->tags($bucket, new TagsGroup($tags),
             function ($err, $result) use (& $response, &$error) {
                 if (isset($err)) {
                     $error = [

@@ -583,8 +583,7 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
     {
         $key = 'product:obtainCostInfo:'.$this->cacheKey().'-user:'.(isset($user) ? $user->cacheKey() : '');
 
-        return Cache::tags(['product'])
-            ->tags('bon')
+        return Cache::tags(['product' , 'product_'.$this->id , 'productCost' , 'cost'])
             ->remember($key, config('constants.CACHE_60'), function () use ($user) {
                 $cost = new AlaaProductPriceCalculator($this, $user);
 
@@ -838,9 +837,11 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
         return $this->belongsToMany(Coupon::class);
     }
 
-    public function block()
-    {
-        return $this->belongsTo(Block::class);
+    public function blocks(){
+        return $this->belongsToMany(Block::Class)
+                    ->withPivot('order', 'enable')
+                    ->withTimestamps()
+                    ->orderBy('order');
     }
 
     public function contracts()
@@ -875,7 +876,7 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
     {
         $key = 'product:hasGifts:'.$this->cacheKey();
 
-        return Cache::tags(['product'])
+        return Cache::tags(['product' , 'product_'.$this->id , 'productGift' , 'gift'])
             ->remember($key, config('constants.CACHE_60'), function () {
                 return ($this->gifts->isEmpty() ? false : true);
             });
@@ -891,7 +892,7 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
     {
         $key = 'product:hasValidFiles:'.$fileType.$this->cacheKey();
 
-        return Cache::tags(['product'])
+        return Cache::tags(['product' , 'product_'.$this->id , 'validFiles' , 'file'])
             ->remember($key, config('constants.CACHE_60'), function () use ($fileType) {
                 return !$this->validProductfiles($fileType)
                     ->get()
@@ -948,7 +949,7 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
     {
         $key = 'product:isEnableToPurchase:'.$this->cacheKey();
 
-        return Cache::tags(['product'])
+        return Cache::tags(['product' , 'product_'.$this->id ])
             ->remember($key, config('constants.CACHE_600'), function () {
 
                 //ToDo : should be removed in future
@@ -990,7 +991,7 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
     {
         $key = 'product:hasParents:'.$depth.'-'.$this->cacheKey();
 
-        return Cache::tags(['product'])
+        return Cache::tags(['product' , 'parentProduct' , 'product_'.$this->id , 'product_'.$this->id.'_parents'])
             ->remember($key, config('constants.CACHE_60'), function () use ($depth) {
                 $counter  = 1;
                 $myParent = $this->parents->first();
@@ -1021,7 +1022,7 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
     {
         $key = 'product:GrandParent:'.$this->cacheKey();
 
-        return Cache::tags(['product'])
+        return Cache::tags(['product' , 'parentProduct' , 'productGrandParent' , 'product_'.$this->id , 'product_'.$this->id.'_parents', 'product_'.$this->id.'_grandParents'])
             ->remember($key, config('constants.CACHE_60'), function () {
                 $parentsArray = $this->getAllParents();
                 if ($parentsArray->isEmpty()) {
@@ -1037,7 +1038,7 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
     {
         $key = 'product:GrandParent:'.$this->cacheKey();
 
-        return Cache::tags(['product'])
+        return Cache::tags(['product' , 'parentProduct' , 'productGrandParent' , 'product_'.$this->id , 'product_'.$this->id.'_parents', 'product_'.$this->id.'_grandParents'])
             ->remember($key, config('constants.CACHE_60'), function () {
                 return $this->grand;
             });
@@ -1049,22 +1050,6 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
     public function grand()
     {
         return $this->hasOne(Product::class, 'id', 'grand_id');
-    }
-
-    /**Determines whether this product has any complimentaries or not
-     *
-     * @return bool
-     */
-    public function hasComplimentaries(): bool
-    {
-        $key = 'product:hasComplimentaries:'.$this->cacheKey();
-
-        return Cache::tags(['product'])
-            ->remember($key, config('constants.CACHE_600'), function () {
-                return !$this->complimentaryproducts()
-                    ->get()
-                    ->isEmpty();
-            });
     }
 
     public function complimentaryproducts()
@@ -1184,9 +1169,9 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
 
     public function getGifts(): ProductCollection
     {
-        $key = 'product:getGifts:'.$this->cacheKey();
+        $key = 'product:gifts:'.$this->cacheKey();
 
-        return Cache::tags(['product'])
+        return Cache::tags(['product' , 'gift' , 'product_'.$this->id , 'product_'.$this->id.'_gifts'])
             ->remember($key, config('constants.CACHE_60'), function () {
                 return $this->gifts->merge(optional($this->grandParent)->gift ?? collect());
             });
@@ -1333,7 +1318,7 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
         //ToDo: This method only works fine for depth value 1 . For depth values more than 1 it does not return the correct output
         $key = 'product:hasChildren:'.$depth.$this->cacheKey();
 
-        return Cache::tags(['product'])
+        return Cache::tags(['product' , 'childProduct' , 'product_'.$this->id , 'product_'.$this->id.'_children'])
             ->remember($key, config('constants.CACHE_600'), function () use ($depth) {
                 $counter    = 1;
                 $myChildren = $this->children->first();
@@ -1359,7 +1344,7 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
     {
         $key = 'product:makeProductLink:'.$this->cacheKey();
 
-        return Cache::tags(['product'])
+        return Cache::tags(['product' , 'productLnk' , 'product_'.$this->id , 'product_'.$this->id.'_link'])
             ->remember($key, config('constants.CACHE_60'), function () {
                 $link        = '';
                 $grandParent = $this->grandParent;
@@ -1409,7 +1394,7 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
     {
         $key = 'product:obtainPrice:'.$this->cacheKey();
 
-        return Cache::tags(['product'])
+        return Cache::tags(['product' , 'price' , 'product_'.$this->id , 'product_'.$this->id.'_price'])
             ->remember($key, config('constants.CACHE_10'), function () {
                 if (!$this->isFree()) {
                     if ($this->isRoot()) {
@@ -1506,7 +1491,7 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
     {
         $key = 'product:makeChildrenArray:'.$this->cacheKey();
 
-        return Cache::tags(['product'])
+        return Cache::tags(['product' , 'childProduct' , 'product_'.$this->id , 'product_'.$this->id.'_children'])
             ->remember($key, config('constants.CACHE_600'), function () {
                 $children = collect();
                 if ($this->hasChildren()) {
@@ -1526,7 +1511,7 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
         $myProduct = $this;
         $key       = 'product:getAllParents:'.$myProduct->cacheKey();
 
-        return Cache::tags(['product'])
+        return Cache::tags(['product' , 'parentProduct' , 'product_'.$this->id , 'product_'.$this->id.'_parents'])
             ->remember($key, config('constants.CACHE_600'), function () use ($myProduct) {
                 $parents = collect();
                 while ($myProduct->hasParents()) {
@@ -1573,9 +1558,9 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
      */
     public function getFinalDiscountValue()
     {
-        $key = 'product:getFinalDiscountValue:'.$this->cacheKey();
+            $key = 'product:getFinalDiscountValue:'.$this->cacheKey();
 
-        return Cache::tags(['product'])
+        return Cache::tags(['product' , 'discount' , 'product_'.$this->id , 'product_'.$this->id.'_discount'])
             ->remember($key, config('constants.CACHE_10'), function () {
                 $discount = 0;
                 if (!$this->isRoot()) {
@@ -1609,9 +1594,9 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
      */
     public function obtainDiscountAmount(): int
     {
-        $key = 'product:obtainDiscountAmount:'.$this->cacheKey();
+            $key = 'product:obtainDiscountAmount:'.$this->cacheKey();
 
-        return Cache::tags(['product'])
+        return Cache::tags(['product' , 'discount' , 'product_'.$this->id , 'product_'.$this->id.'_discount'])
             ->remember($key, config('constants.CACHE_10'), function () {
                 $discountAmount = 0;
                 if (!$this->isRoot()) {
@@ -1685,8 +1670,7 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
     public function getSetsAttribute()
     {
         $key = 'product:sets:'.$this->cacheKey();
-
-        return Cache::tags(['product'])
+        return Cache::tags(['product' , 'set' , 'product_'.$this->id , 'product_'.$this->id.'_sets'])
             ->remember($key, config('constants.CACHE_600'), function () {
                 /** @var SetCollection $sets */
                 $sets = $this->sets()
@@ -1723,7 +1707,7 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
     {
         $product = $this;
         $key     = 'product:attributeset:'.$product->cacheKey();
-        return Cache::tags(['product'])
+        return Cache::tags(['product' , 'attributeset' , 'product_'.$this->id , 'product_'.$this->id.'_attributesets'])
             ->remember($key, config('constants.CACHE_600'), function () use ($product) {
                 //ToDo
 //                if (hasAuthenticatedUserPermission(config('constants.SHOW_PRODUCT_ACCESS')))
@@ -1741,7 +1725,7 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
     {
         $product = $this;
         $key     = 'product:jalaliValidSince:'.$product->cacheKey();
-        return Cache::tags(['product'])
+        return Cache::tags(['product' , 'jalaliValidSince' , 'product_'.$this->id , 'product_'.$this->id.'_jalaliValidSince'])
             ->remember($key, config('constants.CACHE_600'), function () use ($product) {
                 if (hasAuthenticatedUserPermission(config('constants.SHOW_PRODUCT_ACCESS'))) {
                     return $this->convertDate($product->validSince, 'toJalali');
@@ -1754,7 +1738,7 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
     {
         $product = $this;
         $key     = 'product:jalaliValidUntil:'.$product->cacheKey();
-        return Cache::tags(['product'])
+        return Cache::tags(['product' , 'jalaliValidUntil' , 'product_'.$this->id , 'product_'.$this->id.'_jalaliValidUntil'])
             ->remember($key, config('constants.CACHE_600'), function () use ($product) {
                 if (hasAuthenticatedUserPermission(config('constants.SHOW_PRODUCT_ACCESS'))) {
                     return $this->convertDate($product->validUntil, 'toJalali');
@@ -1767,7 +1751,7 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
     {
         $product = $this;
         $key     = 'product:jalaliCreatedAt:'.$product->cacheKey();
-        return Cache::tags(['product'])
+        return Cache::tags(['product' , 'jalaliCreatedAt' , 'product_'.$this->id , 'product_'.$this->id.'_jalaliCreatedAt'])
             ->remember($key, config('constants.CACHE_600'), function () use ($product) {
                 if (hasAuthenticatedUserPermission(config('constants.SHOW_PRODUCT_ACCESS'))) {
                     return $this->convertDate($product->created_at, 'toJalali');
@@ -1780,7 +1764,7 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
     {
         $product = $this;
         $key     = 'product:jalaliUpdatedAt:'.$product->cacheKey();
-        return Cache::tags(['product'])
+        return Cache::tags(['product' , 'jalaliUpdatedAt' , 'product_'.$this->id , 'product_'.$this->id.'_jalaliUpdatedAt'])
             ->remember($key, config('constants.CACHE_600'), function () use ($product) {
                 return $this->convertDate($product->updated_at, 'toJalali');
             });
@@ -1827,7 +1811,7 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
     {
         $product = $this;
         $key     = 'product:children:'.$product->cacheKey();
-        return Cache::tags(['product'])
+        return Cache::tags(['product' , 'childProduct' , 'product_'.$this->id , 'product_'.$this->id.'_children'])
             ->remember($key, config('constants.CACHE_600'), function () use ($product) {
                 return $this->children()
                     ->get();

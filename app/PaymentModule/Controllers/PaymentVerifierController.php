@@ -28,13 +28,6 @@ class PaymentVerifierController extends Controller
      */
     public function verify(string $paymentMethod, string $device)
     {
-        Cache::tags('bon')
-            ->flush();
-        Cache::tags('order')
-            ->flush();
-        Cache::tags('orderproduct')
-            ->flush();
-
         $paymentClient = PaymentDriver::select($paymentMethod);
         $authority     = $paymentClient->getAuthorityValue();
 

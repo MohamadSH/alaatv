@@ -82,14 +82,14 @@ class Slideshow extends BaseModel
     public static function getMainBanner(): Collection
     {
         return Cache::tags([
+            'home',
             'banner',
             'page',
-        ])
-            ->remember('getMainBanner', config('constants.CACHE_600'), function () {
-    
+        ])->remember('getMainBanner', config('constants.CACHE_600'), function () {
+
                 $page = Websitepage::where('url', "/home")
                     ->first();
-                
+
                 return !isset($page) ? collect() : $page
                         ->slides()
                         ->where("isEnable", 1)
@@ -101,12 +101,14 @@ class Slideshow extends BaseModel
     public static function getShopBanner()
     {
         return Cache::tags([
+            'shop',
             'banner',
             'page',
-        ])
-            ->remember('getShopBanner', config('constants.CACHE_600'), function () {
-                return Websitepage::where('url', "/shop")
-                    ->first()
+        ])->remember('getShopBanner', config('constants.CACHE_600'), function () {
+
+                $page = Websitepage::where('url', "/shop")
+                    ->first();
+                return !isset($page) ? collect() : $page
                     ->slides()
                     ->where("isEnable", 1)
                     ->orderBy("order")

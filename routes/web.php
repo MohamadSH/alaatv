@@ -2,8 +2,11 @@
 
 
 use App\Http\Controllers\Web\BotsController;
+use App\Http\Controllers\Web\FavorableController;
 use App\Http\Controllers\Web\HomeController;
+use App\Http\Controllers\Web\LandingPageController;
 use App\Http\Controllers\Web\LiveController;
+use App\Http\Controllers\Web\SanatisharifmergeController;
 use App\Http\Controllers\Web\SectionController;
 use App\Http\Controllers\Web\SetController;
 use App\Http\Controllers\Web\UserController;
@@ -48,16 +51,17 @@ Route::get('debug', 'Web\HomeController@debug');
 Route::post('sendMail', [HomeController::class , 'sendMail']);
 Route::get('product/search', 'Web\ProductController@search');
 Route::get('showPartial/{product}', 'Web\ProductController@showPartial');
-Route::get('Sanati-Sharif-Lesson/{lId?}/{dId?}', 'Web\SanatisharifmergeController@redirectLesson');
-Route::get('sanati-sharif-lesson/{lId?}/{dId?}', 'Web\SanatisharifmergeController@redirectLesson');
-Route::get('Sanati-Sharif-Video/{lId?}/{dId?}/{vId?}', 'Web\SanatisharifmergeController@redirectVideo');
-Route::get('sanati-sharif-video/{lId?}/{dId?}/{vId?}', 'Web\SanatisharifmergeController@redirectVideo');
-Route::get('SanatiSharif-Video/{lId?}/{dId?}/{vId?}', 'Web\SanatisharifmergeController@redirectEmbedVideo');
-Route::get('sanatisharif-video/{lId?}/{dId?}/{vId?}', 'Web\SanatisharifmergeController@redirectEmbedVideo');
-Route::get('Sanati-Sharif-Pamphlet/{lId?}/{dId?}/{pId?}', 'Web\SanatisharifmergeController@redirectPamphlet');
-Route::get('sanati-sharif-pamphlet/{lId?}/{dId?}/{pId?}', 'Web\SanatisharifmergeController@redirectPamphlet');
+Route::get('Sanati-Sharif-Lesson/{lId?}/{dId?}', [SanatisharifmergeController::class , 'redirectLesson']);
+Route::get('sanati-sharif-lesson/{lId?}/{dId?}', [SanatisharifmergeController::class , 'redirectLesson']);
+Route::get('course.{lId?}.{dId?}.video', [SanatisharifmergeController::class , 'redirectLesson']);
+Route::get('Sanati-Sharif-Video/{lId?}/{dId?}/{vId?}', [SanatisharifmergeController::class , 'redirectVideo']);
+Route::get('sanati-sharif-video/{lId?}/{dId?}/{vId?}', [SanatisharifmergeController::class , 'redirectVideo']);
+Route::get('SanatiSharif-Video/{lId?}/{dId?}/{vId?}', [SanatisharifmergeController::class , 'redirectEmbedVideo']);
+Route::get('sanatisharif-video/{lId?}/{dId?}/{vId?}', [SanatisharifmergeController::class , 'redirectEmbedVideo']);
+Route::get('Sanati-Sharif-Pamphlet/{lId?}/{dId?}/{pId?}', [SanatisharifmergeController::class , 'redirectPamphlet']);
+Route::get('sanati-sharif-pamphlet/{lId?}/{dId?}/{pId?}', [SanatisharifmergeController::class , 'redirectPamphlet']);
 Route::get('SanatiSharif-News', 'Web\HomeController@home');
-Route::get('Alaa-App/{mod?}', 'Web\SanatisharifmergeController@AlaaApp');
+Route::get('Alaa-App/{mod?}', [SanatisharifmergeController::class , 'AlaaApp']);
 Route::get('image/{category}/{w}/{h}/{filename}', [
     'as'   => 'image',
     'uses' => 'Web\HomeController@getImage',
@@ -92,16 +96,18 @@ Route::group(['prefix' => 'checkout'], function () {
 });
 
 Route::group(['prefix' => 'landing'], function () {
-    Route::get('1' , [ProductLandingController::class, 'landing1'])->name('landing.1');
-    Route::get('2' , [ProductLandingController::class, 'landing2'])->name('landing.2');
-    Route::get('3' , [ProductLandingController::class, 'landing3'])->name('landing.3');
-    Route::get('4' , [ProductLandingController::class, 'landing4'])->name('landing.4');
-    Route::get('5' , [ProductLandingController::class, 'landing5'])->name('landing.5');
-    Route::get('6' , [ProductLandingController::class, 'landing6'])->name('landing.6');
-    Route::get('7' , [ProductLandingController::class, 'landing7'])->name('landing.7');
-    Route::get('8' , [ProductLandingController::class, 'landing8'])->name('landing.8');
-    Route::get('9' , [ProductLandingController::class, 'landing9'])->name('landing.9');
-    Route::get('10', [ProductLandingController::class, 'landing10'])->name('landing.10');
+    Route::get('1' , [ProductLandingController::class, 'landing1'])->name('web.landing.1');
+    Route::get('2' , [ProductLandingController::class, 'landing2'])->name('web.landing.2');
+    Route::get('3' , [ProductLandingController::class, 'landing3'])->name('web.landing.3');
+    Route::get('4' , [ProductLandingController::class, 'landing4'])->name('web.landing.4');
+    Route::get('5' , [ProductLandingController::class, 'landing5'])->name('web.landing.5');
+    Route::get('6' , [ProductLandingController::class, 'landing6'])->name('web.landing.6');
+    Route::get('7' , [ProductLandingController::class, 'landing7'])->name('web.landing.7');
+    Route::get('8' , [ProductLandingController::class, 'landing8'])->name('web.landing.8');
+    Route::get('9' , [ProductLandingController::class, 'landing9'])->name('web.landing.9');
+    Route::get('10', [ProductLandingController::class, 'landing10'])->name('web.landing.10');
+    Route::get('13Aban', [LandingPageController::class, 'roozeDaneshAmooz'])->name('web.landing.13Aban');
+    Route::get('13aban', [LandingPageController::class, 'roozeDaneshAmooz2'])->name('web.landing.13aban');
 });
 
 Route::group(['middleware' => 'auth'], function () {
@@ -192,6 +198,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('orders', [UserController::class, 'userOrders']);
         Route::get('question', [UserController::class, 'userQuestions']);
         Route::post('sendSMS', [UserController::class, 'sendSMS']);
+        Route::post('update/partialInfo', [UserController::class , 'partialUpdate'])->name('web.user.update.partial');
     });
     Route::group(['prefix' => 'order'], function () {
         Route::post('detachorderproduct', 'Web\OrderController@detachOrderproduct');
@@ -255,27 +262,32 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::get('copylessonfromremote', 'Web\RemoteDataCopyController@copyLesson');
     Route::get('copydepartmentfromremote', 'Web\RemoteDataCopyController@copyDepartment');
-    Route::get('copydepartmentlessonfromremote', 'Web\RemoteDataCopyController@copyDepartmentlesson');
+    Route::get('copydepartmentlessonfromremote', [SanatisharifmergeController::class , 'copyDepartmentlesson']);
     Route::get('copyvideofromremote', 'Web\RemoteDataCopyController@copyVideo');
     Route::get('copypamphletfromremote', 'Web\RemoteDataCopyController@copyPamphlet');
     Route::get('copydepartmentlessontotakhtekhak', 'Web\SanatisharifmergeController@copyDepartmentlesson');
-    Route::get('copycontenttotakhtekhak', 'Web\SanatisharifmergeController@copyContent');
+    Route::get('copycontenttotakhtekhak', [SanatisharifmergeController::class , 'copyContent']);
     Route::get('tagbot', 'Web\BotsController@tagbot');
 
     Route::get('donate', 'Web\DonateController');
     Route::post('donateOrder', 'Web\OrderController@donateOrder');
 
-    Route::get('listContents/{set}', [SetController::class, 'indexContent'])->name('web.set.list.contents');
+    Route::get('listPendingDescriptionContents', [ContentController::class, 'indexPendingDescriptionContent'])->name('web.c.list.pending.description.content');
 
     Route::get('live' , '\\'.LiveController::class)->name('live');
     Route::post('startlive' , [LiveController::class, 'startLive'])->name('web.start.live');
     Route::post('endlive'   , [LiveController::class, 'endLive'])->name('web.end.live');
 
-    Route::post('updateSet/{c}' , [ContentController::class, 'updateSet'])->name('c.updateSet');
     Route::get('atest' , [HomeController::class, 'adTest']);
     Route::get('block/detach/{block}/{type}/{id}', 'Web\BlockController@detachFromBlock');
     Route::get('serpSim' , [AdminController::class, 'serpSim'] );
     Route::get('process_serpsim' , [AdminController::class, 'processSerpsim'] );
+});
+
+Route::group(['prefix' => 'set'], function () {
+    Route::get('{set}/listContents', [SetController::class, 'indexContent'])->name('web.set.list.contents');
+    Route::get('{set}/favored', [FavorableController::class, 'getUsersThatFavoredThisFavorable']);
+    Route::post('{set}/favored', [FavorableController::class, 'markFavorableFavorite']);
 });
 
 Route::group(['prefix' => 'c'], function () {
@@ -285,8 +297,10 @@ Route::group(['prefix' => 'c'], function () {
     Route::get('createArticle',         [ContentController::class, 'createArticle'])->name('c.create.article');
     Route::post('updateTmpDescription',  [ContentController::class, 'createArticle'])->name('c.update.pending.description');
 
-    Route::get('{c}/favored', 'Web\FavorableController@getUsersThatFavoredThisFavorable');
-    Route::post('{c}/favored', 'Web\FavorableController@markFavorableFavorite');
+    Route::get('{c}/favored', [FavorableController::class, 'getUsersThatFavoredThisFavorable']);
+    Route::post('{c}/favored', [FavorableController::class, 'markFavorableFavorite']);
+
+    Route::post('{c}/updateSet' , [ContentController::class, 'updateSet'])->name('c.updateSet');
 
     Route::group(['prefix' => '{c}/attach'], function () {
         Route::post('set/{set}', 'Web\ContentController@attachContentToContentSet');
@@ -295,8 +309,8 @@ Route::group(['prefix' => 'c'], function () {
 });
 
 Route::group(['prefix' => 'product'], function () {
-    Route::get('{product}/favored', 'Web\FavorableController@getUsersThatFavoredThisFavorable');
-    Route::post('{product}/favored', 'Web\FavorableController@markFavorableFavorite');
+    Route::get('{product}/favored', [FavorableController::class, 'getUsersThatFavoredThisFavorable']);
+    Route::post('{product}/favored', [FavorableController::class, 'markFavorableFavorite']);
 });
 
 Route::resource('product', 'Web\ProductController');

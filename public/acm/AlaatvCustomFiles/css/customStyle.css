@@ -386,6 +386,9 @@
     min-width: 35px;
 }
 
+.m-nav .m-nav__item > .m-nav__link .m-nav__link-icon.nav__link-icon-livePage {
+    width: 25px;
+}
 /*media query*/
 @media only screen and (max-width: 1024px) {
     .m-header-menu .m-menu__nav > .m-menu__item .m-menu__submenu > .m-menu__subnav > .m-menu__item {

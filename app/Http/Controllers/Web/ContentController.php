@@ -191,6 +191,7 @@ class ContentController extends Controller
 
     public function show(Request $request, Content $content, RelatedProductSearch $relatedProductSearch)
     {
+        $user = $request->user();
         if (isset($content->redirectUrl)) {
             return redirect($content->redirectUrl, Response::HTTP_FOUND, $request->headers->all());
         }
@@ -229,7 +230,7 @@ class ContentController extends Controller
 
         $seenCount = $content->pageView;
 
-        $userCanSeeCounter = optional(auth()->user())->CanSeeCounter();
+        $userCanSeeCounter = optional($user)->CanSeeCounter();
         $apiResponse       = response()->json($content, Response::HTTP_OK);
 
         $key = 'relatedProduct:content:'.$content->cacheKey();
@@ -248,11 +249,14 @@ class ContentController extends Controller
 
         $contentBlocks = Block::getContentBlocks();
 
+//        $isFavored = optional(optional(optional(optional($user)->favoredContents())->where('id' , $content->id))->get())->isNotEmpty();
+        $isFavored = null;
+
         $viewResponse      = view('content.show',
             compact('seenCount', 'author', 'content', 'contentsWithSameSet', 'videosWithSameSet',
                 'pamphletsWithSameSet', 'contentSetName', 'tags',
                 'userCanSeeCounter', 'adItems', 'videosWithSameSetL', 'videosWithSameSetR',
-                'productsThatHaveThisContent', 'user_can_see_content', 'message', 'productsHasThisContentThroughBlockCollection' , 'contentBlocks'));
+                'productsThatHaveThisContent', 'user_can_see_content', 'message', 'productsHasThisContentThroughBlockCollection' , 'contentBlocks' , 'isFavored'));
 
         return httpResponse($apiResponse, $viewResponse);
     }
@@ -271,11 +275,6 @@ class ContentController extends Controller
         $result = compact('content', 'validSinceTime', 'tags', 'contentset' , 'contenttypes' , 'sections' );
         $view = view('content.edit', $result);
         return httpResponse(null, $view);
-    }
-
-    public function editDescription(Content $content)
-    {
-        return view('content.editDescription' , compact('content'));
     }
 
     /**
@@ -464,11 +463,16 @@ class ContentController extends Controller
         if(!empty($files)) {
             $this->makeFilesCollection($content, $files);
         }
+        Cache::tags(['content_'.$content->id ,
+                    'set_'.$newContetnsetId ,
+                    'set_'.$content->contentset_id ,])->flush();
         $content->contentset_id = $contentsetId;
-        $content->update();
+        if($content->update()){
+            session()->flash('success', 'تغییر نام با موفقیت انجام شد');
+        }else{
+            session()->flash('error', 'خطا در اصلاح ست');
+        }
 
-        Cache::tags('content')->flush();
-        session()->flash('success', 'تغییر نام با موفقیت انجام شد');
         return redirect()->back();
     }
 
@@ -590,7 +594,10 @@ class ContentController extends Controller
     private function getContentInformation(Content $content): array
     {
         $key = 'getContentInformation: '.$content->id;
-        return Cache::tags('set')
+        $cacheTags = [ 'content' , 'content_'.$content->id] ;
+        $cacheTags = (isset($content->contentset_id))?  array_merge($cacheTags , ['set_'.$content->contentset_id ]):$cacheTags;
+        $cacheTags = (isset($content->author_id))?  array_merge($cacheTags , ['user_'.$content->author_id ]):$cacheTags;
+        return Cache::tags($cacheTags)
             ->remember($key, config('constants.CACHE_600'), function () use ($content) {
                 $author = $content->authorName;
 

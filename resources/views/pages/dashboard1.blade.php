@@ -9,7 +9,7 @@
 @endsection
 
 @section('content')
-    
+
     @include('partials.slideShow1' ,['marginBottom'=>'25', 'positionOfSlideShow'=>'صفحه اصلی'])
 
     <div class="m--clearfix"></div>
@@ -76,7 +76,7 @@
                 <div class="m-portlet__body  m-portlet__body--no-padding homePageNavigation-row">
                     <div class="row m-row--no-padding m-row--col-separator-xl shopNavItems">
                         <div class="col-12 col-md-6 m--bg-info shopNavItem">
-                            <a target="_self" href="{{ route('landing.5') }}">
+                            <a target="_self" href="{{ route('web.landing.5') }}">
                                 <!--begin::Total Profit-->
                                 <div class="m-widget24 m--align-center">
                                     <div class="m-widget24__item">
@@ -89,7 +89,7 @@
                             </a>
                         </div>
                         <div class="col-12 col-md-6 m--bg-accent shopNavItem">
-                            <a target="_self" href="{{ route('landing.8') }}">
+                            <a target="_self" href="{{ route('web.landing.8') }}">
                                 <!--begin::Total Profit-->
                                 <div class="m-widget24 m--align-center">
                                     <div class="m-widget24__item">
@@ -107,13 +107,12 @@
             <!--end:: Widgets/Stats-->
         </div>
     </div>
-    
-    
+
     @foreach($blocks as $block)
         @if($block->class === 'konkoor1')
 {{--            <div class="row">--}}
 {{--                <div class="col-12 col-md-6 text-center m--margin-bottom-5">--}}
-{{--                    <a href="{{ route('landing.5') }}"--}}
+{{--                    <a href="{{ route('web.landing.5') }}"--}}
 {{--                       class="a--gtm-eec-advertisement a--gtm-eec-advertisement-click"--}}
 {{--                       data-gtm-eec-promotion-id="homepage-downloadi1"--}}
 {{--                       data-gtm-eec-promotion-name="همایش های دانلودی آلاء"--}}
@@ -123,7 +122,7 @@
 {{--                    </a>--}}
 {{--                </div>--}}
 {{--                <div class="col-12 col-md-6 text-center m--margin-bottom-5">--}}
-{{--                    <a href="{{ route('landing.8') }}"--}}
+{{--                    <a href="{{ route('web.landing.8') }}"--}}
 {{--                       class="a--gtm-eec-advertisement a--gtm-eec-advertisement-click"--}}
 {{--                       data-gtm-eec-promotion-id="homepage-ghorekeshi1"--}}
 {{--                       data-gtm-eec-promotion-name="قرعه کشی گوشی"--}}
@@ -136,7 +135,7 @@
         @elseif($block->class === 'dahom')
 {{--            <div class="row">--}}
 {{--                <div class="col-12 col-md-6 text-center m--margin-bottom-5">--}}
-{{--                    <a href="{{ route('landing.8') }}"--}}
+{{--                    <a href="{{ route('web.landing.8') }}"--}}
 {{--                       class="a--gtm-eec-advertisement a--gtm-eec-advertisement-click"--}}
 {{--                       data-gtm-eec-promotion-id="homepage-ghorekeshi1"--}}
 {{--                       data-gtm-eec-promotion-name="قرعه کشی گوشی"--}}
@@ -146,7 +145,7 @@
 {{--                    </a>--}}
 {{--                </div>--}}
 {{--                <div class="col-12 col-md-6 text-center m--margin-bottom-5">--}}
-{{--                    <a href="{{ route('landing.5') }}"--}}
+{{--                    <a href="{{ route('web.landing.5') }}"--}}
 {{--                       class="a--gtm-eec-advertisement a--gtm-eec-advertisement-click"--}}
 {{--                       data-gtm-eec-promotion-id="homepage-downloadi1"--}}
 {{--                       data-gtm-eec-promotion-name="همایش های دانلودی آلاء"--}}
@@ -169,7 +168,7 @@
     @endforeach
 {{--    <div class="row">--}}
 {{--        <div class="col text-center m--margin-bottom-5">--}}
-{{--            <a href="{{ route('landing.8') }}"--}}
+{{--            <a href="{{ route('web.landing.8') }}"--}}
 {{--               class="a--gtm-eec-advertisement a--gtm-eec-advertisement-click"--}}
 {{--               data-gtm-eec-promotion-id="homepage-ghorekeshi2"--}}
 {{--               data-gtm-eec-promotion-name="قرعه کشی گوشی"--}}
@@ -179,9 +178,9 @@
 {{--            </a>--}}
 {{--        </div>--}}
 {{--    </div>--}}
-    
+
     @include('partials.certificates')
-    
+
 @endsection
 
 @section('page-js')

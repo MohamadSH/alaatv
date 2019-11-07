@@ -3859,15 +3859,16 @@ class SanatisharifmergeController extends Controller
 
     public function redirectLesson(Request $request, $lId = null, $dId = null)
     {
-        $tag    = $this->getDepLessonTags($lId, $dId);
-        $newUri = urldecode(action("Web\ContentController@index", ["tags" => $tag]));
         $isApp  = (strlen(strstr($request->header('User-Agent'), "Alaa")) > 0) ? true : false;
-        $app    = null;
         if ($isApp) {
+            $tag    = $this->getDepLessonTags($lId, $dId);
+            $newUri = urldecode(action("Web\ContentController@index", ["tags" => $tag]));
             $app = "&contentType[]=video";
+            return redirect($newUri.$app, Response::HTTP_MOVED_PERMANENTLY);
         }
 
-        return redirect($newUri.$app, 301);
+        $setId  = Sanatisharifmerge::where('lessonid', $lId)->where('depid' , $dId)->first()->departmentlessonid;
+        return redirect(route('set.show' , $setId) , Response::HTTP_MOVED_PERMANENTLY);
     }
 
     private function getDepLessonTags($lId = null, $dId = null)
@@ -3916,11 +3917,10 @@ class SanatisharifmergeController extends Controller
         $key    = "Url:".$lId."-".$dId."-".$vId;
         $newUri = Cache::rememberForever($key, function () use ($lId, $dId, $vId, $request) {
             if (isset($vId)) {
-                $v = Sanatisharifmerge::where('videoid', '=', $vId)
-                    ->first();
+                $v = Sanatisharifmerge::where('videoid', '=', $vId)->first();
                 if (isset($v)) {
-                    if (isset($v->content)) {
-                        return action('Web\ContentController@show', $v->content);
+                    if (isset($v->educationalcontent_id)) {
+                        return action('Web\ContentController@show', $v->educationalcontent_id);
                     }
                 }
             }
@@ -3936,7 +3936,7 @@ class SanatisharifmergeController extends Controller
         $newUri .= $app;
         $newUri = urldecode($newUri);
 
-        return redirect($newUri, 301);
+        return redirect($newUri, Response::HTTP_MOVED_PERMANENTLY);
     }
 
     public function redirectEmbedVideo(Request $request, $lId = null, $dId = null, $vId = null)

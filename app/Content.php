@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Traits\DateTrait;
 use Eloquent;
 use Exception;
 use Carbon\Carbon;
@@ -135,6 +136,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property mixed                      section_id
  * @property mixed                      section
  * @property mixed                      tmp_description
+ * @property mixed authorName
  * @method static Builder|Content free()
  * @method static Builder|Content type($type)
  */
@@ -150,6 +152,7 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
     use favorableTraits;
     use ModelTrackerTrait;
     use TaggableContentTrait;
+    use DateTrait;
     /*
     |--------------------------------------------------------------------------
     | Properties
@@ -500,9 +503,9 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
 
     public function getPreviousContent()
     {
-        $key = 'Content:previousContent'.$this->cacheKey();
+        $key = 'content:previousContent'.$this->cacheKey();
 
-        return Cache::tags('content')
+        return Cache::tags(['content' , 'previousContent' , 'content_'.$this->id , 'content_previousContent_'.$this->id])
             ->remember($key, config('constants.CACHE_600'), function () {
                 $previousContentOrder = $this->order - 1;
                 $set                  = $this->set;
@@ -524,9 +527,9 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
 
     public function getNextContent()
     {
-        $key = 'Content:nextContent'.$this->cacheKey();
+        $key = 'content:nextContent'.$this->cacheKey();
 
-        return Cache::tags('content')
+        return Cache::tags(['content' , 'nextContent' , 'content_'.$this->id , 'content_'.$this->id.'_nextContent'])
             ->remember($key, config('constants.CACHE_600'), function () {
                 $nextContentOrder = $this->order + 1;
                 $set              = $this->set;
@@ -646,9 +649,9 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
      */
     public function getFileAttribute($value): ?Collection
     {
-        $key = 'Content:File'.$this->cacheKey();
+        $key = 'content:File'.$this->cacheKey();
 
-        return Cache::tags('content')
+        return Cache::tags(['content' , 'file' , 'content_'.$this->id , 'content_'.$this->id.'_file'])
             ->remember($key, config('constants.CACHE_60'), function () use ($value) {
                 $fileCollection = collect(json_decode($value));
                 $fileCollection->transform(function ($item, $key) {
@@ -734,7 +737,7 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
         $content = $this;
         $key     = 'content:author'.$content->cacheKey();
 
-        return Cache::tags(['user'])
+        return Cache::tags(['content' , 'author' , 'content_'.$content->id , 'content_'.$content->id.'_author'])
             ->remember($key, config('constants.CACHE_600'), function () use ($content) {
 
                 $visibleArray = [
@@ -813,7 +816,7 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
     public function getSetName()
     {
         $key = 'content:getSetName:'.$this->cacheKey();
-        return Cache::tags(['content'])
+        return Cache::tags(['content' , 'content_'.$this->id , 'content_'.$this->id.'setName'])
             ->remember($key, config('constants.CACHE_60'), function () {
                 $contentSet = $this->set;
                 return isset($contentSet) ? $contentSet->name : null;
@@ -832,7 +835,7 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
         $content = $this;
         $key     = 'content:setMates:'.$this->cacheKey();
 
-        $setMates = Cache::tags(['content'])
+        $setMates = Cache::tags(['content' , 'setMate' , 'content_'.$this->id , 'content_'.$this->id.'_setMates'])
             ->remember($key, config('constants.CACHE_60'), function () use ($content) {
                 $contentSet     = $content->set;
                 $contentSetName = $content->getSetName();
@@ -894,7 +897,7 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
         $content = $this;
         $key     = 'content:getAddItems'.$content->cacheKey();
 
-        $adItems = Cache::tags(['content'])
+        $adItems = Cache::tags(['content' , 'adItem' , 'content_'.$content->id , 'content_'.$content->id.'_adItem'])
             ->remember($key, config('constants.CACHE_60'), function () use ($content) {
                 $adItems = collect();
                 $set     = $content->set ?: new Contentset();
@@ -1021,8 +1024,9 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
      */
     public function activeProducts(): ProductCollection
     {
-        return Cache::tags(['content', 'product'])
-            ->remember('products-of-content:'.$this->id, config('constants.CACHE_60'), function () {
+        $key = 'content:activeProducts:'.$this->cacheKey();
+        return Cache::tags(['content', 'product' , 'content_'.$this->id , 'content_'.$this->id.'_activeProducts'])
+            ->remember($key, config('constants.CACHE_60'), function () {
                 return $this->set->getProducts()
                     ->makeHidden([
                         'shortDescription',
@@ -1053,8 +1057,9 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
      */
     public function allProducts(): ProductCollection
     {
-        return Cache::tags(['content', 'product'])
-            ->remember('all-of-products-of-content:'.$this->id, config('constants.CACHE_60'), function () {
+        $key = 'content:products:'.$this->cacheKey();
+        return Cache::tags(['content', 'product' , 'content_'.$this->id , 'content_'.$this->id.'_products'])
+            ->remember($key, config('constants.CACHE_60'), function () {
                 return $this->set->getProducts(false)
                     ->makeHidden([
                         'shortDescription',
@@ -1072,7 +1077,6 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
                         'children',
                         'updated_at',
                         'amount',
-
                     ]);
             });
 

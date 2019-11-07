@@ -161,15 +161,9 @@ class ProductController extends Controller
 
     public function show(Request $request, Product $product)
     {
-        //$user = $request->user();
-        $user = null;
-         if ($user) {
-             $purchasedProductIdArray = $this->searchInUserAssetsCollection($product, $user);
-             $allChildIsPurchased = $this->allChildIsPurchased($product, $purchasedProductIdArray);
-         } else {
-             $purchasedProductIdArray = [];
-             $allChildIsPurchased = false;
-         }
+        $user = $request->user();
+        $purchasedProductIdArray = [];
+        $allChildIsPurchased = false;
 
         if (isset($product->redirectUrl)) {
             return redirect($product->redirectUrl, Response::HTTP_FOUND, $request->headers->all());
@@ -185,7 +179,7 @@ class ProductController extends Controller
             return response()->json($product);
         }
 
-        $block = optional($product)->block;
+        $block = optional($product)->blocks->first();
 
         $liveDescriptions = $product->livedescriptions->sortByDesc('created_at');
 
@@ -194,7 +188,10 @@ class ProductController extends Controller
             $children = $product->children()->enable()->get();
         }
 
-        return view('product.show', compact('product', 'block', 'purchasedProductIdArray', 'allChildIsPurchased' , 'liveDescriptions' , 'children'));
+//        $isFavored = optional(optional(optional(optional($user)->favoredProducts())->where('id' , $product->id))->get())->isNotEmpty();
+        $isFavored = null;
+
+        return view('product.show', compact('product', 'block', 'purchasedProductIdArray', 'allChildIsPurchased' , 'liveDescriptions' , 'children' , 'isFavored'));
     }
 
     public function edit(Product $product)
@@ -245,14 +242,13 @@ class ProductController extends Controller
         $tags = implode(',', isset($tags) ? $tags : []);
 
 
-        $liveDescriptions = collect();
-        if($product->id == 347){
-            $liveDescriptions = $product->livedescriptions->sortByDesc('created_at');
-        }
+        $liveDescriptions = $product->livedescriptions->sortByDesc('created_at');
+        $blocks = optional($product)->blocks;
+
 
         return view('product.edit',
             compact('product', 'amountLimit', 'defaultAmountLimit', 'enableStatus', 'defaultEnableStatus',
-                'attributesets', 'bons', 'productFiles',
+                'attributesets', 'bons', 'productFiles', 'blocks' ,
                 'productFileTypes', 'defaultProductFileOrders', 'products', 'producttype', 'productPhotos',
                 'defaultProductPhotoOrder', 'tags' , 'liveDescriptions'));
     }

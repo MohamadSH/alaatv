@@ -6,6 +6,9 @@ use App\Traits\DateTrait;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+/**
+ * @property mixed id
+ */
 class LiveDescription extends Model
 {
     use SoftDeletes , DateTrait;
