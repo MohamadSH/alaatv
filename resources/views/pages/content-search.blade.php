@@ -38,7 +38,7 @@
         </div>
     </div>
     
-    <div class="row">
+    <div class="row SearchColumnsWrapper">
         <div class="SearchBoxFilterColumn filterStatus-close">
             <div class="SearchBoxFilterColumn-tools">
                 <button class="btn btn-outline-danger m-btn m-btn--icon btn-lg m-btn--icon-only m-btn--pill m-btn--air m-btn--outline-2x btnHideSearchBoxInMobileView">

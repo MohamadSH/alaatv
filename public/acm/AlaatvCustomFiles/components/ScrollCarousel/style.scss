@@ -251,6 +251,10 @@
         }
         .a--block-set-count-icon {
           color: white;
+          svg {
+            width: 25px;
+            fill: white;
+          }
         }
       }
       .a--block-set-author-pic {

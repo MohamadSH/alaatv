@@ -26,7 +26,7 @@
       .content {
         position: relative;
         z-index: 3;
-        padding: 15px 5px;
+        padding: 15px 10px;
         width: 75%;
         display: flex;
         align-items: stretch;
@@ -36,7 +36,9 @@
           z-index: 2;
           position: relative;
           h2 {
-            font-size: 1.5rem;
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 15px;
           }
         }
         .detailes {

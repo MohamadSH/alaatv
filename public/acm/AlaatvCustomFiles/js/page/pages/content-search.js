@@ -132,7 +132,9 @@ var Alaasearch = function () {
             '                <span class="a--block-set-count-title">محتوا</span>\n' +
             '                <br>\n' +
             '                <a href="'+widgetLink+'" class="a--block-set-count-icon">\n' +
-            '                    <i class="fa fa-bars"></i>\n' +
+            '                    <svg viewBox="0 0 24 24" preserveAspectRatio="xMidYMid meet" focusable="false" class="style-scope yt-icon" <g="" style="width: 25px;fill: white;">\n' +
+            '        <path d="M3.67 8.67h14V11h-14V8.67zm0-4.67h14v2.33h-14V4zm0 9.33H13v2.34H3.67v-2.34zm11.66 0v7l5.84-3.5-5.84-3.5z" class="style-scope yt-icon" style="color: hsla(0, 0%, 100%, 0.8);/*! fill: red; */"></path>\n' +
+            '      </svg>\n' +
             '                </a>\n' +
             '            </div>\n' +
             '            \n' +
@@ -303,17 +305,21 @@ var Alaasearch = function () {
             videoOrder = data.order,
             setName = (typeof data.set !== 'undefined') ? data.set.name : '-',
             setUrl = (typeof data.set !== 'undefined') ? data.set.contentUrl : '-',
-            videoOrderHtml = '<div class="videoOrder"><div class="videoOrder-title">جلسه</div><div class="videoOrder-number">'+videoOrder+'</div></div>',
+            videoOrderHtml = '<div class="videoOrder"><div class="videoOrder-title">جلسه</div><div class="videoOrder-number">'+videoOrder+'</div><div class="videoOrder-om"> اُم </div></div>',
             widgetDetailes = '' +
-                videoOrderHtml +
-                '<div>' +
+                '<div class="videoDescription">'+truncatise(description.replace(/<a .*>.*<\/a>/i, ''), options)+'</div>' +
+                '<div class="videoDetaileWrapper">' +
+                '   <span><svg viewBox="0 0 24 24" preserveAspectRatio="xMidYMid meet" focusable="false" class="style-scope yt-icon" <g class="style-scope yt-icon">\n' +
+                '        <path d="M3.67 8.67h14V11h-14V8.67zm0-4.67h14v2.33h-14V4zm0 9.33H13v2.34H3.67v-2.34zm11.66 0v7l5.84-3.5-5.84-3.5z" class="style-scope yt-icon"></path>\n' +
+                '      </g></svg></span>' +
                 '   <span> از دوره </span>' +
                 '   <span>'+setName+'</span>' +
                 '   <br>' +
-                '   <span>تاریخ انتشار: </span>' +
-                '   <span>'+new persianDate(new Date(data.updated_at)).format('LLLL')+'</span>' +
-                '</div>' +
-                '<div class="videoDescription m--margin-top-10">'+truncatise(description.replace(/<a .*>.*<\/a>/i, ''), options)+'</div>';
+                '   <i class="fa fa-calendar-alt m--margin-right-5"></i>' +
+                '   <span>تاریخ بروزرسانی: </span>' +
+                '   <span>'+new persianDate(new Date(data.updated_at)).format('YYYY/MM/DD HH:mm:ss')+'</span>' +
+                    videoOrderHtml +
+                '</div>';
 
         var itemData = {
             class: '',
