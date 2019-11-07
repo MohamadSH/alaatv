@@ -64,7 +64,7 @@ var contentSearchFilterData = {
             {
                 "lastName": "حسین خانی",
                 "firstName": "میثم",
-                "value": "میثم__حسین_خانی"
+                "value": "میثم_حسین_خانی"
             },
             {
                 "lastName": "شامیزاده",
@@ -771,7 +771,7 @@ var contentSearchFilterData = {
             {
                 "lastName": "خانی حسین",
                 "firstName": "میثم",
-                "value": "میثم__حسین_خانی"
+                "value": "میثم_حسین_خانی"
             },
             {
                 "lastName": "راوش",
