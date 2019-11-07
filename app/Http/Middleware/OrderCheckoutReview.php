@@ -61,6 +61,7 @@ class OrderCheckoutReview
                 }
             }
         }
+
         setcookie('cartItems', 'Expired', time() - 100000, '/');
         Cookie::queue(cookie()->forget('cartItems'));
 
