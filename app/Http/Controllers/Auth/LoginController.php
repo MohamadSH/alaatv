@@ -10,6 +10,7 @@ use App\Events\Authenticated;
 use App\Traits\CharacterCommon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 
@@ -87,6 +88,7 @@ class LoginController extends Controller
         }
 
         if ($this->attemptLogin($request)) {
+            Log::info('login:user:'.$this->guard()->user()->id.':'.$this->redirectPath());
             if ($this->guard()
                     ->user()->userstatus_id === 1) {
                 return $this->sendLoginResponse($request);
