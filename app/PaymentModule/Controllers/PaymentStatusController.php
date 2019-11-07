@@ -59,7 +59,6 @@ class PaymentStatusController extends Controller
             ];
 
             foreach ($orderproducts as $orderproduct) {
-                Log::info('ecommerce category: '.$orderproduct->product->category);
                 $gtmEec['products'][] = [
                     'id'       => (string)$orderproduct->product->id,
                     'name'     => $orderproduct->product->name,

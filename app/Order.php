@@ -580,44 +580,38 @@ class Order extends BaseModel
     {
         $totalSuccessfulBons = 0;
         $totalFailedBons     = 0;
-        $checkedProducts     = [];
         $user                = $this->user;
-
-        $orderproducts = $this->orderproducts(config("constants.ORDER_PRODUCT_TYPE_DEFAULT"))
-            ->get();
+        if (!isset($user)) {
+            return [0,0];
+        }
+        $orderproducts = $this->orderproducts(config("constants.ORDER_PRODUCT_TYPE_DEFAULT"))->get();
         foreach ($orderproducts as $orderproduct) {
-            if (!isset($user)) {
-                break;
-            }
             if ($user->userbons->where("orderproduct_id", $orderproduct->id)
                 ->isNotEmpty()) {
                 continue;
             }
             /** @var Product $simpleProduct */
             $simpleProduct = $orderproduct->product;
-            $bons          = $simpleProduct->bons->where("name", $bonName);
+            $bons          = $simpleProduct->bons->where("name", $bonName)->where("isEnable", 1);
             if ($bons->isEmpty()) {
                 $grandParent = $simpleProduct->grand_parent;
                 if (isset($grandParent)) {
-                    $simpleProduct = $grandParent;
-                    $bons          = $grandParent->bons->where("name", $bonName)
-                        ->where("isEnable", 1);
+                    $bons          = $grandParent->bons->where("name", $bonName)->where("isEnable", 1);
                 }
             }
-            if (in_array($simpleProduct->id, $checkedProducts)) {
-                continue;
-            }
+
             if ($bons->isNotEmpty()) {
                 $bon     = $bons->first();
                 $bonPlus = $bon->pivot->bonPlus;
                 if ($bonPlus) {
-                    $userbon                   = new Userbon();
-                    $userbon->user_id          = $user->id;
-                    $userbon->bon_id           = $bon->id;
-                    $userbon->totalNumber      = $bon->pivot->bonPlus;
-                    $userbon->userbonstatus_id = config("constants.USERBON_STATUS_ACTIVE");
-                    $userbon->orderproduct_id  = $orderproduct->id;
-                    if ($userbon->save()) {
+                    $userbon = Userbon::create([
+                        'user_id'           => $user->id,
+                        'bon_id'            => $bon->id,
+                        'totalNumber'       => $bon->pivot->bonPlus ,
+                        'userbonstatus_id'  => config('constants.USERBON_STATUS_ACTIVE'),
+                        'orderproduct_id'   => $orderproduct->id
+                    ]);
+                    if (isset($userbon)) {
                         $totalSuccessfulBons += $userbon->totalNumber;
                     } else {
                         $totalFailedBons += $bon->pivot->bonPlus;
