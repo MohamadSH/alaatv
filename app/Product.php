@@ -127,7 +127,7 @@ use App\Traits\{DateTrait,
  * @method static Builder|Product newQuery()
  * @method static Builder|Product query()
  * @property int|null                                                       $grand_id
- * @property-read \Collection|null                                          $attributes
+ * @property-read Collection|null                                          $attributes
  * @property-read mixed                                                     $gift
  * @property-read mixed                                                     $grand_parent
  * @property-read mixed                                                     $type
