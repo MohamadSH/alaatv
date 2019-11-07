@@ -248,24 +248,28 @@ class SetController extends Controller
 
     /**
      * @param  FormRequest  $inputData
-     * @param  Contentset   $contentset
+     * @param  Contentset   $contentSet
      *
      * @return void
      */
-    private function fillContentFromRequest(array $inputData, Contentset $contentset): void
+    private function fillContentFromRequest(array $inputData, Contentset $contentSet): void
     {
         $enabled   = Arr::has($inputData, 'enable');
         $display   = Arr::has($inputData, 'display');
         $tagString = Arr::get($inputData, 'tags');
 
-        $contentset->fill($inputData);
-        $contentset->tags = convertTagStringToArray($tagString);
+        $contentSet->fill($inputData);
+        $contentSet->tags = convertTagStringToArray($tagString);
 
-        $contentset->enable  = $enabled ? 1 : 0;
-        $contentset->display = $display ? 1 : 0;
+        $contentSet->enable  = $enabled ? 1 : 0;
+        $contentSet->display = $display ? 1 : 0;
 
         if (Arr::has($inputData, 'photo')) {
-            $this->storePhotoOfSet($contentset, Arr::get($inputData, 'photo'));
+            $this->storePhotoOfSet($contentSet, Arr::get($inputData, 'photo'));
+        }
+
+        if(isset($contentSet->redirectUrl)){
+            $contentSet->display =  0 ;
         }
     }
 

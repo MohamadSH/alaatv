@@ -2,29 +2,19 @@ var contentSearchFilterData = {
     "lessonTeacher": {
         "همه_دروس": [
             {
-                "lastName": "همه دبیرها",
-                "firstName": "",
-                "value": "همه_دبیرها"
+                "lastName": "موقاری",
+                "firstName": "جلال",
+                "value": "جلال_موقاری"
             },
             {
-                "lastName": "آقاجانی",
-                "firstName": "محمد رضا",
-                "value": "محمد_رضا_آقاجانی"
+                "lastName": "ثابتی",
+                "firstName": "محمد صادق",
+                "value": "محمد_صادق_ثابتی"
             },
             {
-                "lastName": "آقاجانی",
-                "firstName": "رضا",
-                "value": "رضا_آقاجانی"
-            },
-            {
-                "lastName": "آهویی",
-                "firstName": "محسن",
-                "value": "محسن_آهویی"
-            },
-            {
-                "lastName": "ارشی",
-                "firstName": "",
-                "value": "ارشی"
+                "lastName": "سبطی",
+                "firstName": "هامون",
+                "value": "هامون_سبطی"
             },
             {
                 "lastName": "امینی راد",
@@ -37,9 +27,80 @@ var contentSearchFilterData = {
                 "value": "محمد_علی_امینی_راد"
             },
             {
-                "lastName": "بهمند",
-                "firstName": "یاشار",
-                "value": "یاشار_بهمند"
+                "lastName": "گودرزی",
+                "firstName": "احسان ",
+                "value": "احسان_گودرزی"
+            },
+            {
+                "lastName": "کازرانیان",
+                "firstName": "",
+                "value": "کازرانیان"
+            },
+            {
+                "lastName": "فدایی فرد",
+                "firstName": "حمید",
+                "value": "حمید_فدایی_فرد"
+            },
+            {
+                "lastName": "یاری",
+                "firstName": "محمد رضا",
+                "value": "محمد_رضا_یاری"
+            },
+            {
+                "lastName": "داداشی",
+                "firstName": "فرشید",
+                "value": "فرشید_داداشی"
+            },
+            {
+                "lastName": "علیمرادی",
+                "firstName": "پدرام",
+                "value": "پدرام_علیمرادی"
+            },
+            {
+                "lastName": "صادقی",
+                "firstName": "محمد",
+                "value": "محمد_صادقی"
+            },
+            {
+                "lastName": "حسین خانی",
+                "firstName": "میثم",
+                "value": "میثم__حسین_خانی"
+            },
+            {
+                "lastName": "شامیزاده",
+                "firstName": "رضا",
+                "value": "رضا_شامیزاده"
+            },
+            {
+                "lastName": "عزتی",
+                "firstName": "علی اکبر",
+                "value": "علی_اکبر_عزتی"
+            },
+            {
+                "lastName": "صدری",
+                "firstName": "علی",
+                "value": "علی_صدری"
+            },
+            {
+                "lastName": "حسینی فرد",
+                "firstName": "محمد رضا",
+                "value": "محمد_رضا_حسینی_فرد"
+            },
+            {
+                "lastName": "حشمتی",
+                "firstName": "ناصر",
+                "value": "ناصر_حشمتی"
+            },
+            {
+                "lastName": "ناصر شریعت",
+                "firstName": "مهدی",
+                "value": "مهدی_ناصر_شریعت"
+            },
+
+            {
+                "lastName": "آهویی",
+                "firstName": "محسن",
+                "value": "محسن_آهویی"
             },
             {
                 "lastName": "تاج بخش",
@@ -52,24 +113,9 @@ var contentSearchFilterData = {
                 "value": "مهدی_تفتی"
             },
             {
-                "lastName": "ثابتی",
-                "firstName": "محمد صادق",
-                "value": "محمد_صادق_ثابتی"
-            },
-            {
                 "lastName": "جعفری",
                 "firstName": "ابوالفضل",
                 "value": "ابوالفضل_جعفری"
-            },
-            {
-                "lastName": "جعفری",
-                "firstName": "",
-                "value": "جعفری"
-            },
-            {
-                "lastName": "جعفری نژاد",
-                "firstName": "مصطفی",
-                "value": "مصطفی_جعفری_نژاد"
             },
             {
                 "lastName": "جلادتی",
@@ -102,29 +148,9 @@ var contentSearchFilterData = {
                 "value": "محمد_حسین_انوشه"
             },
             {
-                "lastName": "حسین خانی",
-                "firstName": "میثم",
-                "value": "میثم__حسین_خانی"
-            },
-            {
                 "lastName": "حسین شکیباییان",
                 "firstName": "محمد",
                 "value": "محمد_حسین_شکیباییان"
-            },
-            {
-                "lastName": "حسینی فرد",
-                "firstName": "محمد رضا",
-                "value": "محمد_رضا_حسینی_فرد"
-            },
-            {
-                "lastName": "حشمتی",
-                "firstName": "ناصر",
-                "value": "ناصر_حشمتی"
-            },
-            {
-                "lastName": "داداشی",
-                "firstName": "فرشید",
-                "value": "فرشید_داداشی"
             },
             {
                 "lastName": "درویش",
@@ -167,34 +193,9 @@ var contentSearchFilterData = {
                 "value": "امید_زاهدی"
             },
             {
-                "lastName": "سبطی",
-                "firstName": "هامون",
-                "value": "هامون_سبطی"
-            },
-            {
-                "lastName": "شامیزاده",
-                "firstName": "رضا",
-                "value": "رضا_شامیزاده"
-            },
-            {
-                "lastName": "شاه محمدی",
-                "firstName": "",
-                "value": "شاه_محمدی"
-            },
-            {
                 "lastName": "شهریان",
                 "firstName": "محسن",
                 "value": "محسن_شهریان"
-            },
-            {
-                "lastName": "صادقی",
-                "firstName": "محمد",
-                "value": "محمد_صادقی"
-            },
-            {
-                "lastName": "صدری",
-                "firstName": "علی",
-                "value": "علی_صدری"
             },
             {
                 "lastName": "صنیعی طهرانی",
@@ -205,21 +206,6 @@ var contentSearchFilterData = {
                 "lastName": "طلوعی",
                 "firstName": "پیمان",
                 "value": "پیمان_طلوعی"
-            },
-            {
-                "lastName": "عزتی",
-                "firstName": "علی اکبر",
-                "value": "علی_اکبر_عزتی"
-            },
-            {
-                "lastName": "علیمرادی",
-                "firstName": "پدرام",
-                "value": "پدرام_علیمرادی"
-            },
-            {
-                "lastName": "فدایی فرد",
-                "firstName": "حمید",
-                "value": "حمید_فدایی_فرد"
             },
             {
                 "lastName": "فراهانی",
@@ -262,11 +248,6 @@ var contentSearchFilterData = {
                 "value": "محمدرضا_مقصودی"
             },
             {
-                "lastName": "موقاری",
-                "firstName": "جلال",
-                "value": "جلال_موقاری"
-            },
-            {
                 "lastName": "نادریان",
                 "firstName": "",
                 "value": "نادریان"
@@ -275,11 +256,6 @@ var contentSearchFilterData = {
                 "lastName": "ناصح زاده",
                 "firstName": "میلاد",
                 "value": "میلاد_ناصح_زاده"
-            },
-            {
-                "lastName": "ناصر شریعت",
-                "firstName": "مهدی",
-                "value": "مهدی_ناصر_شریعت"
             },
             {
                 "lastName": "نایب کبیر",
@@ -307,11 +283,6 @@ var contentSearchFilterData = {
                 "value": "حامد_پویان_نظر"
             },
             {
-                "lastName": "کازرانیان",
-                "firstName": "",
-                "value": "کازرانیان"
-            },
-            {
                 "lastName": "کاظمی",
                 "firstName": "کاظم",
                 "value": "کاظم_کاظمی"
@@ -325,7 +296,32 @@ var contentSearchFilterData = {
                 "lastName": "کرد",
                 "firstName": "حسین",
                 "value": "حسین_کرد"
-            }
+            },
+            {
+                "lastName": "جعفری نژاد",
+                "firstName": "مصطفی",
+                "value": "مصطفی_جعفری_نژاد"
+            },
+            {
+                "lastName": "آقاجانی",
+                "firstName": "محمد رضا",
+                "value": "محمد_رضا_آقاجانی"
+            },
+            {
+                "lastName": "آقاجانی",
+                "firstName": "رضا",
+                "value": "رضا_آقاجانی"
+            },
+            {
+                "lastName": "ارشی",
+                "firstName": "",
+                "value": "ارشی"
+            },
+            {
+                "lastName": "بهمند",
+                "firstName": "یاشار",
+                "value": "یاشار_بهمند"
+            },
         ],
         "دیفرانسیل": [
             {
@@ -630,6 +626,11 @@ var contentSearchFilterData = {
         ],
         "شیمی": [
             {
+                "lastName": "گودرزی",
+                "firstName": "احسان ",
+                "value": "احسان_گودرزی"
+            },
+            {
                 "lastName": "همه دبیرها",
                 "firstName": "",
                 "value": "همه_دبیرها"
@@ -677,6 +678,11 @@ var contentSearchFilterData = {
         ],
         "فیزیک": [
             {
+                "lastName": "یاری",
+                "firstName": "محمد رضا",
+                "value": "محمد_رضا_یاری"
+            },
+            {
                 "lastName": "همه دبیرها",
                 "firstName": "",
                 "value": "همه_دبیرها"
@@ -715,11 +721,6 @@ var contentSearchFilterData = {
                 "lastName": "کازرانیان",
                 "firstName": "",
                 "value": "کازرانیان"
-            },
-            {
-                "lastName": "یاری",
-                "firstName": "محمد رضا",
-                "value": "محمد_رضا_یاری"
             }
         ],
         "زبان_انگلیسی": [
@@ -940,24 +941,35 @@ var contentSearchFilterData = {
     },
     "allLessons": [
         {
-            "value": "همه_دروس",
-            "index": "همه دروس"
+            "value": "زیست_شناسی",
+            "index": "زیست شناسی"
         },
+        {
+            "value": "شیمی",
+            "index": "شیمی"
+        },
+        {
+            "value": "فیزیک",
+            "index": "فیزیک"
+        },
+        {
+            "value": "ریاضی_تجربی",
+            "index": "ریاضی تجربی"
+        },
+        {
+            "value": "ریاضی_انسانی",
+            "index": "ریاضی انسانی"
+        },
+        {
+            "value": "حسابان",
+            "index": "حسابان"
+        },
+
+
+
         {
             "value": "آمار_و_مدلسازی",
             "index": "آمار و مدلسازی"
-        },
-        {
-            "value": "اخلاق",
-            "index": "اخلاق"
-        },
-        {
-            "value": "المپیاد_فیزیک",
-            "index": "المپیاد فیزیک"
-        },
-        {
-            "value": "المپیاد_نجوم",
-            "index": "المپیاد نجوم"
         },
         {
             "value": "تحلیلی",
@@ -968,24 +980,12 @@ var contentSearchFilterData = {
             "index": "جبر و احتمال"
         },
         {
-            "value": "حسابان",
-            "index": "حسابان"
-        },
-        {
             "value": "دیفرانسیل",
             "index": "دیفرانسیل"
         },
         {
             "value": "دین_و_زندگی",
             "index": "دین و زندگی"
-        },
-        {
-            "value": "ریاضی_انسانی",
-            "index": "ریاضی انسانی"
-        },
-        {
-            "value": "ریاضی_تجربی",
-            "index": "ریاضی تجربی"
         },
         {
             "value": "ریاضی_و_آمار",
@@ -1004,20 +1004,8 @@ var contentSearchFilterData = {
             "index": "زبان و ادبیات فارسی"
         },
         {
-            "value": "زیست_شناسی",
-            "index": "زیست شناسی"
-        },
-        {
-            "value": "شیمی",
-            "index": "شیمی"
-        },
-        {
             "value": "عربی",
             "index": "عربی"
-        },
-        {
-            "value": "فیزیک",
-            "index": "فیزیک"
         },
         {
             "value": "مشاوره",
@@ -1038,7 +1026,15 @@ var contentSearchFilterData = {
         {
             "value": "گسسته",
             "index": "گسسته"
-        }
+        },
+        {
+            "value": "المپیاد_فیزیک",
+            "index": "المپیاد فیزیک"
+        },
+        {
+            "value": "المپیاد_نجوم",
+            "index": "المپیاد نجوم"
+        },
     ],
     "riaziLessons": [
         {
@@ -1228,11 +1224,6 @@ var contentSearchFilterData = {
     ],
     "major": [
         {
-            name: 'همه رشته ها',
-            value: 'همه_رشته_ها',
-            lessonKey: 'allLessons'
-        },
-        {
             name: 'رشته ریاضی',
             value: 'رشته_ریاضی',
             lessonKey: 'riaziLessons'
@@ -1306,14 +1297,32 @@ var contentSearchFilterData = {
     ],
     "nezam": [
         {
-            name: 'نظام قدیم',
-            value: 'نظام_آموزشی_قدیم',
-            maghtaKey: 'maghtaGhadim'
-        },
-        {
             name: 'نظام جدید',
             value: 'نظام_آموزشی_جدید',
             maghtaKey: 'maghtaJadid'
+        },
+        {
+            name: 'نظام قدیم',
+            value: 'نظام_آموزشی_قدیم',
+            maghtaKey: 'maghtaGhadim'
+        }
+    ],
+    "allMaghta": [
+        {
+            name: 'کنکور',
+            value: 'کنکور'
+        },
+        {
+            name: 'دهم',
+            value: 'دهم'
+        },
+        {
+            name: 'یازدهم',
+            value: 'یازدهم'
+        },
+        {
+            name: 'دوازدهم',
+            value: 'دوازدهم'
         }
     ]
 };

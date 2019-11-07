@@ -846,18 +846,6 @@
             variant : '{{ $product->type['hint'] }}',
             quantity: 1
         };
-        var parentProductTags =
-        @if($product->tags !== null)
-        '{{ implode(',',optional($product->tags)->tags) }}';
-        @else
-        '-';
-        @endif
-
-        $(document).load(function () {
-            // $('.m-timeline-3__item-time').html(new persianDate(Date.parse($('.m-timeline-3__item-time').text())).format("dddd, DD MMMM YYYY"));
-
-
-        });
-
+        var parentProductTags = '{{ ($product->tags !== null) ? implode(',',optional($product->tags)->tags) : '-' }}';
     </script>
 @endsection

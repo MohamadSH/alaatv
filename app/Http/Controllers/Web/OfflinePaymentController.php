@@ -15,7 +15,7 @@ use Illuminate\Http\Response;
 use App\Notifications\InvoicePaid;
 use App\Http\Controllers\Controller;
 use Illuminate\Routing\Redirector;
-use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Request as RequestFcade;
 
 class OfflinePaymentController extends Controller
@@ -208,20 +208,24 @@ class OfflinePaymentController extends Controller
                 $order = $order->fresh();
                 /** End */
 
-                $order->orderstatus_id= config('constants.ORDER_STATUS_CLOSED');
-                $order->completed_at     = Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now())->timezone('Asia/Tehran');
+                if($order->orderproducts->isEmpty()){
+                    Log::info('Empty order:After order fresh:order:'.$order->id);
+                }
+
+                $order->orderstatus_id   = config('constants.ORDER_STATUS_CLOSED');
+                $order->completed_at     = Carbon::now('Asia/Tehran');
                 if ($order->hasCost()) {
                     $cost = $order->totalCost() - $order->totalPaidCost();
                     if ($cost == 0) {
+                        if($order->orderproducts->isEmpty()){
+                            Log::info('Empty order:Before bon:order:'.$order->id);
+                        }
                         /** Attaching user bons for this order */
                         $bonName = config('constants.BON1');
-                        $bon     = Bon::where('name', $bonName)
-                            ->first();
-                        if (isset($bon))
-                            [
-                                $givenBonNumber,
-                                $failedBonNumber,
-                            ] = $order->giveUserBons($bonName);
+                        $bon     = Bon::enable()->where('name', $bonName)->first();
+                        if (isset($bon)) {
+                            $order->giveUserBons($bonName);
+                        }
 
                         /** End */
 
@@ -230,12 +234,13 @@ class OfflinePaymentController extends Controller
                         {
                             $order->customerDescription = $customerDescription;
                         }
-
-                        $order->user->notify(new InvoicePaid($order));
                     }
                 }
-
                 $order->update();
+                $order->user->notify(new InvoicePaid($order));
+                if($order->orderproducts->isEmpty()){
+                    Log::info('Empty order:After SMS:order:'.$order->id);
+                }
                 break;
             default :
                 $done = false;
