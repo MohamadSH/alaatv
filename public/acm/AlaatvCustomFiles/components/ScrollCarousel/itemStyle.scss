@@ -1,0 +1,23 @@
+.ScrollCarousel {
+  .item {
+    background-color: white;
+    .pic {
+      img {
+        max-width: 100%;
+        min-width: 100%;
+      }
+    }
+    .content {
+      padding: 15px 5px;
+      .title {
+        h2 {
+          font-size: 1.2rem;
+          font-weight: bold;
+        }
+      }
+      .detailes {
+
+      }
+    }
+  }
+}

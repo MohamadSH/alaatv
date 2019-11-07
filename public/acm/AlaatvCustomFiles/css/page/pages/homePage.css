@@ -51,6 +51,15 @@
     background: white;
 }
 
+.homePageNavigation h2 {
+    color: white !important;
+    text-shadow: 0px 0px 5px rgba(0,0,0,0.72);
+    margin-bottom: 10px !important;
+}
+.homePageNavigation .homePageNavigation-row {
+    margin-top: 1px;
+}
+
 /*media query*/
 @media only screen and (max-width: 767.98px) {
     .shopNavItems.row[class*="m-row--col-separator-"] > div:last-child {

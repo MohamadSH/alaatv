@@ -12,9 +12,52 @@ $(function() {
 // Ajax of Modal forms
 var $modal = $('#ajax-modal');
 
+$('#descriptionSummerNote').summernote({
+    lang: 'fa-IR',
+    height: 200,
+    popover: {
+        image: [],
+        link: [],
+        air: []
+    }
+});
+$('#contextSummerNote').summernote({
+    lang: 'fa-IR',
+    height: 200,
+    popover: {
+        image: [],
+        link: [],
+        air: []
+    }
+});
 
-$('#descriptionSummerNote').summernote({height: 300});
-$('#descriptionSummerNote').summernote({height: 300});
+function iterateTagsArray(tagsFromTree) {
+
+    tagsFromTree = tagsFromTree.flat(1);
+    var uniqueTagsFromTree = [...new Set(tagsFromTree)];
+    var tagsFromTreeLength = uniqueTagsFromTree.length;
+    for (var i = 0; i < tagsFromTreeLength; i++) {
+        uniqueTagsFromTree[i] = filterTagString(uniqueTagsFromTree[i]);
+    }
+
+    var oldTags = $("input.contentTags").tagsinput()[0].itemsArray;
+    var oldTagsLength = oldTags.length;
+    for (var i = 0; i < oldTagsLength; i++) {
+        oldTags[i] = filterTagString(oldTags[i]);
+    }
+
+    var newTags = oldTags.concat(uniqueTagsFromTree);
+    var uniqueNewTags = [...new Set(newTags)];
+
+    return uniqueNewTags;
+}
+
+function filterTagString(tagString) {
+    tagString = persianJs(tagString).arabicChar().toEnglishNumber().toString();
+    tagString = tagString.split(' ').join('_');
+    return tagString;
+}
+
 function initialContentTypeSelect() {
     var selected = $("#rootContentTypes option:selected").text();
     if(selected == "آزمون")
@@ -39,6 +82,18 @@ $(document).ready(function () {
         altFieldFormatter: function(unixDate){
             var d = new Date(unixDate).toISOString();
             return d;
+        }
+    });
+
+
+    $('form.form-horizontal').submit(function(e) {
+        var stringTagsFromTree = $('#tagsString').val();
+        var tagsArray = iterateTagsArray(JSON.parse(stringTagsFromTree));
+        $("input.contentTags").tagsinput('removeAll');
+
+        var tagsArrayLength = tagsArray.length;
+        for (var i = 0; i < tagsArrayLength; i++) {
+            $("input.contentTags").tagsinput('add', tagsArray[i]);
         }
     });
 

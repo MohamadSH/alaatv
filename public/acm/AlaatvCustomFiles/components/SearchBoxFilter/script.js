@@ -1,12 +1,28 @@
 function arabicToPersianWithEnNumber(inputString) {
+    if (typeof inputString === 'undefined' || inputString === null || inputString.length === 0) {
+        return '';
+    }
     inputString = persianJs(inputString).arabicChar().toEnglishNumber().toString();
     inputString = inputString.split(' ').join('_');
     return inputString;
 }
 
 jQuery(document).ready(function() {
+
+    $(document).on('click', '.SearchBoxFilter .GroupFilters .body .showMoreItems', function () {
+        if ($(this).data('moretype') === 'more') {
+            $(this).parents('.m-checkbox-list').css({"max-height": "", "height": "auto", "padding-bottom":"20px"});
+            $(this).data('more', $(this).data('more'));
+            $(this).data('moretype', 'less');
+            $(this).html('نمایش کمتر...');
+        } else {
+            $(this).parents('.m-checkbox-list').css({"max-height": (($(this).data('more')*29.5)+20)+"px", "padding-bottom":"20px"});
+            $(this).data('moretype', 'more');
+            $(this).html('نمایش بیشتر...');
+        }
+    });
+
     $(document).on('click', '.SearchBoxFilter .GroupFilters .head', function () {
-        console.log('clicked:', $(this).parents('.GroupFilters'));
         if($(this).parents('.GroupFilters').hasClass('status-close')) {
             $(this).parents('.GroupFilters').removeClass('status-close').addClass('status-open');
         } else {
@@ -23,6 +39,9 @@ jQuery(document).ready(function() {
             return false;
         }
         seacrText = arabicToPersianWithEnNumber(seacrText);
+
+        // console.log('$(this).parents(\'.body\')', $(this).parents('.body'));
+
         for (var i = 0; i < itemsLength; i++) {
             if (arabicToPersianWithEnNumber(items[i].innerText).includes(seacrText)) {
                 $(items[i]).fadeIn(0);
@@ -30,7 +49,5 @@ jQuery(document).ready(function() {
                 $(items[i]).fadeOut(0);
             }
         }
-        // console.log();
-
     });
 });

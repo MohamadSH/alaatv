@@ -80,7 +80,7 @@
                         </div>
                     </div>
     
-                    <div class="m-widget_head-owlcarousel-items owl-carousel a--owl-carousel-type-2 carousel_block_{{ $block->id }}">
+                    <div class="m-widget_head-owlcarousel-items ScrollCarousel a--owl-carousel-type-2 carousel_block_{{ $block->id }}">
         
         
                         @if(((isset($blockType) && $blockType === 'product') || !isset($blockType)) && isset($block->products))
@@ -89,15 +89,12 @@
                             @endforeach
                         @endif
         
-        
-        
                         {{-- old content block loop --}}
                         @if(((isset($blockType) && $blockType === 'content') || !isset($blockType)) && isset($block->contents))
                             @foreach($block->getActiveContent() as $contentKey=>$content)
                                 @include('block.partials.content')
                             @endforeach
                         @endif
-        
         
                         {{--                                 new content block loop --}}
                         @if(((isset($blockType) && $blockType === 'content') || !isset($blockType)) && isset($block->sets) && $block->sets->count() > 0)
@@ -112,7 +109,19 @@
                             @endforeach
                         @endif
     
-    
+                        <div class="item carousel a--block-item a--block-item-showMoreItem w-66534321">
+                            <a href="{{ $block->url }}">
+                                <button type="button" class="btn m-btn--air btn-outline-accent m-btn m-btn--custom m-btn--outline-2x">
+                                    نمایش بیشتر از
+                                    @if(isset($blockTitle))
+                                        {!! $blockTitle !!}
+                                    @else
+                                        {{ $block->title }}
+                                    @endif
+                                </button>
+                            </a>
+                        </div>
+
                     </div>
                     
                 </div>
