@@ -1,4 +1,4 @@
-<div class="item carousel a--block-item a--block-type-content" data-position="{{ $contentKey }}">
+<div class="item carousel a--block-item a--block-type-content w-44333211" data-position="{{ $contentKey }}">
     <div class="a--block-imageWrapper">
         <a href="{{ $content->url }}" class="btn btn-sm m-btn--pill btn-brand btnViewMore">
             <i class="fa fa-play"></i> / <i class="fa fa-cloud-download-alt"></i>

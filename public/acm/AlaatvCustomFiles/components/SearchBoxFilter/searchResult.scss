@@ -1,0 +1,86 @@
+.searchResult {
+  .listType {
+    .item:hover {
+      .itemHover {
+        background-color: #ff8e0017;
+        width: 100% !important;
+      }
+    }
+    .item {
+      position: relative;
+      z-index: 3;
+      background: white;
+      //display: flex;
+      //justify-content: flex-start;
+      cursor: pointer;
+      margin-bottom: 10px;
+      display: flex;
+      .pic {
+        position: relative;
+        z-index: 3;
+        width: 25%;
+        img {
+          max-width: 100%;
+        }
+      }
+      .content {
+        position: relative;
+        z-index: 3;
+        padding: 15px 10px;
+        width: 75%;
+        display: flex;
+        align-items: stretch;
+        flex-flow: column;
+        justify-content: flex-start;
+        .title {
+          z-index: 2;
+          position: relative;
+          h2 {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 15px;
+          }
+        }
+        .detailes {
+          z-index: 2;
+          position: relative;
+          display: flex;
+          flex-flow: column;
+          align-items: stretch;
+          align-self: stretch;
+          height: 100%;
+          .lesson {
+            width: 100%;
+          }
+          .summary {
+            width: 100%;
+            //max-height: calc( 100% - 65px);
+            overflow: hidden;
+            text-align: justify;
+            max-height: 40px;
+            margin-top: 10px;
+          }
+          .publishedDate {
+            width: 100%;
+            position: absolute;
+            bottom: 0;
+            right: 0;
+          }
+        }
+
+      }
+      .itemHover {
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 0;
+        height: 100%;
+        z-index: 1;
+        transition: all 0.5s;
+      }
+    }
+  }
+  .carouselType {
+
+  }
+}

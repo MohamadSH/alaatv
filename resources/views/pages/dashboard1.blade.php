@@ -17,23 +17,16 @@
         <div class="col">
             <!--begin:: Widgets/Stats-->
             <div class="m-portlet homePageNavigation">
-                <div class="m-portlet__body  m-portlet__body--no-padding">
+                <div class="m-portlet__body  m-portlet__body--no-padding homePageNavigation-row">
                     <div class="row m-row--no-padding m-row--col-separator-xl shopNavItems">
                         <div class="col-6 col-md-3 m--bg-warning shopNavItem">
                             <a target="_self" onclick="$('html,body').animate({scrollTop: $('.konkoor1').offset().top - 100},'slow');" href="#konkoor1">
                                 <!--begin::Total Profit-->
                                 <div class="m-widget24 m--align-center">
                                     <div class="m-widget24__item">
-                                        <button class="btn m-btn m-btn--pill m-btn--air" type="button">
-                                            <h2 class="m-widget24__title">
-                                                کنکور نظام قدیم
-                                            </h2>
-                                        </button>
-                                        <br>
-                                        <span class="m--font-light">
-                                    <img src="https://cdn.alaatv.com/loder.jpg?w=1&h=1" data-src="https://cdn.alaatv.com/upload/alaa-logo-small.png" width="25" height="33" class="lazy-image" alt="آلاء">
-				                </span>
-                                        <div class="m--space-10"></div>
+                                        <h2 class="m-widget24__title">
+                                            کنکور نظام قدیم
+                                        </h2>
                                     </div>
                                 </div>
                                 <!--end::Total Profit-->
@@ -44,16 +37,9 @@
                                 <!--begin::Total Profit-->
                                 <div class="m-widget24 m--align-center">
                                     <div class="m-widget24__item">
-                                        <button class="btn m-btn m-btn--pill m-btn--air" type="button">
-                                            <h2 class="m-widget24__title">
-                                                کنکور نظام جدید
-                                            </h2>
-                                        </button>
-                                        <br>
-                                        <span class="m--font-light">
-                                    <img src="https://cdn.alaatv.com/loder.jpg?w=1&h=1" data-src="https://cdn.alaatv.com/upload/alaa-logo-small.png" width="25" height="33" class="lazy-image" alt="آلاء">
-				                </span>
-                                        <div class="m--space-10"></div>
+                                        <h2 class="m-widget24__title">
+                                            کنکور نظام جدید
+                                        </h2>
                                     </div>
                                 </div>
                                 <!--end::Total Profit-->
@@ -64,16 +50,9 @@
                                 <!--begin::Total Profit-->
                                 <div class="m-widget24 m--align-center">
                                     <div class="m-widget24__item">
-                                        <button class="btn m-btn m-btn--pill m-btn--air" type="button">
-                                            <h2 class="m-widget24__title">
-                                                پایه یازدهم
-                                            </h2>
-                                        </button>
-                                        <br>
-                                        <span class="m--font-light">
-                                    <img src="https://cdn.alaatv.com/loder.jpg?w=1&h=1" data-src="https://cdn.alaatv.com/upload/alaa-logo-small.png" width="25" height="33" class="lazy-image" alt="آلاء">
-				                </span>
-                                        <div class="m--space-10"></div>
+                                        <h2 class="m-widget24__title">
+                                            پایه یازدهم
+                                        </h2>
                                     </div>
                                 </div>
                                 <!--end::Total Profit-->
@@ -84,16 +63,9 @@
                                 <!--begin::Total Profit-->
                                 <div class="m-widget24 m--align-center">
                                     <div class="m-widget24__item">
-                                        <button class="btn m-btn m-btn--pill m-btn--air" type="button">
-                                            <h2 class="m-widget24__title">
-                                                پایه دهم
-                                            </h2>
-                                        </button>
-                                        <br>
-                                        <span class="m--font-light">
-                                    <img src="https://cdn.alaatv.com/loder.jpg?w=1&h=1" data-src="https://cdn.alaatv.com/upload/alaa-logo-small.png" width="25" height="33" class="lazy-image" alt="آلاء">
-				                </span>
-                                        <div class="m--space-10"></div>
+                                        <h2 class="m-widget24__title">
+                                            پایه دهم
+                                        </h2>
                                     </div>
                                 </div>
                                 <!--end::Total Profit-->
@@ -101,19 +73,16 @@
                         </div>
                     </div>
                 </div>
-                <div class="m-portlet__body  m-portlet__body--no-padding m--padding-top-5">
+                <div class="m-portlet__body  m-portlet__body--no-padding homePageNavigation-row">
                     <div class="row m-row--no-padding m-row--col-separator-xl shopNavItems">
                         <div class="col-12 col-md-6 m--bg-info shopNavItem">
                             <a target="_self" href="{{ route('web.landing.5') }}">
                                 <!--begin::Total Profit-->
                                 <div class="m-widget24 m--align-center">
                                     <div class="m-widget24__item">
-                                        <button class="btn m-btn m-btn--pill m-btn--air" type="button">
-                                            <h2 class="m-widget24__title">
-                                                همایش های دانلودی نظام قدیم
-                                            </h2>
-                                        </button>
-                                        <div class="m--space-10"></div>
+                                        <h2 class="m-widget24__title">
+                                            همایش های دانلودی نظام قدیم
+                                        </h2>
                                     </div>
                                 </div>
                                 <!--end::Total Profit-->
@@ -124,12 +93,9 @@
                                 <!--begin::Total Profit-->
                                 <div class="m-widget24 m--align-center">
                                     <div class="m-widget24__item">
-                                        <button class="btn m-btn m-btn--pill m-btn--air" type="button">
-                                            <h2 class="m-widget24__title">
-                                                همایش های دانلودی نظام جدید
-                                            </h2>
-                                        </button>
-                                        <div class="m--space-10"></div>
+                                        <h2 class="m-widget24__title">
+                                            همایش های دانلودی نظام جدید
+                                        </h2>
                                     </div>
                                 </div>
                                 <!--end::Total Profit-->
