@@ -219,6 +219,7 @@ class RedisTagging extends Singleton
     
         if ($cTags > 1) {
             $redis->unlink($resultkey);
+            $redis->unlink($resultKeyForGroups);
         }
     
         $result = [];
@@ -229,7 +230,6 @@ class RedisTagging extends Singleton
                     'bucket' => $bucket,
                     'id'     => $id,
                     'score'  => $score,
-            
                 ];
                 $result[] = $temp;
             }
