@@ -13,7 +13,7 @@
                 @if(isset($withCloseIcon) && $withCloseIcon)
                     <a class="m-link removeTagLabel m--padding-right-10" data-role="{{$key}}"><i class="fa fa-times"></i></a>
                 @endif
-                    <a class="m-link m--font-light" href="{{urldecode(action("Web\ContentController@index" , ["tags"=>[$tag]]))}}">{{$tag}}</a>
+                    <a class="m-link m--font-light" href="{{urldecode(action("Web\ContentController@index" , ["tags"=>[$tag]]))}}">{{preg_replace('/_/', ' ', $tag)}}</a>
                 @if(isset($withInput) && $withInput)
                     <input class="m--hide" id="tagInput_{{$key}}" name="tags[]" type="hidden" value="{{$tag}}">
                 @endif

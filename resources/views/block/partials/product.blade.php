@@ -1,4 +1,4 @@
-<div class="item carousel a--block-item a--block-type-product"
+<div class="item carousel a--block-item a--block-type-product w-55443211"
      data-gtm-eec-product-id="{{ $product->id }}"
      data-gtm-eec-product-name="{{ $product->name }}"
      data-gtm-eec-product-price="{{ number_format($product->price['final'], 2, '.', '') }}"
