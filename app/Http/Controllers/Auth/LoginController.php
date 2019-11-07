@@ -88,7 +88,6 @@ class LoginController extends Controller
         }
 
         if ($this->attemptLogin($request)) {
-            Log::info('login:user:'.$this->guard()->user()->id.':'.$this->redirectPath());
             if ($this->guard()
                     ->user()->userstatus_id === 1) {
                 return $this->sendLoginResponse($request);
