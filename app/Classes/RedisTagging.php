@@ -181,6 +181,7 @@ class RedisTagging extends Singleton
         $tagGroups = $tags_group->getTagsGroup();
     
         $resultKeyForGroups = [];
+        $shouldRemoveKeys   = [];
         foreach ($tagGroups as $tags) {
             $cTags = count($tags);
             if ($cTags > 1) {
@@ -194,6 +195,7 @@ class RedisTagging extends Singleton
                 } catch (Exception $e) {
                 }
                 $resultKeyForGroups[] = $randKey;
+                $shouldRemoveKeys[]   = $randKey;
             } elseif ($cTags === 1) {
                 $resultKeyForGroups[] = $prefix.$tags[0];
             }
@@ -205,8 +207,10 @@ class RedisTagging extends Singleton
             $total_items_db = $redis->zCount($resultkey, '-inf', '+inf');
             if (strcmp($order, self::CONST_ORDER_DESC) === 0) {
                 $tagsresult = $redis->zRevRange($resultkey, $offset, $lastElement, ['withscores' => $withScores]);
+//                $tagsresult = $redis->zRevRange($resultkey, $offset, $lastElement, $withScores);
             } else {
                 $tagsresult = $redis->zRange($resultkey, $offset, $lastElement, ['withscores' => $withScores]);
+//                $tagsresult = $redis->zRange($resultkey, $offset, $lastElement, $withScores);
             }
         } catch (Exception $e) {
             $total_items_db = 0;
@@ -219,7 +223,7 @@ class RedisTagging extends Singleton
     
         if ($cTags > 1) {
             $redis->unlink($resultkey);
-            $redis->unlink($resultKeyForGroups);
+            $redis->unlink($shouldRemoveKeys);
         }
     
         $result = [];
