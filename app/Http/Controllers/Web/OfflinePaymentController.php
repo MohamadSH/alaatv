@@ -205,6 +205,10 @@ class OfflinePaymentController extends Controller
                     }
                 }
 
+                if($order->orderproducts->isEmpty()){
+                    Log::info('Empty order:Before order fresh:order:'.$order->id);
+                }
+
                 $order = $order->fresh();
                 /** End */
 
