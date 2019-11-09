@@ -22,6 +22,11 @@
             background: #fff !important;
             z-index: 999 !important;
         }
+        .btnShowSearchBoxInMobileView {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+        }
     </style>
 @endsection
 
