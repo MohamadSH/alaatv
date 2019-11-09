@@ -117,36 +117,38 @@
                                                 class="m-portlet__body subCategoryWarper a--owl-carousel-slide-iteDetail-{{ $productKey }}">
                                                 <div class="row justify-content-center">
                                                     @foreach($product->sets as $setKey=>$set)
-                                                        <div class="col-12 col-sm-6 col-md-4 col-lg-3">
-                                                            <div class="subCategoryItem">
-                                                                <div class="subCategoryItem-title">
-                                                                    {{ $set->name }}
-                                                                </div>
-                                                                <hr>
-                                                                <div
-                                                                    class="m-btn-group m-btn-group--pill btn-group m-btn-group m-btn-group--pill btn-group-sm"
-                                                                    role="group" aria-label="Small button group">
-                                                                    @if($set->getActiveContents2(config('constants.CONTENT_TYPE_PAMPHLET'))->isNotEmpty())
-                                                                        <button type="button"
-                                                                                class="btn btn-warning btnViewPamphlet"
-                                                                                data-content-type="pamphlet"
-                                                                                data-content-url="{{ $set->contentUrl.'&orderBy=order' }}">
-                                                                            <i class="fa fa-edit"></i>
-                                                                            جزوات
-                                                                        </button>
-                                                                    @endif
-                                                                    @if($set->getActiveContents2(config('constants.CONTENT_TYPE_VIDEO'))->isNotEmpty())
-                                                                        <button type="button"
-                                                                                class="btn btn-success btnViewVideo"
-                                                                                data-content-type="video"
-                                                                                data-content-url="{{ $set->contentUrl.'&orderBy=order' }}">
-                                                                            <i class="fa fa-film"></i>
-                                                                            فیلم ها
-                                                                        </button>
-                                                                    @endif
+                                                        @if($set->getActiveContents2(config('constants.CONTENT_TYPE_PAMPHLET'))->isNotEmpty() || $set->getActiveContents2(config('constants.CONTENT_TYPE_VIDEO'))->isNotEmpty())
+                                                            <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+                                                                <div class="subCategoryItem">
+                                                                    <div class="subCategoryItem-title">
+                                                                        {{ $set->name }}
+                                                                    </div>
+                                                                    <hr>
+                                                                    <div
+                                                                        class="m-btn-group m-btn-group--pill btn-group m-btn-group m-btn-group--pill btn-group-sm"
+                                                                        role="group" aria-label="Small button group">
+                                                                        @if($set->getActiveContents2(config('constants.CONTENT_TYPE_PAMPHLET'))->isNotEmpty())
+                                                                            <button type="button"
+                                                                                    class="btn btn-warning btnViewPamphlet"
+                                                                                    data-content-type="pamphlet"
+                                                                                    data-content-url="{{ $set->contentUrl.'&orderBy=order' }}">
+                                                                                <i class="fa fa-edit"></i>
+                                                                                جزوات
+                                                                            </button>
+                                                                        @endif
+                                                                        @if($set->getActiveContents2(config('constants.CONTENT_TYPE_VIDEO'))->isNotEmpty())
+                                                                            <button type="button"
+                                                                                    class="btn btn-success btnViewVideo"
+                                                                                    data-content-type="video"
+                                                                                    data-content-url="{{ $set->contentUrl.'&orderBy=order' }}">
+                                                                                <i class="fa fa-film"></i>
+                                                                                فیلم ها
+                                                                            </button>
+                                                                        @endif
+                                                                    </div>
                                                                 </div>
                                                             </div>
-                                                        </div>
+                                                        @endif
                                                     @endforeach
                                                 </div>
                                             </div>
