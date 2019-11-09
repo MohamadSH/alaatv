@@ -21,7 +21,8 @@ class DashboardPageController extends Controller
         }
         $pageName             = "shop";
         $userAssetsCollection = $user->getDashboardBlocks();
-        $userFavoritesCollection = $user->getDashboardBlocks();
+//        $userFavoritesCollection = $user->getDashboardBlocks();
+        $userFavoritesCollection = collect();
 
         if ($request->expectsJson()) {
             return response()->json([
