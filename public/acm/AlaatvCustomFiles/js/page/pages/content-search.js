@@ -193,7 +193,6 @@ var Alaasearch = function () {
             '</div>';
     }
     function getProductItem(data, itemKey) {
-        console.log('product data:', data);
         var options = {
             TruncateLength: 80,
             TruncateBy : "words",

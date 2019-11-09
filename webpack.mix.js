@@ -268,6 +268,7 @@ class Mix {
                 'public/acm/AlaatvCustomFiles/components/SearchBoxFilter/style.css',
                 'public/acm/AlaatvCustomFiles/components/SearchBoxFilter/searchResult.css',
 
+                'public/acm/AlaatvCustomFiles/components/AlaaLoading/style.css',
                 'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/style.css',
                 'public/acm/AlaatvCustomFiles/components/ScrollCarousel/style.css',
                 'public/acm/AlaatvCustomFiles/components/ScrollCarousel/itemStyle.css',
@@ -279,6 +280,7 @@ class Mix {
                     'node_modules/persian-date/dist/persian-date.js',
                     'node_modules/truncatise/index.js',
                     'node_modules/persianjs/persian.min.js',
+                    'public/acm/AlaatvCustomFiles/components/AlaaLoading/script.js',
                     'public/acm/AlaatvCustomFiles/components/SearchBoxFilter/script.js',
                     'public/acm/AlaatvCustomFiles/components/aSticky/aSticky.js',
                     'public/acm/AlaatvCustomFiles/js/page-content-search-filter-data.js',
