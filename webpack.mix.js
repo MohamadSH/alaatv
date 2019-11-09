@@ -265,9 +265,10 @@ class Mix {
     mixPageContentSearch() {
         this.mixCssAndJs([
                 'public/acm/AlaatvCustomFiles/components/ribbon/style.css',
-                'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/style.css',
                 'public/acm/AlaatvCustomFiles/components/SearchBoxFilter/style.css',
                 'public/acm/AlaatvCustomFiles/components/SearchBoxFilter/searchResult.css',
+
+                'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/style.css',
                 'public/acm/AlaatvCustomFiles/components/ScrollCarousel/style.css',
                 'public/acm/AlaatvCustomFiles/components/ScrollCarousel/itemStyle.css',
                 'public/acm/AlaatvCustomFiles/css/page/pages/content-search.css'
