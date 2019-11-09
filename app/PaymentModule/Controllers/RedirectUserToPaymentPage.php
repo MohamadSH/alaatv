@@ -23,6 +23,7 @@ use App\Http\Controllers\Web\TransactionController;
 use App\Classes\Payment\RefinementRequest\RefinementLauncher;
 use Illuminate\Routing\Redirector;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Log;
 use ImanGhafoori\Terminator\TerminateException;
 
 class RedirectUserToPaymentPage extends Controller
@@ -59,6 +60,10 @@ class RedirectUserToPaymentPage extends Controller
         event(new UserRedirectedToPayment($user));
 
         $customerDescription = $request->get('customerDescription');
+
+        if(isset($order) && $order->orderproducts->isEmpty()){
+            Log::info('Empty order:Before redirecting to offline route:order:'.$order->id);
+        }
 
         $this->shouldGoToOfflinePayment($cost->rials())
             ->thenRespondWith([[Responses::class, 'sendToOfflinePaymentProcess'], [$device, $order,$customerDescription]]);
