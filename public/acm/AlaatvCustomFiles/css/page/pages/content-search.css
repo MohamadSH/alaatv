@@ -255,6 +255,11 @@
     text-align: justify;
 }
 
+.btnShowSearchBoxInMobileView {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
 
 @media only screen and (max-width: 1700px)  {
     .SearchBoxFilterColumn {
