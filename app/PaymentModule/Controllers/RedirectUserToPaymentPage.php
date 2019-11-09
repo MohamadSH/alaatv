@@ -61,7 +61,7 @@ class RedirectUserToPaymentPage extends Controller
 
         $customerDescription = $request->get('customerDescription');
 
-        if($order->orderproducts->isEmpty()){
+        if(isset($order) && $order->orderproducts->isEmpty()){
             Log::info('Empty order:Before redirecting to offline route:order:'.$order->id);
         }
 
