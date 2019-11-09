@@ -425,13 +425,16 @@ var Alaasearch = function () {
         cleatAllItems();
         addLoadingItem('carouselType');
         addLoadingItem('listType');
-        mApp.block('.SearchBoxFilter .GroupFilters .body', {
-            type: "loader",
-            state: "success",
-        });
+        // mApp.block('.SearchBoxFilter .GroupFilters .body', {
+        //     type: "loader",
+        //     state: "success",
+        // });
+
+        AlaaLoading.show();
         getAjaxContent(urlAction, function (response) {
             loadAjaxContent(response.result);
-            mApp.unblock('.SearchBoxFilter .GroupFilters .body');
+            // mApp.unblock('.SearchBoxFilter .GroupFilters .body');
+            AlaaLoading.hide();
         });
     }
 
