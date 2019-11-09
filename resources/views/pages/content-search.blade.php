@@ -2,27 +2,6 @@
 
 @section('page-css')
     <link href="{{ mix('/css/content-search.css') }}" rel="stylesheet" type="text/css"/>
-    <link href="{{ asset('/acm/AlaatvCustomFiles/components/SearchBoxFilter/style.css') }}" rel="stylesheet">
-    <link href="{{ asset('/acm/AlaatvCustomFiles/components/SearchBoxFilter/searchResult.css') }}" rel="stylesheet">
-    <link href="{{ asset('/acm/AlaatvCustomFiles/components/ScrollCarousel/style.css') }}" rel="stylesheet">
-    <link href="{{ asset('/acm/AlaatvCustomFiles/components/ScrollCarousel/itemStyle.css') }}" rel="stylesheet">
-    <link href="{{ asset('/acm/AlaatvCustomFiles/css/page/pages/content-search.css') }}" rel="stylesheet">
-    <style>
-        .ribbon {
-            position: absolute !important;
-            right: -5px !important;
-            top: -5px !important;
-            z-index: 5 !important;
-        }
-        .ribbon > span {
-            position: absolute !important;
-        }
-        .glow {
-            position: absolute !important;
-            background: #fff !important;
-            z-index: 999 !important;
-        }
-    </style>
 @endsection
 
 @section('content')
@@ -95,11 +74,4 @@
         var tags = {!! json_encode($tags) !!};
     </script>
     <script src="{{ mix('/js/content-search.js') }}"></script>
-    <script src="{{ asset('/acm/AlaatvCustomFiles/components/SearchBoxFilter/script.js') }}"></script>
-    <script src="{{ asset('/acm/AlaatvCustomFiles/components/aSticky/aSticky.js') }}"></script>
-    <script src="{{ asset('/acm/AlaatvCustomFiles/js/page/pages/content-search.js') }}"></script>
-    <script>
-        // shave('.carouselType .ScrollCarousel .item', 120, {character: '✁'});
-        // shave('.carouselType .ScrollCarousel .item .content .detailes .summary', 120);
-    </script>
 @endsection
