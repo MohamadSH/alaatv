@@ -79,19 +79,19 @@ class Wallet extends BaseModel
      *
      * @param integer $amount
      * @param null $orderId
-     * @param boolean $shouldAccept
+     * @param boolean $shouldCheckWithdraw
      *
      * @param bool $withCreatingTransaction
      * @return array
      */
-    public function withdraw($amount, $orderId = null, $shouldAccept = true , $withCreatingTransaction=true)
+    public function withdraw($amount, $orderId = null, $shouldCheckWithdraw = true , $withCreatingTransaction=true)
     {
         /**
          * unused variable
          */ /*$failed = true;*/
         /*$responseText = '';*/
 
-        $accepted = $shouldAccept ? $this->canWithdraw($amount) : true;
+        $accepted = $shouldCheckWithdraw ? $this->canWithdraw($amount) : true;
 
         if ($amount > 0) {
             if ($accepted) {
@@ -109,7 +109,7 @@ class Wallet extends BaseModel
                                 'cost'                 => $amount,
                                 'transactionstatus_id' => config('constants.TRANSACTION_STATUS_SUCCESSFUL'),
                                 'paymentmethod_id'     => config('constants.PAYMENT_METHOD_WALLET'),
-                                'completed_at'         => Carbon::now()->setTimezone('Asia/Tehran'),
+                                'completed_at'         => Carbon::now('Asia/Tehran'),
                             ]);
                     }
                 }
