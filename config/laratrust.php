@@ -195,6 +195,11 @@ return [
          */
         'params'   => '403',
 
+        'handlers' => [
+            'abort' => [
+                'code' => 403
+            ],
+        ]
     ],
 
     /*
