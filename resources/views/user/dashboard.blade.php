@@ -117,7 +117,7 @@
                                                 class="m-portlet__body subCategoryWarper a--owl-carousel-slide-iteDetail-{{ $productKey }}">
                                                 <div class="row justify-content-center">
                                                     @foreach($product->sets as $setKey=>$set)
-                                                        @if($set->getActiveContents2(config('constants.CONTENT_TYPE_PAMPHLET'))->isNotEmpty() && $set->getActiveContents2(config('constants.CONTENT_TYPE_VIDEO'))->isNotEmpty())
+                                                        @if($set->getActiveContents2(config('constants.CONTENT_TYPE_PAMPHLET'))->isNotEmpty() || $set->getActiveContents2(config('constants.CONTENT_TYPE_VIDEO'))->isNotEmpty())
                                                             <div class="col-12 col-sm-6 col-md-4 col-lg-3">
                                                                 <div class="subCategoryItem">
                                                                     <div class="subCategoryItem-title">
