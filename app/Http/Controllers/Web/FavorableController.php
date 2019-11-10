@@ -32,7 +32,7 @@ class FavorableController extends Controller
         return $authException;
     }
 
-    public function markFavorableFavorite(Request $request, FavorableInterface $favorable)
+    public function markFavourableFavourite(Request $request, FavorableInterface $favorable)
     {
         $favoredResult =  $favorable->favoring($request->user());
         if($favoredResult){
@@ -49,7 +49,7 @@ class FavorableController extends Controller
         ]);
     }
 
-    public function markUnFavorableFavorite(Request $request, FavorableInterface $favorable)
+    public function markUnFavourableFavorite(Request $request, FavorableInterface $favorable)
     {
         $unfavoredResult =  $favorable->unfavoring($request->user());
         if($unfavoredResult){
@@ -66,7 +66,7 @@ class FavorableController extends Controller
         ]);
     }
 
-    public function getUsersThatFavoredThisFavorable(Request $request, FavorableInterface $favorable)
+    public function getUsersThatFavouredThisFavorable(Request $request, FavorableInterface $favorable)
     {
         $key = md5($request->url());
 
