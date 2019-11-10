@@ -94,8 +94,8 @@
                                 @endif
                             </div>
                             
-                            <input type="hidden" name="favoriteActionUrl" value="{{ route('web.mark.favourite.set', [ 'set' => $contentSet->id ]) }}">
-                            <input type="hidden" name="unFavoriteActionUrl" value="{{ route('web.mark.unfavourite.set', [ 'set' => $contentSet->id ]) }}">
+                            <input type="hidden" name="favoriteActionUrl" value="{{ route('web.mark.favorite.set', [ 'set' => $contentSet->id ]) }}">
+                            <input type="hidden" name="unFavoriteActionUrl" value="{{ route('web.mark.unfavorite.set', [ 'set' => $contentSet->id ]) }}">
     
                             <div class="btnFavorite">
                                 <img class="btnFavorite-on {{ ($isFavored) ? '' : 'a--d-none' }}" src="/acm/image/fav-on.svg" width="50">
