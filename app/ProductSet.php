@@ -2,8 +2,11 @@
 
 namespace App;
 
+use Eloquent;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\Pivot;
+use Illuminate\Database\Query\Builder;
+use Illuminate\Support\Carbon;
 
 /**
  * App\ProductSet
@@ -11,29 +14,29 @@ use Illuminate\Database\Eloquent\Relations\Pivot;
  * @property int                             $contentset_id
  * @property int                             $product_id
  * @property int                             $order ترتیب
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property Carbon|null $deleted_at
  * @method static bool|null forceDelete()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\ProductSet newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\ProductSet newQuery()
- * @method static \Illuminate\Database\Query\Builder|\App\ProductSet onlyTrashed()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\ProductSet query()
+ * @method static \Illuminate\Database\Eloquent\Builder|ProductSet newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|ProductSet newQuery()
+ * @method static Builder|ProductSet onlyTrashed()
+ * @method static \Illuminate\Database\Eloquent\Builder|ProductSet query()
  * @method static bool|null restore()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\ProductSet whereContentsetId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\ProductSet whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\ProductSet whereDeletedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\ProductSet whereOrder($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\ProductSet whereProductId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\ProductSet whereUpdatedAt($value)
- * @method static \Illuminate\Database\Query\Builder|\App\ProductSet withTrashed()
- * @method static \Illuminate\Database\Query\Builder|\App\ProductSet withoutTrashed()
- * @mixin \Eloquent
+ * @method static \Illuminate\Database\Eloquent\Builder|ProductSet whereContentsetId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ProductSet whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ProductSet whereDeletedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ProductSet whereOrder($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ProductSet whereProductId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|ProductSet whereUpdatedAt($value)
+ * @method static Builder|ProductSet withTrashed()
+ * @method static Builder|ProductSet withoutTrashed()
+ * @mixin Eloquent
  */
 class ProductSet extends Pivot
 {
     use SoftDeletes;
-    
+
     /**
      * The attributes that should be mutated to dates.
      *
@@ -44,8 +47,8 @@ class ProductSet extends Pivot
         'updated_at',
         'deleted_at',
     ];
-    
-    
+
+
     protected $table = 'contentset_product';
     //$p->sets()->updateExistingPivot($s,['order'=>4])
 }

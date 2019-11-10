@@ -4,7 +4,8 @@ namespace App\Providers;
 
 use Illuminate\Support\Facades\{Cache, Route};
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
-use App\{City,
+use App\{Category,
+    City,
     LiveDescription,
     Role,
     Section,
@@ -479,6 +480,18 @@ class RouteServiceProvider extends ServiceProvider
                 'section_'.$value,
             ])->remember($key, config('constants.CACHE_5'), function () use ($value) {
                 return Section::where('id', $value)
+                        ->first() ?? abort(404);
+            });
+        });
+
+        Route::bind('cat', function ($value) {
+            $key = 'Category:'.$value;
+
+            return Cache::tags([
+                'category',
+                'category_'.$value,
+            ])->remember($key, config('constants.CACHE_5'), function () use ($value) {
+                return Category::where('id', $value)
                         ->first() ?? abort(404);
             });
         });

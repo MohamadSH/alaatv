@@ -44,7 +44,7 @@
         "sku": "{{ $product->id }}",
         "brand" : {
             "@type" : "Brand",
-            
+
             "name" : "آلاء",
             "logo": {
                 "@type": "ImageObject",
@@ -60,7 +60,7 @@
             "itemCondition": "https://schema.org/NewCondition"
         }
     }
-    
+
     </script>
 @endsection
 @section('pageBar')
@@ -94,15 +94,15 @@
             <!--begin::Portlet-->
             <div class="m-portlet">
                 <div class="m-portlet__body">
-    
+
                     <input type="hidden" name="favoriteActionUrl" value="{{ route('web.mark.favorite.product', [ 'product' => $product->id ]) }}">
                     <input type="hidden" name="unFavoriteActionUrl" value="{{ route('web.mark.unfavorite.product', [ 'product' => $product->id ]) }}">
-    
+
                     <div class="btnFavorite">
-                        <img class="btnFavorite-on {{ ($isFavored) ? '' : 'a--d-none' }}" src="/acm/image/fav-on.svg" width="50">
-                        <img class="btnFavorite-off {{ ($isFavored) ? 'a--d-none' : '' }}" src="/acm/image/fav-off.svg" width="50">
+                        <img class="btnFavorite-on {{ ($isFavored) ? '' : 'a--d-none' }}" src="https://cdn.alaatv.com/upload/fav-on.svg" width="50">
+                        <img class="btnFavorite-off {{ ($isFavored) ? 'a--d-none' : '' }}" src="https://cdn.alaatv.com/upload/fav-off.svg" width="50">
                     </div>
-                    
+
                     <!--begin::Section-->
                     <div class="m-section m-section--last">
                         <div class="m-section__content">
