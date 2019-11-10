@@ -30,84 +30,6 @@
             display: none !important;
         }
         @endif
-
-    .m-timeline-3 .m-timeline-3__item {
-            disply: table;
-            margin-bottom: 1rem;
-            position: relative; }
-        .m-timeline-3 .m-timeline-3__item:before {
-            position: absolute;
-            display: block;
-            width: 0.28rem;
-            border-radius: 0.3rem;
-            height: 70%;
-            right: 11rem;
-            top: 0.46rem;
-            content: ""; }
-        .m-timeline-3 .m-timeline-3__item .m-timeline-3__item-time {
-            direction: ltr;
-            display: table-cell;
-            vertical-align: top;
-            padding-top: 0.6rem;
-            font-weight: 500;
-            font-size: 1.3rem;
-            position: absolute;
-            text-align: left;
-            width: 10.57rem ; }
-        .m-timeline-3 .m-timeline-3__item .m-timeline-3__item-desc {
-            display: table-cell;
-            width: 100%;
-            vertical-align: top;
-            font-size: 1rem;
-            padding-right: 12rem; }
-        .m-timeline-3 .m-timeline-3__item .m-timeline-3__item-desc .m-timeline-3__item-text {
-            font-size: 1.1rem;
-            font-weight: 400; }
-        .m-timeline-3 .m-timeline-3__item .m-timeline-3__item-desc .m-timeline-3__item-user-name .m-timeline-3__item-link {
-            color:rebeccapurple;
-            font-weight: 600;
-            font-size: 1.2rem;
-            text-decoration: none;}
-
-        @media (max-width: 768px) {
-            .m-timeline-3 .m-timeline-3__item {
-                margin-right: 0; } }
-
-        .m-timeline-3__item .m-timeline-3__item-time {
-            color: #898b96; }
-
-        .m-timeline-3__item .m-timeline-3__item-desc .m-timeline-3__item-text {
-            color: black; }
-
-        .m-timeline-3__item.m-timeline-3__item--brand:before {
-            background: #716aca; }
-
-        .m-timeline-3__item.m-timeline-3__item--metal:before {
-            background: #c4c5d6; }
-
-        .m-timeline-3__item.m-timeline-3__item--light:before {
-            background: #ffffff; }
-
-        .m-timeline-3__item.m-timeline-3__item--accent:before {
-            background: #00c5dc; }
-
-        .m-timeline-3__item.m-timeline-3__item--focus:before {
-            background: #9816f4; }
-
-        .m-timeline-3__item.m-timeline-3__item--primary:before {
-            background: #5867dd; }
-
-        .m-timeline-3__item.m-timeline-3__item--success:before {
-            background: #34bfa3; }
-
-        .m-timeline-3__item.m-timeline-3__item--info:before {
-            background: #36a3f7; }
-
-        .m-timeline-3__item.m-timeline-3__item--warning:before {
-            background: #ffb822; }
-
-        .m-timeline-3__item.m-timeline-3__item--danger:before {
-            background: #f4516c; }
     </style>
 @endsection
 
@@ -172,6 +94,15 @@
             <!--begin::Portlet-->
             <div class="m-portlet">
                 <div class="m-portlet__body">
+    
+                    <input type="hidden" name="favoriteActionUrl" value="{{ route('web.mark.favorite.product', [ 'product' => $product->id ]) }}">
+                    <input type="hidden" name="unFavoriteActionUrl" value="{{ route('web.mark.unfavorite.product', [ 'product' => $product->id ]) }}">
+    
+                    <div class="btnFavorite">
+                        <img class="btnFavorite-on {{ ($isFavored) ? '' : 'a--d-none' }}" src="/acm/image/fav-on.svg" width="50">
+                        <img class="btnFavorite-off {{ ($isFavored) ? 'a--d-none' : '' }}" src="/acm/image/fav-off.svg" width="50">
+                    </div>
+                    
                     <!--begin::Section-->
                     <div class="m-section m-section--last">
                         <div class="m-section__content">

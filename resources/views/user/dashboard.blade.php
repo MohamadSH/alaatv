@@ -39,7 +39,7 @@
                             </h3>
                         </div>
                     </div>
-                    <div class="m-portlet__head-tools">
+                    <div class="m-portlet__head-tools d-none">
                         <a href="#"
                            class="btn btn-outline-metal m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill m-btn--air btn-viewGrid"
                            title="نمایش شبکه ای">
@@ -164,6 +164,37 @@
             </div>
         </div>
     </div>
+
+    @foreach($userAssetsCollection as $userFavoritesKey=>$block)
+    
+        @if($block->title!=="محصولات من")
+        
+            @include('block.partials.block', [
+                'blockCustomClass'=>$block->class.' userFavorites',
+                'blockCustomId'=>'owlCarouselMyFavoritProducts',
+                'blockType'=>'product',
+                'blockTitle'=>'محصولات مورد علاقه من',
+                'blockUrlDisable'=>false,
+            ])
+            
+            @include('block.partials.block', [
+                'blockCustomClass'=>$block->class.' userFavorites',
+                'blockCustomId'=>'owlCarouselMyFavoritContent',
+                'blockType'=>'content',
+                'blockTitle'=>'فیلم های مورد علاقه من',
+                'blockUrlDisable'=>false,
+            ])
+            
+            @include('block.partials.block', [
+                'blockCustomClass'=>$block->class.' userFavorites',
+                'blockCustomId'=>'owlCarouselMyFavoritSet',
+                'blockType'=>'set',
+                'blockTitle'=>'مجموعه های مورد علاقه من',
+                'blockUrlDisable'=>false,
+            ])
+
+        @endif
+    @endforeach
     
     <!--begin::Modal-->
     <div class="modal fade" id="pamphletModal" tabindex="-1" role="dialog" aria-labelledby="pamphletModalModalLabel"

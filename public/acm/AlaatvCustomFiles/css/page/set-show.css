@@ -1,0 +1,11 @@
+
+.m-widget5__desc{
+    font-size:1.2rem !important;
+    text-align: justify;
+}
+.m-widget5__title{
+    font-weight: 700 !important;
+}
+.m-portlet__head-tools > .nav {
+    line-height: 50px;
+}
