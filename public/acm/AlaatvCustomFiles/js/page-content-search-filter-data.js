@@ -169,11 +169,6 @@ var contentSearchFilterData = {
             },
             {
                 "lastName": "رحیمی",
-                "firstName": "شهروز",
-                "value": "شهروز_رحیمی"
-            },
-            {
-                "lastName": "رحیمی",
                 "firstName": "پوریا",
                 "value": "پوریا_رحیمی"
             },
@@ -462,11 +457,6 @@ var contentSearchFilterData = {
                 "lastName": "ثابتی",
                 "firstName": "محمد صادق",
                 "value": "محمد_صادق_ثابتی"
-            },
-            {
-                "lastName": "رحیمی",
-                "firstName": "شهروز",
-                "value": "شهروز_رحیمی"
             },
             {
                 "lastName": "مقصودی",

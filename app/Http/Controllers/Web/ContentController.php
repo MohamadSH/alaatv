@@ -189,7 +189,7 @@ class ContentController extends Controller
         return httpResponse(null, $view);
     }
 
-    public function show(Request $request, Content $content, RelatedProductSearch $relatedProductSearch)
+    public function show(Request $request, Content $content)
     {
         $user = $request->user();
         if (isset($content->redirectUrl)) {
@@ -233,19 +233,9 @@ class ContentController extends Controller
         $userCanSeeCounter = optional($user)->CanSeeCounter();
         $apiResponse       = response()->json($content, Response::HTTP_OK);
 
-        $key = 'relatedProduct:content:'.$content->cacheKey();
-        $productsHasThisContentThroughBlockCollection =
-            Cache::tags(['relatedProduct'])->remember($key , config('constants.CACHE_600'),function () use ($content , $relatedProductSearch){
-            $filters      = [
-                'tags'  => ['c-'.$content->id]
-            ];
-            $result = $relatedProductSearch->get($filters);
-            $products = new ProductCollection();
-            foreach ($result as $product) {
-                $products->push($product);
-            }
-            return $products;
-        });
+        $productsHasThisContentThroughBlockCollection = $content->related_products ;
+
+//        $recommendedProductsOfThisContent = $content->recommended_products ;
 
         $contentBlocks = Block::getContentBlocks();
 
@@ -592,7 +582,7 @@ class ContentController extends Controller
      */
     private function getContentInformation(Content $content): array
     {
-        $key = 'getContentInformation: '.$content->id;
+        $key = 'content:getContentInformation: '.$content->id;
         $cacheTags = [ 'content' , 'content_'.$content->id] ;
         $cacheTags = (isset($content->contentset_id))?  array_merge($cacheTags , ['set_'.$content->contentset_id ]):$cacheTags;
         $cacheTags = (isset($content->author_id))?  array_merge($cacheTags , ['user_'.$content->author_id ]):$cacheTags;
@@ -658,25 +648,6 @@ class ContentController extends Controller
         ];
 
         return $this->makeFilesArray($fileUrl , config('constants.DISK_FREE_CONTENT'));
-    }
-
-    /**
-     * @param int $contenttypeId
-     * @param string $fileName
-     * @param int $productId
-     * @param int $contentsetId
-     * @return array
-     */
-    private function makePaidContentFiles(int $contenttypeId,  string $fileName, int $productId): array
-    {
-        $thumbnail = null;
-        $files = [];
-        if ($contenttypeId == config('constants.CONTENT_TYPE_VIDEO')) {
-            $files = $this->makePaidVideoFiles($fileName, $productId);
-        } elseif ($contenttypeId == config('constants.CONTENT_TYPE_PAMPHLET')) {
-            $files = $this->makePaidPamphletFiles($fileName, $productId);
-        }
-        return $files;
     }
 
     /**
