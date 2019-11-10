@@ -113,7 +113,7 @@ class Block extends BaseModel
     public static function getShopBlocks(): ?BlockCollection
     {
         $blocks = Cache::tags(['block' , 'shop'])
-            ->remember('getShopBlocks', config('constants.CACHE_600'), function () {
+            ->remember('bock:getShopBlocks', config('constants.CACHE_600'), function () {
                 $offerBlock = self::getOfferBlock();
                 $blocks     = self::shop()
                     ->enable()
@@ -165,7 +165,7 @@ class Block extends BaseModel
     {
         if ($sets != null) {
             foreach ($sets as $set) {
-                $this->contents->add($set);
+                $this->sets->add($set);
             }
         }
 
@@ -197,7 +197,7 @@ class Block extends BaseModel
     public static function getMainBlocks(): ?BlockCollection
     {
         $blocks = Cache::tags(['block' , 'home'])
-            ->remember('getMainBlocks', config('constants.CACHE_600'), function () {
+            ->remember('block:getMainBlocks', config('constants.CACHE_600'), function () {
                 $blocks = self::main()
                     ->enable()
                     ->orderBy('order')
@@ -216,7 +216,7 @@ class Block extends BaseModel
 
     public static function getContentBlocks(): ?BlockCollection{
         $blocks = Cache::tags(['block' , 'content'])
-            ->remember('getContentBlocks', config('constants.CACHE_600'), function () {
+            ->remember('block:getContentBlocks', config('constants.CACHE_600'), function () {
                 $blocks = self::findMany([13])
                     ->loadMissing([
                         'contents',
@@ -389,7 +389,7 @@ class Block extends BaseModel
 
     public function getActiveContent(): ContentCollection
     {
-        return Cache::remember('block-getActiveContent-'.$this->cacheKey(), config('constants.CACHE_60'), function () {
+        return Cache::tags(['block' , 'block_'.$this->id , 'block_'.$this->id.'_activeContents'])->remember('block:activeContent:'.$this->cacheKey(), config('constants.CACHE_60'), function () {
             return $this->contents()
                 ->active()
                 ->get()->sortBy('pivot.order');
@@ -398,7 +398,7 @@ class Block extends BaseModel
 
     public function getActiveSets(): SetCollection
     {
-        return Cache::remember('block-getActiveSets-'.$this->cacheKey(), config('constants.CACHE_60'), function () {
+        return Cache::tags(['block' , 'block_'.$this->id , 'block_'.$this->id.'_activeSets'])->remember('block:activeSets:'.$this->cacheKey(), config('constants.CACHE_60'), function () {
             return $this->sets()
                 ->active()
                 ->get()->sortBy('pivot.order');
@@ -407,7 +407,7 @@ class Block extends BaseModel
 
     public function getActiveProducts(): ProductCollection
     {
-        return Cache::remember('block-getActiveProducts-'.$this->cacheKey(), config('constants.CACHE_60'), function () {
+        return Cache::tags(['block' , 'block_'.$this->id , 'block_'.$this->id.'_activeProducts'])->remember('block:activeProducts:'.$this->cacheKey(), config('constants.CACHE_60'), function () {
             return $this->products()
                 ->active()
                 ->get()->sortBy('pivot.order');

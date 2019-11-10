@@ -57,7 +57,7 @@ class webBlockCollectionFormatter implements BlockCollectionFormatter
     private function blockFormatter(Block $block): array
     {
         return Cache::tags(['block' , 'block_',$block->id])
-            ->remember('formatBlock:'.$block->id, config('constants.CACHE_600'), function () use ($block) {
+            ->remember('block:formatBlock:'.$block->id, config('constants.CACHE_600'), function () use ($block) {
                 $section = [
                     "name"            => $block->class,
                     "displayName"     => $block->title,
