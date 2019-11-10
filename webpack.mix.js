@@ -12,6 +12,7 @@ class Mix {
         this.mix.sass('public/acm/AlaatvCustomFiles/components/SearchBoxFilter/searchResult.scss', 'public/acm/AlaatvCustomFiles/components/SearchBoxFilter');
         this.mix.sass('public/acm/AlaatvCustomFiles/components/ScrollCarousel/style.scss', 'public/acm/AlaatvCustomFiles/components/ScrollCarousel');
         this.mix.sass('public/acm/AlaatvCustomFiles/components/ScrollCarousel/itemStyle.scss', 'public/acm/AlaatvCustomFiles/components/ScrollCarousel');
+        this.mix.sass('public/acm/AlaatvCustomFiles/components/Favorite/style.scss', 'public/acm/AlaatvCustomFiles/components/Favorite');
     }
 
     static getBaseCss() {

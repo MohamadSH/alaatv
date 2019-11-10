@@ -1,0 +1,86 @@
+.btnFavorite {
+  position: absolute;
+  left: 10px;
+  top: 10px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 50%;
+  box-shadow: 5px 5px 30px -10px #403A3E;
+  outline: none;
+  width: 50px;
+
+  &:before,
+  &:after {
+    opacity: 0;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    content: '';
+    height: 100%;
+    width: 100%;
+    border: 8px solid rgba(0,0,0,0.2);
+    border-radius: 100%;
+    animation-duration: 1.5s;
+    animation-iteration-count: infinite;
+    animation-timing-function: cubic-bezier(.65,0,.34,1);
+    z-index: 1;
+  }
+
+
+  &:hover {
+    &:before,
+    &:after {
+      animation-name: ripple;
+    }
+  }
+
+  &:before {
+    animation-delay: 0s;
+  }
+
+  &:after {
+    animation-delay: 0.2s;
+  }
+
+  img {
+    position: relative;
+    z-index: 2;
+  }
+}
+
+
+
+/* Safari 4.0 - 8.0 */
+@-webkit-keyframes ripple {
+  from {
+    opacity: 1;
+    transform: scale3d(0.75,0.75,1);
+  }
+
+  to {
+    opacity: 0;
+    transform: scale3d(1.8,1.8,1);
+  }
+}
+
+/* Standard syntax */
+@keyframes ripple {
+  from {
+    opacity: 1;
+    transform: scale3d(0.75,0.75,1);
+  }
+
+  to {
+    opacity: 0;
+    transform: scale3d(1.5,1.5,1);
+  }
+}

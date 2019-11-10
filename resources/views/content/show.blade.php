@@ -2,6 +2,12 @@
 
 @section('page-css')
     <link href="{{ mix("/css/content-show.css") }}" rel="stylesheet">
+    <link href="{{ asset("/acm/AlaatvCustomFiles/components/Favorite/style.css") }}" rel="stylesheet">
+    <style>
+        .contentDetailesWrapper {
+            position: relative;
+        }
+    </style>
 @endsection
 
 @section('page-head')
@@ -268,9 +274,15 @@
                     </div>
 
                     <div class="m-portlet m-portlet--mobile">
-                        <div class="m-portlet__body a--nuevo-alaa-theme">
+                        <div class="m-portlet__body contentDetailesWrapper a--nuevo-alaa-theme">
 
                             <h1 class="m--regular-font-size-lg3 m--font-bold m--font-focus">{{ $content->displayName }}</h1>
+                            
+                            <div class="btnFavorite">
+                                <img class="btnFavorite-on {{ ($isFavored) ? '' : 'a--d-none' }}" src="/acm/image/fav-on.svg" width="50">
+                                <img class="btnFavorite-off {{ ($isFavored) ? 'a--d-none' : '' }}" src="/acm/image/fav-off.svg" width="50">
+                            </div>
+                            
                             @if(isset($content->author_id))
                                 <div class="m-widget3">
                                     <div class="m-widget3__item">
@@ -842,7 +854,9 @@
             j.src = fp + '?uuid=' + i + '&v=' + v;
             f.parentNode.insertBefore(j, f);
         })(window, document, '35b39d4b-517b-44bc-85c4-44f93242836f');
+        
     </script>
     <script src="{{ mix("/js/content-show.js") }}" type="text/javascript"></script>
+    <script src="{{ asset("/acm/AlaatvCustomFiles/components/Favorite/script.js") }}" type="text/javascript"></script>
 @endsection
 

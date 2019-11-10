@@ -1,20 +1,37 @@
 var AlaaLoading = function () {
 
-    function appendLoading() {
-        $('body').append('<div class="AlaaLoadingWrapper"><img src="acm/image/alaaLoading.gif"></div>');
+    function appendLoading(selector = '') {
+        var $selector = getSelectorObject(selector),
+            loadingUrl = '';
+        if (selector === '') {
+            loadingUrl = '/acm/image/alaaLoading-small.gif';
+        } else {
+            loadingUrl = '/acm/image/alaaLoading.gif';
+        }
+        $selector.append('<div class="AlaaLoadingWrapper"><img src="'+loadingUrl+'"></div>');
     }
-    function removeLoading() {
-        $('.AlaaLoadingWrapper').remove();
+    function removeLoading(selector = '') {
+        var $selector = getSelectorObject(selector);
+        $selector.find('.AlaaLoadingWrapper').remove();
     }
 
+    function getSelectorObject(selector) {
+        var $selector;
+        if (selector === '') {
+            $selector = $('body');
+        } else {
+            $selector = $(selector);
+        }
+        return $selector;
+    }
 
     return {
-        show: function () {
-            removeLoading();
-            appendLoading();
+        show: function (selector) {
+            removeLoading(selector);
+            appendLoading(selector);
         },
-        hide: function () {
-            removeLoading();
+        hide: function (selector) {
+            removeLoading(selector);
         }
     };
 }();
