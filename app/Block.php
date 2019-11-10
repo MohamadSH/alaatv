@@ -11,8 +11,6 @@ use App\Collection\ContentCollection;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Iatstuti\Database\Support\CascadeSoftDeletes;
 
 /**
  * App\Block
@@ -70,8 +68,6 @@ use Iatstuti\Database\Support\CascadeSoftDeletes;
  */
 class Block extends BaseModel
 {
-    use SoftDeletes, CascadeSoftDeletes;
-
     public static $BLOCK_TYPE_MAIN = 1;
 
     public static $BLOCK_TYPE_SHOP = 2;
@@ -89,8 +85,6 @@ class Block extends BaseModel
     protected $cascadeDeletes = [
         'blockables',
     ];
-
-    protected $dates = ['deleted_at'];
 
     protected $fillable = [
         'title',
