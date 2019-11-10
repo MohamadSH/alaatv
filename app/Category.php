@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Cache;
 use Kalnoy\Nestedset\NodeTrait;
 
@@ -41,22 +42,32 @@ use Kalnoy\Nestedset\NodeTrait;
  * @property-read mixed                                        $cache_cooldown_seconds
  * @property-read int|null $children_count
  */
-class Category extends BaseModel
+class Category extends Model
 {
     use NodeTrait;
-    
+
+    /**
+     * The attributes that should be mutated to dates.
+     *
+     * @var array
+     */
+    protected $dates = [
+        'created_at',
+        'updated_at',
+    ];
+
     protected $fillable = [
         'name',
         'tags',
         'enable',
         'description',
     ];
-    
+
     public function scopeActive($query)
     {
         return $query->where('enable', 1);
     }
-    
+
     public function getWithDepth()
     {
         return Cache::tags('tree')
@@ -65,5 +76,22 @@ class Category extends BaseModel
                     ->active()
                     ->get();
             });
+    }
+
+    /**
+     * Set the content's tag.
+     *
+     * @param  array  $value
+     *
+     * @return void
+     */
+    public function setTagsAttribute(array $value = null)
+    {
+        $tags = null;
+        if (!empty($value)) {
+            $tags = json_encode($value , JSON_UNESCAPED_UNICODE);
+        }
+
+        $this->attributes['tags'] = $tags;
     }
 }
