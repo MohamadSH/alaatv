@@ -43,7 +43,6 @@ class FavorableController extends Controller
 
         $favoredResult =  $favorable->favoring($request->user());
         if($favoredResult){
-            Cache::tags('favorite_'.$favorable->id)->flush();
             return response()->json([
                 'message'   =>  'Favorite added successfully',
             ]);
@@ -67,7 +66,6 @@ class FavorableController extends Controller
 
         $unfavoredResult =  $favorable->unfavoring($user);
         if($unfavoredResult){
-            Cache::tags('favorite_'.$favorable->id)->flush();
             return response()->json([
                 'message'   =>  'Favorite removed successfully',
             ]);
