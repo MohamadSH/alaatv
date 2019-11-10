@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Classes\TagsGroup;
 use App\Classes\RedisTagging;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
 use App\Http\Requests\Request;
 use App\Http\Controllers\Controller;
@@ -13,7 +14,7 @@ use App\Http\Controllers\Controller;
 class TagController extends Controller
 {
     protected $redis;
-    
+
     public function __construct()
     {
         $this->redis       = RedisTagging::getInstance();
@@ -35,11 +36,11 @@ class TagController extends Controller
      *
      * true
      *
-     * @param  \App\Http\Requests\Request|Request  $request
+     * @param Request|Request  $request
      * @param                                      $bucket
      * @param                                      $id
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function add(Request $request, $bucket, $id)
     {
@@ -127,7 +128,7 @@ class TagController extends Controller
      * @param           $bucket
      * @param           $id
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function remove(Request $request, $bucket, $id)
     {
@@ -176,7 +177,7 @@ class TagController extends Controller
         $tags           = $this->normalizeTags($tags);
         $tags           = str_replace('"', '', $tags);
         $tags           = explode(',', mb_substr($tags, 1, -1));
-    
+
         $type           = $request->type ?? 'inter';
         $limit          = $request->limit ?? 100;
         $offset         = $request->offset ?? 0;
@@ -185,7 +186,7 @@ class TagController extends Controller
 
         $response = null;
         $error    = null;
-    
+
         $this->redis->tags($bucket, new TagsGroup($tags),
             function ($err, $result) use (& $response, &$error) {
                 if (isset($err)) {

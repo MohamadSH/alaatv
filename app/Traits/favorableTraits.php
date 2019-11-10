@@ -9,6 +9,7 @@
 namespace App\Traits;
 
 use App\Events\FavoriteEvent;
+use App\Events\UnfavoriteEvent;
 use App\User;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
@@ -19,6 +20,13 @@ trait favorableTraits
         $syncResult = $this->favoriteBy()->sync($user, false);
         event(new FavoriteEvent($user, $this));
         return !empty($syncResult['attached']);
+    }
+
+    public function unfavoring(User $user):bool
+    {
+        $detachResult = $this->favoriteBy()->detach($user)  ;
+        event(new UnfavoriteEvent($user, $this));
+        return $detachResult;
     }
 
     /**

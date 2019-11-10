@@ -9,13 +9,16 @@
 namespace App\Classes;
 
 use App\User;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 interface FavorableInterface
 {
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return HasMany
      */
     public function favoriteBy();
-    
+
     public function favoring(User $user);
+
+    public function unfavoring(User $user);
 }

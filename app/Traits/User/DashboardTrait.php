@@ -55,13 +55,13 @@ trait DashboardTrait
     private function makeBlockForUserFavored(): ?Block
     {
         $favored = [
-            'content' => $this->favoredContents,
-            'set'     => $this->favoredSets,
-            'product' => $this->favoredProducts,
+            'content' => $this->getActiveFavoredContents(),
+            'set'     => $this->getActiveFavoredSets(),
+            'product' => $this->getActiveFavoredProducts(),
         ];
+
         if ($favored['product']->count() > 0 || $favored['set']->count() > 0 || $favored['content']->count() > 0) {
-            return Block::getDummyBlock(false, trans('profile.Favored'), $favored['product'], $favored['set'],
-                $favored['content']);
+            return Block::getDummyBlock(false, trans('profile.Favored'), $favored['product'], $favored['set'], $favored['content']);
         }
 
         return null;
