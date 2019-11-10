@@ -4,9 +4,9 @@ var AlaaLoading = function () {
         var $selector = getSelectorObject(selector),
             loadingUrl = '';
         if (selector === '') {
-            loadingUrl = '/acm/image/alaaLoading-small.gif';
+            loadingUrl = 'https://cdn.alaatv.com/upload/alaaLoading-small.gif';
         } else {
-            loadingUrl = '/acm/image/alaaLoading.gif';
+            loadingUrl = 'https://cdn.alaatv.com/upload/alaaLoading.gif';
         }
         $selector.append('<div class="AlaaLoadingWrapper"><img src="'+loadingUrl+'"></div>');
     }
