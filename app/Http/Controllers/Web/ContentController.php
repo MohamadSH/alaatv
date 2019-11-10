@@ -249,8 +249,7 @@ class ContentController extends Controller
 
         $contentBlocks = Block::getContentBlocks();
 
-//        $isFavored = optional(optional(optional(optional($user)->favoredContents())->where('id' , $content->id))->get())->isNotEmpty();
-        $isFavored = null;
+        $isFavored = optional(optional(optional(optional($user)->favoredContents())->where('id' , $content->id))->get())->isNotEmpty();
 
         $viewResponse      = view('content.show',
             compact('seenCount', 'author', 'content', 'contentsWithSameSet', 'videosWithSameSet',
