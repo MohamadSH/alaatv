@@ -95,8 +95,8 @@
             <div class="m-portlet">
                 <div class="m-portlet__body">
     
-                    <input type="hidden" name="favoriteActionUrl" value="{{ route('web.mark.favourite.product', [ 'product' => $product->id ]) }}">
-                    <input type="hidden" name="unFavoriteActionUrl" value="{{ route('web.mark.unfavourite.product', [ 'product' => $product->id ]) }}">
+                    <input type="hidden" name="favoriteActionUrl" value="{{ route('web.mark.favorite.product', [ 'product' => $product->id ]) }}">
+                    <input type="hidden" name="unFavoriteActionUrl" value="{{ route('web.mark.unfavorite.product', [ 'product' => $product->id ]) }}">
     
                     <div class="btnFavorite">
                         <img class="btnFavorite-on {{ ($isFavored) ? '' : 'a--d-none' }}" src="/acm/image/fav-on.svg" width="50">
