@@ -18,7 +18,7 @@
             justify-content: center;
         }
         .FavoriteAndOrder .btnFavorite {
-    
+
         }
         .FavoriteAndOrder .Order {
             margin-left: 10px;
@@ -93,17 +93,17 @@
                                     </a>
                                 @endif
                             </div>
-                            
+
                             <input type="hidden" name="favoriteActionUrl" value="{{ route('web.mark.favorite.set', [ 'set' => $contentSet->id ]) }}">
                             <input type="hidden" name="unFavoriteActionUrl" value="{{ route('web.mark.unfavorite.set', [ 'set' => $contentSet->id ]) }}">
-    
+
                             <div class="btnFavorite">
-                                <img class="btnFavorite-on {{ ($isFavored) ? '' : 'a--d-none' }}" src="/acm/image/fav-on.svg" width="50">
-                                <img class="btnFavorite-off {{ ($isFavored) ? 'a--d-none' : '' }}" src="/acm/image/fav-off.svg" width="50">
+                                <img class="btnFavorite-on {{ ($isFavored) ? '' : 'a--d-none' }}" src="https://cdn.alaatv.com/upload/fav-on.svg" width="50">
+                                <img class="btnFavorite-off {{ ($isFavored) ? 'a--d-none' : '' }}" src="https://cdn.alaatv.com/upload/fav-off.svg" width="50">
                             </div>
                         </div>
                         <div class="countOfItems">
-    
+
                             @if($videos->isNotEmpty())
                                 فیلم ها : {{$videos->count()}} @if($pamphlets->isNotEmpty())|@endif
                             @endif
@@ -113,9 +113,9 @@
                             @if($articles->isNotEmpty())
                                 مقاله ها: {{$articles->count()}}
                             @endif
-                            
+
                         </div>
-                        
+
                     </div>
                 </div>
                 <div class="m-portlet__body">
@@ -194,7 +194,7 @@
                             </div>
                         @endforeach
                     </div>
-            
+
                 </div>
             </div>
         </div>
