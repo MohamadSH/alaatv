@@ -256,7 +256,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::resource('file', 'Web\FileController');
     Route::resource('employeetimesheet', 'Web\EmployeetimesheetController');
     Route::resource('lottery', 'Web\LotteryController');
-    Route::resource('cat', 'Web\CategoryController');
+
     Route::resource('livedescription', '\\'.LiveDescriptionController::class );
     Route::resource('section', '\\'.SectionController::class );
 
@@ -283,11 +283,13 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('serpSim' , [AdminController::class, 'serpSim'] );
     Route::get('process_serpsim' , [AdminController::class, 'processSerpsim'] );
 });
+Route::resource('cat', 'Web\CategoryController');
 
 Route::group(['prefix' => 'set'], function () {
     Route::get('{set}/listContents', [SetController::class, 'indexContent'])->name('web.set.list.contents');
-    Route::get('{set}/favored', [FavorableController::class, 'getUsersThatFavoredThisFavorable']);
-    Route::post('{set}/favored', [FavorableController::class, 'markFavorableFavorite']);
+    Route::get('{set}/favoured', [FavorableController::class, 'getUsersThatFavouredThisFavorable'])->name('web.get.user.favourite.set');
+    Route::post('{set}/favoured', [FavorableController::class, 'markFavourableFavourite'])->name('web.mark.favourite.set');
+    Route::post('{set}/unfavoured', [FavorableController::class, 'markUnFavourableFavorite'])->name('web.mark.unfavourite.set');
 });
 
 Route::group(['prefix' => 'c'], function () {
@@ -297,8 +299,9 @@ Route::group(['prefix' => 'c'], function () {
     Route::get('createArticle',         [ContentController::class, 'createArticle'])->name('c.create.article');
     Route::post('updateTmpDescription',  [ContentController::class, 'createArticle'])->name('c.update.pending.description');
 
-    Route::get('{c}/favored', [FavorableController::class, 'getUsersThatFavoredThisFavorable']);
-    Route::post('{c}/favored', [FavorableController::class, 'markFavorableFavorite']);
+    Route::get('{c}/favoured', [FavorableController::class, 'getUsersThatFavouredThisFavorable'])->name('web.get.user.favourite.content');
+    Route::post('{c}/favoured', [FavorableController::class, 'markFavourableFavourite'])->name('web.mark.favourite.content');
+    Route::post('{c}/unfavoured', [FavorableController::class, 'markUnFavourableFavorite'])->name('web.mark.unfavourite.content');
 
     Route::post('{c}/updateSet' , [ContentController::class, 'updateSet'])->name('c.updateSet');
 
@@ -309,8 +312,9 @@ Route::group(['prefix' => 'c'], function () {
 });
 
 Route::group(['prefix' => 'product'], function () {
-    Route::get('{product}/favored', [FavorableController::class, 'getUsersThatFavoredThisFavorable']);
-    Route::post('{product}/favored', [FavorableController::class, 'markFavorableFavorite']);
+    Route::get('{product}/favoured', [FavorableController::class, 'getUsersThatFavouredThisFavorable'])->name('web.get.user.favourite.product');
+    Route::post('{product}/favoured', [FavorableController::class, 'markFavourableFavourite'])->name('web.mark.favourite.product');
+    Route::post('{product}/unfavoured', [FavorableController::class, 'markUnFavourableFavorite'])->name('web.mark.unfavourite.product');
 });
 
 Route::resource('product', 'Web\ProductController');

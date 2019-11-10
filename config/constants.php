@@ -186,6 +186,7 @@ return [
     'CHANGE_TO_PAID_CONTENT'                      => 'changeToPaidContent',
     'SHOW_CONTENT_SET_ACCESS'                     => 'showContentset',
     'LIST_CONTENT_SET_ACCESS'                     => 'listContentset',
+    'LIST_CONTENTS_OF_CONTENT_SET_ACCESS'         => 'listContentsOfContentset',
     'INSERT_CONTENT_SET_ACCESS'                   => 'insertContentset',
     'EDIT_CONTENT_SET_ACCESS'                     => 'editContentset',
     'REMOVE_CONTENT_SET_ACCESS'                   => 'removeContentset',
