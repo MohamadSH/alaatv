@@ -16,7 +16,7 @@
                 "thumbnailUrl" : "{{ $content->thumbnail }}",
                 "description" : "{{ $content->metaDescription }}",
                 "contentUrl" : "{{ $content->url }}",
-                "embedUrl" : "{{ action("Web\ContentController@embed" , $content) }}",
+                "embedUrl" : "{{ route('web.c.embed' , $content->id) }}",
                 "publisher" : {
                     "@type" : "Organization",
                     "name" : "آلاء",
@@ -268,9 +268,18 @@
                     </div>
 
                     <div class="m-portlet m-portlet--mobile">
-                        <div class="m-portlet__body a--nuevo-alaa-theme">
+                        <div class="m-portlet__body contentDetailesWrapper a--nuevo-alaa-theme">
 
-                            <h1 class="m--regular-font-size-lg3 m--font-bold m--font-focus">{{ $content->displayName }}</h1>
+                            <h1 class="m--regular-font-size-lg3 m--font-bold m--font-focus contentTitleH1">{{ $content->displayName }}</h1>
+
+                            <input type="hidden" name="favoriteActionUrl" value="{{ route('web.mark.favorite.content', [ 'c' => $content->id ]) }}">
+                            <input type="hidden" name="unFavoriteActionUrl" value="{{ route('web.mark.unfavorite.content', [ 'c' => $content->id ]) }}">
+
+                            <div class="btnFavorite">
+                                <img class="btnFavorite-on {{ ($isFavored) ? '' : 'a--d-none' }}" src="https://cdn.alaatv.com/upload/fav-on.svg" width="50">
+                                <img class="btnFavorite-off {{ ($isFavored) ? 'a--d-none' : '' }}" src="https://cdn.alaatv.com/upload/fav-off.svg" width="50">
+                            </div>
+
                             @if(isset($content->author_id))
                                 <div class="m-widget3">
                                     <div class="m-widget3__item">
@@ -807,6 +816,8 @@
         ])
     @endforeach
     <div class="AlaaAdDom" alaa-ad-preloadimage="1"></div>
+
+
 @endsection
 
 @section('page-js')
@@ -842,6 +853,7 @@
             j.src = fp + '?uuid=' + i + '&v=' + v;
             f.parentNode.insertBefore(j, f);
         })(window, document, '35b39d4b-517b-44bc-85c4-44f93242836f');
+
     </script>
     <script src="{{ mix("/js/content-show.js") }}" type="text/javascript"></script>
 @endsection

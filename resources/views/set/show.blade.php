@@ -1,15 +1,7 @@
 @extends('app')
 
 @section('page-css')
-    <style>
-        .m-widget5__desc{
-            font-size:1.2rem !important;
-            text-align: justify;
-        }
-        .m-widget5__title{
-            font-weight: 700 !important;
-        }
-    </style>
+    <link href="{{ mix("/css/set-show.css") }}" rel="stylesheet">
 @endsection
 
 @section('page-head')
@@ -49,7 +41,7 @@
     <div class="row">
         <div class="col-lg-8 mx-auto">
             <div class="m-portlet m-portlet--full-height ">
-                <div class="m-portlet__head">
+                <div class="m-portlet__head contentsetListHead">
                     <div class="m-portlet__head-caption">
                         <div class="m-portlet__head-title">
                             <h1 class="m-portlet__head-text">
@@ -58,40 +50,41 @@
                         </div>
                     </div>
                     <div class="m-portlet__head-tools">
-                        <ul class="nav nav-pills nav-pills--brand m-nav-pills--align-right m-nav-pills--btn-pill m-nav-pills--btn-sm" role="tablist">
-                            @if($order == 'desc')
-                                <li  class="nav-item m-tabs__item ">
+                        <div class="FavoriteAndOrder">
+                            <div class="Order">
+                                @if($order == 'desc')
                                     <a href="?order=asc" id="sort-ascending">
-                                        <i class="fa fa-arrow-up"></i>
+                                        <i class="fa fa-sort-amount-up"></i>
                                     </a>
-                                </li>
-                            @else
-                                <li  class="nav-item m-tabs__item ">
+                                @else
                                     <a href="?order=desc" id="sort-descending">
-                                        <i class="fa fa-arrow-down"></i>
+                                        <i class="fa fa-sort-amount-down"></i>
                                     </a>
-                                </li>
-                            @endif
-                            <li  class="nav-item m-tabs__item font-weight-bold">
-                                |
-                            </li>
-                        
+                                @endif
+                            </div>
+
+                            <input type="hidden" name="favoriteActionUrl" value="{{ route('web.mark.favorite.set', [ 'set' => $contentSet->id ]) }}">
+                            <input type="hidden" name="unFavoriteActionUrl" value="{{ route('web.mark.unfavorite.set', [ 'set' => $contentSet->id ]) }}">
+
+                            <div class="btnFavorite">
+                                <img class="btnFavorite-on {{ ($isFavored) ? '' : 'a--d-none' }}" src="https://cdn.alaatv.com/upload/fav-on.svg" width="50">
+                                <img class="btnFavorite-off {{ ($isFavored) ? 'a--d-none' : '' }}" src="https://cdn.alaatv.com/upload/fav-off.svg" width="50">
+                            </div>
+                        </div>
+                        <div class="countOfItems">
+
                             @if($videos->isNotEmpty())
-                                <li class="nav-item m-tabs__item font-weight-bold">
-                                    فیلم ها : {{$videos->count()}} @if($pamphlets->isNotEmpty())|@endif
-                                </li>
+                                فیلم ها : {{$videos->count()}} @if($pamphlets->isNotEmpty())|@endif
                             @endif
                             @if($pamphlets->isNotEmpty())
-                                <li class="nav-item m-tabs__item font-weight-bold">
-                                    جزوه ها: {{$pamphlets->count()}} @if($articles->isNotEmpty())|@endif
-                                </li>
+                                جزوه ها: {{$pamphlets->count()}} @if($articles->isNotEmpty())|@endif
                             @endif
                             @if($articles->isNotEmpty())
-                                <li class="nav-item m-tabs__item font-weight-bold">
-                                    مقاله ها: {{$articles->count()}}
-                                </li>
+                                مقاله ها: {{$articles->count()}}
                             @endif
-                        </ul>
+
+                        </div>
+
                     </div>
                 </div>
                 <div class="m-portlet__body">
@@ -170,7 +163,7 @@
                             </div>
                         @endforeach
                     </div>
-            
+
                 </div>
             </div>
         </div>
@@ -179,10 +172,6 @@
 
 
 @section('page-js')
-    <script type="text/javascript" defer>
-    
-    </script>
     <script src="{{ mix('/js/set-show.js') }}" type="text/javascript"></script>
-    <script src="{{ asset('/acm/AlaatvCustomFiles/components/SearchBoxFilter/script.js') }}" type="text/javascript"></script>
 @endsection
 

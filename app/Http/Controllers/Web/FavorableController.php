@@ -34,17 +34,46 @@ class FavorableController extends Controller
 
     public function markFavorableFavorite(Request $request, FavorableInterface $favorable)
     {
+        $user = $request->user();
+        if($favorable->favoriteBy->where('id' , $user->id)->isNotEmpty()){
+            return response()->json([
+                'message'   =>  'Favorite removed successfully',
+            ]);
+        }
+
         $favoredResult =  $favorable->favoring($request->user());
         if($favoredResult){
-            Cache::tags('favorite_'.$favorable->id)->flush();
             return response()->json([
-                'message'   =>  'Favorable added successfully',
+                'message'   =>  'Favorite added successfully',
             ]);
         }
 
         return response()->json([
             'error' => [
-                'message' => 'Error on adding favorable',
+                'message' => 'Error on adding Favorite',
+            ]
+        ]);
+    }
+
+    public function markUnFavorableFavorite(Request $request, FavorableInterface $favorable)
+    {
+        $user = $request->user();
+        if($favorable->favoriteBy->where('id' , $user->id)->isEmpty()){
+            return response()->json([
+                'message'   =>  'Favorite removed successfully',
+            ]);
+        }
+
+        $unfavoredResult =  $favorable->unfavoring($user);
+        if($unfavoredResult){
+            return response()->json([
+                'message'   =>  'Favorite removed successfully',
+            ]);
+        }
+
+        return response()->json([
+            'error' => [
+                'message' => 'Error on removing Favorite',
             ]
         ]);
     }

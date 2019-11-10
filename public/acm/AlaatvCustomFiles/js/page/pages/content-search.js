@@ -132,9 +132,9 @@ var Alaasearch = function () {
             '                <span class="a--block-set-count-title">محتوا</span>\n' +
             '                <br>\n' +
             '                <a href="'+widgetLink+'" class="a--block-set-count-icon">\n' +
-            '                    <svg viewBox="0 0 24 24" preserveAspectRatio="xMidYMid meet" focusable="false" class="style-scope yt-icon" <g="" style="width: 25px;fill: white;">\n' +
-            '        <path d="M3.67 8.67h14V11h-14V8.67zm0-4.67h14v2.33h-14V4zm0 9.33H13v2.34H3.67v-2.34zm11.66 0v7l5.84-3.5-5.84-3.5z" class="style-scope yt-icon" style="color: hsla(0, 0%, 100%, 0.8);/*! fill: red; */"></path>\n' +
-            '      </svg>\n' +
+            '                    <svg viewBox="0 0 24 24" preserveAspectRatio="xMidYMid meet" focusable="false" class="style-scope yt-icon" <g="" >\n' +
+            '                        <path d="M3.67 8.67h14V11h-14V8.67zm0-4.67h14v2.33h-14V4zm0 9.33H13v2.34H3.67v-2.34zm11.66 0v7l5.84-3.5-5.84-3.5z" class="style-scope yt-icon"></path>\n' +
+            '                    </svg>\n' +
             '                </a>\n' +
             '            </div>\n' +
             '            \n' +
@@ -193,7 +193,6 @@ var Alaasearch = function () {
             '</div>';
     }
     function getProductItem(data, itemKey) {
-        console.log('product data:', data);
         var options = {
             TruncateLength: 80,
             TruncateBy : "words",
@@ -425,13 +424,16 @@ var Alaasearch = function () {
         cleatAllItems();
         addLoadingItem('carouselType');
         addLoadingItem('listType');
-        mApp.block('.SearchBoxFilter .GroupFilters .body', {
-            type: "loader",
-            state: "success",
-        });
+        // mApp.block('.SearchBoxFilter .GroupFilters .body', {
+        //     type: "loader",
+        //     state: "success",
+        // });
+
+        AlaaLoading.show();
         getAjaxContent(urlAction, function (response) {
             loadAjaxContent(response.result);
-            mApp.unblock('.SearchBoxFilter .GroupFilters .body');
+            // mApp.unblock('.SearchBoxFilter .GroupFilters .body');
+            AlaaLoading.hide();
         });
     }
 
@@ -1181,7 +1183,7 @@ var initFilterOptions = function () {
             '                    </span>\n' +
             '                </span>\n' +
             '            </div>\n' : '',
-            moreBtnHtml = '<button data-more="'+moreCounter+'" data-moretype="more" class="showMoreItems">نمایش بیشتر...</button>',
+            moreBtnHtml = '<button data-more="'+moreCounter+'" data-moretype="more" class="showMoreItems"><i class="fa fa-plus"></i>نمایش بیشتر...</button>',
             sytleForMoreBtnHtml = 'style="max-height: '+( (moreCounter*29.5) + 20 )+'px;overflow: hidden;position: relative;"';
 
         if (moreCounter == 0) {

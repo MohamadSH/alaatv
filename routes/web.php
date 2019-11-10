@@ -9,6 +9,7 @@ use App\Http\Controllers\Web\LiveController;
 use App\Http\Controllers\Web\SanatisharifmergeController;
 use App\Http\Controllers\Web\SectionController;
 use App\Http\Controllers\Web\SetController;
+use App\Http\Controllers\Web\TopicsTreeController;
 use App\Http\Controllers\Web\UserController;
 use App\Http\Controllers\Web\AdminController;
 use App\Http\Controllers\Web\SurveyController;
@@ -34,7 +35,7 @@ use App\PaymentModule\Controllers\PaymentVerifierController;
 use App\PaymentModule\Controllers\RedirectAPIUserToPaymentRoute;
 
 
-Route::get('embed/c/{content}', 'Web\ContentController@embed');
+Route::get('embed/c/{content}', [ContentController::class , 'embed'])->name('web.c.embed');
 Route::get('/', '\\'.IndexPageController::class)->name('web.index');
 Route::get('shop', '\\'.ShopPageController::class)->name('web.shop');
 Route::get('home', [HomeController::class , 'home'])->name('web.home');
@@ -256,7 +257,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::resource('file', 'Web\FileController');
     Route::resource('employeetimesheet', 'Web\EmployeetimesheetController');
     Route::resource('lottery', 'Web\LotteryController');
-    Route::resource('cat', 'Web\CategoryController');
+
     Route::resource('livedescription', '\\'.LiveDescriptionController::class );
     Route::resource('section', '\\'.SectionController::class );
 
@@ -283,11 +284,13 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('serpSim' , [AdminController::class, 'serpSim'] );
     Route::get('process_serpsim' , [AdminController::class, 'processSerpsim'] );
 });
+Route::resource('cat', 'Web\CategoryController');
 
 Route::group(['prefix' => 'set'], function () {
     Route::get('{set}/listContents', [SetController::class, 'indexContent'])->name('web.set.list.contents');
-    Route::get('{set}/favored', [FavorableController::class, 'getUsersThatFavoredThisFavorable']);
-    Route::post('{set}/favored', [FavorableController::class, 'markFavorableFavorite']);
+    Route::get('{set}/favored', [FavorableController::class, 'getUsersThatFavoredThisFavorable'])->name('web.get.user.favorite.set');
+    Route::post('{set}/favored', [FavorableController::class, 'markFavorableFavorite'])->name('web.mark.favorite.set');
+    Route::post('{set}/unfavored', [FavorableController::class, 'markUnFavorableFavorite'])->name('web.mark.unfavorite.set');
 });
 
 Route::group(['prefix' => 'c'], function () {
@@ -297,8 +300,9 @@ Route::group(['prefix' => 'c'], function () {
     Route::get('createArticle',         [ContentController::class, 'createArticle'])->name('c.create.article');
     Route::post('updateTmpDescription',  [ContentController::class, 'createArticle'])->name('c.update.pending.description');
 
-    Route::get('{c}/favored', [FavorableController::class, 'getUsersThatFavoredThisFavorable']);
-    Route::post('{c}/favored', [FavorableController::class, 'markFavorableFavorite']);
+    Route::get('{c}/favored', [FavorableController::class, 'getUsersThatFavoredThisFavorable'])->name('web.get.user.favorite.content');
+    Route::post('{c}/favored', [FavorableController::class, 'markFavorableFavorite'])->name('web.mark.favorite.content');
+    Route::post('{c}/unfavored', [FavorableController::class, 'markUnFavorableFavorite'])->name('web.mark.unfavorite.content');
 
     Route::post('{c}/updateSet' , [ContentController::class, 'updateSet'])->name('c.updateSet');
 
@@ -309,15 +313,16 @@ Route::group(['prefix' => 'c'], function () {
 });
 
 Route::group(['prefix' => 'product'], function () {
-    Route::get('{product}/favored', [FavorableController::class, 'getUsersThatFavoredThisFavorable']);
-    Route::post('{product}/favored', [FavorableController::class, 'markFavorableFavorite']);
+    Route::get('{product}/favored', [FavorableController::class, 'getUsersThatFavoredThisFavorable'])->name('web.get.user.favorite.product');
+    Route::post('{product}/favored', [FavorableController::class, 'markFavorableFavorite'])->name('web.mark.favorite.product');
+    Route::post('{product}/unfavored', [FavorableController::class, 'markUnFavorableFavorite'])->name('web.mark.unfavorite.product');
 });
 
 Route::resource('product', 'Web\ProductController');
 Route::resource('set', 'Web\SetController');
 Route::resource('c', 'Web\ContentController')->names([
     'index' => 'content.index'
-]);;
+]);
 Route::resource('sanatisharifmerge', 'Web\SanatisharifmergeController');
 Route::resource('article', 'Web\ArticleController');
 Route::resource('block', 'Web\BlockController');
@@ -330,7 +335,7 @@ Route::group(['prefix' => 'mobile'], function () {
 });
 Route::post('cd3b472d9ba631a73cb7b66ba513df53', 'Web\CouponController@generateRandomCoupon');
 
-Route::get('tree', 'Web\TopicsTreeController@lernitoTree');
-Route::get('tree/getArrayString/{lnid}', 'Web\TopicsTreeController@getTreeInPHPArrayString');
-Route::get('tree/ignoreUpdateItem/{iuid}', 'Web\TopicsTreeController@ignoreUpdateItem');
+Route::get('tree', [TopicsTreeController::class, 'lernitoTree']);
+Route::get('tree/getArrayString/{lnid}', [TopicsTreeController::class, 'getTreeInPHPArrayString']);
+Route::get('tree/ignoreUpdateItem/{iuid}', [TopicsTreeController::class, 'ignoreUpdateItem']);
 Route::any('goToPaymentRoute/{paymentMethod}/{device}/', '\\'.RedirectAPIUserToPaymentRoute::class)->name('redirectToPaymentRoute');

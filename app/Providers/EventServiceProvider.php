@@ -4,13 +4,17 @@ namespace App\Providers;
 
 use App\Events\Authenticated;
 use App\Events\ContentRedirected;
+use App\Events\FavoriteEvent;
 use App\Events\MobileVerified;
 use App\Events\FreeInternetAccept;
 use App\Events\FillTmpShareOfOrder;
+use App\Events\UnfavoriteEvent;
 use App\Events\UserAvatarUploaded;
 use App\Events\UserRedirectedToPayment;
+use App\Listeners\FavoriteEventListener;
 use App\Listeners\RedirectContentListener;
 use App\Listeners\RemoveOldUserAvatarListener;
+use App\Listeners\UnfavoriteEventListener;
 use App\Listeners\UserRedirectedToPaymentListener;
 use Illuminate\Auth\Events\Registered;
 use App\Listeners\AuthenticatedListener;
@@ -60,6 +64,12 @@ class EventServiceProvider extends ServiceProvider
         ],
         UserRedirectedToPayment::class      => [
             UserRedirectedToPaymentListener::class,
+        ],
+        FavoriteEvent::class      => [
+            FavoriteEventListener::class,
+        ],
+        UnfavoriteEvent::class      => [
+            UnfavoriteEventListener::class,
         ],
     ];
 

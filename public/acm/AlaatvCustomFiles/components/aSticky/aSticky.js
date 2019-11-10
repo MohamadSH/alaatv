@@ -249,7 +249,6 @@
                             newTop = newTop1;
 
                             if (newTop < elementTop) {
-
                                 // $('.scrollReport').html(
                                 //     'scrollBottom: '+scrollBottom+
                                 //     '<br>scrollTop: '+scrollTop+
@@ -297,8 +296,9 @@
 
                         } else if (scrollDirection === 'down') {
                             var newOffset = s.stickyElement.offset().top;
+                            var newTopPosition = s.stickyElement.position().top;
                             if (windowHeight < elementHeight) {
-                                if ((newOffset + elementHeight) > scrollBottom + 1) {
+                                if ( ((newOffset + elementHeight) > scrollBottom + 1) && (scrollBottom < ($(document).height()-elementTop))) {
                                     // $('.scrollReport').html(
                                     //     'scrollBottom: '+scrollBottom+
                                     //     '<br>scrollTop: '+scrollTop+
@@ -309,6 +309,7 @@
                                     //     '<br>windowHeight: '+windowHeight+
                                     //     '<br>documentHeight: '+documentHeight+
                                     //     '<br>(newTop1+elementHeight): '+(newTop1+elementHeight)+
+                                    //     '<br>new TopPosition: '+newTopPosition+
                                     //     '<br>new offset: '+newOffset+
                                     //     '<br>old offset: '+(oldOffset)+
                                     //     '<br>newTop1'+ newTop1+
@@ -346,23 +347,22 @@
                                         .css('z-index', '');
                                 }
                             } else {
-
-                                $('.scrollReport').html(
-                                    'scrollBottom: ' + scrollBottom +
-                                    '<br>scrollTop: ' + scrollTop +
-                                    '<br>elementTop: ' + elementTop +
-                                    '<br>elementBottom: ' + elementBottom +
-                                    '<br>scrollDirection: ' + scrollDirection +
-                                    '<br>elementHeight: ' + elementHeight +
-                                    '<br>windowHeight: ' + windowHeight +
-                                    '<br>documentHeight: ' + documentHeight +
-                                    '<br>(newTop1+elementHeight): ' + (newTop1 + elementHeight) +
-                                    '<br>new offset: ' + s.stickyElement.offset().top +
-                                    '<br>old offset: ' + (oldOffset) +
-                                    '<br>newTop1' + newTop1 +
-                                    '<br>newTop2' + newTop2 +
-                                    '<br>down3'
-                                );
+                                // $('.scrollReport').html(
+                                //     'scrollBottom: ' + scrollBottom +
+                                //     '<br>scrollTop: ' + scrollTop +
+                                //     '<br>elementTop: ' + elementTop +
+                                //     '<br>elementBottom: ' + elementBottom +
+                                //     '<br>scrollDirection: ' + scrollDirection +
+                                //     '<br>elementHeight: ' + elementHeight +
+                                //     '<br>windowHeight: ' + windowHeight +
+                                //     '<br>documentHeight: ' + documentHeight +
+                                //     '<br>(newTop1+elementHeight): ' + (newTop1 + elementHeight) +
+                                //     '<br>new offset: ' + s.stickyElement.offset().top +
+                                //     '<br>old offset: ' + (oldOffset) +
+                                //     '<br>newTop1' + newTop1 +
+                                //     '<br>newTop2' + newTop2 +
+                                //     '<br>down3'
+                                // );
                             }
 
                         }

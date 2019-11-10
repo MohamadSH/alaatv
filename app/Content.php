@@ -2,6 +2,8 @@
 
 namespace App;
 
+use App\Classes\Search\RecommendedProductSearch;
+use App\Classes\Search\RelatedProductSearch;
 use App\Traits\DateTrait;
 use Eloquent;
 use Exception;
@@ -1366,4 +1368,47 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
         return null;
     }
 
+    /**
+     * @return ProductCollection
+     */
+    public function getRelatedProductsAttribute():ProductCollection
+    {
+        $content = $this;
+        $key = 'content:relatedProduct:' . $content->cacheKey();
+        $relatedProductSearch = new RelatedProductSearch();
+        return Cache::tags(['content', 'content_' . $content->id, 'content_' . $content->id . '_relatedProduct'])
+            ->remember($key, config('constants.CACHE_600'), function () use ($content, $relatedProductSearch) {
+            $filters = [
+                'tags' => ['c-' . $content->id]
+            ];
+            $result = $relatedProductSearch->get($filters);
+            $products = new ProductCollection();
+            foreach ($result as $product) {
+                $products->push($product);
+            }
+            return $products;
+        });
+    }
+
+    /**
+     * @return ProductCollection
+     */
+    public function getRecommendedProductsAttribute():ProductCollection
+    {
+        $content = $this;
+        $key = 'content:recommendedProduct:' . $content->cacheKey();
+        $recommendedProductSearch = new RecommendedProductSearch ();
+        return Cache::tags(['content', 'content_' . $content->id, 'content_' . $content->id . '_recommendedProduct'])
+            ->remember($key, config('constants.CACHE_600'), function () use ($content, $recommendedProductSearch) {
+                $filters = [
+                    'tags' => ['c-' . $content->id]
+                ];
+                $result = $recommendedProductSearch->get($filters);
+                $products = new ProductCollection();
+                foreach ($result as $product) {
+                    $products->push($product);
+                }
+                return $products;
+            });
+    }
 }
