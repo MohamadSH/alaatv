@@ -2,37 +2,6 @@
 
 @section('page-css')
     <link href="{{ mix("/css/set-show.css") }}" rel="stylesheet">
-    <style>
-        .contentsetListHead {
-            height: auto !important;
-        }
-        .contentsetListHead .m-portlet__head-tools {
-            display: flex;
-            flex-flow: column;
-            padding: 5px 0;
-        }
-        .FavoriteAndOrder {
-            display: flex;
-            flex-flow: row;
-            align-items: center;
-            justify-content: center;
-        }
-        .FavoriteAndOrder .btnFavorite {
-
-        }
-        .FavoriteAndOrder .Order {
-            margin-left: 10px;
-        }
-        .FavoriteAndOrder .Order a i {
-            font-size: 25px;
-        }
-        .countOfItems {
-            display: flex;
-            flex-flow: row;
-            align-items: center;
-            justify-content: center;
-        }
-    </style>
 @endsection
 
 @section('page-head')

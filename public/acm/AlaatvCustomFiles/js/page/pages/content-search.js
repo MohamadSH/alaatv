@@ -1183,7 +1183,7 @@ var initFilterOptions = function () {
             '                    </span>\n' +
             '                </span>\n' +
             '            </div>\n' : '',
-            moreBtnHtml = '<button data-more="'+moreCounter+'" data-moretype="more" class="showMoreItems">نمایش بیشتر...</button>',
+            moreBtnHtml = '<button data-more="'+moreCounter+'" data-moretype="more" class="showMoreItems"><i class="fa fa-plus"></i>نمایش بیشتر...</button>',
             sytleForMoreBtnHtml = 'style="max-height: '+( (moreCounter*29.5) + 20 )+'px;overflow: hidden;position: relative;"';
 
         if (moreCounter == 0) {
