@@ -91,6 +91,12 @@ class SetController extends Controller
             ],
         ]);
 
+        $this->middleware('permission:'.config('constants.LIST_CONTENTS_OF_CONTENT_SET_ACCESS'), [
+            'only' => [
+                'indexContent',
+            ],
+        ]);
+
         $this->middleware('permission:'.config('constants.SHOW_CONTENT_SET_ACCESS'), [
             'only' => [
                 'edit',

@@ -32,24 +32,41 @@ class FavorableController extends Controller
         return $authException;
     }
 
-    public function markFavorableFavorite(Request $request, FavorableInterface $favorable)
+    public function markFavourableFavourite(Request $request, FavorableInterface $favorable)
     {
         $favoredResult =  $favorable->favoring($request->user());
         if($favoredResult){
             Cache::tags('favorite_'.$favorable->id)->flush();
             return response()->json([
-                'message'   =>  'Favorable added successfully',
+                'message'   =>  'Favorite added successfully',
             ]);
         }
 
         return response()->json([
             'error' => [
-                'message' => 'Error on adding favorable',
+                'message' => 'Error on adding Favorite',
             ]
         ]);
     }
 
-    public function getUsersThatFavoredThisFavorable(Request $request, FavorableInterface $favorable)
+    public function markUnFavourableFavorite(Request $request, FavorableInterface $favorable)
+    {
+        $unfavoredResult =  $favorable->unfavoring($request->user());
+        if($unfavoredResult){
+            Cache::tags('favorite_'.$favorable->id)->flush();
+            return response()->json([
+                'message'   =>  'Favorite removed successfully',
+            ]);
+        }
+
+        return response()->json([
+            'error' => [
+                'message' => 'Error on removing Favorite',
+            ]
+        ]);
+    }
+
+    public function getUsersThatFavouredThisFavorable(Request $request, FavorableInterface $favorable)
     {
         $key = md5($request->url());
 
