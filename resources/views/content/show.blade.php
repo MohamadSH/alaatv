@@ -16,7 +16,7 @@
                 "thumbnailUrl" : "{{ $content->thumbnail }}",
                 "description" : "{{ $content->metaDescription }}",
                 "contentUrl" : "{{ $content->url }}",
-                "embedUrl" : "{{ action("Web\ContentController@embed" , $content) }}",
+                "embedUrl" : "{{ route('web.c.embed' , $content->id) }}",
                 "publisher" : {
                     "@type" : "Organization",
                     "name" : "آلاء",
