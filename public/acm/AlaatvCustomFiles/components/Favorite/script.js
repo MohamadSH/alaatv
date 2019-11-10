@@ -4,7 +4,6 @@ function getFavoriteActionUrl() {
 function getUnFavoriteActionUrl() {
     return getUrl('input[type="hidden"][name="unFavoriteActionUrl"]');
 }
-
 function getUrl(selector) {
     var url = $(selector).val();
     if (typeof url !== 'undefined') {
@@ -15,13 +14,14 @@ function getUrl(selector) {
 }
 
 $(document).on('click', '.btnFavorite-on, .btnFavorite-off', function () {
+    var $that = $(this);
     if ($(this).hasClass('btnFavorite-off')) {
         actionUrl = getFavoriteActionUrl();
     } else if ($(this).hasClass('btnFavorite-on')) {
         actionUrl = getUnFavoriteActionUrl();
     }
     mApp.block('.btnFavorite', {
-        overlayColor: "#000000",
+        // overlayColor: "#000000",
         type: "loader",
         state: "success",
     });
@@ -34,13 +34,14 @@ $(document).on('click', '.btnFavorite-on, .btnFavorite-off', function () {
             if (typeof data === 'undefined' || data.error) {
                 toastr.error('خطای سیستمی رخ داده است.');
             } else {
-                toastr.success('علاقه مندی شما ثبت شد.');
-                if ($(this).hasClass('btnFavorite-off')) {
+                if ($that.hasClass('btnFavorite-off')) {
                     $('.btnFavorite-off').fadeOut(0);
                     $('.btnFavorite-on').fadeIn();
-                } else if ($(this).hasClass('btnFavorite-on')) {
+                    toastr.success('به علاقه مندی شما افزوده شد.');
+                } else if ($that.hasClass('btnFavorite-on')) {
                     $('.btnFavorite-on').fadeOut(0);
                     $('.btnFavorite-off').fadeIn();
+                    toastr.success('از علاقه مندی شما حذف شد.');
                 }
             }
             mApp.unblock('.btnFavorite');

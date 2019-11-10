@@ -2,12 +2,17 @@
     isset($block) && $block !== null &&
     (
         (!isset($blockType)) ||
-        isset($blockType) &&
+        isset($blockType)
+        &&
         (
             ($blockType === 'content' && !is_null($block->getActiveContent()) && $block->getActiveContent()->count() > 0) ||
             ($blockType === 'content' && optional(optional(optional($block->sets)->first())->getActiveContents2())->count() > 0) ||
             ($blockType === 'product' && !is_null($block->getActiveProducts()) && $block->getActiveProducts()->count() > 0) ||
-            ($blockType === 'set' && !is_null($block->getActiveSets()) && $block->getActiveSets()->count() > 0)
+            ($blockType === 'set' && !is_null($block->getActiveSets()) && $block->getActiveSets()->count() > 0) ||
+            
+            ($blockType === 'content' && !is_null($block->contents) && $block->contents->count() > 0) ||
+            ($blockType === 'product' && !is_null($block->products) && $block->products->count() > 0) ||
+            ($blockType === 'set' && !is_null($block->sets) && $block->sets->count() > 0)
         )
     )
 )
@@ -81,30 +86,24 @@
                     </div>
     
                     <div class="m-widget_head-owlcarousel-items ScrollCarousel a--owl-carousel-type-2 carousel_block_{{ $block->id }}">
+    
         
-        
-                        @if(((isset($blockType) && $blockType === 'product') || !isset($blockType)) && isset($block->products))
-                            @foreach($block->getActiveProducts() as $productKey=>$product)
+                        @if(((isset($blockType) && $blockType === 'product' && isset($block->products) && $block->products->count() > 0) || !isset($blockType)) && isset($block->products))
+                            @foreach($block->products as $productKey=>$product)
                                 @include('block.partials.product')
                             @endforeach
-                        @endif
-        
                         {{-- old content block loop --}}
-                        @if(((isset($blockType) && $blockType === 'content') || !isset($blockType)) && isset($block->contents))
-                            @foreach($block->getActiveContent() as $contentKey=>$content)
+                        @elseif(((isset($blockType) && $blockType === 'content' && isset($block->contents) && $block->contents->count() > 0) || !isset($blockType)) && isset($block->contents))
+                            @foreach($block->contents as $contentKey=>$content)
                                 @include('block.partials.content')
                             @endforeach
-                        @endif
-        
-                        {{--                                 new content block loop --}}
-                        @if(((isset($blockType) && $blockType === 'content') || !isset($blockType)) && isset($block->sets) && $block->sets->count() > 0)
+                        {{-- new content block loop --}}
+                        @elseif(((isset($blockType) && $blockType === 'content') || !isset($blockType)) && isset($block->sets) && $block->sets->count() > 0)
                             @foreach($block->sets->first()->getActiveContents2() as $contentKey=>$content)
                                 @include('block.partials.content')
                             @endforeach
-                        @endif
-        
-                        @if(((isset($blockType) && $blockType === 'set') || !isset($blockType)) && isset($block->sets))
-                            @foreach($block->getActiveSets() as $setsKey=>$set)
+                        @elseif(((isset($blockType) && $blockType === 'set' && isset($block->sets) && $block->sets->count() > 0) || !isset($blockType)) && isset($block->sets))
+                            @foreach($block->sets as $setsKey=>$set)
                                 @include('block.partials.set')
                             @endforeach
                         @endif
