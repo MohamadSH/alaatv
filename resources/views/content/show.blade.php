@@ -272,8 +272,8 @@
 
                             <h1 class="m--regular-font-size-lg3 m--font-bold m--font-focus contentTitleH1">{{ $content->displayName }}</h1>
                             
-                            <input type="hidden" name="favoriteActionUrl" value="{{ route('web.mark.favourite.content', [ 'c' => $content->id ]) }}">
-                            <input type="hidden" name="unFavoriteActionUrl" value="{{ route('web.mark.unfavourite.content', [ 'c' => $content->id ]) }}">
+                            <input type="hidden" name="favoriteActionUrl" value="{{ route('web.mark.favorite.content', [ 'c' => $content->id ]) }}">
+                            <input type="hidden" name="unFavoriteActionUrl" value="{{ route('web.mark.unfavorite.content', [ 'c' => $content->id ]) }}">
                             
                             <div class="btnFavorite">
                                 <img class="btnFavorite-on {{ ($isFavored) ? '' : 'a--d-none' }}" src="/acm/image/fav-on.svg" width="50">
