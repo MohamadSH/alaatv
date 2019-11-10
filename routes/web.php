@@ -9,6 +9,7 @@ use App\Http\Controllers\Web\LiveController;
 use App\Http\Controllers\Web\SanatisharifmergeController;
 use App\Http\Controllers\Web\SectionController;
 use App\Http\Controllers\Web\SetController;
+use App\Http\Controllers\Web\TopicsTreeController;
 use App\Http\Controllers\Web\UserController;
 use App\Http\Controllers\Web\AdminController;
 use App\Http\Controllers\Web\SurveyController;
@@ -321,7 +322,7 @@ Route::resource('product', 'Web\ProductController');
 Route::resource('set', 'Web\SetController');
 Route::resource('c', 'Web\ContentController')->names([
     'index' => 'content.index'
-]);;
+]);
 Route::resource('sanatisharifmerge', 'Web\SanatisharifmergeController');
 Route::resource('article', 'Web\ArticleController');
 Route::resource('block', 'Web\BlockController');
@@ -334,7 +335,7 @@ Route::group(['prefix' => 'mobile'], function () {
 });
 Route::post('cd3b472d9ba631a73cb7b66ba513df53', 'Web\CouponController@generateRandomCoupon');
 
-Route::get('tree', 'Web\TopicsTreeController@lernitoTree');
-Route::get('tree/getArrayString/{lnid}', 'Web\TopicsTreeController@getTreeInPHPArrayString');
-Route::get('tree/ignoreUpdateItem/{iuid}', 'Web\TopicsTreeController@ignoreUpdateItem');
+Route::get('tree', [TopicsTreeController::class, 'lernitoTree']);
+Route::get('tree/getArrayString/{lnid}', [TopicsTreeController::class, 'getTreeInPHPArrayString']);
+Route::get('tree/ignoreUpdateItem/{iuid}', [TopicsTreeController::class, 'ignoreUpdateItem']);
 Route::any('goToPaymentRoute/{paymentMethod}/{device}/', '\\'.RedirectAPIUserToPaymentRoute::class)->name('redirectToPaymentRoute');
