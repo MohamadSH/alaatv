@@ -165,21 +165,7 @@ class OfflinePaymentController extends Controller
         switch ($paymentMethod) {
             case 'inPersonPayment' :
             case 'offlinePayment':
-                $usedCoupon = $order->hasProductsThatUseItsCoupon();
-                if (!$usedCoupon) {
-                    /** if order has not used coupon reverse it    */
-                    $coupon = $order->coupon;
-                    if (isset($coupon)) {
-                        $order->detachCoupon();
-                        if ($order->updateWithoutTimestamp()) {
-                            $coupon->decreaseUseNumber();
-                            $coupon->update();
-                        }
-                    }
-                }
-
-                $orderPaymentStatus = config('constants.PAYMENT_STATUS_UNPAID');
-                $order->close($orderPaymentStatus);
+                $order->close(config('constants.PAYMENT_STATUS_UNPAID'));
 
                 break;
             case 'wallet':
