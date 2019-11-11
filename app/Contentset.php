@@ -239,8 +239,8 @@ class Contentset extends BaseModel implements Taggable, SeoInterface , Favorable
 
     public function getProducts($onlyActiveProduct = true): ProductCollection
     {
-        $key = 'products-of-set:'.$this->cacheKey().'onlyActiveProduct-'.$onlyActiveProduct;
-        return Cache::tags(['set', 'product'])
+        $key = 'set:getProducts:onlyActive_'.($onlyActiveProduct)?'1':'0'.':'.$this->cacheKey();
+        return Cache::tags(['set' , 'product' , 'set_'.$this->id , 'set_'.$this->id.'_products'])
             ->remember($key, config('constants.CACHE_60'), function () use ($onlyActiveProduct) {
                 return self::getProductOfSet($onlyActiveProduct, $this);
             });
@@ -330,9 +330,9 @@ class Contentset extends BaseModel implements Taggable, SeoInterface , Favorable
 
     public function getLastActiveContent(): Content
     {
-        $key = 'ContentSet:getLastActiveContent'.$this->cacheKey();
+        $key = 'set:getLastActiveContent:'.$this->cacheKey();
 
-        return Cache::tags('set')
+        return Cache::tags(['set' , 'activeContent' , 'lastActiveContent' , 'set_'.$this->id , 'set_'.$this->id.'_activeContents' ,  'set_'.$this->id.'_lastActiveContent'])
             ->remember($key, config('constants.CACHE_300'), function () {
 
                 $r = $this->getActiveContents();
@@ -344,9 +344,9 @@ class Contentset extends BaseModel implements Taggable, SeoInterface , Favorable
 
     public function getLastContent(): Content
     {
-        $key = 'ContentSet:getLastContent'.$this->cacheKey();
+        $key = 'set:getLastContent:'.$this->cacheKey();
 
-        return Cache::tags('set')
+        return Cache::tags(['set' , 'content' , 'lastContent' , 'set_'.$this->id , 'set_'.$this->id.'_contents' ,  'set_'.$this->id.'_lastContent'])
             ->remember($key, config('constants.CACHE_300'), function () {
 
                 $r = $this->getContents();
@@ -358,9 +358,9 @@ class Contentset extends BaseModel implements Taggable, SeoInterface , Favorable
 
     public function getActiveContents(): ContentCollection
     {
-        $key = 'ContentSet:getActiveContents'.$this->cacheKey();
+        $key = 'set:getActiveContents:'.$this->cacheKey();
 
-        return Cache::tags('set')
+        return Cache::tags(['set' , 'activeContent' , 'set_'.$this->id , 'set_'.$this->id.'_activeContents'])
             ->remember($key, config('constants.CACHE_300'), function () {
 
                 $oldContentCollection = $this->oldContents()
@@ -376,8 +376,8 @@ class Contentset extends BaseModel implements Taggable, SeoInterface , Favorable
 
     public function getActiveContents2(int $type = null)
     {
-        $key = 'ContentSet:type-'.$type.':getActiveContents2:'.$this->cacheKey();
-        return Cache::tags('set')
+        $key = 'set:getActiveContents2:type_'.$type.':'.$this->cacheKey();
+        return Cache::tags(['set' , 'activeContent' , 'set_'.$this->id , 'set_'.$this->id.'_activeContents'])
             ->remember($key, config('constants.CACHE_300'), function () use ($type) {
                 $contents = $this->activeContents();
 
@@ -392,9 +392,9 @@ class Contentset extends BaseModel implements Taggable, SeoInterface , Favorable
 
     public function getContents(): ContentCollection
     {
-        $key = 'ContentSet:getContents'.$this->cacheKey();
+        $key = 'set:getContents:'.$this->cacheKey();
 
-        return Cache::tags('set')
+        return Cache::tags(['set' , 'content' , 'set_'.$this->id , 'set_'.$this->id.'_contents'])
             ->remember($key, config('constants.CACHE_300'), function () {
 
                 $oldContentCollection = $this->oldContents()
