@@ -710,16 +710,18 @@ class Order extends BaseModel
      */
     public function close($paymentStatus = null, int $orderStatus = null)
     {
-        if (!isset($orderStatus)) {
+        if (is_null($orderStatus)) {
             // You can't put config() in method signature
-            $orderStatus = config("constants.ORDER_STATUS_CLOSED");
+            $orderStatus = config('constants.ORDER_STATUS_CLOSED');
         }
 
         $this->orderstatus_id   = $orderStatus;
 
-        if(isset($paymentStatus))
+        if(isset($paymentStatus)) {
             $this->paymentstatus_id = $paymentStatus;
-        $this->completed_at     = Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now())->timezone('Asia/Tehran');
+        }
+
+        $this->completed_at     = Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now('Asia/Tehran'));
     }
 
     public function detachUnusedCoupon()
