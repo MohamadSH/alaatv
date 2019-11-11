@@ -5,11 +5,9 @@
         isset($blockType)
         &&
         (
-            ($blockType === 'content' && !is_null($block->getActiveContent()) && $block->getActiveContent()->count() > 0) ||
-            ($blockType === 'content' && optional(optional(optional($block->sets)->first())->getActiveContents2())->count() > 0) ||
-            ($blockType === 'product' && !is_null($block->getActiveProducts()) && $block->getActiveProducts()->count() > 0) ||
-            ($blockType === 'set' && !is_null($block->getActiveSets()) && $block->getActiveSets()->count() > 0) ||
-            
+            ($blockType === 'productSampleVideo' && !is_null($block->getActiveContent()) && $block->getActiveContent()->count() > 0) ||
+            ($blockType === 'productSampleVideo' && optional(optional(optional($block->sets)->first())->getActiveContents2())->count() > 0) ||
+
             ($blockType === 'content' && !is_null($block->contents) && $block->contents->count() > 0) ||
             ($blockType === 'product' && !is_null($block->products) && $block->products->count() > 0) ||
             ($blockType === 'set' && !is_null($block->sets) && $block->sets->count() > 0)
@@ -36,7 +34,7 @@
                     <div class="m-portlet__head-caption">
                         <div class="m-portlet__head-title">
                             <h3 class="m-portlet__head-text">
-    
+
                                 @if((isset($squareSing) && $squareSing === true) || !isset($squareSing))
                                     @if(((isset($blockType) && $blockType === 'product') || !isset($blockType)) && isset($block->products))
                                         <span class="redSquare"></span>
@@ -44,7 +42,7 @@
                                         <span class="blueSquare"></span>
                                     @endif
                                 @endif
-    
+
                                 @if(!isset($blockUrlDisable) || !$blockUrlDisable)
                                     <a href="{{ $block->url }}" class="m-link">
                                         @endif
@@ -71,7 +69,7 @@
                     </div>
                 </div>
                 <div class="m-portlet__body m-portlet__body--no-padding a--owl-carousel-body">
-                    
+
                     <div class="a--owl-carousel-init-loading">
                         <div class="lds-roller">
                             <div></div>
@@ -84,10 +82,10 @@
                             <div></div>
                         </div>
                     </div>
-    
+
                     <div class="m-widget_head-owlcarousel-items ScrollCarousel a--owl-carousel-type-2 carousel_block_{{ $block->id }}">
-    
-        
+
+
                         @if(((isset($blockType) && $blockType === 'product' && isset($block->products) && $block->products->count() > 0) || !isset($blockType)) && isset($block->products))
                             @foreach($block->products as $productKey=>$product)
                                 @include('block.partials.product')
@@ -97,17 +95,21 @@
                             @foreach($block->contents as $contentKey=>$content)
                                 @include('block.partials.content')
                             @endforeach
-                        {{-- new content block loop --}}
-                        @elseif(((isset($blockType) && $blockType === 'content') || !isset($blockType)) && isset($block->sets) && $block->sets->count() > 0)
-                            @foreach($block->sets->first()->getActiveContents2() as $contentKey=>$content)
-                                @include('block.partials.content')
-                            @endforeach
                         @elseif(((isset($blockType) && $blockType === 'set' && isset($block->sets) && $block->sets->count() > 0) || !isset($blockType)) && isset($block->sets))
                             @foreach($block->sets as $setsKey=>$set)
                                 @include('block.partials.set')
                             @endforeach
+                        @elseif((isset($blockType) && $blockType === 'productSampleVideo') &&
+                              (
+                              (!is_null($block->getActiveContent()) && $block->getActiveContent()->count() > 0)
+                              ||
+                              (optional(optional(optional($block->sets)->first())->getActiveContents2())->count() > 0)
+                              ) )
+                            @foreach($block->sets->first()->getActiveContents2() as $contentKey=>$content)
+                                @include('block.partials.content')
+                            @endforeach
                         @endif
-    
+
                         @if(strlen(trim($block->url))>0)
                             <div class="item carousel a--block-item a--block-item-showMoreItem w-66534321">
                                 <a href="{{ $block->url }}">
@@ -124,7 +126,7 @@
                         @endif
 
                     </div>
-                    
+
                 </div>
             </div>
         </div>
