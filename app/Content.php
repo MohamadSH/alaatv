@@ -1376,7 +1376,7 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
         $content = $this;
         $key = 'content:relatedProduct:' . $content->cacheKey();
         $relatedProductSearch = new RelatedProductSearch();
-        return Cache::tags(['content', 'content_' . $content->id, 'content_' . $content->id . '_relatedProduct'])
+        return Cache::tags(['content' , 'relatedProduct', 'content_' . $content->id, 'content_' . $content->id . '_relatedProduct'])
             ->remember($key, config('constants.CACHE_600'), function () use ($content, $relatedProductSearch) {
             $filters = [
                 'tags' => ['c-' . $content->id]
@@ -1398,7 +1398,7 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
         $content = $this;
         $key = 'content:recommendedProduct:' . $content->cacheKey();
         $recommendedProductSearch = new RecommendedProductSearch ();
-        return Cache::tags(['content', 'content_' . $content->id, 'content_' . $content->id . '_recommendedProduct'])
+        return Cache::tags(['content', 'recommendedProduct' ,  'content_' . $content->id, 'content_' . $content->id . '_recommendedProduct'])
             ->remember($key, config('constants.CACHE_600'), function () use ($content, $recommendedProductSearch) {
                 $filters = [
                     'tags' => ['c-' . $content->id]
