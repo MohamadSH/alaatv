@@ -14,6 +14,7 @@ use App\Traits\RequestCommon;
 use Illuminate\Http\Response;
 use App\Adapter\AlaaSftpAdapter;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use App\Classes\Search\ContentsetSearch;
@@ -280,8 +281,16 @@ class SetController extends Controller
 
     private function syncProducts(array $products, Contentset $contentSet)
     {
+        foreach ($contentSet->products as $product) {
+            Cache::tags(['product_'.$product->id.'_sets'])->flush();
+        }
+
         $contentSet->products()->detach();
         $contentSet->products()->attach($products);
+
+        foreach ($products as $productId) {
+            Cache::tags(['product_'.$productId.'_sets'])->flush();
+        }
 
     }
 
