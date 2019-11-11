@@ -278,10 +278,11 @@ class SetController extends Controller
         }
     }
 
-    private function syncProducts(array $products, Contentset $contentset)
+    private function syncProducts(array $products, Contentset $contentSet)
     {
-        $contentset->products()
-            ->sync($products);
+        $contentSet->products()->detach();
+        $contentSet->products()->attach($products);
+
     }
 
     private function storePhotoOfSet(Contentset $contentSet, $file): void
