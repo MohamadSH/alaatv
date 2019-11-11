@@ -25,8 +25,6 @@
 @section('content')
 
     @include('systemMessage.flash')
-
-
     <div class="row blockWraper a--owl-carousel-row">
         <div class="col">
             <div class="m-portlet a--owl-carousel-Wraper" id="owlCarouselMyProduct">
