@@ -628,7 +628,7 @@
     @include('block.partials.block', [
         'blockTitle'=>view('product.partials.productInfoNav', ['targetId'=>'sampleVideo']),
         'blockUrlDisable'=>true,
-        'blockType'=>'content',
+        'blockType'=>'productSampleVideo',
         'imageDimension'=>'?w=300&h=169',
         'squareSing'=>false,
         'blockCustomClass'=>'a--owl-carousel-type-2 productShowBlock sampleVideo a--block-widget-1',
