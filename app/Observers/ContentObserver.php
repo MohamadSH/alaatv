@@ -117,7 +117,7 @@ class ContentObserver
         }
 
         Cache::tags(['content_'.$content->id ,
-                    'set_'.$content->contentset_id ,
+                    'set_'.$content->contentset_id.'_activeContents' ,
                     'content_search' ])->flush();
     }
 }
