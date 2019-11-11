@@ -1,5 +1,5 @@
 $(document).ready(function () {
-
+    var ordersData = (typeof orders.data !== 'undefined') ? orders.data : [];
     function getRefCode(transactionItem) {
         let refCode = '';
         // if (transactionItem.paymentmethod.name === 'paycheck') {
@@ -32,30 +32,30 @@ $(document).ready(function () {
 
     $(document).on('click', '.btnViewOrderDetailes', function (e) {
         let index = $(this).data('order-key');
-        $('.orderDetailes-orderStatus').html(orders[index].orderstatus.displayName);
-        $('.orderDetailes-paymentStatus').html(orders[index].paymentstatus.displayName);
-        $('.orderDetailes-price').html(orders[index].price.toLocaleString('fa') + ' تومان ');
-        $('.orderDetailes-paidPrice').html(orders[index].paidPrice.toLocaleString('fa') + ' تومان ');
-        $('.orderDetailes-completed_at').html(new persianDate(Date.parse(orders[index].completed_at)).format("dddd, DD MMMM YYYY"));
+        $('.orderDetailes-orderStatus').html(ordersData[index].orderstatus.displayName);
+        $('.orderDetailes-paymentStatus').html(ordersData[index].paymentstatus.displayName);
+        $('.orderDetailes-price').html(ordersData[index].price.toLocaleString('fa') + ' تومان ');
+        $('.orderDetailes-paidPrice').html(ordersData[index].paidPrice.toLocaleString('fa') + ' تومان ');
+        $('.orderDetailes-completed_at').html(new persianDate(Date.parse(ordersData[index].completed_at)).format("dddd, DD MMMM YYYY"));
 
-        if (typeof orders[index].orderPostingInfo[0] !== 'undefined') {
+        if (typeof ordersData[index].orderPostingInfo[0] !== 'undefined') {
             $('#postedProductCodeReportWraper').fadeIn();
-            $('.orderDetailes-orderPostingInfo').html(orders[index].orderPostingInfo[0].postCode);
+            $('.orderDetailes-orderPostingInfo').html(ordersData[index].orderPostingInfo[0].postCode);
         } else {
             $('.orderDetailes-orderPostingInfo').html('پست نشده');
             $('#postedProductCodeReportWraper').fadeOut();
         }
 
-        $('.orderDetailes-debt').html(orders[index].debt.toLocaleString('fa') + ' تومان ');
+        $('.orderDetailes-debt').html(ordersData[index].debt.toLocaleString('fa') + ' تومان ');
 
         let hideAllDiscountInfo = true;
         let couponMessage = 'کپن ندارد';
         $('.orderDiscountInfoInModal tbody').find('.orderDetailes-couponInfo').remove();
-        if (orders[index].couponInfo !== null) {
-            couponMessage = orders[index].couponInfo.name + ' با ' + orders[index].couponInfo.discount;
-            if (orders[index].couponInfo.typeHint === 'percentage') {
+        if (ordersData[index].couponInfo !== null) {
+            couponMessage = ordersData[index].couponInfo.name + ' با ' + ordersData[index].couponInfo.discount;
+            if (ordersData[index].couponInfo.typeHint === 'percentage') {
                 couponMessage += '%';
-            } else /*if (orders[index].couponInfo.typeHint === 'percentage')*/ {
+            } else /*if (ordersData[index].couponInfo.typeHint === 'percentage')*/ {
                 couponMessage += ' تومان ';
             }
             couponMessage += ' تخفیف ';
@@ -68,32 +68,32 @@ $(document).ready(function () {
             hideAllDiscountInfo = false;
         }
         $('.orderDiscountInfoInModal tbody').find('.orderDetailes-usedBonSum').remove();
-        if (orders[index].usedBonSum > 0) {
+        if (ordersData[index].usedBonSum > 0) {
             let orderDetailes_usedBonSum = '\n' +
                 '<tr class="orderDetailes-usedBonSum">\n' +
                 '    <td>تعداد بن استفاده شده:</td>\n' +
-                '    <td>'+orders[index].usedBonSum+'</td>\n' +
+                '    <td>'+ordersData[index].usedBonSum+'</td>\n' +
                 '</tr>';
             $('.orderDiscountInfoInModal tbody').append(orderDetailes_usedBonSum);
             hideAllDiscountInfo = false;
         }
         $('.orderDiscountInfoInModal tbody').find('.orderDetailes-addedBonSum').remove();
-        if (orders[index].addedBonSum > 0) {
+        if (ordersData[index].addedBonSum > 0) {
             let orderDetailes_addedBonSum = '\n' +
                 '<tr class="orderDetailes-addedBonSum">\n' +
                 '    <td>تعداد بن اضافه شده به شما از این سفارش: </td>\n' +
-                '    <td>'+orders[index].addedBonSum+'</td>\n' +
+                '    <td>'+ordersData[index].addedBonSum+'</td>\n' +
                 '</tr>';
             $('.orderDiscountInfoInModal tbody').append(orderDetailes_addedBonSum);
             hideAllDiscountInfo = false;
         }
 
         $('.orderDiscountInfoInModal tbody').find('.orderDetailes-totalOrderDiscount').remove();
-        if (orders[index].discount > 0) {
+        if (ordersData[index].discount > 0) {
             let orderDetailes_totalOrderDiscount = '\n' +
                 '<tr class="orderDetailes-totalOrderDiscount">\n' +
                 '    <td>تخفیف کلی سفارش: </td>\n' +
-                '    <td>'+orders[index].discount.toLocaleString('fa') + ' تومان '+'</td>\n' +
+                '    <td>'+ordersData[index].discount.toLocaleString('fa') + ' تومان '+'</td>\n' +
                 '</tr>';
             $('.orderDiscountInfoInModal tbody').append(orderDetailes_totalOrderDiscount);
             hideAllDiscountInfo = false;
@@ -102,10 +102,10 @@ $(document).ready(function () {
         $('#orderDetailesModal .customerDescriptionInModal').fadeOut();
         $('#orderDetailesModal .customerDescriptionInModal').html('');
         if (
-            orders[index].customerDescription !== null &&
-            orders[index].customerDescription.length > 0
+            ordersData[index].customerDescription !== null &&
+            ordersData[index].customerDescription.length > 0
         ) {
-            $('#orderDetailesModal .customerDescriptionInModal').html(orders[index].customerDescription);
+            $('#orderDetailesModal .customerDescriptionInModal').html(ordersData[index].customerDescription);
             $('#orderDetailesModal .customerDescriptionInModal').fadeIn();
         }
 
@@ -116,12 +116,12 @@ $(document).ready(function () {
             $('.orderDiscountInfoInModal').parent('.alert-success').fadeIn();
         }
 
-        $('.orderDetailes-created_at').html(new persianDate(Date.parse(orders[index].created_at)).format("dddd, DD MMMM YYYY"));
+        $('.orderDetailes-created_at').html(new persianDate(Date.parse(ordersData[index].created_at)).format("dddd, DD MMMM YYYY"));
 
 
         let productHtml = '';
-        for (let opIndex in orders[index].orderproducts) {
-            let opItem = orders[index].orderproducts[opIndex];
+        for (let opIndex in ordersData[index].orderproducts) {
+            let opItem = ordersData[index].orderproducts[opIndex];
             let atvHtml = '';
             for (let atvIndex in opItem.attributevalues) {
                 let atvItem = opItem.attributevalues[atvIndex];
@@ -181,8 +181,8 @@ $(document).ready(function () {
 
 
         let successfulTransactionsHtml = '';
-        for (let stIndex in orders[index].successfulTransactions) {
-            let successfulTransactionItem = orders[index].successfulTransactions[stIndex];
+        for (let stIndex in ordersData[index].successfulTransactions) {
+            let successfulTransactionItem = ordersData[index].successfulTransactions[stIndex];
             let refCode = getRefCode(successfulTransactionItem);
             let completed_at = new persianDate(Date.parse(successfulTransactionItem.completed_at)).format("dddd, DD MMMM YYYY, h:mm:ss a");
 
@@ -213,8 +213,8 @@ $(document).ready(function () {
 
 
         let pendingTransactionsHtml = '';
-        for (let ptIndex in orders[index].pending_transactions) {
-            let pendingTransactionItem = orders[index].pending_transactions[ptIndex];
+        for (let ptIndex in ordersData[index].pending_transactions) {
+            let pendingTransactionItem = ordersData[index].pending_transactions[ptIndex];
             let refCode = getRefCode(pendingTransactionItem);
             let created_at = new persianDate(Date.parse(pendingTransactionItem.created_at)).format("dddd, DD MMMM YYYY, h:mm:ss a");
 
@@ -239,8 +239,8 @@ $(document).ready(function () {
 
 
         let unpaidTransactionsHtml = '';
-        for (let unptIndex in orders[index].unpaid_transactions) {
-            let unpaidTransactionItem = orders[index].unpaid_transactions[unptIndex];
+        for (let unptIndex in ordersData[index].unpaid_transactions) {
+            let unpaidTransactionItem = ordersData[index].unpaid_transactions[unptIndex];
             let created_at = new persianDate(Date.parse(unpaidTransactionItem.created_at)).format("dddd, DD MMMM YYYY, h:mm:ss a");
             let deadline_at = new persianDate(Date.parse(unpaidTransactionItem.deadline_at)).format("dddd, DD MMMM YYYY, h:mm:ss a");
 
