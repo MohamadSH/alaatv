@@ -4,9 +4,11 @@
     These routes are loaded by the RouteServiceProvider within a group which is assigned the "api" middleware group.
 */
 
+use App\Http\Controllers\Api\HomeController;
 use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Api\ContentController;
 use App\Http\Controllers\Api\GetPaymentRedirectEncryptedLink;
+use App\Http\Controllers\Api\TagController;
 
 Route::group(['middleware' => 'web'], function () {
     Auth::routes(['verify' => true]);
@@ -17,11 +19,11 @@ Route::post('uploadFile', 'Web\HomeController@uploadFile');
 Route::group(['prefix' => 'v1'], function () {
     Route::group(['prefix' => 'rt'], function () {
 
-        Route::get('id/{bucket}/{id}', "Api\TagController@get");
-        Route::put('id/{bucket}/{id}', "Api\TagController@add");
-        Route::delete('id/{bucket}/{id}', "Api\TagController@remove");
-        Route::get('tags/{bucket}', "Api\TagController@index");
-        Route::get('flush', "Api\TagController@flush");
+        Route::get('id/{bucket}/{id}', [TagController::class, 'get']);
+        Route::put('id/{bucket}/{id}', [TagController::class, 'add']);
+        Route::delete('id/{bucket}/{id}', [TagController::class, 'remove']);
+        Route::get('tags/{bucket}', [TagController::class, 'index']);
+        Route::get('flush', [TagController::class, 'flush']);
 
     });
 
@@ -40,6 +42,7 @@ Route::group(['prefix' => 'v1'], function () {
     Route::any('fetchContents', [ContentController::class, 'fetchContents'])
         ->name('api.fetch.content');
 
+    Route::get('satra', [HomeController::class, 'satra']);
 
     Route::group(['middleware' => 'auth:api'], function () {
         Route::any('user/auth2/profile', 'Api\UserController@getAuth2Profile');
