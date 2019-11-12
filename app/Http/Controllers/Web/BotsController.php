@@ -60,6 +60,48 @@ class BotsController extends Controller
     public function bot(Request $request)
     {
         try {
+            if($request->has('fixContentsTags')){
+                $contents = \App\Content::where('created_at' , '>=' , '2019-11-05 00:00' )
+                    ->orWhere('updated_at' , '>=' , '2019-11-05 00:00:00' )
+                    ->get();
+
+                foreach ($contents as $content) {
+                    $itemTagsArray = $content->tags->tags;
+                    $params = [
+                        'tags' => json_encode($itemTagsArray, JSON_UNESCAPED_UNICODE),
+                    ];
+                    if (isset($content->created_at) && strlen($content->created_at) > 0) {
+                        $params['score'] = Carbon::createFromFormat('Y-m-d H:i:s', $content->created_at)->timestamp;
+                    }
+
+                    $response = $this->sendRequest(config('constants.TAG_API_URL').'id/content/'.$content->id, 'PUT', $params);
+                    if($response["statusCode"] != Response::HTTP_OK){
+                        dump('Error on tagging content #'.$content->id);
+                    }
+                }
+                dd('DONE');
+            }
+
+            if($request->has('fixSetTags')){
+                $sets = \App\Contentset::orderByDesc('id')->limit(20)->get();
+
+                foreach ($sets as $set) {
+                    $itemTagsArray = $set->tags->tags;
+                    $params = [
+                        'tags' => json_encode($itemTagsArray, JSON_UNESCAPED_UNICODE),
+                    ];
+                    if (isset($set->created_at) && strlen($set->created_at) > 0) {
+                        $params['score'] = Carbon::createFromFormat('Y-m-d H:i:s', $set->created_at)->timestamp;
+                    }
+
+                    $response = $this->sendRequest(config('constants.TAG_API_URL').'id/contentset/'.$set->id, 'PUT', $params);
+                    if($response["statusCode"] != Response::HTTP_OK){
+                        dump('Error on tagging content #'.$set->id);
+                    }
+                }
+                dd('DONE');
+            }
+
             if ($request->has("voucherbot")) {
                 $asiatechProduct      = config("constants.ASIATECH_FREE_ADSL");
                 $voucherPendingOrders = Order::where("orderstatus_id", config("constants.ORDER_STATUS_PENDING"))
