@@ -191,25 +191,14 @@ class OfflinePaymentController extends Controller
                     }
                 }
 
-                if($order->orderproducts->isEmpty()){
-                    Log::info('Empty order:Before order fresh:order:'.$order->id);
-                }
-
                 $order = $order->fresh();
                 /** End */
-
-                if($order->orderproducts->isEmpty()){
-                    Log::info('Empty order:After order fresh:order:'.$order->id);
-                }
 
                 $order->orderstatus_id   = config('constants.ORDER_STATUS_CLOSED');
                 $order->completed_at     = Carbon::now('Asia/Tehran');
                 if ($order->hasCost()) {
                     $cost = $order->totalCost() - $order->totalPaidCost();
                     if ($cost == 0) {
-                        if($order->orderproducts->isEmpty()){
-                            Log::info('Empty order:Before bon:order:'.$order->id);
-                        }
                         /** Attaching user bons for this order */
                         $bonName = config('constants.BON1');
                         $bon     = Bon::enable()->where('name', $bonName)->first();
@@ -228,9 +217,6 @@ class OfflinePaymentController extends Controller
                 }
                 $order->update();
                 $order->user->notify(new InvoicePaid($order));
-                if($order->orderproducts->isEmpty()){
-                    Log::info('Empty order:After SMS:order:'.$order->id);
-                }
                 break;
             default :
                 $done = false;
