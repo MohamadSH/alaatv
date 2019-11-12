@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Classes\RedisTagging;
 use App\Classes\TagSplitter;
 use App\Observers\SetObserver;
 use App\Observers\ContentObserver;
@@ -65,6 +66,10 @@ class TagManagerProvider extends ServiceProvider
     {
         $this->app->singleton(TagSplitter::class, function ($app) {
             return new TagSplitter();
+        });
+
+        $this->app->singleton(RedisTagging::class, function ($app) {
+            return new RedisTagging();
         });
     }
 }
