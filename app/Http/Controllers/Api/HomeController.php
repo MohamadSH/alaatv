@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 
 class HomeController extends Controller
 {
@@ -29,11 +30,14 @@ class HomeController extends Controller
 
     public function satra()
     {
-        $contents = \App\Content::active()
-                                ->orderByDesc('created_at')
-                                ->where('contenttype_id' , config('constants.CONTENT_TYPE_VIDEO'))
-                                ->limit(5)
-                                ->get();
+        $contents =  Cache::tags(['satra'])->remember('satra_api', config('constants.CACHE_60'), function (){
+            return \App\Content::query()
+                ->orderByDesc('created_at')
+                ->where('contenttype_id' , config('constants.CONTENT_TYPE_VIDEO'))
+                ->active()
+                ->limit(5)
+                ->get();
+        });
 
         $contentArray = [];
         foreach ($contents as $content) {
@@ -43,7 +47,8 @@ class HomeController extends Controller
                 'id'            => $content->id,
                 'url'           => $content->url,
                 'title'         => $content->name,
-                'published_at'  => isset($validSince)?$validSince:$createdAt
+                'published_at'  => isset($validSince)?$validSince:$createdAt,
+                'visit_count'  => 0
             ];
         }
 
