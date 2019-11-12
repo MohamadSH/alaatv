@@ -1,0 +1,28 @@
+#AlaaAjaxLoginModal {
+  .modal-header {
+    background: #ff9000;
+    border: none;
+    -webkit-box-shadow: 0px 6px 5px -3px rgba(0,0,0,0.75);
+    -moz-box-shadow: 0px 6px 5px -3px rgba(0,0,0,0.75);
+    box-shadow: 0px 1px 5px -1px rgba(0,0,0,0.75);
+
+    .modal-title {
+      color: white;
+      font-weight: bold;
+    }
+  }
+  .modal-body {
+    input[name="mobile"],
+    input[name="password"]{
+      direction: ltr;
+    }
+  }
+  .modal-footer {
+    justify-content: center;
+    padding: 0;
+    button {
+      width: 100%;
+      margin: 0;
+    }
+  }
+}

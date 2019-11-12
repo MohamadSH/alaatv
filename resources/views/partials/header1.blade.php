@@ -535,7 +535,7 @@
 
                             @else
                                 <li class="a--login-item m-nav__item m-topbar__quick-actions m-topbar__quick-actions--img">
-                                    <a href="{{ route("login") }}" class="m-nav__link">
+                                    <a href="{{ route("login") }}" class="m-nav__link loginPageLinkInNav">
                                         <span class="a--login-title">ورود/ثبت نام</span>
                                         <span class="m-nav__link-icon">
                                         <i class="fa fa-sign-in-alt"></i>

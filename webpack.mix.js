@@ -13,6 +13,7 @@ class Mix {
         this.mix.sass('public/acm/AlaatvCustomFiles/components/ScrollCarousel/style.scss', 'public/acm/AlaatvCustomFiles/components/ScrollCarousel');
         this.mix.sass('public/acm/AlaatvCustomFiles/components/ScrollCarousel/itemStyle.scss', 'public/acm/AlaatvCustomFiles/components/ScrollCarousel');
         this.mix.sass('public/acm/AlaatvCustomFiles/components/Favorite/style.scss', 'public/acm/AlaatvCustomFiles/components/Favorite');
+        this.mix.sass('public/acm/AlaatvCustomFiles/components/AjaxLogin/style.scss', 'public/acm/AlaatvCustomFiles/components/AjaxLogin');
     }
 
     static getBaseCss() {
@@ -199,6 +200,7 @@ class Mix {
             ],
             'public/css/page-shop.css',
             [
+                    'public/acm/AlaatvCustomFiles/components/ScrollCarousel/js.js',
                     'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/js.js',
                     'public/acm/AlaatvCustomFiles/components/aSticky/aSticky.js',
                     'public/acm/AlaatvCustomFiles/js/certificates.js',
@@ -243,6 +245,7 @@ class Mix {
             [
                 'public/acm/AlaatvCustomFiles/components/aSticky/aSticky.js',
                 'public/acm/AlaatvCustomFiles/js/certificates.js',
+                // 'public/acm/AlaatvCustomFiles/components/ScrollCarousel/js.js',
                 'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/js.js',
                 'public/acm/AlaatvCustomFiles/js/page/pages/homePage.js',
             ],
@@ -281,6 +284,7 @@ class Mix {
                     'node_modules/persian-date/dist/persian-date.js',
                     'node_modules/truncatise/index.js',
                     'node_modules/persianjs/persian.min.js',
+                    'public/acm/AlaatvCustomFiles/components/ScrollCarousel/js.js',
                     'public/acm/AlaatvCustomFiles/components/AlaaLoading/script.js',
                     'public/acm/AlaatvCustomFiles/components/SearchBoxFilter/script.js',
                     'public/acm/AlaatvCustomFiles/components/aSticky/aSticky.js',
@@ -364,6 +368,7 @@ class Mix {
             'public/css/user-dashboard.css',
             [
                     'node_modules/block-ui/jquery.blockUI.js',
+                    'public/acm/AlaatvCustomFiles/components/ScrollCarousel/js.js',
                     'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/js.js',
                     'public/acm/AlaatvCustomFiles/js/page/user-dashboard.js',
                 ],
@@ -403,6 +408,7 @@ class Mix {
                 'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/style.css',
                 'public/acm/AlaatvCustomFiles/components/ScrollCarousel/style.css',
 
+                'public/acm/AlaatvCustomFiles/components/AjaxLogin/style.css',
                 'public/acm/AlaatvCustomFiles/components/Favorite/style.css',
 
                 'public/acm/videojs/skins/alaa-theme/videojs.css',
@@ -418,7 +424,9 @@ class Mix {
                 'node_modules/tooltip/dist/Tooltip.js',
                 'node_modules/toastr/build/toastr.min.js',
                 'node_modules/block-ui/jquery.blockUI.js',
+                'public/acm/AlaatvCustomFiles/components/ScrollCarousel/js.js',
                 'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/js.js',
+                'public/acm/AlaatvCustomFiles/components/AjaxLogin/script.js',
                 'public/acm/AlaatvCustomFiles/components/Favorite/script.js',
                 'public/acm/videojs/video.min.js',
                 'public/acm/videojs/plugins/pip/videojs.pip.min.js',
@@ -439,6 +447,7 @@ class Mix {
     mixPageSetShow() {
         this.mixCssAndJs([
                 'node_modules/toastr/build/toastr.css',
+                'public/acm/AlaatvCustomFiles/components/AjaxLogin/style.css',
                 'public/acm/AlaatvCustomFiles/components/Favorite/style.css',
                 'public/acm/AlaatvCustomFiles/css/page/set-show.css'
             ],
@@ -446,6 +455,7 @@ class Mix {
             [
                 'node_modules/toastr/build/toastr.min.js',
                 'node_modules/block-ui/jquery.blockUI.js',
+                'public/acm/AlaatvCustomFiles/components/AjaxLogin/script.js',
                 'public/acm/AlaatvCustomFiles/components/Favorite/script.js',
                 'public/acm/AlaatvCustomFiles/js/page/set-show.js'
             ],
@@ -473,6 +483,7 @@ class Mix {
             ],
             'public/css/page-landing7.css',
             [
+                    'public/acm/AlaatvCustomFiles/components/ScrollCarousel/js.js',
                     'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/js.js',
                     'public/acm/AlaatvCustomFiles/js/page-landing7.js',
                 ],
@@ -506,6 +517,7 @@ class Mix {
             ],
             'public/css/page-landing9.css',
             [
+                    'public/acm/AlaatvCustomFiles/components/ScrollCarousel/js.js',
                     'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/js.js',
                     'public/acm/AlaatvCustomFiles/components/aSticky/aSticky.js',
                     'public/acm/AlaatvCustomFiles/js/page-product-landing9.js',
@@ -523,6 +535,7 @@ class Mix {
             ],
             'public/css/page-landing10.css',
             [
+                    'public/acm/AlaatvCustomFiles/components/ScrollCarousel/js.js',
                     'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/js.js',
                     'public/acm/AlaatvCustomFiles/components/aSticky/aSticky.js',
                     'public/acm/AlaatvCustomFiles/js/page-product-landing10.js',
@@ -551,6 +564,7 @@ class Mix {
                 'public/acm/AlaatvCustomFiles/components/ribbon/style.css',
                 'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/style.css',
                 'public/acm/AlaatvCustomFiles/components/ScrollCarousel/style.css',
+                'public/acm/AlaatvCustomFiles/components/AjaxLogin/style.css',
                 'public/acm/AlaatvCustomFiles/components/Favorite/style.css',
                 'public/acm/AlaatvCustomFiles/css/page/product-show.css',
             ],
@@ -559,6 +573,7 @@ class Mix {
                     'node_modules/toastr/build/toastr.min.js',
                     'node_modules/block-ui/jquery.blockUI.js',
                     'node_modules/bootstrap-switch/dist/js/bootstrap-switch.js',
+                    'public/acm/AlaatvCustomFiles/components/ScrollCarousel/js.js',
                     'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/js.js',
                     'node_modules/lightgallery/src/js/lightgallery.js',
                     'node_modules/lightgallery/modules/lg-thumbnail.min.js',
@@ -578,6 +593,7 @@ class Mix {
                     'public/acm/videojs/lang/fa.js',
                     'public/acm/AlaatvCustomFiles/js/UserCart.js',
                     'public/acm/AlaatvCustomFiles/components/aSticky/aSticky.js',
+                    'public/acm/AlaatvCustomFiles/components/AjaxLogin/script.js',
                     'public/acm/AlaatvCustomFiles/components/Favorite/script.js',
 
                     'public/acm/AlaatvCustomFiles/js/page/product-show.js',
