@@ -17,7 +17,7 @@ class TagController extends Controller
 
     public function __construct()
     {
-        $this->redis       = RedisTagging::getInstance();
+        $this->redis       = app(RedisTagging::class);
     }
 
     /**

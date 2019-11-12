@@ -2,11 +2,11 @@
 
 namespace App\Providers;
 
+use App\Classes\RedisTagging;
 use App\Classes\TagSplitter;
 use App\Observers\SetObserver;
 use App\Observers\ContentObserver;
 use App\Observers\ProductObserver;
-use App\Classes\TagSplitterInterface;
 use Illuminate\Support\ServiceProvider;
 use App\Classes\Search\TaggingInterface;
 use App\Console\Commands\AuthorTagCommand;
@@ -25,38 +25,38 @@ class TagManagerProvider extends ServiceProvider
      */
     public function boot()
     {
-        
+
         $this->app->when(ContentObserver::class)
             ->needs(TaggingInterface::class)
             ->give(function () {
                 return (new ContentTagManagerViaApi());
             });
-        
+
         $this->app->when(SetObserver::class)
             ->needs(TaggingInterface::class)
             ->give(function () {
                 return (new ContentsetTagManagerViaApi());
             });
-        
+
         $this->app->when(ProductObserver::class)
             ->needs(TaggingInterface::class)
             ->give(function () {
                 return (new ProductTagManagerViaApi());
             });
-        //
-        
+
         $this->app->when(ContentTagCommand::class)
             ->needs(TaggingInterface::class)
             ->give(function () {
                 return (new ContentTagManagerViaApi());
             });
+
         $this->app->when(AuthorTagCommand::class)
             ->needs(TaggingInterface::class)
             ->give(function () {
                 return (new AuthorTagManagerViaApi());
             });
     }
-    
+
     /**
      * Register services.
      *
@@ -66,6 +66,10 @@ class TagManagerProvider extends ServiceProvider
     {
         $this->app->singleton(TagSplitter::class, function ($app) {
             return new TagSplitter();
+        });
+
+        $this->app->singleton(RedisTagging::class, function ($app) {
+            return new RedisTagging();
         });
     }
 }
