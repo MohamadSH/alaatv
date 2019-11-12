@@ -75,6 +75,55 @@
                 <div id="m_header_menu" class="m-header-menu m-aside-header-menu-mobile m-aside-header-menu-mobile--offcanvas  m-header-menu--skin-dark m-header-menu--submenu-skin-light m-aside-header-menu-mobile--skin-dark m-aside-header-menu-mobile--submenu-skin-dark ">
                     <ul class="m-menu__nav ">
                         <li class="m-menu__item  m-menu__item--submenu m-menu__item--rel" m-menu-submenu-toggle="hover" m-menu-link-redirect="1" aria-haspopup="true">
+                            <a href="javascript:" class="m-menu__link m-menu__toggle" title="فیلم های آلاء">
+                                <i class="m-menu__link-icon flaticon-layers"></i>
+                                <span class="m-menu__link-text">فیلم های آلاء</span>
+                                <i class="m-menu__hor-arrow fa fa-angle-down"></i>
+                                <i class="m-menu__ver-arrow fa fa-angle-left"></i>
+                            </a>
+                            <div class="m-menu__submenu m-menu__submenu--classic m-menu__submenu--left a-major-menu__submenu">
+                                <div class="container-fluid">
+                                    <div class="row">
+                                        <div class="col-md-2 categoryItemsCol">
+                                            <div class="categoryItem">کنکور</div>
+                                            <div class="categoryItem">یازدهم</div>
+                                            <div class="categoryItem">دهم</div>
+                                        </div>
+                                        <div class="col-md-10 subCategoryItemsCol">
+                                            <div class="row">
+                                                <div class="col-md-4">
+                                                    <div class="subCategoryItem subCategoryItem-title">اختصاصی (ریاضی و تجربی)</div>
+                                                    <div class="subCategoryItem">شیمی</div>
+                                                    <div class="subCategoryItem">فیزیک</div>
+                                                    <div class="subCategoryItem">ریاضی تجربی</div>
+                                                    <div class="subCategoryItem">زیست</div>
+                                                    <div class="subCategoryItem">هندسه</div>
+                                                    <div class="subCategoryItem">گسسته و آمار و احتمال</div>
+                                                    <div class="subCategoryItem">حسابان و ریاضی پایه</div>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <div class="subCategoryItem subCategoryItem-title">اختصاصی انسانی</div>
+                                                    <div class="subCategoryItem">عربی انسانی و اقتصاد</div>
+                                                    <div class="subCategoryItem">جامعه شناسی و روان شناسی</div>
+                                                    <div class="subCategoryItem">ریاضی و آمار</div>
+                                                    <div class="subCategoryItem">تاریخ و جغرافیا</div>
+                                                    <div class="subCategoryItem">علوم و فنون ادبی، فلسفه و منطق</div>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <div class="subCategoryItem subCategoryItem-title">عمومی </div>
+                                                    <div class="subCategoryItem">انگلیسی</div>
+                                                    <div class="subCategoryItem">عربی (ریاضی و تجربی)</div>
+                                                    <div class="subCategoryItem">فارسی</div>
+                                                    <div class="subCategoryItem">دین و زندگی</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+    
+                        <li class="m-menu__item  m-menu__item--submenu m-menu__item--rel d-none" m-menu-submenu-toggle="hover" m-menu-link-redirect="1" aria-haspopup="true">
                             <a href="javascript:" class="m-menu__link m-menu__toggle" title="فیلم و جزوه دهم آلاء">
                                 <i class="m-menu__link-icon flaticon-layers"></i>
                                 <span class="m-menu__link-text">دهم</span>
@@ -85,7 +134,7 @@
                                 <ul class="m-menu__subnav">
                                     <li class="m-menu__item " m-menu-link-redirect="1" aria-haspopup="true">
                                         <a href="{{ urldecode(route('content.index', 'tags[]=دهم&tags[]=رشته_ریاضی')) }}" class="m-menu__link ">
-{{--                                            <i class="m-menu__link-icon majorIcon"><img src="{{ asset('/acm/extra/riazi.gif') }}" alt="riazi" > </i>--}}
+                                            {{--                                            <i class="m-menu__link-icon majorIcon"><img src="{{ asset('/acm/extra/riazi.gif') }}" alt="riazi" > </i>--}}
                                             <span class="m-menu__link-title">
                                                 <span class="m-menu__link-wrap">
                                                     <span class="m-badge a-badge--square m-badge--warning m-badge--dot m--margin-right-5"></span>
@@ -96,7 +145,7 @@
                                     </li>
                                     <li class="m-menu__item " m-menu-link-redirect="1" aria-haspopup="true">
                                         <a href="{{ urldecode(route('content.index', 'tags[]=دهم&tags[]=رشته_تجربی')) }}" class="m-menu__link ">
-{{--                                            <i class="m-menu__link-icon majorIcon"><img src="{{ asset('/acm/extra/tajrobi.gif') }}" alt="riazi" > </i>--}}
+                                            {{--                                            <i class="m-menu__link-icon majorIcon"><img src="{{ asset('/acm/extra/tajrobi.gif') }}" alt="riazi" > </i>--}}
                                             <span class="m-menu__link-title">
                                                 <span class="m-menu__link-wrap">
                                                     <span class="m-badge a-badge--square m-badge--warning m-badge--dot m--margin-right-5"></span>
@@ -107,7 +156,7 @@
                                     </li>
                                     <li class="m-menu__item " m-menu-link-redirect="1" aria-haspopup="true">
                                         <a href="{{ urldecode(route('content.index', 'tags[]=دهم&tags[]=رشته_انسانی')) }}" class="m-menu__link ">
-{{--                                            <i class="m-menu__link-icon majorIcon"><img src="{{ asset('/acm/extra/ensani.gif') }}" alt="riazi" > </i>--}}
+                                            {{--                                            <i class="m-menu__link-icon majorIcon"><img src="{{ asset('/acm/extra/ensani.gif') }}" alt="riazi" > </i>--}}
                                             <span class="m-menu__link-title">
                                                 <span class="m-menu__link-wrap">
                                                     <span class="m-badge a-badge--square m-badge--warning m-badge--dot m--margin-right-5"></span>
@@ -119,7 +168,7 @@
                                 </ul>
                             </div>
                         </li>
-                        <li class="m-menu__item  m-menu__item--submenu m-menu__item--rel" m-menu-submenu-toggle="hover" m-menu-link-redirect="1" aria-haspopup="true">
+                        <li class="m-menu__item  m-menu__item--submenu m-menu__item--rel d-none" m-menu-submenu-toggle="hover" m-menu-link-redirect="1" aria-haspopup="true">
                             <a href="javascript:" class="m-menu__link m-menu__toggle" title="فیلم و جزوه یازدهم آلاء">
                                 <i class="m-menu__link-icon flaticon-layers"></i>
                                 <span class="m-menu__link-text">یازدهم</span>
@@ -164,7 +213,7 @@
                                 </ul>
                             </div>
                         </li>
-                        <li class="m-menu__item  m-menu__item--submenu m-menu__item--rel" m-menu-submenu-toggle="hover" m-menu-link-redirect="1" aria-haspopup="true">
+                        <li class="m-menu__item  m-menu__item--submenu m-menu__item--rel d-none" m-menu-submenu-toggle="hover" m-menu-link-redirect="1" aria-haspopup="true">
                             <a href="javascript:" class="m-menu__link m-menu__toggle" title="فیلم و جزوه کنکور آلاء">
                                 <i class="m-menu__link-icon flaticon-medal"></i>
                                 <span class="m-menu__link-title">
@@ -227,7 +276,7 @@
                                 </ul>
                             </div>
                         </li>
-                        <li class="m-menu__item  m-menu__item--submenu m-menu__item--rel" m-menu-submenu-toggle="hover" m-menu-link-redirect="1" aria-haspopup="true">
+                        <li class="m-menu__item  m-menu__item--submenu m-menu__item--rel d-none" m-menu-submenu-toggle="hover" m-menu-link-redirect="1" aria-haspopup="true">
                             <a href="javascript:" class="m-menu__link m-menu__toggle" title="فیلم و جزوه کنکور آلاء">
                                 <i class="m-menu__link-icon flaticon-medal"></i>
                                 <span class="m-menu__link-title">
@@ -290,7 +339,7 @@
                                 </ul>
                             </div>
                         </li>
-                        <li class="m-menu__item  m-menu__item--submenu m-menu__item--rel" m-menu-submenu-toggle="hover" m-menu-link-redirect="1" aria-haspopup="true">
+                        <li class="m-menu__item  m-menu__item--submenu m-menu__item--rel d-none" m-menu-submenu-toggle="hover" m-menu-link-redirect="1" aria-haspopup="true">
                             <a href="javascript:" class="m-menu__link m-menu__toggle" title="همایش های آلاء">
                                 <i class="m-menu__link-icon flaticon-medal"></i>
                                 <span class="m-menu__link-title">

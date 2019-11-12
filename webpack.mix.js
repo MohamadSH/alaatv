@@ -14,6 +14,7 @@ class Mix {
         this.mix.sass('public/acm/AlaatvCustomFiles/components/ScrollCarousel/itemStyle.scss', 'public/acm/AlaatvCustomFiles/components/ScrollCarousel');
         this.mix.sass('public/acm/AlaatvCustomFiles/components/Favorite/style.scss', 'public/acm/AlaatvCustomFiles/components/Favorite');
         this.mix.sass('public/acm/AlaatvCustomFiles/components/AjaxLogin/style.scss', 'public/acm/AlaatvCustomFiles/components/AjaxLogin');
+        this.mix.sass('public/acm/AlaatvCustomFiles/css/megamenu.scss', 'public/acm/AlaatvCustomFiles/css');
     }
 
     static getBaseCss() {
@@ -24,6 +25,7 @@ class Mix {
             'public/acm/custom-css-app.css',
 
             'public/acm/AlaatvCustomFiles/css/customStyle.css',
+            'public/acm/AlaatvCustomFiles/css/megamenu.css',
             'public/acm/AlaatvCustomFiles/css/fixThemeStyle.css',
             'public/acm/AlaatvCustomFiles/components/loading/loading.css',
         ];
@@ -69,13 +71,13 @@ class Mix {
     mixAll() {
         this.mixBase();
         this.mixPages();
-        this.mixUser();
-        this.mixLanding();
-        this.mixProduct();
-        this.mixPageContentShow();
-        this.mixPageSetShow();
-        this.mixCheckout();
-        this.mixAdmin();
+        // this.mixUser();
+        // this.mixLanding();
+        // this.mixProduct();
+        // this.mixPageContentShow();
+        // this.mixPageSetShow();
+        // this.mixCheckout();
+        // this.mixAdmin();
         this.mixCopyDirectory();
 
         // if (this.mix.inProduction()) {
@@ -295,13 +297,13 @@ class Mix {
             );
     }
     mixPages() {
-        this.mixPageLive();
-        this.mixPageShop();
-        this.mixPageError();
-        this.mixAuthLogin();
+        // this.mixPageLive();
+        // this.mixPageShop();
+        // this.mixPageError();
+        // this.mixAuthLogin();
         this.mixPageHomePage();
-        this.mixPageContactUs();
-        this.mixPageContentSearch();
+        // this.mixPageContactUs();
+        // this.mixPageContentSearch();
     }
 
     mixPageUserOrders() {
