@@ -81,7 +81,16 @@ class OfflinePaymentController extends Controller
                 'paidPrice'   => 1,
             ]);
 
+        if(isset($order) && $order->orderproducts->isEmpty()){
+            Log::info('Empty order:Before order fresh:order:'.$order->id);
+        }
+
         event(new FillTmpShareOfOrder($order));
+
+        if(isset($order) && $order->orderproducts->isEmpty()){
+            Log::info('Empty order:Before order fresh:order:'.$order->id);
+        }
+
         if($device == 'android') {
             $order->user->notify(new DownloadNotice($order));
         }
