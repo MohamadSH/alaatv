@@ -43,7 +43,8 @@ class HomeController extends Controller
                 'id'            => $content->id,
                 'url'           => $content->url,
                 'title'         => $content->name,
-                'published_at'  => isset($validSince)?$validSince:$createdAt
+                'published_at'  => isset($validSince)?$validSince:$createdAt,
+                'visit_count'  => 0
             ];
         }
 
