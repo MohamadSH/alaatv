@@ -135,6 +135,12 @@ class SetController extends Controller
         return view('set.index', compact('sets', 'tags'));
     }
 
+    public function indexContent(Request $request, Contentset $set)
+    {
+        $contents = optional($set->contents)->sortBy('order');
+        return view('set.listContents', compact('set', 'contents'));
+    }
+
     public function store(InsertContentsetRequest $request)
     {
         $contentSet = new Contentset();
@@ -246,15 +252,9 @@ class SetController extends Controller
         return view('set.create', compact('products'));
     }
 
-    public function indexContent(Request $request, Contentset $set)
-    {
-        $contents = optional($set->contents)->sortBy('order');
-        return view('set.listContents', compact('set', 'contents'));
-    }
-
     /**
-     * @param  FormRequest  $inputData
-     * @param  Contentset   $contentSet
+     * @param array $inputData
+     * @param Contentset $contentSet
      *
      * @return void
      */
