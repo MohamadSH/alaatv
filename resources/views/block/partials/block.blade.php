@@ -31,7 +31,7 @@
             id="{{ $block->class }}"
         @endif>
         <div class="col">
-            <div class="m-portlet a--owl-carousel-Wraper OwlCarouselType2-shopPage" id="owlCarousel_{{ $block->id }}">
+            <div class="m-portlet a--owl-carousel-Wraper" id="owlCarousel_{{ $block->id }}">
                 <div class="m-portlet__head a--owl-carousel-head">
                     <div class="m-portlet__head-caption">
                         <div class="m-portlet__head-title">
