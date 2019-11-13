@@ -13,17 +13,17 @@ for (let i = 0; i < slidersLength; i++) {
         sliders[i].classList.add('active');
         slidersRepository[i].startX = e.pageX - sliders[i].offsetLeft;
         slidersRepository[i].scrollLeft = sliders[i].scrollLeft;
-        console.log('mousedown');
+        // console.log('mousedown');
     });
     sliders[i].addEventListener('mouseleave', () => {
         slidersRepository[i].isDown = false;
         sliders[i].classList.remove('active');
-        console.log('mouseleave');
+        // console.log('mouseleave');
     });
     sliders[i].addEventListener('mouseup', () => {
         slidersRepository[i].isDown = false;
         sliders[i].classList.remove('active');
-        console.log('mouseup');
+        // console.log('mouseup');
     });
     sliders[i].addEventListener('mousemove', (e) => {
         if(!slidersRepository[i].isDown) return;
@@ -34,31 +34,3 @@ for (let i = 0; i < slidersLength; i++) {
         // console.log(walk);
     });
 }
-
-
-// slider.addEventListener('mousedown', (e) => {
-//     isDown = true;
-//     slider.classList.add('active');
-//     startX = e.pageX - slider.offsetLeft;
-//     scrollLeft = slider.scrollLeft;
-//     console.log('mousedown');
-// });
-// slider.addEventListener('mouseleave', () => {
-//     isDown = false;
-//     slider.classList.remove('active');
-//     console.log('mouseleave');
-// });
-// slider.addEventListener('mouseup', () => {
-//     isDown = false;
-//     slider.classList.remove('active');
-//     console.log('mouseup');
-// });
-// slider.addEventListener('mousemove', (e) => {
-//     if(!isDown) return;
-//     e.preventDefault();
-//     const x = e.pageX - slider.offsetLeft;
-//     const walk = (x - startX) * 3; //scroll-fast
-//     slider.scrollLeft = scrollLeft - walk;
-//     console.log(walk);
-//     console.log('mousemove');
-// });
