@@ -26,7 +26,9 @@ class AlterTableContentsetsAddRedirectUrl extends Migration
     public function down()
     {
         Schema::table('contentsets', function (Blueprint $table) {
-            $table->dropColumn('redirectUrl');
+            if (Schema::hasColumn('contentsets', 'redirectUrl')) {
+                $table->dropColumn('redirectUrl');
+            }
         });
     }
 }
