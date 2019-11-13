@@ -24,6 +24,7 @@ class Mix {
             'public/acm/custom-css-app.css',
 
             'public/acm/AlaatvCustomFiles/css/customStyle.css',
+            'public/acm/AlaatvCustomFiles/css/customStyle/footer.css',
             'public/acm/AlaatvCustomFiles/css/fixThemeStyle.css',
             'public/acm/AlaatvCustomFiles/components/loading/loading.css',
         ];
@@ -195,7 +196,6 @@ class Mix {
                 'public/acm/AlaatvCustomFiles/components/ribbon/style.css',
                 'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/style.css',
                 'public/acm/AlaatvCustomFiles/components/ScrollCarousel/style.css',
-                'public/acm/AlaatvCustomFiles/css/certificates.css',
                 'public/acm/AlaatvCustomFiles/css/page/pages/shop.css',
             ],
             'public/css/page-shop.css',
@@ -203,7 +203,6 @@ class Mix {
                     'public/acm/AlaatvCustomFiles/components/ScrollCarousel/js.js',
                     'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/js.js',
                     'public/acm/AlaatvCustomFiles/components/aSticky/aSticky.js',
-                    'public/acm/AlaatvCustomFiles/js/certificates.js',
                     'public/acm/AlaatvCustomFiles/js/page/pages/shop.js',
                 ],
                 'public/js/page-shop.js'
@@ -238,14 +237,12 @@ class Mix {
                 'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/style.css',
                 'public/acm/AlaatvCustomFiles/components/ScrollCarousel/style.css',
                 'public/acm/AlaatvCustomFiles/components/ribbon/style.css',
-                'public/acm/AlaatvCustomFiles/css/certificates.css',
                 'public/acm/AlaatvCustomFiles/css/page/pages/homePage.css',
             ],
             'public/css/page-homePage.css',
             [
                 'public/acm/AlaatvCustomFiles/components/aSticky/aSticky.js',
-                'public/acm/AlaatvCustomFiles/js/certificates.js',
-                // 'public/acm/AlaatvCustomFiles/components/ScrollCarousel/js.js',
+                'public/acm/AlaatvCustomFiles/components/ScrollCarousel/js.js',
                 'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/js.js',
                 'public/acm/AlaatvCustomFiles/js/page/pages/homePage.js',
             ],

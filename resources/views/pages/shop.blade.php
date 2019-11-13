@@ -145,7 +145,7 @@
         @endif
     @endforeach
 
-    @include("partials.certificates")
+{{--    @include('partials.certificates')--}}
 @endsection
 
 @section('page-js')

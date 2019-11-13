@@ -179,7 +179,7 @@
 {{--        </div>--}}
 {{--    </div>--}}
 
-    @include('partials.certificates')
+{{--    @include('partials.certificates')--}}
 
 @endsection
 
