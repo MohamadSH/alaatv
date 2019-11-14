@@ -40,7 +40,7 @@ class SatraSyncer
                 'content_id' => $content->id,
                 'url'        => $content->url,
                 'view'       => 0,
-                'title'      => (isset($content->name))?$content->name:'جلسه '.$content->order,
+                'title'      => (!is_null($content->name))?$content->name:'جلسه '.$content->order,
              ],
          ];
 
