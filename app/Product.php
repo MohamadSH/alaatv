@@ -173,6 +173,8 @@ use App\Traits\{DateTrait,
  * @property-read int|null                                                  $sets_count
  * @property mixed                                                          livedescriptions
  * @property mixed                                                          category
+ * @property array recommender_contents
+ * @property array sample_contents
  * @method static Builder|Product whereBlockId($value)
  * @method static Builder|Product whereIntroVideos($value)
  */
@@ -212,6 +214,8 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
         'غیرفعال',
         'فعال',
     ];
+    public const RECOMMENDER_CONTENTS_BUCKET = 'recommendercontent';
+    public const SAMPLE_CONTENTS_BUCKET = 'relatedproduct';
 
     protected $fillable = [
         'name',
@@ -517,6 +521,30 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
         return json_decode($value);
     }
 
+    /**
+     * Gets product's tags
+     *
+     * @param $value
+     *
+     * @return mixed
+     */
+    public function getSampleContentsAttribute($value)
+    {
+        return json_decode($value);
+    }
+
+    /**
+     * Gets product's tags
+     *
+     * @param $value
+     *
+     * @return mixed
+     */
+    public function getRecommenderContentsAttribute($value)
+    {
+        return json_decode($value);
+    }
+
     public function getRedirectUrlAttribute($value)
     {
         if ($value == null) {
@@ -784,6 +812,46 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
         }
 
         $this->attributes['tags'] = $tags;
+    }
+
+    /**
+     * Set the content's tag.
+     *
+     * @param  array  $value
+     *
+     * @return void
+     */
+    public function setSampleContentsAttribute(array $value = null)
+    {
+        $tags = null;
+        if (!empty($value)) {
+            $tags = json_encode([
+                'bucket' => 'relatedproduct',
+                'tags'   => $value,
+            ], JSON_UNESCAPED_UNICODE);
+        }
+
+        $this->attributes['sample_contents'] = $tags;
+    }
+
+    /**
+     * Set the content's tag.
+     *
+     * @param  array  $value
+     *
+     * @return void
+     */
+    public function setRecommenderContentsAttribute(array $value = null)
+    {
+        $tags = null;
+        if (!empty($value)) {
+            $tags = json_encode([
+                'bucket' => 'recommendercontent',
+                'tags'   => $value,
+            ], JSON_UNESCAPED_UNICODE);
+        }
+
+        $this->attributes['recommender_contents'] = $tags;
     }
 
     /**
