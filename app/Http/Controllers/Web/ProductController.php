@@ -240,6 +240,12 @@ class ProductController extends Controller
         $tags = optional($product->tags)->tags;
         $tags = implode(',', isset($tags) ? $tags : []);
 
+        $sampleContents = optional($product->sample_contents)->tags;
+        $sampleContents = implode(',', isset($sampleContents) ? $sampleContents : []);
+
+        $recommenderContents = optional($product->recommender_contents)->tags;
+        $recommenderContents = implode(',', isset($recommenderContents) ? $recommenderContents : []);
+
 
         $liveDescriptions = $product->livedescriptions->sortByDesc('created_at');
         $blocks = optional($product)->blocks;
@@ -249,7 +255,7 @@ class ProductController extends Controller
             compact('product', 'amountLimit', 'defaultAmountLimit', 'enableStatus', 'defaultEnableStatus',
                 'attributesets', 'bons', 'productFiles', 'blocks' ,
                 'productFileTypes', 'defaultProductFileOrders', 'products', 'producttype', 'productPhotos',
-                'defaultProductPhotoOrder', 'tags' , 'liveDescriptions'));
+                'defaultProductPhotoOrder', 'tags' , 'sampleContents' , 'recommenderContents' , 'liveDescriptions'));
     }
 
     public function update(EditProductRequest $request, Product $product)
@@ -936,11 +942,23 @@ class ProductController extends Controller
         $images    = Arr::has($inputData, 'image') ? [Arr::get($inputData, 'image')] : [];
         $isFree    = Arr::has($inputData, 'isFree');
         $tagString = Arr::get($inputData, 'tags');
+        $sampleContentString = Arr::get($inputData, 'sampleContents');
+        $recommenderContentString = Arr::get($inputData, 'recommenderContents');
 
         $product->fill($inputData);
 
         if (strlen($tagString) > 0) {
             $product->tags = convertTagStringToArray($tagString);
+        }
+
+        if (strlen($sampleContentString) > 0) {
+            $sampleContentsArray = convertTagStringToArray($sampleContentString);
+            $product->sample_contents =  $sampleContentsArray;
+        }
+
+        if (strlen($recommenderContentString) > 0) {
+            $recommenderContentsArray = convertTagStringToArray($recommenderContentString);
+            $product->recommender_contents = $recommenderContentsArray ;
         }
 
         if ($this->strIsEmpty($product->discount)) {
@@ -949,7 +967,7 @@ class ProductController extends Controller
 
         $product->isFree = $isFree;
 
-        $product->intro_videos = $this->setIntroVideos(Arr::get($inputData, 'introVideo'),
+        $product->intro_videos = $this->setIntroVideos(Arr::get($inputData, 'sampleContentsString'),
             Arr::get($inputData, 'introVideoThumbnail'));
 
         //Storing product's catalog
