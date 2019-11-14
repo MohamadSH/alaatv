@@ -190,7 +190,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('info', [UserController::class, 'informationPublicUrl']);
         Route::get('{user}/info', 'Web\UserController@information');
         Route::post('{user}/completeInfo', [UserController::class, 'completeInformation']);
-        Route::get('orders', 'Web\UserController@userOrders');
+        Route::get('orders', [UserController::class, 'userOrders'] )->name('web.user.orders');
         Route::get('question', 'Web\UserController@uploads');
         Route::post('submitWorkTime/{employeetimesheet}', [EmployeetimesheetController::class, 'submitWorkTime'])->name('web.user.employeetime.submit.update');
         Route::post('submitWorkTime', [EmployeetimesheetController::class, 'submitWorkTime'])->name('web.user.employeetime.submit');
