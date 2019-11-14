@@ -101,7 +101,7 @@
                             @endforeach
                         @elseif((isset($blockType) && $blockType === 'productSampleVideo') &&
                               (
-                              (!is_null($block->getActiveContent()) && $block->getActiveContent()->count() > 0)
+                              (!is_null($block->getActiveContent()) && $block->getActiveContent()->count() > 0 && !is_null($block->sets->first()))
                               ||
                               (optional(optional(optional($block->sets)->first())->getActiveContents2())->count() > 0)
                               ) )

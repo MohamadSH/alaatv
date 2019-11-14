@@ -44,10 +44,6 @@ class PaymentStatusController extends Controller
         if (isset($result['orderId'])) {
             $order         = Order::find($result['orderId']);
             $orderproducts = $order->orderproducts;
-            if($orderproducts->isEmpty()){
-                Log::info('Empty order:Before order fresh:order:'.$order->id);
-            }
-
             $orderproducts->loadMissing('product');
 
             $gtmEec        = [
