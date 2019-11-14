@@ -151,7 +151,7 @@
                                     <a target="_blank" href="{{ route('web.admin.cacheclear') }}?orderproduct" class="m-menu__link ">
                                         <span class="m-menu__item-here"></span>
                                         <i class="m-menu__link-icon flaticon-network"></i>
-                                        <span class="m-menu__link-text m--font-bold ">خالی کردن کش آیتم سبئ</span>
+                                        <span class="m-menu__link-text m--font-bold ">خالی کردن کش آیتم سبد</span>
                                     </a>
                                 </li>
                                 <li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1">

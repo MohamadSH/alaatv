@@ -837,7 +837,7 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
         $content = $this;
         $key     = 'content:setMates:'.$this->cacheKey();
 
-        $setMates = Cache::tags(['content' , 'setMate' , 'content_'.$this->id , 'content_'.$this->id.'_setMates'])
+        $setMates = Cache::tags(['content' , 'setMate' , 'set_'.$this->contentset_id.'_setMates' , 'content_'.$this->id , 'content_'.$this->id.'_setMates'])
             ->remember($key, config('constants.CACHE_60'), function () use ($content) {
                 $contentSet     = $content->set;
                 $contentSetName = $content->getSetName();
