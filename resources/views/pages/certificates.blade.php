@@ -4,7 +4,7 @@
 @endsection
 
 
-@section("pageBar")
+@section('pageBar')
     <nav aria-label = "breadcrumb">
         <ol class = "breadcrumb">
             <li class = "breadcrumb-item">
@@ -18,7 +18,7 @@
     </nav>
 @endsection
 
-@section("content")
-    @include("partials.certificates");
+@section('content')
+    @include('partials.certificates');
 @endsection
 

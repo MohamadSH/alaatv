@@ -93,20 +93,20 @@
                     <span class="m-menu__link-text">انجمن آلاء</span>
                 </a>
             </li>
-            <li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1">
-                <a target="_blank" href="https://telegram.me/alaa_sanatisharif" rel="noreferrer" class="m-menu__link ">
-                    <span class="m-menu__item-here"></span>
-                    <i class="m-menu__link-icon fab fa-telegram"></i>
-                    <span class="m-menu__link-text">کانال تلگرام</span>
-                </a>
-            </li>
-            <li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1">
-                <a target="_blank" href="https://www.instagram.com/alaa_sanatisharif" rel="noreferrer" class="m-menu__link ">
-                    <span class="m-menu__item-here"></span>
-                    <i class="m-menu__link-icon fab fa-instagram"></i>
-                    <span class="m-menu__link-text">اینستاگرام</span>
-                </a>
-            </li>
+{{--            <li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1">--}}
+{{--                <a target="_blank" href="https://telegram.me/alaa_sanatisharif" rel="noreferrer" class="m-menu__link ">--}}
+{{--                    <span class="m-menu__item-here"></span>--}}
+{{--                    <i class="m-menu__link-icon fab fa-telegram"></i>--}}
+{{--                    <span class="m-menu__link-text">کانال تلگرام</span>--}}
+{{--                </a>--}}
+{{--            </li>--}}
+{{--            <li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1">--}}
+{{--                <a target="_blank" href="https://www.instagram.com/alaa_sanatisharif" rel="noreferrer" class="m-menu__link ">--}}
+{{--                    <span class="m-menu__item-here"></span>--}}
+{{--                    <i class="m-menu__link-icon fab fa-instagram"></i>--}}
+{{--                    <span class="m-menu__link-text">اینستاگرام</span>--}}
+{{--                </a>--}}
+{{--            </li>--}}
 
             @if(Auth::check())
                 @ability(config('constants.ROLE_ADMIN'),config('constants.ADMIN_PANEL_ACCESS'))
