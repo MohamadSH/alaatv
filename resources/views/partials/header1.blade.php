@@ -4,7 +4,7 @@
     }
 </style>--}}
 <!-- BEGIN: Header -->
-<header id="m_header" class="m-grid__item    m-header " m-minimize-offset="200" m-minimize-mobile-offset="200">
+<header id="m_header" class="a--MegaMenu m-grid__item m-header " m-minimize-offset="200" m-minimize-mobile-offset="200">
     <div class="m-container m-container--fluid m-container--full-height">
         <div class="m-stack m-stack--ver m-stack--desktop">
             <!-- BEGIN: Brand -->
@@ -83,38 +83,109 @@
                             </a>
                             <div class="m-menu__submenu m-menu__submenu--classic m-menu__submenu--left a-major-menu__submenu">
                                 <div class="container-fluid">
-                                    <div class="row">
-                                        <div class="col-md-2 categoryItemsCol">
-                                            <div class="categoryItem">کنکور</div>
-                                            <div class="categoryItem">یازدهم</div>
-                                            <div class="categoryItem">دهم</div>
+                                    <div class="row a--MegaMenu-dropDownRow">
+                                        <div class="col-md-2 a--MegaMenu-categoryItemsCol">
+                                            <div class="a--MegaMenu-categoryItem" dtat-cat-id="2">دوازدهم و کنکور</div>
+                                            <div class="a--MegaMenu-categoryItem" dtat-cat-id="3">یازدهم</div>
+                                            <div class="a--MegaMenu-categoryItem" dtat-cat-id="4">دهم</div>
+                                            <div class="a--MegaMenu-categoryItem" dtat-cat-id="1">کنکور نظام قدیم</div>
                                         </div>
-                                        <div class="col-md-10 subCategoryItemsCol">
-                                            <div class="row">
-                                                <div class="col-md-4">
-                                                    <div class="subCategoryItem subCategoryItem-title">اختصاصی (ریاضی و تجربی)</div>
-                                                    <div class="subCategoryItem">شیمی</div>
-                                                    <div class="subCategoryItem">فیزیک</div>
-                                                    <div class="subCategoryItem">ریاضی تجربی</div>
-                                                    <div class="subCategoryItem">زیست</div>
-                                                    <div class="subCategoryItem">هندسه</div>
-                                                    <div class="subCategoryItem">گسسته و آمار و احتمال</div>
-                                                    <div class="subCategoryItem">حسابان و ریاضی پایه</div>
+                                        <div class="col-md-10 a--MegaMenu-subCategoryItemsCol">
+    
+                                            <div class="a--MegaMenu-categorySubItems" data-cat-id="1">
+                                                <div class="row">
+                                                    <div class="col-md-4">
+                                                        <div class="subCategoryItem subCategoryItem-title">دروس اختصاصی ریاضی و تجربی</div>
+                                                        <div class="subCategoryItem">شیمی</div>
+                                                        <div class="subCategoryItem">فیزیک</div>
+                                                        <div class="subCategoryItem">ریاضیات تجربی</div>
+                                                        <div class="subCategoryItem">زیست شناسی</div>
+                                                        <div class="subCategoryItem">هندسه تحلیلی و هندسه پایه</div>
+                                                        <div class="subCategoryItem">ریاضیات گسسته و آمار و احتمال</div>
+                                                        <div class="subCategoryItem">دیفرانسیل، حسابان و ریاضی پایه</div>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <div class="subCategoryItem subCategoryItem-title">دروس اختصاصی انسانی</div>
+                                                        <div class="subCategoryItem">فلسفه و منطق</div>
+                                                        <div class="subCategoryItem">ریاضی</div>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <div class="subCategoryItem subCategoryItem-title">دروس عمومی</div>
+                                                        <div class="subCategoryItem">انگلیسی</div>
+                                                        <div class="subCategoryItem">عربی عمومی</div>
+                                                        <div class="subCategoryItem">ادبیات و زبان فارسی</div>
+                                                        <div class="subCategoryItem">دین و زندگی</div>
+                                                    </div>
                                                 </div>
-                                                <div class="col-md-4">
-                                                    <div class="subCategoryItem subCategoryItem-title">اختصاصی انسانی</div>
-                                                    <div class="subCategoryItem">عربی انسانی و اقتصاد</div>
-                                                    <div class="subCategoryItem">جامعه شناسی و روان شناسی</div>
-                                                    <div class="subCategoryItem">ریاضی و آمار</div>
-                                                    <div class="subCategoryItem">تاریخ و جغرافیا</div>
-                                                    <div class="subCategoryItem">علوم و فنون ادبی، فلسفه و منطق</div>
+                                            </div>
+                                            <div class="a--MegaMenu-categorySubItems" data-cat-id="2">
+                                                <div class="row">
+                                                    <div class="col-md-4">
+                                                        <div class="subCategoryItem subCategoryItem-title">دروس اختصاصی ریاضی و تجربی</div>
+                                                        <div class="subCategoryItem">شیمی</div>
+                                                        <div class="subCategoryItem">فیزیک</div>
+                                                        <div class="subCategoryItem">ریاضیات تجربی</div>
+                                                        <div class="subCategoryItem">زیست شناسی</div>
+                                                        <div class="subCategoryItem">هندسه</div>
+                                                        <div class="subCategoryItem">ریاضیات گسسته و آمار و احتمال</div>
+                                                        <div class="subCategoryItem">حسابان و ریاضی پایه</div>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <div class="subCategoryItem subCategoryItem-title">دروس اختصاصی انسانی</div>
+                                                        <div class="subCategoryItem">عربی</div>
+                                                        <div class="subCategoryItem">ریاضی</div>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <div class="subCategoryItem subCategoryItem-title">دروس عمومی</div>
+                                                        <div class="subCategoryItem">انگلیسی</div>
+                                                        <div class="subCategoryItem">عربی عمومی</div>
+                                                        <div class="subCategoryItem">فارسی</div>
+                                                        <div class="subCategoryItem">دین و زندگی</div>
+                                                    </div>
                                                 </div>
-                                                <div class="col-md-4">
-                                                    <div class="subCategoryItem subCategoryItem-title">عمومی </div>
-                                                    <div class="subCategoryItem">انگلیسی</div>
-                                                    <div class="subCategoryItem">عربی (ریاضی و تجربی)</div>
-                                                    <div class="subCategoryItem">فارسی</div>
-                                                    <div class="subCategoryItem">دین و زندگی</div>
+                                            </div>
+                                            <div class="a--MegaMenu-categorySubItems" data-cat-id="3">
+                                                <div class="row">
+                                                    <div class="col-md-4">
+                                                        <div class="subCategoryItem subCategoryItem-title">دروس اختصاصی ریاضی و تجربی</div>
+                                                        <div class="subCategoryItem">شیمی</div>
+                                                        <div class="subCategoryItem">فیزیک</div>
+                                                        <div class="subCategoryItem">ریاضی تجربی</div>
+                                                        <div class="subCategoryItem">زیست شناسی</div>
+                                                        <div class="subCategoryItem">هندسه</div>
+                                                        <div class="subCategoryItem">آمار و احتمال</div>
+                                                        <div class="subCategoryItem">حسابان</div>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <div class="subCategoryItem subCategoryItem-title">دروس عمومی</div>
+                                                        <div class="subCategoryItem">انگلیسی</div>
+                                                        <div class="subCategoryItem">عربی عمومی</div>
+                                                        <div class="subCategoryItem">فارسی</div>
+                                                        <div class="subCategoryItem">دین و زندگی</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="a--MegaMenu-categorySubItems" data-cat-id="4">
+                                                <div class="row">
+                                                    <div class="col-md-4">
+                                                        <div class="subCategoryItem subCategoryItem-title">دروس اختصاصی ریاضی و تجربی</div>
+                                                        <div class="subCategoryItem">شیمی</div>
+                                                        <div class="subCategoryItem">فیزیک</div>
+                                                        <div class="subCategoryItem">زیست شناسی</div>
+                                                        <div class="subCategoryItem">هندسه</div>
+                                                        <div class="subCategoryItem">ریاضی</div>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <div class="subCategoryItem subCategoryItem-title">دروس اختصاصی انسانی</div>
+                                                        <div class="subCategoryItem">ریاضی و آمار</div>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <div class="subCategoryItem subCategoryItem-title">دروس عمومی</div>
+                                                        <div class="subCategoryItem">انگلیسی</div>
+                                                        <div class="subCategoryItem">عربی عمومی</div>
+                                                        <div class="subCategoryItem">فارسی</div>
+                                                        <div class="subCategoryItem">دین و زندگی</div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -123,6 +194,60 @@
                             </div>
                         </li>
     
+                        <style>
+                            /*.a--MegaMenu */
+                            .a--MegaMenu-categoryItemsCol  {
+                                padding: 0;
+                                background-color: #f7f7f7;
+                            }
+                            .a--MegaMenu-categoryItemsCol .a--MegaMenu-categoryItem {
+                                position: relative;
+                                background-color: #f7f7f7;
+                                min-height: 60px;
+                                display: flex;
+                                justify-content: center;
+                                align-items: center;
+                                cursor: pointer;
+                                border-bottom: solid 1px #dbdbdb;
+                            }
+                            .a--MegaMenu-categoryItemsCol .a--MegaMenu-categoryItem:hover,
+                            .a--MegaMenu-categoryItemsCol .a--MegaMenu-categoryItem.a--MegaMenu-categoryItem-selected {
+                                background-color: #ff9000;
+                                color: white;
+                                font-weight: bold;
+                            }
+                            .a--MegaMenu-categoryItemsCol .a--MegaMenu-categoryItem:hover:after,
+                            .a--MegaMenu-categoryItemsCol .a--MegaMenu-categoryItem.a--MegaMenu-categoryItem-selected:after {
+                                content: '';
+                                position: absolute;
+                                left: -15px;
+                                top: 0;
+                                border-right: solid 15px #ff9000;
+                                border-top: solid 30px transparent;
+                                border-bottom: solid 30px transparent;
+                            }
+                            .subCategoryItem {
+                                display: flex;
+                                justify-content: flex-start;
+                                align-items: center;
+                                height: 30px;
+                                padding-right: 5px;
+                                cursor: pointer;
+                                transition: all 0.2s;
+                            }
+                            .subCategoryItem:hover {
+                                background: #ff900066;
+                            }
+                            .subCategoryItem.subCategoryItem-title {
+                                font-weight: bold;
+                            }
+                            .a--MegaMenu-categorySubItems.a--MegaMenu-categorySubItems-hidden {
+                                display: none;
+                            }
+                            .a--MegaMenu-categorySubItems.a--MegaMenu-categorySubItems-show {
+                                display: block;
+                            }
+                        </style>
                         <li class="m-menu__item  m-menu__item--submenu m-menu__item--rel d-none" m-menu-submenu-toggle="hover" m-menu-link-redirect="1" aria-haspopup="true">
                             <a href="javascript:" class="m-menu__link m-menu__toggle" title="فیلم و جزوه دهم آلاء">
                                 <i class="m-menu__link-icon flaticon-layers"></i>
