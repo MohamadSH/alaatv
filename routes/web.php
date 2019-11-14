@@ -6,6 +6,7 @@ use App\Http\Controllers\Web\FavorableController;
 use App\Http\Controllers\Web\HomeController;
 use App\Http\Controllers\Web\LandingPageController;
 use App\Http\Controllers\Web\LiveController;
+use App\Http\Controllers\Web\OfflinePaymentController;
 use App\Http\Controllers\Web\SanatisharifmergeController;
 use App\Http\Controllers\Web\SectionController;
 use App\Http\Controllers\Web\SetController;
@@ -92,7 +93,7 @@ Route::group(['prefix' => 'checkout'], function () {
     Route::any('verifyPayment/online/{status}/{paymentMethod}/{device}', [PaymentStatusController::class, 'show'])
         ->name('showOnlinePaymentStatus');
 
-    Route::any('verifyPayment/offline/{paymentMethod}/{device}', 'Web\OfflinePaymentController@verifyPayment')
+    Route::any('verifyPayment/offline/{paymentMethod}/{device}', [OfflinePaymentController::class, 'verifyPayment'])
         ->name('verifyOfflinePayment');
 });
 
