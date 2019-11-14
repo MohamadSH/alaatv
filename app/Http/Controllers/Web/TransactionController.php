@@ -431,9 +431,13 @@ class TransactionController extends Controller
             $transactions = collect();
             if ($result['Status'] == 'success') {
                 $authorities = $result['Authorities'];
+                if(is_null($authorities)) {
+                    $authorities = collect();
+                }
+
                 foreach ($authorities as $authority) {
                     /** @var Transaction $transaction */
-                    $transaction = TransactionRepo::getTransactionByAuthority($authority['Authority'])->getValue(null);;
+                    $transaction = TransactionRepo::getTransactionByAuthority($authority['Authority'])->getValue(null);
                     $userId= null;
                     $firstName   = '';
                     $lastName    = '';
@@ -462,6 +466,7 @@ class TransactionController extends Controller
                 }
             }
             else {
+                dd($result);
                 $error = $result['error'];
             }
             $pageName = 'admin';
