@@ -8,6 +8,7 @@ use App\Content;
 use App\Traits\APIRequestCommon;
 use Carbon\Carbon;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 
 class SatraSyncer
@@ -121,7 +122,11 @@ class SatraSyncer
 
     private function countContentVisits(Content $content) :int
     {
-        $latest_id = Content::latest('id')->first()->id;
+
+        $latest_id =   Cache::tags(['satra'])
+                        ->remember('satra:countContentVisits:lastContentId', config("constants.CACHE_5"), function () {
+                            Content::latest('id')->first()->id;
+                        });
         $now = Carbon::now()->timestamp;
         $createdAt = $content->created_at->timestamp;
 
