@@ -13,7 +13,7 @@
             </li>
             <li class="breadcrumb-item">
                 <i class="flaticon-photo-camera m--padding-right-5"></i>
-                <a class="m-link" href="{{ action("Web\UserController@userOrders") }}">سفارش های من</a>
+                <a class="m-link" href="{{ route('web.user.orders') }}">سفارش های من</a>
             </li>
             <li class="breadcrumb-item active" aria-current="page">
                 <a class="m-link" href="#"> رسید پرداخت</a>
