@@ -862,7 +862,8 @@
                             }
                             successfulTransactions += '<div class="transactionItem successfulTransactionItem">';
                             let successfulTransaction = row.successfulTransactions[index];
-                            if (typeof successfulTransaction.paymentmethod !== 'undefined') {
+                            if (typeof successfulTransaction.paymentmethod !== 'undefined'&&
+                                successfulTransaction.paymentmethod !== null) {
                                 successfulTransactions += successfulTransaction.paymentmethod.displayName;
                             } else {
                                 successfulTransactions += '<span class="m-badge m-badge--wide m-badge--danger">- نحوه پرداخت نامشخص</span>';
@@ -921,7 +922,8 @@
                             pendingTransactions += '<div class="transactionItem pendingTransactionItem">';
                             let pendingTransaction = row.pendingTransactions[index];
 
-                            if (typeof pendingTransaction.paymentmethod !== 'undefined') {
+                            if (typeof pendingTransaction.paymentmethod !== 'undefined'&&
+                                pendingTransaction.paymentmethod !== null) {
                                 pendingTransactions += pendingTransaction.paymentmethod.displayName;
                             }
 
