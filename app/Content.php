@@ -928,6 +928,14 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
         $videoDirectUrl = $file->where('res', '480p') ?: collect();
         $videoDirectUrl = $videoDirectUrl->first();
         $videoDirectUrl = isset($videoDirectUrl) ? $videoDirectUrl->link : null;
+
+        $seoModLookupTable = [
+            self::CONTENT_TYPE_VIDEO => SeoMetaTagsGenerator::SEO_MOD_VIDEO_TAGS,
+            self::CONTENT_TYPE_PAMPHLET => SeoMetaTagsGenerator::SEO_MOD_PDF_TAGS,
+            self::CONTENT_TYPE_EXAM => SeoMetaTagsGenerator::SEO_MOD_GENERAL_TAGS,
+            self::CONTENT_TYPE_BOOK => SeoMetaTagsGenerator::SEO_MOD_GENERAL_TAGS,
+            self::CONTENT_TYPE_ARTICLE => SeoMetaTagsGenerator::SEO_MOD_ARTICLE_TAGS,
+        ];
         return [
             'title'                => $this->metaTitle,
             'description'          => $this->metaDescription,
@@ -937,7 +945,7 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
             'imageUrl'             => $this->thumbnail,
             'imageWidth'           => '1280',
             'imageHeight'          => '720',
-            'seoMod'               => SeoMetaTagsGenerator::SEO_MOD_VIDEO_TAGS,
+            'seoMod'               => $seoModLookupTable[$this->contenttype_id],
             'playerUrl'            => action('Web\ContentController@embed', $this),
             'playerWidth'          => '854',
             'playerHeight'         => '480',
