@@ -13,7 +13,7 @@ class InsertContentsToSatraCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'alaaTv:insert:contents:to:satra';
+    protected $signature = 'alaaTv:insert:contents:to:satra {id : The ID of the content to begin}';
 
     /**
      * The console command description.
@@ -39,11 +39,21 @@ class InsertContentsToSatraCommand extends Command
      */
     public function handle()
     {
-        $contents = Content::query()
-                            ->where('contenttype_id' , config('constants.CONTENT_TYPE_VIDEO'))
-                            ->whereNull('redirectUrl')
-                            ->active()
-                            ->get();
+        $contentId = (int) $this->argument('id');
+        if($contentId > 0){
+            $contents = Content::query()
+                                ->where('id' , '>=' , $contentId)
+                                ->where('contenttype_id' , config('constants.CONTENT_TYPE_VIDEO'))
+                                ->whereNull('redirectUrl')
+                                ->active()
+                                ->get();
+        }else{
+            $contents = Content::query()
+                                ->where('contenttype_id' , config('constants.CONTENT_TYPE_VIDEO'))
+                                ->whereNull('redirectUrl')
+                                ->active()
+                                ->get();
+        }
 
         $contentsCount = $contents->count();
 
