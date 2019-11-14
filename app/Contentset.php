@@ -332,7 +332,7 @@ class Contentset extends BaseModel implements Taggable, SeoInterface , Favorable
     {
         $key = 'set:getLastActiveContent:'.$this->cacheKey();
 
-        return Cache::tags(['set' , 'activeContent' , 'lastActiveContent' , 'set_'.$this->id , 'set_'.$this->id.'_activeContents' ,  'set_'.$this->id.'_lastActiveContent'])
+        return Cache::tags(['set' , 'activeContent' , 'lastActiveContent' , 'set_'.$this->id, 'set_'.$this->id.'_contents' , 'set_'.$this->id.'_activeContents' ,  'set_'.$this->id.'_lastActiveContent'])
             ->remember($key, config('constants.CACHE_300'), function () {
 
                 $r = $this->getActiveContents();
@@ -360,7 +360,7 @@ class Contentset extends BaseModel implements Taggable, SeoInterface , Favorable
     {
         $key = 'set:getActiveContents:'.$this->cacheKey();
 
-        return Cache::tags(['set' , 'activeContent' , 'set_'.$this->id , 'set_'.$this->id.'_activeContents'])
+        return Cache::tags(['set' , 'activeContent' , 'set_'.$this->id  , 'set_'.$this->id.'_contents' , 'set_'.$this->id.'_activeContents'])
             ->remember($key, config('constants.CACHE_300'), function () {
 
                 $oldContentCollection = $this->oldContents()
@@ -377,7 +377,7 @@ class Contentset extends BaseModel implements Taggable, SeoInterface , Favorable
     public function getActiveContents2(int $type = null)
     {
         $key = 'set:getActiveContents2:type_'.$type.':'.$this->cacheKey();
-        return Cache::tags(['set' , 'activeContent' , 'set_'.$this->id , 'set_'.$this->id.'_activeContents'])
+        return Cache::tags(['set' , 'activeContent' , 'set_'.$this->id , 'set_'.$this->id.'_contents' , 'set_'.$this->id.'_activeContents'])
             ->remember($key, config('constants.CACHE_300'), function () use ($type) {
                 $contents = $this->activeContents();
 

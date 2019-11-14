@@ -199,7 +199,7 @@
                                             تگ ها :
                                         </label>
                                         <div class="col-md-10">
-                                            <input name="tags" type="text" id="contentTags" class="form-control input-large" value="{{ (isset($lastContent)?(implode(',',$lastContent->tags->tags)):'') }}" data-role="tagsinput">
+                                            <input name="tags" type="text" id="contentTags" class="form-control input-large" value="{{ (isset($lastContent) &&  isset($lastContent->tags) )?(implode(',',$lastContent->tags->tags)):'' }}" data-role="tagsinput">
                                         </div>
                                     </div>
                                 </div>
