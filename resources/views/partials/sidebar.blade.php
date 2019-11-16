@@ -72,20 +72,20 @@
                     </a>
                 </li>
             @endif
-            <li class="m-menu__item @if(isset($pageName) && strcmp($pageName , "rules")==0) m-menu__item--active @endif" aria-haspopup="true" m-menu-link-redirect="1">
-                <a href="{{ action("Web\RulesPageController") }}" class="m-menu__link ">
-                    <span class="m-menu__item-here"></span>
-                    <i class="m-menu__link-icon fa fa-gavel"></i>
-                    <span class="m-menu__link-text">قوانین</span>
-                </a>
-            </li>
-            <li class="m-menu__item @if(isset($pageName) && strcmp($pageName , "contactUs")==0) m-menu__item--active @endif" aria-haspopup="true" m-menu-link-redirect="1">
-                <a href="{{ action("Web\ContactUsController") }}" class="m-menu__link ">
-                    <span class="m-menu__item-here"></span>
-                    <i class="m-menu__link-icon fa fa-phone-volume"></i>
-                    <span class="m-menu__link-text">@lang('page.contact us')</span>
-                </a>
-            </li>
+{{--            <li class="m-menu__item @if(isset($pageName) && strcmp($pageName , "rules")==0) m-menu__item--active @endif" aria-haspopup="true" m-menu-link-redirect="1">--}}
+{{--                <a href="{{ action("Web\RulesPageController") }}" class="m-menu__link ">--}}
+{{--                    <span class="m-menu__item-here"></span>--}}
+{{--                    <i class="m-menu__link-icon fa fa-gavel"></i>--}}
+{{--                    <span class="m-menu__link-text">قوانین</span>--}}
+{{--                </a>--}}
+{{--            </li>--}}
+{{--            <li class="m-menu__item @if(isset($pageName) && strcmp($pageName , "contactUs")==0) m-menu__item--active @endif" aria-haspopup="true" m-menu-link-redirect="1">--}}
+{{--                <a href="{{ action("Web\ContactUsController") }}" class="m-menu__link ">--}}
+{{--                    <span class="m-menu__item-here"></span>--}}
+{{--                    <i class="m-menu__link-icon fa fa-phone-volume"></i>--}}
+{{--                    <span class="m-menu__link-text">@lang('page.contact us')</span>--}}
+{{--                </a>--}}
+{{--            </li>--}}
             <li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1">
                 <a target="_blank" href="https://forum.alaatv.com" rel="noreferrer" class="m-menu__link ">
                     <span class="m-menu__item-here"></span>

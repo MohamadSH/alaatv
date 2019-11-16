@@ -59,12 +59,15 @@
 
 /* Safari 4.0 - 8.0 */
 @-webkit-keyframes ripple {
-  from {
+  0% {
     opacity: 1;
     transform: scale3d(0.75,0.75,1);
   }
-
-  to {
+  70% {
+    opacity: 0.2;
+    transform: scale3d(1.4,1.4,1);
+  }
+  100% {
     opacity: 0;
     transform: scale3d(1.8,1.8,1);
   }
@@ -72,13 +75,16 @@
 
 /* Standard syntax */
 @keyframes ripple {
-  from {
+  0% {
     opacity: 1;
     transform: scale3d(0.75,0.75,1);
   }
-
-  to {
+  70% {
+    opacity: 0.2;
+    transform: scale3d(1.4,1.4,1);
+  }
+  100% {
     opacity: 0;
-    transform: scale3d(1.5,1.5,1);
+    transform: scale3d(1.8,1.8,1);
   }
 }

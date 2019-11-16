@@ -1,11 +1,10 @@
 var AlaaMegaMenu = function () {
 
     function getSubCategoryObject($categoryTarget) {
-        var $parentCategoryObject = getParentCategoryObject($categoryTarget);
-        return $parentCategoryObject.find('.a--MegaMenu-subCategoryItemsCol .a--MegaMenu-categorySubItems[data-cat-id="'+$categoryTarget.attr('dtat-cat-id')+'"]');
+        return getMegaMenuTitleObject($categoryTarget).find('.a--MegaMenu-subCategoryItemsCol .a--MegaMenu-categorySubItems[data-cat-id="'+$categoryTarget.attr('dtat-cat-id')+'"]');
     }
-    function getParentCategoryObject($categoryTarget) {
-        return $categoryTarget.parents('.a--MegaMenu-dropDownRow');
+    function getMegaMenuTitleObject($hoverTarget) {
+        return $hoverTarget.parents('.a--MegaMenu-title');
     }
 
     function showCategory($categoryTarget) {
@@ -15,11 +14,13 @@ var AlaaMegaMenu = function () {
     }
     function hideCategory($categoryTarget) {
         $categoryTarget.removeClass('a--MegaMenu-categoryItem-selected');
-        hideCategorySubItems($categoryTarget);
+        hideCategorySubItems(getSubCategoryObject($categoryTarget));
     }
-    function hideAllCategory() {
-        $('.a--MegaMenu-categoryItem').removeClass('a--MegaMenu-categoryItem-selected');
-        hideCategorySubItems();
+    function hideAllCategory($categoryTarget) {
+        getMegaMenuTitleObject($categoryTarget).find('.a--MegaMenu-categoryItem').removeClass('a--MegaMenu-categoryItem-selected');
+        getMegaMenuTitleObject($categoryTarget).find('.a--MegaMenu-categorySubItems').each(function() {
+            hideCategorySubItems($(this));
+        });
     }
 
     function showCategorySubItems($target) {
@@ -33,6 +34,14 @@ var AlaaMegaMenu = function () {
         }
     }
 
+    function closeAllDropDownMenus() {
+        $('.a--MegaMenu-title').removeClass('a--MegaMenu-title-hover');
+    }
+    function showDropDownMenu($hoverTarget) {
+        closeAllDropDownMenus();
+        getMegaMenuTitleObject($hoverTarget).addClass('a--MegaMenu-title-hover');
+    }
+
     return {
         showCategory: function ($categoryTarget) {
             showCategory($categoryTarget)
@@ -40,17 +49,11 @@ var AlaaMegaMenu = function () {
         hideCategory: function ($categoryTarget) {
             hideCategory($categoryTarget)
         },
-        hideAllCategory: function () {
-            hideAllCategory()
+        showDropDownMenu: function ($hoverTarget) {
+            showDropDownMenu($hoverTarget);
         },
-        getSelectedTags: function () {
-            return getSelectedTags();
-        },
-        refreshPageTagsBadge: function () {
-            refreshPageTagsBadge();
-        },
-        getNewDataBaseOnTags: function (contentSearchFilterData) {
-            getNewDataBaseOnTags(contentSearchFilterData);
+        closeAllDropDownMenus: function () {
+            closeAllDropDownMenus();
         }
     };
 }();
@@ -59,27 +62,35 @@ var AlaaMegaMenu = function () {
 
 $(document).ready(function () {
 
-    AlaaMegaMenu.hideAllCategory();
-
+    const titleItems = document.getElementsByClassName('a--MegaMenu-title');
     const categoryItems = document.getElementsByClassName('a--MegaMenu-categoryItem');
-    let categoryItemsLength = categoryItems.length;
+    let titleItemsLength = titleItems.length,
+        categoryItemsLength = categoryItems.length;
+
+    for (let i = 0; i < titleItemsLength; i++) {
+        var titleItem = titleItems[i];
+
+        // mouseover - mousedown - mouseleave - mouseup
+        titleItem.addEventListener('mouseover', (e) => {
+            AlaaMegaMenu.showDropDownMenu($(e.target));
+        });
+        titleItem.addEventListener('mouseleave', (e) => {
+            AlaaMegaMenu.closeAllDropDownMenus();
+        });
+    }
 
     for (let i = 0; i < categoryItemsLength; i++) {
         var categoryItem = categoryItems[i];
 
-        if (i === 0) {
+        if ($(categoryItem).is(':first-child')) {
             AlaaMegaMenu.showCategory($(categoryItem));
+        } else {
+            AlaaMegaMenu.hideCategory($(categoryItem));
         }
 
         // mouseover - mousedown - mouseleave - mouseup
         categoryItem.addEventListener('mouseover', (e) => {
             AlaaMegaMenu.showCategory($(e.target));
-        });
-        categoryItem.addEventListener('mouseleave', () => {
-            // console.log('mouseleave');
-        });
-        categoryItem.addEventListener('mouseup', () => {
-            // console.log('mouseup');
         });
     }
 });

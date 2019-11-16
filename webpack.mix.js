@@ -14,6 +14,7 @@ class Mix {
         this.mix.sass('public/acm/AlaatvCustomFiles/components/ScrollCarousel/itemStyle.scss', 'public/acm/AlaatvCustomFiles/components/ScrollCarousel');
         this.mix.sass('public/acm/AlaatvCustomFiles/components/Favorite/style.scss', 'public/acm/AlaatvCustomFiles/components/Favorite');
         this.mix.sass('public/acm/AlaatvCustomFiles/components/AjaxLogin/style.scss', 'public/acm/AlaatvCustomFiles/components/AjaxLogin');
+        this.mix.sass('public/acm/AlaatvCustomFiles/components/MegaMenu/style.scss', 'public/acm/AlaatvCustomFiles/components/MegaMenu');
     }
 
     static getBaseCss() {
@@ -24,6 +25,8 @@ class Mix {
             'public/acm/custom-css-app.css',
 
             'public/acm/AlaatvCustomFiles/css/customStyle.css',
+            'public/acm/AlaatvCustomFiles/components/MegaMenu/style.css',
+            'public/acm/AlaatvCustomFiles/css/customStyle/megamenuBackground.css',
             'public/acm/AlaatvCustomFiles/css/customStyle/footer.css',
             'public/acm/AlaatvCustomFiles/css/fixThemeStyle.css',
             'public/acm/AlaatvCustomFiles/components/loading/loading.css',
@@ -40,6 +43,7 @@ class Mix {
 
             'public/acm/AlaatvCustomFiles/js/GoogleAnalyticsEnhancedEcommerce.js',
             'public/acm/AlaatvCustomFiles/js/lazyLoad.js',
+            'public/acm/AlaatvCustomFiles/components/MegaMenu/script.js',
             'public/acm/AlaatvCustomFiles/js/app.js',
             'public/acm/AlaatvCustomFiles/js/mLayout.js'
         ];
