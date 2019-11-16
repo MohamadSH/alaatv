@@ -29,7 +29,7 @@
             id="{{ $block->class }}"
         @endif>
         <div class="col">
-            <div class="m-portlet a--owl-carousel-Wraper OwlCarouselType2-shopPage" id="owlCarousel_{{ $block->id }}">
+            <div class="m-portlet a--owl-carousel-Wraper" id="owlCarousel_{{ $block->id }}">
                 <div class="m-portlet__head a--owl-carousel-head">
                     <div class="m-portlet__head-caption">
                         <div class="m-portlet__head-title">
@@ -69,23 +69,23 @@
                     </div>
                 </div>
                 <div class="m-portlet__body m-portlet__body--no-padding a--owl-carousel-body">
-
-                    <div class="a--owl-carousel-init-loading">
-                        <div class="lds-roller">
-                            <div></div>
-                            <div></div>
-                            <div></div>
-                            <div></div>
-                            <div></div>
-                            <div></div>
-                            <div></div>
-                            <div></div>
-                        </div>
-                    </div>
-
+                    
+{{--                    <div class="a--owl-carousel-init-loading">--}}
+{{--                        <div class="lds-roller">--}}
+{{--                            <div></div>--}}
+{{--                            <div></div>--}}
+{{--                            <div></div>--}}
+{{--                            <div></div>--}}
+{{--                            <div></div>--}}
+{{--                            <div></div>--}}
+{{--                            <div></div>--}}
+{{--                            <div></div>--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
+    
                     <div class="m-widget_head-owlcarousel-items ScrollCarousel a--owl-carousel-type-2 carousel_block_{{ $block->id }}">
-
-
+    
+        
                         @if(((isset($blockType) && $blockType === 'product' && isset($block->products) && $block->products->count() > 0) || !isset($blockType)) && isset($block->products))
                             @foreach($block->products as $productKey=>$product)
                                 @include('block.partials.product')
@@ -109,7 +109,7 @@
                                 @include('block.partials.content')
                             @endforeach
                         @endif
-
+    
                         @if(strlen(trim($block->url))>0)
                             <div class="item carousel a--block-item a--block-item-showMoreItem w-66534321">
                                 <a href="{{ $block->url }}">
@@ -126,7 +126,7 @@
                         @endif
 
                     </div>
-
+                    
                 </div>
             </div>
         </div>
