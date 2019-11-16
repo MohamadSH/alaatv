@@ -320,20 +320,12 @@
                             </div>
                         </div>
                     </div>
-                    @include('product.partials.tagsInput' )
-
-                    <br>
-
-                    <div class="form-group ">
-                        <div class="row">
-                            <label class="col-md-3 control-label" for="tagsString">متن تگ ها: </label>
-                            <div class="col-md-9">
-                                <input class="form-control" id="tagsString" dir="ltr"
-                                                         name="tagsString" type="text"
-                                                         value="">
-                            </div>
-                        </div>
-                    </div>
+                    <hr>
+                    @include('product.partials.tagsInput' , ['value'=>(isset($tags))?$tags:null] )
+                    <hr>
+                    @include('product.partials.tagsInput' , ['value'=>(isset($sampleContents))?$sampleContents:null ,'id' => 'sampleContents' , 'name' => 'sampleContents' , 'label' => 'کانتنت های معرفی کننده محصول'] )
+                    <hr>
+                    @include('product.partials.tagsInput' , ['value'=>(isset($recommenderContents))?$recommenderContents:null ,'id' => 'recommenderContents' , 'name' => 'recommenderContents' , 'label' => 'کانتنت های پیشنهای دهنده محصول'] )
 
                     <div class="form-actions">
                         <div class="row">

@@ -14,6 +14,7 @@ use App\Traits\RequestCommon;
 use Illuminate\Http\Response;
 use App\Adapter\AlaaSftpAdapter;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use App\Classes\Search\ContentsetSearch;
@@ -134,6 +135,12 @@ class SetController extends Controller
         return view('set.index', compact('sets', 'tags'));
     }
 
+    public function indexContent(Request $request, Contentset $set)
+    {
+        $contents = optional($set->contents)->sortBy('order');
+        return view('set.listContents', compact('set', 'contents'));
+    }
+
     public function store(InsertContentsetRequest $request)
     {
         $contentSet = new Contentset();
@@ -245,15 +252,9 @@ class SetController extends Controller
         return view('set.create', compact('products'));
     }
 
-    public function indexContent(Request $request, Contentset $set)
-    {
-        $contents = optional($set->contents)->sortBy('order');
-        return view('set.listContents', compact('set', 'contents'));
-    }
-
     /**
-     * @param  FormRequest  $inputData
-     * @param  Contentset   $contentSet
+     * @param array $inputData
+     * @param Contentset $contentSet
      *
      * @return void
      */
@@ -278,10 +279,19 @@ class SetController extends Controller
         }
     }
 
-    private function syncProducts(array $products, Contentset $contentset)
+    private function syncProducts(array $products, Contentset $contentSet)
     {
-        $contentset->products()
-            ->sync($products);
+        foreach ($contentSet->products as $product) {
+            Cache::tags(['product_'.$product->id.'_sets'])->flush();
+        }
+
+        $contentSet->products()->detach();
+        $contentSet->products()->attach($products);
+
+        foreach ($products as $productId) {
+            Cache::tags(['product_'.$productId.'_sets'])->flush();
+        }
+
     }
 
     private function storePhotoOfSet(Contentset $contentSet, $file): void

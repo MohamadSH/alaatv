@@ -61,10 +61,6 @@ class RedirectUserToPaymentPage extends Controller
 
         $customerDescription = $request->get('customerDescription');
 
-        if(isset($order) && $order->orderproducts->isEmpty()){
-            Log::info('Empty order:Before redirecting to offline route:order:'.$order->id);
-        }
-
         $this->shouldGoToOfflinePayment($cost->rials())
             ->thenRespondWith([[Responses::class, 'sendToOfflinePaymentProcess'], [$device, $order,$customerDescription]]);
 
