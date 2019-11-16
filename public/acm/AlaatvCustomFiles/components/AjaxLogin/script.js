@@ -102,33 +102,33 @@ var AjaxLogin = function () {
             regexMobile = RegExp('^09[0-9]{9}$'),
             regexMelliCode = RegExp('^\\d{10}$');
 
-        if (usernameObject.val().trim().length === 0) {
-            status = false;
-            message = 'شماره همراه خود را وارد کنید.';
-            changeInputFeedback(usernameObject, message);
-        } else if (!regexMobile.test(usernameObject.val().trim())) {
-            status = false;
-            message = 'شماره همراه خود را به درستی وارد نکرده اید.';
-            changeInputFeedback(usernameObject, message);
-        } else {
-            changeInputFeedback(usernameObject, '');
-        }
+        // if (usernameObject.val().trim().length === 0) {
+        //     status = false;
+        //     message = 'شماره همراه خود را وارد کنید.';
+        //     changeInputFeedback(usernameObject, message);
+        // } else if (!regexMobile.test(usernameObject.val().trim())) {
+        //     status = false;
+        //     message = 'شماره همراه خود را به درستی وارد نکرده اید.';
+        //     changeInputFeedback(usernameObject, message);
+        // } else {
+        //     changeInputFeedback(usernameObject, '');
+        // }
 
-        if (passwordObject.val().trim().length === 0) {
-            status = false;
-            message = 'کد ملی خود را وارد کنید.';
-            changeInputFeedback(passwordObject, message);
-        } else if (passwordObject.val().trim().length !== 10) {
-            status = false;
-            message = 'کد ملی می بایست ده رقم باشد.';
-            changeInputFeedback(passwordObject, message);
-        } else if (!regexMelliCode.test(passwordObject.val().trim())) {
-            status = false;
-            message = 'کد ملی خود را به درستی وارد نکرده اید.';
-            changeInputFeedback(passwordObject, message);
-        } else {
-            changeInputFeedback(passwordObject, '');
-        }
+        // if (passwordObject.val().trim().length === 0) {
+        //     status = false;
+        //     message = 'کد ملی خود را وارد کنید.';
+        //     changeInputFeedback(passwordObject, message);
+        // } else if (passwordObject.val().trim().length !== 10) {
+        //     status = false;
+        //     message = 'کد ملی می بایست ده رقم باشد.';
+        //     changeInputFeedback(passwordObject, message);
+        // } else if (!regexMelliCode.test(passwordObject.val().trim())) {
+        //     status = false;
+        //     message = 'کد ملی خود را به درستی وارد نکرده اید.';
+        //     changeInputFeedback(passwordObject, message);
+        // } else {
+        //     changeInputFeedback(passwordObject, '');
+        // }
 
         return status
     }
@@ -150,6 +150,9 @@ var AjaxLogin = function () {
         showLoading();
         ajaxSetup();
 
+        var usernameObject = getUsernameObject(),
+            passwordObject = getPasswordObject();
+
         $.ajax({
             type: 'POST',
             url : getLoginUrlAction(),
@@ -161,17 +164,23 @@ var AjaxLogin = function () {
             success: function (data) {
                 hideLoading();
                 showMessage('success', 'به آلاء خوش آمدید');
+                changeInputFeedback(usernameObject, '');
+                changeInputFeedback(passwordObject, '');
                 callback(status);
             },
             error: function (data) {
+
                 var errors = data.responseJSON.errors; // An array with all errors.
                 if(typeof errors.nationalCode !== 'undefined'){
-                    showMessage('danger', errors.nationalCode[0]);
+                    changeInputFeedback(passwordObject, errors.nationalCode[0]);
                 }
                 if(typeof errors.mobile !== 'undefined'){
-                    showMessage('danger', errors.mobile[0]);
+                    if (data.status === 422) {
+                        changeInputFeedback(usernameObject, errors.mobile[0]);
+                    } else {
+                        showMessage('danger', errors.mobile[0]);
+                    }
                 }
-
                 hideLoading();
             }
 
