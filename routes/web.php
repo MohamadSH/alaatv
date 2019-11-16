@@ -288,7 +288,7 @@ Route::group(['middleware' => 'auth'], function () {
 Route::resource('cat', 'Web\CategoryController');
 
 Route::group(['prefix' => 'set'], function () {
-    Route::get('{set}/listContents', [SetController::class, 'indexContent'])->name('web.set.list.contents');
+    Route::get('{set}/list', [SetController::class, 'indexContent'])->name('web.set.list.contents');
     Route::get('{set}/favored', [FavorableController::class, 'getUsersThatFavoredThisFavorable'])->name('web.get.user.favorite.set');
     Route::post('{set}/favored', [FavorableController::class, 'markFavorableFavorite'])->name('web.mark.favorite.set');
     Route::post('{set}/unfavored', [FavorableController::class, 'markUnFavorableFavorite'])->name('web.mark.unfavorite.set');

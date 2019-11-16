@@ -326,38 +326,36 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
     /**
      * Gets desirable products
      *
-     * @param  int     $configurable
-     * @param  int     $enable
-     * @param  array   $excluded
-     * @param  string  $orderBy
-     * @param  string  $orderMethod
+     * @param int $onlyGrand
+     * @param int $onlyEnable
+     * @param array $excluded
+     * @param string $orderBy
+     * @param string $orderMethod
      *
+     * @param array $included
      * @return $this|Product|Builder
      */
-    public static function getProducts($configurable = 0, $enable = 0, $excluded = [], $orderBy = '', $orderMethod = '')
+    public static function getProducts($onlyGrand = 0, $onlyEnable = 0, $excluded = [] , $orderBy = '', $orderMethod = '' , $included = [])
     {
         /** @var Product $products */
-        if ($configurable == 1) {
-            $products = Product::configurable();
-            if ($enable == 1) {
-                $products = $products->enable();
-            }
-        } else {
-            if ($configurable == 0) {
-                $products = Product::select()
-                    ->doesntHave('parents')
-                    ->whereNull('deleted_at');
-                if ($enable == 1) {
-                    $products->enable();
-                }
-            }
+        if ($onlyGrand == 1) {
+            $products = Product::isGrand();
+        } elseif ($onlyGrand == 0) {
+            $products = Product::query();
+        }
+
+        if ($onlyEnable == 1) {
+            $products = $products->enable();
         }
 
         if (!empty($excluded)) {
-            optional($products)->whereNotIn('id', $excluded);
+            $products->whereNotIn('id', $excluded);
         }
 
-        //ToDo do it via in product search class
+        if (!empty($included)) {
+            $products->whereIn('id', $included);
+        }
+
         if (strlen($orderBy) > 0) {
             if (strlen($orderMethod) > 0) {
                 switch ($orderMethod) {
@@ -463,6 +461,16 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
     public function scopeSimple($query)
     {
         return $query->where('producttype_id', '=', 1);
+    }
+
+    public function scopeIsGrand($query)
+    {
+        return $query->whereNull('grand_id');
+    }
+
+    public function scopeIsChild($query)
+    {
+        return $query->whereNotNull('grand_id');
     }
 
     /*
