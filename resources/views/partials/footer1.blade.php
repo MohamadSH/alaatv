@@ -1,9 +1,9 @@
-<div class="page-footer">
-    <div class="page-footer-inner"> @if(isset($wSetting->site->footer)) {!! $wSetting->site->footer !!} @endif</div>
-    <div class="scroll-to-top">
-        <i class="icon-arrow-up"></i>
-    </div>
-</div>
+{{--<div class="page-footer">--}}
+{{--    <div class="page-footer-inner"> @if(isset($wSetting->site->footer)) {!! $wSetting->site->footer !!} @endif</div>--}}
+{{--    <div class="scroll-to-top">--}}
+{{--        <i class="icon-arrow-up"></i>--}}
+{{--    </div>--}}
+{{--</div>--}}
 
 <div class="modal fade" id="aboutAlaaModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
@@ -43,7 +43,7 @@
 </div>
 
 <!-- begin::Footer -->
-<footer class="m-grid__item m-footer ">
+<footer class="m-grid__item m-footer">
     <div class="m-container m-container--fluid m-container--full-height m-page__container">
         <div class="m-stack m-stack--flex-tablet-and-mobile m-stack--ver m-stack--desktop">
             <div class="m-stack__item m-stack__item--left m-stack__item--middle m-stack__item--last d-none">
@@ -52,7 +52,7 @@
                     @if(isset($wSetting->site->footer)) {!! $wSetting->site->footer !!} @endif
 				</span>
             </div>
-            <ul class="m-footer__nav m-nav m-nav--inline alaaNamad">
+            <ul class="m-footer__nav m-nav m-nav--inline alaaNamad d-block">
         
                 <li class="m-nav__item">
                     <a data-toggle="modal" data-target="#aboutAlaaModal">
@@ -79,6 +79,11 @@
                 <ul class="m-footer__nav m-nav m-nav--inline m--pull-right m--margin-top-10 a--full-width text-center">
     
     
+                    <li class="m-nav__item">
+                        <a href="{{ action("Web\RulesPageController") }}" class="m-nav__link" data-toggle="m-tooltip" title="قوانین" data-placement="top">
+                            <i class="m-menu__link-icon fa fa-gavel"></i>
+                        </a>
+                    </li>
                     <li class="m-nav__item m-nav__item">
                         <a href="{{ action("Web\ContactUsController") }}" class="m-nav__link" data-toggle="m-tooltip" title="@lang('page.contact us')" data-placement="top">
                             <i class="m-menu__link-icon fa fa-phone-volume"></i>
@@ -99,12 +104,7 @@
                             <i class="m-menu__link-icon fab fa-instagram"></i>
                         </a>
                     </li>
-                    {{--                    <li class="m-nav__item">--}}
-                    {{--                        <a href="{{ action("Web\RulesPageController") }}" class="m-nav__link">--}}
-                    {{--                            <i class="m-menu__link-icon fa fa-gavel"></i>--}}
-                    {{--                            <span class="m-nav__link-text">قوانین</span>--}}
-                    {{--                        </a>--}}
-                    {{--                    </li>--}}
+                    
                     {{--                    <li class="m-nav__item">--}}
                     {{--                        <a href="{{ action("Web\ProductController@search") }}" class="m-nav__link">--}}
                     {{--                            <span class="m-nav__link-text">همایش ها</span>--}}
@@ -121,6 +121,9 @@
                     {{--                        </a>--}}
                     {{--                    </li>--}}
                 </ul>
+                <div class="text-center">
+                    @if(isset($wSetting->site->footer)) {!! $wSetting->site->footer !!} @endif
+                </div>
             </div>
         </div>
     </div>
