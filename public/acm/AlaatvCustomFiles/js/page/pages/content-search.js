@@ -597,15 +597,6 @@ var Alaasearch = function () {
         return $('.searchResult .listType>.item').length;
     }
 
-    function clearOwlcarousel(owl) {
-        var length = owl.find('.item').length;
-        while (length > 0) {
-            owl.trigger('remove.owl.carousel', 0)
-                .trigger('refresh.owl.carousel');
-            length = owl.find('.item').length;
-        }
-    }
-
     return {
         init: function (contentData) {
             cleatAllItems();
@@ -615,376 +606,13 @@ var Alaasearch = function () {
         loadDataBasedOnNewFilter: function (urlAction) {
             loadDataBasedOnNewFilter(urlAction);
         },
-        clearFields: function () {
-            clearOwlcarousel($('#product-carousel-warper .a--owl-carousel-type-1'));
-            clearOwlcarousel($('#set-carousel-warper .a--owl-carousel-type-1'));
-            clearOwlcarousel($('#video-carousel-warper .a--owl-carousel-type-1'));
-            $('#pamphlet-vertical-widget').html('');
-            $('#article-vertical-widget').html('');
-        },
     }
-}();
-
-var CustomInitMultiLevelSearch = function () {
-
-    var filterData = null;
-    var tags = null;
-    var tagsFromController = null;
-
-    var selectedVlues = null;
-
-    var emptyFields = null;
-
-    function addUnderLine(string) {
-        if (typeof string === 'undefined' || string === null) {
-            return '';
-        }
-        return string.replace(/ /g, '_');
-    }
-
-    function removeUnderLine(string) {
-        return string.replace(/_/g, ' ');
-    }
-
-    function getTags() {
-        // var url = new URL(window.location.href);
-        // var tags = url.searchParams.getAll("tags[]");
-        var tags = getUrlParams(window.location.href, /(tags\[[0-9]*\])/g);
-        var tagValue = [];
-        for (var index in tags) {
-            tagValue.push(tags[index].value);
-        }
-        return tagValue;
-    }
-
-    function getUrlParams(url, param) {
-        var res = url.match(/(\?|\&)([^=]+)\=([^&]+)/g);
-        var params = [];
-        for (var index in res) {
-            var tagItem = res[index];
-            var paramValue = tagItem.replace(/(\?|\&)([^=]+)\=/g, '');
-            var paramName = tagItem.replace('='+paramValue, '').replace('?', '').replace('&', '');
-            if(typeof param !== 'undefined' && paramName.search(param) !== -1) {
-                params.push({
-                    name: paramName,
-                    value: paramValue
-                });
-            } else {
-                params.push({
-                    name: paramName,
-                    value: paramValue
-                });
-            }
-        }
-        return params;
-    }
-
-    function activeFilter(filterClass) {
-        $('.selectorItem').attr('data-select-active', 'false');
-        $('.selectorItem.'+filterClass).attr('data-select-active', 'true');
-    }
-
-    function getTagsFromControllerOrUrl() {
-        var tags = [];
-        if (tagsFromController !== null && typeof tagsFromController !== 'undefined') {
-            tags = tagsFromController;
-        } else {
-            tags = getTags();
-        }
-        return tags;
-    }
-
-    function setSelectedNezamFromTags() {
-        var selectedVal = filterData.nezam[1];
-        var existInTags = false;
-
-        var tags = getTagsFromControllerOrUrl();
-
-        for (var tagsIndex in tags) {
-            for (var nezamIndex in filterData.nezam) {
-                var item = filterData.nezam[nezamIndex];
-                if (item.value === decodeURI(tags[tagsIndex])) {
-                    selectedVal = item;
-                    activeFilter('maghtaSelector');
-                    existInTags = true;
-                    break;
-                }
-            }
-        }
-        selectedVlues.nezam = selectedVal;
-        if (existInTags) {
-            var name = removeUnderLine(selectedVal.value);
-            $('.selectorItem.nezamSelector').attr('data-select-value', name);
-            return name;
-        } else {
-            return false;
-        }
-    }
-
-    function setSelectedMaghtaFromTags() {
-
-        var selectedNezam = selectedVlues.nezam;
-        var selectedMaghta = filterData[selectedNezam.maghtaKey][0];
-
-        var existInTags = false;
-        var tags = getTagsFromControllerOrUrl();
-
-        for (var tagsIndex in tags) {
-            for (var maghtaIndex in filterData[selectedNezam.maghtaKey]) {
-                var item = filterData[selectedNezam.maghtaKey][maghtaIndex];
-                if (item.value === decodeURI(tags[tagsIndex])) {
-                    selectedMaghta = item;
-                    activeFilter('majorSelector');
-                    existInTags = true;
-                    break;
-                }
-            }
-        }
-        selectedVlues[selectedNezam.maghtaKey] = selectedMaghta;
-        if (existInTags) {
-            var name = removeUnderLine(selectedMaghta.value);
-            $('.selectorItem.maghtaSelector').attr('data-select-value', name);
-            return name;
-        } else {
-            return false;
-        }
-    }
-
-    function setSelectedMajorFromTags() {
-        var selectedVal = filterData.major[0];
-        var existInTags = false;
-
-        var tags = getTagsFromControllerOrUrl();
-
-        for (var tagsIndex in tags) {
-            for (var majorIndex in filterData.major) {
-                var value = filterData.major[majorIndex].value;
-                if (value === decodeURI(tags[tagsIndex])) {
-                    selectedVal = filterData.major[majorIndex];
-                    activeFilter('lessonSelector');
-                    existInTags = true;
-                    break;
-                }
-            }
-        }
-        selectedVlues.major = selectedVal;
-        if (existInTags) {
-            var name = removeUnderLine(selectedVal.value);
-            $('.selectorItem.majorSelector').attr('data-select-value', name);
-            return name;
-        } else {
-            return false;
-        }
-    }
-
-    function setSelectedLessonFromTags() {
-        var selectedMajor = selectedVlues.major;
-        var selectedLesson = filterData[selectedMajor.lessonKey][0];
-        var existInTags = false;
-
-        var tags = getTagsFromControllerOrUrl();
-
-        for (var tagsIndex in tags) {
-            for (var lessonIndex in filterData[selectedMajor.lessonKey]) {
-                var item = filterData[selectedMajor.lessonKey][lessonIndex];
-                if (item.value === decodeURI(tags[tagsIndex])) {
-                    selectedLesson = item;
-                    activeFilter('teacherSelector');
-                    existInTags = true;
-                    break;
-                }
-            }
-        }
-        selectedVlues.lesson = selectedLesson;
-        if (existInTags) {
-            var name = removeUnderLine(selectedLesson.index);
-            $('.selectorItem.lessonSelector').attr('data-select-value', name);
-            return name;
-        } else {
-            return false;
-        }
-    }
-
-    function setSelectedTeacherFromTags() {
-        var selectedLesson = selectedVlues.lesson.value;
-        var selectedTeacher = filterData.lessonTeacher[selectedLesson][0];
-        var existInTags = false;
-
-        var tags = getTagsFromControllerOrUrl();
-
-        for (var tagsIndex in tags) {
-            for (var teacherIndex in filterData.lessonTeacher[selectedLesson]) {
-                var item = filterData.lessonTeacher[selectedLesson][teacherIndex];
-                if (item.value === decodeURI(tags[tagsIndex])) {
-                    selectedTeacher = item;
-                    activeFilter('teacherSelector');
-                    existInTags = true;
-                    break;
-                }
-            }
-        }
-        selectedVlues.teacher = selectedTeacher;
-        if (existInTags) {
-            var name = removeUnderLine(selectedTeacher.value);
-            $('.selectorItem.teacherSelector').attr('data-select-value', name);
-            return name;
-        } else {
-            return false;
-        }
-    }
-
-    function initSelectorItem(selectorClass, selectedValue, filterDataArray) {
-        $(selectorClass).find('.subItem').remove();
-        appendSubItems(filterDataArray, selectorClass, selectedValue);
-        fadeOutSubItemsIfDisplayTypeIsSelect2(selectorClass, filterDataArray, selectedValue);
-    }
-
-    function initNezam() {
-        var selectorClass = '.nezamSelector';
-        var selectedValue = setSelectedNezamFromTags();
-        var filterDataArray = filterData.nezam;
-        initSelectorItem(selectorClass, selectedValue, filterDataArray);
-        setSelectedNezamFromTags();
-    }
-
-    function initMaghta() {
-        var selectorClass = '.maghtaSelector';
-        var selectedValue = setSelectedMaghtaFromTags();
-        var maghta = selectedVlues.nezam.maghtaKey;
-        var filterDataArray = filterData[maghta];
-        initSelectorItem(selectorClass, selectedValue, filterDataArray);
-        setSelectedMaghtaFromTags();
-    }
-
-    function initMajor() {
-        var selectorClass = '.majorSelector';
-        var selectedValue = setSelectedMajorFromTags();
-        var filterDataArray = filterData.major;
-        initSelectorItem(selectorClass, selectedValue, filterDataArray);
-    }
-
-    function initLessons() {
-        var selectorClass = '.lessonSelector';
-        var selectedValue = setSelectedLessonFromTags();
-        var major = selectedVlues.major.lessonKey;
-        var filterDataArray = filterData[major];
-        initSelectorItem(selectorClass, selectedValue, filterDataArray);
-    }
-
-    function initTeacher() {
-        var selectorClass = '.teacherSelector';
-        var selectedValue = setSelectedTeacherFromTags();
-        var lesson = selectedVlues.lesson.value;
-        var filterDataArray = filterData.lessonTeacher[lesson];
-        initSelectorItem(selectorClass, selectedValue, filterDataArray);
-    }
-
-    function fadeOutSubItemsIfDisplayTypeIsSelect2(selectorClass, filterDataArray, selectedValue) {
-        var showType = getDisaplayType(selectorClass);
-        if (showType === 'select2') {
-            var selectorOrder = $(selectorClass).attr('data-select-order');
-            if (selectedValue === false) {
-                if ($('.filterNavigationStep[data-select-order="'+selectorOrder+'"]').hasClass('current')) {
-                    selectedValue = null;
-                } else {
-                    selectedValue = $(selectorClass).attr('data-select-value');
-                }
-            }
-            $(selectorClass).find('.subItem').fadeOut(0);
-            $(selectorClass).find('.form-control.select2').empty();
-            for (var index in filterDataArray) {
-                var name = filterDataArray[index].value;
-                name = removeUnderLine(name);
-                if (selectedValue === name) {
-                    $(selectorClass).find('.form-control.select2').append("<option value='"+name+"' selected>"+name+"</option>");
-                } else {
-                    $(selectorClass).find('.form-control.select2').append("<option value='"+name+"'>"+name+"</option>");
-                }
-            }
-        } else if (showType === 'grid') {
-            $(selectorClass).find('.subItem').fadeIn(0);
-        }
-    }
-
-    function appendSubItems(filterDataArray, selectorClass, selectedValue) {
-        for (var index in filterDataArray) {
-            var name = filterDataArray[index].value;
-            name = removeUnderLine(name);
-            if (selectedValue === name) {
-                $(selectorClass).append('<div class="col subItem" selected="selected">'+name+'</div>');
-            } else {
-                $(selectorClass).append('<div class="col subItem">'+name+'</div>');
-            }
-        }
-    }
-
-    function checkEmptyField(string) {
-        for (var index in emptyFields) {
-            var item = emptyFields[index];
-            if (addUnderLine(item) === addUnderLine(string)) {
-                return '';
-            }
-        }
-        return addUnderLine(string);
-    }
-
-    function getDisaplayType(selectorClass) {
-        var showType = $(selectorClass).data('select-display');
-        if (typeof showType === 'undefined') {
-            showType = 'grid';
-        }
-        return showType;
-    }
-
-    function initSelectedValues() {
-        selectedVlues = {
-            nezam: filterData.nezam[1],
-            maghta: filterData.maghtaJadid[0],
-            major: filterData.major[0],
-            lesson: filterData.allLessons[0],
-            teacher: filterData.lessonTeacher.همه_دروس[0].value
-        };
-    }
-
-    function initEmptyFields() {
-        emptyFields = [
-            filterData.lessonTeacher.همه_دروس[0].value,
-            filterData.allLessons[0].value,
-            filterData.major[0].value,
-            filterData.maghtaGhadim[0].value,
-            filterData.maghtaJadid[0].value
-        ];
-    }
-
-    return {
-        initFilters: function (contentSearchFilterData, inputTags) {
-            filterData = contentSearchFilterData;
-            tagsFromController = inputTags;
-            initSelectedValues();
-            initNezam();
-            initMaghta();
-            initMajor();
-            initLessons();
-            initTeacher();
-            tagsFromController = null;
-        },
-        checkEmptyField: function (contentSearchFilterData, string) {
-            initEmptyFields();
-            return checkEmptyField(string);
-        },
-        addUnderLine: function (string) {
-            return addUnderLine(string);
-        },
-        removeUnderLine: function (string) {
-            return removeUnderLine(string);
-        }
-    };
 }();
 
 var TagManager = function () {
 
     function refreshUrlBasedOnSelectedTags() {
-        var selectedItems = getSelectedTags();
+        var selectedItems = FilterOptions.getselectedItemsInArray();
         var pageTagsListBadge = '.pageTags .m-list-badge__items';
         $(pageTagsListBadge).find('.m-list-badge__item').remove();
 
@@ -1010,18 +638,8 @@ var TagManager = function () {
         return url;
     }
 
-    function getSelectedTags() {
-        var checkedItems = $('.GroupFilters-item input[type="checkbox"]:checked'),
-            checkedItemsLength = checkedItems.length,
-            tagsArray = [];
-        for (var i = 0; i < checkedItemsLength; i++) {
-            tagsArray.push($(checkedItems[i]).val());
-        }
-        return tagsArray;
-    }
-
     function refreshPageTagsBadge() {
-        var tags = getSelectedTags();
+        var tags = FilterOptions.getselectedItemsInArray();
         var tagsLength = tags.length;
         $('.pageTags .m-badge').remove();
         if(tagsLength === 0) {
@@ -1029,13 +647,26 @@ var TagManager = function () {
         } else {
             $('.pageTags').fadeIn();
             for(var i = 0; i < tagsLength; i++) {
-                $('.pageTags .m-list-badge').append('<span class="m-badge m-badge--info m-badge--wide m-badge--rounded m--margin-left-10 tag_0"><a class="m-link m--font-light" href="http://192.168.5.30/c?tags[0]='+tags[i]+'">'+tags[i].split('_').join(' ')+'</a></span>');
+                $('.pageTags .m-list-badge').append(getBadgeHtml(tags[i]));
             }
         }
     }
 
+    function getBadgeHtml(tagValue) {
+        var badgeName = tagValue.split('_').join(' '),
+            badgeValue = tagValue;
+        return '' +
+            '<span class="m-badge m-badge--info m-badge--wide m-badge--rounded m--margin-left-10 tag_0">' +
+            '    <a class="removeTagLabel m--padding-right-10"><i class="fa fa-times"></i></a>' +
+            '    <a class="m-link m--font-light" href="http://192.168.5.30/c?tags[0]='+badgeValue+'">' +
+            '        '+badgeName+'' +
+            '    </a>' +
+            '    <input class="m--hide" name="tags[]" type="hidden" value="'+badgeValue+'">' +
+            '</span>';
+    }
+
     function runWaiting() {
-        Alaasearch.clearFields();
+        // Alaasearch.clearFields();
         $('.notFoundMessage').fadeOut();
         $('#product-carousel-warper').fadeIn();
         $('#video-carousel-warper').fadeIn();
@@ -1059,13 +690,11 @@ var TagManager = function () {
         mApp.unblock('#product-carousel-warper, #set-carousel-warper, #video-carousel-warper, #pamphlet-vertical-widget, #article-vertical-widget');
     }
 
-    function getNewDataBaseOnTags(contentSearchFilterData) {
+    function getNewDataBaseOnTags() {
 
         runWaiting();
 
-        // document.location.href
-
-        var tagsValue = refreshUrlBasedOnSelectedTags(contentSearchFilterData);
+        var tagsValue = refreshUrlBasedOnSelectedTags();
 
 
         var originUrl = document.location.origin;
@@ -1110,23 +739,28 @@ var TagManager = function () {
         });
     }
 
+    function addTagBadgeEvents(callback) {
+        $(document).on('click', '.removeTagLabel', function() {
+            var itemValue = $(this).parents('.m-badge').find('input[type="hidden"][name="tags[]"]').val();
+            FilterOptions.uncheckItem(itemValue);
+            callback();
+        });
+    }
+
     return {
         refreshUrlBasedOnSelectedTags: function () {
             return refreshUrlBasedOnSelectedTags();
         },
-        getSelectedTags: function () {
-            return getSelectedTags();
-        },
         refreshPageTagsBadge: function () {
             refreshPageTagsBadge();
         },
-        getNewDataBaseOnTags: function (contentSearchFilterData) {
-            getNewDataBaseOnTags(contentSearchFilterData);
-        }
+        addTagBadgeEvents: function (callback) {
+            addTagBadgeEvents(callback);
+        },
     };
 }();
 
-var initFilterOptions = function () {
+var FilterOptions = function () {
 
     var contentSearchFilterData = {};
 
@@ -1186,7 +820,7 @@ var initFilterOptions = function () {
             moreBtnHtml = '<button data-more="'+moreCounter+'" data-moretype="more" class="showMoreItems"><i class="fa fa-plus"></i>نمایش بیشتر...</button>',
             sytleForMoreBtnHtml = 'style="max-height: '+( (moreCounter*29.5) + 20 )+'px;overflow: hidden;position: relative;"';
 
-        if (moreCounter == 0) {
+        if (moreCounter === 0) {
             moreBtnHtml = '';
             sytleForMoreBtnHtml = '';
         }
@@ -1284,11 +918,54 @@ var initFilterOptions = function () {
         });
     }
 
+    function getCheckedItems() {
+        return $('.GroupFilters-item input[type="checkbox"]:checked');
+    }
+
+    function getselectedItemsInArray() {
+        var checkedItems = getCheckedItems(),
+            checkedItemsLength = checkedItems.length,
+            tagsArray = [];
+        for (var i = 0; i < checkedItemsLength; i++) {
+            tagsArray.push($(checkedItems[i]).val());
+        }
+        return tagsArray;
+    }
+
+    function uncheckItem(itemValue) {
+        $('.GroupFilters-item input[type="checkbox"][value="'+itemValue+'"]').prop('checked', false);
+    }
+    
+    function filterItemChangeEvent() {
+        var newUrl = TagManager.refreshUrlBasedOnSelectedTags();
+        TagManager.refreshPageTagsBadge();
+        sortSelectedItems();
+        Alaasearch.loadDataBasedOnNewFilter(newUrl);
+    }
+
+    function showFilterMenuForMobile() {
+        $('.SearchBoxFilterColumn').removeClass('filterStatus-close');
+        $('.SearchBoxFilterColumn').addClass('filterStatus-open');
+    }
+    function hideFilterMenuForMobile() {
+        $('.SearchBoxFilterColumn').addClass('filterStatus-close');
+        $('.SearchBoxFilterColumn').removeClass('filterStatus-open');
+    }
+
     return {
         init: function (data) {
+            AlaaLoading.show();
             contentSearchFilterData = data.contentSearchFilterData;
             $(data.containerSelector).html(initGroupsField());
+            AlaaLoading.hide();
 
+
+            $(document).on('click',  '.btnShowSearchBoxInMobileView', function () {
+                showFilterMenuForMobile();
+            });
+            $(document).on('click',  '.btnHideSearchBoxInMobileView', function () {
+                hideFilterMenuForMobile();
+            });
             $(document).on('change', '.GroupFilters-item input[type="checkbox"]', function () {
                 // var thisCheckedStatus = $(this).is(':checked');
                 // $(this).parents('.GroupFilters').find('input[type="checkbox"]').prop('checked', false);
@@ -1297,15 +974,19 @@ var initFilterOptions = function () {
                 // } else {
                 //     $(this).prop('checked', false);
                 // }
-                var newUrl = TagManager.refreshUrlBasedOnSelectedTags();
-                TagManager.refreshPageTagsBadge();
-                sortSelectedItems();
-                Alaasearch.loadDataBasedOnNewFilter(newUrl);
+                if ($(this).parents('.filterStatus-open').length === 0) {
+                    console.log('$(this).parents.length > 0', $(this).parents('.filterStatus-open').length);
+                    filterItemChangeEvent();
+                }
+            });
+            $(document).on('click', '.btnApplyFilterInMobileView', function () {
+                filterItemChangeEvent();
+                hideFilterMenuForMobile();
             });
 
             $('.SearchBoxFilter').sticky({
                 topSpacing: $('#m_header').height(),
-                bottomSpacing: 60,
+                bottomSpacing: 200,
                 scrollDirectionSensitive: true,
                 unstickUnder: 1025,
                 zIndex: 98
@@ -1318,11 +999,26 @@ var initFilterOptions = function () {
             });
 
             $(document).on('click', '#m_aside_left_hide_toggle', function () {
+                if ($('body').hasClass('m-aside-left--hide')) {
+                    $('.SearchColumnsWrapper').removeClass('maxWidth');
+                } else {
+                    $('.SearchColumnsWrapper').addClass('maxWidth');
+                }
                 $('.SearchBoxFilter').update();
             });
 
             checkFilterBasedOnUrlTags(data.tags);
             sortSelectedItems();
+
+            TagManager.addTagBadgeEvents(function () {
+                filterItemChangeEvent();
+            });
+        },
+        getselectedItemsInArray: function () {
+            return getselectedItemsInArray();
+        },
+        uncheckItem: function (itemValue) {
+            uncheckItem(itemValue);
         }
     }
 }();
@@ -1331,22 +1027,11 @@ $('.notFoundMessage').fadeOut(0);
 
 jQuery(document).ready(function () {
 
-    initFilterOptions.init({
+    FilterOptions.init({
         contentSearchFilterData: contentSearchFilterData,
         containerSelector: '.SearchBoxFilter',
         tags: tags
     });
-
-
-    $(document).on('click',  '.btnShowSearchBoxInMobileView', function () {
-        $('.SearchBoxFilterColumn').removeClass('filterStatus-close');
-        $('.SearchBoxFilterColumn').addClass('filterStatus-open');
-    });
-    $(document).on('click',  '.btnHideSearchBoxInMobileView', function () {
-        $('.SearchBoxFilterColumn').addClass('filterStatus-close');
-        $('.SearchBoxFilterColumn').removeClass('filterStatus-open');
-    });
-
 
     let otherResponsive = {
             0:{
