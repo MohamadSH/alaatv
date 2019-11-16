@@ -128,6 +128,11 @@ select.form-control {
     overflow: auto;
 }
 
+.m-badge * {
+    font-size: .8rem;
+    cursor: pointer;
+}
+
 .btn-group.m-btn-group--pill:not(.btn-group-vertical) .btn:only-child {
     border-radius: 60px;
 }
