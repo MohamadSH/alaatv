@@ -127,8 +127,12 @@ class ProductObserver
 
 
 
-    private function setRelatedContentsTags(Product $product , array $contentIds, string $bucket)
+    private function setRelatedContentsTags(Product $product , array $contentIds=null, string $bucket):bool
     {
+        if(!isset($contentIds)){
+            return false;
+        }
+
         $itemTagsArray = [];
         foreach ($contentIds as $id) {
             $itemTagsArray[] = 'c-'.$id;
@@ -138,5 +142,6 @@ class ProductObserver
         ];
 
         $response = $this->sendRequest(config('constants.TAG_API_URL')."id/$bucket/".$product->id, 'PUT', $params);
+        return true;
     }
 }
