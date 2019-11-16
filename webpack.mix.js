@@ -13,6 +13,8 @@ class Mix {
         this.mix.sass('public/acm/AlaatvCustomFiles/components/ScrollCarousel/style.scss', 'public/acm/AlaatvCustomFiles/components/ScrollCarousel');
         this.mix.sass('public/acm/AlaatvCustomFiles/components/ScrollCarousel/itemStyle.scss', 'public/acm/AlaatvCustomFiles/components/ScrollCarousel');
         this.mix.sass('public/acm/AlaatvCustomFiles/components/Favorite/style.scss', 'public/acm/AlaatvCustomFiles/components/Favorite');
+        this.mix.sass('public/acm/AlaatvCustomFiles/components/AjaxLogin/style.scss', 'public/acm/AlaatvCustomFiles/components/AjaxLogin');
+        this.mix.sass('public/acm/AlaatvCustomFiles/components/MegaMenu/style.scss', 'public/acm/AlaatvCustomFiles/components/MegaMenu');
     }
 
     static getBaseCss() {
@@ -23,6 +25,9 @@ class Mix {
             'public/acm/custom-css-app.css',
 
             'public/acm/AlaatvCustomFiles/css/customStyle.css',
+            'public/acm/AlaatvCustomFiles/components/MegaMenu/style.css',
+            'public/acm/AlaatvCustomFiles/css/customStyle/megamenuBackground.css',
+            'public/acm/AlaatvCustomFiles/css/customStyle/footer.css',
             'public/acm/AlaatvCustomFiles/css/fixThemeStyle.css',
             'public/acm/AlaatvCustomFiles/components/loading/loading.css',
         ];
@@ -38,6 +43,7 @@ class Mix {
 
             'public/acm/AlaatvCustomFiles/js/GoogleAnalyticsEnhancedEcommerce.js',
             'public/acm/AlaatvCustomFiles/js/lazyLoad.js',
+            'public/acm/AlaatvCustomFiles/components/MegaMenu/script.js',
             'public/acm/AlaatvCustomFiles/js/app.js',
             'public/acm/AlaatvCustomFiles/js/mLayout.js'
         ];
@@ -194,18 +200,17 @@ class Mix {
                 'public/acm/AlaatvCustomFiles/components/ribbon/style.css',
                 'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/style.css',
                 'public/acm/AlaatvCustomFiles/components/ScrollCarousel/style.css',
-                'public/acm/AlaatvCustomFiles/css/certificates.css',
                 'public/acm/AlaatvCustomFiles/css/page/pages/shop.css',
             ],
             'public/css/page-shop.css',
             [
-                    'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/js.js',
-                    'public/acm/AlaatvCustomFiles/components/aSticky/aSticky.js',
-                    'public/acm/AlaatvCustomFiles/js/certificates.js',
-                    'public/acm/AlaatvCustomFiles/js/page/pages/shop.js',
-                ],
-                'public/js/page-shop.js'
-            );
+                'public/acm/AlaatvCustomFiles/components/ScrollCarousel/js.js',
+                'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/js.js',
+                'public/acm/AlaatvCustomFiles/components/aSticky/aSticky.js',
+                'public/acm/AlaatvCustomFiles/js/page/pages/shop.js',
+            ],
+            'public/js/page-shop.js'
+        );
     }
     mixPageError() {
         this.mixCssAndJs([
@@ -213,10 +218,10 @@ class Mix {
             ],
             'public/css/page-error.css',
             [
-                    'public/acm/AlaatvCustomFiles/js/page/pages/error.js'
-                ],
-                'public/js/page-error.js'
-            );
+                'public/acm/AlaatvCustomFiles/js/page/pages/error.js'
+            ],
+            'public/js/page-error.js'
+        );
     }
     mixAuthLogin() {
         this.mixCssAndJs([
@@ -224,25 +229,24 @@ class Mix {
             ],
             'public/css/auth-login.css',
             [
-                    'node_modules/block-ui/jquery.blockUI.js',
-                    'node_modules/jquery-validation/dist/jquery.validate.js',
-                    'public/acm/AlaatvCustomFiles/js/page/pages/login.js'
-                ],
-                'public/js/login.js'
-            );
+                'node_modules/block-ui/jquery.blockUI.js',
+                'node_modules/jquery-validation/dist/jquery.validate.js',
+                'public/acm/AlaatvCustomFiles/js/page/pages/login.js'
+            ],
+            'public/js/login.js'
+        );
     }
     mixPageHomePage() {
         this.mixCssAndJs([
                 'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/style.css',
                 'public/acm/AlaatvCustomFiles/components/ScrollCarousel/style.css',
                 'public/acm/AlaatvCustomFiles/components/ribbon/style.css',
-                'public/acm/AlaatvCustomFiles/css/certificates.css',
                 'public/acm/AlaatvCustomFiles/css/page/pages/homePage.css',
             ],
             'public/css/page-homePage.css',
             [
                 'public/acm/AlaatvCustomFiles/components/aSticky/aSticky.js',
-                'public/acm/AlaatvCustomFiles/js/certificates.js',
+                'public/acm/AlaatvCustomFiles/components/ScrollCarousel/js.js',
                 'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/js.js',
                 'public/acm/AlaatvCustomFiles/js/page/pages/homePage.js',
             ],
@@ -277,18 +281,19 @@ class Mix {
             ],
             'public/css/content-search.css',
             [
-                    'node_modules/block-ui/jquery.blockUI.js',
-                    'node_modules/persian-date/dist/persian-date.js',
-                    'node_modules/truncatise/index.js',
-                    'node_modules/persianjs/persian.min.js',
-                    'public/acm/AlaatvCustomFiles/components/AlaaLoading/script.js',
-                    'public/acm/AlaatvCustomFiles/components/SearchBoxFilter/script.js',
-                    'public/acm/AlaatvCustomFiles/components/aSticky/aSticky.js',
-                    'public/acm/AlaatvCustomFiles/js/page-content-search-filter-data.js',
-                    'public/acm/AlaatvCustomFiles/js/page/pages/content-search.js'
-                ],
-                'public/js/content-search.js'
-            );
+                'node_modules/block-ui/jquery.blockUI.js',
+                'node_modules/persian-date/dist/persian-date.js',
+                'node_modules/truncatise/index.js',
+                'node_modules/persianjs/persian.min.js',
+                'public/acm/AlaatvCustomFiles/components/ScrollCarousel/js.js',
+                'public/acm/AlaatvCustomFiles/components/AlaaLoading/script.js',
+                'public/acm/AlaatvCustomFiles/components/SearchBoxFilter/script.js',
+                'public/acm/AlaatvCustomFiles/components/aSticky/aSticky.js',
+                'public/acm/AlaatvCustomFiles/js/page-content-search-filter-data.js',
+                'public/acm/AlaatvCustomFiles/js/page/pages/content-search.js'
+            ],
+            'public/js/content-search.js'
+        );
     }
     mixPages() {
         this.mixPageLive();
@@ -306,11 +311,11 @@ class Mix {
             ],
             'public/css/user-orders.css',
             [
-                    'node_modules/persian-date/dist/persian-date.js',
-                    'public/acm/AlaatvCustomFiles/js/page/user-orders.js'
-                ],
-                'public/js/user-orders.js'
-            );
+                'node_modules/persian-date/dist/persian-date.js',
+                'public/acm/AlaatvCustomFiles/js/page/user-orders.js'
+            ],
+            'public/js/user-orders.js'
+        );
     }
     mixPageUserProfile() {
         this.mixCssAndJs(
@@ -363,12 +368,13 @@ class Mix {
             ],
             'public/css/user-dashboard.css',
             [
-                    'node_modules/block-ui/jquery.blockUI.js',
-                    'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/js.js',
-                    'public/acm/AlaatvCustomFiles/js/page/user-dashboard.js',
-                ],
-                'public/js/user-dashboard.js'
-            );
+                'node_modules/block-ui/jquery.blockUI.js',
+                'public/acm/AlaatvCustomFiles/components/ScrollCarousel/js.js',
+                'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/js.js',
+                'public/acm/AlaatvCustomFiles/js/page/user-dashboard.js',
+            ],
+            'public/js/user-dashboard.js'
+        );
     }
     mixPageUserProfileSalesReport() {
         this.mixCssAndJs([
@@ -377,15 +383,15 @@ class Mix {
             ],
             'public/css/user-profile-salesReport.css',
             [
-                    'public/acm/AlaatvCustomFiles/js/iran.geo-map.js',
-                    'node_modules/highcharts/highcharts.js',
-                    'node_modules/highcharts/modules/map.js',
-                    'node_modules/highcharts/modules/drilldown.js',
-                    'node_modules/highcharts/modules/networkgraph.js',
-                    'public/acm/AlaatvCustomFiles/js/page/user-sales-report.js',
-                ],
-                'public/js/user-profile-salesReport.js'
-            );
+                'public/acm/AlaatvCustomFiles/js/iran.geo-map.js',
+                'node_modules/highcharts/highcharts.js',
+                'node_modules/highcharts/modules/map.js',
+                'node_modules/highcharts/modules/drilldown.js',
+                'node_modules/highcharts/modules/networkgraph.js',
+                'public/acm/AlaatvCustomFiles/js/page/user-sales-report.js',
+            ],
+            'public/js/user-profile-salesReport.js'
+        );
     }
     mixUser() {
         this.mixPageUserOrders();
@@ -403,6 +409,7 @@ class Mix {
                 'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/style.css',
                 'public/acm/AlaatvCustomFiles/components/ScrollCarousel/style.css',
 
+                'public/acm/AlaatvCustomFiles/components/AjaxLogin/style.css',
                 'public/acm/AlaatvCustomFiles/components/Favorite/style.css',
 
                 'public/acm/videojs/skins/alaa-theme/videojs.css',
@@ -418,7 +425,9 @@ class Mix {
                 'node_modules/tooltip/dist/Tooltip.js',
                 'node_modules/toastr/build/toastr.min.js',
                 'node_modules/block-ui/jquery.blockUI.js',
+                'public/acm/AlaatvCustomFiles/components/ScrollCarousel/js.js',
                 'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/js.js',
+                'public/acm/AlaatvCustomFiles/components/AjaxLogin/script.js',
                 'public/acm/AlaatvCustomFiles/components/Favorite/script.js',
                 'public/acm/videojs/video.min.js',
                 'public/acm/videojs/plugins/pip/videojs.pip.min.js',
@@ -439,6 +448,7 @@ class Mix {
     mixPageSetShow() {
         this.mixCssAndJs([
                 'node_modules/toastr/build/toastr.css',
+                'public/acm/AlaatvCustomFiles/components/AjaxLogin/style.css',
                 'public/acm/AlaatvCustomFiles/components/Favorite/style.css',
                 'public/acm/AlaatvCustomFiles/css/page/set-show.css'
             ],
@@ -446,6 +456,7 @@ class Mix {
             [
                 'node_modules/toastr/build/toastr.min.js',
                 'node_modules/block-ui/jquery.blockUI.js',
+                'public/acm/AlaatvCustomFiles/components/AjaxLogin/script.js',
                 'public/acm/AlaatvCustomFiles/components/Favorite/script.js',
                 'public/acm/AlaatvCustomFiles/js/page/set-show.js'
             ],
@@ -460,10 +471,10 @@ class Mix {
             ],
             'public/css/page-landing5.css',
             [
-                    'public/acm/AlaatvCustomFiles/js/page-product-landing5.js',
-                ],
-                'public/js/page-landing5.js'
-            );
+                'public/acm/AlaatvCustomFiles/js/page-product-landing5.js',
+            ],
+            'public/js/page-landing5.js'
+        );
     }
     mixLanding7() {
         this.mixCssAndJs([
@@ -473,11 +484,12 @@ class Mix {
             ],
             'public/css/page-landing7.css',
             [
-                    'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/js.js',
-                    'public/acm/AlaatvCustomFiles/js/page-landing7.js',
-                ],
-                'public/js/page-landing7.js'
-            );
+                'public/acm/AlaatvCustomFiles/components/ScrollCarousel/js.js',
+                'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/js.js',
+                'public/acm/AlaatvCustomFiles/js/page-landing7.js',
+            ],
+            'public/js/page-landing7.js'
+        );
     }
     mixLanding8() {
         this.mixCssAndJs([
@@ -488,11 +500,11 @@ class Mix {
             ],
             'public/css/page-landing8.css',
             [
-                    'node_modules/flipclock/dist/flipclock.js',
-                    'public/acm/AlaatvCustomFiles/js/page-product-landing8.js',
-                ],
-                'public/js/page-landing8.js'
-            );
+                'node_modules/flipclock/dist/flipclock.js',
+                'public/acm/AlaatvCustomFiles/js/page-product-landing8.js',
+            ],
+            'public/js/page-landing8.js'
+        );
     }
     mixLanding9() {
         this.mixCssAndJs([
@@ -506,12 +518,13 @@ class Mix {
             ],
             'public/css/page-landing9.css',
             [
-                    'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/js.js',
-                    'public/acm/AlaatvCustomFiles/components/aSticky/aSticky.js',
-                    'public/acm/AlaatvCustomFiles/js/page-product-landing9.js',
-                ],
-                'public/js/page-landing9.js'
-            );
+                'public/acm/AlaatvCustomFiles/components/ScrollCarousel/js.js',
+                'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/js.js',
+                'public/acm/AlaatvCustomFiles/components/aSticky/aSticky.js',
+                'public/acm/AlaatvCustomFiles/js/page-product-landing9.js',
+            ],
+            'public/js/page-landing9.js'
+        );
     }
     mixLanding10() {
         this.mixCssAndJs([
@@ -523,12 +536,13 @@ class Mix {
             ],
             'public/css/page-landing10.css',
             [
-                    'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/js.js',
-                    'public/acm/AlaatvCustomFiles/components/aSticky/aSticky.js',
-                    'public/acm/AlaatvCustomFiles/js/page-product-landing10.js',
-                ],
-                'public/js/page-landing10.js'
-            );
+                'public/acm/AlaatvCustomFiles/components/ScrollCarousel/js.js',
+                'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/js.js',
+                'public/acm/AlaatvCustomFiles/components/aSticky/aSticky.js',
+                'public/acm/AlaatvCustomFiles/js/page-product-landing10.js',
+            ],
+            'public/js/page-landing10.js'
+        );
     }
     mixLanding() {
         this.mixLanding5();
@@ -551,39 +565,42 @@ class Mix {
                 'public/acm/AlaatvCustomFiles/components/ribbon/style.css',
                 'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/style.css',
                 'public/acm/AlaatvCustomFiles/components/ScrollCarousel/style.css',
+                'public/acm/AlaatvCustomFiles/components/AjaxLogin/style.css',
                 'public/acm/AlaatvCustomFiles/components/Favorite/style.css',
                 'public/acm/AlaatvCustomFiles/css/page/product-show.css',
             ],
             'public/css/product-show.css',
             [
-                    'node_modules/toastr/build/toastr.min.js',
-                    'node_modules/block-ui/jquery.blockUI.js',
-                    'node_modules/bootstrap-switch/dist/js/bootstrap-switch.js',
-                    'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/js.js',
-                    'node_modules/lightgallery/src/js/lightgallery.js',
-                    'node_modules/lightgallery/modules/lg-thumbnail.min.js',
-                    'node_modules/lightgallery/modules/lg-autoplay.min.js',
-                    'node_modules/lightgallery/modules/lg-fullscreen.min.js',
-                    'node_modules/lightgallery/modules/lg-pager.min.js',
-                    'node_modules/lightgallery/modules/lg-hash.min.js',
-                    'node_modules/lightgallery/modules/lg-share.min.js',
-                    'node_modules/lightgallery/modules/lg-zoom.min.js',
-                    'public/assets/demo/demo12/custom/components/base/bootstrap-notify.js',
-                    'public/acm/videojs/video.min.js',
-                    'public/acm/videojs/plugins/pip/videojs.pip.min.js',
-                    'public/acm/videojs/nuevo.min.js',
-                    'public/acm/videojs/plugins/videojs.p2p.min.js',
-                    'public/acm/videojs/plugins/videojs.hotkeys.min.js',
-                    'public/acm/videojs/plugins/seek-to-point.js',
-                    'public/acm/videojs/lang/fa.js',
-                    'public/acm/AlaatvCustomFiles/js/UserCart.js',
-                    'public/acm/AlaatvCustomFiles/components/aSticky/aSticky.js',
-                    'public/acm/AlaatvCustomFiles/components/Favorite/script.js',
+                'node_modules/toastr/build/toastr.min.js',
+                'node_modules/block-ui/jquery.blockUI.js',
+                'node_modules/bootstrap-switch/dist/js/bootstrap-switch.js',
+                'public/acm/AlaatvCustomFiles/components/ScrollCarousel/js.js',
+                'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/js.js',
+                'node_modules/lightgallery/src/js/lightgallery.js',
+                'node_modules/lightgallery/modules/lg-thumbnail.min.js',
+                'node_modules/lightgallery/modules/lg-autoplay.min.js',
+                'node_modules/lightgallery/modules/lg-fullscreen.min.js',
+                'node_modules/lightgallery/modules/lg-pager.min.js',
+                'node_modules/lightgallery/modules/lg-hash.min.js',
+                'node_modules/lightgallery/modules/lg-share.min.js',
+                'node_modules/lightgallery/modules/lg-zoom.min.js',
+                'public/assets/demo/demo12/custom/components/base/bootstrap-notify.js',
+                'public/acm/videojs/video.min.js',
+                'public/acm/videojs/plugins/pip/videojs.pip.min.js',
+                'public/acm/videojs/nuevo.min.js',
+                'public/acm/videojs/plugins/videojs.p2p.min.js',
+                'public/acm/videojs/plugins/videojs.hotkeys.min.js',
+                'public/acm/videojs/plugins/seek-to-point.js',
+                'public/acm/videojs/lang/fa.js',
+                'public/acm/AlaatvCustomFiles/js/UserCart.js',
+                'public/acm/AlaatvCustomFiles/components/aSticky/aSticky.js',
+                'public/acm/AlaatvCustomFiles/components/AjaxLogin/script.js',
+                'public/acm/AlaatvCustomFiles/components/Favorite/script.js',
 
-                    'public/acm/AlaatvCustomFiles/js/page/product-show.js',
-                ],
-                'public/js/product-show.js'
-            );
+                'public/acm/AlaatvCustomFiles/js/page/product-show.js',
+            ],
+            'public/js/product-show.js'
+        );
     }
     mixPageProductContentEmbed() {
         this.mixCssAndJs([
@@ -595,17 +612,17 @@ class Mix {
             ],
             'public/css/product-content-embed.css',
             [
-                    'public/acm/videojs/video.min.js',
-                    'public/acm/videojs/plugins/pip/videojs.pip.min.js',
-                    'public/acm/videojs/nuevo.min.js',
-                    'public/acm/videojs/plugins/videojs.p2p.min.js',
-                    'public/acm/videojs/plugins/videojs.hotkeys.min.js',
-                    'public/acm/videojs/plugins/seek-to-point.js',
-                    'public/acm/videojs/lang/fa.js',
-                    'public/acm/AlaatvCustomFiles/js/product-content-embed.js',
-                ],
-                'public/js/product-content-embed.js'
-            );
+                'public/acm/videojs/video.min.js',
+                'public/acm/videojs/plugins/pip/videojs.pip.min.js',
+                'public/acm/videojs/nuevo.min.js',
+                'public/acm/videojs/plugins/videojs.p2p.min.js',
+                'public/acm/videojs/plugins/videojs.hotkeys.min.js',
+                'public/acm/videojs/plugins/seek-to-point.js',
+                'public/acm/videojs/lang/fa.js',
+                'public/acm/AlaatvCustomFiles/js/product-content-embed.js',
+            ],
+            'public/js/product-content-embed.js'
+        );
     }
     mixProduct() {
         this.mixPageProductShow();
@@ -622,15 +639,15 @@ class Mix {
             ],
             'public/css/checkout-review.css',
             [
-                    'node_modules/toastr/build/toastr.min.js',
-                    'node_modules/bootstrap-switch/dist/js/bootstrap-switch.js',
-                    'node_modules/block-ui/jquery.blockUI.js',
-                    'node_modules/jquery-sticky/jquery.sticky.js',
-                    'public/acm/AlaatvCustomFiles/js/UserCart.js',
-                    'public/acm/AlaatvCustomFiles/js/page/checkout-review.js'
-                ],
-                'public/js/checkout-review.js'
-            );
+                'node_modules/toastr/build/toastr.min.js',
+                'node_modules/bootstrap-switch/dist/js/bootstrap-switch.js',
+                'node_modules/block-ui/jquery.blockUI.js',
+                'node_modules/jquery-sticky/jquery.sticky.js',
+                'public/acm/AlaatvCustomFiles/js/UserCart.js',
+                'public/acm/AlaatvCustomFiles/js/page/checkout-review.js'
+            ],
+            'public/js/checkout-review.js'
+        );
     }
     mixPageCheckoutVerification() {
         this.mixCssAndJs([
@@ -638,10 +655,10 @@ class Mix {
             ],
             'public/css/checkout-verification.css',
             [
-                    'public/acm/AlaatvCustomFiles/js/page/checkout-verification.js',
-                ],
-                'public/js/checkout-verification.js'
-            );
+                'public/acm/AlaatvCustomFiles/js/page/checkout-verification.js',
+            ],
+            'public/js/checkout-verification.js'
+        );
     }
     mixCheckout() {
         this.mixPageCheckoutReview();
@@ -668,47 +685,47 @@ class Mix {
             ],
             'public/css/admin-all.css',
             [
-                    'node_modules/persianjs/persian.min.js',
-                    'node_modules/summernote/dist/summernote.js',
-                    'node_modules/block-ui/jquery.blockUI.js',
-                    'node_modules/tooltip/dist/Tooltip.js',
-                    'node_modules/select2/dist/js/select2.js',
-                    'node_modules/select2/dist/js/select2.full.js',
-                    'node_modules/icheck/icheck.js',
-                    'public/acm/AlaatvCustomFiles/components/alaa_old/plugins/datatables/datatables.min.js',
-                    'public/acm/AlaatvCustomFiles/components/alaa_old/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
-                    'public/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js',
-                    'public/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-fileinput/bootstrap-fileinput.js',
-                    'public/acm/AlaatvCustomFiles/components/alaa_old/plugins/jquery-inputmask/jquery.inputmask.bundle.min.js',
-                    'public/acm/AlaatvCustomFiles/components/alaa_old/plugins/jquery.sparkline.min.js',
-                    'public/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-toastr/toastr.min.js',
-                    'public/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-select/js/bootstrap-select.min.js',
-                    'public/acm/AlaatvCustomFiles/components/alaa_old/plugins/jquery-multi-select/js/jquery.multi-select.js',
-                    'public/acm/AlaatvCustomFiles/components/alaa_old/plugins/jquery-repeater/jquery.repeater.min.js',
-                    'public/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-tagsinput/bootstrap-tagsinput.min.js',
-                    'public/acm/AlaatvCustomFiles/components/alaa_old/plugins/jplayer/dist/jplayer/jquery.jplayer.js',
-                    'public/acm/AlaatvCustomFiles/components/alaa_old/plugins/jQueryNumberFormat/jquery.number.min.js',
-                    'public/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-sweetalert/sweetalert.min.js',
-                    'public/acm/AlaatvCustomFiles/components/alaa_old/plugins/jquery.input-ip-address-control-1.0.min.js',
+                'node_modules/persianjs/persian.min.js',
+                'node_modules/summernote/dist/summernote.js',
+                'node_modules/block-ui/jquery.blockUI.js',
+                'node_modules/tooltip/dist/Tooltip.js',
+                'node_modules/select2/dist/js/select2.js',
+                'node_modules/select2/dist/js/select2.full.js',
+                'node_modules/icheck/icheck.js',
+                'public/acm/AlaatvCustomFiles/components/alaa_old/plugins/datatables/datatables.min.js',
+                'public/acm/AlaatvCustomFiles/components/alaa_old/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
+                'public/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js',
+                'public/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-fileinput/bootstrap-fileinput.js',
+                'public/acm/AlaatvCustomFiles/components/alaa_old/plugins/jquery-inputmask/jquery.inputmask.bundle.min.js',
+                'public/acm/AlaatvCustomFiles/components/alaa_old/plugins/jquery.sparkline.min.js',
+                'public/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-toastr/toastr.min.js',
+                'public/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-select/js/bootstrap-select.min.js',
+                'public/acm/AlaatvCustomFiles/components/alaa_old/plugins/jquery-multi-select/js/jquery.multi-select.js',
+                'public/acm/AlaatvCustomFiles/components/alaa_old/plugins/jquery-repeater/jquery.repeater.min.js',
+                'public/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-tagsinput/bootstrap-tagsinput.min.js',
+                'public/acm/AlaatvCustomFiles/components/alaa_old/plugins/jplayer/dist/jplayer/jquery.jplayer.js',
+                'public/acm/AlaatvCustomFiles/components/alaa_old/plugins/jQueryNumberFormat/jquery.number.min.js',
+                'public/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-sweetalert/sweetalert.min.js',
+                'public/acm/AlaatvCustomFiles/components/alaa_old/plugins/jquery.input-ip-address-control-1.0.min.js',
 
-                    'public/acm/AlaatvCustomFiles/components/alaa_old/scripts/datatable.min.js',
-                    'public/acm/AlaatvCustomFiles/components/alaa_old/scripts/form-repeater.js',
-                    'public/acm/AlaatvCustomFiles/components/alaa_old/scripts/ui-toastr.min.js',
-                    'public/acm/AlaatvCustomFiles/components/alaa_old/scripts/components-editors.js',
-                    'public/acm/AlaatvCustomFiles/components/alaa_old/scripts/components-multi-select.min.js',
-                    'public/acm/AlaatvCustomFiles/components/alaa_old/scripts/components-bootstrap-multiselect.min.js',
-                    'public/acm/AlaatvCustomFiles/components/alaa_old/scripts/ui-confirmations.min.js',
-                    'public/acm/AlaatvCustomFiles/components/alaa_old/scripts/makeSelect2Single.js',
-                    'public/acm/AlaatvCustomFiles/components/alaa_old/scripts/form-input-mask.js',
-                    'public/acm/AlaatvCustomFiles/components/alaa_old/scripts/form-icheck.js',
-                    'public/acm/extra/persian-datepicker/lib/persian-date.js',
-                    'public/acm/extra/persian-datepicker/dist/js/persian-datepicker-0.4.5.min.js',
-                    'public/acm/AlaatvCustomFiles/js/admin/makeDataTable.js',
-                    'public/acm/AlaatvCustomFiles/js/admin-makeMultiSelect.js',
-                    'public/acm/AlaatvCustomFiles/js/admin-customInitComponent.js',
-                ],
-                'public/js/admin-all.js'
-            );
+                'public/acm/AlaatvCustomFiles/components/alaa_old/scripts/datatable.min.js',
+                'public/acm/AlaatvCustomFiles/components/alaa_old/scripts/form-repeater.js',
+                'public/acm/AlaatvCustomFiles/components/alaa_old/scripts/ui-toastr.min.js',
+                'public/acm/AlaatvCustomFiles/components/alaa_old/scripts/components-editors.js',
+                'public/acm/AlaatvCustomFiles/components/alaa_old/scripts/components-multi-select.min.js',
+                'public/acm/AlaatvCustomFiles/components/alaa_old/scripts/components-bootstrap-multiselect.min.js',
+                'public/acm/AlaatvCustomFiles/components/alaa_old/scripts/ui-confirmations.min.js',
+                'public/acm/AlaatvCustomFiles/components/alaa_old/scripts/makeSelect2Single.js',
+                'public/acm/AlaatvCustomFiles/components/alaa_old/scripts/form-input-mask.js',
+                'public/acm/AlaatvCustomFiles/components/alaa_old/scripts/form-icheck.js',
+                'public/acm/extra/persian-datepicker/lib/persian-date.js',
+                'public/acm/extra/persian-datepicker/dist/js/persian-datepicker-0.4.5.min.js',
+                'public/acm/AlaatvCustomFiles/js/admin/makeDataTable.js',
+                'public/acm/AlaatvCustomFiles/js/admin-makeMultiSelect.js',
+                'public/acm/AlaatvCustomFiles/js/admin-customInitComponent.js',
+            ],
+            'public/js/admin-all.js'
+        );
     }
     mixAdminContentCreate() {
         this.mixCssAndJs([
@@ -721,27 +738,27 @@ class Mix {
             ],
             'public/css/admin-content-create.css',
             [
-                    'node_modules/block-ui/jquery.blockUI.js',
-                    'node_modules/persian-date/dist/persian-date.js',
-                    'node_modules/persian-datepicker/dist/js/persian-datepicker.js',
-                    'node_modules/icheck/icheck.min.js',
-                    'node_modules/jquery-multiselect/jquery-MultiSelect.js',
-                    'node_modules/bootstrap-tagsinput/dist/bootstrap-tagsinput.min.js',
-                    'node_modules/bootstrap-multiselect/dist/js/bootstrap-multiselect.js',
-                    'node_modules/select2/dist/js/select2.js',
-                ],
-                'public/js/admin-content-create.js'
-            );
+                'node_modules/block-ui/jquery.blockUI.js',
+                'node_modules/persian-date/dist/persian-date.js',
+                'node_modules/persian-datepicker/dist/js/persian-datepicker.js',
+                'node_modules/icheck/icheck.min.js',
+                'node_modules/jquery-multiselect/jquery-MultiSelect.js',
+                'node_modules/bootstrap-tagsinput/dist/bootstrap-tagsinput.min.js',
+                'node_modules/bootstrap-multiselect/dist/js/bootstrap-multiselect.js',
+                'node_modules/select2/dist/js/select2.js',
+            ],
+            'public/js/admin-content-create.js'
+        );
     }
     mixAdminContentEdit() {
         this.mixCssAndJs([
             ],
-                'public/css/admin-content-edit.css',
+            'public/css/admin-content-edit.css',
             [
                 'node_modules/diff-match-patch/index.js',
-                ],
-                'public/js/admin-content-edit.js'
-            );
+            ],
+            'public/js/admin-content-edit.js'
+        );
     }
     mixAdmin() {
         this.mixAdminBase();

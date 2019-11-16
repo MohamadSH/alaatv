@@ -33,7 +33,7 @@
                         <div class="m-portlet__head-title">
                             <h3 class="m-portlet__head-text">
                                 <span class="redSquare"></span>
-                                محصولات من
+                                محصولات خریداری شده من
                             </h3>
                         </div>
                     </div>
