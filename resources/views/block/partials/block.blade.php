@@ -72,18 +72,18 @@
                 </div>
                 <div class="m-portlet__body m-portlet__body--no-padding a--owl-carousel-body">
                     
-                    <div class="a--owl-carousel-init-loading">
-                        <div class="lds-roller">
-                            <div></div>
-                            <div></div>
-                            <div></div>
-                            <div></div>
-                            <div></div>
-                            <div></div>
-                            <div></div>
-                            <div></div>
-                        </div>
-                    </div>
+{{--                    <div class="a--owl-carousel-init-loading">--}}
+{{--                        <div class="lds-roller">--}}
+{{--                            <div></div>--}}
+{{--                            <div></div>--}}
+{{--                            <div></div>--}}
+{{--                            <div></div>--}}
+{{--                            <div></div>--}}
+{{--                            <div></div>--}}
+{{--                            <div></div>--}}
+{{--                            <div></div>--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
     
                     <div class="m-widget_head-owlcarousel-items ScrollCarousel a--owl-carousel-type-2 carousel_block_{{ $block->id }}">
     
