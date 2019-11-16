@@ -215,7 +215,6 @@
         ];
     </script>
     <script src="{{ mix('/js/page-homePage.js') }}" async ></script>
-    <script src="{{ asset('/acm/AlaatvCustomFiles/components/MegaMenu/script.js') }}" async ></script>
 @endsection
 
 @section('page-preload-js')
