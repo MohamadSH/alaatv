@@ -737,23 +737,10 @@
                     </div>
                     <div class="m-portlet__body m-portlet__body--no-padding a--owl-carousel-body">
 
-                        <div class="a--owl-carousel-init-loading">
-                            <div class="lds-roller">
-                                <div></div>
-                                <div></div>
-                                <div></div>
-                                <div></div>
-                                <div></div>
-                                <div></div>
-                                <div></div>
-                                <div></div>
-                            </div>
-                        </div>
-
                         <div
-                            class="m-widget_head-owlcarousel-items owl-carousel a--owl-carousel-type-2 carousel_block_owlCarouselParentProducts">
+                            class="m-widget_head-owlcarousel-items ScrollCarousel owl-carousel a--owl-carousel-type-2 carousel_block_owlCarouselParentProducts">
                             @foreach($productsThatHaveThisContent as $productKey=>$product)
-                                <div class="item carousel a--block-item a--block-type-product"
+                                <div class="item carousel a--block-item a--block-type-product w-55443211"
                                      data-position="{{ $productKey }}"
                                      data-gtm-eec-product-id="{{ $product->id }}"
                                      data-gtm-eec-product-name="{{ $product->name }}"
