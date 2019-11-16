@@ -1010,6 +1010,10 @@ var contentSearchFilterData = {
             "index": "هندسه پایه"
         },
         {
+            "value": "هندسه",
+            "index": "هندسه"
+        },
+        {
             "value": "هندسه_کنکور",
             "index": "هندسه کنکور"
         },

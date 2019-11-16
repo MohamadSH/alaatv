@@ -23,6 +23,7 @@
                 <button class="btn btn-outline-danger m-btn m-btn--icon btn-lg m-btn--icon-only m-btn--pill m-btn--air m-btn--outline-2x btnHideSearchBoxInMobileView">
                     <i class="fa fa-times" aria-hidden="true"></i>
                 </button>
+                <button class="btn btn-outline-accent m-btn m-btn--air m-btn--outline-2x m--pull-left btnApplyFilterInMobileView"> اعمال فیلتر </button>
             </div>
             <div class="SearchBoxFilter">
             
@@ -30,6 +31,12 @@
         </div>
         <div class="searchResultColumn">
     
+            <div class="row">
+                <div class="col pageTags">
+                    @include('partials.search.tagLabel' , ['tags'=>$tags, 'withCloseIcon'=>true, 'withInput'=>true])
+                </div>
+            </div>
+            
             <div class="m-alert m-alert--icon m-alert--icon-solid m-alert--outline alert alert-warning alert-dismissible fade show notFoundMessage" role="alert">
                 <div class="m-alert__icon">
                     <i class="fa fa-sad-tear"></i>
@@ -53,12 +60,6 @@
                 <div class="listType">
                 
                     
-                </div>
-    
-                <div class="row">
-                    <div class="col pageTags">
-                        @include('partials.search.tagLabel' , ['tags'=>$tags])
-                    </div>
                 </div>
             </div>
         </div>
