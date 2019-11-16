@@ -165,9 +165,17 @@
             <div class = "btn-group">
                 <button class = "btn btn-xs black dropdown-toggle" type = "button" data-toggle = "dropdown" aria-expanded = "false"> عملیات</button>
                 <ul class = "dropdown-menu" role = "menu" id = "{{$item->id}}">
+                    @role((config("constants.ROLE_ADMIN")))
+                    <li>
+                        <a target = "_blank" href = "{{route('web.admin.cacheclear' , ['user'=>1 , 'user_id'=>$item->id])}}">
+                            <i class = "fa fa-pencil"></i>
+                            خالی کردن کش کاربر
+                        </a>
+                    </li>
+                    @endrole
                     @permission((config('constants.SHOW_USER_ACCESS')))
                     <li>
-                        <a target = "_blank" href = "{{action("Web\UserController@edit" , $item)}}">
+                        <a target = "_blank" href = "{{route('user.edit' , $item)}}">
                             <i class = "fa fa-pencil"></i>
                             اصلاح
                         </a>
@@ -178,14 +186,6 @@
                         <a class = "deleteUser" data-target = "#deleteUserConfirmationModal" data-toggle = "modal">
                             <i class = "fa fa-remove" aria-hidden = "true"></i>
                             حذف
-                        </a>
-                    </li>
-                    {{--@endpermission--}}
-                    {{--@permission((config('constants.INSERT_ORDER_ACCESS')))--}}
-                    <li>
-                        <a target = "_blank" href = "{{action("Web\OrderController@create" , ["customer_id"=>$item->id])}}">
-                            <i class = "fa fa-plus" aria-hidden = "true"></i>
-                            درج سفارش
                         </a>
                     </li>
                     {{--@endpermission--}}
