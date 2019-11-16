@@ -4,6 +4,7 @@ namespace App\Observers;
 
 use App\Classes\Search\TaggingInterface;
 use App\Product;
+use App\Traits\APIRequestCommon;
 use App\Traits\TaggableTrait;
 use Illuminate\Support\Facades\Cache;
 
@@ -12,6 +13,7 @@ class ProductObserver
     private $tagging;
 
     use TaggableTrait;
+    use APIRequestCommon;
 
     public function __construct(TaggingInterface $tagging)
     {
@@ -100,6 +102,9 @@ class ProductObserver
             'product_'.$product->id ,
             'product_search' ,
             'relatedProduct_search' ])->flush();
+
+        $this->setRelatedContentsTags($product , optional($product->sample_contents)->tags , Product::RECOMMENDER_CONTENTS_BUCKET);
+        $this->setRelatedContentsTags($product , optional($product->recommender_contents)->tags, Product::SAMPLE_CONTENTS_BUCKET);
     }
 
     /**
@@ -121,4 +126,22 @@ class ProductObserver
     }
 
 
+
+    private function setRelatedContentsTags(Product $product , array $contentIds=null, string $bucket):bool
+    {
+        if(!isset($contentIds)){
+            return false;
+        }
+
+        $itemTagsArray = [];
+        foreach ($contentIds as $id) {
+            $itemTagsArray[] = 'c-'.$id;
+        }
+        $params = [
+            'tags' => json_encode($itemTagsArray, JSON_UNESCAPED_UNICODE),
+        ];
+
+        $response = $this->sendRequest(config('constants.TAG_API_URL')."id/$bucket/".$product->id, 'PUT', $params);
+        return true;
+    }
 }

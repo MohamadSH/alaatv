@@ -2,9 +2,11 @@
 
 namespace App\Observers;
 
+use App\Classes\SatraSyncer;
 use App\Classes\Search\TaggingInterface;
 use App\Content;
 use App\Events\ContentRedirected;
+use App\Jobs\InsertContentToSatra;
 use App\Traits\TaggableTrait;
 use Illuminate\Support\Facades\Cache;
 
@@ -28,7 +30,7 @@ class ContentObserver
      */
     public function created(Content $content)
     {
-
+        dispatch(new InsertContentToSatra($content));
     }
 
     /**
@@ -40,6 +42,7 @@ class ContentObserver
      */
     public function updated(Content $content)
     {
+//        (new SatraSyncer())->updateContentInfo($content);
     }
 
     /**
@@ -117,7 +120,8 @@ class ContentObserver
         }
 
         Cache::tags(['content_'.$content->id ,
-                    'set_'.$content->contentset_id.'_activeContents' ,
+                    'set_'.$content->contentset_id.'_contents' ,
+                    'set_'.$content->contentset_id.'_setMates' ,
                     'content_search' ])->flush();
     }
 }

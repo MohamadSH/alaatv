@@ -1503,7 +1503,10 @@ class UserController extends Controller
 
         $file = $this->getRequestFile($inputData, 'photo');
         if ($file !== false) {
-            $this->storePhotoOfUser($user, $file);
+            $storePicResult = $this->storePhotoOfUser($user, $file);
+            if(isset($storePicResult)){
+                $user->photo = $storePicResult;
+            }
         }
     }
 

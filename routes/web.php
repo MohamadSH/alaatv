@@ -6,6 +6,7 @@ use App\Http\Controllers\Web\FavorableController;
 use App\Http\Controllers\Web\HomeController;
 use App\Http\Controllers\Web\LandingPageController;
 use App\Http\Controllers\Web\LiveController;
+use App\Http\Controllers\Web\OfflinePaymentController;
 use App\Http\Controllers\Web\SanatisharifmergeController;
 use App\Http\Controllers\Web\SectionController;
 use App\Http\Controllers\Web\SetController;
@@ -92,7 +93,7 @@ Route::group(['prefix' => 'checkout'], function () {
     Route::any('verifyPayment/online/{status}/{paymentMethod}/{device}', [PaymentStatusController::class, 'show'])
         ->name('showOnlinePaymentStatus');
 
-    Route::any('verifyPayment/offline/{paymentMethod}/{device}', 'Web\OfflinePaymentController@verifyPayment')
+    Route::any('verifyPayment/offline/{paymentMethod}/{device}', [OfflinePaymentController::class, 'verifyPayment'])
         ->name('verifyOfflinePayment');
 });
 
@@ -190,7 +191,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('info', [UserController::class, 'informationPublicUrl']);
         Route::get('{user}/info', 'Web\UserController@information');
         Route::post('{user}/completeInfo', [UserController::class, 'completeInformation']);
-        Route::get('orders', 'Web\UserController@userOrders');
+        Route::get('orders', [UserController::class, 'userOrders'] )->name('web.user.orders');
         Route::get('question', 'Web\UserController@uploads');
         Route::post('submitWorkTime/{employeetimesheet}', [EmployeetimesheetController::class, 'submitWorkTime'])->name('web.user.employeetime.submit.update');
         Route::post('submitWorkTime', [EmployeetimesheetController::class, 'submitWorkTime'])->name('web.user.employeetime.submit');
@@ -287,7 +288,7 @@ Route::group(['middleware' => 'auth'], function () {
 Route::resource('cat', 'Web\CategoryController');
 
 Route::group(['prefix' => 'set'], function () {
-    Route::get('{set}/listContents', [SetController::class, 'indexContent'])->name('web.set.list.contents');
+    Route::get('{set}/list', [SetController::class, 'indexContent'])->name('web.set.list.contents');
     Route::get('{set}/favored', [FavorableController::class, 'getUsersThatFavoredThisFavorable'])->name('web.get.user.favorite.set');
     Route::post('{set}/favored', [FavorableController::class, 'markFavorableFavorite'])->name('web.mark.favorite.set');
     Route::post('{set}/unfavored', [FavorableController::class, 'markUnFavorableFavorite'])->name('web.mark.unfavorite.set');

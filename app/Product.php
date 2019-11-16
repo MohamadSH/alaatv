@@ -173,6 +173,8 @@ use App\Traits\{DateTrait,
  * @property-read int|null                                                  $sets_count
  * @property mixed                                                          livedescriptions
  * @property mixed                                                          category
+ * @property array recommender_contents
+ * @property array sample_contents
  * @method static Builder|Product whereBlockId($value)
  * @method static Builder|Product whereIntroVideos($value)
  */
@@ -212,6 +214,8 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
         'غیرفعال',
         'فعال',
     ];
+    public const RECOMMENDER_CONTENTS_BUCKET = 'recommendercontent';
+    public const SAMPLE_CONTENTS_BUCKET = 'relatedproduct';
 
     protected $fillable = [
         'name',
@@ -322,53 +326,45 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
     /**
      * Gets desirable products
      *
-     * @param  int     $configurable
-     * @param  int     $enable
-     * @param  array   $excluded
-     * @param  string  $orderBy
-     * @param  string  $orderMethod
+     * @param int $onlyGrand
+     * @param int $onlyEnable
+     * @param array $excluded
+     * @param string $orderBy
+     * @param string $orderMethod
      *
+     * @param array $included
      * @return $this|Product|Builder
      */
-    public static function getProducts($configurable = 0, $enable = 0, $excluded = [], $orderBy = '', $orderMethod = '')
+    public static function getProducts($onlyGrand = 0, $onlyEnable = 0, $excluded = [] , $orderBy = 'created_at', $orderMethod = 'asc' , $included = [])
     {
         /** @var Product $products */
-        if ($configurable == 1) {
-            $products = Product::configurable();
-            if ($enable == 1) {
-                $products = $products->enable();
-            }
-        } else {
-            if ($configurable == 0) {
-                $products = Product::select()
-                    ->doesntHave('parents')
-                    ->whereNull('deleted_at');
-                if ($enable == 1) {
-                    $products->enable();
-                }
-            }
+        if ($onlyGrand == 1) {
+            $products = Product::isGrand();
+        } elseif ($onlyGrand == 0) {
+            $products = Product::query();
+        }
+
+        if ($onlyEnable == 1) {
+            $products = $products->enable();
         }
 
         if (!empty($excluded)) {
-            optional($products)->whereNotIn('id', $excluded);
+            $products->whereNotIn('id', $excluded);
         }
 
-        //ToDo do it via in product search class
-        if (strlen($orderBy) > 0) {
-            if (strlen($orderMethod) > 0) {
-                switch ($orderMethod) {
-                    case 'asc' :
-                        $products->orderBy('order');
-                        break;
-                    case 'desc' :
-                        $products->orderBy('order', 'desc');
-                        break;
-                    default:
-                        break;
-                }
-            } else {
-                $products->orderBy('order');
-            }
+        if (!empty($included)) {
+            $products->whereIn('id', $included);
+        }
+
+        switch ($orderMethod) {
+            case 'asc' :
+                $products->orderBy($orderBy);
+                break;
+            case 'desc' :
+                $products->orderBy($orderBy, 'desc');
+                break;
+            default:
+                break;
         }
 
         return $products;
@@ -461,6 +457,16 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
         return $query->where('producttype_id', '=', 1);
     }
 
+    public function scopeIsGrand($query)
+    {
+        return $query->whereNull('grand_id');
+    }
+
+    public function scopeIsChild($query)
+    {
+        return $query->whereNotNull('grand_id');
+    }
+
     /*
     |--------------------------------------------------------------------------
     | Accessor
@@ -513,6 +519,30 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
      * @return mixed
      */
     public function getTagsAttribute($value)
+    {
+        return json_decode($value);
+    }
+
+    /**
+     * Gets product's tags
+     *
+     * @param $value
+     *
+     * @return mixed
+     */
+    public function getSampleContentsAttribute($value)
+    {
+        return json_decode($value);
+    }
+
+    /**
+     * Gets product's tags
+     *
+     * @param $value
+     *
+     * @return mixed
+     */
+    public function getRecommenderContentsAttribute($value)
     {
         return json_decode($value);
     }
@@ -784,6 +814,46 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
         }
 
         $this->attributes['tags'] = $tags;
+    }
+
+    /**
+     * Set the content's tag.
+     *
+     * @param  array  $value
+     *
+     * @return void
+     */
+    public function setSampleContentsAttribute(array $value = null)
+    {
+        $tags = null;
+        if (!empty($value)) {
+            $tags = json_encode([
+                'bucket' => 'relatedproduct',
+                'tags'   => $value,
+            ], JSON_UNESCAPED_UNICODE);
+        }
+
+        $this->attributes['sample_contents'] = $tags;
+    }
+
+    /**
+     * Set the content's tag.
+     *
+     * @param  array  $value
+     *
+     * @return void
+     */
+    public function setRecommenderContentsAttribute(array $value = null)
+    {
+        $tags = null;
+        if (!empty($value)) {
+            $tags = json_encode([
+                'bucket' => 'recommendercontent',
+                'tags'   => $value,
+            ], JSON_UNESCAPED_UNICODE);
+        }
+
+        $this->attributes['recommender_contents'] = $tags;
     }
 
     /**

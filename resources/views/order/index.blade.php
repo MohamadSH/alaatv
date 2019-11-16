@@ -28,6 +28,11 @@
             <div class = "btn-group">
                 <span class = "order_id hidden" id = "{{$order->id}}"></span>
                 <span class = "user_id hidden" id = "{{$order->user->id}}"></span>
+                @role((config("constants.ROLE_ADMIN")))
+                <a target = "_blank" class = "btn btn-accent" href = "{{route('web.admin.cacheclear' , ['order'=>1 , 'order_id'=>$order->id])}}">
+                    خالی کردن کش سفارش
+                </a>
+                @endrole
                 @permission((config('constants.SHOW_ORDER_ACCESS')))
                 <a target = "_blank" class = "btn btn-success" href = "{{action("Web\OrderController@edit" , $order)}}">
                     <i class = "fa fa-pencil"></i>

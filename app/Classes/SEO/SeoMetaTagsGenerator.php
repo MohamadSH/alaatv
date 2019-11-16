@@ -13,73 +13,73 @@ use SEO;
 class SeoMetaTagsGenerator
 {
     public const SEO_MOD_VIDEO_TAGS = 1;
-    
+
     public const SEO_MOD_PDF_TAGS = 2;
-    
+
     public const SEO_MOD_ARTICLE_TAGS = 3;
-    
+
     public const SEO_MOD_PRODUCT_TAGS = 4;
-    
+
     public const SEO_MOD_GENERAL_TAGS = 5;
-    
+
     private const SEO_TYPE_VIDEO = 'video';
-    
+
     private const SEO_TYPE_WEBSITE = 'website';
-    
+
     private const SEO_TYPE_ARTICLE = 'article';
-    
+
     protected $title;
-    
+
     protected $description;
-    
+
     protected $url;
-    
+
     protected $canonical;
-    
+
     protected $site;
-    
+
     protected $imageUrl;
-    
+
     protected $imageWidth;
-    
+
     protected $imageHeight;
-    
+
     protected $seoMod;
-    
+
     protected $playerUrl;
-    
+
     protected $playerWidth;
-    
+
     protected $playerHeight;
-    
+
     protected $videoDirectUrl;
-    
+
     protected $videoActorName;
-    
+
     protected $videoActorRole;
-    
+
     protected $videoDirector;
-    
+
     protected $videoWriter;
-    
+
     protected $videoDuration;
-    
+
     protected $videoReleaseDate;
-    
+
     protected $tags;
-    
+
     protected $videoWidth;
-    
+
     protected $videoHeight;
-    
+
     protected $videoType;
-    
+
     protected $articleAuthor;
-    
+
     protected $articleModifiedTime;
-    
+
     protected $articlePublishedTime;
-    
+
     /**
      * SeoMetaTagsGenerator constructor.
      *
@@ -90,12 +90,12 @@ class SeoMetaTagsGenerator
     public function __construct(SeoInterface $seo)
     {
         foreach ($seo->getMetaTags() as $key => $value) {
-            
+
             $this->$key = $value;
         }
         $this->build();
     }
-    
+
     /**
      * @throws \Exception
      */
@@ -123,7 +123,7 @@ class SeoMetaTagsGenerator
                 throw new \Exception('seoMod should be set!');
         }
     }
-    
+
     protected function generateCommonTags()
     {
         SEO::setTitle($this->title);
@@ -139,7 +139,7 @@ class SeoMetaTagsGenerator
                 'width'  => $this->imageWidth,
             ]);
     }
-    
+
     protected function generateVideoTags()
     {
         SEO::twitter()
@@ -158,7 +158,7 @@ class SeoMetaTagsGenerator
                 'writer'       => $this->videoWriter,
                 'duration'     => $this->videoDuration,
                 'release_date' => $this->videoReleaseDate,
-                'tag'          => $this->tags,
+                'tag'          => $this->tags->tags,
             ]);
         SEO::opengraph()
             ->addVideo($this->videoDirectUrl, [
@@ -168,13 +168,14 @@ class SeoMetaTagsGenerator
                 'height'     => $this->videoHeight,
             ]);
     }
-    
+
     protected function generatePdfTags()
     {
+
         SEO::opengraph()
             ->setType(self::SEO_TYPE_WEBSITE);
     }
-    
+
     protected function generateArticleTags()
     {
         SEO::opengraph()
@@ -183,10 +184,10 @@ class SeoMetaTagsGenerator
                 'published_time' => $this->articlePublishedTime,
                 'modified_time'  => $this->articleModifiedTime,
                 'author'         => $this->articleAuthor,
-                'tag'            => $this->tags,
+                'tag'            => $this->tags->tags,
             ]);
     }
-    
+
     protected function generateProductTags()
     {
         SEO::opengraph()

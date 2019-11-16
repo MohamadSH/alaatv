@@ -837,7 +837,7 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
         $content = $this;
         $key     = 'content:setMates:'.$this->cacheKey();
 
-        $setMates = Cache::tags(['content' , 'setMate' , 'content_'.$this->id , 'content_'.$this->id.'_setMates'])
+        $setMates = Cache::tags(['content' , 'setMate' , 'set_'.$this->contentset_id.'_setMates' , 'content_'.$this->id , 'content_'.$this->id.'_setMates'])
             ->remember($key, config('constants.CACHE_60'), function () use ($content) {
                 $contentSet     = $content->set;
                 $contentSetName = $content->getSetName();
@@ -928,6 +928,14 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
         $videoDirectUrl = $file->where('res', '480p') ?: collect();
         $videoDirectUrl = $videoDirectUrl->first();
         $videoDirectUrl = isset($videoDirectUrl) ? $videoDirectUrl->link : null;
+
+        $seoModLookupTable = [
+            self::CONTENT_TYPE_VIDEO => SeoMetaTagsGenerator::SEO_MOD_VIDEO_TAGS,
+            self::CONTENT_TYPE_PAMPHLET => SeoMetaTagsGenerator::SEO_MOD_PDF_TAGS,
+            self::CONTENT_TYPE_EXAM => SeoMetaTagsGenerator::SEO_MOD_GENERAL_TAGS,
+            self::CONTENT_TYPE_BOOK => SeoMetaTagsGenerator::SEO_MOD_GENERAL_TAGS,
+            self::CONTENT_TYPE_ARTICLE => SeoMetaTagsGenerator::SEO_MOD_ARTICLE_TAGS,
+        ];
         return [
             'title'                => $this->metaTitle,
             'description'          => $this->metaDescription,
@@ -937,7 +945,7 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
             'imageUrl'             => $this->thumbnail,
             'imageWidth'           => '1280',
             'imageHeight'          => '720',
-            'seoMod'               => SeoMetaTagsGenerator::SEO_MOD_VIDEO_TAGS,
+            'seoMod'               => $seoModLookupTable[$this->contenttype_id],
             'playerUrl'            => action('Web\ContentController@embed', $this),
             'playerWidth'          => '854',
             'playerHeight'         => '480',
@@ -1376,7 +1384,7 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
         $content = $this;
         $key = 'content:relatedProduct:' . $content->cacheKey();
         $relatedProductSearch = new RelatedProductSearch();
-        return Cache::tags(['content', 'content_' . $content->id, 'content_' . $content->id . '_relatedProduct'])
+        return Cache::tags(['content' , 'relatedProduct', 'content_' . $content->id, 'content_' . $content->id . '_relatedProduct'])
             ->remember($key, config('constants.CACHE_600'), function () use ($content, $relatedProductSearch) {
             $filters = [
                 'tags' => ['c-' . $content->id]
@@ -1398,7 +1406,7 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
         $content = $this;
         $key = 'content:recommendedProduct:' . $content->cacheKey();
         $recommendedProductSearch = new RecommendedProductSearch ();
-        return Cache::tags(['content', 'content_' . $content->id, 'content_' . $content->id . '_recommendedProduct'])
+        return Cache::tags(['content', 'recommendedProduct' ,  'content_' . $content->id, 'content_' . $content->id . '_recommendedProduct'])
             ->remember($key, config('constants.CACHE_600'), function () use ($content, $recommendedProductSearch) {
                 $filters = [
                     'tags' => ['c-' . $content->id]
