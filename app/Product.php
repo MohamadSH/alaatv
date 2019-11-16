@@ -335,7 +335,7 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
      * @param array $included
      * @return $this|Product|Builder
      */
-    public static function getProducts($onlyGrand = 0, $onlyEnable = 0, $excluded = [] , $orderBy = '', $orderMethod = '' , $included = [])
+    public static function getProducts($onlyGrand = 0, $onlyEnable = 0, $excluded = [] , $orderBy = 'created_at', $orderMethod = 'asc' , $included = [])
     {
         /** @var Product $products */
         if ($onlyGrand == 1) {
@@ -356,21 +356,15 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
             $products->whereIn('id', $included);
         }
 
-        if (strlen($orderBy) > 0) {
-            if (strlen($orderMethod) > 0) {
-                switch ($orderMethod) {
-                    case 'asc' :
-                        $products->orderBy('order');
-                        break;
-                    case 'desc' :
-                        $products->orderBy('order', 'desc');
-                        break;
-                    default:
-                        break;
-                }
-            } else {
-                $products->orderBy('order');
-            }
+        switch ($orderMethod) {
+            case 'asc' :
+                $products->orderBy($orderBy);
+                break;
+            case 'desc' :
+                $products->orderBy($orderBy, 'desc');
+                break;
+            default:
+                break;
         }
 
         return $products;
