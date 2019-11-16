@@ -53,32 +53,32 @@
 				</span>
             </div>
             <ul class="m-footer__nav m-nav m-nav--inline alaaNamad d-block">
-        
+
                 <li class="m-nav__item">
                     <a data-toggle="modal" data-target="#aboutAlaaModal">
-                        <img src="https://cdn.alaatv.com/loder.jpg?w=1&h=1" data-src="/acm/image/footer-alaaLogo.png" class="lazy-image" alt="آلاء" data-name="alaa" width="36" height="46" data-toggle="m-tooltip" title="آلاء" data-placement="top"/>
+                        <img src="https://cdn.alaatv.com/loder.jpg?w=1&h=1" data-src="https://cdn.alaatv.com/upload/footer-alaaLogo.png" class="lazy-image" alt="آلاء" data-name="alaa" width="36" height="46" data-toggle="m-tooltip" title="آلاء" data-placement="top"/>
                     </a>
                 </li>
                 <li class="m-nav__item">
                     <a data-toggle="modal" data-target="#aboutSharifHighschoolModal">
-                        <img src="https://cdn.alaatv.com/loder.jpg?w=1&h=1" data-src="/acm/image/footer-sharifLogo.png" class="lazy-image" alt="دبیرستان دانشگاه شریف آلاء" data-name="sharif-school" width="49" height="46" data-toggle="m-tooltip" title="دبیرستان غیر دولتی دانشگاه صنعتی شریف" data-placement="top"/>
+                        <img src="https://cdn.alaatv.com/loder.jpg?w=1&h=1" data-src="https://cdn.alaatv.com/upload/footer-sharifLogo.png" class="lazy-image" alt="دبیرستان دانشگاه شریف آلاء" data-name="sharif-school" width="49" height="46" data-toggle="m-tooltip" title="دبیرستان غیر دولتی دانشگاه صنعتی شریف" data-placement="top"/>
                     </a>
                 </li>
                 <li class="m-nav__item">
                     <a onclick='window.open("https://trustseal.enamad.ir/Verify.aspx?id=125806&amp;p=gCsnIb3IATIJnVIY", "Popup","toolbar=no, location=no, statusbar=no, menubar=no, scrollbars=1, resizable=0, width=580, height=600, top=30")' >
-                        <img class="lazy-image" src="https://cdn.alaatv.com/loder.jpg?w=1&h=1" data-src="/acm/image/enamad.png" alt="enamad.ir" style='cursor:pointer' data-name="enamad" width="56" height="46" data-toggle="m-tooltip" title="نماد اعتماد الکترونیکی" data-placement="top">
+                        <img class="lazy-image" src="https://cdn.alaatv.com/loder.jpg?w=1&h=1" data-src="https://cdn.alaatv.com/upload/enamad.png" alt="enamad.ir" style='cursor:pointer' data-name="enamad" width="56" height="46" data-toggle="m-tooltip" title="نماد اعتماد الکترونیکی" data-placement="top">
                     </a>
                 </li>
                 <li class="m-nav__item" data-toggle="m-tooltip" title="نشان ملی ثبت رسانه های دیجیتال" data-placement="top">
-                    <img class="lazy-image" id='jxlzwlaofukznbqejzpesizp' style='cursor:pointer' onclick='window.open("https://logo.samandehi.ir/Verify.aspx?id=146279&p=rfthaodsgvkauiwkjyoepfvl", "Popup","toolbar=no, scrollbars=no, location=no, statusbar=no, menubar=no, resizable=0, width=450, height=630, top=30")' alt='logo-samandehi' src="https://cdn.alaatv.com/loder.jpg?w=1&h=1" data-src='/acm/image/samandehi.png' width="44" height="46"/>
+                    <img class="lazy-image" id='jxlzwlaofukznbqejzpesizp' style='cursor:pointer' onclick='window.open("https://logo.samandehi.ir/Verify.aspx?id=146279&p=rfthaodsgvkauiwkjyoepfvl", "Popup","toolbar=no, scrollbars=no, location=no, statusbar=no, menubar=no, resizable=0, width=450, height=630, top=30")' alt='logo-samandehi' src="https://cdn.alaatv.com/loder.jpg?w=1&h=1" data-src='https://cdn.alaatv.com/upload/samandehi.png' width="44" height="46"/>
                 </li>
-    
-    
+
+
             </ul>
             <div class="m-stack__item m-stack__item--right m-stack__item--middle m-stack__item--first d-block">
                 <ul class="m-footer__nav m-nav m-nav--inline m--pull-right m--margin-top-10 a--full-width text-center">
-    
-    
+
+
                     <li class="m-nav__item">
                         <a href="{{ action("Web\RulesPageController") }}" class="m-nav__link" data-toggle="m-tooltip" title="قوانین" data-placement="top">
                             <i class="m-menu__link-icon fa fa-gavel"></i>
@@ -104,7 +104,7 @@
                             <i class="m-menu__link-icon fab fa-instagram"></i>
                         </a>
                     </li>
-                    
+
                     {{--                    <li class="m-nav__item">--}}
                     {{--                        <a href="{{ action("Web\ProductController@search") }}" class="m-nav__link">--}}
                     {{--                            <span class="m-nav__link-text">همایش ها</span>--}}
