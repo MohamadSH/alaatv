@@ -182,7 +182,7 @@ trait ProductCommon
 
     protected function makeProductCollection($productsId = null)
     {
-        $key = ':0-';
+        $key = '';
         $cacheTags = ['product'];
         if (isset($productsId)) {
             foreach ($productsId as $product) {
@@ -194,17 +194,12 @@ trait ProductCommon
 
         return Cache::tags($cacheTags)
             ->remember($key, config('constants.CACHE_60'), function () use ($productsId) {
-            if (isset($productsId)) {
-                $allProducts = Product::getProducts()
-                    ->whereIn('id', $productsId)
-                    ->orderBy('created_at', 'Desc')
-                    ->get();
+            if (!isset($productsId)) {
+                $productsId = [];
             }
-            else {
-                $allProducts = Product::getProducts()
-                    ->orderBy('created_at', 'Desc')
-                    ->get();
-            }
+
+            $allProducts = Product::getProducts(0 , 0 , [] , 'created_at' , 'desc' , $productsId)->get();
+
             $products = collect();
             foreach ($allProducts as $product) {
                 $products->push($product);
