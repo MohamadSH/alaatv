@@ -742,6 +742,9 @@
                             '            <div class="btn-group">\n' +
                             '                <input type="hidden" class="userFullname" name="userFullname" value="'+row.user.firstName+' '+row.user.lastName+'">\n' +
                             '                <input type="hidden" class="userId" name="userId" value="'+row.user.id+'">\n' +
+                            '                <a target="_blank" class="btn btn-success" href="/cacheclearAdmin?order=1&"'+row.id+'>\n' +
+                            '                    <i class="fa fa-pencil"></i> خالی کردن کش \n' +
+                            '                </a>\n' +
                             '                <a target="_blank" class="btn btn-success" href="'+row.editLink+'">\n' +
                             '                    <i class="fa fa-pencil"></i> اصلاح \n' +
                             '                </a>\n' +

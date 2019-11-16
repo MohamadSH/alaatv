@@ -140,12 +140,12 @@
     @foreach($blocks as $block)
         @if($block->products->count() > 0)
             @include('block.partials.block', [
-                'blockCustomClass'=>'shopBlock a--owl-carousel-type-2'
+                'blockCustomClass'=>'shopBlock OwlCarouselType2-shopPage'
             ])
         @endif
     @endforeach
 
-    @include("partials.certificates")
+{{--    @include('partials.certificates')--}}
 @endsection
 
 @section('page-js')

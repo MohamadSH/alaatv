@@ -1,0 +1,31 @@
+
+.a--MegaMenu-categorySubItems-background {
+    position: absolute;
+    left: 20px;
+    bottom: 20px;
+    width: 100px;
+    height: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.a--MegaMenu-categorySubItems-background-title {
+    color: white;
+    font-weight: bold;
+    font-size: 20px;
+    position: relative;
+    z-index: 2;
+    text-align: center;
+}
+.a--MegaMenu-categorySubItems-background-image {
+    width: 100px;
+    height: 100px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1;
+}
+.a--MegaMenu-categorySubItems-background-image svg {
+    max-width: 100%;
+    max-height: 100%;
+}
