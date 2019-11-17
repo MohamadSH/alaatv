@@ -142,7 +142,7 @@ Route::group(['middleware' => 'auth'], function () {
     /*** Admin routes */
 
 
-    Route::get('asset', [UserController::class, 'userProductFiles'])->name('user.asset');
+    Route::get('asset', [UserController::class, 'userProductFiles'])->name('web.user.asset');
     Route::get('complete-register', [UserController::class, 'completeRegister'])->name('completeRegister');
     Route::get('survey',  [SurveyController::class, 'show']);
     Route::resource('survey', '\\'. SurveyController::class);

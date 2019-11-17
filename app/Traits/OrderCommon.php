@@ -19,7 +19,7 @@ trait OrderCommon
      */
     public function firstOrCreateOpenOrder(User $user): Order
     {
-        
+
         $openOrder = $user->openOrders->first();
         if (!isset($openOrder)) {
             $openOrder                   = new Order();
@@ -28,10 +28,10 @@ trait OrderCommon
             $openOrder->paymentstatus_id = config('constants.PAYMENT_STATUS_UNPAID');
             $openOrder->save();
         }
-        
+
         return $openOrder;
     }
-    
+
     protected function payOrderCostByWallet($user, $order, $cost)
     {
         $walletPaidFlag = false;
@@ -55,7 +55,7 @@ trait OrderCommon
                 $walletPaidFlag = true;
             }
         }
-        
+
         return [
             "result" => $walletPaidFlag,
             "cost"   => $cost,
@@ -115,7 +115,7 @@ trait OrderCommon
             }
         }
     }
-    
+
     /** Attaches a gift to the order of this orderproduct
      *
      * @param  Order         $order
@@ -133,11 +133,30 @@ trait OrderCommon
         $giftOrderproduct->cost                = $gift->calculatePayablePrice()["cost"];
         $giftOrderproduct->discountPercentage  = 100;
         $giftOrderproduct->save();
-        
+
         $giftOrderproduct->parents()
             ->attach($orderproduct,
                 ["relationtype_id" => config("constants.ORDER_PRODUCT_INTERRELATION_PARENT_CHILD")]);
-        
+
         return $giftOrderproduct;
+    }
+
+    /**
+     * @param int $orderId
+     * @param $wallets
+     */
+    public function withdrawWalletPendings(int $orderId, $wallets): void
+    {
+        /** @var Wallet $wallet */
+        foreach ($wallets as $wallet) {
+            if ($wallet->balance > 0 && $wallet->pending_to_reduce > 0) {
+                $withdrawResult = $wallet->withdraw($wallet->pending_to_reduce, $orderId);
+                if ($withdrawResult['result']) {
+                    $wallet->update([
+                        'pending_to_reduce' => 0,
+                    ]);
+                }
+            }
+        }
     }
 }

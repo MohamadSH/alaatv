@@ -5,9 +5,9 @@ namespace App\Http\Controllers\Web;
 use App\Bon;
 use App\Events\FillTmpShareOfOrder;
 use App\Notifications\DownloadNotice;
+use App\Traits\OrderCommon;
 use App\User;
 use App\Order;
-use App\Wallet;
 use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -21,6 +21,7 @@ use Illuminate\Support\Facades\Request as RequestFcade;
 class OfflinePaymentController extends Controller
 {
 
+    use OrderCommon;
     /**
      * OfflinePaymentController constructor.
      *
@@ -62,7 +63,7 @@ class OfflinePaymentController extends Controller
             return response(['message' => 'Invalid inputs'], Response::HTTP_BAD_REQUEST);
 
         $assetLink          = '
-            <a href="'.route('user.asset').'" class="btn m-btn--pill m-btn--air m-btn m-btn--gradient-from-info m-btn--gradient-to-accent animated infinite heartBeat">
+            <a href="'.route('web.user.asset').'" class="btn m-btn--pill m-btn--air m-btn m-btn--gradient-from-info m-btn--gradient-to-accent animated infinite heartBeat">
                 دانلودهای من
             </a>';
 
@@ -175,21 +176,8 @@ class OfflinePaymentController extends Controller
                 /** Wallet transactions */
 //                $order->closeWalletPendingTransactions();
                 $wallets = optional($order->user)->wallets;
-                if(isset($wallets))
-                {
-                    /** @var Wallet $wallet */
-                    foreach ($wallets as $wallet) {
-                        if($wallet->balance > 0 && $wallet->pending_to_reduce > 0 )
-                        {
-                            $withdrawResult =  $wallet->withdraw($wallet->pending_to_reduce , $order->id);
-                            if($withdrawResult['result'])
-                            {
-                                $wallet->update([
-                                    'pending_to_reduce' => 0 ,
-                                ]);
-                            }
-                        }
-                    }
+                if(isset($wallets)) {
+                    $this->withdrawWalletPendings($order->id, $wallets);
                 }
 
                 $order = $order->fresh();
