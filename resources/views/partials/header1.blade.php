@@ -91,7 +91,7 @@
                                             <div class="a--MegaMenu-categoryItem" dtat-cat-id="nezameGhadim">کنکور نظام قدیم</div>
                                         </div>
                                         <div class="col-md-10 a--MegaMenu-subCategoryItemsCol">
-                        
+
                                             <div class="a--MegaMenu-categorySubItems" style="background: #ffd6e6;" data-cat-id="davazdahomVaKonkur">
                                                 <div class="row no-gutters">
                                                     <div class="col-md-4">
@@ -398,7 +398,7 @@
                                             <div class="a--MegaMenu-categorySubItems" style="background: #fff2e1;" data-cat-id="nezameGhadim">
                                                 <div class="row no-gutters">
                                                     <div class="col-md-4">
-    
+
                                                         <div class="subCategoryItem subCategoryItem-title">
                                                             <a class="m-link" href="{{ urldecode(route('content.index', 'tags[]=نظام_آموزشی_قدیم&tags[]=کنکور&tags[]=رشته_ریاضی&tags[]=رشته_تجربی')) }}" >
                                                                 دروس اختصاصی ریاضی و تجربی
@@ -424,7 +424,7 @@
                                                                 زیست شناسی
                                                             </a>
                                                         </div>
-    
+
                                                         <div class="subCategoryItem">
                                                             <a class="m-link" href="{{ urldecode(route('content.index', 'tags[]=نظام_آموزشی_قدیم&tags[]=کنکور&tags[]=رشته_ریاضی&tags[]=رشته_تجربی&tags[]=هندسه_پایه&tags[]=هندسه&tags[]=تحلیلی')) }}" >
                                                                 هندسه تحلیلی و هندسه پایه
@@ -440,8 +440,8 @@
                                                                 دیفرانسیل، حسابان و ریاضی پایه
                                                             </a>
                                                         </div>
-                                                        
-                                                        
+
+
                                                     </div>
                                                     <div class="col-md-4">
                                                         <div class="subCategoryItem subCategoryItem-title">
@@ -505,8 +505,8 @@
                                 </div>
                             </div>
                         </li>
-                        
-                        
+
+
                         <li class="m-menu__item  m-menu__item--submenu m-menu__item--rel d-none" m-menu-submenu-toggle="hover" m-menu-link-redirect="1" aria-haspopup="true">
                             <a href="javascript:" class="m-menu__link m-menu__toggle" title="فیلم و جزوه دهم آلاء">
                                 <i class="m-menu__link-icon flaticon-layers"></i>
@@ -931,7 +931,7 @@
                                                             <span class="m-nav__section-text"> ---- </span>
                                                         </li>
                                                         <li class="m-nav__item">
-                                                            <a href="{{ action("Web\UserController@show",Auth::user()) }}" class="m-nav__link">
+                                                            <a href="{{ route('web.user.dashboard',Auth::user()) }}" class="m-nav__link">
                                                                 <i class="m-nav__link-icon fa fa-user-circle"></i>
                                                                 <span class="m-nav__link-title">
                                                                     <span class="m-nav__link-wrap">
@@ -941,7 +941,7 @@
                                                             </a>
                                                         </li>
                                                         <li class="m-nav__item">
-                                                            <a href="{{ action("Web\UserController@userProductFiles")  }}" class="m-nav__link">
+                                                            <a href="{{ route('web.user.asset') }}" class="m-nav__link">
                                                                 <i class="m-nav__link-icon fa fa-cloud-download-alt"></i>
                                                                 <span class="m-nav__link-text">فیلم ها و جزوه های من</span>
                                                             </a>
