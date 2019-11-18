@@ -92,7 +92,7 @@
                                             <div class="a--MegaMenu-categoryItem" dtat-cat-id="nezameGhadim">کنکور نظام قدیم</div>
                                         </div>
                                         <div class="col-md-10 a--MegaMenu-subCategoryItemsCol">
-                        
+
                                             <div class="a--MegaMenu-categorySubItems" style="background: #ffd6e6;" data-cat-id="davazdahomVaKonkur">
                                                 <div class="row no-gutters">
                                                     <div class="col-md-4">
@@ -404,7 +404,7 @@
                                             <div class="a--MegaMenu-categorySubItems" style="background: #fff2e1;" data-cat-id="nezameGhadim">
                                                 <div class="row no-gutters">
                                                     <div class="col-md-4">
-                                    
+
                                                         <div class="subCategoryItem subCategoryItem-title">
                                                             <a class="m-link" href="{{ urldecode(route('content.index', 'tags[]=نظام_آموزشی_قدیم&tags[]=کنکور&tags[]=رشته_ریاضی&tags[]=رشته_تجربی')) }}" >
                                                                 دروس اختصاصی ریاضی و تجربی
@@ -430,7 +430,7 @@
                                                                 زیست شناسی
                                                             </a>
                                                         </div>
-                                    
+
                                                         <div class="subCategoryItem">
                                                             <a class="m-link" href="{{ urldecode(route('content.index', 'tags[]=نظام_آموزشی_قدیم&tags[]=کنکور&tags[]=رشته_ریاضی&tags[]=رشته_تجربی&tags[]=هندسه_پایه&tags[]=هندسه&tags[]=تحلیلی')) }}" >
                                                                 هندسه تحلیلی و هندسه پایه
@@ -527,12 +527,12 @@
                                             <div class="a--MegaMenu-categoryItem" dtat-cat-id="raheAbrisham">راه ابریشم</div>
                                         </div>
                                         <div class="col-md-10 a--MegaMenu-subCategoryItemsCol">
-                        
+
                                             <div class="a--MegaMenu-categorySubItems" style="background: #ffd6e6;" data-cat-id="talaee">
                                                 <div class="row no-gutters">
                                                     <div class="col">
                                                         <a href="{{ route('web.landing.8') }}">
-                                                            <img class="lazy-image" data-src="/acm/image/megamenuBackground-talaee.jpg" style="width: 1083px;">
+                                                            <img class="lazy-image" data-src="https://cdn.alaatv.com/upload/megamenuBackground-talaee.jpg" style="width: 1083px;">
                                                         </a>
                                                     </div>
                                                 </div>
@@ -541,7 +541,7 @@
                                                 <div class="row no-gutters">
                                                     <div class="col">
                                                         <a href="{{ route('web.landing.9') }}">
-                                                            <img class="lazy-image" data-src="/acm/image/megamenuBackground-taftan.jpg" style="width: 1083px;">
+                                                            <img class="lazy-image" data-src="https://cdn.alaatv.com/upload/megamenuBackground-taftan.jpg" style="width: 1083px;">
                                                         </a>
                                                     </div>
                                                 </div>
@@ -550,7 +550,7 @@
                                                 <div class="row no-gutters">
                                                     <div class="col">
                                                         <a href="{{ route('web.landing.10') }}">
-                                                            <img class="lazy-image" data-src="/acm/image/megamenuBackground-5+1.jpg" style="width: 1083px;">
+                                                            <img class="lazy-image" data-src="https://cdn.alaatv.com/upload/megamenuBackground-5+1.jpg" style="width: 1083px;">
                                                         </a>
                                                     </div>
                                                 </div>
@@ -559,7 +559,7 @@
                                                 <div class="row no-gutters">
                                                     <div class="col">
                                                         <a href="{{ route('web.landing.5') }}">
-                                                            <img class="lazy-image" data-src="/acm/image/megamenuBackground-ghadim.jpg" style="width: 1083px;">
+                                                            <img class="lazy-image" data-src="https://cdn.alaatv.com/upload/megamenuBackground-ghadim.jpg" style="width: 1083px;">
                                                         </a>
                                                     </div>
                                                 </div>
@@ -568,7 +568,7 @@
                                                 <div class="row no-gutters">
                                                     <div class="col">
                                                         <a href="product/347">
-                                                            <img class="lazy-image" data-src="/acm/image/megamenuBackground-raheAbrisham.jpg" style="width: 1083px;">
+                                                            <img class="lazy-image" data-src="https://cdn.alaatv.com/upload/megamenuBackground-raheAbrisham.jpg" style="width: 1083px;">
                                                         </a>
                                                     </div>
                                                 </div>
@@ -578,8 +578,8 @@
                                 </div>
                             </div>
                         </li>
-                        
-                        
+
+
                         <li class="m-menu__item  m-menu__item--submenu m-menu__item--rel d-none" m-menu-submenu-toggle="hover" m-menu-link-redirect="1" aria-haspopup="true">
                             <a href="javascript:" class="m-menu__link m-menu__toggle" title="فیلم و جزوه دهم آلاء">
                                 <i class="m-menu__link-icon flaticon-layers"></i>
