@@ -336,6 +336,7 @@ class Mix {
                 'node_modules/bootstrap-fileinput/js/fileinput.js',
                 'node_modules/persian-date/dist/persian-date.js',
                 'node_modules/persian-datepicker/dist/js/persian-datepicker.js',
+                'node_modules/persianjs/persian.min.js',
                 'public/acm/AlaatvCustomFiles/js/page/user-profile.js'
             ],
             'public/js/user-profile.js'
