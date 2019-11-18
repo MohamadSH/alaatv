@@ -1,13 +1,13 @@
-function arabicToPersianWithEnNumber(inputString) {
-    if (typeof inputString === 'undefined' || inputString === null || inputString.length === 0) {
-        return '';
-    }
-    inputString = persianJs(inputString).arabicChar().toEnglishNumber().toString();
-    inputString = inputString.split(' ').join('_');
-    return inputString;
-}
-
 jQuery(document).ready(function() {
+
+    function arabicToPersianWithEnNumber(inputString) {
+        if (typeof inputString === 'undefined' || inputString === null || inputString.length === 0) {
+            return '';
+        }
+        inputString = persianJs(inputString).arabicChar().toEnglishNumber().toString();
+        inputString = inputString.split(' ').join('_');
+        return inputString;
+    }
 
     $(document).on('click', '.SearchBoxFilter .GroupFilters .body .showMoreItems', function () {
         if ($(this).data('moretype') === 'more') {

@@ -33,7 +33,7 @@
             "demo_api_url": ""
         },
         "dist": [
-            "./../../../../public/assets"
+            "./../../../../public/assets2120"
         ]
     },
     "build": {
@@ -64,6 +64,11 @@
                             ],
                             "fonts": [
                                 "{$config.path.src}/vendors/fontawesome5/webfonts/**"
+                            ]
+                        },
+                        "block-ui": {
+                            "scripts": [
+                                "{$config.path.node_modules}/block-ui/jquery.blockUI.js"
                             ]
                         }
                     }

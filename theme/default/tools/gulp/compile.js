@@ -96,6 +96,7 @@ if ((/true/i).test(build.config.compile.rtl.enabled)) {
   tasks.push('rtl');
 }
 
+
 // entry point
 gulp.task('default', gulp.series(gulp.parallel(tasks), function(cb) {
     // clean first and then start bundling
