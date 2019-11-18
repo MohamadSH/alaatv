@@ -62,20 +62,6 @@
                         </div>
                     @else
 
-
-                        <div class="a--owl-carousel-init-loading">
-                            <div class="lds-roller">
-                                <div></div>
-                                <div></div>
-                                <div></div>
-                                <div></div>
-                                <div></div>
-                                <div></div>
-                                <div></div>
-                                <div></div>
-                            </div>
-                        </div>
-
                         <div class="m-widget_head-owlcarousel-items owl-carousel a--owl-carousel-type-2 myProduct">
                             @foreach($userAssetsCollection as $userAssetKey=>$userAsset)
                                 @if($userAsset->title === 'محصولات من')
