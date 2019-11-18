@@ -21,19 +21,23 @@
         @endforeach
     </select>
 
-    <button type="submit" class="btn m-btn--pill m-btn--air btn-warning">افزودن بلاک</button>
+    <button type="submit" class="btn m-btn--pill m-btn--air btn-info">افزودن بلاک</button>
+    {!! Form::close() !!}
 @else
 @foreach($blocks as $block)
 <div class="row">
-    <div class="col-md-6">
+    <div class="col-md-4">
         {{ $block->title }}
     </div>
-    <div class="col-md-6">
-{{--        <a href="#">--}}
-{{--            <button type="button" class="btn m-btn--pill m-btn--air btn-danger">حذف بلاک</button>--}}
-{{--        </a>--}}
-        <a href="{{ route('block.edit', $block->id) }}" target="_blank">
-            <button type="button" class="btn m-btn--pill m-btn--air btn-warning">ویرایش بلاک</button>
+    <div class="col-md-2">
+        {!! Form::open(['method'=>'DELETE' , 'url'=>route('web.product.detach.block', $product->id)]) !!}
+            {!! Form::input('hidden', 'block_id' , $block->id ) !!}
+            <button type="submit" class="btn m-btn--pill m-btn--air btn-danger">حذف بلاک</button>
+        {!! Form::close() !!}
+    </div>
+    <div class="col-md-2">
+        <a href="{{ route('block.edit', $block->id) }}" target="_blank" class="btn m-btn--pill m-btn--air btn-warning">
+            ویرایش بلاک
         </a>
     </div>
 </div>

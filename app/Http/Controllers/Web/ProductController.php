@@ -10,7 +10,8 @@ use Illuminate\Support\{Arr, Collection, Facades\File, Facades\Storage};
 use App\{Adapter\AlaaSftpAdapter,
     Block,
     Bon,
-    Events\BlockAttachedToProduct,
+    Events\SendProductIntroducingBlockTags,
+    Events\BlockDetachedFromProduct,
     Product,
     Attributeset,
     Attributetype,
@@ -863,8 +864,6 @@ class ProductController extends Controller
             Response::HTTP_SERVICE_UNAVAILABLE);
     }
 
-
-
     /**
      * @param $introVideo
      * @param $introVideoThumbnail
@@ -994,7 +993,7 @@ class ProductController extends Controller
 
         $product->blocks()->attach($block->id);
 
-        event(new BlockAttachedToProduct($product , $block));
+        event(new SendProductIntroducingBlockTags($product , $block));
 
         session()->put('success' , 'بلاک با موفقیت اضافه شد');
         return redirect()->back();
@@ -1010,7 +1009,7 @@ class ProductController extends Controller
 
         $product->blocks()->detach($block->id);
 
-        event(new BlockAttachedToProduct($product , $block));
+        event(new BlockDetachedFromProduct($product , $block));
 
         session()->put('success' , 'بلاک با موفقیت اضافه شد');
         return redirect()->back();
@@ -1100,50 +1099,6 @@ class ProductController extends Controller
                 'discount' => $bonDiscount,
                 'bonPlus'  => $bonPlus,
             ]);
-        }
-    }
-
-    private function searchInUserAssetsCollection(Product $product, User $user) {
-
-        $purchasedProductIdArray = [];
-        $userAssetsCollection = $user->getDashboardBlocks()->pluck('products');
-        foreach ($userAssetsCollection as $blockProducts) {
-            foreach ($blockProducts as $product1) {
-                $this->iterateProductAndChildren($product1->id, $product, $purchasedProductIdArray);
-            }
-        }
-
-        return $purchasedProductIdArray;
-    }
-
-    private function allChildIsPurchased(Product $product, $purchasedProductIdArray) {
-        if ($product->children->count() > 0) {
-            foreach ($product->children as $productChild) {
-                if (array_search($product->id, $purchasedProductIdArray) === false) {
-                    $res = $this->allChildIsPurchased($productChild, $purchasedProductIdArray);
-                    if (!$res) {
-                        return false;
-                    }
-                }
-            }
-        } elseif (array_search($product->id, $purchasedProductIdArray) === false) {
-            return false;
-        } else {
-            return true;
-        }
-        return true;
-    }
-
-    private function iterateProductAndChildren($searchProductId, Product $product, array & $purchasedProductIdArray) {
-
-        if ($searchProductId === $product->id) {
-            $purchasedProductIdArray[] = $product->id;
-        }
-
-        if ($product->children->count() > 0) {
-            foreach ($product->children as $key=>$childProduct) {
-                $this->iterateProductAndChildren($searchProductId, $childProduct, $purchasedProductIdArray);
-            }
         }
     }
 }

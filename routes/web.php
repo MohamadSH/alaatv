@@ -220,6 +220,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::delete('{product}/removeGift', [ProductController::class, 'removeGift']);
         Route::post('{product}/copy', [ProductController::class, 'copy']);
         Route::post('{product}/attachBlock', [ProductController::class, 'attachBlock'])->name('web.product.attach.block');
+        Route::delete('{product}/detachBlock', [ProductController::class, 'detachBlock'])->name('web.product.detach.block');
         Route::put('child/{product}', [ProductController::class, 'childProductEnable']);
         Route::put('addComplimentary/{product}', [ProductController::class, 'addComplimentary']);
         Route::put('removeComplimentary/{product}', [ProductController::class, 'removeComplimentary']);

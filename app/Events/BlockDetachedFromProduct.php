@@ -8,7 +8,7 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
 
-class BlockAttachedToProduct
+class BlockDetachedFromProduct
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
@@ -23,7 +23,7 @@ class BlockAttachedToProduct
      */
     public function __construct(Product $product , Block $block)
     {
-        $this->block = $product ;
-        $this->product = $block ;
+        $this->product = $product;
+        $this->block = $block;
     }
 }
