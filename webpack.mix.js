@@ -24,6 +24,7 @@ class Mix {
             'public/assets/demo/demo12/base/style.bundle.rtl.css',
             'public/acm/custom-css-app.css',
 
+            'public/acm/AlaatvCustomFiles/components/AjaxLogin/style.css',
             'public/acm/AlaatvCustomFiles/css/customStyle.css',
             'public/acm/AlaatvCustomFiles/components/MegaMenu/style.css',
             'public/acm/AlaatvCustomFiles/css/customStyle/megamenuBackground.css',
@@ -39,13 +40,17 @@ class Mix {
             'node_modules/lozad/dist/lozad.js',
             'public/assets/vendors/base/vendors.bundle.js',
             'public/assets/demo/demo12/base/scripts.bundle.js',
+            'node_modules/block-ui/jquery.blockUI.js',
 
 
+            'public/acm/AlaatvCustomFiles/components/AjaxLogin/script.js',
+            'public/acm/AlaatvCustomFiles/js/GlobalJsVar.js',
+            'public/acm/AlaatvCustomFiles/js/LoginBeforeClick.js',
             'public/acm/AlaatvCustomFiles/js/GoogleAnalyticsEnhancedEcommerce.js',
             'public/acm/AlaatvCustomFiles/js/lazyLoad.js',
             'public/acm/AlaatvCustomFiles/components/MegaMenu/script.js',
             'public/acm/AlaatvCustomFiles/js/app.js',
-            'public/acm/AlaatvCustomFiles/js/mLayout.js'
+            // 'public/acm/AlaatvCustomFiles/js/mLayout.js'
         ];
     }
 
@@ -229,7 +234,6 @@ class Mix {
             ],
             'public/css/auth-login.css',
             [
-                'node_modules/block-ui/jquery.blockUI.js',
                 'node_modules/jquery-validation/dist/jquery.validate.js',
                 'public/acm/AlaatvCustomFiles/js/page/pages/login.js'
             ],
@@ -281,7 +285,6 @@ class Mix {
             ],
             'public/css/content-search.css',
             [
-                'node_modules/block-ui/jquery.blockUI.js',
                 'node_modules/persian-date/dist/persian-date.js',
                 'node_modules/truncatise/index.js',
                 'node_modules/persianjs/persian.min.js',
@@ -330,10 +333,10 @@ class Mix {
             'public/css/user-profile.css',
             [
                 'node_modules/toastr/build/toastr.min.js',
-                'node_modules/block-ui/jquery.blockUI.js',
                 'node_modules/bootstrap-fileinput/js/fileinput.js',
                 'node_modules/persian-date/dist/persian-date.js',
                 'node_modules/persian-datepicker/dist/js/persian-datepicker.js',
+                'node_modules/persianjs/persian.min.js',
                 'public/acm/AlaatvCustomFiles/js/page/user-profile.js'
             ],
             'public/js/user-profile.js'
@@ -350,7 +353,6 @@ class Mix {
             'public/css/user-completeInfo.css',
             [
                 'node_modules/toastr/build/toastr.min.js',
-                'node_modules/block-ui/jquery.blockUI.js',
                 'node_modules/persian-date/dist/persian-date.js',
                 'node_modules/persian-datepicker/dist/js/persian-datepicker.js',
                 // 'public/acm/AlaatvCustomFiles/js/page/user-profile.js'
@@ -368,7 +370,6 @@ class Mix {
             ],
             'public/css/user-dashboard.css',
             [
-                'node_modules/block-ui/jquery.blockUI.js',
                 'public/acm/AlaatvCustomFiles/components/ScrollCarousel/js.js',
                 'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/js.js',
                 'public/acm/AlaatvCustomFiles/js/page/user-dashboard.js',
@@ -409,7 +410,6 @@ class Mix {
                 'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/style.css',
                 'public/acm/AlaatvCustomFiles/components/ScrollCarousel/style.css',
 
-                'public/acm/AlaatvCustomFiles/components/AjaxLogin/style.css',
                 'public/acm/AlaatvCustomFiles/components/Favorite/style.css',
 
                 'public/acm/videojs/skins/alaa-theme/videojs.css',
@@ -424,10 +424,8 @@ class Mix {
             [
                 'node_modules/tooltip/dist/Tooltip.js',
                 'node_modules/toastr/build/toastr.min.js',
-                'node_modules/block-ui/jquery.blockUI.js',
                 'public/acm/AlaatvCustomFiles/components/ScrollCarousel/js.js',
                 'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/js.js',
-                'public/acm/AlaatvCustomFiles/components/AjaxLogin/script.js',
                 'public/acm/AlaatvCustomFiles/components/Favorite/script.js',
                 'public/acm/videojs/video.min.js',
                 'public/acm/videojs/plugins/pip/videojs.pip.min.js',
@@ -448,15 +446,12 @@ class Mix {
     mixPageSetShow() {
         this.mixCssAndJs([
                 'node_modules/toastr/build/toastr.css',
-                'public/acm/AlaatvCustomFiles/components/AjaxLogin/style.css',
                 'public/acm/AlaatvCustomFiles/components/Favorite/style.css',
                 'public/acm/AlaatvCustomFiles/css/page/set-show.css'
             ],
             'public/css/set-show.css',
             [
                 'node_modules/toastr/build/toastr.min.js',
-                'node_modules/block-ui/jquery.blockUI.js',
-                'public/acm/AlaatvCustomFiles/components/AjaxLogin/script.js',
                 'public/acm/AlaatvCustomFiles/components/Favorite/script.js',
                 'public/acm/AlaatvCustomFiles/js/page/set-show.js'
             ],
@@ -565,14 +560,12 @@ class Mix {
                 'public/acm/AlaatvCustomFiles/components/ribbon/style.css',
                 'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/style.css',
                 'public/acm/AlaatvCustomFiles/components/ScrollCarousel/style.css',
-                'public/acm/AlaatvCustomFiles/components/AjaxLogin/style.css',
                 'public/acm/AlaatvCustomFiles/components/Favorite/style.css',
                 'public/acm/AlaatvCustomFiles/css/page/product-show.css',
             ],
             'public/css/product-show.css',
             [
                 'node_modules/toastr/build/toastr.min.js',
-                'node_modules/block-ui/jquery.blockUI.js',
                 'node_modules/bootstrap-switch/dist/js/bootstrap-switch.js',
                 'public/acm/AlaatvCustomFiles/components/ScrollCarousel/js.js',
                 'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/js.js',
@@ -594,7 +587,6 @@ class Mix {
                 'public/acm/videojs/lang/fa.js',
                 'public/acm/AlaatvCustomFiles/js/UserCart.js',
                 'public/acm/AlaatvCustomFiles/components/aSticky/aSticky.js',
-                'public/acm/AlaatvCustomFiles/components/AjaxLogin/script.js',
                 'public/acm/AlaatvCustomFiles/components/Favorite/script.js',
 
                 'public/acm/AlaatvCustomFiles/js/page/product-show.js',
@@ -641,7 +633,6 @@ class Mix {
             [
                 'node_modules/toastr/build/toastr.min.js',
                 'node_modules/bootstrap-switch/dist/js/bootstrap-switch.js',
-                'node_modules/block-ui/jquery.blockUI.js',
                 'node_modules/jquery-sticky/jquery.sticky.js',
                 'public/acm/AlaatvCustomFiles/js/UserCart.js',
                 'public/acm/AlaatvCustomFiles/js/page/checkout-review.js'
@@ -687,7 +678,6 @@ class Mix {
             [
                 'node_modules/persianjs/persian.min.js',
                 'node_modules/summernote/dist/summernote.js',
-                'node_modules/block-ui/jquery.blockUI.js',
                 'node_modules/tooltip/dist/Tooltip.js',
                 'node_modules/select2/dist/js/select2.js',
                 'node_modules/select2/dist/js/select2.full.js',
@@ -738,7 +728,6 @@ class Mix {
             ],
             'public/css/admin-content-create.css',
             [
-                'node_modules/block-ui/jquery.blockUI.js',
                 'node_modules/persian-date/dist/persian-date.js',
                 'node_modules/persian-datepicker/dist/js/persian-datepicker.js',
                 'node_modules/icheck/icheck.min.js',
