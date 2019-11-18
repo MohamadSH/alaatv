@@ -111,7 +111,7 @@
                                                             </a>
                                                         </div>
                                                         <div class="subCategoryItem">
-                                                            <a class="m-link" href="{{ urldecode(route('content.index', 'tags[]=نظام_آموزشی_جدید&tags[]=دوازدهم&tags[]=کنکور&tags[]=رشته_ریاضی&tags[]=رشته_تجربی&tags[]=ریاضی_تجربی&tags[]=ریاضی_پایه')) }}" >
+                                                            <a class="m-link" href="{{ urldecode(route('content.index', 'tags[]=نظام_آموزشی_جدید&tags[]=دوازدهم&tags[]=کنکور&tags[]=رشته_تجربی&tags[]=ریاضی_تجربی&tags[]=ریاضی_پایه')) }}" >
                                                                 ریاضیات تجربی
                                                             </a>
                                                         </div>
@@ -126,13 +126,18 @@
                                                             </a>
                                                         </div>
                                                         <div class="subCategoryItem">
-                                                            <a class="m-link" href="{{ urldecode(route('content.index', 'tags[]=نظام_آموزشی_جدید&tags[]=دوازدهم&tags[]=کنکور&tags[]=رشته_ریاضی&tags[]=رشته_تجربی&tags[]=گسسته&tags[]=آمار_و_احتمال')) }}" >
+                                                            <a class="m-link" href="{{ urldecode(route('content.index', 'tags[]=نظام_آموزشی_جدید&tags[]=دوازدهم&tags[]=کنکور&tags[]=رشته_ریاضی&tags[]=گسسته&tags[]=آمار_و_احتمال')) }}" >
                                                                 ریاضیات گسسته و آمار و احتمال
                                                             </a>
                                                         </div>
                                                         <div class="subCategoryItem">
+                                                            <a class="m-link" href="{{ urldecode(route('content.index', 'tags[]=نظام_آموزشی_جدید&tags[]=دوازدهم&tags[]=کنکور&tags[]=رشته_ریاضی&tags[]=حسابان&tags[]=ریاضی_پایه')) }}" >
+                                                                حسابان
+                                                            </a>
+                                                        </div>
+                                                        <div class="subCategoryItem">
                                                             <a class="m-link" href="{{ urldecode(route('content.index', 'tags[]=نظام_آموزشی_جدید&tags[]=دوازدهم&tags[]=کنکور&tags[]=رشته_ریاضی&tags[]=رشته_تجربی&tags[]=حسابان&tags[]=ریاضی_پایه')) }}" >
-                                                                حسابان و ریاضی پایه
+                                                                ریاضی پایه
                                                             </a>
                                                         </div>
                                                     </div>
@@ -156,7 +161,7 @@
                                                     <div class="col-md-4">
                                                         <div class="subCategoryItem subCategoryItem-title">
                                                             <a class="m-link" href="{{ urldecode(route('content.index', 'tags[]=نظام_آموزشی_جدید&tags[]=دوازدهم&tags[]=کنکور&tags[]=زبان_انگلیسی&tags[]=عربی&tags[]=زبان_و_ادبیات_فارسی&tags[]=دین_و_زندگی')) }}" >
-                                                            دروس عمومی
+                                                                دروس عمومی
                                                             </a>
                                                         </div>
                                                         <div class="subCategoryItem">
@@ -222,17 +227,17 @@
                                                             </a>
                                                         </div>
                                                         <div class="subCategoryItem">
-                                                            <a class="m-link" href="{{ urldecode(route('content.index', 'tags[]=نظام_آموزشی_جدید&tags[]=یازدهم&tags[]=رشته_ریاضی&tags[]=رشته_تجربی&tags[]=ریاضی_تجربی')) }}" >
+                                                            <a class="m-link" href="{{ urldecode(route('content.index', 'tags[]=نظام_آموزشی_جدید&tags[]=یازدهم&tags[]=رشته_تجربی&tags[]=ریاضی_تجربی')) }}" >
                                                                 ریاضی تجربی
                                                             </a>
                                                         </div>
                                                         <div class="subCategoryItem">
-                                                            <a class="m-link" href="{{ urldecode(route('content.index', 'tags[]=نظام_آموزشی_جدید&tags[]=یازدهم&tags[]=رشته_ریاضی&tags[]=رشته_تجربی&tags[]=زیست_شناسی')) }}" >
+                                                            <a class="m-link" href="{{ urldecode(route('content.index', 'tags[]=نظام_آموزشی_جدید&tags[]=یازدهم&tags[]=رشته_تجربی&tags[]=زیست_شناسی')) }}" >
                                                                 زیست شناسی
                                                             </a>
                                                         </div>
                                                         <div class="subCategoryItem">
-                                                            <a class="m-link" href="{{ urldecode(route('content.index', 'tags[]=نظام_آموزشی_جدید&tags[]=یازدهم&tags[]=رشته_ریاضی&tags[]=رشته_تجربی&tags[]=هندسه&tags[]=هندسه_پایه')) }}" >
+                                                            <a class="m-link" href="{{ urldecode(route('content.index', 'tags[]=نظام_آموزشی_جدید&tags[]=یازدهم&tags[]=رشته_ریاضی&tags[]=هندسه&tags[]=هندسه_پایه')) }}" >
                                                                 هندسه
                                                             </a>
                                                         </div>
@@ -242,7 +247,7 @@
                                                             </a>
                                                         </div>
                                                         <div class="subCategoryItem">
-                                                            <a class="m-link" href="{{ urldecode(route('content.index', 'tags[]=نظام_آموزشی_جدید&tags[]=یازدهم&tags[]=رشته_ریاضی&tags[]=رشته_تجربی&tags[]=حسابان')) }}" >
+                                                            <a class="m-link" href="{{ urldecode(route('content.index', 'tags[]=نظام_آموزشی_جدید&tags[]=یازدهم&tags[]=رشته_ریاضی&tags[]=حسابان')) }}" >
                                                                 حسابان
                                                             </a>
                                                         </div>
@@ -318,12 +323,12 @@
                                                             </a>
                                                         </div>
                                                         <div class="subCategoryItem">
-                                                            <a class="m-link" href="{{ urldecode(route('content.index', 'tags[]=نظام_آموزشی_جدید&tags[]=دهم&tags[]=رشته_ریاضی&tags[]=رشته_تجربی&tags[]=زیست_شناسی')) }}" >
+                                                            <a class="m-link" href="{{ urldecode(route('content.index', 'tags[]=نظام_آموزشی_جدید&tags[]=دهم&tags[]=رشته_تجربی&tags[]=زیست_شناسی')) }}" >
                                                                 زیست شناسی
                                                             </a>
                                                         </div>
                                                         <div class="subCategoryItem">
-                                                            <a class="m-link" href="{{ urldecode(route('content.index', 'tags[]=نظام_آموزشی_جدید&tags[]=دهم&tags[]=رشته_ریاضی&tags[]=رشته_تجربی&tags[]=هندسه&tags[]=هندسه_پایه')) }}" >
+                                                            <a class="m-link" href="{{ urldecode(route('content.index', 'tags[]=نظام_آموزشی_جدید&tags[]=دهم&tags[]=رشته_ریاضی&tags[]=هندسه&tags[]=هندسه_پایه')) }}" >
                                                                 هندسه
                                                             </a>
                                                         </div>
@@ -398,7 +403,7 @@
                                             <div class="a--MegaMenu-categorySubItems" style="background: #fff2e1;" data-cat-id="nezameGhadim">
                                                 <div class="row no-gutters">
                                                     <div class="col-md-4">
-    
+                                    
                                                         <div class="subCategoryItem subCategoryItem-title">
                                                             <a class="m-link" href="{{ urldecode(route('content.index', 'tags[]=نظام_آموزشی_قدیم&tags[]=کنکور&tags[]=رشته_ریاضی&tags[]=رشته_تجربی')) }}" >
                                                                 دروس اختصاصی ریاضی و تجربی
@@ -415,16 +420,16 @@
                                                             </a>
                                                         </div>
                                                         <div class="subCategoryItem">
-                                                            <a class="m-link" href="{{ urldecode(route('content.index', 'tags[]=نظام_آموزشی_قدیم&tags[]=کنکور&tags[]=رشته_ریاضی&tags[]=رشته_تجربی&tags[]=ریاضی_تجربی&tags[]=ریاضی_پایه')) }}" >
+                                                            <a class="m-link" href="{{ urldecode(route('content.index', 'tags[]=نظام_آموزشی_قدیم&tags[]=کنکور&tags[]=رشته_تجربی&tags[]=ریاضی_تجربی&tags[]=ریاضی_پایه')) }}" >
                                                                 ریاضیات تجربی
                                                             </a>
                                                         </div>
                                                         <div class="subCategoryItem">
-                                                            <a class="m-link" href="{{ urldecode(route('content.index', 'tags[]=نظام_آموزشی_قدیم&tags[]=کنکور&tags[]=رشته_ریاضی&tags[]=رشته_تجربی&tags[]=زیست_شناسی')) }}" >
+                                                            <a class="m-link" href="{{ urldecode(route('content.index', 'tags[]=نظام_آموزشی_قدیم&tags[]=کنکور&tags[]=رشته_تجربی&tags[]=زیست_شناسی')) }}" >
                                                                 زیست شناسی
                                                             </a>
                                                         </div>
-    
+                                    
                                                         <div class="subCategoryItem">
                                                             <a class="m-link" href="{{ urldecode(route('content.index', 'tags[]=نظام_آموزشی_قدیم&tags[]=کنکور&tags[]=رشته_ریاضی&tags[]=رشته_تجربی&tags[]=هندسه_پایه&tags[]=هندسه&tags[]=تحلیلی')) }}" >
                                                                 هندسه تحلیلی و هندسه پایه
@@ -440,8 +445,8 @@
                                                                 دیفرانسیل، حسابان و ریاضی پایه
                                                             </a>
                                                         </div>
-                                                        
-                                                        
+                                
+                                
                                                     </div>
                                                     <div class="col-md-4">
                                                         <div class="subCategoryItem subCategoryItem-title">
@@ -497,6 +502,75 @@
                                                                 </g>
                                                             </svg>
                                                         </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="m-menu__item  m-menu__item--submenu m-menu__item--rel a--MegaMenu-title">
+                            <a href="javascript:" class="m-menu__link m-menu__toggle" title="فیلم های آلاء">
+                                <i class="m-menu__link-icon flaticon-layers"></i>
+                                <span class="m-menu__link-text">همایش های آلاء</span>
+                                <i class="m-menu__hor-arrow fa fa-angle-down"></i>
+                                <i class="m-menu__ver-arrow fa fa-angle-left"></i>
+                            </a>
+                            <div class="m-menu__submenu1 m-menu__submenu--classic1 a-major-menu__submenu a--MegaMenu-dropDownRow">
+                                <div class="container-fluid">
+                                    <div class="row">
+                                        <div class="col-md-2 a--MegaMenu-categoryItemsCol">
+                                            <div class="a--MegaMenu-categoryItem" dtat-cat-id="talaee">طلایی</div>
+                                            <div class="a--MegaMenu-categoryItem" dtat-cat-id="taftan">تفتان</div>
+                                            <div class="a--MegaMenu-categoryItem" dtat-cat-id="5+1">5+1</div>
+                                            <div class="a--MegaMenu-categoryItem" dtat-cat-id="nezameGhadim">همایش های نظام قدیم</div>
+                                            <div class="a--MegaMenu-categoryItem" dtat-cat-id="raheAbrisham">راه ابریشم</div>
+                                        </div>
+                                        <div class="col-md-10 a--MegaMenu-subCategoryItemsCol">
+                        
+                                            <div class="a--MegaMenu-categorySubItems" style="background: #ffd6e6;" data-cat-id="talaee">
+                                                <div class="row no-gutters">
+                                                    <div class="col">
+                                                        <a href="{{ route('web.landing.8') }}">
+                                                            <img class="lazy-image" data-src="/acm/image/megamenuBackground-talaee.jpg" style="width: 1083px;">
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="a--MegaMenu-categorySubItems" style="background: #ffe0e9;" data-cat-id="taftan">
+                                                <div class="row no-gutters">
+                                                    <div class="col">
+                                                        <a href="{{ route('web.landing.9') }}">
+                                                            <img class="lazy-image" data-src="/acm/image/megamenuBackground-taftan.jpg" style="width: 1083px;">
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="a--MegaMenu-categorySubItems" style="background: #ffe6dd;" data-cat-id="5+1">
+                                                <div class="row no-gutters">
+                                                    <div class="col">
+                                                        <a href="{{ route('web.landing.10') }}">
+                                                            <img class="lazy-image" data-src="/acm/image/megamenuBackground-5+1.jpg" style="width: 1083px;">
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="a--MegaMenu-categorySubItems" style="background: #fff2e1;" data-cat-id="nezameGhadim">
+                                                <div class="row no-gutters">
+                                                    <div class="col">
+                                                        <a href="{{ route('web.landing.5') }}">
+                                                            <img class="lazy-image" data-src="/acm/image/megamenuBackground-ghadim.jpg" style="width: 1083px;">
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="a--MegaMenu-categorySubItems" style="background: #fff2e1;" data-cat-id="raheAbrisham">
+                                                <div class="row no-gutters">
+                                                    <div class="col">
+                                                        <a href="product/347">
+                                                            <img class="lazy-image" data-src="/acm/image/megamenuBackground-raheAbrisham.jpg" style="width: 1083px;">
+                                                        </a>
                                                     </div>
                                                 </div>
                                             </div>
@@ -723,7 +797,7 @@
                                 </ul>
                             </div>
                         </li>
-                        <li class="m-menu__item  m-menu__item--submenu m-menu__item--rel" m-menu-submenu-toggle="hover" m-menu-link-redirect="1" aria-haspopup="true">
+                        <li class="m-menu__item  m-menu__item--submenu m-menu__item--rel d-none" m-menu-submenu-toggle="hover" m-menu-link-redirect="1" aria-haspopup="true">
                             <a href="javascript:" class="m-menu__link m-menu__toggle" title="همایش های آلاء">
                                 <i class="m-menu__link-icon flaticon-medal"></i>
                                 <span class="m-menu__link-title">
