@@ -349,7 +349,7 @@ jQuery(document).ready(function() {
     $('.productDetailes .m-portlet__head').sticky({
         // container: '.productDetailes',
         hidePosition: {
-            element: '.relatedProduct .m-portlet__head',
+            element: '.productLiveDescription .m-portlet__head',
             topSpace: $('#m_header').height()
         },
         topSpacing: $('#m_header').height(),
@@ -542,7 +542,6 @@ jQuery(document).ready(function() {
     });
 
     var player = videojs('videoPlayer', {language: 'fa'});
-
 
     if ($('input[type="hidden"][name="introVideo"]').length > 0) {
         player.src([

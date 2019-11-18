@@ -73,7 +73,7 @@ class InvoicePaid extends Notification implements ShouldQueue
         return [
             'code'                   => $this->invoice->id,
             'name' => $this->getUserFullName() ,
-            'assetLink' => route('user.asset') ,
+            'assetLink' => route('web.user.asset') ,
             'supportLink' => 'https://goo.gl/jme5VU',
         ];
     }

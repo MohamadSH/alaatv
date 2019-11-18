@@ -440,11 +440,11 @@
                                             </a>
                                         @else
                                             <button class="btn m-btn--air btn-success m-btn--icon m--margin-bottom-5 btnAddToCart gta-track-add-to-card">
-                                            <span>
-                                                <i class="fa fa-cart-arrow-down"></i>
-                                                <i class="fas fa-sync-alt fa-spin m--hide"></i>
-                                                <span>افزودن به سبد خرید</span>
-                                            </span>
+                                                <span>
+                                                    <i class="fa fa-cart-arrow-down"></i>
+                                                    <i class="fas fa-sync-alt fa-spin m--hide"></i>
+                                                    <span>افزودن به سبد خرید</span>
+                                                </span>
                                             </button>
                                         @endif
                                     @else
@@ -600,13 +600,18 @@
             @else
                 <div class="m--font-brand a_product-price_mobile-wrapper">
                     <span id="a_product-price_mobile">
-                        @if($product->priceText['discount'] == 0 )
-                            <span>{{ $product->priceText['finalPriceText'] }} </span>
+                        @include('product.partials.price', ['price'=>$product->price])
+                        
+{{--                        @if($product->priceText['discount'] == 0 )--}}
+{{--                            <span>{{ $product->priceText['finalPriceText'] }} </span>--}}
 
-                        @else
-                            <strike>{{ $product->priceText['basePriceText'] }} </strike>
-                            <span class="m-badge m-badge--danger m-badge--wide m-badge--rounded">{{ $product->priceText['finalPriceText'] }}</span>
-                        @endif
+{{--                        @else--}}
+{{--                            <strike>{{ $product->priceText['basePriceText'] }} </strike>--}}
+{{--                            <span class="m-badge m-badge--danger m-badge--wide m-badge--rounded">{{ $product->priceText['finalPriceText'] }}</span>--}}
+{{--                        @endif--}}
+                    
+                    
+                    
                     </span>
                 </div>
             @endif
@@ -732,9 +737,9 @@
                                             <span class="m-timeline-3__item-time">{{$liveDescription->CreatedAt_Jalali_WithTime()}}</span>
                                             <div class="m-timeline-3__item-desc">
                                             <span class="m-timeline-3__item-user-name">
-                                                    <a  class="m-timeline-3__item-link">
-                                                                {{$liveDescription->title}}
-                                                    </a>
+                                                <a  class="m-timeline-3__item-link">
+                                                    {{$liveDescription->title}}
+                                                </a>
                                             </span>
                                                 <br>
                                                 <span class="m-timeline-3__item-text">

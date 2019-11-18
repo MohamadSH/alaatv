@@ -1,36 +1,45 @@
-function getFormData($form) {
-    var unindexed_array = $form.serializeArray();
-    var indexed_array = {};
-
-    $.map(unindexed_array, function (n, i) {
-        indexed_array[n['name']] = n['value'];
-    });
-
-    return indexed_array;
-}
-
-function updateUserCompletionProgress(percent) {
-    $('.userCompletion-progress-bar').attr('aria-valuenow', percent);
-    $('.userCompletion-progress-bar').css({'width': percent+'%'});
-    $('.userCompletion-percent-text').html(percent);
-    $('.userCompletion-progress-bar').removeClass('bg-danger').removeClass('bg-warning').removeClass('bg-info').removeClass('bg-success');
-
-    percent = parseInt(percent);
-
-    if (percent <= 25) {
-        $('.userCompletion-progress-bar').addClass('bg-danger');
-    } else if (percent > 25 && percent <= 50) {
-        $('.userCompletion-progress-bar').addClass('bg-warning');
-    } else if (percent > 50 && percent <= 75) {
-
-    } else if (percent > 75 && percent < 100) {
-        $('.userCompletion-progress-bar').addClass('bg-info');
-    } else if (percent === 100) {
-        $('.userCompletion-progress-bar').addClass('bg-success');
-    }
-}
-
 $(document).ready(function () {
+
+    function getFormData($form) {
+        var unindexed_array = $form.serializeArray();
+        var indexed_array = {};
+
+        $.map(unindexed_array, function (n, i) {
+            indexed_array[n['name']] = n['value'];
+        });
+
+        return indexed_array;
+    }
+
+    function updateUserCompletionProgress(percent) {
+        $('.userCompletion-progress-bar').attr('aria-valuenow', percent);
+        $('.userCompletion-progress-bar').css({'width': percent+'%'});
+        $('.userCompletion-percent-text').html(percent);
+        $('.userCompletion-progress-bar').removeClass('bg-danger').removeClass('bg-warning').removeClass('bg-info').removeClass('bg-success');
+
+        percent = parseInt(percent);
+
+        if (percent <= 25) {
+            $('.userCompletion-progress-bar').addClass('bg-danger');
+        } else if (percent > 25 && percent <= 50) {
+            $('.userCompletion-progress-bar').addClass('bg-warning');
+        } else if (percent > 50 && percent <= 75) {
+
+        } else if (percent > 75 && percent < 100) {
+            $('.userCompletion-progress-bar').addClass('bg-info');
+        } else if (percent === 100) {
+            $('.userCompletion-progress-bar').addClass('bg-success');
+        }
+    }
+
+    function arabicToPersianWithEnNumber(inputString) {
+        if (typeof inputString === 'undefined' || inputString === null || inputString.length === 0) {
+            return '';
+        }
+        inputString = persianJs(inputString).arabicChar().toEnglishNumber().toString();
+        inputString = inputString.split(' ').join('_');
+        return inputString;
+    }
 
     $(document).on('click', '#btnEditUserPhoto', function () {
         $('#UserProfilePhoto').trigger('click');
@@ -180,6 +189,10 @@ $(document).ready(function () {
         let $postalCode = $('#profileForm-setting input[name="postalCode"]');
         let $email = $('#profileForm-setting input[name="email"]');
         var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
+        $postalCode.val(arabicToPersianWithEnNumber($postalCode.val()));
+        $email.val(arabicToPersianWithEnNumber($email.val()));
+
         if(isNaN($postalCode.val())) {
             status = false;
             message += 'برای کد پستی عدد وارد کنید.'+'<br>';

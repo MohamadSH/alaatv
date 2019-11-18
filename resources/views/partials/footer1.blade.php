@@ -90,7 +90,7 @@
                         </a>
                     </li>
                     <li class="m-nav__item m-nav__item">
-                        <a href="{{ action("Web\RulesPageController") }}" class="m-nav__link" data-toggle="m-tooltip" title="انجمن آلاء" data-placement="top">
+                        <a href="https://forum.alaatv.com" class="m-nav__link" data-toggle="m-tooltip" title="انجمن آلاء" data-placement="top">
                             <i class="m-menu__link-icon fab fa-hornbill"></i>
                         </a>
                     </li>
