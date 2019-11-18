@@ -121,7 +121,7 @@
                                                             </a>
                                                         </div>
                                                         <div class="subCategoryItem">
-                                                            <a class="m-link" href="{{ urldecode(route('content.index', 'tags[]=نظام_آموزشی_جدید&tags[]=دوازدهم&tags[]=کنکور&tags[]=رشته_ریاضی&tags[]=رشته_تجربی&tags[]=هندسه&tags[]=هندسه_کنکور')) }}" >
+                                                            <a class="m-link" href="{{ urldecode(route('content.index', 'tags[]=نظام_آموزشی_جدید&tags[]=دوازدهم&tags[]=کنکور&tags[]=رشته_ریاضی&tags[]=هندسه&tags[]=هندسه_کنکور')) }}" >
                                                                 هندسه
                                                             </a>
                                                         </div>
@@ -242,7 +242,7 @@
                                                             </a>
                                                         </div>
                                                         <div class="subCategoryItem">
-                                                            <a class="m-link" href="{{ urldecode(route('content.index', 'tags[]=نظام_آموزشی_جدید&tags[]=یازدهم&tags[]=رشته_ریاضی&tags[]=رشته_تجربی&tags[]=آمار_و_احتمال')) }}" >
+                                                            <a class="m-link" href="{{ urldecode(route('content.index', 'tags[]=نظام_آموزشی_جدید&tags[]=یازدهم&tags[]=رشته_ریاضی&tags[]=آمار_و_احتمال')) }}" >
                                                                 آمار و احتمال
                                                             </a>
                                                         </div>
@@ -328,7 +328,7 @@
                                                             </a>
                                                         </div>
                                                         <div class="subCategoryItem">
-                                                            <a class="m-link" href="{{ urldecode(route('content.index', 'tags[]=نظام_آموزشی_جدید&tags[]=دهم&tags[]=رشته_ریاضی&tags[]=هندسه&tags[]=هندسه_پایه')) }}" >
+                                                            <a class="m-link" href="{{ urldecode(route('content.index', 'tags[]=نظام_آموزشی_جدید&tags[]=دهم&tags[]=رشته_تجربی&tags[]=رشته_ریاضی&tags[]=هندسه&tags[]=هندسه_پایه')) }}" >
                                                                 هندسه
                                                             </a>
                                                         </div>
