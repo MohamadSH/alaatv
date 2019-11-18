@@ -8,7 +8,9 @@ use Illuminate\Http\{Request, Response};
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Support\{Arr, Collection, Facades\File, Facades\Storage};
 use App\{Adapter\AlaaSftpAdapter,
+    Block,
     Bon,
+    Events\BlockAttachedToProduct,
     Product,
     Attributeset,
     Attributetype,
@@ -249,11 +251,14 @@ class ProductController extends Controller
 
         $liveDescriptions = $product->livedescriptions->sortByDesc('created_at');
         $blocks = optional($product)->blocks;
-
+        $allBlocks = [];
+        if($blocks->isEmpty()){
+            $allBlocks = Block::all()->pluck('title' , 'id')->toArray();
+        }
 
         return view('product.edit',
             compact('product', 'amountLimit', 'defaultAmountLimit', 'enableStatus', 'defaultEnableStatus',
-                'attributesets', 'bons', 'productFiles', 'blocks' ,
+                'attributesets', 'bons', 'productFiles', 'blocks' , 'allBlocks' ,
                 'productFileTypes', 'defaultProductFileOrders', 'products', 'producttype', 'productPhotos',
                 'defaultProductPhotoOrder', 'tags' , 'sampleContents' , 'recommenderContents' , 'liveDescriptions'));
     }
@@ -977,6 +982,38 @@ class ProductController extends Controller
         //Storing product's image
         $storeImageResult = $this->storeImageOfProduct($product, $images);
         //ToDo : delete the file if it is an update
+    }
+
+    public function attachBlock(Request $request, Product $product)
+    {
+        $block = Block::Find($request->get('block_id'));
+        if(is_null($block)){
+            session()->put('error' , 'بلاک یافت نشد');
+            return redirect()->back();
+        }
+
+        $product->blocks()->attach($block->id);
+
+        event(new BlockAttachedToProduct($product , $block));
+
+        session()->put('success' , 'بلاک با موفقیت اضافه شد');
+        return redirect()->back();
+    }
+
+    public function detachBlock(Request $request, Product $product)
+    {
+        $block = Block::Find($request->get('block_id'));
+        if(is_null($block)){
+            session()->put('error' , 'بلاک یافت نشد');
+            return redirect()->back();
+        }
+
+        $product->blocks()->detach($block->id);
+
+        event(new BlockAttachedToProduct($product , $block));
+
+        session()->put('success' , 'بلاک با موفقیت اضافه شد');
+        return redirect()->back();
     }
 
     /** Stores catalog file of the product

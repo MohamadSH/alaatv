@@ -7,6 +7,8 @@ use App\Http\Controllers\Web\HomeController;
 use App\Http\Controllers\Web\LandingPageController;
 use App\Http\Controllers\Web\LiveController;
 use App\Http\Controllers\Web\OfflinePaymentController;
+use App\Http\Controllers\Web\OrderController;
+use App\Http\Controllers\Web\ProductController;
 use App\Http\Controllers\Web\SanatisharifmergeController;
 use App\Http\Controllers\Web\SectionController;
 use App\Http\Controllers\Web\SetController;
@@ -189,10 +191,10 @@ Route::group(['middleware' => 'auth'], function () {
             ->name('web.authenticatedUser.profile.update');
 
         Route::get('info', [UserController::class, 'informationPublicUrl']);
-        Route::get('{user}/info', 'Web\UserController@information');
+        Route::get('{user}/info', [UserController::class, 'information']);
         Route::post('{user}/completeInfo', [UserController::class, 'completeInformation']);
         Route::get('orders', [UserController::class, 'userOrders'] )->name('web.user.orders');
-        Route::get('question', 'Web\UserController@uploads');
+        Route::get('question', [UserController::class, 'uploads']);
         Route::post('submitWorkTime/{employeetimesheet}', [EmployeetimesheetController::class, 'submitWorkTime'])->name('web.user.employeetime.submit.update');
         Route::post('submitWorkTime', [EmployeetimesheetController::class, 'submitWorkTime'])->name('web.user.employeetime.submit');
         Route::post('removeFromLottery', [LotteryController::class, 'removeFromLottery']);
@@ -203,23 +205,24 @@ Route::group(['middleware' => 'auth'], function () {
         Route::post('update/partialInfo', [UserController::class , 'partialUpdate'])->name('web.user.update.partial');
     });
     Route::group(['prefix' => 'order'], function () {
-        Route::post('detachorderproduct', 'Web\OrderController@detachOrderproduct');
-        Route::post('addOrderproduct/{product}', 'Web\OrderController@addOrderproduct');
-        Route::delete('removeOrderproduct/{product}', 'Web\OrderController@removeOrderproduct');
-        Route::post('submitCoupon', 'Web\OrderController@submitCoupon');
-        Route::get('RemoveCoupon', 'Web\OrderController@removeCoupon');
+        Route::post('detachorderproduct', [OrderController::class, 'detachOrderproduct']);
+        Route::post('addOrderproduct/{product}', [OrderController::class, 'addOrderproduct']);
+        Route::delete('removeOrderproduct/{product}', [OrderController::class, 'removeOrderproduct']);
+        Route::post('submitCoupon', [OrderController::class, 'submitCoupon']);
+        Route::get('RemoveCoupon', [OrderController::class, 'removeCoupon']);
     });
     Route::group(['prefix' => 'product'], function () {
-        Route::get('{product}/createConfiguration', 'Web\ProductController@createConfiguration');
-        Route::post('{product}/makeConfiguration', 'Web\ProductController@makeConfiguration');
-        Route::get('{product}/editAttributevalues', 'Web\ProductController@editAttributevalues');
-        Route::post('{product}/updateAttributevalues', 'Web\ProductController@updateAttributevalues');
-        Route::put('{product}/addGift', 'Web\ProductController@addGift');
-        Route::delete('{product}/removeGift', 'Web\ProductController@removeGift');
-        Route::post('{product}/copy', 'Web\ProductController@copy');
-        Route::put('child/{product}', 'Web\ProductController@childProductEnable');
-        Route::put('addComplimentary/{product}', 'Web\ProductController@addComplimentary');
-        Route::put('removeComplimentary/{product}', 'Web\ProductController@removeComplimentary');
+        Route::get('{product}/createConfiguration', [ProductController::class, 'createConfiguration']);
+        Route::post('{product}/makeConfiguration', [ProductController::class, 'makeConfiguration']);
+        Route::get('{product}/editAttributevalues', [ProductController::class, 'editAttributevalues']);
+        Route::post('{product}/updateAttributevalues', [ProductController::class, 'updateAttributevalues']);
+        Route::put('{product}/addGift', [ProductController::class, 'addGift']);
+        Route::delete('{product}/removeGift', [ProductController::class, 'removeGift']);
+        Route::post('{product}/copy', [ProductController::class, 'copy']);
+        Route::post('{product}/attachBlock', [ProductController::class, 'attachBlock'])->name('web.product.attach.block');
+        Route::put('child/{product}', [ProductController::class, 'childProductEnable']);
+        Route::put('addComplimentary/{product}', [ProductController::class, 'addComplimentary']);
+        Route::put('removeComplimentary/{product}', [ProductController::class, 'removeComplimentary']);
     });
 
     Route::get('consultantEntekhabReshtePanel', [ConsultationController::class, 'consultantEntekhabReshte']);

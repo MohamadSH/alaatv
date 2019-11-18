@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Events\Authenticated;
+use App\Events\BlockAttachedToProduct;
 use App\Events\ContentRedirected;
 use App\Events\FavoriteEvent;
 use App\Events\MobileVerified;
@@ -11,6 +12,7 @@ use App\Events\FillTmpShareOfOrder;
 use App\Events\UnfavoriteEvent;
 use App\Events\UserAvatarUploaded;
 use App\Events\UserRedirectedToPayment;
+use App\Listeners\BlockAttachedToProductListener;
 use App\Listeners\FavoriteEventListener;
 use App\Listeners\RedirectContentListener;
 use App\Listeners\RemoveOldUserAvatarListener;
@@ -70,6 +72,9 @@ class EventServiceProvider extends ServiceProvider
         ],
         UnfavoriteEvent::class      => [
             UnfavoriteEventListener::class,
+        ],
+        BlockAttachedToProduct::class      => [
+            BlockAttachedToProductListener::class,
         ],
     ];
 
