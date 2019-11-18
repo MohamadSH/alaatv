@@ -8,7 +8,10 @@ use Illuminate\Http\{Request, Response};
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Support\{Arr, Collection, Facades\File, Facades\Storage};
 use App\{Adapter\AlaaSftpAdapter,
+    Block,
     Bon,
+    Events\SendProductIntroducingBlockTags,
+    Events\BlockDetachedFromProduct,
     Product,
     Attributeset,
     Attributetype,
@@ -249,11 +252,14 @@ class ProductController extends Controller
 
         $liveDescriptions = $product->livedescriptions->sortByDesc('created_at');
         $blocks = optional($product)->blocks;
-
+        $allBlocks = [];
+        if($blocks->isEmpty()){
+            $allBlocks = Block::all()->pluck('title' , 'id')->toArray();
+        }
 
         return view('product.edit',
             compact('product', 'amountLimit', 'defaultAmountLimit', 'enableStatus', 'defaultEnableStatus',
-                'attributesets', 'bons', 'productFiles', 'blocks' ,
+                'attributesets', 'bons', 'productFiles', 'blocks' , 'allBlocks' ,
                 'productFileTypes', 'defaultProductFileOrders', 'products', 'producttype', 'productPhotos',
                 'defaultProductPhotoOrder', 'tags' , 'sampleContents' , 'recommenderContents' , 'liveDescriptions'));
     }
@@ -858,8 +864,6 @@ class ProductController extends Controller
             Response::HTTP_SERVICE_UNAVAILABLE);
     }
 
-
-
     /**
      * @param $introVideo
      * @param $introVideoThumbnail
@@ -979,6 +983,38 @@ class ProductController extends Controller
         //ToDo : delete the file if it is an update
     }
 
+    public function attachBlock(Request $request, Product $product)
+    {
+        $block = Block::Find($request->get('block_id'));
+        if(is_null($block)){
+            session()->put('error' , 'بلاک یافت نشد');
+            return redirect()->back();
+        }
+
+        $product->blocks()->attach($block->id);
+
+        event(new SendProductIntroducingBlockTags($product , $block));
+
+        session()->put('success' , 'بلاک با موفقیت اضافه شد');
+        return redirect()->back();
+    }
+
+    public function detachBlock(Request $request, Product $product)
+    {
+        $block = Block::Find($request->get('block_id'));
+        if(is_null($block)){
+            session()->put('error' , 'بلاک یافت نشد');
+            return redirect()->back();
+        }
+
+        $product->blocks()->detach($block->id);
+
+        event(new BlockDetachedFromProduct($product , $block));
+
+        session()->put('success' , 'بلاک با موفقیت اضافه شد');
+        return redirect()->back();
+    }
+
     /** Stores catalog file of the product
      *
      * @param  Product  $product
@@ -1063,50 +1099,6 @@ class ProductController extends Controller
                 'discount' => $bonDiscount,
                 'bonPlus'  => $bonPlus,
             ]);
-        }
-    }
-
-    private function searchInUserAssetsCollection(Product $product, User $user) {
-
-        $purchasedProductIdArray = [];
-        $userAssetsCollection = $user->getDashboardBlocks()->pluck('products');
-        foreach ($userAssetsCollection as $blockProducts) {
-            foreach ($blockProducts as $product1) {
-                $this->iterateProductAndChildren($product1->id, $product, $purchasedProductIdArray);
-            }
-        }
-
-        return $purchasedProductIdArray;
-    }
-
-    private function allChildIsPurchased(Product $product, $purchasedProductIdArray) {
-        if ($product->children->count() > 0) {
-            foreach ($product->children as $productChild) {
-                if (array_search($product->id, $purchasedProductIdArray) === false) {
-                    $res = $this->allChildIsPurchased($productChild, $purchasedProductIdArray);
-                    if (!$res) {
-                        return false;
-                    }
-                }
-            }
-        } elseif (array_search($product->id, $purchasedProductIdArray) === false) {
-            return false;
-        } else {
-            return true;
-        }
-        return true;
-    }
-
-    private function iterateProductAndChildren($searchProductId, Product $product, array & $purchasedProductIdArray) {
-
-        if ($searchProductId === $product->id) {
-            $purchasedProductIdArray[] = $product->id;
-        }
-
-        if ($product->children->count() > 0) {
-            foreach ($product->children as $key=>$childProduct) {
-                $this->iterateProductAndChildren($searchProductId, $childProduct, $purchasedProductIdArray);
-            }
         }
     }
 }
