@@ -25,21 +25,8 @@ trait HandleOrderPayment
         $order->closeWalletPendingTransactions();
 
         $wallets = optional($order->user)->wallets;
-        if(isset($wallets))
-        {
-            /** @var Wallet $wallet */
-            foreach ($wallets as $wallet) {
-                if($wallet->balance > 0 && $wallet->pending_to_reduce > 0 )
-                {
-                    $withdrawResult =  $wallet->withdraw($wallet->pending_to_reduce , $order->id);
-                    if($withdrawResult['result'])
-                    {
-                        $wallet->update([
-                            'pending_to_reduce' => 0 ,
-                        ]);
-                    }
-                }
-            }
+        if(isset($wallets)) {
+            $this->withdrawWalletPendings($order->id, $wallets);
         }
 
         //refreshing order after closing it's wallet transactions

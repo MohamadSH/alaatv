@@ -81,11 +81,36 @@
         @endpermission
 
         <div class="alert alert-info alert-dismissible fade show" role="alert">
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-            </button>
-            <strong>
-                در حال حاضر پخش زنده وجود ندارد
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"></button>
+            <strong class="m--font-danger"  >
+                اطلاعیه
             </strong>
+            <br>
+            تعداد کسانی که از پخش زنده ریاضیات آقای شامیزاده صبح ها استفاده می کردند خیلی زیاد شد
+            <br>
+            این تعداد استفاده کننده حدود 60 میلیون تومان هزینه مازاد (علاوه بر هزینه های فعلی) برای آلاء داره ، لذا با اجازه تا اطلاع ثانوی ما لایو رو قطع کردیم. ولی فیلم های ضبط شده اش رو سریع تدوین می کنیم و قرار می دیم.
+            <br>
+            تفاوت کلاس کنکور امسال آلاء صفر تا صد آلاء دو چیز بود:
+            <br>
+            1. دانش آموز سر کلاس است که وقتی سوال می پرسه ممکنه سوال شما باسه.
+            <br>
+            2. لایو بود
+            <br>
+            از اینجا به بعد خاصیت شماره 1 رو همچنان خواهیم داشت ولی پخش لایوش رو به خاطر مشکل مالی مجبوریم تا اطلاع ثانوی قطع کنیم.
+            <br>
+            ببخشید به امید روزی که آلاء از لحاظ مالی به قدر توانمند بشه که بتونه هر خدمتی رو رایگان تقدیم موفقیت شما بکنه.
+            <br>
+            سهراب ابوذرخانی فرد ، مدیر عامل آلاء
+            <br><br>
+            <div class="row">
+                <div class="col-md-4 mx-auto">
+                    <a class="btn btn-brand a--full-width">دانلود فیلم های هندسه آقای شامیزاده</a>
+                    <br>
+                    <a class="btn btn-focus a--full-width">دانلود فیلم های گسسته آقای شامیزاده</a>
+                    <br>
+                    <a class="btn btn-primary a--full-width">دانلود فیلم های ریاضی تجربی آقای شامیزاده</a>
+                </div>
+            </div>
         </div>
     @endif
 

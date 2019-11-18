@@ -9,6 +9,7 @@ use AlaaTV\Gateways\Money;
 use App\PaymentModule\Responses;
 use App\Notifications\InvoicePaid;
 use App\Traits\HandleOrderPayment;
+use App\Traits\OrderCommon;
 use Illuminate\Routing\Controller;
 use AlaaTV\Gateways\PaymentDriver;
 use Illuminate\Http\RedirectResponse;
@@ -19,6 +20,7 @@ use AlaaTV\Gateways\Contracts\OnlinePaymentVerificationResponseInterface;
 class PaymentVerifierController extends Controller
 {
     use HandleOrderPayment;
+    use OrderCommon;
 
     /**
      * @param  string  $paymentMethod
@@ -53,7 +55,7 @@ class PaymentVerifierController extends Controller
             );
             $this->handleOrderSuccessPayment($myOrder);
             $assetLink          = '
-            <a href="'.route('user.asset').'" class="btn m-btn--pill m-btn--air m-btn m-btn--gradient-from-info m-btn--gradient-to-accent animated infinite heartBeat">
+            <a href="'.route('web.user.asset').'" class="btn m-btn--pill m-btn--air m-btn m-btn--gradient-from-info m-btn--gradient-to-accent animated infinite heartBeat">
                 دانلودهای من
             </a>';
             $responseMessages[] = 'برای دانلود محصولاتی که خریده اید به صفحه روبرو بروید: '.$assetLink;

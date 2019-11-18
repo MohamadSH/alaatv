@@ -175,6 +175,7 @@ use App\Traits\{DateTrait,
  * @property mixed                                                          category
  * @property array recommender_contents
  * @property array sample_contents
+ * @property mixed blocks
  * @method static Builder|Product whereBlockId($value)
  * @method static Builder|Product whereIntroVideos($value)
  */
