@@ -393,4 +393,7 @@
     .addToCartForMobileDeviceWrapper {
         display: block;
     }
+    .productInfoNav-btnAddToCart {
+        display: none !important;
+    }
 }

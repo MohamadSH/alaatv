@@ -356,11 +356,22 @@ jQuery(document).ready(function() {
         zIndex: 98
     });
 
+    $('.productLiveDescription .m-portlet__head').sticky({
+        // container: '.productDetailes',
+        hidePosition: {
+            element: '.relatedProduct .m-portlet__head',
+            topSpace: $('#m_header').height()
+        },
+        topSpacing: $('#m_header').height(),
+        zIndex: 98
+    });
+
     $('.relatedProduct .m-portlet__head').sticky({
         container: '.relatedProduct',
         topSpacing: $('#m_header').height(),
         zIndex: 98
     });
+
 
     $(document).on('click', '.productInfoNav', function () {
         var targetId = $(this).data('tid');
