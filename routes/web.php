@@ -288,6 +288,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('serpSim' , [AdminController::class, 'serpSim'] );
     Route::get('process_serpsim' , [AdminController::class, 'processSerpsim'] );
 
+    Route::post('bigUpload' , [HomeController::class, 'uploadFile'] )->name('web.bigUpload');
     Route::get('uuupppllloooodddd' , [HomeController::class, 'uploadCenter'] )->name('web.uploadCenter');
     Route::post('uuupppllloooodddd' , [HomeController::class, 'upload'] )->name('web.upload');
 });
