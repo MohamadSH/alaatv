@@ -609,7 +609,7 @@
                                                     <a target="_blank" class="m-menu__link" href="{{ urldecode(route('content.index', 'tags[]=نظام_آموزشی_قدیم&tags[]=کنکور&tags[]=زبان_و_ادبیات_فارسی')) }}">
                                                         <i class="m-menu__link-bullet fa fa-book-open"><span></span></i>
                                                         <span class="m-menu__link-text">
-                                                            فارسی
+                                                            زبان و ادبیات فارسی
                                                         </span>
                                                     </a>
                                                 </li>

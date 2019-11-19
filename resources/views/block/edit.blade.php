@@ -102,7 +102,7 @@
                                     "id" => "block-products",
                                     "name" => "block-products[]",
                                     'everyProduct'=>false,
-                                    'canChooseSelectable'=>true,
+                                    'listType'=>'canSelectAllType',
                                     'title'=>'انتخاب محصول'
                                 ])
 
