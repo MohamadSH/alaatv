@@ -50,9 +50,9 @@
                 </li>
             </ul>
             <hr>
-            {!! Form::open(['files'=>true , 'method'=>'POST' , 'url'=>route('web.upload') , 'accept-charset'=>'UTF-8' ]) !!}
+            {!! Form::open(['files'=>true , 'method'=>'POST' , 'url'=>route('web.bigUpload') , 'accept-charset'=>'UTF-8' , 'id' =>'uploadForm' ]) !!}
             <div class = "form-group">
-                {!! Form::file('file') !!}
+                {!! Form::file('file' , ['id' => 'file']) !!}
                 {!! Form::submit('آپلود' , ['class' => 'btn btn-primary']) !!}
             </div>
             @if ($errors->has('file'))
@@ -72,4 +72,67 @@
 
 @section('page-js')
     <script src="{{ mix('/js/admin-all.js') }}" type="text/javascript"></script>
+    <script>
+        $(document).on('submit', '#uploadForm', function (e) {
+            e.preventDefault();
+            // var loadingImage = "<img src = '/acm/extra/loading-arrow.gif' style='height: 20px;'>";
+            var form = $(this);
+            var datastring = new FormData($(this)[0]);
+            url = form.attr('action');
+            var fileName = $('#file').val().split('\\').pop();
+            toastr.options = {
+                "closeButton": true,
+                "debug": false,
+                "positionClass": "toast-top-center",
+                "onclick": null,
+                "showDuration": "1000",
+                "hideDuration": "1000",
+                "timeOut": "5000",
+                "extendedTimeOut": "1000",
+                "showEasing": "swing",
+                "hideEasing": "linear",
+                "showMethod": "fadeIn",
+                "hideMethod": "fadeOut"
+            };
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data: datastring,
+                headers:{
+                    'X-Datatype' : 'uploadCenterSftp',
+                    'X-Dataname' : fileName,
+                },
+                statusCode: {
+                    //The status for when action was successful
+                    200: function (response) {
+                        // console.log(response);
+                        // console.log(response.responseText);
+                        toastr["success"]("محتوا با موقیت درج شد", "پیام سیستم");
+                    },
+                    //The status for when the user is not authorized for making the request
+                    403: function (response) {
+                        window.location.replace("/403");
+                    },
+                    404: function (response) {
+                        window.location.replace("/404");
+                    },
+                    //The status for when form data is not valid
+                    422: function (response) {
+                        toastr["error"]("خطای ۴۲۲ . خطای ورودی ها", "پیام سیستم");
+                    },
+                    //The status for when there is error php code
+                    500: function (response) {
+                        console.log(response.responseText);
+                    },
+                    //The status for when there is error php code
+                    503: function (response) {
+                    }
+                },
+                cache: false,
+                contentType: false,
+                processData: false
+            });
+
+        });
+    </script>
 @endsection

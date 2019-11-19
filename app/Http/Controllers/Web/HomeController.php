@@ -599,7 +599,6 @@ class HomeController extends Controller
      */
     public function uploadFile(Request $request)
     {
-
         $filePath         = $request->header('X-File-Name');
         $originalFileName = $request->header('X-Dataname');
         $filePrefix       = '';
@@ -607,7 +606,6 @@ class HomeController extends Controller
         $disk             = $request->header('X-Datatype');
         $done             = false;
 
-        //        dd($request->headers->all());
         try {
             $dirname  = pathinfo($filePath, PATHINFO_DIRNAME);
             $ext      = pathinfo($originalFileName, PATHINFO_EXTENSION);
@@ -615,10 +613,6 @@ class HomeController extends Controller
 
             $newFileNameDir = $dirname.'/'.$fileName;
 
-            //            dd([
-            //                "filePath"=>$filePath,
-            //                "newFileNameDir"=>$newFileNameDir
-            //            ]);
             if (File::exists($newFileNameDir)) {
                 File::delete($newFileNameDir);
             }
@@ -661,33 +655,34 @@ class HomeController extends Controller
                         $done = true;
                     }
                 }
-            } else {
-                if (strcmp($disk, 'video') == 0) {
-                    $adapter    = new SftpAdapter([
-                        'host'          => config('constants.SFTP_HOST'),
-                        'port'          => config('constants.SFTP_PORT'),
-                        'username'      => config('constants.SFTP_USERNAME'),
-                        'password'      => config('constants.SFTP_PASSSWORD'),
-                        'privateKey'    => config('constants.SFTP_PRIVATE_KEY_PATH'),
-                        // example:  /alaa_media/cdn/media/203/HD_720p , /alaa_media/cdn/media/thumbnails/203/
-                        'root'          => config('constants.DOWNLOAD_SERVER_ROOT').config('constants.DOWNLOAD_SERVER_MEDIA_PARTIAL_PATH').$contentSetId,
-                        'timeout'       => config('constants.SFTP_TIMEOUT'),
-                        'directoryPerm' => 0755,
-                    ]);
-                    $filesystem = new Filesystem($adapter);
-                    if ($filesystem->put($originalFileName, fopen($newFileNameDir, 'r+'))) {
-                        $done = true;
-                        // example:  https://cdn.sanatisharif.ir/media/203/hq/203001dtgr.mp4
-                        $fileName = config('constants.DOWNLOAD_SERVER_PROTOCOL').config('constants.CDN_SERVER_NAME').config('constants.DOWNLOAD_SERVER_MEDIA_PARTIAL_PATH').$contentSetId.$originalFileName;
-                    }
-                } else {
-                    $filesystem = Storage::disk($disk.'Sftp');
-                    //                Storage::putFileAs('photos', new File('/path/to/photo'), 'photo.jpg');
-                    if ($filesystem->put($fileName, fopen($newFileNameDir, 'r+'))) {
-                        $done = true;
-                    }
+            }
+            elseif (strcmp($disk, 'video') == 0) {
+                $adapter    = new SftpAdapter([
+                    'host'          => config('constants.SFTP_HOST'),
+                    'port'          => config('constants.SFTP_PORT'),
+                    'username'      => config('constants.SFTP_USERNAME'),
+                    'password'      => config('constants.SFTP_PASSSWORD'),
+                    'privateKey'    => config('constants.SFTP_PRIVATE_KEY_PATH'),
+                    // example:  /alaa_media/cdn/media/203/HD_720p , /alaa_media/cdn/media/thumbnails/203/
+                    'root'          => config('constants.DOWNLOAD_SERVER_ROOT').config('constants.DOWNLOAD_SERVER_MEDIA_PARTIAL_PATH').$contentSetId,
+                    'timeout'       => config('constants.SFTP_TIMEOUT'),
+                    'directoryPerm' => 0755,
+                ]);
+                $filesystem = new Filesystem($adapter);
+                if ($filesystem->put($originalFileName, fopen($newFileNameDir, 'r+'))) {
+                    $done = true;
+                    // example:  https://cdn.sanatisharif.ir/media/203/hq/203001dtgr.mp4
+                    $fileName = config('constants.DOWNLOAD_SERVER_PROTOCOL').config('constants.CDN_SERVER_NAME').config('constants.DOWNLOAD_SERVER_MEDIA_PARTIAL_PATH').$contentSetId.$originalFileName;
                 }
             }
+            else {
+                $filesystem = Storage::disk($disk);
+                //                Storage::putFileAs('photos', new File('/path/to/photo'), 'photo.jpg');
+                if ($filesystem->put($fileName, fopen($newFileNameDir, 'r+'))) {
+                    $done = true;
+                }
+            }
+
             if ($done) {
                 return response()->json([
                     'fileName' => $fileName,
@@ -697,7 +692,6 @@ class HomeController extends Controller
                 return response()->json([] , Response::HTTP_SERVICE_UNAVAILABLE);
             }
         } catch (Exception $e) {
-            //            return $this->TAG.' '.$e->getMessage();
             return response()->json([
                 'message' => 'unexpected error',
                 'error'   => $e->getMessage(),
