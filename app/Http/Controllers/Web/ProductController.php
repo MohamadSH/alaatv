@@ -257,9 +257,11 @@ class ProductController extends Controller
             $allBlocks = Block::all()->pluck('title' , 'id')->toArray();
         }
 
+        $sets = $product->sets()->get();
+
         return view('product.edit',
             compact('product', 'amountLimit', 'defaultAmountLimit', 'enableStatus', 'defaultEnableStatus',
-                'attributesets', 'bons', 'productFiles', 'blocks' , 'allBlocks' ,
+                'attributesets', 'bons', 'productFiles', 'blocks' , 'allBlocks' , 'sets',
                 'productFileTypes', 'defaultProductFileOrders', 'products', 'producttype', 'productPhotos',
                 'defaultProductPhotoOrder', 'tags' , 'sampleContents' , 'recommenderContents' , 'liveDescriptions'));
     }

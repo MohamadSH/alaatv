@@ -183,7 +183,7 @@ trait ProductCommon
     protected function makeProductCollection($productsId = null)
     {
         $key = '';
-        $cacheTags = ['product'];
+        $cacheTags = ['product' , 'productCollection'];
         if (isset($productsId)) {
             foreach ($productsId as $product) {
                 $cacheTags[] = 'product_'.$product;
