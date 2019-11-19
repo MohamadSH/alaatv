@@ -555,7 +555,7 @@ class ContentController extends Controller
         if(!$content->isEnable() && $enabled){
             $content->validSince = Carbon::now('Asia/Tehran');
         }else{
-            $content->validSince = explode(' ', $validSinceDateTime)[0];
+            $content->validSince = $validSinceDateTime;
         }
 
         $content->enable     = $enabled ? 1 : 0;
