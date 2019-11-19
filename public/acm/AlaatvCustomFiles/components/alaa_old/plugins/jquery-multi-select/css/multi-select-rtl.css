@@ -96,3 +96,29 @@
   left: auto !important;
   right: -9999px !important;
 }
+
+.multiselect-container {
+  width: 100%
+}
+
+.multiselect-container > li > a > label.parentItem {
+  font-weight: bold;
+}
+.multiselect-container > li > a > label.childItem {
+  border-right: solid 1px #d0d0d0;
+}
+.multiselect-container > li > a > label.startOfChilds,
+.multiselect-container > li > a > label.endOfChilds {
+  border-bottom: solid 1px #d0d0d0;
+  width: 100%;
+}
+.multiselect-container > li > a > label.startOfChilds {
+  margin-bottom: 20px;
+}
+.multiselect-container > li > a > label.endOfChilds {
+  margin-top: 20px;
+}
+.multiselect-container > li > a > label.startOfChilds input,
+.multiselect-container > li > a > label.endOfChilds input {
+  display: none;
+}

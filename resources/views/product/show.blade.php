@@ -25,6 +25,11 @@
             display: none !important;
         }
         @endif
+        @if($liveDescriptions->isEmpty())
+        .productInfoNav-liveDescription {
+            display: none !important;
+        }
+        @endif
         @if(!isset($block) || !isset($block->products) || $block->products->count() === 0)
             .productInfoNav-relatedProduct {
             display: none !important;
@@ -573,8 +578,6 @@
 
     {{--دکمه افزودن به سبد خرید--}}
     @if($product->enable)
-
-
         <div class="addToCartForMobileDeviceWrapper" >
 
 

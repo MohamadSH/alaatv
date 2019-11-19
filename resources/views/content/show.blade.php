@@ -554,7 +554,7 @@
                 </div>
             @endif
             @if($pamphletsWithSameSet->count() > 0 and $pamphletsWithSameSet->where("content.id" , "<>",$content->id)->isNotEmpty())
-            <!--begin::Portlet-->
+                <!--begin::Portlet-->
                 <div class="m-portlet m-portlet--collapsed m-portlet--head-sm" m-portlet="true" id="m_portlet_tools_7">
                     <div class="m-portlet__head">
                         <div class="m-portlet__head-caption">
@@ -648,7 +648,7 @@
                                 @foreach($videosWithSameSet as $item)
                                     <div class="a-widget5__item" id="playlistItem_{{ $item["content"]->id }}">
                                         <div
-                                            class="a-widget5__content  {{ $item["content"]->id == $content->id ? 'm--bg-info' : '' }}">
+                                            class="a-widget5__content {{ $item["content"]->id == $content->id ? 'm--bg-info' : '' }}">
                                             <div class="a-widget5__pic">
                                                 <a class="m-link a--full-width"
                                                    href="{{action("Web\ContentController@show" , $item["content"])}}">
@@ -662,7 +662,8 @@
                                             <div class="a-widget5__section">
                                                 <h4 class="a-widget5__title">
                                                     <a class="m-link"
-                                                       href="{{action("Web\ContentController@show" , $item["content"])}}">
+                                                       href="{{action("Web\ContentController@show" , $item["content"])}}"
+                                                       data-toggle="m-tooltip" title="{{ $item["content"]->display_name }}" data-placement="top" >
                                                         {!! str_limit($item["content"]->display_name, 45, ' ...') !!}
                                                     </a>
                                                 </h4>
