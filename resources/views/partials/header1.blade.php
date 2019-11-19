@@ -482,7 +482,7 @@
                                                         </div>
                                                         <div class="subCategoryItem">
                                                             <a class="m-link" href="{{ urldecode(route('content.index', 'tags[]=نظام_آموزشی_قدیم&tags[]=کنکور&tags[]=زبان_و_ادبیات_فارسی')) }}" >
-                                                                فارسی
+                                                                زبان و ادبیات فارسی
                                                             </a>
                                                         </div>
                                                         <div class="subCategoryItem">
