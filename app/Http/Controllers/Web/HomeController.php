@@ -13,6 +13,7 @@ use League\Flysystem\Sftp\SftpAdapter;
 use Illuminate\Contracts\Encryption\DecryptException;
 use Illuminate\Support\Facades\{File, Input, Config, Storage};
 use App\{Gender,
+    Http\Requests\UploadCenterRequest,
     Major,
     User,
     Product,
@@ -55,17 +56,19 @@ class HomeController extends Controller
 
         $authException = [
 //            'debug',
-'newDownload',
-'download',
-'getImage',
-'sendMail',
-'siteMapXML',
+                'newDownload',
+                'download',
+                'getImage',
+                'sendMail',
+                'siteMapXML',
 //            'uploadFile',
-'search',
-'home',
+                'search',
+                'home',
         ];
         $this->middleware('auth', ['except' => $authException]);
         $this->middleware('role:admin', ['only' => ['debug'] ]);
+        $this->middleware('permission:'.config('constants.UPLOAD_CENTER_ACCESS'), ['only' => 'uploadCenter']);
+        $this->middleware('permission:'.config('constants.UPLOAD_CENTER_ACCESS'), ['only' => 'upload']);
     }
 
     public function debug(Request $request, User $user = null)
@@ -704,9 +707,29 @@ class HomeController extends Controller
         }
     }
 
-    public function adTest(Request $request){
-        $uuid = $request->get('uuid' , '35b39d4b-517b-44bc-85c4-44f93242836f');
-        return view('pages.adtest' , compact('uuid'));
+    public function uploadCenter(Request $request)
+    {
+        return view('admin.uploadCenter');
+    }
+
+    public function upload(UploadCenterRequest $request)
+    {
+        $file = $this->getRequestFile($request->all(), 'file');
+        if ($file !== false) {
+            $extension = $file->getClientOriginalExtension();
+            $fileName  = basename($file->getClientOriginalName(), '.'.$extension).'_'.date('YmdHis').'.'.$extension;
+            if (Storage::disk(config('constants.DISK26'))->put($fileName, File::get($file))) {
+                $path = config('constants.DOWNLOAD_SERVER_PROTOCOL').config('constants.CDN_SERVER_NAME').'/upload/uploadCenter/'.$fileName;
+                session()->put('success' , 'فایل با موفقیت آپلود شد . آدرس فایل  '."<br><a target='_blank' href='$path'>$path</a>");
+                return redirect()->back();
+            }
+
+            session()->put('error' , 'خطا در آپلود فایل');
+            return redirect()->back();
+        }
+
+        session()->put('error' , 'فایلی برای آپلود یافت نشد');
+        return redirect()->back();
     }
 
     /**

@@ -26,7 +26,7 @@
             </li>
     
     
-            <li class="m-menu__item m-menu__item--submenu" aria-haspopup="true" m-menu-submenu-toggle="hover">
+            <li class="m-menu__item m-menu__item--submenu megamenuForMobiveInSidebar" aria-haspopup="true" m-menu-submenu-toggle="hover">
                 <a href="javascript:;" class="m-menu__link m-menu__toggle">
                     <i class="m-menu__link-icon fa fa-film"></i>
                     <span class="m-menu__link-text">فیلم های آلاء</span>
@@ -609,7 +609,7 @@
                                                     <a target="_blank" class="m-menu__link" href="{{ urldecode(route('content.index', 'tags[]=نظام_آموزشی_قدیم&tags[]=کنکور&tags[]=زبان_و_ادبیات_فارسی')) }}">
                                                         <i class="m-menu__link-bullet fa fa-book-open"><span></span></i>
                                                         <span class="m-menu__link-text">
-                                                            فارسی
+                                                            زبان و ادبیات فارسی
                                                         </span>
                                                     </a>
                                                 </li>

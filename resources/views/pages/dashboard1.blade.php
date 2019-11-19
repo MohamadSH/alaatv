@@ -20,7 +20,7 @@
                 <div class="m-portlet__body  m-portlet__body--no-padding homePageNavigation-row">
                     <div class="row m-row--no-padding m-row--col-separator-xl shopNavItems">
                         <div class="col-6 col-md-3 m--bg-warning shopNavItem">
-                            <a target="_self" onclick="$('html,body').animate({scrollTop: $('.konkoor1').offset().top - 100},'slow');" href="#konkoor1">
+                            <a target="_self" class="btnScrollTo" data-scroll-to=".konkoor1" href="#konkoor1">
                                 <!--begin::Total Profit-->
                                 <div class="m-widget24 m--align-center">
                                     <div class="m-widget24__item">
@@ -33,7 +33,7 @@
                             </a>
                         </div>
                         <div class="col-6 col-md-3 m--bg-accent shopNavItem">
-                            <a target="_self" onclick="$('html,body').animate({scrollTop: $('.konkoor2').offset().top - 100},'slow');" href="#konkoor2">
+                            <a target="_self" class="btnScrollTo" data-scroll-to=".konkoor2" href="#konkoor2">
                                 <!--begin::Total Profit-->
                                 <div class="m-widget24 m--align-center">
                                     <div class="m-widget24__item">
@@ -46,7 +46,7 @@
                             </a>
                         </div>
                         <div class="col-6 col-md-3 m--bg-success shopNavItem">
-                            <a target="_self" onclick="$('html,body').animate({scrollTop: $('.yazdahom').offset().top - 100},'slow');" href="#yazdahom">
+                            <a target="_self" class="btnScrollTo" data-scroll-to=".yazdahom" href="#yazdahom">
                                 <!--begin::Total Profit-->
                                 <div class="m-widget24 m--align-center">
                                     <div class="m-widget24__item">
@@ -59,7 +59,7 @@
                             </a>
                         </div>
                         <div class="col-6 col-md-3 m--bg-info shopNavItem">
-                            <a target="_self" onclick="$('html,body').animate({scrollTop: $('.dahom').offset().top - 100},'slow');" href="#dahom">
+                            <a target="_self" class="btnScrollTo" data-scroll-to=".dahom" href="#dahom">
                                 <!--begin::Total Profit-->
                                 <div class="m-widget24 m--align-center">
                                     <div class="m-widget24__item">
@@ -214,6 +214,8 @@
             @endforeach
         ];
     </script>
+    
+    
     <script src="{{ mix('/js/page-homePage.js') }}" async ></script>
 @endsection
 
