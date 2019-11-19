@@ -314,6 +314,20 @@ return [
             'dProtocol'  => env('DOWNLOAD_SERVER_PROTOCOL', 'http://'),
         ],
 
+        'uploadCenterSftp'     => [
+            'driver'     => 'sftp',
+            'host'       => env('SFTP_HOST2', ''),
+            'port'       => env('SFTP_PORT', '22'),
+            'username'   => env('SFTP_USERNAME', ''),
+            'password'   => env('SFTP_PASSWORD', ''),
+            'privateKey' => env('SFTP_PRIVATE_KEY_PATH', ''),
+            'root'       => env('SFTP_ROOT', ''),
+            'prefix'     => '/upload/uploadCenter',
+            'timeout'    => env('SFTP_TIMEOUT', '10'),
+            'dHost'      => env('CDN_SERVER_NAME', ''),
+            'dProtocol'  => env('DOWNLOAD_SERVER_PROTOCOL', 'http://'),
+        ],
+
         's3' => [
             'driver' => 's3',
             'key'    => env('AWS_ACCESS_KEY_ID'),
