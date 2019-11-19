@@ -436,8 +436,7 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
      */
     public function scopeValid($query)
     {
-        return $query->where('validSince', '<', Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now())
-            ->timezone('Asia/Tehran'))
+        return $query->where('validSince', '<', Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now('Asia/Tehran')))
             ->orWhereNull('validSince');
     }
 
@@ -1353,8 +1352,7 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
      */
     public function isValid(): bool
     {
-        if ($this->validSince === null || $this->validSince < Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now())
-                ->timezone('Asia/Tehran')) {
+        if ($this->validSince === null || $this->validSince < Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now('Asia/Tehran'))) {
             return true;
         }
 
