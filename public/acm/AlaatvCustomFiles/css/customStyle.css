@@ -373,6 +373,16 @@
 
 
 
+.megamenuForMobiveInSidebar {
+    display: none !important;
+}
+
+@media only screen and (max-width: 1024px) {
+    .megamenuForMobiveInSidebar {
+        display: block !important;
+    }
+}
+
 @media only screen and (max-width: 1800px) {
     #carouselMainSlideShow .carousel-inner {
         min-height: 719.922px;
