@@ -101,7 +101,8 @@ class ProductObserver
         Cache::tags([
             'product_'.$product->id ,
             'product_search' ,
-            'relatedProduct_search' ])->flush();
+            'relatedProduct_search' ,
+            'productCollection'])->flush();
 
         $this->setRelatedContentsTags($product , optional($product->sample_contents)->tags , Product::RECOMMENDER_CONTENTS_BUCKET);
         $this->setRelatedContentsTags($product , optional($product->recommender_contents)->tags, Product::SAMPLE_CONTENTS_BUCKET);
