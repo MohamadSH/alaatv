@@ -79,12 +79,12 @@
                             </tr>
                             </thead>
                             <tbody>
-                                @if($product->sets->isEmpty())
+                                @if($sets->isEmpty())
                                     <tr style="text-align: center;">
                                         <td colspan="3">ندارد</td>
                                     </tr>
                                 @else
-                                    @foreach($product->sets as $set)
+                                    @foreach($sets as $set)
                                         <tr>
                                             <td>{{ $set->name }}</td>
                                             <td>
