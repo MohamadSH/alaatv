@@ -61,7 +61,6 @@ class HomeController extends Controller
                 'getImage',
                 'sendMail',
                 'siteMapXML',
-//            'uploadFile',
                 'search',
                 'home',
         ];
@@ -69,6 +68,7 @@ class HomeController extends Controller
         $this->middleware('role:admin', ['only' => ['debug'] ]);
         $this->middleware('permission:'.config('constants.UPLOAD_CENTER_ACCESS'), ['only' => 'uploadCenter']);
         $this->middleware('permission:'.config('constants.UPLOAD_CENTER_ACCESS'), ['only' => 'upload']);
+        $this->middleware('permission:'.config('constants.UPLOAD_CENTER_ACCESS'), ['only' => 'bigUpload']);
     }
 
     public function debug(Request $request, User $user = null)
