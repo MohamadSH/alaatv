@@ -117,10 +117,11 @@
                 statusCode: {
                     //The status for when action was successful
                     200: function (response) {
+                        var link = response.link;
                         toastr["success"]("محتوا با موقیت درج شد", "پیام سیستم");
                         form[0].reset();
                         $('#uploadedFileMessage').show();
-                        $('#uploadedFilePath').html('<a href="'+response.link+'">response.link</a>');
+                        $('#uploadedFilePath').html('<a href="'+link+'">'+link+'</a>');
                         $('#loading').hide();
                     },
                     //The status for when the user is not authorized for making the request
