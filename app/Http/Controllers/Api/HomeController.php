@@ -119,7 +119,7 @@ class HomeController extends Controller
                 $filesystem = Storage::disk($disk);
                 //                Storage::putFileAs('photos', new File('/path/to/photo'), 'photo.jpg');
                 if ($filesystem->put($fileName, fopen($newFileNameDir, 'r+'))) {
-                    $link = 'https://cdn.alaatv.com/upload/uploadCenter/'.$fileName;
+                    $link = 'https://cdn.alaatv.com/upload/u/'.$fileName;
                     $done = true;
                 }
             }
