@@ -129,17 +129,16 @@
                     500: function (response) {
                         toastr["error"]("خطای سرور", "خطای 500");
                         $('#loading').hide();
-                        console.log(response.responseText);
+                        console.log(response.response);
                     },
                     503: function (response) {
                         toastr["error"]("سرویس خارج از دسترس", "خطای 503");
                         $('#loading').hide();
-                        console.log(response.responseText);
+                        console.log(response.response);
                     },
                     301: function (response) {
                         toastr["error"]("آدرس مورد نظر ریدایرکت شده است", "خطای 301");
                         $('#loading').hide();
-                        console.log(response.responseText);
                     },
                 },
                 cache: false,
