@@ -14,8 +14,6 @@ Route::group(['middleware' => 'web'], function () {
     Auth::routes(['verify' => true]);
 });
 
-Route::post('big' , [HomeController::class, 'bigUpload'] )->name('api.bigUpload');
-
 Route::group(['prefix' => 'v1'], function () {
     Route::group(['prefix' => 'rt'], function () {
 
@@ -29,8 +27,9 @@ Route::group(['prefix' => 'v1'], function () {
 
     Route::get('lastVersion', 'Api\AppVersionController@show');
 
-    Route::get('debug', 'Api\HomeController@debug');
-    Route::get('authTest', 'Api\HomeController@authTest');
+    Route::get('debug', [HomeController::class, 'debug'])->name('api.debug');
+    Route::get('authTest', [HomeController::class, 'authTest'])->name('api.authTest');
+    Route::post('big' , [HomeController::class, 'bigUpload'] )->name('api.bigUpload');
 
     Route::get('c/{c}', 'Api\ContentController@show');
     Route::get('product/{product}', 'Api\ProductController@show');
