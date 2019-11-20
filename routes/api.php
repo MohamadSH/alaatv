@@ -14,8 +14,6 @@ Route::group(['middleware' => 'web'], function () {
     Auth::routes(['verify' => true]);
 });
 
-Route::post('uploadFile', 'Web\HomeController@uploadFile');
-
 Route::group(['prefix' => 'v1'], function () {
     Route::group(['prefix' => 'rt'], function () {
 
