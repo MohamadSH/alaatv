@@ -50,7 +50,7 @@
                 </li>
             </ul>
             <hr>
-            {!! Form::open(['files'=>true , 'method'=>'POST' , 'url'=>route('web.bigUpload') , 'accept-charset'=>'UTF-8' , 'id' =>'uploadForm' ]) !!}
+            {!! Form::open(['files'=>true , 'method'=>'POST' , 'url'=>'/big' , 'accept-charset'=>'UTF-8' , 'id' =>'uploadForm' ]) !!}
             <div class = "form-group">
                 {!! Form::file('file' , ['id' => 'file']) !!}
                 {!! Form::submit('آپلود' , ['class' => 'btn btn-primary']) !!}
