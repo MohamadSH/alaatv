@@ -49,7 +49,7 @@ class HomeController extends Controller
         try {
             $dirname  = pathinfo($filePath, PATHINFO_DIRNAME);
             $ext      = pathinfo($originalFileName, PATHINFO_EXTENSION);
-            $fileName = basename($originalFileName, '.'.$ext).'_'.date('YmdHis').'.'.$ext;
+            $fileName = str_random(4).'.'.$ext;
 
             $newFileNameDir = $dirname.'/'.$fileName;
 
@@ -119,7 +119,7 @@ class HomeController extends Controller
                 $filesystem = Storage::disk($disk);
                 //                Storage::putFileAs('photos', new File('/path/to/photo'), 'photo.jpg');
                 if ($filesystem->put($fileName, fopen($newFileNameDir, 'r+'))) {
-                    $link = 'https://cdn.alaatv.com/upload/uploadCenter/'.$fileName;
+                    $link = 'https://cdn.alaatv.com/upload/u/'.$fileName;
                     $done = true;
                 }
             }
