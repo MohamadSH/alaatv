@@ -590,14 +590,12 @@ class HomeController extends Controller
         }
     }
 
-    /**
-     * Sends an email to the website's own email
-     *
-     * @param Request $request
-     *
-     * @return Response
-     */
-    public function uploadFile(Request $request)
+    public function uploadCenter(Request $request)
+    {
+        return view('admin.uploadCenter');
+    }
+
+    public function bigUpload(Request $request)
     {
         $filePath         = $request->header('X-File-Name');
         $originalFileName = $request->header('X-Dataname');
@@ -699,11 +697,6 @@ class HomeController extends Controller
                 'file'    => $e->getFile(),
             ] , Response::HTTP_SERVICE_UNAVAILABLE);
         }
-    }
-
-    public function uploadCenter(Request $request)
-    {
-        return view('admin.uploadCenter');
     }
 
     public function upload(UploadCenterRequest $request)
