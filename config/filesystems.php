@@ -322,7 +322,7 @@ return [
             'password'   => env('SFTP_PASSWORD', ''),
             'privateKey' => env('SFTP_PRIVATE_KEY_PATH', ''),
             'root'       => env('SFTP_ROOT', ''),
-            'prefix'     => '/upload/uploadCenter',
+            'prefix'     => '/upload/u',
             'timeout'    => env('SFTP_TIMEOUT', '10'),
             'dHost'      => env('CDN_SERVER_NAME', ''),
             'dProtocol'  => env('DOWNLOAD_SERVER_PROTOCOL', 'http://'),

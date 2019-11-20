@@ -957,15 +957,11 @@ class ProductController extends Controller
             $product->tags = convertTagStringToArray($tagString);
         }
 
-        if (strlen($sampleContentString) > 0) {
-            $sampleContentsArray = convertTagStringToArray($sampleContentString);
-            $product->sample_contents =  $sampleContentsArray;
-        }
+        $sampleContentsArray = convertTagStringToArray($sampleContentString);
+        $product->sample_contents =  $sampleContentsArray;
 
-        if (strlen($recommenderContentString) > 0) {
-            $recommenderContentsArray = convertTagStringToArray($recommenderContentString);
-            $product->recommender_contents = $recommenderContentsArray ;
-        }
+        $recommenderContentsArray = convertTagStringToArray($recommenderContentString);
+        $product->recommender_contents = $recommenderContentsArray ;
 
         if ($this->strIsEmpty($product->discount)) {
             $product->discount = 0;
@@ -995,7 +991,18 @@ class ProductController extends Controller
 
         $product->blocks()->attach($block->id);
 
-        event(new SendProductIntroducingBlockTags($product , $block));
+        $blockContents = optional(optional(optional($block)->contents)->pluck('id'))->toArray();
+        $blockFirstSetContents = optional(optional(optional(optional($block->sets)->first())->contents)->pluck('id'))->toArray();
+        $contentsIds = array_unique(array_merge(!is_null($blockContents)?$blockContents:[] , !is_null($blockFirstSetContents)?$blockFirstSetContents:[]), SORT_REGULAR);
+        $productSampleContents = optional($product->sample_contents)->tags ;
+        if(!is_null($productSampleContents)){
+            $contentsIds =  array_values(array_unique(array_merge($contentsIds , $productSampleContents) , SORT_REGULAR));
+        }
+
+        if(!empty($contentsIds)){
+            $product->sample_contents =  $contentsIds;
+            $product->update();
+        }
 
         session()->put('success' , 'بلاک با موفقیت اضافه شد');
         return redirect()->back();
@@ -1011,7 +1018,16 @@ class ProductController extends Controller
 
         $product->blocks()->detach($block->id);
 
-        event(new BlockDetachedFromProduct($product , $block));
+        $blockContents = optional(optional(optional($block)->contents)->pluck('id'))->toArray();
+        $blockFirstSetContents = optional(optional(optional(optional($block->sets)->first())->contents)->pluck('id'))->toArray();
+        $contentsIds = array_unique(array_merge(!is_null($blockContents)?$blockContents:[] , !is_null($blockFirstSetContents)?$blockFirstSetContents:[]), SORT_REGULAR);
+        $productSampleContents = optional($product->sample_contents)->tags ;
+        if(!is_null($productSampleContents)){
+            $contentsIds = array_values(array_unique(array_diff($productSampleContents , $contentsIds ) , SORT_REGULAR));
+        }
+
+        $product->sample_contents =  $contentsIds;
+        $product->update();
 
         session()->put('success' , 'بلاک با موفقیت اضافه شد');
         return redirect()->back();
