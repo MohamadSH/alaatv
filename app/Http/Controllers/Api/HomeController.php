@@ -17,7 +17,7 @@ class HomeController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth:api' , ['except'=>['satra']]);
+        $this->middleware('auth:api' , ['except'=>[ 'satra' , 'bigUpload' ]]);
     }
 
     public function debug(Request $request)
