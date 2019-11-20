@@ -49,7 +49,7 @@ class HomeController extends Controller
         try {
             $dirname  = pathinfo($filePath, PATHINFO_DIRNAME);
             $ext      = pathinfo($originalFileName, PATHINFO_EXTENSION);
-            $fileName = basename($originalFileName, '.'.$ext).'_'.date('YmdHis').'.'.$ext;
+            $fileName = str_random(4).'.'.$ext;
 
             $newFileNameDir = $dirname.'/'.$fileName;
 
