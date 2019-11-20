@@ -55,6 +55,9 @@
                 {!! Form::file('file' , ['id' => 'file']) !!}
                 {!! Form::submit('آپلود' , ['class' => 'btn btn-primary']) !!}
             </div>
+            <div class = "form-groug" style="text-align: center">
+                <img src="https://cdn.alaatv.com/upload/alaaLoading-small.gif" id="loading" style="display:none">
+            </div>
             @if ($errors->has('file'))
                 <hr>
                 <div class = "form-group has-danger">
@@ -75,7 +78,7 @@
     <script>
         $(document).on('submit', '#uploadForm', function (e) {
             e.preventDefault();
-            // var loadingImage = "<img src = '/acm/extra/loading-arrow.gif' style='height: 20px;'>";
+            $('#loading').show();
             var form = $(this);
             var datastring = new FormData($(this)[0]);
             url = form.attr('action');
@@ -105,28 +108,39 @@
                 statusCode: {
                     //The status for when action was successful
                     200: function (response) {
-                        // console.log(response);
-                        // console.log(response.responseText);
                         toastr["success"]("محتوا با موقیت درج شد", "پیام سیستم");
+                        $('#loading').hide();
                     },
                     //The status for when the user is not authorized for making the request
                     403: function (response) {
-                        window.location.replace("/403");
+                        toastr["warning"]("دسترسی غیرمجاز", "خطای 403");
+                        $('#loading').hide();
                     },
                     404: function (response) {
-                        window.location.replace("/404");
+                        toastr["warning"]("آدرس مورد نظر یافت نشد", "خطای 404");
+                        $('#loading').hide();
                     },
                     //The status for when form data is not valid
                     422: function (response) {
-                        toastr["error"]("خطای ۴۲۲ . خطای ورودی ها", "پیام سیستم");
+                        toastr["error"]("ورودی های غیرمجاز", "خطای 422");
+                        $('#loading').hide();
                     },
                     //The status for when there is error php code
                     500: function (response) {
+                        toastr["error"]("خطای سرور", "خطای 500");
+                        $('#loading').hide();
                         console.log(response.responseText);
                     },
-                    //The status for when there is error php code
                     503: function (response) {
-                    }
+                        toastr["error"]("سرویس خارج از دسترس", "خطای 503");
+                        $('#loading').hide();
+                        console.log(response.responseText);
+                    },
+                    301: function (response) {
+                        toastr["error"]("آدرس مورد نظر ریدایرکت شده است", "خطای 301");
+                        $('#loading').hide();
+                        console.log(response.responseText);
+                    },
                 },
                 cache: false,
                 contentType: false,
