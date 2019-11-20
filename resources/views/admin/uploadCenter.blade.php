@@ -23,7 +23,13 @@
     <div id = "ajax-modal" class = "modal fade" tabindex = "-1"></div>
     {{--Ajax modal for panel startup --}}
 
-    @include("systemMessage.flash")
+    <div class = "alert alert-info alert-dismissible fade show" role = "alert" id="uploadedFileMessage" style="display:none">
+        <button type = "button" class = "close" data-dismiss = "alert" aria-label = "Close"></button>
+        <strong>
+                آدرس فایل شما: <br>
+            <span id="uploadedFilePath"></span>
+        </strong>
+    </div>
 
     <div class="row">
         <div class="col-lg-4 mx-auto">
@@ -79,6 +85,9 @@
         $(document).on('submit', '#uploadForm', function (e) {
             e.preventDefault();
             $('#loading').show();
+            $('#uploadedFileMessage').hide();
+            $('#uploadedFilePath').html('');
+
             var form = $(this);
             var datastring = new FormData($(this)[0]);
             url = form.attr('action');
@@ -109,6 +118,9 @@
                     //The status for when action was successful
                     200: function (response) {
                         toastr["success"]("محتوا با موقیت درج شد", "پیام سیستم");
+                        form[0].reset();
+                        $('#uploadedFileMessage').show();
+                        $('#uploadedFilePath').html(response.link);
                         $('#loading').hide();
                     },
                     //The status for when the user is not authorized for making the request
