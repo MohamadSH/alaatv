@@ -37,12 +37,14 @@ class HomeController extends Controller
 
     public function bigUpload(Request $request)
     {
+
         $filePath         = $request->header('X-File-Name');
         $originalFileName = $request->header('X-Dataname');
         $filePrefix       = '';
         $contentSetId     = $request->header('X-Dataid');
         $disk             = $request->header('X-Datatype');
         $done             = false;
+        $link = null;
 
         try {
             $dirname  = pathinfo($filePath, PATHINFO_DIRNAME);
@@ -117,14 +119,16 @@ class HomeController extends Controller
                 $filesystem = Storage::disk($disk);
                 //                Storage::putFileAs('photos', new File('/path/to/photo'), 'photo.jpg');
                 if ($filesystem->put($fileName, fopen($newFileNameDir, 'r+'))) {
+                    $link = 'https://cdn.alaatv.com/upload/uploadCenter/'.$fileName;
                     $done = true;
                 }
             }
 
             if ($done) {
                 return response()->json([
-                    'fileName' => $fileName,
-                    'prefix'   => $filePrefix,
+                    'fileName'  => $fileName,
+                    'link'      => $link,
+                    'prefix'    => $filePrefix,
                 ]);
             } else {
                 return response()->json([] , Response::HTTP_SERVICE_UNAVAILABLE);
