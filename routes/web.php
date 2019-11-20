@@ -289,7 +289,6 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('process_serpsim' , [AdminController::class, 'processSerpsim'] );
 
     Route::get('uuupppllloooodddd' , [HomeController::class, 'uploadCenter'] )->name('web.uploadCenter');
-    Route::post('uuupppllloooodddd' , [HomeController::class, 'upload'] )->name('web.upload');
 });
 Route::resource('cat', 'Web\CategoryController');
 
