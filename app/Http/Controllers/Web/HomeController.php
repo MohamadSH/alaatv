@@ -9,8 +9,11 @@ use Illuminate\Routing\Redirector;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Contracts\Encryption\DecryptException;
-use Illuminate\Support\Facades\{ Input, Config, Storage};
+use Illuminate\Support\Facades\{ Input, Config, Storage , File};
+use League\Flysystem\Filesystem;
+use League\Flysystem\Sftp\SftpAdapter;
 use App\{Notifications\sendLink,
+    UploadCenter,
     User,
     Product,
     Productfile,
@@ -586,12 +589,138 @@ class HomeController extends Controller
         }
     }
 
-    public function uploadCenter()
+    public function uploadCenter(Request $request)
     {
         $employees = User::whereHas('roles' , function ($q){
            $q->where('name' , config('constants.ROLE_UPLOAD_CENTER'));
         })->pluck('lastName' , 'id')->toArray();
-        return view('admin.uploadCenter' , compact('employees'));
+
+        $uploaderId = $request->get('uploader_id');
+        $files = UploadCenter::orderByDesc('created_at');
+        if(isset($uploaderId)){
+            $files->where('user_id' , $uploaderId);
+        }
+
+        $files = $files->get();
+
+        return view('admin.uploadCenter' , compact('employees' , 'files'));
+    }
+
+    public function bigUpload(Request $request)
+    {
+        $user = $request->user();
+
+        $filePath         = $request->header('X-File-Name');
+        $originalFileName = $request->header('X-Dataname');
+        $filePrefix       = '';
+        $contentSetId     = $request->header('X-Dataid');
+        $disk             = $request->header('X-Datatype');
+        $done             = false;
+        $link = null;
+
+        try {
+            $dirname  = pathinfo($filePath, PATHINFO_DIRNAME);
+            $ext      = pathinfo($originalFileName, PATHINFO_EXTENSION);
+            $fileName = str_random(4).'.'.$ext;
+
+            $newFileNameDir = $dirname.'/'.$fileName;
+
+            if (File::exists($newFileNameDir)) {
+                File::delete($newFileNameDir);
+            }
+            File::move($filePath, $newFileNameDir);
+
+            if (strcmp($disk, 'product') == 0) {
+                if ($ext == 'mp4') {
+                    $directory = 'video';
+                } else {
+                    if ($ext == 'pdf') {
+                        $directory = 'pamphlet';
+                    }
+                }
+
+                $adapter    = new SftpAdapter([
+                    'host'          => config('constants.SFTP_HOST'),
+                    'port'          => config('constants.SFTP_PORT'),
+                    'username'      => config('constants.SFTP_USERNAME'),
+                    'password'      => config('constants.SFTP_PASSSWORD'),
+                    'privateKey'    => config('constants.SFTP_PRIVATE_KEY_PATH'),
+                    'root'          => config('constants.SFTP_ROOT').'/private/'.$contentSetId.'/',
+                    'timeout'       => config('constants.SFTP_TIMEOUT'),
+                    'directoryPerm' => 0755,
+                ]);
+                $filesystem = new Filesystem($adapter);
+                if (isset($directory)) {
+                    if (!$filesystem->has($directory)) {
+                        $filesystem->createDir($directory);
+                    }
+
+                    $filePrefix = $directory.'/';
+                    $filesystem = $filesystem->get($directory);
+                    $path       = $filesystem->getPath();
+                    $filesystem->setPath($path.'/'.$fileName);
+                    if ($filesystem->put(fopen($newFileNameDir, 'r+'))) {
+                        $done = true;
+                    }
+                } else {
+                    if ($filesystem->put($fileName, fopen($newFileNameDir, 'r+'))) {
+                        $done = true;
+                    }
+                }
+            }
+            elseif (strcmp($disk, 'video') == 0) {
+                $adapter    = new SftpAdapter([
+                    'host'          => config('constants.SFTP_HOST'),
+                    'port'          => config('constants.SFTP_PORT'),
+                    'username'      => config('constants.SFTP_USERNAME'),
+                    'password'      => config('constants.SFTP_PASSSWORD'),
+                    'privateKey'    => config('constants.SFTP_PRIVATE_KEY_PATH'),
+                    // example:  /alaa_media/cdn/media/203/HD_720p , /alaa_media/cdn/media/thumbnails/203/
+                    'root'          => config('constants.DOWNLOAD_SERVER_ROOT').config('constants.DOWNLOAD_SERVER_MEDIA_PARTIAL_PATH').$contentSetId,
+                    'timeout'       => config('constants.SFTP_TIMEOUT'),
+                    'directoryPerm' => 0755,
+                ]);
+                $filesystem = new Filesystem($adapter);
+                if ($filesystem->put($originalFileName, fopen($newFileNameDir, 'r+'))) {
+                    $done = true;
+                    // example:  https://cdn.sanatisharif.ir/media/203/hq/203001dtgr.mp4
+                    $fileName = config('constants.DOWNLOAD_SERVER_PROTOCOL').config('constants.CDN_SERVER_NAME').config('constants.DOWNLOAD_SERVER_MEDIA_PARTIAL_PATH').$contentSetId.$originalFileName;
+                }
+            }
+            else {
+                $filesystem = Storage::disk($disk);
+                //                Storage::putFileAs('photos', new File('/path/to/photo'), 'photo.jpg');
+                if ($filesystem->put($fileName, fopen($newFileNameDir, 'r+'))) {
+                    $relativePath = 'upload/u/'.$fileName;
+                    $link = config('constants.DOWNLOAD_SERVER_PROTOCOL').config('constants.CDN_SERVER_NAME').'/'.$relativePath;
+                    if(isset($user)){
+                        UploadCenter::create([
+                            'user_id' => $user->id,
+                            'link' => $relativePath
+                        ]);
+                    }
+
+                    $done = true;
+                }
+            }
+
+            if ($done) {
+                return response()->json([
+                    'fileName'  => $fileName,
+                    'link'      => $link,
+                    'prefix'    => $filePrefix,
+                ]);
+            } else {
+                return response()->json([] , Response::HTTP_SERVICE_UNAVAILABLE);
+            }
+        } catch (Exception $e) {
+            return response()->json([
+                'message' => 'unexpected error',
+                'error'   => $e->getMessage(),
+                'line'    => $e->getLine(),
+                'file'    => $e->getFile(),
+            ] , Response::HTTP_SERVICE_UNAVAILABLE);
+        }
     }
 
     public function smsLink(Request $request)
