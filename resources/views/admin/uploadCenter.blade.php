@@ -117,6 +117,59 @@
     </div>
         </div>
     </div>
+
+    @permission((config('constants.LIST_UPLOAD_CENTER_FILES')))
+    <div class="row">
+        <div class="col-lg-12">
+            <div class = "m-portlet m-portlet--mobile m-portlet--body-progress-">
+                <div class="m-portlet__head">
+                    <div class="m-portlet__head-caption">
+                        <div class="m-portlet__head-title">
+                            <span class="m-portlet__head-icon">
+                                <i class="fa fa-table"></i>
+                            </span>
+                            <h3 class="m-portlet__head-text">
+                                جدول فایل ها
+                            </h3>
+                        </div>
+                    </div>
+                </div>
+                <div class = "m-portlet__body">
+                    {!! Form::open([ 'method'=>'GET' , 'url'=>route('web.uploadCenter')  ]) !!}
+                    <div class = "form-group">
+                        {!! Form::select('uploader_id', $employees ,null , ['class' => 'mt-multiselect btn btn-default a--full-width' , 'data-label' => 'left' , 'data-width' => '100%' , 'data-filter'=>'true' , 'data-height'=>'200', 'title'=>'ارسال به']) !!}
+                        {!! Form::submit('فیلتر کن' , ['class' => 'btn btn-primary a--full-width']) !!}
+                    </div>
+                    {!! Form::close() !!}
+                    <hr>
+                    <h3 style="text-align: center">
+                        تعداد فایل ها : {{$files->count()}}
+                    </h3>
+                    <table class="table table-striped table-bordered table-hover dt-responsive" width="100%" id="uploadedFilesTable">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>لینک</th>
+                                <th>آپلود کننده</th>
+                                <th>زمان آپلود</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        @foreach($files as $file)
+                            <tr>
+                                <td>{{$file->id}}</td>
+                                <td>@if(isset($file->user_id)) {{$file->link}} @else <span class = "m-badge m-badge--danger m-badge--wide">ندارد</span>  @endif</td>
+                                <td>@if(isset($file->user_id)) {{$file->user->full_name}} @else <span class = "m-badge m-badge--danger m-badge--wide">نامشخص</span> @endif</td>
+                                <td><label style="direction: ltr">{{$file->CreatedAt_Jalali_WithTime()}}</label></td>
+                            </tr>
+                        @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    @endpermission
 @endsection
 
 @section('page-js')
