@@ -2,28 +2,32 @@
 
 namespace App;
 
+use Eloquent;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Carbon;
+
 /**
  * App\Dayofweek
  *
- * @property mixed id
  * @property int $id
  * @property string|null $name نام روز
  * @property string|null $display_name نام قابل نمایش روز
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property \Illuminate\Support\Carbon|null $deleted_at
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Live[] $lives
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property Carbon|null $deleted_at
+ * @property-read Collection|Live[] $lives
  * @property-read int|null $lives_count
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Dayofweek newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Dayofweek newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Dayofweek query()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Dayofweek whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Dayofweek whereDeletedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Dayofweek whereDisplayName($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Dayofweek whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Dayofweek whereName($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Dayofweek whereUpdatedAt($value)
- * @mixin \Eloquent
+ * @method static Builder|Dayofweek newModelQuery()
+ * @method static Builder|Dayofweek newQuery()
+ * @method static Builder|Dayofweek query()
+ * @method static Builder|Dayofweek whereCreatedAt($value)
+ * @method static Builder|Dayofweek whereDeletedAt($value)
+ * @method static Builder|Dayofweek whereDisplayName($value)
+ * @method static Builder|Dayofweek whereId($value)
+ * @method static Builder|Dayofweek whereName($value)
+ * @method static Builder|Dayofweek whereUpdatedAt($value)
+ * @mixin Eloquent
  */
 class Dayofweek extends BaseModel
 {
