@@ -6,12 +6,10 @@ use Exception;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\{Request, Response};
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
-use Illuminate\Support\{Arr, Collection, Facades\File, Facades\Storage};
+use Illuminate\Support\{Arr, Collection, Facades\Cache, Facades\File, Facades\Storage};
 use App\{Adapter\AlaaSftpAdapter,
     Block,
     Bon,
-    Events\SendProductIntroducingBlockTags,
-    Events\BlockDetachedFromProduct,
     Product,
     Attributeset,
     Attributetype,
@@ -991,9 +989,7 @@ class ProductController extends Controller
 
         $product->blocks()->attach($block->id);
 
-        $blockContents = optional(optional(optional($block)->contents)->pluck('id'))->toArray();
-        $blockFirstSetContents = optional(optional(optional(optional($block->sets)->first())->contents)->pluck('id'))->toArray();
-        $contentsIds = array_unique(array_merge(!is_null($blockContents)?$blockContents:[] , !is_null($blockFirstSetContents)?$blockFirstSetContents:[]), SORT_REGULAR);
+        $contentsIds = $this->getProductsSampleContentsFromBlock($block);
         $productSampleContents = optional($product->sample_contents)->tags ;
         if(!is_null($productSampleContents)){
             $contentsIds =  array_values(array_unique(array_merge($contentsIds , $productSampleContents) , SORT_REGULAR));
@@ -1003,6 +999,8 @@ class ProductController extends Controller
             $product->sample_contents =  $contentsIds;
             $product->update();
         }
+
+        Cache::tags(['product_'.$product->id ,])->flush();
 
         session()->put('success' , 'بلاک با موفقیت اضافه شد');
         return redirect()->back();
@@ -1018,9 +1016,7 @@ class ProductController extends Controller
 
         $product->blocks()->detach($block->id);
 
-        $blockContents = optional(optional(optional($block)->contents)->pluck('id'))->toArray();
-        $blockFirstSetContents = optional(optional(optional(optional($block->sets)->first())->contents)->pluck('id'))->toArray();
-        $contentsIds = array_unique(array_merge(!is_null($blockContents)?$blockContents:[] , !is_null($blockFirstSetContents)?$blockFirstSetContents:[]), SORT_REGULAR);
+        $contentsIds = $this->getProductsSampleContentsFromBlock($block);
         $productSampleContents = optional($product->sample_contents)->tags ;
         if(!is_null($productSampleContents)){
             $contentsIds = array_values(array_unique(array_diff($productSampleContents , $contentsIds ) , SORT_REGULAR));
@@ -1028,6 +1024,8 @@ class ProductController extends Controller
 
         $product->sample_contents =  $contentsIds;
         $product->update();
+
+        Cache::tags(['product_'.$product->id ,])->flush();
 
         session()->put('success' , 'بلاک با موفقیت اضافه شد');
         return redirect()->back();
@@ -1118,5 +1116,16 @@ class ProductController extends Controller
                 'bonPlus'  => $bonPlus,
             ]);
         }
+    }
+
+    /**
+     * @param  Block $block
+     * @return array
+     */
+    private function getProductsSampleContentsFromBlock( Block  $block): array
+    {
+        $blockContents = optional(optional(optional($block)->contents)->pluck('id'))->toArray();
+        $blockFirstSetContents = optional(optional(optional(optional($block->sets)->first())->contents)->pluck('id'))->toArray();
+        return array_unique(array_merge(!is_null($blockContents) ? $blockContents : [], !is_null($blockFirstSetContents) ? $blockFirstSetContents : []), SORT_REGULAR);
     }
 }
