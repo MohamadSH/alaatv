@@ -97,11 +97,11 @@
             </ul>
             <hr>
             {!! Form::open(['files'=>true , 'method'=>'POST' , 'url'=>'/big' , 'accept-charset'=>'UTF-8' , 'id' =>'uploadForm' ]) !!}
-            <div class = "form-group">
+            <div class = "form-group" style="text-align: center">
                 {!! Form::file('file' , ['id' => 'file']) !!}
-                {!! Form::submit('آپلود' , ['class' => 'btn btn-primary']) !!}
+                {!! Form::submit('آپلود' , ['class' => 'btn btn-primary a--full-width']) !!}
             </div>
-            <div class = "form-groug" style="text-align: center">
+            <div class = "form-group" style="text-align: center">
                 <img src="https://cdn.alaatv.com/upload/alaaLoading-small.gif" id="loading" style="display:none">
             </div>
             @if ($errors->has('file'))
