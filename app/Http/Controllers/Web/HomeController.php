@@ -693,12 +693,14 @@ class HomeController extends Controller
                 if ($filesystem->put($fileName, fopen($newFileNameDir, 'r+'))) {
                     $relativePath = 'upload/u/'.$fileName;
                     $link = config('constants.DOWNLOAD_SERVER_PROTOCOL').config('constants.CDN_SERVER_NAME').'/'.$relativePath;
+                    $userId = null;
                     if(isset($user)){
-                        UploadCenter::create([
-                            'user_id' => $user->id,
-                            'link' => $relativePath
-                        ]);
+                       $userId = $user->id;
                     }
+                    UploadCenter::create([
+                        'user_id' => $userId,
+                        'link' => $relativePath
+                    ]);
 
                     $done = true;
                 }
