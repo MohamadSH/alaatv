@@ -158,7 +158,7 @@
                         @foreach($files as $file)
                             <tr>
                                 <td>{{$file->id}}</td>
-                                <td>@if(isset($file->user_id)) {{$file->link}} @else <span class = "m-badge m-badge--danger m-badge--wide">ندارد</span>  @endif</td>
+                                <td>@if(isset($file->user_id)) <a target="_blank" href="{{$file->link}}">{{$file->link}}</a> @else <span class = "m-badge m-badge--danger m-badge--wide">ندارد</span>  @endif</td>
                                 <td>@if(isset($file->user_id)) {{$file->user->full_name}} @else <span class = "m-badge m-badge--danger m-badge--wide">نامشخص</span> @endif</td>
                                 <td><label style="direction: ltr">{{$file->CreatedAt_Jalali_WithTime()}}</label></td>
                             </tr>
@@ -222,7 +222,7 @@
                         toastr["success"]("محتوا با موقیت درج شد", "پیام سیستم");
                         form[0].reset();
                         $('#uploadedFileMessage').show();
-                        $('#uploadedFilePath').html('<a href="'+link+'">'+link+'</a>');
+                        $('#uploadedFilePath').html('<a target="_blank" href="'+link+'">'+link+'</a>');
                         if ( $( '#smsLink' ).length ) {
                             $('#smsLink').val(link);
                         }
