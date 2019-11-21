@@ -289,6 +289,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('process_serpsim' , [AdminController::class, 'processSerpsim'] );
 
     Route::get('uuupppllloooodddd' , [HomeController::class, 'uploadCenter'] )->name('web.uploadCenter');
+    Route::post('bigUUUUpppppllllooooooad' , [HomeController::class, 'bigUpload'] )->name('api.bigUpload');
+
     Route::post('smsLink' , [HomeController::class, 'smsLink'] )->name('web.sms.link');
 });
 Route::resource('cat', 'Web\CategoryController');

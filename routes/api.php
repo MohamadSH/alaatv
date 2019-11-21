@@ -29,7 +29,6 @@ Route::group(['prefix' => 'v1'], function () {
 
     Route::get('debug', [HomeController::class, 'debug'])->name('api.debug');
     Route::get('authTest', [HomeController::class, 'authTest'])->name('api.authTest');
-    Route::post('big' , [HomeController::class, 'bigUpload'] )->name('api.bigUpload');
 
     Route::get('c/{c}', 'Api\ContentController@show');
     Route::get('product/{product}', 'Api\ProductController@show');
