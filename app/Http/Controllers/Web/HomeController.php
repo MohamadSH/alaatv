@@ -10,7 +10,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Contracts\Encryption\DecryptException;
 use Illuminate\Support\Facades\{ Input, Config, Storage};
-use App\{
+use App\{Notifications\sendLink,
     User,
     Product,
     Productfile,
@@ -64,6 +64,7 @@ class HomeController extends Controller
         $this->middleware('permission:'.config('constants.UPLOAD_CENTER_ACCESS'), ['only' => 'uploadCenter']);
         $this->middleware('permission:'.config('constants.UPLOAD_CENTER_ACCESS'), ['only' => 'upload']);
         $this->middleware('permission:'.config('constants.UPLOAD_CENTER_ACCESS'), ['only' => 'bigUpload']);
+        $this->middleware('permission:'.config('constants.SEND_SMS_TO_USER_ACCESS'), ['only' => 'smsLink']);
     }
 
     public function debug(Request $request, User $user = null)
@@ -587,7 +588,37 @@ class HomeController extends Controller
 
     public function uploadCenter()
     {
-        return view('admin.uploadCenter');
+        $employees = User::whereHas('roles' , function ($q){
+           $q->where('name' , 'employee');
+        })->pluck('lastName' , 'id')->toArray();
+        return view('admin.uploadCenter' , compact('employees'));
+    }
+
+    public function smsLink(Request $request)
+    {
+        $user = User::Find($request->get('employee_id'));
+        if(is_null($user)){
+            return response()->json([
+                'error'=>[
+                    'message' => 'کاربر مورد نظر یافت نشد'
+                ]
+            ] , Response::HTTP_UNPROCESSABLE_ENTITY);
+        }
+
+        $link = $request->get('link');
+        if(is_null($link)){
+            return response()->json([
+                'error'=>[
+                    'message' => 'ارسال لینک الزامی است'
+                ]
+            ] , Response::HTTP_UNPROCESSABLE_ENTITY);
+        }
+
+        $user->notify(new sendLink($link));
+
+        return response()->json([
+            'message' => 'پیامک با موفقیت ارسال شد'
+        ] );
     }
 
     /**
