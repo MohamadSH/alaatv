@@ -89,7 +89,7 @@
         <div class = "m-portlet__body">
             <ul class="font-weight-bold m--font-info">
                 <li>
-                فرمت های مجاز فایل : pdf, png, jpg , rar
+                فرمت های مجاز فایل : pdf, png, jpg , zip , rar
                 </li>
                 <li>
                 حداکثر حجم مجاز: 100 مگ
