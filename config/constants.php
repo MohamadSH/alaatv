@@ -18,6 +18,7 @@ return [
     'ROLE_TEACHER_ID'            => 10,
     'BOOK_POST_MAN_ROLE'         => 'bookPostMan',
     'SHARIF_SCHOOL_REGISTER'     => 'sharifSchoolRegister',
+    'ROLE_UPLOAD_CENTER'         => 'uploadCenter',
 
     // Permissions :
     'ADMIN_PANEL_ACCESS'         => 'adminPanel',
