@@ -67,6 +67,10 @@
                         <span class="m-badge m-badge--light m-badge--bordered m-badge-bordered--info">8</span>
                         استفاده گروهی و یا انتشار محصولات آلاء شرعا حرام و از نظر اخلاقی غیر مجاز می باشد.
                     </div>
+                    <div class="m--margin-bottom-10">
+                        <span class="m-badge m-badge--light m-badge--bordered m-badge-bordered--info">9</span>
+                        آلاء خود را امین اطلاعات کاربران می داند و از آنها برای انجام هیچ پردازشی چه توسط خود و چه توسط سازمان های همکار استفاده نمی کند.
+                    </div>
 
 
 
