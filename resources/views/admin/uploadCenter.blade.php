@@ -212,7 +212,6 @@
                 url: url,
                 data: datastring,
                 headers:{
-                    'X-Datatype' : 'uploadCenterSftp',
                     'X-Dataname' : fileName,
                 },
                 statusCode: {
