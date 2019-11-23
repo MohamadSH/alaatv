@@ -89,7 +89,7 @@
         <div class = "m-portlet__body">
             <ul class="font-weight-bold m--font-info">
                 <li>
-                فرمت های مجاز فایل : pdf, png , jpg , zip , rar
+                فرمت های مجاز فایل : pdf, png , jpg , zip , rar , psd , doc
                 </li>
                 <li>
                 حداکثر حجم مجاز: 100 مگ
@@ -212,7 +212,6 @@
                 url: url,
                 data: datastring,
                 headers:{
-                    'X-Datatype' : 'uploadCenterSftp',
                     'X-Dataname' : fileName,
                 },
                 statusCode: {
