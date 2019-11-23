@@ -109,15 +109,7 @@
                                                     <a target="_blank" class="m-menu__link" href="{{ urldecode(route('content.index', 'tags[]=نظام_آموزشی_جدید&tags[]=دوازدهم&tags[]=کنکور&tags[]=رشته_ریاضی&tags[]=حسابان&tags[]=ریاضی_پایه')) }}">
                                                         <i class="m-menu__link-bullet fa fa-book-open"><span></span></i>
                                                         <span class="m-menu__link-text">
-                                                            حسابان
-                                                        </span>
-                                                    </a>
-                                                </li>
-                                                <li class="m-menu__item " aria-haspopup="true">
-                                                    <a target="_blank" class="m-menu__link" href="{{ urldecode(route('content.index', 'tags[]=نظام_آموزشی_جدید&tags[]=دوازدهم&tags[]=کنکور&tags[]=رشته_ریاضی&tags[]=رشته_تجربی&tags[]=حسابان&tags[]=ریاضی_پایه')) }}">
-                                                        <i class="m-menu__link-bullet fa fa-book-open"><span></span></i>
-                                                        <span class="m-menu__link-text">
-                                                            ریاضی پایه
+                                                            حسابان و ریاضی پایه
                                                         </span>
                                                     </a>
                                                 </li>
