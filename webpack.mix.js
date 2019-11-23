@@ -77,14 +77,14 @@ class Mix {
 
     mixAll() {
         this.mixBase();
-        this.mixPages();
-        this.mixUser();
-        this.mixLanding();
+        // this.mixPages();
+        // this.mixUser();
+        // this.mixLanding();
         this.mixProduct();
-        this.mixPageContentShow();
-        this.mixPageSetShow();
-        this.mixCheckout();
-        this.mixAdmin();
+        // this.mixPageContentShow();
+        // this.mixPageSetShow();
+        // this.mixCheckout();
+        // this.mixAdmin();
         this.mixCopyDirectory();
 
         // if (this.mix.inProduction()) {
@@ -487,15 +487,17 @@ class Mix {
     }
     mixLanding8() {
         this.mixCssAndJs([
-                'node_modules/flipclock/dist/flipclock.css',
+                // 'node_modules/metrojs/release/MetroJs.Full/MetroJs.min.css',
+                // 'node_modules/flipclock/dist/flipclock.css',
                 'public/acm/AlaatvCustomFiles/components/imageWithCaption/style.css',
                 'public/acm/AlaatvCustomFiles/components/ribbon/style.css',
                 'public/acm/AlaatvCustomFiles/css/page-product-landing8.css',
             ],
             'public/css/page-landing8.css',
             [
-                'node_modules/flipclock/dist/flipclock.js',
-                'public/acm/AlaatvCustomFiles/js/page-product-landing8.js',
+                'node_modules/metrojs/release/MetroJs.Full/MetroJs.min.js',
+                // 'node_modules/flipclock/dist/flipclock.js',
+                // 'public/acm/AlaatvCustomFiles/js/page-product-landing8.js',
             ],
             'public/js/page-landing8.js'
         );

@@ -2,6 +2,7 @@
 
 @section('page-css')
     <link href="{{ mix('/css/product-show.css') }}" rel="stylesheet" type="text/css"/>
+    <link href="{{ asset('/acm/AlaatvCustomFiles/components/customSelect/style.css') }}" rel="stylesheet" type="text/css"/>
     <style>
         @if(
             (!isset($block) || !isset($block->contents) || $block->contents->count() === 0) &&
@@ -87,142 +88,239 @@
 @endsection
 
 @section('content')
-
+    
     <div class="row">
         <div class="col">
             @include('systemMessage.flash')
         </div>
     </div>
+    
+    @include('product.partials.raheAbrisham.pictureAndMap')
 
-    <div class="row" id="a_top_section">
-        <div class="col">
-            <!--begin::Portlet-->
-            <div class="m-portlet">
-                <div class="m-portlet__body">
+    @include('product.partials.raheAbrisham.descriptionBox', [
+        'title' => 'راهنمایی آلایی هایی که تازه ثبت نام کردند',
+        'closeIcon' => true,
+        'content' => view('product.partials.raheAbrisham.helpMessage')
+    ])
 
-                    <input type="hidden" name="favoriteActionUrl" value="{{ route('web.mark.favorite.product', [ 'product' => $product->id ]) }}">
-                    <input type="hidden" name="unFavoriteActionUrl" value="{{ route('web.mark.unfavorite.product', [ 'product' => $product->id ]) }}">
+    @include('product.partials.raheAbrisham.entekhabeFarsang')
+    
+    @include('product.partials.raheAbrisham.descriptionBox', [
+        'title' => 'توضیح مراحل راه ابریشم',
+        'content' => 'این نمونه متن توضیحات راه ابریشم هست که در این کادر قرار میگیره، بصورت مختصر و مفید تمام مراحل راه ابریشم و اهداف طی فرایند در این دوره آموزشی دانلودی باید توضیح داده شود. در حد دو خط توضیحات برای پیش نماش کافیست و باقی مطالب در ادامه مطلب و کادر گسترده نمایش داده میشود ...',
+        'btnMoreText' => 'مطالعه کامل توضیحات',
+    ])
 
-                    <div class="btnFavorite">
-                        <img class="btnFavorite-on {{ ($isFavored) ? '' : 'a--d-none' }}" src="https://cdn.alaatv.com/upload/fav-on.svg" width="50">
-                        <img class="btnFavorite-off {{ ($isFavored) ? 'a--d-none' : '' }}" src="https://cdn.alaatv.com/upload/fav-off.svg" width="50">
-                    </div>
+    @include('product.partials.raheAbrisham.descriptionBox', [
+        'title' => 'راهنمای استفاده از این دوره',
+        'content' => 'این نمونه متن توضیحات راه ابریشم هست که در این کادر قرار میگیره، بصورت مختصر و مفید تمام مراحل راه ابریشم و اهداف طی فرایند در این دوره آموزشی دانلودی باید توضیح داده شود. در حد دو خط توضیحات برای پیش نماش کافیست و باقی مطالب در ادامه مطلب و کادر گسترده نمایش داده میشود ...',
+        'btnMoreText' => 'مطالعه کامل توضیحات',
+    ])
 
-                    <!--begin::Section-->
-                    <div class="m-section m-section--last">
-                        <div class="m-section__content">
-                            <!--begin::Preview-->
-                            <div class="row">
-                                <div class="col-lg-3">
-                                    <div class="m--margin-bottom-45">
-                                        <img src="{{$product->photo}}?w=400&h=400" alt="عکس محصول@if(isset($product->name)) {{$product->name}} @endif" class="img-fluid m--marginless a--full-width"/>
-                                        @if(isset($product->bons->first()->pivot->bonPlus))
-                                            <div class="m-alert m-alert--icon m-alert--air m-alert--square alert alert-success alert-dismissible fade show" role="alert">
-                                                <div class="m-alert__icon">
-                                                    <i class="flaticon-interface-9"></i>
+    @include('product.partials.raheAbrisham.descriptionBox', [
+        'title' => 'نحوه دریافت هدایای ارزشمند آموزشی ویژه شما عزیزان',
+        'content' => 'این نمونه متن توضیحات راه ابریشم هست که در این کادر قرار میگیره، بصورت مختصر و مفید تمام مراحل راه ابریشم و اهداف طی فرایند در این دوره آموزشی دانلودی باید توضیح داده شود. در حد دو خط توضیحات برای پیش نماش کافیست و باقی مطالب در ادامه مطلب و کادر گسترده نمایش داده میشود ...',
+        'btnMoreText' => 'مطالعه کامل توضیحات',
+    ])
+
+    @include('product.partials.raheAbrisham.descriptionBox', [
+        'title' => 'سوالات متداول درباره این دوره',
+        'color' => 'transparentBack',
+        'content' => view('product.partials.raheAbrisham.soalateMotedavel')
+    ])
+
+    @include('product.partials.raheAbrisham.descriptionBox', [
+        'title' => 'توضیحات لحظه ای و آخرین تغییرات',
+        'color' => 'red',
+        'content' => view('product.partials.raheAbrisham.liveDescription')
+    ])
+    
+    @if(false)
+    
+        <div class="row" id="a_top_section">
+            <div class="col">
+                <!--begin::Portlet-->
+                <div class="m-portlet">
+                    <div class="m-portlet__body">
+    
+                        <input type="hidden" name="favoriteActionUrl" value="{{ route('web.mark.favorite.product', [ 'product' => $product->id ]) }}">
+                        <input type="hidden" name="unFavoriteActionUrl" value="{{ route('web.mark.unfavorite.product', [ 'product' => $product->id ]) }}">
+    
+                        <div class="btnFavorite">
+                            <img class="btnFavorite-on {{ ($isFavored) ? '' : 'a--d-none' }}" src="https://cdn.alaatv.com/upload/fav-on.svg" width="50">
+                            <img class="btnFavorite-off {{ ($isFavored) ? 'a--d-none' : '' }}" src="https://cdn.alaatv.com/upload/fav-off.svg" width="50">
+                        </div>
+    
+                        <!--begin::Section-->
+                        <div class="m-section m-section--last">
+                            <div class="m-section__content">
+                                <!--begin::Preview-->
+                                <div class="row">
+                                    <div class="col-lg-3">
+                                        <div class="m--margin-bottom-45">
+                                            <img src="{{$product->photo}}?w=400&h=400" alt="عکس محصول@if(isset($product->name)) {{$product->name}} @endif" class="img-fluid m--marginless a--full-width"/>
+                                            @if(isset($product->bons->first()->pivot->bonPlus))
+                                                <div class="m-alert m-alert--icon m-alert--air m-alert--square alert alert-success alert-dismissible fade show" role="alert">
+                                                    <div class="m-alert__icon">
+                                                        <i class="flaticon-interface-9"></i>
+                                                    </div>
+                                                    <div class="m-alert__text">
+                                                        <strong>{{ $product->bons->first()->pivot->bonPlus }}+ آلاء بن</strong>
+                                                    </div>
                                                 </div>
-                                                <div class="m-alert__text">
-                                                    <strong>{{ $product->bons->first()->pivot->bonPlus }}+ آلاء بن</strong>
+                                            @else
+                                                <div class="m-alert m-alert--icon m-alert--air m-alert--square alert alert-warning alert-dismissible fade show" role="alert">
+                                                    <div class="m-alert__icon">
+                                                        <i class="flaticon-interface-9"></i>
+                                                    </div>
+                                                    <div class="m-alert__text">
+                                                        این محصول بن ندارد
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        @else
-                                            <div class="m-alert m-alert--icon m-alert--air m-alert--square alert alert-warning alert-dismissible fade show" role="alert">
-                                                <div class="m-alert__icon">
-                                                    <i class="flaticon-interface-9"></i>
-                                                </div>
-                                                <div class="m-alert__text">
-                                                    این محصول بن ندارد
-                                                </div>
-                                            </div>
-                                        @endif
+                                            @endif
+                                        </div>
+    
                                     </div>
-
-                                </div>
-                                <div class="col">
-
-                                    {{--ویژگی ها و دارای --}}
-                                    <div class="row">
-                                        @if(optional(optional(optional($product->attributes)->get('information'))->where('control', 'simple'))->count()>0 ||  optional(optional( optional($product->attributes)->get('main'))->where('control', 'simple'))->count()>0)
-                                            <div class="col-12
-                                            @if(optional(optional(optional($product->attributes)->get('information'))->where('control', 'checkBox'))->count())
-                                                    col-md-6
-                                            @endif">
-
-                                                <div class="m-portlet m-portlet--bordered m-portlet--full-height productAttributes">
-                                                    <div class="m-portlet__head">
-                                                        <div class="m-portlet__head-caption">
-                                                            <div class="m-portlet__head-title">
-                                                                <h3 class="m-portlet__head-text">
-                                                                    ویژگی های محصول {{$product->name}}
-                                                                </h3>
+                                    <div class="col">
+    
+                                        {{--ویژگی ها و دارای --}}
+                                        <div class="row">
+                                            @if(optional(optional(optional($product->attributes)->get('information'))->where('control', 'simple'))->count()>0 ||  optional(optional( optional($product->attributes)->get('main'))->where('control', 'simple'))->count()>0)
+                                                <div class="col-12
+                                                @if(optional(optional(optional($product->attributes)->get('information'))->where('control', 'checkBox'))->count())
+                                                        col-md-6
+                                                @endif">
+    
+                                                    <div class="m-portlet m-portlet--bordered m-portlet--full-height productAttributes">
+                                                        <div class="m-portlet__head">
+                                                            <div class="m-portlet__head-caption">
+                                                                <div class="m-portlet__head-title">
+                                                                    <h3 class="m-portlet__head-text">
+                                                                        ویژگی های محصول {{$product->name}}
+                                                                    </h3>
+                                                                </div>
                                                             </div>
                                                         </div>
-                                                    </div>
-                                                    <div class="m-portlet__body m--padding-top-5 m--padding-bottom-5 m--padding-right-10 m--padding-left-10">
-                                                        <!--begin::m-widget4-->
-                                                        <div class="m-widget4">
-
-                                                            @if(optional(optional(optional($product->attributes)->get('information'))->where('control', 'simple'))->count())
-                                                                @foreach($product->attributes->get('information')->where('control', 'simple') as $key => $informationItem)
-                                                                    @if(count($informationItem->data) > 1)
-                                                                        <div class="m-widget4__item m--padding-top-5 m--padding-bottom-5">
-                                                                            <div class="m-widget4__img m-widget4__img--icon">
-                                                                                <i class="flaticon-like m--font-info"></i>
-                                                                            </div>
-                                                                            <div class="m-widget4__info">
-                                                                                <span class="m-widget4__text">
-                                                                                    {{ $informationItem->title }}:
-                                                                                </span>
-                                                                            </div>
-                                                                        </div>
-                                                                    @endif
-                                                                    @foreach($informationItem->data as $key => $informationItemData)
-
-                                                                        <div class="m-widget4__item  m--padding-top-5 m--padding-bottom-5">
-                                                                            <div class="m-widget4__img m-widget4__img--icon">
-                                                                                @if(count($informationItem->data) === 1)
+                                                        <div class="m-portlet__body m--padding-top-5 m--padding-bottom-5 m--padding-right-10 m--padding-left-10">
+                                                            <!--begin::m-widget4-->
+                                                            <div class="m-widget4">
+    
+                                                                @if(optional(optional(optional($product->attributes)->get('information'))->where('control', 'simple'))->count())
+                                                                    @foreach($product->attributes->get('information')->where('control', 'simple') as $key => $informationItem)
+                                                                        @if(count($informationItem->data) > 1)
+                                                                            <div class="m-widget4__item m--padding-top-5 m--padding-bottom-5">
+                                                                                <div class="m-widget4__img m-widget4__img--icon">
                                                                                     <i class="flaticon-like m--font-info"></i>
-                                                                                @else
-                                                                                    <i class="flaticon-interface-5 m--font-info"></i>
+                                                                                </div>
+                                                                                <div class="m-widget4__info">
+                                                                                    <span class="m-widget4__text">
+                                                                                        {{ $informationItem->title }}:
+                                                                                    </span>
+                                                                                </div>
+                                                                            </div>
+                                                                        @endif
+                                                                        @foreach($informationItem->data as $key => $informationItemData)
+    
+                                                                            <div class="m-widget4__item  m--padding-top-5 m--padding-bottom-5">
+                                                                                <div class="m-widget4__img m-widget4__img--icon">
+                                                                                    @if(count($informationItem->data) === 1)
+                                                                                        <i class="flaticon-like m--font-info"></i>
+                                                                                    @else
+                                                                                        <i class="flaticon-interface-5 m--font-info"></i>
+                                                                                    @endif
+                                                                                </div>
+                                                                                <div class="m-widget4__info">
+                                                                                    <span class="m-widget4__text">
+                                                                                        @if(count($informationItem->data) > 1)
+                                                                                           {{ $informationItemData->name }}
+                                                                                        @else
+                                                                                            {{ $informationItem->title }}: {{ $informationItemData->name }}
+                                                                                        @endif
+                                                                                    </span>
+                                                                                </div>
+                                                                            </div>
+    
+                                                                        @endforeach
+                                                                    @endforeach
+                                                                @endif
+    
+                                                                @if(optional($product->attributes)->get('main') != null && $product->attributes->get('main')->where('control', 'simple'))
+                                                                    @foreach($product->attributes->get('main')->where('control', 'simple') as $key => $informationItem)
+                                                                        @if(count($informationItem->data) > 1)
+                                                                            <div class="m-widget4__item m--padding-top-5 m--padding-bottom-5">
+                                                                                <div class="m-widget4__img m-widget4__img--icon">
+                                                                                    <i class="flaticon-like m--font-warning"></i>
+                                                                                </div>
+                                                                                <div class="m-widget4__info">
+                                                                                    <span class="m-widget4__text">
+                                                                                        {{ $informationItem->title }}:
+                                                                                    </span>
+                                                                                </div>
+                                                                            </div>
+                                                                        @endif
+                                                                        @foreach($informationItem->data as $key => $informationItemData)
+                                                                            <div class="m-widget4__item m--padding-top-5 m--padding-bottom-5">
+                                                                                <div class="m-widget4__img m-widget4__img--icon">
+                                                                                    @if(count($informationItem->data) === 1)
+                                                                                        <i class="flaticon-like m--font-warning"></i>
+                                                                                    @else
+                                                                                        <i class="flaticon-interface-5 m--font-warning"></i>
+                                                                                    @endif
+                                                                                </div>
+                                                                                <div class="m-widget4__info">
+                                                                                    <span class="m-widget4__text">
+                                                                                        @if(count($informationItem->data) > 1)
+                                                                                            {{ $informationItemData->name }}
+                                                                                        @else
+                                                                                            {{ $informationItem->title }}: {{ $informationItemData->name }}
+                                                                                        @endif
+                                                                                    </span>
+                                                                                </div>
+                                                                                @if(isset($informationItemData->id))
+                                                                                    <input type="hidden" value="{{ $informationItemData->id }}" name="attribute[]">
                                                                                 @endif
                                                                             </div>
-                                                                            <div class="m-widget4__info">
-                                                                                <span class="m-widget4__text">
-                                                                                    @if(count($informationItem->data) > 1)
-                                                                                       {{ $informationItemData->name }}
-                                                                                    @else
-                                                                                        {{ $informationItem->title }}: {{ $informationItemData->name }}
-                                                                                    @endif
-                                                                                </span>
-                                                                            </div>
-                                                                        </div>
-
+                                                                        @endforeach
                                                                     @endforeach
-                                                                @endforeach
-                                                            @endif
-
-                                                            @if(optional($product->attributes)->get('main') != null && $product->attributes->get('main')->where('control', 'simple'))
-                                                                @foreach($product->attributes->get('main')->where('control', 'simple') as $key => $informationItem)
+                                                                @endif
+    
+                                                            </div>
+                                                            <!--end::Widget 9-->
+                                                        </div>
+                                                    </div>
+    
+                                                </div>
+                                            @endif
+                                            @if(optional(optional(optional($product->attributes)->get('information'))->where('control', 'checkBox'))->count())
+                                                <div class="col-12
+                                                @if(optional(optional(optional($product->attributes)->get('information'))->where('control', 'simple'))->count()>0 ||  optional(optional( optional($product->attributes)->get('main'))->where('control', 'simple'))->count()>0)
+                                                        col-md-6
+                                                @endif">
+    
+                                                    <div class="m-portlet m-portlet--bordered m-portlet--full-height productInformation">
+                                                        <div class="m-portlet__head">
+                                                            <div class="m-portlet__head-caption">
+                                                                <div class="m-portlet__head-title">
+                                                                    <h3 class="m-portlet__head-text">
+                                                                        دارای
+                                                                    </h3>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="m-portlet__body m--padding-5">
+                                                            <!--begin::m-widget4-->
+                                                            <div class="m-widget4">
+    
+                                                                @foreach($product->attributes->get('information')->where('control', 'checkBox') as $key => $informationItem)
                                                                     @if(count($informationItem->data) > 1)
-                                                                        <div class="m-widget4__item m--padding-top-5 m--padding-bottom-5">
-                                                                            <div class="m-widget4__img m-widget4__img--icon">
-                                                                                <i class="flaticon-like m--font-warning"></i>
-                                                                            </div>
-                                                                            <div class="m-widget4__info">
-                                                                                <span class="m-widget4__text">
-                                                                                    {{ $informationItem->title }}:
-                                                                                </span>
-                                                                            </div>
+                                                                        <div class="m-widget4__item  m--padding-top-5 m--padding-bottom-5 m--padding-right-10 m--padding-left-10 a--full-width m--font-boldest">
+                                                                            {{ $informationItem->title }}
                                                                         </div>
                                                                     @endif
                                                                     @foreach($informationItem->data as $key => $informationItemData)
-                                                                        <div class="m-widget4__item m--padding-top-5 m--padding-bottom-5">
+                                                                        <div class="m-widget4__item  m--padding-top-5 m--padding-bottom-5 m--padding-right-10 m--padding-left-10">
                                                                             <div class="m-widget4__img m-widget4__img--icon">
-                                                                                @if(count($informationItem->data) === 1)
-                                                                                    <i class="flaticon-like m--font-warning"></i>
-                                                                                @else
-                                                                                    <i class="flaticon-interface-5 m--font-warning"></i>
-                                                                                @endif
+                                                                                <i class="fa fa-check"></i>
                                                                             </div>
                                                                             <div class="m-widget4__info">
                                                                                 <span class="m-widget4__text">
@@ -233,310 +331,265 @@
                                                                                     @endif
                                                                                 </span>
                                                                             </div>
-                                                                            @if(isset($informationItemData->id))
-                                                                                <input type="hidden" value="{{ $informationItemData->id }}" name="attribute[]">
-                                                                            @endif
                                                                         </div>
                                                                     @endforeach
                                                                 @endforeach
-                                                            @endif
-
-                                                        </div>
-                                                        <!--end::Widget 9-->
-                                                    </div>
-                                                </div>
-
-                                            </div>
-                                        @endif
-                                        @if(optional(optional(optional($product->attributes)->get('information'))->where('control', 'checkBox'))->count())
-                                            <div class="col-12
-                                            @if(optional(optional(optional($product->attributes)->get('information'))->where('control', 'simple'))->count()>0 ||  optional(optional( optional($product->attributes)->get('main'))->where('control', 'simple'))->count()>0)
-                                                    col-md-6
-                                            @endif">
-
-                                                <div class="m-portlet m-portlet--bordered m-portlet--full-height productInformation">
-                                                    <div class="m-portlet__head">
-                                                        <div class="m-portlet__head-caption">
-                                                            <div class="m-portlet__head-title">
-                                                                <h3 class="m-portlet__head-text">
-                                                                    دارای
-                                                                </h3>
+    
                                                             </div>
+                                                            <!--end::Widget 9-->
                                                         </div>
                                                     </div>
-                                                    <div class="m-portlet__body m--padding-5">
-                                                        <!--begin::m-widget4-->
-                                                        <div class="m-widget4">
-
-                                                            @foreach($product->attributes->get('information')->where('control', 'checkBox') as $key => $informationItem)
-                                                                @if(count($informationItem->data) > 1)
-                                                                    <div class="m-widget4__item  m--padding-top-5 m--padding-bottom-5 m--padding-right-10 m--padding-left-10 a--full-width m--font-boldest">
-                                                                        {{ $informationItem->title }}
-                                                                    </div>
-                                                                @endif
-                                                                @foreach($informationItem->data as $key => $informationItemData)
-                                                                    <div class="m-widget4__item  m--padding-top-5 m--padding-bottom-5 m--padding-right-10 m--padding-left-10">
-                                                                        <div class="m-widget4__img m-widget4__img--icon">
-                                                                            <i class="fa fa-check"></i>
-                                                                        </div>
-                                                                        <div class="m-widget4__info">
-                                                                            <span class="m-widget4__text">
-                                                                                @if(count($informationItem->data) > 1)
-                                                                                    {{ $informationItemData->name }}
-                                                                                @else
-                                                                                    {{ $informationItem->title }}: {{ $informationItemData->name }}
-                                                                                @endif
-                                                                            </span>
-                                                                        </div>
-                                                                    </div>
-                                                                @endforeach
-                                                            @endforeach
-
+                                                </div>
+                                            @endif
+                                        </div>
+    
+                                        {{--خدمات اضافی--}}
+                                        @if(optional(optional($product->attributes)->get('extra'))->count())
+                                            <div class="m-portlet  m-portlet--creative m-portlet--bordered-semi">
+                                                <div class="m-portlet__head">
+                                                    <div class="m-portlet__head-caption col">
+                                                        <div class="m-portlet__head-title">
+                                                                        <span class="m-portlet__head-icon">
+                                                                            <i class="flaticon-confetti"></i>
+                                                                        </span>
+                                                            <h3 class="m-portlet__head-text">
+                                                                خدماتی که برای این محصول نیاز دارید را انتخاب کنید:
+                                                            </h3>
+                                                            <h2 class="m-portlet__head-label m-portlet__head-label--warning">
+                                                                <span>خدمات</span>
+                                                            </h2>
                                                         </div>
-                                                        <!--end::Widget 9-->
                                                     </div>
+                                                </div>
+                                                <div class="m-portlet__body">
+    
+                                                    @include("product.partials.extraSelectCollection")
+                                                    @include("product.partials.extraCheckboxCollection" , ["withExtraCost"])
+    
                                                 </div>
                                             </div>
                                         @endif
-                                    </div>
-
-                                    {{--خدمات اضافی--}}
-                                    @if(optional(optional($product->attributes)->get('extra'))->count())
-                                        <div class="m-portlet  m-portlet--creative m-portlet--bordered-semi">
-                                            <div class="m-portlet__head">
-                                                <div class="m-portlet__head-caption col">
-                                                    <div class="m-portlet__head-title">
+    
+                                        {{--محصول ساده یا قابل پیکربندی و یا قابل انتخاب--}}
+                                        @if(in_array($product->type['id'] ,[config("constants.PRODUCT_TYPE_SELECTABLE")]))
+                                            <div class="m-portlet m-portlet--bordered m-portlet--creative m-portlet--bordered-semi">
+                                                <div class="m-portlet__head">
+                                                    <div class="m-portlet__head-caption col">
+                                                        <div class="m-portlet__head-title">
                                                                     <span class="m-portlet__head-icon">
-                                                                        <i class="flaticon-confetti"></i>
+                                                                        <i class="flaticon-multimedia-5"></i>
                                                                     </span>
-                                                        <h3 class="m-portlet__head-text">
-                                                            خدماتی که برای این محصول نیاز دارید را انتخاب کنید:
-                                                        </h3>
-                                                        <h2 class="m-portlet__head-label m-portlet__head-label--warning">
-                                                            <span>خدمات</span>
-                                                        </h2>
+                                                            <h3 class="m-portlet__head-text">
+                                                                موارد مورد نظر خود را انتخاب کنید:
+                                                            </h3>
+                                                            <h2 class="m-portlet__head-label m-portlet__head-label--info">
+                                                                <span>انتخاب محصول</span>
+                                                            </h2>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <div class="m-portlet__body">
-
-                                                @include("product.partials.extraSelectCollection")
-                                                @include("product.partials.extraCheckboxCollection" , ["withExtraCost"])
-
-                                            </div>
-                                        </div>
-                                    @endif
-
-                                    {{--محصول ساده یا قابل پیکربندی و یا قابل انتخاب--}}
-                                    @if(in_array($product->type['id'] ,[config("constants.PRODUCT_TYPE_SELECTABLE")]))
-                                        <div class="m-portlet m-portlet--bordered m-portlet--creative m-portlet--bordered-semi">
-                                            <div class="m-portlet__head">
-                                                <div class="m-portlet__head-caption col">
-                                                    <div class="m-portlet__head-title">
-                                                                <span class="m-portlet__head-icon">
-                                                                    <i class="flaticon-multimedia-5"></i>
-                                                                </span>
-                                                        <h3 class="m-portlet__head-text">
-                                                            موارد مورد نظر خود را انتخاب کنید:
-                                                        </h3>
-                                                        <h2 class="m-portlet__head-label m-portlet__head-label--info">
-                                                            <span>انتخاب محصول</span>
-                                                        </h2>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="m-portlet__body">
-
-                                                <ul class="m-nav m-nav--active-bg" id="m_nav" role="tablist">
-                                                    @if(!empty($children))
-                                                        @foreach($children as $p)
-                                                            @include('product.partials.showChildren',['product' => $p , 'color' => 1, 'childIsPurchased' => (array_search($product->id, $purchasedProductIdArray) !== false)])
-                                                        @endforeach
-                                                    @endif
-                                                </ul>
-
-                                            </div>
-                                        </div>
-                                    @elseif(in_array($product->type['id'] ,[config("constants.PRODUCT_TYPE_SIMPLE")]))
-                                    @elseif(in_array($product->type['id'], [config("constants.PRODUCT_TYPE_CONFIGURABLE")]))
-                                        <div class="m-portlet m-portlet--bordered m-portlet--creative m-portlet--bordered-semi">
-                                            <div class="m-portlet__head">
-                                                <div class="m-portlet__head-caption col">
-                                                    <div class="m-portlet__head-title">
-                                                                <span class="m-portlet__head-icon">
-                                                                    <i class="flaticon-settings-1"></i>
-                                                                </span>
-                                                        <h3 class="m-portlet__head-text">
-                                                            ویژگی های مورد نظر خود را انتخاب کنید:
-                                                        </h3>
-                                                        <h2 class="m-portlet__head-label m-portlet__head-label--info">
-                                                            <span>ویژگی های محصول</span>
-                                                        </h2>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="m-portlet__body">
-
-                                                @if(optional(optional(optional($product->attributes)->get('main'))->where('type', 'main'))->count()>0)
-
-                                                    @if($product->attributes->get('main')->where('type', 'main')->where('control', 'dropDown')->count()>0)
-                                                        @foreach($product->attributes->get('main')->where('type', 'main')->where('control', 'dropDown') as $index => $select)
-
-                                                            <div class="form-group m-form__group">
-                                                                <label for="exampleSelect1">{{ $select->title }}</label>
-                                                                <select name="attribute[]" class="form-control m-input attribute">
-                                                                    @foreach($select->data as $dropdownIndex => $dropdownOption)
-                                                                        <option value="{{ $dropdownOption->id }}">{{ $dropdownOption->name }}</option>
-                                                                    @endforeach
-                                                                </select>
-                                                            </div>
-
-                                                        @endforeach
-                                                    @endif
-
-                                                    @if($product->attributes->get('main')->where('type', 'main')->where('control', 'checkBox')->count()>0)
-                                                        @foreach($product->attributes->get('main')->where('type', 'main')->where('control', 'checkBox') as $index => $select)
-                                                            @foreach($select->data as $selectData)
-                                                                <label class="m-checkbox m-checkbox--air m-checkbox--state-success">
-                                                                    <input type="checkbox" name="attribute[]" value="{{ $selectData->id }}" class="attribute">
-                                                                    {{ $selectData->name }}
-                                                                    <span></span>
-                                                                </label>
+                                                <div class="m-portlet__body">
+    
+                                                    <ul class="m-nav m-nav--active-bg" id="m_nav" role="tablist">
+                                                        @if(!empty($children))
+                                                            @foreach($children as $p)
+                                                                @include('product.partials.showChildren',['product' => $p , 'color' => 1, 'childIsPurchased' => (array_search($product->id, $purchasedProductIdArray) !== false)])
                                                             @endforeach
-                                                        @endforeach
-                                                    @endif
-
-                                                @endif
-
+                                                        @endif
+                                                    </ul>
+    
+                                                </div>
                                             </div>
-                                        </div>
-                                    @endif
-
-                                    {!! Form::hidden('product_id',$product->id) !!}
-
-                                    {{--دکمه افزودن به سبد خرید--}}
-                                    @if($product->enable)
-
-
-                                        @if($allChildIsPurchased)
-                                            <div class="alert alert-info" role="alert">
-                                                <strong>شما این محصول را خریده اید</strong>
-                                            </div>
-                                        @else
-                                            <h5 class="m--font-danger">
-                                                <span id="a_product-price">
-                                                    @if($product->priceText['discount'] == 0 )
-                                                        {{ $product->priceText['basePriceText'] }}
-                                                    @else
-                                                        قیمت محصول: <strike>{{ $product->priceText['basePriceText'] }} </strike><br>
-                                                        قیمت با تخفیف
-                                                        <span class="m-badge m-badge--info m-badge--wide m-badge--rounded" id="a_product-discount">{{ ($product->price['discount']*100/$product->price['base']) }}%</span>
-                                                        :  {{ $product->priceText['finalPriceText'] }}
+                                        @elseif(in_array($product->type['id'] ,[config("constants.PRODUCT_TYPE_SIMPLE")]))
+                                        @elseif(in_array($product->type['id'], [config("constants.PRODUCT_TYPE_CONFIGURABLE")]))
+                                            <div class="m-portlet m-portlet--bordered m-portlet--creative m-portlet--bordered-semi">
+                                                <div class="m-portlet__head">
+                                                    <div class="m-portlet__head-caption col">
+                                                        <div class="m-portlet__head-title">
+                                                                    <span class="m-portlet__head-icon">
+                                                                        <i class="flaticon-settings-1"></i>
+                                                                    </span>
+                                                            <h3 class="m-portlet__head-text">
+                                                                ویژگی های مورد نظر خود را انتخاب کنید:
+                                                            </h3>
+                                                            <h2 class="m-portlet__head-label m-portlet__head-label--info">
+                                                                <span>ویژگی های محصول</span>
+                                                            </h2>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="m-portlet__body">
+    
+                                                    @if(optional(optional(optional($product->attributes)->get('main'))->where('type', 'main'))->count()>0)
+    
+                                                        @if($product->attributes->get('main')->where('type', 'main')->where('control', 'dropDown')->count()>0)
+                                                            @foreach($product->attributes->get('main')->where('type', 'main')->where('control', 'dropDown') as $index => $select)
+    
+                                                                <div class="form-group m-form__group">
+                                                                    <label for="exampleSelect1">{{ $select->title }}</label>
+                                                                    <select name="attribute[]" class="form-control m-input attribute">
+                                                                        @foreach($select->data as $dropdownIndex => $dropdownOption)
+                                                                            <option value="{{ $dropdownOption->id }}">{{ $dropdownOption->name }}</option>
+                                                                        @endforeach
+                                                                    </select>
+                                                                </div>
+    
+                                                            @endforeach
+                                                        @endif
+    
+                                                        @if($product->attributes->get('main')->where('type', 'main')->where('control', 'checkBox')->count()>0)
+                                                            @foreach($product->attributes->get('main')->where('type', 'main')->where('control', 'checkBox') as $index => $select)
+                                                                @foreach($select->data as $selectData)
+                                                                    <label class="m-checkbox m-checkbox--air m-checkbox--state-success">
+                                                                        <input type="checkbox" name="attribute[]" value="{{ $selectData->id }}" class="attribute">
+                                                                        {{ $selectData->name }}
+                                                                        <span></span>
+                                                                    </label>
+                                                                @endforeach
+                                                            @endforeach
+                                                        @endif
+    
                                                     @endif
-                                                </span>
-                                            </h5>
+    
+                                                </div>
+                                            </div>
                                         @endif
-
-
-                                        @if($allChildIsPurchased)
-                                            <a class="btn m-btn m-btn--pill m-btn--air m-btn--gradient-from-focus m-btn--gradient-to-danger  animated infinite pulse" role="button" href="{{ action("Web\UserController@userProductFiles") }}">
-                                                <i class="fa fa-play-circle"></i>
-                                                مشاهده در صفحه فیلم ها و جزوه های من
-                                            </a>
+    
+                                        {!! Form::hidden('product_id',$product->id) !!}
+    
+                                        {{--دکمه افزودن به سبد خرید--}}
+                                        @if($product->enable)
+    
+    
+                                            @if($allChildIsPurchased)
+                                                <div class="alert alert-info" role="alert">
+                                                    <strong>شما این محصول را خریده اید</strong>
+                                                </div>
+                                            @else
+                                                <h5 class="m--font-danger">
+                                                    <span id="a_product-price">
+                                                        @if($product->priceText['discount'] == 0 )
+                                                            {{ $product->priceText['basePriceText'] }}
+                                                        @else
+                                                            قیمت محصول: <strike>{{ $product->priceText['basePriceText'] }} </strike><br>
+                                                            قیمت با تخفیف
+                                                            <span class="m-badge m-badge--info m-badge--wide m-badge--rounded" id="a_product-discount">{{ ($product->price['discount']*100/$product->price['base']) }}%</span>
+                                                            :  {{ $product->priceText['finalPriceText'] }}
+                                                        @endif
+                                                    </span>
+                                                </h5>
+                                            @endif
+    
+    
+                                            @if($allChildIsPurchased)
+                                                <a class="btn m-btn m-btn--pill m-btn--air m-btn--gradient-from-focus m-btn--gradient-to-danger  animated infinite pulse" role="button" href="{{ action("Web\UserController@userProductFiles") }}">
+                                                    <i class="fa fa-play-circle"></i>
+                                                    مشاهده در صفحه فیلم ها و جزوه های من
+                                                </a>
+                                            @else
+                                                <button class="btn m-btn--air btn-success m-btn--icon m--margin-bottom-5 btnAddToCart gta-track-add-to-card">
+                                                    <span>
+                                                        <i class="fa fa-cart-arrow-down"></i>
+                                                        <i class="fas fa-sync-alt fa-spin m--hide"></i>
+                                                        <span>افزودن به سبد خرید</span>
+                                                    </span>
+                                                </button>
+                                            @endif
                                         @else
-                                            <button class="btn m-btn--air btn-success m-btn--icon m--margin-bottom-5 btnAddToCart gta-track-add-to-card">
+                                            <button class="btn btn-danger btn-lg m-btn  m-btn m-btn--icon">
                                                 <span>
-                                                    <i class="fa fa-cart-arrow-down"></i>
-                                                    <i class="fas fa-sync-alt fa-spin m--hide"></i>
-                                                    <span>افزودن به سبد خرید</span>
+                                                    <i class="flaticon-shopping-basket"></i>
+                                                    <span>این محصول غیر فعال است.</span>
                                                 </span>
                                             </button>
                                         @endif
-                                    @else
-                                        <button class="btn btn-danger btn-lg m-btn  m-btn m-btn--icon">
-                                            <span>
-                                                <i class="flaticon-shopping-basket"></i>
-                                                <span>این محصول غیر فعال است.</span>
-                                            </span>
-                                        </button>
-                                    @endif
-
-                                </div>
-
-                                @if( isset($product->introVideo) || (isset($product->gift) && $product->gift->isNotEmpty()))
-                                <div class="col-lg-4">
-
-                                    <div class="m-portlet m-portlet--bordered-semi m-portlet--rounded-force m--margin-bottom-45 videoPlayerPortlet @if(!isset($product->introVideo)) m--hide @endif">
-                                        <div class="m-portlet__body">
-                                            <div class="m-widget19 a--nuevo-alaa-theme a--media-parent">
-                                                <div class="m-widget19__pic m-portlet-fit--top m-portlet-fit--sides a--video-wraper">
-
-                                                    @if( $product->introVideo )
-                                                        <input type="hidden" name="introVideo"
-                                                               value="{{ $product->introVideo }}">
-                                                    @endif
-
-                                                    <video
-                                                            id="videoPlayer"
-                                                            class="
-                                                           video-js
-                                                           vjs-fluid
-                                                           vjs-default-skin
-                                                           vjs-big-play-centered"
-                                                            controls
-                                                            {{-- preload="auto"--}}
-                                                            preload="none"
-                                                            @if(isset($product->introVideoThumbnail))
-                                                            poster = "{{$product->introVideoThumbnail}}?w=400&h=225"
-                                                            @else
-                                                            poster = "https://cdn.alaatv.com/media/204/240p/204054ssnv.jpg"
-                                                            @endif >
-
-                                                        {{--                                                        <source--}}
-                                                        {{--                                                                src="{{$product->introVideo}}"--}}
-                                                        {{--                                                                id="videoPlayerSource"--}}
-                                                        {{--                                                                type = 'video/mp4'/>--}}
-
-                                                        {{--<p class="vjs-no-js">جهت پخش آنلاین فیلم، ابتدا مطمئن شوید که جاوا اسکریپت در مرور گر شما فعال است و از آخرین نسخه ی مرورگر استفاده می کنید.</p>--}}
-                                                    </video>
-
-                                                    <div class="m-widget19__shadow"></div>
-                                                </div>
-                                                <div class="m-widget19__content">
-                                                    <div class="m-widget19__header">
-                                                        <h4 id="videoPlayerTitle">
-                                                            کلیپ معرفی
-                                                        </h4>
-                                                    </div>
-                                                    <div class="m-widget19__body text-left" id="videoPlayerDescription"></div>
-                                                </div>
-                                            </div>
-                                            </div>
+    
                                     </div>
-
-                                    @if(isset($product->gift) && $product->gift->isNotEmpty())
-                                        <div class="m-portlet m-portlet--bordered m-portlet--creative m-portlet--bordered-semi m--margin-top-25">
-                                            <div class="m-portlet__head">
-                                                <div class="m-portlet__head-caption col">
-                                                    <div class="m-portlet__head-title">
-                                                        <span class="m-portlet__head-icon">
-                                                            <i class="flaticon-gift"></i>
-                                                        </span>
-                                                        <h3 class="m-portlet__head-text">
-                                                            این محصول شامل هدایای زیر می باشد:
-                                                        </h3>
-                                                        <h2 class="m-portlet__head-label m-portlet__head-label--accent">
-                                                            <span>هدایا</span>
-                                                        </h2>
+    
+                                    @if( isset($product->introVideo) || (isset($product->gift) && $product->gift->isNotEmpty()))
+                                    <div class="col-lg-4">
+    
+                                        <div class="m-portlet m-portlet--bordered-semi m-portlet--rounded-force m--margin-bottom-45 videoPlayerPortlet @if(!isset($product->introVideo)) m--hide @endif">
+                                            <div class="m-portlet__body">
+                                                <div class="m-widget19 a--nuevo-alaa-theme a--media-parent">
+                                                    <div class="m-widget19__pic m-portlet-fit--top m-portlet-fit--sides a--video-wraper">
+    
+                                                        @if( $product->introVideo )
+                                                            <input type="hidden" name="introVideo"
+                                                                   value="{{ $product->introVideo }}">
+                                                        @endif
+    
+                                                        <video
+                                                                id="videoPlayer"
+                                                                class="
+                                                               video-js
+                                                               vjs-fluid
+                                                               vjs-default-skin
+                                                               vjs-big-play-centered"
+                                                                controls
+                                                                {{-- preload="auto"--}}
+                                                                preload="none"
+                                                                @if(isset($product->introVideoThumbnail))
+                                                                poster = "{{$product->introVideoThumbnail}}?w=400&h=225"
+                                                                @else
+                                                                poster = "https://cdn.alaatv.com/media/204/240p/204054ssnv.jpg"
+                                                                @endif >
+    
+                                                            {{--                                                        <source--}}
+                                                            {{--                                                                src="{{$product->introVideo}}"--}}
+                                                            {{--                                                                id="videoPlayerSource"--}}
+                                                            {{--                                                                type = 'video/mp4'/>--}}
+    
+                                                            {{--<p class="vjs-no-js">جهت پخش آنلاین فیلم، ابتدا مطمئن شوید که جاوا اسکریپت در مرور گر شما فعال است و از آخرین نسخه ی مرورگر استفاده می کنید.</p>--}}
+                                                        </video>
+    
+                                                        <div class="m-widget19__shadow"></div>
+                                                    </div>
+                                                    <div class="m-widget19__content">
+                                                        <div class="m-widget19__header">
+                                                            <h4 id="videoPlayerTitle">
+                                                                کلیپ معرفی
+                                                            </h4>
+                                                        </div>
+                                                        <div class="m-widget19__body text-left" id="videoPlayerDescription"></div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <div class="m-portlet__body">
-                                                <div class="row justify-content-center productGifts">
-                                                    @foreach($product->gift as $gift)
-                                                        <div class="col-12">
-                                                            @if(strlen($gift->url)>0)
-                                                                <a target="_blank" href="{{ $gift->url }}">
+                                                </div>
+                                        </div>
+    
+                                        @if(isset($product->gift) && $product->gift->isNotEmpty())
+                                            <div class="m-portlet m-portlet--bordered m-portlet--creative m-portlet--bordered-semi m--margin-top-25">
+                                                <div class="m-portlet__head">
+                                                    <div class="m-portlet__head-caption col">
+                                                        <div class="m-portlet__head-title">
+                                                            <span class="m-portlet__head-icon">
+                                                                <i class="flaticon-gift"></i>
+                                                            </span>
+                                                            <h3 class="m-portlet__head-text">
+                                                                این محصول شامل هدایای زیر می باشد:
+                                                            </h3>
+                                                            <h2 class="m-portlet__head-label m-portlet__head-label--accent">
+                                                                <span>هدایا</span>
+                                                            </h2>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="m-portlet__body">
+                                                    <div class="row justify-content-center productGifts">
+                                                        @foreach($product->gift as $gift)
+                                                            <div class="col-12">
+                                                                @if(strlen($gift->url)>0)
+                                                                    <a target="_blank" href="{{ $gift->url }}">
+                                                                        <div>
+                                                                            <img src="{{ $gift->photo }}" class="rounded-circle">
+                                                                        </div>
+                                                                        <div>
+                                                                            <button type="button" class="btn m-btn--pill m-btn--air m-btn m-btn--gradient-from-info m-btn--gradient-to-accent">
+                                                                                {{ $gift->name }}
+                                                                            </button>
+                                                                        </div>
+                                                                    </a>
+                                                                @else
                                                                     <div>
                                                                         <img src="{{ $gift->photo }}" class="rounded-circle">
                                                                     </div>
@@ -545,235 +598,215 @@
                                                                             {{ $gift->name }}
                                                                         </button>
                                                                     </div>
-                                                                </a>
-                                                            @else
-                                                                <div>
-                                                                    <img src="{{ $gift->photo }}" class="rounded-circle">
-                                                                </div>
-                                                                <div>
-                                                                    <button type="button" class="btn m-btn--pill m-btn--air m-btn m-btn--gradient-from-info m-btn--gradient-to-accent">
-                                                                        {{ $gift->name }}
-                                                                    </button>
-                                                                </div>
-                                                            @endif
-                                                        </div>
-                                                    @endforeach
+                                                                @endif
+                                                            </div>
+                                                        @endforeach
+                                                    </div>
                                                 </div>
                                             </div>
+                                        @endif
+                                    </div>
+                                    @endif
+                                </div>
+                                <!--end::Preview-->
+                            </div>
+                        </div>
+                        <!--end::Section-->
+                    </div>
+                </div>
+                <!--end::Portlet-->
+            </div>
+        </div>
+    
+        {{--دکمه افزودن به سبد خرید--}}
+        @if($product->enable)
+            <div class="addToCartForMobileDeviceWrapper" >
+    
+    
+                @if($allChildIsPurchased)
+                    <a class="btn m-btn m-btn--pill m-btn--air m-btn--gradient-from-focus m-btn--gradient-to-danger  animated infinite pulse" role="button" href="{{ action("Web\UserController@userProductFiles") }}">
+                        <i class="fa fa-play-circle"></i>
+                        مشاهده در صفحه فیلم ها و جزوه های من
+                    </a>
+                @else
+                    <button class="btn m-btn--air btn-success m-btn--icon m--margin-bottom-5 btnAddToCart gta-track-add-to-card">
+                        <span>
+                            <i class="fa fa-cart-arrow-down"></i>
+                            <i class="fas fa-sync-alt fa-spin m--hide"></i>
+                            <span>افزودن به سبد خرید</span>
+                        </span>
+                    </button>
+                @endif
+    
+                @if($allChildIsPurchased)
+                    <span class="alert alert-info" role="alert">
+                        <strong>شما این محصول را خریده اید</strong>
+                    </span>
+                @else
+                    <div class="m--font-brand a_product-price_mobile-wrapper">
+                        <span id="a_product-price_mobile">
+                            @include('product.partials.price', ['price'=>$product->price])
+                            
+    {{--                        @if($product->priceText['discount'] == 0 )--}}
+    {{--                            <span>{{ $product->priceText['finalPriceText'] }} </span>--}}
+    
+    {{--                        @else--}}
+    {{--                            <strike>{{ $product->priceText['basePriceText'] }} </strike>--}}
+    {{--                            <span class="m-badge m-badge--danger m-badge--wide m-badge--rounded">{{ $product->priceText['finalPriceText'] }}</span>--}}
+    {{--                        @endif--}}
+                        
+                        
+                        
+                        </span>
+                    </div>
+                @endif
+    
+    
+            </div>
+        @else
+            <div class="addToCartForMobileDeviceWrapper" >
+                <button class="btn btn-danger btn-lg m-btn  m-btn m-btn--icon">
+                    <span>
+                        <i class="flaticon-shopping-basket"></i>
+                        <span>این محصول غیر فعال است.</span>
+                    </span>
+                </button>
+            </div>
+        @endif
+    
+        {{--نمونه فیلم--}}
+        @include('block.partials.block', [
+            'blockTitle'=>view('product.partials.productInfoNav', ['targetId'=>'sampleVideo']),
+            'blockUrlDisable'=>true,
+            'blockType'=>'productSampleVideo',
+            'imageDimension'=>'?w=300&h=169',
+            'squareSing'=>false,
+            'blockCustomClass'=>'a--owl-carousel-type-2 productShowBlock sampleVideo a--block-widget-1',
+            'blockCustomId'=>'Block-sampleVideo'
+            ])
+        
+    
+        {{--نمونه جزوه--}}
+        @include('product.partials.pamphlet')
+    
+        @if(mb_strlen(trim(strip_tags($product->shortDescription))) > 0 || mb_strlen(trim(strip_tags($product->longDescription))) > 0)
+            <div class="row m--margin-top-10">
+                <div class="col m--margin-bottom-25">
+                    <div class="m-portlet m-portlet--tabs productDetailes" id="productDetailes">
+                        <div class="m-portlet__head">
+                            <div class="m-portlet__head-caption">
+                                <div class="m-portlet__head-title">
+                                    <h3 class="m-portlet__head-text">
+                                        @include('product.partials.productInfoNav', ['targetId'=>'productDetailes'])
+                                    </h3>
+                                </div>
+                            </div>
+                            <div class="m-portlet__head-tools">
+                                <ul class="m-portlet__nav">
+                                    <li class="m-portlet__nav-item">
+                                        <p class="m-portlet__nav-link m-portlet__nav-link--icon">
+    
+    
+                                            @if($allChildIsPurchased)
+                                                <a class="btn m-btn m-btn--pill m-btn--air m-btn--gradient-from-focus m-btn--gradient-to-danger  animated infinite pulse" role="button" href="{{ action("Web\UserController@userProductFiles") }}">
+                                                    <i class="fa fa-play-circle"></i>
+                                                    <span class="d-none d-sm-none d-md-inline-block d-lg-inline-block">
+                                                        مشاهده در صفحه فیلم ها و جزوه های من
+                                                    </span>
+                                                </a>
+                                            @else
+    {{--                                            <button class="btn m-btn--air btn-success m-btn--icon btnAddToCart gta-track-add-to-card">--}}
+    {{--                                                <span>--}}
+    {{--                                                    <i class="fa fa-cart-arrow-down"></i>--}}
+    {{--                                                    <i class="fas fa-sync-alt fa-spin m--hide"></i>--}}
+    {{--                                                    <span>افزودن به سبد خرید</span>--}}
+    {{--                                                </span>--}}
+    {{--                                            </button>--}}
+                                            @endif
+    
+    
+                                        </p>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="m-portlet__body">
+                            <div class="tab-content">
+                                <div class="tab-pane active show" id="productInformation">
+                                    {!! $product->shortDescription !!}
+                                    @if( isset($product->longDescription) && strlen($product->longDescription) > 0 )
+                                        <div>
+                                            {!! $product->longDescription !!}
                                         </div>
                                     @endif
                                 </div>
-                                @endif
                             </div>
-                            <!--end::Preview-->
                         </div>
                     </div>
-                    <!--end::Section-->
                 </div>
             </div>
-            <!--end::Portlet-->
-        </div>
-    </div>
-
-
-    {{--دکمه افزودن به سبد خرید--}}
-    @if($product->enable)
-        <div class="addToCartForMobileDeviceWrapper" >
-
-
-            @if($allChildIsPurchased)
-                <a class="btn m-btn m-btn--pill m-btn--air m-btn--gradient-from-focus m-btn--gradient-to-danger  animated infinite pulse" role="button" href="{{ action("Web\UserController@userProductFiles") }}">
-                    <i class="fa fa-play-circle"></i>
-                    مشاهده در صفحه فیلم ها و جزوه های من
-                </a>
-            @else
-                <button class="btn m-btn--air btn-success m-btn--icon m--margin-bottom-5 btnAddToCart gta-track-add-to-card">
-                    <span>
-                        <i class="fa fa-cart-arrow-down"></i>
-                        <i class="fas fa-sync-alt fa-spin m--hide"></i>
-                        <span>افزودن به سبد خرید</span>
-                    </span>
-                </button>
-            @endif
-
-            @if($allChildIsPurchased)
-                <span class="alert alert-info" role="alert">
-                    <strong>شما این محصول را خریده اید</strong>
-                </span>
-            @else
-                <div class="m--font-brand a_product-price_mobile-wrapper">
-                    <span id="a_product-price_mobile">
-                        @include('product.partials.price', ['price'=>$product->price])
-                        
-{{--                        @if($product->priceText['discount'] == 0 )--}}
-{{--                            <span>{{ $product->priceText['finalPriceText'] }} </span>--}}
-
-{{--                        @else--}}
-{{--                            <strike>{{ $product->priceText['basePriceText'] }} </strike>--}}
-{{--                            <span class="m-badge m-badge--danger m-badge--wide m-badge--rounded">{{ $product->priceText['finalPriceText'] }}</span>--}}
-{{--                        @endif--}}
-                    
-                    
-                    
-                    </span>
-                </div>
-            @endif
-
-
-        </div>
-    @else
-        <div class="addToCartForMobileDeviceWrapper" >
-            <button class="btn btn-danger btn-lg m-btn  m-btn m-btn--icon">
-                <span>
-                    <i class="flaticon-shopping-basket"></i>
-                    <span>این محصول غیر فعال است.</span>
-                </span>
-            </button>
-        </div>
-    @endif
-
-    {{--نمونه فیلم--}}
-    @include('block.partials.block', [
-        'blockTitle'=>view('product.partials.productInfoNav', ['targetId'=>'sampleVideo']),
-        'blockUrlDisable'=>true,
-        'blockType'=>'productSampleVideo',
-        'imageDimension'=>'?w=300&h=169',
-        'squareSing'=>false,
-        'blockCustomClass'=>'a--owl-carousel-type-2 productShowBlock sampleVideo a--block-widget-1',
-        'blockCustomId'=>'Block-sampleVideo'
-        ])
-
-{{--    @if(isset($product->sets) && $product->sets->count() > 0)--}}
-{{--        @foreach($product->sets as $set)--}}
-{{--            --}}{{--نمونه فیلم--}}
-{{--            @include('block.partials.block', [--}}
-{{--                'blockTitle'=>$set->title,--}}
-{{--                'blockUrlDisable'=>true,--}}
-{{--                'blockType'=>'content',--}}
-{{--                'blockCustomClass'=>'a--owl-carousel-type-2 productShowBlock sampleVideo a--block-widget-1',--}}
-{{--                'blockCustomId'=>'Block-sampleVideo'--}}
-{{--                ])--}}
-{{--        @endforeach--}}
-{{--    @endif--}}
-
-
-        {{--نمونه جزوه--}}
-    @include('product.partials.pamphlet')
-
-    @if(mb_strlen(trim(strip_tags($product->shortDescription))) > 0 || mb_strlen(trim(strip_tags($product->longDescription))) > 0)
-        <div class="row m--margin-top-10">
-            <div class="col m--margin-bottom-25">
-                <div class="m-portlet m-portlet--tabs productDetailes" id="productDetailes">
-                    <div class="m-portlet__head">
-                        <div class="m-portlet__head-caption">
-                            <div class="m-portlet__head-title">
-                                <h3 class="m-portlet__head-text">
-                                    @include('product.partials.productInfoNav', ['targetId'=>'productDetailes'])
-                                </h3>
+        @endif
+    
+        {{-- توضیحات لطظه ای --}}
+        @if($liveDescriptions->isNotEmpty())
+            <div class="row m--margin-top-10">
+                <div class="col m--margin-bottom-25">
+                    <div class="m-portlet m-portlet--tabs productLiveDescription" id="productLiveDescription">
+                        <div class="m-portlet__head">
+                            <div class="m-portlet__head-caption">
+                                <div class="m-portlet__head-title">
+                                    <h3 class="m-portlet__head-text">
+                                        @include('product.partials.productInfoNav', ['targetId'=>'productLiveDescription'])
+                                    </h3>
+                                </div>
                             </div>
                         </div>
-                        <div class="m-portlet__head-tools">
-                            <ul class="m-portlet__nav">
-                                <li class="m-portlet__nav-item">
-                                    <p class="m-portlet__nav-link m-portlet__nav-link--icon">
-
-
-                                        @if($allChildIsPurchased)
-                                            <a class="btn m-btn m-btn--pill m-btn--air m-btn--gradient-from-focus m-btn--gradient-to-danger  animated infinite pulse" role="button" href="{{ action("Web\UserController@userProductFiles") }}">
-                                                <i class="fa fa-play-circle"></i>
-                                                <span class="d-none d-sm-none d-md-inline-block d-lg-inline-block">
-                                                    مشاهده در صفحه فیلم ها و جزوه های من
+                        <div class="m-portlet__body">
+                            <div class="tab-content">
+                                <div class="m-timeline-3">
+                                    <div class="m-timeline-3__items">
+                                        @foreach($liveDescriptions as $liveDescription)
+                                            <div class="m-timeline-3__item m-timeline-3__item--info">
+                                                <span class="m-timeline-3__item-time">{{$liveDescription->CreatedAt_Jalali_WithTime()}}</span>
+                                                <div class="m-timeline-3__item-desc">
+                                                <span class="m-timeline-3__item-user-name">
+                                                    <a  class="m-timeline-3__item-link">
+                                                        {{$liveDescription->title}}
+                                                    </a>
                                                 </span>
-                                            </a>
-                                        @else
-{{--                                            <button class="btn m-btn--air btn-success m-btn--icon btnAddToCart gta-track-add-to-card">--}}
-{{--                                                <span>--}}
-{{--                                                    <i class="fa fa-cart-arrow-down"></i>--}}
-{{--                                                    <i class="fas fa-sync-alt fa-spin m--hide"></i>--}}
-{{--                                                    <span>افزودن به سبد خرید</span>--}}
-{{--                                                </span>--}}
-{{--                                            </button>--}}
-                                        @endif
-
-
-                                    </p>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="m-portlet__body">
-                        <div class="tab-content">
-                            <div class="tab-pane active show" id="productInformation">
-                                {!! $product->shortDescription !!}
-                                @if( isset($product->longDescription) && strlen($product->longDescription) > 0 )
-                                    <div>
-                                        {!! $product->longDescription !!}
-                                    </div>
-                                @endif
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    @endif
-
-    @if($liveDescriptions->isNotEmpty())
-        <div class="row m--margin-top-10">
-            <div class="col m--margin-bottom-25">
-                <div class="m-portlet m-portlet--tabs productLiveDescription" id="productLiveDescription">
-                    <div class="m-portlet__head">
-                        <div class="m-portlet__head-caption">
-                            <div class="m-portlet__head-title">
-                                <h3 class="m-portlet__head-text">
-                                    @include('product.partials.productInfoNav', ['targetId'=>'productLiveDescription'])
-                                </h3>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="m-portlet__body">
-                        <div class="tab-content">
-                            <div class="m-timeline-3">
-                                <div class="m-timeline-3__items">
-                                    @foreach($liveDescriptions as $liveDescription)
-                                        <div class="m-timeline-3__item m-timeline-3__item--info">
-                                            <span class="m-timeline-3__item-time">{{$liveDescription->CreatedAt_Jalali_WithTime()}}</span>
-                                            <div class="m-timeline-3__item-desc">
-                                            <span class="m-timeline-3__item-user-name">
-                                                <a  class="m-timeline-3__item-link">
-                                                    {{$liveDescription->title}}
-                                                </a>
-                                            </span>
-                                                <br>
-                                                <span class="m-timeline-3__item-text">
-                                                    {!!  $liveDescription->description !!}
-                                            </span>
-
+                                                    <br>
+                                                    <span class="m-timeline-3__item-text">
+                                                        {!!  $liveDescription->description !!}
+                                                </span>
+    
+                                                </div>
                                             </div>
-                                        </div>
-                                    @endforeach
+                                        @endforeach
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+        @endif
+    
+        {{-- محصولات مرتبط --}}
+        @include('block.partials.block', [
+            'blockTitle'=>view('product.partials.productInfoNav', ['targetId'=>'relatedProduct']),
+            'blockUrlDisable'=>true,
+            'blockType'=>'product',
+            'squareSing'=>false,
+            'blockCustomClass'=>'a--owl-carousel-type-2 productShowBlock relatedProduct',
+            'blockCustomId'=>'Block-relatedProduct'
+            ])
     @endif
-
-    @include('block.partials.block', [
-        'blockTitle'=>view('product.partials.productInfoNav', ['targetId'=>'relatedProduct']),
-        'blockUrlDisable'=>true,
-        'blockType'=>'product',
-        'squareSing'=>false,
-        'blockCustomClass'=>'a--owl-carousel-type-2 productShowBlock relatedProduct',
-        'blockCustomId'=>'Block-relatedProduct'
-        ])
-
+    
 @endsection
 
 @section('page-js')
     <script src="{{ mix('/js/product-show.js') }}"></script>
+    <script src="{{ asset('/acm/AlaatvCustomFiles/components/customSelect/js.js') }}"></script>
     <script>
         var TotalQuantityAddedToCart = 0;
         var parentProduct = {
@@ -786,5 +819,13 @@
             quantity: 1
         };
         var parentProductTags = '{{ ($product->tags !== null) ? implode(',',optional($product->tags)->tags) : '-' }}';
+
+        CustomSelect.init({
+            elementId: 'selectFarsang',
+            onChange: function (data) {
+                console.log(data);
+                // { index: 2, totalCount: 5, value: "3", text: "فرسنگ سوم" }
+            }
+        });
     </script>
 @endsection

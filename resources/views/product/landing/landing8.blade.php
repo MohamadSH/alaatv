@@ -20,7 +20,7 @@
                 </div>
                 <div class="m-portlet__body">
                     <div class="m-widget27 m-portlet-fit--sides">
-                        <div class="m-widget27__pic">
+                        <div class="m-widget27__pic d-none">
                             <img src="/acm/extra/landing1/img/landing8_banner1.jpg" alt="" class="lazy-image">
                             <h3 class="m-widget27__title m--font-light">
                             
@@ -33,6 +33,7 @@
                         </div>
                         <div class="m-widget27__container">
                             <div class="container-fluid">
+                                
                                 <div class="row">
                                     <div class="col-md-4 order-2 order-sm-2 order-md-1 order-lg-1 sideItems">
     
@@ -290,17 +291,18 @@
                                     </div>
                                 </div>
                             </div>
-                        
-                        
                         </div>
                     </div>
                 </div>
             </div>
-        
         </div>
     </div>
 @endsection
 
 @section('page-js')
     <script src="{{ mix('/js/page-landing8.js') }}"></script>
+    <script>
+        // $(".live-tile, .flip-list").not(".exclude").liveTile();
+    </script>
+
 @endsection
