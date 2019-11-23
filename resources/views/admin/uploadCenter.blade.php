@@ -174,7 +174,55 @@
 
 @section('page-js')
     <script src="{{ mix('/js/admin-all.js') }}" type="text/javascript"></script>
+    <script src="{{asset('/acm/AlaatvCustomFiles/js/jquery.form.js') }}" type="text/javascript"></script>
+
     <script>
+
+        $(document).ready(function()
+        {
+            var options = {
+                headers:{
+                    'X-Dataname' : fileName,
+                },
+                beforeSend: function()
+                {
+                    // $("#progress").show();
+                    //clear everything
+                    // $("#bar").width('0%');
+                    // $("#message").html("");
+                    // $("#percent").html("0%");
+                },
+                uploadProgress: function(event, position, total, percentComplete)
+                {
+                    // $("#bar").width(percentComplete+'%');
+                    // $("#percent").html(percentComplete+'%');
+
+                },
+                success: function()
+                {
+                    console.log('success');
+                    // $("#bar").width('100%');
+                    // $("#percent").html('100%');
+
+                },
+                complete: function(response)
+                {
+                    // $("#message").html("<font color='green'>"+response.responseText+"</font>");
+                },
+                error: function(response)
+                {
+                    console.log(response.status);
+                    // $("#message").html("<font color='red'> ERROR: unable to upload files</font>");
+
+                }
+
+            };
+
+            $("#uploadForm").ajaxForm(options);
+
+        });
+
+
         toastr.options = {
             "closeButton": true,
             "debug": false,
@@ -190,83 +238,82 @@
             "hideMethod": "fadeOut"
         };
 
-        $(document).on('submit', '#uploadForm', function (e) {
-            e.preventDefault();
-            $('#loading').show();
-            $('#uploadedFileMessage').hide();
-            $('#uploadedFilePath').html('');
-            if ( $( '#smsLink' ).length ) {
-                $('#smsLink').val('');
-            }
-            if ( $( '#smsLinkPortlet' ).length ) {
-                $('#smsLinkPortlet').hide();
-            }
-
-            var form = $(this);
-            var datastring = new FormData($(this)[0]);
-            url = form.attr('action');
-            var fileName = $('#file').val().split('\\').pop();
-
-            $.ajax({
-                type: 'POST',
-                url: url,
-                data: datastring,
-                headers:{
-                    'X-Datatype' : 'uploadCenterSftp',
-                    'X-Dataname' : fileName,
-                },
-                statusCode: {
-                    //The status for when action was successful
-                    200: function (response) {
-                        var link = response.link;
-                        toastr["success"]("محتوا با موقیت درج شد", "پیام سیستم");
-                        form[0].reset();
-                        $('#uploadedFileMessage').show();
-                        $('#uploadedFilePath').html('<a target="_blank" href="'+link+'">'+link+'</a>');
-                        if ( $( '#smsLink' ).length ) {
-                            $('#smsLink').val(link);
-                        }
-                        if ( $( '#smsLinkPortlet' ).length ) {
-                            $('#smsLinkPortlet').show();
-                        }
-                        $('#loading').hide();
-                    },
-                    //The status for when the user is not authorized for making the request
-                    403: function (response) {
-                        toastr["warning"]("دسترسی غیرمجاز", "خطای 403");
-                        $('#loading').hide();
-                    },
-                    404: function (response) {
-                        toastr["warning"]("آدرس مورد نظر یافت نشد", "خطای 404");
-                        $('#loading').hide();
-                    },
-                    //The status for when form data is not valid
-                    422: function (response) {
-                        toastr["error"]("ورودی های غیرمجاز", "خطای 422");
-                        $('#loading').hide();
-                    },
-                    //The status for when there is error php code
-                    500: function (response) {
-                        toastr["error"]("خطای سرور", "خطای 500");
-                        $('#loading').hide();
-                        console.log(response.response);
-                    },
-                    503: function (response) {
-                        toastr["error"]("سرویس خارج از دسترس", "خطای 503");
-                        $('#loading').hide();
-                        console.log(response.response);
-                    },
-                    301: function (response) {
-                        toastr["error"]("آدرس مورد نظر ریدایرکت شده است", "خطای 301");
-                        $('#loading').hide();
-                    },
-                },
-                cache: false,
-                contentType: false,
-                processData: false
-            });
-
-        });
+        // $(document).on('submit', '#uploadForm', function (e) {
+        //     e.preventDefault();
+        //     $('#loading').show();
+        //     $('#uploadedFileMessage').hide();
+        //     $('#uploadedFilePath').html('');
+        //     if ( $( '#smsLink' ).length ) {
+        //         $('#smsLink').val('');
+        //     }
+        //     if ( $( '#smsLinkPortlet' ).length ) {
+        //         $('#smsLinkPortlet').hide();
+        //     }
+        //
+        //     var form = $(this);
+        //     var datastring = new FormData($(this)[0]);
+        //     url = form.attr('action');
+        //     var fileName = $('#file').val().split('\\').pop();
+        //
+        //     $.ajax({
+        //         type: 'POST',
+        //         url: url,
+        //         data: datastring,
+        //         headers:{
+        //             'X-Dataname' : fileName,
+        //         },
+        //         statusCode: {
+        //             //The status for when action was successful
+        //             200: function (response) {
+        //                 var link = response.link;
+        //                 toastr["success"]("محتوا با موقیت درج شد", "پیام سیستم");
+        //                 form[0].reset();
+        //                 $('#uploadedFileMessage').show();
+        //                 $('#uploadedFilePath').html('<a target="_blank" href="'+link+'">'+link+'</a>');
+        //                 if ( $( '#smsLink' ).length ) {
+        //                     $('#smsLink').val(link);
+        //                 }
+        //                 if ( $( '#smsLinkPortlet' ).length ) {
+        //                     $('#smsLinkPortlet').show();
+        //                 }
+        //                 $('#loading').hide();
+        //             },
+        //             //The status for when the user is not authorized for making the request
+        //             403: function (response) {
+        //                 toastr["warning"]("دسترسی غیرمجاز", "خطای 403");
+        //                 $('#loading').hide();
+        //             },
+        //             404: function (response) {
+        //                 toastr["warning"]("آدرس مورد نظر یافت نشد", "خطای 404");
+        //                 $('#loading').hide();
+        //             },
+        //             //The status for when form data is not valid
+        //             422: function (response) {
+        //                 toastr["error"]("ورودی های غیرمجاز", "خطای 422");
+        //                 $('#loading').hide();
+        //             },
+        //             //The status for when there is error php code
+        //             500: function (response) {
+        //                 toastr["error"]("خطای سرور", "خطای 500");
+        //                 $('#loading').hide();
+        //                 console.log(response.response);
+        //             },
+        //             503: function (response) {
+        //                 toastr["error"]("سرویس خارج از دسترس", "خطای 503");
+        //                 $('#loading').hide();
+        //                 console.log(response.response);
+        //             },
+        //             301: function (response) {
+        //                 toastr["error"]("آدرس مورد نظر ریدایرکت شده است", "خطای 301");
+        //                 $('#loading').hide();
+        //             },
+        //         },
+        //         cache: false,
+        //         contentType: false,
+        //         processData: false
+        //     });
+        //
+        // });
 
         @permission((config('constants.SEND_SMS_TO_USER_ACCESS')))
         $(document).on('submit', '#smsLinkForm', function (e) {
