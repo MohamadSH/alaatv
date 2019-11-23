@@ -618,7 +618,7 @@ class HomeController extends Controller
         try {
             $ext      = pathinfo($originalFileName, PATHINFO_EXTENSION);
 
-            if(in_array($ext, ['jpg','jpeg','JPG','png','pdf','rar','zip','psd','doc'])){
+            if(!in_array($ext, ['jpg','jpeg','JPG','png','pdf','rar','zip','psd','doc'])){
                 File::delete($filePath);
                 return response()->json([
                     'error'=>[
