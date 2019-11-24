@@ -90,7 +90,15 @@
                 }
             });
 
-            $('#productShortDescriptionSummerNote').summernote({height: 300});
+            $('#productShortDescriptionSummerNote').summernote({
+                lang: 'fa-IR',
+                height: 300,
+                popover: {
+                    image: [],
+                    link: [],
+                    air: []
+                }
+            });
 
         });
     </script>

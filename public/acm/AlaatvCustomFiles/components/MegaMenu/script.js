@@ -18,6 +18,7 @@ var AlaaMegaMenu = function () {
     }
     function hideAllCategory($categoryTarget) {
         getMegaMenuTitleObject($categoryTarget).find('.a--MegaMenu-categoryItem').removeClass('a--MegaMenu-categoryItem-selected');
+        getMegaMenuTitleObject($categoryTarget).find('.a--MegaMenu-categoryItem a').removeClass('a--MegaMenu-categoryItem-selected');
         getMegaMenuTitleObject($categoryTarget).find('.a--MegaMenu-categorySubItems').each(function() {
             hideCategorySubItems($(this));
         });
@@ -71,10 +72,10 @@ $(document).ready(function () {
         var titleItem = titleItems[i];
 
         // mouseover - mousedown - mouseleave - mouseup
-        titleItem.addEventListener('mouseover', (e) => {
+        titleItem.addEventListener('mouseover', function(e) {
             AlaaMegaMenu.showDropDownMenu($(e.target));
         });
-        titleItem.addEventListener('mouseleave', (e) => {
+        titleItem.addEventListener('mouseleave', function(e) {
             AlaaMegaMenu.closeAllDropDownMenus();
         });
     }
@@ -89,7 +90,7 @@ $(document).ready(function () {
         }
 
         // mouseover - mousedown - mouseleave - mouseup
-        categoryItem.addEventListener('mouseover', (e) => {
+        categoryItem.addEventListener('mouseover', function(e) {
             AlaaMegaMenu.showCategory($(e.target));
         });
     }
