@@ -8,24 +8,17 @@ class SaveNewBlockRequest extends FormRequest
 {
     public function authorize()
     {
-        if (auth()
-            ->user()
-            // ->can(config('constants.INSERT_CONTACT_ACCESS'))
-        ) {
-            return true;
-        }
-        
-        return false;
+        return true;
     }
-    
+
     public function rules()
     {
         return [
-            'order'  => 'required|numeric',
-//            'title'     => 'required|string',
+//            'order'  => 'required|numeric',
+            'title'     => 'required|string',
 //            'customUrl'   => 'string',
 //            'class' => 'string',
-//            'type' => 'required|numeric',
+            'type' => 'required|numeric',
 //            'tags' => 'string',
         ];
     }
