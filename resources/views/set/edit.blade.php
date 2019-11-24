@@ -41,17 +41,16 @@
 
 @section('page-js')
     <script src="{{ mix('/js/admin-all.js') }}" type="text/javascript"></script>
+    <script src="/acm/AlaatvCustomFiles/js/admin/page-productAdmin.js" type="text/javascript"></script>
     <script>
 
-        var selectedProducts = {!! json_encode($setProducts->pluck('id')) !!};
-
-        $("input.setTags").tagsinput({
-            tagClass: 'm-badge m-badge--info m-badge--wide m-badge--rounded'
-        });
-        /**
-         * Start up jquery
-         */
         jQuery(document).ready(function () {
+
+            var selectedProducts = {!! json_encode($setProducts->pluck('id')) !!};
+
+            $("input.setTags").tagsinput({
+                tagClass: 'm-badge m-badge--info m-badge--wide m-badge--rounded'
+            });
 
             $('#productShortDescriptionSummerNote').summernote({height: 300});
 
@@ -62,17 +61,8 @@
                 alert('ابتدا مقادیر سلکت شده به بک اند فرستاده می شوند سپس صفحه رفرش می شود.');
             });
 
-        });
-    </script>
-    <script src="/acm/AlaatvCustomFiles/js/admin/page-productAdmin.js" type="text/javascript"></script>
-    <script>
-
-        jQuery(document).ready(function () {
-
-            for(index in selectedProducts) {
-                var productId = selectedProducts[index];
-                $('.multiselect-container li input[type="checkbox"][value="'+productId+'"]').prop('checked', true);
-            }
+            $('#setProduct').multiselect('select', selectedProducts);
+            
         });
     </script>
 @endsection
