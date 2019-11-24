@@ -161,29 +161,3 @@ select.form-control {
         padding: 5px !important;
     }
 }
-
-@media only screen and (max-width: 1250px) {
-    /*.m-header-menu .m-menu__nav > .m-menu__item {*/
-    /*    padding-left: 3px;*/
-    /*    padding-right: 3px;*/
-    /*}*/
-    .m-topbar .m-topbar__nav.m-nav > .m-nav__item {
-        padding: 0 3px;
-    }
-}
-
-@media only screen and (max-width: 1128px) {
-    /*.m-header-menu .m-menu__nav > .m-menu__item {*/
-    /*    padding-left: 0;*/
-    /*    padding-right: 0;*/
-    /*}*/
-    .m-topbar .m-topbar__nav.m-nav > .m-nav__item {
-        padding: 0;
-    }
-}
-
-@media only screen and (max-width: 1024px) {
-    .m-header-menu .m-menu__nav > .m-menu__item .m-menu__submenu > .m-menu__subnav > .m-menu__item {
-        background: transparent;
-    }
-}
