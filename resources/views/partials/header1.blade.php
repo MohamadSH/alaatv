@@ -86,10 +86,26 @@
                                 <div class="container-fluid">
                                     <div class="row">
                                         <div class="col-md-2 a--MegaMenu-categoryItemsCol">
-                                            <div class="a--MegaMenu-categoryItem" dtat-cat-id="davazdahomVaKonkur">دوازدهم و کنکور</div>
-                                            <div class="a--MegaMenu-categoryItem" dtat-cat-id="yazdahom">یازدهم</div>
-                                            <div class="a--MegaMenu-categoryItem" dtat-cat-id="dahom">دهم</div>
-                                            <div class="a--MegaMenu-categoryItem" dtat-cat-id="nezameGhadim">کنکور نظام قدیم</div>
+                                            <div class="a--MegaMenu-categoryItem" dtat-cat-id="davazdahomVaKonkur">
+                                                <a class="m-link" href="{{ urldecode(route('content.index', 'tags[]=نظام_آموزشی_جدید&tags[]=دوازدهم&tags[]=کنکور')) }}">
+                                                    دوازدهم و کنکور
+                                                </a>
+                                            </div>
+                                            <div class="a--MegaMenu-categoryItem" dtat-cat-id="yazdahom">
+                                                <a class="m-link" href="{{ urldecode(route('content.index', 'tags[]=نظام_آموزشی_جدید&tags[]=یازدهم')) }}">
+                                                    یازدهم
+                                                </a>
+                                            </div>
+                                            <div class="a--MegaMenu-categoryItem" dtat-cat-id="dahom">
+                                                <a class="m-link" href="{{ urldecode(route('content.index', 'tags[]=نظام_آموزشی_جدید&tags[]=دهم')) }}">
+                                                    دهم
+                                                </a>
+                                            </div>
+                                            <div class="a--MegaMenu-categoryItem" dtat-cat-id="nezameGhadim">
+                                                <a class="m-link" href="{{ urldecode(route('content.index', 'tags[]=نظام_آموزشی_قدیم&tags[]=کنکور')) }}">
+                                                    کنکور نظام قدیم
+                                                </a>
+                                            </div>
                                         </div>
                                         <div class="col-md-10 a--MegaMenu-subCategoryItemsCol">
 
@@ -515,10 +531,26 @@
                                 <div class="container-fluid">
                                     <div class="row">
                                         <div class="col-md-2 a--MegaMenu-categoryItemsCol">
-                                            <div class="a--MegaMenu-categoryItem" dtat-cat-id="talaee">طلایی</div>
-                                            <div class="a--MegaMenu-categoryItem" dtat-cat-id="taftan">تفتان</div>
-                                            <div class="a--MegaMenu-categoryItem" dtat-cat-id="5+1">5+1</div>
-                                            <div class="a--MegaMenu-categoryItem" dtat-cat-id="nezameGhadim">همایش های نظام قدیم</div>
+                                            <div class="a--MegaMenu-categoryItem" dtat-cat-id="talaee">
+                                                <a class="m-link" href="{{ route('web.landing.8') }}">
+                                                    طلایی
+                                                </a>
+                                            </div>
+                                            <div class="a--MegaMenu-categoryItem" dtat-cat-id="taftan">
+                                                <a class="m-link" href="{{ route('web.landing.9') }}">
+                                                    تفتان
+                                                </a>
+                                            </div>
+                                            <div class="a--MegaMenu-categoryItem" dtat-cat-id="5+1">
+                                                <a class="m-link" href="{{ route('web.landing.10') }}">
+                                                    5+1
+                                                </a>
+                                            </div>
+                                            <div class="a--MegaMenu-categoryItem" dtat-cat-id="nezameGhadim">
+                                                <a class="m-link" href="{{ route('web.landing.5') }}">
+                                                    همایش های نظام قدیم
+                                                </a>
+                                            </div>
                                             <div class="a--MegaMenu-categoryItem" dtat-cat-id="raheAbrisham">راه ابریشم</div>
                                         </div>
                                         <div class="col-md-10 a--MegaMenu-subCategoryItemsCol">
