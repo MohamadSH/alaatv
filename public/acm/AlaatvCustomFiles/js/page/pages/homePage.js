@@ -46,10 +46,6 @@ function loadCarousels() {
                 btnSwfitchEvent: function() {
                     imageObserver.observe();
                     gtmEecProductObserver.observe();
-                },
-                onTranslatedEvent: function(event) {
-                    imageObserver.observe();
-                    gtmEecProductObserver.observe();
                 }
             },
             grid: {

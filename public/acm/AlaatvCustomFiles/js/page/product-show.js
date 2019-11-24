@@ -535,10 +535,6 @@ jQuery(document).ready(function() {
             btnSwfitchEvent: function() {
                 imageObserver.observe();
                 gtmEecProductObserver.observe();
-            },
-            onTranslatedEvent: function(event) {
-                imageObserver.observe();
-                gtmEecProductObserver.observe();
             }
         },
         grid: {

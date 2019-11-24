@@ -48,8 +48,26 @@
     <script src="{{ mix('/js/admin-all.js') }}" type="text/javascript"></script>
     <script type="text/javascript">
         jQuery(document).ready(function () {
-            $('#employeeCommentSummerNote').summernote({height: 200, placeholder: "توضیحات کارمند"});
-            $('#managerCommentSummerNote').summernote({height: 200, placeholder: "توضیحات مدیر"});
+            $('#employeeCommentSummerNote').summernote({
+                lang: 'fa-IR',
+                height: 300,
+                placeholder: 'توضیحات کارمند',
+                popover: {
+                    image: [],
+                    link: [],
+                    air: []
+                }
+            });
+            $('#managerCommentSummerNote').summernote({
+                lang: 'fa-IR',
+                height: 300,
+                placeholder: 'توضیحات مدیر',
+                popover: {
+                    image: [],
+                    link: [],
+                    air: []
+                }
+            });
 
             $("#date").persianDatepicker({
                 altField: '#dateAlt',

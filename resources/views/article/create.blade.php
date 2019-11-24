@@ -50,7 +50,15 @@
 @section("extraJS")
     <script>
         //        $('#briefSummerNote').summernote({height: 200});
-        $('#bodySummerNote').summernote({height: 300});
+        $('#bodySummerNote').summernote({
+            lang: 'fa-IR',
+            height: 300,
+            popover: {
+                image: [],
+                link: [],
+                air: []
+            }
+        });
     </script>
 
     <script>

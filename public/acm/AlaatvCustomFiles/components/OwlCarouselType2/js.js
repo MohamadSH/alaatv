@@ -198,8 +198,6 @@
             }, 300);
         }
 
-        $.fn.OwlCarouselType2.owlCarouselOptions.OwlCarousel.onTranslatedEvent(event);
-
         $.fn.OwlCarouselType2.owlCarouselOptions.OwlCarousel.btnSwfitchEvent();
     };
 

@@ -15,11 +15,10 @@ var LazyLoad = function () {
 
     function carousel_slidEvent(lazyObservers) {
         $("#carouselMainSlideShow").on('slid.bs.carousel', function (e) {
-            let lazyObserversLength = lazyObservers.length;
-            for(let i = 0; i < lazyObserversLength; i++) {
+            var lazyObserversLength = lazyObservers.length;
+            for(var i = 0; i < lazyObserversLength; i++) {
                 lazyObservers[i].observe();
             }
-            // loadImage($(e.relatedTarget).find('img.imageSlideOfSlideshow'));
         });
     }
 
@@ -46,7 +45,6 @@ var LazyLoad = function () {
     function canChangeLazyLoad(element) {
         let lazyLoadStatus = parseInt($(element).attr('a-lazyload'));
         return lazyLoadStatus !== 1;
-
     }
 
     function changeLazyLoadStatus(element) {
@@ -56,8 +54,8 @@ var LazyLoad = function () {
 
     function loadElementByQuerySelector(querySelector, callback) {
         let elementObserver = lozad(querySelector, {
-            rootMargin: '0px', // syntax similar to that of CSS Margin
-            threshold: 0.1, // ratio of element convergence
+            rootMargin: '0px',
+            threshold: 0.1,
             load: function(element) {
                 if (canChangeLazyLoad(element)) {
                     callback(element);
@@ -67,13 +65,6 @@ var LazyLoad = function () {
         });
         elementObserver.observe();
         return elementObserver;
-    }
-
-    function getElementData(element, data) {
-        if (typeof element.data(data) !== 'undefined') {
-            return $element.data('gtm-eec-product-id');
-        }
-        return 'undefined';
     }
 
     return {
@@ -107,16 +98,16 @@ var LazyLoad = function () {
         },
 
         carousel: function (lazyObservers) {
-            // Bootstrap 4 carousel lazy load
-            carousel_loadHeightOfImageAndLoading();
-            carousel_slidEvent(lazyObservers);
+            /* Bootstrap 4 carousel lazy load */
             if ($('#carouselMainSlideShow').length === 1) {
-                $('#m_aside_left_hide_toggle').on('click', function() {
-                    carousel_loadHeightOfImageAndLoading();
-                });
-                $(window).on('resize', function() {
-                    carousel_loadHeightOfImageAndLoading();
-                });
+                carousel_loadHeightOfImageAndLoading();
+                carousel_slidEvent(lazyObservers);
+                // $('#m_aside_left_hide_toggle').on('click', function() {
+                //     carousel_loadHeightOfImageAndLoading();
+                // });
+                // $(window).on('resize', function() {
+                //     carousel_loadHeightOfImageAndLoading();
+                // });
             }
         },
 
