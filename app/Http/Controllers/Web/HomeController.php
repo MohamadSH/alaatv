@@ -596,8 +596,6 @@ class HomeController extends Controller
         $employees = User::whereHas('roles' , function ($q){
            $q->where('name' , config('constants.ROLE_UPLOAD_CENTER'));
         })->pluck('lastName' , 'id')->toArray();
-        $employees[0] = 'همه';
-        $employees    = array_sort_recursive($employees);
 
         $canSendSMS = ($user->can(config('constants.SEND_SMS_TO_USER_ACCESS')))?true:false;
 
@@ -605,7 +603,7 @@ class HomeController extends Controller
             $canSeeFileTable = true;
             $uploaderId = $request->get('uploader_id');
             $files = UploadCenter::orderByDesc('created_at');
-            if(isset($uploaderId) && $uploaderId != 0){
+            if(isset($uploaderId)){
                 $files->where('user_id' , $uploaderId);
             }
             $files = $files->paginate(10, ['*'], 'page');
