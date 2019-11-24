@@ -606,7 +606,7 @@ class HomeController extends Controller
             if(isset($uploaderId)){
                 $files->where('user_id' , $uploaderId);
             }
-            $files = $files->paginate(15, ['*'], 'page');
+            $files = $files->paginate(10, ['*'], 'page');
         }
 
         $linkParameters = request()->except('page');
