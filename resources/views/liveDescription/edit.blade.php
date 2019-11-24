@@ -46,6 +46,14 @@
 @section('page-js')
     <script src="{{ mix('/js/admin-all.js') }}" type="text/javascript"></script>
     <script>
-        $('#productLiveDescriptionSummerNote').summernote({height: 300});
+        $('#productLiveDescriptionSummerNote').summernote({
+            lang: 'fa-IR',
+            height: 300,
+            popover: {
+                image: [],
+                link: [],
+                air: []
+            }
+        });
     </script>
 @endsection

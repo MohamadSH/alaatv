@@ -69,8 +69,24 @@
         $("input[data-role=tagsinput], select[multiple][data-role=tagsinput]").tagsinput({
             tagClass: 'm-badge m-badge--info m-badge--wide m-badge--rounded'
         });
-        $('#descriptionSummerNote').summernote({height: 300});
-        $('#contextSummerNote').summernote({height: 300});
+        $('#descriptionSummerNote').summernote({
+            lang: 'fa-IR',
+            height: 300,
+            popover: {
+                image: [],
+                link: [],
+                air: []
+            }
+        });
+        $('#contextSummerNote').summernote({
+            lang: 'fa-IR',
+            height: 300,
+            popover: {
+                image: [],
+                link: [],
+                air: []
+            }
+        });
 
         $("#validSinceDate").persianDatepicker({
             altField: '#validSinceDateAlt',
