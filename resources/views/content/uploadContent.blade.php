@@ -311,7 +311,15 @@
 
                     var textArea = file.previewElement.querySelector('textarea[name="description"]');
                     textArea.setAttribute("id", "textarea_" + myDropzone.files.length);
-                    $("#textarea_" + myDropzone.files.length).summernote({height: 300});
+                    $("#textarea_" + myDropzone.files.length).summernote({
+                        lang: 'fa-IR',
+                        height: 300,
+                        popover: {
+                            image: [],
+                            link: [],
+                            air: []
+                        }
+                    });
 
                     var validSinceDateDom = file.previewElement.querySelector('.validSinceDate');
                     validSinceDateDom.setAttribute("id", "validSinceDate_" + myDropzone.files.length);

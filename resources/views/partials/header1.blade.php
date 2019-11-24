@@ -86,10 +86,26 @@
                                 <div class="container-fluid">
                                     <div class="row">
                                         <div class="col-md-2 a--MegaMenu-categoryItemsCol">
-                                            <div class="a--MegaMenu-categoryItem" dtat-cat-id="davazdahomVaKonkur">دوازدهم و کنکور</div>
-                                            <div class="a--MegaMenu-categoryItem" dtat-cat-id="yazdahom">یازدهم</div>
-                                            <div class="a--MegaMenu-categoryItem" dtat-cat-id="dahom">دهم</div>
-                                            <div class="a--MegaMenu-categoryItem" dtat-cat-id="nezameGhadim">کنکور نظام قدیم</div>
+                                            <div class="a--MegaMenu-categoryItem" dtat-cat-id="davazdahomVaKonkur">
+                                                <a class="m-link" href="{{ urldecode(route('content.index', 'tags[]=نظام_آموزشی_جدید&tags[]=دوازدهم&tags[]=کنکور')) }}">
+                                                    دوازدهم و کنکور
+                                                </a>
+                                            </div>
+                                            <div class="a--MegaMenu-categoryItem" dtat-cat-id="yazdahom">
+                                                <a class="m-link" href="{{ urldecode(route('content.index', 'tags[]=نظام_آموزشی_جدید&tags[]=یازدهم')) }}">
+                                                    یازدهم
+                                                </a>
+                                            </div>
+                                            <div class="a--MegaMenu-categoryItem" dtat-cat-id="dahom">
+                                                <a class="m-link" href="{{ urldecode(route('content.index', 'tags[]=نظام_آموزشی_جدید&tags[]=دهم')) }}">
+                                                    دهم
+                                                </a>
+                                            </div>
+                                            <div class="a--MegaMenu-categoryItem" dtat-cat-id="nezameGhadim">
+                                                <a class="m-link" href="{{ urldecode(route('content.index', 'tags[]=نظام_آموزشی_قدیم&tags[]=کنکور')) }}">
+                                                    کنکور نظام قدیم
+                                                </a>
+                                            </div>
                                         </div>
                                         <div class="col-md-10 a--MegaMenu-subCategoryItemsCol">
 
@@ -133,12 +149,7 @@
                                                         </div>
                                                         <div class="subCategoryItem">
                                                             <a class="m-link" href="{{ urldecode(route('content.index', 'tags[]=نظام_آموزشی_جدید&tags[]=دوازدهم&tags[]=کنکور&tags[]=رشته_ریاضی&tags[]=حسابان&tags[]=ریاضی_پایه')) }}" >
-                                                                حسابان
-                                                            </a>
-                                                        </div>
-                                                        <div class="subCategoryItem">
-                                                            <a class="m-link" href="{{ urldecode(route('content.index', 'tags[]=نظام_آموزشی_جدید&tags[]=دوازدهم&tags[]=کنکور&tags[]=رشته_ریاضی&tags[]=رشته_تجربی&tags[]=حسابان&tags[]=ریاضی_پایه')) }}" >
-                                                                ریاضی پایه
+                                                                حسابان و ریاضی پایه
                                                             </a>
                                                         </div>
                                                     </div>
@@ -520,10 +531,26 @@
                                 <div class="container-fluid">
                                     <div class="row">
                                         <div class="col-md-2 a--MegaMenu-categoryItemsCol">
-                                            <div class="a--MegaMenu-categoryItem" dtat-cat-id="talaee">طلایی</div>
-                                            <div class="a--MegaMenu-categoryItem" dtat-cat-id="taftan">تفتان</div>
-                                            <div class="a--MegaMenu-categoryItem" dtat-cat-id="5+1">5+1</div>
-                                            <div class="a--MegaMenu-categoryItem" dtat-cat-id="nezameGhadim">همایش های نظام قدیم</div>
+                                            <div class="a--MegaMenu-categoryItem" dtat-cat-id="talaee">
+                                                <a class="m-link" href="{{ route('web.landing.8') }}">
+                                                    طلایی
+                                                </a>
+                                            </div>
+                                            <div class="a--MegaMenu-categoryItem" dtat-cat-id="taftan">
+                                                <a class="m-link" href="{{ route('web.landing.9') }}">
+                                                    تفتان
+                                                </a>
+                                            </div>
+                                            <div class="a--MegaMenu-categoryItem" dtat-cat-id="5+1">
+                                                <a class="m-link" href="{{ route('web.landing.10') }}">
+                                                    5+1
+                                                </a>
+                                            </div>
+                                            <div class="a--MegaMenu-categoryItem" dtat-cat-id="nezameGhadim">
+                                                <a class="m-link" href="{{ route('web.landing.5') }}">
+                                                    همایش های نظام قدیم
+                                                </a>
+                                            </div>
                                             <div class="a--MegaMenu-categoryItem" dtat-cat-id="raheAbrisham">راه ابریشم</div>
                                         </div>
                                         <div class="col-md-10 a--MegaMenu-subCategoryItemsCol">
@@ -578,306 +605,7 @@
                                 </div>
                             </div>
                         </li>
-
-
-                        <li class="m-menu__item  m-menu__item--submenu m-menu__item--rel d-none" m-menu-submenu-toggle="hover" m-menu-link-redirect="1" aria-haspopup="true">
-                            <a href="javascript:" class="m-menu__link m-menu__toggle" title="فیلم و جزوه دهم آلاء">
-                                <i class="m-menu__link-icon flaticon-layers"></i>
-                                <span class="m-menu__link-text">دهم</span>
-                                <i class="m-menu__hor-arrow fa fa-angle-down"></i>
-                                <i class="m-menu__ver-arrow fa fa-angle-left"></i>
-                            </a>
-                            <div class="m-menu__submenu m-menu__submenu--classic m-menu__submenu--left a-major-menu__submenu">
-                                <ul class="m-menu__subnav">
-                                    <li class="m-menu__item " m-menu-link-redirect="1" aria-haspopup="true">
-                                        <a href="{{ urldecode(route('content.index', 'tags[]=دهم&tags[]=رشته_ریاضی')) }}" class="m-menu__link ">
-                                            {{--                                            <i class="m-menu__link-icon majorIcon"><img src="{{ asset('/acm/extra/riazi.gif') }}" alt="riazi" > </i>--}}
-                                            <span class="m-menu__link-title">
-                                                <span class="m-menu__link-wrap">
-                                                    <span class="m-badge a-badge--square m-badge--warning m-badge--dot m--margin-right-5"></span>
-                                                    <span class="m-menu__link-text">رشته ریاضی</span>
-                                                </span>
-                                            </span>
-                                        </a>
-                                    </li>
-                                    <li class="m-menu__item " m-menu-link-redirect="1" aria-haspopup="true">
-                                        <a href="{{ urldecode(route('content.index', 'tags[]=دهم&tags[]=رشته_تجربی')) }}" class="m-menu__link ">
-                                            {{--                                            <i class="m-menu__link-icon majorIcon"><img src="{{ asset('/acm/extra/tajrobi.gif') }}" alt="riazi" > </i>--}}
-                                            <span class="m-menu__link-title">
-                                                <span class="m-menu__link-wrap">
-                                                    <span class="m-badge a-badge--square m-badge--warning m-badge--dot m--margin-right-5"></span>
-                                                    <span class="m-menu__link-text">رشته تجربی</span>
-                                                </span>
-                                            </span>
-                                        </a>
-                                    </li>
-                                    <li class="m-menu__item " m-menu-link-redirect="1" aria-haspopup="true">
-                                        <a href="{{ urldecode(route('content.index', 'tags[]=دهم&tags[]=رشته_انسانی')) }}" class="m-menu__link ">
-                                            {{--                                            <i class="m-menu__link-icon majorIcon"><img src="{{ asset('/acm/extra/ensani.gif') }}" alt="riazi" > </i>--}}
-                                            <span class="m-menu__link-title">
-                                                <span class="m-menu__link-wrap">
-                                                    <span class="m-badge a-badge--square m-badge--warning m-badge--dot m--margin-right-5"></span>
-                                                    <span class="m-menu__link-text">رشته انسانی</span>
-                                                </span>
-                                            </span>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </li>
-                        <li class="m-menu__item  m-menu__item--submenu m-menu__item--rel d-none" m-menu-submenu-toggle="hover" m-menu-link-redirect="1" aria-haspopup="true">
-                            <a href="javascript:" class="m-menu__link m-menu__toggle" title="فیلم و جزوه یازدهم آلاء">
-                                <i class="m-menu__link-icon flaticon-layers"></i>
-                                <span class="m-menu__link-text">یازدهم</span>
-                                <i class="m-menu__hor-arrow fa fa-angle-down"></i>
-                                <i class="m-menu__ver-arrow fa fa-angle-left"></i>
-                            </a>
-                            <div class="m-menu__submenu m-menu__submenu--classic m-menu__submenu--left a-major-menu__submenu">
-                                <ul class="m-menu__subnav">
-                                    <li class="m-menu__item " m-menu-link-redirect="1" aria-haspopup="true">
-                                        <a href="{{ urldecode(route('content.index', 'tags[]=یازدهم&tags[]=رشته_ریاضی')) }}" class="m-menu__link ">
-{{--                                            <i class="m-menu__link-icon majorIcon"><img src="{{ asset('/acm/extra/riazi.gif') }}" alt="riazi" > </i>--}}
-                                            <span class="m-menu__link-title">
-                                                <span class="m-menu__link-wrap">
-                                                    <span class="m-badge a-badge--square m-badge--warning m-badge--dot m--margin-right-5"></span>
-                                                    <span class="m-menu__link-text">رشته ریاضی</span>
-                                                </span>
-                                            </span>
-                                        </a>
-                                    </li>
-                                    <li class="m-menu__item " m-menu-link-redirect="1" aria-haspopup="true">
-                                        <a href="{{ urldecode(route('content.index', 'tags[]=یازدهم&tags[]=رشته_تجربی')) }}" class="m-menu__link ">
-{{--                                            <i class="m-menu__link-icon majorIcon"><img src="{{ asset('/acm/extra/tajrobi.gif') }}" alt="riazi" > </i>--}}
-                                            <span class="m-menu__link-title">
-                                                <span class="m-menu__link-wrap">
-                                                    <span class="m-badge a-badge--square m-badge--warning m-badge--dot m--margin-right-5"></span>
-                                                    <span class="m-menu__link-text">رشته تجربی</span>
-                                                </span>
-                                            </span>
-                                        </a>
-                                    </li>
-                                    <li class="m-menu__item " m-menu-link-redirect="1" aria-haspopup="true">
-                                        <a href="{{ urldecode(route('content.index', 'tags[]=یازدهم&tags[]=رشته_انسانی')) }}" class="m-menu__link ">
-{{--                                            <i class="m-menu__link-icon majorIcon"><img src="{{ asset('/acm/extra/ensani.gif') }}" alt="riazi" > </i>--}}
-                                            <span class="m-menu__link-title">
-                                                <span class="m-menu__link-wrap">
-                                                    <span class="m-badge a-badge--square m-badge--warning m-badge--dot m--margin-right-5"></span>
-                                                    <span class="m-menu__link-text">رشته انسانی</span>
-                                                </span>
-                                            </span>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </li>
-                        <li class="m-menu__item  m-menu__item--submenu m-menu__item--rel d-none" m-menu-submenu-toggle="hover" m-menu-link-redirect="1" aria-haspopup="true">
-                            <a href="javascript:" class="m-menu__link m-menu__toggle" title="فیلم و جزوه کنکور آلاء">
-                                <i class="m-menu__link-icon flaticon-medal"></i>
-                                <span class="m-menu__link-title">
-                                    <span class="m-menu__link-wrap">
-                                        <span class="m-menu__link-text">کنکور</span>
-                                        <span class="m-menu__link-badge">
-                                            <span class="m-badge m-badge--brand m-badge--wide">نظام جدید</span>
-                                        </span>
-                                    </span>
-                                </span>
-                                <i class="m-menu__hor-arrow fa fa-angle-down"></i>
-                                <i class="m-menu__ver-arrow fa fa-angle-left"></i>
-                            </a>
-                            <div class="m-menu__submenu m-menu__submenu--classic m-menu__submenu--left a-major-menu__submenu">
-                                <ul class="m-menu__subnav">
-                                    <li class="m-menu__item " m-menu-link-redirect="1" aria-haspopup="true">
-                                        <a href="{{ urldecode(route('content.index', 'tags[]=کنکور&tags[]=رشته_ریاضی&tags[]=نظام_آموزشی_جدید')) }}" class="m-menu__link ">
-{{--                                            <i class="m-menu__link-icon majorIcon"><img src="{{ asset('/acm/extra/riazi.gif') }}" alt="riazi" > </i>--}}
-                                            <span class="m-menu__link-title">
-                                                <span class="m-menu__link-wrap">
-                                                    <span class="m-badge a-badge--square m-badge--warning m-badge--dot m--margin-right-5"></span>
-                                                    <span class="m-menu__link-text">رشته ریاضی</span>
-                                                </span>
-                                            </span>
-                                        </a>
-                                    </li>
-                                    <li class="m-menu__item " m-menu-link-redirect="1" aria-haspopup="true">
-                                        <a href="{{ urldecode(route('content.index', 'tags[]=کنکور&tags[]=رشته_تجربی&tags[]=نظام_آموزشی_جدید')) }}" class="m-menu__link ">
-{{--                                            <i class="m-menu__link-icon majorIcon"><img src="{{ asset('/acm/extra/tajrobi.gif') }}" alt="riazi" > </i>--}}
-                                            <span class="m-menu__link-title">
-                                                <span class="m-menu__link-wrap">
-                                                    <span class="m-badge a-badge--square m-badge--warning m-badge--dot m--margin-right-5"></span>
-                                                    <span class="m-menu__link-text">رشته تجربی</span>
-                                                </span>
-                                            </span>
-                                        </a>
-                                    </li>
-                                    <li class="m-menu__item " m-menu-link-redirect="1" aria-haspopup="true">
-                                        <a href="{{ urldecode(route('content.index', 'tags[]=کنکور&tags[]=رشته_انسانی&tags[]=نظام_آموزشی_جدید')) }}" class="m-menu__link ">
-{{--                                            <i class="m-menu__link-icon majorIcon"><img src="{{ asset('/acm/extra/ensani.gif') }}" alt="riazi" > </i>--}}
-                                            <span class="m-menu__link-title">
-                                                <span class="m-menu__link-wrap">
-                                                    <span class="m-badge a-badge--square m-badge--warning m-badge--dot m--margin-right-5"></span>
-                                                    <span class="m-menu__link-text">رشته انسانی</span>
-                                                </span>
-                                            </span>
-                                        </a>
-                                    </li>
-                                    <li class="m-menu__item " m-menu-link-redirect="1" aria-haspopup="true">
-                                        <a href="{{ route('web.shop') }}" class="m-menu__link ">
-                                            {{--                                            <i class="m-menu__link-icon majorIcon"><img src="{{ asset('/acm/extra/ensani.gif') }}" alt="riazi" > </i>--}}
-                                            <span class="m-menu__link-title">
-                                                <span class="m-menu__link-wrap">
-                                                    <span class="m-badge a-badge--square m-badge--warning m-badge--dot m--margin-right-5"></span>
-                                                    <span class="m-menu__link-text">جمع بندی و جزوه</span>
-                                                </span>
-                                            </span>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </li>
-                        <li class="m-menu__item  m-menu__item--submenu m-menu__item--rel d-none" m-menu-submenu-toggle="hover" m-menu-link-redirect="1" aria-haspopup="true">
-                            <a href="javascript:" class="m-menu__link m-menu__toggle" title="فیلم و جزوه کنکور آلاء">
-                                <i class="m-menu__link-icon flaticon-medal"></i>
-                                <span class="m-menu__link-title">
-                                    <span class="m-menu__link-wrap">
-                                        <span class="m-menu__link-text">کنکور</span>
-                                        <span class="m-menu__link-badge">
-                                            <span class="m-badge m-badge--brand m-badge--wide">نظام قدیم</span>
-                                        </span>
-                                    </span>
-                                </span>
-                                <i class="m-menu__hor-arrow fa fa-angle-down"></i>
-                                <i class="m-menu__ver-arrow fa fa-angle-left"></i>
-                            </a>
-                            <div class="m-menu__submenu m-menu__submenu--classic m-menu__submenu--left a-major-menu__submenu">
-                                <ul class="m-menu__subnav">
-                                    <li class="m-menu__item " m-menu-link-redirect="1" aria-haspopup="true">
-                                        <a href="{{ urldecode(route('content.index', 'tags[]=کنکور&tags[]=رشته_ریاضی&tags[]=نظام_آموزشی_قدیم')) }}" class="m-menu__link ">
-                                            {{--                                            <i class="m-menu__link-icon majorIcon"><img src="{{ asset('/acm/extra/riazi.gif') }}" alt="riazi" > </i>--}}
-                                            <span class="m-menu__link-title">
-                                                <span class="m-menu__link-wrap">
-                                                    <span class="m-badge a-badge--square m-badge--warning m-badge--dot m--margin-right-5"></span>
-                                                    <span class="m-menu__link-text">رشته ریاضی</span>
-                                                </span>
-                                            </span>
-                                        </a>
-                                    </li>
-                                    <li class="m-menu__item " m-menu-link-redirect="1" aria-haspopup="true">
-                                        <a href="{{ urldecode(route('content.index', 'tags[]=کنکور&tags[]=رشته_تجربی&tags[]=نظام_آموزشی_قدیم')) }}" class="m-menu__link ">
-                                            {{--                                            <i class="m-menu__link-icon majorIcon"><img src="{{ asset('/acm/extra/tajrobi.gif') }}" alt="riazi" > </i>--}}
-                                            <span class="m-menu__link-title">
-                                                <span class="m-menu__link-wrap">
-                                                    <span class="m-badge a-badge--square m-badge--warning m-badge--dot m--margin-right-5"></span>
-                                                    <span class="m-menu__link-text">رشته تجربی</span>
-                                                </span>
-                                            </span>
-                                        </a>
-                                    </li>
-                                    <li class="m-menu__item " m-menu-link-redirect="1" aria-haspopup="true">
-                                        <a href="{{ urldecode(route('content.index', 'tags[]=کنکور&tags[]=رشته_انسانی&tags[]=نظام_آموزشی_قدیم')) }}" class="m-menu__link ">
-                                            {{--                                            <i class="m-menu__link-icon majorIcon"><img src="{{ asset('/acm/extra/ensani.gif') }}" alt="riazi" > </i>--}}
-                                            <span class="m-menu__link-title">
-                                                <span class="m-menu__link-wrap">
-                                                    <span class="m-badge a-badge--square m-badge--warning m-badge--dot m--margin-right-5"></span>
-                                                    <span class="m-menu__link-text">رشته انسانی</span>
-                                                </span>
-                                            </span>
-                                        </a>
-                                    </li>
-                                    <li class="m-menu__item " m-menu-link-redirect="1" aria-haspopup="true">
-                                        <a href="{{ route('web.landing.5') }}" class="m-menu__link ">
-                                            {{--                                            <i class="m-menu__link-icon majorIcon"><img src="{{ asset('/acm/extra/ensani.gif') }}" alt="riazi" > </i>--}}
-                                            <span class="m-menu__link-title">
-                                                <span class="m-menu__link-wrap">
-                                                    <span class="m-badge a-badge--square m-badge--warning m-badge--dot m--margin-right-5"></span>
-                                                    <span class="m-menu__link-text">جمع بندی و جزوه</span>
-                                                </span>
-                                            </span>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </li>
-                        <li class="m-menu__item  m-menu__item--submenu m-menu__item--rel d-none" m-menu-submenu-toggle="hover" m-menu-link-redirect="1" aria-haspopup="true">
-                            <a href="javascript:" class="m-menu__link m-menu__toggle" title="همایش های آلاء">
-                                <i class="m-menu__link-icon flaticon-medal"></i>
-                                <span class="m-menu__link-title">
-                                    <span class="m-menu__link-wrap">
-                                        <span class="m-menu__link-text">همایش دانلودی</span>
-                                        <span class="m-menu__link-badge">
-                                        </span>
-                                    </span>
-                                </span>
-                                <i class="m-menu__hor-arrow fa fa-angle-down"></i>
-                                <i class="m-menu__ver-arrow fa fa-angle-left"></i>
-                            </a>
-                            <div class="m-menu__submenu m-menu__submenu--classic m-menu__submenu--left a-major-menu__submenu">
-                                <ul class="m-menu__subnav">
-                                    <li class="m-menu__item " m-menu-link-redirect="1" aria-haspopup="true">
-                                        <a href="{{ route('web.landing.8') }}" class="m-menu__link ">
-                                            {{--                                            <i class="m-menu__link-icon majorIcon"><img src="{{ asset('/acm/extra/riazi.gif') }}" alt="riazi" > </i>--}}
-                                            <span class="m-menu__link-title">
-                                                <span class="m-menu__link-wrap">
-                                                    <span class="m-badge a-badge--square m-badge--warning m-badge--dot m--margin-right-5"></span>
-                                                    <span class="m-menu__link-text">
-                                                        <b>طلایی</b>
-                                                        -
-                                                        80% کنکور
-                                                        -
-                                                        جمع بندی کامل
-                                                    </span>
-                                                </span>
-                                            </span>
-                                        </a>
-                                    </li>
-                                    <li class="m-menu__item " m-menu-link-redirect="1" aria-haspopup="true">
-                                        <a href="{{ route('web.landing.9') }}" class="m-menu__link ">
-                                            {{--                                            <i class="m-menu__link-icon majorIcon"><img src="{{ asset('/acm/extra/tajrobi.gif') }}" alt="riazi" > </i>--}}
-                                            <span class="m-menu__link-title">
-                                                <span class="m-menu__link-wrap">
-                                                    <span class="m-badge a-badge--square m-badge--warning m-badge--dot m--margin-right-5"></span>
-                                                    <span class="m-menu__link-text">
-                                                        <b>تفتان</b>
-                                                        -
-                                                        60% کنکور
-                                                        -
-                                                        دروس پایه
-                                                    </span>
-                                                </span>
-                                            </span>
-                                        </a>
-                                    </li>
-                                    <li class="m-menu__item " m-menu-link-redirect="1" aria-haspopup="true">
-                                        <a href="{{ route('web.landing.10') }}" class="m-menu__link ">
-                                            {{--                                            <i class="m-menu__link-icon majorIcon"><img src="{{ asset('/acm/extra/ensani.gif') }}" alt="riazi" > </i>--}}
-                                            <span class="m-menu__link-title">
-                                                <span class="m-menu__link-wrap">
-                                                    <span class="m-badge a-badge--square m-badge--warning m-badge--dot m--margin-right-5"></span>
-                                                    <span class="m-menu__link-text">
-                                                        <b>5+1</b>
-                                                        -
-                                                        33% کنکور
-                                                        -
-                                                        نیم سال اول دوازدهم
-                                                    </span>
-                                                </span>
-                                            </span>
-                                        </a>
-                                    </li>
-                                    <li class="m-menu__item " m-menu-link-redirect="1" aria-haspopup="true">
-                                        <a href="{{ route('web.landing.5') }}" class="m-menu__link ">
-                                            {{--                                            <i class="m-menu__link-icon majorIcon"><img src="{{ asset('/acm/extra/ensani.gif') }}" alt="riazi" > </i>--}}
-                                            <span class="m-menu__link-title">
-                                                <span class="m-menu__link-wrap">
-                                                    <span class="m-badge a-badge--square m-badge--warning m-badge--dot m--margin-right-5"></span>
-                                                    <span class="m-menu__link-text">
-                                                        <b>همایش های نظام قدیم</b>
-                                                    </span>
-                                                </span>
-                                            </span>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </li>
+                        
                     </ul>
                 </div>
                 <!-- END: Horizontal Menu -->
