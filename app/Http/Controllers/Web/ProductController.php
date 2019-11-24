@@ -16,7 +16,6 @@ use App\{Adapter\AlaaSftpAdapter,
     Traits\FileCommon,
     Traits\Helper,
     Attributevalue,
-    User,
     Websitesetting,
     Productfiletype,
     Traits\MathCommon,
@@ -967,7 +966,7 @@ class ProductController extends Controller
 
         $product->isFree = $isFree;
 
-        $product->intro_videos = $this->setIntroVideos(Arr::get($inputData, 'sampleContentsString'),
+        $product->intro_videos = $this->setIntroVideos(Arr::get($inputData, 'introVideo'),
             Arr::get($inputData, 'introVideoThumbnail'));
 
         //Storing product's catalog
