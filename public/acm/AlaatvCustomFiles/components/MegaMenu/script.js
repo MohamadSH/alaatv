@@ -18,6 +18,7 @@ var AlaaMegaMenu = function () {
     }
     function hideAllCategory($categoryTarget) {
         getMegaMenuTitleObject($categoryTarget).find('.a--MegaMenu-categoryItem').removeClass('a--MegaMenu-categoryItem-selected');
+        getMegaMenuTitleObject($categoryTarget).find('.a--MegaMenu-categoryItem a').removeClass('a--MegaMenu-categoryItem-selected');
         getMegaMenuTitleObject($categoryTarget).find('.a--MegaMenu-categorySubItems').each(function() {
             hideCategorySubItems($(this));
         });
