@@ -30,8 +30,8 @@
             <span id="uploadedFilePath"></span>
         </strong>
     </div>
-    @permission((config('constants.SEND_SMS_TO_USER_ACCESS')))
-    <div class="row" id="smsLinkPortlet" style="display:none">
+    @if($canSendSMS)
+        <div class="row" id="smsLinkPortlet" style="display:none">
         <div class="col-lg-4 mx-auto">
             <div class = "m-portlet m-portlet--mobile m-portlet--body-progress-">
                 <div class="m-portlet__head">
@@ -69,7 +69,7 @@
             </div>
         </div>
     </div>
-    @endpermission
+    @endif
 
     <div class="row">
         <div class="col-lg-4 mx-auto">
@@ -118,8 +118,8 @@
         </div>
     </div>
 
-    @permission((config('constants.LIST_UPLOAD_CENTER_FILES')))
-    <div class="row">
+    @if(isset($canSeeFileTable))
+        <div class="row">
         <div class="col-lg-12">
             <div class = "m-portlet m-portlet--mobile m-portlet--body-progress-">
                 <div class="m-portlet__head">
@@ -165,11 +165,13 @@
                         @endforeach
                         </tbody>
                     </table>
+                    {{$files->appends($linkParameters)->links()}}
                 </div>
             </div>
         </div>
     </div>
-    @endpermission
+    @endif
+
 @endsection
 
 @section('page-js')
