@@ -52,7 +52,15 @@
                 tagClass: 'm-badge m-badge--info m-badge--wide m-badge--rounded'
             });
 
-            $('#productShortDescriptionSummerNote').summernote({height: 300});
+            $('#productShortDescriptionSummerNote').summernote({
+                lang: 'fa-IR',
+                height: 300,
+                popover: {
+                    image: [],
+                    link: [],
+                    air: []
+                }
+            });
 
             makeDataTable('productTable');
 
