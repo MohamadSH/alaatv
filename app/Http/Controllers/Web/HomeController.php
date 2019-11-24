@@ -591,19 +591,27 @@ class HomeController extends Controller
 
     public function uploadCenter(Request $request)
     {
+        $user = $request->user();
+
         $employees = User::whereHas('roles' , function ($q){
            $q->where('name' , config('constants.ROLE_UPLOAD_CENTER'));
         })->pluck('lastName' , 'id')->toArray();
 
-        $uploaderId = $request->get('uploader_id');
-        $files = UploadCenter::orderByDesc('created_at');
-        if(isset($uploaderId)){
-            $files->where('user_id' , $uploaderId);
+        $canSendSMS = ($user->can(config('constants.SEND_SMS_TO_USER_ACCESS')))?true:false;
+
+        if($user->can(config('constants.LIST_UPLOAD_CENTER_FILES'))){
+            $canSeeFileTable = true;
+            $uploaderId = $request->get('uploader_id');
+            $files = UploadCenter::orderByDesc('created_at');
+            if(isset($uploaderId)){
+                $files->where('user_id' , $uploaderId);
+            }
+            $files = $files->paginate(15, ['*'], 'page');
         }
 
-        $files = $files->get();
+        $linkParameters = request()->except('page');
 
-        return view('admin.uploadCenter' , compact('employees' , 'files'));
+        return view('admin.uploadCenter' , compact('employees' , 'files' , 'canSendSMS' , 'canSeeFileTable' , 'linkParameters'));
     }
 
     public function bigUpload(Request $request)
