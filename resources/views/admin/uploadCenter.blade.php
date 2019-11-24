@@ -143,7 +143,7 @@
                     {!! Form::close() !!}
                     <hr>
                     <h3 style="text-align: center">
-                        تعداد فایل ها : {{$files->count()}}
+                        تعداد فایل ها : {{$files->total()}}
                     </h3>
                     <table class="table table-striped table-bordered table-hover dt-responsive" width="100%" id="uploadedFilesTable">
                         <thead>
