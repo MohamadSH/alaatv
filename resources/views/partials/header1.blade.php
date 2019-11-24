@@ -87,22 +87,22 @@
                                     <div class="row">
                                         <div class="col-md-2 a--MegaMenu-categoryItemsCol">
                                             <div class="a--MegaMenu-categoryItem" dtat-cat-id="davazdahomVaKonkur">
-                                                <a class="m-link" href="{{ urldecode(route('content.index', 'tags[]=نظام_آموزشی_جدید&tags[]=دوازدهم&tags[]=کنکور')) }}">
+                                                <a dtat-cat-id="davazdahomVaKonkur" class="m-link" href="{{ urldecode(route('content.index', 'tags[]=نظام_آموزشی_جدید&tags[]=دوازدهم&tags[]=کنکور')) }}">
                                                     دوازدهم و کنکور
                                                 </a>
                                             </div>
                                             <div class="a--MegaMenu-categoryItem" dtat-cat-id="yazdahom">
-                                                <a class="m-link" href="{{ urldecode(route('content.index', 'tags[]=نظام_آموزشی_جدید&tags[]=یازدهم')) }}">
+                                                <a dtat-cat-id="yazdahom" class="m-link" href="{{ urldecode(route('content.index', 'tags[]=نظام_آموزشی_جدید&tags[]=یازدهم')) }}">
                                                     یازدهم
                                                 </a>
                                             </div>
                                             <div class="a--MegaMenu-categoryItem" dtat-cat-id="dahom">
-                                                <a class="m-link" href="{{ urldecode(route('content.index', 'tags[]=نظام_آموزشی_جدید&tags[]=دهم')) }}">
+                                                <a dtat-cat-id="dahom" class="m-link" href="{{ urldecode(route('content.index', 'tags[]=نظام_آموزشی_جدید&tags[]=دهم')) }}">
                                                     دهم
                                                 </a>
                                             </div>
                                             <div class="a--MegaMenu-categoryItem" dtat-cat-id="nezameGhadim">
-                                                <a class="m-link" href="{{ urldecode(route('content.index', 'tags[]=نظام_آموزشی_قدیم&tags[]=کنکور')) }}">
+                                                <a dtat-cat-id="nezameGhadim" class="m-link" href="{{ urldecode(route('content.index', 'tags[]=نظام_آموزشی_قدیم&tags[]=کنکور')) }}">
                                                     کنکور نظام قدیم
                                                 </a>
                                             </div>
@@ -532,22 +532,22 @@
                                     <div class="row">
                                         <div class="col-md-2 a--MegaMenu-categoryItemsCol">
                                             <div class="a--MegaMenu-categoryItem" dtat-cat-id="talaee">
-                                                <a class="m-link" href="{{ route('web.landing.8') }}">
+                                                <a dtat-cat-id="talaee" class="m-link" href="{{ route('web.landing.8') }}">
                                                     طلایی
                                                 </a>
                                             </div>
                                             <div class="a--MegaMenu-categoryItem" dtat-cat-id="taftan">
-                                                <a class="m-link" href="{{ route('web.landing.9') }}">
+                                                <a dtat-cat-id="taftan" class="m-link" href="{{ route('web.landing.9') }}">
                                                     تفتان
                                                 </a>
                                             </div>
                                             <div class="a--MegaMenu-categoryItem" dtat-cat-id="5+1">
-                                                <a class="m-link" href="{{ route('web.landing.10') }}">
+                                                <a dtat-cat-id="5+1" class="m-link" href="{{ route('web.landing.10') }}">
                                                     5+1
                                                 </a>
                                             </div>
                                             <div class="a--MegaMenu-categoryItem" dtat-cat-id="nezameGhadim">
-                                                <a class="m-link" href="{{ route('web.landing.5') }}">
+                                                <a dtat-cat-id="nezameGhadim" class="m-link" href="{{ route('web.landing.5') }}">
                                                     همایش های نظام قدیم
                                                 </a>
                                             </div>
