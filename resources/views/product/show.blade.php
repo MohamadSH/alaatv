@@ -105,23 +105,29 @@
 
     @include('product.partials.raheAbrisham.entekhabeFarsang')
     
-    @include('product.partials.raheAbrisham.descriptionBox', [
-        'title' => 'توضیح مراحل راه ابریشم',
-        'content' => 'این نمونه متن توضیحات راه ابریشم هست که در این کادر قرار میگیره، بصورت مختصر و مفید تمام مراحل راه ابریشم و اهداف طی فرایند در این دوره آموزشی دانلودی باید توضیح داده شود. در حد دو خط توضیحات برای پیش نماش کافیست و باقی مطالب در ادامه مطلب و کادر گسترده نمایش داده میشود ...',
-        'btnMoreText' => 'مطالعه کامل توضیحات',
-    ])
-
-    @include('product.partials.raheAbrisham.descriptionBox', [
-        'title' => 'راهنمای استفاده از این دوره',
-        'content' => 'این نمونه متن توضیحات راه ابریشم هست که در این کادر قرار میگیره، بصورت مختصر و مفید تمام مراحل راه ابریشم و اهداف طی فرایند در این دوره آموزشی دانلودی باید توضیح داده شود. در حد دو خط توضیحات برای پیش نماش کافیست و باقی مطالب در ادامه مطلب و کادر گسترده نمایش داده میشود ...',
-        'btnMoreText' => 'مطالعه کامل توضیحات',
-    ])
-
-    @include('product.partials.raheAbrisham.descriptionBox', [
-        'title' => 'نحوه دریافت هدایای ارزشمند آموزشی ویژه شما عزیزان',
-        'content' => 'این نمونه متن توضیحات راه ابریشم هست که در این کادر قرار میگیره، بصورت مختصر و مفید تمام مراحل راه ابریشم و اهداف طی فرایند در این دوره آموزشی دانلودی باید توضیح داده شود. در حد دو خط توضیحات برای پیش نماش کافیست و باقی مطالب در ادامه مطلب و کادر گسترده نمایش داده میشود ...',
-        'btnMoreText' => 'مطالعه کامل توضیحات',
-    ])
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            @include('product.partials.raheAbrisham.descriptionBox', [
+                'title' => 'توضیح مراحل راه ابریشم',
+                'content' => 'این نمونه متن توضیحات راه ابریشم هست که در این کادر قرار میگیره، بصورت مختصر و مفید تمام مراحل راه ابریشم و اهداف طی فرایند در این دوره آموزشی دانلودی باید توضیح داده شود. در حد دو خط توضیحات برای پیش نماش کافیست و باقی مطالب در ادامه مطلب و کادر گسترده نمایش داده میشود ...',
+                'btnMoreText' => 'مطالعه کامل توضیحات',
+            ])
+        </div>
+        <div class="col-md-6">
+            @include('product.partials.raheAbrisham.descriptionBox', [
+                'title' => 'راهنمای استفاده از این دوره',
+                'content' => 'این نمونه متن توضیحات راه ابریشم هست که در این کادر قرار میگیره، بصورت مختصر و مفید تمام مراحل راه ابریشم و اهداف طی فرایند در این دوره آموزشی دانلودی باید توضیح داده شود. در حد دو خط توضیحات برای پیش نماش کافیست و باقی مطالب در ادامه مطلب و کادر گسترده نمایش داده میشود ...',
+                'btnMoreText' => 'مطالعه کامل توضیحات',
+            ])
+        </div>
+        <div class="col-md-6">
+            @include('product.partials.raheAbrisham.descriptionBox', [
+                'title' => 'نحوه دریافت هدایای ارزشمند آموزشی ویژه شما عزیزان',
+                'content' => 'این نمونه متن توضیحات راه ابریشم هست که در این کادر قرار میگیره، بصورت مختصر و مفید تمام مراحل راه ابریشم و اهداف طی فرایند در این دوره آموزشی دانلودی باید توضیح داده شود. در حد دو خط توضیحات برای پیش نماش کافیست و باقی مطالب در ادامه مطلب و کادر گسترده نمایش داده میشود ...',
+                'btnMoreText' => 'مطالعه کامل توضیحات',
+            ])
+        </div>
+    </div>
 
     @include('product.partials.raheAbrisham.descriptionBox', [
         'title' => 'سوالات متداول درباره این دوره',
@@ -805,6 +811,8 @@
 @endsection
 
 @section('page-js')
+    <script src="{{ asset('/acm/AlaatvCustomFiles/components/ScrollCarousel/js.js') }}"></script>
+    <script src="{{ asset('/acm/AlaatvCustomFiles/components/OwlCarouselType2/js.js') }}"></script>
     <script src="{{ mix('/js/product-show.js') }}"></script>
     <script src="{{ asset('/acm/AlaatvCustomFiles/components/customSelect/js.js') }}"></script>
     <script>
@@ -827,5 +835,7 @@
                 // { index: 2, totalCount: 5, value: "3", text: "فرسنگ سوم" }
             }
         });
+
+        ScrollCarousel.addSwipeIcons($('.ScrollCarousel'));
     </script>
 @endsection

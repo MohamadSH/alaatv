@@ -568,8 +568,8 @@ class Mix {
             [
                 'node_modules/toastr/build/toastr.min.js',
                 'node_modules/bootstrap-switch/dist/js/bootstrap-switch.js',
-                'public/acm/AlaatvCustomFiles/components/ScrollCarousel/js.js',
-                'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/js.js',
+                // 'public/acm/AlaatvCustomFiles/components/ScrollCarousel/js.js',
+                // 'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/js.js',
                 'node_modules/lightgallery/src/js/lightgallery.js',
                 'node_modules/lightgallery/modules/lg-thumbnail.min.js',
                 'node_modules/lightgallery/modules/lg-autoplay.min.js',

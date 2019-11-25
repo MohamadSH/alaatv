@@ -20,6 +20,18 @@
 </div>
 
 <style>
+    .entekhabeFarsangVideoAndPamphlet {
+        position: relative;
+    }
+    .entekhabeFarsangVideoAndPamphlet:before {
+        content: ' ';
+        border-right: solid 25px transparent;
+        border-left: solid 25px transparent;
+        border-bottom: solid 25px white;
+        position: absolute;
+        left: 25%;
+        top: -25px;
+    }
     .entekhabeFarsangVideoAndPamphlet .nav.nav-tabs {
         width: max-content;
         margin: auto;
@@ -43,6 +55,14 @@
     .entekhabeFarsangVideoAndPamphlet .nav-tabs .nav-link.active {
         color: black;
         border-bottom: solid 3px black;
+    }
+    .entekhabeFarsangVideoAndPamphlet .m-portlet__body {
+        padding-top: 0 !important;
+    }
+    .entekhabeFarsangVideoAndPamphlet .m-portlet__body .closeBtn {
+        position: absolute;
+        top: 20px;
+        right: 20px;
     }
     .entekhabeFarsangVideoAndPamphlet .tab-content .tab-pane {
         position: relative;
@@ -80,13 +100,26 @@
     .entekhabeFarsangVideoAndPamphlet .tab-content .tab-pane .ScrollCarousel-previous {
         right: 0;
     }
+
+    @media (max-width: 767px) {
+        .entekhabeFarsangVideoAndPamphlet:before {
+            left: 50%;
+        }
+    }
+
+    @media (max-width: 400px) {
+        .entekhabeFarsangVideoAndPamphlet .nav-tabs .nav-item .nav-link, .entekhabeFarsangVideoAndPamphlet .nav-tabs .nav-link {
+            font-size: 1.2rem;
+        }
+    }
 </style>
+
 
 <div class="row">
     <div class="col">
         <div class="m-portlet entekhabeFarsangVideoAndPamphlet">
             <div class="m-portlet__body">
-                <div>
+                <div class="closeBtn">
                     <i class="fa fa-times"></i>
                 </div>
                 <ul class="nav nav-tabs" role="tablist">
@@ -99,125 +132,149 @@
                 </ul>
                 <div class="tab-content">
                     <div class="tab-pane active" id="m_tabs_video" role="tabpanel">
-                        <div class="ScrollCarousel-previous">
-                            <i class="fa fa-chevron-right"></i>
-                        </div>
-                        <div class="ScrollCarousel m--margin-top-20">
-                            <div class="item w-55443211">
-                                <img class="lazy-image a--full-width"
-                                     src="https://cdn.alaatv.com/loder.jpg?w=16&h=9"
-                                     data-src="/acm/image/raheAbrisham/samplePhoto.png"
-                                     alt="samplePhoto"
-                                     width="253" height="142">
+                        <div class="ScrollCarousel">
+                            
+                            <div class="ScrollCarousel-Items m--margin-top-20" id="ScrollCarousel1">
+                                <div class="item w-55443211">
+                                    <img class="lazy-image a--full-width"
+                                         src="https://cdn.alaatv.com/loder.jpg?w=16&h=9"
+                                         data-src="/acm/image/raheAbrisham/samplePhoto.png"
+                                         alt="samplePhoto"
+                                         width="253" height="142">
+                                </div>
+                                <div class="item w-55443211">
+                                    <img class="lazy-image a--full-width"
+                                         src="https://cdn.alaatv.com/loder.jpg?w=16&h=9"
+                                         data-src="/acm/image/raheAbrisham/samplePhoto.png"
+                                         alt="samplePhoto"
+                                         width="253" height="142">
+                                </div>
+                                <div class="item w-55443211">
+                                    <img class="lazy-image a--full-width"
+                                         src="https://cdn.alaatv.com/loder.jpg?w=16&h=9"
+                                         data-src="/acm/image/raheAbrisham/samplePhoto.png"
+                                         alt="samplePhoto"
+                                         width="253" height="142">
+                                </div>
+                                <div class="item w-55443211">
+                                    <img class="lazy-image a--full-width"
+                                         src="https://cdn.alaatv.com/loder.jpg?w=16&h=9"
+                                         data-src="/acm/image/raheAbrisham/samplePhoto.png"
+                                         alt="samplePhoto"
+                                         width="253" height="142">
+                                </div>
+                                <div class="item w-55443211">
+                                    <img class="lazy-image a--full-width"
+                                         src="https://cdn.alaatv.com/loder.jpg?w=16&h=9"
+                                         data-src="/acm/image/raheAbrisham/samplePhoto.png"
+                                         alt="samplePhoto"
+                                         width="253" height="142">
+                                </div>
+                                <div class="item w-55443211">
+                                    <img class="lazy-image a--full-width"
+                                         src="https://cdn.alaatv.com/loder.jpg?w=16&h=9"
+                                         data-src="/acm/image/raheAbrisham/samplePhoto.png"
+                                         alt="samplePhoto"
+                                         width="253" height="142">
+                                </div>
+                                <div class="item w-55443211">
+                                    <img class="lazy-image a--full-width"
+                                         src="https://cdn.alaatv.com/loder.jpg?w=16&h=9"
+                                         data-src="/acm/image/raheAbrisham/samplePhoto.png"
+                                         alt="samplePhoto"
+                                         width="253" height="142">
+                                </div>
+                                <div class="item w-55443211">
+                                    <img class="lazy-image a--full-width"
+                                         src="https://cdn.alaatv.com/loder.jpg?w=16&h=9"
+                                         data-src="/acm/image/raheAbrisham/samplePhoto.png"
+                                         alt="samplePhoto"
+                                         width="253" height="142">
+                                </div>
+                                <div class="item w-55443211">
+                                    <img class="lazy-image a--full-width"
+                                         src="https://cdn.alaatv.com/loder.jpg?w=16&h=9"
+                                         data-src="/acm/image/raheAbrisham/samplePhoto.png"
+                                         alt="samplePhoto"
+                                         width="253" height="142">
+                                </div>
+                                <div class="item w-55443211">
+                                    <img class="lazy-image a--full-width"
+                                         src="https://cdn.alaatv.com/loder.jpg?w=16&h=9"
+                                         data-src="/acm/image/raheAbrisham/samplePhoto.png"
+                                         alt="samplePhoto"
+                                         width="253" height="142">
+                                </div>
+                                <div class="item w-55443211">
+                                    <img class="lazy-image a--full-width"
+                                         src="https://cdn.alaatv.com/loder.jpg?w=16&h=9"
+                                         data-src="/acm/image/raheAbrisham/samplePhoto.png"
+                                         alt="samplePhoto"
+                                         width="253" height="142">
+                                </div>
                             </div>
-                            <div class="item w-55443211">
-                                <img class="lazy-image a--full-width"
-                                     src="https://cdn.alaatv.com/loder.jpg?w=16&h=9"
-                                     data-src="/acm/image/raheAbrisham/samplePhoto.png"
-                                     alt="samplePhoto"
-                                     width="253" height="142">
-                            </div>
-                            <div class="item w-55443211">
-                                <img class="lazy-image a--full-width"
-                                     src="https://cdn.alaatv.com/loder.jpg?w=16&h=9"
-                                     data-src="/acm/image/raheAbrisham/samplePhoto.png"
-                                     alt="samplePhoto"
-                                     width="253" height="142">
-                            </div>
-                            <div class="item w-55443211">
-                                <img class="lazy-image a--full-width"
-                                     src="https://cdn.alaatv.com/loder.jpg?w=16&h=9"
-                                     data-src="/acm/image/raheAbrisham/samplePhoto.png"
-                                     alt="samplePhoto"
-                                     width="253" height="142">
-                            </div>
-                            <div class="item w-55443211">
-                                <img class="lazy-image a--full-width"
-                                     src="https://cdn.alaatv.com/loder.jpg?w=16&h=9"
-                                     data-src="/acm/image/raheAbrisham/samplePhoto.png"
-                                     alt="samplePhoto"
-                                     width="253" height="142">
-                            </div>
-                            <div class="item w-55443211">
-                                <img class="lazy-image a--full-width"
-                                     src="https://cdn.alaatv.com/loder.jpg?w=16&h=9"
-                                     data-src="/acm/image/raheAbrisham/samplePhoto.png"
-                                     alt="samplePhoto"
-                                     width="253" height="142">
-                            </div>
-                            <div class="item w-55443211">
-                                <img class="lazy-image a--full-width"
-                                     src="https://cdn.alaatv.com/loder.jpg?w=16&h=9"
-                                     data-src="/acm/image/raheAbrisham/samplePhoto.png"
-                                     alt="samplePhoto"
-                                     width="253" height="142">
-                            </div>
-                        </div>
-                        <div class="whiteShadow"></div>
-                        <div class="ScrollCarousel-next">
-                            <i class="fa fa-chevron-left"></i>
+                            <div class="whiteShadow"></div>
+                            
                         </div>
                     </div>
                     <div class="tab-pane" id="m_tabs_pamphlet" role="tabpanel">
     
     
-                        <div class="ScrollCarousel-previous">
-                            <i class="fa fa-chevron-right"></i>
-                        </div>
-                        <div class="ScrollCarousel m--margin-top-20">
-                            <div class="item w-55443211">
-                                <img class="lazy-image a--full-width"
-                                     src="https://cdn.alaatv.com/loder.jpg?w=16&h=9"
-                                     data-src="/acm/image/raheAbrisham/samplePhoto.png"
-                                     alt="samplePhoto"
-                                     width="253" height="142">
+                        <div class="ScrollCarousel">
+                            
+                            <div class="ScrollCarousel-Items m--margin-top-20">
+                                <div class="item w-55443211">
+                                    <img class="lazy-image a--full-width"
+                                         src="https://cdn.alaatv.com/loder.jpg?w=16&h=9"
+                                         data-src="/acm/image/raheAbrisham/samplePhoto.png"
+                                         alt="samplePhoto"
+                                         width="253" height="142">
+                                </div>
+                                <div class="item w-55443211">
+                                    <img class="lazy-image a--full-width"
+                                         src="https://cdn.alaatv.com/loder.jpg?w=16&h=9"
+                                         data-src="/acm/image/raheAbrisham/samplePhoto.png"
+                                         alt="samplePhoto"
+                                         width="253" height="142">
+                                </div>
+                                <div class="item w-55443211">
+                                    <img class="lazy-image a--full-width"
+                                         src="https://cdn.alaatv.com/loder.jpg?w=16&h=9"
+                                         data-src="/acm/image/raheAbrisham/samplePhoto.png"
+                                         alt="samplePhoto"
+                                         width="253" height="142">
+                                </div>
+                                <div class="item w-55443211">
+                                    <img class="lazy-image a--full-width"
+                                         src="https://cdn.alaatv.com/loder.jpg?w=16&h=9"
+                                         data-src="/acm/image/raheAbrisham/samplePhoto.png"
+                                         alt="samplePhoto"
+                                         width="253" height="142">
+                                </div>
+                                <div class="item w-55443211">
+                                    <img class="lazy-image a--full-width"
+                                         src="https://cdn.alaatv.com/loder.jpg?w=16&h=9"
+                                         data-src="/acm/image/raheAbrisham/samplePhoto.png"
+                                         alt="samplePhoto"
+                                         width="253" height="142">
+                                </div>
+                                <div class="item w-55443211">
+                                    <img class="lazy-image a--full-width"
+                                         src="https://cdn.alaatv.com/loder.jpg?w=16&h=9"
+                                         data-src="/acm/image/raheAbrisham/samplePhoto.png"
+                                         alt="samplePhoto"
+                                         width="253" height="142">
+                                </div>
+                                <div class="item w-55443211">
+                                    <img class="lazy-image a--full-width"
+                                         src="https://cdn.alaatv.com/loder.jpg?w=16&h=9"
+                                         data-src="/acm/image/raheAbrisham/samplePhoto.png"
+                                         alt="samplePhoto"
+                                         width="253" height="142">
+                                </div>
                             </div>
-                            <div class="item w-55443211">
-                                <img class="lazy-image a--full-width"
-                                     src="https://cdn.alaatv.com/loder.jpg?w=16&h=9"
-                                     data-src="/acm/image/raheAbrisham/samplePhoto.png"
-                                     alt="samplePhoto"
-                                     width="253" height="142">
-                            </div>
-                            <div class="item w-55443211">
-                                <img class="lazy-image a--full-width"
-                                     src="https://cdn.alaatv.com/loder.jpg?w=16&h=9"
-                                     data-src="/acm/image/raheAbrisham/samplePhoto.png"
-                                     alt="samplePhoto"
-                                     width="253" height="142">
-                            </div>
-                            <div class="item w-55443211">
-                                <img class="lazy-image a--full-width"
-                                     src="https://cdn.alaatv.com/loder.jpg?w=16&h=9"
-                                     data-src="/acm/image/raheAbrisham/samplePhoto.png"
-                                     alt="samplePhoto"
-                                     width="253" height="142">
-                            </div>
-                            <div class="item w-55443211">
-                                <img class="lazy-image a--full-width"
-                                     src="https://cdn.alaatv.com/loder.jpg?w=16&h=9"
-                                     data-src="/acm/image/raheAbrisham/samplePhoto.png"
-                                     alt="samplePhoto"
-                                     width="253" height="142">
-                            </div>
-                            <div class="item w-55443211">
-                                <img class="lazy-image a--full-width"
-                                     src="https://cdn.alaatv.com/loder.jpg?w=16&h=9"
-                                     data-src="/acm/image/raheAbrisham/samplePhoto.png"
-                                     alt="samplePhoto"
-                                     width="253" height="142">
-                            </div>
-                            <div class="item w-55443211">
-                                <img class="lazy-image a--full-width"
-                                     src="https://cdn.alaatv.com/loder.jpg?w=16&h=9"
-                                     data-src="/acm/image/raheAbrisham/samplePhoto.png"
-                                     alt="samplePhoto"
-                                     width="253" height="142">
-                            </div>
-                        </div>
-                        <div class="whiteShadow"></div>
-                        <div class="ScrollCarousel-next">
-                            <i class="fa fa-chevron-left"></i>
+                            <div class="whiteShadow"></div>
+                            
                         </div>
                         
                     </div>

@@ -51,8 +51,8 @@
             </div>
             
             <div class="searchResult">
-                <div class="carouselType">
-                    <div class="ScrollCarousel">
+                <div class="carouselType ScrollCarousel">
+                    <div class="ScrollCarousel-Items">
                         
                     </div>
                 </div>

@@ -68,7 +68,7 @@
                         </a>
                     </div>
                 </div>
-                <div class="m-portlet__body m-portlet__body--no-padding a--owl-carousel-body">
+                <div class="m-portlet__body m-portlet__body--no-padding a--owl-carousel-body ScrollCarousel">
                     
 {{--                    <div class="a--owl-carousel-init-loading">--}}
 {{--                        <div class="lds-roller">--}}
@@ -83,7 +83,7 @@
 {{--                        </div>--}}
 {{--                    </div>--}}
     
-                    <div class="m-widget_head-owlcarousel-items ScrollCarousel a--owl-carousel-type-2 carousel_block_{{ $block->id }}">
+                    <div class="m-widget_head-owlcarousel-items ScrollCarousel-Items a--owl-carousel-type-2 carousel_block_{{ $block->id }}">
     
         
                         @if(((isset($blockType) && $blockType === 'product' && isset($block->products) && $block->products->count() > 0) || !isset($blockType)) && isset($block->products))

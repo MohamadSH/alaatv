@@ -2,6 +2,7 @@
     .m-portlet.transparentBack {
         background-color: transparent;
         box-shadow: none;
+        margin-top: -25px;
     }
     .m-portlet.transparentBack .m-portlet__head {
         background-color: transparent;

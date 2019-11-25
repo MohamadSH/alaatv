@@ -2,16 +2,27 @@
     .display-5 {
         font-size: 2rem;
         font-weight: bold;
-        line-height: 1.2;
+        line-height: 1.9;
     }
     .display-6 {
         font-size: 1.5rem;
         font-weight: bold;
-        line-height: 1.2;
+        line-height: 2.5;
     }
     .a--margin-0 {
         margin: 0;
     }
+    @media (max-width: 800px) {
+        .display-5 {
+            font-size: 1.2rem;
+            line-height: 1;
+        }
+        .display-6 {
+            font-size: 1rem;
+            line-height: 1.5;
+        }
+    }
+
 </style>
 <div class="row" id="a_top_section">
     <div class="col">
@@ -33,7 +44,7 @@
                         <!--begin::Preview-->
                         <div class="row">
                             <div class="col-lg-3">
-                                <div class="m--margin-bottom-45">
+                                <div>
                                     <img src="{{$product->photo}}?w=400&h=400" alt="عکس محصول@if(isset($product->name)) {{$product->name}} @endif" class="img-fluid m--marginless a--full-width"/>
                                     <button type="button" class="btn m-btn--square btn-metal a--full-width m--margin-top-15">
                                         <p class="display-6 a--margin-0">
@@ -50,7 +61,7 @@
                                         <img src="/acm/image/raheAbrisham/raheAbrisham_konkur.png" class="img-fluid m--marginless a--full-width">
                                     </div>
                                 </div>
-                                <div class="row no-gutters m--margin-top-10">
+                                <div class="row no-gutters m--margin-top-15">
                                     <div class="col-6 m--padding-right-5">
                                         <button class="btn m-btn--square btn-success a--full-width" type="submit">
                                             <p class="display-5 a--margin-0">
