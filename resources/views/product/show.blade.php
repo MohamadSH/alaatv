@@ -640,7 +640,8 @@
         'imageDimension'=>'?w=300&h=169',
         'squareSing'=>false,
         'blockCustomClass'=>'a--owl-carousel-type-2 productShowBlock sampleVideo a--block-widget-1',
-        'blockCustomId'=>'Block-sampleVideo'
+        'blockCustomId'=>'Block-sampleVideo',
+        'btnLoadMore'=>true
         ])
 
 {{--    @if(isset($product->sets) && $product->sets->count() > 0)--}}
@@ -767,7 +768,8 @@
         'blockType'=>'product',
         'squareSing'=>false,
         'blockCustomClass'=>'a--owl-carousel-type-2 productShowBlock relatedProduct',
-        'blockCustomId'=>'Block-relatedProduct'
+        'blockCustomId'=>'Block-relatedProduct',
+        'btnLoadMore'=>true
         ])
 
 @endsection
