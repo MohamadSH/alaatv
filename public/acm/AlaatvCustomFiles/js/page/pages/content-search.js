@@ -1027,6 +1027,8 @@ $('.notFoundMessage').fadeOut(0);
 
 jQuery(document).ready(function () {
 
+    $('.m-body .m-content').addClass('boxed');
+
     FilterOptions.init({
         contentSearchFilterData: contentSearchFilterData,
         containerSelector: '.SearchBoxFilter',

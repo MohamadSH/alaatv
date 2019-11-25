@@ -127,6 +127,9 @@
                 'btnMoreText' => 'مطالعه کامل توضیحات',
             ])
         </div>
+        <div class="col-md-6">
+            <img src="https://cdn.alaatv.com/upload/megamenuBackground-talaee.jpg?w=1083&amp;h=0" style="width: 100%;">
+        </div>
     </div>
 
     @include('product.partials.raheAbrisham.descriptionBox', [
@@ -828,6 +831,8 @@
         };
         var parentProductTags = '{{ ($product->tags !== null) ? implode(',',optional($product->tags)->tags) : '-' }}';
 
+        $('.m-body .m-content').addClass('boxed');
+        
         CustomSelect.init({
             elementId: 'selectFarsang',
             onChange: function (data) {
