@@ -118,7 +118,7 @@
         </div>
     </div>
 
-    @if(isset($canSeeFileTable))
+    @if(isset($canSeeFileTable) && isset($files))
         <div class="row">
         <div class="col-lg-12">
             <div class = "m-portlet m-portlet--mobile m-portlet--body-progress-">
