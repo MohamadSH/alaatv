@@ -577,7 +577,7 @@
                                                 <div class="row no-gutters">
                                                     <div class="col">
                                                         <a href="{{ route('web.landing.10') }}">
-                                                            <img class="lazy-image" data-src="https://cdn.alaatv.com/upload/megamenuBackground-5+1.jpg" style="width: 1083px;">
+                                                            <img class="lazy-image" data-src="https://cdn.alaatv.com/upload/megamenuBackground-GODAR.jpg" style="width: 1083px;">
                                                         </a>
                                                     </div>
                                                 </div>
@@ -605,7 +605,7 @@
                                 </div>
                             </div>
                         </li>
-                        
+
                     </ul>
                 </div>
                 <!-- END: Horizontal Menu -->

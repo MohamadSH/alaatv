@@ -21,7 +21,7 @@
                 <div class="m-portlet__body">
                     <div class="m-widget27 m-portlet-fit--sides">
                         <div class="m-widget27__pic">
-                            <img src="https://cdn.alaatv.com/upload/landing8_banner1.jpg" alt="" class="lazy-image">
+                            <img src="https://cdn.alaatv.com/upload/landing8_banner2.jpg" alt="" class="lazy-image">
                             <h3 class="m-widget27__title m--font-light">
 
                             </h3>
@@ -55,20 +55,24 @@
                                                     <div class="lessonsTimesWraper-body">
                                                         <table>
                                                             <tbody>
-                                                                @foreach( $productHoures as $item)
-                                                                    <tr onclick="window.location.href = '{{ $item['url'] }}';">
-                                                                        <td>
-                                                                            <a href="{{ $item['url'] }}">
-                                                                                {{ $item['name'] }}:
-                                                                            </a>
-                                                                        </td>
-                                                                        <td>
-                                                                            <a href="{{ $item['url'] }}">
+                                                            @foreach( $productHoures as $item)
+                                                                <tr onclick="window.location.href = '{{ $item['url'] }}';">
+                                                                    <td>
+                                                                        <a href="{{ $item['url'] }}">
+                                                                            {{ $item['name'] }}:
+                                                                        </a>
+                                                                    </td>
+                                                                    <td>
+                                                                        <a href="{{ $item['url'] }}">
+                                                                            @if($item['hours'] == 0)
+                                                                                به زودی
+                                                                            @else
                                                                                 {{ $item['hours'] }} ساعت
-                                                                            </a>
-                                                                        </td>
-                                                                    </tr>
-                                                                @endforeach
+                                                                            @endif
+                                                                        </a>
+                                                                    </td>
+                                                                </tr>
+                                                            @endforeach
                                                             </tbody>
                                                         </table>
                                                     </div>
@@ -89,7 +93,7 @@
                                                     <div class="m-portlet__head-title">
                                                         <h2 class="m-portlet__head-label m-portlet__head-label--info">
                                                             <span>
-                                                                همایش طلایی آلاء
+                                                                همایش گدار آلاء
                                                             </span>
                                                         </h2>
                                                     </div>
@@ -98,13 +102,16 @@
                                             <div class="m-portlet__body">
 
                                                 <span class="m-badge m-badge--danger m-badge--dot"></span>
-                                                جمع بندی حداقل 80 درصد مباحث کنکور
+                                                جمع بندی کنکوری نیمسال اول دوازدهم
                                                 <br>
                                                 <span class="m-badge m-badge--danger m-badge--dot"></span>
-                                                حل تست های فراوان آموزشی و نکته دار
+                                                حل تست های فراوان آموزشی و مهارتی
                                                 <br>
                                                 <span class="m-badge m-badge--danger m-badge--dot"></span>
-                                                پیش بینی و بررسی تست های احتمالی کنکور
+                                                مناسب برای آزمون های آزمایشی دی و فروردین
+                                                <br>
+                                                <span class="m-badge m-badge--danger m-badge--dot"></span>
+                                                مناسب برای آزمون های دی ماه مدارس
                                                 <br>
                                                 <span class="m-badge m-badge--danger m-badge--dot"></span>
                                                 یک منبع کامل و مورد اعتماد
@@ -127,7 +134,7 @@
                                             <div class="m-portlet__body">
 
                                                 <span class="m-badge m-badge--danger m-badge--dot"></span>
-                                                همایش طلایی؛ یک نقشه راه مطمئن، از مسیری کوتاه و قابل اعتماد برای موفقیت تا روز کنکور است.
+                                                همایش گدار؛ یک راه مطمئن، کوتاه و قابل اعتماد برای آغاز مسیر موفقیت در کنکور است.
 
                                             </div>
                                         </div>
@@ -147,13 +154,13 @@
                                             <div class="m-portlet__body">
 
                                                 <span class="m-badge m-badge--danger m-badge--dot"></span>
-                                                هنوز خودتون رو توی بزرگراه رقابت کنکور نمی بینید؟
+                                                هنوز خودت رو توی بزرگراه رقابت کنکور نمی بینی؟
                                                 <br>
                                                 <span class="m-badge m-badge--danger m-badge--dot"></span>
-                                                ویا در مسیر هستید اما سرعت مناسبی ندارید؟
+                                                ویا در مسیر هستی اما سرعت مناسبی نداری؟
                                                 <br>
                                                 <span class="m-badge m-badge--danger m-badge--dot"></span>
-                                                و یا نیاز به یک جمع بندی تمام کننده دارید؟
+                                                و یا نیاز به یک جمع بندی تمام کننده داری؟
                                                 <br>
                                                 <br>
                                                 <span style="padding: 5px;background: #ff9a17;color: white;font-weight: bold;">این همایش مناسب شماست</span>
@@ -162,16 +169,16 @@
 
                                     </div>
                                     <div class="col-md-8 order-1 order-sm-1 order-md-2 order-lg-2 mainItems">
-{{--                                        <div class="row justify-content-center">--}}
-{{--                                            <div class="col text-center">--}}
-{{--                                                <div class="m-divider m--margin-bottom-30">--}}
-{{--                                                    <span></span>--}}
-{{--                                                    <span>تا شروع کنکور</span>--}}
-{{--                                                    <span></span>--}}
-{{--                                                </div>--}}
-{{--                                                <div class="konkourTimer"></div>--}}
-{{--                                            </div>--}}
-{{--                                        </div>--}}
+                                        {{--                                        <div class="row justify-content-center">--}}
+                                        {{--                                            <div class="col text-center">--}}
+                                        {{--                                                <div class="m-divider m--margin-bottom-30">--}}
+                                        {{--                                                    <span></span>--}}
+                                        {{--                                                    <span>تا شروع کنکور</span>--}}
+                                        {{--                                                    <span></span>--}}
+                                        {{--                                                </div>--}}
+                                        {{--                                                <div class="konkourTimer"></div>--}}
+                                        {{--                                            </div>--}}
+                                        {{--                                        </div>--}}
 
                                         <div class="row justify-content-center">
                                             <div class="col m--margin-bottom-10">
@@ -191,20 +198,20 @@
                                                     <div class="lessonsTimesWraper-body">
                                                         <table>
                                                             <tbody>
-                                                                @foreach( $productHoures as $item)
-                                                                    <tr onclick="window.location.href = '{{ $item['url'] }}';">
-                                                                        <td>
-                                                                            <a href="{{ $item['url'] }}">
-                                                                                {{ $item['name'] }}:
-                                                                            </a>
-                                                                        </td>
-                                                                        <td>
-                                                                            <a href="{{ $item['url'] }}">
-                                                                                {{ $item['hours'] }} ساعت
-                                                                            </a>
-                                                                        </td>
-                                                                    </tr>
-                                                                @endforeach
+                                                            @foreach( $productHoures as $item)
+                                                                <tr onclick="window.location.href = '{{ $item['url'] }}';">
+                                                                    <td>
+                                                                        <a href="{{ $item['url'] }}">
+                                                                            {{ $item['name'] }}:
+                                                                        </a>
+                                                                    </td>
+                                                                    <td>
+                                                                        <a href="{{ $item['url'] }}">
+                                                                            {{ $item['hours'] }} ساعت
+                                                                        </a>
+                                                                    </td>
+                                                                </tr>
+                                                            @endforeach
                                                             </tbody>
                                                         </table>
                                                     </div>

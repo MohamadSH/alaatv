@@ -570,7 +570,7 @@ class ProductLandingController extends Controller
     public function landing10(Request $request)
     {
         $url = $request->url();
-        $this->generateSeoMetaTags(new SeoDummyTags('همایش های 1+5 آلاء',
+        $this->generateSeoMetaTags(new SeoDummyTags('همایش های گدار آلاء',
             'جمع بندی نیم سال اول پایه دوازدهم', $url,
             $url, route('image', [
                 'category' => '11',
@@ -579,15 +579,98 @@ class ProductLandingController extends Controller
                 'filename' => $this->setting->site->siteLogo,
             ]), '100', '100', null));
 
-        $blocks        = new BlockCollection();
-        $blocksIdArray = [6];
-        foreach ($blocksIdArray as $blockId) {
-            $block = Block::find($blockId);
-            if (isset($block)) {
-                $blocks->push($block);
-            }
-        }
+        $productIds = [
+            373,
+            375,
+            377,
+            379,
+            381,
+            383,
+            385,
+            387,
+            389,
+        ];
 
-        return view('product.landing.landing10', compact( 'blocks'));
+        $productHoures = [
+            373 => [
+                'name' => 'همایش فیزیک گدار',
+                'url' => route('product.show' , 373),
+                'hours' => 11
+            ],
+            375 => [
+                'name' => 'همایش ریاضی انسانی گدار',
+                'url' => route('product.show' , 375),
+                'hours' => 6
+            ],
+            377 => [
+                'name' => 'همایش ریاضی تجربی گدار',
+                'url' => route('product.show' , 377),
+                'hours' => 0
+            ],
+            379 => [
+                'name' => 'همایش گسسته گدار',
+                'url' => route('product.show' , 379),
+                'hours' => 0
+            ],
+            381 => [
+                'name' => 'همایش هندسه گدار',
+                'url' => route('product.show' , 381),
+                'hours' => 0
+            ],
+            383 => [
+                'name' => 'همایش حسابان گدار',
+                'url' => route('product.show' , 383),
+                'hours' => 0
+            ],
+            385 => [
+                'name' => 'همایش ریاضی تجربی گدار',
+                'url' => route('product.show' , 385),
+                'hours' => 0
+            ],
+            387 => [
+                'name' => 'همایش شیمی گدار',
+                'url' => route('product.show' , 387),
+                'hours' => 0
+            ],
+            389 => [
+                'name' => 'همایش زیست شناسی گدار',
+                'url' => route('product.show' , 389),
+                'hours' => 0
+            ]
+        ];
+
+
+        [$products, $landingProducts] = Cache::remember('landing-8-products', config('constants.CACHE_600'),
+            static function () use ($productIds) {
+                $products  = Product::whereIn('id', $productIds)
+                    ->orderBy('order')
+                    ->enable()
+                    ->get();
+                $attribute = Attribute::where('name', 'major')
+                    ->get()
+                    ->first();
+
+                $landingProducts = collect();
+                foreach ($products as $product) {
+                    $majors = [];
+                    if (isset($attribute)) {
+                        $majors = $product->attributevalues->where('attribute_id', $attribute->id)
+                            ->pluck('name')
+                            ->toArray();
+                    }
+
+                    $landingProducts->push([
+                        'product' => $product,
+                        'majors'  => $majors,
+                    ]);
+                }
+                return [$products, $landingProducts];
+            });
+
+        $withFilter = true;
+
+        $costCollection = $this->makeCostCollection($products);
+
+        return view('product.landing.landing11', compact('landingProducts', 'costCollection', 'withFilter', 'productHoures'));
     }
 }

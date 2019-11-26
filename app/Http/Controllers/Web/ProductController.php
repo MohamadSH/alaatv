@@ -190,7 +190,25 @@ class ProductController extends Controller
 
         $isFavored = optional(optional(optional(optional($user)->favoredProducts())->where('id' , $product->id))->get())->isNotEmpty();
 
-        return view('product.show', compact('product', 'block', 'purchasedProductIdArray', 'allChildIsPurchased' , 'liveDescriptions' , 'children' , 'isFavored'));
+        $isForcedGift = false;
+        $shouldBuyProductId = null;
+        $shouldBuyProductName = '';
+        $hasPurchasedShouldBuyProduct = false;
+        if($product->id == 385){
+            $isForcedGift = true;
+            $shouldBuyProductName = 'راه ابریشم';
+            $shouldBuyProductId = Product::RAHE_ABRISHAM  ;
+            /** @var \App\User $user */
+            if(isset($user)){
+                $key = 'user:hasPurchasedShouldBuyProduct:'.$user->cacheKey();
+                $hasPurchasedShouldBuyProduct =   Cache::tags(['user_'.$user->id.'_closedOrders' ])
+                    ->remember($key, config('constants.CACHE_600'), function () use ($user , $shouldBuyProductId) {
+                        return $user->products()->contains($shouldBuyProductId);
+                    });
+            }
+        }
+
+        return view('product.show', compact('product', 'block', 'purchasedProductIdArray', 'allChildIsPurchased' , 'liveDescriptions' , 'children' , 'isFavored' , 'isForcedGift' , 'shouldBuyProductId' , 'shouldBuyProductName' , 'hasPurchasedShouldBuyProduct'));
     }
 
     public function edit(Product $product)
