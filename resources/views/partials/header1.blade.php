@@ -543,7 +543,7 @@
                                             </div>
                                             <div class="a--MegaMenu-categoryItem" dtat-cat-id="5+1">
                                                 <a dtat-cat-id="5+1" class="m-link" href="{{ route('web.landing.10') }}">
-                                                    5+1
+                                                    گدار
                                                 </a>
                                             </div>
                                             <div class="a--MegaMenu-categoryItem" dtat-cat-id="nezameGhadim">
