@@ -602,11 +602,17 @@ class ProductLandingController extends Controller
                 'url' => route('product.show' , 375),
                 'hours' => 6
             ],
+            385 => [
+                'name' => 'همایش ریاضی تجربی گدار',
+                'url' => route('product.show' , 385),
+                'hours' => 0
+            ],
             377 => [
                 'name' => 'همایش ریاضی تجربی گدار',
                 'url' => route('product.show' , 377),
-                'hours' => 0
+                'hours' => 10
             ],
+
             379 => [
                 'name' => 'همایش گسسته گدار',
                 'url' => route('product.show' , 379),
@@ -615,16 +621,11 @@ class ProductLandingController extends Controller
             381 => [
                 'name' => 'همایش هندسه گدار',
                 'url' => route('product.show' , 381),
-                'hours' => 0
+                'hours' => 8
             ],
             383 => [
                 'name' => 'همایش حسابان گدار',
                 'url' => route('product.show' , 383),
-                'hours' => 0
-            ],
-            385 => [
-                'name' => 'همایش ریاضی تجربی گدار',
-                'url' => route('product.show' , 385),
                 'hours' => 0
             ],
             387 => [
