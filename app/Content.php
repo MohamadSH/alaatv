@@ -209,6 +209,7 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
         'contentset_id',
         'isFree',
         'enable',
+        'display',
         'section_id',
         'tmp_description',
     ];
@@ -438,6 +439,11 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
     {
         return $query->where('validSince', '<', Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now('Asia/Tehran')))
             ->orWhereNull('validSince');
+    }
+
+    public function scopeDisplay($query , $display = 1)
+    {
+        return $query->where('display', $display);
     }
 
     /**
