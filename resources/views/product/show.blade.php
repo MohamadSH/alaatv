@@ -116,25 +116,25 @@
                                 <div class="col-lg-3">
                                     <div class="m--margin-bottom-45">
                                         <img src="{{$product->photo}}?w=400&h=400" alt="عکس محصول@if(isset($product->name)) {{$product->name}} @endif" class="img-fluid m--marginless a--full-width"/>
-                                        @if(isset($product->bons->first()->pivot->bonPlus))
-                                            <div class="m-alert m-alert--icon m-alert--air m-alert--square alert alert-success alert-dismissible fade show" role="alert">
-                                                <div class="m-alert__icon">
-                                                    <i class="flaticon-interface-9"></i>
-                                                </div>
-                                                <div class="m-alert__text">
-                                                    <strong>{{ $product->bons->first()->pivot->bonPlus }}+ آلاء بن</strong>
-                                                </div>
-                                            </div>
-                                        @else
-                                            <div class="m-alert m-alert--icon m-alert--air m-alert--square alert alert-warning alert-dismissible fade show" role="alert">
-                                                <div class="m-alert__icon">
-                                                    <i class="flaticon-interface-9"></i>
-                                                </div>
-                                                <div class="m-alert__text">
-                                                    این محصول بن ندارد
-                                                </div>
-                                            </div>
-                                        @endif
+{{--                                        @if(isset($product->bons->first()->pivot->bonPlus))--}}
+{{--                                            <div class="m-alert m-alert--icon m-alert--air m-alert--square alert alert-success alert-dismissible fade show" role="alert">--}}
+{{--                                                <div class="m-alert__icon">--}}
+{{--                                                    <i class="flaticon-interface-9"></i>--}}
+{{--                                                </div>--}}
+{{--                                                <div class="m-alert__text">--}}
+{{--                                                    <strong>{{ $product->bons->first()->pivot->bonPlus }}+ آلاء بن</strong>--}}
+{{--                                                </div>--}}
+{{--                                            </div>--}}
+{{--                                        @else--}}
+{{--                                            <div class="m-alert m-alert--icon m-alert--air m-alert--square alert alert-warning alert-dismissible fade show" role="alert">--}}
+{{--                                                <div class="m-alert__icon">--}}
+{{--                                                    <i class="flaticon-interface-9"></i>--}}
+{{--                                                </div>--}}
+{{--                                                <div class="m-alert__text">--}}
+{{--                                                    این محصول بن ندارد--}}
+{{--                                                </div>--}}
+{{--                                            </div>--}}
+{{--                                        @endif--}}
                                     </div>
 
                                 </div>
@@ -415,7 +415,7 @@
                                     {!! Form::hidden('product_id',$product->id) !!}
 
                                     {{--دکمه افزودن به سبد خرید--}}
-                                    @if($product->enable)
+                                    @if($product->enable && !$isForcedGift)
 
 
                                         @if($allChildIsPurchased)
@@ -453,12 +453,30 @@
                                             </button>
                                         @endif
                                     @else
-                                        <button class="btn btn-danger btn-lg m-btn  m-btn m-btn--icon">
-                                            <span>
-                                                <i class="flaticon-shopping-basket"></i>
-                                                <span>این محصول غیر فعال است.</span>
-                                            </span>
-                                        </button>
+                                        @if(!$product->enable)
+                                            <button class="btn btn-danger btn-lg m-btn  m-btn m-btn--icon">
+                                                <span>
+                                                    <i class="flaticon-shopping-basket"></i>
+                                                    <span>این محصول غیر فعال است.</span>
+                                                </span>
+                                            </button>
+                                        @elseif($isForcedGift)
+                                            @if($hasPurchasedShouldBuyProduct)
+                                                <button class="btn btn-danger btn-lg m-btn  m-btn m-btn--icon">
+                                                    <span>
+                                                        <i class="flaticon-arrows"></i>
+                                                        <span>شما محصول راه ابریشم را خریداری کرده اید و این محصول به عنوان هدیه به شما تعلق خواهد گرفت</span>
+                                                    </span>
+                                                </button>
+                                            @else
+                                                <a class="btn btn-focus btn-lg m-btn  m-btn m-btn--icon" href="{{ route('product.show' , $shouldBuyProductId ) }}">
+                                                    <span>
+                                                        <i class="flaticon-arrows"></i>
+                                                        <span>این محصول فروش تکی ندارد . برای تهیه این محصول باید  {{$shouldBuyProductName}} را تهیه کنید  برای خرید کلیک کنید</span>
+                                                    </span>
+                                                </a>
+                                            @endif
+                                        @endif
                                     @endif
 
                                 </div>
@@ -577,10 +595,8 @@
 
 
     {{--دکمه افزودن به سبد خرید--}}
-    @if($product->enable)
-        <div class="addToCartForMobileDeviceWrapper" >
-
-
+    <div class="addToCartForMobileDeviceWrapper" >
+    @if($product->enable && !$isForcedGift)
             @if($allChildIsPurchased)
                 <a class="btn m-btn m-btn--pill m-btn--air m-btn--gradient-from-focus m-btn--gradient-to-danger  animated infinite pulse" role="button" href="{{ action("Web\UserController@userProductFiles") }}">
                     <i class="fa fa-play-circle"></i>
@@ -604,7 +620,7 @@
                 <div class="m--font-brand a_product-price_mobile-wrapper">
                     <span id="a_product-price_mobile">
                         @include('product.partials.price', ['price'=>$product->price])
-                        
+
 {{--                        @if($product->priceText['discount'] == 0 )--}}
 {{--                            <span>{{ $product->priceText['finalPriceText'] }} </span>--}}
 
@@ -612,29 +628,44 @@
 {{--                            <strike>{{ $product->priceText['basePriceText'] }} </strike>--}}
 {{--                            <span class="m-badge m-badge--danger m-badge--wide m-badge--rounded">{{ $product->priceText['finalPriceText'] }}</span>--}}
 {{--                        @endif--}}
-                    
-                    
-                    
+
+
+
                     </span>
                 </div>
             @endif
 
-
-        </div>
     @else
-        <div class="addToCartForMobileDeviceWrapper" >
+        @if(!$product->enable)
             <button class="btn btn-danger btn-lg m-btn  m-btn m-btn--icon">
-                <span>
-                    <i class="flaticon-shopping-basket"></i>
-                    <span>این محصول غیر فعال است.</span>
-                </span>
+                    <span>
+                        <i class="flaticon-shopping-basket"></i>
+                        <span>این محصول غیر فعال است.</span>
+                    </span>
             </button>
-        </div>
+        @elseif($isForcedGift)
+                @if($hasPurchasedShouldBuyProduct)
+                    <button class="btn btn-danger btn-lg m-btn  m-btn m-btn--icon">
+                        <span>
+                                <i class="flaticon-arrows"></i>
+                                <span>شما محصول راه ابریشم را خریداری کرده اید و این محصول به عنوان هدیه به شما تعلق خواهد گرفت</span>
+                        </span>
+                    </button>
+                @else
+                    <a class="btn btn-focus btn-lg m-btn  m-btn m-btn--icon" href="{{ route('product.show' , $shouldBuyProductId ) }}">
+                            <span>
+                                <i class="flaticon-arrows"></i>
+                                <span>این محصول فروش تکی ندارد . برای تهیه این محصول باید  {{$shouldBuyProductName}} را تهیه کنید  برای خرید کلیک کنید</span>
+                            </span>
+                    </a>
+                @endif
+        @endif
     @endif
+</div>
 
     {{--نمونه فیلم--}}
     @include('block.partials.block', [
-        'blockTitle'=>view('product.partials.productInfoNav', ['targetId'=>'sampleVideo']),
+        'blockTitle'=>view('product.partials.productInfoNav', ['targetId'=>'sampleVideo' , 'product'=>$product , 'isForcedGift'=>$isForcedGift]),
         'blockUrlDisable'=>true,
         'blockType'=>'productSampleVideo',
         'imageDimension'=>'?w=300&h=169',
@@ -762,7 +793,7 @@
     @endif
 
     @include('block.partials.block', [
-        'blockTitle'=>view('product.partials.productInfoNav', ['targetId'=>'relatedProduct']),
+        'blockTitle'=>view('product.partials.productInfoNav', ['targetId'=>'relatedProduct', 'product'=>$product , 'isForcedGift'=>$isForcedGift]),
         'blockUrlDisable'=>true,
         'blockType'=>'product',
         'squareSing'=>false,
