@@ -640,7 +640,7 @@ class ProductLandingController extends Controller
         ];
 
 
-        [$products, $landingProducts] = Cache::remember('landing-8-products', config('constants.CACHE_600'),
+        [$products, $landingProducts] = Cache::remember('landing-10-products', config('constants.CACHE_600'),
             static function () use ($productIds) {
                 $products  = Product::whereIn('id', $productIds)
                     ->orderBy('order')
