@@ -52,6 +52,7 @@ class ConvertBonToWalletCommand extends Command
                 $this->info("\n\n");
 
                 $bar = $this->output->createProgressBar($userCount);
+                $users->load('userbons');
                 foreach ($users as $user) {
                     $activeUserbons = $user->userbons->where('userbonstatus_id' , config('constants.USERBON_STATUS_ACTIVE'));
                     $activeUserbonsCount = $activeUserbons->sum('totalNumber');
@@ -62,6 +63,7 @@ class ConvertBonToWalletCommand extends Command
                     }
 
                     $amount = $prefix * $activeUserbonsCount;
+                    /** @var User $user */
                     $depositResult =  $user->deposit( $amount  , config('constants.WALLET_TYPE_GIFT'));
                     if($depositResult['result']){
                         $user->notify(new BonToWallet( $activeUserbonsCount , $amount));
