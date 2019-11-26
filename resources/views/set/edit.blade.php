@@ -47,10 +47,12 @@
         jQuery(document).ready(function () {
 
             var selectedProducts = {!! json_encode($setProducts->pluck('id')) !!};
-
-            $("input.setTags").tagsinput({
-                tagClass: 'm-badge m-badge--info m-badge--wide m-badge--rounded'
-            });
+            //
+            // $("input.setTags").tagsinput({
+            //     tagClass: 'm-badge m-badge--info m-badge--wide m-badge--rounded'
+            // });
+            
+            $('.bootstrap-tagsinput .tag.label.label-info').addClass('m-badge m-badge--info m-badge--wide m-badge--rounded');
 
             $('#productShortDescriptionSummerNote').summernote({
                 lang: 'fa-IR',
@@ -59,6 +61,22 @@
                     image: [],
                     link: [],
                     air: []
+                },
+                toolbar: [
+                    ['style', ['style']],
+                    ['font', ['bold', 'italic', 'underline', 'clear']],
+                    ['fontname', ['fontname']],
+                    ['color', ['color']],
+                    ['para', ['ul', 'ol', 'paragraph']],
+                    ['height', ['height']],
+                    ['table', ['table']],
+                    ['insert', ['link', 'picture', 'hr']],
+                    ['view', ['fullscreen', 'codeview']],
+                    ['help', ['help']],
+                    ['mybutton', ['multiColumnButton']]
+                ],
+                buttons: {
+                    multiColumnButton: summernoteMultiColumnButton
                 }
             });
 

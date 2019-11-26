@@ -672,7 +672,7 @@ class Mix {
                 'public/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-sweetalert/sweetalert.css',
                 'public/acm/extra/persian-datepicker/dist/css/persian-datepicker-1.1.3.min.css',
                 'public/acm/AlaatvCustomFiles/components/alaa_old/font/glyphicons-halflings/glyphicons-halflings.css',
-                'public/acm/AlaatvCustomFiles/components/alaa_old/admin-custom/style/summernote.css',
+                'public/acm/AlaatvCustomFiles/css/admin/custom/summernote.css',
             ],
             'public/css/admin-all.css',
             [
@@ -713,7 +713,7 @@ class Mix {
                 'public/acm/AlaatvCustomFiles/js/admin/makeDataTable.js',
                 'public/acm/AlaatvCustomFiles/js/admin-makeMultiSelect.js',
                 'public/acm/AlaatvCustomFiles/js/admin-customInitComponent.js',
-                'public/acm/AlaatvCustomFiles/components/alaa_old/admin-custom/script/summernote.js',
+                'public/acm/AlaatvCustomFiles/js/admin/custom/summernote.js',
             ],
             'public/js/admin-all.js'
         );
