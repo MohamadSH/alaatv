@@ -519,6 +519,22 @@
                     image: [],
                     link: [],
                     air: []
+                },
+                toolbar: [
+                    ['style', ['style']],
+                    ['font', ['bold', 'italic', 'underline', 'clear']],
+                    ['fontname', ['fontname']],
+                    ['color', ['color']],
+                    ['para', ['ul', 'ol', 'paragraph']],
+                    ['height', ['height']],
+                    ['table', ['table']],
+                    ['insert', ['link', 'picture', 'hr']],
+                    ['view', ['fullscreen', 'codeview']],
+                    ['help', ['help']],
+                    ['mybutton', ['multiColumnButton']]
+                ],
+                buttons: {
+                    multiColumnButton: summernoteMultiColumnButton
                 }
             });
             $('#productLongDescriptionSummerNote').summernote({
@@ -528,6 +544,22 @@
                     image: [],
                     link: [],
                     air: []
+                },
+                toolbar: [
+                    ['style', ['style']],
+                    ['font', ['bold', 'italic', 'underline', 'clear']],
+                    ['fontname', ['fontname']],
+                    ['color', ['color']],
+                    ['para', ['ul', 'ol', 'paragraph']],
+                    ['height', ['height']],
+                    ['table', ['table']],
+                    ['insert', ['link', 'picture', 'hr']],
+                    ['view', ['fullscreen', 'codeview']],
+                    ['help', ['help']],
+                    ['mybutton', ['multiColumnButton']]
+                ],
+                buttons: {
+                    multiColumnButton: summernoteMultiColumnButton
                 }
             });
             $('#productSpecialDescriptionSummerNote').summernote({
@@ -537,6 +569,22 @@
                     image: [],
                     link: [],
                     air: []
+                },
+                toolbar: [
+                    ['style', ['style']],
+                    ['font', ['bold', 'italic', 'underline', 'clear']],
+                    ['fontname', ['fontname']],
+                    ['color', ['color']],
+                    ['para', ['ul', 'ol', 'paragraph']],
+                    ['height', ['height']],
+                    ['table', ['table']],
+                    ['insert', ['link', 'picture', 'hr']],
+                    ['view', ['fullscreen', 'codeview']],
+                    ['help', ['help']],
+                    ['mybutton', ['multiColumnButton']]
+                ],
+                buttons: {
+                    multiColumnButton: summernoteMultiColumnButton
                 }
             });
             $('#productLiveDescriptionSummerNote').summernote({
@@ -546,6 +594,22 @@
                     image: [],
                     link: [],
                     air: []
+                },
+                toolbar: [
+                    ['style', ['style']],
+                    ['font', ['bold', 'italic', 'underline', 'clear']],
+                    ['fontname', ['fontname']],
+                    ['color', ['color']],
+                    ['para', ['ul', 'ol', 'paragraph']],
+                    ['height', ['height']],
+                    ['table', ['table']],
+                    ['insert', ['link', 'picture', 'hr']],
+                    ['view', ['fullscreen', 'codeview']],
+                    ['help', ['help']],
+                    ['mybutton', ['multiColumnButton']]
+                ],
+                buttons: {
+                    multiColumnButton: summernoteMultiColumnButton
                 }
             });
 
@@ -588,5 +652,6 @@
             });
         });
     </script>
-    <script src="public/acm/AlaatvCustomFiles/js/admin/page-productAdmin.js" type="text/javascript"></script>
+    
+    <script src="/acm/AlaatvCustomFiles/js/admin/page-productAdmin.js" type="text/javascript"></script>
 @endsection
