@@ -10,6 +10,7 @@ use Illuminate\Http\Response;
 use App\Http\Controllers\Controller;
 use App\Collection\ProductCollection;
 use Illuminate\Support\Facades\Cache;
+use \App\Http\Resources\Product as ProductResource;
 
 class ProductController extends Controller
 {
@@ -25,6 +26,11 @@ class ProductController extends Controller
      */
     public function show(Request $request, Product $product)
     {
+        if($product->id == 385){
+            return redirect( route('api.v1.product.show' , Product::RAHE_ABRISHAM ),
+                Response::HTTP_FOUND, $request->headers->all());
+        }
+
         if (!is_null($product->redirectUrl)) {
             return redirect(convertRedirectUrlToApiVersion($product->redirectUrl),
                 Response::HTTP_FOUND, $request->headers->all());
@@ -36,6 +42,21 @@ class ProductController extends Controller
         }
 
         return response()->json($product);
+    }
+
+    public function showV2(Request $request , Product $product)
+    {
+        if (!is_null($product->redirectUrl)) {
+            return redirect(convertRedirectUrlToApiVersion($product->redirectUrl),
+                Response::HTTP_FOUND, $request->headers->all());
+        }
+
+        if (!is_null($product->grandParent)) {
+            return redirect($product->grandParent->apiUrl['v1'], Response::HTTP_MOVED_PERMANENTLY,
+                $request->headers->all());
+        }
+
+        return (new ProductResource($product))->response();
     }
 
     /**

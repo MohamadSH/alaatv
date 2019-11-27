@@ -11,6 +11,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Cache;
 use App\Http\Requests\EditUserRequest;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
+use App\Http\Resources\User as UserResource;
+use App\Http\Resources\Order as OrderResource;
 
 class UserController extends Controller
 {
@@ -83,6 +85,63 @@ class UserController extends Controller
         return response($response, Response::HTTP_OK);
     }
 
+    public function updateV2(EditUserRequest $request, User $user = null)
+    {
+        $authenticatedUser = $request->user('api');
+        if ($user === null) {
+            $user = $authenticatedUser;
+        }
+        try {
+            $user->fillByPublic($request->all());
+            $file = $this->getRequestFile($request->all(), 'photo');
+            if ($file !== false) {
+                $this->storePhotoOfUser($user, $file);
+            }
+        } catch (FileNotFoundException $e) {
+            return response([
+                "error" => [
+                    "text" => $e->getMessage(),
+                    "line" => $e->getLine(),
+                    "file" => $e->getFile(),
+                ],
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+
+        //ToDo : place in UserObserver
+        if ($user->checkUserProfileForLocking()) {
+            $user->lockHisProfile();
+        }
+
+        if ($user->update()) {
+
+            $message = 'User profile updated successfully';
+            $status  = Response::HTTP_OK;
+        }
+        else {
+            $message = 'Database error on updating user';
+            $status  = Response::HTTP_SERVICE_UNAVAILABLE;
+        }
+
+        if ($status == Response::HTTP_OK) {
+            $response = [
+                'user'    => new UserResource($user),
+                'message' => $message,
+            ];
+        }
+        else {
+            $response = [
+                'error' => [
+                    'code'    => $status,
+                    'message' => $message,
+                ],
+            ];
+        }
+
+        Cache::tags('user_'.$user->id)->flush();
+
+        return response($response, Response::HTTP_OK);
+    }
+
     public function show(Request $request, User $user)
     {
         $authenticatedUser = $request->user('api');
@@ -93,10 +152,26 @@ class UserController extends Controller
                     'code'    => Response::HTTP_FORBIDDEN,
                     'message' => 'UnAuthorized',
                 ],
-            ], 403);
+            ], Response::HTTP_FORBIDDEN);
         }
 
         return response($user, Response::HTTP_OK);
+    }
+
+    public function showV2(Request $request , User $user)
+    {
+        $authenticatedUser = $request->user('api');
+
+        if ($authenticatedUser->id != $user->id) {
+            return response([
+                'error' => [
+                    'code'    => Response::HTTP_FORBIDDEN,
+                    'message' => 'UnAuthorized',
+                ],
+            ], Response::HTTP_FORBIDDEN);
+        }
+
+        return (new UserResource($user))->response();
     }
 
     /**
@@ -125,6 +200,25 @@ class UserController extends Controller
         $orders = $user->getClosedOrders($request->get('orders' , 1));
 
         return response()->json($orders);
+    }
+
+    public function userOrdersV2(Request $request, User $user)
+    {
+        /** @var User $user */
+        $authenticatedUser = $request->user('api');
+
+        if ($authenticatedUser->id != $user->id) {
+            return response([
+                'error' => [
+                    'code'    => Response::HTTP_FORBIDDEN,
+                    'message' => 'UnAuthorized',
+                ],
+            ], Response::HTTP_OK);
+        }
+
+        $orders = $user->getClosedOrders($request->get('orders' , 1));
+
+        return OrderResource::collection($orders);
     }
 
     public function getAuth2Profile(Request $request)

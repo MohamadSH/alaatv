@@ -18,6 +18,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Cache;
 use App\Http\Requests\SubmitCouponRequest;
 use App\Classes\Pricing\Alaa\AlaaInvoiceGenerator;
+use \App\Http\Resources\Coupon as CouponResource;
 
 class OrderController extends Controller
 {
@@ -147,6 +148,41 @@ class OrderController extends Controller
         return response($response, Response::HTTP_OK);
     }
 
+    public function submitCouponV2(SubmitCouponRequest $request, AlaaInvoiceGenerator $invoiceGenerator)
+    {
+        $coupon = Coupon::code($request->get('code'))->first();
+        if ($request->has('openOrder')) {
+            $order = $request->get('openOrder');
+        }
+        else {
+            $order_id = $request->get('order_id');
+            $order    = Order::Find($order_id);
+        }
+
+        list($resultCode, $resultText) = $this->processCoupon($invoiceGenerator, $coupon, $order);
+
+        if ($resultCode == Response::HTTP_OK) {
+            $response = [
+                new CouponResource($coupon),
+                'message' => 'Coupon attached successfully',
+            ];
+        }
+        else {
+            $response = [
+                'error' => [
+                    'code'    => $resultCode ?? $resultCode,
+                    'message' => $resultText ?? $resultText,
+                ],
+            ];
+        }
+
+        Cache::tags([
+            'order_'.$order->id.'_coupon' ,
+            'order_'.$order->id.'_cost'])->flush();
+
+        return response($response, Response::HTTP_OK);
+    }
+
     /**
      * @param Request $request
      *
@@ -257,7 +293,7 @@ class OrderController extends Controller
         $donateOrder->costwithoutcoupon = $orderCost['rawCostWithoutDiscount'];
         $donateOrder->update();
 
-        return redirect()->route('api.payment.getEncryptedLink' , ['order_id'  =>  $donateOrder->id]);
+        return redirect()->route('api.v1.payment.getEncryptedLink' , ['order_id'  =>  $donateOrder->id]);
     }
 
     /**
