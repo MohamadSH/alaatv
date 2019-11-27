@@ -91,6 +91,7 @@ trait HasWallet
         }
         $wallet = $this->wallets->where("wallettype_id", $walletType)->first();
         if (isset($wallet)) {
+            /** @var Wallet $wallet */
             $result = $wallet->deposit($amount);
             if ($result["result"]) {
                 $responseText = "SUCCESSFUL";
