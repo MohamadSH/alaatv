@@ -1,0 +1,24 @@
+.note-popover .popover-content, .panel-heading.note-toolbar {
+    background: #f2f1f1;
+    border-bottom: solid 1px #d9d9d9;
+}
+.note-editor .note-editable {
+    direction: rtl;
+}
+.note-editor .note-toolbar .summernoteMultiColumnButton {
+
+}
+.note-editor .note-toolbar .summernoteMultiColumnButton-dropdown {
+    text-align: center;
+}
+.note-editor .note-toolbar .summernoteMultiColumnButton .dropdown-toggle-icon {
+    transform: rotate(90deg);
+}
+.note-editor .summernote-row {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+.note-editor .summernote-row,
+.note-editor .summernote-row .summernote-col {
+    border: dotted 1px gray;
+}
