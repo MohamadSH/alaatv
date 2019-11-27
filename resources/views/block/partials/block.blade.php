@@ -110,7 +110,7 @@
                             @endforeach
                         @endif
     
-                        @if(strlen(trim($block->url))>0)
+                        @if(strlen(trim($block->url))>0 && isset($btnLoadMore) && $btnLoadMore)
                             <div class="item carousel a--block-item a--block-item-showMoreItem w-44333211">
                                 <a href="{{ $block->url }}">
                                     <button type="button" class="btn m-btn--air btn-outline-accent m-btn m-btn--custom m-btn--outline-2x">
