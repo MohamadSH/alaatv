@@ -206,6 +206,8 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
 
     public const ASIATECH_PRODUCT = 224;
 
+    public const RAHE_ABRISHAM = 347;
+
     public const AMOUNT_LIMIT = [
         'نامحدود',
         'محدود',
@@ -1744,7 +1746,7 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
         return Cache::tags(['product' , 'set' , 'product_'.$this->id , 'product_'.$this->id.'_sets'])
             ->remember($key, config('constants.CACHE_600'), function () {
                 /** @var SetCollection $sets */
-                $sets = $this->sets()
+                $sets = $this->sets()->active()
                     ->wherePivot('deleted_at', '=', null)
                     ->get();
                 return $sets;
@@ -1757,7 +1759,6 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
     public function sets()
     {
         return $this->belongsToMany(Contentset::class)
-            ->active()
             ->using(ProductSet::class)
             ->as('productSet')
             ->withPivot([

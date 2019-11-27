@@ -284,10 +284,14 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('startlive' , [LiveController::class, 'startLive'])->name('web.start.live');
     Route::post('endlive'   , [LiveController::class, 'endLive'])->name('web.end.live');
 
-    Route::get('atest' , [HomeController::class, 'adTest']);
     Route::get('block/detach/{block}/{type}/{id}', 'Web\BlockController@detachFromBlock');
     Route::get('serpSim' , [AdminController::class, 'serpSim'] );
     Route::get('process_serpsim' , [AdminController::class, 'processSerpsim'] );
+
+    Route::get('uuupppllloooodddd' , [HomeController::class, 'uploadCenter'] )->name('web.uploadCenter');
+    Route::post('upload' , [HomeController::class, 'bigUpload'] )->name('web.bigUpload');
+
+    Route::post('smsLink' , [HomeController::class, 'smsLink'] )->name('web.sms.link');
 });
 Route::resource('cat', 'Web\CategoryController');
 

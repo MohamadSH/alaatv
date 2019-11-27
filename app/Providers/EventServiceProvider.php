@@ -3,8 +3,6 @@
 namespace App\Providers;
 
 use App\Events\Authenticated;
-use App\Events\BlockDetachedFromProduct;
-use App\Events\SendProductIntroducingBlockTags;
 use App\Events\ContentRedirected;
 use App\Events\FavoriteEvent;
 use App\Events\MobileVerified;
@@ -13,8 +11,6 @@ use App\Events\FillTmpShareOfOrder;
 use App\Events\UnfavoriteEvent;
 use App\Events\UserAvatarUploaded;
 use App\Events\UserRedirectedToPayment;
-use App\Listeners\BlockDetachedFromProductListener;
-use App\Listeners\SendProductIntroducingBlockTagsListener;
 use App\Listeners\FavoriteEventListener;
 use App\Listeners\RedirectContentListener;
 use App\Listeners\RemoveOldUserAvatarListener;
@@ -74,12 +70,6 @@ class EventServiceProvider extends ServiceProvider
         ],
         UnfavoriteEvent::class      => [
             UnfavoriteEventListener::class,
-        ],
-        SendProductIntroducingBlockTags::class      => [
-            SendProductIntroducingBlockTagsListener::class,
-        ],
-        BlockDetachedFromProduct::class      => [
-            BlockDetachedFromProductListener::class,
         ],
     ];
 

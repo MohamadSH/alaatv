@@ -74,7 +74,7 @@
                 </button>
                 <div id="m_header_menu" class="m-header-menu m-aside-header-menu-mobile m-aside-header-menu-mobile--offcanvas  m-header-menu--skin-dark m-header-menu--submenu-skin-light m-aside-header-menu-mobile--skin-dark m-aside-header-menu-mobile--submenu-skin-dark ">
                     <ul class="m-menu__nav ">
-                        
+
                         <li class="m-menu__item  m-menu__item--submenu m-menu__item--rel a--MegaMenu-title">
                             <a href="javascript:" class="m-menu__link m-menu__toggle" title="فیلم های آلاء">
                                 <i class="m-menu__link-icon flaticon-layers"></i>
@@ -543,7 +543,7 @@
                                             </div>
                                             <div class="a--MegaMenu-categoryItem" dtat-cat-id="5+1">
                                                 <a dtat-cat-id="5+1" class="m-link" href="{{ route('web.landing.10') }}">
-                                                    5+1
+                                                    گدار
                                                 </a>
                                             </div>
                                             <div class="a--MegaMenu-categoryItem" dtat-cat-id="nezameGhadim">
@@ -577,7 +577,7 @@
                                                 <div class="row no-gutters">
                                                     <div class="col">
                                                         <a href="{{ route('web.landing.10') }}">
-                                                            <img class="lazy-image" data-src="https://cdn.alaatv.com/upload/megamenuBackground-5+1.jpg" style="width: 1083px;">
+                                                            <img class="lazy-image" data-src="https://cdn.alaatv.com/upload/megamenuBackground-GODAR.jpg" style="width: 1083px;">
                                                         </a>
                                                     </div>
                                                 </div>
@@ -594,7 +594,7 @@
                                             <div class="a--MegaMenu-categorySubItems" style="background: #fff2e1;" data-cat-id="raheAbrisham">
                                                 <div class="row no-gutters">
                                                     <div class="col">
-                                                        <a href="product/347">
+                                                        <a href="{{route('product.show' , 347)}}">
                                                             <img class="lazy-image" data-src="https://cdn.alaatv.com/upload/megamenuBackground-raheAbrisham.jpg" style="width: 1083px;">
                                                         </a>
                                                     </div>
@@ -605,7 +605,7 @@
                                 </div>
                             </div>
                         </li>
-                        
+
                     </ul>
                 </div>
                 <!-- END: Horizontal Menu -->
@@ -672,18 +672,6 @@
                                 </div>
                             </li>
                             @if(Auth::check())
-                                @if(isset($bonName))
-                                    <li class="m-nav__item">
-                                        <a href="{{ action("Web\UserController@userOrders") }}" class="m-nav__link">
-                                            <span class="m-nav__link-icon">
-                                                <span class="m-nav__link-icon-wrapper">{{ $bonName }}</span>
-                                                @if(Auth::user()->userHasBon() > 0)
-                                                <span class="m-nav__link-badge m-badge m-badge--accent">{{ Auth::user()->userHasBon() }}</span>
-                                                @endif
-                                            </span>
-                                        </a>
-                                    </li>
-                                @endif
                                 <li class="m-nav__item">
                                     <a href="{{ action("Web\UserController@userOrders") }}" class="m-nav__link">
                                         <span class="m-nav__link-icon">

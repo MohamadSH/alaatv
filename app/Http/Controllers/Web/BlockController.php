@@ -75,7 +75,7 @@ class BlockController extends Controller
     {
         return ($request->expectsJson() ? response()->json($block) : $block);
     }
-    
+
     public function edit(Request $request, Block $block)
     {
         $blockTypes = [
@@ -99,29 +99,29 @@ class BlockController extends Controller
         $blockProductsId = $block->products->pluck('id');
         return view('block.edit', compact('block', 'products', 'sets', 'blockSets', 'blockContents', 'blockProductsId', 'blockTypes'));
     }
-    
+
     public function update(Request $request, Block $block)
     {
-        
+
         $productsId = $request->get('block-products' , []);
         $setsId = $request->get('block-sets' , []);
         $contentsId = convertTagStringToArray($request->get('contents' , ''));
-    
+
         $this->fillBlockFromRequest($request, $block);
-        
+
         $block->update();
-        
+
         $this->attachProducts($block, $productsId);
-    
+
         $this->attachSets($block, $setsId);
-    
+
         $this->attachContents($block, $contentsId);
-    
+
         session()->put('success', 'اصلاح بلاک با موفقیت انجام شد');
-        
+
         return redirect()->back();
     }
-    
+
     /**
      * @param  Block  $block
      * @param  array  $productsId
@@ -130,7 +130,7 @@ class BlockController extends Controller
     {
         $block->products()->sync($productsId);
     }
-    
+
     /**
      * @param  Block  $block
      * @param  array  $setsId
@@ -139,7 +139,7 @@ class BlockController extends Controller
     {
         $block->sets()->sync($setsId);
     }
-    
+
     /**
      * @param  Block  $block
      * @param  array  $contentsId
@@ -148,17 +148,17 @@ class BlockController extends Controller
     {
         $block->contents()->sync($contentsId);
     }
-    
+
     public function store(SaveNewBlockRequest $request)
     {
         $block = new Block();
-        
+
         $productsId = $request->get('block-products' , []);
         $setsId = $request->get('block-sets' , []);
         $contentsId =convertTagStringToArray($request->get('contents' , ''));
 
         $this->fillBlockFromRequest($request, $block);
-    
+
         if($block->save()) {
             $this->attachProducts($block, $productsId);
 
@@ -174,7 +174,7 @@ class BlockController extends Controller
         return redirect()->back();
 
     }
-    
+
     /**
      * Remove the specified resource from storage.
      *
@@ -190,14 +190,14 @@ class BlockController extends Controller
         if ($block->delete()) {
             $done = true;
         }
-        
+
         if ($done) {
             return $response->setStatusCode(Response::HTTP_OK);
         }
-    
+
         return $response->setStatusCode(Response::HTTP_SERVICE_UNAVAILABLE);
     }
-    
+
     /**
      * @param  Request  $request
      * @param  Block    $block
@@ -208,12 +208,14 @@ class BlockController extends Controller
         $block->title     = $request->get('title');
         $block->customUrl = $request->get('customUrl');
         $block->class     = $request->get('class');
-        $block->order     = $request->get('order');
-        $block->enable    = $request->get('enable',0);
+        $order = $request->get('order');
+        $block->order     = (!is_null($order))?$order:0;
+        $enable = $request->get('enable');
+        $block->enable    = (!is_null($enable))?$enable:0;
         $block->type      = $request->get('type');
         $block->tags      = json_encode($tags);
     }
-    
+
     public function detachFromBlock(Block $block, string $type, int $id) {
         $detachType = [
             'product' => 'detachProduct',
@@ -224,15 +226,15 @@ class BlockController extends Controller
         $this->$methodName($block, $id);
         return redirect()->back();
     }
-    
+
     private function detachProduct(Block $block, int $id) {
         $block->products()->detach(Product::find($id));
     }
-    
+
     private function detachSet(Block $block, int $id) {
         $block->sets()->detach(Contentset::find($id));
     }
-    
+
     private function detachContent(Block $block, int $id) {
         $block->contents()->detach(Content::find($id));
     }

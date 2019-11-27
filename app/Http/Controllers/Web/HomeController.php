@@ -5,15 +5,15 @@ namespace App\Http\Controllers\Web;
 use Exception;
 use Carbon\Carbon;
 use Illuminate\Http\Response;
-use League\Flysystem\Filesystem;
 use Illuminate\Routing\Redirector;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
-use League\Flysystem\Sftp\SftpAdapter;
 use Illuminate\Contracts\Encryption\DecryptException;
-use Illuminate\Support\Facades\{File, Input, Config, Storage};
-use App\{Gender,
-    Major,
+use Illuminate\Support\Facades\{ Input, Config, Storage , File};
+use League\Flysystem\Filesystem;
+use League\Flysystem\Sftp\SftpAdapter;
+use App\{Notifications\sendLink,
+    UploadCenter,
     User,
     Product,
     Productfile,
@@ -26,7 +26,6 @@ use App\{Gender,
     Traits\CharacterCommon,
     Traits\APIRequestCommon,
     Http\Requests\ContactUsFormRequest,
-    Classes\Format\BlockCollectionFormatter,
     Classes\Repository\ContentRepositoryInterface,
     Classes\Repository\ProductRepository as ProductRepository};
 
@@ -55,17 +54,20 @@ class HomeController extends Controller
 
         $authException = [
 //            'debug',
-'newDownload',
-'download',
-'getImage',
-'sendMail',
-'siteMapXML',
-//            'uploadFile',
-'search',
-'home',
+                'newDownload',
+                'download',
+                'getImage',
+                'sendMail',
+                'siteMapXML',
+                'search',
+                'home',
         ];
         $this->middleware('auth', ['except' => $authException]);
         $this->middleware('role:admin', ['only' => ['debug'] ]);
+        $this->middleware('permission:'.config('constants.UPLOAD_CENTER_ACCESS'), ['only' => 'uploadCenter']);
+        $this->middleware('permission:'.config('constants.UPLOAD_CENTER_ACCESS'), ['only' => 'upload']);
+        $this->middleware('permission:'.config('constants.UPLOAD_CENTER_ACCESS'), ['only' => 'bigUpload']);
+        $this->middleware('permission:'.config('constants.SEND_SMS_TO_USER_ACCESS'), ['only' => 'smsLink']);
     }
 
     public function debug(Request $request, User $user = null)
@@ -587,114 +589,82 @@ class HomeController extends Controller
         }
     }
 
-    /**
-     * Sends an email to the website's own email
-     *
-     * @param Request $request
-     *
-     * @return Response
-     */
-    public function uploadFile(Request $request)
+    public function uploadCenter(Request $request)
     {
+        $user = $request->user();
+
+        $employees = User::whereHas('roles' , function ($q){
+           $q->where('name' , config('constants.ROLE_UPLOAD_CENTER'));
+        })->pluck('lastName' , 'id')->toArray();
+
+        $canSendSMS = ($user->can(config('constants.SEND_SMS_TO_USER_ACCESS')))?true:false;
+
+        $files = null;
+        $canSeeFileTable = false;
+        if($user->can(config('constants.LIST_UPLOAD_CENTER_FILES'))){
+            $canSeeFileTable = true;
+            $uploaderId = $request->get('uploader_id');
+            $files = UploadCenter::orderByDesc('created_at');
+            if(isset($uploaderId)){
+                $files->where('user_id' , $uploaderId);
+            }
+            $files = $files->paginate(10, ['*'], 'page');
+        }
+
+        $linkParameters = request()->except('page');
+
+        return view('admin.uploadCenter' , compact('employees' , 'files' , 'canSendSMS' , 'canSeeFileTable' , 'linkParameters'));
+    }
+
+    public function bigUpload(Request $request)
+    {
+        $user = $request->user();
 
         $filePath         = $request->header('X-File-Name');
         $originalFileName = $request->header('X-Dataname');
         $filePrefix       = '';
-        $contentSetId     = $request->header('X-Dataid');
-        $disk             = $request->header('X-Datatype');
-        $done             = false;
+        $link = null;
 
-        //        dd($request->headers->all());
         try {
-            $dirname  = pathinfo($filePath, PATHINFO_DIRNAME);
             $ext      = pathinfo($originalFileName, PATHINFO_EXTENSION);
-            $fileName = basename($originalFileName, '.'.$ext).'_'.date('YmdHis').'.'.$ext;
 
-            $newFileNameDir = $dirname.'/'.$fileName;
+            if(!in_array($ext, ['jpg','jpeg','JPG','png','pdf','rar','zip','psd','doc'])){
+                File::delete($filePath);
+                return response()->json([
+                    'error'=>[
+                        'message' => 'File format is not permitted'
+                    ]
+                ] , Response::HTTP_UNPROCESSABLE_ENTITY);
+            }
 
-            //            dd([
-            //                "filePath"=>$filePath,
-            //                "newFileNameDir"=>$newFileNameDir
-            //            ]);
+            $fileName = str_random(4).'.'.$ext;
+
+            $newFileNameDir = '/alaa_media/cdn/upload/u/'.$fileName;
+
             if (File::exists($newFileNameDir)) {
                 File::delete($newFileNameDir);
             }
             File::move($filePath, $newFileNameDir);
 
-            if (strcmp($disk, 'product') == 0) {
-                if ($ext == 'mp4') {
-                    $directory = 'video';
-                } else {
-                    if ($ext == 'pdf') {
-                        $directory = 'pamphlet';
-                    }
-                }
-
-                $adapter    = new SftpAdapter([
-                    'host'          => config('constants.SFTP_HOST'),
-                    'port'          => config('constants.SFTP_PORT'),
-                    'username'      => config('constants.SFTP_USERNAME'),
-                    'password'      => config('constants.SFTP_PASSSWORD'),
-                    'privateKey'    => config('constants.SFTP_PRIVATE_KEY_PATH'),
-                    'root'          => config('constants.SFTP_ROOT').'/private/'.$contentSetId.'/',
-                    'timeout'       => config('constants.SFTP_TIMEOUT'),
-                    'directoryPerm' => 0755,
-                ]);
-                $filesystem = new Filesystem($adapter);
-                if (isset($directory)) {
-                    if (!$filesystem->has($directory)) {
-                        $filesystem->createDir($directory);
-                    }
-
-                    $filePrefix = $directory.'/';
-                    $filesystem = $filesystem->get($directory);
-                    $path       = $filesystem->getPath();
-                    $filesystem->setPath($path.'/'.$fileName);
-                    if ($filesystem->put(fopen($newFileNameDir, 'r+'))) {
-                        $done = true;
-                    }
-                } else {
-                    if ($filesystem->put($fileName, fopen($newFileNameDir, 'r+'))) {
-                        $done = true;
-                    }
-                }
-            } else {
-                if (strcmp($disk, 'video') == 0) {
-                    $adapter    = new SftpAdapter([
-                        'host'          => config('constants.SFTP_HOST'),
-                        'port'          => config('constants.SFTP_PORT'),
-                        'username'      => config('constants.SFTP_USERNAME'),
-                        'password'      => config('constants.SFTP_PASSSWORD'),
-                        'privateKey'    => config('constants.SFTP_PRIVATE_KEY_PATH'),
-                        // example:  /alaa_media/cdn/media/203/HD_720p , /alaa_media/cdn/media/thumbnails/203/
-                        'root'          => config('constants.DOWNLOAD_SERVER_ROOT').config('constants.DOWNLOAD_SERVER_MEDIA_PARTIAL_PATH').$contentSetId,
-                        'timeout'       => config('constants.SFTP_TIMEOUT'),
-                        'directoryPerm' => 0755,
-                    ]);
-                    $filesystem = new Filesystem($adapter);
-                    if ($filesystem->put($originalFileName, fopen($newFileNameDir, 'r+'))) {
-                        $done = true;
-                        // example:  https://cdn.sanatisharif.ir/media/203/hq/203001dtgr.mp4
-                        $fileName = config('constants.DOWNLOAD_SERVER_PROTOCOL').config('constants.CDN_SERVER_NAME').config('constants.DOWNLOAD_SERVER_MEDIA_PARTIAL_PATH').$contentSetId.$originalFileName;
-                    }
-                } else {
-                    $filesystem = Storage::disk($disk.'Sftp');
-                    //                Storage::putFileAs('photos', new File('/path/to/photo'), 'photo.jpg');
-                    if ($filesystem->put($fileName, fopen($newFileNameDir, 'r+'))) {
-                        $done = true;
-                    }
-                }
+            $userId = null;
+            if(isset($user)){
+                $userId = $user->id;
             }
-            if ($done) {
-                return response()->json([
-                    'fileName' => $fileName,
-                    'prefix'   => $filePrefix,
-                ]);
-            } else {
-                return response()->json([] , Response::HTTP_SERVICE_UNAVAILABLE);
-            }
+            $relativePath = 'upload/u/'.$fileName;
+            $link = config('constants.DOWNLOAD_SERVER_PROTOCOL').config('constants.CDN_SERVER_NAME').'/'.$relativePath;
+
+            UploadCenter::create([
+                'user_id' => $userId,
+                'link' => $relativePath
+            ]);
+
+
+            return response()->json([
+                'fileName'  => $fileName,
+                'link'      => $link,
+                'prefix'    => $filePrefix,
+            ]);
         } catch (Exception $e) {
-            //            return $this->TAG.' '.$e->getMessage();
             return response()->json([
                 'message' => 'unexpected error',
                 'error'   => $e->getMessage(),
@@ -704,9 +674,31 @@ class HomeController extends Controller
         }
     }
 
-    public function adTest(Request $request){
-        $uuid = $request->get('uuid' , '35b39d4b-517b-44bc-85c4-44f93242836f');
-        return view('pages.adtest' , compact('uuid'));
+    public function smsLink(Request $request)
+    {
+        $user = User::Find($request->get('employee_id'));
+        if(is_null($user)){
+            return response()->json([
+                'error'=>[
+                    'message' => 'کاربر مورد نظر یافت نشد'
+                ]
+            ] , Response::HTTP_UNPROCESSABLE_ENTITY);
+        }
+
+        $link = $request->get('link');
+        if(is_null($link)){
+            return response()->json([
+                'error'=>[
+                    'message' => 'ارسال لینک الزامی است'
+                ]
+            ] , Response::HTTP_UNPROCESSABLE_ENTITY);
+        }
+
+        $user->notify(new sendLink($link));
+
+        return response()->json([
+            'message' => 'پیامک با موفقیت ارسال شد'
+        ] );
     }
 
     /**

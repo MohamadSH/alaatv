@@ -24,8 +24,8 @@
                     <span class="m-menu__link-text">محصولات آموزشی</span>
                 </a>
             </li>
-    
-    
+
+
             <li class="m-menu__item m-menu__item--submenu megamenuForMobiveInSidebar" aria-haspopup="true" m-menu-submenu-toggle="hover">
                 <a href="javascript:;" class="m-menu__link m-menu__toggle">
                     <i class="m-menu__link-icon fa fa-film"></i>
@@ -622,8 +622,8 @@
                     </ul>
                 </div>
             </li>
-            
-            
+
+
             <li class="m-menu__item  m-menu__item--submenu d-none @if(isset($pageName) && strcmp($pageName , "content")==0) m-menu__item--active @endif" aria-haspopup="true" m-menu-submenu-toggle="hover">
                 <a href="javascript:" class="m-menu__link m-menu__toggle">
                     <span class="m-menu__item-here"></span>
@@ -1102,6 +1102,15 @@
                             <span class="m-menu__item-here"></span>
                             <i class="m-menu__link-icon flaticon-clock"></i>
                             <span class="m-menu__link-text">گزارش فروش دبیران</span>
+                        </a>
+                    </li>
+                    @endpermission
+                    @permission((config("constants.UPLOAD_CENTER_ACCESS")))
+                    <li class="m-menu__item" aria-haspopup="true" m-menu-link-redirect="1">
+                        <a href="{{ route('web.uploadCenter') }}" class="m-menu__link ">
+                            <span class="m-menu__item-here"></span>
+                            <i class="m-menu__link-icon flaticon-clock"></i>
+                            <span class="m-menu__link-text">آپلود سنتر</span>
                         </a>
                     </li>
                     @endpermission
