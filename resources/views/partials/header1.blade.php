@@ -662,7 +662,7 @@
                                                         <input id="m_quicksearch_input" autocomplete="off" type="text" name="q" class="m-list-search__form-input" value="" placeholder="دنبال چی می گردی ؟....">
                                                     </span>
                                                     <span class="m-list-search__form-icon-close" id="m_quicksearch_close">
-                                                        <i class="fa fa-trash-alt"></i>
+                                                        <i class="fa fa-times"></i>
                                                     </span>
                                                 </div>
                                             </form>
