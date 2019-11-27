@@ -70,14 +70,14 @@
                             </a>
                         </div>
                         <div class="col m--bg-success shopNavItem">
-                            <a target="_self" onclick="$('html,body').animate({scrollTop: $('.konkoor2').offset().top - 100},'slow');" href="#konkoor2">
+                            <a target="_self" onclick="$('html,body').animate({scrollTop: $('.godar98').offset().top - 100},'slow');" href="#godar98">
                                 <!--begin::Total Profit-->
                                 <div class="m-widget24 m--align-center">
                                     <div class="m-widget24__item">
                                         <button class="btn m-btn m-btn--pill m-btn--air" type="button">
                                             <h2 class="m-widget24__title">
                                                 همایش
-                                                1 + 5
+                                                گدار
                                             </h2>
                                         </button>
                                         <br>

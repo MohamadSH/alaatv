@@ -14,9 +14,9 @@ use App\Http\Resources\Block as BlockResource;
 class ShopPageController extends Controller
 {
     use MetaCommon;
-    
+
     protected $setting;
-    
+
     public function __construct(Websitesetting $setting)
     {
         $this->setting = $setting->setting;
@@ -24,7 +24,7 @@ class ShopPageController extends Controller
 
     public function __invoke(Request $request)
     {
-        
+
         $url = $request->url();
         $this->generateSeoMetaTags(new SeoDummyTags($this->setting->site->seo->homepage->metaTitle,
             $this->setting->site->seo->homepage->metaDescription, $url,
@@ -34,11 +34,11 @@ class ShopPageController extends Controller
                 'h'        => '100',
                 'filename' => $this->setting->site->siteLogo,
             ]), '100', '100', null));
-        
-        $blocks = Block::getShopBlocks();
+
         $slides = Slideshow::getShopBanner();
-        
+
         if (request()->expectsJson()) {
+            $blocks = Block::getShopBlocksForApp();
             $numberOfBlocks = $blocks->count();
             return response()->json([
                 'mainBanner' => $slides->isNotEmpty() ? $slides : null,
@@ -58,6 +58,7 @@ class ShopPageController extends Controller
                 ],
             ]);
         }
+        $blocks = Block::getShopBlocks();
         $pageName = "shop";
         return view('pages.shop', compact('pageName', 'blocks', 'slides'));
     }
