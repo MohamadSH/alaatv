@@ -39,7 +39,7 @@ class DetachOpenUserbonsCommand extends Command
      */
     public function handle()
     {
-        $openUserbons = Userbon::whereHas('orderproduct' , function ($q){
+        $openUserbons = Userbon::whereHas('orderproducts' , function ($q){
                                 $q->whereHas('order' , function ($q2){
                                    $q2->where('orderstatus_id' ,  config('constants.ORDER_STATUS_OPEN'));
                                 });

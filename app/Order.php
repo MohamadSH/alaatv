@@ -1165,7 +1165,7 @@ class Order extends BaseModel
 
     public function orderpostinginfos()
     {
-        return $this->hasMany('\App\Orderpostinginfo');
+        return $this->hasMany(Orderpostinginfo::Class);
     }
 
     public function getDebtAttribute()

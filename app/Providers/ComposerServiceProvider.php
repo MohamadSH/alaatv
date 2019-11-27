@@ -35,6 +35,7 @@ class ComposerServiceProvider extends ServiceProvider
             'product.landing.landing8',
             'product.landing.landing9',
             'product.landing.landing10',
+            'product.landing.landing11',
             'pages.dashboard1',
             'user.salesReport',
             'pages.sharifLanding',

@@ -94,6 +94,24 @@ trait ProductAttributeTrait
         return $this->getAllAttributes();
     }
 
+    public function getInfoAttributesAttribute(){
+        $product = $this;
+        $key     = 'product:getInfoAttributes:'.$product->id;
+
+        return Cache::tags(['product' , 'attribute' , 'product_'.$this->id , 'product_'.$this->id.'_attributes'])
+            ->remember($key, config('constants.CACHE_600'), function () use ($product) {
+                $attributes = [];
+                /** @var \App\Attributevalue $attributevalue */
+                foreach ($product->attributevalues as $attributevalue) {
+                    /** @var \App\Attribute $attribute */
+                    $attribute = $attributevalue->attribute;
+                    $attributes[$attribute->name][] = $attributevalue->name;
+                }
+
+                return $attributes;
+            });
+    }
+
     /**
      * Gets product's all attributes
      *
