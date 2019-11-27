@@ -78,14 +78,14 @@ class Mix {
 
     mixAll() {
         this.mixBase();
-        this.mixPages();
-        this.mixUser();
-        this.mixLanding();
+        // this.mixPages();
+        // this.mixUser();
+        // this.mixLanding();
         this.mixProduct();
-        this.mixPageContentShow();
-        this.mixPageSetShow();
-        this.mixCheckout();
-        this.mixAdmin();
+        // this.mixPageContentShow();
+        // this.mixPageSetShow();
+        // this.mixCheckout();
+        // this.mixAdmin();
         this.mixCopyDirectory();
 
         // if (this.mix.inProduction()) {
@@ -589,7 +589,7 @@ class Mix {
                 'public/acm/AlaatvCustomFiles/components/aSticky/aSticky.js',
                 'public/acm/AlaatvCustomFiles/components/Favorite/script.js',
 
-                'public/acm/AlaatvCustomFiles/js/page/product-show.js',
+                // 'public/acm/AlaatvCustomFiles/js/page/product-show.js',
             ],
             'public/js/product-show.js'
         );
@@ -618,7 +618,7 @@ class Mix {
     }
     mixProduct() {
         this.mixPageProductShow();
-        this.mixPageProductContentEmbed();
+        // this.mixPageProductContentEmbed();
     }
 
     mixPageCheckoutReview() {
