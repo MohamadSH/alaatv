@@ -117,6 +117,30 @@ class Block extends BaseModel
                 $offerBlock = self::getOfferBlock();
                 $blocks     = self::shop()
                     ->enable()
+                    ->where('id' , '<>' , 115)
+                    ->orderBy('order')
+                    ->get()
+                    ->loadMissing([
+                        'contents',
+                        'sets',
+                        'products',
+                        'banners',
+                    ]);
+
+                return $blocks->prepend($offerBlock);
+            });
+
+        return $blocks;
+    }
+
+    public static function getShopBlocksForApp(): ?BlockCollection
+    {
+        $blocks = Cache::tags(['block' , 'shop'])
+            ->remember('bock:getShopBlocks', config('constants.CACHE_600'), function () {
+                $offerBlock = self::getOfferBlock();
+                $blocks     = self::shop()
+                    ->enable()
+                    ->where('id' , '<>' , 113)
                     ->orderBy('order')
                     ->get()
                     ->loadMissing([

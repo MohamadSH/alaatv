@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Http\Controllers\Controller;
 use App\Traits\Content\ContentControllerResponseTrait;
+use \App\Http\Resources\Content as ContentResource;
 
 class ContentController extends Controller
 {
@@ -34,8 +35,31 @@ class ContentController extends Controller
 
         $productsThatHaveThisContent = $content->activeProducts();
 
-        return $this->getUserCanNotSeeContentJsonResponse($content, $productsThatHaveThisContent, function ($msg) {
-        });
+        return $this->getUserCanNotSeeContentJsonResponse($content, $productsThatHaveThisContent, function ($msg) {});
+    }
+
+    public function showV2(Request $request , Content $content)
+    {
+        if (!is_null($content->redirectUrl)) {
+            return redirect(convertRedirectUrlToApiVersion($content->redirectUrl),
+                Response::HTTP_FOUND, $request->headers->all());
+        }
+
+        if (!$content->isActive()) {
+            $message = '';
+            $code    = Response::HTTP_LOCKED;
+            return response()->json([
+                'message' => $message,
+            ], $code);
+        }
+
+        if ($this->userCanSeeContent($request, $content, 'api')) {
+            return ( new ContentResource($content))->response();
+        }
+
+        $productsThatHaveThisContent = $content->activeProducts();
+
+        return $this->getUserCanNotSeeContentJsonResponse($content, $productsThatHaveThisContent, function ($msg) {});
     }
 
     public function fetchContents(Request $request){
