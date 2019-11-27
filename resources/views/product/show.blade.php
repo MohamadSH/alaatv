@@ -695,7 +695,7 @@
     @if(mb_strlen(trim(strip_tags($product->shortDescription))) > 0 || mb_strlen(trim(strip_tags($product->longDescription))) > 0)
         <div class="row m--margin-top-10">
             <div class="col m--margin-bottom-25">
-                <div class="m-portlet m-portlet--tabs productDetailes" id="productDetailes">
+                <div class="m-portlet m-portlet--tabs productDetailes boxed" id="productDetailes">
                     <div class="m-portlet__head">
                         <div class="m-portlet__head-caption">
                             <div class="m-portlet__head-title">

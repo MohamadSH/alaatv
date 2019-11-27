@@ -542,7 +542,7 @@
                                                 </a>
                                             </div>
                                             <div class="a--MegaMenu-categoryItem" dtat-cat-id="5+1">
-                                                <a dtat-cat-id="5+1" class="m-link" href="{{ route('web.landing.10') }}">
+                                                <a dtat-cat-id="godar" class="m-link" href="{{ route('web.landing.10') }}">
                                                     گدار
                                                 </a>
                                             </div>
@@ -551,7 +551,11 @@
                                                     همایش های نظام قدیم
                                                 </a>
                                             </div>
-                                            <div class="a--MegaMenu-categoryItem" dtat-cat-id="raheAbrisham">راه ابریشم</div>
+                                            <div class="a--MegaMenu-categoryItem" dtat-cat-id="raheAbrisham">
+                                                <a dtat-cat-id="raheAbrisham" class="m-link" href="{{route('product.show' , 347)}}">
+                                                    راه ابریشم
+                                                </a>
+                                            </div>
                                         </div>
                                         <div class="col-md-10 a--MegaMenu-subCategoryItemsCol">
 
@@ -573,7 +577,7 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="a--MegaMenu-categorySubItems" style="background: #ffe6dd;" data-cat-id="5+1">
+                                            <div class="a--MegaMenu-categorySubItems" style="background: #ffe6dd;" data-cat-id="godar">
                                                 <div class="row no-gutters">
                                                     <div class="col">
                                                         <a href="{{ route('web.landing.10') }}">
