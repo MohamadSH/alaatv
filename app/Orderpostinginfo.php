@@ -44,9 +44,9 @@ class Orderpostinginfo extends BaseModel
         'order_id',
         'postCode',
     ];
-    
+
     public function order()
     {
-        return $this->belongsTo('\App\Order');
+        return $this->belongsTo(Order::Class);
     }
 }
