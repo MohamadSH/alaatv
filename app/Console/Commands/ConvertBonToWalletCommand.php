@@ -3,8 +3,6 @@
 namespace App\Console\Commands;
 
 use App\Notifications\BonToWallet;
-use App\Order;
-use App\Orderproduct;
 use App\User;
 use App\Userbon;
 use Illuminate\Console\Command;
