@@ -188,10 +188,10 @@
                                                             <img src="https://cdn.alaatv.com/upload/Alaa-logo-free.png" alt="آلاء">
                                                         </div>
                                                         <div class="lessonsTimesWraper-header-bottom">
-                                                            <h2>همایش های طلایی آلاء</h2>
+                                                            <h2>همایش های گدار آلاء</h2>
                                                             <br>
                                                             <span class="lessonsTimesWraper-header-bottom-slogan">
-                                                                کمترین زمان ممکن برای طلایی ترین نتیجه
+                                                                جمع بندی نیم سال اول دوازدهم
                                                             </span>
                                                         </div>
                                                     </div>
@@ -221,9 +221,9 @@
                                                     </div>
                                                     <div class="lessonsTimesWraper-footer">
                                                         <div class="lessonsTimesWraper-footer-slogan animated infinite heartBeat">
-                                                            ۸۰ درصد
+                                                            همایش های
                                                             <br>
-                                                            کنکور
+                                                            کنکوری
                                                         </div>
                                                     </div>
                                                 </div>
