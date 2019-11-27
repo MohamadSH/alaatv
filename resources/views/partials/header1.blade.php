@@ -531,6 +531,16 @@
                                 <div class="container-fluid">
                                     <div class="row">
                                         <div class="col-md-2 a--MegaMenu-categoryItemsCol">
+                                            <div class="a--MegaMenu-categoryItem" dtat-cat-id="godar">
+                                                <a dtat-cat-id="godar" class="m-link" href="{{ route('web.landing.10') }}">
+                                                    گدار
+                                                </a>
+                                            </div>
+                                            <div class="a--MegaMenu-categoryItem" dtat-cat-id="raheAbrisham">
+                                                <a dtat-cat-id="raheAbrisham" class="m-link" href="{{route('product.show' , 347)}}">
+                                                    راه ابریشم
+                                                </a>
+                                            </div>
                                             <div class="a--MegaMenu-categoryItem" dtat-cat-id="talaee">
                                                 <a dtat-cat-id="talaee" class="m-link" href="{{ route('web.landing.8') }}">
                                                     طلایی
@@ -541,24 +551,32 @@
                                                     تفتان
                                                 </a>
                                             </div>
-                                            <div class="a--MegaMenu-categoryItem" dtat-cat-id="5+1">
-                                                <a dtat-cat-id="godar" class="m-link" href="{{ route('web.landing.10') }}">
-                                                    گدار
-                                                </a>
-                                            </div>
                                             <div class="a--MegaMenu-categoryItem" dtat-cat-id="nezameGhadim">
                                                 <a dtat-cat-id="nezameGhadim" class="m-link" href="{{ route('web.landing.5') }}">
                                                     همایش های نظام قدیم
                                                 </a>
                                             </div>
-                                            <div class="a--MegaMenu-categoryItem" dtat-cat-id="raheAbrisham">
-                                                <a dtat-cat-id="raheAbrisham" class="m-link" href="{{route('product.show' , 347)}}">
-                                                    راه ابریشم
-                                                </a>
-                                            </div>
                                         </div>
                                         <div class="col-md-10 a--MegaMenu-subCategoryItemsCol">
-
+    
+                                            <div class="a--MegaMenu-categorySubItems" style="background: #ffe6dd;" data-cat-id="godar">
+                                                <div class="row no-gutters">
+                                                    <div class="col">
+                                                        <a href="{{ route('web.landing.10') }}">
+                                                            <img class="lazy-image" data-src="https://cdn.alaatv.com/upload/megamenuBackground-GODAR.jpg" style="width: 1083px;">
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="a--MegaMenu-categorySubItems" style="background: #fff2e1;" data-cat-id="raheAbrisham">
+                                                <div class="row no-gutters">
+                                                    <div class="col">
+                                                        <a href="{{route('product.show' , 347)}}">
+                                                            <img class="lazy-image" data-src="https://cdn.alaatv.com/upload/megamenuBackground-raheAbrisham.jpg" style="width: 1083px;">
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>
                                             <div class="a--MegaMenu-categorySubItems" style="background: #ffd6e6;" data-cat-id="talaee">
                                                 <div class="row no-gutters">
                                                     <div class="col">
@@ -577,29 +595,11 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="a--MegaMenu-categorySubItems" style="background: #ffe6dd;" data-cat-id="godar">
-                                                <div class="row no-gutters">
-                                                    <div class="col">
-                                                        <a href="{{ route('web.landing.10') }}">
-                                                            <img class="lazy-image" data-src="https://cdn.alaatv.com/upload/megamenuBackground-GODAR.jpg" style="width: 1083px;">
-                                                        </a>
-                                                    </div>
-                                                </div>
-                                            </div>
                                             <div class="a--MegaMenu-categorySubItems" style="background: #fff2e1;" data-cat-id="nezameGhadim">
                                                 <div class="row no-gutters">
                                                     <div class="col">
                                                         <a href="{{ route('web.landing.5') }}">
                                                             <img class="lazy-image" data-src="https://cdn.alaatv.com/upload/megamenuBackground-ghadim.jpg" style="width: 1083px;">
-                                                        </a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="a--MegaMenu-categorySubItems" style="background: #fff2e1;" data-cat-id="raheAbrisham">
-                                                <div class="row no-gutters">
-                                                    <div class="col">
-                                                        <a href="{{route('product.show' , 347)}}">
-                                                            <img class="lazy-image" data-src="https://cdn.alaatv.com/upload/megamenuBackground-raheAbrisham.jpg" style="width: 1083px;">
                                                         </a>
                                                     </div>
                                                 </div>

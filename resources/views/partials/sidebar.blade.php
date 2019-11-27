@@ -634,6 +634,22 @@
                     <span class="m-menu__arrow"></span>
                     <ul class="m-menu__subnav">
                         <li class="m-menu__item " aria-haspopup="true">
+                            <a target="_blank" class="m-menu__link" href="{{ route('web.landing.10') }}">
+                                <i class="m-menu__link-icon fa fa-file-video"><span></span></i>
+                                <span class="m-menu__link-text">
+                                    گدار
+                                </span>
+                            </a>
+                        </li>
+                        <li class="m-menu__item " aria-haspopup="true">
+                            <a target="_blank" class="m-menu__link" href="{{route('product.show' , 347)}}">
+                                <i class="m-menu__link-icon fa fa-file-video"><span></span></i>
+                                <span class="m-menu__link-text">
+                                    راه ابریشم
+                                </span>
+                            </a>
+                        </li>
+                        <li class="m-menu__item " aria-haspopup="true">
                             <a target="_blank" class="m-menu__link" href="{{ route('web.landing.8') }}">
                                 <i class="m-menu__link-icon fa fa-file-video"><span></span></i>
                                 <span class="m-menu__link-text">
@@ -653,23 +669,7 @@
                             <a target="_blank" class="m-menu__link" href="{{ route('web.landing.10') }}">
                                 <i class="m-menu__link-icon fa fa-file-video"><span></span></i>
                                 <span class="m-menu__link-text">
-                                    گدار
-                                </span>
-                            </a>
-                        </li>
-                        <li class="m-menu__item " aria-haspopup="true">
-                            <a target="_blank" class="m-menu__link" href="{{ route('web.landing.10') }}">
-                                <i class="m-menu__link-icon fa fa-file-video"><span></span></i>
-                                <span class="m-menu__link-text">
                                     همایش های نظام قدیم
-                                </span>
-                            </a>
-                        </li>
-                        <li class="m-menu__item " aria-haspopup="true">
-                            <a target="_blank" class="m-menu__link" href="{{route('product.show' , 347)}}">
-                                <i class="m-menu__link-icon fa fa-file-video"><span></span></i>
-                                <span class="m-menu__link-text">
-                                    راه ابریشم
                                 </span>
                             </a>
                         </li>
