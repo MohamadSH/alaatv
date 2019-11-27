@@ -333,11 +333,28 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
             'validSince',
             'page_view',
             'thumbnail',
+            'redirectUrl',
+            'tmp_description'
         ];
         foreach ($unSetArray as $key) {
             unset($array[$key]);
         }
+        if(!$this->isActive() || isset($this->redirectUrl) ){
+            foreach ($array as $key => $value){
+
+                    $array[$key] = null;
+            }
+        }
         return $array;
+    }
+    /**
+     * Get the value used to index the model.
+     *
+     * @return mixed
+     */
+    public function getScoutKey()
+    {
+        return $this->id;
     }
 
     /*
