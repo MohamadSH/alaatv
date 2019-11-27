@@ -85,9 +85,9 @@ use App\Classes\Checkout\Alaa\OrderproductCheckout;
  * @property-read int|null $inserted_userbons_count
  * @property-read int|null $parents_count
  * @property-read int|null $userbons_count
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Orderproduct whereTmpExtraCost($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Orderproduct whereTmpFinalCost($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Orderproduct whereTmpShareOrder($value)
+ * @method static Builder|Orderproduct whereTmpExtraCost($value)
+ * @method static Builder|Orderproduct whereTmpFinalCost($value)
+ * @method static Builder|Orderproduct whereTmpShareOrder($value)
  */
 class Orderproduct extends BaseModel
 {
@@ -348,21 +348,6 @@ class Orderproduct extends BaseModel
         $this->update();
     }
 
-    /** change type of orderproduct to Gift type
-     *
-     * @param  Product  $gift
-     *
-     * @return Orderproduct
-     */
-//    public function changeOrderproductTypeToGift($orderproductId)
-//    {
-//        $orderproduct = Orderproduct::FindorFail($orderproductId);
-//        $orderproduct->orderproducttype_id = config("constants.ORDER_PRODUCT_GIFT");
-//        $orderproduct->save();
-//
-//        return $orderproduct;
-//    }
-
     /**
      * Sets orderproduct excluding from coupon
      *
@@ -599,10 +584,7 @@ class Orderproduct extends BaseModel
 
         return Cache::tags(['orderproduct' , 'bon' , 'cost' , 'orderproduct_'.$orderproduct->id , 'orderproduct_'.$orderproduct->id.'_bon'])
             ->remember($key, config('constants.CACHE_60'), function () use ($orderproduct) {
-                $userbons = $this->userbons()
-                    ->get();
-
-                return $userbons;
+                return $this->userbons()->get();
             });
     }
 
@@ -613,11 +595,7 @@ class Orderproduct extends BaseModel
 
         return Cache::tags(['orderproduct' , 'attribute' , 'attributevalues' , 'orderproduct_'.$orderproduct->id , 'orderproduct_'.$orderproduct->id.'_attributevalues'])
             ->remember($key, config('constants.CACHE_60'), function () use ($orderproduct) {
-                //ToDo : set visible
-                $attributevalues = $orderproduct->attributevalues()
-                    ->get();
-
-                return $attributevalues;
+                return $orderproduct->attributevalues()->get();
             });
     }
 
