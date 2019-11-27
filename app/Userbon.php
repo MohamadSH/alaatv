@@ -82,22 +82,22 @@ class Userbon extends BaseModel
 
     public function bon()
     {
-        return $this->belongsTo('\App\Bon');
+        return $this->belongsTo(Bon::Class);
     }
 
     public function user()
     {
-        return $this->belongsTo('\App\User');
+        return $this->belongsTo(User::Class);
     }
 
     public function orderproducts()
     {
-        return $this->belongsToMany('\App\Orderproduct');
+        return $this->belongsToMany(Orderproduct::Class);
     }
 
     public function orderproduct()
     {
-        return $this->belongsTo('\App\Orderproduct');
+        return $this->belongsTo(Orderproduct::Class);
     }
 
     public function void()
