@@ -207,7 +207,11 @@
                                                                     </td>
                                                                     <td>
                                                                         <a href="{{ $item['url'] }}">
-                                                                            {{ $item['hours'] }} ساعت
+                                                                            @if($item['hours'] == 0)
+                                                                                به زودی
+                                                                            @else
+                                                                                {{ $item['hours'] }} ساعت
+                                                                            @endif
                                                                         </a>
                                                                     </td>
                                                                 </tr>
