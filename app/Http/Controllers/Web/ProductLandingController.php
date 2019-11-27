@@ -597,6 +597,11 @@ class ProductLandingController extends Controller
                 'url' => route('product.show' , 373),
                 'hours' => 11
             ],
+            381 => [
+                'name' => 'همایش هندسه گدار',
+                'url' => route('product.show' , 381),
+                'hours' => 8
+            ],
             375 => [
                 'name' => 'همایش ریاضی انسانی گدار',
                 'url' => route('product.show' , 375),
@@ -605,6 +610,11 @@ class ProductLandingController extends Controller
             377 => [
                 'name' => 'همایش ریاضی تجربی گدار',
                 'url' => route('product.show' , 377),
+                'hours' => 10
+            ],
+            385 => [
+                'name' => 'همایش ریاضی تجربی گدار',
+                'url' => route('product.show' , 385),
                 'hours' => 0
             ],
             379 => [
@@ -612,19 +622,9 @@ class ProductLandingController extends Controller
                 'url' => route('product.show' , 379),
                 'hours' => 0
             ],
-            381 => [
-                'name' => 'همایش هندسه گدار',
-                'url' => route('product.show' , 381),
-                'hours' => 0
-            ],
             383 => [
                 'name' => 'همایش حسابان گدار',
                 'url' => route('product.show' , 383),
-                'hours' => 0
-            ],
-            385 => [
-                'name' => 'همایش ریاضی تجربی گدار',
-                'url' => route('product.show' , 385),
                 'hours' => 0
             ],
             387 => [
@@ -640,7 +640,7 @@ class ProductLandingController extends Controller
         ];
 
 
-        [$products, $landingProducts] = Cache::remember('landing-8-products', config('constants.CACHE_600'),
+        [$products, $landingProducts] = Cache::remember('landing-10-products', config('constants.CACHE_600'),
             static function () use ($productIds) {
                 $products  = Product::whereIn('id', $productIds)
                     ->orderBy('order')

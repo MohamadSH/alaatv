@@ -543,7 +543,7 @@
                                             </div>
                                             <div class="a--MegaMenu-categoryItem" dtat-cat-id="5+1">
                                                 <a dtat-cat-id="5+1" class="m-link" href="{{ route('web.landing.10') }}">
-                                                    5+1
+                                                    گدار
                                                 </a>
                                             </div>
                                             <div class="a--MegaMenu-categoryItem" dtat-cat-id="nezameGhadim">
@@ -672,18 +672,6 @@
                                 </div>
                             </li>
                             @if(Auth::check())
-                                @if(isset($bonName))
-                                    <li class="m-nav__item">
-                                        <a href="{{ action("Web\UserController@userOrders") }}" class="m-nav__link">
-                                            <span class="m-nav__link-icon">
-                                                <span class="m-nav__link-icon-wrapper">{{ $bonName }}</span>
-                                                @if(Auth::user()->userHasBon() > 0)
-                                                <span class="m-nav__link-badge m-badge m-badge--accent">{{ Auth::user()->userHasBon() }}</span>
-                                                @endif
-                                            </span>
-                                        </a>
-                                    </li>
-                                @endif
                                 <li class="m-nav__item">
                                     <a href="{{ action("Web\UserController@userOrders") }}" class="m-nav__link">
                                         <span class="m-nav__link-icon">

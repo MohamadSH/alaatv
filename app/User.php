@@ -124,6 +124,21 @@ use Laravel\Passport\Token;
  *               $diet                     رژیم غذایی خاص
  * @property string|null
  *               $techCode                 کد تکنسین
+ * @property string    $full_name
+ * @property string    whatsapp
+ * @property string    skype
+ * @property string    province
+ * @property string    city
+ * @property string    address
+ * @property string    postalCode
+ * @property string    school
+ * @property string    bio
+ * @property string    introducedBy
+ * @property int    bloodtype_id
+ * @property string    allergy
+ * @property string    medicalCondition
+ * @property string    diet
+ * @property Userstatus    userstatus
  * @property-read Collection|Bankaccount[]
  *                    $bankaccounts
  * @property-read Bloodtype|null

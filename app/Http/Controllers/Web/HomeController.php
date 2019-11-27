@@ -599,6 +599,8 @@ class HomeController extends Controller
 
         $canSendSMS = ($user->can(config('constants.SEND_SMS_TO_USER_ACCESS')))?true:false;
 
+        $files = null;
+        $canSeeFileTable = false;
         if($user->can(config('constants.LIST_UPLOAD_CENTER_FILES'))){
             $canSeeFileTable = true;
             $uploaderId = $request->get('uploader_id');
