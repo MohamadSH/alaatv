@@ -814,6 +814,5 @@
             quantity: 1
         };
         var parentProductTags = '{{ ($product->tags !== null) ? implode(',',optional($product->tags)->tags) : '-' }}';
-        
     </script>
 @endsection

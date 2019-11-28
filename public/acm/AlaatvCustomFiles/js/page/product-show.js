@@ -331,9 +331,22 @@ var ProductResponsivePage = function () {
         var productPicColumnWidth = getColumnWidthInPercent($('.productPicColumn')),
             productAttributesColumnWidth = getColumnWidthInPercent($('.productAttributesColumn')),
             PicAttributesIntroVideoRowWidth = 100 - productPicColumnWidth - productAttributesColumnWidth;
+
         setColuimnWidth($('.productIntroVideoColumn'), PicAttributesIntroVideoRowWidth);
     }
     function applyModel1(a, b, windowWidth) {
+
+        //reset
+        $('.servicesRows .servicesRow').css({'max-height':'', 'min-height': ''});
+        removeColuimnWidth($('.productAttributesColumn'));
+        $('.productIntroVideoColumn').css({'margin-top': ''});
+        $('.productAttributesColumn').css({'margin-top':'', 'order': ''});
+        removeColuimnWidth($('.attributeRow .col'));
+        $('.attributeRow').css({'justify-content':''});
+        $('.attributeRow .col').css({'margin-top':''});
+        $('.priceAndAddToCartRow .btnAddToCart').fadeIn(0);
+
+
         var picColumnWidth = fx(a, b, windowWidth);
         setColuimnWidth($('.productPicColumn'), picColumnWidth);
         setVideoColumnWidthModel1();
@@ -341,13 +354,6 @@ var ProductResponsivePage = function () {
         $('.productIntroVideoColumn .videoInformation').fadeIn(0);
         $('.servicesRows').css({'padding-bottom':'8px'});
 
-        //reset
-        removeColuimnWidth($('.productAttributesColumn'));
-        $('.productIntroVideoColumn').css({'margin-top': '0'});
-        $('.productAttributesColumn').css({'margin-top':'10px', 'order': 'unset'});
-        removeColuimnWidth($('.attributeRow .col'));
-        $('.attributeRow').css({'justify-content':''});
-        $('.attributeRow .col').css({'margin-top':''});
     }
 
     // model 2
@@ -357,6 +363,16 @@ var ProductResponsivePage = function () {
         setColuimnWidth($('.productAttributesColumn'), productAttributesColumnwWidth);
     }
     function applyModel2(a, b, windowWidth) {
+
+        $('.servicesRows .servicesRow').css({'max-height':'', 'min-height': ''});
+        $('.productAttributesColumn').css({'margin-top':'', 'order': ''});
+        removeColuimnWidth($('.attributeRow .col'));
+        $('.attributeRow').css({'justify-content':''});
+        $('.attributeRow .col').css({'margin-top':''});
+        $('.priceAndAddToCartRow .btnAddToCart').fadeIn(0);
+
+
+
         var picColumnWidth = fx(a, b, windowWidth);
         setColuimnWidth($('.productPicColumn'), picColumnWidth);
         setColuimnWidth($('.productIntroVideoColumn'), picColumnWidth);
@@ -366,11 +382,6 @@ var ProductResponsivePage = function () {
         $('.productIntroVideoColumn').css({'margin-top': '0'});
         var marginTop = -1 *  ($('.productIntroVideoColumn').offset().top - ($('.PicAttributesIntroVideoRow img').width() + $('.PicAttributesIntroVideoRow img').offset().top) - 15);
         $('.productIntroVideoColumn').css({'margin-top': marginTop + 'px'});
-
-        $('.productAttributesColumn').css({'margin-top':'10px', 'order': 'unset'});
-        removeColuimnWidth($('.attributeRow .col'));
-        $('.attributeRow').css({'justify-content':''});
-        $('.attributeRow .col').css({'margin-top':''});
     }
 
     // model 3
@@ -385,6 +396,7 @@ var ProductResponsivePage = function () {
         $('.productAttributesColumn').css({'margin-top':'10px', 'order': '2'});
 
 
+        $('.priceAndAddToCartRow .btnAddToCart').fadeIn(0);
         removeColuimnWidth($('.attributeRow .col'));
         $('.attributeRow').css({'justify-content':''});
         $('.attributeRow .col').css({'margin-top':''});
@@ -401,6 +413,7 @@ var ProductResponsivePage = function () {
         $('.servicesRows .servicesRow').css({'max-height':'unset', 'min-height': 'unset'});
         $('.productAttributesColumn').css({'margin-top':'10px', 'order': '2'});
 
+        $('.priceAndAddToCartRow .btnAddToCart').fadeIn(0);
         removeColuimnWidth($('.attributeRow .col'));
         $('.attributeRow').css({'justify-content':''});
         $('.attributeRow .col').css({'margin-top':''});
@@ -427,7 +440,6 @@ var ProductResponsivePage = function () {
     }
 
     function apply() {
-        console.log('apply');
         var windowWidth = getWindowWidth();
         applyModel(windowWidth);
     }

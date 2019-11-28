@@ -415,7 +415,7 @@
 .productAttributesBox {
     border: solid 1px #b5b5b5;
     border-radius: 10px;
-    margin: 0 5px;
+    margin: 0 2px;
 }
 .productAttributesBox .title {
 
@@ -462,8 +462,8 @@
     margin-top: 5px;
 }
 .servicesRows .servicesBadge {
-    padding: 0 10px;
-    margin: 0 3px;
+    padding: 0 8px;
+    margin: 0 1px;
     background-color: #f3f4f9;
 }
 
@@ -483,6 +483,7 @@
     display: flex;
     align-items: center;
     justify-content: flex-start;
+    min-height: 70px;
 }
 .priceAndAddToCartRow .priceAndAddToCartCol .price,
 .priceAndAddToCartRow .priceAndAddToCartCol .discount{

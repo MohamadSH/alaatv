@@ -59,7 +59,7 @@
                                                                     </div>
                                                                 </div>
                                                                 <div class="value">
-                                                                    {{$product->info_attributes->productionYear}}
+                                                                    {{implode('، ',(array)$product->info_attributes['productionYear'])}}
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -76,7 +76,7 @@
                                                                     </div>
                                                                 </div>
                                                                 <div class="value">
-                                                                    تجربی ریاضی
+                                                                    {{implode('، ',(array)$product->info_attributes['major'])}}
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -93,7 +93,7 @@
                                                                     </div>
                                                                 </div>
                                                                 <div class="value">
-                                                                    نظام جدید
+                                                                    {{implode('،',(array)$product->info_attributes['educationalSystem'])}}
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -113,7 +113,7 @@
                                                                     </div>
                                                                 </div>
                                                                 <div class="value">
-                                                                    دانلودی
+                                                                    {{implode('،',(array)$product->info_attributes['shippingMethod'])}}
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -135,7 +135,7 @@
                                                                     </div>
                                                                 </div>
                                                                 <div class="value">
-                                                                    آقای پویان نظر
+                                                                    {{implode('،',(array)$product->info_attributes['teacher'])}}
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -199,11 +199,12 @@
                                                                 </svg>
                                                             </span>
                                                             خدماتی که دریافت می کنید:
-                                                            <span class="servicesBadge">فیلم</span>
-                                                            <span class="servicesBadge">جزوه</span>
-                                                            <span class="servicesBadge">کنکورچه</span>
+                                                            @foreach($product->info_attributes['services'] as $s)
+                                                                <span class="servicesBadge">{{ $s }}</span>
+                                                            @endforeach
                                                         </div>
                                                         <div class="col-12 servicesRow">
+                                                            @if(isset($product->info_attributes['courseDuration']))
                                                             <span>
                                                                 <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 512.001 512.001" width="25" xml:space="preserve">
                                                                     <g transform="translate(0 -1)">
@@ -259,13 +260,14 @@
                                                                     </g>
                                                                 </svg>
                                                             </span>
-                                                            خدماتی که دریافت می کنید:
-                                                            <span class="servicesBadge">فیلم</span>
-                                                            <span class="servicesBadge">جزوه</span>
-                                                            <span class="servicesBadge">کنکورچه</span>
+                                                            مدت برنامه:
+                                                            {{implode('،',(array)$product->info_attributes['courseDuration'])}}
+                                                            [ {{implode('،',(array)$product->info_attributes['studyPlan'])}} ]
+                                                            @endif
                                                         </div>
                                                         <div class="col-12 servicesRow">
-                                                            <span>
+                                                            @if(isset($product->info_attributes['accessoryServices']))
+                                                                <span>
                                                                 <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 512.001 512.001" width="25" xml:space="preserve">
                                                                     <g transform="translate(0 -1)">
                                                                         <polygon style="fill:#FFFFFF;" points="256.001,478.877 256.001,171.677 8.534,171.677  "/>
@@ -320,26 +322,27 @@
                                                                     </g>
                                                                 </svg>
                                                             </span>
-                                                            خدماتی که دریافت می کنید:
-                                                            <span class="servicesBadge">فیلم</span>
-                                                            <span class="servicesBadge">جزوه</span>
-                                                            <span class="servicesBadge">کنکورچه</span>
+                                                                خدمات جانبی:
+                                                                @foreach($product->info_attributes['accessoryServices'] as $s)
+                                                                    <span class="servicesBadge">{{ $s }}</span>
+                                                                @endforeach
+                                                            @endif
                                                         </div>
                                                         <div class="col">
                                                             <div class="row videoInformation">
                                                                 <div class="col">
             
                                                                     <div class="alert m-alert--default videoFilesPublishTime" role="alert">
-                                        <span>
-                                            <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 52 52" xml:space="preserve" width="20">
-                                                <g>
-                                                    <path d="M26,0C11.664,0,0,11.663,0,26s11.664,26,26,26s26-11.663,26-26S40.336,0,26,0z M26,50C12.767,50,2,39.233,2,26   S12.767,2,26,2s24,10.767,24,24S39.233,50,26,50z"/>
-                                                    <path d="M26,10c-0.552,0-1,0.447-1,1v22c0,0.553,0.448,1,1,1s1-0.447,1-1V11C27,10.447,26.552,10,26,10z"/>
-                                                    <path d="M26,37c-0.552,0-1,0.447-1,1v2c0,0.553,0.448,1,1,1s1-0.447,1-1v-2C27,37.447,26.552,37,26,37z"/>
-                                                </g>
-                                            </svg>
-                                        </span>
-                                                                        زمان انتشار فایل های این همایش: 20 آذرماه
+                                                                        <span>
+                                                                            <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 52 52" xml:space="preserve" width="20">
+                                                                                <g>
+                                                                                    <path d="M26,0C11.664,0,0,11.663,0,26s11.664,26,26,26s26-11.663,26-26S40.336,0,26,0z M26,50C12.767,50,2,39.233,2,26   S12.767,2,26,2s24,10.767,24,24S39.233,50,26,50z"/>
+                                                                                    <path d="M26,10c-0.552,0-1,0.447-1,1v22c0,0.553,0.448,1,1,1s1-0.447,1-1V11C27,10.447,26.552,10,26,10z"/>
+                                                                                    <path d="M26,37c-0.552,0-1,0.447-1,1v2c0,0.553,0.448,1,1,1s1-0.447,1-1v-2C27,37.447,26.552,37,26,37z"/>
+                                                                                </g>
+                                                                            </svg>
+                                                                        </span>
+                                                                        زمان دریافت فایل های این همایش: {{ implode(' ',(array)$product->info_attributes['downloadDate']) }}
                                                                     </div>
             
                                                                     <div class="m-alert m-alert--air m-alert--square alert videoLength" role="alert">
@@ -363,7 +366,7 @@
                                                     </g>
                                                 </svg>
                                             </span>
-                                                                            مدت زمان: 11 ساعت
+                                                                            مدت زمان: {{ implode(' ',(array)$product->info_attributes['duration']) }}
                                                                         </div>
                                                                     </div>
         
@@ -732,7 +735,7 @@
                                                     </g>
                                                 </svg>
                                             </span>
-                                            زمان انتشار فایل های این همایش: 20 آذرماه
+                                            زمان دریافت فایل های این همایش: {{ implode(' ',(array)$product->info_attributes['downloadDate']) }}
                                         </div>
                                         <div class="m-alert m-alert--air m-alert--square alert videoLength" role="alert">
                                             <div class="m-alert__text">
@@ -755,7 +758,7 @@
                                                         </g>
                                                     </svg>
                                                 </span>
-                                                مدت زمان: 11 ساعت
+                                                مدت زمان: {{ implode(' ',(array)$product->info_attributes['duration']) }}
                                             </div>
                                         </div>
                                     </div>
