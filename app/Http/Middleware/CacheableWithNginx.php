@@ -15,6 +15,7 @@ class CacheableWithNginx
         '/logout',
         '/goToPaymentRoute/*',
         '/checkout/*',
+        '/api/login',
     ];
 
     /**
