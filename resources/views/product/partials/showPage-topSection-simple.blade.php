@@ -3,13 +3,13 @@
         <!--begin::Portlet-->
         <div class="m-portlet">
             <div class="m-portlet__body">
-                
+
                 @include('partials.favorite', [
                     'favActionUrl' => route('web.mark.favorite.product', [ 'product' => $product->id ]),
                     'unfavActionUrl' => route('web.mark.unfavorite.product', [ 'product' => $product->id ]),
                     'isFavored' => $isFavored
                 ])
-                
+
                 <!--begin::Section-->
                 <div class="m-section m-section--last">
                     <div class="m-section__content">
@@ -19,16 +19,16 @@
                                 <div>
                                     <img src="{{$product->photo}}?w=400&h=400" alt="عکس محصول@if(isset($product->name)) {{$product->name}} @endif" class="img-fluid m--marginless a--full-width"/>
                                 </div>
-                            
+
                             </div>
                             <div class="col-lg-5 col-md-8 productAttributesColumn">
-                                
-                                
+
+
                                 {{--ویژگی ها و دارای --}}
                                 <div class="row productAttributesRows">
                                     @if(optional(optional(optional($product->attributes)->get('information'))->where('control', 'simple'))->count()>0 ||  optional(optional( optional($product->attributes)->get('main'))->where('control', 'simple'))->count()>0)
                                         <div class="col">
-                                            
+
                                             <div class="m-portlet m-portlet--bordered productAttributes">
                                                 <div class="m-portlet__head">
                                                     <div class="m-portlet__head-caption">
@@ -41,7 +41,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="m-portlet__body m--padding-top-5 m--padding-bottom-5 m--padding-right-10 m--padding-left-10">
-                                                    
+
                                                     <div class="row no-gutters attributeRow">
                                                         <div class="col">
                                                             <div class="productAttributesBox">
@@ -140,7 +140,6 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    
                                                     <div class="row servicesRows">
                                                         <div class="col-12 servicesRow">
                                                             <span>
@@ -152,7 +151,7 @@
                                                                             <polygon style="fill:#A4C2F7;" points="503.467,171.677 179.201,171.677 264.534,35.143 418.134,35.143   "/>
                                                                         </g>
                                                                         <polygon style="fill:#FFFFFF;" points="332.801,171.677 8.534,171.677 93.867,35.143 247.467,35.143  "/>
-                                                                        
+
                                                                             <linearGradient id="SVGID_1_" gradientUnits="userSpaceOnUse" x1="-48.7194" y1="653.6632" x2="-48.0494" y2="653.019" gradientTransform="matrix(426.6667 0 0 -443.7334 20900.0254 290102.25)">
                                                                             <stop offset="0" style="stop-color:#D4E1F4"/>
                                                                             <stop offset="0.1717" style="stop-color:#D4E1F4"/>
@@ -198,9 +197,9 @@
                                                                     </g>
                                                                 </svg>
                                                             </span>
-                                                            خدماتی که دریافت می کنید:
+                                                            <span class="servicesCategory">خدماتی که دریافت می کنید:</span>
                                                             @foreach($product->info_attributes['services'] as $s)
-                                                                <span class="servicesBadge">{{ $s }}</span>
+                                                                <span class="servicesBadge"> {{ $s }} </span>
                                                             @endforeach
                                                         </div>
                                                         <div class="col-12 servicesRow">
@@ -214,7 +213,7 @@
                                                                             <polygon style="fill:#A4C2F7;" points="503.467,171.677 179.201,171.677 264.534,35.143 418.134,35.143   "/>
                                                                         </g>
                                                                         <polygon style="fill:#FFFFFF;" points="332.801,171.677 8.534,171.677 93.867,35.143 247.467,35.143  "/>
-                                                                        
+
                                                                             <linearGradient id="SVGID_1_" gradientUnits="userSpaceOnUse" x1="-48.7194" y1="653.6632" x2="-48.0494" y2="653.019" gradientTransform="matrix(426.6667 0 0 -443.7334 20900.0254 290102.25)">
                                                                             <stop offset="0" style="stop-color:#D4E1F4"/>
                                                                             <stop offset="0.1717" style="stop-color:#D4E1F4"/>
@@ -260,7 +259,10 @@
                                                                     </g>
                                                                 </svg>
                                                             </span>
-                                                            مدت برنامه:
+                                                            <span class="servicesCategory">
+                                                                مدت برنامه:
+                                                            </span>
+
                                                             {{implode('،',(array)$product->info_attributes['courseDuration'])}}
                                                             [ {{implode('،',(array)$product->info_attributes['studyPlan'])}} ]
                                                             @endif
@@ -276,7 +278,7 @@
                                                                             <polygon style="fill:#A4C2F7;" points="503.467,171.677 179.201,171.677 264.534,35.143 418.134,35.143   "/>
                                                                         </g>
                                                                         <polygon style="fill:#FFFFFF;" points="332.801,171.677 8.534,171.677 93.867,35.143 247.467,35.143  "/>
-                                                                        
+
                                                                             <linearGradient id="SVGID_1_" gradientUnits="userSpaceOnUse" x1="-48.7194" y1="653.6632" x2="-48.0494" y2="653.019" gradientTransform="matrix(426.6667 0 0 -443.7334 20900.0254 290102.25)">
                                                                             <stop offset="0" style="stop-color:#D4E1F4"/>
                                                                             <stop offset="0.1717" style="stop-color:#D4E1F4"/>
@@ -322,16 +324,20 @@
                                                                     </g>
                                                                 </svg>
                                                             </span>
-                                                                خدمات جانبی:
+
+                                                                <span class="servicesCategory">
+                                                                    خدمات جانبی:
+                                                                </span>
+
                                                                 @foreach($product->info_attributes['accessoryServices'] as $s)
-                                                                    <span class="servicesBadge">{{ $s }}</span>
+                                                                    <span class="servicesBadge"> {{ $s }} </span>
                                                                 @endforeach
                                                             @endif
                                                         </div>
                                                         <div class="col">
                                                             <div class="row videoInformation">
                                                                 <div class="col">
-            
+
                                                                     <div class="alert m-alert--default videoFilesPublishTime" role="alert">
                                                                         <span>
                                                                             <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 52 52" xml:space="preserve" width="20">
@@ -344,67 +350,73 @@
                                                                         </span>
                                                                         زمان دریافت فایل های این همایش: {{ implode(' ',(array)$product->info_attributes['downloadDate']) }}
                                                                     </div>
-            
+
+                                                                    @if(isset($product->info_attributes['duration']) || isset($product->info_attributes['durationTillNow']))
                                                                     <div class="m-alert m-alert--air m-alert--square alert videoLength" role="alert">
                                                                         <div class="m-alert__text">
-                                            <span>
-                                                <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 59 59" xml:space="preserve" width="30">
-                                                    <line style="fill:none;stroke:#424A60;stroke-width:2;stroke-linecap:round;stroke-miterlimit:10;" x1="48.515" y1="13.615" x2="52.05" y2="10.08"/>
-                                                    <rect x="50.464" y="5.665" transform="matrix(0.7071 -0.7071 0.7071 0.7071 9.5322 40.3433)" style="fill:#AFB6BB;" width="6.001" height="6"/>
-                                                    <path style="fill:#3083C9;" d="M30.13,6c-2.008,0-3.96,0.235-5.837,0.666V13h-8c-0.553,0-1,0.447-1,1s0.447,1,1,1h8v5h-13  c-0.553,0-1,0.447-1,1s0.447,1,1,1h13v5h-18c-0.553,0-1,0.447-1,1s0.447,1,1,1h18v5h-22c-0.553,0-1,0.447-1,1s0.447,1,1,1h22v5h-16  c-0.553,0-1,0.447-1,1s0.447,1,1,1h16v5h-10c-0.553,0-1,0.447-1,1s0.447,1,1,1h10v7.334C26.17,57.765,28.122,58,30.13,58  c14.359,0,26-11.641,26-26S44.489,6,30.13,6z"/>
-                                                    <path style="fill:#2B77AA;" d="M44,23.172c-0.348-0.346-0.896-0.39-1.293-0.104L29.76,32.433c-0.844,0.614-1.375,1.563-1.456,2.604  s0.296,2.06,1.033,2.797c0.673,0.673,1.567,1.044,2.518,1.044c1.138,0,2.216-0.549,2.886-1.47l9.363-12.944  C44.391,24.067,44.348,23.519,44,23.172z"/>
-                                                    <path style="fill:#EFCE4A;" d="M43,21.293c-0.348-0.346-0.896-0.39-1.293-0.104L28.76,30.554c-0.844,0.614-1.375,1.563-1.456,2.604  s0.296,2.06,1.033,2.797C29.01,36.629,29.904,37,30.854,37c1.138,0,2.216-0.549,2.886-1.47l9.363-12.944  C43.391,22.188,43.348,21.64,43,21.293z"/>
-                                                    <path style="fill:#424A60;" d="M28.293,6.084C28.954,6.034,29.619,6,30.293,6s1.339,0.034,2,0.084V3h2.5c0.828,0,1.5-0.672,1.5-1.5  v0c0-0.828-0.672-1.5-1.5-1.5h-9c-0.828,0-1.5,0.672-1.5,1.5v0c0,0.828,0.672,1.5,1.5,1.5h2.5V6.084z"/>
-                                                    <g>
-                                                        <path style="fill:#A1C8EC;" d="M30.293,5c-0.553,0-1,0.447-1,1v3c0,0.553,0.447,1,1,1s1-0.447,1-1V6   C31.293,5.447,30.846,5,30.293,5z"/>
-                                                        <path style="fill:#A1C8EC;" d="M30.293,54c-0.553,0-1,0.447-1,1v3c0,0.553,0.447,1,1,1s1-0.447,1-1v-3   C31.293,54.447,30.846,54,30.293,54z"/>
-                                                        <path style="fill:#A1C8EC;" d="M56.13,31h-3c-0.553,0-1,0.447-1,1s0.447,1,1,1h3c0.553,0,1-0.447,1-1S56.683,31,56.13,31z"/>
-                                                        <path style="fill:#A1C8EC;" d="M43.63,8.617c-0.479-0.277-1.09-0.112-1.366,0.366l-1.5,2.599c-0.276,0.479-0.112,1.09,0.366,1.366   c0.157,0.091,0.329,0.134,0.499,0.134c0.346,0,0.682-0.18,0.867-0.5l1.5-2.599C44.272,9.505,44.108,8.893,43.63,8.617z"/>
-                                                        <path style="fill:#A1C8EC;" d="M53.146,44.134l-2.598-1.5c-0.478-0.277-1.09-0.114-1.366,0.366   c-0.276,0.479-0.112,1.09,0.366,1.366l2.598,1.5C52.304,45.957,52.475,46,52.645,46c0.346,0,0.682-0.179,0.867-0.5   C53.789,45.021,53.625,44.41,53.146,44.134z"/>
-                                                        <path style="fill:#A1C8EC;" d="M42.496,51.419c-0.277-0.48-0.89-0.644-1.366-0.366c-0.479,0.276-0.643,0.888-0.366,1.366l1.5,2.598   c0.186,0.321,0.521,0.5,0.867,0.5c0.17,0,0.342-0.043,0.499-0.134c0.479-0.276,0.643-0.888,0.366-1.366L42.496,51.419z"/>
-                                                        <path style="fill:#A1C8EC;" d="M50.05,21.5c0.17,0,0.342-0.043,0.499-0.134l2.598-1.5c0.479-0.276,0.643-0.888,0.366-1.366   c-0.276-0.479-0.89-0.644-1.366-0.366l-2.598,1.5C49.07,19.91,48.906,20.521,49.183,21C49.368,21.321,49.704,21.5,50.05,21.5z"/>
-                                                    </g>
-                                                </svg>
-                                            </span>
-                                                                            مدت زمان: {{ implode(' ',(array)$product->info_attributes['duration']) }}
+                                                                            <span>
+                                                                                <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 59 59" xml:space="preserve" width="30">
+                                                                                    <line style="fill:none;stroke:#424A60;stroke-width:2;stroke-linecap:round;stroke-miterlimit:10;" x1="48.515" y1="13.615" x2="52.05" y2="10.08"/>
+                                                                                    <rect x="50.464" y="5.665" transform="matrix(0.7071 -0.7071 0.7071 0.7071 9.5322 40.3433)" style="fill:#AFB6BB;" width="6.001" height="6"/>
+                                                                                    <path style="fill:#3083C9;" d="M30.13,6c-2.008,0-3.96,0.235-5.837,0.666V13h-8c-0.553,0-1,0.447-1,1s0.447,1,1,1h8v5h-13  c-0.553,0-1,0.447-1,1s0.447,1,1,1h13v5h-18c-0.553,0-1,0.447-1,1s0.447,1,1,1h18v5h-22c-0.553,0-1,0.447-1,1s0.447,1,1,1h22v5h-16  c-0.553,0-1,0.447-1,1s0.447,1,1,1h16v5h-10c-0.553,0-1,0.447-1,1s0.447,1,1,1h10v7.334C26.17,57.765,28.122,58,30.13,58  c14.359,0,26-11.641,26-26S44.489,6,30.13,6z"/>
+                                                                                    <path style="fill:#2B77AA;" d="M44,23.172c-0.348-0.346-0.896-0.39-1.293-0.104L29.76,32.433c-0.844,0.614-1.375,1.563-1.456,2.604  s0.296,2.06,1.033,2.797c0.673,0.673,1.567,1.044,2.518,1.044c1.138,0,2.216-0.549,2.886-1.47l9.363-12.944  C44.391,24.067,44.348,23.519,44,23.172z"/>
+                                                                                    <path style="fill:#EFCE4A;" d="M43,21.293c-0.348-0.346-0.896-0.39-1.293-0.104L28.76,30.554c-0.844,0.614-1.375,1.563-1.456,2.604  s0.296,2.06,1.033,2.797C29.01,36.629,29.904,37,30.854,37c1.138,0,2.216-0.549,2.886-1.47l9.363-12.944  C43.391,22.188,43.348,21.64,43,21.293z"/>
+                                                                                    <path style="fill:#424A60;" d="M28.293,6.084C28.954,6.034,29.619,6,30.293,6s1.339,0.034,2,0.084V3h2.5c0.828,0,1.5-0.672,1.5-1.5  v0c0-0.828-0.672-1.5-1.5-1.5h-9c-0.828,0-1.5,0.672-1.5,1.5v0c0,0.828,0.672,1.5,1.5,1.5h2.5V6.084z"/>
+                                                                                    <g>
+                                                                                        <path style="fill:#A1C8EC;" d="M30.293,5c-0.553,0-1,0.447-1,1v3c0,0.553,0.447,1,1,1s1-0.447,1-1V6   C31.293,5.447,30.846,5,30.293,5z"/>
+                                                                                        <path style="fill:#A1C8EC;" d="M30.293,54c-0.553,0-1,0.447-1,1v3c0,0.553,0.447,1,1,1s1-0.447,1-1v-3   C31.293,54.447,30.846,54,30.293,54z"/>
+                                                                                        <path style="fill:#A1C8EC;" d="M56.13,31h-3c-0.553,0-1,0.447-1,1s0.447,1,1,1h3c0.553,0,1-0.447,1-1S56.683,31,56.13,31z"/>
+                                                                                        <path style="fill:#A1C8EC;" d="M43.63,8.617c-0.479-0.277-1.09-0.112-1.366,0.366l-1.5,2.599c-0.276,0.479-0.112,1.09,0.366,1.366   c0.157,0.091,0.329,0.134,0.499,0.134c0.346,0,0.682-0.18,0.867-0.5l1.5-2.599C44.272,9.505,44.108,8.893,43.63,8.617z"/>
+                                                                                        <path style="fill:#A1C8EC;" d="M53.146,44.134l-2.598-1.5c-0.478-0.277-1.09-0.114-1.366,0.366   c-0.276,0.479-0.112,1.09,0.366,1.366l2.598,1.5C52.304,45.957,52.475,46,52.645,46c0.346,0,0.682-0.179,0.867-0.5   C53.789,45.021,53.625,44.41,53.146,44.134z"/>
+                                                                                        <path style="fill:#A1C8EC;" d="M42.496,51.419c-0.277-0.48-0.89-0.644-1.366-0.366c-0.479,0.276-0.643,0.888-0.366,1.366l1.5,2.598   c0.186,0.321,0.521,0.5,0.867,0.5c0.17,0,0.342-0.043,0.499-0.134c0.479-0.276,0.643-0.888,0.366-1.366L42.496,51.419z"/>
+                                                                                        <path style="fill:#A1C8EC;" d="M50.05,21.5c0.17,0,0.342-0.043,0.499-0.134l2.598-1.5c0.479-0.276,0.643-0.888,0.366-1.366   c-0.276-0.479-0.89-0.644-1.366-0.366l-2.598,1.5C49.07,19.91,48.906,20.521,49.183,21C49.368,21.321,49.704,21.5,50.05,21.5z"/>
+                                                                                    </g>
+                                                                                </svg>
+                                                                            </span>
+                                                                            @if(isset($product->info_attributes['duration']))
+                                                                                مدت زمان: {{ implode(' ',(array)$product->info_attributes['duration']) }}
+                                                                            @elseif(isset($product->info_attributes['durationTillNow']))
+                                                                                مدت زمان تاکنون: {{ implode(' ',(array)$product->info_attributes['durationTillNow']) }}
+                                                                            @endif
                                                                         </div>
                                                                     </div>
-        
+                                                                    @endif
+
                                                                 </div>
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    
-                                                    
+
+
                                                     <div class="row priceAndAddToCartRow">
                                                         <div class="col-md-6 priceAndAddToCartCol">
-    
+
                                                             {{--دکمه افزودن به سبد خرید--}}
                                                             @if($product->enable && !$isForcedGift)
-                                                                
+
                                                                 @if($product->price['discount']>0)
                                                                     <div class="discount">
-    
+
                                                                         <svg class="discountIcon" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 54 54" xml:space="preserve">
                                                                             <path style="fill:#DD352E;" d="M8.589,0C5.779,0,3.5,2.279,3.5,5.089V54l18-12l18,12V6c0-3.3,2.7-6,6-6H8.589z"/>
                                                                             <path style="fill:#B02721;" d="M45.41,0.005C42.151,0.054,39.5,2.73,39.5,6v17h11V5.135C50.5,2.315,48.225,0.03,45.41,0.005z"/>
                                                                         </svg>
-    
+
                                                                         <div class="discountValue">
-    
+
                                                                             <div class="discountValue-number">
                                                                                 {{ ($product->price['discount']*100/$product->price['base']) }}%
                                                                             </div>
                                                                             <div class="discountValue-text">
                                                                                 تخفیف
                                                                             </div>
-                                                                            
-                                                                            
+
+
                                                                         </div>
-                                                                        
+
                                                                     </div>
                                                                 @endif
-    
+
                                                                 <div class="price">
                                                                     @if($allChildIsPurchased)
                                                                         <div class="alert alert-info" role="alert">
@@ -421,9 +433,9 @@
                                                                         </div>
                                                                     @endif
                                                                 </div>
-    
+
                                                             @else
-                                                                
+
                                                                 @if($isForcedGift)
                                                                     @if($hasPurchasedShouldBuyProduct)
                                                                         <button class="btn btn-danger btn-lg m-btn  m-btn m-btn--icon">
@@ -442,13 +454,13 @@
                                                                     @endif
                                                                 @endif
                                                             @endif
-                                                            
+
                                                         </div>
                                                         <div class="col-md-6">
-    
+
                                                             {{--دکمه افزودن به سبد خرید--}}
                                                             @if($product->enable && !$isForcedGift)
-        
+
                                                                 @if($allChildIsPurchased)
                                                                     <a class="btn m-btn m-btn--pill m-btn--air m-btn--gradient-from-focus m-btn--gradient-to-danger  animated infinite pulse" role="button" href="{{ action("Web\UserController@userProductFiles") }}">
                                                                         <i class="fa fa-play-circle"></i>
@@ -470,7 +482,7 @@
                                                                         </span>
                                                                     </button>
                                                                 @endif
-                                                                
+
                                                             @else
                                                                 @if(!$product->enable)
                                                                     <button class="btn btn-danger btn-lg m-btn  m-btn m-btn--icon">
@@ -479,33 +491,17 @@
                                                                             <span>این محصول غیر فعال است.</span>
                                                                         </span>
                                                                     </button>
-                                                                @elseif($isForcedGift)
-                                                                    @if($hasPurchasedShouldBuyProduct)
-                                                                        <button class="btn btn-danger btn-lg m-btn  m-btn m-btn--icon">
-                                                                            <span>
-                                                                                <i class="flaticon-arrows"></i>
-                                                                                <span>شما محصول راه ابریشم را خریداری کرده اید و این محصول به عنوان هدیه به شما تعلق خواهد گرفت</span>
-                                                                            </span>
-                                                                        </button>
-                                                                    @else
-                                                                        <a class="btn btn-focus btn-lg m-btn  m-btn m-btn--icon" href="{{ route('product.show' , $shouldBuyProductId ) }}">
-                                                                            <span>
-                                                                                <i class="flaticon-arrows"></i>
-                                                                                <span>این محصول فروش تکی ندارد . برای تهیه این محصول باید  {{$shouldBuyProductName}} را تهیه کنید  برای خرید کلیک کنید</span>
-                                                                            </span>
-                                                                        </a>
-                                                                    @endif
                                                                 @endif
                                                             @endif
-                                                            
-                                                            
-                                                            
+
+
+
                                                         </div>
                                                     </div>
-                                                    
+
                                                     <!--begin::m-widget4-->
                                                     <div class="m-widget4 d-none">
-                                                        
+
                                                         @if(optional(optional(optional($product->attributes)->get('information'))->where('control', 'simple'))->count())
                                                             @foreach($product->attributes->get('information')->where('control', 'simple') as $key => $informationItem)
                                                                 @if(count($informationItem->data) > 1)
@@ -521,7 +517,7 @@
                                                                     </div>
                                                                 @endif
                                                                 @foreach($informationItem->data as $key => $informationItemData)
-                                                                    
+
                                                                     <div class="m-widget4__item  m--padding-top-5 m--padding-bottom-5">
                                                                         <div class="m-widget4__img m-widget4__img--icon">
                                                                             @if(count($informationItem->data) === 1)
@@ -540,11 +536,11 @@
                                                                                 </span>
                                                                         </div>
                                                                     </div>
-                                                                
+
                                                                 @endforeach
                                                             @endforeach
                                                         @endif
-                                                        
+
                                                         @if(optional($product->attributes)->get('main') != null && $product->attributes->get('main')->where('control', 'simple'))
                                                             @foreach($product->attributes->get('main')->where('control', 'simple') as $key => $informationItem)
                                                                 @if(count($informationItem->data) > 1)
@@ -584,12 +580,12 @@
                                                                 @endforeach
                                                             @endforeach
                                                         @endif
-                                                    
+
                                                     </div>
                                                     <!--end::Widget 9-->
                                                 </div>
                                             </div>
-                                        
+
                                         </div>
                                     @endif
                                     @if(optional(optional(optional($product->attributes)->get('information'))->where('control', 'checkBox'))->count() && false)
@@ -607,7 +603,7 @@
                                                 <div class="m-portlet__body m--padding-5">
                                                     <!--begin::m-widget4-->
                                                     <div class="m-widget4">
-                                                        
+
                                                         @foreach($product->attributes->get('information')->where('control', 'checkBox') as $key => $informationItem)
                                                             @if(count($informationItem->data) > 1)
                                                                 <div class="m-widget4__item  m--padding-top-5 m--padding-bottom-5 m--padding-right-10 m--padding-left-10 a--full-width m--font-boldest">
@@ -631,7 +627,7 @@
                                                                 </div>
                                                             @endforeach
                                                         @endforeach
-                                                    
+
                                                     </div>
                                                     <!--end::Widget 9-->
                                                 </div>
@@ -639,7 +635,7 @@
                                         </div>
                                     @endif
                                 </div>
-                                
+
                                 {{--خدمات اضافی--}}
                                 @if(optional(optional($product->attributes)->get('extra'))->count() && false)
                                     <div class="m-portlet  m-portlet--creative m-portlet--bordered-semi">
@@ -659,33 +655,33 @@
                                             </div>
                                         </div>
                                         <div class="m-portlet__body">
-                                            
+
                                             @include("product.partials.extraSelectCollection")
                                             @include("product.partials.extraCheckboxCollection" , ["withExtraCost"])
-                                        
+
                                         </div>
                                     </div>
                                 @endif
-                                
-                                
+
+
                                 {!! Form::hidden('product_id',$product->id) !!}
-                                
-                            
+
+
                             </div>
-                            
+
                             @if( isset($product->introVideo) || (isset($product->gift) && $product->gift->isNotEmpty()))
                                 <div class="col-lg-4 col-md-4 productIntroVideoColumn">
-                                    
+
                                     <div class="m-portlet m-portlet--bordered-semi m-portlet--rounded-force videoPlayerPortlet @if(!isset($product->introVideo)) m--hide @endif">
                                         <div class="m-portlet__body">
                                             <div class="m-widget19 a--nuevo-alaa-theme a--media-parent">
                                                 <div class="m-widget19__pic m-portlet-fit--top m-portlet-fit--sides a--video-wraper">
-                                                    
+
                                                     @if( $product->introVideo )
                                                         <input type="hidden" name="introVideo"
                                                                value="{{ $product->introVideo }}">
                                                     @endif
-                                                    
+
                                                     <video
                                                             id="videoPlayer"
                                                             class="
@@ -701,15 +697,15 @@
                                                             @else
                                                             poster = "https://cdn.alaatv.com/media/204/240p/204054ssnv.jpg"
                                                             @endif >
-                                                        
+
                                                         {{--                                                        <source--}}
                                                         {{--                                                                src="{{$product->introVideo}}"--}}
                                                         {{--                                                                id="videoPlayerSource"--}}
                                                         {{--                                                                type = 'video/mp4'/>--}}
-                                                        
+
                                                         {{--<p class="vjs-no-js">جهت پخش آنلاین فیلم، ابتدا مطمئن شوید که جاوا اسکریپت در مرور گر شما فعال است و از آخرین نسخه ی مرورگر استفاده می کنید.</p>--}}
                                                     </video>
-                                                    
+
                                                     <div class="m-widget19__shadow"></div>
                                                 </div>
 {{--                                                <div class="m-widget19__content">--}}
@@ -723,7 +719,7 @@
                                             </div>
                                         </div>
                                     </div>
-    
+
                                     <div class="videoInformation">
                                         <div class="alert m-alert--default videoFilesPublishTime" role="alert">
                                             <span>
@@ -762,7 +758,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    
+
                                     @if(isset($product->gift) && $product->gift->isNotEmpty())
                                         <div class="m-portlet m-portlet--bordered m-portlet--creative m-portlet--bordered-semi m--margin-top-25">
                                             <div class="m-portlet__head">

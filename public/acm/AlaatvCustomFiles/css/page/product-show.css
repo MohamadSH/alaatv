@@ -445,9 +445,13 @@
     border-bottom-left-radius: 10px;
 }
 .servicesRows {
-    margin: 10px 0;
+    margin: 10px 0 0 0;
     border-bottom: dotted 3px #b4b4b4;
     padding-bottom: 0;
+}
+
+.servicesRows .servicesRow .servicesCategory {
+    white-space: nowrap;
 }
 .servicesRows .videoInformation .videoFilesPublishTime {
     margin-bottom: 0;
@@ -456,15 +460,45 @@
 .servicesRows .videoInformation .videoLength {
     margin-bottom: 0;
 }
+/*scrollbar*/
+/* width */
+.servicesRows .servicesRow::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+}
+
+/* Track */
+.servicesRows .servicesRow::-webkit-scrollbar-track {
+    background: #ffefdb;
+}
+
+/* Handle */
+.servicesRows .servicesRow::-webkit-scrollbar-thumb {
+    background: #ff9000;
+    border-radius: 10px;
+}
+
+/* Handle on hover */
+.servicesRows .servicesRow::-webkit-scrollbar-thumb:hover {
+    background: #ff6c00;
+}
+/*scrollbar*/
 .servicesRows .servicesRow {
-    max-height: 22px;
-    min-height: 22px;
-    margin-top: 5px;
+    max-height: 30px;
+    min-height: 30px;
+    margin-top: 0;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scrollbar-color: #ff9000 #ffe0b8;
+    scrollbar-width: thin;
+    display: flex;
+    align-items: flex-start;
 }
 .servicesRows .servicesBadge {
     padding: 0 8px;
     margin: 0 1px;
     background-color: #f3f4f9;
+    white-space: nowrap;
 }
 
 .priceAndAddToCartRow {
