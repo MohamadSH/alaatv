@@ -337,7 +337,7 @@
                                                         <div class="col">
                                                             <div class="row videoInformation">
                                                                 <div class="col">
-
+                                                                    @if(isset($product->info_attributes['downloadDate']) && !is_null($product->info_attributes['downloadDate']))
                                                                     <div class="alert m-alert--default videoFilesPublishTime" role="alert">
                                                                         <span>
                                                                             <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 52 52" xml:space="preserve" width="20">
@@ -348,8 +348,15 @@
                                                                                 </g>
                                                                             </svg>
                                                                         </span>
-                                                                        زمان دریافت فایل های این همایش: {{ implode(' ',(array)$product->info_attributes['downloadDate']) }}
+                                                                        زمان دریافت فایل های این
+                                                                        @if(in_array($product->category_name,['همایش' , 'جزوه']))
+                                                                         {{$product->category_name}}
+                                                                        @else
+                                                                            محصول
+                                                                        @endif
+                                                                        : {{ implode(' ',(array)$product->info_attributes['downloadDate']) }}
                                                                     </div>
+                                                                    @endif
 
                                                                     @if((isset($product->info_attributes['duration']) && !is_null($product->info_attributes['duration'])) ||
                                                                         (isset($product->info_attributes['durationTillNow']) && !is_null($product->info_attributes['durationTillNow'])))
@@ -722,6 +729,7 @@
                                     </div>
 
                                     <div class="videoInformation">
+                                        @if(isset($product->info_attributes['downloadDate']) && !is_null($product->info_attributes['downloadDate']))
                                         <div class="alert m-alert--default videoFilesPublishTime" role="alert">
                                             <span>
                                                 <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 52 52" xml:space="preserve" width="20">
@@ -732,8 +740,15 @@
                                                     </g>
                                                 </svg>
                                             </span>
-                                            زمان دریافت فایل های این همایش: {{ implode(' ',(array)$product->info_attributes['downloadDate']) }}
+                                            زمان دریافت فایل های این
+                                            @if(in_array($product->category_name,['همایش' , 'جزوه']))
+                                                {{$product->category_name}}
+                                            @else
+                                                محصول
+                                            @endif
+                                            : {{ implode(' ',(array)$product->info_attributes['downloadDate']) }}
                                         </div>
+                                        @endif
                                         @if((isset($product->info_attributes['duration']) && !is_null($product->info_attributes['duration'])) ||
                                             (isset($product->info_attributes['durationTillNow']) && !is_null($product->info_attributes['durationTillNow'])))
                                         <div class="m-alert m-alert--air m-alert--square alert videoLength" role="alert">
