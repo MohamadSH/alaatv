@@ -16,7 +16,7 @@ class CacheableWithNginx
         '/goToPaymentRoute/*',
         '/checkout/*',
     ];
-    
+
     /**
      * Handle an incoming request.
      *
@@ -27,23 +27,23 @@ class CacheableWithNginx
      */
     public function handle($request, Closure $next)
     {
-        if ($this->isNotCachable($request)) {
+        if ($this->isNotCacheables($request)) {
             if ($this->methodIsGetOrHead($request) && !$request->hasCookie($this->cookieName)) {
                 Cookie::queue(cookie()->forever($this->cookieName, '1'));
             }
             return $next($request);
         }
-        $this->weCanCacheThisRequest();
+        Cookie::queue(cookie()->forget($this->cookieName));
         $response = $next($request);
-    
-        if ($this->methodIsGetOrHead($request)) {
+
+        if ($this->isCacheables($request)) {
             return $response->withHeaders([
                 'Cache-Control' => 'public, max-age='. 60 * (config('cache_time_in_minutes', 60)),
             ]);
         }
         return $response;
     }
-    
+
     private function methodIsGetOrHead(Request $request)
     {
         return $request->isMethod('GET') || $request->isMethod('HEAD') ? true : false;
@@ -60,27 +60,31 @@ class CacheableWithNginx
             if ($except !== '/') {
                 $except = trim($except, '/');
             }
-            
+
             if ($request->fullUrlIs($except) || $request->is($except)) {
                 return true;
             }
         }
-        
+
         return false;
     }
-    
-    private function weCanCacheThisRequest(): void
-    {
-        Cookie::queue(cookie()->forget($this->cookieName));
-    }
-    
+
     /**
      * @param  Request  $request
      *
      * @return bool
      */
-    private function isNotCachable($request): bool
+    private function isNotCacheables($request): bool
     {
         return $request->user() || $this->inExceptArray($request);
+    }
+
+    /**
+     * @param $request
+     * @return bool
+     */
+    private function isCacheables($request): bool
+    {
+        return $this->methodIsGetOrHead($request) && !$this->isNotCacheables($request);
     }
 }
