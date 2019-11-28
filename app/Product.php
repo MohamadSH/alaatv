@@ -1951,6 +1951,14 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
         return $thumbnail->url;
     }
 
+    public function getCategoryNameAttribute(){
+        if(in_array($this->category, ['همایش/آرش' , 'همایش/تفتان' , 'همایش/گدار' , 'قدیم'])){
+            return 'همایش';
+        }
+
+        return $this->category;
+    }
+
     /**
      * @param  string  $text
      *
