@@ -358,8 +358,6 @@
                                                                     </div>
                                                                     @endif
 
-                                                                    @if((isset($product->info_attributes['duration']) && !is_null($product->info_attributes['duration'])) ||
-                                                                        (isset($product->info_attributes['durationTillNow']) && !is_null($product->info_attributes['durationTillNow'])))
                                                                     <div class="m-alert m-alert--air m-alert--square alert videoLength" role="alert">
                                                                         <div class="m-alert__text">
                                                                             <span>
@@ -385,10 +383,11 @@
                                                                                 مدت زمان: {{ implode(' ',(array)$product->info_attributes['duration']) }}
                                                                             @elseif(isset($product->info_attributes['durationTillNow']) && !is_null($product->info_attributes['durationTillNow']))
                                                                                 مدت زمان تاکنون: {{ implode(' ',(array)$product->info_attributes['durationTillNow']) }}
+                                                                            @elseif(isset($product->info_attributes['numberOfPages']) && !is_null($product->info_attributes['numberOfPages']))
+                                                                                تعداد صفحات جزوه: {{ implode(' ',(array)$product->info_attributes['numberOfPages']) }}
                                                                             @endif
                                                                         </div>
                                                                     </div>
-                                                                    @endif
 
                                                                 </div>
                                                             </div>
@@ -749,8 +748,6 @@
                                             : {{ implode(' ',(array)$product->info_attributes['downloadDate']) }}
                                         </div>
                                         @endif
-                                        @if((isset($product->info_attributes['duration']) && !is_null($product->info_attributes['duration'])) ||
-                                            (isset($product->info_attributes['durationTillNow']) && !is_null($product->info_attributes['durationTillNow'])))
                                         <div class="m-alert m-alert--air m-alert--square alert videoLength" role="alert">
                                             <div class="m-alert__text">
                                                 <span>
@@ -776,11 +773,11 @@
                                                     مدت زمان: {{ implode(' ',(array)$product->info_attributes['duration']) }}
                                                 @elseif(isset($product->info_attributes['durationTillNow']) && !is_null($product->info_attributes['durationTillNow']))
                                                     مدت زمان تاکنون: {{ implode(' ',(array)$product->info_attributes['durationTillNow']) }}
+                                                @elseif(isset($product->info_attributes['numberOfPages']) && !is_null($product->info_attributes['numberOfPages']))
+                                                    تعداد صفحات جزوه: {{ implode(' ',(array)$product->info_attributes['numberOfPages']) }}
                                                 @endif
-
                                             </div>
                                         </div>
-                                        @endif
                                     </div>
 
                                     @if(isset($product->gift) && $product->gift->isNotEmpty())
