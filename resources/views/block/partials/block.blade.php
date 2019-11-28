@@ -44,7 +44,7 @@
                                 @endif
 
                                 @if(!isset($blockUrlDisable) || !$blockUrlDisable)
-                                    <a href="{{ $block->url }}" class="m-link">
+                                    <a @if(isset($block->customUrl))href="{{ $block->customUrl }}"@endif class="m-link">
                                         @endif
                                         @if(isset($blockTitle))
                                             {!! $blockTitle !!}
@@ -69,7 +69,7 @@
                     </div>
                 </div>
                 <div class="m-portlet__body m-portlet__body--no-padding a--owl-carousel-body">
-                    
+
 {{--                    <div class="a--owl-carousel-init-loading">--}}
 {{--                        <div class="lds-roller">--}}
 {{--                            <div></div>--}}
@@ -82,10 +82,10 @@
 {{--                            <div></div>--}}
 {{--                        </div>--}}
 {{--                    </div>--}}
-    
+
                     <div class="m-widget_head-owlcarousel-items ScrollCarousel a--owl-carousel-type-2 carousel_block_{{ $block->id }}">
-    
-        
+
+
                         @if(((isset($blockType) && $blockType === 'product' && isset($block->products) && $block->products->count() > 0) || !isset($blockType)) && isset($block->products))
                             @foreach($block->products as $productKey=>$product)
                                 @include('block.partials.product')
@@ -109,7 +109,7 @@
                                 @include('block.partials.content')
                             @endforeach
                         @endif
-    
+
                         @if(strlen(trim($block->url))>0 && isset($btnLoadMore) && $btnLoadMore)
                             <div class="item carousel a--block-item a--block-item-showMoreItem w-44333211">
                                 <a href="{{ $block->url }}">
@@ -126,7 +126,7 @@
                         @endif
 
                     </div>
-                    
+
                 </div>
             </div>
         </div>
