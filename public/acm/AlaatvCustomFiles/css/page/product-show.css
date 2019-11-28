@@ -492,13 +492,13 @@
     scrollbar-color: #ff9000 #ffe0b8;
     scrollbar-width: thin;
     display: flex;
+    align-items: flex-start;
 }
 .servicesRows .servicesBadge {
     padding: 0 8px;
     margin: 0 1px;
     background-color: #f3f4f9;
     white-space: nowrap;
-    line-height: 25px;
 }
 
 .priceAndAddToCartRow {
