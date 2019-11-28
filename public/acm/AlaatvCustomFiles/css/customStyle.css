@@ -383,6 +383,13 @@
     }
 }
 
+@media only screen and (min-width: 1700px) {
+    .m-portlet.boxed {
+        margin-left: 65px;
+        margin-right: 65px;
+    }
+}
+
 @media only screen and (max-width: 1800px) {
     #carouselMainSlideShow .carousel-inner {
         min-height: 719.922px;
