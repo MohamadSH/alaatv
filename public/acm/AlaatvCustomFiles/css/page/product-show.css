@@ -398,3 +398,181 @@
         display: none !important;
     }
 }
+
+
+
+
+
+.productAttributesRows {
+    height: 100%;
+}
+.productAttributesRows .productAttributes {
+    margin-bottom: 0;
+}
+.attributeRow {
+
+}
+.productAttributesBox {
+    border: solid 1px #b5b5b5;
+    border-radius: 10px;
+    margin: 0 2px;
+}
+.productAttributesBox .title {
+
+}
+.productAttributesBox .title .icon {
+    text-align: center;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+.productAttributesBox .title .icon svg {
+    width: 43%;
+}
+.productAttributesBox .title .text {
+    text-align: right;
+    padding: 0 10px 5px 10px;
+}
+.productAttributesBox .value {
+    font-weight: bold;
+    text-align: center;
+    color: #6d6e72;
+    background-color: #f3f4f9;
+    min-height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-bottom-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+}
+.servicesRows {
+    margin: 10px 0 0 0;
+    border-bottom: dotted 3px #b4b4b4;
+    padding-bottom: 0;
+}
+
+.servicesRows .servicesRow .servicesCategory {
+    white-space: nowrap;
+}
+.servicesRows .videoInformation .videoFilesPublishTime {
+    margin-bottom: 0;
+    margin-top: 10px;
+}
+.servicesRows .videoInformation .videoLength {
+    margin-bottom: 0;
+}
+/*scrollbar*/
+/* width */
+.servicesRows .servicesRow::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+}
+
+/* Track */
+.servicesRows .servicesRow::-webkit-scrollbar-track {
+    background: #ffefdb;
+}
+
+/* Handle */
+.servicesRows .servicesRow::-webkit-scrollbar-thumb {
+    background: #ff9000;
+    border-radius: 10px;
+}
+
+/* Handle on hover */
+.servicesRows .servicesRow::-webkit-scrollbar-thumb:hover {
+    background: #ff6c00;
+}
+/*scrollbar*/
+.servicesRows .servicesRow {
+    max-height: 30px;
+    min-height: 30px;
+    margin-top: 0;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scrollbar-color: #ff9000 #ffe0b8;
+    scrollbar-width: thin;
+    display: flex;
+    align-items: flex-start;
+}
+.servicesRows .servicesBadge {
+    padding: 0 8px;
+    margin: 0 1px;
+    background-color: #f3f4f9;
+    white-space: nowrap;
+}
+
+.priceAndAddToCartRow {
+    padding: 13px 0;
+}
+.priceAndAddToCartRow .btnAddToCart {
+    position: absolute;
+    left: 25px;
+    bottom: 0;
+}
+.priceAndAddToCartRow .btnAddToCart svg {
+    width: 25px;
+    height: 25px;
+}
+.priceAndAddToCartRow .priceAndAddToCartCol {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    min-height: 70px;
+}
+.priceAndAddToCartRow .priceAndAddToCartCol .price,
+.priceAndAddToCartRow .priceAndAddToCartCol .discount{
+    display: flex;
+    justify-items: center;
+    align-items: center;
+}
+.priceAndAddToCartRow .priceAndAddToCartCol .price {
+    font-size: 25px;
+    line-height: 25px;
+}
+.priceAndAddToCartRow .priceAndAddToCartCol .discount {
+    position: relative;
+    margin-left: 15px;
+}
+.priceAndAddToCartRow .priceAndAddToCartCol .discount .discountIcon {
+    width: 70px;
+}
+.priceAndAddToCartRow .priceAndAddToCartCol .discount .discountValue {
+    position: absolute;
+    top: 0;
+    right: 20px;
+    width: 45px;
+    height: 55px;
+    color: white;
+    text-align: center;
+}
+.priceAndAddToCartRow .priceAndAddToCartCol .discount .discountValue .discountValue-number {
+    font-size: 18px;
+    line-height: 18px;
+    padding-top: 10px;
+}
+.priceAndAddToCartRow .priceAndAddToCartCol .discount .discountValue .discountValue-text {
+
+}
+.priceAndAddToCartRow .priceAndAddToCartCol .price .oldValue {
+    position: relative;
+    color: #c7c7c7;
+    position: relative;
+}
+.priceAndAddToCartRow .priceAndAddToCartCol .price .oldValue::after {
+    content: ' ';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    width: 100%;
+    border-bottom: solid 1px black;
+}
+.videoPlayerPortlet {
+    margin-bottom: 0;
+}
+.productIntroVideoColumn .videoInformation .videoFilesPublishTime {
+    margin-top: 5px;
+    margin-bottom: 0;
+}
+.productIntroVideoColumn .videoInformation .videoFilesPublishTime {
+    margin-bottom: 0;
+}

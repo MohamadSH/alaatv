@@ -100,14 +100,26 @@ trait ProductAttributeTrait
 
         return Cache::tags(['product' , 'attribute' , 'product_'.$this->id , 'product_'.$this->id.'_attributes'])
             ->remember($key, config('constants.CACHE_600'), function () use ($product) {
-                $attributes = [];
+                $attributes = [
+                    'productionYear'    => null,
+                    'major'             => null,
+                    'educationalSystem' => null,
+                    'shippingMethod'    => null,
+                    'teacher'           => null,
+                    'studyPlan'         => null,
+                    'courseDuration'    => null,
+                    'accessoryServices' => null,
+                    'downloadDate'      => null,
+                    'duration'          => null,
+                    'services'          => null,
+    
+                ];
                 /** @var \App\Attributevalue $attributevalue */
                 foreach ($product->attributevalues as $attributevalue) {
                     /** @var \App\Attribute $attribute */
-                    $attribute = $attributevalue->attribute;
+                    $attribute                      = $attributevalue->attribute;
                     $attributes[$attribute->name][] = $attributevalue->name;
                 }
-
                 return $attributes;
             });
     }
