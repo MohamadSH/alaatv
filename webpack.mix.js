@@ -43,6 +43,7 @@ class Mix {
             'node_modules/block-ui/jquery.blockUI.js',
 
 
+            'public/acm/AlaatvCustomFiles/js/mLayout.js',// quick search (ajax) in header
             'public/acm/AlaatvCustomFiles/components/AjaxLogin/script.js',
             'public/acm/AlaatvCustomFiles/js/GlobalJsVar.js',
             'public/acm/AlaatvCustomFiles/js/LoginBeforeClick.js',
