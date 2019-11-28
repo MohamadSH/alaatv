@@ -351,7 +351,8 @@
                                                                         زمان دریافت فایل های این همایش: {{ implode(' ',(array)$product->info_attributes['downloadDate']) }}
                                                                     </div>
 
-                                                                    @if(!is_null($product->info_attributes['duration']) || !is_null($product->info_attributes['durationTillNow']))
+                                                                    @if((isset($product->info_attributes['duration']) && !is_null($product->info_attributes['duration'])) ||
+                                                                        (isset($product->info_attributes['durationTillNow']) && !is_null($product->info_attributes['durationTillNow'])))
                                                                     <div class="m-alert m-alert--air m-alert--square alert videoLength" role="alert">
                                                                         <div class="m-alert__text">
                                                                             <span>
@@ -373,9 +374,9 @@
                                                                                     </g>
                                                                                 </svg>
                                                                             </span>
-                                                                            @if(!is_null($product->info_attributes['duration']))
+                                                                            @if(isset($product->info_attributes['duration']) && !is_null($product->info_attributes['duration']))
                                                                                 مدت زمان: {{ implode(' ',(array)$product->info_attributes['duration']) }}
-                                                                            @elseif(!is_null($product->info_attributes['durationTillNow']))
+                                                                            @elseif(isset($product->info_attributes['durationTillNow']) && !is_null($product->info_attributes['durationTillNow']))
                                                                                 مدت زمان تاکنون: {{ implode(' ',(array)$product->info_attributes['durationTillNow']) }}
                                                                             @endif
                                                                         </div>
@@ -733,6 +734,8 @@
                                             </span>
                                             زمان دریافت فایل های این همایش: {{ implode(' ',(array)$product->info_attributes['downloadDate']) }}
                                         </div>
+                                        @if((isset($product->info_attributes['duration']) && !is_null($product->info_attributes['duration'])) ||
+                                            (isset($product->info_attributes['durationTillNow']) && !is_null($product->info_attributes['durationTillNow'])))
                                         <div class="m-alert m-alert--air m-alert--square alert videoLength" role="alert">
                                             <div class="m-alert__text">
                                                 <span>
@@ -754,9 +757,15 @@
                                                         </g>
                                                     </svg>
                                                 </span>
-                                                مدت زمان: {{ implode(' ',(array)$product->info_attributes['duration']) }}
+                                                @if(isset($product->info_attributes['duration']) && !is_null($product->info_attributes['duration']))
+                                                    مدت زمان: {{ implode(' ',(array)$product->info_attributes['duration']) }}
+                                                @elseif(isset($product->info_attributes['durationTillNow']) && !is_null($product->info_attributes['durationTillNow']))
+                                                    مدت زمان تاکنون: {{ implode(' ',(array)$product->info_attributes['durationTillNow']) }}
+                                                @endif
+
                                             </div>
                                         </div>
+                                        @endif
                                     </div>
 
                                     @if(isset($product->gift) && $product->gift->isNotEmpty())
