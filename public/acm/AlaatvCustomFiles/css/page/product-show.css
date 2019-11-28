@@ -498,6 +498,7 @@
     margin: 0 1px;
     background-color: #f3f4f9;
     white-space: nowrap;
+    line-height: 25px;
 }
 
 .priceAndAddToCartRow {
