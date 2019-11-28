@@ -310,6 +310,196 @@ var ProductShowPage = function () {
     };
 }();
 
+var ProductResponsivePage = function () {
+
+
+    function fx(a, b, x) {
+        return (a*x)+b;
+    }
+    function setColuimnWidth($column, width) {
+        $column.css({'flex':'0 0 '+width+'%', 'max-width':width+'%'});
+    }
+    function removeColuimnWidth($column) {
+        $column.css({'flex':'', 'max-width':''});
+    }
+    function getColumnWidthInPercent($column) {
+        return parseFloat($column.css('max-width'));
+    }
+
+    // model 1
+    function setVideoColumnWidthModel1() {
+        var productPicColumnWidth = getColumnWidthInPercent($('.productPicColumn')),
+            productAttributesColumnWidth = getColumnWidthInPercent($('.productAttributesColumn')),
+            PicAttributesIntroVideoRowWidth = 100 - productPicColumnWidth - productAttributesColumnWidth;
+
+        setColuimnWidth($('.productIntroVideoColumn'), PicAttributesIntroVideoRowWidth);
+    }
+    function applyModel1(a, b, windowWidth) {
+
+        //reset
+        $('.servicesRows .servicesRow').css({'max-height':'', 'min-height': ''});
+        removeColuimnWidth($('.productAttributesColumn'));
+        $('.productIntroVideoColumn').css({'margin-top': ''});
+        $('.productAttributesColumn').css({'margin-top':'', 'order': ''});
+        removeColuimnWidth($('.attributeRow .col'));
+        $('.attributeRow').css({'justify-content':''});
+        $('.attributeRow .col').css({'margin-top':''});
+        $('.priceAndAddToCartRow .btnAddToCart').fadeIn(0);
+
+
+        var picColumnWidth = fx(a, b, windowWidth);
+        setColuimnWidth($('.productPicColumn'), picColumnWidth);
+        setVideoColumnWidthModel1();
+        $('.productAttributesRows .videoInformation').fadeOut(0);
+        $('.productIntroVideoColumn .videoInformation').fadeIn(0);
+        $('.servicesRows').css({'padding-bottom':'8px'});
+
+    }
+
+    // model 2
+    function setProductAttributesColumnWidthModel2() {
+        var productPicColumnWidth = getColumnWidthInPercent($('.productPicColumn')),
+            productAttributesColumnwWidth = 100 - productPicColumnWidth;
+        setColuimnWidth($('.productAttributesColumn'), productAttributesColumnwWidth);
+    }
+    function applyModel2(a, b, windowWidth) {
+
+        $('.servicesRows .servicesRow').css({'max-height':'', 'min-height': ''});
+        $('.productAttributesColumn').css({'margin-top':'', 'order': ''});
+        removeColuimnWidth($('.attributeRow .col'));
+        $('.attributeRow').css({'justify-content':''});
+        $('.attributeRow .col').css({'margin-top':''});
+        $('.priceAndAddToCartRow .btnAddToCart').fadeIn(0);
+
+
+
+        var picColumnWidth = fx(a, b, windowWidth);
+        setColuimnWidth($('.productPicColumn'), picColumnWidth);
+        setColuimnWidth($('.productIntroVideoColumn'), picColumnWidth);
+        $('.productAttributesRows .videoInformation').fadeIn(0);
+        $('.productIntroVideoColumn .videoInformation').fadeOut(0);
+        setProductAttributesColumnWidthModel2();
+        $('.productIntroVideoColumn').css({'margin-top': '0'});
+        var marginTop = -1 *  ($('.productIntroVideoColumn').offset().top - ($('.PicAttributesIntroVideoRow img').width() + $('.PicAttributesIntroVideoRow img').offset().top) - 15);
+        $('.productIntroVideoColumn').css({'margin-top': marginTop + 'px'});
+    }
+
+    // model 3
+    function applyModel3() {
+        $('.productIntroVideoColumn').css({'margin-top': ''});
+        setColuimnWidth($('.productPicColumn'), 37.1);
+        setColuimnWidth($('.productIntroVideoColumn'), 62.9);
+        setColuimnWidth($('.productAttributesColumn'), 100);
+        $('.productAttributesRows .videoInformation').fadeIn(0);
+        $('.productIntroVideoColumn .videoInformation').fadeOut(0);
+        $('.servicesRows .servicesRow').css({'max-height':'unset', 'min-height': 'unset'});
+        $('.productAttributesColumn').css({'margin-top':'10px', 'order': '2'});
+
+
+        $('.priceAndAddToCartRow .btnAddToCart').fadeIn(0);
+        removeColuimnWidth($('.attributeRow .col'));
+        $('.attributeRow').css({'justify-content':''});
+        $('.attributeRow .col').css({'margin-top':''});
+    }
+
+    // model 4
+    function applyModel4() {
+        $('.productIntroVideoColumn').css({'margin-top': ''});
+        setColuimnWidth($('.productPicColumn'), 36.5);
+        setColuimnWidth($('.productIntroVideoColumn'), 63.5);
+        setColuimnWidth($('.productAttributesColumn'), 100);
+        $('.productAttributesRows .videoInformation').fadeIn(0);
+        $('.productIntroVideoColumn .videoInformation').fadeOut(0);
+        $('.servicesRows .servicesRow').css({'max-height':'unset', 'min-height': 'unset'});
+        $('.productAttributesColumn').css({'margin-top':'10px', 'order': '2'});
+
+        $('.priceAndAddToCartRow .btnAddToCart').fadeIn(0);
+        removeColuimnWidth($('.attributeRow .col'));
+        $('.attributeRow').css({'justify-content':''});
+        $('.attributeRow .col').css({'margin-top':''});
+    }
+
+    // model 5
+    function applyModel5() {
+        $('.productIntroVideoColumn').css({'margin-top': ''});
+        setColuimnWidth($('.productPicColumn'), 100);
+        setColuimnWidth($('.productIntroVideoColumn'), 100);
+        setColuimnWidth($('.productAttributesColumn'), 100);
+        setColuimnWidth($('.attributeRow .col'), 50);
+        $('.productAttributesRows .videoInformation').fadeIn(0);
+        $('.productIntroVideoColumn .videoInformation').fadeOut(0);
+        $('.priceAndAddToCartRow .btnAddToCart').fadeOut(0);
+        $('.productAttributesColumn').css({'margin-top':'10px', 'order': '2'});
+        $('.servicesRows .servicesRow').css({'max-height':'unset', 'min-height': 'unset'});
+        $('.attributeRow').css({'justify-content':'center'});
+        $('.attributeRow .col').css({'margin-top':'5px'});
+    }
+
+    function getWindowWidth() {
+        return $(window).width();
+    }
+
+    function apply() {
+        var windowWidth = getWindowWidth();
+        applyModel(windowWidth);
+    }
+
+    function addWindowResizeEvent() {
+        $(window).resize(function(){
+            apply()
+        });
+    }
+
+    function applyModel(windowWidth) {
+        if (windowWidth >= 1900) {
+            applyModel1((-101.0/10000), (43.79), windowWidth);
+        }
+        else if (windowWidth >= 1800) {
+            applyModel1((-13.0/1000), (49.3), windowWidth);
+        }
+        else if (windowWidth >= 1700) {
+            applyModel1((-13.0/1000), (49.3), windowWidth);
+        }
+        else if (windowWidth >= 1600) {
+            applyModel1((-3.0/200), (52.7), windowWidth);
+        }
+        else if (windowWidth >= 1500) {
+            applyModel1((-9.0/500), (115.0/2), windowWidth);
+        }
+        else if (windowWidth >= 1400) {
+            applyModel1((-87.0/2500), (82.7), windowWidth);
+        }
+        else if (windowWidth >= 1300) {
+            applyModel2((-2.0/125), (249/5), windowWidth);
+        }
+        else if (windowWidth >= 1200) {
+            applyModel2((-3.0/125), (301.0/5), windowWidth);
+        }
+        else if (windowWidth >= 1100) {
+            applyModel2((-1.0/40), (307.0/5), windowWidth);
+        }
+        else if (windowWidth >= 1000) {
+            applyModel2((-13.0/500), (125.0/2), windowWidth);
+        }
+        else if (windowWidth >= 768) {
+            applyModel3((9/2500), (-540/2500), windowWidth);
+        }
+        else if (windowWidth >= 500) {
+            applyModel4((9/2500), (-540/2500), windowWidth);
+        }
+        else if (windowWidth >= 0) {
+            applyModel5((9/2500), (-540/2500), windowWidth);
+        }
+    }
+
+    return {
+        apply:function () {
+            apply();
+            addWindowResizeEvent();
+        },
+    };
+}();
+
 jQuery(document).ready(function() {
 
     GAEE.productDetailViews('product.show', parentProduct);
@@ -371,7 +561,6 @@ jQuery(document).ready(function() {
         topSpacing: $('#m_header').height(),
         zIndex: 98
     });
-
 
     $(document).on('click', '.productInfoNav', function () {
         var targetId = $(this).data('tid');
@@ -548,75 +737,82 @@ jQuery(document).ready(function() {
         childCountHideOwlCarousel: 4
     });
 
-    var player = videojs('videoPlayer', {language: 'fa'});
+    if ($('#videoPlayer').length > 0) {
+        var player = videojs('videoPlayer', {language: 'fa'});
 
-    if ($('input[type="hidden"][name="introVideo"]').length > 0) {
-        player.src([
-            {type: "video/mp4", src: $('input[type="hidden"][name="introVideo"]').val()}
-        ]);
+        if ($('input[type="hidden"][name="introVideo"]').length > 0) {
+            player.src([
+                {type: "video/mp4", src: $('input[type="hidden"][name="introVideo"]').val()}
+            ]);
+        }
+
+        player.nuevo({
+            // logotitle:"آموزش مجازی آلاء",
+            // logo:"https://sanatisharif.ir/image/11/135/67/logo-150x22_20180430222256.png",
+            logocontrolbar: '/acm/extra/Alaa-logo.gif',
+            // logoposition:"RT", // logo position (LT - top left, RT - top right)
+            logourl: '//sanatisharif.ir',
+            // related: related_videos,
+            // shareUrl:"https://www.nuevolab.com/videojs/",
+            // shareTitle: "Nuevo plugin for VideoJs Player",
+            // slideImage:"//cdn.nuevolab.com/media/sprite.jpg",
+
+            // videoInfo: true,
+            // infoSize: 18,
+            // infoIcon: "https://sanatisharif.ir/image/11/150/150/favicon_32_20180819090313.png",
+
+            closeallow: false,
+            mute: true,
+            rateMenu: true,
+            resume: true, // (false) enable/disable resume option to start video playback from last time position it was left
+            // theaterButton: true,
+            // timetooltip: true,
+            // mousedisplay: true,
+            endAction: 'related', // (undefined) If defined (share/related) either sharing panel or related panel will display when video ends.
+            container: "inline",
+
+
+            // limit: 20,
+            // limiturl: "http://localdev.alaatv.com/videojs/examples/basic.html",
+            // limitimage : "//cdn.nuevolab.com/media/limit.png", // limitimage or limitmessage
+            // limitmessage: "اگه می خوای بقیه اش رو ببینی باید پول بدی :)",
+
+
+            // overlay: "//domain.com/overlay.html" //(undefined) - overlay URL to display html on each pause event example: https://www.nuevolab.com/videojs/tryit/overlay
+
+        });
+
+        player.hotkeys({
+            volumeStep: 0.1,
+            seekStep: 5,
+            alwaysCaptureHotkeys: true
+        });
+
+        player.pic2pic();
+
+        // player.on('mode',function(event,mode) {
+        //     let width = '100%';
+        //     if(mode=='large') {
+        //         // $('.productDetailesColumns .column1').addClass('order-2');
+        //         // $('.productDetailesColumns .column2').addClass('order-3');
+        //         $('.productDetailesColumns .column3').addClass('order-first');
+        //         $('.productDetailesColumns .column3').removeClass('col-lg-4');
+        //         $('.productDetailesColumns .column3').addClass('col-lg-12');
+        //         $('.productDetailesColumns .column3 .videoPlayerPortlet').css({'width':'60%'});
+        //     } else {
+        //         // $('.productDetailesColumns .column1').removeClass('order-2');
+        //         // $('.productDetailesColumns .column2').removeClass('order-3');
+        //         $('.productDetailesColumns .column3').removeClass('order-first');
+        //         $('.productDetailesColumns .column3').removeClass('col-lg-12');
+        //         $('.productDetailesColumns .column3').addClass('col-lg-4');
+        //         $('.productDetailesColumns .column3 .videoPlayerPortlet').css({'width':'100%'});
+        //     }
+        // });
     }
 
-    player.nuevo({
-        // logotitle:"آموزش مجازی آلاء",
-        // logo:"https://sanatisharif.ir/image/11/135/67/logo-150x22_20180430222256.png",
-        logocontrolbar: '/acm/extra/Alaa-logo.gif',
-        // logoposition:"RT", // logo position (LT - top left, RT - top right)
-        logourl: '//sanatisharif.ir',
-        // related: related_videos,
-        // shareUrl:"https://www.nuevolab.com/videojs/",
-        // shareTitle: "Nuevo plugin for VideoJs Player",
-        // slideImage:"//cdn.nuevolab.com/media/sprite.jpg",
+    if ($('#productInformation .summernote-row .summernote-col').length > 0) {
+        $('#productInformation').css('column-count', '1');
+    }
 
-        // videoInfo: true,
-        // infoSize: 18,
-        // infoIcon: "https://sanatisharif.ir/image/11/150/150/favicon_32_20180819090313.png",
-
-        closeallow: false,
-        mute: true,
-        rateMenu: true,
-        resume: true, // (false) enable/disable resume option to start video playback from last time position it was left
-        // theaterButton: true,
-        // timetooltip: true,
-        // mousedisplay: true,
-        endAction: 'related', // (undefined) If defined (share/related) either sharing panel or related panel will display when video ends.
-        container: "inline",
-
-
-        // limit: 20,
-        // limiturl: "http://localdev.alaatv.com/videojs/examples/basic.html",
-        // limitimage : "//cdn.nuevolab.com/media/limit.png", // limitimage or limitmessage
-        // limitmessage: "اگه می خوای بقیه اش رو ببینی باید پول بدی :)",
-
-
-        // overlay: "//domain.com/overlay.html" //(undefined) - overlay URL to display html on each pause event example: https://www.nuevolab.com/videojs/tryit/overlay
-
-    });
-
-    player.hotkeys({
-        volumeStep: 0.1,
-        seekStep: 5,
-        alwaysCaptureHotkeys: true
-    });
-
-    player.pic2pic();
-
-    // player.on('mode',function(event,mode) {
-    //     let width = '100%';
-    //     if(mode=='large') {
-    //         // $('.productDetailesColumns .column1').addClass('order-2');
-    //         // $('.productDetailesColumns .column2').addClass('order-3');
-    //         $('.productDetailesColumns .column3').addClass('order-first');
-    //         $('.productDetailesColumns .column3').removeClass('col-lg-4');
-    //         $('.productDetailesColumns .column3').addClass('col-lg-12');
-    //         $('.productDetailesColumns .column3 .videoPlayerPortlet').css({'width':'60%'});
-    //     } else {
-    //         // $('.productDetailesColumns .column1').removeClass('order-2');
-    //         // $('.productDetailesColumns .column2').removeClass('order-3');
-    //         $('.productDetailesColumns .column3').removeClass('order-first');
-    //         $('.productDetailesColumns .column3').removeClass('col-lg-12');
-    //         $('.productDetailesColumns .column3').addClass('col-lg-4');
-    //         $('.productDetailesColumns .column3 .videoPlayerPortlet').css({'width':'100%'});
-    //     }
-    // });
-
+    ProductResponsivePage.apply();
 });
