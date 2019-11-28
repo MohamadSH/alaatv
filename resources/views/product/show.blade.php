@@ -2,7 +2,6 @@
 
 @section('page-css')
     <link href="{{ mix('/css/product-show.css') }}" rel="stylesheet" type="text/css"/>
-    <link href="{{ asset('/acm/AlaatvCustomFiles/css/page/product-show.css') }}" rel="stylesheet" type="text/css"/>
     <style>
         @if(
             (!isset($block) || !isset($block->contents) || $block->contents->count() === 0) &&
