@@ -351,7 +351,7 @@
                                                                         زمان دریافت فایل های این همایش: {{ implode(' ',(array)$product->info_attributes['downloadDate']) }}
                                                                     </div>
 
-                                                                    @if(isset($product->info_attributes['duration']) || isset($product->info_attributes['durationTillNow']))
+                                                                    @if(!is_null($product->info_attributes['duration']) || !is_null($product->info_attributes['durationTillNow']))
                                                                     <div class="m-alert m-alert--air m-alert--square alert videoLength" role="alert">
                                                                         <div class="m-alert__text">
                                                                             <span>
@@ -373,9 +373,9 @@
                                                                                     </g>
                                                                                 </svg>
                                                                             </span>
-                                                                            @if(isset($product->info_attributes['duration']))
+                                                                            @if(!is_null($product->info_attributes['duration']))
                                                                                 مدت زمان: {{ implode(' ',(array)$product->info_attributes['duration']) }}
-                                                                            @elseif(isset($product->info_attributes['durationTillNow']))
+                                                                            @elseif(!is_null($product->info_attributes['durationTillNow']))
                                                                                 مدت زمان تاکنون: {{ implode(' ',(array)$product->info_attributes['durationTillNow']) }}
                                                                             @endif
                                                                         </div>
