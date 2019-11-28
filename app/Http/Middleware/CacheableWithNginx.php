@@ -30,10 +30,12 @@ class CacheableWithNginx
     {
         if ($this->isNotCacheables($request)) {
             if ($this->methodIsGetOrHead($request) && !$request->hasCookie($this->cookieName)) {
+                setcookie($this->cookieName , '1', time() + (86400*30), '/');
                 Cookie::queue(cookie()->forever($this->cookieName, '1'));
             }
             return $next($request);
         }
+        setcookie($this->cookieName , 'Expired', time() - 100000, '/');
         Cookie::queue(cookie()->forget($this->cookieName));
         $response = $next($request);
 
