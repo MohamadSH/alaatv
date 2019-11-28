@@ -259,7 +259,10 @@
                                                                     </g>
                                                                 </svg>
                                                             </span>
-                                                            مدت برنامه:
+                                                            <span class="servicesCategory">
+                                                                مدت برنامه:
+                                                            </span>
+                                                            
                                                             {{implode('،',(array)$product->info_attributes['courseDuration'])}}
                                                             [ {{implode('،',(array)$product->info_attributes['studyPlan'])}} ]
                                                             @endif
@@ -321,7 +324,11 @@
                                                                     </g>
                                                                 </svg>
                                                             </span>
-                                                                خدمات جانبی:
+        
+                                                                <span class="servicesCategory">
+                                                                    خدمات جانبی:
+                                                                </span>
+                                                                
                                                                 @foreach($product->info_attributes['accessoryServices'] as $s)
                                                                     <span class="servicesBadge"> {{ $s }} </span>
                                                                 @endforeach
