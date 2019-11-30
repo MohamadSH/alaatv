@@ -69,9 +69,10 @@ class Kernel extends HttpKernel
         'api' => [
             'throttle:120000,1',
             'bindings',
+            CacheableWithNginx::class,
         ],
     ];
-    
+
     /**
      * The application's route middleware.
      *
@@ -103,7 +104,7 @@ class Kernel extends HttpKernel
         'CanAccessEmployeeTimeSheet'                => CanAccessEmployeeTimeSheet::class,
 
     ];
-    
+
     /**
      * The priority-sorted list of middleware.
      *
