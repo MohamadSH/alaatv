@@ -534,6 +534,7 @@
                                             <div class="a--MegaMenu-categoryItem" dtat-cat-id="godar">
                                                 <a dtat-cat-id="godar" class="m-link" href="{{ route('web.landing.10') }}">
                                                     گدار
+                                                    <span class="m-badge m-badge--info m-badge--wide m-badge--rounded a--puls-gray">جدید</span>
                                                 </a>
                                             </div>
                                             <div class="a--MegaMenu-categoryItem" dtat-cat-id="raheAbrisham">
@@ -558,7 +559,7 @@
                                             </div>
                                         </div>
                                         <div class="col-md-10 a--MegaMenu-subCategoryItemsCol">
-    
+
                                             <div class="a--MegaMenu-categorySubItems" style="background: #ffe6dd;" data-cat-id="godar">
                                                 <div class="row no-gutters">
                                                     <div class="col">
