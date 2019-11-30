@@ -174,7 +174,10 @@
     <script src = "/acm/AlaatvCustomFiles/components/alaa_old/scripts/ui-toastr.min.js" type = "text/javascript"></script>
     <script src = "/acm/AlaatvCustomFiles/components/alaa_old/scripts/components-multi-select.min.js" type = "text/javascript"></script>
     <script src = "/acm/AlaatvCustomFiles/js/admin/makeDataTable.js" type = "text/javascript"></script>
-    <script src = "/acm/AlaatvCustomFiles/js/admin-edit-attributeset.js" type = "text/javascript"></script>
+
+
+
+    <script src = "/acm/AlaatvCustomFiles/js/admin/edit/attributeset.js" type = "text/javascript"></script>
 @endsection
 
 @endpermission

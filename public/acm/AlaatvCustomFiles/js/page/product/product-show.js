@@ -500,319 +500,358 @@ var ProductResponsivePage = function () {
     };
 }();
 
-jQuery(document).ready(function() {
+var CustomPageFunction = function () {
 
-    GAEE.productDetailViews('product.show', parentProduct);
-    if (GAEE.reportGtmEecOnConsole()) {
-        console.log('product.show', parentProduct);
+    function initGAEE() {
+        GAEE.productDetailViews('product.show', parentProduct);
+        if (GAEE.reportGtmEecOnConsole()) {
+            console.log('product.show', parentProduct);
+        }
     }
 
-    let childLevel = ProductSwitch.init();
+    function initProductSwitchForSelectableProducts() {
+        let childLevel = ProductSwitch.init();
 
-    let callBack = function () {
-        let productsState = ProductShowPage.getProductSelectValues();
-        ProductShowPage.refreshPrice([], productsState, []);
-    };
+        let callBack = function () {
+            let productsState = ProductShowPage.getProductSelectValues();
+            ProductShowPage.refreshPrice([], productsState, []);
+        };
+        $(document).on('change', "input[name='products[]'].product", function() {
+            let thisValue = this.defaultValue;
+            let hasChildren = $(this).hasClass('hasChildren');
+            if(hasChildren) {
+                ProductSwitch.changeChildCheckStatus(thisValue, $(this).prop('checked'));
+            }
+            ProductSwitch.updateSelectedProductsStatus(childLevel,callBack );
+        });
+    }
 
-    $("#lightgallery").lightGallery();
+    function initLightGallery() {
+        $("#lightgallery").lightGallery();
+    }
 
-    $('.sampleVideo .m-portlet__head').sticky({
-        // container: '.sampleVideo',
-        hidePosition: {
-            element: '.productPamphletWarper .productPamphletTitle',
-            topSpace: $('#m_header').height()
-        },
-        topSpacing: $('#m_header').height(),
-        zIndex: 98
-    });
-
-    $('.productPamphletWarper .productPamphletTitle').sticky({
-        // container: '.productPamphletWarper',
-        hidePosition: {
-            element: '.productDetailes .m-portlet__head',
-            topSpace: $('#m_header').height()
-        },
-        topSpacing: $('#m_header').height(),
-        zIndex: 98
-    });
-
-    $('.productDetailes .m-portlet__head').sticky({
-        // container: '.productDetailes',
-        hidePosition: {
-            element: '.productLiveDescription .m-portlet__head',
-            topSpace: $('#m_header').height()
-        },
-        topSpacing: $('#m_header').height(),
-        zIndex: 98
-    });
-
-    $('.productLiveDescription .m-portlet__head').sticky({
-        // container: '.productDetailes',
-        hidePosition: {
-            element: '.relatedProduct .m-portlet__head',
-            topSpace: $('#m_header').height()
-        },
-        topSpacing: $('#m_header').height(),
-        zIndex: 98
-    });
-
-    $('.relatedProduct .m-portlet__head').sticky({
-        container: '.relatedProduct',
-        topSpacing: $('#m_header').height(),
-        zIndex: 98
-    });
-
-    $(document).on('click', '.productInfoNav', function () {
-        var targetId = $(this).data('tid');
-        $([document.documentElement, document.body]).animate({
-            scrollTop: $('#'+targetId).offset().top - $('#m_header').height() + 5
-        }, 1000);
-    });
-
-    $(document).on('click', '.btnShowVideoLink', function () {
-
-        $([document.documentElement, document.body]).animate({
-            scrollTop: $("#videoPlayer").offset().top - $('#m_header').height()
-        }, 'slow');
-
-        $('.videoPlayerPortlet').fadeOut().removeClass('m--hide').fadeIn();
-
-        mApp.block('.videoPlayerPortlet', {
-            overlayColor: "#000000",
-            type: "loader",
-            state: "success"
+    function initSticky() {
+        $('.sampleVideo .m-portlet__head').sticky({
+            // container: '.sampleVideo',
+            hidePosition: {
+                element: '.productPamphletWarper .productPamphletTitle',
+                topSpace: $('#m_header').height()
+            },
+            topSpacing: $('#m_header').height(),
+            zIndex: 98
         });
 
-        var videoSrc = $(this).attr('data-videosrc');
-        var videoTitle = $(this).attr('data-videotitle');
-        var videoDescription = $(this).attr('data-videodes');
-        var sources = [{"type": "video/mp4", "src": videoSrc}];
+        $('.productPamphletWarper .productPamphletTitle').sticky({
+            // container: '.productPamphletWarper',
+            hidePosition: {
+                element: '.productDetailes .m-portlet__head',
+                topSpace: $('#m_header').height()
+            },
+            topSpacing: $('#m_header').height(),
+            zIndex: 98
+        });
 
-        $("#videoPlayer").find("#videosrc").attr("src", videoSrc);
-        $("#videoPlayerTitle").html(videoTitle);
-        $("#videoPlayerDescription").html(videoDescription);
+        $('.productDetailes .m-portlet__head').sticky({
+            // container: '.productDetailes',
+            hidePosition: {
+                element: '.productLiveDescription .m-portlet__head',
+                topSpace: $('#m_header').height()
+            },
+            topSpacing: $('#m_header').height(),
+            zIndex: 98
+        });
 
-        mApp.unblock('.videoPlayerPortlet');
+        $('.productLiveDescription .m-portlet__head').sticky({
+            // container: '.productDetailes',
+            hidePosition: {
+                element: '.relatedProduct .m-portlet__head',
+                topSpace: $('#m_header').height()
+            },
+            topSpacing: $('#m_header').height(),
+            zIndex: 98
+        });
 
-        player.pause();
-        player.src(sources);
-        player.load();
-        // $("html, body").animate({ scrollTop: 0 }, "slow");
-    });
+        $('.relatedProduct .m-portlet__head').sticky({
+            container: '.relatedProduct',
+            topSpacing: $('#m_header').height(),
+            zIndex: 98
+        });
 
-    $(document).on('click', '.btnAddToCart', function (e) {
+        $(document).on('click', '.productInfoNav', function () {
+            var targetId = $(this).data('tid');
+            $([document.documentElement, document.body]).animate({
+                scrollTop: $('#'+targetId).offset().top - $('#m_header').height() + 5
+            }, 1000);
+        });
+    }
 
-        ProductShowPage.disableBtnAddToCart();
-        var product = $("input[name=product_id]").val();
-        let mainAttributeStates = ProductShowPage.getMainAttributeStates();
-        let extraAttributeStates = ProductShowPage.getExtraAttributeStates();
-        let productSelectValues = ProductShowPage.getProductSelectValues() ;
-        let selectedProductObject = ProductShowPage.getSelectedProductObject() ;
+    function initAddToCartEvent() {
+        $(document).on('click', '.btnAddToCart', function (e) {
 
-        // for (var index in selectedProductObject) {
-        //     selectedProductObject[index].category = parentProductTags;
-        //     selectedProductObject[index].variant = 'simple';
-        // }
-        selectedProductObject.push(parentProduct);
-        TotalQuantityAddedToCart = selectedProductObject.length;
-        GAEE.productAddToCart('product.addToCart', selectedProductObject);
-        if (GAEE.reportGtmEecOnConsole()) {
-            console.log('product.addToCart', selectedProductObject);
-        }
+            ProductShowPage.disableBtnAddToCart();
+            var product = $("input[name=product_id]").val();
+            let mainAttributeStates = ProductShowPage.getMainAttributeStates();
+            let extraAttributeStates = ProductShowPage.getExtraAttributeStates();
+            let productSelectValues = ProductShowPage.getProductSelectValues() ;
+            let selectedProductObject = ProductShowPage.getSelectedProductObject() ;
 
-        if ($('#js-var-userId').val()) {
+            // for (var index in selectedProductObject) {
+            //     selectedProductObject[index].category = parentProductTags;
+            //     selectedProductObject[index].variant = 'simple';
+            // }
+            selectedProductObject.push(parentProduct);
+            TotalQuantityAddedToCart = selectedProductObject.length;
+            GAEE.productAddToCart('product.addToCart', selectedProductObject);
+            if (GAEE.reportGtmEecOnConsole()) {
+                console.log('product.addToCart', selectedProductObject);
+            }
 
-            $.ajax({
-                type: 'POST',
-                url: '/orderproduct',
-                data: {
-                    product_id: product,
-                    products: productSelectValues,
-                    attribute: mainAttributeStates,
-                    extraAttribute: extraAttributeStates
-                },
-                statusCode: {
-                    200: function (response) {
-                        let successMessage = 'محصول مورد نظر به سبد خرید اضافه شد.';
+            if ($('#js-var-userId').val()) {
 
-                        toastr.success(successMessage);
-
-                        window.location.replace('/checkout/review');
-
+                $.ajax({
+                    type: 'POST',
+                    url: '/orderproduct',
+                    data: {
+                        product_id: product,
+                        products: productSelectValues,
+                        attribute: mainAttributeStates,
+                        extraAttribute: extraAttributeStates
                     },
-                    500: function (response) {
+                    statusCode: {
+                        200: function (response) {
+                            let successMessage = 'محصول مورد نظر به سبد خرید اضافه شد.';
 
-                        toastr.error('خطای سیستمی رخ داده است.');
+                            toastr.success(successMessage);
 
-                        ProductShowPage.enableBtnAddToCart();
-                    },
-                    503: function (response) {
-                        toastr.error('خطای پایگاه داده!');
-                        ProductShowPage.enableBtnAddToCart();
+                            window.location.replace('/checkout/review');
+
+                        },
+                        500: function (response) {
+
+                            toastr.error('خطای سیستمی رخ داده است.');
+
+                            ProductShowPage.enableBtnAddToCart();
+                        },
+                        503: function (response) {
+                            toastr.error('خطای پایگاه داده!');
+                            ProductShowPage.enableBtnAddToCart();
+                        }
                     }
-                }
-            });
+                });
 
-        } else {
+            } else {
 
-            let data = {
-                'product_id': $('input[name="product_id"][type="hidden"]').val(),
-                'attribute': mainAttributeStates,
-                'extraAttribute': extraAttributeStates,
-                'products': productSelectValues,
-            };
+                let data = {
+                    'product_id': $('input[name="product_id"][type="hidden"]').val(),
+                    'attribute': mainAttributeStates,
+                    'extraAttribute': extraAttributeStates,
+                    'products': productSelectValues,
+                };
 
-            UesrCart.addToCartInCookie(data);
+                UesrCart.addToCartInCookie(data);
 
-            let successMessage = 'محصول مورد نظر به سبد خرید اضافه شد.';
+                let successMessage = 'محصول مورد نظر به سبد خرید اضافه شد.';
 
 
-            toastr.success(successMessage);
+                toastr.success(successMessage);
 
-            setTimeout(function () {
-                window.location.replace('/checkout/review');
-            }, 2000);
-        }
+                setTimeout(function () {
+                    window.location.replace('/checkout/review');
+                }, 2000);
+            }
 
-    });
+        });
+    }
 
-    $(document).on('change', "input[name='products[]'].product", function() {
-        let thisValue = this.defaultValue;
-        let hasChildren = $(this).hasClass('hasChildren');
-        if(hasChildren) {
-            ProductSwitch.changeChildCheckStatus(thisValue, $(this).prop('checked'));
-        }
-        ProductSwitch.updateSelectedProductsStatus(childLevel,callBack );
-    });
+    function initRefreshPriceEvents() {
+        $(document).on("ifChanged change", ".attribute", function () {
+            var attributeState = ProductShowPage.getMainAttributeStates();
+            ProductShowPage.refreshPrice(attributeState , [] ,[]);
+        });
 
-    $(document).on("ifChanged change", ".attribute", function () {
-        var attributeState = ProductShowPage.getMainAttributeStates();
-        ProductShowPage.refreshPrice(attributeState , [] ,[]);
-    });
+        $(document).on("ifChanged change", ".extraAttribute", function () {
+            var attributeState = ProductShowPage.getExtraAttributeStates();
+            ProductShowPage.refreshPrice([] , [] , attributeState);
+        });
 
-    $(document).on("ifChanged change", ".extraAttribute", function () {
-        var attributeState = ProductShowPage.getExtraAttributeStates();
-        ProductShowPage.refreshPrice([] , [] , attributeState);
-    });
+        $(document).on("ifChanged switchChange.bootstrapSwitch", ".product", function () {
+            var productsState = ProductShowPage.getProductSelectValues() ;
+            ProductShowPage.refreshPrice([] , productsState , []);
+        });
+    }
 
-    $(document).on("ifChanged switchChange.bootstrapSwitch", ".product", function () {
-        var productsState = ProductShowPage.getProductSelectValues() ;
-        ProductShowPage.refreshPrice([] , productsState , []);
-    });
-
-    $('.productShowBlock').OwlCarouselType2({
-        OwlCarousel: {
-            center: false,
-            loop: false,
-            responsive: {
-                0: {
-                    items: 1
+    function initSampleVideoBlock() {
+        $('.sampleVideo').OwlCarouselType2({
+            OwlCarousel: {
+                center: false,
+                loop: false,
+                responsive: {
+                    0: {
+                        items: 1
+                    },
+                    400: {
+                        items: 2
+                    },
+                    600: {
+                        items: 3
+                    },
+                    800: {
+                        items: 4
+                    },
+                    1000: {
+                        items: 5
+                    }
                 },
-                400: {
-                    items: 2
-                },
-                600: {
-                    items: 3
-                },
-                800: {
-                    items: 4
-                },
-                1000: {
-                    items: 5
+                btnSwfitchEvent: function() {
+                    imageObserver.observe();
+                    gtmEecProductObserver.observe();
                 }
             },
-            btnSwfitchEvent: function() {
-                imageObserver.observe();
-                gtmEecProductObserver.observe();
-            }
-        },
-        grid: {
-            columnClass: 'col-12 col-sm-6 col-md-3 gridItem',
-            btnSwfitchEvent: function() {
-                imageObserver.observe();
-                gtmEecProductObserver.observe();
-            }
-        },
-        defaultView: 'OwlCarousel', // OwlCarousel or grid
-        childCountHideOwlCarousel: 4
-    });
+            grid: {
+                columnClass: 'col-12 col-sm-6 col-md-3 gridItem',
+                btnSwfitchEvent: function() {
+                    imageObserver.observe();
+                    gtmEecProductObserver.observe();
+                }
+            },
+            defaultView: 'OwlCarousel', // OwlCarousel or grid
+            childCountHideOwlCarousel: 4
+        });
+    }
 
-    if ($('#videoPlayer').length > 0) {
-        var player = videojs('videoPlayer', {language: 'fa'});
+    function initVideoPlayer() {
+        var player;
+        if ($('#videoPlayer').length > 0) {
+            player = videojs('videoPlayer', {language: 'fa'});
 
-        if ($('input[type="hidden"][name="introVideo"]').length > 0) {
-            player.src([
-                {type: "video/mp4", src: $('input[type="hidden"][name="introVideo"]').val()}
-            ]);
+            if ($('input[type="hidden"][name="introVideo"]').length > 0) {
+                player.src([
+                    {type: "video/mp4", src: $('input[type="hidden"][name="introVideo"]').val()}
+                ]);
+            }
+
+            player.nuevo({
+                // logotitle:"آموزش مجازی آلاء",
+                // logo:"https://sanatisharif.ir/image/11/135/67/logo-150x22_20180430222256.png",
+                logocontrolbar: '/acm/extra/Alaa-logo.gif',
+                // logoposition:"RT", // logo position (LT - top left, RT - top right)
+                logourl: '//sanatisharif.ir',
+                // related: related_videos,
+                // shareUrl:"https://www.nuevolab.com/videojs/",
+                // shareTitle: "Nuevo plugin for VideoJs Player",
+                // slideImage:"//cdn.nuevolab.com/media/sprite.jpg",
+
+                // videoInfo: true,
+                // infoSize: 18,
+                // infoIcon: "https://sanatisharif.ir/image/11/150/150/favicon_32_20180819090313.png",
+
+                closeallow: false,
+                mute: true,
+                rateMenu: true,
+                resume: true, // (false) enable/disable resume option to start video playback from last time position it was left
+                // theaterButton: true,
+                // timetooltip: true,
+                // mousedisplay: true,
+                endAction: 'related', // (undefined) If defined (share/related) either sharing panel or related panel will display when video ends.
+                container: "inline",
+
+
+                // limit: 20,
+                // limiturl: "http://localdev.alaatv.com/videojs/examples/basic.html",
+                // limitimage : "//cdn.nuevolab.com/media/limit.png", // limitimage or limitmessage
+                // limitmessage: "اگه می خوای بقیه اش رو ببینی باید پول بدی :)",
+
+
+                // overlay: "//domain.com/overlay.html" //(undefined) - overlay URL to display html on each pause event example: https://www.nuevolab.com/videojs/tryit/overlay
+
+            });
+
+            player.hotkeys({
+                volumeStep: 0.1,
+                seekStep: 5,
+                alwaysCaptureHotkeys: true
+            });
+
+            player.pic2pic();
+
+            // player.on('mode',function(event,mode) {
+            //     let width = '100%';
+            //     if(mode=='large') {
+            //         // $('.productDetailesColumns .column1').addClass('order-2');
+            //         // $('.productDetailesColumns .column2').addClass('order-3');
+            //         $('.productDetailesColumns .column3').addClass('order-first');
+            //         $('.productDetailesColumns .column3').removeClass('col-lg-4');
+            //         $('.productDetailesColumns .column3').addClass('col-lg-12');
+            //         $('.productDetailesColumns .column3 .videoPlayerPortlet').css({'width':'60%'});
+            //     } else {
+            //         // $('.productDetailesColumns .column1').removeClass('order-2');
+            //         // $('.productDetailesColumns .column2').removeClass('order-3');
+            //         $('.productDetailesColumns .column3').removeClass('order-first');
+            //         $('.productDetailesColumns .column3').removeClass('col-lg-12');
+            //         $('.productDetailesColumns .column3').addClass('col-lg-4');
+            //         $('.productDetailesColumns .column3 .videoPlayerPortlet').css({'width':'100%'});
+            //     }
+            // });
         }
+        $(document).on('click', '.btnShowVideoLink', function () {
 
-        player.nuevo({
-            // logotitle:"آموزش مجازی آلاء",
-            // logo:"https://sanatisharif.ir/image/11/135/67/logo-150x22_20180430222256.png",
-            logocontrolbar: '/acm/extra/Alaa-logo.gif',
-            // logoposition:"RT", // logo position (LT - top left, RT - top right)
-            logourl: '//sanatisharif.ir',
-            // related: related_videos,
-            // shareUrl:"https://www.nuevolab.com/videojs/",
-            // shareTitle: "Nuevo plugin for VideoJs Player",
-            // slideImage:"//cdn.nuevolab.com/media/sprite.jpg",
+            $([document.documentElement, document.body]).animate({
+                scrollTop: $("#videoPlayer").offset().top - $('#m_header').height()
+            }, 'slow');
 
-            // videoInfo: true,
-            // infoSize: 18,
-            // infoIcon: "https://sanatisharif.ir/image/11/150/150/favicon_32_20180819090313.png",
+            $('.videoPlayerPortlet').fadeOut().removeClass('m--hide').fadeIn();
 
-            closeallow: false,
-            mute: true,
-            rateMenu: true,
-            resume: true, // (false) enable/disable resume option to start video playback from last time position it was left
-            // theaterButton: true,
-            // timetooltip: true,
-            // mousedisplay: true,
-            endAction: 'related', // (undefined) If defined (share/related) either sharing panel or related panel will display when video ends.
-            container: "inline",
+            mApp.block('.videoPlayerPortlet', {
+                overlayColor: "#000000",
+                type: "loader",
+                state: "success"
+            });
 
+            var videoSrc = $(this).attr('data-videosrc');
+            var videoTitle = $(this).attr('data-videotitle');
+            var videoDescription = $(this).attr('data-videodes');
+            var sources = [{"type": "video/mp4", "src": videoSrc}];
 
-            // limit: 20,
-            // limiturl: "http://localdev.alaatv.com/videojs/examples/basic.html",
-            // limitimage : "//cdn.nuevolab.com/media/limit.png", // limitimage or limitmessage
-            // limitmessage: "اگه می خوای بقیه اش رو ببینی باید پول بدی :)",
+            $("#videoPlayer").find("#videosrc").attr("src", videoSrc);
+            $("#videoPlayerTitle").html(videoTitle);
+            $("#videoPlayerDescription").html(videoDescription);
 
+            mApp.unblock('.videoPlayerPortlet');
 
-            // overlay: "//domain.com/overlay.html" //(undefined) - overlay URL to display html on each pause event example: https://www.nuevolab.com/videojs/tryit/overlay
-
+            player.pause();
+            player.src(sources);
+            player.load();
+            // $("html, body").animate({ scrollTop: 0 }, "slow");
         });
-
-        player.hotkeys({
-            volumeStep: 0.1,
-            seekStep: 5,
-            alwaysCaptureHotkeys: true
-        });
-
-        player.pic2pic();
-
-        // player.on('mode',function(event,mode) {
-        //     let width = '100%';
-        //     if(mode=='large') {
-        //         // $('.productDetailesColumns .column1').addClass('order-2');
-        //         // $('.productDetailesColumns .column2').addClass('order-3');
-        //         $('.productDetailesColumns .column3').addClass('order-first');
-        //         $('.productDetailesColumns .column3').removeClass('col-lg-4');
-        //         $('.productDetailesColumns .column3').addClass('col-lg-12');
-        //         $('.productDetailesColumns .column3 .videoPlayerPortlet').css({'width':'60%'});
-        //     } else {
-        //         // $('.productDetailesColumns .column1').removeClass('order-2');
-        //         // $('.productDetailesColumns .column2').removeClass('order-3');
-        //         $('.productDetailesColumns .column3').removeClass('order-first');
-        //         $('.productDetailesColumns .column3').removeClass('col-lg-12');
-        //         $('.productDetailesColumns .column3').addClass('col-lg-4');
-        //         $('.productDetailesColumns .column3 .videoPlayerPortlet').css({'width':'100%'});
-        //     }
-        // });
     }
 
-    if ($('#productInformation .summernote-row .summernote-col').length > 0) {
-        $('#productInformation').css('column-count', '1');
+    function handleProductInformationMultiColumn() {
+        if ($('#productInformation .summernote-row .summernote-col').length > 0) {
+            $('#productInformation').css('column-count', '1');
+        }
     }
 
-    ProductResponsivePage.apply();
+    function initResponsivePage() {
+        ProductResponsivePage.apply();
+    }
+
+    return {
+        init: function () {
+            initGAEE();
+            initProductSwitchForSelectableProducts();
+            initLightGallery();
+            initSticky();
+            initAddToCartEvent();
+            initRefreshPriceEvents();
+            initSampleVideoBlock();
+            initVideoPlayer();
+            handleProductInformationMultiColumn();
+            initResponsivePage();
+        },
+    };
+}();
+
+jQuery(document).ready(function() {
+    CustomPageFunction.init();
 });
+v
