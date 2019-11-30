@@ -110,7 +110,7 @@ var Alaasearch = function () {
                 full_name: data.author.full_name
             },
             widgetCount: data.active_contents_count,
-            widgetLink: '/set/'+data.id
+            widgetLink: data.setUrl
         };
 
         let widgetPic = inputData.widgetPic,
@@ -220,7 +220,7 @@ var Alaasearch = function () {
             discount = 100;
             price.final = 0;
         }
-      
+
         if (price.base !== price.final) {
             priceHtml += '    <span class="m-badge m-badge--warning a--productRealPrice">' + price.base.toLocaleString('fa') + '</span>\n';
             priceHtml += '    <span class="m-badge m-badge--info a--productDiscount">' + discount + '%</span>\n';
@@ -935,7 +935,7 @@ var FilterOptions = function () {
     function uncheckItem(itemValue) {
         $('.GroupFilters-item input[type="checkbox"][value="'+itemValue+'"]').prop('checked', false);
     }
-    
+
     function filterItemChangeEvent() {
         var newUrl = TagManager.refreshUrlBasedOnSelectedTags();
         TagManager.refreshPageTagsBadge();
