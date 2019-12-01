@@ -532,7 +532,7 @@ var CustomPageFunction = function () {
 
     function initSticky() {
         $('.sampleVideo .m-portlet__head').sticky({
-            // container: '.sampleVideo',
+            container: '.sampleVideo',
             hidePosition: {
                 element: '.productPamphletWarper .productPamphletTitle',
                 topSpace: $('#m_header').height()
@@ -542,7 +542,7 @@ var CustomPageFunction = function () {
         });
 
         $('.productPamphletWarper .productPamphletTitle').sticky({
-            // container: '.productPamphletWarper',
+            container: '.productPamphletWarper',
             hidePosition: {
                 element: '.productDetailes .m-portlet__head',
                 topSpace: $('#m_header').height()
@@ -552,7 +552,7 @@ var CustomPageFunction = function () {
         });
 
         $('.productDetailes .m-portlet__head').sticky({
-            // container: '.productDetailes',
+            container: '.productDetailes',
             hidePosition: {
                 element: '.productLiveDescription .m-portlet__head',
                 topSpace: $('#m_header').height()
@@ -562,7 +562,7 @@ var CustomPageFunction = function () {
         });
 
         $('.productLiveDescription .m-portlet__head').sticky({
-            // container: '.productDetailes',
+            container: '.productLiveDescription',
             hidePosition: {
                 element: '.relatedProduct .m-portlet__head',
                 topSpace: $('#m_header').height()
