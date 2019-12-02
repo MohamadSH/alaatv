@@ -25,6 +25,140 @@
 @section('content')
 
     @include('systemMessage.flash')
+
+
+    <style>
+        .btn-group-rounded button:first-child {
+            border-top-right-radius: 10px;
+            border-bottom-right-radius: 10px;
+        }
+        .btn-group-rounded button:last-child {
+            border-top-left-radius: 10px;
+            border-bottom-left-radius: 10px;
+        }
+    </style>
+    <div class="row m--margin-bottom-10">
+        <div class="col text-center">
+            <div class="btn-group m-btn-group btn-group-rounded" role="group" aria-label="...">
+                <button type="button" class="btn btn-secondary">علاقه مندی ها</button>
+                <button type="button" class="btn btn-warning">محصولات من</button>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <style>
+                .sortingFilter {
+                    margin-bottom: 10px;
+                }
+                .sortingFilter .sortingFilter-item {
+                    display: inline-block;
+                    margin-left: 10px;
+                }
+            </style>
+            <div class="sortingFilter">
+                <div class="sortingFilter-item title">
+                    <span>
+                        <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 56 56" xml:space="preserve" width="25">
+                            <g>
+                                <path d="M8,41.08V2c0-0.553-0.448-1-1-1S6,1.447,6,2v39.08C2.613,41.568,0,44.481,0,48c0,3.859,3.14,7,7,7s7-3.141,7-7   C14,44.481,11.387,41.568,8,41.08z M7,53c-2.757,0-5-2.243-5-5s2.243-5,5-5s5,2.243,5,5S9.757,53,7,53z"/>
+                                <path d="M29,20.695V2c0-0.553-0.448-1-1-1s-1,0.447-1,1v18.632c-3.602,0.396-6.414,3.456-6.414,7.161s2.812,6.765,6.414,7.161V54   c0,0.553,0.448,1,1,1s1-0.447,1-1V34.891c3.4-0.577,6-3.536,6-7.098S32.4,21.272,29,20.695z M27.793,33   c-2.871,0-5.207-2.336-5.207-5.207s2.335-5.207,5.207-5.207S33,24.922,33,27.793S30.664,33,27.793,33z"/>
+                                <path d="M56,8c0-3.859-3.14-7-7-7s-7,3.141-7,7c0,3.519,2.613,6.432,6,6.92V54c0,0.553,0.448,1,1,1s1-0.447,1-1V14.92   C53.387,14.432,56,11.519,56,8z M49,13c-2.757,0-5-2.243-5-5s2.243-5,5-5s5,2.243,5,5S51.757,13,49,13z"/>
+                            </g>
+                        </svg>
+                    </span>
+                    مرتب سازی بر اساس:
+                </div>
+                <div class="sortingFilter-item date">
+                    @include('partials.CustomSelect', ['items'=>[
+                            [
+                                'name'=> 'جدید ترین ها',
+                                'value'=> 'جدید ترین ها',
+                                'selected'=> true
+                            ],
+                            [
+                                'name'=> 'قدیمی ترین ها',
+                                'value'=> 'قدیمی ترین ها',
+                            ],
+                        ]
+                    ])
+                </div>
+                <div class="sortingFilter-item subject">
+                    @include('partials.CustomSelect', ['items'=>[
+                            [
+                                'name'=> 'همایش طلایی',
+                                'value'=> 'همایش طلایی',
+                                'selected'=> true
+                            ],
+                            [
+                                'name'=> 'همایش گدار',
+                                'value'=> 'همایش گدار'
+                            ],
+                            [
+                                'name'=> 'همایش تفتان',
+                                'value'=> 'همایش تفتان'
+                            ],
+                            [
+                                'name'=> 'همایش راه ابریشم',
+                                'value'=> 'همایش راه ابریشم'
+                            ],
+                        ]
+                    ])
+                </div>
+            </div>
+        </div>
+    </div>
+    <style>
+        .myProductsRow {
+            margin-bottom: 100px;
+        }
+
+
+
+
+        .productItem {
+            background: white;
+            margin-top: 10px;
+        }
+        .productItem .productItem-image {
+
+        }
+        .productItem .productItem-description {
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+        .productItem .productItem-description .title {
+            font-size: 2rem;
+            font-weight: bold;
+        }
+        .productItem .productItem-description .action {
+            margin-top: 30px;
+        }
+        .productItem .productItem-description .action .btn {
+            padding: 10px 40px;
+            border-radius: 5px;
+        }
+        .productItem .productItem-description .action .btn.btn-warning {
+            margin-left: 30px;
+        }
+    </style>
+    <div class="row myProductsRow">
+        <div class="col-md-8 productsCol">
+            @include('user.partials.dashboard.productItem', [
+                'name'=> 'همایش گدار شیمی آلاء',
+                'src'=> 'https://cdn.alaatv.com/upload/images/product/p7 (4)_20190517134806.jpg',
+            ])
+            @include('user.partials.dashboard.productItem', [
+                'name'=> 'راه ابریشم ریاضی تجربی آلاء',
+                'src'=> 'https://cdn.alaatv.com/upload/images/product/pr4_20191007173649.jpg',
+            ])
+        </div>
+        <div class="col-md-4 setsOfProductCol"></div>
+    </div>
+
     <div class="row blockWraper a--owl-carousel-row">
         <div class="col">
             <div class="m-portlet a--owl-carousel-Wraper" id="owlCarouselMyProduct">
