@@ -2,6 +2,7 @@
 
 @section('page-css')
     <link href="{{ mix('/css/user-dashboard.css') }}" rel="stylesheet" type="text/css"/>
+    <link href="{{ asset('/acm/AlaatvCustomFiles/components/CustomDropDown/style.css') }}" rel="stylesheet" type="text/css"/>
 @endsection
 
 @section('pageBar')
@@ -424,5 +425,16 @@
 @endsection
 
 @section('page-js')
+    <script src="{{ asset('/acm/AlaatvCustomFiles/components/CustomDropDown/js.js') }}"></script>
     <script src="{{ mix('/js/user-dashboard.js') }}"></script>
+    <script>
+        CustomDropDown.init({
+            elementId: 'selectProductSet',
+            onChange: function (data) {
+                console.log(data);
+                // { index: 2, totalCount: 5, value: "3", text: "فرسنگ سوم" }
+            }
+        });
+
+    </script>
 @endsection

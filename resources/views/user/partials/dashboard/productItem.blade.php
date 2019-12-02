@@ -18,7 +18,14 @@
 {{--                    <button type="button" class="btn btn-warning btn-lg">فیلم ها</button>--}}
 {{--                    <button type="button" class="btn btn-secondary btn-lg">جزوات</button>--}}
 
-
+                    <select class="CustomDropDown" id="selectProductSet">
+                        <option value="1">item 1</option>
+                        <option value="1">item 2</option>
+                        <option value="1">item 3</option>
+                        <option value="1">item 4</option>
+                        <option value="1">item 5</option>
+                        <option value="1">item 6</option>
+                    </select>
 
 
                 </div>
