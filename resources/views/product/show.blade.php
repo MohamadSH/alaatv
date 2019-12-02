@@ -95,6 +95,18 @@
         </div>
     </div>
 
+    <script id="ScrollCarousel_base" type="x-tmpl-mustache">
+        @include('partials.ScrollCarousel.mustache_base')
+    </script>
+
+    <script id="ScrollCarousel_item" type="x-tmpl-mustache">
+        @include('partials.ScrollCarousel.mustache_item')
+    </script>
+
+    <div id="mustacheTest"></div>
+    <div id="mustacheTest2"></div>
+
+
     @include('product.partials.raheAbrisham.pictureAndMap')
 
 
@@ -836,6 +848,7 @@
     <script src="{{ asset('/acm/AlaatvCustomFiles/components/ScrollCarousel/js.js') }}"></script>
     <script src="{{ asset('/acm/AlaatvCustomFiles/components/OwlCarouselType2/js.js') }}"></script>
     <script src="{{ mix('/js/product-show.js') }}"></script>
+    <script src="{{ asset('/acm/AlaatvCustomFiles/js/page/product/product-show.js') }}"></script>
     <script src="{{ asset('/acm/AlaatvCustomFiles/components/customSelect/js.js') }}"></script>
     <script>
         var TotalQuantityAddedToCart = 0;
@@ -849,17 +862,5 @@
             quantity: 1
         };
         var parentProductTags = '{{ ($product->tags !== null) ? implode(',',optional($product->tags)->tags) : '-' }}';
-
-        $('.m-body .m-content').addClass('boxed');
-
-        CustomSelect.init({
-            elementId: 'selectFarsang',
-            onChange: function (data) {
-                console.log(data);
-                // { index: 2, totalCount: 5, value: "3", text: "فرسنگ سوم" }
-            }
-        });
-
-        ScrollCarousel.addSwipeIcons($('.ScrollCarousel'));
     </script>
 @endsection

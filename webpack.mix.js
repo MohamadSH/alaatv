@@ -566,6 +566,7 @@ class Mix {
             ],
             'public/css/product-show.css',
             [
+                'node_modules/mustache/mustache.min.js',
                 'node_modules/toastr/build/toastr.min.js',
                 'node_modules/bootstrap-switch/dist/js/bootstrap-switch.js',
                 // 'public/acm/AlaatvCustomFiles/components/ScrollCarousel/js.js',
@@ -590,7 +591,7 @@ class Mix {
                 'public/acm/AlaatvCustomFiles/components/aSticky/aSticky.js',
                 'public/acm/AlaatvCustomFiles/components/Favorite/script.js',
 
-                'public/acm/AlaatvCustomFiles/js/page/product/product-show.js',
+                // 'public/acm/AlaatvCustomFiles/js/page/product/product-show.js',
             ],
             'public/js/product-show.js'
         );
