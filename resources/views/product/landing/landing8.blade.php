@@ -20,10 +20,10 @@
                 </div>
                 <div class="m-portlet__body">
                     <div class="m-widget27 m-portlet-fit--sides">
-                        <div class="m-widget27__pic d-none">
-                            <img src="/acm/extra/landing1/img/landing8_banner1.jpg" alt="" class="lazy-image">
+                        <div class="m-widget27__pic">
+                            <img src="https://cdn.alaatv.com/upload/landing8_banner1.jpg" alt="" class="lazy-image">
                             <h3 class="m-widget27__title m--font-light">
-                            
+
                             </h3>
                             <div class="m-widget27__btn">
                                 <button type="button" class="btn m-btn--pill btn-secondary m-btn m-btn--custom m-btn--bolder d-none">
@@ -33,11 +33,10 @@
                         </div>
                         <div class="m-widget27__container">
                             <div class="container-fluid">
-                                
                                 <div class="row">
                                     <div class="col-md-4 order-2 order-sm-2 order-md-1 order-lg-1 sideItems">
-    
-    
+
+
                                         <div class="row justify-content-center">
                                             <div class="col m--margin-bottom-30">
                                                 <div class="lessonsTimesWraper">
@@ -83,7 +82,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        
+
                                         <div class="m-portlet m-portlet--creative m-portlet--first m-portlet--bordered-semi">
                                             <div class="m-portlet__head">
                                                 <div class="m-portlet__head-caption">
@@ -97,7 +96,7 @@
                                                 </div>
                                             </div>
                                             <div class="m-portlet__body">
-            
+
                                                 <span class="m-badge m-badge--danger m-badge--dot"></span>
                                                 جمع بندی حداقل 80 درصد مباحث کنکور
                                                 <br>
@@ -109,10 +108,10 @@
                                                 <br>
                                                 <span class="m-badge m-badge--danger m-badge--dot"></span>
                                                 یک منبع کامل و مورد اعتماد
-        
+
                                             </div>
                                         </div>
-    
+
                                         <div class="m-portlet m-portlet--creative m-portlet--first m-portlet--bordered-semi m--margin-top-50">
                                             <div class="m-portlet__head">
                                                 <div class="m-portlet__head-caption">
@@ -126,13 +125,13 @@
                                                 </div>
                                             </div>
                                             <div class="m-portlet__body">
-    
+
                                                 <span class="m-badge m-badge--danger m-badge--dot"></span>
                                                 همایش طلایی؛ یک نقشه راه مطمئن، از مسیری کوتاه و قابل اعتماد برای موفقیت تا روز کنکور است.
-                                                
+
                                             </div>
                                         </div>
-    
+
                                         <div class="m-portlet m-portlet--creative m-portlet--first m-portlet--bordered-semi m--margin-top-50">
                                             <div class="m-portlet__head">
                                                 <div class="m-portlet__head-caption">
@@ -146,7 +145,7 @@
                                                 </div>
                                             </div>
                                             <div class="m-portlet__body">
-    
+
                                                 <span class="m-badge m-badge--danger m-badge--dot"></span>
                                                 هنوز خودتون رو توی بزرگراه رقابت کنکور نمی بینید؟
                                                 <br>
@@ -160,7 +159,7 @@
                                                 <span style="padding: 5px;background: #ff9a17;color: white;font-weight: bold;">این همایش مناسب شماست</span>
                                             </div>
                                         </div>
-                                        
+
                                     </div>
                                     <div class="col-md-8 order-1 order-sm-1 order-md-2 order-lg-2 mainItems">
 {{--                                        <div class="row justify-content-center">--}}
@@ -173,7 +172,7 @@
 {{--                                                <div class="konkourTimer"></div>--}}
 {{--                                            </div>--}}
 {{--                                        </div>--}}
-                                        
+
                                         <div class="row justify-content-center">
                                             <div class="col m--margin-bottom-10">
                                                 <div class="lessonsTimesWraper">
@@ -221,11 +220,11 @@
                                         </div>
                                         <div class="row justify-content-center">
                                             @foreach( $landingProducts as $productKey=>$product)
-        
+
                                                 <div class="col-12 col-sm-6 col-md-4 col-lg-3 m--padding-left-5 m--padding-right-5 m--margin-top-5">
-    
+
                                                     <div class="productItem">
-                                                        
+
                                                         @if($product['product']->price['final'] !== $product['product']->price['base'])
                                                             <div class="ribbon">
                                                                 <span>
@@ -235,13 +234,13 @@
                                                                 </span>
                                                             </div>
                                                         @endif
-    
+
                                                         <div class="a--imageWithCaption">
                                                             @if(isset($product['product']->image[0]))
                                                                 <img src="https://cdn.alaatv.com/loder.jpg?w=1&h=1" data-src="{{$product['product']->photo}}?w=300&h=300" alt="عکس محصول@if(isset($product['product']->name[0])) {{$product['product']->name}} @endif" class="img-thumbnail lazy-image" width="400" height="400">
                                                             @endif
-        
-        
+
+
                                                             <a href="{{$product['product']->url ?? '#'}}"
                                                                class="a--gtm-eec-product a--gtm-eec-product-click"
                                                                data-gtm-eec-product-id="{{ $product['product']->id }}"
@@ -273,7 +272,7 @@
                                                                 </div>
                                                             </a>
                                                         </div>
-    
+
                                                         <div class="text-center">
                                                             <a href="{{$product['product']->url ?? '#'}}">
                                                                 <button type="button" class="btn btn-sm m-btn--air btn-accent a--full-width m--margin-bottom-10">
@@ -281,28 +280,27 @@
                                                                 </button>
                                                             </a>
                                                         </div>
-                                                        
+
                                                     </div>
-                                                    
+
                                                 </div>
                                             @endforeach
                                         </div>
-                                    
+
                                     </div>
                                 </div>
                             </div>
+
+
                         </div>
                     </div>
                 </div>
             </div>
+
         </div>
     </div>
 @endsection
 
 @section('page-js')
     <script src="{{ mix('/js/page-landing8.js') }}"></script>
-    <script>
-        // $(".live-tile, .flip-list").not(".exclude").liveTile();
-    </script>
-
 @endsection

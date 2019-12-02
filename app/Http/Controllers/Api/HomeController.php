@@ -6,11 +6,13 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 
+
+
 class HomeController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth:api' , ['except'=>['satra']]);
+        $this->middleware('auth:api' , ['except'=>[ 'satra' , 'bigUpload' ]]);
     }
 
     public function debug(Request $request)

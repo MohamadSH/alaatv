@@ -6,19 +6,16 @@ use Exception;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\{Request, Response};
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
-use Illuminate\Support\{Arr, Collection, Facades\File, Facades\Storage};
+use Illuminate\Support\{Arr, Collection, Facades\Cache, Facades\File, Facades\Storage};
 use App\{Adapter\AlaaSftpAdapter,
     Block,
     Bon,
-    Events\SendProductIntroducingBlockTags,
-    Events\BlockDetachedFromProduct,
     Product,
     Attributeset,
     Attributetype,
     Traits\FileCommon,
     Traits\Helper,
     Attributevalue,
-    User,
     Websitesetting,
     Productfiletype,
     Traits\MathCommon,
@@ -193,7 +190,25 @@ class ProductController extends Controller
 
         $isFavored = optional(optional(optional(optional($user)->favoredProducts())->where('id' , $product->id))->get())->isNotEmpty();
 
-        return view('product.show', compact('product', 'block', 'purchasedProductIdArray', 'allChildIsPurchased' , 'liveDescriptions' , 'children' , 'isFavored'));
+        $isForcedGift = false;
+        $shouldBuyProductId = null;
+        $shouldBuyProductName = '';
+        $hasPurchasedShouldBuyProduct = false;
+        if($product->id == 385){
+            $isForcedGift = true;
+            $shouldBuyProductName = 'راه ابریشم';
+            $shouldBuyProductId = Product::RAHE_ABRISHAM  ;
+            /** @var \App\User $user */
+            if(isset($user)){
+                $key = 'user:hasPurchasedShouldBuyProduct:'.$user->cacheKey();
+                $hasPurchasedShouldBuyProduct =   Cache::tags(['user_'.$user->id.'_closedOrders' ])
+                    ->remember($key, config('constants.CACHE_600'), function () use ($user , $shouldBuyProductId) {
+                        return $user->products()->contains($shouldBuyProductId);
+                    });
+            }
+        }
+
+        return view('product.show', compact('product', 'block', 'purchasedProductIdArray', 'allChildIsPurchased' , 'liveDescriptions' , 'children' , 'isFavored' , 'isForcedGift' , 'shouldBuyProductId' , 'shouldBuyProductName' , 'hasPurchasedShouldBuyProduct'));
     }
 
     public function edit(Product $product)
@@ -257,9 +272,11 @@ class ProductController extends Controller
             $allBlocks = Block::all()->pluck('title' , 'id')->toArray();
         }
 
+        $sets = $product->sets()->get();
+
         return view('product.edit',
             compact('product', 'amountLimit', 'defaultAmountLimit', 'enableStatus', 'defaultEnableStatus',
-                'attributesets', 'bons', 'productFiles', 'blocks' , 'allBlocks' ,
+                'attributesets', 'bons', 'productFiles', 'blocks' , 'allBlocks' , 'sets',
                 'productFileTypes', 'defaultProductFileOrders', 'products', 'producttype', 'productPhotos',
                 'defaultProductPhotoOrder', 'tags' , 'sampleContents' , 'recommenderContents' , 'liveDescriptions'));
     }
@@ -955,15 +972,11 @@ class ProductController extends Controller
             $product->tags = convertTagStringToArray($tagString);
         }
 
-        if (strlen($sampleContentString) > 0) {
-            $sampleContentsArray = convertTagStringToArray($sampleContentString);
-            $product->sample_contents =  $sampleContentsArray;
-        }
+        $sampleContentsArray = convertTagStringToArray($sampleContentString);
+        $product->sample_contents =  $sampleContentsArray;
 
-        if (strlen($recommenderContentString) > 0) {
-            $recommenderContentsArray = convertTagStringToArray($recommenderContentString);
-            $product->recommender_contents = $recommenderContentsArray ;
-        }
+        $recommenderContentsArray = convertTagStringToArray($recommenderContentString);
+        $product->recommender_contents = $recommenderContentsArray ;
 
         if ($this->strIsEmpty($product->discount)) {
             $product->discount = 0;
@@ -971,7 +984,7 @@ class ProductController extends Controller
 
         $product->isFree = $isFree;
 
-        $product->intro_videos = $this->setIntroVideos(Arr::get($inputData, 'sampleContentsString'),
+        $product->intro_videos = $this->setIntroVideos(Arr::get($inputData, 'introVideo'),
             Arr::get($inputData, 'introVideoThumbnail'));
 
         //Storing product's catalog
@@ -993,7 +1006,18 @@ class ProductController extends Controller
 
         $product->blocks()->attach($block->id);
 
-        event(new SendProductIntroducingBlockTags($product , $block));
+        $contentsIds = $this->getProductsSampleContentsFromBlock($block);
+        $productSampleContents = optional($product->sample_contents)->tags ;
+        if(!is_null($productSampleContents)){
+            $contentsIds =  array_values(array_unique(array_merge($contentsIds , $productSampleContents) , SORT_REGULAR));
+        }
+
+        if(!empty($contentsIds)){
+            $product->sample_contents =  $contentsIds;
+            $product->update();
+        }
+
+        Cache::tags(['product_'.$product->id ,])->flush();
 
         session()->put('success' , 'بلاک با موفقیت اضافه شد');
         return redirect()->back();
@@ -1009,7 +1033,16 @@ class ProductController extends Controller
 
         $product->blocks()->detach($block->id);
 
-        event(new BlockDetachedFromProduct($product , $block));
+        $contentsIds = $this->getProductsSampleContentsFromBlock($block);
+        $productSampleContents = optional($product->sample_contents)->tags ;
+        if(!is_null($productSampleContents)){
+            $contentsIds = array_values(array_unique(array_diff($productSampleContents , $contentsIds ) , SORT_REGULAR));
+        }
+
+        $product->sample_contents =  $contentsIds;
+        $product->update();
+
+        Cache::tags(['product_'.$product->id ,])->flush();
 
         session()->put('success' , 'بلاک با موفقیت اضافه شد');
         return redirect()->back();
@@ -1100,5 +1133,16 @@ class ProductController extends Controller
                 'bonPlus'  => $bonPlus,
             ]);
         }
+    }
+
+    /**
+     * @param  Block $block
+     * @return array
+     */
+    private function getProductsSampleContentsFromBlock( Block  $block): array
+    {
+        $blockContents = optional(optional(optional($block)->contents)->pluck('id'))->toArray();
+        $blockFirstSetContents = optional(optional(optional(optional($block->sets)->first())->contents)->pluck('id'))->toArray();
+        return array_unique(array_merge(!is_null($blockContents) ? $blockContents : [], !is_null($blockFirstSetContents) ? $blockFirstSetContents : []), SORT_REGULAR);
     }
 }

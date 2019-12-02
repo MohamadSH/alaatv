@@ -25,28 +25,26 @@ class Set extends JsonResource
         }
 
         return [
-            'id'             => $this->id,
-            'name'           => $this->name,
-            'shortName'      => $this->shortName,
-            'description'    => $this->description,
-            'photo'          => $this->photo,
-            'tags'           => $this->tags,
-            'contents_count' => $this->contents_count,
+            'id'                    => $this->id,
+            'redirectUrl'           => $this->redirectUrl,
+            'name'                  => $this->name,
+            'shortaName'             => $this->shortName,
+            'description'           => $this->description,
+            'photo'                 => $this->photo,
+            'tags'                  => $this->tags,
+            'contents_count'        => $this->contents_count,
+            'active_contents_count' => $this->activeContents->count() ,
             'url'            => [
-                'last_content' => [
-                    'web' => $this->url,
-                    'api' => null,
-                ],
-                /*                    'set'          => [
-                                        'web' => null,
-                                        'api' => $this->apiUrl,
-                                    ],*/
+                'set'          => [
+                    'web' => null,
+                    'api' => $this->api_url,
+                       ],
                 'list'         => [
-                    'web' => $this->contentUrl,
+                    'web' => $this->content_url,
                     'api' => null,
-                ],
+                       ],
             ],
-            'author'         => new User($this->author),
+            'author'         => new Author($this->author),
             'created_at'     => $this->created_at,
             'updated_at'     => $this->updated_at,
         ];

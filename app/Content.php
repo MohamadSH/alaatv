@@ -209,6 +209,7 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
         'contentset_id',
         'isFree',
         'enable',
+        'display',
         'section_id',
         'tmp_description',
     ];
@@ -332,11 +333,28 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
             'validSince',
             'page_view',
             'thumbnail',
+            'redirectUrl',
+            'tmp_description'
         ];
         foreach ($unSetArray as $key) {
             unset($array[$key]);
         }
+        if(!$this->isActive() || isset($this->redirectUrl) ){
+            foreach ($array as $key => $value){
+
+                    $array[$key] = null;
+            }
+        }
         return $array;
+    }
+    /**
+     * Get the value used to index the model.
+     *
+     * @return mixed
+     */
+    public function getScoutKey()
+    {
+        return $this->id;
     }
 
     /*
@@ -436,9 +454,13 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
      */
     public function scopeValid($query)
     {
-        return $query->where('validSince', '<', Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now())
-            ->timezone('Asia/Tehran'))
+        return $query->where('validSince', '<', Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now('Asia/Tehran')))
             ->orWhereNull('validSince');
+    }
+
+    public function scopeDisplay($query , $display = 1)
+    {
+        return $query->where('display', $display);
     }
 
     /**
@@ -1353,8 +1375,7 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
      */
     public function isValid(): bool
     {
-        if ($this->validSince === null || $this->validSince < Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now())
-                ->timezone('Asia/Tehran')) {
+        if ($this->validSince === null || $this->validSince < Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now('Asia/Tehran'))) {
             return true;
         }
 

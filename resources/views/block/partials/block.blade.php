@@ -29,7 +29,7 @@
             id="{{ $block->class }}"
         @endif>
         <div class="col">
-            <div class="m-portlet a--owl-carousel-Wraper" id="owlCarousel_{{ $block->id }}">
+            <div class="m-portlet a--owl-carousel-Wraper @if(isset($boxed) && $boxed) boxed @endif" id="owlCarousel_{{ $block->id }}">
                 <div class="m-portlet__head a--owl-carousel-head">
                     <div class="m-portlet__head-caption">
                         <div class="m-portlet__head-title">
@@ -110,7 +110,7 @@
                             @endforeach
                         @endif
     
-                        @if(strlen(trim($block->url))>0)
+                        @if(strlen(trim($block->url))>0 && isset($btnLoadMore) && $btnLoadMore)
                             <div class="item carousel a--block-item a--block-item-showMoreItem w-44333211">
                                 <a href="{{ $block->url }}">
                                     <button type="button" class="btn m-btn--air btn-outline-accent m-btn m-btn--custom m-btn--outline-2x">

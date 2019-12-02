@@ -43,6 +43,7 @@ class Mix {
             'node_modules/block-ui/jquery.blockUI.js',
 
 
+            'public/acm/AlaatvCustomFiles/js/mLayout.js',// quick search (ajax) in header
             'public/acm/AlaatvCustomFiles/components/AjaxLogin/script.js',
             'public/acm/AlaatvCustomFiles/js/GlobalJsVar.js',
             'public/acm/AlaatvCustomFiles/js/LoginBeforeClick.js',
@@ -314,7 +315,7 @@ class Mix {
             'public/css/user-orders.css',
             [
                 'node_modules/persian-date/dist/persian-date.js',
-                'public/acm/AlaatvCustomFiles/js/page/user-orders.js'
+                'public/acm/AlaatvCustomFiles/js/page/user/orders.js'
             ],
             'public/js/user-orders.js'
         );
@@ -336,7 +337,7 @@ class Mix {
                 'node_modules/persian-date/dist/persian-date.js',
                 'node_modules/persian-datepicker/dist/js/persian-datepicker.js',
                 'node_modules/persianjs/persian.min.js',
-                'public/acm/AlaatvCustomFiles/js/page/user-profile.js'
+                'public/acm/AlaatvCustomFiles/js/page/user/profile.js'
             ],
             'public/js/user-profile.js'
         );
@@ -371,7 +372,7 @@ class Mix {
             [
                 'public/acm/AlaatvCustomFiles/components/ScrollCarousel/js.js',
                 'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/js.js',
-                'public/acm/AlaatvCustomFiles/js/page/user-dashboard.js',
+                'public/acm/AlaatvCustomFiles/js/page/user/dashboard.js',
             ],
             'public/js/user-dashboard.js'
         );
@@ -388,7 +389,7 @@ class Mix {
                 'node_modules/highcharts/modules/map.js',
                 'node_modules/highcharts/modules/drilldown.js',
                 'node_modules/highcharts/modules/networkgraph.js',
-                'public/acm/AlaatvCustomFiles/js/page/user-sales-report.js',
+                'public/acm/AlaatvCustomFiles/js/page/user/sales-report.js',
             ],
             'public/js/user-profile-salesReport.js'
         );
@@ -465,7 +466,7 @@ class Mix {
             ],
             'public/css/page-landing5.css',
             [
-                'public/acm/AlaatvCustomFiles/js/page-product-landing5.js',
+                'public/acm/AlaatvCustomFiles/js/page/product/landing/5.js',
             ],
             'public/js/page-landing5.js'
         );
@@ -480,7 +481,7 @@ class Mix {
             [
                 'public/acm/AlaatvCustomFiles/components/ScrollCarousel/js.js',
                 'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/js.js',
-                'public/acm/AlaatvCustomFiles/js/page-landing7.js',
+                'public/acm/AlaatvCustomFiles/js/page/product/landing/7.js',
             ],
             'public/js/page-landing7.js'
         );
@@ -495,9 +496,8 @@ class Mix {
             ],
             'public/css/page-landing8.css',
             [
-                'node_modules/metrojs/release/MetroJs.Full/MetroJs.min.js',
                 // 'node_modules/flipclock/dist/flipclock.js',
-                // 'public/acm/AlaatvCustomFiles/js/page-product-landing8.js',
+                // 'public/acm/AlaatvCustomFiles/js/page/product/landing/8.js',
             ],
             'public/js/page-landing8.js'
         );
@@ -517,7 +517,7 @@ class Mix {
                 'public/acm/AlaatvCustomFiles/components/ScrollCarousel/js.js',
                 'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/js.js',
                 'public/acm/AlaatvCustomFiles/components/aSticky/aSticky.js',
-                'public/acm/AlaatvCustomFiles/js/page-product-landing9.js',
+                'public/acm/AlaatvCustomFiles/js/page/product/landing/9.js',
             ],
             'public/js/page-landing9.js'
         );
@@ -535,7 +535,7 @@ class Mix {
                 'public/acm/AlaatvCustomFiles/components/ScrollCarousel/js.js',
                 'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/js.js',
                 'public/acm/AlaatvCustomFiles/components/aSticky/aSticky.js',
-                'public/acm/AlaatvCustomFiles/js/page-product-landing10.js',
+                'public/acm/AlaatvCustomFiles/js/page/product/landing/10.js',
             ],
             'public/js/page-landing10.js'
         );
@@ -590,7 +590,7 @@ class Mix {
                 'public/acm/AlaatvCustomFiles/components/aSticky/aSticky.js',
                 'public/acm/AlaatvCustomFiles/components/Favorite/script.js',
 
-                'public/acm/AlaatvCustomFiles/js/page/product-show.js',
+                'public/acm/AlaatvCustomFiles/js/page/product/product-show.js',
             ],
             'public/js/product-show.js'
         );
@@ -674,6 +674,7 @@ class Mix {
                 'public/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-sweetalert/sweetalert.css',
                 'public/acm/extra/persian-datepicker/dist/css/persian-datepicker-1.1.3.min.css',
                 'public/acm/AlaatvCustomFiles/components/alaa_old/font/glyphicons-halflings/glyphicons-halflings.css',
+                'public/acm/AlaatvCustomFiles/css/admin/custom/summernote.css',
             ],
             'public/css/admin-all.css',
             [
@@ -683,6 +684,7 @@ class Mix {
                 'node_modules/select2/dist/js/select2.js',
                 'node_modules/select2/dist/js/select2.full.js',
                 'node_modules/icheck/icheck.js',
+
                 'public/acm/AlaatvCustomFiles/components/alaa_old/plugins/datatables/datatables.min.js',
                 'public/acm/AlaatvCustomFiles/components/alaa_old/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
                 'public/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js',
@@ -709,11 +711,14 @@ class Mix {
                 'public/acm/AlaatvCustomFiles/components/alaa_old/scripts/makeSelect2Single.js',
                 'public/acm/AlaatvCustomFiles/components/alaa_old/scripts/form-input-mask.js',
                 'public/acm/AlaatvCustomFiles/components/alaa_old/scripts/form-icheck.js',
+
                 'public/acm/extra/persian-datepicker/lib/persian-date.js',
                 'public/acm/extra/persian-datepicker/dist/js/persian-datepicker-0.4.5.min.js',
+
                 'public/acm/AlaatvCustomFiles/js/admin/makeDataTable.js',
-                'public/acm/AlaatvCustomFiles/js/admin-makeMultiSelect.js',
-                'public/acm/AlaatvCustomFiles/js/admin-customInitComponent.js',
+                'public/acm/AlaatvCustomFiles/js/admin/makeMultiSelect.js',
+                'public/acm/AlaatvCustomFiles/js/admin/custom/init-component.js',
+                'public/acm/AlaatvCustomFiles/js/admin/custom/summernote.js',
             ],
             'public/js/admin-all.js'
         );

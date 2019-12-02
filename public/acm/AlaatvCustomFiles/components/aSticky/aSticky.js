@@ -516,6 +516,11 @@
         window.attachEvent('onscroll', scroller);
         window.attachEvent('onresize', resizer);
     }
+    // $(window).resize(function(){
+    //     scroller();
+    //     resizer();
+    // });
+
 
     $.fn.sticky = function (method) {
         if (methods[method]) {

@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use Illuminate\Http\Resources\Json\Resource;
 use Laravel\Horizon\Horizon;
 use League\Flysystem\Filesystem;
 use Illuminate\Support\Collection;
@@ -69,6 +70,7 @@ class AppServiceProvider extends ServiceProvider
         User::observe(UserObserver::class);
         Slideshow::observe(SlideshowObserver::class);
         $this->defineValidationRules();
+//        Resource::withoutWrapping();
     }
 
     private function defineValidationRules(): void

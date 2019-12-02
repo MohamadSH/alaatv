@@ -20,7 +20,7 @@
          محصولات مرتبط
     </div>
 
-
+    @if($product->enable && !$isForcedGift)
     <div class="productInfoNav productInfoNav-btnAddToCart">
         <button class="btn m-btn--air btn-success m-btn--icon btnAddToCart gta-track-add-to-card">
             <span>
@@ -29,5 +29,6 @@
             </span>
         </button>
     </div>
+    @endif
 
 </div>
