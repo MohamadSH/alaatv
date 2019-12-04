@@ -37,9 +37,9 @@ trait HandleOrderPayment
         $updateOrderPaymentStatusResult = $this->updateOrderPaymentStatus($order);
 
         /** Attaching user bons for this order */
-        if ($updateOrderPaymentStatusResult['paymentstatus_id'] == config('constants.PAYMENT_STATUS_PAID')) {
-            $this->givesOrderBonsToUser($order);
-        }
+//        if ($updateOrderPaymentStatusResult['paymentstatus_id'] == config('constants.PAYMENT_STATUS_PAID')) {
+//            $this->givesOrderBonsToUser($order);
+//        }
     }
 
     /**

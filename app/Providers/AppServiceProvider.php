@@ -8,7 +8,9 @@ use League\Flysystem\Filesystem;
 use Illuminate\Support\Collection;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\{Auth, Schema, Storage, Validator};
-use App\{Content,
+use App\{Block,
+    Content,
+    Observers\BlockObserver,
     Observers\SlideshowObserver,
     Observers\TransactionObserver,
     Observers\UserObserver,
@@ -69,6 +71,7 @@ class AppServiceProvider extends ServiceProvider
         Transaction::observe(TransactionObserver::class);
         User::observe(UserObserver::class);
         Slideshow::observe(SlideshowObserver::class);
+        Block::observe(BlockObserver::class);
         $this->defineValidationRules();
 //        Resource::withoutWrapping();
     }
