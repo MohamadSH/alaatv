@@ -189,11 +189,11 @@ class OfflinePaymentController extends Controller
                     $cost = $order->totalCost() - $order->totalPaidCost();
                     if ($cost == 0) {
                         /** Attaching user bons for this order */
-                        $bonName = config('constants.BON1');
-                        $bon     = Bon::enable()->where('name', $bonName)->first();
-                        if (isset($bon)) {
-                            $order->giveUserBons($bonName);
-                        }
+//                        $bonName = config('constants.BON1');
+//                        $bon     = Bon::enable()->where('name', $bonName)->first();
+//                        if (isset($bon)) {
+//                            $order->giveUserBons($bonName);
+//                        }
 
                         /** End */
 
