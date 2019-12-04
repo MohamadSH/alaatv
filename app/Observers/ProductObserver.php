@@ -102,7 +102,9 @@ class ProductObserver
             'product_'.$product->id ,
             'product_search' ,
             'relatedProduct_search' ,
-            'productCollection'])->flush();
+            'productCollection',
+            'shop' ,
+            'home',])->flush();
 
         $this->setRelatedContentsTags($product , isset(optional($product->sample_contents)->tags)?optional($product->sample_contents)->tags:[] , Product::SAMPLE_CONTENTS_BUCKET);
         $this->setRelatedContentsTags($product , isset(optional($product->recommender_contents)->tags)?optional($product->recommender_contents)->tags:[], Product::RECOMMENDER_CONTENTS_BUCKET);

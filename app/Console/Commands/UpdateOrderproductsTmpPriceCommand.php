@@ -54,6 +54,7 @@ class UpdateOrderproductsTmpPriceCommand extends Command
         if ($this->confirm('Found '.$orderproducts->count().' orderproducts , Do you want to proceed?', true)) {
             $bar = $this->output->createProgressBar($orderproducts->count());
             foreach ($orderproducts as $orderproduct) {
+                /** @var Orderproduct $orderproduct */
                 $orderproduct->setTmpFinalCost();
                 $bar->advance();
             }
