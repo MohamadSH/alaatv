@@ -1,10 +1,10 @@
 var UserAssets = function () {
 
-    let lcokLoadNextPage = false;
+    let lockLoadNextPage = false;
 
     function loadContents(contentUrl, contentType, refresh) {
 
-        if (lcokLoadNextPage || contentUrl.trim().length === 0) {
+        if (lockLoadNextPage || contentUrl.trim().length === 0) {
             return false;
         }
 
@@ -38,7 +38,7 @@ var UserAssets = function () {
             state: "success",
         });
 
-        lcokLoadNextPage = true;
+        lockLoadNextPage = true;
 
         $.ajax({
             type: 'GET',
@@ -46,13 +46,15 @@ var UserAssets = function () {
             data: {},
             dataType: 'json',
             success: function (data) {
-                lcokLoadNextPage = false;
+                lockLoadNextPage = false;
                 if (data.error) {
                     let message = 'خطای سیستمی رخ داده است.';
                     $('#'+modalId+' .modal-body .m-widget6 .m-widget6__body').html(message);
                 } else {
                     // contentType: video-pamphlet
                     let contents = data.result[contentType];
+
+                    createList1(data.result);
 
                     if (refresh) {
                         $('#' + modalId + ' .modal-body .m-widget6 .m-widget6__body').html(createList(contents, contentType));
@@ -78,7 +80,7 @@ var UserAssets = function () {
                 mApp.unblock('.btnLoadMoreInModal');
             },
             error: function (jqXHR, textStatus, errorThrown) {
-                lcokLoadNextPage = false;
+                lockLoadNextPage = false;
                 let message = 'خطای سیستمی رخ داده است.';
                 $('#'+modalId+' .modal-body .m-widget6 .m-widget6__body').html(message);
                 mApp.unblock('#'+modalId+' .modal-body');
@@ -216,6 +218,137 @@ var UserAssets = function () {
         return ((elemBottom >= docViewTop) && (elemTop <= docViewBottom) && (elemBottom <= docViewBottom) && (elemTop >= docViewTop));
     }
 
+    // new
+    function createList1(data) {
+        console.log(data);
+    }
+
+    function ajax(contentUrl, callback) {
+
+        if (lockLoadNextPage || contentUrl.trim().length === 0) {
+            return false;
+        }
+
+        AlaaLoading.show();
+        //
+        // // fix position of block in modal
+        // $('#'+modalId+' .modal-body .blockElement').css({
+        //     'top': 'calc( 50% - 17px)',
+        //     'left': 'calc( 50% - 81px)'
+        // });
+
+        lockLoadNextPage = true;
+
+        $.ajax({
+            type: 'GET',
+            url : contentUrl,
+            data: {},
+            dataType: 'json',
+            success: function (data) {
+                lockLoadNextPage = false;
+                if (data.error) {
+                    // let message = 'خطای سیستمی رخ داده است.';
+                    // $('#'+modalId+' .modal-body .m-widget6 .m-widget6__body').html(message);
+                } else {
+                    // contentType: video-pamphlet
+                    callback(data.result);
+                }
+                AlaaLoading.hide();
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                lockLoadNextPage = false;
+                // let message = 'خطای سیستمی رخ داده است.';
+                // $('#'+modalId+' .modal-body .m-widget6 .m-widget6__body').html(message);
+                AlaaLoading.hide();
+            }
+        });
+    }
+
+    function loadNewData(url) {
+        ajax(url, callback)
+    }
+
+    function loadNextPage() {
+
+    }
+
+    function createVideoListHtmlData(data) {
+        setNextPageUrlVideo(data.next_page_url);
+        var htmlData = '',
+            dataLength = data.data.length;
+        for(var i = 0; i < dataLength; i++) {
+            var item = data.data[i];
+            htmlData += getVideoItem({
+                src: item.thumbnail,
+                title: item.name,
+                link: item.url,
+                setName: item.set.name,
+                lastUpdate: item.updated_at,
+                order: item.order,
+            });
+        }
+        return htmlData;
+    }
+
+    function getVideoItem(data) {
+        return '' +
+            '<div class="item ">\n' +
+            '    <div class="pic">\n' +
+            '        <a href="http://alaatv.test/c/16839" class="d-block">\n' +
+            '            <img src="https://cdn.alaatv.com/loder.jpg?w=1&h=1" data-src="'+data.src+'" alt="'+data.title+'" class="a--full-width lazy-image videoImage" width="253" height="142">\n' +
+            '        </a>\n' +
+            '    </div>\n' +
+            '    <div class="content">\n' +
+            '        <div class="title">\n' +
+            '            <h2>\n' +
+            '                <a href="'+data.link+'" class="m-link">\n' +
+            '                    '+data.title +
+            '                </a>\n' +
+            '            </h2>\n' +
+            '        </div>\n' +
+            '        <div class="detailes">\n' +
+            '            <div class="videoDetaileWrapper">\n' +
+            '                <span>\n' +
+            '                    <svg viewBox="0 0 24 24" preserveAspectRatio="xMidYMid meet" focusable="false" class="style-scope yt-icon">\n' +
+            '                        <path d="M3.67 8.67h14V11h-14V8.67zm0-4.67h14v2.33h-14V4zm0 9.33H13v2.34H3.67v-2.34zm11.66 0v7l5.84-3.5-5.84-3.5z" class="style-scope yt-icon"></path>\n' +
+            '                    </svg>\n' +
+            '                </span>\n' +
+            '                <span> از دوره </span>\n' +
+            '                <span>'+data.setName+'</span>\n' +
+            '                <br>\n' +
+            '                <i class="fa fa-calendar-alt m--margin-right-5"></i>\n' +
+            '                <span>تاریخ بروزرسانی: </span>\n' +
+            '                <span>'+data.lastUpdate+'</span>\n' +
+            '                <div class="videoOrder">\n' +
+            '                    <div class="videoOrder-title">جلسه</div>\n' +
+            '                    <div class="videoOrder-number">'+data.order+'</div>\n' +
+            '                    <div class="videoOrder-om"> اُم </div>\n' +
+            '                </div>\n' +
+            '            </div>\n' +
+            '        </div>\n' +
+            '    </div>\n' +
+            '    <div class="itemHover"></div>\n' +
+            '</div>';
+    }
+
+    function setNextPageUrlVideo(url) {
+        $('#videoContentNextPageUrl').val(url);
+    }
+
+    function getNextPageUrlVideo() {
+        return $('#videoContentNextPageUrl').val();
+    }
+
+    function appendToContentSetList(data) {
+        $('#searchResult_video .searchResult .listType').html(data.video);
+        $('#searchResult_pamphlet .m-widget4').html(data.pamphlet);
+    }
+
+    function loadNewContentSetList(data) {
+        $('#searchResult_video .searchResult .listType').append(data.video);
+        $('#searchResult_pamphlet .m-widget4').append(data.pamphlet);
+    }
+
     return {
         loadContents: function (contentUrl, contentType, refresh) {
             loadContents(contentUrl, contentType, refresh);
@@ -257,20 +390,27 @@ $(document).ready(function () {
     $('#owlCarouselMyFavoritSet').OwlCarouselType2(OwlCarouselType2Option);
     $('#owlCarouselMyFavoritContent').OwlCarouselType2(OwlCarouselType2Option);
     $('#owlCarouselMyFavoritProducts').OwlCarouselType2(OwlCarouselType2Option);
-    $(document).on('click', '.btnViewVideo, .btnViewPamphlet', function () {
-        let contentType = $(this).data('content-type');
-        let contentUrl = $(this).data('content-url');
-        let $nextPageUrl = null;
+    $(document).on('click', '.btnViewVideo, .btnViewPamphlet, .select-item', function () {
+        let contentType = $(this).data('content-type'),
+            contentUrl = $(this).data('content-url'),
+            $nextPageUrl = null;
+
+        if ($(this).hasClass('select-item')) {
+            contentType = $(this).find('btnViewVideo').data('content-type');
+            contentUrl = $(this).find('btnViewVideo').data('content-url');
+        }
+
         if (contentType === 'video') {
             $nextPageUrl = $('#videoContentNextPageUrl');
         } else if (contentType === 'pamphlet') {
             $nextPageUrl = $('#pamphletContentNextPageUrl');
         }
-        if ($nextPageUrl.val().trim().length === 0) {
+        if ($nextPageUrl !== null && $nextPageUrl.val().trim().length === 0) {
             $('.btnLoadMoreInModal').fadeOut();
         } else {
             $('.btnLoadMoreInModal').fadeIn();
         }
+
         UserAssets.loadContents(contentUrl, contentType, true);
     });
     $(document).on('click', '.btnLoadMoreInModal', function () {

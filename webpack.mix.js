@@ -9,12 +9,12 @@ class Mix {
         this.mix.sass('public/acm/AlaatvCustomFiles/components/OwlCarouselType2/style.scss', 'public/acm/AlaatvCustomFiles/components/OwlCarouselType2');
         this.mix.sass('public/acm/AlaatvCustomFiles/components/MultiLevelSearch/style.scss', 'public/acm/AlaatvCustomFiles/components/MultiLevelSearch');
         this.mix.sass('public/acm/AlaatvCustomFiles/components/SearchBoxFilter/style.scss', 'public/acm/AlaatvCustomFiles/components/SearchBoxFilter');
-        this.mix.sass('public/acm/AlaatvCustomFiles/components/SearchBoxFilter/searchResult.scss', 'public/acm/AlaatvCustomFiles/components/SearchBoxFilter');
         this.mix.sass('public/acm/AlaatvCustomFiles/components/ScrollCarousel/style.scss', 'public/acm/AlaatvCustomFiles/components/ScrollCarousel');
         this.mix.sass('public/acm/AlaatvCustomFiles/components/ScrollCarousel/itemStyle.scss', 'public/acm/AlaatvCustomFiles/components/ScrollCarousel');
         this.mix.sass('public/acm/AlaatvCustomFiles/components/Favorite/style.scss', 'public/acm/AlaatvCustomFiles/components/Favorite');
         this.mix.sass('public/acm/AlaatvCustomFiles/components/AjaxLogin/style.scss', 'public/acm/AlaatvCustomFiles/components/AjaxLogin');
         this.mix.sass('public/acm/AlaatvCustomFiles/components/MegaMenu/style.scss', 'public/acm/AlaatvCustomFiles/components/MegaMenu');
+        this.mix.sass('public/acm/AlaatvCustomFiles/css/page/pages/content-search/searchResult.scss', 'public/acm/AlaatvCustomFiles/css/page/pages/content-search');
     }
 
     static getBaseCss() {
@@ -275,13 +275,13 @@ class Mix {
         this.mixCssAndJs([
                 'public/acm/AlaatvCustomFiles/components/ribbon/style.css',
                 'public/acm/AlaatvCustomFiles/components/SearchBoxFilter/style.css',
-                'public/acm/AlaatvCustomFiles/components/SearchBoxFilter/searchResult.css',
+                'public/acm/AlaatvCustomFiles/css/page/pages/content-search/searchResult.css',
 
                 'public/acm/AlaatvCustomFiles/components/AlaaLoading/style.css',
                 'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/style.css',
                 'public/acm/AlaatvCustomFiles/components/ScrollCarousel/style.css',
                 'public/acm/AlaatvCustomFiles/components/ScrollCarousel/itemStyle.css',
-                'public/acm/AlaatvCustomFiles/css/page/pages/content-search.css'
+                'public/acm/AlaatvCustomFiles/css/page/pages/content-search/content-search.css'
             ],
             'public/css/content-search.css',
             [
@@ -362,17 +362,18 @@ class Mix {
     }
     mixPageUserDashboard() {
         this.mixCssAndJs([
+                'node_modules/animate.css/animate.css',
                 'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/style.css',
                 'public/acm/AlaatvCustomFiles/components/ScrollCarousel/style.css',
-                'node_modules/animate.css/animate.css',
                 'public/acm/AlaatvCustomFiles/components/ribbon/style.css',
-                'public/acm/AlaatvCustomFiles/css/page/user-dashboard.css',
+                'public/acm/AlaatvCustomFiles/components/CustomDropDown/style.css',
+                // 'public/acm/AlaatvCustomFiles/css/page/user-dashboard.css',
             ],
             'public/css/user-dashboard.css',
             [
                 'public/acm/AlaatvCustomFiles/components/ScrollCarousel/js.js',
                 'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/js.js',
-                'public/acm/AlaatvCustomFiles/js/page/user/dashboard.js',
+                // 'public/acm/AlaatvCustomFiles/js/page/user/dashboard.js',
             ],
             'public/js/user-dashboard.js'
         );
