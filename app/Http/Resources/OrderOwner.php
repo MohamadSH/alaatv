@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
@@ -19,22 +20,28 @@ class OrderOwner extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  Request  $request
      * @return array
      */
     public function toArray($request)
     {
+        if (!($this->resource instanceof \App\User)) {
+            return [];
+        }
+
         return [
-            'id'           => $this->id,
-            'firstName'    => $this->firstName,
-            'lastName'     => $this->lastName,
-            'nationalCode' => $this->nationalCode ,
-            'province'     => $this->province,
-            'city'         => $this->city,
-            'address'      => $this->address,
-            'postalCode'   => $this->postalCode,
-            'school'       => $this->school,
-            'info'         => $this->info,
+            'id'            => $this->id,
+            'first_name'    => $this->firstName,
+            'last_name'     => $this->lastName,
+            'mobile'        => $this->mobile,
+            'national_code' => $this->nationalCode ,
+            'province'      => $this->province,
+            'city'          => $this->city,
+            'address'       => $this->address,
+            'postal_code'   => $this->postalCode,
+            'school'        => $this->school,
+            'info'          => $this->info,
+            'profile_completion'  => (int) $this->completion(),
         ];
     }
 }

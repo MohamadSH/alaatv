@@ -31,43 +31,40 @@ class Product extends JsonResource
             ];
         }
 
+        $this->loadMissing('sets' , 'children' , 'producttype');
+
         return [
             'id'            => $this->id,
             'category'      => $this->category ,
-            'order'         => $this->order,
-            'redirect_url'  => null,
+            'redirect_url'  => $this->redirectUrl,
             'name'          => $this->name,
-            'type'          => $this->producttype,
+            'type'          => $this->when(isset($this->producttype_id) , function (){ return new Producttype($this->producttype) ;}),
+//            'isFree'        => $this->isFree,
             'description'   => [
                 'short' => $this->shortDescription,
                 'long'  => $this->longDescription,
             ],
-            'slogan'        => $this->slogan,
-            'enable'        => $this->enable,
-            'amount'        => $this->amount,
-            'isFree'        => $this->isFree,
-            'price'         => $this->price,
-            'tags'          => $this->tags,
-            'recommender_contents' => $this->recommender_contents,
-            'sample_contents'      => $this->sample_contents,
-            'introVideo'    => $this->introVideo,
+            'slogan'                => $this->slogan,
+//            'amount'                => $this->amount,
+            'price'                 => $this->price,
+            'tags'                  => $this->tags,
+            'recommender_contents'  => $this->when(isset($this->recommender_contents) , $this->recommender_contents),
+            'sample_contents'       => $this->when(isset($this->sample_contents), $this->sample_contents),
+            'intro_video'    => $this->introVideo,
             'page_view'     => $this->page_view,
             'url'           => [
                 'web' => $this->url,
                 'api' => $this->api_url,
             ],
             'photo'         => $this->photo,
-            'sample_photos' => $this->sample_photos,
-            'gift'          => $this->gift->isNotEmpty() ? Product::collection($this->gift) : null,
-            'sets'          => Set::collection($this->whenLoaded('sets')),
-            'attributes'    => $this->attributes,
-            'children'      => $this->children->isNotEmpty() ? Product::collection($this->children) : null,
-            'updated_at'    => $this->updated_at,
-            'validSince'    => $this->validSince,
-            'validUntil'    => $this->validUntil,
-            'bonPlus'       => $this->bon_plus,
-            'bonDiscount'   => $this->bon_discount,
-            'bons'          => $this->bons,
+            'sample_photos' => ProductSamplePhoto::collection($this->sample_photos), //It is not a relationship
+            'gift'          => $this->when($this->gift->isNotEmpty() , function (){ return Gift::collection($this->gift) ; }) , //It is not a relationship
+            'sets'          => ProductSet::collection($this->whenLoaded('sets')),
+            'attributes'    => [
+                'info' =>  $this->when(!empty($this->info_attributes) , $this->info_attributes),
+                'extra' => $this->when(!empty($this->extra_attributes) , $this->extra_attributes),
+            ],
+            'children'      => Child::collection($this->whenLoaded('children')),
         ];
     }
 }

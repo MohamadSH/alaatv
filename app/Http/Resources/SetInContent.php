@@ -9,13 +9,17 @@ use Illuminate\Http\Resources\Json\JsonResource;
  *
  * @mixin \App\Contentset
  * */
-class Set extends JsonResource
+class SetInContent extends JsonResource
 {
+    function __construct(\App\Contentset $model)
+    {
+        parent::__construct($model);
+    }
+
     /**
      * Transform the resource into an array.
      *
      * @param  \Illuminate\Http\Request  $request
-     *
      * @return array
      */
     public function toArray($request)
@@ -24,10 +28,7 @@ class Set extends JsonResource
             return [];
         }
 
-
-
         return [
-            'id'                    => $this->id,
             'redirect_url'           => $this->redirectUrl,
             'name'                  => $this->name,
             'short_name'             => $this->shortName,
@@ -39,15 +40,12 @@ class Set extends JsonResource
                 'set'          => [
                     'web' => null,
                     'api' => $this->api_url,
-                       ],
+                ],
                 'list'         => [
                     'web' => $this->content_url,
                     'api' => null,
-                       ],
+                ],
             ],
-            'author'         => $this->when(isset($this->author) , $this->author),
-            'created_at'     => $this->created_at,
-            'updated_at'     => $this->updated_at,
         ];
     }
 }

@@ -19,10 +19,14 @@ class Discounttype extends JsonResource
      */
     public function toArray($request)
     {
+        if (!($this->resource instanceof \App\Discounttype)) {
+            return [];
+        }
+
+
         return [
-            'id'          => $this->id,
             'name'        => $this->name,
-            'displayName' => $this->displayName,
+            'display_name' => $this->displayName,
         ];
     }
 }
