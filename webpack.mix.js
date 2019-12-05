@@ -369,7 +369,7 @@ class Mix {
                 'public/acm/AlaatvCustomFiles/components/ScrollCarousel/style.css',
                 'public/acm/AlaatvCustomFiles/components/ribbon/style.css',
                 'public/acm/AlaatvCustomFiles/components/CustomDropDown/style.css',
-                '/acm/AlaatvCustomFiles/css/page/pages/content-search/searchResult.css',
+                'public/acm/AlaatvCustomFiles/css/page/pages/content-search/searchResult.css',
                 'public/acm/AlaatvCustomFiles/css/page/user-dashboard.css',
             ],
             'public/css/user-dashboard.css',
