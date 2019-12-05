@@ -5,11 +5,11 @@ namespace App\Http\Resources;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
- * Class Orderstatus
+ * Class Wallet
  *
- * @mixin \App\Orderstatus
+ * @mixin \App\Wallet
  * */
-class Orderstatus extends JsonResource
+class Wallet extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -19,14 +19,15 @@ class Orderstatus extends JsonResource
      */
     public function toArray($request)
     {
-        if (!($this->resource instanceof \App\Orderstatus)) {
+        if (!($this->resource instanceof \App\Wallet)) {
             return [];
         }
 
+        $this->loadMissing('walletType');
 
         return [
-            'name'        => $this->name ,
-            'display_name' => $this->displayName ,
+            'wallettype_id'     => $this->when(isset($this->wallettype_id) , function (){ return new Wallettype($this->walletType);}),
+            'balance'           => $this->balance,
         ];
     }
 }

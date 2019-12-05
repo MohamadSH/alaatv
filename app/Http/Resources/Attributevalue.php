@@ -19,11 +19,13 @@ class Attributevalue extends JsonResource
      */
     public function toArray($request)
     {
+        if (!($this->resource instanceof \App\Attributevalue)) {
+            return [];
+        }
+
         return [
             'attribute_id' => $this->attribute_id ,
             'name'         => $this->name,
-            'description'  => $this->description,
-            'isDefault'    => $this->isDefault
         ];
     }
 }
