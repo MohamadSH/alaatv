@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\DB;
 trait AssetTrait
 {
     use FavoredTrait;
-    
+
     /**  Determines whether user has this content or not
      *
      * @param  \App\Content  $content
@@ -27,7 +27,7 @@ trait AssetTrait
     {
         return $this->IsThereACommonProduct($content);
     }
-    
+
     /**
      * @param  \App\Content  $content
      *
@@ -37,7 +37,7 @@ trait AssetTrait
     {
         return count(array_intersect($this->getUserProductsId(), $this->getContentProductsId($content))) > 0;
     }
-    
+
     /**
      * @return array
      */
@@ -47,7 +47,7 @@ trait AssetTrait
             ->pluck('id')
             ->toArray();
     }
-    
+
     /**
      * @return \App\Collection\ProductCollection
      */
@@ -73,7 +73,7 @@ trait AssetTrait
             })
             ->join('users', 'users.id', '=', 'orders.user_id')
             ->select([
-                "products.*",
+                'products.*' , 'orders.completed_at',
             ])
             ->where('users.id', '=', $this->getKey())
             ->whereNotIn('products.id' , [Product::DONATE_PRODUCT_5_HEZAR , Product::CUSTOM_DONATE_PRODUCT , Product::ASIATECH_PRODUCT ])
@@ -83,7 +83,7 @@ trait AssetTrait
 
         return Product::hydrate($result->toArray());
     }
-    
+
     /**
      * @param  \App\Content  $content
      *
