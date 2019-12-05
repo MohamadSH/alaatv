@@ -47,12 +47,10 @@
         jQuery(document).ready(function () {
 
             var selectedProducts = {!! json_encode($setProducts->pluck('id')) !!};
-            //
-            // $("input.setTags").tagsinput({
-            //     tagClass: 'm-badge m-badge--info m-badge--wide m-badge--rounded'
-            // });
-            
-            $('.bootstrap-tagsinput .tag.label.label-info').addClass('m-badge m-badge--info m-badge--wide m-badge--rounded');
+
+            $("input.setTags").tagsinput({
+                tagClass: 'm-badge m-badge--info m-badge--wide m-badge--rounded'
+            });
 
             $('#productShortDescriptionSummerNote').summernote({
                 lang: 'fa-IR',
@@ -88,7 +86,7 @@
             });
 
             $('#setProduct').multiselect('select', selectedProducts);
-            
+
         });
     </script>
 @endsection

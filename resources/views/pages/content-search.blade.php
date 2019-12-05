@@ -5,7 +5,7 @@
 @endsection
 
 @section('content')
-    
+
     <div class="row showSearchBoxBtnWrapper">
         <div class="col showSearchBoxBtnWrapperColumn">
             <button class="btn btn-outline-accent btn-lg m-btn m-btn--icon m-btn--outline-2x btnShowSearchBoxInMobileView">
@@ -16,7 +16,7 @@
             </button>
         </div>
     </div>
-    
+
     <div class="row SearchColumnsWrapper">
         <div class="SearchBoxFilterColumn filterStatus-close">
             <div class="SearchBoxFilterColumn-tools">
@@ -26,17 +26,17 @@
                 <button class="btn btn-outline-accent m-btn m-btn--air m-btn--outline-2x m--pull-left btnApplyFilterInMobileView"> اعمال فیلتر </button>
             </div>
             <div class="SearchBoxFilter">
-            
+
             </div>
         </div>
         <div class="searchResultColumn">
-    
+
             <div class="row">
                 <div class="col pageTags">
                     @include('partials.search.tagLabel' , ['tags'=>$tags, 'withCloseIcon'=>true, 'withInput'=>true])
                 </div>
             </div>
-            
+
             <div class="m-alert m-alert--icon m-alert--icon-solid m-alert--outline alert alert-warning alert-dismissible fade show notFoundMessage" role="alert">
                 <div class="m-alert__icon">
                     <i class="fa fa-sad-tear"></i>
@@ -49,17 +49,17 @@
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close"></button>
                 </div>
             </div>
-            
+
             <div class="searchResult">
                 <div class="carouselType">
                     <div class="ScrollCarousel">
-                        
+
                     </div>
                 </div>
-                
+
                 <div class="listType">
-                
-                    
+
+
                 </div>
             </div>
         </div>

@@ -6,7 +6,7 @@
         @yield('page-head')
     </head>
     <!-- end::Head -->
-    
+
     <!-- begin::Body -->
     <body class="m-page--fluid m--skin- m-content--skin-light2 m-header--fixed m-header--fixed-mobile m-aside-left--enabled m-aside-left--skin-dark m-aside-left--fixed m-aside-left--offcanvas m-aside-right--enabled m-footer--push m-aside--offcanvas-default {{ isset($closedSideBar) && $closedSideBar ? 'm-aside-left--hide':''  }}">
     @if(config('gtm.GTM'))
@@ -29,16 +29,16 @@
                 @section("sidebar")
                     @include("partials.sidebar")
                 @show
-                
+
                 <div class="m-grid__item m-grid__item--fluid m-wrapper">
                     <div class="m-content">
                         @yield('pageBar')
                         @yield('content')
                     </div>
                 </div>
-        
+
                 @section('right-aside')
-                
+
                 @show
             </div>
             <!-- end:: Body -->
@@ -48,7 +48,7 @@
         @show
         </div>
         <!-- end:: Page -->
-        
+
         @section('quick-sidebar')
             @include('partials.quickSidebar')
         @show
@@ -57,12 +57,12 @@
             <i class="fa fa-angle-up"></i>
         </div>
         <!-- end::Scroll Top -->
-    
+
         <!--begin::Global Theme Bundle -->
         <script src="{{ mix('/js/all.js') }}" type="text/javascript"></script>
         <!--end::Global Theme Bundle -->
         @yield('data-layer')
-        
+
         <script>
             $(function () {
                 /**

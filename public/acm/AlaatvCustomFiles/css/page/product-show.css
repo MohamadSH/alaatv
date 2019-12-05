@@ -546,7 +546,7 @@
     text-align: center;
 }
 .priceAndAddToCartRow .priceAndAddToCartCol .discount .discountValue .discountValue-number {
-    font-size: 18px;
+    font-size: 14px;
     line-height: 18px;
     padding-top: 10px;
 }
