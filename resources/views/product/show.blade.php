@@ -102,15 +102,15 @@
                 <!--begin::Portlet-->
                 <div class="m-portlet">
                     <div class="m-portlet__body">
-                    
+
                         <input type="hidden" name="favoriteActionUrl" value="{{ route('web.mark.favorite.product', [ 'product' => $product->id ]) }}">
                         <input type="hidden" name="unFavoriteActionUrl" value="{{ route('web.mark.unfavorite.product', [ 'product' => $product->id ]) }}">
-                    
+
                         <div class="btnFavorite">
                             <img class="btnFavorite-on {{ ($isFavored) ? '' : 'a--d-none' }}" src="https://cdn.alaatv.com/upload/fav-on.svg" width="50">
                             <img class="btnFavorite-off {{ ($isFavored) ? 'a--d-none' : '' }}" src="https://cdn.alaatv.com/upload/fav-off.svg" width="50">
                         </div>
-                    
+
                         <!--begin::Section-->
                         <div class="m-section m-section--last">
                             <div class="m-section__content">
@@ -139,10 +139,10 @@
                                             {{--                                            </div>--}}
                                             {{--                                        @endif--}}
                                         </div>
-                                
+
                                     </div>
                                     <div class="col">
-                                    
+
                                         {{--ویژگی ها و دارای --}}
                                         <div class="row">
                                             @if(optional(optional(optional($product->attributes)->get('information'))->where('control', 'simple'))->count()>0 ||  optional(optional( optional($product->attributes)->get('main'))->where('control', 'simple'))->count()>0)
@@ -150,7 +150,7 @@
                                             @if(optional(optional(optional($product->attributes)->get('information'))->where('control', 'checkBox'))->count())
                                                         col-md-6
 @endif">
-                                                
+
                                                     <div class="m-portlet m-portlet--bordered m-portlet--full-height productAttributes">
                                                         <div class="m-portlet__head">
                                                             <div class="m-portlet__head-caption">
@@ -164,7 +164,7 @@
                                                         <div class="m-portlet__body m--padding-top-5 m--padding-bottom-5 m--padding-right-10 m--padding-left-10">
                                                             <!--begin::m-widget4-->
                                                             <div class="m-widget4">
-                                                            
+
                                                                 @if(optional(optional(optional($product->attributes)->get('information'))->where('control', 'simple'))->count())
                                                                     @foreach($product->attributes->get('information')->where('control', 'simple') as $key => $informationItem)
                                                                         @if(count($informationItem->data) > 1)
@@ -180,7 +180,7 @@
                                                                             </div>
                                                                         @endif
                                                                         @foreach($informationItem->data as $key => $informationItemData)
-                                                                        
+
                                                                             <div class="m-widget4__item  m--padding-top-5 m--padding-bottom-5">
                                                                                 <div class="m-widget4__img m-widget4__img--icon">
                                                                                     @if(count($informationItem->data) === 1)
@@ -199,11 +199,11 @@
                                                                                 </span>
                                                                                 </div>
                                                                             </div>
-                                                                    
+
                                                                         @endforeach
                                                                     @endforeach
                                                                 @endif
-                                                            
+
                                                                 @if(optional($product->attributes)->get('main') != null && $product->attributes->get('main')->where('control', 'simple'))
                                                                     @foreach($product->attributes->get('main')->where('control', 'simple') as $key => $informationItem)
                                                                         @if(count($informationItem->data) > 1)
@@ -243,12 +243,12 @@
                                                                         @endforeach
                                                                     @endforeach
                                                                 @endif
-                                                        
+
                                                             </div>
                                                             <!--end::Widget 9-->
                                                         </div>
                                                     </div>
-                                            
+
                                                 </div>
                                             @endif
                                             @if(optional(optional(optional($product->attributes)->get('information'))->where('control', 'checkBox'))->count())
@@ -256,7 +256,7 @@
                                             @if(optional(optional(optional($product->attributes)->get('information'))->where('control', 'simple'))->count()>0 ||  optional(optional( optional($product->attributes)->get('main'))->where('control', 'simple'))->count()>0)
                                                         col-md-6
 @endif">
-                                                
+
                                                     <div class="m-portlet m-portlet--bordered m-portlet--full-height productInformation">
                                                         <div class="m-portlet__head">
                                                             <div class="m-portlet__head-caption">
@@ -270,7 +270,7 @@
                                                         <div class="m-portlet__body m--padding-5">
                                                             <!--begin::m-widget4-->
                                                             <div class="m-widget4">
-                                                            
+
                                                                 @foreach($product->attributes->get('information')->where('control', 'checkBox') as $key => $informationItem)
                                                                     @if(count($informationItem->data) > 1)
                                                                         <div class="m-widget4__item  m--padding-top-5 m--padding-bottom-5 m--padding-right-10 m--padding-left-10 a--full-width m--font-boldest">
@@ -294,7 +294,7 @@
                                                                         </div>
                                                                     @endforeach
                                                                 @endforeach
-                                                        
+
                                                             </div>
                                                             <!--end::Widget 9-->
                                                         </div>
@@ -302,7 +302,7 @@
                                                 </div>
                                             @endif
                                         </div>
-                                    
+
                                         {{--خدمات اضافی--}}
                                         @if(optional(optional($product->attributes)->get('extra'))->count())
                                             <div class="m-portlet  m-portlet--creative m-portlet--bordered-semi">
@@ -322,14 +322,14 @@
                                                     </div>
                                                 </div>
                                                 <div class="m-portlet__body">
-                                                
+
                                                     @include("product.partials.extraSelectCollection")
                                                     @include("product.partials.extraCheckboxCollection" , ["withExtraCost"])
-                                            
+
                                                 </div>
                                             </div>
                                         @endif
-                                    
+
                                         {{--محصول ساده یا قابل پیکربندی و یا قابل انتخاب--}}
                                         @if(in_array($product->type['id'] ,[config("constants.PRODUCT_TYPE_SELECTABLE")]))
                                             <div class="m-portlet m-portlet--bordered m-portlet--creative m-portlet--bordered-semi">
@@ -349,7 +349,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="m-portlet__body">
-                                                
+
                                                     <ul class="m-nav m-nav--active-bg" id="m_nav" role="tablist">
                                                         @if(!empty($children))
                                                             @foreach($children as $p)
@@ -357,7 +357,7 @@
                                                             @endforeach
                                                         @endif
                                                     </ul>
-                                            
+
                                                 </div>
                                             </div>
                                         @elseif(in_array($product->type['id'] ,[config("constants.PRODUCT_TYPE_SIMPLE")]))
@@ -379,12 +379,12 @@
                                                     </div>
                                                 </div>
                                                 <div class="m-portlet__body">
-                                                
+
                                                     @if(optional(optional(optional($product->attributes)->get('main'))->where('type', 'main'))->count()>0)
-                                                    
+
                                                         @if($product->attributes->get('main')->where('type', 'main')->where('control', 'dropDown')->count()>0)
                                                             @foreach($product->attributes->get('main')->where('type', 'main')->where('control', 'dropDown') as $index => $select)
-                                                            
+
                                                                 <div class="form-group m-form__group">
                                                                     <label for="exampleSelect1">{{ $select->title }}</label>
                                                                     <select name="attribute[]" class="form-control m-input attribute">
@@ -393,10 +393,10 @@
                                                                         @endforeach
                                                                     </select>
                                                                 </div>
-                                                        
+
                                                             @endforeach
                                                         @endif
-                                                    
+
                                                         @if($product->attributes->get('main')->where('type', 'main')->where('control', 'checkBox')->count()>0)
                                                             @foreach($product->attributes->get('main')->where('type', 'main')->where('control', 'checkBox') as $index => $select)
                                                                 @foreach($select->data as $selectData)
@@ -408,19 +408,19 @@
                                                                 @endforeach
                                                             @endforeach
                                                         @endif
-                                                
+
                                                     @endif
-                                            
+
                                                 </div>
                                             </div>
                                         @endif
-                                    
+
                                         {!! Form::hidden('product_id',$product->id) !!}
-                                    
+
                                         {{--دکمه افزودن به سبد خرید--}}
                                         @if($product->enable && !$isForcedGift)
-                                        
-                                        
+
+
                                             @if($allChildIsPurchased)
                                                 <div class="alert alert-info" role="alert">
                                                     <strong>شما این محصول را خریده اید</strong>
@@ -439,8 +439,8 @@
                                                 </span>
                                                 </h5>
                                             @endif
-                                        
-                                        
+
+
                                             @if($allChildIsPurchased)
                                                 <a class="btn m-btn m-btn--pill m-btn--air m-btn--gradient-from-focus m-btn--gradient-to-danger  animated infinite pulse" role="button" href="{{ action("Web\UserController@userProductFiles") }}">
                                                     <i class="fa fa-play-circle"></i>
@@ -481,22 +481,22 @@
                                                 @endif
                                             @endif
                                         @endif
-                                
+
                                     </div>
-                                
+
                                     @if( isset($product->introVideo) || (isset($product->gift) && $product->gift->isNotEmpty()))
                                         <div class="col-lg-4">
-                                        
+
                                             <div class="m-portlet m-portlet--bordered-semi m-portlet--rounded-force m--margin-bottom-45 videoPlayerPortlet @if(!isset($product->introVideo)) m--hide @endif">
                                                 <div class="m-portlet__body">
                                                     <div class="m-widget19 a--nuevo-alaa-theme a--media-parent">
                                                         <div class="m-widget19__pic m-portlet-fit--top m-portlet-fit--sides a--video-wraper">
-                                                        
+
                                                             @if( $product->introVideo )
                                                                 <input type="hidden" name="introVideo"
                                                                        value="{{ $product->introVideo }}">
                                                             @endif
-                                                        
+
                                                             <video
                                                                     id="videoPlayer"
                                                                     class="
@@ -512,15 +512,15 @@
                                                                     @else
                                                                     poster = "https://cdn.alaatv.com/media/204/240p/204054ssnv.jpg"
                                                                     @endif >
-                                                            
+
                                                                 {{--                                                        <source--}}
                                                                 {{--                                                                src="{{$product->introVideo}}"--}}
                                                                 {{--                                                                id="videoPlayerSource"--}}
                                                                 {{--                                                                type = 'video/mp4'/>--}}
-                                                            
+
                                                                 {{--<p class="vjs-no-js">جهت پخش آنلاین فیلم، ابتدا مطمئن شوید که جاوا اسکریپت در مرور گر شما فعال است و از آخرین نسخه ی مرورگر استفاده می کنید.</p>--}}
                                                             </video>
-                                                        
+
                                                             <div class="m-widget19__shadow"></div>
                                                         </div>
                                                         <div class="m-widget19__content">
@@ -534,7 +534,7 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                        
+
                                             @if(isset($product->gift) && $product->gift->isNotEmpty())
                                                 <div class="m-portlet m-portlet--bordered m-portlet--creative m-portlet--bordered-semi m--margin-top-25">
                                                     <div class="m-portlet__head">
@@ -596,7 +596,7 @@
             </div>
         </div>
     @endif
-    
+
 
 
     {{--دکمه افزودن به سبد خرید--}}

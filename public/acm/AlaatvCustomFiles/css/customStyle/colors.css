@@ -1,0 +1,15 @@
+:root {
+    --alaa-color-warning: #ffcc00;
+}
+.nav-pills .nav-link.active,
+.nav-pills .show > .nav-link {
+    background-color: var(--alaa-color-warning);
+}
+.nav.nav-pills .nav-item.dropdown.show > .nav-link,
+.nav.nav-pills .nav-link.active {
+    color: black;
+}
+.btn-warning {
+    background-color: var(--alaa-color-warning);
+    border-color: var(--alaa-color-warning);
+}
