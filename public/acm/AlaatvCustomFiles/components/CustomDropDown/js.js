@@ -9,9 +9,16 @@
 
             if ($.fn.CustomDropDown.checkExistSelectElement($this)) {
                 $this.attr('data-custom-dropdown-id', lastId);
+                $.fn.CustomDropDown.clean($this);
                 $.fn.CustomDropDown.createCustomDropDown($this);
             }
         });
+    };
+
+    $.fn.CustomDropDown.clean = function ($this) {
+        // console.log($this.find('.select-selected'));
+        // $this.find('.select-selected').remove();
+        // $.fn.CustomDropDown.getItemsElement($this).remove();
     };
 
     $.fn.CustomDropDown.checkExistSelectElement = function ($this) {
@@ -65,10 +72,12 @@
         }
     };
 
-    $.fn.CustomDropDown.renderOption = function (label, value) {
-        var renderedLabel = label;
+    $.fn.CustomDropDown.renderOption = function (optionObject) {
+        var label = optionObject.innerHTML,
+            value = optionObject.getAttribute('value'),
+            renderedLabel = label;
         if (typeof $.fn.CustomDropDown.options.renderOption === 'function') {
-            renderedLabel = $.fn.CustomDropDown.options.renderOption(label, value);
+            renderedLabel = $.fn.CustomDropDown.options.renderOption(optionObject);
         }
         var item = document.createElement('DIV');
         item.innerHTML = renderedLabel;
@@ -81,6 +90,8 @@
 
     $.fn.CustomDropDown.optionClickEvent = function (item) {
         item.addEventListener('click', function(e) {
+
+
             var selectElement = $.fn.CustomDropDown.getSelectElement($(e.target).parents('.CustomDropDown')),
                 selectSelectedElement = $(e.target).parents('.CustomDropDown').find('.select-selected')[0];
             if ($(e.target).parents('.CustomDropDown').hasClass('CustomParentOptions')) {
@@ -89,32 +100,54 @@
                 selectElement = $.fn.CustomDropDown.getSelectElement($cddid);
                 selectSelectedElement = $cddid.find('.select-selected')[0];
             }
+
+
             /* When an item is clicked, update the original select box, and the selected item: */
             var sLength = selectElement.length,
-                selectItem = ($(e.target).hasClass('select-item')) ? $(e.target)[0] : $(e.target).parents('.select-item')[0],
-                $selectItems = ($(e.target).hasClass('select-item')) ? $(e.target)[0] : $(e.target).parents('.select-items').find('.select-item'),
-                dov, index;
+                selectedItem = ($(e.target).hasClass('select-item')) ? $(e.target)[0] : $(e.target).parents('.select-item')[0],
+                $selectItems = $(e.target).parents('.select-items').find('.select-item'),
+                value, index;
             for (var i = 0; i < sLength; i++) {
-                if (selectElement.options[i].innerHTML === selectItem.getAttribute('data-option-label')) {
-                    selectElement.selectedIndex = i;
-                    selectSelectedElement.innerHTML = selectItem.getAttribute('data-option-label');
-                    $($selectItems).removeClass('same-as-selected');
-                    selectItem.classList.add('same-as-selected');
-                    dov = selectItem.getAttribute('data-option-value');
+                if (selectElement.options[i].innerHTML === selectedItem.getAttribute('data-option-label')) {
+                    value = selectedItem.getAttribute('data-option-value');
                     index = i;
                     break;
                 }
             }
-            // selectItem.click();
-            selectSelectedElement.setAttribute('data-option-value', selectItem.getAttribute('data-option-value'));
-            $.fn.CustomDropDown.options.onChange({
+
+
+
+            if ($.fn.CustomDropDown.options.onChange({
+                target: $(e.target),
                 selectObject: selectElement,
                 index: index,
                 totalCount: sLength,
-                value: dov,
-                text: selectItem.innerHTML
+                value: value,
+                text: selectedItem.innerHTML
+            }) === false) {
+                return;
+            }
+
+            $.fn.CustomDropDown.selectItem(selectElement, selectSelectedElement, $selectItems, index, selectedItem);
+
+            $.fn.CustomDropDown.options.onChanged({
+                target: $(e.target),
+                selectObject: selectElement,
+                index: index,
+                totalCount: sLength,
+                value: value,
+                text: selectedItem.innerHTML
             });
         });
+    };
+
+    $.fn.CustomDropDown.selectItem = function (selectElement, selectSelectedElement, $selectItems, index, selectedItem) {
+        selectElement.selectedIndex = index;
+        selectSelectedElement.innerHTML = selectedItem.getAttribute('data-option-label');
+        $selectItems.removeClass('same-as-selected');
+        selectedItem.classList.add('same-as-selected');
+        // selectedItem.click();
+        selectSelectedElement.setAttribute('data-option-value', selectedItem.getAttribute('data-option-value'));
     };
 
     $.fn.CustomDropDown.createSelectedItem = function ($this) {
@@ -138,7 +171,8 @@
 
             var label = selectElement.options[j].innerHTML,
                 value = selectElement.options[j].getAttribute('value'),
-                optionItem = $.fn.CustomDropDown.renderOption(label, value);
+                optionObject = selectElement.options[j],
+                optionItem = $.fn.CustomDropDown.renderOption(optionObject);
             itemsDiv.appendChild(optionItem);
         }
 
@@ -200,6 +234,7 @@
 
     $.fn.CustomDropDown.defaultOptions = {
         onChange: function (data) {},
+        onChanged: function (data) {},
         parentOptions: null,
         renderOption: null
     };

@@ -1,226 +1,100 @@
-var UserAssets = function () {
+var LoadContentSet = function () {
 
     let lockLoadNextPage = false;
 
-    function loadContents(contentUrl, contentType, refresh) {
-
-        if (lockLoadNextPage || contentUrl.trim().length === 0) {
-            return false;
-        }
-
-        let modalId = '';
-        if (contentType === 'video') {
-            modalId = 'videoModal';
-        } else if (contentType === 'pamphlet') {
-            modalId = 'pamphletModal';
-        }
-
-        if (refresh) {
-            $('#'+modalId+' .modal-body .m-widget6 .m-widget6__body').html('');
-            $('#'+modalId).modal('show');
-        }
-
-        mApp.block('#'+modalId+' .modal-body', {
-            overlayColor: "#000000",
-            type: "loader",
-            state: "success",
-            message: "کمی صبر کنید..."
-        });
-
-        // fix position of block in modal
-        $('#'+modalId+' .modal-body .blockElement').css({
-            'top': 'calc( 50% - 17px)',
-            'left': 'calc( 50% - 81px)'
-        });
-
-        mApp.block('.btnLoadMoreInModal', {
-            type: "loader",
-            state: "success",
-        });
-
-        lockLoadNextPage = true;
-
-        $.ajax({
-            type: 'GET',
-            url : contentUrl,
-            data: {},
-            dataType: 'json',
-            success: function (data) {
-                lockLoadNextPage = false;
-                if (data.error) {
-                    let message = 'خطای سیستمی رخ داده است.';
-                    $('#'+modalId+' .modal-body .m-widget6 .m-widget6__body').html(message);
-                } else {
-                    // contentType: video-pamphlet
-                    let contents = data.result[contentType];
-
-                    createList1(data.result);
-
-                    if (refresh) {
-                        $('#' + modalId + ' .modal-body .m-widget6 .m-widget6__body').html(createList(contents, contentType));
-                    } else {
-                        $('#' + modalId + ' .modal-body .m-widget6 .m-widget6__body').append(createList(contents, contentType));
-                    }
-                    let $nextPageUrl = null;
-                    if (contentType === 'video') {
-                        $nextPageUrl = $('#videoContentNextPageUrl');
-                        $nextPageUrl.val((data.result.video === null) ? '' : data.result.video.next_page_url);
-                    } else if (contentType === 'pamphlet') {
-                        $nextPageUrl = $('#pamphletContentNextPageUrl');
-                        $nextPageUrl.val((data.result.pamphlet === null) ? '' : data.result.pamphlet.next_page_url);
-                    }
-
-                    if ($nextPageUrl.val().trim().length === 0) {
-                        $('.btnLoadMoreInModal').fadeOut();
-                    } else {
-                        $('.btnLoadMoreInModal').fadeIn();
-                    }
-                }
-                mApp.unblock('#'+modalId+' .modal-body');
-                mApp.unblock('.btnLoadMoreInModal');
-            },
-            error: function (jqXHR, textStatus, errorThrown) {
-                lockLoadNextPage = false;
-                let message = 'خطای سیستمی رخ داده است.';
-                $('#'+modalId+' .modal-body .m-widget6 .m-widget6__body').html(message);
-                mApp.unblock('#'+modalId+' .modal-body');
-            }
-        });
+    function loadNewData(url) {
+        showSelectedProduct(url);
+        ajax(url, loadNewContentSetList);
     }
 
-    function createList(data, contentType) {
-        let list = '';
-        if (data === null) {
-            return '<div class="alert alert-warning text-center" role="alert"><strong>تاکنون موردی منتشر نشده است!</strong></div>';
-        }
-        for (let index in data.data) {
-            if (isNaN(index)) {
-                continue;
-            }
-            let content = data.data[index];
-            list += makeListItemBasedOnContentType(content, contentType);
-        }
-        return list;
+    function loadNextPage(type) {
+        ajax(getNextPageUrl(type), appendToContentSetList);
     }
 
-    function makeListItemBasedOnContentType(content, contentType) {
-        let listItem = '';
-        let title = content.name;
-
-        if (contentType === 'video') {
-            title += '<br>' + ' جلسه: ' + content.order;
+    function showTabPage(type) {
+        if (type === 'video') {
+            openVideoTabPage();
+        } else {
+            openPamohletTabPage();
         }
-        let viewLink = content.url;
-        let thumbnail = content.thumbnail;
-        let downloadLinks = [];
-        for (let index in content.file[contentType]) {
-            downloadLinks.push({
-                title: content.file[contentType][index].caption,
-                // title: ' جلسه شماره: ' + content.order,
-                url: content.file[contentType][index].link
-            });
-        }
-
-        if (contentType === 'video') {
-            listItem = getRowVideoContent(title, viewLink, downloadLinks, thumbnail);
-        } else if (contentType === 'pamphlet') {
-            listItem = getRowPamphletContent(title, viewLink, downloadLinks, thumbnail);
-        }
-        return listItem;
     }
 
-    function getRowVideoContent(title, viewLink, downloadLinks, thumbnail) {
-        let downloadBtns = '';
-        for (let index in downloadLinks) {
-            if (isNaN(index)) {
-                continue;
-            }
-            let downloadLink = downloadLinks[index];
-            let title = downloadLink.title;
-            let url = downloadLink.url;
-            downloadBtns +=
-                '<a href="'+url+'" target="_blank" class="m-btn btn btn-success">\n' +
-                '    <i class="fa fa-cloud-download-alt"></i>\n' +title+
-                '</a>\n';
-        }
-
-        if (thumbnail === null) {
-            thumbnail = '/assets/app/media/img/files/mp4.svg';
-        }
-
-        return '\n' +
-            '<div class="m-widget6__item contentItem">\n' +
-            '    <span class="m-widget6__text">\n' +
-            '       <div class="a-widget6__thumbnail itemThumbnail">\n' +
-            '           <a class="m-link" target="_blank" href="'+viewLink+'"><img src="'+thumbnail+'" alt="'+title+'"></a>\n' +
-            '       </div>\n' +
-            '       <div class="a-widget6__title">\n' +
-            '           <a class="m-link" href="'+viewLink+'">'+title+'</a>\n' +
-            '       </div>\n' +
-            '    </span>\n' +
-            '    <span class="m-widget6__text">\n' +
-            '        <div class="m-btn-group m-btn-group--pill btn-group" role="group" aria-label="First group">\n' +
-            '            <a href="'+viewLink+'" target="_blank" class="m-btn btn btn-info">\n' +
-            '                <i class="fa fa-edit"></i>\n' +
-            '            </a>\n' +
-                            downloadBtns+
-            '        </div>\n' +
-            '    </span>\n' +
-            '</div>';
+    function loadNewContentSetList(data) {
+        var listHtmlData = createListHtmlData(data);
+        loadList($('#searchResult_video .searchResult .listType'), listHtmlData.video, 'video');
+        loadList($('#searchResult_pamphlet .m-widget4'), listHtmlData.pamphlet, 'pamphlet');
+        imageObserver.observe();
+        showModalForSmallScreen();
     }
 
-    function getRowPamphletContent(title, viewLink, downloadLinks, thumbnail) {
-        let downloadBtns = '';
-        for (let index in downloadLinks) {
-            if (isNaN(index)) {
-                continue;
-            }
-            let downloadLink = downloadLinks[index];
-            let title = downloadLink.title;
-            let url = downloadLink.url;
-            downloadBtns +=
-                '<a href="'+url+'" target="_blank" class="m-btn btn btn-success">\n' +
-                '    <i class="fa fa-cloud-download-alt"></i>\n' +title+
-                '</a>\n';
-        }
-        if (thumbnail === null) {
-            thumbnail = '/assets/app/media/img/files/pdf.svg';
-        }
-        return '\n' +
-            '<div class="m-widget6__item contentItem">\n' +
-            '    <span class="m-widget6__text">\n' +
-            '       <div class="a-widget6__thumbnail itemThumbnail">\n' +
-            '           <a class="m-link" target="_blank" href="'+viewLink+'"><img src="'+thumbnail+'" alt="'+title+'"></a>\n' +
-            '       </div>\n' +
-            '       <div class="a-widget6__title">\n' +
-            '           <a class="m-link" target="_blank" href="'+viewLink+'">'+title+'</a>\n' +
-            '       </div>\n' +
-            '    </span>\n' +
-            '    <span class="m-widget6__text">\n' +
-            '        <div class="m-btn-group m-btn-group--pill btn-group" role="group" aria-label="First group">\n' +
-            '            <a href="'+viewLink+'" target="_blank" class="m-btn btn btn-info">\n' +
-            '                <i class="fa fa-eye"></i>\n' +
-            '            </a>\n' +
-                         downloadBtns+
-            '        </div>\n' +
-            '    </span>\n' +
-            '</div>';
+    function loadList($list, data, type) {
+        $list.html(data);
+        checkShowLoadMoreBtn(type);
+        checkNoContent(type);
     }
 
-    function isScrolledIntoView(elem) {
-        if (elem.length === 0) {
-            return false;
-        }
-        let docViewTop = $(window).scrollTop();
-        let docViewBottom = docViewTop + $(window).height();
-        let elemTop = $(elem).offset().top;
-        let elemBottom = elemTop + $(elem).height();
-        return ((elemBottom >= docViewTop) && (elemTop <= docViewBottom) && (elemBottom <= docViewBottom) && (elemTop >= docViewTop));
+    function appendToContentSetList(data) {
+        var listHtmlData = createListHtmlData(data);
+        appendList($('#searchResult_video .searchResult .listType'), listHtmlData.video, 'video');
+        appendList($('#searchResult_pamphlet .m-widget4'), listHtmlData.pamphlet, 'pamphlet');
+        imageObserver.observe();
     }
 
-    // new
-    function createList1(data) {
-        console.log(data);
+    function appendList($list, data, type) {
+        $list.append(data);
+        checkShowLoadMoreBtn(type);
+    }
+
+    function checkShowLoadMoreBtn(type) {
+        var nextPageUrl = getNextPageUrl(type);
+        if (nextPageUrl.trim().length > 0) {
+            $('.btnLoadMore[data-content-type="' + type + '"]').fadeIn(0);
+        } else {
+            $('.btnLoadMore[data-content-type="' + type + '"]').fadeOut(0);
+        }
+    }
+
+    function checkNoContent(type) {
+        if (type==='video') {
+            checkNoVideo();
+        } else if (type==='pamphlet') {
+            checkNoPamphlet();
+        }
+    }
+
+    function checkNoVideo() {
+        if ($('#searchResult_video .searchResult .listType .item').length > 0) {
+            showVideoTabPage();
+            hideNoVideoMessage();
+        } else {
+            hideVideoTabPage();
+            $('.noVideoMessage').fadeIn();
+        }
+    }
+
+    function checkNoPamphlet() {
+        if ($('#searchResult_pamphlet .m-widget4 .m-widget4__item').length > 0) {
+            showPamohletTabPage();
+            hideNoPamphleMessage();
+        } else {
+            hidePamohletTabPage();
+            $('.noPamphletMessage').fadeIn();
+        }
+    }
+
+    function hideNoVideoMessage() {
+        $('.noVideoMessage').fadeOut(0);
+    }
+
+    function hideNoPamphleMessage() {
+        $('.noPamphletMessage').fadeOut(0);
+    }
+
+    function createListHtmlData(data) {
+        return {
+            video: (typeof data.video === 'undefined') ? null : createVideoListHtmlData(data.video),
+            pamphlet: (typeof data.pamphlet === 'undefined') ? null : createPamphletListHtmlData(data.pamphlet)
+        };
     }
 
     function ajax(contentUrl, callback) {
@@ -229,7 +103,7 @@ var UserAssets = function () {
             return false;
         }
 
-        AlaaLoading.show();
+        showLoading();
         //
         // // fix position of block in modal
         // $('#'+modalId+' .modal-body .blockElement').css({
@@ -241,7 +115,7 @@ var UserAssets = function () {
 
         $.ajax({
             type: 'GET',
-            url : contentUrl,
+            url: contentUrl,
             data: {},
             dataType: 'json',
             success: function (data) {
@@ -253,38 +127,56 @@ var UserAssets = function () {
                     // contentType: video-pamphlet
                     callback(data.result);
                 }
-                AlaaLoading.hide();
+                hideLoading();
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 lockLoadNextPage = false;
                 // let message = 'خطای سیستمی رخ داده است.';
                 // $('#'+modalId+' .modal-body .m-widget6 .m-widget6__body').html(message);
-                AlaaLoading.hide();
+                hideLoading();
             }
         });
     }
 
-    function loadNewData(url) {
-        ajax(url, callback)
-    }
-
-    function loadNextPage() {
-
-    }
-
     function createVideoListHtmlData(data) {
+        if (typeof data === 'undefined' || data === null) {
+            setNextPageUrlVideo('');
+            return '';
+        }
         setNextPageUrlVideo(data.next_page_url);
         var htmlData = '',
             dataLength = data.data.length;
-        for(var i = 0; i < dataLength; i++) {
+        for (var i = 0; i < dataLength; i++) {
             var item = data.data[i];
             htmlData += getVideoItem({
                 src: item.thumbnail,
                 title: item.name,
                 link: item.url,
-                setName: item.set.name,
+                setName: (typeof item.set !== 'undefined') ? item.set.name : '',
                 lastUpdate: item.updated_at,
                 order: item.order,
+            });
+        }
+        return htmlData;
+    }
+
+    function createPamphletListHtmlData(data) {
+        if (typeof data === 'undefined' || data === null) {
+            setNextPageUrlPamphlet('');
+            return '';
+        }
+        setNextPageUrlPamphlet(data.next_page_url);
+        var htmlData = '',
+            dataLength = data.data.length;
+        for (var i = 0; i < dataLength; i++) {
+            var item = data.data[i];
+            htmlData += getPamphletItem({
+                title: item.name,
+                link: item.url,
+                setName: (typeof item.set !== 'undefined') ? item.set.name : '',
+                lastUpdate: item.updated_at,
+                order: item.order,
+                fileLink: (typeof item.file !== 'undefined') ? item.file.pamphlet[0].link : '',
             });
         }
         return htmlData;
@@ -295,14 +187,14 @@ var UserAssets = function () {
             '<div class="item ">\n' +
             '    <div class="pic">\n' +
             '        <a href="http://alaatv.test/c/16839" class="d-block">\n' +
-            '            <img src="https://cdn.alaatv.com/loder.jpg?w=1&h=1" data-src="'+data.src+'" alt="'+data.title+'" class="a--full-width lazy-image videoImage" width="253" height="142">\n' +
+            '            <img src="https://cdn.alaatv.com/loder.jpg?w=1&h=1" data-src="' + data.src + '" alt="' + data.title + '" class="a--full-width lazy-image videoImage" width="253" height="142">\n' +
             '        </a>\n' +
             '    </div>\n' +
             '    <div class="content">\n' +
             '        <div class="title">\n' +
             '            <h2>\n' +
-            '                <a href="'+data.link+'" class="m-link">\n' +
-            '                    '+data.title +
+            '                <a href="' + data.link + '" class="m-link">\n' +
+            '                    ' + data.title +
             '                </a>\n' +
             '            </h2>\n' +
             '        </div>\n' +
@@ -314,20 +206,52 @@ var UserAssets = function () {
             '                    </svg>\n' +
             '                </span>\n' +
             '                <span> از دوره </span>\n' +
-            '                <span>'+data.setName+'</span>\n' +
+            '                <span>' + data.setName + '</span>\n' +
             '                <br>\n' +
             '                <i class="fa fa-calendar-alt m--margin-right-5"></i>\n' +
             '                <span>تاریخ بروزرسانی: </span>\n' +
-            '                <span>'+data.lastUpdate+'</span>\n' +
+            '                <span>' + data.lastUpdate + '</span>\n' +
             '                <div class="videoOrder">\n' +
             '                    <div class="videoOrder-title">جلسه</div>\n' +
-            '                    <div class="videoOrder-number">'+data.order+'</div>\n' +
+            '                    <div class="videoOrder-number">' + data.order + '</div>\n' +
             '                    <div class="videoOrder-om"> اُم </div>\n' +
             '                </div>\n' +
             '            </div>\n' +
             '        </div>\n' +
             '    </div>\n' +
             '    <div class="itemHover"></div>\n' +
+            '</div>';
+    }
+
+    function getPamphletItem(data) {
+        return '' +
+            '<div class="m-widget4__item">\n' +
+            '    <div class="m-widget4__img m-widget4__img--icon">\n' +
+            '        <svg width="50" height="50" viewBox="-79 0 512 512" xmlns="http://www.w3.org/2000/svg">' +
+            '            <path d="m353.101562 485.515625h-353.101562v-485.515625h273.65625l79.445312 79.449219zm0 0" fill="#e3e4d8"/>' +
+            '            <path d="m273.65625 0v79.449219h79.445312zm0 0" fill="#d0cebd"/>' +
+            '            <path d="m0 353.101562h353.101562v158.898438h-353.101562zm0 0" fill="#b53438"/>' +
+            '            <g fill="#fff">' +
+            '                <path d="m52.964844 485.515625c-4.871094 0-8.828125-3.953125-8.828125-8.824219v-88.277344c0-4.875 3.957031-8.828124 8.828125-8.828124 4.875 0 8.828125 3.953124 8.828125 8.828124v88.277344c0 4.871094-3.953125 8.824219-8.828125 8.824219zm0 0"/>' +
+            '                <path d="m300.136719 397.242188h-52.964844c-4.871094 0-8.828125-3.957032-8.828125-8.828126 0-4.875 3.957031-8.828124 8.828125-8.828124h52.964844c4.875 0 8.828125 3.953124 8.828125 8.828124 0 4.871094-3.953125 8.828126-8.828125 8.828126zm0 0"/>' +
+            '                <path d="m300.136719 441.378906h-52.964844c-4.871094 0-8.828125-3.953125-8.828125-8.828125 0-4.871093 3.957031-8.828125 8.828125-8.828125h52.964844c4.875 0 8.828125 3.957032 8.828125 8.828125 0 4.875-3.953125 8.828125-8.828125 8.828125zm0 0"/>' +
+            '                <path d="m247.171875 485.515625c-4.871094 0-8.828125-3.953125-8.828125-8.824219v-88.277344c0-4.875 3.957031-8.828124 8.828125-8.828124 4.875 0 8.828125 3.953124 8.828125 8.828124v88.277344c0 4.871094-3.953125 8.824219-8.828125 8.824219zm0 0"/>' +
+            '            </g>' +
+            '            <path d="m170.203125 95.136719c-.863281.28125-11.695313 15.261719.847656 27.9375 8.351563-18.371094-.464843-28.054688-.847656-27.9375m5.34375 73.523437c-6.296875 21.496094-14.601563 44.703125-23.527344 65.710938 18.378907-7.042969 38.375-13.195313 57.140625-17.546875-11.871094-13.621094-23.738281-30.632813-33.613281-48.164063m65.710937 57.175782c7.167969 5.445312 8.914063 8.199218 13.613282 8.199218 2.054687 0 7.925781-.085937 10.636718-3.828125 1.316407-1.820312 1.828126-2.984375 2.019532-3.59375-1.074219-.574219-2.515625-1.710937-10.335938-1.710937-4.449218 0-10.027344.191406-15.933594.933594m-119.957031 38.601562c-18.804687 10.425781-26.464843 19-27.011719 23.835938-.089843.804687-.328124 2.90625 3.785157 6.011718 1.316406-.414062 8.96875-3.859375 23.226562-29.847656m-23.421875 44.527344c-3.0625 0-6-.980469-8.507812-2.832032-9.15625-6.796874-10.390625-14.347656-9.808594-19.492187 1.597656-14.132813 19.304688-28.945313 52.648438-44.03125 13.230468-28.636719 25.820312-63.921875 33.324218-93.398437-8.773437-18.871094-17.3125-43.351563-11.097656-57.714844 2.179688-5.03125 4.910156-8.894532 9.976562-10.566406 2.011719-.652344 7.078126-1.480469 8.941407-1.480469 4.617187 0 9.050781 5.507812 11.183593 9.089843 3.972657 6.648438 3.992188 14.390626 3.363282 21.859376-.609375 7.253906-1.84375 14.46875-3.265625 21.601562-1.039063 5.242188-2.214844 10.460938-3.46875 15.660156 11.855469 24.175782 28.644531 48.816406 44.746093 65.683594 11.539063-2.054688 21.460938-3.097656 29.546876-3.097656 13.761718 0 22.121093 3.167968 25.519531 9.691406 2.828125 5.402344 1.660156 11.726562-3.433594 18.769531-4.898437 6.769531-11.640625 10.34375-19.523437 10.34375-10.710938 0-23.15625-6.671875-37.050782-19.851562-24.957031 5.15625-54.097656 14.34375-77.65625 24.515625-7.355468 15.410156-14.398437 27.824218-20.964844 36.933594-8.996093 12.5-16.773437 18.316406-24.472656 18.316406" fill="#b53438"/>' +
+            '            <path d="m79.449219 450.207031h-26.484375c-4.871094 0-8.828125-3.953125-8.828125-8.828125v-52.964844c0-4.875 3.957031-8.828124 8.828125-8.828124h26.484375c19.472656 0 35.308593 15.835937 35.308593 35.3125 0 19.472656-15.835937 35.308593-35.308593 35.308593zm-17.65625-17.65625h17.65625c9.734375 0 17.652343-7.917969 17.652343-17.652343 0-9.738282-7.917968-17.65625-17.652343-17.65625h-17.65625zm0 0" fill="#fff"/>' +
+            '            <path d="m158.898438 485.515625h-8.828126c-4.875 0-8.828124-3.953125-8.828124-8.824219v-88.277344c0-4.875 3.953124-8.828124 8.828124-8.828124h8.828126c29.199218 0 52.964843 23.753906 52.964843 52.964843 0 29.210938-23.765625 52.964844-52.964843 52.964844zm0-17.652344h.085937zm0-70.621093v70.621093c19.472656 0 35.308593-15.839843 35.308593-35.3125 0-19.472656-15.835937-35.308593-35.308593-35.308593zm0 0" fill="#fff"/>' +
+            '        </svg>\n' +
+            '    </div>\n' +
+            '    <div class="m-widget4__info">\n' +
+            '        <span class="m-widget4__text">\n' +
+            '            ' + data.title +
+            '        </span>\n' +
+            '    </div>\n' +
+            '    <div class="m-widget4__ext">\n' +
+            '        <a href="' + data.fileLink + '" class="m-widget4__icon">\n' +
+            '            <i class="fa fa-cloud-download-alt"></i>\n' +
+            '        </a>\n' +
+            '    </div>\n' +
             '</div>';
     }
 
@@ -339,47 +263,251 @@ var UserAssets = function () {
         return $('#videoContentNextPageUrl').val();
     }
 
-    function appendToContentSetList(data) {
-        $('#searchResult_video .searchResult .listType').html(data.video);
-        $('#searchResult_pamphlet .m-widget4').html(data.pamphlet);
+    function setNextPageUrlPamphlet(url) {
+        $('#pamphletContentNextPageUrl').val(url);
     }
 
-    function loadNewContentSetList(data) {
-        $('#searchResult_video .searchResult .listType').append(data.video);
-        $('#searchResult_pamphlet .m-widget4').append(data.pamphlet);
+    function getNextPageUrlPamphlet() {
+        return $('#pamphletContentNextPageUrl').val();
+    }
+
+    function hideAllTabPage() {
+        $('.nav .nav-item .nav-link').removeClass('active');
+        $('.tab-content .tab-pane').removeClass('active');
+    }
+
+    function openPamohletTabPage() {
+        hideAllTabPage();
+        $('.nav .nav-item .nav-link[href="#searchResult_pamphlet"]').addClass('active');
+        $('#searchResult_pamphlet').addClass('active');
+    }
+
+    function openVideoTabPage() {
+        hideAllTabPage();
+        $('.nav .nav-item .nav-link[href="#searchResult_video"]').addClass('active');
+        $('#searchResult_video').addClass('active');
+    }
+
+    function hideVideoTabPage() {
+        $('.nav .nav-item .nav-link[href="#searchResult_video"]').fadeOut();
+    }
+
+    function showVideoTabPage() {
+        $('.nav .nav-item .nav-link[href="#searchResult_video"]').fadeIn();
+    }
+
+    function hidePamohletTabPage() {
+        $('.nav .nav-item .nav-link[href="#searchResult_pamphlet"]').fadeOut();
+    }
+
+    function showPamohletTabPage() {
+        $('.nav .nav-item .nav-link[href="#searchResult_pamphlet"]').fadeIn();
+    }
+
+    function showLoading() {
+        AlaaLoading.show();
+        $('.searchResultLoading_video').fadeIn();
+        $('.searchResultLoading_pamphlet').fadeIn();
+        $('.btnLoadMore').fadeOut(0);
+        hideNoVideoMessage();
+        hideNoPamphleMessage();
+    }
+
+    function hideLoading() {
+        $('.searchResultLoading_video').fadeOut();
+        $('.searchResultLoading_pamphlet').fadeOut();
+        AlaaLoading.hide();
+    }
+
+    function getNextPageUrl(type) {
+        if (type === 'video') {
+            return getNextPageUrlVideo();
+        } else {
+            return getNextPageUrlPamphlet();
+        }
+    }
+
+    function showModalForSmallScreen() {
+        var ww = $(window).width();
+        if (ww <= 1024) {
+            $('#smallScreenModal').modal('show');
+        }
+    }
+
+    function addEvents() {
+        $(document).on('click', '.btnViewVideo, .btnViewPamphlet', function () {
+            let contentType = $(this).data('content-type'),
+                contentUrl = $(this).data('content-url');
+
+            showTabPage(contentType);
+
+            loadNewData(contentUrl);
+        });
+        $(document).on('click', '.btnLoadMore', function () {
+            let contentType = $(this).data('content-type');
+            loadNextPage(contentType);
+        });
+    }
+
+    function chooseFirstProduct() {
+        if ($('.productsCol .productItem:first-child .action button.btn').length>0) {
+            let contentType = $('.productsCol .productItem:first-child .action button.btn').first().data('content-type'),
+                contentUrl = $('.productsCol .productItem:first-child .action button.btn').first().data('content-url');
+            showTabPage(contentType);
+            loadNewData(contentUrl);
+        } else if ($('.productsCol .CustomParentOptions:nth-child(2) .btnViewVideo').length>0) {
+
+        }
+    }
+
+    function showSelectedProduct(url) {
+        var $selectedProduct = getProductItem(url);
+        $('.productItem').removeClass('selectedProduct');
+        $selectedProduct.addClass('selectedProduct');
+    }
+
+    function getProductItem(url) {
+        var productKey = $('.btnViewContentSet[data-content-url="'+url+'"]').attr('data-product-key'),
+            $selectedProduct = $('.productItem[data-product-key="'+productKey+'"]');
+        return $selectedProduct;
     }
 
     return {
-        loadContents: function (contentUrl, contentType, refresh) {
-            loadContents(contentUrl, contentType, refresh);
+        init: function () {
+            addEvents();
+            chooseFirstProduct();
+
+            var ww = $(window).width();
+            if (ww <= 1024) {
+                $('#smallScreenModal .modal-body').html($('.contentsetOfProductCol').html());
+                $('.contentsetOfProductCol').html('');
+            }
+        },
+    };
+}();
+
+var FilterAndSort = function () {
+
+    function addEvents() {
+        $(document).on('click', '.CustomSelect.filter .CustomSelect-Item', function () {
+            selectItem($(this));
+            showSelectedCategoryItems($(this));
+        });
+        $(document).on('click', '.CustomSelect.sort .CustomSelect-Item', function () {
+            selectItem($(this));
+        });
+    }
+
+    function showSelectedCategoryItems($this) {
+        var category = $this.attr('data-value');
+        if (category === 'همه') {
+            $('.productItem').fadeIn();
+        } else {
+            $('.productItem:not([data-pc="'+category+'"])').fadeOut();
+            $('.productItem[data-pc="'+category+'"]').fadeIn();
+        }
+    }
+
+    function getParentCustomSelect($this) {
+        return $this.parents('.CustomSelect');
+    }
+
+    function deselectAll($this) {
+        var $customSelect = getParentCustomSelect($this);
+        $customSelect.find('.CustomSelect-Item').removeClass('selected');
+    }
+
+    function selectItem($this) {
+        deselectAll($this);
+        $this.addClass('selected');
+    }
+
+    return {
+        init: function () {
+            addEvents();
+        },
+    };
+}();
+
+var PurchaseAndFavoriteTabPage = function () {
+
+    function addEvents() {
+        $(document).on('click', '.btnShowFavorites', function () {
+            selectFavorites();
+            showFavorites();
+        });
+        $(document).on('click', '.btnShowPurchase', function () {
+            selectPurchase();
+            showPurchase();
+        });
+    }
+
+    function showFavorites() {
+        hidePurchase();
+        $('.myFavoritesRow').fadeIn();
+    }
+
+    function showPurchase() {
+        hideFavorites();
+        $('.myProductsRow').fadeIn();
+    }
+
+    function hidePurchase() {
+        $('.myProductsRow').fadeOut(0);
+    }
+
+    function hideFavorites() {
+        $('.myFavoritesRow').fadeOut(0);
+    }
+
+    function selectFavorites() {
+        deselectPurchase();
+        $('.btnShowFavorites').addClass('btn-warning').removeClass('btn-secondary');
+    }
+    function deselectFavorites() {
+        $('.btnShowFavorites').removeClass('btn-warning').addClass('btn-secondary');
+    }
+
+    function selectPurchase() {
+        deselectFavorites();
+        $('.btnShowPurchase').addClass('btn-warning').removeClass('btn-secondary');
+    }
+    function deselectPurchase() {
+        $('.btnShowPurchase').removeClass('btn-warning').addClass('btn-secondary');
+    }
+
+    return {
+        init: function () {
+            showPurchase();
+            addEvents();
         },
     };
 }();
 
 function moveUpBtns(dom) {
-    $('.a--block-item .a--block-detailesWrapper').css({'position':'relative', 'top':'auto', 'left':'auto', 'width':'100%', 'transform':'scale(1)'});
-    $('.a--block-item .a--block-detailesWrapper .btn-group-sm').css({'transform':'scale(1)'});
-    $('.a--block-item .a--block-imageWrapper img').css({'filter':'none'});
+    $('.a--block-item .a--block-detailesWrapper').css({'position': 'relative', 'top': 'auto', 'left': 'auto', 'width': '100%', 'transform': 'scale(1)'});
+    $('.a--block-item .a--block-detailesWrapper .btn-group-sm').css({'transform': 'scale(1)'});
+    $('.a--block-item .a--block-imageWrapper img').css({'filter': 'none'});
 
     if ($(dom).parents('.a--block-item').find('.a--owl-carousel-show-detailes').length > 0) {
         $(dom).parents('.a--block-item').find('.a--owl-carousel-show-detailes').trigger('click');
     } else {
-        $(dom).css({'filter':'blur(3px)'});
-        $(dom).parents('.a--block-item').find('.a--block-detailesWrapper').css({'position':'absolute', 'top':'calc( 50% - 16px)', 'left':'0'});
-        $(dom).parents('.a--block-item').find('.a--block-detailesWrapper .btn-group-sm').css({'transform':'scale(1.5)'});
+        $(dom).css({'filter': 'blur(3px)'});
+        $(dom).parents('.a--block-item').find('.a--block-detailesWrapper').css({'position': 'absolute', 'top': 'calc( 50% - 16px)', 'left': '0'});
+        $(dom).parents('.a--block-item').find('.a--block-detailesWrapper .btn-group-sm').css({'transform': 'scale(1.5)'});
     }
 }
 
 $(document).ready(function () {
     var OwlCarouselType2Option = {
         OwlCarousel: {
-            btnSwfitchEvent: function() {
+            btnSwfitchEvent: function () {
                 imageObserver.observe();
                 gtmEecProductObserver.observe();
             }
         },
         grid: {
-            btnSwfitchEvent: function() {
+            btnSwfitchEvent: function () {
                 imageObserver.observe();
                 gtmEecProductObserver.observe();
             }
@@ -390,37 +518,67 @@ $(document).ready(function () {
     $('#owlCarouselMyFavoritSet').OwlCarouselType2(OwlCarouselType2Option);
     $('#owlCarouselMyFavoritContent').OwlCarouselType2(OwlCarouselType2Option);
     $('#owlCarouselMyFavoritProducts').OwlCarouselType2(OwlCarouselType2Option);
-    $(document).on('click', '.btnViewVideo, .btnViewPamphlet, .select-item', function () {
-        let contentType = $(this).data('content-type'),
-            contentUrl = $(this).data('content-url'),
-            $nextPageUrl = null;
 
-        if ($(this).hasClass('select-item')) {
-            contentType = $(this).find('btnViewVideo').data('content-type');
-            contentUrl = $(this).find('btnViewVideo').data('content-url');
-        }
+    LoadContentSet.init();
+    FilterAndSort.init();
+    PurchaseAndFavoriteTabPage.init();
 
-        if (contentType === 'video') {
-            $nextPageUrl = $('#videoContentNextPageUrl');
-        } else if (contentType === 'pamphlet') {
-            $nextPageUrl = $('#pamphletContentNextPageUrl');
-        }
-        if ($nextPageUrl !== null && $nextPageUrl.val().trim().length === 0) {
-            $('.btnLoadMoreInModal').fadeOut();
-        } else {
-            $('.btnLoadMoreInModal').fadeIn();
-        }
 
-        UserAssets.loadContents(contentUrl, contentType, true);
-    });
-    $(document).on('click', '.btnLoadMoreInModal', function () {
-        let $nextPageUrl = null;
-        let contentType = $(this).data('content-type');
-        if (contentType === 'video') {
-            $nextPageUrl = $('#videoContentNextPageUrl');
-        } else if (contentType === 'pamphlet') {
-            $nextPageUrl = $('#pamphletContentNextPageUrl');
+    $('.CustomDropDown').CustomDropDown({
+        onChange: function (data) {
+            if (!data.target.hasClass('btnViewVideo') && !data.target.hasClass('btnViewVideo')) {
+                return false;
+            }
+            // { index: 2, totalCount: 5, value: "3", text: "فرسنگ سوم" }
+        },
+        onChanged: function (data) {
+            // console.log(data);
+            // { index: 2, totalCount: 5, value: "3", text: "فرسنگ سوم" }
+        },
+        parentOptions: function ($this) {
+            var parentId = $this.attr('data-parent-id');
+            return '#'+parentId;
+        },
+        renderOption: function (optionObject) {
+
+            var label = optionObject.innerHTML,
+                value = optionObject.getAttribute('value'),
+                productKey = optionObject.getAttribute('data-product-key'),
+                hasVideo = optionObject.getAttribute('data-has-video'),
+                hasPamphlet = optionObject.getAttribute('data-has-pamphlet'),
+                btnVideo =
+                    '    <button type="button"\n' +
+                    '            class="btn btn-warning btnViewContentSet btnViewVideo"\n' +
+                    '            data-product-key="'+productKey+'"\n' +
+                    '            data-content-type="video"\n' +
+                    '            data-content-url="'+value+'">\n' +
+                    '        فیلم ها\n' +
+                    '    </button>\n',
+                btnPamphlet =
+                    '    <button type="button"\n' +
+                    '            class="btn btn-secondary btnViewContentSet btnViewPamphlet"\n' +
+                    '            data-product-key="'+productKey+'"\n' +
+                    '            data-content-type="pamphlet"\n' +
+                    '            data-content-url="'+value+'">\n' +
+                    '        جزوات\n' +
+                    '    </button>',
+                actionBtn = '';
+
+            if (hasVideo==='1') {
+                actionBtn += btnVideo;
+            }
+            if (hasPamphlet==='1') {
+                actionBtn += btnPamphlet;
+            }
+            return '' +
+                '<div class="setRow">' +
+                '  <div class="setRow-label">'+
+                label+
+                '  </div>' +
+                '  <div class="setRow-action">'+
+                actionBtn +
+                '  </div>' +
+                '</div>';
         }
-        UserAssets.loadContents($nextPageUrl.val(), contentType, false);
     });
 });

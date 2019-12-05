@@ -31,10 +31,14 @@
     border: none;
 }
 .CustomDropDown.solidBackground.background-yellow .select-selected {
-background: #fc0;
+    background: #fc0;
 }
 .CustomDropDown.solidBackground.background-yellow .select-selected::after {
     color: #020200;
+    background: #fc0;
+    -webkit-box-shadow: 5px 0px 5px 0px rgba(255,204,0,1);
+    -moz-box-shadow: 5px 0px 5px 0px rgba(255,204,0,1);
+    box-shadow: 5px 0px 5px 0px rgba(255,204,0,1);
 }
 
 .CustomDropDown .select-selected {
@@ -75,10 +79,12 @@ background: #fc0;
 /* style the items (options), including the selected item: */
 .CustomDropDown .select-items .select-item,
 .CustomDropDown .select-selected {
-    padding: 8px 16px;
+    padding: 8px 16px 8px 40px;
     border: 1px solid transparent;
     border-color: rgba(0, 0, 0, 0.1) transparent transparent transparent;
     cursor: pointer;
+    overflow: hidden;
+    white-space: nowrap;
 }
 
 /* Style items (options): */

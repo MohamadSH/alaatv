@@ -28,6 +28,7 @@ class Mix {
             'public/acm/AlaatvCustomFiles/css/customStyle.css',
             'public/acm/AlaatvCustomFiles/components/MegaMenu/style.css',
             'public/acm/AlaatvCustomFiles/css/customStyle/megamenuBackground.css',
+            'public/acm/AlaatvCustomFiles/css/customStyle/colors.css',
             'public/acm/AlaatvCustomFiles/css/customStyle/footer.css',
             'public/acm/AlaatvCustomFiles/css/fixThemeStyle.css',
             'public/acm/AlaatvCustomFiles/components/loading/loading.css',
@@ -363,17 +364,21 @@ class Mix {
     mixPageUserDashboard() {
         this.mixCssAndJs([
                 'node_modules/animate.css/animate.css',
+                'public/acm/AlaatvCustomFiles/components/AlaaLoading/style.css',
                 'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/style.css',
                 'public/acm/AlaatvCustomFiles/components/ScrollCarousel/style.css',
                 'public/acm/AlaatvCustomFiles/components/ribbon/style.css',
                 'public/acm/AlaatvCustomFiles/components/CustomDropDown/style.css',
-                // 'public/acm/AlaatvCustomFiles/css/page/user-dashboard.css',
+                '/acm/AlaatvCustomFiles/css/page/pages/content-search/searchResult.css',
+                'public/acm/AlaatvCustomFiles/css/page/user-dashboard.css',
             ],
             'public/css/user-dashboard.css',
             [
+                'public/acm/AlaatvCustomFiles/components/AlaaLoading/script.js',
+                'public/acm/AlaatvCustomFiles/components/CustomDropDown/js.js',
                 'public/acm/AlaatvCustomFiles/components/ScrollCarousel/js.js',
                 'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/js.js',
-                // 'public/acm/AlaatvCustomFiles/js/page/user/dashboard.js',
+                'public/acm/AlaatvCustomFiles/js/page/user/dashboard.js',
             ],
             'public/js/user-dashboard.js'
         );
