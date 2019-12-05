@@ -339,6 +339,7 @@ var LoadContentSet = function () {
             let contentType = $(this).data('content-type'),
                 contentUrl = $(this).data('content-url');
 
+            changeToModalAndList();
             showTabPage(contentType);
 
             loadNewData(contentUrl);
@@ -346,6 +347,11 @@ var LoadContentSet = function () {
         $(document).on('click', '.btnLoadMore', function () {
             let contentType = $(this).data('content-type');
             loadNextPage(contentType);
+        });
+
+
+        $(window).resize(function(){
+            changeToModalAndList();
         });
     }
 
@@ -372,15 +378,33 @@ var LoadContentSet = function () {
         return $selectedProduct;
     }
 
+    function changeToModalAndList() {
+        var ww = $(window).width();
+        if (ww <= 1024) {
+            if ($('.contentsetOfProductCol').html().length>0) {
+                $('#smallScreenModal .modal-body').html($('.contentsetOfProductCol').html());
+                $('.contentsetOfProductCol').html('');
+            }
+            $('#smallScreenModal').modal('show');
+        } else {
+            if ($('#smallScreenModal .modal-body').html().length>0) {
+                $('.contentsetOfProductCol').html($('#smallScreenModal .modal-body').html());
+                $('#smallScreenModal .modal-body').html('');
+            }
+            $('#smallScreenModal').modal('hide');
+        }
+    }
+
     return {
         init: function () {
             addEvents();
-            chooseFirstProduct();
 
             var ww = $(window).width();
             if (ww <= 1024) {
                 $('#smallScreenModal .modal-body').html($('.contentsetOfProductCol').html());
                 $('.contentsetOfProductCol').html('');
+            } else {
+                chooseFirstProduct();
             }
         },
     };
@@ -571,7 +595,6 @@ $(document).ready(function () {
     $('#owlCarouselMyFavoritContent').OwlCarouselType2(OwlCarouselType2Option);
     $('#owlCarouselMyFavoritProducts').OwlCarouselType2(OwlCarouselType2Option);
 
-    LoadContentSet.init();
     PurchaseAndFavoriteTabPage.init();
 
     $('.CustomDropDown').CustomDropDown({
@@ -633,4 +656,6 @@ $(document).ready(function () {
     });
 
     FilterAndSort.init();
+    LoadContentSet.init();
+
 });
