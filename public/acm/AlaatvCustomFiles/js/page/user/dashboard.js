@@ -186,7 +186,7 @@ var LoadContentSet = function () {
         return '' +
             '<div class="item ">\n' +
             '    <div class="pic">\n' +
-            '        <a href="http://alaatv.test/c/16839" class="d-block">\n' +
+            '        <a href="' + data.link + '" class="d-block">\n' +
             '            <img src="https://cdn.alaatv.com/loder.jpg?w=1&h=1" data-src="' + data.src + '" alt="' + data.title + '" class="a--full-width lazy-image videoImage" width="253" height="142">\n' +
             '        </a>\n' +
             '    </div>\n' +
@@ -361,8 +361,11 @@ var LoadContentSet = function () {
                 contentUrl = $('.productsCol .productItem:first-child .action button.btn').first().data('content-url');
             showTabPage(contentType);
             loadNewData(contentUrl);
-        } else if ($('.productsCol .CustomParentOptions:nth-child(2) .btnViewVideo').length>0) {
-
+        } else if ($('.productsCol .CustomParentOptions:nth-child(2) .btnViewContentSet').length>0) {
+            let contentType = $('.productsCol .CustomParentOptions:nth-child(2) .btnViewContentSet').first().data('content-type'),
+                contentUrl = $('.productsCol .CustomParentOptions:nth-child(2) .btnViewContentSet').first().data('content-url');
+            showTabPage(contentType);
+            loadNewData(contentUrl);
         }
     }
 
@@ -451,7 +454,6 @@ var FilterAndSort = function () {
 
         var $productList = getProductsList(),
             $products = getProducts($productList);
-        console.log($products);
         var sortList = Array.prototype.sort.bind($products);
 
         sortList(function ( a, b ) {
@@ -476,7 +478,7 @@ var FilterAndSort = function () {
             // Returning 0 leaves them as-is
             return 0;
         });
-        console.log($products);
+
         $productList.append($products);
         reorganizeCustomDropDown();
     }
@@ -605,7 +607,6 @@ $(document).ready(function () {
             // { index: 2, totalCount: 5, value: "3", text: "فرسنگ سوم" }
         },
         onChanged: function (data) {
-            // console.log(data);
             // { index: 2, totalCount: 5, value: "3", text: "فرسنگ سوم" }
         },
         parentOptions: function ($this) {
