@@ -86,23 +86,23 @@
                                 <div class="container-fluid">
                                     <div class="row">
                                         <div class="col-md-2 a--MegaMenu-categoryItemsCol">
-                                            <div class="a--MegaMenu-categoryItem" dtat-cat-id="davazdahomVaKonkur">
-                                                <a dtat-cat-id="davazdahomVaKonkur" class="m-link" href="{{ urldecode(route('content.index', 'tags[]=نظام_آموزشی_جدید&tags[]=دوازدهم&tags[]=کنکور')) }}">
+                                            <div class="a--MegaMenu-categoryItem" data-cat-id="davazdahomVaKonkur">
+                                                <a data-cat-id="davazdahomVaKonkur" class="m-link" href="{{ urldecode(route('content.index', 'tags[]=نظام_آموزشی_جدید&tags[]=دوازدهم&tags[]=کنکور')) }}">
                                                     دوازدهم و کنکور
                                                 </a>
                                             </div>
-                                            <div class="a--MegaMenu-categoryItem" dtat-cat-id="yazdahom">
-                                                <a dtat-cat-id="yazdahom" class="m-link" href="{{ urldecode(route('content.index', 'tags[]=نظام_آموزشی_جدید&tags[]=یازدهم')) }}">
+                                            <div class="a--MegaMenu-categoryItem" data-cat-id="yazdahom">
+                                                <a data-cat-id="yazdahom" class="m-link" href="{{ urldecode(route('content.index', 'tags[]=نظام_آموزشی_جدید&tags[]=یازدهم')) }}">
                                                     یازدهم
                                                 </a>
                                             </div>
-                                            <div class="a--MegaMenu-categoryItem" dtat-cat-id="dahom">
-                                                <a dtat-cat-id="dahom" class="m-link" href="{{ urldecode(route('content.index', 'tags[]=نظام_آموزشی_جدید&tags[]=دهم')) }}">
+                                            <div class="a--MegaMenu-categoryItem" data-cat-id="dahom">
+                                                <a data-cat-id="dahom" class="m-link" href="{{ urldecode(route('content.index', 'tags[]=نظام_آموزشی_جدید&tags[]=دهم')) }}">
                                                     دهم
                                                 </a>
                                             </div>
-                                            <div class="a--MegaMenu-categoryItem" dtat-cat-id="nezameGhadim">
-                                                <a dtat-cat-id="nezameGhadim" class="m-link" href="{{ urldecode(route('content.index', 'tags[]=نظام_آموزشی_قدیم&tags[]=کنکور')) }}">
+                                            <div class="a--MegaMenu-categoryItem" data-cat-id="nezameGhadim">
+                                                <a data-cat-id="nezameGhadim" class="m-link" href="{{ urldecode(route('content.index', 'tags[]=نظام_آموزشی_قدیم&tags[]=کنکور')) }}">
                                                     کنکور نظام قدیم
                                                 </a>
                                             </div>
@@ -531,39 +531,40 @@
                                 <div class="container-fluid">
                                     <div class="row">
                                         <div class="col-md-2 a--MegaMenu-categoryItemsCol">
-                                            <div class="a--MegaMenu-categoryItem" dtat-cat-id="godar">
-                                                <a dtat-cat-id="godar" class="m-link" href="{{ route('web.landing.10') }}">
+                                            <div class="a--MegaMenu-categoryItem" data-cat-id="godar">
+                                                <a data-cat-id="godar" class="m-link" href="{{ route('web.landing.10') }}">
                                                     گدار
+                                                    <span class="m-badge m-badge--info m-badge--wide m-badge--rounded a--puls-gray" data-cat-id="godar">جدید</span>
                                                 </a>
                                             </div>
-                                            <div class="a--MegaMenu-categoryItem" dtat-cat-id="raheAbrisham">
-                                                <a dtat-cat-id="raheAbrisham" class="m-link" href="{{route('product.show' , 347)}}">
+                                            <div class="a--MegaMenu-categoryItem" data-cat-id="raheAbrisham">
+                                                <a data-cat-id="raheAbrisham" class="m-link" href="{{route('product.show' , 347)}}">
                                                     راه ابریشم
                                                 </a>
                                             </div>
-                                            <div class="a--MegaMenu-categoryItem" dtat-cat-id="talaee">
-                                                <a dtat-cat-id="talaee" class="m-link" href="{{ route('web.landing.8') }}">
+                                            <div class="a--MegaMenu-categoryItem" data-cat-id="talaee">
+                                                <a data-cat-id="talaee" class="m-link" href="{{ route('web.landing.8') }}">
                                                     طلایی
                                                 </a>
                                             </div>
-                                            <div class="a--MegaMenu-categoryItem" dtat-cat-id="taftan">
-                                                <a dtat-cat-id="taftan" class="m-link" href="{{ route('web.landing.9') }}">
+                                            <div class="a--MegaMenu-categoryItem" data-cat-id="taftan">
+                                                <a data-cat-id="taftan" class="m-link" href="{{ route('web.landing.9') }}">
                                                     تفتان
                                                 </a>
                                             </div>
-                                            <div class="a--MegaMenu-categoryItem" dtat-cat-id="nezameGhadim">
-                                                <a dtat-cat-id="nezameGhadim" class="m-link" href="{{ route('web.landing.5') }}">
+                                            <div class="a--MegaMenu-categoryItem" data-cat-id="nezameGhadim">
+                                                <a data-cat-id="nezameGhadim" class="m-link" href="{{ route('web.landing.5') }}">
                                                     همایش های نظام قدیم
                                                 </a>
                                             </div>
                                         </div>
                                         <div class="col-md-10 a--MegaMenu-subCategoryItemsCol">
-    
+
                                             <div class="a--MegaMenu-categorySubItems" style="background: #ffe6dd;" data-cat-id="godar">
                                                 <div class="row no-gutters">
                                                     <div class="col">
                                                         <a href="{{ route('web.landing.10') }}">
-                                                            <img class="lazy-image" data-src="https://cdn.alaatv.com/upload/megamenuBackground-GODAR.jpg" style="width: 1083px;">
+                                                            <img class="a--full-width lazy-image" data-src="https://cdn.alaatv.com/upload/megamenuBackground-GODAR.jpg" width="1034" height="286">
                                                         </a>
                                                     </div>
                                                 </div>
@@ -572,7 +573,7 @@
                                                 <div class="row no-gutters">
                                                     <div class="col">
                                                         <a href="{{route('product.show' , 347)}}">
-                                                            <img class="lazy-image" data-src="https://cdn.alaatv.com/upload/megamenuBackground-raheAbrisham.jpg" style="width: 1083px;">
+                                                            <img class="a--full-width lazy-image" data-src="https://cdn.alaatv.com/upload/megamenuBackground-raheAbrisham.jpg" width="1034" height="286">
                                                         </a>
                                                     </div>
                                                 </div>
@@ -581,7 +582,7 @@
                                                 <div class="row no-gutters">
                                                     <div class="col">
                                                         <a href="{{ route('web.landing.8') }}">
-                                                            <img class="lazy-image" data-src="https://cdn.alaatv.com/upload/megamenuBackground-talaee.jpg" style="width: 1083px;">
+                                                            <img class="a--full-width lazy-image" data-src="https://cdn.alaatv.com/upload/megamenuBackground-talaee.jpg" width="1034" height="286">
                                                         </a>
                                                     </div>
                                                 </div>
@@ -590,7 +591,7 @@
                                                 <div class="row no-gutters">
                                                     <div class="col">
                                                         <a href="{{ route('web.landing.9') }}">
-                                                            <img class="lazy-image" data-src="https://cdn.alaatv.com/upload/megamenuBackground-taftan.jpg" style="width: 1083px;">
+                                                            <img class="a--full-width lazy-image" data-src="https://cdn.alaatv.com/upload/megamenuBackground-taftan.jpg" width="1034" height="286">
                                                         </a>
                                                     </div>
                                                 </div>
@@ -599,7 +600,7 @@
                                                 <div class="row no-gutters">
                                                     <div class="col">
                                                         <a href="{{ route('web.landing.5') }}">
-                                                            <img class="lazy-image" data-src="https://cdn.alaatv.com/upload/megamenuBackground-ghadim.jpg" style="width: 1083px;">
+                                                            <img class="a--full-width lazy-image" data-src="https://cdn.alaatv.com/upload/megamenuBackground-ghadim.jpg" width="1034" height="286">
                                                         </a>
                                                     </div>
                                                 </div>

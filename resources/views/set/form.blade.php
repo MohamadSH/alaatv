@@ -153,7 +153,7 @@
                             تگ ها :
                         </label>
                         <div class="col-md-9">
-                            <input name="tags" type="text" class="form-control input-large setTags" value="@if($editForm && isset($set->tags)){{ implode(',',$set->tags->tags) }}@endif" data-role="tagsinput">
+                            <input name="tags" type="text" class="form-control input-large setTags" value="@if($editForm && isset($set->tags)){{ implode(',',$set->tags->tags) }}@endif" >
                         </div>
                     </div>
                 </div>
