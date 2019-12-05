@@ -19,19 +19,19 @@ class Coupon extends JsonResource
      */
     public function toArray($request)
     {
+        if (!($this->resource instanceof \App\Coupon)) {
+            return [];
+        }
+
+        $this->loadMissing('coupontype' , 'discounttype') ;
+
         return [
-            'id'            => $this->id,
             'name'          => $this->name,
-            'enable'        => $this->enable,
-            'description'   => $this->description,
             'code'          => $this->code,
             'discount'      => $this->discount,
-            'usageLimit'    => $this->usageLimit,
-            'usageNumber'   => $this->usageNumber,
-            'validSince'    => $this->validSince,
-            'validUntil'    => $this->validUntil,
-            'coupontype'    => new Coupontype($this->coupontype),
-            'discounttype'  => new Discounttype($this->discounttype),
+            'usage_number'  => $this->usageNumber,
+            'coupontype'    => $this->when(isset($this->coupontype_id) , function (){ return new Coupontype($this->coupontype);}),
+            'discounttype'  => $this->when(isset($this->discounttype_id) , function (){ return new Discounttype($this->discounttype);}),
         ];
     }
 }

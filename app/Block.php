@@ -241,7 +241,7 @@ class Block extends BaseModel
     public static function getContentBlocks(): ?BlockCollection{
         $blocks = Cache::tags(['block' , 'content'])
             ->remember('block:getContentBlocks', config('constants.CACHE_600'), function () {
-                $blocks = self::findMany([13])
+                $blocks = self::findMany([115])
                     ->loadMissing([
                         'contents',
                         'sets',

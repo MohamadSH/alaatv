@@ -61,3 +61,245 @@
         border-bottom: 1px solid #ebedf2;
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.btn-group-rounded button:first-child {
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+.btn-group-rounded button:last-child {
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+}
+
+.CustomParentOptions.CustomDropDown {
+    border: solid 1px #a9a9a9;
+    border-radius: 10px;
+    padding: 10px;
+    margin-top: 20px;
+}
+.CustomParentOptions.CustomDropDown:before {
+    content: ' ';
+    border-right: solid 20px transparent;
+    border-left: solid 20px transparent;
+    border-bottom: solid 20px #a9a9a9;
+    position: absolute;
+    left: calc( 50% - 40px );
+    top: -20px;
+}
+.CustomDropDown .select-items {
+    border: none;
+    background: transparent;
+}
+.CustomDropDown .select-items .select-item {
+    margin-bottom: 5px;
+    background: white;
+    border-radius: 10px;
+}
+
+.setRow {
+    display: flex;
+    justify-content: space-between;
+}
+.setRow .setRow-label {
+
+}
+.setRow .setRow-action {
+    width: 200px;
+    display: flex;
+    justify-content: space-between;
+}
+.setRow .setRow-action button {
+    width: 95px;
+    border-radius: 5px;
+    padding: 5px;
+}
+
+.sortingFilter {
+    width: max-content;
+    margin: 0 auto 10px auto;
+}
+.sortingFilter .sortingFilter-item {
+    display: inline-block;
+    margin-left: 10px;
+}
+.myProductsRow {
+    margin-bottom: 100px;
+}
+
+
+
+.productItem {
+    background: white;
+    margin-bottom: 10px;
+    transition: all 1s;
+}
+.productItem .productItem-image {
+
+}
+.productItem .productItem-description {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    margin-bottom: 10px;
+}
+.productItem .productItem-description .title {
+    font-size: 1.2rem;
+    font-weight: bold;
+    align-self: flex-start;
+    padding-right: 20px;
+}
+.productItem .productItem-description .action {
+    margin-top: 10px;
+    width: 300px;
+    display: flex;
+    justify-content: space-between;
+}
+.productItem .productItem-description .action > .btn {
+    width: 145px;
+    border-radius: 5px;
+    padding: 5px;
+}
+.productItem .productItem-description .action .CustomDropDown {
+    width: 100%;
+}
+
+.productItem.selectedProduct {
+    background-color: #c4c4c4;
+}
+
+
+
+
+
+#smallScreenModal .modal-body  > .m-portlet > .m-portlet__body > .nav.nav-pills,
+.contentsetOfProductCol > .m-portlet > .m-portlet__body > .nav.nav-pills {
+    background: #f2f3f8;
+    border-radius: 5px;
+}
+#smallScreenModal .modal-body  > .m-portlet > .m-portlet__body > .nav.nav-pills > .nav-item > .nav-link.active,
+.contentsetOfProductCol > .m-portlet > .m-portlet__body > .nav.nav-pills > .nav-item > .nav-link.active {
+    /*background: #ffb822;*/
+    /*color: black;*/
+    border-radius: 5px;
+}
+
+
+
+
+
+
+
+/*media query*/
+@media (min-width: 1700px) {
+    .productsCol {
+        flex: 0 0 33.33333%;
+        max-width: 33.33333%;
+    }
+    .contentsetOfProductCol {
+        flex: 0 0 66.66667%;
+        max-width: 66.66667%;
+    }
+}
+@media (max-width: 1300px) {
+    .productItem .productItem-imageCol {
+        flex: 0 0 25%;
+        max-width: 25%;
+    }
+    .productItem .productItem-descriptionCol {
+        flex: 0 0 75%;
+        max-width: 75%;
+    }
+    .productItem .productItem-description .title {
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 450px) {
+    .productItem .productItem-imageCol {
+        flex: 0 0 100%;
+        max-width: 100%;
+    }
+    .productItem .productItem-descriptionCol {
+        flex: 0 0 100%;
+        max-width: 100%;
+    }
+    .productItem .no-gutters {
+        margin-left: 5px;
+        margin-right: 5px;
+    }
+    .productItem .no-gutters > .col,
+    .productItem .no-gutters > [class*="col-"] {
+        padding-left: 5px;
+        padding-right: 5px;
+    }
+}
+@media (max-width: 1200px) {
+    .productItem .productItem-description .action {
+        width: 200px;
+    }
+    .productItem .productItem-description .action > .btn {
+        width: 95px;
+    }
+}
+@media (max-width: 1024px) {
+    .myProductsRow .productsCol {
+        flex: 0 0 100%;
+        max-width: 100%;
+    }
+    .myProductsRow .contentsetOfProductCol {
+        display: none;
+    }
+}
+@media (max-width: 600px) {
+    .myProductsRow .productsCol {
+        flex: 0 0 100%;
+        max-width: 100%;
+    }
+    .myProductsRow .contentsetOfProductCol {
+        display: none;
+    }
+}

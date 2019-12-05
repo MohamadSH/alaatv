@@ -29,6 +29,38 @@ class DashboardPageController extends Controller
             ]);
         }
 
-        return view('user.dashboard', compact('user', 'pageName', 'userAssetsCollection'));
+
+        $categoryArray = [
+            [
+                'name'  => 'همه',
+                'value' => 'all',
+                'selected' => true,
+            ],
+            [
+                'name'  => 'همایش آرش یا طلایی',
+                'value' => 'همایش/آرش',
+            ],
+            [
+                'name'  => 'همایش تفتان',
+                'value' => 'همایش/تفتان',
+            ],
+            [
+                'name'  => 'همایش گدار یا 5+1',
+                'value' => 'همایش/گدار',
+            ],
+            [
+                'name'  => 'نظام قدیم',
+                'value' => 'قدیم',
+            ],
+            [
+                'name'  => 'جزوه',
+                'value' => 'جزوه',
+            ],
+            [
+                'name'  => 'ویژه',
+                'value' => 'VIP',
+            ],
+        ];
+        return view('user.dashboard', compact('user', 'pageName', 'userAssetsCollection' , 'categoryArray'));
     }
 }

@@ -19,8 +19,13 @@ class Orderpostinginfo extends JsonResource
      */
     public function toArray($request)
     {
+        if (!($this->resource instanceof \App\Orderpostinginfo)) {
+            return [];
+        }
+
+
         return [
-            'postCode' => $this->postCode
+            'post_code' => $this->postCode
         ];
     }
 }
