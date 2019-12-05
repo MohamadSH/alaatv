@@ -56,12 +56,12 @@
                             @include('partials.CustomSelect', ['class'=>'sort', 'items'=>[
                                     [
                                         'name'=> 'جدید ترین ها',
-                                        'value'=> 'جدید ترین ها',
+                                        'value'=> 'data-sort1',
                                         'selected'=> true
                                     ],
                                     [
                                         'name'=> 'قدیمی ترین ها',
-                                        'value'=> 'قدیمی ترین ها',
+                                        'value'=> 'data-sort2',
                                     ],
                                 ]
                             ])
@@ -125,7 +125,9 @@
                                 'name'=> $product->name,
                                 'src'=> $product->photo,
                                 'sets'=> $product->sets,
-                                'category'=> $product->category
+                                'category'=> $product->category,
+                                'sort1' => $product->sorting['completed_at_desc'],
+                                'sort2' => $product->sorting['completed_at_asc']
                             ])
 
                         @endforeach
@@ -288,4 +290,5 @@
 
 @section('page-js')
     <script src="{{ mix('/js/user-dashboard.js') }}"></script>
+    <script src="{{ asset('/acm/AlaatvCustomFiles/js/page/user/dashboard.js') }}"></script>
 @endsection

@@ -1,6 +1,6 @@
 @if(isset($src) && isset($name) && isset($sets) && isset($key))
 
-    <div class="productItem" data-pc="{{$category}}" data-product-key="{{$key}}">
+    <div class="productItem" data-pc="{{$category}}" data-product-key="{{$key}}" data-sort1="{{$sort1}}" data-sort2="{{$sort2}}">
         <div class="row no-gutters">
             <div class="col-md-2 productItem-imageCol">
                 <div class="productItem-image">

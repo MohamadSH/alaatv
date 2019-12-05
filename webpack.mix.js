@@ -378,7 +378,7 @@ class Mix {
                 'public/acm/AlaatvCustomFiles/components/CustomDropDown/js.js',
                 'public/acm/AlaatvCustomFiles/components/ScrollCarousel/js.js',
                 'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/js.js',
-                'public/acm/AlaatvCustomFiles/js/page/user/dashboard.js',
+                // 'public/acm/AlaatvCustomFiles/js/page/user/dashboard.js',
             ],
             'public/js/user-dashboard.js'
         );

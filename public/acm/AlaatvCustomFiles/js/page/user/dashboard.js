@@ -395,6 +395,7 @@ var FilterAndSort = function () {
         });
         $(document).on('click', '.CustomSelect.sort .CustomSelect-Item', function () {
             selectItem($(this));
+            sortList($(this).attr('data-value'));
         });
     }
 
@@ -422,9 +423,60 @@ var FilterAndSort = function () {
         $this.addClass('selected');
     }
 
+    function sortList(sortType) {
+
+        var $productList = getProductsList(),
+            $products = getProducts($productList);
+        console.log($products);
+        var sortList = Array.prototype.sort.bind($products);
+
+        sortList(function ( a, b ) {
+
+            // Cache inner content from the first element (a) and the next sibling (b)
+            // var aText = a.innerHTML;
+            // var bText = b.innerHTML;
+
+            var sorta = parseInt(a.getAttribute(sortType));
+            var sortb = parseInt(b.getAttribute(sortType));
+
+            // Returning -1 will place element `a` before element `b`
+            if ( sorta < sortb ) {
+                return -1;
+            }
+
+            // Returning 1 will do the opposite
+            if ( sorta > sortb ) {
+                return 1;
+            }
+
+            // Returning 0 leaves them as-is
+            return 0;
+        });
+        console.log($products);
+        $productList.append($products);
+        reorganizeCustomDropDown();
+    }
+
+    function getProductsList() {
+        return $('.produtItems');
+    }
+
+    function getProducts($productList) {
+        return $productList.children('.productItem');
+
+    }
+
+    function reorganizeCustomDropDown() {
+        $('.CustomParentOptions').each(function () {
+            var customParentOptionsId = $(this).attr('id').replace('CustomDropDown', '');
+            $(this).insertAfter( $('.productItem[data-product-key="'+customParentOptionsId+'"]') );
+        });
+    }
+
     return {
         init: function () {
             addEvents();
+            sortList('data-sort1');
         },
     };
 }();
@@ -520,13 +572,11 @@ $(document).ready(function () {
     $('#owlCarouselMyFavoritProducts').OwlCarouselType2(OwlCarouselType2Option);
 
     LoadContentSet.init();
-    FilterAndSort.init();
     PurchaseAndFavoriteTabPage.init();
-
 
     $('.CustomDropDown').CustomDropDown({
         onChange: function (data) {
-            if (!data.target.hasClass('btnViewVideo') && !data.target.hasClass('btnViewVideo')) {
+            if (!data.target.hasClass('btnViewVideo') && !data.target.hasClass('btnViewContentSet')) {
                 return false;
             }
             // { index: 2, totalCount: 5, value: "3", text: "فرسنگ سوم" }
@@ -581,4 +631,6 @@ $(document).ready(function () {
                 '</div>';
         }
     });
+
+    FilterAndSort.init();
 });
