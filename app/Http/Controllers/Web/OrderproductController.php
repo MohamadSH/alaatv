@@ -424,7 +424,7 @@ class OrderproductController extends Controller
                 $this->attachExtraAttributes($data['extraAttribute'], $orderProduct);
             }
 
-            $this->applyOrderProductBon($data, $user, $orderProduct, $productItem);
+//            $this->applyOrderProductBon($data, $user, $orderProduct, $productItem);
 
             $this->applyOrderGifts($order, $orderProduct, $productItem);
 

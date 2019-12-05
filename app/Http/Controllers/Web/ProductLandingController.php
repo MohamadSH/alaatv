@@ -613,7 +613,7 @@ class ProductLandingController extends Controller
                 'hours' => 10
             ],
             385 => [
-                'name' => 'همایش ریاضی تجربی گدار',
+                'name' => 'همایش ریاضی تجربی گدار (ویژه راه ابریشم)',
                 'url' => route('product.show' , 385),
                 'hours' => 0
             ],

@@ -59,7 +59,7 @@
                                                                 <tr onclick="window.location.href = '{{ $item['url'] }}';">
                                                                     <td>
                                                                         <a href="{{ $item['url'] }}">
-                                                                            {{ $item['name'] }}:
+                                                                            {{ $item['name'] }}
                                                                         </a>
                                                                     </td>
                                                                     <td>
@@ -202,7 +202,7 @@
                                                                 <tr onclick="window.location.href = '{{ $item['url'] }}';">
                                                                     <td>
                                                                         <a href="{{ $item['url'] }}">
-                                                                            {{ $item['name'] }}:
+                                                                            {{ $item['name'] }}
                                                                         </a>
                                                                     </td>
                                                                     <td>
