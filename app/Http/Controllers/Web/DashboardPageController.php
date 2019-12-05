@@ -36,7 +36,7 @@ class DashboardPageController extends Controller
                 'value' => 'all',
             ],
             [
-                'name'  => 'همایش طلایی و آرش',
+                'name'  => 'همایش طلایی',
                 'value' => 'همایش/آرش',
             ],
             [
@@ -44,7 +44,7 @@ class DashboardPageController extends Controller
                 'value' => 'همایش/تفتان',
             ],
             [
-                'name'  => 'همایش گدار',
+                'name'  => 'همایش 1+5 و گدار',
                 'value' => 'همایش/گدار',
             ],
             [
