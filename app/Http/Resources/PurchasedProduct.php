@@ -24,15 +24,19 @@ class PurchasedProduct extends JsonResource
      */
     public function toArray($request)
     {
+        if (!($this->resource instanceof \App\Product)) {
+            return [];
+        }
+
+        $this->loadMissing('sets' , 'children' , 'producttype');
+
         return [
             'id'            => $this->id,
             'redirect_url'  => null,
             'name'          => $this->name,
-            'type'          => $this->producttype,
-            'description'   => [
-                'short' => $this->shortDescription,
-            ],
-            'isFree'        => $this->isFree,
+            'type'          => $this->when(isset($this->producttype_id) , function (){ return new Producttype($this->producttype);}),
+//            'type'          => $this->when(isset($this->producttype_id) , function (){ return New Producttype($this->producttype); }),
+//            'isFree'        => $this->isFree,
             'price'         => $this->price,
             'tags'          => $this->tags,
             'url'           => [
@@ -40,8 +44,10 @@ class PurchasedProduct extends JsonResource
                 'api' => $this->api_url,
             ],
             'photo'         => $this->photo,
-            'attributes'    => $this->attributes,
-            'children'      => $this->children->isNotEmpty() ? Product::collection($this->children) : null,
+            'attributes'    => [
+                'info' =>  $this->when(!empty($this->info_attributes) , $this->info_attributes),
+            ],
+
         ];
     }
 }

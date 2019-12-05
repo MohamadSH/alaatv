@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
@@ -14,15 +15,19 @@ class Coupontype extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  Request  $request
      * @return array
      */
     public function toArray($request)
     {
+        if (!($this->resource instanceof \App\Coupontype)) {
+            return [];
+        }
+
+
         return [
-            'id' => $this->id,
             'name' => $this->name,
-            'displayName' => $this->displayName
+            'display_name' => $this->displayName
         ];
     }
 }

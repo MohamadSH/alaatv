@@ -42,6 +42,7 @@ trait DashboardTrait
     private function makeBlockForUserProducts(): ?Block
     {
         $products = $this->products();
+        $products->addSorting();
         if ($products->count() > 0) {
             return Block::getDummyBlock(false, trans('profile.My Products'), $products);
         }

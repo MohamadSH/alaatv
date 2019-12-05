@@ -24,12 +24,17 @@ class Author extends JsonResource
      */
     public function toArray($request)
     {
+        if (!($this->resource instanceof \App\User)) {
+            return [];
+        }
+
         return [
-                'id'        => $this->id,
-                'firstName' => $this->firstName ,
-                'lastName'  => $this->lastName ,
-                'photo'     => $this->photo ,
-                'full_name' => $this->full_name,
+                'id'         => $this->id,
+                'first_name' => $this->firstName ,
+                'last_name'  => $this->lastName ,
+                'photo'      => $this->photo ,
+                'full_name'  => $this->full_name,
+                'name_slug'  => $this->nameSlug,
             ];
     }
 }

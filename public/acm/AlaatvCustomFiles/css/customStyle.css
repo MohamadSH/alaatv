@@ -384,7 +384,7 @@
 }
 
 @media only screen and (min-width: 1700px) {
-    .m-portlet.boxed {
+    .boxed {
         margin-left: 65px;
         margin-right: 65px;
     }
@@ -436,6 +436,13 @@
     }
 }
 
+.a--puls-white {
+    animation: a--pulse 1.2s infinite;
+}
+.a--puls-gray {
+    animation: a--pulse-gray 1.2s infinite;
+}
+
 @-webkit-keyframes a--pulse {
     0% {
         -webkit-box-shadow:0 0 0 0 rgba(255,255,255,.4)
@@ -450,14 +457,39 @@
 @keyframes a--pulse {
     0% {
         -moz-box-shadow:0 0 0 0 rgba(255,255,255,.4);
-        box-shadow:0 0 0 0 rgba(255,255,255,.4)
+        box-shadow:0 0 0 0 rgba(255,255,255,.4);
     }
     70% {
         -moz-box-shadow:0 0 0 10px rgba(255,255,255,0);
-        box-shadow:0 0 0 10px rgba(255,255,255,0)
+        box-shadow:0 0 0 10px rgba(255,255,255,0);
     }
     100% {
         -moz-box-shadow:0 0 0 0 rgba(255,255,255,0);
-        box-shadow:0 0 0 0 rgba(255,255,255,0)
+        box-shadow:0 0 0 0 rgba(255,255,255,0);
+    }
+}
+@-webkit-keyframes a--pulse-gray {
+    0% {
+        -webkit-box-shadow:0 0 0 0 rgba(55, 55, 55, 0.68);
+    }
+    70% {
+        -webkit-box-shadow:0 0 0 10px rgba(0,0,0,0)
+    }
+    100% {
+        -webkit-box-shadow:0 0 0 0 rgba(0,0,0,0)
+    }
+}
+@keyframes a--pulse-gray {
+    0% {
+        -moz-box-shadow:0 0 0 0 rgba(55, 55, 55, 0.68);
+        box-shadow:0 0 0 0 rgba(55, 55, 55, 0.68);
+    }
+    70% {
+        -moz-box-shadow:0 0 0 10px rgba(0,0,0,0);
+        box-shadow:0 0 0 10px rgba(0,0,0,0);
+    }
+    100% {
+        -moz-box-shadow:0 0 0 0 rgba(0,0,0,0);
+        box-shadow:0 0 0 0 rgba(0,0,0,0);
     }
 }

@@ -19,10 +19,13 @@ class Transactiongateway extends JsonResource
      */
     public function toArray($request)
     {
+        if (!($this->resource instanceof \App\Transactiongateway)) {
+            return [];
+        }
+
         return [
             'name'          => $this->name,
-            'displayName'   => $this->displayName ,
-            'description'   => $this->description
+            'display_name'   => $this->displayName ,
         ];
     }
 }
