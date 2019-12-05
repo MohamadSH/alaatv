@@ -68,44 +68,7 @@
                         </div>
                         <div class="sortingFilter-item subject">
 
-
-                            <?PHP
-
-                            $categoryArray = ['همه'];
-
-                            function printNewCategory(&$categoryArray, $category) {
-                                if (array_search($category,$categoryArray)) {
-                                    return;
-                                }
-                                $categoryArray[] = $category;
-                            }
-
-                            function modifyCategoryStructure($categoryArray) {
-                                foreach ($categoryArray as $key => $value) {
-                                    $categoryArray[$key] = [
-                                        'name'=> $value,
-                                        'value'=> $value,
-                                        'selected'=> ($key===0)
-                                    ];
-                                }
-                                return $categoryArray;
-                            }
-                            ?>
-                            @foreach($userAssetsCollection as $userAssetKey=>$userAsset)
-                                @if($userAsset->title === 'محصولات من')
-                                    @foreach($userAsset->products as $productKey=>$product)
-
-                                        <?PHP
-                                        printNewCategory($categoryArray, $product->category);
-                                        ?>
-
-                                    @endforeach
-                                @endif
-                            @endforeach
-
-
-                            @include('partials.CustomSelect', ['class'=>'filter', 'items'=>modifyCategoryStructure($categoryArray)])
-
+                            @include('partials.CustomSelect', ['class'=>'filter', 'items'=>$categoryArray])
 
                         </div>
                     </div>
@@ -290,5 +253,4 @@
 
 @section('page-js')
     <script src="{{ mix('/js/user-dashboard.js') }}"></script>
-    <script src="{{ asset('/acm/AlaatvCustomFiles/js/page/user/dashboard.js') }}"></script>
 @endsection

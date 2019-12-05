@@ -401,7 +401,7 @@ var FilterAndSort = function () {
 
     function showSelectedCategoryItems($this) {
         var category = $this.attr('data-value');
-        if (category === 'همه') {
+        if (category === 'all') {
             $('.productItem').fadeIn();
         } else {
             $('.productItem:not([data-pc="'+category+'"])').fadeOut();
