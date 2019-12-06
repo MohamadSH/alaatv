@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
@@ -14,17 +15,18 @@ class Bon extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  Request  $request
      * @return array
      */
     public function toArray($request)
     {
+        if (!($this->resource instanceof \App\Bon)) {
+            return [];
+        }
+
         return [
             'name'          => $this->name,
-            'displayName'   => $this->displayName,
-            'description'   => $this->description,
-            'order'         =>$this->order,
-            'enable'        => $this->isEnable,
+            'display_name'   => $this->displayName,
         ];
     }
 }

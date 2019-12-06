@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
@@ -9,7 +10,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
  *
  * @mixin \App\Product
  * */
-class PurchasedProduct extends JsonResource
+class Child extends JsonResource
 {
     function __construct(\App\Product $model)
     {
@@ -19,7 +20,7 @@ class PurchasedProduct extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  Request  $request
      * @return array
      */
     public function toArray($request)
@@ -28,26 +29,33 @@ class PurchasedProduct extends JsonResource
             return [];
         }
 
-        $this->loadMissing('sets' , 'children' , 'producttype');
+        if (isset($this->redirectUrl)) {
+            return [
+                'id'           => $this->id,
+                'redirect_url' => $this->redirectUrl,
+            ];
+        }
+
+        $this->loadMissing('children');
 
         return [
             'id'            => $this->id,
-            'redirect_url'  => null,
+            'redirect_url'  => $this->redirectUrl,
             'name'          => $this->name,
-            'type'          => $this->when(isset($this->producttype_id) , function (){ return new Producttype($this->producttype);}),
-//            'type'          => $this->when(isset($this->producttype_id) , function (){ return New Producttype($this->producttype); }),
-//            'isFree'        => $this->isFree,
             'price'         => $this->price,
-            'tags'          => $this->tags,
+            'intro_video'   => $this->introVideo,
             'url'           => [
                 'web' => $this->url,
                 'api' => $this->api_url,
             ],
             'photo'         => $this->photo,
+            'gift'          => $this->when($this->gift->isNotEmpty() , function (){ return Gift::collection($this->gift) ; }) , //It is not a relationship
+            'sets'          => $this->when($this->sets->isNotEmpty() , function (){ return ProductSet::collection($this->sets); }), //It is not a relationship
             'attributes'    => [
                 'info' =>  $this->when(!empty($this->info_attributes) , $this->info_attributes),
+                'extra' => $this->when(!empty($this->extra_attributes) , $this->extra_attributes),
             ],
-
+            'children'      => Child::collection($this->whenLoaded('children')),
         ];
     }
 }

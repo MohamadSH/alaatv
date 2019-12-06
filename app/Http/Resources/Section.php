@@ -2,31 +2,30 @@
 
 namespace App\Http\Resources;
 
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
- * Class Orderstatus
+ * Class \App\Section
  *
- * @mixin \App\Orderstatus
+ * @mixin \App\Section
  * */
-class Orderstatus extends JsonResource
+class Section extends JsonResource
 {
     /**
      * Transform the resource into an array.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  Request  $request
      * @return array
      */
     public function toArray($request)
     {
-        if (!($this->resource instanceof \App\Orderstatus)) {
+        if (!($this->resource instanceof \App\Section)) {
             return [];
         }
 
-
         return [
-            'name'        => $this->name ,
-            'display_name' => $this->displayName ,
+            'name' => $this->name,
         ];
     }
 }

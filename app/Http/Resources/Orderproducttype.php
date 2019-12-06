@@ -19,10 +19,14 @@ class Orderproducttype extends JsonResource
      */
     public function toArray($request)
     {
+        if (!($this->resource instanceof \App\Orderproducttype)) {
+            return [];
+        }
+
+
         return [
-            'id'            => $this->id ,
             'name'          => $this->name ,
-            'displayName'   => $this->displayName ,
+            'display_name'   => $this->displayName ,
         ];
     }
 }
