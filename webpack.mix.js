@@ -30,6 +30,7 @@ class Mix {
             'public/acm/AlaatvCustomFiles/css/customStyle/megamenuBackground.css',
             'public/acm/AlaatvCustomFiles/css/customStyle/colors.css',
             'public/acm/AlaatvCustomFiles/css/customStyle/footer.css',
+            'public/acm/AlaatvCustomFiles/css/customStyle/mobile-topMenu.css',
             'public/acm/AlaatvCustomFiles/css/fixThemeStyle.css',
             'public/acm/AlaatvCustomFiles/components/loading/loading.css',
         ];
