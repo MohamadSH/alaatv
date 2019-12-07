@@ -202,19 +202,19 @@ var Alaasearch = function () {
         };
 
         var widgetActionLink = data.url;
-        var widgetActionName = '<i class="fa fa-cart-arrow-down"></i>' + ' / ' + '<i class="fa fa-eye"></i>';
+        // var widgetActionName = '<i class="fa fa-cart-arrow-down"></i>' + ' / ' + '<i class="fa fa-eye"></i>';
         var widgetPic = data.photo;
         var widgetTitle = data.name;
         var price = data.price;
         var shortDescription = (data.shortDescription!==null) ? data.shortDescription : (data.longDescription!==null) ? data.longDescription : '';
         var discount = Math.round((1 - (price.final / price.base)) * 100);
         var discountRibbon = '';
-        var countOfExistingProductInCarousel = $('#product-carousel.owl-carousel').find('.item').length;
+        // var countOfExistingProductInCarousel = $('#product-carousel.owl-carousel').find('.item').length;
         var gtmEecProductId = data.id;
         var gtmEecProductName = data.name;
-        var gtmEecProductCategory = '-';
+        var gtmEecProductCategory = data.category;
         var gtmEecProductVariant = '-';
-        var gtmEecProductPosition = countOfExistingProductInCarousel;
+        var gtmEecProductPosition = itemKey;
         var priceHtml = '<span class="m-badge m-badge--danger m-badge--wide m-badge--rounded a--productPrice">';
         if (discount > 100) {
             discount = 100;
@@ -237,42 +237,28 @@ var Alaasearch = function () {
         priceHtml += '    ' + price.final.toLocaleString('fa') + ' تومان \n';
         priceHtml += '</span>';
 
+        var gtmEec =
+            '   data-gtm-eec-product-id="'+gtmEecProductId+'"\n' +
+            '   data-gtm-eec-product-name="'+gtmEecProductName+'"\n' +
+            '   data-gtm-eec-product-price="'+priceToStringWithTwoDecimal(price.final)+'"\n' +
+            '   data-gtm-eec-product-brand="آلاء"\n' +
+            '   data-gtm-eec-product-category="'+((gtmEecProductCategory===null || gtmEecProductCategory.trim().length===0)?'-':gtmEecProductCategory)+'"\n' +
+            '   data-gtm-eec-product-variant="'+gtmEecProductVariant+'"\n' +
+            '   data-gtm-eec-product-position="'+gtmEecProductPosition+'"\n' +
+            '   data-gtm-eec-product-list="محصولات صفحه سرچ">\n';
+
         var itemData = {
             class: 'a--gtm-eec-product',
             widgetLink: widgetActionLink,
             itemGtm:
-                '     data-position="'+itemKey+'"\n' +
-                '     data-gtm-eec-product-id="'+gtmEecProductId+'"\n' +
-                '     data-gtm-eec-product-name="'+gtmEecProductName+'"\n' +
-                '     data-gtm-eec-product-price="'+priceToStringWithTwoDecimal(price.final)+'"\n' +
-                '     data-gtm-eec-product-brand="آلاء"\n' +
-                '     data-gtm-eec-product-category="-"\n' +
-                '     data-gtm-eec-product-variant="-"\n' +
-                '     data-gtm-eec-product-position="'+itemKey+'"\n' +
-                '     data-gtm-eec-product-list="محصولات صفحه سرچ"',
+                '     data-position="'+itemKey+'"\n ' + gtmEec,
             widgetPic: '<a href="' + widgetActionLink + '"\n' +
-                '   class="d-block a--gtm-eec-product-click"\n' +
-                '   data-gtm-eec-product-id="'+gtmEecProductId+'"\n' +
-                '   data-gtm-eec-product-name="'+gtmEecProductName+'"\n' +
-                '   data-gtm-eec-product-price="'+priceToStringWithTwoDecimal(price.final)+'"\n' +
-                '   data-gtm-eec-product-brand="آلاء"\n' +
-                '   data-gtm-eec-product-category="-"\n' +
-                '   data-gtm-eec-product-variant="-"\n' +
-                '   data-gtm-eec-product-position="'+itemKey+'"\n' +
-                '   data-gtm-eec-product-list="محصولات صفحه سرچ">\n' +
+                '   class="d-block a--gtm-eec-product-click"\n ' + gtmEec + ' >\n' +
                 '    <img src="https://cdn.alaatv.com/loder.jpg?w=1&h=1" data-src="'+widgetPic+'" alt="'+gtmEecProductName+'" class="a--full-width lazy-image productImage" width="400" height="400" />\n' +
                 '</a>\n',
             widgetTitle:
-                '<a href="' + widgetActionLink + '"\n' +
-                '   class="m-link a--owl-carousel-type-2-item-subtitle a--gtm-eec-product-click"\n' +
-                '   data-gtm-eec-product-id="'+gtmEecProductId+'"\n' +
-                '   data-gtm-eec-product-name="'+gtmEecProductName+'"\n' +
-                '   data-gtm-eec-product-price="'+priceToStringWithTwoDecimal(price.final)+'"\n' +
-                '   data-gtm-eec-product-brand="آلاء"\n' +
-                '   data-gtm-eec-product-category="-"\n' +
-                '   data-gtm-eec-product-variant="-"\n' +
-                '   data-gtm-eec-product-position="'+itemKey+'"\n' +
-                '   data-gtm-eec-product-list="محصولات صفحه سرچ">\n' +
+                '<a href="' + widgetActionLink + '"\n ' +
+                '   class="m-link a--owl-carousel-type-2-item-subtitle a--gtm-eec-product-click"\n ' + gtmEec + ' >\n' +
                 '    '+widgetTitle+'\n' +
                 '</a>\n',
             widgetDetailes: '' +
