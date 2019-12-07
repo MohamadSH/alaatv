@@ -242,15 +242,17 @@
 
 
                                                             <a href="{{$product['product']->url ?? '#'}}"
+                                                               @include('partials.gtm-eec.product', ['position'=>$productKey, 'list'=>'لندینگ8-همایش طلایی-80درصد کنکور', 'product'=>$product['product']])
                                                                class="a--gtm-eec-product a--gtm-eec-product-click"
-                                                               data-gtm-eec-product-id="{{ $product['product']->id }}"
-                                                               data-gtm-eec-product-name="{{ $product['product']->name }}"
-                                                               data-gtm-eec-product-price="{{ number_format($product['product']->price['final'], 2, '.', '') }}"
-                                                               data-gtm-eec-product-brand="آلاء"
-                                                               data-gtm-eec-product-category="-"
-                                                               data-gtm-eec-product-variant="-"
-                                                               data-gtm-eec-product-position="{{ $productKey }}"
-                                                               data-gtm-eec-product-list="لندینگ8-همایش طلایی-80درصد کنکور">
+{{--                                                               data-gtm-eec-product-id="{{ $product['product']->id }}"--}}
+{{--                                                               data-gtm-eec-product-name="{{ $product['product']->name }}"--}}
+{{--                                                               data-gtm-eec-product-price="{{ number_format($product['product']->price['final'], 2, '.', '') }}"--}}
+{{--                                                               data-gtm-eec-product-brand="آلاء"--}}
+{{--                                                               data-gtm-eec-product-category="-"--}}
+{{--                                                               data-gtm-eec-product-variant="-"--}}
+{{--                                                               data-gtm-eec-product-position="{{ $productKey }}"--}}
+{{--                                                               data-gtm-eec-product-list="لندینگ8-همایش طلایی-80درصد کنکور"--}}
+                                                            >
                                                                 <div class="a--imageCaptionWarper">
                                                                     <div class="a--imageCaptionContent">
                                                                         <div class="a--imageCaptionTitle">

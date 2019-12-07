@@ -194,15 +194,18 @@
                                     @foreach($productsHasThisContentThroughBlockCollection as $productKey=>$product)
                                         @if($product->type['type'] === 'simple')
                                             <button
-                                                data-gtm-eec-product-id="{{$product->id}}"
-                                                data-gtm-eec-product-name="{{$product->name}}"
-                                                data-gtm-eec-product-price="@if($product->price){{$product->price['final']}}@endif"
-                                                data-gtm-eec-product-brand="آلاء"
-                                                data-gtm-eec-product-category="-"
-                                                data-gtm-eec-product-variant="-"
-                                                data-gtm-eec-product-quantity="1"
-                                                data-gtm-eec-product-position="{{ $productKey }}"
-                                                data-gtm-eec-product-list="نمونه فیلم-دکمه افزودن به سبد"
+                                                @include('partials.gtm-eec.product', ['position'=>$productKey, 'list'=>'نمونه فیلم-دکمه افزودن به سبد', 'quantity'=>'1'])
+
+{{--                                                data-gtm-eec-product-id="{{$product->id}}"--}}
+{{--                                                data-gtm-eec-product-name="{{$product->name}}"--}}
+{{--                                                data-gtm-eec-product-price="@if($product->price){{$product->price['final']}}@endif"--}}
+{{--                                                data-gtm-eec-product-brand="آلاء"--}}
+{{--                                                data-gtm-eec-product-category="-"--}}
+{{--                                                data-gtm-eec-product-variant="-"--}}
+{{--                                                data-gtm-eec-product-quantity="1"--}}
+{{--                                                data-gtm-eec-product-position="{{ $productKey }}"--}}
+{{--                                                data-gtm-eec-product-list="نمونه فیلم-دکمه افزودن به سبد"--}}
+
                                                 class="btn m-btn--air btn-success m-btn--icon m--margin-bottom-5 a--gtm-eec-product btnAddToCart"
                                                 data-pid="{{ $product->id }}">
                                                 <span>
@@ -224,15 +227,18 @@
                                     @foreach($productsThatHaveThisContent as $productKey=>$product)
                                         @if($product->type['type'] === 'simple')
                                             <button
-                                                data-gtm-eec-product-id="{{$product->id}}"
-                                                data-gtm-eec-product-name="{{$product->name}}"
-                                                data-gtm-eec-product-price="@if($product->price){{ number_format($product->price['final'], 2, '.', '') }}@endif"
-                                                data-gtm-eec-product-brand="آلاء"
-                                                data-gtm-eec-product-category="-"
-                                                data-gtm-eec-product-variant="-"
-                                                data-gtm-eec-product-quantity="1"
-                                                data-gtm-eec-product-position="{{ $productKey }}"
-                                                data-gtm-eec-product-list="محصولاتی که شامل این محتوا هستند-دکمه افزودن به سبد"
+                                                @include('partials.gtm-eec.product', ['position'=>$productKey, 'list'=>'محصولاتی که شامل این محتوا هستند-دکمه افزودن به سبد', 'quantity'=>'1'])
+
+{{--                                                data-gtm-eec-product-id="{{$product->id}}"--}}
+{{--                                                data-gtm-eec-product-name="{{$product->name}}"--}}
+{{--                                                data-gtm-eec-product-price="@if($product->price){{ number_format($product->price['final'], 2, '.', '') }}@endif"--}}
+{{--                                                data-gtm-eec-product-brand="آلاء"--}}
+{{--                                                data-gtm-eec-product-category="-"--}}
+{{--                                                data-gtm-eec-product-variant="-"--}}
+{{--                                                data-gtm-eec-product-quantity="1"--}}
+{{--                                                data-gtm-eec-product-position="{{ $productKey }}"--}}
+{{--                                                data-gtm-eec-product-list="محصولاتی که شامل این محتوا هستند-دکمه افزودن به سبد"--}}
+
                                                 class="btn m-btn--air btn-success m-btn--icon m--margin-bottom-5 a--gtm-eec-product btnAddToCart"
                                                 data-pid="{{ $product->id }}">
                                             <span>
@@ -743,26 +749,35 @@
                             @foreach($productsThatHaveThisContent as $productKey=>$product)
                                 <div class="item carousel a--block-item a--block-type-product w-55443211"
                                      data-position="{{ $productKey }}"
-                                     data-gtm-eec-product-id="{{ $product->id }}"
-                                     data-gtm-eec-product-name="{{ $product->name }}"
-                                     data-gtm-eec-product-price="{{ number_format($product->price['final'], 2, '.', '') }}"
-                                     data-gtm-eec-product-brand="آلاء"
-                                     data-gtm-eec-product-category="-"
-                                     data-gtm-eec-product-variant="-"
-                                     data-gtm-eec-product-position="{{ $productKey }}"
-                                     data-gtm-eec-product-list="محصولاتی که شامل این محتوا هستند">
+
+                                     @include('partials.gtm-eec.product', ['position'=>$productKey, 'list'=>'محصولاتی که شامل این محتوا هستند'])
+
+{{--                                     data-gtm-eec-product-id="{{ $product->id }}"--}}
+{{--                                     data-gtm-eec-product-name="{{ $product->name }}"--}}
+{{--                                     data-gtm-eec-product-price="{{ number_format($product->price['final'], 2, '.', '') }}"--}}
+{{--                                     data-gtm-eec-product-brand="آلاء"--}}
+{{--                                     data-gtm-eec-product-category="-"--}}
+{{--                                     data-gtm-eec-product-variant="-"--}}
+{{--                                     data-gtm-eec-product-position="{{ $productKey }}"--}}
+{{--                                     data-gtm-eec-product-list="محصولاتی که شامل این محتوا هستند"--}}
+                                >
 
                                     <div class="a--block-imageWrapper">
                                         <a href="{{ $product->url }}"
                                            class="a--block-imageWrapper-image a--gtm-eec-product a--gtm-eec-product-click d-block"
-                                           data-gtm-eec-product-id="{{ $product->id }}"
-                                           data-gtm-eec-product-name="{{ $product->name }}"
-                                           data-gtm-eec-product-price="{{ number_format($product->price['final'], 2, '.', '') }}"
-                                           data-gtm-eec-product-brand="آلاء"
-                                           data-gtm-eec-product-category="-"
-                                           data-gtm-eec-product-variant="-"
-                                           data-gtm-eec-product-position="{{ $productKey }}"
-                                           data-gtm-eec-product-list="محصولاتی که شامل این محتوا هستند">
+
+                                           @include('partials.gtm-eec.product', ['position'=>$productKey, 'list'=>'محصولاتی که شامل این محتوا هستند'])
+
+
+{{--                                           data-gtm-eec-product-id="{{ $product->id }}"--}}
+{{--                                           data-gtm-eec-product-name="{{ $product->name }}"--}}
+{{--                                           data-gtm-eec-product-price="{{ number_format($product->price['final'], 2, '.', '') }}"--}}
+{{--                                           data-gtm-eec-product-brand="آلاء"--}}
+{{--                                           data-gtm-eec-product-category="-"--}}
+{{--                                           data-gtm-eec-product-variant="-"--}}
+{{--                                           data-gtm-eec-product-position="{{ $productKey }}"--}}
+{{--                                           data-gtm-eec-product-list="محصولاتی که شامل این محتوا هستند"--}}
+                                        >
                                             <img src="https://cdn.alaatv.com/loder.jpg?w=1&h=1"
                                                  data-src="{{ $product->photo }}" alt="{{ $product->name }}"
                                                  class="a--block-image lazy-image" width="400" height="400"/>
@@ -772,14 +787,18 @@
                                         <div class="a--block-titleWrapper">
                                             <a href="{{ $product->url }}"
                                                class="m-link a--owl-carousel-type-2-item-subtitle a--gtm-eec-product-click"
-                                               data-gtm-eec-product-id="{{ $product->id }}"
-                                               data-gtm-eec-product-name="{{ $product->name }}"
-                                               data-gtm-eec-product-price="{{ number_format($product->price['final'], 2, '.', '') }}"
-                                               data-gtm-eec-product-brand="آلاء"
-                                               data-gtm-eec-product-category="-"
-                                               data-gtm-eec-product-variant="-"
-                                               data-gtm-eec-product-position="{{ $productKey }}"
-                                               data-gtm-eec-product-list="محصولاتی که شامل این محتوا هستند">
+
+                                               @include('partials.gtm-eec.product', ['position'=>$productKey, 'list'=>'محصولاتی که شامل این محتوا هستند'])
+
+{{--                                               data-gtm-eec-product-id="{{ $product->id }}"--}}
+{{--                                               data-gtm-eec-product-name="{{ $product->name }}"--}}
+{{--                                               data-gtm-eec-product-price="{{ number_format($product->price['final'], 2, '.', '') }}"--}}
+{{--                                               data-gtm-eec-product-brand="آلاء"--}}
+{{--                                               data-gtm-eec-product-category="-"--}}
+{{--                                               data-gtm-eec-product-variant="-"--}}
+{{--                                               data-gtm-eec-product-position="{{ $productKey }}"--}}
+{{--                                               data-gtm-eec-product-list="محصولاتی که شامل این محتوا هستند"--}}
+                                            >
                                                 <span class="m-badge m-badge--danger m-badge--dot"></span>
                                                 {{ $product->name }}
                                             </a>
