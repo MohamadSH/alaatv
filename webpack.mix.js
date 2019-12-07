@@ -311,7 +311,7 @@ class Mix {
 
     mixPageUserOrders() {
         this.mixCssAndJs([
-                'public/acm/AlaatvCustomFiles/css/page/user-orders.css',
+                'public/acm/AlaatvCustomFiles/css/page/user/orders.css',
             ],
             'public/css/user-orders.css',
             [
@@ -329,7 +329,7 @@ class Mix {
                 'node_modules/persian-datepicker/dist/css/persian-datepicker.css',
                 'node_modules/bootstrap-fileinput/css/fileinput.css',
                 'node_modules/bootstrap-fileinput/css/fileinput-rtl.css',
-                'public/acm/AlaatvCustomFiles/css/page/user-profile.css',
+                'public/acm/AlaatvCustomFiles/css/page/user/profile.css',
             ],
             'public/css/user-profile.css',
             [
@@ -370,7 +370,7 @@ class Mix {
                 'public/acm/AlaatvCustomFiles/components/ribbon/style.css',
                 'public/acm/AlaatvCustomFiles/components/CustomDropDown/style.css',
                 'public/acm/AlaatvCustomFiles/css/page/pages/content-search/searchResult.css',
-                'public/acm/AlaatvCustomFiles/css/page/user-dashboard.css',
+                'public/acm/AlaatvCustomFiles/css/page/user/dashboard.css',
             ],
             'public/css/user-dashboard.css',
             [
@@ -386,7 +386,7 @@ class Mix {
     mixPageUserProfileSalesReport() {
         this.mixCssAndJs([
                 'node_modules/highcharts/css/highcharts.css',
-                'public/acm/AlaatvCustomFiles/css/page/user-sales-report.css',
+                'public/acm/AlaatvCustomFiles/css/page/user/sales-report.css',
             ],
             'public/css/user-profile-salesReport.css',
             [
@@ -468,7 +468,7 @@ class Mix {
     mixLanding5() {
         this.mixCssAndJs([
                 'public/acm/AlaatvCustomFiles/components/imageWithCaption/style.css',
-                'public/acm/AlaatvCustomFiles/css/page-product-landing5.css',
+                'public/acm/AlaatvCustomFiles/css/page/product/landing/5.css',
             ],
             'public/css/page-landing5.css',
             [
@@ -481,7 +481,7 @@ class Mix {
         this.mixCssAndJs([
                 'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/style.css',
                 'public/acm/AlaatvCustomFiles/components/ScrollCarousel/style.css',
-                'public/acm/AlaatvCustomFiles/css/page-product-landing7.css',
+                'public/acm/AlaatvCustomFiles/css/page/product/landing/7.css',
             ],
             'public/css/page-landing7.css',
             [
@@ -497,7 +497,7 @@ class Mix {
                 'node_modules/flipclock/dist/flipclock.css',
                 'public/acm/AlaatvCustomFiles/components/imageWithCaption/style.css',
                 'public/acm/AlaatvCustomFiles/components/ribbon/style.css',
-                'public/acm/AlaatvCustomFiles/css/page-product-landing8.css',
+                'public/acm/AlaatvCustomFiles/css/page/product/landing/8.css',
             ],
             'public/css/page-landing8.css',
             [
@@ -514,8 +514,8 @@ class Mix {
                 'public/acm/AlaatvCustomFiles/components/ribbon/style.css',
                 'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/style.css',
                 'public/acm/AlaatvCustomFiles/components/ScrollCarousel/style.css',
-                'public/acm/AlaatvCustomFiles/css/page-product-landing7.css',
-                'public/acm/AlaatvCustomFiles/css/page-product-landing9.css',
+                'public/acm/AlaatvCustomFiles/css/page/product/landing/7.css',
+                'public/acm/AlaatvCustomFiles/css/page/product/landing/9.css',
             ],
             'public/css/page-landing9.css',
             [
@@ -532,8 +532,8 @@ class Mix {
                 'public/acm/AlaatvCustomFiles/components/ribbon/style.css',
                 'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/style.css',
                 'public/acm/AlaatvCustomFiles/components/ScrollCarousel/style.css',
-                'public/acm/AlaatvCustomFiles/css/page-product-landing7.css',
-                'public/acm/AlaatvCustomFiles/css/page-product-landing9.css',
+                'public/acm/AlaatvCustomFiles/css/page/product/landing/7.css',
+                'public/acm/AlaatvCustomFiles/css/page/product/landing/9.css',
             ],
             'public/css/page-landing10.css',
             [
@@ -567,7 +567,7 @@ class Mix {
                 'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/style.css',
                 'public/acm/AlaatvCustomFiles/components/ScrollCarousel/style.css',
                 'public/acm/AlaatvCustomFiles/components/Favorite/style.css',
-                'public/acm/AlaatvCustomFiles/css/page/product-show.css',
+                'public/acm/AlaatvCustomFiles/css/page/product/show.css',
             ],
             'public/css/product-show.css',
             [
@@ -606,7 +606,7 @@ class Mix {
                 'public/acm/videojs/plugins/pip/videojs.pip.min.css',
                 'public/acm/videojs/plugins/pip/videojs.pip.rtl.css',
                 'public/acm/videojs/plugins/seek-to-point.css',
-                'public/acm/AlaatvCustomFiles/css/product-content-embed.css',
+                'public/acm/AlaatvCustomFiles/css/page/product/content-embed.css',
             ],
             'public/css/product-content-embed.css',
             [
@@ -641,7 +641,7 @@ class Mix {
                 'node_modules/bootstrap-switch/dist/js/bootstrap-switch.js',
                 'node_modules/jquery-sticky/jquery.sticky.js',
                 'public/acm/AlaatvCustomFiles/js/UserCart.js',
-                'public/acm/AlaatvCustomFiles/js/page/checkout-review.js'
+                'public/acm/AlaatvCustomFiles/js/page/checkout/review.js'
             ],
             'public/js/checkout-review.js'
         );
@@ -652,7 +652,7 @@ class Mix {
             ],
             'public/css/checkout-verification.css',
             [
-                'public/acm/AlaatvCustomFiles/js/page/checkout-verification.js',
+                'public/acm/AlaatvCustomFiles/js/page/checkout/verification.js',
             ],
             'public/js/checkout-verification.js'
         );
@@ -774,7 +774,7 @@ class Mix {
     oldMixCheckoutAuth() {
         mix.babel(
             [
-                'public/acm/AlaatvCustomFiles/js/page-checkout-auth.js',
+                'public/acm/AlaatvCustomFiles/js/page/checkout/auth.js',
             ],
             'public/js/checkout-auth.js'
         ).version();
@@ -800,7 +800,7 @@ class Mix {
             .babel(
                 [
                     'public/acm/AlaatvCustomFiles/js/UserCart.js',
-                    'public/acm/AlaatvCustomFiles/js/page-checkout-payment.js',
+                    'public/acm/AlaatvCustomFiles/js/page/checkout/payment.js',
                 ],
                 'public/js/checkout-payment.js'
             ).version();

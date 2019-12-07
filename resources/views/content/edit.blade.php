@@ -142,7 +142,7 @@
 @section('page-js')
     <script src="{{ mix('/js/admin-all.js') }}" type="text/javascript"></script>
     <script src="{{ mix('/js/admin-content-edit.js') }}" type="text/javascript"></script>
-    <script src = "/acm/AlaatvCustomFiles/js/admin-edit-educationalContent.js" type = "text/javascript"></script>
+    <script src = "/acm/AlaatvCustomFiles/js/admin/edit/educationalContent.js" type = "text/javascript"></script>
     <script type="text/javascript">
         $("input[data-role=tagsinput], select[multiple][data-role=tagsinput]").tagsinput({
             tagClass: 'm-badge m-badge--info m-badge--wide m-badge--rounded'
