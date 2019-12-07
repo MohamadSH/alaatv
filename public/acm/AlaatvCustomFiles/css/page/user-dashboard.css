@@ -303,3 +303,12 @@
         display: none;
     }
 }
+
+.setRow .setRow-label {
+    width: calc( 100% - 205px );
+    overflow: hidden;
+    margin-left: 5px;
+}
+.CustomDropDown .select-items .select-item {
+    adding-left: 5px;
+}
