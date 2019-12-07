@@ -24,7 +24,7 @@ var LoadContentSet = function () {
         loadList($('#searchResult_video .searchResult .listType'), listHtmlData.video, 'video');
         loadList($('#searchResult_pamphlet .m-widget4'), listHtmlData.pamphlet, 'pamphlet');
         imageObserver.observe();
-        showModalForSmallScreen();
+        // showModalForSmallScreen();
     }
 
     function loadList($list, data, type) {
@@ -350,7 +350,7 @@ var LoadContentSet = function () {
         });
 
 
-        $(window).resize(function(){
+        $( window ).on( "orientationchange", function( event ) {
             changeToModalAndList();
         });
     }
