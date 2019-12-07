@@ -59,7 +59,9 @@
                                                                     </div>
                                                                 </div>
                                                                 <div class="value">
-                                                                    {{implode('، ',(array)$product->info_attributes['productionYear'])}}
+                                                                    @if(isset($product->info_attributes['productionYear']))
+                                                                        {{implode('، ',(array)$product->info_attributes['productionYear'])}}
+                                                                    @endif
                                                                 </div>
                                                             </div>
                                                         </div>

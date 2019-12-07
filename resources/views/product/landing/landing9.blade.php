@@ -8,7 +8,7 @@
     <div class="row">
         <div class="col">
             <div class="m-portlet m-portlet--head-overlay m-portlet--full-height  m-portlet--rounded-force">
-    
+
                 <div>
                     <img src="/acm/extra/taftan_landing1.jpg" class="a--full-width">
                 </div>
@@ -58,17 +58,18 @@
                                 </div>
 
                             </div>--}}
-                            
-    
+
+
                             @foreach($blocks as $blockKey=>$block)
                                 @if($block->products->count() > 0)
                                     @include('block.partials.block', [
                                             'blockCustomClass'=>'landing7Block-'.$blockKey.' a--owl-carousel-type-2 OwlCarouselType2-landing9',
+                                            'blockType'=>'product2',
                                             'blockCustomId'=>$block->class
                                         ])
                                 @endif
                             @endforeach
-                            
+
                         </div>
                     </div>
                 </div>

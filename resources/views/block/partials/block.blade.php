@@ -9,7 +9,7 @@
             ($blockType === 'productSampleVideo' && optional(optional(optional($block->sets)->first())->getActiveContents2())->count() > 0) ||
 
             ($blockType === 'content' && !is_null($block->contents) && $block->contents->count() > 0) ||
-            ($blockType === 'product' && !is_null($block->products) && $block->products->count() > 0) ||
+            (($blockType === 'product' || $blockType === 'product2') && !is_null($block->products) && $block->products->count() > 0) ||
             ($blockType === 'set' && !is_null($block->sets) && $block->sets->count() > 0)
         )
     )
@@ -86,10 +86,16 @@
                     <div class="m-widget_head-owlcarousel-items ScrollCarousel a--owl-carousel-type-2 carousel_block_{{ $block->id }}">
 
 
-                        @if(((isset($blockType) && $blockType === 'product' && isset($block->products) && $block->products->count() > 0) || !isset($blockType)) && isset($block->products))
-                            @foreach($block->products as $productKey=>$product)
-                                @include('block.partials.product')
-                            @endforeach
+                        @if(((isset($blockType) && ($blockType === 'product' || $blockType === 'product2') && isset($block->products) && $block->products->count() > 0) || !isset($blockType)) && isset($block->products))
+                            @if($blockType === 'product')
+                                @foreach($block->products as $productKey=>$product)
+                                    @include('block.partials.product')
+                                @endforeach
+                            @elseif($blockType === 'product2')
+                                @foreach($block->products as $productKey=>$product)
+                                    @include('block.partials.product2')
+                                @endforeach
+                            @endif
                         {{-- old content block loop --}}
                         @elseif(((isset($blockType) && $blockType === 'content' && isset($block->contents) && $block->contents->count() > 0) || !isset($blockType)) && isset($block->contents))
                             @foreach($block->contents as $contentKey=>$content)
