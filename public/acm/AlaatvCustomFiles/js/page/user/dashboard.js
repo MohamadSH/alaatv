@@ -4,6 +4,8 @@ var LoadContentSet = function () {
 
     function loadNewData(url) {
         showSelectedProduct(url);
+        loadList($('#searchResult_video .searchResult .listType'), '', 'video');
+        loadList($('#searchResult_pamphlet .m-widget4'), '', 'pamphlet');
         ajax(url, loadNewContentSetList);
     }
 
@@ -21,16 +23,19 @@ var LoadContentSet = function () {
 
     function loadNewContentSetList(data) {
         var listHtmlData = createListHtmlData(data);
-        loadList($('#searchResult_video .searchResult .listType'), listHtmlData.video, 'video');
-        loadList($('#searchResult_pamphlet .m-widget4'), listHtmlData.pamphlet, 'pamphlet');
+        handleVideoAndPamphletListForNewContentSet($('#searchResult_video .searchResult .listType'), listHtmlData.video, 'video');
+        handleVideoAndPamphletListForNewContentSet($('#searchResult_pamphlet .m-widget4'), listHtmlData.pamphlet, 'pamphlet');
         imageObserver.observe();
-        showModalForSmallScreen();
+    }
+
+    function handleVideoAndPamphletListForNewContentSet($list, listHtmlData, type) {
+        loadList($list, listHtmlData, type);
+        checkShowLoadMoreBtn(type);
+        checkNoContent(type);
     }
 
     function loadList($list, data, type) {
         $list.html(data);
-        checkShowLoadMoreBtn(type);
-        checkNoContent(type);
     }
 
     function appendToContentSetList(data) {
@@ -200,6 +205,7 @@ var LoadContentSet = function () {
             '        </div>\n' +
             '        <div class="detailes">\n' +
             '            <div class="videoDetaileWrapper">\n' +
+            '            <div class="setName">\n' +
             '                <span>\n' +
             '                    <svg viewBox="0 0 24 24" preserveAspectRatio="xMidYMid meet" focusable="false" class="style-scope yt-icon">\n' +
             '                        <path d="M3.67 8.67h14V11h-14V8.67zm0-4.67h14v2.33h-14V4zm0 9.33H13v2.34H3.67v-2.34zm11.66 0v7l5.84-3.5-5.84-3.5z" class="style-scope yt-icon"></path>\n' +
@@ -207,10 +213,12 @@ var LoadContentSet = function () {
             '                </span>\n' +
             '                <span> از دوره </span>\n' +
             '                <span>' + data.setName + '</span>\n' +
-            '                <br>\n' +
+            '            </div>\n' +
+            '            <div class="updateTime">\n' +
             '                <i class="fa fa-calendar-alt m--margin-right-5"></i>\n' +
             '                <span>تاریخ بروزرسانی: </span>\n' +
             '                <span>' + data.lastUpdate + '</span>\n' +
+            '            </div>\n' +
             '                <div class="videoOrder">\n' +
             '                    <div class="videoOrder-title">جلسه</div>\n' +
             '                    <div class="videoOrder-number">' + data.order + '</div>\n' +
@@ -350,7 +358,7 @@ var LoadContentSet = function () {
         });
 
 
-        $(window).resize(function(){
+        $( window ).on( "orientationchange", function( event ) {
             changeToModalAndList();
         });
     }
