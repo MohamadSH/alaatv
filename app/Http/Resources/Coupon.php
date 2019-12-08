@@ -26,8 +26,8 @@ class Coupon extends JsonResource
         $this->loadMissing('coupontype' , 'discounttype') ;
 
         return [
-            'name'          => $this->name,
-            'code'          => $this->code,
+            'name'          => $this->when(isset($this->name) , $this->name),
+            'code'          => $this->when(isset($this->code) , $this->code),
             'discount'      => $this->discount,
             'usage_number'  => $this->usageNumber,
             'coupontype'    => $this->when(isset($this->coupontype_id) , function (){ return new Coupontype($this->coupontype);}),

@@ -32,19 +32,13 @@ class ProductSet extends JsonResource
 
         return [
             'id'                    => $this->id,
-            'redirect_url'          => $this->redirectUrl,
-            'name'                  => $this->name,
-            'short_name'            => $this->shortName,
-            'photo'                 => $this->photo,
-            'url'            => [
-                'set'          => [
-                    'web' => null,
-                    'api' => $this->api_url,
-                ],
-                'list'         => [
-                    'web' => $this->content_url,
-                    'api' => null,
-                ],
+            'redirect_url'          => $this->when(isset($this->redirectUrl) , $this->redirectUrl),
+            'name'                  => $this->when(isset($this->name) , $this->name),
+            'short_name'            => $this->when(isset($this->short_name) , $this->short_name),
+            'photo'                 => $this->when(isset($this->photo) , $this->photo),
+            'url'                   => new Url($this),
+            'list_contents'         => [
+                'web' => $this->content_url,
             ],
         ];
     }
