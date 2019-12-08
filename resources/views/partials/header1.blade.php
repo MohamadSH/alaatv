@@ -698,7 +698,21 @@
                                     </div>
                                 </div>
                             </li>
-                            @if(Auth::check())
+
+
+
+                        @if(Auth::check())
+
+                                <li class="m-nav__item">
+                                    <a href="https://alaatv.com/user/orders" class="m-nav__link">
+                                    <span class="m-nav__link-icon">
+                                        <span class="m-nav__link-icon-wrapper"><i class="fa fa-wallet"></i></span>
+                                        @if(Auth::user()->getTotalWalletBalance()>0)
+                                            <span class="m-nav__link-badge m-badge m-badge--accent">{{number_format(Auth::user()->getTotalWalletBalance())}}</span>
+                                        @endif
+                                    </span>
+                                    </a>
+                                </li>
 
                                 <li class="m-nav__item">
                                     <a href="{{ action("Web\OrderController@checkoutReview") }}" class="m-nav__link">
@@ -792,11 +806,11 @@
 
                             @else
                                 <li class="a--login-item m-nav__item m-topbar__quick-actions m-topbar__quick-actions--img">
-                                    <a href="{{ route("login") }}" class="m-nav__link loginPageLinkInNav">
+                                    <a data-href="{{ Request::url() }}" class="m-nav__link loginPageLinkInNav LoginBeforeClick">
                                         <span class="a--login-title">ورود/ثبت نام</span>
                                         <span class="m-nav__link-icon">
-                                        <i class="fa fa-sign-in-alt"></i>
-                                    </span>
+                                            <i class="fa fa-sign-in-alt"></i>
+                                        </span>
                                     </a>
                                 </li>
                             @endif
