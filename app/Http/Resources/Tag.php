@@ -4,28 +4,20 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Arr;
 
-/**
- * Class \App\Section
- *
- * @mixin \App\Section
- * */
-class Section extends JsonResource
+class Tag extends JsonResource
 {
     /**
      * Transform the resource into an array.
      *
      * @param  Request  $request
+     *
      * @return array
      */
     public function toArray($request)
     {
-        if (!($this->resource instanceof \App\Section)) {
-            return [];
-        }
-
-        return [
-            'name' => $this->when(isset($this->name) , $this->name) ,
-        ];
+        $array = (array) $this->resource;
+        return Arr::get($array, 'tags');
     }
 }

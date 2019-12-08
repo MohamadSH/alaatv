@@ -31,16 +31,10 @@ class OrderOwner extends JsonResource
 
         return [
             'id'            => $this->id,
-            'first_name'    => $this->firstName,
-            'last_name'     => $this->lastName,
-            'mobile'        => $this->mobile,
-            'national_code' => $this->nationalCode ,
-            'province'      => $this->province,
-            'city'          => $this->city,
-            'address'       => $this->address,
-            'postal_code'   => $this->postalCode,
-            'school'        => $this->school,
-            'info'          => $this->info,
+            'first_name'    => $this->when(isset($this->firstName) , $this->firstName),
+            'last_name'     => $this->when(isset($this->lastName) , $this->lastName),
+            'mobile'        => $this->when(isset($this->mobile) , $this->mobile),
+            'national_code' => $this->when(isset($this->nationalCode) , $this->nationalCode) ,
             'profile_completion'  => (int) $this->completion(),
         ];
     }
