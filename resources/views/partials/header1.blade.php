@@ -641,30 +641,30 @@
                     <div class="m-stack__item m-topbar__nav-wrapper">
                         <ul class="m-topbar__nav m-nav m-nav--inline">
 
-                            <li class="m-nav__item m--hidden-tablet-and-mobile">
-                                <a data-href="{{ route('live') }}" class="m-nav__link LoginBeforeClick" title="پخش زنده">
-                                    <span class="m-nav__link-icon nav__link-icon-livePage">
-                                        <span class="m-nav__link-icon-wrapper">
-                                            <img class="a--full-width lazy-image
-                                                 @if($live)
-                                                    liveOn
-                                                 @else
-                                                    liveOff
-                                                 @endif "
-                                                 src="https://cdn.alaatv.com/loder.jpg?w=1&h=1"
-                                                 @if($live)
-                                                 data-src="https://cdn.alaatv.com/upload/live-on.png"
-                                                 @else
-                                                 data-src="https://cdn.alaatv.com/upload/live-off.png"
-                                                 @endif
-                                                 width="35"
-                                                 height="40"
-                                                 alt="livePageIcon"
-                                            >
-                                        </span>
-                                    </span>
-                                </a>
-                            </li>
+{{--                            <li class="m-nav__item m--hidden-tablet-and-mobile">--}}
+{{--                                <a data-href="{{ route('live') }}" class="m-nav__link LoginBeforeClick" title="پخش زنده">--}}
+{{--                                    <span class="m-nav__link-icon nav__link-icon-livePage">--}}
+{{--                                        <span class="m-nav__link-icon-wrapper">--}}
+{{--                                            <img class="a--full-width lazy-image--}}
+{{--                                                 @if($live)--}}
+{{--                                                    liveOn--}}
+{{--                                                 @else--}}
+{{--                                                    liveOff--}}
+{{--                                                 @endif "--}}
+{{--                                                 src="https://cdn.alaatv.com/loder.jpg?w=1&h=1"--}}
+{{--                                                 @if($live)--}}
+{{--                                                 data-src="https://cdn.alaatv.com/upload/live-on.png"--}}
+{{--                                                 @else--}}
+{{--                                                 data-src="https://cdn.alaatv.com/upload/live-off.png"--}}
+{{--                                                 @endif--}}
+{{--                                                 width="35"--}}
+{{--                                                 height="40"--}}
+{{--                                                 alt="livePageIcon"--}}
+{{--                                            >--}}
+{{--                                        </span>--}}
+{{--                                    </span>--}}
+{{--                                </a>--}}
+{{--                            </li>--}}
 
                             <li class="m-nav__item m-dropdown m-dropdown--large m-dropdown--arrow m-dropdown--align-right m-dropdown--mobile-full-width m-dropdown--skin-light	m-list-search m-list-search--skin-light" m-dropdown-toggle="click" id="m_quicksearch" m-quicksearch-mode="dropdown" m-dropdown-persistent="1">
 
@@ -699,16 +699,7 @@
                                 </div>
                             </li>
                             @if(Auth::check())
-                                <li class="m-nav__item">
-                                    <a href="{{ action("Web\UserController@userOrders") }}" class="m-nav__link">
-                                        <span class="m-nav__link-icon">
-                                            <span class="m-nav__link-icon-wrapper"><i class="fa fa-wallet"></i></span>
-                                            @if(Auth::user()->getTotalWalletBalance() > 0)
-                                            <span class="m-nav__link-badge m-badge  m-badge--accent">{{ number_format(Auth::user()->getTotalWalletBalance()) }}</span>
-                                            @endif
-                                        </span>
-                                    </a>
-                                </li>
+
                                 <li class="m-nav__item">
                                     <a href="{{ action("Web\OrderController@checkoutReview") }}" class="m-nav__link">
                                         <span class="m-nav__link-icon">
