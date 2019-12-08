@@ -29,22 +29,15 @@ class SetInContent extends JsonResource
         }
 
         return [
-            'redirect_url'           => $this->redirectUrl,
-            'name'                  => $this->name,
-            'short_name'             => $this->shortName,
-            'photo'                 => $this->photo,
-            'tags'                  => $this->tags,
-            'contents_count'        => $this->contents_count,
-            'active_contents_count' => $this->activeContents->count() ,
-            'url'            => [
-                'set'          => [
-                    'web' => null,
-                    'api' => $this->api_url,
-                ],
-                'list'         => [
-                    'web' => $this->content_url,
-                    'api' => null,
-                ],
+            'redirect_url'              => $this->when(isset($this->redirectUrl) , $this->redirectUrl),
+            'name'                      => $this->when(isset($this->name) , $this->name),
+            'short_name'                => $this->when(isset($this->shortName) , $this->shortName),
+            'photo'                     => $this->when(isset($this->photo) , $this->photo),
+            'contents_count'            => $this->contents_count,
+            'active_contents_count'     => $this->activeContents->count() ,
+            'url'                       => new Url($this),
+            'list_contents'             => [
+                'web' => $this->content_url,
             ],
         ];
     }

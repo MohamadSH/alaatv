@@ -40,7 +40,7 @@ class PurchasedOrderproduct extends JsonResource
             'price'             => $this->price,
 //            'bons'              => AttachedUserbon::collection($this->bons),
             'attributevalues'   => $this->when($this->attributevalues->isNotEmpty() , function (){return Attributevalue::collection($this->attributevalues);}), //Not a relationship
-            'photo'             => $this->photo,
+            'photo'             => $this->when(isset($this->photo) , $this->photo),
         ];
     }
 }

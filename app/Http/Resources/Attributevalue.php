@@ -25,7 +25,7 @@ class Attributevalue extends JsonResource
 
         return [
             'attribute_id' => $this->attribute_id ,
-            'name'         => $this->name,
+            'name'         => $this->when(isset($this->name) , $this->name),
         ];
     }
 }

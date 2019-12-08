@@ -25,7 +25,7 @@ class Orderpostinginfo extends JsonResource
 
 
         return [
-            'post_code' => $this->postCode
+            'post_code' => $this->when(isset($this->postCode) , $this->postCode)
         ];
     }
 }
