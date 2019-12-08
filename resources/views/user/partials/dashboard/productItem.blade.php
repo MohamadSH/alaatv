@@ -4,7 +4,7 @@
         <div class="row no-gutters">
             <div class="col-md-2 productItem-imageCol">
                 <div class="productItem-image">
-                    <img src="https://cdn.alaatv.com/loder.jpg?w=1&h=1"
+                    <img src="https://cdn.alaatv.com/loder.jpg?w=1&h=1" data-toggle="m-tooltip" data-placement="top" data-original-title="{{$name}}"
                          data-src="{{ $src }}"
                          alt="{{ $name }}"
                          class="lazy-image a--full-width" width="400" height="400" />

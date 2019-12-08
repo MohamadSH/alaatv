@@ -617,6 +617,9 @@ $(document).ready(function () {
         onChanged: function (data) {
             // { index: 2, totalCount: 5, value: "3", text: "فرسنگ سوم" }
         },
+        onRendered: function (data) {
+            $('[data-toggle="m-tooltip"]').tooltip();
+        },
         parentOptions: function ($this) {
             var parentId = $this.attr('data-parent-id');
             return '#'+parentId;
@@ -654,7 +657,7 @@ $(document).ready(function () {
             }
             return '' +
                 '<div class="setRow">' +
-                '  <div class="setRow-label">'+
+                '  <div class="setRow-label" data-toggle="m-tooltip" data-placement="top" data-original-title="'+label+'">'+
                 label+
                 '  </div>' +
                 '  <div class="setRow-action">'+
