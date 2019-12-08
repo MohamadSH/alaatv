@@ -86,6 +86,9 @@
     overflow: hidden;
     white-space: nowrap;
 }
+.CustomDropDown .select-items .select-item {
+    padding: 8px;
+}
 
 /* Style items (options): */
 .CustomDropDown .select-items {

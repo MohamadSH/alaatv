@@ -141,11 +141,20 @@ select.form-control {
     border-radius: 60px;
 }
 
+.m-brand {
+    padding: 0 10px;
+}
+.m-brand .m-brand__tools .m-brand__icon:last-child {
+    margin-left: 0;
+}
 /*media query*/
 @media only screen and (max-width: 767.98px) {
     .m-body .m-content {
         /*padding: 10px 20px 30px 20px;*/
         padding: 10px 5px 30px 5px;
+    }
+    .modal .modal-content .modal-body {
+        padding: 5px;
     }
 
     .row {
