@@ -109,6 +109,7 @@ class Contentset extends BaseModel implements Taggable, SeoInterface , Favorable
         'shortName',
         'author',
         'contentUrl',
+        'setUrl'
     ];
 
     protected $hidden = [
@@ -321,6 +322,11 @@ class Contentset extends BaseModel implements Taggable, SeoInterface , Favorable
         $contentId = !is_null($content) ? $content->id : null;
 
         return isset($contentId) ? action("Web\ContentController@show", $contentId) : '';
+    }
+
+    public function getSetUrlAttribute($value): string
+    {
+        return route('set.show' , $this->id );
     }
 
     public function getWebUrlAttribute($value): string

@@ -396,12 +396,12 @@
 }
 
 @media only screen and (min-width: 1700px) {
-    .m-body .m-content.boxed {
-        padding: 10px 100px 30px 100px;
-    }
-    .m-portlet.boxed {
+    .boxed {
         margin-left: 65px;
         margin-right: 65px;
+    }
+    .m-body .m-content.boxed {
+        padding: 10px 100px 30px 100px;
     }
 }
 @media only screen and (max-width: 1800px) {

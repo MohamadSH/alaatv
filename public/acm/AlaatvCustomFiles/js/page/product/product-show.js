@@ -733,9 +733,9 @@ var CustomPageFunction = function () {
             player.nuevo({
                 // logotitle:"آموزش مجازی آلاء",
                 // logo:"https://sanatisharif.ir/image/11/135/67/logo-150x22_20180430222256.png",
-                logocontrolbar: '/acm/extra/Alaa-logo.gif',
+                logocontrolbar: 'https://cdn.alaatv.com/upload/footer-alaaLogo.png?w=18&h=24',
                 // logoposition:"RT", // logo position (LT - top left, RT - top right)
-                logourl: '//sanatisharif.ir',
+                logourl: '//alaatv.com',
                 // related: related_videos,
                 // shareUrl:"https://www.nuevolab.com/videojs/",
                 // shareTitle: "Nuevo plugin for VideoJs Player",

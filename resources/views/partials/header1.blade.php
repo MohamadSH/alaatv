@@ -3,6 +3,8 @@
         font-family: IRANSans !important;
     }
 </style>--}}
+
+
 <!-- BEGIN: Header -->
 <header id="m_header" class="a--MegaMenu m-grid__item m-header " m-minimize-offset="200" m-minimize-mobile-offset="200">
     <div class="m-container m-container--fluid m-container--full-height">
@@ -10,7 +12,14 @@
             <!-- BEGIN: Brand -->
             <div class="m-stack__item m-brand  m-brand--skin-dark ">
                 <div class="m-stack m-stack--ver m-stack--general">
-                    <div class="m-stack__item m-stack__item--middle m-brand__logo">
+                    <div class="m-stack__item m-stack__item--middle m-brand__logo m-brand__tools">
+
+                        <!-- BEGIN: Responsive Aside Left Menu Toggler -->
+                        <a href="javascript:" id="m_aside_left_offcanvas_toggle" class="m-brand__icon m-brand__toggler m-brand__toggler--left m--visible-tablet-and-mobile-inline-block">
+                            <span></span>
+                        </a>
+                        <!-- END -->
+
                         <a href="{{route('web.index')}}" class="m-brand__logo-wrapper">
                             <img alt="لوگوی سایت آلاء" src="{{$wLogoUrl}}"  width="135" height="22"/>
                         </a>
@@ -18,31 +27,31 @@
                     <div class="m-stack__item m-stack__item--middle m-brand__tools">
 
                         <!-- BEGIN: Responsive Aside Left Menu Toggler -->
-                        <a href="{{ route('live') }}" class="m-brand__toggler--left m--visible-tablet-and-mobile-inline-block liveIconOnMobile" title="پخش زنده">
-                            <img class="a--full-width lazy-image
-                                @if($live)
-                                liveOn
-                                @else
-                                liveOff
-                                @endif "
-                                src="https://cdn.alaatv.com/loder.jpg?w=1&h=1"
-                                @if($live)
-                                data-src="https://cdn.alaatv.com/upload/live-on.png"
-                                @else
-                                data-src="https://cdn.alaatv.com/upload/live-off-mobile.png"
-                                @endif
-                                width="35"
-                                height="40"
-                                alt="livePageIcon"
-                            >
-                        </a>
+{{--                        <a href="{{ route('live') }}" class="m-brand__toggler--left m--visible-tablet-and-mobile-inline-block liveIconOnMobile" title="پخش زنده">--}}
+{{--                            <img class="a--full-width lazy-image--}}
+{{--                                @if($live)--}}
+{{--                                liveOn--}}
+{{--                                @else--}}
+{{--                                liveOff--}}
+{{--                                @endif "--}}
+{{--                                src="https://cdn.alaatv.com/loder.jpg?w=1&h=1"--}}
+{{--                                @if($live)--}}
+{{--                                data-src="https://cdn.alaatv.com/upload/live-on.png"--}}
+{{--                                @else--}}
+{{--                                data-src="https://cdn.alaatv.com/upload/live-off-mobile.png"--}}
+{{--                                @endif--}}
+{{--                                width="35"--}}
+{{--                                height="40"--}}
+{{--                                alt="livePageIcon"--}}
+{{--                            >--}}
+{{--                        </a>--}}
                         <!-- END -->
 
-                        <!-- BEGIN: Responsive Aside Left Menu Toggler -->
-                        <a href="javascript:" id="m_aside_left_offcanvas_toggle" class="m-brand__icon m-brand__toggler m-brand__toggler--left m--visible-tablet-and-mobile-inline-block">
-                            <span></span>
-                        </a>
-                        <!-- END -->
+{{--                        <!-- BEGIN: Responsive Aside Left Menu Toggler -->--}}
+{{--                        <a href="javascript:" id="m_aside_left_offcanvas_toggle" class="m-brand__icon m-brand__toggler m-brand__toggler--left m--visible-tablet-and-mobile-inline-block">--}}
+{{--                            <span></span>--}}
+{{--                        </a>--}}
+{{--                        <!-- END -->--}}
 
                         <!-- BEGIN: Aside Hide Toggle -->
                         <a href="javascript:" id="m_aside_left_hide_toggle" class="m-brand__icon m-brand__toggler m-brand__toggler--left m--hidden-tablet-and-mobile">
@@ -58,11 +67,24 @@
                         <!-- END -->
 
 
-                        <!-- BEGIN: Topbar Toggler -->
-                        <a id="m_aside_header_topbar_mobile_toggle" href="javascript:" class="m-brand__icon m--visible-tablet-and-mobile-inline-block">
-                            <i class="fa fa-user-alt" style="color: white;"></i>
-                        </a>
-                        <!-- BEGIN: Topbar Toggler -->
+                        @if(Auth::check())
+                            <a href="{{ action("Web\OrderController@checkoutReview") }}" class="m-brand__icon m--visible-tablet-and-mobile-inline-block">
+                                <i class="fa fa-shopping-cart" style="color: white;"></i>
+                                @if(Auth::user()->numberOfProductsInBasket > 0)
+                                    <span class="shoppingBasketOfUserNumber m-nav__link-badge m-badge m-badge--danger">{{ Auth::user()->numberOfProductsInBasket }}</span>
+                                @endif
+                            </a>
+                            <!-- BEGIN: Topbar Toggler -->
+                            <a id="m_aside_header_topbar_mobile_toggle1" href="javascript:" class="m-brand__icon m--visible-tablet-and-mobile-inline-block">
+                                <i class="fa fa-user-alt" style="color: white;"></i>
+                            </a>
+                            <!-- BEGIN: Topbar Toggler -->
+                        @else
+                            <a data-href="{{ Request::url() }}" class="m-brand__icon m--visible-tablet-and-mobile-inline-block LoginBeforeClick">
+                                <i class="fa fa-sign-in-alt" style="color: white;"></i>
+                            </a>
+                        @endif
+
                     </div>
                 </div>
             </div>
@@ -521,7 +543,7 @@
                             </div>
                         </li>
                         <li class="m-menu__item  m-menu__item--submenu m-menu__item--rel a--MegaMenu-title">
-                            <a href="javascript:" class="m-menu__link m-menu__toggle" title="فیلم های آلاء">
+                            <a href="javascript:" class="m-menu__link m-menu__toggle" title="همایش های آلاء">
                                 <i class="m-menu__link-icon flaticon-layers"></i>
                                 <span class="m-menu__link-text">همایش های آلاء</span>
                                 <i class="m-menu__hor-arrow fa fa-angle-down"></i>
@@ -619,30 +641,30 @@
                     <div class="m-stack__item m-topbar__nav-wrapper">
                         <ul class="m-topbar__nav m-nav m-nav--inline">
 
-                            <li class="m-nav__item m--hidden-tablet-and-mobile">
-                                <a data-href="{{ route('live') }}" class="m-nav__link LoginBeforeClick" title="پخش زنده">
-                                    <span class="m-nav__link-icon nav__link-icon-livePage">
-                                        <span class="m-nav__link-icon-wrapper">
-                                            <img class="a--full-width lazy-image
-                                                 @if($live)
-                                                    liveOn
-                                                 @else
-                                                    liveOff
-                                                 @endif "
-                                                 src="https://cdn.alaatv.com/loder.jpg?w=1&h=1"
-                                                 @if($live)
-                                                 data-src="https://cdn.alaatv.com/upload/live-on.png"
-                                                 @else
-                                                 data-src="https://cdn.alaatv.com/upload/live-off.png"
-                                                 @endif
-                                                 width="35"
-                                                 height="40"
-                                                 alt="livePageIcon"
-                                            >
-                                        </span>
-                                    </span>
-                                </a>
-                            </li>
+{{--                            <li class="m-nav__item m--hidden-tablet-and-mobile">--}}
+{{--                                <a data-href="{{ route('live') }}" class="m-nav__link LoginBeforeClick" title="پخش زنده">--}}
+{{--                                    <span class="m-nav__link-icon nav__link-icon-livePage">--}}
+{{--                                        <span class="m-nav__link-icon-wrapper">--}}
+{{--                                            <img class="a--full-width lazy-image--}}
+{{--                                                 @if($live)--}}
+{{--                                                    liveOn--}}
+{{--                                                 @else--}}
+{{--                                                    liveOff--}}
+{{--                                                 @endif "--}}
+{{--                                                 src="https://cdn.alaatv.com/loder.jpg?w=1&h=1"--}}
+{{--                                                 @if($live)--}}
+{{--                                                 data-src="https://cdn.alaatv.com/upload/live-on.png"--}}
+{{--                                                 @else--}}
+{{--                                                 data-src="https://cdn.alaatv.com/upload/live-off.png"--}}
+{{--                                                 @endif--}}
+{{--                                                 width="35"--}}
+{{--                                                 height="40"--}}
+{{--                                                 alt="livePageIcon"--}}
+{{--                                            >--}}
+{{--                                        </span>--}}
+{{--                                    </span>--}}
+{{--                                </a>--}}
+{{--                            </li>--}}
 
                             <li class="m-nav__item m-dropdown m-dropdown--large m-dropdown--arrow m-dropdown--align-right m-dropdown--mobile-full-width m-dropdown--skin-light	m-list-search m-list-search--skin-light" m-dropdown-toggle="click" id="m_quicksearch" m-quicksearch-mode="dropdown" m-dropdown-persistent="1">
 
@@ -677,16 +699,7 @@
                                 </div>
                             </li>
                             @if(Auth::check())
-                                <li class="m-nav__item">
-                                    <a href="{{ action("Web\UserController@userOrders") }}" class="m-nav__link">
-                                        <span class="m-nav__link-icon">
-                                            <span class="m-nav__link-icon-wrapper"><i class="fa fa-wallet"></i></span>
-                                            @if(Auth::user()->getTotalWalletBalance() > 0)
-                                            <span class="m-nav__link-badge m-badge  m-badge--accent">{{ number_format(Auth::user()->getTotalWalletBalance()) }}</span>
-                                            @endif
-                                        </span>
-                                    </a>
-                                </li>
+
                                 <li class="m-nav__item">
                                     <a href="{{ action("Web\OrderController@checkoutReview") }}" class="m-nav__link">
                                         <span class="m-nav__link-icon">
@@ -723,6 +736,23 @@
                                                     <ul class="m-nav m-nav--skin-light">
                                                         <li class="m-nav__section m--hide">
                                                             <span class="m-nav__section-text"> ---- </span>
+                                                        </li>
+
+                                                        <li class="m-nav__item">
+                                                            <a href="{{ action("Web\UserController@userOrders") }}" class="m-nav__link">
+
+                                                                <i class="m-nav__link-icon fa fa-wallet"></i>
+
+
+                                                                <span class="m-nav__link-title">
+                                                                    <span class="m-nav__link-wrap">
+                                                                        <span class="m-nav__link-text">
+                                                                            <span>موجودی کیف پول: </span>
+                                                                            <span>  {{number_format(Auth::user()->getTotalWalletBalance())}}  تومان </span>
+                                                                        </span>
+                                                                    </span>
+                                                                </span>
+                                                            </a>
                                                         </li>
                                                         <li class="m-nav__item">
                                                             <a href="{{ action("Web\UserController@show",Auth::user()) }}" class="m-nav__link">

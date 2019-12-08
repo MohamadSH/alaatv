@@ -98,27 +98,38 @@ trait ProductAttributeTrait
         $product = $this;
         $key     = 'product:getInfoAttributes:'.$product->id;
 
-        return Cache::tags(['product' , 'attribute' , 'product_'.$this->id , 'product_'.$this->id.'_attributes'])
+        return Cache::tags(['product' , 'attribute' , 'infoAttributes' , 'product_'.$this->id , 'product_'.$this->id.'_attributes' , 'product_'.$this->id.'_infoAttributes'])
             ->remember($key, config('constants.CACHE_600'), function () use ($product) {
-                $attributes = [
-                    'productionYear'    => null,
-                    'major'             => null,
-                    'educationalSystem' => null,
-                    'shippingMethod'    => null,
-                    'teacher'           => null,
-                    'studyPlan'         => null,
-                    'courseDuration'    => null,
-                    'accessoryServices' => null,
-                    'downloadDate'      => null,
-                    'duration'          => null,
-                    'services'          => null,
-    
-                ];
+                $attributes = [];
                 /** @var \App\Attributevalue $attributevalue */
                 foreach ($product->attributevalues as $attributevalue) {
                     /** @var \App\Attribute $attribute */
                     $attribute                      = $attributevalue->attribute;
-                    $attributes[$attribute->name][] = $attributevalue->name;
+                    if($attribute->attributetype_id != config('constants.ATTRIBUTE_TYPE_EXTRA'))
+                    {
+                        $attributes[$attribute->name][] = $attributevalue->name;
+                    }
+                }
+                return $attributes;
+            });
+    }
+
+
+    public function getExtraAttributesAttribute(){
+        $product = $this;
+        $key     = 'product:getExtraAttributes:'.$product->id;
+
+        return Cache::tags(['product' , 'attribute' , 'extraAttributes' , 'product_'.$this->id , 'product_'.$this->id.'_attributes' , 'product_'.$this->id.'_extra!ttributes'])
+            ->remember($key, config('constants.CACHE_600'), function () use ($product) {
+                $attributes = [];
+                /** @var \App\Attributevalue $attributevalue */
+                foreach ($product->attributevalues as $attributevalue) {
+                    /** @var \App\Attribute $attribute */
+                    $attribute                      = $attributevalue->attribute;
+                    if($attribute->attributetype_id == config('constants.ATTRIBUTE_TYPE_EXTRA'))
+                    {
+                        $attributes[$attribute->name][] = $attributevalue->name;
+                    }
                 }
                 return $attributes;
             });

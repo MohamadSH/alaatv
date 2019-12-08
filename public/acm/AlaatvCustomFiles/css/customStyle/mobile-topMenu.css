@@ -1,0 +1,15 @@
+.m-stack.m-stack--general {
+    display: flex;
+    justify-content: space-between;
+}
+.m-stack.m-stack--general.m-stack--ver > .m-stack__item {
+    display: flex;
+    align-items: center;
+}
+.m-stack.m-stack--general.m-stack--ver > .m-stack__item.m-brand__logo {
+    text-align: right;
+}
+.m-brand .m-brand__tools .m-brand__icon {
+    margin-left: 15px;
+    margin-right: 0;
+}

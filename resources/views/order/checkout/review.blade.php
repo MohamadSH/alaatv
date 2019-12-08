@@ -58,13 +58,15 @@
                                                                     data-variant="-"
                                                                     data-productid="{{ $simpleOrderProductItem->product->id }}"
 
-                                                                    data-gtm-eec-product-id="{{ $simpleOrderProductItem->product->id }}"
-                                                                    data-gtm-eec-product-name="{{ $simpleOrderProductItem->product->name }}"
-                                                                    data-gtm-eec-product-price="{{ number_format($simpleOrderProductItem->product->price['final'], 2, '.', '') }}"
-                                                                    data-gtm-eec-product-brand="آلاء"
-                                                                    data-gtm-eec-product-category="-"
-                                                                    data-gtm-eec-product-variant="-"
-                                                                    data-gtm-eec-product-quantity="1"
+                                                                    @include('partials.gtm-eec.product', ['position'=>$key, 'list'=>'سبد خرید', 'product'=>$simpleOrderProductItem->product, 'quantity'=>'1'])
+
+{{--                                                                    data-gtm-eec-product-id="{{ $simpleOrderProductItem->product->id }}"--}}
+{{--                                                                    data-gtm-eec-product-name="{{ $simpleOrderProductItem->product->name }}"--}}
+{{--                                                                    data-gtm-eec-product-price="{{ number_format($simpleOrderProductItem->product->price['final'], 2, '.', '') }}"--}}
+{{--                                                                    data-gtm-eec-product-brand="آلاء"--}}
+{{--                                                                    data-gtm-eec-product-category="-"--}}
+{{--                                                                    data-gtm-eec-product-variant="-"--}}
+{{--                                                                    data-gtm-eec-product-quantity="1"--}}
 
                                                                     class="btn btn-sm m-btn--pill m-btn--air btn-danger d-none d-md-block d-lg-block d-xl-block m--margin-right-5 btnRemoveOrderproduct">
                                                                     <span>

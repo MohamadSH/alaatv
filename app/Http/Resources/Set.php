@@ -24,12 +24,13 @@ class Set extends JsonResource
             return [];
         }
 
+
+
         return [
             'id'                    => $this->id,
-            'redirectUrl'           => $this->redirectUrl,
+            'redirect_url'           => $this->redirectUrl,
             'name'                  => $this->name,
-            'shortaName'             => $this->shortName,
-            'description'           => $this->description,
+            'short_name'             => $this->shortName,
             'photo'                 => $this->photo,
             'tags'                  => $this->tags,
             'contents_count'        => $this->contents_count,
@@ -44,7 +45,7 @@ class Set extends JsonResource
                     'api' => null,
                        ],
             ],
-            'author'         => new Author($this->author),
+            'author'         => $this->when(isset($this->author) , $this->author),
             'created_at'     => $this->created_at,
             'updated_at'     => $this->updated_at,
         ];

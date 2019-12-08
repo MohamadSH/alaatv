@@ -9,7 +9,7 @@
             ($blockType === 'productSampleVideo' && optional(optional(optional($block->sets)->first())->getActiveContents2())->count() > 0) ||
 
             ($blockType === 'content' && !is_null($block->contents) && $block->contents->count() > 0) ||
-            ($blockType === 'product' && !is_null($block->products) && $block->products->count() > 0) ||
+            (($blockType === 'product' || $blockType === 'product2') && !is_null($block->products) && $block->products->count() > 0) ||
             ($blockType === 'set' && !is_null($block->sets) && $block->sets->count() > 0)
         )
     )
@@ -44,7 +44,7 @@
                                 @endif
 
                                 @if(!isset($blockUrlDisable) || !$blockUrlDisable)
-                                    <a href="{{ $block->url }}" class="m-link">
+                                    <a @if(isset($block->customUrl))href="{{ $block->customUrl }}"@endif class="m-link">
                                         @endif
                                         @if(isset($blockTitle))
                                             {!! $blockTitle !!}
@@ -68,8 +68,8 @@
                         </a>
                     </div>
                 </div>
-                <div class="m-portlet__body m-portlet__body--no-padding a--owl-carousel-body ScrollCarousel">
-                    
+                <div class="m-portlet__body m-portlet__body--no-padding a--owl-carousel-body">
+
 {{--                    <div class="a--owl-carousel-init-loading">--}}
 {{--                        <div class="lds-roller">--}}
 {{--                            <div></div>--}}
@@ -82,14 +82,20 @@
 {{--                            <div></div>--}}
 {{--                        </div>--}}
 {{--                    </div>--}}
-    
-                    <div class="m-widget_head-owlcarousel-items ScrollCarousel-Items a--owl-carousel-type-2 carousel_block_{{ $block->id }}">
-    
-        
-                        @if(((isset($blockType) && $blockType === 'product' && isset($block->products) && $block->products->count() > 0) || !isset($blockType)) && isset($block->products))
-                            @foreach($block->products as $productKey=>$product)
-                                @include('block.partials.product')
-                            @endforeach
+
+                    <div class="m-widget_head-owlcarousel-items ScrollCarousel a--owl-carousel-type-2 carousel_block_{{ $block->id }}">
+
+
+                        @if(((isset($blockType) && ($blockType === 'product' || $blockType === 'product2') && isset($block->products) && $block->products->count() > 0) || !isset($blockType)) && isset($block->products))
+                            @if(!isset($blockType) || $blockType === 'product')
+                                @foreach($block->products as $productKey=>$product)
+                                    @include('block.partials.product')
+                                @endforeach
+                            @elseif($blockType === 'product2')
+                                @foreach($block->products as $productKey=>$product)
+                                    @include('block.partials.product2')
+                                @endforeach
+                            @endif
                         {{-- old content block loop --}}
                         @elseif(((isset($blockType) && $blockType === 'content' && isset($block->contents) && $block->contents->count() > 0) || !isset($blockType)) && isset($block->contents))
                             @foreach($block->contents as $contentKey=>$content)
@@ -109,7 +115,7 @@
                                 @include('block.partials.content')
                             @endforeach
                         @endif
-    
+
                         @if(strlen(trim($block->url))>0 && isset($btnLoadMore) && $btnLoadMore)
                             <div class="item carousel a--block-item a--block-item-showMoreItem w-44333211">
                                 <a href="{{ $block->url }}">
@@ -126,7 +132,7 @@
                         @endif
 
                     </div>
-                    
+
                 </div>
             </div>
         </div>

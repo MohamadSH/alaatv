@@ -54,11 +54,11 @@
                             <div class="Order">
                                 @if($order == 'desc')
                                     <a href="?order=asc" id="sort-ascending">
-                                        <i class="fa fa-sort-amount-up"></i>
+                                        <i class="fa fa-sort-amount-down"></i>
                                     </a>
                                 @else
                                     <a href="?order=desc" id="sort-descending">
-                                        <i class="fa fa-sort-amount-down"></i>
+                                        <i class="fa fa-sort-amount-up"></i>
                                     </a>
                                 @endif
                             </div>
