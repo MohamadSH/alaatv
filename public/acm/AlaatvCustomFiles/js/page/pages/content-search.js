@@ -245,7 +245,7 @@ var Alaasearch = function () {
             '   data-gtm-eec-product-category="'+((gtmEecProductCategory===null || gtmEecProductCategory.trim().length===0)?'-':gtmEecProductCategory)+'"\n' +
             '   data-gtm-eec-product-variant="'+gtmEecProductVariant+'"\n' +
             '   data-gtm-eec-product-position="'+gtmEecProductPosition+'"\n' +
-            '   data-gtm-eec-product-list="محصولات صفحه سرچ">\n';
+            '   data-gtm-eec-product-list="محصولات صفحه سرچ"\n';
 
         var itemData = {
             class: 'a--gtm-eec-product',
