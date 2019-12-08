@@ -24,7 +24,7 @@ class Wallettype extends JsonResource
         }
 
         return [
-            'name'          => $this->name,
+            'name'           => $this->name,
             'display_name'   => $this->displayName,
         ];
     }

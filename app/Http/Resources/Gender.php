@@ -20,7 +20,7 @@ class Gender extends JsonResource
     public function toArray($request)
     {
         return [
-            'name'          => $this->name,
+            'name'          => $this->when(isset($this->name) , $this->name),
         ];
     }
 }

@@ -1379,34 +1379,34 @@ class UserController extends Controller
             ]);
         }
 
-        $wallet = $user->wallets->where('wallettype_id' , config('constants.WALLET_TYPE_GIFT'))->first();
-        if(isset($wallet)){
-            /** @var TransactionCollection $depositTransactions */
-            $depositTransactions = $wallet->transactions->where('cost' , '<' , 0)->where('created_at' , '>=' , '2019-11-03 00:00:00');
-            if($depositTransactions->isNotEmpty()){
-                return response()->json([
-                    'error' =>[
-                        'message' => 'شما قبلا هدیه کیف پول را دریافت کرده اید',
-                    ]
-                ]);
-            }
-        }
-
-        $userCompletion = $user->completion('custom' , LandingPageController::ROOZE_DANESH_AMOOZ_USER_NECESSARY_INFO);
-        if($userCompletion == 100){
-            $depositResult =  $user->deposit( LandingPageController::ROOZE_DANESH_AMOOZ_GIFT_CREDIT  , config('constants.WALLET_TYPE_GIFT'));
-            if($depositResult['result']){
-                return response()->json([
-                    'message'=>'14 هزار تومان اعتبار هدیه به کیف پول شما افزوده شد'
-                ]);
-            }else{
-                return response()->json([
-                    'error' =>[
-                        'message' => 'خطایی در اعدای هدیه کیف پول رخ داد. لطفا دوباره اقدام کنید',
-                    ]
-                ]);
-            }
-        }
+//        $wallet = $user->wallets->where('wallettype_id' , config('constants.WALLET_TYPE_GIFT'))->first();
+//        if(isset($wallet)){
+//            /** @var TransactionCollection $depositTransactions */
+//            $depositTransactions = $wallet->transactions->where('cost' , '<' , 0)->where('created_at' , '>=' , '2019-11-03 00:00:00');
+//            if($depositTransactions->isNotEmpty()){
+//                return response()->json([
+//                    'error' =>[
+//                        'message' => 'شما قبلا هدیه کیف پول را دریافت کرده اید',
+//                    ]
+//                ]);
+//            }
+//        }
+//
+//        $userCompletion = $user->completion('custom' , LandingPageController::ROOZE_DANESH_AMOOZ_USER_NECESSARY_INFO);
+//        if($userCompletion == 100){
+//            $depositResult =  $user->deposit( LandingPageController::ROOZE_DANESH_AMOOZ_GIFT_CREDIT  , config('constants.WALLET_TYPE_GIFT'));
+//            if($depositResult['result']){
+//                return response()->json([
+//                    'message'=>'14 هزار تومان اعتبار هدیه به کیف پول شما افزوده شد'
+//                ]);
+//            }else{
+//                return response()->json([
+//                    'error' =>[
+//                        'message' => 'خطایی در اعدای هدیه کیف پول رخ داد. لطفا دوباره اقدام کنید',
+//                    ]
+//                ]);
+//            }
+//        }
 
         return response()->json([
             'error' =>[

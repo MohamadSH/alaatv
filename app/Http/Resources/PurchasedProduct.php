@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
@@ -19,7 +20,7 @@ class PurchasedProduct extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  Request  $request
      * @return array
      */
     public function toArray($request)
@@ -32,20 +33,16 @@ class PurchasedProduct extends JsonResource
 
         return [
             'id'            => $this->id,
-            'redirect_url'  => null,
-            'name'          => $this->name,
+            'redirect_url'  => $this->when(isset($this->redirectUrl) , $this->redirectUrl),
+            'name'          => $this->when(isset($this->name) , $this->name),
             'type'          => $this->when(isset($this->producttype_id) , function (){ return new Producttype($this->producttype);}),
 //            'type'          => $this->when(isset($this->producttype_id) , function (){ return New Producttype($this->producttype); }),
 //            'isFree'        => $this->isFree,
-            'price'         => $this->price,
-            'tags'          => $this->tags,
-            'url'           => [
-                'web' => $this->url,
-                'api' => $this->api_url,
-            ],
+            'url'           => new Url($this),
             'photo'         => $this->photo,
             'attributes'    => [
                 'info' =>  $this->when(!empty($this->info_attributes) , $this->info_attributes),
+                'extra' => $this->when(!empty($this->extra_attributes) , $this->extra_attributes),
             ],
 
         ];
