@@ -704,18 +704,18 @@
                         @if(Auth::check())
 
                                 <li class="m-nav__item">
-                                    <a href="https://alaatv.com/user/orders" class="m-nav__link">
-                                    <span class="m-nav__link-icon">
-                                        <span class="m-nav__link-icon-wrapper"><i class="fa fa-wallet"></i></span>
-                                        @if(Auth::user()->getTotalWalletBalance()>0)
-                                            <span class="m-nav__link-badge m-badge m-badge--accent">{{number_format(Auth::user()->getTotalWalletBalance())}}</span>
-                                        @endif
-                                    </span>
+                                    <a href="https://alaatv.com/user/orders" class="m-nav__link" data-toggle="m-tooltip" data-placement="top" data-original-title="کیف پول">
+                                        <span class="m-nav__link-icon">
+                                            <span class="m-nav__link-icon-wrapper"><i class="fa fa-wallet"></i></span>
+                                            @if(Auth::user()->getTotalWalletBalance()>0)
+                                                <span class="m-nav__link-badge m-badge m-badge--accent">{{number_format(Auth::user()->getTotalWalletBalance())}}</span>
+                                            @endif
+                                        </span>
                                     </a>
                                 </li>
 
                                 <li class="m-nav__item">
-                                    <a href="{{ action("Web\OrderController@checkoutReview") }}" class="m-nav__link">
+                                    <a href="{{ action("Web\OrderController@checkoutReview") }}" class="m-nav__link" data-toggle="m-tooltip" data-placement="top" data-original-title="سبد خرید">
                                         <span class="m-nav__link-icon">
                                             <span class="m-nav__link-icon-wrapper"><i class="fa fa-shopping-cart"></i></span>
                                             @if(Auth::user()->numberOfProductsInBasket > 0)
