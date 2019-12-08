@@ -11,6 +11,7 @@
                 $this.attr('data-custom-dropdown-id', lastId);
                 $.fn.CustomDropDown.clean($this);
                 $.fn.CustomDropDown.createCustomDropDown($this);
+                $.fn.CustomDropDown.options.onRendered($this);
             }
         });
     };
@@ -235,6 +236,7 @@
     $.fn.CustomDropDown.defaultOptions = {
         onChange: function (data) {},
         onChanged: function (data) {},
+        onRendered: function (data) {},
         parentOptions: null,
         renderOption: null
     };

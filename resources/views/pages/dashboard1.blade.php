@@ -114,6 +114,7 @@
 {{--                <div class="col-12 col-md-6 text-center m--margin-bottom-5">--}}
 {{--                    <a href="{{ route('web.landing.5') }}"--}}
 {{--                       class="a--gtm-eec-advertisement a--gtm-eec-advertisement-click"--}}
+{{--                            @include('partials.gtm-eec.promotion', ['id'=>'homepage-downloadi1', 'name'=>'همایش های دانلودی آلاء', 'creative'=>'قبل از بلاک کنکور نظام قدیم', 'position'=>'سمت راست', ])--}}
 {{--                       data-gtm-eec-promotion-id="homepage-downloadi1"--}}
 {{--                       data-gtm-eec-promotion-name="همایش های دانلودی آلاء"--}}
 {{--                       data-gtm-eec-promotion-creative="قبل از بلاک کنکور نظام قدیم"--}}
@@ -215,8 +216,8 @@
             @endforeach
         ];
     </script>
-    
-    
+
+
     <script src="{{ mix('/js/page-homePage.js') }}" async ></script>
 @endsection
 
