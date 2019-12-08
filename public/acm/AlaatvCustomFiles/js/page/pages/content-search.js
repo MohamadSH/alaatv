@@ -9,7 +9,7 @@ var Alaasearch = function () {
 
     function ajaxSetup() {
         $.ajaxSetup({
-            cache: false,
+            cache: true,
             headers: {
                 'X-CSRF-TOKEN': window.Laravel.csrfToken,
             }
