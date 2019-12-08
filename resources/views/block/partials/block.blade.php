@@ -87,7 +87,7 @@
 
 
                         @if(((isset($blockType) && ($blockType === 'product' || $blockType === 'product2') && isset($block->products) && $block->products->count() > 0) || !isset($blockType)) && isset($block->products))
-                            @if($blockType === 'product')
+                            @if(!isset($blockType) || $blockType === 'product')
                                 @foreach($block->products as $productKey=>$product)
                                     @include('block.partials.product')
                                 @endforeach
