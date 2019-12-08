@@ -1,0 +1,119 @@
+/* The container must be positioned relative: */
+.CustomDropDown {
+    position: relative;
+    padding: 0;
+    margin: 0;
+    border: none;
+    height: 50px;
+    line-height: 30px;
+    border-radius: 5px;
+
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+    -khtml-user-select: none; /* Konqueror HTML */
+    -moz-user-select: none; /* Old versions of Firefox */
+    -ms-user-select: none; /* Internet Explorer/Edge */
+    user-select: none; /* Non-prefixed version, currently supported by Chrome, Opera and Firefox */
+
+    &.CustomParentOptions {
+        height: auto;
+        display: none;
+        &.CustomDropDown-show {
+            display: block;
+            position: relative;
+        }
+        .select-items {
+            position: relative;
+        }
+    }
+
+    &.solidBackground {
+        &.background-yellow {
+            .select-selected {
+                background: #fc0;
+                &::after {
+                    color: #020200;
+                    background: #fc0;
+                    -webkit-box-shadow: 5px 0px 5px 0px rgba(255,204,0,1);
+                    -moz-box-shadow: 5px 0px 5px 0px rgba(255,204,0,1);
+                    box-shadow: 5px 0px 5px 0px rgba(255,204,0,1);
+                }
+            }
+        }
+        .select-selected {
+            border: none;
+        }
+    }
+
+    select {
+        display: none; /*hide original SELECT element: */
+    }
+
+    .select-selected {
+        position: absolute;
+        top: 0;
+        left: 0;
+        margin: 0;
+        width: 100%;
+        height: 100%;
+        color: #575962;
+        cursor: pointer;
+        font-weight: 900;
+        overflow: hidden;
+        border-radius: 5px;
+        white-space: nowrap;
+        background-color: white;
+        padding: 8px 16px 8px 40px;
+
+
+        &:after {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 50px;
+            height: 100%;
+            font-family: "Font Awesome 5 Free";
+            content: "\f107";
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 5px;
+            color: #f66e84;
+            font-size: 1.8rem;
+        }
+
+        &.select-arrow-active:after {
+            content: "\f106";
+        }
+    }
+
+    .select-items {
+
+        position: absolute;
+        background-color: white;
+        color: #575962;
+        top: 100%;
+        left: 0;
+        right: 0;
+        z-index: 90;
+        border: solid 1px rgba(0, 0, 0, 0.1);
+
+        &.select-hide {
+            display: none;
+        }
+
+        .select-item {
+            padding: 8px;
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            overflow: hidden;
+            white-space: nowrap;
+
+            &:hover,
+            &.same-as-selected {
+                background-color: rgba(0, 0, 0, 0.1);
+            }
+
+        }
+    }
+}

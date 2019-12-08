@@ -6,7 +6,7 @@
             </p>
         </div>
         <div class="col-md-6">
-            <div class="custom-select" id="selectFarsang">
+            <div class="CustomDropDown" id="selectFarsang">
                 <select>
                     <option value="1">فرسنگ اول</option>
                     <option value="2">فرسنگ دوم</option>
@@ -133,7 +133,7 @@
                 <div class="tab-content">
                     <div class="tab-pane active" id="m_tabs_video" role="tabpanel">
                         <div class="ScrollCarousel">
-                            
+
                             <div class="ScrollCarousel-Items m--margin-top-20" id="ScrollCarousel1">
                                 <div class="item w-55443211">
                                     <img class="lazy-image a--full-width"
@@ -214,14 +214,14 @@
                                 </div>
                             </div>
                             <div class="whiteShadow"></div>
-                            
+
                         </div>
                     </div>
                     <div class="tab-pane" id="m_tabs_pamphlet" role="tabpanel">
-    
-    
+
+
                         <div class="ScrollCarousel">
-                            
+
                             <div class="ScrollCarousel-Items m--margin-top-20">
                                 <div class="item w-55443211">
                                     <img class="lazy-image a--full-width"
@@ -274,9 +274,9 @@
                                 </div>
                             </div>
                             <div class="whiteShadow"></div>
-                            
+
                         </div>
-                        
+
                     </div>
                 </div>
             </div>

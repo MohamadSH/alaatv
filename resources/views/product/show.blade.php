@@ -2,7 +2,7 @@
 
 @section('page-css')
     <link href="{{ mix('/css/product-show.css') }}" rel="stylesheet" type="text/css"/>
-    <link href="{{ asset('/acm/AlaatvCustomFiles/components/customSelect/style.css') }}" rel="stylesheet" type="text/css"/>
+    <link href="{{ asset('/acm/AlaatvCustomFiles/components/CustomDropDown/style.css') }}" rel="stylesheet" type="text/css"/>
     <style>
         @if(
             (!isset($block) || !isset($block->contents) || $block->contents->count() === 0) &&
@@ -644,7 +644,6 @@
         @endif
     @endif
 
-
     {{--دکمه افزودن به سبد خرید--}}
     <div class="addToCartForMobileDeviceWrapper" >
         @if($product->enable && !$isForcedGift)
@@ -848,8 +847,8 @@
     <script src="{{ asset('/acm/AlaatvCustomFiles/components/ScrollCarousel/js.js') }}"></script>
     <script src="{{ asset('/acm/AlaatvCustomFiles/components/OwlCarouselType2/js.js') }}"></script>
     <script src="{{ mix('/js/product-show.js') }}"></script>
+    <script src="{{ asset('/acm/AlaatvCustomFiles/components/CustomDropDown/js.js') }}"></script>
     <script src="{{ asset('/acm/AlaatvCustomFiles/js/page/product/product-show.js') }}"></script>
-    <script src="{{ asset('/acm/AlaatvCustomFiles/components/customSelect/js.js') }}"></script>
     <script>
         var TotalQuantityAddedToCart = 0;
         var parentProduct = {

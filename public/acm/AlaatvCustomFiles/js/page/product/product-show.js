@@ -857,8 +857,7 @@ jQuery(document).ready(function() {
 
     $('.m-body .m-content').addClass('boxed');
 
-    CustomSelect.init({
-        elementId: 'selectFarsang',
+    $('.CustomDropDown').CustomDropDown({
         onChange: function (data) {
             console.log(data);
             // { index: 2, totalCount: 5, value: "3", text: "فرسنگ سوم" }
