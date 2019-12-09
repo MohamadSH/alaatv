@@ -512,6 +512,11 @@ class Mix {
         this.mixCssAndJs([
                 'node_modules/slick-carousel/slick/slick.css',
                 'node_modules/slick-carousel/slick/slick-theme.css',
+
+
+                'public/acm/AlaatvCustomFiles/components/imageWithCaption/style.css',
+
+
                 'public/acm/AlaatvCustomFiles/components/ribbon/style.css',
                 'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/style.css',
                 'public/acm/AlaatvCustomFiles/components/ScrollCarousel/style.css',
