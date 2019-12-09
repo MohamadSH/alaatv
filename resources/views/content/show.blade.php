@@ -215,10 +215,12 @@
                                                 </span>
                                             </button>
                                         @else
+
 {{--                                            <a href="{{ $product->url }}" class="btn m-btn--pill m-btn--air m-btn m-btn--gradient-from-info m-btn--gradient-to-accent btnViewProductPage">--}}
 {{--                                                مشاهده--}}
 {{--                                                {{ $product->name }}--}}
 {{--                                            </a>--}}
+
                                         @endif
                                     @endforeach
                                 @endif
@@ -248,10 +250,12 @@
                                             </span>
                                             </button>
                                         @else
+
 {{--                                            <a href="{{ $product->url }}" class="btn m-btn--pill m-btn--air m-btn m-btn--gradient-from-info m-btn--gradient-to-accent btnViewProductPage">--}}
 {{--                                                مشاهده--}}
 {{--                                                {{ $product->name }}--}}
 {{--                                            </a>--}}
+
                                         @endif
                                     @endforeach
                                 @endif
