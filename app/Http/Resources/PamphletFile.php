@@ -19,10 +19,10 @@ class PamphletFile extends JsonResource
     {
         $array = (array) $this->resource;
         return [
-            'link'    => Arr::get($array, 'link'),
-            'ext'     => Arr::get($array, 'ext'),
-            'size'    => Arr::get($array, 'size'),
-            'caption' => Arr::get($array, 'caption'),
+            'link'    => $this->when(Arr::has($array, 'link') , Arr::get($array, 'link')),
+            'ext'     => $this->when(Arr::has($array, 'ext') , Arr::get($array, 'ext')),
+            'size'    => $this->when(Arr::has($array, 'size') , Arr::get($array, 'size')),
+            'caption' => $this->when(Arr::has($array, 'caption') , Arr::get($array, 'caption')),
         ];
     }
 }

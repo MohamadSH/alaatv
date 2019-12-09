@@ -25,6 +25,7 @@ class Gift extends JsonResource
         }
 
         return [
+            'id'               => $this->id,
             'redirect_url'     => $this->when(isset($this->redirectUrl) , $this->redirectUrl),
             'name'             => $this->when(isset($this->name) , $this->name),
             'url'              => new Url($this),

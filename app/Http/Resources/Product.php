@@ -46,7 +46,7 @@ class Product extends JsonResource
             ],
             'slogan'                => $this->when(isset($this->slogan) , $this->slogan),
 //            'amount'                => $this->amount,
-            'price'                 => $this->price,
+            'price'                 => new Price($this->price),
             'tags'                  => $this->when(isset($this->tags) , function (){ return new Tag($this->tags);}),
             'recommender_contents'  => $this->when(isset($this->recommender_contents) , $this->recommender_contents),
             'sample_contents'       => $this->when(isset($this->sample_contents), $this->sample_contents),
