@@ -59,7 +59,7 @@
                                                                     </div>
                                                                 </div>
                                                                 <div class="value">
-                                                                    {{implode('، ',(array)$product->info_attributes['productionYear'])}}
+                                                                    {{implode('، ',(array)Arr::get($product->info_attributes , 'productionYear'))}}
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -76,7 +76,7 @@
                                                                     </div>
                                                                 </div>
                                                                 <div class="value">
-                                                                    {{implode('، ',(array)$product->info_attributes['major'])}}
+                                                                    {{implode('، ',(array)Arr::get($product->info_attributes , 'major'))}}
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -93,7 +93,7 @@
                                                                     </div>
                                                                 </div>
                                                                 <div class="value">
-                                                                    {{implode('،',(array)$product->info_attributes['educationalSystem'])}}
+                                                                    {{implode('،',(array)Arr::get($product->info_attributes , 'educationalSystem'))}}
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -113,7 +113,7 @@
                                                                     </div>
                                                                 </div>
                                                                 <div class="value">
-                                                                    {{implode('،',(array)$product->info_attributes['shippingMethod'])}}
+                                                                    {{implode('،',(array)Arr::get($product->info_attributes , 'shippingMethod'))}}
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -135,7 +135,7 @@
                                                                     </div>
                                                                 </div>
                                                                 <div class="value">
-                                                                    {{implode('،',(array)$product->info_attributes['teacher'])}}
+                                                                    {{implode('،',(array)Arr::get($product->info_attributes , 'teacher'))}}
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -211,8 +211,8 @@
                                                                 مدت برنامه:
                                                             </span>
 
-                                                            {{implode('،',(array)$product->info_attributes['courseDuration'])}}
-                                                            [ {{implode('،',(array)$product->info_attributes['studyPlan'])}} ]
+                                                            {{implode('،',(array)Arr::get($product->info_attributes , 'courseDuration'))}}
+                                                            [ {{implode('،',(array)Arr::get($product->info_attributes , 'studyPlan'))}} ]
                                                             @endif
                                                         </div>
                                                         <div class="col-12 servicesRow">
@@ -250,7 +250,7 @@
                                                                         @else
                                                                             محصول
                                                                         @endif
-                                                                        : {{ implode(' ',(array)$product->info_attributes['downloadDate']) }}
+                                                                        : {{ implode(' ',(array)Arr::get($product->info_attributes , 'downloadDate')) }}
                                                                     </div>
                                                                     @endif
 
@@ -286,9 +286,9 @@
                                                                                 @endif
                                                                             </span>
                                                                             @if(isset($product->info_attributes['duration']) && !is_null($product->info_attributes['duration']))
-                                                                                مدت زمان: {{ implode(' ',(array)$product->info_attributes['duration']) }}
+                                                                                مدت زمان: {{ implode(' ',(array)Arr::get($product->info_attributes , 'duration')) }}
                                                                             @elseif(isset($product->info_attributes['numberOfPages']) && !is_null($product->info_attributes['numberOfPages']))
-                                                                                تعداد صفحات جزوه: {{ implode(' ',(array)$product->info_attributes['numberOfPages']) }}
+                                                                                تعداد صفحات جزوه: {{ implode(' ',(array)Arr::get($product->info_attributes , 'numberOfPages')) }}
                                                                             @endif
                                                                         </div>
                                                                     </div>
@@ -649,7 +649,7 @@
                                             @else
                                                 محصول
                                             @endif
-                                            : {{ implode(' ',(array)$product->info_attributes['downloadDate']) }}
+                                            : {{ implode(' ',(array)Arr::get($product->info_attributes , 'downloadDate')) }}
                                         </div>
                                         @endif
                                         <div class="m-alert m-alert--air m-alert--square alert videoLength" role="alert">
@@ -685,9 +685,9 @@
                                                     @endif
                                                 </span>
                                                 @if(isset($product->info_attributes['duration']) && !is_null($product->info_attributes['duration']))
-                                                    مدت زمان: {{ implode(' ',(array)$product->info_attributes['duration']) }}
+                                                    مدت زمان: {{ implode(' ',(array)Arr::get($product->info_attributes , 'duration')) }}
                                                 @elseif(isset($product->info_attributes['numberOfPages']) && !is_null($product->info_attributes['numberOfPages']))
-                                                    تعداد صفحات جزوه: {{ implode(' ',(array)$product->info_attributes['numberOfPages']) }}
+                                                    تعداد صفحات جزوه: {{ implode(' ',(array)Arr::get($product->info_attributes ,'numberOfPages')) }}
                                                 @endif
                                             </div>
                                         </div>
