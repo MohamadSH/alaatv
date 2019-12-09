@@ -1231,8 +1231,18 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
     public function getApiUrlAttribute($value): array
     {
         return [
-            'v1' => action("Api\ProductController@show", $this),
+            'v1' => route('api.v2.product.show' , $this),
         ];
+    }
+
+    public function getApiUrlV1Attribute()
+    {
+        return route('api.v1.product.show' , $this);
+    }
+
+    public function getApiUrlV2Attribute($value)
+    {
+        return route('api.v2.product.show' , $this);
     }
 
     public function getGiftAttribute(): ProductCollection
