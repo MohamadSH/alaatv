@@ -26,6 +26,7 @@ use App\Ordermanagercomment;
 use Exception;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Contracts\Routing\ResponseFactory;
+use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use App\Traits\ProductCommon;
@@ -709,11 +710,11 @@ class OrderController extends Controller
     /**
      * Showing authentication step in the checkout process
      *
-     * @param  CheckoutReviewRequest  $request
+     * @param CheckoutReviewRequest $request
      *
-     * @param  AlaaInvoiceGenerator   $invoiceGenerator
+     * @param AlaaInvoiceGenerator $invoiceGenerator
      *
-     * @return Response
+     * @return ResponseFactory|Factory|Response|\Illuminate\View\View
      * @throws Exception
      */
     public function checkoutReview(CheckoutReviewRequest $request, AlaaInvoiceGenerator $invoiceGenerator)
@@ -1256,7 +1257,7 @@ class OrderController extends Controller
                     }
                     if ($transaction->cost > $newCost) {
                         $newTransaction                            = new Transaction();
-                        $newTransaction->destinationBankAccount_id = $transaction->destinationBankAccount_id;;
+                        $newTransaction->destinationBankAccount_id = $transaction->destinationBankAccount_id;
                         $newTransaction->paymentmethod_id      = $transaction->paymentmethod_id;
                         $newTransaction->transactiongateway_id = $transaction->transactiongateway_id;
                         $newTransaction->transactionstatus_id  = config('constants.TRANSACTION_STATUS_SUCCESSFUL');
