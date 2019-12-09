@@ -27,13 +27,16 @@
                        disabled="disabled"
                        @endif
 
-                       data-gtm-eec-product-id="{{ $product->id }}"
-                       data-gtm-eec-product-name="{{ $product->name }}"
-                       data-gtm-eec-product-price="{{ number_format($product->price['final'], 2, '.', '') }}"
-                       data-gtm-eec-product-brand="آلاء"
-                       data-gtm-eec-product-category="-"
-                       data-gtm-eec-product-variant="-"
-                       data-gtm-eec-product-quantity="1" >
+                       @include('partials.gtm-eec.product', ['position'=>'0', 'list'=>'صفحه نمایش محصول-محصولات فرزند', 'quantity'=>'1'])
+
+{{--                       data-gtm-eec-product-id="{{ $product->id }}"--}}
+{{--                       data-gtm-eec-product-name="{{ $product->name }}"--}}
+{{--                       data-gtm-eec-product-price="{{ number_format($product->price['final'], 2, '.', '') }}"--}}
+{{--                       data-gtm-eec-product-brand="آلاء"--}}
+{{--                       data-gtm-eec-product-category="-"--}}
+{{--                       data-gtm-eec-product-variant="-"--}}
+{{--                       data-gtm-eec-product-quantity="1"--}}
+                >
                 <span></span>
             </label>
         </span>
@@ -73,13 +76,15 @@
                                                disabled="disabled"
                                                @endif
 
-                                               data-gtm-eec-product-id="{{ $product->id }}"
-                                               data-gtm-eec-product-name="{{ $product->name }}"
-                                               data-gtm-eec-product-price="{{ number_format($product->price['final'], 2, '.', '') }}"
-                                               data-gtm-eec-product-brand="آلاء"
-                                               data-gtm-eec-product-category="-"
-                                               data-gtm-eec-product-variant="-"
-                                               data-gtm-eec-product-quantity="1"
+                                               @include('partials.gtm-eec.product', ['position'=>'0', 'list'=>'صفحه نمایش محصول-محصولات فرزند', 'quantity'=>'1'])
+
+{{--                                               data-gtm-eec-product-id="{{ $product->id }}"--}}
+{{--                                               data-gtm-eec-product-name="{{ $product->name }}"--}}
+{{--                                               data-gtm-eec-product-price="{{ number_format($product->price['final'], 2, '.', '') }}"--}}
+{{--                                               data-gtm-eec-product-brand="آلاء"--}}
+{{--                                               data-gtm-eec-product-category="-"--}}
+{{--                                               data-gtm-eec-product-variant="-"--}}
+{{--                                               data-gtm-eec-product-quantity="1"--}}
                                         >
                                         <span></span>
                                     </label>
