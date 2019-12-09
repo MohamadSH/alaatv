@@ -557,7 +557,7 @@
 
                 @if(optional(Auth::user())->id === null)
 
-                    <div class="m-portlet m-portlet--bordered-semi CheckoutReviewTotalPriceWarper">
+                    <div class="m-portlet m-portlet--bordered-semi CheckoutReviewTotalPriceWarper loginFormBeforeBuy">
                         <div class="m-portlet__body">
                             <div class="alert alert-info alert-dismissible fade show" role="alert">
                                 پیش از ثبت سفارش وارد حساب کاربری خود شوید.
@@ -633,11 +633,20 @@
         <div class="m-portlet__body">
             <div class="row">
                 <div class="col-6">
-                    <button type="button"
-                            onclick="$('#frmGotoGateway').submit();mApp.block('.btnGotoCheckoutPayment_mobile, .a--userCartList', {type: 'loader',state: 'info',});"
-                            class="btn btn-lg m-btn--square m-btn m-btn--gradient-from-success m-btn--gradient-to-accent btnGotoCheckoutPayment">
-                        ثبت سفارش
-                    </button>
+
+                    @if(optional(Auth::user())->id === null)
+                        <button type="button"
+                                onclick="$('.loginFormBeforeBuy').AnimateScrollTo();"
+                                class="btn btn-lg m-btn--square m-btn m-btn--gradient-from-success m-btn--gradient-to-accent">
+                            ورود و خرید
+                        </button>
+                    @else
+                        <button type="button"
+                                onclick="$('#frmGotoGateway').submit();mApp.block('.btnGotoCheckoutPayment_mobile, .a--userCartList', {type: 'loader',state: 'info',});"
+                                class="btn btn-lg m-btn--square m-btn m-btn--gradient-from-success m-btn--gradient-to-accent btnGotoCheckoutPayment">
+                            ثبت سفارش
+                        </button>
+                    @endif
                 </div>
                 <div class="col-6">
                     <div class="priceReport">

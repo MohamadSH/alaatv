@@ -854,4 +854,3 @@ var CustomPageFunction = function () {
 jQuery(document).ready(function() {
     CustomPageFunction.init();
 });
-v
