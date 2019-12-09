@@ -19,7 +19,7 @@
 
     $.fn.AnimateScrollTo.defaultOptions = {
         topPadding: $.fn.AnimateScrollTo.getHeaderHeight() + 5,
-        speed: 1000
+        speed: 500
     };
 
     $.fn.AnimateScrollTo.options = null;

@@ -579,9 +579,10 @@ var CustomPageFunction = function () {
 
         $(document).on('click', '.productInfoNav', function () {
             var targetId = $(this).data('tid');
-            $([document.documentElement, document.body]).animate({
-                scrollTop: $('#'+targetId).offset().top - $('#m_header').height() + 5
-            }, 1000);
+            $('#'+targetId).AnimateScrollTo();
+            // $([document.documentElement, document.body]).animate({
+            //     scrollTop: $('#'+targetId).offset().top - $('#m_header').height() + 5
+            // }, 1000);
         });
     }
 
@@ -795,9 +796,10 @@ var CustomPageFunction = function () {
         }
         $(document).on('click', '.btnShowVideoLink', function () {
 
-            $([document.documentElement, document.body]).animate({
-                scrollTop: $("#videoPlayer").offset().top - $('#m_header').height()
-            }, 'slow');
+            $('#videoPlayer').AnimateScrollTo();
+            // $([document.documentElement, document.body]).animate({
+            //     scrollTop: $("#videoPlayer").offset().top - $('#m_header').height()
+            // }, 'slow');
 
             $('.videoPlayerPortlet').fadeOut().removeClass('m--hide').fadeIn();
 

@@ -254,6 +254,7 @@ class Mix {
                 'public/acm/AlaatvCustomFiles/components/aSticky/aSticky.js',
                 'public/acm/AlaatvCustomFiles/components/ScrollCarousel/js.js',
                 'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/js.js',
+                'public/acm/AlaatvCustomFiles/components/AnimateScrollTo/js.js',
                 'public/acm/AlaatvCustomFiles/js/page/pages/homePage.js',
             ],
             'public/js/page-homePage.js',
@@ -443,6 +444,7 @@ class Mix {
                 'public/acm/videojs/lang/fa.js',
                 'public/acm/AlaatvCustomFiles/components/summarizeText/js.js',
                 'public/acm/AlaatvCustomFiles/components/aSticky/aSticky.js',
+                'public/acm/AlaatvCustomFiles/components/AnimateScrollTo/js.js',
                 'public/acm/AlaatvCustomFiles/js/UserCart.js',
                 'public/acm/AlaatvCustomFiles/js/page/content-show.js'
             ],
