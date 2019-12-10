@@ -10,6 +10,7 @@ use Illuminate\Support\{Arr, Collection, Facades\Cache, Facades\File, Facades\St
 use App\{Adapter\AlaaSftpAdapter,
     Block,
     Bon,
+    Content,
     Product,
     Attributeset,
     Attributetype,
@@ -207,7 +208,11 @@ class ProductController extends Controller
                     });
             }
 
-//            $lastSet = $product->sets->sortByDesc('created_at')->first() ;
+            $lastSet = $product->sets->sortByDesc('created_at')->first() ;
+            $lastSetPamphlets = $lastSet->where('contenttype_id' , Content::CONTENT_TYPE_PAMPHLET);
+            $lastSetVideos    = $lastSet->where('contenttype_id' , Content::CONTENT_TYPE_VIDEO);
+
+            return view('product.customShow.raheAbrisham', compact('product', 'block', 'purchasedProductIdArray', 'allChildIsPurchased' , 'liveDescriptions' , 'children' , 'isFavored' , 'isForcedGift' , 'shouldBuyProductId' , 'shouldBuyProductName' , 'hasPurchasedShouldBuyProduct' , 'lastSet' , 'lastSetPamphlets' , 'lastSetVideos'));
         }
 
         return view('product.show', compact('product', 'block', 'purchasedProductIdArray', 'allChildIsPurchased' , 'liveDescriptions' , 'children' , 'isFavored' , 'isForcedGift' , 'shouldBuyProductId' , 'shouldBuyProductName' , 'hasPurchasedShouldBuyProduct'));
