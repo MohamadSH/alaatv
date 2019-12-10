@@ -95,24 +95,12 @@
         </div>
     </div>
 
-    <script id="ScrollCarousel_base" type="x-tmpl-mustache">
-        @include('partials.ScrollCarousel.mustache_base')
-    </script>
-
-    <script id="ScrollCarousel_item" type="x-tmpl-mustache">
-        @include('partials.ScrollCarousel.mustache_item')
-    </script>
-
-    <div id="mustacheTest"></div>
-    <div id="mustacheTest2"></div>
-
-
     @include('product.partials.raheAbrisham.pictureAndMap')
-
 
     @include('product.partials.raheAbrisham.descriptionBox', [
         'title' => 'راهنمایی آلایی هایی که تازه ثبت نام کردند',
         'closeIcon' => true,
+        'class' => 'helpMessageRow',
         'content' => view('product.partials.raheAbrisham.helpMessage')
     ])
 
@@ -153,6 +141,7 @@
 
     @include('product.partials.raheAbrisham.descriptionBox', [
         'title' => 'توضیحات لحظه ای و آخرین تغییرات',
+        'class' => 'liveDescriptionRow',
         'color' => 'red',
         'content' => view('product.partials.raheAbrisham.liveDescription')
     ])
@@ -724,7 +713,6 @@
         'blockCustomId'=>'Block-sampleVideo'
         ])
 
-
     {{--نمونه جزوه--}}
     @include('product.partials.pamphlet')
 
@@ -844,6 +832,7 @@
 @endsection
 
 @section('page-js')
+    <script src="{{ asset('/acm/AlaatvCustomFiles/components/AnimateScrollTo/js.js') }}"></script>
     <script src="{{ asset('/acm/AlaatvCustomFiles/components/ScrollCarousel/js.js') }}"></script>
     <script src="{{ asset('/acm/AlaatvCustomFiles/components/OwlCarouselType2/js.js') }}"></script>
     <script src="{{ mix('/js/product-show.js') }}"></script>

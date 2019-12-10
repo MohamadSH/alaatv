@@ -856,7 +856,6 @@ var CustomPageFunction = function () {
 jQuery(document).ready(function() {
     CustomPageFunction.init();
 
-
     $('.m-body .m-content').addClass('boxed');
 
     $('.CustomDropDown').CustomDropDown({
@@ -867,50 +866,6 @@ jQuery(document).ready(function() {
     });
 
     ScrollCarousel.addSwipeIcons($('.ScrollCarousel'));
-
-
-    // function renderNested(template_string, translate) {
-    //     return function() {
-    //         return function(text, render) {
-    //             return Mustache.to_html(template_string, translate(render(text)));
-    //         };
-    //     };
-    // }
-    // var template = $("#ScrollCarousel_base").html();
-    // var nested_template = $("#ScrollCarousel_item").html();
-    // var model = {
-    //     data: {
-    //         names: [
-    //             { name: "Foo" },
-    //             { name: "Bar" }
-    //         ],
-    //         nested: renderNested(nested_template, function(text) {
-    //             return { name: text };
-    //         })
-    //     }
-    // };
-    // var result = Mustache.to_html(template, model);
-    // $("#mustacheTest").html( result );
-
-
-    function MustacheLoadUser(template, renderedData) {
-        Mustache.parse(template);   // optional, speeds up future uses
-        return Mustache.render(template, renderedData);
-    }
-
-    $('#mustacheTest').html(MustacheLoadUser($('#ScrollCarousel_base').html(), {
-        items: [
-            {src:'https://cdn.alaatv.com/media/thumbnails/562/562000kfbv.jpg?w=210&h=118'},
-            {src:'https://cdn.alaatv.com/media/thumbnails/580/580000moza.jpg?w=210&h=118'},
-            {src:'https://cdn.alaatv.com/media/thumbnails/580/580001kmvz.jpg?w=210&h=118'},
-            {src:'https://cdn.alaatv.com/media/thumbnails/586/586000zero.jpg?w=210&h=118'}
-        ],
-        item : function(text, render) {
-            return Mustache.to_html($('#ScrollCarousel_item').html(), {
-                src: this.src
-            });
-        }
-    }));
 
     imageObserver.observe();
 });

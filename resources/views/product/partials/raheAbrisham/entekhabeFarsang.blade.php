@@ -100,6 +100,9 @@
     .entekhabeFarsangVideoAndPamphlet .tab-content .tab-pane .ScrollCarousel-previous {
         right: 0;
     }
+    .m-portlet .m-portlet__body .closeBtn {
+        cursor: pointer;
+    }
 
     @media (max-width: 767px) {
         .entekhabeFarsangVideoAndPamphlet:before {
@@ -114,12 +117,11 @@
     }
 </style>
 
-
 <div class="row">
     <div class="col">
         <div class="m-portlet entekhabeFarsangVideoAndPamphlet">
             <div class="m-portlet__body">
-                <div class="closeBtn">
+                <div class="closeBtn" onclick="$(this).parents('.row').fadeOut();">
                     <i class="fa fa-times"></i>
                 </div>
                 <ul class="nav nav-tabs" role="tablist">

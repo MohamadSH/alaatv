@@ -29,15 +29,15 @@
         <!--begin::Portlet-->
         <div class="m-portlet">
             <div class="m-portlet__body">
-                
+
                 <input type="hidden" name="favoriteActionUrl" value="{{ route('web.mark.favorite.product', [ 'product' => $product->id ]) }}">
                 <input type="hidden" name="unFavoriteActionUrl" value="{{ route('web.mark.unfavorite.product', [ 'product' => $product->id ]) }}">
-                
+
                 <div class="btnFavorite">
                     <img class="btnFavorite-on {{ ($isFavored) ? '' : 'a--d-none' }}" src="https://cdn.alaatv.com/upload/fav-on.svg" width="50">
                     <img class="btnFavorite-off {{ ($isFavored) ? 'a--d-none' : '' }}" src="https://cdn.alaatv.com/upload/fav-off.svg" width="50">
                 </div>
-                
+
                 <!--begin::Section-->
                 <div class="m-section m-section--last">
                     <div class="m-section__content">
@@ -51,9 +51,9 @@
                                             خرید مجدد این دوره
                                         </p>
                                     </button>
-                                    
+
                                 </div>
-                            
+
                             </div>
                             <div class="col">
                                 <div class="row">
@@ -63,14 +63,14 @@
                                 </div>
                                 <div class="row no-gutters m--margin-top-15">
                                     <div class="col-6 m--padding-right-5">
-                                        <button class="btn m-btn--square btn-success a--full-width" type="submit">
+                                        <button class="btn m-btn--square btn-success a--full-width" onclick="$('.helpMessageRow').fadeIn();">
                                             <p class="display-5 a--margin-0">
                                                 من تازه شروع کردم
                                             </p>
                                         </button>
                                     </div>
                                     <div class="col-6 m--padding-left-5">
-                                        <button class="btn m-btn--square btn-outline-metal a--full-width" type="submit">
+                                        <button class="btn m-btn--square btn-outline-metal a--full-width" onclick="$('.liveDescriptionRow').AnimateScrollTo();">
                                             <p class="display-5 a--margin-0">
                                                 مشاهده آخرین تغییرات
                                             </p>
@@ -78,7 +78,7 @@
                                     </div>
                                 </div>
                             </div>
-                            
+
                         </div>
                         <!--end::Preview-->
                     </div>
