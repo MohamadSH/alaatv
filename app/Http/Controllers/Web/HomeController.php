@@ -9,9 +9,7 @@ use Illuminate\Routing\Redirector;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Contracts\Encryption\DecryptException;
-use Illuminate\Support\Facades\{ Input, Config, Storage , File};
-use League\Flysystem\Filesystem;
-use League\Flysystem\Sftp\SftpAdapter;
+use Illuminate\Support\Facades\{  Config, Storage , File};
 use App\{Notifications\sendLink,
     UploadCenter,
     User,
