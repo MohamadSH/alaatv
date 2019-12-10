@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
@@ -14,7 +15,7 @@ class Gift extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  Request  $request
      * @return array
      */
     public function toArray($request)
@@ -24,13 +25,11 @@ class Gift extends JsonResource
         }
 
         return [
-            'redirect_url'          => $this->redirectUrl,
-            'name'                  => $this->name,
-            'url'           => [
-                'web' => $this->url,
-                'api' => $this->api_url,
-            ],
-            'photo'         => $this->photo,
+            'id'               => $this->id,
+            'redirect_url'     => $this->when(isset($this->redirectUrl) , $this->redirectUrl),
+            'name'             => $this->when(isset($this->name) , $this->name),
+            'url'              => new Url($this),
+            'photo'            => $this->when(isset($this->photo) , $this->photo),
         ];
     }
 }

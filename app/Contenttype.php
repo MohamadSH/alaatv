@@ -2,6 +2,10 @@
 
 namespace App;
 
+use Carbon\Carbon;
+use Eloquent;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Cache;
 
 /**
@@ -13,32 +17,32 @@ use Illuminate\Support\Facades\Cache;
  * @property string|null                                                      $description توضیح
  * @property int                                                              $order       ترتیب
  * @property int                                                              $enable      فعال یا غیر فعال
- * @property \Carbon\Carbon|null                                              $created_at
- * @property \Carbon\Carbon|null                                              $updated_at
- * @property \Carbon\Carbon|null                                              $deleted_at
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Contenttype[] $children
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Content[]     $contents
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Contenttype[] $parents
+ * @property Carbon|null                                              $created_at
+ * @property Carbon|null                                              $updated_at
+ * @property Carbon|null                                              $deleted_at
+ * @property-read Collection|Contenttype[] $children
+ * @property-read Collection|Content[] $contents
+ * @property-read Collection|Contenttype[] $parents
  * @method static bool|null forceDelete()
- * @method static \Illuminate\Database\Query\Builder|\App\Contenttype onlyTrashed()
+ * @method static \Illuminate\Database\Query\Builder|Contenttype onlyTrashed()
  * @method static bool|null restore()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Contenttype whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Contenttype whereDeletedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Contenttype whereDescription($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Contenttype whereDisplayName($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Contenttype whereEnable($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Contenttype whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Contenttype whereName($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Contenttype whereOrder($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Contenttype whereUpdatedAt($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Contenttype withTrashed()
- * @method static \Illuminate\Database\Query\Builder|\App\Contenttype withoutTrashed()
- * @mixin \Eloquent
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Contenttype newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Contenttype newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Contenttype query()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel disableCache()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel withCacheCooldownSeconds($seconds)
+ * @method static Builder|Contenttype whereCreatedAt($value)
+ * @method static Builder|Contenttype whereDeletedAt($value)
+ * @method static Builder|Contenttype whereDescription($value)
+ * @method static Builder|Contenttype whereDisplayName($value)
+ * @method static Builder|Contenttype whereEnable($value)
+ * @method static Builder|Contenttype whereId($value)
+ * @method static Builder|Contenttype whereName($value)
+ * @method static Builder|Contenttype whereOrder($value)
+ * @method static Builder|Contenttype whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Query\Builder|Contenttype withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|Contenttype withoutTrashed()
+ * @mixin Eloquent
+ * @method static Builder|Contenttype newModelQuery()
+ * @method static Builder|Contenttype newQuery()
+ * @method static Builder|Contenttype query()
+ * @method static Builder|BaseModel disableCache()
+ * @method static Builder|BaseModel withCacheCooldownSeconds($seconds)
  * @property-read mixed                                                       $cache_cooldown_seconds
  * @property-read int|null $children_count
  * @property-read int|null $contents_count
@@ -53,7 +57,7 @@ class Contenttype extends BaseModel
         'order',
         'enable',
     ];
-    
+
     public static function List(): array
     {
         return [
@@ -62,7 +66,7 @@ class Contenttype extends BaseModel
             "article",
         ];
     }
-    
+
     public static function getRootContentType()
     {
         return Cache::tags('contentType')
@@ -71,12 +75,12 @@ class Contenttype extends BaseModel
                     ->get();
             });
     }
-    
+
     public function contents()
     {
         return $this->belongsToMany('App\Content', 'educationalcontent_contenttype', 'contenttype_id', 'content_id');
     }
-    
+
     public function parents()
     {
         return $this->belongsToMany('App\Contenttype', 'contenttype_contenttype', 't2_id',
@@ -86,7 +90,7 @@ class Contenttype extends BaseModel
                 'contenttypeinterraltions.id')//            ->select('major1_id AS id', 'majorinterrelationtypes.name AS pivot_relationName' , 'majorinterrelationtypes.displayName AS pivot_relationDisplayName')
         ->where("relationtype_id", 1);
     }
-    
+
     public function children()
     {
         return $this->belongsToMany('App\Contenttype', 'contenttype_contenttype', 't1_id',

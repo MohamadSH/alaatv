@@ -3,6 +3,9 @@
 namespace App;
 
 use Carbon\Carbon;
+use Eloquent;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 
 /**
  * App\Wallet
@@ -13,34 +16,34 @@ use Carbon\Carbon;
  * @property int|null                                                         $wallettype_id آیدی مشخص کننده نوع کیف
  *           پول
  * @property int                                                              $balance       اعتبار کیف پول
- * @property \Carbon\Carbon|null                                              $created_at
- * @property \Carbon\Carbon|null                                              $updated_at
- * @property \Carbon\Carbon|null                                              $deleted_at
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Transaction[] $transactions
- * @property-read \App\User|null                                              $user
+ * @property Carbon|null                                              $created_at
+ * @property Carbon|null                                              $updated_at
+ * @property Carbon|null                                              $deleted_at
+ * @property-read Collection|Transaction[] $transactions
+ * @property-read User|null                                              $user
  * @method static bool|null forceDelete()
- * @method static \Illuminate\Database\Query\Builder|\App\Wallet onlyTrashed()
+ * @method static \Illuminate\Database\Query\Builder|Wallet onlyTrashed()
  * @method static bool|null restore()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Wallet whereBalance($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Wallet whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Wallet whereDeletedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Wallet whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Wallet whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Wallet whereUserId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Wallet whereWallettypeId($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Wallet withTrashed()
- * @method static \Illuminate\Database\Query\Builder|\App\Wallet withoutTrashed()
- * @mixin \Eloquent
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Wallet newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Wallet newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Wallet query()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel disableCache()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel withCacheCooldownSeconds($seconds)
- * @property-read \App\Wallettype|null                                        $walletType
+ * @method static Builder|Wallet whereBalance($value)
+ * @method static Builder|Wallet whereCreatedAt($value)
+ * @method static Builder|Wallet whereDeletedAt($value)
+ * @method static Builder|Wallet whereId($value)
+ * @method static Builder|Wallet whereUpdatedAt($value)
+ * @method static Builder|Wallet whereUserId($value)
+ * @method static Builder|Wallet whereWallettypeId($value)
+ * @method static \Illuminate\Database\Query\Builder|Wallet withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|Wallet withoutTrashed()
+ * @mixin Eloquent
+ * @method static Builder|Wallet newModelQuery()
+ * @method static Builder|Wallet newQuery()
+ * @method static Builder|Wallet query()
+ * @method static Builder|BaseModel disableCache()
+ * @method static Builder|BaseModel withCacheCooldownSeconds($seconds)
+ * @property-read Wallettype|null                                        $walletType
  * @property-read mixed                                                       $cache_cooldown_seconds
  * @property int $pending_to_reduce مبلغی که علی الحساب از کیف پول کم شده است
  * @property-read int|null $transactions_count
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Wallet wherePendingToReduce($value)
+ * @method static Builder|Wallet wherePendingToReduce($value)
  */
 class Wallet extends BaseModel
 {

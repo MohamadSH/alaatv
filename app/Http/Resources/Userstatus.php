@@ -24,7 +24,7 @@ class Userstatus extends JsonResource
         }
 
         return [
-            'name'          => $this->name,
+            'name'          => $this->when(isset($this->name) , $this->name),
         ];
     }
 }

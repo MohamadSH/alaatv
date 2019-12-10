@@ -26,7 +26,7 @@ class UnpaidTransaction extends JsonResource
      */
     public function toArray($request)
     {
-        if (!($this->resource instanceof \App\Orderstatus)) {
+        if (!($this->resource instanceof \App\Transaction)) {
             return [];
         }
         $this->loadMissing('paymentmethod');
@@ -36,7 +36,7 @@ class UnpaidTransaction extends JsonResource
             'order_id'          => $this->when(isset($this->order_id) , function (){ return $this->order_id ;}),
             'cost'              => $this->cost ,
             'transactionstatus' => $this->when(isset($this->transactionstatus_id) , function (){ return new TransactionStatus($this->transactionstatus);}),
-            'created_at'        => $this->created_at,
-            'deadline_at'      => $this->deadline_at,
+            'created_at'        => $this->when(isset($this->created_at) , function (){return $this->created_at;}),
+            'deadline_at'       => $this->when(isset($this->deadline_at) , $this->deadline_at),
         ];
     }}

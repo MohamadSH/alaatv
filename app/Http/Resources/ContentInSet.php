@@ -36,10 +36,10 @@ class ContentInSet extends JsonResource
 
         return [
             'id'             => $this->id,
-            'redirect_url'   => $this->redirectUrl,
+            'redirect_url'   => $this->when(isset($this->redirectUrl) , $this->redirectUrl),
             'contenttype'    => $this->when(isset($this->contenttype_id) , function () {return New Contenttype($this->contenttype);}) ,
             'section'        => $this->when(isset($this->section_id) , function (){ return New Section($this->section);}),
-            'name'           => $this->name,
+            'name'           => $this->when(isset($this->name) , $this->name),
             'file'           => [
                 'video'    => $this->when(isset($videoFileCollection) , function () use ($videoFileCollection) { return VideoFile::collection($videoFileCollection); } ),
                 'pamphlet' => $this->when(isset($pamphletFileCollection) , function () use ($pamphletFileCollection) { return PamphletFile::collection($pamphletFileCollection); } ),
@@ -50,12 +50,7 @@ class ContentInSet extends JsonResource
             'thumbnail'      => $this->when(isset($this->thumbnail) , $this->thumbnail),
             'isFree'         => $this->isFree,
             'order'          => $this->order,
-            'url'            => [
-                'current' => [
-                    'web' => $this->url,
-                    'api' => $this->api_url,
-                ],
-            ],
+            'url'            => new Url($this),
         ];
     }
 }
