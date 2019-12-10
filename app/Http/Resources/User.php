@@ -36,7 +36,7 @@ class User extends JsonResource
             'mobile_verified_at' => $this->when(isset($this->mobile_verified_at) , $this->mobile_verified_at),
             'last_service_call'  => $this->when(isset($this->lastServiceCall) , $this->lastServiceCall),
             'national_code'      => $this->when(isset($this->nationalCode) , $this->nationalCode),
-            'lock_profile'       => $this->when(isset($this->lockProfile) , $this->lockProfile),
+            'lock_profile'       => $this->when(isset($this->lockProfile) , function (){return $this->lockProfile;}),
             'photo'              => $this->when(isset($this->photo) , $this->photo),
             'province'           => $this->when(isset($this->province) , $this->province) ,
             'city'               => $this->when(isset($this->city) , $this->city),
@@ -51,7 +51,6 @@ class User extends JsonResource
             'gender'             => $this->when(isset($this->gender) , function (){return New  Gender($this->gender) ; }),
             'profile_completion'  => (int) $this->completion(),
             'wallets'             => Wallet::collection($this->whenLoaded('wallets')),
-            'userstatus'         => $this->when(isset($this->userstatus_id) , function (){ return New Userstatus($this->userstatus);}),
             'created_at'         => $this->when(isset($this->created_at) , function (){return $this->created_at;}) ,
         ];
     }
