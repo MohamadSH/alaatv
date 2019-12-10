@@ -53,9 +53,8 @@ return [
         Illuminate\View\ViewServiceProvider::class,
 
 
-//        Collective\Html\HtmlServiceProvider::class,
+        Collective\Html\HtmlServiceProvider::class,
         Zarinpal\Laravel\ZarinpalServiceProvider::class,
-//        Greggilbert\Recaptcha\RecaptchaServiceProvider::class,
         Jenssegers\Agent\AgentServiceProvider::class,
         Laratrust\LaratrustServiceProvider::class,
         Watson\Sitemap\SitemapServiceProvider::class,
@@ -64,7 +63,6 @@ return [
         /*
          * Package Service Providers...
          */
-//        Backup\BackupServiceProvider::class,
         Artesaos\SEOTools\Providers\SEOToolsServiceProvider::class,
 
         Laravel\Scout\ScoutServiceProvider::class,
