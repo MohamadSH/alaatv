@@ -77,6 +77,8 @@ loadStickeHeader();
 $(document).ready(function () {
     $(document).on('click', '.btnScrollTo', function () {
         var scrollTo = $(this).attr('data-scroll-to');
-        $('html,body').animate({scrollTop: $(scrollTo).offset().top - $('#m_header').height()},'slow');
+        $(scrollTo).AnimateScrollTo();
+        // $('html,body').animate({scrollTop: $(scrollTo).offset().top - $('#m_header').height()},'slow');
+
     });
 });

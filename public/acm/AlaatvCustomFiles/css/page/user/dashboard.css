@@ -303,6 +303,12 @@
     .select-items .select-item .setRow .setRow-label {
         width: 100%;
         margin: 0;
+        white-space: normal;
+        text-align: justify;
+        line-height: 17px;
+        min-height: 34px;
+        max-height: 34px;
+        margin-bottom: 5px;
     }
 }
 @media (max-width: 600px) {
