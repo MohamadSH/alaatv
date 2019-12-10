@@ -36,7 +36,7 @@ use Laratrust\Traits\LaratrustUserTrait;
 use App\Traits\MustVerifyMobileNumberTrait;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Iatstuti\Database\Support\CascadeSoftDeletes;
+//use Iatstuti\Database\Support\CascadeSoftDeletes;
 use App\Classes\Verification\MustVerifyMobileNumber;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use App\Traits\User\{BonTrait,
@@ -360,7 +360,8 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber, 
     use MustVerifyMobileNumberTrait;
     use Helper;
     use DateTrait;
-    use SoftDeletes, CascadeSoftDeletes;
+    use SoftDeletes;
+//    use CascadeSoftDeletes;
     use LaratrustUserTrait;
     use HasWallet;
     use Notifiable;
