@@ -206,6 +206,8 @@ class ProductController extends Controller
                         return $user->products()->contains($shouldBuyProductId);
                     });
             }
+
+//            $lastSet = $product->sets->sortByDesc('created_at')->first() ;
         }
 
         return view('product.show', compact('product', 'block', 'purchasedProductIdArray', 'allChildIsPurchased' , 'liveDescriptions' , 'children' , 'isFavored' , 'isForcedGift' , 'shouldBuyProductId' , 'shouldBuyProductName' , 'hasPurchasedShouldBuyProduct'));

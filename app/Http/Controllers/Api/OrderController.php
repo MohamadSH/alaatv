@@ -18,7 +18,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Cache;
 use App\Http\Requests\SubmitCouponRequest;
 use App\Classes\Pricing\Alaa\AlaaInvoiceGenerator;
-use \App\Http\Resources\Coupon as CouponResource;
+use App\Http\Resources\Coupon as CouponResource;
+use App\Http\Resources\Invoice as InvoiceResource;
 
 class OrderController extends Controller
 {
@@ -51,6 +52,14 @@ class OrderController extends Controller
         unset($invoiceInfo['price']['payableByWallet']);
 
         return response($invoiceInfo, Response::HTTP_OK);
+    }
+
+    public function checkoutReviewV2(Request $request)
+    {
+        $user = $request->user('api');
+        $order = $user->getOpenOrder();
+
+        return (new InvoiceResource((new AlaaInvoiceGenerator())->generateOrderInvoice($order)))->response();
     }
 
     /**
