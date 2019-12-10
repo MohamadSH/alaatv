@@ -10,9 +10,9 @@ use App\Events\Authenticated;
 use App\Traits\CharacterCommon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use App\Http\Resources\User as   UserResource ;
 
 class LoginController extends Controller
 {
@@ -170,7 +170,8 @@ class LoginController extends Controller
 
         $token = $user->getAppToken();
         $data  = array_merge([
-            'user' => $user,
+            'user' => $user,  //Can't change this line because of current Android application
+//              'user' => new UserResource($user)
         ], $token);
         return response()->json([
             'status'     => 1,

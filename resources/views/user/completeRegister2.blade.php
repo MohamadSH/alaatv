@@ -5,272 +5,276 @@
 @endsection
 
 @section('content')
-
     <div class="row">
         <div class="col-md-4 mx-auto">
             <div class="m-alert m-alert--outline m-alert--outline-2x alert alert-success alert-dismissible fade show" role="alert">
-                <strong>
-                    هدیه آلاء به دانش‌آموز امروز، دانشجوی فردا
-                    ۱۳ آبان تا ۱۶ آذر                </strong>
+                <strong>زمان هدیه کیف پول به پایان رسیده است</strong>
             </div>
         </div>
     </div>
-    @include('systemMessage.flash')
-    @if(!$hadGotGiftBefore &&  !$hasGotGiftBefore)
-    <div class="row">
-        <div class="col-md-4 mx-auto">
-            <div class="m-alert m-alert--outline m-alert--outline-2x alert alert-warning alert-dismissible fade show" role="alert">
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                </button>
-                <strong>
-                    قبل از دریافت هدیه هویت خودتو تایید کن
-                </strong>
-            </div>
-        </div>
-    </div>
-    @endif
-
-    <div class="row">
-        @if(!$hadGotGiftBefore &&  !$hasGotGiftBefore)
-        <div class="col-md-6 mx-auto">
 
 
-            <div class="m-portlet m-portlet--creative m-portlet--bordered-semi profileMenuPage profileMenuPage-setting">
-                <div class="m-portlet__head">
-                    <div class="m-portlet__head-caption">
-                        <div class="m-portlet__head-title">
-						<span class="m-portlet__head-icon m--hide">
-							<i class="fa fa-chart-line"></i>
-						</span>
-                            <h2 class="m-portlet__head-label m-portlet__head-label--warning">
-                                <span>
-                                    <i class="fa fa-cogs"></i>
-                                    تایید اطلاعات شخصی
-                                </span>
-                            </h2>
-                        </div>
-                    </div>
-                    <div class="m-portlet__head-tools">
+{{--    <div class="row">--}}
+{{--        <div class="col-md-4 mx-auto">--}}
+{{--            <div class="m-alert m-alert--outline m-alert--outline-2x alert alert-success alert-dismissible fade show" role="alert">--}}
+{{--                <strong>--}}
+{{--                    هدیه آلاء به دانش‌آموز امروز، دانشجوی فردا--}}
+{{--                    ۱۳ آبان تا ۱۶ آذر                </strong>--}}
+{{--            </div>--}}
+{{--        </div>--}}
+{{--    </div>--}}
+{{--    @include('systemMessage.flash')--}}
+{{--    @if(!$hadGotGiftBefore &&  !$hasGotGiftBefore)--}}
+{{--    <div class="row">--}}
+{{--        <div class="col-md-4 mx-auto">--}}
+{{--            <div class="m-alert m-alert--outline m-alert--outline-2x alert alert-warning alert-dismissible fade show" role="alert">--}}
+{{--                <button type="button" class="close" data-dismiss="alert" aria-label="Close">--}}
+{{--                </button>--}}
+{{--                <strong>--}}
+{{--                    قبل از دریافت هدیه هویت خودتو تایید کن--}}
+{{--                </strong>--}}
+{{--            </div>--}}
+{{--        </div>--}}
+{{--    </div>--}}
+{{--    @endif--}}
 
-                    </div>
-                </div>
-                <div class="m-portlet__body">
-
-                    {!! Form::model($user,['method' => 'POST','url' => route('web.user.update.partial') , 'role'=>'form' , 'id' => 'profileForm-setting']) !!}
-                    {!! Form::hidden('updateType',"profile") !!}
-
-                        <div class="row">
-                            <div class="col-md-6">
-
-                                    <div class="form-group m-form__group {{ $errors->has('firstName') ? ' has-danger' : '' }}">
-                                        <label for="firstName">نام</label>
-                                        <div class="m-input-icon m-input-icon--left">
-                                            <input type="text" name="firstName" id="firstName" class="form-control m-input m-input--air" placeholder="نام" @if(isset($user->firstName))value="{{ $user->firstName }}"@endif @if(isset($user->firstName)) disabled="disabled" @endif>
-                                            <span class="m-input-icon__icon m-input-icon__icon--left">
-                                    <span>
-                                        <i class="fa fa-user"></i>
-                                    </span>
-                                </span>
-                                        </div>
-                                    </div>
-
-                            </div>
-                            <div class="col-md-6">
-
-                                    <div class="form-group m-form__group {{ $errors->has('lastName') ? ' has-danger' : '' }}">
-                                        <label for="lastName">نام خانوادگی</label>
-                                        <div class="m-input-icon m-input-icon--left">
-                                            <input type="text" name="lastName" id="lastName" class="form-control m-input m-input--air" placeholder="نام خانوادگی" @if(isset($user->lastName))value="{{ $user->lastName }}"@endif @if(isset($user->lastName)) disabled="disabled" @endif>
-                                            <span class="m-input-icon__icon m-input-icon__icon--left">
-                                    <span>
-                                        <i class="fa fa-user"></i>
-                                    </span>
-                                </span>
-                                        </div>
-                                    </div>
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-md-6">
-
-                                <div class="form-group m-form__group {{ $errors->has('province') ? ' has-danger' : '' }}">
-                                    <label for="province">استان</label>
-                                    <div class="m-input-icon m-input-icon--left">
-                                        <input type="text" name="province" id="province" class="form-control m-input m-input--air" placeholder="استان" @if(isset($user->province))value="{{ $user->province }}"@endif @if(isset($user->province)) disabled="disabled" @endif>
-                                        <span class="m-input-icon__icon m-input-icon__icon--left">
-                                            <span>
-                                                <i class="fa fa-location-arrow"></i>
-                                            </span>
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-
-                                <div class="form-group m-form__group {{ $errors->has('city') ? ' has-danger' : '' }}">
-                                    <label for="city">شهر</label>
-                                    <div class="m-input-icon m-input-icon--left">
-                                        <input type="text" name="city" id="city" class="form-control m-input m-input--air" placeholder="شهر" @if(isset($user->city))value="{{ $user->city }}"@endif @if(isset($user->city)) disabled="disabled" @endif>
-                                        <span class="m-input-icon__icon m-input-icon__icon--left">
-                                            <span>
-                                                <i class="fa fa-location-arrow"></i>
-                                            </span>
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-md-6">
+{{--    <div class="row">--}}
+{{--        @if(!$hadGotGiftBefore &&  !$hasGotGiftBefore)--}}
+{{--        <div class="col-md-6 mx-auto">--}}
 
 
-                                <div class="form-group m-form__group {{ $errors->has('gender_id') ? ' has-danger' : '' }}">
-                                    <label for="gender_id">جنسیت</label>
-                                    <div class="m-input-icon m-input-icon--left">
-                                        @if(isset($user->gender_id))
-                                        {!! Form::select('gender_id',$genders,null,['class' => 'form-control m-input m-input--air', 'id' => 'gender_id', 'disabled' => 'disabled']) !!}
-                                        @else
-                                        {!! Form::select('gender_id',$genders,null,['class' => 'form-control m-input m-input--air', 'id' => 'gender_id']) !!}
-                                        @endif
-                                        <span class="m-input-icon__icon m-input-icon__icon--left">
-                                            <span>
-                                                <i class="fa fa-user"></i>
-                                            </span>
-                                        </span>
-                                    </div>
-                                </div>
+{{--            <div class="m-portlet m-portlet--creative m-portlet--bordered-semi profileMenuPage profileMenuPage-setting">--}}
+{{--                <div class="m-portlet__head">--}}
+{{--                    <div class="m-portlet__head-caption">--}}
+{{--                        <div class="m-portlet__head-title">--}}
+{{--						<span class="m-portlet__head-icon m--hide">--}}
+{{--							<i class="fa fa-chart-line"></i>--}}
+{{--						</span>--}}
+{{--                            <h2 class="m-portlet__head-label m-portlet__head-label--warning">--}}
+{{--                                <span>--}}
+{{--                                    <i class="fa fa-cogs"></i>--}}
+{{--                                    تایید اطلاعات شخصی--}}
+{{--                                </span>--}}
+{{--                            </h2>--}}
+{{--                        </div>--}}
+{{--                    </div>--}}
+{{--                    <div class="m-portlet__head-tools">--}}
 
-                            </div>
-                            <div class="col-md-6">
+{{--                    </div>--}}
+{{--                </div>--}}
+{{--                <div class="m-portlet__body">--}}
 
+{{--                    {!! Form::model($user,['method' => 'POST','url' => route('web.user.update.partial') , 'role'=>'form' , 'id' => 'profileForm-setting']) !!}--}}
+{{--                    {!! Form::hidden('updateType',"profile") !!}--}}
 
-                                <div class="form-group m-form__group {{ $errors->has('major_id') ? ' has-danger' : '' }}">
-                                    <label for="major_id">رشته</label>
-                                    <div class="m-input-icon m-input-icon--left">
-                                        @if(isset($user->major_id))
-                                        {!! Form::select('major_id',$majors,null,['class' => 'form-control m-input m-input--air', 'id' => 'major_id', 'disabled' => 'disabled']) !!}
-                                        @else
-                                        {!! Form::select('major_id',$majors,null,['class' => 'form-control m-input m-input--air', 'id' => 'major_id']) !!}
-                                        @endif
-                                        <span class="m-input-icon__icon m-input-icon__icon--left">
-                                            <span>
-                                                <i class="fa fa-graduation-cap"></i>
-                                            </span>
-                                        </span>
-                                    </div>
-                                </div>
+{{--                        <div class="row">--}}
+{{--                            <div class="col-md-6">--}}
 
-                            </div>
-                        </div>
+{{--                                    <div class="form-group m-form__group {{ $errors->has('firstName') ? ' has-danger' : '' }}">--}}
+{{--                                        <label for="firstName">نام</label>--}}
+{{--                                        <div class="m-input-icon m-input-icon--left">--}}
+{{--                                            <input type="text" name="firstName" id="firstName" class="form-control m-input m-input--air" placeholder="نام" @if(isset($user->firstName))value="{{ $user->firstName }}"@endif @if(isset($user->firstName)) disabled="disabled" @endif>--}}
+{{--                                            <span class="m-input-icon__icon m-input-icon__icon--left">--}}
+{{--                                    <span>--}}
+{{--                                        <i class="fa fa-user"></i>--}}
+{{--                                    </span>--}}
+{{--                                </span>--}}
+{{--                                        </div>--}}
+{{--                                    </div>--}}
 
-                        <div class="row">
-                            <div class="col-md-6">
+{{--                            </div>--}}
+{{--                            <div class="col-md-6">--}}
 
-                                <div class = "form-group m-form__group {{ $errors->has('birthdate') ? ' has-danger' : '' }}>
-                                    <label for = "birthdate">تاریخ تولد</label>
-                                    <div class = "m-input-icon m-input-icon--left">
-                                        <input class = "form-control m-input m-input--air" name = "birthdate" id = "birthdate" @if(isset($user->birthdate)) value="{{$user->birthdate}}" disabled="disabled" @endif/>
-                                        <input name = "birthdateAlt" id = "birthdateAlt" type = "hidden" @if(isset($user->birthdate)) value="{{$user->birthdate}}" disabled="disabled" @endif/>
-                                        <span class = "m-input-icon__icon m-input-icon__icon--left">
-                                            <span>
-                                                <i class = "fa fa-calendar-alt"></i>
-                                            </span>
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
+{{--                                    <div class="form-group m-form__group {{ $errors->has('lastName') ? ' has-danger' : '' }}">--}}
+{{--                                        <label for="lastName">نام خانوادگی</label>--}}
+{{--                                        <div class="m-input-icon m-input-icon--left">--}}
+{{--                                            <input type="text" name="lastName" id="lastName" class="form-control m-input m-input--air" placeholder="نام خانوادگی" @if(isset($user->lastName))value="{{ $user->lastName }}"@endif @if(isset($user->lastName)) disabled="disabled" @endif>--}}
+{{--                                            <span class="m-input-icon__icon m-input-icon__icon--left">--}}
+{{--                                    <span>--}}
+{{--                                        <i class="fa fa-user"></i>--}}
+{{--                                    </span>--}}
+{{--                                </span>--}}
+{{--                                        </div>--}}
+{{--                                    </div>--}}
+{{--                            </div>--}}
+{{--                        </div>--}}
 
-                                <div class="text-center">
-                                    <span class="m-badge m-badge--success mobileVerifyMessage @if(!$user->hasVerifiedMobile()) d-none @endif">
-                                        شماره موبایل تایید شده است.
-                                        <br>
-                                        @if(isset($user->mobile)){{ $user->mobile }} @endif
-                                    </span>
-                                    <span class="m-badge m-badge--danger mobileUnVerifyMessage @if($user->hasVerifiedMobile()) d-none @endif">
-                                        توجه! شماره موبایل تایید نشده است.
-                                        <br>
-                                        @if(isset($user->mobile)){{ $user->mobile }} @endif
-                                    </span>
-                                </div>
+{{--                        <div class="row">--}}
+{{--                            <div class="col-md-6">--}}
 
-                                @if(!$user->hasVerifiedMobile() )
-                                    <div class="row SendMobileVerificationCodeWarper">
-                                        <div class="col-12 text-center">
-                                            <input type="hidden" id="SendMobileVerificationCodeActionUrl" value="{{ action('Web\MobileVerificationController@resend') }}">
-                                            <button type="button" id="btnSendMobileVerificationCode" class="btn m-btn--pill m-btn--air m-btn m-btn--gradient-from-info m-btn--gradient-to-accent m--margin-top-10">تایید شماره موبایل</button>
-                                        </div>
-                                        <div class="col-12 text-center inputVerificationWarper d-none">
-                                            <div class="form-group m-form__group">
-                                                <label for="txtMobileVerificationCode">کد تاییدیه ارسال شده:</label>
-                                                <div class="m-input-icon m-input-icon--left">
-                                                    <input type="text" name="txtMobileVerificationCode" id="txtMobileVerificationCode" class="form-control m-input m-input--air" placeholder="کد تایید">
-                                                    <span class="m-input-icon__icon m-input-icon__icon--left">
-                                                    <span>
-                                                        <i class="fa fa-mobile-alt"></i>
-                                                    </span>
-                                                </span>
-                                                </div>
-                                            </div>
-                                            <input type="hidden" id="VerifyMobileVerificationCodeActionUrl" value="{{ action('Web\MobileVerificationController@verify') }}">
-                                            <button type="button" id="btnVerifyMobileVerificationCode" class="btn m-btn--pill m-btn--air m-btn m-btn--gradient-from-info m-btn--gradient-to-accent">تایید کد</button>
-                                        </div>
-                                    </div>
-                                @endif
+{{--                                <div class="form-group m-form__group {{ $errors->has('province') ? ' has-danger' : '' }}">--}}
+{{--                                    <label for="province">استان</label>--}}
+{{--                                    <div class="m-input-icon m-input-icon--left">--}}
+{{--                                        <input type="text" name="province" id="province" class="form-control m-input m-input--air" placeholder="استان" @if(isset($user->province))value="{{ $user->province }}"@endif @if(isset($user->province)) disabled="disabled" @endif>--}}
+{{--                                        <span class="m-input-icon__icon m-input-icon__icon--left">--}}
+{{--                                            <span>--}}
+{{--                                                <i class="fa fa-location-arrow"></i>--}}
+{{--                                            </span>--}}
+{{--                                        </span>--}}
+{{--                                    </div>--}}
+{{--                                </div>--}}
+{{--                            </div>--}}
+{{--                            <div class="col-md-6">--}}
 
-                            </div>
-                        </div>
+{{--                                <div class="form-group m-form__group {{ $errors->has('city') ? ' has-danger' : '' }}">--}}
+{{--                                    <label for="city">شهر</label>--}}
+{{--                                    <div class="m-input-icon m-input-icon--left">--}}
+{{--                                        <input type="text" name="city" id="city" class="form-control m-input m-input--air" placeholder="شهر" @if(isset($user->city))value="{{ $user->city }}"@endif @if(isset($user->city)) disabled="disabled" @endif>--}}
+{{--                                        <span class="m-input-icon__icon m-input-icon__icon--left">--}}
+{{--                                            <span>--}}
+{{--                                                <i class="fa fa-location-arrow"></i>--}}
+{{--                                            </span>--}}
+{{--                                        </span>--}}
+{{--                                    </div>--}}
+{{--                                </div>--}}
+{{--                            </div>--}}
+{{--                        </div>--}}
 
-                        <input type="hidden" id="userUpdateProfileUrl" value="{{ action((isset($formAction))?$formAction:'Web\UserController@update' , Auth::user()) }}">
-
-                    {!! Form::close() !!}
+{{--                        <div class="row">--}}
+{{--                            <div class="col-md-6">--}}
 
 
-                    <button type="button" class="btn m-btn--pill m-btn--air btn-primary btnSubmitCompleteInfo">
-                        تایید اطلاعات
-                    </button>
+{{--                                <div class="form-group m-form__group {{ $errors->has('gender_id') ? ' has-danger' : '' }}">--}}
+{{--                                    <label for="gender_id">جنسیت</label>--}}
+{{--                                    <div class="m-input-icon m-input-icon--left">--}}
+{{--                                        @if(isset($user->gender_id))--}}
+{{--                                        {!! Form::select('gender_id',$genders,null,['class' => 'form-control m-input m-input--air', 'id' => 'gender_id', 'disabled' => 'disabled']) !!}--}}
+{{--                                        @else--}}
+{{--                                        {!! Form::select('gender_id',$genders,null,['class' => 'form-control m-input m-input--air', 'id' => 'gender_id']) !!}--}}
+{{--                                        @endif--}}
+{{--                                        <span class="m-input-icon__icon m-input-icon__icon--left">--}}
+{{--                                            <span>--}}
+{{--                                                <i class="fa fa-user"></i>--}}
+{{--                                            </span>--}}
+{{--                                        </span>--}}
+{{--                                    </div>--}}
+{{--                                </div>--}}
 
-                </div>
-            </div>
+{{--                            </div>--}}
+{{--                            <div class="col-md-6">--}}
 
 
-        </div>
-        @else
-            <div class="alert alert-success alert-dismissible fade show" role="alert">
-                <strong>تبریک!</strong>
-                @if($hadGotGiftBefore)
-                شما هدیه ۱۴ هزار تومانی را پیش از این دریافت کرده اید
-                @else
-                    مبلغ 14 هزار تومان هدیه به کیف پول شما افزوده شد.
-                @endif
-                <strong>این هدیه تا تاریخ 16 آذر اعتبار دارد.</strong>
-            </div>
-        @endif
-    </div>
+{{--                                <div class="form-group m-form__group {{ $errors->has('major_id') ? ' has-danger' : '' }}">--}}
+{{--                                    <label for="major_id">رشته</label>--}}
+{{--                                    <div class="m-input-icon m-input-icon--left">--}}
+{{--                                        @if(isset($user->major_id))--}}
+{{--                                        {!! Form::select('major_id',$majors,null,['class' => 'form-control m-input m-input--air', 'id' => 'major_id', 'disabled' => 'disabled']) !!}--}}
+{{--                                        @else--}}
+{{--                                        {!! Form::select('major_id',$majors,null,['class' => 'form-control m-input m-input--air', 'id' => 'major_id']) !!}--}}
+{{--                                        @endif--}}
+{{--                                        <span class="m-input-icon__icon m-input-icon__icon--left">--}}
+{{--                                            <span>--}}
+{{--                                                <i class="fa fa-graduation-cap"></i>--}}
+{{--                                            </span>--}}
+{{--                                        </span>--}}
+{{--                                    </div>--}}
+{{--                                </div>--}}
 
-    <div class="modal" id="completeRegisterMessage" >
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">
+{{--                            </div>--}}
+{{--                        </div>--}}
 
-                    </h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <div class="alert alert-success alert-dismissible fade show" role="alert">
-                        <strong>تبریک!</strong>
-                        مبلغ 14000 تومان هدیه به کیف پول شما افزوده شد.
-                        <strong>این هدیه تا 16 آذر دیگر اعتبار دارد.</strong>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+{{--                        <div class="row">--}}
+{{--                            <div class="col-md-6">--}}
+
+{{--                                <div class = "form-group m-form__group {{ $errors->has('birthdate') ? ' has-danger' : '' }}>--}}
+{{--                                    <label for = "birthdate">تاریخ تولد</label>--}}
+{{--                                    <div class = "m-input-icon m-input-icon--left">--}}
+{{--                                        <input class = "form-control m-input m-input--air" name = "birthdate" id = "birthdate" @if(isset($user->birthdate)) value="{{$user->birthdate}}" disabled="disabled" @endif/>--}}
+{{--                                        <input name = "birthdateAlt" id = "birthdateAlt" type = "hidden" @if(isset($user->birthdate)) value="{{$user->birthdate}}" disabled="disabled" @endif/>--}}
+{{--                                        <span class = "m-input-icon__icon m-input-icon__icon--left">--}}
+{{--                                            <span>--}}
+{{--                                                <i class = "fa fa-calendar-alt"></i>--}}
+{{--                                            </span>--}}
+{{--                                        </span>--}}
+{{--                                    </div>--}}
+{{--                                </div>--}}
+{{--                            </div>--}}
+{{--                            <div class="col-md-6">--}}
+
+{{--                                <div class="text-center">--}}
+{{--                                    <span class="m-badge m-badge--success mobileVerifyMessage @if(!$user->hasVerifiedMobile()) d-none @endif">--}}
+{{--                                        شماره موبایل تایید شده است.--}}
+{{--                                        <br>--}}
+{{--                                        @if(isset($user->mobile)){{ $user->mobile }} @endif--}}
+{{--                                    </span>--}}
+{{--                                    <span class="m-badge m-badge--danger mobileUnVerifyMessage @if($user->hasVerifiedMobile()) d-none @endif">--}}
+{{--                                        توجه! شماره موبایل تایید نشده است.--}}
+{{--                                        <br>--}}
+{{--                                        @if(isset($user->mobile)){{ $user->mobile }} @endif--}}
+{{--                                    </span>--}}
+{{--                                </div>--}}
+
+{{--                                @if(!$user->hasVerifiedMobile() )--}}
+{{--                                    <div class="row SendMobileVerificationCodeWarper">--}}
+{{--                                        <div class="col-12 text-center">--}}
+{{--                                            <input type="hidden" id="SendMobileVerificationCodeActionUrl" value="{{ action('Web\MobileVerificationController@resend') }}">--}}
+{{--                                            <button type="button" id="btnSendMobileVerificationCode" class="btn m-btn--pill m-btn--air m-btn m-btn--gradient-from-info m-btn--gradient-to-accent m--margin-top-10">تایید شماره موبایل</button>--}}
+{{--                                        </div>--}}
+{{--                                        <div class="col-12 text-center inputVerificationWarper d-none">--}}
+{{--                                            <div class="form-group m-form__group">--}}
+{{--                                                <label for="txtMobileVerificationCode">کد تاییدیه ارسال شده:</label>--}}
+{{--                                                <div class="m-input-icon m-input-icon--left">--}}
+{{--                                                    <input type="text" name="txtMobileVerificationCode" id="txtMobileVerificationCode" class="form-control m-input m-input--air" placeholder="کد تایید">--}}
+{{--                                                    <span class="m-input-icon__icon m-input-icon__icon--left">--}}
+{{--                                                    <span>--}}
+{{--                                                        <i class="fa fa-mobile-alt"></i>--}}
+{{--                                                    </span>--}}
+{{--                                                </span>--}}
+{{--                                                </div>--}}
+{{--                                            </div>--}}
+{{--                                            <input type="hidden" id="VerifyMobileVerificationCodeActionUrl" value="{{ action('Web\MobileVerificationController@verify') }}">--}}
+{{--                                            <button type="button" id="btnVerifyMobileVerificationCode" class="btn m-btn--pill m-btn--air m-btn m-btn--gradient-from-info m-btn--gradient-to-accent">تایید کد</button>--}}
+{{--                                        </div>--}}
+{{--                                    </div>--}}
+{{--                                @endif--}}
+
+{{--                            </div>--}}
+{{--                        </div>--}}
+
+{{--                        <input type="hidden" id="userUpdateProfileUrl" value="{{ action((isset($formAction))?$formAction:'Web\UserController@update' , Auth::user()) }}">--}}
+
+{{--                    {!! Form::close() !!}--}}
+
+
+{{--                    <button type="button" class="btn m-btn--pill m-btn--air btn-primary btnSubmitCompleteInfo">--}}
+{{--                        تایید اطلاعات--}}
+{{--                    </button>--}}
+
+{{--                </div>--}}
+{{--        @else--}}
+{{--            <div class="alert alert-success alert-dismissible fade show" role="alert">--}}
+{{--                <strong>تبریک!</strong>--}}
+{{--                @if($hadGotGiftBefore)--}}
+{{--                شما هدیه ۱۴ هزار تومانی را پیش از این دریافت کرده اید--}}
+{{--                @else--}}
+{{--                    مبلغ 14 هزار تومان هدیه به کیف پول شما افزوده شد.--}}
+{{--                @endif--}}
+{{--                <strong>این هدیه تا تاریخ 16 آذر اعتبار دارد.</strong>--}}
+{{--            </div>--}}
+{{--        @endif--}}
+{{--    </div>--}}
+
+{{--    <div class="modal" id="completeRegisterMessage" >--}}
+{{--        <div class="modal-dialog" role="document">--}}
+{{--            <div class="modal-content">--}}
+{{--                <div class="modal-header">--}}
+{{--                    <h5 class="modal-title">--}}
+
+{{--                    </h5>--}}
+{{--                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">--}}
+{{--                        <span aria-hidden="true">&times;</span>--}}
+{{--                    </button>--}}
+{{--                </div>--}}
+{{--                <div class="modal-body">--}}
+{{--                    <div class="alert alert-success alert-dismissible fade show" role="alert">--}}
+{{--                        <strong>تبریک!</strong>--}}
+{{--                        مبلغ 14000 تومان هدیه به کیف پول شما افزوده شد.--}}
+{{--                        <strong>این هدیه تا 16 آذر دیگر اعتبار دارد.</strong>--}}
+{{--                    </div>--}}
+{{--                </div>--}}
+{{--            </div>--}}
+{{--        </div>--}}
+{{--    </div>--}}
 
 @endsection
 

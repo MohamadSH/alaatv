@@ -9,8 +9,10 @@
 namespace App\Classes\Pricing\Alaa;
 
 use App\Collection\OrderproductCollection;
+use App\Http\Resources\PurchasedProduct;
 use App\Order;
 use Illuminate\Support\Collection;
+use App\Http\Resources\PurchasedOrderproduct as OrderproductResource;
 
 class AlaaInvoiceGenerator
 {
@@ -25,27 +27,27 @@ class AlaaInvoiceGenerator
         $orderproductsInfo = $this->getOrderproductsInfo($order);
         /** @var OrderproductCollection $orderproducts */
         $orderproducts = $orderproductsInfo['purchasedOrderproducts'];
-        
+
         $orderproducts->reCheckOrderproducs();
-        
+
         $order = $order->fresh();
-        
+
         $orderPriceArray = $order->obtainOrderCost(true);
-        
+
         /** @var OrderproductCollection $calculatedOrderproducts */
         $calculatedOrderproducts = $orderPriceArray['calculatedOrderproducts'];
         $calculatedOrderproducts->updateCostValues();
-        
+
         $orderproductsRawCost = $orderPriceArray['sumOfOrderproductsRawCost'];
         $totalCost            = $orderPriceArray['totalCost'];
         $payableByWallet      = $orderPriceArray['payableAmountByWallet'];
-        
+
         $orderProductCount = $this->orderproductFormatter($calculatedOrderproducts);
-        
+
         return $this->invoiceFormatter($calculatedOrderproducts, $orderProductCount, $orderproductsRawCost, $totalCost,
             $payableByWallet);
     }
-    
+
     /**
      * @param  Order  $order
      *
@@ -55,16 +57,16 @@ class AlaaInvoiceGenerator
     {
         /** @var OrderproductCollection $allOrderproducts */
         $allOrderproducts = $order->orderproducts->sortByDesc('created_at');
-        
+
         $purchasedOrderproducts = $allOrderproducts->whereType([config('constants.ORDER_PRODUCT_TYPE_DEFAULT')]);
         $giftOrderproducts      = $allOrderproducts->whereType([config('constants.ORDER_PRODUCT_GIFT')]);
-        
+
         return [
             'purchasedOrderproducts' => $purchasedOrderproducts,
             'giftOrderproducts'      => $giftOrderproducts,
         ];
     }
-    
+
     /**
      * Formats orderproduct collection and return total number of orderproducts
      *
@@ -75,29 +77,33 @@ class AlaaInvoiceGenerator
     private function orderproductFormatter(OrderproductCollection &$orderproducts): int
     {
         $newPrices = $orderproducts->getNewPrices();
-        
+
         $orderProductCount = 0;
         $orderproducts     = new OrderproductCollection($orderproducts->groupBy('grandId')
             ->map(function ($orderproducts) use (&$orderProductCount) {
                 $orderProductCount += $orderproducts->count();
-                
+
+                $grand = $orderproducts->first()->grandProduct ;
                 return [
                     'grand'         => $orderproducts->first()->grandProduct ?? null,
                     'orderproducts' => $orderproducts,
+                    //For new api
+//                    'grand'  => isset($grand)? New PurchasedProduct($grand) : null,
+//                    'orderproducts' => OrderproductResource::Collection($orderproducts),
                 ];
             })
             ->values()
             ->all());
-        
+
         $orderproducts = $orderproducts->setNewPrices($newPrices);
-        
+
         return $orderProductCount;
     }
-    
+
     private function invoiceFormatter($orderproducts, $orderproductCount, $orderproductsRawCost, $totalCost, $payableByWallet)
     {
         $discount = $orderproductsRawCost - $totalCost;
-        
+
         return [
             'items'             => $orderproducts,
             'orderproductCount' => $orderproductCount,
@@ -109,7 +115,7 @@ class AlaaInvoiceGenerator
             ],
         ];
     }
-    
+
     /**
      * @param  Collection  $fakeOrderproducts
      *
@@ -119,9 +125,9 @@ class AlaaInvoiceGenerator
     {
         /** @var OrderproductCollection $fakeOrderproducts */
         $groupPriceInfo = $fakeOrderproducts->calculateGroupPrice();
-        
+
         $orderProductCount = $this->orderproductFormatter($fakeOrderproducts);
-        
+
         return $this->invoiceFormatter($fakeOrderproducts, $orderProductCount, $groupPriceInfo['rawCost'],
             $groupPriceInfo['customerCost'], 0);
     }

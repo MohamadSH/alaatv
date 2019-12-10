@@ -18,9 +18,9 @@ class ProductSamplePhoto extends JsonResource
     {
         $array = (array) $this->resource;
         return [
-            'title'         => Arr::get($array, 'title') ,
-            'description'   => Arr::get($array, 'description') ,
-            'url'           => Arr::get($array, 'url') ,
+            'title'         => $this->when(Arr::has($array, 'title')  , Arr::get($array, 'title') ),
+            'description'   => $this->when(Arr::has($array, 'description') , Arr::get($array, 'description')) ,
+            'url'           => $this->when(Arr::has($array, 'url') , Arr::get($array, 'url')) ,
         ];
     }
 }
