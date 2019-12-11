@@ -44,7 +44,7 @@ class BlockV2 extends JsonResource
             'contents'   => $this->when(isset($contents) && $contents->isNotEmpty() , function () use ($contents) { return ContentInBlock::collection($contents) ;}),
             'sets'       => $this->when(isset($sets) && $sets->isNotEmpty() , function () use ($sets) { return SetInBlock::collection($sets) ;}),
             'products'   => $this->when(isset($products) && $products->isNotEmpty() , function () use ($products){ return ProductInBlock::collection($products);}),
-            'banners'    => $this->when(isset($banners) && $banners->isNotEmpty() , function () use ($banners){ return Banner::collection($banners);}),
+            'banners'    => $this->when(isset($banners) && $banners->isNotEmpty() , function () use ($banners){ return Slideshow::collection($banners);}),
             'updated_at' => $this->when(isset($this->updated_at) , function (){ return $this->updated_at; }),
         ];
     }
