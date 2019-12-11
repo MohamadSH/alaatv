@@ -3,13 +3,9 @@
 namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Arr;
 
-/**
- * Class \App\Contenttype
- *
- * @mixin \App\Contenttype
- * */
-class Contenttype extends JsonResource
+class Banner extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -19,12 +15,9 @@ class Contenttype extends JsonResource
      */
     public function toArray($request)
     {
-        if (!($this->resource instanceof \App\Contenttype)) {
-            return [];
-        }
-
+        $array = (array) $this->resource;
         return [
-            'type'          => $this->id,
+            'photo' =>  $this->when(Arr::has($array , 'photo') , Arr::get($array , 'photo'))
         ];
     }
 }

@@ -37,15 +37,13 @@ class Product extends JsonResource
             'id'            => $this->id,
             'category'      => $this->when(isset($this->category) , $this->category),
             'redirect_url'  => $this->when(isset($this->redirectUrl) , $this->redirectUrl),
-            'name'          => $this->when(isset($this->name) , $this->name),
+            'title'          => $this->when(isset($this->name) , $this->name),
             'type'          => $this->when(isset($this->producttype_id) , function (){ return new Producttype($this->producttype) ;}),
-//            'isFree'        => $this->isFree,
             'description'   => [
                 'short' => $this->when(isset($this->shortDescription) , $this->shortDescription),
                 'long'  => $this->when(isset($this->longDescription) , $this->longDescription),
             ],
             'slogan'                => $this->when(isset($this->slogan) , $this->slogan),
-//            'amount'                => $this->amount,
             'price'                 => new Price($this->price),
             'tags'                  => $this->when(isset($this->tags) , function (){ return new Tag($this->tags);}),
             'recommender_contents'  => $this->when(isset($this->recommender_contents) , $this->recommender_contents),
@@ -54,7 +52,7 @@ class Product extends JsonResource
             'page_view'             => $this->when(isset($this->page_view) , $this->page_view),
             'url'                   => new Url($this),
             'photo'                 => $this->when(isset($this->photo) , $this->photo),
-            'sample_photos'         => $this->when(isset($this->sample_photos) , function (){return ProductSamplePhoto::collection($this->sample_photos);})  , //It is not a relationship
+            'sample_photos'         => $this->when(isset($this->sample_photos) && $this->sample_photos->isNotEmpty() , function (){return ProductSamplePhoto::collection($this->sample_photos);})  , //It is not a relationship
             'gift'                  => $this->when($this->gift->isNotEmpty() , function (){ return Gift::collection($this->gift) ; }) , //It is not a relationship
             'sets'                  => $this->when($this->sets->isNotEmpty() , function (){return ProductSet::collection($this->whenLoaded('sets'));}),
             'attributes'            => [
