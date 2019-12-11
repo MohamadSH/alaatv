@@ -195,24 +195,8 @@ class ProductController extends Controller
         $shouldBuyProductId = null;
         $shouldBuyProductName = '';
         $hasPurchasedShouldBuyProduct = false;
-        if($product->id == 385){
-            $isForcedGift = true;
-            $shouldBuyProductName = 'راه ابریشم';
-            $shouldBuyProductId = Product::RAHE_ABRISHAM  ;
-            /** @var \App\User $user */
-            if(isset($user)){
-                $key = 'user:hasPurchasedShouldBuyProduct:'.$user->cacheKey();
-                $hasPurchasedShouldBuyProduct =   Cache::tags(['user_'.$user->id.'_closedOrders' ])
-                    ->remember($key, config('constants.CACHE_600'), function () use ($user , $shouldBuyProductId) {
-                        return $user->products()->contains($shouldBuyProductId);
-                    });
-            }
-
-            $lastSet = $product->sets->sortByDesc('created_at')->first() ;
-            $lastSetPamphlets = $lastSet->where('contenttype_id' , Content::CONTENT_TYPE_PAMPHLET);
-            $lastSetVideos    = $lastSet->where('contenttype_id' , Content::CONTENT_TYPE_VIDEO);
-
-            return view('product.customShow.raheAbrisham', compact('product', 'block', 'purchasedProductIdArray', 'allChildIsPurchased' , 'liveDescriptions' , 'children' , 'isFavored' , 'isForcedGift' , 'shouldBuyProductId' , 'shouldBuyProductName' , 'hasPurchasedShouldBuyProduct' , 'lastSet' , 'lastSetPamphlets' , 'lastSetVideos'));
+        if($product->id == 347){
+            return $this->createRaheAbrishamView($product, $user, compact('product', 'block', 'purchasedProductIdArray', 'allChildIsPurchased' , 'liveDescriptions' , 'children' , 'isFavored' , 'isForcedGift' , 'shouldBuyProductId' , 'shouldBuyProductName' , 'hasPurchasedShouldBuyProduct'));
         }
 
         return view('product.show', compact('product', 'block', 'purchasedProductIdArray', 'allChildIsPurchased' , 'liveDescriptions' , 'children' , 'isFavored' , 'isForcedGift' , 'shouldBuyProductId' , 'shouldBuyProductName' , 'hasPurchasedShouldBuyProduct'));
@@ -1151,5 +1135,40 @@ class ProductController extends Controller
         $blockContents = optional(optional(optional($block)->contents)->pluck('id'))->toArray();
         $blockFirstSetContents = optional(optional(optional(optional($block->sets)->first())->contents)->pluck('id'))->toArray();
         return array_unique(array_merge(!is_null($blockContents) ? $blockContents : [], !is_null($blockFirstSetContents) ? $blockFirstSetContents : []), SORT_REGULAR);
+    }
+
+    /**
+     * @param \App\Product $product
+     * @param \App\User $user
+     * @return array
+     */
+    private function createRaheAbrishamView(Product $product, \App\User $user = null, $compact)
+    {
+        extract($compact);
+        $isForcedGift = true;
+        $shouldBuyProductName = 'راه ابریشم';
+        $shouldBuyProductId = Product::RAHE_ABRISHAM;
+        /** @var \App\User $user */
+        if (isset($user)) {
+            $key = 'user:hasPurchasedShouldBuyProduct:'.$user->cacheKey();
+            $hasPurchasedShouldBuyProduct = Cache::tags(['user_'.$user->id.'_closedOrders'])->remember($key, config('constants.CACHE_600'),
+                    function () use ($user, $shouldBuyProductId) {
+                        return $user->products()->contains($shouldBuyProductId);
+                    });
+        }
+
+        $sets = $product->sets->sortByDesc('created_at');
+        $lastSet = $sets->first();
+        if ($lastSet !== null) {
+            $lastSetContents = $lastSet->getActiveContents2();// "Call to a member function getActiveContents2() on null"
+            $lastSetPamphlets = $lastSetContents->where('contenttype_id', Content::CONTENT_TYPE_PAMPHLET);
+            $lastSetVideos = $lastSetContents->where('contenttype_id', Content::CONTENT_TYPE_VIDEO);
+        } else {
+            $lastSetContents = collect();
+            $lastSetPamphlets = collect();
+            $lastSetVideos = collect();
+        }
+
+        return view('product.customShow.raheAbrisham', compact('product', 'block', 'purchasedProductIdArray', 'allChildIsPurchased' , 'liveDescriptions' , 'children' , 'isFavored' , 'isForcedGift' , 'shouldBuyProductId' , 'shouldBuyProductName' , 'hasPurchasedShouldBuyProduct', 'sets', 'lastSet' , 'lastSetPamphlets' , 'lastSetVideos'));
     }
 }

@@ -58,34 +58,6 @@
             flex-shrink: 0;
         }
 
-
-        //@for $a from 1 through 9 {
-        //  @for $b from 1 through 9 {
-        //    @for $c from 1 through 9 {
-        //      @for $d from 1 through 9 {
-        //        @for $e from 1 through 9 {
-        //          @for $f from 1 through 9 {
-        //            @for $g from 1 through 9 {
-        //
-        //              @debug 'w-#{$a}#{$b}#{$c}#{$d}#{$e}#{$f}#{$g}';
-        //
-        //              @include make-size-media('w-#{$a}#{$b}#{$c}#{$d}#{$e}#{$f}#{$g}',
-        //                      $a,
-        //                      $b,
-        //                      $c,
-        //                      $d,
-        //                      $e,
-        //                      $f,
-        //                      $g
-        //              );
-        //            }
-        //          }
-        //        }
-        //      }
-        //    }
-        //  }
-        //}
-
         @mixin make-size-media($sizeName,
                                     $column-count-1701pxToHigher,
                                     $column-count-BW1281pxTo1700px,
@@ -231,6 +203,7 @@
             1
         );
     }
+
     .ScrollCarousel-next,
     .ScrollCarousel-previous {
         position: absolute;
@@ -240,13 +213,16 @@
         display: flex;
         justify-content: center;
         align-items: center;
+
         i {
             font-size: 3rem;
         }
     }
+
     .ScrollCarousel-next {
         left: 0;
     }
+
     .ScrollCarousel-previous {
         right: 0;
     }

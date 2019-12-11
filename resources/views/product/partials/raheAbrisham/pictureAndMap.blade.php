@@ -45,7 +45,7 @@
                         <div class="row">
                             <div class="col-lg-3">
                                 <div>
-                                    <img src="{{$product->photo}}?w=400&h=400" alt="عکس محصول@if(isset($product->name)) {{$product->name}} @endif" class="img-fluid m--marginless a--full-width"/>
+                                    <img src="{{$product->photo}}?w=400&h=400" alt="عکس محصول@if(isset($product->name)) {{$product->name}} @endif" class="img-fluid productPicture m--marginless a--full-width"/>
                                     <button type="button" class="btn m-btn--square btn-metal a--full-width m--margin-top-15">
                                         <p class="display-6 a--margin-0">
                                             خرید مجدد این دوره
@@ -53,17 +53,19 @@
                                     </button>
 
                                 </div>
-
                             </div>
                             <div class="col">
                                 <div class="row">
                                     <div class="col">
-                                        <img src="/acm/image/raheAbrisham/raheAbrisham_konkur.png" class="img-fluid m--marginless a--full-width">
+
+                                        <div id="mapRoad"></div>
+
+{{--                                        <img src="/acm/image/raheAbrisham/raheAbrisham_konkur.png" class="img-fluid m--marginless a--full-width">--}}
                                     </div>
                                 </div>
                                 <div class="row no-gutters m--margin-top-15">
                                     <div class="col-6 m--padding-right-5">
-                                        <button class="btn m-btn--square btn-success a--full-width" onclick="$('.helpMessageRow').fadeIn();">
+                                        <button class="btn m-btn--square btn-success a--full-width" onclick="$('.helpMessageRow').fadeIn(); $('.helpMessageRow').AnimateScrollTo();">
                                             <p class="display-5 a--margin-0">
                                                 من تازه شروع کردم
                                             </p>

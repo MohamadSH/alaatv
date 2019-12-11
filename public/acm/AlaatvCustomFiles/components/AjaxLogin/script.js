@@ -209,17 +209,23 @@ var AjaxLogin = function () {
         $('#AlaaAjaxLoginModal .AjaxLoginMessage').html('');
     }
 
+    function validateAndSendRequest(callbackOrRedirectLink) {
+        if (validateForm() === true) {
+            ajaxLoginRequest(callbackOrRedirectLink, 'LoginSubmit');
+        }
+    }
+
     return {
         showLogin: function (loginUrlAction, callbackOrRedirectLink) {
             setLoginUrlAction(loginUrlAction);
             if (!checkExistLoginModal()) {
                 appendLoginModalToBody();
             }
-            $(document).off('click', '.AjaxLoginSubmit').on('click', '.AjaxLoginSubmit', function () {
-                if (validateForm() === false) {
-                    return;
-                }
-                ajaxLoginRequest(callbackOrRedirectLink, 'LoginSubmit');
+            $(document).off('click', '#AlaaAjaxLoginModal .AjaxLoginSubmit').on('click', '#AlaaAjaxLoginModal .AjaxLoginSubmit', function () {
+                validateAndSendRequest(callbackOrRedirectLink);
+            });
+            $(document).off('keypress', '#AlaaAjaxLoginModal input').on('keypress', '#AlaaAjaxLoginModal input', function () {
+                validateAndSendRequest(callbackOrRedirectLink);
             });
             showLoginModal();
         },

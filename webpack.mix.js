@@ -563,52 +563,28 @@ class Mix {
         this.mixLanding10();
     }
 
-    mixPageProductShow() {
-        this.mixCssAndJs([
-                'node_modules/toastr/build/toastr.css',
-                'node_modules/bootstrap-switch/dist/css/bootstrap3/bootstrap-switch.css',
-                'node_modules/lightgallery/src/css/lightgallery.css',
-                'public/acm/videojs/skins/alaa-theme/videojs.css',
-                'public/acm/videojs/plugins/pip/videojs.pip.min.css',
-                'public/acm/videojs/plugins/pip/videojs.pip.rtl.css',
-                'public/acm/videojs/plugins/seek-to-point.css',
-                'public/acm/AlaatvCustomFiles/components/imageWithCaption/style.css',
-                'public/acm/AlaatvCustomFiles/components/ribbon/style.css',
-                'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/style.css',
-                'public/acm/AlaatvCustomFiles/components/ScrollCarousel/style.css',
-                'public/acm/AlaatvCustomFiles/components/Favorite/style.css',
-                'public/acm/AlaatvCustomFiles/css/page/product/show.css',
-            ],
-            'public/css/product-show.css',
-            [
-                'node_modules/mustache/mustache.min.js',
-                'node_modules/toastr/build/toastr.min.js',
-                'node_modules/bootstrap-switch/dist/js/bootstrap-switch.js',
-                // 'public/acm/AlaatvCustomFiles/components/ScrollCarousel/js.js',
-                // 'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/js.js',
-                'node_modules/lightgallery/src/js/lightgallery.js',
-                'node_modules/lightgallery/modules/lg-thumbnail.min.js',
-                'node_modules/lightgallery/modules/lg-autoplay.min.js',
-                'node_modules/lightgallery/modules/lg-fullscreen.min.js',
-                'node_modules/lightgallery/modules/lg-pager.min.js',
-                'node_modules/lightgallery/modules/lg-hash.min.js',
-                'node_modules/lightgallery/modules/lg-share.min.js',
-                'node_modules/lightgallery/modules/lg-zoom.min.js',
-                'public/assets/demo/demo12/custom/components/base/bootstrap-notify.js',
-                'public/acm/videojs/video.min.js',
-                'public/acm/videojs/plugins/pip/videojs.pip.min.js',
-                'public/acm/videojs/nuevo.min.js',
-                'public/acm/videojs/plugins/videojs.p2p.min.js',
-                'public/acm/videojs/plugins/videojs.hotkeys.min.js',
-                'public/acm/videojs/plugins/seek-to-point.js',
-                'public/acm/videojs/lang/fa.js',
-                'public/acm/AlaatvCustomFiles/js/UserCart.js',
-                'public/acm/AlaatvCustomFiles/components/aSticky/aSticky.js',
-                'public/acm/AlaatvCustomFiles/components/Favorite/script.js',
+    mixPageProductShow(baseProductShow) {
+        this.mixCssAndJs(baseProductShow.css, 'public/css/product-show.css',
+            baseProductShow.js, 'public/js/product-show.js');
+    }
+    mixPageProductShowRaheAbrisham(baseProductShow) {
+        this.mixCssAndJs(baseProductShow.css.concat([
+                'node_modules/highcharts/css/highcharts.css',
+                'public/acm/AlaatvCustomFiles/components/AlaaLoading/style.css',
+            ]),
+            'public/css/product-show-RaheAbrisham.css',
+            baseProductShow.js.concat([
+                'node_modules/highcharts/highcharts.js',
+                'node_modules/highcharts/modules/map.js',
+                'node_modules/highcharts/modules/drilldown.js',
+                'node_modules/highcharts/modules/networkgraph.js',
 
-                // 'public/acm/AlaatvCustomFiles/js/page/product/product-show.js',
-            ],
-            'public/js/product-show.js'
+                'public/acm/AlaatvCustomFiles/components/AlaaLoading/script.js',
+                // 'public/acm/AlaatvCustomFiles/components/CustomDropDown/js.js',
+
+                // 'public/acm/AlaatvCustomFiles/js/page/product/CustomShow/raheAbrisham.js',
+            ]),
+            'public/js/product-show-RaheAbrisham.js'
         );
     }
     mixPageProductContentEmbed() {
@@ -634,7 +610,58 @@ class Mix {
         );
     }
     mixProduct() {
-        this.mixPageProductShow();
+        var baseProductShow = {
+            css: [
+                'node_modules/toastr/build/toastr.css',
+                'node_modules/bootstrap-switch/dist/css/bootstrap3/bootstrap-switch.css',
+                'node_modules/lightgallery/src/css/lightgallery.css',
+                'public/acm/videojs/skins/alaa-theme/videojs.css',
+                'public/acm/videojs/plugins/pip/videojs.pip.min.css',
+                'public/acm/videojs/plugins/pip/videojs.pip.rtl.css',
+                'public/acm/videojs/plugins/seek-to-point.css',
+                'public/acm/AlaatvCustomFiles/components/imageWithCaption/style.css',
+                'public/acm/AlaatvCustomFiles/components/ribbon/style.css',
+                'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/style.css',
+                'public/acm/AlaatvCustomFiles/components/ScrollCarousel/style.css',
+                'public/acm/AlaatvCustomFiles/components/Favorite/style.css',
+                'public/acm/AlaatvCustomFiles/css/page/product/show.css',
+            ],
+            js: [
+                'node_modules/mustache/mustache.min.js',
+                'node_modules/toastr/build/toastr.min.js',
+                'node_modules/bootstrap-switch/dist/js/bootstrap-switch.js',
+                'node_modules/lightgallery/src/js/lightgallery.js',
+                'node_modules/lightgallery/modules/lg-thumbnail.min.js',
+                'node_modules/lightgallery/modules/lg-autoplay.min.js',
+                'node_modules/lightgallery/modules/lg-fullscreen.min.js',
+                'node_modules/lightgallery/modules/lg-pager.min.js',
+                'node_modules/lightgallery/modules/lg-hash.min.js',
+                'node_modules/lightgallery/modules/lg-share.min.js',
+                'node_modules/lightgallery/modules/lg-zoom.min.js',
+
+                'public/assets/demo/demo12/custom/components/base/bootstrap-notify.js',
+
+                'public/acm/videojs/video.min.js',
+                'public/acm/videojs/plugins/pip/videojs.pip.min.js',
+                'public/acm/videojs/nuevo.min.js',
+                'public/acm/videojs/plugins/videojs.p2p.min.js',
+                'public/acm/videojs/plugins/videojs.hotkeys.min.js',
+                'public/acm/videojs/plugins/seek-to-point.js',
+                'public/acm/videojs/lang/fa.js',
+
+                'public/acm/AlaatvCustomFiles/components/ScrollCarousel/js.js',
+                'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/js.js',
+                'public/acm/AlaatvCustomFiles/components/AnimateScrollTo/js.js',
+                'public/acm/AlaatvCustomFiles/components/aSticky/aSticky.js',
+                'public/acm/AlaatvCustomFiles/components/Favorite/script.js',
+
+                'public/acm/AlaatvCustomFiles/js/UserCart.js',
+
+                'public/acm/AlaatvCustomFiles/js/page/product/product-show.js',
+            ]
+        };
+        this.mixPageProductShow(baseProductShow);
+        this.mixPageProductShowRaheAbrisham(baseProductShow);
         this.mixPageProductContentEmbed();
     }
 

@@ -93,7 +93,7 @@ var Alaasearch = function () {
         $.each(data.data, function (index, value) {
             if (loadType === 'carouselType') {
                 carouselHasItem = true;
-                $('.searchResult .carouselType .ScrollCarousel').append(getSetCarouselItem(value));
+                $('.searchResult .carouselType .ScrollCarousel .ScrollCarousel-Items').append(getSetCarouselItem(value));
             } else if (loadType === 'listType') {
 
             }
@@ -329,7 +329,7 @@ var Alaasearch = function () {
     function addLoadingItem(itemType) {
         var loadingHtml = '<div style="width: 30px; display: inline-block;" class="m-loader m-loader--primary m-loader--lg"></div>';
         if (itemType === 'carouselType') {
-            $('.searchResult .carouselType .ScrollCarousel').append('<div class="item loadingItem w-44333211">\n' + loadingHtml + '</div>');
+            $('.searchResult .carouselType .ScrollCarousel .ScrollCarousel-Items').append('<div class="item loadingItem w-44333211">\n' + loadingHtml + '</div>');
         } else if (itemType === 'listType') {
             $('.searchResult .listType').append('\n' +
                 '<div class="item loadingItem">\n' +
@@ -344,14 +344,14 @@ var Alaasearch = function () {
     }
     function removeLoadingItem(itemType) {
         if (itemType === 'carouselType') {
-            $('.searchResult .carouselType .ScrollCarousel .loadingItem').remove();
+            $('.searchResult .carouselType .ScrollCarousel .ScrollCarousel-Items .loadingItem').remove();
         } else if (itemType === 'listType') {
             $('.searchResult .listType .loadingItem').remove();
         }
     }
 
     function clearCarousel() {
-        $('.searchResult .carouselType .ScrollCarousel .item').remove();
+        $('.searchResult .carouselType .ScrollCarousel .ScrollCarousel-Items .item').remove();
     }
     function clearListType() {
         $('.searchResult .listType .item').remove();
@@ -378,7 +378,7 @@ var Alaasearch = function () {
             if (sensorPosition < 3) {
                 sensorPosition = 3;
             }
-            $('.searchResult .carouselType .ScrollCarousel>.item:nth-child('+sensorPosition+')').after(sensorHtml);
+            $('.searchResult .carouselType .ScrollCarousel .ScrollCarousel-Items > .item:nth-child('+sensorPosition+')').after(sensorHtml);
             lazyLoadSensorItemCarousel();
         } else if (itemType === 'listType') {
             sensorPosition = getListTypeChildCount() - 3;
@@ -391,7 +391,7 @@ var Alaasearch = function () {
     }
     function removeSensorItem(itemType) {
         if (itemType === 'carouselType') {
-            $('.searchResult .carouselType .ScrollCarousel .sensorItem').remove();
+            $('.searchResult .carouselType .ScrollCarousel .ScrollCarousel-Items .sensorItem').remove();
         } else if (itemType === 'listType') {
             $('.searchResult .listType .sensorItem').remove();
         }
@@ -558,7 +558,7 @@ var Alaasearch = function () {
         });
     }
     function lazyLoadSensorItemCarousel() {
-        LazyLoad.loadElementByQuerySelector('.searchResult .carouselType .ScrollCarousel .sensorItem', function () {
+        LazyLoad.loadElementByQuerySelector('.searchResult .carouselType .ScrollCarousel .ScrollCarousel-Items .sensorItem', function () {
             fetchNewCarousel();
         });
     }
@@ -577,7 +577,7 @@ var Alaasearch = function () {
     }
 
     function getCarouselChildCount() {
-        return $('.searchResult .carouselType .ScrollCarousel>.item').length;
+        return $('.searchResult .carouselType .ScrollCarousel .ScrollCarousel-Items > .item').length;
     }
     function getListTypeChildCount() {
         return $('.searchResult .listType>.item').length;

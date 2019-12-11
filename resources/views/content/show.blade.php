@@ -748,8 +748,7 @@
                     </div>
                     <div class="m-portlet__body m-portlet__body--no-padding a--owl-carousel-body ScrollCarousel">
 
-                        <div
-                            class="m-widget_head-owlcarousel-items ScrollCarousel-Items owl-carousel a--owl-carousel-type-2 carousel_block_owlCarouselParentProducts">
+                        <div class="m-widget_head-owlcarousel-items ScrollCarousel-Items owl-carousel a--owl-carousel-type-2 carousel_block_owlCarouselParentProducts">
                             @foreach($productsThatHaveThisContent as $productKey=>$product)
                                 <div class="item carousel a--block-item a--block-type-product w-55443211"
                                      data-position="{{ $productKey }}"
