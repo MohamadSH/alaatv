@@ -10,6 +10,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Contracts\Encryption\DecryptException;
 use Illuminate\Support\Facades\{  Config, Storage , File};
+use Illuminate\Support\Arr;
 use App\{Notifications\sendLink,
     UploadCenter,
     User,
@@ -163,7 +164,7 @@ class HomeController extends Controller
                 $diskName = config('constants.DISK10');
                 break;
             case 'فایل محصول' :
-                $productId = Input::get('pId');
+                $productId = $request->get('pId');
                 $diskName  = config('constants.DISK13');
 
                 if (isset($user) && !$user->can(config('constants.DOWNLOAD_PRODUCT_FILE'))) {

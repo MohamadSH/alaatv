@@ -9,6 +9,7 @@
 namespace App\Classes\Search;
 
 use App\Content;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
@@ -55,7 +56,7 @@ class ContentSearch extends SearchAbstract
     private function getFiltered(array ...$filters): ?LengthAwarePaginator
     {
         $filters     = array_merge(...$filters);
-        $contentType = array_get($filters, 'contentType');
+        $contentType = Arr::get($filters, 'contentType');
         if ($contentType === null) {
             throw new \InvalidArgumentException('filters[contentType] should be set.');
         }

@@ -23,7 +23,7 @@
             <li class="breadcrumb-item">
                 <i class="fa fa-video-camera m--padding-right-5"></i>
                 <a class="m-link"
-                   href="{{ action("Web\ContentController@index") }}">@lang('content.Educational Content Of Alaa')</a>
+                   href="{{ action('Web\ContentController@index') }}">@lang('content.Educational Content Of Alaa')</a>
             </li>
             <li class="breadcrumb-item">
                 <i class="fa fa-video-camera m--padding-right-5"></i>
@@ -34,7 +34,7 @@
     <input id="js-var-setId" class="m--hide" type="hidden" value='{{ $contentSet->id }}'>
     <input id="js-var-setName" class="m--hide" type="hidden" value='{{ $contentSet->name }}'>
     <input id="js-var-setUrl" class="m--hide" type="hidden"
-           value='{{action("Web\ContentController@show" , $contentSet)}}'>
+           value='{{route('set.show' , $contentSet->id)}}'>
 @endsection
 
 @section('content')
@@ -92,14 +92,14 @@
                         @foreach($videos as $video)
                             <div class="m-widget5__item">
                                 <div class="m-widget5__content">
-                                    <a href="{{ route('c.show' , ['content'=>$video]) }}" style="display: inherit">
+                                    <a href="{{ route('c.show' , $video ) }}" style="display: inherit">
                                         <div class="m-widget5__pic  a--full-width" style="display: contents" >
                                             <img class="img-fluid a--full-width lazy-image" width="453" height="254"  src="https://cdn.alaatv.com/loder.jpg?w=1&h=1" data-src="{{$video->thumbnail}}" alt="{{$video->displayName}}" data-container="body" data-toggle="m-tooltip" data-placement="top" title="دانلود یا تماشا فیلم">
                                         </div>
                                     </a>
                                     <div class="m-widget5__section">
                                         <h2 class="m-widget5__title m--margin-top-10-mobile">
-                                            <a href="{{ route('c.show' , ['content'=>$video]) }}">{{$video->displayName}}</a>
+                                            <a href="{{ route('c.show' ,$video) }}">{{$video->displayName}}</a>
                                         </h2>
                                         <div class="m-widget5__info font-weight-bold">
                                             @if($video->isFree)
@@ -119,9 +119,9 @@
                                 </div>
                                 <div class="m-widget5__content">
                                     <div>
-                                        <button type="button" class="btn m-btn--pill  btn-primary btn-block"  onclick="window.location = '{{route('c.show' , ['content'=>$video])}}';" data-container="body" data-toggle="m-tooltip" data-placement="top" title="دانلود یا تماشا فیلم">فیلم</button>
+                                        <button type="button" class="btn m-btn--pill  btn-primary btn-block"  onclick="window.location = '{{route('c.show' , $video)}}';" data-container="body" data-toggle="m-tooltip" data-placement="top" title="دانلود یا تماشا فیلم">فیلم</button>
                                         @foreach($pamphlets->where('session' , $video->session) as $pamphlet)
-                                            <button type="button" class="btn m-btn--pill  btn-focus btn-block" onclick="window.location = '{{route('c.show' , ['content'=>$pamphlet])}}';" data-container="body" data-toggle="m-tooltip" data-placement="top" title="دانلود جزوه">جزوه</button>
+                                            <button type="button" class="btn m-btn--pill  btn-focus btn-block" onclick="window.location = '{{route('c.show' , $pamphlet)}}';" data-container="body" data-toggle="m-tooltip" data-placement="top" title="دانلود جزوه">جزوه</button>
                                         @endforeach
                                     </div>
                                 </div>
@@ -130,14 +130,14 @@
                         @foreach($articles as $article)
                             <div class="m-widget5__item">
                                 <div class="m-widget5__content">
-                                    <a href="{{ route('c.show' , ['content'=>$article]) }}" style="display: inherit">
+                                    <a href="{{ route('c.show' , $article) }}" style="display: inherit">
                                         <div class="m-widget5__pic  a--full-width" style="display: contents" >
                                             <img class="img-fluid a--full-width lazy-image" width="453" height="254"  src="https://cdn.alaatv.com/loder.jpg?w=1&h=1" data-src="{{$article->thumbnail}}" alt="{{$article->name}}" data-container="body" data-toggle="m-tooltip" data-placement="top" title="خواندن مقاله">
                                         </div>
                                     </a>
                                     <div class="m-widget5__section">
                                         <h2 class="m-widget5__title m--margin-top-10-mobile">
-                                            <a href="{{ route('c.show' , ['content'=>$article]) }}">{{$article->name}}</a>
+                                            <a href="{{ route('c.show' , $article) }}">{{$article->name}}</a>
                                         </h2>
                                         <div class="m-widget5__info font-weight-bold">
                                             @if($article->isFree)
@@ -157,7 +157,7 @@
                                 </div>
                                 <div class="m-widget5__content">
                                     <div>
-                                        <button type="button" class="btn m-btn--pill  btn-primary btn-block"  onclick="window.location = '{{route('c.show' , ['content'=>$article])}}';" data-container="body" data-toggle="m-tooltip" data-placement="top" title="خواندن مقاله">خواندن</button>
+                                        <button type="button" class="btn m-btn--pill  btn-primary btn-block"  onclick="window.location = '{{route('c.show' , $article)}}';" data-container="body" data-toggle="m-tooltip" data-placement="top" title="خواندن مقاله">خواندن</button>
                                     </div>
                                 </div>
                             </div>
