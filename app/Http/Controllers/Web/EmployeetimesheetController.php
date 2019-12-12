@@ -12,10 +12,9 @@ use App\Employeetimesheet;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\View;
-use Illuminate\Support\Facades\Input;
+
 use App\Traits\EmployeeWorkSheetCommon;
 use App\Http\Requests\InsertEmployeeTimeSheet;
 
@@ -52,8 +51,8 @@ class EmployeetimesheetController extends Controller
     {
         /** @var Employeetimesheet $employeeTimeSheets */
         $employeeTimeSheets = Employeetimesheet::orderBy('date', 'Desc');
-        if (Input::has('users')) {
-            $usersId            = Input::get('users');
+        if ($request->has('users')) {
+            $usersId            = $request->get('users');
             $employeeTimeSheets->whereIn('user_id', $usersId);
         }
 
@@ -62,10 +61,10 @@ class EmployeetimesheetController extends Controller
             $employeeTimeSheets->whereIn('user_id', [397580 , 285202 , 8992]);
         }
 
-        if (Input::has('dateEnable')) {
-            if (Input::has('sinceDate') && Input::has('tillDate')) {
-                $sinceDate          = Input::get('sinceDate');
-                $tillDate           = Input::get('tillDate');
+        if ($request->has('dateEnable')) {
+            if ($request->has('sinceDate') && $request->has('tillDate')) {
+                $sinceDate          = $request->get('sinceDate');
+                $tillDate           = $request->get('tillDate');
                 $employeeTimeSheets->whereBetween('date', [
                     explode('T', $sinceDate)[0],
                     explode('T', $tillDate)[0],
@@ -73,13 +72,13 @@ class EmployeetimesheetController extends Controller
             }
         }
 
-        if (Input::has('workdayTypes')) {
-            $workDayTypes       = Input::get('workdayTypes');
+        if ($request->has('workdayTypes')) {
+            $workDayTypes       = $request->get('workdayTypes');
             $employeeTimeSheets->whereIn('workdaytype_id', $workDayTypes);
         }
 
-        if (Input::has('isPaid')) {
-            $isPaid = Input::get('isPaid');
+        if ($request->has('isPaid')) {
+            $isPaid = $request->get('isPaid');
             if (isset($isPaid[0])) {
                 $employeeTimeSheets->where('isPaid', $isPaid);
             }

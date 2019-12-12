@@ -17,6 +17,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Traits\ProductCommon;
 use Illuminate\Http\Response;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Kalnoy\Nestedset\QueryBuilder;
 use Illuminate\Support\Facades\URL;
@@ -147,7 +148,7 @@ class OrderproductController extends Controller
             ->toArray();
         $checkoutStatuses       = Checkoutstatus::pluck('displayName', 'id')
             ->toArray();
-        $checkoutStatuses       = array_sort_recursive($checkoutStatuses);
+        $checkoutStatuses       = Arr::sortRecursive($checkoutStatuses);
 
         $product  = $orderproduct->product()
             ->first();
@@ -604,11 +605,11 @@ class OrderproductController extends Controller
                 $extraCost = null;
             }
             $attributevalueIndex = $attributevalue->name;
-            $select              = array_add($select, $attributevalue->id, $attributevalueIndex);
-            $extraCostArray      = array_add($extraCostArray, $attributevalue->id, $extraCost);
+            $select              = Arr::add($select, $attributevalue->id, $attributevalueIndex);
+            $extraCostArray      = Arr::add($extraCostArray, $attributevalue->id, $extraCost);
         }
         $select[0] = 'هیچکدام';
-        $select    = array_sort_recursive($select);
+        $select    = Arr::sortRecursive($select);
         if (!empty($select)) {
             $extraSelectCollection->put($attribute->id, [
                 'attributeDescription' => $attribute->displayName,

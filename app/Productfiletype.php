@@ -3,6 +3,7 @@
 namespace App;
 
 use App\Traits\DateTrait;
+use Illuminate\Support\Arr;
 
 /**
  * App\Productfiletype
@@ -55,8 +56,8 @@ class Productfiletype extends BaseModel
     {
         $productFileTypes = Productfiletype::pluck('displayName', 'id')
             ->toArray();
-        $productFileTypes = array_add($productFileTypes, 0, "انتخاب کنید");
-        $productFileTypes = array_sort_recursive($productFileTypes);
+        $productFileTypes = Arr::add($productFileTypes, 0, "انتخاب کنید");
+        $productFileTypes = Arr::sortRecursive($productFileTypes);
 
         return $productFileTypes;
     }

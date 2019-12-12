@@ -10,7 +10,6 @@ use App\Http\Requests\InsertEventResultRequest;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Storage;
 
 class EventresultController extends Controller
@@ -24,11 +23,11 @@ class EventresultController extends Controller
             ['only' => 'index']);
     }
 
-    public function index()
+    public function index(Request $request)
     {
         $eventresults = Eventresult::orderBy("rank");
 
-        $eventIds = Input::get("event_id");
+        $eventIds = $request->get("event_id");
         if (isset($eventIds)) {
             $eventresults = $eventresults->whereIn("event_id", $eventIds);
         }

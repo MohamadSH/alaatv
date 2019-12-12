@@ -360,7 +360,8 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber, 
     use MustVerifyMobileNumberTrait;
     use Helper;
     use DateTrait;
-    use SoftDeletes, CascadeSoftDeletes;
+    use SoftDeletes;
+    use CascadeSoftDeletes;
     use LaratrustUserTrait;
     use HasWallet;
     use Notifiable;

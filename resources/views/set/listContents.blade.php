@@ -23,7 +23,7 @@
                         <a target="_blank" href="{{ route('c.create', ['set'=>$set->id]) }}">
                             <button type="button" class="btn m-btn--pill m-btn--air btn-primary">افزودن محتوا</button>
                         </a>
-                        <a href="{{ route('set.edit', ['set'=>$set->id]) }}">
+                        <a href="{{ route('set.edit', $set->id) }}">
                             <button type="button" class="btn m-btn--pill m-btn--air btn-warning">ویرایش</button>
                         </a>
                     </div>

@@ -2,14 +2,13 @@
 
 namespace App\Http\Controllers\Web;
 
-use App\{Assignmentstatus,
+use App\{
     Attribute,
     Attributecontrol,
     Attributeset,
     Bon,
     Checkoutstatus,
     Collection\OrderCollections,
-    Consultationstatus,
     Contenttype,
     Coupon,
     Coupontype,
@@ -47,10 +46,10 @@ use Auth;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Contracts\View\Factory;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Http\{Request, Response};
-use Illuminate\Support\Facades\Input;
 use Illuminate\View\View;
 
 class AdminController extends Controller
@@ -93,7 +92,7 @@ class AdminController extends Controller
     /**
      * Show admin panel main page
      *
-     * @return Response
+     * @return Factory|View
      */
     public function admin()
     {
@@ -104,8 +103,8 @@ class AdminController extends Controller
         $gendersWithUnknown->prepend('نامشخص');
         $permissions = Permission::pluck('display_name', 'id');
         $roles = Role::pluck('display_name', 'id');
-        //        $roles = array_add($roles , 0 , 'همه نقش ها');
-        //        $roles = array_sort_recursive($roles);
+        //        $roles = Arr::add($roles , 0 , 'همه نقش ها');
+        //        $roles = Arr::sortRecursive($roles);
         $limitStatus = [
             0 => 'نامحدود',
             1 => 'محدود',
@@ -176,12 +175,12 @@ class AdminController extends Controller
 
         $coupons = Coupon::pluck('name', 'id')
             ->toArray();
-        $coupons = array_sort_recursive($coupons);
+        $coupons = Arr::sortRecursive($coupons);
 
         $checkoutStatuses = Checkoutstatus::pluck('displayName', 'id')
             ->toArray();
         $checkoutStatuses[0] = 'نامشخص';
-        $checkoutStatuses = array_sort_recursive($checkoutStatuses);
+        $checkoutStatuses = Arr::sortRecursive($checkoutStatuses);
 
         $pageName = 'admin';
 
@@ -258,7 +257,7 @@ class AdminController extends Controller
                 ->pluck('displayName', 'id')
                 ->toArray();
         }
-        //        $orderstatuses= array_sort_recursive(array_add($orderstatuses , 0 , 'دارای هر وضعیت سفارش')->toArray());
+        //        $orderstatuses= Arr::sortRecursive(Arr::add($orderstatuses , 0 , 'دارای هر وضعیت سفارش')->toArray());
 
         $paymentstatuses = Paymentstatus::pluck('displayName', 'id')
             ->toArray();
@@ -266,7 +265,7 @@ class AdminController extends Controller
         $checkoutStatuses = Checkoutstatus::pluck('displayName', 'id')
             ->toArray();
         $checkoutStatuses[0] = 'نامشخص';
-        $checkoutStatuses = array_sort_recursive($checkoutStatuses);
+        $checkoutStatuses = Arr::sortRecursive($checkoutStatuses);
 
         $products = collect();
         if ($user->hasRole('onlineNoroozMarketing')) {
@@ -313,7 +312,7 @@ class AdminController extends Controller
 
         $coupons = Coupon::pluck('name', 'id')
             ->toArray();
-        $coupons = array_sort_recursive($coupons);
+        $coupons = Arr::sortRecursive($coupons);
 
         $transactionStatuses = Transactionstatus::orderBy('order')
             ->pluck('displayName', 'id')
@@ -487,7 +486,7 @@ class AdminController extends Controller
         $checkoutStatuses = Checkoutstatus::pluck('displayName', 'id')
             ->toArray();
         $checkoutStatuses[0] = 'نامشخص';
-        $checkoutStatuses = array_sort_recursive($checkoutStatuses);
+        $checkoutStatuses = Arr::sortRecursive($checkoutStatuses);
 
         $pageName = 'admin';
 
@@ -497,7 +496,7 @@ class AdminController extends Controller
 
         $coupons = Coupon::pluck('name', 'id')
             ->toArray();
-        $coupons = array_sort_recursive($coupons);
+        $coupons = Arr::sortRecursive($coupons);
 
         return view('admin.indexSMS',
             compact('pageName', 'majors', 'userStatuses', 'roles', 'relatives', 'orderstatuses', 'paymentstatuses',
@@ -546,10 +545,12 @@ class AdminController extends Controller
 
     /**
      * Admin panel for adjusting site configuration
+     * @param Request $request
+     * @return Factory|View
      */
-    public function adminMajor()
+    public function adminMajor(Request $request)
     {
-        $parentName = Input::get('parent');
+        $parentName = $request->get('parent');
         $parentMajor = Major::all()
             ->where('name', $parentName)
             ->where('majortype_id', 1)
@@ -577,8 +578,8 @@ class AdminController extends Controller
         $gendersWithUnknown->prepend('نامشخص');
         $permissions = Permission::pluck('display_name', 'id');
         $roles = Role::pluck('display_name', 'id');
-        //        $roles = array_add($roles , 0 , 'همه نقش ها');
-        //        $roles = array_sort_recursive($roles);
+        //        $roles = Arr::add($roles , 0 , 'همه نقش ها');
+        //        $roles = Arr::sortRecursive($roles);
         $limitStatus = [
             0 => 'نامحدود',
             1 => 'محدود',
@@ -636,7 +637,7 @@ class AdminController extends Controller
 
         $coupons = Coupon::pluck('name', 'id')
             ->toArray();
-        $coupons = array_sort_recursive($coupons);
+        $coupons = Arr::sortRecursive($coupons);
 
         $lotteries = Lottery::pluck('displayName', 'id')
             ->toArray();
@@ -646,7 +647,7 @@ class AdminController extends Controller
         $checkoutStatuses = Checkoutstatus::pluck('displayName', 'id')
             ->toArray();
         $checkoutStatuses[0] = 'نامشخص';
-        $checkoutStatuses = array_sort_recursive($checkoutStatuses);
+        $checkoutStatuses = Arr::sortRecursive($checkoutStatuses);
 
         return view('admin.indexGetReport',
             compact('pageName', 'majors', 'userStatuses', 'permissions', 'roles', 'limitStatus', 'orderstatuses',
@@ -925,7 +926,7 @@ class AdminController extends Controller
         $ajaxActionUrl = action('Web\OrderproductController@index');
         $checkoutStatuses = Checkoutstatus::pluck('displayName', 'id')->toArray();
         $checkoutStatuses[0] = 'همه';
-        $checkoutStatuses = array_sort_recursive($checkoutStatuses);
+        $checkoutStatuses = Arr::sortRecursive($checkoutStatuses);
 
         return view('admin.salesReport', compact('products', 'pageName', 'ajaxActionUrl', 'checkoutStatuses'));
     }
