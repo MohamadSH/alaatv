@@ -321,7 +321,7 @@ class Contentset extends BaseModel implements Taggable, SeoInterface , Favorable
         $content   = $this->getLastActiveContent();
         $contentId = !is_null($content) ? $content->id : null;
 
-        return isset($contentId) ? action("Web\ContentController@show", $contentId) : '';
+        return isset($contentId) ? route('c.show' , $contentId) : '';
     }
 
     public function getSetUrlAttribute($value): string
@@ -435,17 +435,31 @@ class Contentset extends BaseModel implements Taggable, SeoInterface , Favorable
         ];
     }
 
+    public function getApiUrlV1Attribute()
+    {
+        return route('api.v1.set.show' , $this);
+    }
+
+    public function getApiUrlV2Attribute($value)
+    {
+        return route('api.v2.set.show' , $this);
+    }
+
+
     /**
      * @param $value
      *
-     * @return User
+     * @return User|null
      */
-    public function getAuthorAttribute($value): User
+    public function getAuthorAttribute($value): ?User
     {
         $content = $this->getLastActiveContent();
 
-        $author = $content->author;
+        if(is_null($content->author_id)) {
+            return null;
+        }
 
+        $author = $content->author;
         return $author->setVisible([
             'id',
             'firstName',

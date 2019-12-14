@@ -26,6 +26,7 @@ class Order extends JsonResource
         $this->loadMissing('orderstatus' , 'paymentstatus' , 'orderproducts'  , 'transactions' , 'orderpostinginfos' , 'user');
 
         return [
+            'id'                       => $this->id,
             'discount'                 => $this->discount ,
             'customer_description'     => $this->when(isset($this->customerDescription ) , $this->customerDescription ),
 //            'customer_extra_info'      => $this->customerExtraInfo ,
@@ -37,7 +38,8 @@ class Order extends JsonResource
             'paymentstatus'            => $this->when(isset($this->paymentstatus_id) , function (){ return new Paymentstatus($this->paymentstatus);}),
 //            'orderproducts'           => Orderproduct::collection($this->whenLoaded('orderproducts')),
             'orderproducts'            => $this->when(isset($this->orderproducts) , function () { return PurchasedOrderproduct::collection($this->whenLoaded('orderproducts'));}),
-            'coupon_info'              => $this->when(!is_null($this->coupon_info) , $this->coupon_info),
+//            'coupon_info'              => $this->when(!is_null($this->coupon_info) , $this->coupon_info), //Deprecated
+            'coupon_info'              => $this->when(isset($this->coupon_id) , function (){return new Coupon($this->coupon);}),
             'successful_transactions'  => $this->when($this->successful_transactions->isNotEmpty() , function () { return SuccessfulTransaction::collection($this->successful_transactions) ; } ) , // It is not a relationship
             'pending_transactions'     => $this->when($this->pending_transactions->isNotEmpty() , function () { return PendingTransaction::collection($this->pending_transactions) ; } ) , // It is not a relationship
             'unpaid_transaction'       => $this->when($this->unpaid_transactions->isNotEmpty() , function () { return UnpaidTransaction::collection($this->unpaid_transactions) ; } ) , // It is not a relationship

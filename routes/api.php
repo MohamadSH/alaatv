@@ -8,12 +8,14 @@ use App\Http\Controllers\Api\AppVersionController;
 use App\Http\Controllers\Api\DashboardPageController;
 use App\Http\Controllers\Api\FirebasetokenController;
 use App\Http\Controllers\Api\HomeController;
+use App\Http\Controllers\Api\IndexPageController;
 use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Api\ContentController;
 use App\Http\Controllers\Api\GetPaymentRedirectEncryptedLink;
 use App\Http\Controllers\Api\OrderproductController;
 use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\SetController;
+use App\Http\Controllers\Api\ShopPageController;
 use App\Http\Controllers\Api\TagController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\ZarinpalTransactionController;
@@ -50,6 +52,9 @@ Route::group(['prefix' => 'v1'], function () {
     Route::post('getPrice/{product}', [ProductController::class, 'refreshPrice'])->name('api.v1.refreshPrice');
     Route::post('donate', [OrderController::class, 'donateOrder'])->name('api.v1.donate');
     Route::any('fetchContents', [ContentController::class, 'fetchContents'])->name('api.v1.fetch.content');
+    Route::get('shop', '\\'. ShopPageController::class)->name('api.v1.shop');
+    Route::get('/', '\\'. IndexPageController::class)->name('api.v1.home');
+
 
     Route::get('satra', [HomeController::class, 'satra']);
 
@@ -87,11 +92,15 @@ Route::group(['prefix' => 'v2'], function () {
     Route::get('authTest', [HomeController::class, 'authTest'])->name('api.v2.authTest');
 
     Route::get('c/{c}', [ContentController::class, 'showV2'])->name('api.v2.content.show');
+    Route::get('c', [ContentController::class, 'indexV2'])->name('api.v2.content.index');
     Route::get('product/{product}', [ProductController::class, 'showV2'])->name('api.v2.product.show');
+    Route::get('product', [ProductController::class, 'indexV2'])->name('api.v2.product.index');
     Route::get('set/{set}', [SetController::class, 'showV2'])->name('api.v2.set.show');
     Route::post('getPrice/{product}', [ProductController::class, 'refreshPrice'])->name('api.v2.refreshPrice');
     Route::post('donate', [OrderController::class, 'donateOrder'])->name('api.v2.make.donate');
     Route::any('fetchContents', [ContentController::class, 'fetchContents'])->name('api.v2.fetch.content');
+    Route::get('shop', '\\'. ShopPageController::class)->name('api.v2.shop');
+    Route::get('/home', '\\'. IndexPageController::class)->name('api.v2.home');
 
     Route::group(['middleware' => 'auth:api'], function () {
         Route::any('user/auth2/profile', [UserController::class, 'getAuth2Profile']);
@@ -100,7 +109,7 @@ Route::group(['prefix' => 'v2'], function () {
         Route::post('orderproduct', [OrderproductController::class, 'storeV2'])->name('api.v2.orderproduct.store');
         Route::delete('orderproduct/{orderproduct}', [OrderproductController::class, 'destroy'])->name('api.v2.orderproduct.destroy');
         Route::post('transaction', '\\'.ZarinpalTransactionController::class)->name('api.v2.zarinpal.transaction.store');
-        Route::post('orderCoupon', [OrderController::class, 'submitCoupon'])->name('api.v2.coupon.submit');
+        Route::post('orderCoupon', [OrderController::class, 'submitCouponV2'])->name('api.v2.coupon.submit');
         Route::delete('orderCoupon', [OrderController::class, 'removeCoupon'])->name('api.v2.coupon.remove');
 
 

@@ -33,11 +33,12 @@ class PendingTransaction extends JsonResource
         $this->loadMissing('paymentmethod' , 'transactiongateway');
 
         return [
+            'wallet_id'         => $this->when(isset($this->wallet_id) , function (){ return $this->wallet_id ;}),
             'order id'          => $this->when(isset($this->order_id) , function (){ return $this->order_id ;}),
             'cost'              => $this->cost ,
-            'trace_number'      => $this->when(!is_null($this->traceNumber) , $this->traceNumber) ,
-            'refrence_number'   => $this->when(!is_null($this->referenceNumber) , $this->referenceNumber),
-            'paycheck_number'   => $this->when(!is_null($this->paycheckNumber) , $this->paycheckNumber),
+            'trace_number'      => $this->when(isset($this->traceNumber) , $this->traceNumber) ,
+            'refrence_number'   => $this->when(isset($this->referenceNumber) , $this->referenceNumber),
+            'paycheck_number'   => $this->when(isset($this->paycheckNumber) , $this->paycheckNumber),
             'paymentmethod'     => $this->when(isset($this->paymentmethod_id) , function (){ return new Paymentmethod($this->paymentmethod) ;}) ,
             'transactionstatus' => $this->when(isset($this->transactionstatus_id) , function (){ return new TransactionStatus($this->transactionstatus) ;}),
             'created at'        => $this->when(isset($this->created_at) , function (){ return $this->created_at;}),

@@ -24,8 +24,6 @@ class Set extends JsonResource
             return [];
         }
 
-
-
         return [
             'id'                    => $this->id,
             'redirect_url'          => $this->when(isset($this->redirectUrl) , $this->redirectUrl),

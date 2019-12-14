@@ -14,6 +14,11 @@ class ContentController extends Controller
 {
     use ContentControllerResponseTrait;
 
+    public function indexV2(Request $request)
+    {
+        return response();
+    }
+
     public function show(Request $request, Content $content)
     {
         if (!is_null($content->redirectUrl)) {

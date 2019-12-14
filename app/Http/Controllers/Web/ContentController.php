@@ -377,21 +377,6 @@ class ContentController extends Controller
         return redirect()->back();
     }
 
-    public function updatePendingDescription(Request $request , Content $content)
-    {
-        $updateResult = $content->update([
-            'temp_description' => $request->get('description'),
-        ]);
-
-        if($updateResult){
-            session()->put('success', 'اصلاح محتوا با موفقیت انجام شد');
-        }else{
-            session()->put('error', 'خطای پایگاه داده');
-        }
-
-        return redirect()->back();
-    }
-
     public function destroy(Content $content)
     {
         //TODO:// remove Tags From Redis, ( Do it in ContentObserver)
