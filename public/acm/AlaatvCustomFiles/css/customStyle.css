@@ -436,6 +436,44 @@
     }
 }
 
+
+
+
+@media (min-width: 993px) {
+    .a--desktop-show {
+        display: block !important;
+    }
+
+    .a--desktop-hide,
+    .a--mobile-show,
+    .a--tablet-show {
+        display: none;
+    }
+}
+
+@media (max-width: 992px) {
+    .a--tablet-hide,
+    .a--desktop-show,
+    .a--mobile-show {
+        display: none;
+    }
+    .a--tablet-show {
+        display: block !important;
+    }
+}
+@media (max-width: 600px) {
+    .a--mobile-show {
+        display: block !important;
+    }
+    .a--mobile-hide,
+    .a--desktop-show,
+    .a--tablet-show {
+        display: none;
+    }
+}
+
+
+
 .a--puls-white {
     animation: a--pulse 1.2s infinite;
 }
@@ -493,3 +531,6 @@
         box-shadow:0 0 0 0 rgba(0,0,0,0);
     }
 }
+
+
+

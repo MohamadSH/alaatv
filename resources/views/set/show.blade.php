@@ -2,41 +2,6 @@
 
 @section('page-css')
     <link href="{{ mix("/css/set-show.css") }}" rel="stylesheet">
-    <style>
-
-        @media (min-width: 993px) {
-            .a--desktop-show {
-                display: block !important;
-            }
-
-            .a--desktop-hide,
-            .a--mobile-show,
-            .a--tablet-show {
-                display: none;
-            }
-        }
-
-        @media (max-width: 992px) {
-            .a--tablet-hide,
-            .a--desktop-show,
-            .a--mobile-show {
-                display: none;
-            }
-            .a--tablet-show {
-                display: block !important;
-            }
-        }
-        @media (max-width: 600px) {
-            .a--mobile-show {
-                display: block !important;
-            }
-            .a--mobile-hide,
-            .a--desktop-show,
-            .a--tablet-show {
-                display: none;
-            }
-        }
-    </style>
 @endsection
 
 @section('page-head')
@@ -87,7 +52,7 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-lg-2 a--desktop-show">
+        <div class="col-lg-2 a--desktop-show rightSideAdBanner">
             <a href="{{ route('web.landing.8') }}"
                class="a--gtm-eec-advertisement a--gtm-eec-advertisement-click"
                data-gtm-eec-promotion-id="setShow-TopOfList-mobileShow"
