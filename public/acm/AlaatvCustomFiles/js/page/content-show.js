@@ -135,9 +135,10 @@ jQuery(document).ready( function() {
         childCountHideOwlCarousel: 4
     });
     $(document).on('click', '.scrollToOwlCarouselParentProducts', function(){
-        $([document.documentElement, document.body]).animate({
-            scrollTop: ($("#owlCarouselParentProducts").offset().top - 80)
-        }, 500);
+        $("#owlCarouselParentProducts").AnimateScrollTo();
+        // $([document.documentElement, document.body]).animate({
+        //     scrollTop: ($("#owlCarouselParentProducts").offset().top - 80)
+        // }, 500);
     });
 
     $(document).on('click', '.btnAddToCart', function () {

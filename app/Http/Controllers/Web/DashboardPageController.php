@@ -20,6 +20,7 @@ class DashboardPageController extends Controller
             abort(Response::HTTP_FORBIDDEN, 'you can\'nt get user '.$user->id.' dashboard!.');
         }
         $pageName             = "shop";
+        $userInfoCompletion   = $user->completion();
         $userAssetsCollection = $user->getDashboardBlocks();
 
         if ($request->expectsJson()) {
@@ -61,6 +62,6 @@ class DashboardPageController extends Controller
                 'value' => 'VIP',
             ],
         ];
-        return view('user.dashboard', compact('user', 'pageName', 'userAssetsCollection' , 'categoryArray'));
+        return view('user.dashboard', compact('user', 'pageName', 'userAssetsCollection' , 'categoryArray', 'userInfoCompletion'));
     }
 }

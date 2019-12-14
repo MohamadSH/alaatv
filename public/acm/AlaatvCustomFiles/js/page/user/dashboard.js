@@ -160,6 +160,7 @@ var LoadContentSet = function () {
                 setName: (typeof item.set !== 'undefined') ? item.set.name : '',
                 lastUpdate: item.updated_at,
                 order: item.order,
+                file: item.file,
             });
         }
         return htmlData;
@@ -188,6 +189,20 @@ var LoadContentSet = function () {
     }
 
     function getVideoItem(data) {
+
+        var videos = data.file.video,
+            videosLength = videos.length,
+            groupBtn = '<div class="btn-group m-btn-group" role="group">\n';
+        for (var i = 0; i < videosLength; i++) {
+            var link = videos[i].link,
+                title = videos[i].caption;
+            if (title==='کیفیت بالا') {
+                groupBtn += '<a href="'+link+'"><button type="button" class="btn btn-success"><i class="fa fa-cloud-download-alt m--margin-right-5"></i> '+title+'</button></a>';
+            }
+        }
+        groupBtn += '<a href="'+data.link+'"><button type="button" class="btn btn-success"><i class="fa fa-ellipsis-h m--margin-right-5"></i> بیشتر</button></a>';
+        groupBtn += '</div>\n';
+
         return '' +
             '<div class="item ">\n' +
             '    <div class="pic">\n' +
@@ -205,26 +220,27 @@ var LoadContentSet = function () {
             '        </div>\n' +
             '        <div class="detailes">\n' +
             '            <div class="videoDetaileWrapper">\n' +
-            '            <div class="setName">\n' +
-            '                <span>\n' +
-            '                    <svg viewBox="0 0 24 24" preserveAspectRatio="xMidYMid meet" focusable="false" class="style-scope yt-icon">\n' +
-            '                        <path d="M3.67 8.67h14V11h-14V8.67zm0-4.67h14v2.33h-14V4zm0 9.33H13v2.34H3.67v-2.34zm11.66 0v7l5.84-3.5-5.84-3.5z" class="style-scope yt-icon"></path>\n' +
-            '                    </svg>\n' +
-            '                </span>\n' +
-            '                <span> از دوره </span>\n' +
-            '                <span>' + data.setName + '</span>\n' +
-            '            </div>\n' +
-            '            <div class="updateTime">\n' +
-            '                <i class="fa fa-calendar-alt m--margin-right-5"></i>\n' +
-            '                <span>تاریخ بروزرسانی: </span>\n' +
-            '                <span>' + data.lastUpdate + '</span>\n' +
-            '            </div>\n' +
+            '                <div class="setName">\n' +
+            '                    <span>\n' +
+            '                        <svg viewBox="0 0 24 24" preserveAspectRatio="xMidYMid meet" focusable="false" class="style-scope yt-icon">\n' +
+            '                            <path d="M3.67 8.67h14V11h-14V8.67zm0-4.67h14v2.33h-14V4zm0 9.33H13v2.34H3.67v-2.34zm11.66 0v7l5.84-3.5-5.84-3.5z" class="style-scope yt-icon"></path>\n' +
+            '                        </svg>\n' +
+            '                    </span>\n' +
+            '                    <span> از دوره </span>\n' +
+            '                    <span>' + data.setName + '</span>\n' +
+            '                </div>\n' +
+            '                <div class="updateTime">\n' +
+            '                    <i class="fa fa-calendar-alt m--margin-right-5"></i>\n' +
+            '                    <span>تاریخ بروزرسانی: </span>\n' +
+            '                    <span>' + data.lastUpdate + '</span>\n' +
+            '                </div>\n' +
             '                <div class="videoOrder">\n' +
             '                    <div class="videoOrder-title">جلسه</div>\n' +
             '                    <div class="videoOrder-number">' + data.order + '</div>\n' +
             '                    <div class="videoOrder-om"> اُم </div>\n' +
             '                </div>\n' +
             '            </div>\n' +
+            groupBtn +
             '        </div>\n' +
             '    </div>\n' +
             '    <div class="itemHover"></div>\n' +
