@@ -221,6 +221,9 @@ var AjaxLogin = function () {
                 }
                 ajaxLoginRequest(callbackOrRedirectLink, 'LoginSubmit');
             });
+            $(document).off('keypress', '#AlaaAjaxLoginModal input').on('keypress', '#AlaaAjaxLoginModal input', function () {
+                validateAndSendRequest(callbackOrRedirectLink);
+            });
             showLoginModal();
         },
         showLoginLoading: function (status, message) {
