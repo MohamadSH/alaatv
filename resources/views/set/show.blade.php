@@ -2,6 +2,41 @@
 
 @section('page-css')
     <link href="{{ mix("/css/set-show.css") }}" rel="stylesheet">
+    <style>
+
+        @media (min-width: 993px) {
+            .a--desktop-show {
+                display: block !important;
+            }
+
+            .a--desktop-hide,
+            .a--mobile-show,
+            .a--tablet-show {
+                display: none;
+            }
+        }
+
+        @media (max-width: 992px) {
+            .a--tablet-hide,
+            .a--desktop-show,
+            .a--mobile-show {
+                display: none;
+            }
+            .a--tablet-show {
+                display: block !important;
+            }
+        }
+        @media (max-width: 600px) {
+            .a--mobile-show {
+                display: block !important;
+            }
+            .a--mobile-hide,
+            .a--desktop-show,
+            .a--tablet-show {
+                display: none;
+            }
+        }
+    </style>
 @endsection
 
 @section('page-head')
@@ -39,6 +74,30 @@
 
 @section('content')
     <div class="row">
+        <div class="col">
+            <a href="{{ route('web.landing.8') }}"
+               class="a--gtm-eec-advertisement a--gtm-eec-advertisement-click a--mobile-show a--tablet-show m--margin-bottom-10"
+               data-gtm-eec-promotion-id="setShow-TopOfList-mobileShow"
+               data-gtm-eec-promotion-name="جشنواره یلدایی آلاء"
+               data-gtm-eec-promotion-creative="بالای لیست"
+               data-gtm-eec-promotion-position="وسط">
+                <img data-src="{{ asset('/acm/image/yalda-festival_300.100.jpg') }}" class="a--full-width lazy-image" alt="جشنواره یلدایی آلاء">
+{{--                <video autoplay loop muted playsinline data-src="{{ asset('/acm/image/yalda-festival_300.100.mp4') }}" class="a--full-width lazy-image" alt="جشنواره یلدایی آلاء"></video>--}}
+            </a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-2 a--desktop-show">
+            <a href="{{ route('web.landing.8') }}"
+               class="a--gtm-eec-advertisement a--gtm-eec-advertisement-click"
+               data-gtm-eec-promotion-id="setShow-TopOfList-mobileShow"
+               data-gtm-eec-promotion-name="جشنواره یلدایی آلاء"
+               data-gtm-eec-promotion-creative="بالای لیست"
+               data-gtm-eec-promotion-position="وسط">
+{{--                <video autoplay loop muted playsinline data-src="{{ asset('/acm/image/yalda-festival_300.100.mp4') }}" class="a--full-width lazy-image" alt="جشنواره یلدایی آلاء"></video>--}}
+                <img data-src="{{ asset('/acm/image/yalda-festival_400.400.jpg') }}" class="a--full-width lazy-image" alt="جشنواره یلدایی آلاء">
+            </a>
+        </div>
         <div class="col-lg-8 mx-auto">
             <div class="m-portlet m-portlet--full-height ">
                 <div class="m-portlet__head contentsetListHead">
@@ -167,6 +226,7 @@
                 </div>
             </div>
         </div>
+        <div class="col-lg-2 a--desktop-show"></div>
     </div>
 @endsection
 
