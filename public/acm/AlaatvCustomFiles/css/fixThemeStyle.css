@@ -71,6 +71,9 @@ select.form-control {
     width: 41px;
     height: 41px;
 }
+.m-topbar .m-topbar__nav.m-nav>.m-nav__item {
+    cursor: pointer;
+}
 
 .m-list-badge .m-list-badge__label {
     white-space: nowrap;

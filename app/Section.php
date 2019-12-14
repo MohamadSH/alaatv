@@ -2,6 +2,13 @@
 
 namespace App;
 
+/**
+ * App\Section
+ *
+ * @property string|null                                                      $name        نام
+ * @property int                                                              $order ترتیب
+ * @property boolean                                                      enable فعال/غیرفعال
+ */
 class Section extends BaseModel
 {
     protected $fillable = [

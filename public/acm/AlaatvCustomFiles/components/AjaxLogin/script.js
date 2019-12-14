@@ -209,6 +209,12 @@ var AjaxLogin = function () {
         $('#AlaaAjaxLoginModal .AjaxLoginMessage').html('');
     }
 
+    function validateAndSendRequest(callbackOrRedirectLink) {
+        if (validateForm() === true) {
+            ajaxLoginRequest(callbackOrRedirectLink, 'LoginSubmit');
+        }
+    }
+
     return {
         showLogin: function (loginUrlAction, callbackOrRedirectLink) {
             setLoginUrlAction(loginUrlAction);
@@ -216,10 +222,10 @@ var AjaxLogin = function () {
                 appendLoginModalToBody();
             }
             $(document).off('click', '.AjaxLoginSubmit').on('click', '.AjaxLoginSubmit', function () {
-                if (validateForm() === false) {
-                    return;
-                }
-                ajaxLoginRequest(callbackOrRedirectLink, 'LoginSubmit');
+                validateAndSendRequest(callbackOrRedirectLink);
+            });
+            $(document).off('keypress', '#AlaaAjaxLoginModal input').on('keypress', '#AlaaAjaxLoginModal input', function () {
+                validateAndSendRequest(callbackOrRedirectLink);
             });
             showLoginModal();
         },

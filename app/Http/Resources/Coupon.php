@@ -29,7 +29,7 @@ class Coupon extends JsonResource
             'name'          => $this->when(isset($this->name) , $this->name),
             'code'          => $this->when(isset($this->code) , $this->code),
             'discount'      => $this->discount,
-            'usage_number'  => $this->usageNumber,
+//            'usage_number'  => $this->usageNumber,
             'coupontype'    => $this->when(isset($this->coupontype_id) , function (){ return new Coupontype($this->coupontype);}),
             'discounttype'  => $this->when(isset($this->discounttype_id) , function (){ return new Discounttype($this->discounttype);}),
         ];

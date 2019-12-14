@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Classes\Search\ProductSearch;
+use App\Http\Requests\ProductIndexRequest;
 use App\Product;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -15,6 +17,23 @@ use \App\Http\Resources\Product as ProductResource;
 class ProductController extends Controller
 {
     use ProductCommon;
+
+    public function indexV2(ProductIndexRequest $request, ProductSearch $productSearch)
+    {
+        $filters       = $request->all();
+        $pageName      = 'productPage';
+        $filters['doesntHaveGrand']  = 1;
+        $filters['active'] = 1 ;
+
+        $productSearch->setPageName($pageName);
+        if($request->has('length')){
+            $productSearch->setNumberOfItemInEachPage($request->get('length'));
+        }
+
+        $productResult = $productSearch->get($filters);
+
+        return ProductResource::collection($productResult)->response();
+    }
 
     /**
      * Display the specified resource.

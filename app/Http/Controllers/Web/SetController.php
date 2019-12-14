@@ -18,6 +18,8 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use App\Classes\Search\ContentsetSearch;
+use App\Http\Resources\Set as SetResource;
+use App\Http\Resources\ContentInSet as ContentResource;
 use App\Http\Requests\ContentsetIndexRequest;
 use App\Http\Requests\InsertContentsetRequest;
 
@@ -202,10 +204,6 @@ class SetController extends Controller
             return redirect($contentSet->redirectUrl, Response::HTTP_FOUND, $request->headers->all());
         }
 
-        if ($request->expectsJson()) {
-            return response()->json($contentSet);
-        }
-
         $contents = $contentSet->getActiveContents2();
         if ($order === 'desc') {
             $contents = $contents->sortByDesc('order');
@@ -224,7 +222,27 @@ class SetController extends Controller
         $videos    = $contents->where('contenttype_id' , Content::CONTENT_TYPE_VIDEO);
         $articles  = $contents->where('contenttype_id' , Content::CONTENT_TYPE_ARTICLE);
 
-       $jsonLdArray = $this->getJsonLdArray($videos, $pamphlets, $articles);
+        if ($request->expectsJson()) {
+            $files = [];
+            if(isset($pamphlets) && $pamphlets->isNotEmpty()){
+                $files['pamphlets'] = ContentResource::collection($pamphlets);
+            }
+
+            if(isset($videos) && $videos->isNotEmpty()){
+                $files['videos'] = ContentResource::collection($videos);
+            }
+
+            if(isset($articles) && $articles->isNotEmpty()){
+                $files['articles'] = ContentResource::collection($articles);
+            }
+
+            return response()->json([
+                'set'   => new SetResource($contentSet),
+                'files' => $files
+            ]);
+        }
+
+        $jsonLdArray = $this->getJsonLdArray($videos, $pamphlets, $articles);
 
         $this->generateSeoMetaTags($contentSet);
 

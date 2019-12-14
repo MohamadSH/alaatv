@@ -47,7 +47,7 @@ class Child extends JsonResource
             'url'           => new Url($this),
             'photo'         => $this->when(isset($this->photo) , $this->photo),
             'gift'          => $this->when($this->gift->isNotEmpty() , function (){ return Gift::collection($this->gift) ; }) , //It is not a relationship
-            'sets'          => $this->when($this->sets->isNotEmpty() , function (){ return ProductSet::collection($this->sets); }), //It is not a relationship
+//            'sets'          => $this->when($this->sets->isNotEmpty() , function (){ return ProductSet::collection($this->sets); }), //It is not a relationship
             'attributes'    => [
                 'info' =>  $this->when(!empty($this->info_attributes) , $this->info_attributes),
                 'extra' => $this->when(!empty($this->extra_attributes) , $this->extra_attributes),

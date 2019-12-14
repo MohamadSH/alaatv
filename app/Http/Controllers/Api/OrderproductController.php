@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Collection\OrderproductCollection;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\OrderProduct\OrderProductStoreRequest;
-use App\Http\Resources\Orderproduct as OrderproductResource;
+use App\Http\Resources\PurchasedOrderproduct as OrderproductResource;
 use App\Orderproduct;
 use App\Product;
 use App\Traits\OrderCommon;

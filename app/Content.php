@@ -517,7 +517,7 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
 
     public function getUrlAttribute($value): string
     {
-        return action("Web\ContentController@show", $this);
+        return route('c.show' , $this);
     }
 
     public function getPreviousUrlAttribute($value)
@@ -544,6 +544,11 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
             });
     }
 
+    public function getPreviousContentAttribute()
+    {
+        return $this->getPreviousContent();
+    }
+
     public function getNextUrlAttribute($value)
     {
         return ($this->getNextContent() ?: new Content())->url;
@@ -568,12 +573,29 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
             });
     }
 
+    public function getNextContentAtttibute()
+    {
+        return $this->getNextContent();
+    }
+
     public function getApiUrlAttribute($value): array
     {
         return [
-            'v1' => action("Api\ContentController@show", $this),
+            'v1' => route('api.v1.content.show' , $this),
+            'v2' => route('api.v2.content.show' , $this)
         ];
     }
+
+    public function getApiUrlV1Attribute()
+    {
+        return route('api.v1.content.show' , $this);
+    }
+
+    public function getApiUrlV2Attribute($value)
+    {
+        return route('api.v2.content.show' , $this);
+    }
+
 
     public function getPreviousApiUrlAttribute($value)
     {

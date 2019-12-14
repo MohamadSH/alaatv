@@ -215,10 +215,12 @@
                                                 </span>
                                             </button>
                                         @else
-                                            <a class="btn m-btn--pill m-btn--air m-btn m-btn--gradient-from-info m-btn--gradient-to-accent btnViewProductPage">
-                                                مشاهده
-                                                {{ $product->name }}
-                                            </a>
+
+{{--                                            <a href="{{ $product->url }}" class="btn m-btn--pill m-btn--air m-btn m-btn--gradient-from-info m-btn--gradient-to-accent btnViewProductPage">--}}
+{{--                                                مشاهده--}}
+{{--                                                {{ $product->name }}--}}
+{{--                                            </a>--}}
+
                                         @endif
                                     @endforeach
                                 @endif
@@ -248,10 +250,12 @@
                                             </span>
                                             </button>
                                         @else
-                                            <a class="btn m-btn--pill m-btn--air m-btn m-btn--gradient-from-info m-btn--gradient-to-accent btnViewProductPage">
-                                                مشاهده
-                                                {{ $product->name }}
-                                            </a>
+
+{{--                                            <a href="{{ $product->url }}" class="btn m-btn--pill m-btn--air m-btn m-btn--gradient-from-info m-btn--gradient-to-accent btnViewProductPage">--}}
+{{--                                                مشاهده--}}
+{{--                                                {{ $product->name }}--}}
+{{--                                            </a>--}}
+
                                         @endif
                                     @endforeach
                                 @endif
@@ -260,16 +264,15 @@
                     </div>
 
                     <div class="row">
-                        <div class="col text-center m--margin-bottom-5">
-                            {{--                            <a href="{{ route('web.landing.5') }}"--}}
-                            {{--                               class="a--gtm-eec-advertisement a--gtm-eec-advertisement-click"--}}
-                            {{--                               data-gtm-eec-promotion-id="contentShowPage-rightSide-0"--}}
-                            {{--                               data-gtm-eec-promotion-name="همایش های دانلودی آلاء"--}}
-                            {{--                               data-gtm-eec-promotion-creative="سمت راست صفحه بالای توضیحات کانتنت"--}}
-                            {{--                               data-gtm-eec-promotion-position="0">--}}
-                            {{--                                <img src="{{ asset('/acm/extra/ads/gif/970-90.gif') }}" class="a--full-width">--}}
-                            {{--                                --}}{{--                            <img src="{{ asset('/acm/extra/ads/gif/300-250.gif') }}" class="a--full-width">--}}
-                            {{--                            </a>--}}
+                        <div class="col text-center m--margin-bottom-5 a--mobile-show a--tablet-show">
+                            <a href="{{ action("Web\ShopPageController") }}"
+                               class="a--gtm-eec-advertisement a--gtm-eec-advertisement-click"
+                               data-gtm-eec-promotion-id="contentShowPage-rightSide-0"
+                               data-gtm-eec-promotion-name="جشنواره یلدایی آلاء"
+                               data-gtm-eec-promotion-creative="سمت راست صفحه بالای توضیحات کانتنت"
+                               data-gtm-eec-promotion-position="0">
+                                <img data-src="{{ asset('/acm/image/yalda-festival_300.100.jpg') }}" class="a--full-width lazy-image" alt="جشنواره یلدایی آلاء">
+                            </a>
                         </div>
                     </div>
 
@@ -381,16 +384,15 @@
                                     <div class="col-md-8">
 
                                         <div class="row">
-                                            <div class="col-md-6 text-center m--margin-bottom-5">
-                                                {{--                                                <a href="{{ route('web.landing.8') }}"--}}
-                                                {{--                                                   class="a--gtm-eec-advertisement a--gtm-eec-advertisement-click"--}}
-                                                {{--                                                   data-gtm-eec-promotion-id="contentShowPage-rightSide-1"--}}
-                                                {{--                                                   data-gtm-eec-promotion-name="قرعه کشی گوشی"--}}
-                                                {{--                                                   data-gtm-eec-promotion-creative="جلوی لینک های مستقیم دانلود این فیلم"--}}
-                                                {{--                                                   data-gtm-eec-promotion-position="0">--}}
-                                                {{--                                                    <img data-src="{{ asset('/acm/extra/ads/gif/300-250.gif') }}" class="a--full-width lazy-image">--}}
-                                                {{--                                                    --}}{{--                            <img src="{{ asset('/acm/extra/ads/gif/300-250.gif') }}" class="a--full-width">--}}
-                                                {{--                                                </a>--}}
+                                            <div class="col-md-6 text-center m--margin-bottom-5 a--desktop-show">
+{{--                                                <a href="{{ action("Web\ShopPageController") }}"--}}
+{{--                                                   class="a--gtm-eec-advertisement a--gtm-eec-advertisement-click"--}}
+{{--                                                   data-gtm-eec-promotion-id="contentShowPage-rightSide-1"--}}
+{{--                                                   data-gtm-eec-promotion-name="جشنواره یلدایی آلاء"--}}
+{{--                                                   data-gtm-eec-promotion-creative="جلوی لینک های مستقیم دانلود این فیلم"--}}
+{{--                                                   data-gtm-eec-promotion-position="0">--}}
+{{--                                                    <img data-src="{{ asset('/acm/image/yalda-festival_400.400.jpg') }}" class="a--full-width lazy-image" alt="جشنواره یلدایی آلاء">--}}
+{{--                                                </a>--}}
                                             </div>
                                             <div class="col-md-6 text-center m--margin-bottom-5">
                                                 {{--                                                <a href="{{ route('web.landing.5') }}"--}}
@@ -462,15 +464,15 @@
                     <!--end::Portlet-->
 
                     <div class="row">
-                        <div class="col text-center m--margin-bottom-5">
-                            {{--                            <a href="{{ route('web.landing.5') }}"--}}
-                            {{--                               class="a--gtm-eec-advertisement a--gtm-eec-advertisement-click "--}}
-                            {{--                               data-gtm-eec-promotion-id="contentShowPage-rightSide-0"--}}
-                            {{--                               data-gtm-eec-promotion-name="همایش های دانلودی آلاء"--}}
-                            {{--                               data-gtm-eec-promotion-creative="سمت راست صفحه بالای توضیحات کانتنت"--}}
-                            {{--                               data-gtm-eec-promotion-position="0">--}}
-                            {{--                                <img src="{{ asset('/acm/extra/ads/gif/970-90.gif') }}" class="a--full-width">--}}
-                            {{--                            </a>--}}
+                        <div class="col text-center m--margin-bottom-5 a--mobile-show a--tablet-show">
+                            <a href="{{ action("Web\ShopPageController") }}"
+                               class="a--gtm-eec-advertisement a--gtm-eec-advertisement-click"
+                               data-gtm-eec-promotion-id="contentShowPage-rightSide-0"
+                               data-gtm-eec-promotion-name="جشنواره یلدایی آلاء"
+                               data-gtm-eec-promotion-creative="سمت راست صفحه بالای توضیحات کانتنت"
+                               data-gtm-eec-promotion-position="0">
+                                <img data-src="{{ asset('/acm/image/yalda-festival_300.100.jpg') }}" class="a--full-width lazy-image" alt="جشنواره یلدایی آلاء">
+                            </a>
                         </div>
                     </div>
 
@@ -542,15 +544,15 @@
                     <!--end::Portlet-->
 
                     <div class="row">
-                        <div class="col text-center m--margin-bottom-5">
-                            {{--                            <a href="{{ route('web.landing.5') }}"--}}
-                            {{--                               class="a--gtm-eec-advertisement a--gtm-eec-advertisement-click "--}}
-                            {{--                               data-gtm-eec-promotion-id="contentShowPage-rightSide-0"--}}
-                            {{--                               data-gtm-eec-promotion-name="همایش های دانلودی آلاء"--}}
-                            {{--                               data-gtm-eec-promotion-creative="سمت راست صفحه بالای توضیحات کانتنت"--}}
-                            {{--                               data-gtm-eec-promotion-position="0">--}}
-                            {{--                                <img src="{{ asset('/acm/extra/ads/gif/970-90.gif') }}" class="a--full-width">--}}
-                            {{--                            </a>--}}
+                        <div class="col text-center m--margin-bottom-5 a--mobile-show a--tablet-show">
+                            <a href="{{ action("Web\ShopPageController") }}"
+                               class="a--gtm-eec-advertisement a--gtm-eec-advertisement-click"
+                               data-gtm-eec-promotion-id="contentShowPage-rightSide-0"
+                               data-gtm-eec-promotion-name="جشنواره یلدایی آلاء"
+                               data-gtm-eec-promotion-creative="سمت راست صفحه بالای توضیحات کانتنت"
+                               data-gtm-eec-promotion-position="0">
+                                <img data-src="{{ asset('/acm/image/yalda-festival_300.100.jpg') }}" class="a--full-width lazy-image" alt="جشنواره یلدایی آلاء">
+                            </a>
                         </div>
                     </div>
                 @endif
@@ -690,17 +692,16 @@
                     </div>
                 </div>
                 <!--end::Portlet-->
-                <div>
-                    {{--                    <a href="https://alaatv.com/product/312"--}}
-                    {{--                       data-tooltip-content="همایش طلایی شیمی کنکور"--}}
-                    {{--                       class="a--gtm-eec-advertisement a--gtm-eec-advertisement-click"--}}
-                    {{--                       data-gtm-eec-promotion-id="contentShowPage-leftSide-1"--}}
-                    {{--                       data-gtm-eec-promotion-name="همایش طلایی شیمی کنکور"--}}
-                    {{--                       data-gtm-eec-promotion-creative="سمت چپ صفحه پایین لیست کانتنت های مشابه"--}}
-                    {{--                       data-gtm-eec-promotion-position="0">--}}
-                    {{--                        <img src="http://uupload.ir/files/u8r8_banner-1.gif" alt="همایش طلایی شیمی کنکور"--}}
-                    {{--                             class="m--img-centered a--full-width"/>--}}
-                    {{--                    </a>--}}
+                <div class="a--desktop-show">
+                    <a href="{{ action("Web\ShopPageController") }}"
+                       data-tooltip-content="همایش طلایی شیمی کنکور"
+                       class="a--gtm-eec-advertisement a--gtm-eec-advertisement-click"
+                       data-gtm-eec-promotion-id="contentShowPage-leftSide-1"
+                       data-gtm-eec-promotion-name="جشنواره یلدایی آلاء"
+                       data-gtm-eec-promotion-creative="سمت چپ صفحه پایین لیست کانتنت های مشابه"
+                       data-gtm-eec-promotion-position="0">
+                        <img data-src="{{ asset('/acm/image/yalda-festival_300.100.jpg') }}" class="a--full-width lazy-image" alt="جشنواره یلدایی آلاء">
+                    </a>
                     {{--                    <a href="https://alaatv.com/product/312"--}}
                     {{--                       data-tooltip-content="همایش طلایی ریاضی تجربی کنکور"--}}
                     {{--                       class="a--gtm-eec-advertisement a--gtm-eec-advertisement-click"--}}
