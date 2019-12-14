@@ -40,7 +40,7 @@
 @section('content')
     <div class="row">
         <div class="col">
-            <a href="{{ route('web.landing.8') }}"
+            <a href="{{ action("Web\ShopPageController") }}"
                class="a--gtm-eec-advertisement a--gtm-eec-advertisement-click a--mobile-show a--tablet-show m--margin-bottom-10"
                data-gtm-eec-promotion-id="setShow-TopOfList-mobileShow"
                data-gtm-eec-promotion-name="جشنواره یلدایی آلاء"
@@ -53,7 +53,7 @@
     </div>
     <div class="row">
         <div class="col-lg-2 a--desktop-show rightSideAdBanner">
-            <a href="{{ route('web.landing.8') }}"
+            <a href="{{ action("Web\ShopPageController") }}"
                class="a--gtm-eec-advertisement a--gtm-eec-advertisement-click"
                data-gtm-eec-promotion-id="setShow-TopOfList-mobileShow"
                data-gtm-eec-promotion-name="جشنواره یلدایی آلاء"
