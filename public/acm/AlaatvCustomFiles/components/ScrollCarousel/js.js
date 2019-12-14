@@ -12,14 +12,24 @@ var ScrollCarousel = function () {
                 scrollLeft: null
             };
             addMouseEvents(sliders[i], slidersRepository[i]);
+            addScrollEvent(sliders[i]);
         }
+        addNextAndPreviousBtnEvent();
+    }
 
+    function addNextAndPreviousBtnEvent() {
         $(document).on('click', '.ScrollCarousel .ScrollCarousel-previous', function () {
             swipe($(this).parents('.ScrollCarousel'), 'right');
         });
         $(document).on('click', '.ScrollCarousel .ScrollCarousel-next', function () {
             swipe($(this).parents('.ScrollCarousel'), 'left');
         });
+    }
+
+    function addScrollEvent(slider) {
+        slider.onscroll = function(){
+            checkSwipIcons($(this).parents('.ScrollCarousel'));
+        };
     }
 
     function addMouseEvents(element, elementRepository) {
@@ -72,13 +82,43 @@ var ScrollCarousel = function () {
         $ScrollCarousel.append('<div class="ScrollCarousel-previous"><i class="fa fa-chevron-right"></i></div>');
     }
 
-    function appendSwipeIcons($ScrollCarousel) {
-        appendSwipeLeftIcon($ScrollCarousel);
-        appendSwipeRightIcon($ScrollCarousel);
+    function appendSwipeIcons($scrollCarousel) {
+        appendSwipeLeftIcon($scrollCarousel);
+        appendSwipeRightIcon($scrollCarousel);
+        checkSwipIcons($scrollCarousel);
+    }
+
+    function checkSwipIcons($scrollCarousel) {
+        $scrollCarousel.each(function () {
+            var scrollCarousel1Items = getScrollCarouselItems($(this)),
+                scrollCarousel1ItemsLength = scrollCarousel1Items.length,
+                firstItem = scrollCarousel1Items[0],
+                lastItem = scrollCarousel1Items[scrollCarousel1ItemsLength-1],
+                firstItemData = getData(firstItem),
+                lastItemItemData = getData(lastItem);
+
+            if (firstItemData === false || firstItemData.pltrp===firstItemData.thisWidthWithMargin) {
+                $(this).find('.ScrollCarousel-previous').fadeOut();
+            } else {
+                $(this).find('.ScrollCarousel-previous').fadeIn();
+            }
+
+            var lastItemLeftPosition = lastItemItemData.thisPositionLeft + lastItemItemData.thisMarginLeft;
+            if (lastItemItemData !== false && lastItemLeftPosition < 0 && (Math.abs(lastItemItemData.thisPositionLeft)-lastItemItemData.thisMarginLeft) > 1) {
+                $(this).find('.ScrollCarousel-next').fadeIn();
+            } else if(lastItemItemData === false || lastItemLeftPosition > 0 || (Math.abs(lastItemItemData.thisPositionLeft)-lastItemItemData.thisMarginLeft) <= 1) {
+                $(this).find('.ScrollCarousel-next').fadeOut();
+            }
+
+        });
+    }
+
+    function getScrollCarouselItems($scrollCarousel) {
+        return $scrollCarousel.find('.item').toArray();
     }
 
     function swipe($scrollCarousel, direction) {
-        var scrollCarousel1Items = $scrollCarousel.find('.item').toArray(),
+        var scrollCarousel1Items = getScrollCarouselItems($scrollCarousel),
             scrollCarousel1ItemsLength = scrollCarousel1Items.length;
 
         for (var i = 0; i < scrollCarousel1ItemsLength; i++) {
@@ -100,6 +140,9 @@ var ScrollCarousel = function () {
     }
 
     function getData(item) {
+        if (typeof item === 'undefined') {
+            return false;
+        }
         var $this = $(item),
             $parent = $this.parent(),
             thisWidth = parseInt($this.width()),
@@ -107,8 +150,12 @@ var ScrollCarousel = function () {
             thisPositionLeft = $this.position().left,
             parentWidth = $parent.width(),
             pltrp = Math.round((parentWidth - thisPositionLeft) * 1000) / 1000; // thisPositionLeftTowardsTheRightOfParent -> pltrp
+
         return {
+            this: $this,
             thisWidth: thisWidth,
+            thisPositionLeft: thisPositionLeft,
+            thisMarginLeft: thisMarginLeft,
             thisWidthWithMargin: Math.round($this.outerWidth(true) * 1000) / 1000,
             pltrp: pltrp, // thisPositionLeftTowardsTheRightOfParent -> pltrp
             newScrollPositionToRight: (pltrp - $parent.scrollLeft() - thisWidth - thisMarginLeft) * -1,
@@ -142,9 +189,13 @@ var ScrollCarousel = function () {
             sliders = document.getElementsByClassName('ScrollCarousel-Items');
             addEvents(sliders);
         },
-        addSwipeIcons: function ($ScrollCarousel) {
-            appendSwipeIcons($ScrollCarousel);
+        addSwipeIcons: function ($scrollCarousel) {
+            appendSwipeIcons($scrollCarousel);
+        },
+        checkSwipIcons: function ($scrollCarousel) {
+            checkSwipIcons($scrollCarousel)
         }
+
     };
 }();
 ScrollCarousel.init();

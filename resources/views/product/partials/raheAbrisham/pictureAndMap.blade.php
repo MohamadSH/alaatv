@@ -1,29 +1,3 @@
-<style>
-    .display-5 {
-        font-size: 2rem;
-        font-weight: bold;
-        line-height: 1.9;
-    }
-    .display-6 {
-        font-size: 1.5rem;
-        font-weight: bold;
-        line-height: 2.5;
-    }
-    .a--margin-0 {
-        margin: 0;
-    }
-    @media (max-width: 800px) {
-        .display-5 {
-            font-size: 1.2rem;
-            line-height: 1;
-        }
-        .display-6 {
-            font-size: 1rem;
-            line-height: 1.5;
-        }
-    }
-
-</style>
 <div class="row" id="a_top_section">
     <div class="col">
         <!--begin::Portlet-->
@@ -46,12 +20,12 @@
                             <div class="col-lg-3">
                                 <div>
                                     <img src="{{$product->photo}}?w=400&h=400" alt="عکس محصول@if(isset($product->name)) {{$product->name}} @endif" class="img-fluid productPicture m--marginless a--full-width"/>
-                                    <button type="button" class="btn m-btn--square btn-metal a--full-width m--margin-top-15">
-                                        <p class="display-6 a--margin-0">
+                                    <button type="button" class="btn m-btn--square btn-metal a--full-width m--margin-top-15 btnShowRepurchase">
+                                        <p class="display-6 m--marginless">
                                             خرید مجدد این دوره
                                         </p>
                                     </button>
-
+                                    {!! Form::hidden('product_id',$product->id) !!}
                                 </div>
                             </div>
                             <div class="col">
@@ -65,15 +39,15 @@
                                 </div>
                                 <div class="row no-gutters m--margin-top-15">
                                     <div class="col-6 m--padding-right-5">
-                                        <button class="btn m-btn--square btn-success a--full-width" onclick="$('.helpMessageRow').fadeIn(); $('.helpMessageRow').AnimateScrollTo();">
-                                            <p class="display-5 a--margin-0">
+                                        <button class="btn m-btn--square btn-success a--full-width btnShowHelpMessage">
+                                            <p class="display-5 m--marginless">
                                                 من تازه شروع کردم
                                             </p>
                                         </button>
                                     </div>
                                     <div class="col-6 m--padding-left-5">
                                         <button class="btn m-btn--square btn-outline-metal a--full-width" onclick="$('.liveDescriptionRow').AnimateScrollTo();">
-                                            <p class="display-5 a--margin-0">
+                                            <p class="display-5 m--marginless">
                                                 مشاهده آخرین تغییرات
                                             </p>
                                         </button>

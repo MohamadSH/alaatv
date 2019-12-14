@@ -1,16 +1,47 @@
-var InitPage = function () {
+var EntekhabeFarsang = function () {
 
     function showFarsang(setId) {
         showLoading();
         $('.selectEntekhabeFarsangVideoAndPamphlet').AnimateScrollTo();
         getAjaxContent('/set/'+setId, function (data) {
-            // console.log(data);
             $('#selectFarsang .select-selected').html(data.set.name).attr('data-option-value', setId);
-            setVideoList(createVideoList(data.files.videos));
-            setPamphletList(createPamphletList(data.files.pamphlets));
+            setLists(data.files);
+            setBtnMoreLink(data.set.url.web);
+            checkNoData();
+            refreshScrollCarouselSwipIcons();
+            showLists();
             imageObserver.observe();
             hideLoading();
         })
+    }
+
+    function refreshScrollCarouselSwipIcons() {
+        ScrollCarousel.checkSwipIcons($('.ScrollCarousel'));
+    }
+
+    function checkNoData() {
+        checkNoVideo();
+        checkNoPamphlet();
+    }
+
+    function checkNoVideo() {
+        if (getVideoListHtml().trim().length === 0 && getVideoListHtml().trim() !== noDataMessage('فیلمی وجود ندارد.')) {
+            setVideoMessage(noDataMessage('فیلمی وجود ندارد.'));
+            getBtnMoreVideo().fadeOut();
+        } else {
+            setVideoMessage('');
+            getBtnMoreVideo().fadeIn();
+        }
+    }
+
+    function checkNoPamphlet() {
+        if (getPamphletList().trim().length === 0 && getPamphletList().trim() !== noDataMessage('جزوه ای وجود ندارد.')) {
+            setPamphletMessage(noDataMessage('جزوه ای وجود ندارد.'));
+            getBtnMorePamphlet().fadeOut();
+        } else {
+            setPamphletMessage('');
+            getBtnMorePamphlet().fadeIn();
+        }
     }
 
     function ajaxSetup() {
@@ -53,9 +84,13 @@ var InitPage = function () {
         );
     }
 
+    function showLists() {
+        $('.entekhabeFarsangVideoAndPamphlet').parents('.row').fadeIn();
+    }
+
     function createVideoList(data) {
         if (typeof data === 'undefined') {
-            return noDataMessage('فیلمی وجود ندارد.');
+            return '';
         }
         var dataLength = data.length,
             htmlData = '';
@@ -70,7 +105,7 @@ var InitPage = function () {
 
     function createPamphletList(data) {
         if (typeof data === 'undefined') {
-            return noDataMessage('جزوه ای وجود ندارد.');
+            return '';
         }
         var dataLength = data.length,
             htmlData = '';
@@ -123,18 +158,62 @@ var InitPage = function () {
             '</div>';
     }
 
+    function setBtnMoreLink(link) {
+        setBtnMoreVideoLink(link);
+        setBtnMorePamphletLink(link);
+    }
+
+    function setBtnMoreVideoLink(link) {
+        getBtnMoreVideo().parents('a').attr('href', link);
+    }
+
+    function setBtnMorePamphletLink(link) {
+        getBtnMorePamphlet().parents('a').attr('href', link);
+    }
+
+    function setLists(data) {
+        setVideoList(createVideoList(data.videos));
+        setPamphletList(createPamphletList(data.pamphlets));
+    }
+
     function setVideoList(html) {
         $('#m_tabs_video .ScrollCarousel .ScrollCarousel-Items').html(html);
+    }
+
+    function getVideoListHtml() {
+        return $('#m_tabs_video .ScrollCarousel .ScrollCarousel-Items').html();
     }
 
     function setPamphletList(html) {
         $('#m_tabs_pamphlet .ScrollCarousel .ScrollCarousel-Items').html(html);
     }
 
+    function getPamphletList() {
+        return $('#m_tabs_pamphlet .ScrollCarousel .ScrollCarousel-Items').html();
+    }
+
+    function setPamphletMessage(html) {
+        $('.showPamphletMessage').html(html);
+    }
+
+    function setVideoMessage(html) {
+        $('.showVideoMessage').html(html);
+    }
+
+    function getBtnMoreVideo() {
+        return $('.btnShowMoreVideo');
+    }
+
+    function getBtnMorePamphlet() {
+        return $('.btnShowMorePamphlet');
+    }
+
     function showLoading() {
         var loadingHtml = '<div class="m-loader m-loader--warning" style="width: 100px;height: 100px;margin: auto;"></div>';
-        setVideoList(loadingHtml);
-        setPamphletList(loadingHtml);
+        setVideoList('');
+        setPamphletList('');
+        setVideoMessage(loadingHtml);
+        setPamphletMessage(loadingHtml);
         AlaaLoading.show();
     }
 
@@ -146,16 +225,37 @@ var InitPage = function () {
         return '<div class="alert alert-info text-center" role="alert" style="width: 100%;margin: auto;">'+message+'</div>';
     }
 
+
+    return {
+        init: function() {
+            checkNoData();
+            refreshScrollCarouselSwipIcons();
+        },
+        showFarsang: function (setId) {
+            showFarsang(setId);
+        },
+    };
+
+}();
+
+
+var InitAbrishamPage = function () {
+
+    function makePageBoxedForLargScreen() {
+        $('.m-body .m-content').addClass('boxed');
+    }
+
     function getFarsangMapHeight() {
-        var gg = $('.productPicture').width();
         return $('.productPicture').width()+'px';
     }
 
     function initFarsangMap(farsangs) {
+
         if (typeof farsangs === 'undefined') {
             return false;
         }
-        var farsangsLength = farsangs.length,
+        var publishedFarsangsLength = farsangs.length - 1,
+            farsangsLength = 10,
             mapRoadId = 'mapRoad',
             omArray=[
                 '',
@@ -231,75 +331,63 @@ var InitPage = function () {
                     y: 20,
                     step: 10
                 },
-                {
-                    x: 100,
-                    y: -2,
-                    step: 11
-                },
-                {
-                    x: 110,
-                    y: 22,
-                    step: 12
-                },
-                {
-                    x: 120,
-                    y: 12,
-                    step: 13
-                },
-                {
-                    x: 130,
-                    y: -8,
-                    step: 14
-                },
-                {
-                    x: 140,
-                    y: 7,
-                    step: 15
-                },
-                {
-                    x: 150,
-                    y: 20,
-                    step: 16
-                },
-                {
-                    x: 160,
-                    y: -10,
-                    step: 17
-                },
-                {
-                    x: 170,
-                    y: -2,
-                    step: 18
-                },
-                {
-                    x: 180,
-                    y: 22,
-                    step: 19
-                },
-                {
-                    x: 190,
-                    y: 12,
-                    step: 20
-                },
             ];
 
         for(var i = 0; i < farsangsLength; i++) {
+            var footPrint = 'url(/acm/image/raheAbrisham/footPrint2.svg)';
+
+            if ( i < publishedFarsangsLength ) {
+                footPrint = 'url(/acm/image/raheAbrisham/footPrint1.svg)';
+
+                farsangPoints[i].drilldown = "FarsangItems";
+                // farsangPoints[i].dataLabels = {color: 'white'};
+                farsangPoints[i].set = {
+                    id: farsangs[i].setId,
+                    name: farsangs[i].name
+                };
+            } if ( i === publishedFarsangsLength ) {
+                footPrint = 'url(/acm/image/raheAbrisham/footPrint3.svg)';
+
+                farsangPoints[i].set = {
+                    id: farsangs[i].setId,
+                    name: farsangs[i].name
+                };
+            }
             farsangPoints[i].marker = {
-                symbol: 'url(/acm/image/raheAbrisham/footPrint.svg)'
+                // symbol: 'url(/acm/image/raheAbrisham/footPrint.svg)'
+                symbol: footPrint,
             };
             farsangPoints[i].name = 'فرسنگ ' + omArray[farsangPoints[i].step];
-            farsangPoints[i].set = {
-                id: farsangs[i].setId,
-                name: farsangs[i].name
-            };
         }
 
-        farsangPoints.splice(farsangsLength);
+        // farsangPoints.splice(farsangsLength);
+
+        // Math.easeOutBounce = function (pos) {
+        //     var res;
+        //     res = (7.5625 * pos * pos);
+        //     // if ((pos) < (1 / 2.75)) {
+        //     //     res = (7.5625 * pos * pos);
+        //     // } else if (pos < (2 / 2.75)) {
+        //     //     res = (7.5625 * (pos -= (1.5 / 2.75)) * pos + 0.75);
+        //     // } else if (pos < (2.5 / 2.75)) {
+        //     //     res = (7.5625 * (pos -= (2.25 / 2.75)) * pos + 0.9375);
+        //     // } else {
+        //     //     res = (7.5625 * (pos -= (2.625 / 2.75)) * pos + 0.984375);
+        //     // }
+        //     res = 1 - res;
+        //     return res;
+        // };
+
+        Highcharts.setOptions({
+            lang: {
+                drillUpText: '<< بازگشت به {series.name}'
+            }
+        });
 
         var chart = new Highcharts.chart(mapRoadId, {
             chart: {
                 type: 'spline',
-                margin: [0, 10, 0, 10],
+                margin: [5, 20, 5, 20], // [up, right, down, left]
                 // width: '100%',
                 height: getFarsangMapHeight(),
                 // inverted: true
@@ -315,7 +403,7 @@ var InitPage = function () {
             },
             xAxis: {
                 visible: false,
-                // reversed: false,
+                // reversed: true,
                 // title: {
                 //     enabled: true,
                 //     text: ''
@@ -352,62 +440,306 @@ var InitPage = function () {
                 // },
                 series: {
                     cursor: 'pointer',
+                    // allowPointSelect: true,
                     dataLabels: {
                         enabled: true,
+                        color: 'white',
+                        style: {
+                            fontSize: '16px',
+                            textOutline: false ,
+                        },
                         format: '{point.name}',
+                        // useHTML: true,
                         // formatter: function () {
-                        //     return Highcharts.numberFormat(this.y,2);
+                        //     console.log(this)
+                        //     return '<div>'+this.key+'</div>';
                         // }
                     },
                     point: {
                         events: {
                             click: function() {
-                                var data = this.series.data[this.index];
-                                showFarsang(data.set.id)
+                                // var data = this.series.data[this.index];
+                                // EntekhabeFarsang.showFarsang(data.set.id)
                             }
                         }
                     }
                 },
             },
             series: [{
-                data: farsangPoints
+                type: 'spline',
+                name: 'مسیر راه ابریشم',
+                data: farsangPoints,
+                // data: [],
+                color: '#da9d6c',
+                // animation: false,
+                animation: {
+                    duration: 2000,
+                    // Uses Math.easeOutBounce
+                    // easing: 'easeOutBounce'
+                }
             }],
+
+
+
+            drilldown: {
+                drillUpButton: {
+                    position: {
+                        align: 'left'
+                    }
+                },
+                activeDataLabelStyle: {
+                    color: 'white',
+                    textDecoration: 'none'
+                },
+                margin: [5, 50, 5, 50], // [up, right, down, left]
+                series: [
+                    {
+                        type: 'organization',
+                        name: 'FarsangItems',
+                        id: 'FarsangItems',
+                        keys: ['from', 'to'],
+                        enableMouseTracking: false,
+                        hangingIndent: 100,
+                        data: [
+                            ['farsang1', 'CTO'],
+                            ['farsang1', 'CPO'],
+                            ['farsang1', 'CSO'],
+                            ['farsang1', 'CMO'],
+                        ],
+                        levels: [{
+                            level: 0,
+                            color: 'silver',
+                            dataLabels: {
+                                color: 'black'
+                            },
+                            width: 250,
+                            height: 250
+                        }, {
+                            level: 1,
+                            color: 'silver',
+                            dataLabels: {
+                                color: 'black'
+                            },
+                            width: 250,
+                            height: 250
+                        }, {
+                            level: 2,
+                            color: '#980104'
+                        }, {
+                            level: 4,
+                            color: '#359154'
+                        }],
+                        nodes: [{
+                            id: 'farsang1',
+                            title: 'فرسنگ اول',
+                            name: 'فرسنگ اول',
+                            image: 'https://wp-assets.highcharts.com/www-highcharts-com/blog/wp-content/uploads/2018/11/12132317/Grethe.jpg',
+                            layout: 'hanging'
+                        }, {
+                            id: 'CTO',
+                            title: 'CTO',
+                            name: 'Christer Vasseng',
+                            color: '#007ad0',
+                            column: 4,
+                            image: 'https://wp-assets.highcharts.com/www-highcharts-com/blog/wp-content/uploads/2018/11/12140620/Christer.jpg',
+                            layout: 'hanging'
+                        }, {
+                            id: 'CPO',
+                            title: 'CPO',
+                            name: 'Torstein Hønsi',
+                            column: 4,
+                            image: 'https://wp-assets.highcharts.com/www-highcharts-com/blog/wp-content/uploads/2018/11/12131849/Torstein1.jpg',
+                            layout: 'hanging'
+                        }, {
+                            id: 'CSO',
+                            title: 'CSO',
+                            name: 'Anita Nesse',
+                            column: 4,
+                            image: 'https://wp-assets.highcharts.com/www-highcharts-com/blog/wp-content/uploads/2018/11/12132313/Anita.jpg',
+                            layout: 'hanging'
+                        }, {
+                            id: 'CMO',
+                            title: 'CMO',
+                            name: 'Vidar Brekke',
+                            column: 4,
+                            image: 'https://wp-assets.highcharts.com/www-highcharts-com/blog/wp-content/uploads/2018/11/13105551/Vidar.jpg',
+                            layout: 'hanging'
+                        }],
+                        colorByPoint: false,
+                        color: '#007ad0',
+                        dataLabels: {
+                            color: 'white'
+                        },
+                        borderColor: 'white',
+                        nodeWidth: 90
+
+
+                        // data: [
+                        //     ['farsang1', 'تورق'],
+                        //     ['farsang1', 'صفر تا صد'],
+                        //     ['farsang1', 'کنکورچه'],
+                        //     ['farsang1', 'تست'],
+                        //     ['farsang1', 'پیش آزمون'],
+                        // ],
+                        // inverted: true,
+                        // levels: [
+                        //     {
+                        //         level: 0,
+                        //         color: '#980104',
+                        //         // dataLabels: {
+                        //         //     color: 'black'
+                        //         // },
+                        //         width: 100,
+                        //         height: 250
+                        //     }, {
+                        //         level: 1,
+                        //         color: '#980104',
+                        //         // dataLabels: {
+                        //         //     color: 'black'
+                        //         // },
+                        //         // height: 25
+                        //     }, {
+                        //         level: 2,
+                        //         color: '#980104'
+                        //     }, {
+                        //         level: 4,
+                        //         color: '#980104'
+                        //     }
+                        // ],
+                        // nodes: [
+                        //     {
+                        //         id: 'farsang1',
+                        //         title: 'فرسنگ اول',
+                        //         name: 'فرسنگ اول',
+                        //         image: 'https://wp-assets.highcharts.com/www-highcharts-com/blog/wp-content/uploads/2018/11/12132317/Grethe.jpg'
+                        //     },
+                        //     {
+                        //         id: 'تورق',
+                        //         title: 'تورق',
+                        //         name: 'تورق',
+                        //         column: 4,
+                        //         image: 'https://wp-assets.highcharts.com/www-highcharts-com/blog/wp-content/uploads/2018/11/12131849/Torstein1.jpg'
+                        //     },
+                        //     {
+                        //         id: 'صفر تا صد',
+                        //         title: 'صفر تا صد',
+                        //         name: 'صفر تا صد',
+                        //         column: 4,
+                        //         image: 'https://wp-assets.highcharts.com/www-highcharts-com/blog/wp-content/uploads/2018/11/12132313/Anita.jpg',
+                        //         layout: 'hanging'
+                        //     },
+                        //     {
+                        //         id: 'کنکورچه',
+                        //         title: 'کنکورچه',
+                        //         name: 'کنکورچه',
+                        //         column: 4,
+                        //         image: 'https://wp-assets.highcharts.com/www-highcharts-com/blog/wp-content/uploads/2018/11/13105551/Vidar.jpg',
+                        //         layout: 'hanging'
+                        //     }
+                        // ],
+                        // colorByPoint: true,
+                        // color: '#007ad0',
+                        // dataLabels: {
+                        //     color: 'white'
+                        // },
+                        // borderColor: 'white',
+                        // nodeWidth: 65,
+                    }
+                ]
+            }
+
+
 
         });
 
         // $('#'+mapRoadId).prepend('<img class="background" src="/acm/image/raheAbrisham/mapBackground.png">');
-
+        $('#'+mapRoadId).prepend('<img class="background" src="/acm/image/raheAbrisham/mapbackground1.jpg">');
         $('#'+mapRoadId).find('.highcharts-container').css({'width': '100%'}).find('svg').css({'width': '100%'});
 
+        // feedMapPoints(chart, farsangPoints);
+
+
+    }
+
+    function feedMapPoints(chart, farsangPoints) {
+        var counter = 0,
+            farsangPointsLength = farsangPoints.length;
+        var i = setInterval(function(){
+
+            chart.series[0].addPoint(farsangPoints[counter]);
+
+            counter++;
+            if(counter === farsangPointsLength) {
+                clearInterval(i);
+            }
+        }, 400);
     }
 
     function initCustomDropDown() {
         $('.CustomDropDown').CustomDropDown({
             onChange: function (data) {
-                showFarsang(data.value);
+                EntekhabeFarsang.showFarsang(data.value);
                 // { index: 2, totalCount: 5, value: "3", text: "فرسنگ سوم" }
             }
         });
+    }
 
+    function initScrollCarousel() {
         ScrollCarousel.addSwipeIcons($('.ScrollCarousel'));
+    }
 
-        imageObserver.observe();
+    function initEvents() {
+        $(document).on('click', '.showMoreLiveDescriptions', function () {
+            var $target = $('.liveDescriptionRow .m-timeline-3 .m-timeline-3__items .m-timeline-3__item:not(:first-child)');
+            if ($target.is(":visible")) {
+                $target.fadeOut();
+            } else {
+                $target.fadeIn();
+                $(this).fadeOut();
+            }
+        });
+        $(document).on('click', '.btnShowRepurchase', function () {
+            $('.helpMessageRow').fadeOut(0);
+            $('.RepurchaseRow').fadeIn();
+            $('.RepurchaseRow').AnimateScrollTo();
+        });
+        $(document).on('click', '.btnShowHelpMessage', function () {
+            $('.RepurchaseRow').fadeOut(0);
+            $('.helpMessageRow').fadeIn();
+            $('.helpMessageRow').AnimateScrollTo();
+        });
+    }
+
+    function initLiveDescription() {
+        $('.liveDescriptionRow .m-timeline-3 .m-timeline-3__items .m-timeline-3__item:not(:first-child)').fadeOut();
+    }
+
+    function initRepurchaseRowAndHelpMessageRow() {
+        $('.helpMessageRow').fadeOut();
+        $('.RepurchaseRow').fadeOut();
     }
 
     return {
         init: function (farsangs) {
+
+            initRepurchaseRowAndHelpMessageRow();
+            EntekhabeFarsang.init();
+            makePageBoxedForLargScreen();
             initFarsangMap(farsangs);
             initCustomDropDown();
+            initScrollCarousel();
+            initLiveDescription();
+            initEvents();
+            imageObserver.observe();
         },
     };
 }();
 
+
 jQuery(document).ready(function () {
 
-    $('.m-body .m-content').addClass('boxed');
-    $('.helpMessageRow').fadeOut();
 
-    InitPage.init(farsangs);
+    InitAbrishamPage.init(farsangs);
 
 
     //

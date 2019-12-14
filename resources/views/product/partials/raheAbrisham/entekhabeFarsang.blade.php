@@ -1,7 +1,7 @@
 <div class="alert alert-danger m--padding-30 selectEntekhabeFarsangVideoAndPamphlet" role="alert">
     <div class="row">
         <div class="col-md-6">
-            <p class="display-6 a--margin-0">
+            <p class="display-6 m--marginless">
                 اگر الآن می خوای فرسنگ هارو ببینی، پس انتخابش کن
             </p>
         </div>
@@ -16,108 +16,11 @@
         </div>
     </div>
 </div>
-<style>
-    .entekhabeFarsangVideoAndPamphlet {
-        position: relative;
-    }
-    .entekhabeFarsangVideoAndPamphlet:before {
-        content: ' ';
-        border-right: solid 25px transparent;
-        border-left: solid 25px transparent;
-        border-bottom: solid 25px white;
-        position: absolute;
-        left: 25%;
-        top: -25px;
-    }
-    .entekhabeFarsangVideoAndPamphlet .nav.nav-tabs {
-        width: max-content;
-        margin: auto;
-    }
-    .entekhabeFarsangVideoAndPamphlet .nav-tabs .nav-item {
-        margin: 0;
-    }
-    .entekhabeFarsangVideoAndPamphlet .nav-tabs .nav-item .nav-link,
-    .entekhabeFarsangVideoAndPamphlet .nav-tabs .nav-link {
-        background-color: white;
-        color: #b6b6b6;
-        border-top: none;
-        border-right: none;
-        border-left: none;
-        border-bottom: solid 3px #b6b6b6;
-        font-size: 2rem;
-        font-weight: bold;
-        padding: 10px 50px;
-    }
-    .entekhabeFarsangVideoAndPamphlet .nav-tabs .nav-item.show .nav-link,
-    .entekhabeFarsangVideoAndPamphlet .nav-tabs .nav-link.active {
-        color: black;
-        border-bottom: solid 3px black;
-    }
-    .entekhabeFarsangVideoAndPamphlet .m-portlet__body {
-        padding-top: 0 !important;
-    }
-    .entekhabeFarsangVideoAndPamphlet .m-portlet__body .closeBtn {
-        position: absolute;
-        top: 20px;
-        right: 20px;
-    }
-    .entekhabeFarsangVideoAndPamphlet .tab-content .tab-pane {
-        position: relative;
-    }
-    .entekhabeFarsangVideoAndPamphlet .tab-content .tab-pane .whiteShadow {
-        content: ' ';
-        position: absolute;
-        left: 0;
-        top: 0;
-        height: calc( 100% - 10px);
-        width: 145px;
-        background: transparent;
-        background: linear-gradient(90deg, rgb(255, 255, 255) 0%, rgba(255,255,255,0) 60%);
-    }
-    .entekhabeFarsangVideoAndPamphlet .tab-content .tab-pane .ScrollCarousel-next,
-    .entekhabeFarsangVideoAndPamphlet .tab-content .tab-pane .ScrollCarousel-previous {
-        position: absolute;
-        height: calc( 100% - 15px);
-        color: #f66e84;
-        top: 0;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        z-index: 5;
-        cursor: pointer;
-    }
-
-    .entekhabeFarsangVideoAndPamphlet .tab-content .tab-pane .ScrollCarousel-next .fa,
-    .entekhabeFarsangVideoAndPamphlet .tab-content .tab-pane .ScrollCarousel-previous .fa {
-        font-size: 3rem;
-    }
-    .entekhabeFarsangVideoAndPamphlet .tab-content .tab-pane .ScrollCarousel-next {
-        left: 0;
-    }
-    .entekhabeFarsangVideoAndPamphlet .tab-content .tab-pane .ScrollCarousel-previous {
-        right: 0;
-    }
-    .m-portlet .m-portlet__body .closeBtn {
-        cursor: pointer;
-    }
-
-    @media (max-width: 767px) {
-        .entekhabeFarsangVideoAndPamphlet:before {
-            left: 50%;
-        }
-    }
-
-    @media (max-width: 400px) {
-        .entekhabeFarsangVideoAndPamphlet .nav-tabs .nav-item .nav-link, .entekhabeFarsangVideoAndPamphlet .nav-tabs .nav-link {
-            font-size: 1.2rem;
-        }
-    }
-</style>
 
 <div class="row">
     <div class="col">
         <div class="m-portlet entekhabeFarsangVideoAndPamphlet">
-            <div class="m-portlet__body">
+            <div class="m-portlet__body m--padding-bottom-10">
                 <div class="closeBtn" onclick="$(this).parents('.row').fadeOut();">
                     <i class="fa fa-times"></i>
                 </div>
@@ -133,7 +36,7 @@
                     <div class="tab-pane active" id="m_tabs_video" role="tabpanel">
                         <div class="ScrollCarousel">
 
-                            <div class="ScrollCarousel-Items m--margin-top-20" id="ScrollCarousel1">
+                            <div class="ScrollCarousel-Items m--margin-top-20">
 
                                 @foreach($lastSetVideos as $item)
                                     <div class="item w-55443211">
@@ -158,36 +61,15 @@
                             <div class="whiteShadow"></div>
 
                         </div>
+                        <div class="text-center showVideoMessage"></div>
+                        <div class="text-center m--margin-top-10">
+                            <a href="#">
+                                <button type="button" class="btn m-btn--pill btn-outline-danger btnShowMoreVideo">مشاهده تمام فیلم ها</button>
+                            </a>
+                        </div>
                     </div>
                     <div class="tab-pane" id="m_tabs_pamphlet" role="tabpanel">
-
-
                         <div class="ScrollCarousel">
-<style>
-    .pamphletItem {
-        display: flex;
-        flex-flow: row;
-        -webkit-box-shadow: 0 0 5px -4px rgba(0,0,0,0.75);
-        -moz-box-shadow: 0 0 5px -4px rgba(0,0,0,0.75);
-        box-shadow: 0 0 5px -4px rgba(0,0,0,0.75);
-        margin-top: 5px;
-        padding: 5px;
-    }
-    .pamphletItem .pamphletItem-thumbnail {
-        flex-basis: 15%;
-        max-width: 15%;
-        display: flex;
-        align-items: center;
-    }
-    .pamphletItem .pamphletItem-name {
-        flex-basis: 85%;
-        max-width: 85%;
-        padding-right: 5px;
-        display: flex;
-        align-items: center;
-        overflow: hidden;
-    }
-</style>
                             <div class="ScrollCarousel-Items m--margin-top-20">
                                 @foreach($lastSetPamphlets as $item)
                                     <div class="item w-55443211">
@@ -224,7 +106,12 @@
                             <div class="whiteShadow"></div>
 
                         </div>
-
+                        <div class="text-center showPamphletMessage"></div>
+                        <div class="text-center m--margin-top-10">
+                            <a href="#">
+                                <button type="button" class="btn m-btn--pill btn-outline-danger btnShowMorePamphlet">مشاهده تمام جزوات</button>
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>

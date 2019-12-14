@@ -579,6 +579,10 @@ class Mix {
                 'node_modules/highcharts/modules/drilldown.js',
                 'node_modules/highcharts/modules/networkgraph.js',
 
+                'node_modules/highcharts/modules/sankey.js',
+                'node_modules/highcharts/modules/organization.js',
+                'node_modules/highcharts/modules/accessibility.js',
+
                 'public/acm/AlaatvCustomFiles/components/AlaaLoading/script.js',
                 // 'public/acm/AlaatvCustomFiles/components/CustomDropDown/js.js',
 
@@ -649,7 +653,7 @@ class Mix {
                 'public/acm/videojs/plugins/seek-to-point.js',
                 'public/acm/videojs/lang/fa.js',
 
-                'public/acm/AlaatvCustomFiles/components/ScrollCarousel/js.js',
+                // 'public/acm/AlaatvCustomFiles/components/ScrollCarousel/js.js',
                 'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/js.js',
                 'public/acm/AlaatvCustomFiles/components/AnimateScrollTo/js.js',
                 'public/acm/AlaatvCustomFiles/components/aSticky/aSticky.js',

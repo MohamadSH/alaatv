@@ -1,29 +1,10 @@
-<style>
-    .soalateMotedavel.m-accordion.m-accordion--section .m-accordion__item {
-        margin-bottom: 0.5rem;
-    }
-    .soalateMotedavel.m-accordion.m-accordion--section .m-accordion__item .m-accordion__item-head,
-    .soalateMotedavel.m-accordion.m-accordion--solid .m-accordion__item .m-accordion__item-head.collapsed {
-        background-color: #bebebe;
-        color: white !important;
-        font-weight: bold;
-    }
-    .soalateMotedavel.m-accordion.m-accordion--toggle-arrow .m-accordion__item .m-accordion__item-head .m-accordion__item-mode,
-    .soalateMotedavel.m-accordion.m-accordion--toggle-arrow .m-accordion__item .m-accordion__item-head.collapsed .m-accordion__item-mode {
-        color: white !important;
-    }
-    .soalateMotedavel.m-accordion.m-accordion--section .m-accordion__item .m-accordion__item-body .m-accordion__item-content,
-    .soalateMotedavel.m-accordion.m-accordion--section .m-accordion__item .m-accordion__item-body > span {
-        padding-top: 1.5rem;
-    }
-</style>
 <div class="m-accordion m-accordion--default m-accordion--solid m-accordion--section  m-accordion--toggle-arrow soalateMotedavel" id="soalateMotedavel" role="tablist">
-    
+
     <!--begin::Item-->
     <div class="m-accordion__item">
         <div class="m-accordion__item-head" role="tab" id="soalateMotedavel_item_1_head" data-toggle="collapse" href="#soalateMotedavel_item_1_body" aria-expanded="true">
             <span class="m-accordion__item-icon">
-            
+
             </span>
             <span class="m-accordion__item-title">
                 میشه با 10 ساعت مطالعه در هفته، به برنامه این دوره رسید؟
@@ -39,7 +20,7 @@
         </div>
     </div>
     <!--end::Item-->
-    
+
     <!--begin::Item-->
     <div class="m-accordion__item">
         <div class="m-accordion__item-head collapsed" role="tab" id="soalateMotedavel_item_2_head" data-toggle="collapse" href="#soalateMotedavel_item_2_body" aria-expanded="false">
@@ -58,7 +39,7 @@
         </div>
     </div>
     <!--end::Item-->
-    
+
     <!--begin::Item-->
     <div class="m-accordion__item">
         <div class="m-accordion__item-head collapsed" role="tab" id="soalateMotedavel_item_3_head" data-toggle="collapse" href="#soalateMotedavel_item_3_body" aria-expanded="false">
@@ -77,7 +58,7 @@
         </div>
     </div>
     <!--end::Item-->
-    
+
     <!--begin::Item-->
     <div class="m-accordion__item">
         <div class="m-accordion__item-head collapsed" role="tab" id="soalateMotedavel_item_4_head" data-toggle="collapse" href="#soalateMotedavel_item_4_body" aria-expanded="false">

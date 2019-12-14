@@ -1,20 +1,3 @@
-<style>
-    .m-portlet.transparentBack {
-        background-color: transparent;
-        box-shadow: none;
-        margin-top: -25px;
-    }
-    .m-portlet.transparentBack .m-portlet__head {
-        background-color: transparent;
-        border: none;
-    }
-    .m-portlet.transparentBack .m-portlet__body {
-        padding: 0;
-    }
-    .m-portlet .m-portlet__head .m-portlet__head-text .fa.fa-times  {
-        cursor: pointer;
-    }
-</style>
 <div class="row @if(isset($class)) {{$class}} @endif">
     <div class="col">
         <div class="m-portlet @if(isset($color) && $color === 'transparentBack') transparentBack @elseif(isset($color) && $color === 'red') m-portlet--danger m-portlet--head-solid-bg @endif">
@@ -33,7 +16,7 @@
                                     <span class="redSquare"></span>
                                 @endif
 
-                                <p class="display-6 a--margin-0">
+                                <p class="display-6 m--marginless">
                                     {!! $title !!}
                                 </p>
                             </h3>
@@ -44,9 +27,9 @@
             @endif
             <div class="m-portlet__body">
                 {!! $content !!}
-                @if(isset($btnMoreText))
+                @if(isset($btnMoreText) && $btnMoreText!==false)
                     <div class="text-right">
-                        <button type="button" class="btn m-btn--square btn-metal">
+                        <button type="button" class="btn m-btn--square btn-metal @if(isset($btnMoreClass)) {{$btnMoreClass}} @endif">
                             {{ $btnMoreText }}
                         </button>
                     </div>

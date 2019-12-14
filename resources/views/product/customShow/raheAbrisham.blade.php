@@ -3,57 +3,7 @@
 @section('page-css')
     <link href="{{ mix('/css/product-show-RaheAbrisham.css') }}" rel="stylesheet" type="text/css"/>
     <link href="{{ asset('/acm/AlaatvCustomFiles/components/CustomDropDown/style.css') }}" rel="stylesheet" type="text/css"/>
-    <style>
-        @if(
-            (!isset($block) || !isset($block->contents) || $block->contents->count() === 0) &&
-            (!isset($block) || !isset($block->sets) || $block->sets->count() === 0)
-        )
-            .productInfoNav-sampleVideo {
-            display: none !important;
-        }
-        @endif
-        @if(!isset($product->samplePhotos) || $product->samplePhotos->count() === 0)
-            .productInfoNav-samplePamphlet {
-            display: none !important;
-        }
-        @endif
-
-        @if(
-            mb_strlen(trim(strip_tags($product->shortDescription))) === 0 &&
-            mb_strlen(trim(strip_tags($product->longDescription))) === 0
-        )
-            .productInfoNav-detailes {
-            display: none !important;
-        }
-        @endif
-        @if($liveDescriptions->isEmpty())
-        .productInfoNav-liveDescription {
-            display: none !important;
-        }
-        @endif
-        @if(!isset($block) || !isset($block->products) || $block->products->count() === 0)
-            .productInfoNav-relatedProduct {
-            display: none !important;
-        }
-        @endif
-
-        #mapRoad {
-            position: relative;
-        }
-        #mapRoad img.background {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-        }
-         #mapRoad * {
-            font-family: IRANSans;
-        }
-        #mapRoad .highcharts-background {
-            fill: transparent;
-        }
-    </style>
+    <link href="{{ asset('/acm/AlaatvCustomFiles/css/page/product/customShow/raheAbrisham.css') }}" rel="stylesheet" type="text/css"/>
 @endsection
 
 @section('page-head')
@@ -120,8 +70,6 @@
 {{--    <div id="mustacheTest"></div>--}}
 {{--    <div id="mustacheTest2"></div>--}}
 
-
-
     <div class="row">
         <div class="col">
             @include('systemMessage.flash')
@@ -129,6 +77,13 @@
     </div>
 
     @include('product.partials.raheAbrisham.pictureAndMap')
+
+    @include('product.partials.raheAbrisham.descriptionBox', [
+        'title' => 'خرید مجدد دوره راه ابریشم',
+        'closeIcon' => true,
+        'class' => 'RepurchaseRow',
+        'content' => view('product.partials.raheAbrisham.repurchase')
+    ])
 
     @include('product.partials.raheAbrisham.descriptionBox', [
         'title' => 'راهنمایی آلایی هایی که تازه ثبت نام کردند',
@@ -162,7 +117,7 @@
             ])
         </div>
         <div class="col-md-6">
-            <img src="https://cdn.alaatv.com/upload/megamenuBackground-talaee.jpg?w=1083&amp;h=0" style="width: 100%;">
+            <img src="https://cdn.alaatv.com/upload/megamenuBackground-talaee.jpg?w=1083&amp;h=0" class="a--full-width">
         </div>
     </div>
 
@@ -172,11 +127,15 @@
         'content' => view('product.partials.raheAbrisham.soalateMotedavel')
     ])
 
+
+
     @include('product.partials.raheAbrisham.descriptionBox', [
         'title' => 'توضیحات لحظه ای و آخرین تغییرات',
         'class' => 'liveDescriptionRow',
         'color' => 'red',
-        'content' => view('product.partials.raheAbrisham.liveDescription')
+        'content' => view('product.partials.raheAbrisham.liveDescription', compact('liveDescriptions')),
+        'btnMoreText' => (count($liveDescriptions)>1)?'مطالعه اخبار قبلی':false,
+        'btnMoreClass' => 'showMoreLiveDescriptions',
     ])
 
 @endsection
@@ -203,6 +162,7 @@
             @endforeach
         ];
     </script>
+    <script src="{{ asset('/acm/AlaatvCustomFiles/components/ScrollCarousel/js.js') }}"></script>
     <script src="{{ asset('/acm/AlaatvCustomFiles/components/CustomDropDown/js.js') }}"></script>
     <script src="{{ mix('/js/product-show-RaheAbrisham.js') }}"></script>
     <script src="{{ asset('/acm/AlaatvCustomFiles/js/page/product/CustomShow/raheAbrisham.js') }}"></script>
