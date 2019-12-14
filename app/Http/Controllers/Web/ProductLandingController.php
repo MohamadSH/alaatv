@@ -611,31 +611,31 @@ class ProductLandingController extends Controller
                 'url' => route('product.show' , 377),
                 'hours' => 10
             ],
-            385 => [
-                'name' => 'همایش ریاضی تجربی گدار (ویژه راه ابریشم)',
-                'url' => route('product.show' , 385),
-                'hours' => 0
-            ],
             379 => [
                 'name' => 'همایش گسسته گدار',
                 'url' => route('product.show' , 379),
-                'hours' => 0
+                'hours' => 14
+            ],
+            387 => [
+                'name' => 'همایش شیمی گدار',
+                'url' => route('product.show' , 387),
+                'hours' => 14
+            ],
+            389 => [
+                'name' => 'همایش زیست شناسی گدار',
+                'url' => route('product.show' , 389),
+                'hours' => 18
             ],
             383 => [
                 'name' => 'همایش حسابان گدار',
                 'url' => route('product.show' , 383),
                 'hours' => 0
             ],
-            387 => [
-                'name' => 'همایش شیمی گدار',
-                'url' => route('product.show' , 387),
+            385 => [
+                'name' => 'همایش ریاضی تجربی گدار (ویژه راه ابریشم)',
+                'url' => route('product.show' , 385),
                 'hours' => 0
             ],
-            389 => [
-                'name' => 'همایش زیست شناسی گدار',
-                'url' => route('product.show' , 389),
-                'hours' => 0
-            ]
         ];
 
 
