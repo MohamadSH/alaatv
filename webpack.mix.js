@@ -461,6 +461,7 @@ class Mix {
             'public/css/set-show.css',
             [
                 'node_modules/toastr/build/toastr.min.js',
+                'public/acm/AlaatvCustomFiles/components/aSticky/aSticky.js',
                 'public/acm/AlaatvCustomFiles/components/Favorite/script.js',
                 'public/acm/AlaatvCustomFiles/js/page/set-show.js'
             ],

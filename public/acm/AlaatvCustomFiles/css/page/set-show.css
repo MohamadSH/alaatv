@@ -39,3 +39,10 @@
     align-items: center;
     justify-content: center;
 }
+
+.rightSideAdBanner {
+    padding: 0;
+}
+.rightSideAdBanner a {
+    display: block;
+}
