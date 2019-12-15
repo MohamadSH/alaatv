@@ -14,7 +14,6 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Input;
 use SEO;
 
 class ProductLandingController extends Controller
@@ -95,8 +94,8 @@ class ProductLandingController extends Controller
         return redirect()->route('web.landing.5', $request->all());
 
         $gheireHozoori = config('constants.ORDOO_GHEIRE_HOZOORI_NOROOZ_97_PRODUCT_ALLTOGHETHER');
-        if (Input::has('utm_term')) {
-            $utm_term = Input::get('utm_term');
+        if ($request->has('utm_term')) {
+            $utm_term = $request->get('utm_term');
             switch ($utm_term) {
                 case '700':
                     $gheireHozoori = config('constants.ORDOO_GHEIRE_HOZOORI_NOROOZ_97_PRODUCT_ALLTOGHETHER');

@@ -34,7 +34,7 @@ class Block extends JsonResource
         $sets     = $this->notRedirectedSets;
         $products = $this->products;
         $banners  = $this->banners;
-        $array    = [
+        return [
             'id'         => $this->id,
             'title'      => $this->title,
             'offer'      => $this->offer,
@@ -46,6 +46,5 @@ class Block extends JsonResource
             'banners'    => optional($banners)->isNotEmpty() ? $banners : null,
             'updated_at' => $this->updated_at,
         ];
-        return $array;
     }
 }

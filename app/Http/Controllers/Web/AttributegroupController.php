@@ -7,9 +7,8 @@ use App\Attributegroup;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\EditAttributegroupRequest;
 use App\Http\Requests\InsertAttributegroupRequest;
+use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Config;
-use Illuminate\Support\Facades\Input;
 
 class AttributegroupController extends Controller
 {
@@ -21,12 +20,12 @@ class AttributegroupController extends Controller
         $this->middleware('permission:'.config('constants.SHOW_ATTRIBUTEGROUP_ACCESS'), ['only' => 'edit']);
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $attributesetId  = Input::get('attributeset_id');
+        $attributesetId  = $request->get('attributeset_id');
         $attributegroups = Attributegroup::where('attributeset_id', $attributesetId)
             ->get();
-        
+
         return view('attributegroup.index', compact('attributegroups'));
     }
 
@@ -34,11 +33,11 @@ class AttributegroupController extends Controller
     {
         $attributegroup = new Attributegroup();
         $attributegroup->fill($request->all());
-        
+
         if ($attributegroup->save()) {
             $attributegroup->attributes()
                 ->sync($request->get('attributes', []));
-            
+
             return response()->json();
         }
 
@@ -53,7 +52,7 @@ class AttributegroupController extends Controller
         $groupAttributes = $attributegroup->attributes()
             ->pluck('id')
             ->toArray();
-        
+
         return view('attributegroup.edit', compact('attributegroup', 'attributeset', 'groupAttributes', 'attributes'));
     }
 
@@ -63,14 +62,14 @@ class AttributegroupController extends Controller
         $attributegroup->fill($request->all());
         $attributegroup->attributes()
             ->sync($request->get('attributes', []));
-        
+
         if ($attributegroup->update()) {
             session()->put("success", "اطلاعات گروه صفت با موفقیت اصلاح شد");
         }
         else {
             session()->put("error", "خطای پایگاه داده.");
         }
-        
+
         return redirect(action("Web\AttributesetController@edit", $attributeset));
     }
 
@@ -82,7 +81,7 @@ class AttributegroupController extends Controller
         else {
             session()->put('error', 'خطای پایگاه داده');
         }
-        
+
         return redirect()->back();
     }
 }

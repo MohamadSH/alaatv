@@ -9,6 +9,7 @@
 namespace App\Traits\Product;
 
 use App\Attributetype;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
 
@@ -279,7 +280,7 @@ trait ProductAttributeTrait
                                                         }
                                                     }
                                                 }
-                                                $groupedCheckbox = array_add($groupedCheckbox, $attributevalue->id, [
+                                                $groupedCheckbox = Arr::add($groupedCheckbox, $attributevalue->id, [
                                                     "displayName"           => null,
                                                     "index"                 => $attributevalueIndex,
                                                     "name"                  => $attributevalueIndex,
@@ -331,11 +332,11 @@ trait ProductAttributeTrait
 //                    dump($attributes);
                         $data = collect();
                         foreach ($attributes as $item) {
-                            $type  = array_get($item, 'type');
-                            $title = array_get($item, 'displayName');
+                            $type  = Arr::get($item, 'type');
+                            $title = Arr::get($item, 'displayName');
                             $data->push([
-                                "name" => array_get($item, 'name'),
-                                "id"   => array_get($item, 'value'),
+                                "name" => Arr::get($item, 'name'),
+                                "id"   => Arr::get($item, 'value'),
                             ]);
                         }
                         if (count($attributes) > 0) {
@@ -380,7 +381,7 @@ trait ProductAttributeTrait
                     "type"  => $type,
                 ],
             ]);
-//            $result = array_add($result, $attributevalue->id, $attributevalueIndex);
+//            $result = Arr::add($result, $attributevalue->id, $attributevalueIndex);
         }
     }
 

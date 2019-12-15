@@ -9,6 +9,7 @@ use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Arr;
 
 /**
  * App\Transaction
@@ -220,14 +221,14 @@ class Transaction extends BaseModel
         $parentsArray  = [];
         $myTransaction = $this;
         while ($myTransaction->hasParents()) {
-            $parentsArray  = array_add($parentsArray, $counter++, $myTransaction->parents->first());
+            $parentsArray  = Arr::add($parentsArray, $counter++, $myTransaction->parents->first());
             $myTransaction = $myTransaction->parents->first();
         }
         if (empty($parentsArray)) {
             return false;
         }
         else {
-            return array_last($parentsArray);
+            return Arr::last($parentsArray);
         }
     }
 

@@ -21,18 +21,18 @@ class ContactUsFormRequest extends FormRequest
             'fullName'             => 'required|max:255',
             'phone'                => 'sometimes|nullable|numeric',
             'message'              => 'required',
-            'g-recaptcha-response' => 'required|recaptcha',
+//            'g-recaptcha-response' => 'required|recaptcha',
         ];
 
         return $rules;
     }
-    
+
     public function prepareForValidation()
     {
         $this->replaceNumbers();
         parent::prepareForValidation();
     }
-    
+
     protected function replaceNumbers()
     {
         $input = $this->request->all();

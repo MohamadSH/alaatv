@@ -5,40 +5,40 @@ namespace App\Http\Controllers\Web;
 use App\Major;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Input;
+
 use App\Http\Requests\InsertMajorRequest;
 
 class MajorController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-    
+
         $majors = Major::orderBy('name');
-    
-        $majotIds = Input::get('ids');
+
+        $majotIds = $request->get('ids');
         if (strcmp(gettype($majotIds), 'string') == 0) {
             $majotIds = json_decode($majotIds);
         }
         if (isset($majotIds)) {
             $majors = $majors->whereIn('id', $majotIds);
         }
-    
-        $majorCodes    = Input::get('majorCode');
-        $majorParentId = Input::get('majorParent');
+
+        $majorCodes    = $request->get('majorCode');
+        $majorParentId = $request->get('majorParent');
         if (isset($majorCodes) && $majorParentId) {
             $majors = $majors->whereHas('parents', function ($q) use ($majorCodes, $majorParentId) {
                 $q->where('major1_id', $majorParentId)
                     ->whereIn('majorCode', $majorCodes);
             });
         }
-    
-        $parentIds = Input::get('parents');
+
+        $parentIds = $request->get('parents');
         if (isset($parentIds)) {
             $majors = $majors->whereHas('parents', function ($q) use ($parentIds) {
                 $q->whereIn('major1_id', $parentIds);
             });
         }
-        
+
         return $majors->get();
     }
 
@@ -56,16 +56,16 @@ class MajorController extends Controller
                 $flag = true;
             }
         }
-        
+
         if ($flag) {
-            $parentMajorId = Input::get('parent');
+            $parentMajorId = $request->get('parent');
             if (!in_array($parentMajorId, [
                 1,
                 2,
                 3,
             ])) {
                 session()->put('error', 'رشته والد باید ریاضی یا تجربی یا انسانی باشد');
-                
+
                 return redirect()->back();
             }
             if ($major->parents()
@@ -88,7 +88,7 @@ class MajorController extends Controller
         else {
             session()->put('success', 'خطای پایگاه داده در درج رشته');
         }
-        
+
         return redirect()->back();
     }
 
@@ -104,7 +104,7 @@ class MajorController extends Controller
             }
         }
         session()->put('success', 'درج کدهای رشته ها با موفقیت انجام شد!');
-        
+
         return redirect()->back();
     }
 }

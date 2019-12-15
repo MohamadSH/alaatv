@@ -9,7 +9,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
  *
  * @mixin \App\Contentset
  * */
-class SetInContent extends JsonResource
+class SetInBlock extends JsonResource
 {
     function __construct(\App\Contentset $model)
     {
@@ -35,6 +35,8 @@ class SetInContent extends JsonResource
             'short_title'                => $this->when(isset($this->shortName) , $this->shortName),
             'photo'                     => $this->when(isset($this->photo) , $this->photo),
             'url'                       => new Url($this),
+            'active_contents_count'     => $this->activeContents->count() ,
+            'author'                    => $this->when(isset($this->author) , $this->author),
         ];
     }
 }

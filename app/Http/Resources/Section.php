@@ -25,6 +25,7 @@ class Section extends JsonResource
         }
 
         return [
+            'id'   => $this->id,
             'name' => $this->when(isset($this->name) , $this->name) ,
         ];
     }

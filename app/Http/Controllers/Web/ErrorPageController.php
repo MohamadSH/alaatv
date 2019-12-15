@@ -40,13 +40,13 @@ class ErrorPageController extends Controller
     /**
      * Show the general error page.
      *
-     * @param  string  $message
+     * @param string $message
      *
-     * @return Response
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function errorPage($message)
     {
-        //        $message = Input::get("message");
+        //        $message = $request->get("message");
         if (strlen($message) <= 0) {
             $message = '';
         }

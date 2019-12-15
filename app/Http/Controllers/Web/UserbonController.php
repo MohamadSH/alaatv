@@ -7,15 +7,16 @@ use App\Http\Requests\InsertUserBonRequest;
 use App\Product;
 use App\Traits\Helper;
 use App\Userbon;
+use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Input;
+
 
 class UserbonController extends Controller
 {
     use Helper;
-    
+
     protected $response;
-    
+
     function __construct()
     {
         /** setting permissions
@@ -26,18 +27,18 @@ class UserbonController extends Controller
         $this->middleware('permission:'.config('constants.REMOVE_USER_BON_ACCESS'), ['only' => 'destroy']);
     }
 
-    public function index()
+    public function index(Request $request)
     {
         $userbons = Userbon::OrderBy('created_at', 'Desc');
-        
-        $createdSinceDate  = Input::get('createdSinceDate');
-        $createdTillDate   = Input::get('createdTillDate');
-        $createdTimeEnable = Input::get('createdTimeEnable');
+
+        $createdSinceDate  = $request->get('createdSinceDate');
+        $createdTillDate   = $request->get('createdTillDate');
+        $createdTimeEnable = $request->get('createdTimeEnable');
         if (strlen($createdSinceDate) > 0 && strlen($createdTillDate) > 0 && isset($createdTimeEnable)) {
             $userbons = $this->timeFilterQuery($userbons, $createdSinceDate, $createdTillDate, 'created_at');
         }
-        
-        $productsId = Input::get("products");
+
+        $productsId = $request->get("products");
         if (isset($productsId)) {
             if (!in_array(0, $productsId)) {
                 $products = Product::whereIn('id', $productsId)
@@ -60,42 +61,42 @@ class UserbonController extends Controller
                 $userbons = $userbons->whereHas("orderproduct");
             }
         }
-        
-        $firstName = trim(Input::get('firstName'));
+
+        $firstName = trim($request->get('firstName'));
         if (isset($firstName) && strlen($firstName) > 0) {
             $userbons = $userbons->whereHas('user', function ($q) use ($firstName) {
                 $q->where('firstName', 'like', '%'.$firstName.'%');
             });
         }
-        
-        $lastName = trim(Input::get('lastName'));
+
+        $lastName = trim($request->get('lastName'));
         if (isset($lastName) && strlen($lastName) > 0) {
             $userbons = $userbons->whereHas('user', function ($q) use ($lastName) {
                 $q->where('lastName', 'like', '%'.$lastName.'%');
             });
         }
-        
-        $nationalCode = trim(Input::get('nationalCode'));
+
+        $nationalCode = trim($request->get('nationalCode'));
         if (isset($nationalCode) && strlen($nationalCode) > 0) {
             $userbons = $userbons->whereHas('user', function ($q) use ($nationalCode) {
                 $q->where('nationalCode', 'like', '%'.$nationalCode.'%');
             });
         }
-        
-        $mobile = trim(Input::get('mobile'));
+
+        $mobile = trim($request->get('mobile'));
         if (isset($mobile) && strlen($mobile) > 0) {
             $userbons = $userbons->whereHas('user', function ($q) use ($mobile) {
                 $q->where('mobile', 'like', '%'.$mobile.'%');
             });
         }
-        
-        $userBonStatus = Input::get("userBonStatus");
+
+        $userBonStatus = $request->get("userBonStatus");
         if (isset($userBonStatus) && strlen($userBonStatus) > 0) {
             $userbons = $userbons->where("userbonstatus_id", $userBonStatus);
         }
-        
+
         $userbons = $userbons->get();
-        
+
         return view('userBon.index', compact('userbons'));
     }
 
@@ -114,7 +115,7 @@ class UserbonController extends Controller
     public function destroy(Userbon $userbon)
     {
         $userbon->delete();
-        
+
         return redirect()->back();
     }
 }
