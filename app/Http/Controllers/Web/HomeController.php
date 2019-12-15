@@ -10,7 +10,6 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Contracts\Encryption\DecryptException;
 use Illuminate\Support\Facades\{  Config, Storage , File};
-use Illuminate\Support\Arr;
 use App\{Notifications\sendLink,
     UploadCenter,
     User,
