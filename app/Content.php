@@ -587,12 +587,14 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
         if(isset($this->id)) {
             return [
                 'v1' => route('api.v1.content.show' , $this),
-                'v2' => route('api.v2.content.show' , $this)
+//                'v2' => route('api.v2.content.show' , $this)
             ];
 
         }
 
-        return [];
+        return [
+            'v1' => ''
+        ];
     }
 
     public function getApiUrlV1Attribute()
