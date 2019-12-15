@@ -74,7 +74,7 @@ class LiveDescriptionController extends Controller
      * Show the form for editing the specified resource.
      *
      * @param LiveDescription $liveDescription
-     * @return void
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function edit(LiveDescription $liveDescription)
     {

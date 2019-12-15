@@ -33,12 +33,14 @@ class VoucherController extends Controller
     /**
      * Submit user request for voucher request
      *
-     * @param  Request  $request
+     * @param Request $request
      *
-     * @return Response
+     * @return \Illuminate\Contracts\View\Factory|RedirectResponse|\Illuminate\Routing\Redirector|\Illuminate\View\View
      */
     public function voucherRequest(Request $request)
     {
+        return redirect(route('web.index') , Response::HTTP_FOUND);
+
         $url   = $request->url();
         $title = "آلاء| درخواست اینترنت آسیاتک";
         SEO::setTitle($title);
@@ -79,6 +81,7 @@ class VoucherController extends Controller
             ->orderBy("completed_at")
             ->get();
         $userAsitechPendingOrders = $asitechPendingOrders->where("user_id", $user->id);
+        $rank=0;
         if ($userAsitechPendingOrders->isNotEmpty()) {
             $rank = $userAsitechPendingOrders->keys()
                     ->first() + 1;

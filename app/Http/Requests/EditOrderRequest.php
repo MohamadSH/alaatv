@@ -31,7 +31,7 @@ class EditOrderRequest extends FormRequest
             'orderstatus_id'   => 'exists:orderstatuses,id',
             'paymentstatus_id' => 'exists:paymentstatuses,id',
         ];
-        if ($request->get(['transactionstatus_id']) != config("constants.TRANSACTION_STATUS_SUCCESSFUL")) {
+        if ($request->get('transactionstatus_id') != config("constants.TRANSACTION_STATUS_SUCCESSFUL")) {
             $rules['transactionID'] = 'max:0';
         }
 
