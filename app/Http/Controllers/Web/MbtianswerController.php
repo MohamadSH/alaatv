@@ -9,7 +9,7 @@ use App\Mbtianswer;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Input;
+
 
 class MbtianswerController extends Controller
 {
@@ -36,15 +36,15 @@ class MbtianswerController extends Controller
         return view("mbti.index", compact("mbtiAnswers"));
     }
 
-    public function create()
+    public function create(Request $request)
     {
-        $action = Input::get("action");
+        $action = $request->get("action");
         if (strcmp($action, "correctExam") == 0) {
             if (!Auth::user()
                 ->can(config('constants.LIST_MBTIANSWER_ACCESS'))) {
                 redirect(action("Web\ErrorPageController@error403"));
             }
-            $userId = Input::get("user_id");
+            $userId = $request->get("user_id");
             if (!isset($userId)) {
                 redirect(action("Web\ErrorPageController@error404"));
             }

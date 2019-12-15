@@ -3,8 +3,7 @@
 namespace App\Http\Requests;
 
 use App\Traits\CharacterCommon;
-use Illuminate\Support\Facades\Input;
-use Illuminate\Support\Facades\Config;
+
 use Illuminate\Foundation\Http\FormRequest;
 
 class EditOrderRequest extends FormRequest
@@ -20,11 +19,11 @@ class EditOrderRequest extends FormRequest
             ->can(config('constants.EDIT_ORDER_ACCESS'))) {
             return true;
         }
-    
+
         return false;
     }
 
-    public function rules()
+    public function rules(\Illuminate\Http\Request $request)
     {
         $this->id = $_REQUEST["id"];
         $rules    = [
@@ -32,19 +31,19 @@ class EditOrderRequest extends FormRequest
             'orderstatus_id'   => 'exists:orderstatuses,id',
             'paymentstatus_id' => 'exists:paymentstatuses,id',
         ];
-        if (Input::get(['transactionstatus_id']) != config("constants.TRANSACTION_STATUS_SUCCESSFUL")) {
+        if ($request->get(['transactionstatus_id']) != config("constants.TRANSACTION_STATUS_SUCCESSFUL")) {
             $rules['transactionID'] = 'max:0';
         }
-    
+
         return $rules;
     }
-    
+
     public function prepareForValidation()
     {
         $this->replaceNumbers();
         parent::prepareForValidation();
     }
-    
+
     protected function replaceNumbers()
     {
         $input = $this->request->all();

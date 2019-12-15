@@ -24,8 +24,7 @@ class Producttype extends JsonResource
         }
 
         return [
-            'display_name' => $this->when(isset($this->displayName) , $this->displayName) ,
-            'name'        =>  $this->when(isset($this->name) , $this->name) ,
+            'type'        => $this->id ,
         ];
     }
 }

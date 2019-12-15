@@ -5,6 +5,7 @@ namespace App\Http\ViewComposers;
 
 use App\Traits\CharacterCommon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use Illuminate\View\View;
 
 class ContentSearchComposer
@@ -1386,7 +1387,7 @@ class ContentSearchComposer
         }, $inputs);
         $default   = array_intersect($tags, $inputSlug);
         if (is_array($default)) {
-            $default = array_first($default);
+            $default = Arr::first($default);
 
             return array_search($default, $inputSlug);
         }

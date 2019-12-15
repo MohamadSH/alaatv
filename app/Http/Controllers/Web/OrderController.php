@@ -32,17 +32,12 @@ use Illuminate\Http\Request;
 use App\Traits\ProductCommon;
 use App\Traits\RequestCommon;
 use Illuminate\Http\Response;
-use App\Afterloginformcontrol;
 use App\Traits\APIRequestCommon;
-use Illuminate\Support\Facades\DB;
-use App\Collection\OrderCollections;
+use Illuminate\Support\Arr;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\DonateRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Input;
 use App\Http\Requests\EditOrderRequest;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
@@ -101,70 +96,70 @@ class OrderController extends Controller
                     config('constants.ORDER_STATUS_OPEN_BY_ADMIN'));
         }
 
-        $createdSinceDate  = Input::get('createdSinceDate');
-        $createdTillDate   = Input::get('createdTillDate');
-        $createdTimeEnable = Input::get('createdTimeEnable');
+        $createdSinceDate  = $request->get('createdSinceDate');
+        $createdTillDate   = $request->get('createdTillDate');
+        $createdTimeEnable = $request->get('createdTimeEnable');
         if (strlen($createdSinceDate) > 0 && strlen($createdTillDate) > 0 && isset($createdTimeEnable)) {
             $orders = $this->timeFilterQuery($orders, $createdSinceDate, $createdTillDate, 'created_at');
         }
 
-        $updatedSinceDate  = Input::get('updatedSinceDate');
-        $updatedTillDate   = Input::get('updatedTillDate');
-        $updatedTimeEnable = Input::get('updatedTimeEnable');
+        $updatedSinceDate  = $request->get('updatedSinceDate');
+        $updatedTillDate   = $request->get('updatedTillDate');
+        $updatedTimeEnable = $request->get('updatedTimeEnable');
         if (strlen($updatedSinceDate) > 0 && strlen($updatedTillDate) > 0 && isset($updatedTimeEnable)) {
             $orders = $this->timeFilterQuery($orders, $updatedSinceDate, $updatedTillDate, 'updated_at');
         }
 
-        $completedSinceDate  = Input::get('completedSinceDate');
-        $completedTillDate   = Input::get('completedTillDate');
-        $completedTimeEnable = Input::get('completedTimeEnable');
+        $completedSinceDate  = $request->get('completedSinceDate');
+        $completedTillDate   = $request->get('completedTillDate');
+        $completedTimeEnable = $request->get('completedTimeEnable');
         if (strlen($completedSinceDate) > 0 && strlen($completedTillDate) > 0 && isset($completedTimeEnable)) {
             $orders = $this->timeFilterQuery($orders, $completedSinceDate, $completedTillDate, 'completed_at',
                 $sinceTime = '00:00:00', $tillTime = '23:59:59',
                 false);
         }
 
-        $firstName = trim(Input::get('firstName'));
+        $firstName = trim($request->get('firstName'));
         if (isset($firstName) && strlen($firstName) > 0) {
             $orders = $orders->whereHas('user', function ($q) use ($firstName) {
                 $q->where('firstName', 'like', '%'.$firstName.'%');
             });
         }
 
-        $lastName = trim(Input::get('lastName'));
+        $lastName = trim($request->get('lastName'));
         if (isset($lastName) && strlen($lastName) > 0) {
             $orders = $orders->whereHas('user', function ($q) use ($lastName) {
                 $q->where('lastName', 'like', '%'.$lastName.'%');
             });
         }
 
-        $nationalCode = trim(Input::get('nationalCode'));
+        $nationalCode = trim($request->get('nationalCode'));
         if (isset($nationalCode) && strlen($nationalCode) > 0) {
             $orders = $orders->whereHas('user', function ($q) use ($nationalCode) {
                 $q->where('nationalCode', 'like', '%'.$nationalCode.'%');
             });
         }
 
-        $mobile = trim(Input::get('mobile'));
+        $mobile = trim($request->get('mobile'));
         if (isset($mobile) && strlen($mobile) > 0) {
             $orders = $orders->whereHas('user', function ($q) use ($mobile) {
                 $q->where('mobile', 'like', '%'.$mobile.'%');
             });
         }
 
-        $orderStatusesId = Input::get('orderStatuses');
+        $orderStatusesId = $request->get('orderStatuses');
         //        if(isset($orderStatusesId) && !in_array(0, $orderStatusesId))
         if (isset($orderStatusesId)) {
             $orders = Order::orderStatusFilter($orders, $orderStatusesId);
         }
 
-        $paymentStatusesId = Input::get('paymentStatuses');
+        $paymentStatusesId = $request->get('paymentStatuses');
         //        if(isset($paymentStatusesId) && !in_array(0, $paymentStatusesId))
         if (isset($paymentStatusesId)) {
             $orders = Order::paymentStatusFilter($orders, $paymentStatusesId);
         }
 
-        $productsId = Input::get('products');
+        $productsId = $request->get('products');
         if (isset($productsId) && !in_array(0, $productsId)) {
             $products = Product::whereIn('id', $productsId)
                 ->get();
@@ -186,7 +181,7 @@ class OrderController extends Controller
             });
         }
 
-        $extraAttributevaluesId = Input::get('extraAttributes');
+        $extraAttributevaluesId = $request->get('extraAttributes');
         if (isset($extraAttributevaluesId)) {
             if (isset($productsId) && !in_array(0, $productsId)) {
                 $orders = $orders->whereHas('orderproducts', function ($q) use ($extraAttributevaluesId, $productsId) {
@@ -204,14 +199,14 @@ class OrderController extends Controller
             }
         }
 
-        $majorEnable = Input::get('majorEnable');
-        $majorsId    = Input::get('majors');
+        $majorEnable = $request->get('majorEnable');
+        $majorsId    = $request->get('majors');
         if (isset($majorEnable) && isset($majorsId)) {
             $orders = Order::UserMajorFilter($orders, $majorsId);
         }
 
-        $couponEnable = Input::get('couponEnable');
-        $couponsId    = Input::get('coupons');
+        $couponEnable = $request->get('couponEnable');
+        $couponsId    = $request->get('coupons');
         if (isset($couponEnable) && isset($couponsId)) {
             if (in_array(0, $couponsId)) {
                 $orders = $orders->whereDoesntHave('coupon');
@@ -224,16 +219,16 @@ class OrderController extends Controller
             }
         }
 
-        $transactionStatusEnable = Input::get('transactionStatusEnable');
-        $transactionStatusesId   = Input::get('transactionStatuses');
+        $transactionStatusEnable = $request->get('transactionStatusEnable');
+        $transactionStatusesId   = $request->get('transactionStatuses');
         if (isset($transactionStatusEnable) && isset($transactionStatusesId)) {
             $orders = $orders->whereHas('transactions', function ($q) use ($transactionStatusesId) {
                 $q->whereIn('transactionstatus_id', $transactionStatusesId);
             });
         }
 
-        $checkoutStatusEnable = Input::get('checkoutStatusEnable');
-        $checkoutStatusesId   = Input::get('checkoutStatuses');
+        $checkoutStatusEnable = $request->get('checkoutStatusEnable');
+        $checkoutStatusesId   = $request->get('checkoutStatuses');
         if (isset($checkoutStatusEnable) && isset($checkoutStatusesId)) {
             if (isset($productsId) && !in_array(0, $productsId)) {
                 $orders = $orders->whereHas('orderproducts', function ($q) use ($checkoutStatusesId, $productsId) {
@@ -259,7 +254,7 @@ class OrderController extends Controller
             }
         }
 
-        $withoutPostalCode = Input::get('withoutPostalCode');
+        $withoutPostalCode = $request->get('withoutPostalCode');
         if (isset($withoutPostalCode)) {
             $orders = $orders->whereHas('user', function ($q) {
                 $q->where(function ($q) {
@@ -268,7 +263,7 @@ class OrderController extends Controller
                 });
             });
         } else {
-            $postalCode = Input::get('postalCode');
+            $postalCode = $request->get('postalCode');
             if (isset($postalCode) && strlen($postalCode) > 0) {
                 $orders = $orders->whereHas('user', function ($q) use ($postalCode) {
                     $q->where('postalCode', 'like', '%'.$postalCode.'%');
@@ -276,7 +271,7 @@ class OrderController extends Controller
             }
         }
 
-        $withoutProvince = Input::get('withoutProvince');
+        $withoutProvince = $request->get('withoutProvince');
         if (isset($withoutProvince)) {
             $orders = $orders->whereHas('user', function ($q) {
                 $q->where(function ($q) {
@@ -285,7 +280,7 @@ class OrderController extends Controller
                 });
             });
         } else {
-            $province = Input::get('province');
+            $province = $request->get('province');
             if (isset($province) && strlen($province) > 0) {
                 $orders = $orders->whereHas('user', function ($q) use ($province) {
                     $q->where('province', 'like', '%'.$province.'%');
@@ -293,7 +288,7 @@ class OrderController extends Controller
             }
         }
 
-        $withoutCity = Input::get('withoutCity');
+        $withoutCity = $request->get('withoutCity');
         if (isset($withoutCity)) {
             $orders = $orders->whereHas('user', function ($q) {
                 $q->where(function ($q) {
@@ -302,7 +297,7 @@ class OrderController extends Controller
                 });
             });
         } else {
-            $city = Input::get('city');
+            $city = $request->get('city');
             if (isset($city) && strlen($city) > 0) {
                 $orders = $orders->whereHas('user', function ($q) use ($city) {
                     $q->where('city', 'like', '%'.$city.'%');
@@ -310,11 +305,11 @@ class OrderController extends Controller
             }
         }
 
-        $addressSpecialFilter = Input::get('addressSpecialFilter');
+        $addressSpecialFilter = $request->get('addressSpecialFilter');
         if (isset($addressSpecialFilter)) {
             switch ($addressSpecialFilter) {
                 case '0':
-                    $address = Input::get('address');
+                    $address = $request->get('address');
                     if (isset($address) && strlen($address) > 0) {
                         $orders = $orders->whereHas('user', function ($q) use ($address) {
                             $q->where('address', 'like', '%'.$address.'%');
@@ -341,7 +336,7 @@ class OrderController extends Controller
                     break;
             }
         } else {
-            $address = Input::get('address');
+            $address = $request->get('address');
             if (isset($address) && strlen($address) > 0) {
                 $orders = $orders->whereHas('user', function ($q) use ($address) {
                     $q->where('address', 'like', '%'.$address.'%');
@@ -349,7 +344,7 @@ class OrderController extends Controller
             }
         }
 
-        $withoutSchool = Input::get('withoutSchool');
+        $withoutSchool = $request->get('withoutSchool');
         if (isset($withoutSchool)) {
             $orders = $orders->whereHas('user', function ($q) {
                 $q->where(function ($q) {
@@ -358,7 +353,7 @@ class OrderController extends Controller
                 });
             });
         } else {
-            $school = Input::get('school');
+            $school = $request->get('school');
             if (isset($school) && strlen($school) > 0) {
                 $orders = $orders->whereHas('user', function ($q) use ($school) {
                     $q->where('school', 'like', '%'.$school.'%');
@@ -367,20 +362,20 @@ class OrderController extends Controller
         }
 
         //customer description , manager comment
-        $withoutCustomerDescription = Input::get('withoutOrderCustomerDescription');
+        $withoutCustomerDescription = $request->get('withoutOrderCustomerDescription');
         if (isset($withoutCustomerDescription)) {
             $orders = $orders->where(function ($q) {
                 $q->whereNull('customerDescription')
                     ->orWhere('customerDescription', '');
             });
         } else {
-            $customerDescription = Input::get('orderCustomerDescription');
+            $customerDescription = $request->get('orderCustomerDescription');
             if (isset($customerDescription) && strlen($customerDescription) > 0) {
                 $orders = $orders->where('customerDescription', 'like', '%'.$customerDescription.'%');
             }
         }
 
-        $withoutManagerComments = Input::get('withoutOrderManagerComments');
+        $withoutManagerComments = $request->get('withoutOrderManagerComments');
         if (isset($withoutManagerComments)) {
             $orders = $orders->whereDoesntHave('ordermanagercomments')
                 ->orWhereHas('ordermanagercomments', function ($q) {
@@ -388,7 +383,7 @@ class OrderController extends Controller
                         ->orWhere('comment', '');
                 });
         } else {
-            $managerComments = Input::get('orderManagerComments');
+            $managerComments = $request->get('orderManagerComments');
             if (isset($managerComments) && strlen($managerComments) > 0) {
                 $orders = $orders->whereHas('ordermanagercomments', function ($q) use ($managerComments) {
                     $q->where('comment', 'like', '%'.$managerComments.'%');
@@ -396,9 +391,9 @@ class OrderController extends Controller
             }
         }
 
-        //        $orderCost = Input::get("cost");
+        //        $orderCost = $request->get("cost");
         //        if(isset($orderCost) && strlen($orderCost) > 0){
-        //            $compareBy = Input::get("filterByCost");
+        //            $compareBy = $request->get("filterByCost");
         //            if(isset($compareBy) && (strcmp("$compareBy" , "=") == 0
         //                || strcmp("$compareBy" , ">") == 0
         //                || strcmp("$compareBy" , "<") == 0))
@@ -412,9 +407,9 @@ class OrderController extends Controller
         //            }
         //        }
         //
-        //        $discountCost = Input::get("discountCost");
+        //        $discountCost = $request->get("discountCost");
         //        if(isset($discountCost) && strlen($discountCost) > 0){
-        //            $discountCompareBy = Input::get("filterByDiscount");
+        //            $discountCompareBy = $request->get("filterByDiscount");
         //            if(isset($discountCompareBy) && (strcmp("$discountCompareBy" , "=") == 0
         //                || strcmp("$discountCompareBy" , ">") == 0
         //                || strcmp("$discountCompareBy" , "<") == 0))
@@ -423,8 +418,8 @@ class OrderController extends Controller
         //            }
         //        }
 
-        $sortBy   = Input::get('sortBy');
-        $sortType = Input::get('sortType');
+        $sortBy   = $request->get('sortBy');
+        $sortType = $request->get('sortType');
         if (strlen($sortBy) > 0 && strlen($sortType) > 0) {
             if (strcmp($sortBy, 'userLastName') == 0) {
                 $orders = $orders->join('users', 'orders.user_id', '=', 'users.id')
@@ -448,9 +443,9 @@ class OrderController extends Controller
         return $orders;
     }
 
-    public function create()
+    public function create(Request $request)
     {
-        $customer_id = Input::get('customer_id');
+        $customer_id = $request->get('customer_id');
         $customer    = User::FindOrFail($customer_id);
         $openOrders  = $customer->orders->where('orderstatus_id', config('constants.ORDER_STATUS_OPEN_BY_ADMIN'));
         if ($openOrders->isEmpty()) {
@@ -512,8 +507,8 @@ class OrderController extends Controller
             ->pluck('displayName', 'id')
             ->toArray();
         $coupons = Coupon::pluck('name', 'id')->toArray();
-        $coupons = array_add($coupons, 0, 'بدون کپن');
-        $coupons = array_sort_recursive($coupons);
+        $coupons = Arr::add($coupons, 0, 'بدون کپن');
+        $coupons = Arr::sortRecursive($coupons);
 
         $transactionGateways = TransactionGatewayRepo::getTransactionGateways(['enable'=>1])->get()->pluck('displayName' , 'id');
 

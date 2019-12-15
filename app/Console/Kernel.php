@@ -29,9 +29,9 @@ class Kernel extends ConsoleKernel
         $schedule->command('horizon:snapshot')
             ->everyFiveMinutes();
 
-        $schedule->command('backup:mysql-dump')
-            ->timezone('Asia/Tehran')
-            ->dailyAt('04:30');
+//        $schedule->command('backup:mysql-dump')
+//            ->timezone('Asia/Tehran')
+//            ->dailyAt('04:30');
 
         $schedule->command('alaaTv:employee:send:timeSheet 0')
             ->dailyAt('23:45')
