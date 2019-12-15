@@ -517,7 +517,11 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
 
     public function getUrlAttribute($value): string
     {
-        return route('c.show' , $this);
+        if(isset($this->id))
+        {
+            return route('c.show' , $this);
+        }
+        return '';
     }
 
     public function getPreviousUrlAttribute($value)
@@ -580,10 +584,15 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
 
     public function getApiUrlAttribute($value): array
     {
-        return [
-            'v1' => route('api.v1.content.show' , $this),
-            'v2' => route('api.v2.content.show' , $this)
-        ];
+        if(isset($this->id)) {
+            return [
+                'v1' => route('api.v1.content.show' , $this),
+                'v2' => route('api.v2.content.show' , $this)
+            ];
+
+        }
+
+        return [];
     }
 
     public function getApiUrlV1Attribute()

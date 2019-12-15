@@ -2,7 +2,6 @@
 
 namespace App\Http\Resources;
 
-use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
@@ -10,18 +9,30 @@ use Illuminate\Http\Resources\Json\JsonResource;
  *
  * @mixin \App\Product
  * */
-class Gift extends JsonResource
+class ProductInBlock extends JsonResource
 {
+    function __construct(\App\Product $model)
+    {
+        parent::__construct($model);
+    }
+
     /**
      * Transform the resource into an array.
      *
-     * @param  Request  $request
+     * @param  \Illuminate\Http\Request  $request
      * @return array
      */
     public function toArray($request)
     {
         if (!($this->resource instanceof \App\Product)) {
             return [];
+        }
+
+        if (isset($this->redirectUrl)) {
+            return [
+                'id'           => $this->id,
+                'redirect_url' => $this->redirectUrl,
+            ];
         }
 
         return [

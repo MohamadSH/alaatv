@@ -7,6 +7,7 @@ use App\Province;
 use App\Survey;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Response;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Route;
@@ -83,7 +84,7 @@ class SurveyController extends Controller
             $dataJson = json_decode($response->content());
             Request::replace($originalInput);
             foreach ($dataJson as $data) {
-                $questionAnswerArray = array_add($questionAnswerArray, $data->id, $data->name);
+                $questionAnswerArray = Arr::add($questionAnswerArray, $data->id, $data->name);
             }
         }
         $answersData->put($question->id, $questionAnswerArray);
@@ -126,9 +127,9 @@ class SurveyController extends Controller
         $rootMajorArray = [];
         $majorsArray    = [];
         foreach ($dataJson as $item) {
-            $majorsArray = array_add($majorsArray, $item->id, $item->name);
+            $majorsArray = Arr::add($majorsArray, $item->id, $item->name);
         }
-        $rootMajorArray = array_add($rootMajorArray, $userMajor->name, $majorsArray);
+        $rootMajorArray = Arr::add($rootMajorArray, $userMajor->name, $majorsArray);
         $questionsData->put($question->id, $rootMajorArray);
     }
 
@@ -173,9 +174,9 @@ class SurveyController extends Controller
             Request::replace($originalInput);
             $citiesArray = [];
             foreach ($dataJson as $item) {
-                $citiesArray = array_add($citiesArray, $item->id, $item->name);
+                $citiesArray = Arr::add($citiesArray, $item->id, $item->name);
             }
-            $provinceCityArray = array_add($provinceCityArray, $province->name, $citiesArray);
+            $provinceCityArray = Arr::add($provinceCityArray, $province->name, $citiesArray);
             $questionsData->put($question->id, $provinceCityArray);
         }
     }

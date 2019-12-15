@@ -25,29 +25,32 @@ class Content extends JsonResource
             return [];
         }
 
-        $file                   = $this->file;
-        $videoFileCollection    = $file->get('video');
-        $pamphletFileCollection = $file->get('pamphlet');
-
         $this->loadMissing('contenttype' , 'section' , 'user' , 'set');
+
+        if( $this->contenttype_id == config('constants.CONTENT_TYPE_ARTICLE') ){
+            $body = $this->context;
+        }else{
+            $body = $this->description;
+        }
 
         return [
             'id'             => $this->id,
             'redirect_url'   => $this->when(isset($this->redirectUrl) , $this->redirectUrl),
             'contenttype'    => $this->when(isset($this->contenttype_id) , function () {return New Contenttype($this->contenttype);}) ,
-//            'section'        => $this->when(isset($this->section_id) , function (){ return New Section($this->section);}),
-            'name'           => $this->when(isset($this->name) ,$this->name),
-            'description'    => $this->when(isset($this->description) , $this->description),
-            'tags'           => $this->when(isset($this->tags) , function () { return new Tag($this->tags); } ),
-            'context'        => $this->when( ($this->contenttype_id == config('constants.CONTENT_TYPE_ARTICLE')) && isset($this->context) , $this->context),
-            'file'           => [
-                'video'    => $this->when(isset($videoFileCollection) , function () use ($videoFileCollection) { return VideoFile::collection($videoFileCollection); } ),
-                'pamphlet' => $this->when(isset($pamphletFileCollection) , function () use ($pamphletFileCollection) { return PamphletFile::collection($pamphletFileCollection); } ),
-            ],
-            'duration'       => $this->when(isset($this->duration) , $this->duration),
-            //ToDo : It was before
-//            'photo'      => $this->when(isset($this->thumbnail) , $this->thumbnail),
-            'thumbnail'             => $this->when(isset($this->thumbnail) , $this->thumbnail),
+            'title'           => $this->when(isset($this->name) ,$this->name),
+            'body'            => $body,
+            'tags'            => $this->when(isset($this->tags) , function () { return new Tag($this->tags); } ),
+            'file'            => $this->when($this->contenttype_id == config('constants.CONTENT_TYPE_PAMPHLET') || $this->contenttype_id == config('constants.CONTENT_TYPE_VIDEO') , function (){
+                $file                   = $this->file;
+                $videoFileCollection    = $file->get('video');
+                $pamphletFileCollection = $file->get('pamphlet');
+                return [
+                    'video'    => $this->when(isset($videoFileCollection) , function () use ($videoFileCollection) { return VideoFile::collection($videoFileCollection); } ),
+                    'pamphlet' => $this->when(isset($pamphletFileCollection) , function () use ($pamphletFileCollection) { return PamphletFile::collection($pamphletFileCollection); } ),
+                ];
+            }),
+            'duration'              => $this->when(isset($this->duration) , $this->duration),
+            'photo'                 => $this->when(isset($this->thumbnail) , $this->thumbnail),
             'isFree'                => $this->isFree,
             'order'                 => $this->order,
             'page_view'             => $this->when(isset($this->page_view) , $this->page_view),

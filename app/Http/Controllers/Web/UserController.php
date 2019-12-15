@@ -15,15 +15,12 @@ use Illuminate\{
     Support\Collection,
     Support\Facades\DB,
     Support\Facades\View,
-    Support\Facades\Input,
     Support\Facades\Cache,
     Contracts\Filesystem\FileNotFoundException,
     Validation\ValidationException};
 use App\{Collection\OrderCollections,
-    Collection\TransactionCollection,
     Contacttype,
     Http\Requests\EditOrderRequest,
-    Http\Requests\EditUserPartialInfoRequest,
     Http\Requests\InsertContactRequest,
     Http\Requests\InsertPhoneRequest,
     Phonetype,
@@ -84,9 +81,9 @@ class UserController extends Controller
         $seePaidCost = null;
 
 
-        $createdTimeEnable = Input::get('createdTimeEnable');
-        $createdSinceDate  = Input::get('createdSinceDate');
-        $createdTillDate   = Input::get('createdTillDate');
+        $createdTimeEnable = $request->get('createdTimeEnable');
+        $createdSinceDate  = $request->get('createdSinceDate');
+        $createdTillDate   = $request->get('createdTillDate');
         if (strlen($createdSinceDate) > 0 && strlen($createdTillDate) > 0 && isset($createdTimeEnable)) {
             $createdSinceDate = Carbon::parse($createdSinceDate)
                     ->format('Y-m-d').' 00:00:00';
@@ -99,49 +96,49 @@ class UserController extends Controller
             $users = User::orderBy('created_at', 'Desc');
         }
 
-        $updatedSinceDate  = Input::get('updatedSinceDate');
-        $updatedTillDate   = Input::get('updatedTillDate');
-        $updatedTimeEnable = Input::get('updatedTimeEnable');
+        $updatedSinceDate  = $request->get('updatedSinceDate');
+        $updatedTillDate   = $request->get('updatedTillDate');
+        $updatedTimeEnable = $request->get('updatedTimeEnable');
         if (strlen($updatedSinceDate) > 0 && strlen($updatedTillDate) > 0 && isset($updatedTimeEnable)) {
             $users = $this->timeFilterQuery($users, $updatedSinceDate, $updatedTillDate, 'updated_at');
         }
 
         //filter by firstName, lastName, nationalCode, mobile
-        $firstName = trim(Input::get('firstName'));
+        $firstName = trim($request->get('firstName'));
         if (isset($firstName) && strlen($firstName) > 0) {
             $users = $users->where('firstName', 'like', '%'.$firstName.'%');
         }
 
-        $lastName = trim(Input::get('lastName'));
+        $lastName = trim($request->get('lastName'));
         if (isset($lastName) && strlen($lastName) > 0) {
             $users = $users->where('lastName', 'like', '%'.$lastName.'%');
         }
 
-        $nationalCode = trim(Input::get('nationalCode'));
+        $nationalCode = trim($request->get('nationalCode'));
         if (isset($nationalCode) && strlen($nationalCode) > 0) {
             $users = $users->where('nationalCode', 'like', '%'.$nationalCode.'%');
         }
 
-        $mobile = trim(Input::get('mobile'));
+        $mobile = trim($request->get('mobile'));
         if (isset($mobile) && strlen($mobile) > 0) {
             $users = $users->where('mobile', 'like', '%'.$mobile.'%');
         }
 
         //filter by role, major , coupon
-        $roleEnable = Input::get('roleEnable');
-        $rolesId    = Input::get('roles');
+        $roleEnable = $request->get('roleEnable');
+        $rolesId    = $request->get('roles');
         if (isset($roleEnable) && isset($rolesId)) {
             $users = User::roleFilter($users, $rolesId);
         }
 
-        $majorEnable = Input::get('majorEnable');
-        $majorsId    = Input::get('majors');
+        $majorEnable = $request->get('majorEnable');
+        $majorsId    = $request->get('majors');
         if (isset($majorEnable) && isset($majorsId)) {
             $users = User::majorFilter($users, $majorsId);
         }
 
-        $couponEnable = Input::get('couponEnable');
-        $couponsId    = Input::get('coupons');
+        $couponEnable = $request->get('couponEnable');
+        $couponsId    = $request->get('coupons');
         if (isset($couponEnable) && isset($couponsId)) {
             if (in_array(0, $couponsId)) {
                 $users = $users->whereHas('orders', function ($q) use ($couponsId) {
@@ -166,8 +163,8 @@ class UserController extends Controller
         }
 
         //filter by product
-        $seenProductEnable = Input::get('productEnable');
-        $productsId        = Input::get('products');
+        $seenProductEnable = $request->get('productEnable');
+        $productsId        = $request->get('products');
         if (isset($seenProductEnable) && isset($productsId)) {
             $productUrls = [];
             $baseUrl     = url('/');
@@ -179,8 +176,8 @@ class UserController extends Controller
             });
         }
 
-        $orderProductEnable = Input::get('orderProductEnable');
-        $productsId         = Input::get('orderProducts');
+        $orderProductEnable = $request->get('orderProductEnable');
+        $productsId         = $request->get('orderProducts');
         if (isset($orderProductEnable) && isset($productsId)) {
             if (in_array(-1, $productsId)) {
                 $users = $users->whereDoesntHave('orders', function ($q) {
@@ -220,8 +217,8 @@ class UserController extends Controller
                     }
                 }
 
-                if (Input::has('checkoutStatusEnable')) {
-                    $checkoutStatuses = Input::get('checkoutStatuses');
+                if ($request->has('checkoutStatusEnable')) {
+                    $checkoutStatuses = $request->get('checkoutStatuses');
                     if (in_array(0, $checkoutStatuses)) {
                         $orders = Order::whereHas('orderproducts', function ($q) use ($productsId) {
                             $q->whereIn('product_id', $productsId)
@@ -244,9 +241,9 @@ class UserController extends Controller
                         ->whereNotIn('orderstatus_id', [config('constants.ORDER_STATUS_OPEN')]);
                 }
 
-                $createdSinceDate  = Input::get('completedSinceDate');
-                $createdTillDate   = Input::get('completedTillDate');
-                $createdTimeEnable = Input::get('completedTimeEnable');
+                $createdSinceDate  = $request->get('completedSinceDate');
+                $createdTillDate   = $request->get('completedTillDate');
+                $createdTimeEnable = $request->get('completedTimeEnable');
                 if (strlen($createdSinceDate) > 0 && strlen($createdTillDate) > 0 && isset($createdTimeEnable)) {
                     $orders = $this->timeFilterQuery($orders, $createdSinceDate, $createdTillDate, 'created_at');
                 }
@@ -255,8 +252,8 @@ class UserController extends Controller
                     ->toArray());
             }
         }
-        elseif (Input::has('checkoutStatusEnable')) {
-            $checkoutStatuses = Input::get('checkoutStatuses');
+        elseif ($request->has('checkoutStatusEnable')) {
+            $checkoutStatuses = $request->get('checkoutStatuses');
             if (in_array(0, $checkoutStatuses)) {
                 $orders = Order::whereHas('orderproducts', function ($q) use ($productsId) {
                     $q->whereNull('checkoutstatus_id');
@@ -274,7 +271,7 @@ class UserController extends Controller
                 ->toArray());
         }
 
-        $paymentStatusesId = Input::get('paymentStatuses');
+        $paymentStatusesId = $request->get('paymentStatuses');
         if (isset($paymentStatusesId)) {
             //Muhammad Shahrokhi : kar nemikone!
 //            $users = $users->whereHas('orders' , function ($q) use ($paymentStatusesId) {
@@ -291,7 +288,7 @@ class UserController extends Controller
                 ->toArray());
         }
 
-        $orderStatusesId = Input::get('orderStatuses');
+        $orderStatusesId = $request->get('orderStatuses');
         if (isset($orderStatusesId)) {
             //Muhammad Shahrokhi : kar nemikone!
 //            $users = $users->whereHas('orders' , function ($q) use ($orderStatusesId) {
@@ -307,7 +304,7 @@ class UserController extends Controller
                 ->toArray());
         }
         //filter by gender ,lockProfile , mobileVerification
-        $genderId = Input::get('gender_id');
+        $genderId = $request->get('gender_id');
         if (isset($genderId) && strlen($genderId) > 0) {
             if ($genderId == 0) {
                 $users = $users->whereDoesntHave('gender');
@@ -317,23 +314,23 @@ class UserController extends Controller
             }
         }
 
-        $userstatusId = Input::get('userstatus_id');
+        $userstatusId = $request->get('userstatus_id');
         if (isset($userstatusId) && strlen($userstatusId) > 0 && $userstatusId != 0) {
             $users = $users->where('userstatus_id', $userstatusId);
         }
 
-        $lockProfileStatus = Input::get('lockProfileStatus');
+        $lockProfileStatus = $request->get('lockProfileStatus');
         if (isset($lockProfileStatus) && strlen($lockProfileStatus) > 0) {
             $users = $users->where('lockProfile', $lockProfileStatus);
         }
 
-        $mobileNumberVerification = Input::get('mobileNumberVerification');
+        $mobileNumberVerification = $request->get('mobileNumberVerification');
         if (isset($mobileNumberVerification) && strlen($mobileNumberVerification) > 0) {
             $users = $users->where('mobileNumberVerification', $mobileNumberVerification);
         }
 
         //filter by postalCode, province , city, address, school , email
-        $withoutPostalCode = Input::get('withoutPostalCode');
+        $withoutPostalCode = $request->get('withoutPostalCode');
         if (isset($withoutPostalCode)) {
             $users = $users->where(function ($q) {
                 $q->whereNull('postalCode')
@@ -341,13 +338,13 @@ class UserController extends Controller
             });
         }
         else {
-            $postalCode = Input::get('postalCode');
+            $postalCode = $request->get('postalCode');
             if (isset($postalCode) && strlen($postalCode) > 0) {
                 $users = $users->where('postalCode', 'like', '%'.$postalCode.'%');
             }
         }
 
-        $withoutProvince = Input::get('withoutProvince');
+        $withoutProvince = $request->get('withoutProvince');
         if (isset($withoutProvince)) {
             $users = $users->where(function ($q) {
                 $q->whereNull('province')
@@ -355,13 +352,13 @@ class UserController extends Controller
             });
         }
         else {
-            $province = Input::get('province');
+            $province = $request->get('province');
             if (isset($province) && strlen($province) > 0) {
                 $users = $users->where('province', 'like', '%'.$province.'%');
             }
         }
 
-        $withoutCity = Input::get('withoutCity');
+        $withoutCity = $request->get('withoutCity');
         if (isset($withoutCity)) {
             $users = $users->where(function ($q) {
                 $q->whereNull('city')
@@ -369,29 +366,29 @@ class UserController extends Controller
             });
         }
         else {
-            $city = Input::get('city');
+            $city = $request->get('city');
             if (isset($city) && strlen($city) > 0) {
                 $users = $users->where('city', 'like', '%'.$city.'%');
             }
         }
 
-//        $withoutAddress = Input::get('withoutAddress');
+//        $withoutAddress = $request->get('withoutAddress');
 //        if(isset($withoutAddress)) {
 //            $users = $users->where(function ($q){
 //                $q->whereNull('address')->orWhere('address' , '');
 //            });
 //        }
 //        else{
-//            $address = Input::get('address');
+//            $address = $request->get('address');
 //            if (isset($address) && strlen($address) > 0)
 //                $users = $users->where('address', 'like', '%' . $address . '%');
 //        }
 
-        $addressSpecialFilter = Input::get('addressSpecialFilter');
+        $addressSpecialFilter = $request->get('addressSpecialFilter');
         if (isset($addressSpecialFilter)) {
             switch ($addressSpecialFilter) {
                 case '0':
-                    $address = Input::get('address');
+                    $address = $request->get('address');
                     if (isset($address) && strlen($address) > 0) {
                         $users = $users->where('address', 'like', '%'.$address.'%');
                     }
@@ -413,13 +410,13 @@ class UserController extends Controller
             }
         }
         else {
-            $address = Input::get('address');
+            $address = $request->get('address');
             if (isset($address) && strlen($address) > 0) {
                 $users = $users->where('address', 'like', '%'.$address.'%');
             }
         }
 
-        $withoutSchool = Input::get('withoutSchool');
+        $withoutSchool = $request->get('withoutSchool');
         if (isset($withoutSchool)) {
             $users = $users->where(function ($q) {
                 $q->whereNull('school')
@@ -427,13 +424,13 @@ class UserController extends Controller
             });
         }
         else {
-            $school = Input::get('school');
+            $school = $request->get('school');
             if (isset($school) && strlen($school) > 0) {
                 $users = $users->where('school', 'like', '%'.$school.'%');
             }
         }
 
-        $withoutEmail = Input::get('withoutEmail');
+        $withoutEmail = $request->get('withoutEmail');
         if (isset($withoutEmail)) {
             $users = $users->where(function ($q) {
                 $q->whereNull('email')
@@ -441,7 +438,7 @@ class UserController extends Controller
             });
         }
         else {
-            $email = Input::get('email');
+            $email = $request->get('email');
             if (isset($email) && strlen($email) > 0) {
                 $users = $users->where('email', 'like', '%'.$email.'%');
             }
@@ -457,8 +454,8 @@ class UserController extends Controller
              * end
              */
 
-            $sortBy   = Input::get('sortBy');
-            $sortType = Input::get('sortType');
+            $sortBy   = $request->get('sortBy');
+            $sortType = $request->get('sortType');
             if (strlen($sortBy) > 0 && strlen($sortType) > 0) {
                 if (strcmp($sortType, 'desc') == 0) {
                     $items = $items->sortByDesc($sortBy);
@@ -495,8 +492,8 @@ class UserController extends Controller
         elseif (strcmp($previousPath, action('Web\AdminController@admin')) == 0 || $request->has('userAdmin')) {
             $items = $users->paginate(10, ['*'], 'orders');
 
-            $sortBy   = Input::get('sortBy');
-            $sortType = Input::get('sortType');
+            $sortBy   = $request->get('sortBy');
+            $sortType = $request->get('sortType');
             if (strlen($sortBy) > 0 && strlen($sortType) > 0) {
                 if (strcmp($sortType, 'desc') == 0) {
                     $items = $items->sortByDesc($sortBy);
@@ -513,8 +510,8 @@ class UserController extends Controller
 
             $items = $users->get();
 
-            $sortBy   = Input::get('sortBy');
-            $sortType = Input::get('sortType');
+            $sortBy   = $request->get('sortBy');
+            $sortType = $request->get('sortType');
             if (strlen($sortBy) > 0 && strlen($sortType) > 0) {
                 if (strcmp($sortType, 'desc') == 0) {
                     $items = $items->sortByDesc($sortBy);
@@ -545,7 +542,7 @@ class UserController extends Controller
             }
             /** end */
 
-            $minCost = Input::get('minCost');
+            $minCost = $request->get('minCost');
             if (isset($minCost[0])) {
                 foreach ($items as $key => $user) {
                     $userOrders     = $user->orders;
@@ -564,25 +561,25 @@ class UserController extends Controller
                 }
             }
 
-            if (Input::has('lotteries')) {
-                $lotteryId = Input::get('lotteries');
+            if ($request->has('lotteries')) {
+                $lotteryId = $request->get('lotteries');
                 $lotteries = Lottery::where('id', $lotteryId)
                     ->get();
             }
 
-            if (Input::has('reportType')) {
-                $reportType = Input::get('reportType');
+            if ($request->has('reportType')) {
+                $reportType = $request->get('reportType');
             }
 
-            if (Input::has('seePaidCost')) {
+            if ($request->has('seePaidCost')) {
                 $seePaidCost = true;
             }
         }
         else {
             $items = $users->get();
 
-            $sortBy   = Input::get('sortBy');
-            $sortType = Input::get('sortType');
+            $sortBy   = $request->get('sortBy');
+            $sortType = $request->get('sortType');
             if (strlen($sortBy) > 0 && strlen($sortType) > 0) {
                 if (strcmp($sortType, 'desc') == 0) {
                     $items = $items->sortByDesc($sortBy);
@@ -981,22 +978,22 @@ class UserController extends Controller
         $majors    = Major::pluck('name', 'id')
             ->toArray();
         $majors[0] = 'نامشخص';
-        $majors    = array_sort_recursive($majors);
+        $majors    = Arr::sortRecursive($majors);
         /////////////////////////////////////////
         $genders    = Gender::pluck('name', 'id')
             ->toArray();
         $genders[0] = 'نامشخص';
-        $genders    = array_sort_recursive($genders);
+        $genders    = Arr::sortRecursive($genders);
         ///////////////////////
         $bloodTypes    = Bloodtype::pluck('name', 'id')
             ->toArray();
         $bloodTypes[0] = 'نامشخص';
-        $bloodTypes    = array_sort_recursive($bloodTypes);
+        $bloodTypes    = Arr::sortRecursive($bloodTypes);
         //////////////////////////
         $grades     = Grade::pluck('displayName', 'id')
             ->toArray();
         $grades[0]  = 'نامشخص';
-        $grades     = array_sort_recursive($grades);
+        $grades     = Arr::sortRecursive($grades);
         $orderFiles = $order->files;
 
         //////////Lock fields//////////
@@ -1261,7 +1258,7 @@ class UserController extends Controller
          * customerExtraInfo
          */
         $jsonConcats              = '';
-        $extraInfoQuestions       = array_sort_recursive($request->get('customerExtraInfoQuestion'));
+        $extraInfoQuestions       = Arr::sortRecursive($request->get('customerExtraInfoQuestion'));
         $customerExtraInfoAnswers = $request->get('customerExtraInfoAnswer');
         foreach ($extraInfoQuestions as $key => $question) {
             $obj        = new stdClass();

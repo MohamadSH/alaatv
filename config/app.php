@@ -25,7 +25,7 @@ return [
     'cipher' => 'AES-256-CBC',
 
     'providers' => [
-    
+
         /*
          * Laravel Framework Service Providers...
          */
@@ -51,22 +51,20 @@ return [
         Illuminate\Translation\TranslationServiceProvider::class,
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
-    
-    
+
+
         Collective\Html\HtmlServiceProvider::class,
         Zarinpal\Laravel\ZarinpalServiceProvider::class,
-        Greggilbert\Recaptcha\RecaptchaServiceProvider::class,
         Jenssegers\Agent\AgentServiceProvider::class,
         Laratrust\LaratrustServiceProvider::class,
         Watson\Sitemap\SitemapServiceProvider::class,
         Intervention\Image\ImageServiceProvider::class,
-    
+
         /*
          * Package Service Providers...
          */
-        Backup\BackupServiceProvider::class,
         Artesaos\SEOTools\Providers\SEOToolsServiceProvider::class,
-    
+
         Laravel\Scout\ScoutServiceProvider::class,
         Yab\MySQLScout\Providers\MySQLScoutServiceProvider::class,
         /*
@@ -80,12 +78,12 @@ return [
         App\Providers\TelescopeServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         App\Providers\WebsiteSettingProvider::class,
-    
+
         App\Providers\MedianaServiceProvider::class,
         App\Providers\ComposerServiceProvider::class,
         App\Providers\TagManagerProvider::class,
         App\Providers\InterfaceBindingProvider::class,
-    
+
         App\HelpDesk\Providers\HelpDeskServiceProvider::class,
 
     ],
@@ -101,7 +99,7 @@ return [
     */
 
     'aliases' => [
-    
+
         'App'          => Illuminate\Support\Facades\App::class,
         'Arr'          => Illuminate\Support\Arr::class,
         'Artisan'      => Illuminate\Support\Facades\Artisan::class,
@@ -126,7 +124,7 @@ return [
         'Password'     => Illuminate\Support\Facades\Password::class,
         'Queue'        => Illuminate\Support\Facades\Queue::class,
         'Redirect'     => Illuminate\Support\Facades\Redirect::class,
-        'RedisManager' => Illuminate\Support\Facades\Redis::class,
+        'Redis'        => Illuminate\Support\Facades\Redis::class,
         'Request'      => Illuminate\Support\Facades\Request::class,
         'Response'     => Illuminate\Support\Facades\Response::class,
         'Route'        => Illuminate\Support\Facades\Route::class,

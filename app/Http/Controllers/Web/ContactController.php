@@ -6,9 +6,9 @@ use App\Contact;
 use App\Relative;
 use App\Phonetype;
 use App\Contacttype;
+use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Input;
 use App\Http\Requests\EditPhoneRequest;
 use App\Http\Requests\EditContactRequest;
 use App\Http\Requests\InsertContactRequest;
@@ -22,9 +22,9 @@ class ContactController extends Controller
         $this->middleware('permission:'.config('constants.EDIT_CONTACT_ACCESS'), ['only' => 'edit']);
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $userId = Input::get('user');
+        $userId = $request->get('user');
         if (isset($userId)) {
             $contacts     = Contact::where('user_id', $userId)
                 ->orderBy("created_at", "desc")
@@ -36,7 +36,7 @@ class ContactController extends Controller
             $contacts = Contact::all()
                 ->sortByDesc("created_at");
         }
-        
+
         return view('contact.index', compact('contacts', 'userId', 'relatives', 'contacttypes'));
     }
 
@@ -66,7 +66,7 @@ class ContactController extends Controller
         $relatives    = Relative::pluck('displayName', 'id');
         $contacttypes = Contacttype::pluck('displayName', 'id');
         $phonetypes   = Phonetype::pluck('displayName', 'id');
-        
+
         return view('contact.edit', compact('contact', 'relatives', 'contacttypes', 'phonetypes'));
     }
 
