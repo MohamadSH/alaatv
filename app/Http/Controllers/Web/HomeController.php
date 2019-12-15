@@ -10,7 +10,6 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Contracts\Encryption\DecryptException;
 use Illuminate\Support\Facades\{  Config, Storage , File};
-use Illuminate\Support\Arr;
 use App\{Notifications\sendLink,
     UploadCenter,
     User,
@@ -97,15 +96,15 @@ class HomeController extends Controller
         /** @var User $user */
         $user = $request->user('alaatv');
         if ($user === null) {
-            abort(403, 'Not authorized.');
+            abort(Response::HTTP_FORBIDDEN, 'Not authorized.');
         }
         if ($data === null) {
-            abort(403, 'Invalid Link');
+            abort(Response::HTTP_FORBIDDEN, 'Invalid Link');
         }
         try {
             $data = (array) decrypt($data);
         } catch (DecryptException $e) {
-            abort(403, 'invalid Data!');
+            abort(Response::HTTP_FORBIDDEN, 'invalid Data!');
         }
         $url       = $data['url'];
         $contentId = $data['data']['content_id'];
@@ -385,7 +384,7 @@ class HomeController extends Controller
 
     public function siteMapXML()
     {
-        return redirect(action('Web\SitemapController@index'), 301);
+        return redirect(action('Web\SitemapController@index'), Response::HTTP_MOVED_PERMANENTLY);
     }
 
     /**

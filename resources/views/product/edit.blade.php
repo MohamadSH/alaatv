@@ -210,7 +210,7 @@
                                 <h5  style="font-weight: bolder"><span style="color:red;text-decoration: underline">عنوان: </span>{{$liveDescription->title}}</h5>
                                 <p  style="font-size:1.2rem ; direction: ltr"><span style="color:red;text-decoration: underline">تاریخ : </span>{{$liveDescription->CreatedAt_Jalali_WithTime()}}</p>
                                 <p style="font-size:1.2rem"><span style="color:red;text-decoration: underline">توضیح :</span> {!! $liveDescription->description !!}</p>
-                                <a class="btn btn-accent" target="_blank" href="{{route('livedescription.edit' , ['liveDescription' => $liveDescription])}}">اصلاح</a>
+                                <a class="btn btn-accent" target="_blank" href="{{route('livedescription.edit' , $liveDescription)}}">اصلاح</a>
                                 <a  href="#" class="btn btn-danger removeLiveDescription" data-action="{{route('livedescription.destroy' , ['liveDescription' => $liveDescription])}}" >حذف</a>
                             </li>
                             <hr>
@@ -652,6 +652,6 @@
             });
         });
     </script>
-    
+
     <script src="/acm/AlaatvCustomFiles/js/admin/page-productAdmin.js" type="text/javascript"></script>
 @endsection
