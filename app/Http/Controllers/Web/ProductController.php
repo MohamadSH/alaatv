@@ -208,12 +208,15 @@ class ProductController extends Controller
                     });
             }
 
-            $lastSet = $product->sets->sortByDesc('created_at')->first() ;
-            $lastSetPamphlets = $lastSet->where('contenttype_id' , Content::CONTENT_TYPE_PAMPHLET);
-            $lastSetVideos    = $lastSet->where('contenttype_id' , Content::CONTENT_TYPE_VIDEO);
-
-            return view('product.customShow.raheAbrisham', compact('product', 'block', 'purchasedProductIdArray', 'allChildIsPurchased' , 'liveDescriptions' , 'children' , 'isFavored' , 'isForcedGift' , 'shouldBuyProductId' , 'shouldBuyProductName' , 'hasPurchasedShouldBuyProduct' , 'lastSet' , 'lastSetPamphlets' , 'lastSetVideos'));
         }
+
+//        if($product->id == 347){
+//            $lastSet = $product->sets->sortByDesc('created_at')->first() ;
+//            $lastSetPamphlets = $lastSet->where('contenttype_id' , Content::CONTENT_TYPE_PAMPHLET);
+//            $lastSetVideos    = $lastSet->where('contenttype_id' , Content::CONTENT_TYPE_VIDEO);
+//
+//            return view('product.customShow.raheAbrisham', compact('product', 'block', 'purchasedProductIdArray', 'allChildIsPurchased' , 'liveDescriptions' , 'children' , 'isFavored' , 'isForcedGift' , 'shouldBuyProductId' , 'shouldBuyProductName' , 'hasPurchasedShouldBuyProduct' , 'lastSet' , 'lastSetPamphlets' , 'lastSetVideos'));
+//        }
 
         return view('product.show', compact('product', 'block', 'purchasedProductIdArray', 'allChildIsPurchased' , 'liveDescriptions' , 'children' , 'isFavored' , 'isForcedGift' , 'shouldBuyProductId' , 'shouldBuyProductName' , 'hasPurchasedShouldBuyProduct'));
     }
