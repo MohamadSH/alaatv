@@ -238,7 +238,6 @@ var EntekhabeFarsang = function () {
 
 }();
 
-
 var InitAbrishamPage = function () {
 
     function makePageBoxedForLargScreen() {
@@ -249,16 +248,48 @@ var InitAbrishamPage = function () {
         return $('.productPicture').width()+'px';
     }
 
-    function initFarsangMap(farsangs) {
+    function splitFarsangAndNonFarsang(productSets) {
 
-        if (typeof farsangs === 'undefined') {
+        if (typeof productSets === 'undefined') {
             return false;
         }
-        var publishedFarsangsLength = farsangs.length - 1,
-            farsangsLength = 10,
-            mapRoadId = 'mapRoad',
-            omArray=[
-                '',
+
+        var publishedProductSetsLength = productSets.length,
+            pileSetId = 604, // پیله راه ابریشم (ریاضیات مقدماتی) (نظام آموزشی جدید) (99-1398) محمد صادق ثابتی
+            nonFarsangIds = [
+                717, // پیش آزمون قلمچی راه ابریشم (نظام آموزشی جدید) (99-1398) محمد صادق ثابتی
+                665, // بارانداز راه ابریشم ( پس آزمون)
+                217, // صفر تا صد ریاضی تجربی کنکور (نظام آموزشی جدید) (98-1397) محمد صادق ثابتی
+                pileSetId,
+            ],
+            freshFarsangs = [],
+            freshNonFarsangs = [],
+            pileObject;
+
+
+        for(var i = 0; i < publishedProductSetsLength; i++) {
+            var productSetItem = productSets[i];
+
+            if (nonFarsangIds.indexOf(productSetItem.setId) === -1) {
+                freshFarsangs.push(productSetItem);
+            } else if(productSetItem.setId === pileSetId) {
+                pileObject = productSetItem;
+            } else {
+                freshNonFarsangs.push(productSetItem);
+            }
+        }
+
+        freshFarsangs.push(pileObject);
+
+        return {
+            farsangs: freshFarsangs.reverse(),
+            nonFarsangs: freshNonFarsangs
+        };
+    }
+
+    function getItemName(omIndex) {
+        var omArray=[
+                'پیله راه ابریشم',
                 'اول',
                 'دوم',
                 'سوم',
@@ -280,111 +311,127 @@ var InitAbrishamPage = function () {
                 'نوزدهم',
                 'بیستم'
             ],
+            name = (omIndex===0)?omArray[omIndex]:'فرسنگ '+omArray[omIndex];
+        return name;
+    }
+
+    function getHighchartPoints(productSets) {
+
+        var splitedFarsangAndNonFarsang = splitFarsangAndNonFarsang(productSets),
+            farsangs = splitedFarsangAndNonFarsang.farsangs,
+            nonFarsangs = splitedFarsangAndNonFarsang.nonFarsangs,
+            farsangsLength = farsangs.length,
+            nonFarsangsLength = nonFarsangs.length,
             farsangPoints = [
                 {
                     x: 0,
                     y: 0,
-                    step: 1
                 },
                 {
                     x: 10,
                     y: 15,
-                    step: 2
                 },
                 {
                     x: 20,
                     y: -5,
-                    step: 3
                 },
                 {
                     x: 30,
                     y: -10,
-                    step: 4
                 },
                 {
                     x: 40,
                     y: -2,
-                    step: 5
                 },
                 {
                     x: 50,
                     y: 22,
-                    step: 6
                 },
                 {
                     x: 60,
                     y: 12,
-                    step: 7
                 },
                 {
                     x: 70,
                     y: -8,
-                    step: 8
                 },
                 {
                     x: 80,
                     y: 7,
-                    step: 9
                 },
                 {
                     x: 90,
                     y: 20,
-                    step: 10
                 },
-            ];
+                {
+                    x: 100,
+                    y: 30,
+                },
+            ],
+            farsangPointsLength = farsangPoints.length,
+            currentStep = farsangsLength - 1;
 
-        for(var i = 0; i < farsangsLength; i++) {
-            var footPrint = 'url(/acm/image/raheAbrisham/footPrint2.svg)';
+        for(var i = 0; i < farsangPointsLength; i++) {
+            var footPrint = 'url(/acm/image/raheAbrisham/footPrint2.svg)',
+                farsangItem = farsangs[i];
 
-            if ( i < publishedFarsangsLength ) {
+            if ( i < currentStep) {
                 footPrint = 'url(/acm/image/raheAbrisham/footPrint1.svg)';
 
-                farsangPoints[i].drilldown = "FarsangItems";
+                // farsangPoints[i].drilldown = "FarsangItems";
                 // farsangPoints[i].dataLabels = {color: 'white'};
                 farsangPoints[i].set = {
-                    id: farsangs[i].setId,
-                    name: farsangs[i].name
+                    id: farsangItem.setId,
+                    name: farsangItem.name
                 };
-            } if ( i === publishedFarsangsLength ) {
+            } else if ( i === currentStep ) {
+
                 footPrint = 'url(/acm/image/raheAbrisham/footPrint3.svg)';
 
                 farsangPoints[i].set = {
-                    id: farsangs[i].setId,
-                    name: farsangs[i].name
+                    id: farsangItem.setId,
+                    name: farsangItem.name
                 };
             }
             farsangPoints[i].marker = {
                 // symbol: 'url(/acm/image/raheAbrisham/footPrint.svg)'
                 symbol: footPrint,
             };
-            farsangPoints[i].name = 'فرسنگ ' + omArray[farsangPoints[i].step];
+            farsangPoints[i].name = getItemName(i);
         }
 
-        // farsangPoints.splice(farsangsLength);
+        return {
+            farsangs: farsangPoints,
+            nonFarsangs: []
+        };
+    }
 
-        // Math.easeOutBounce = function (pos) {
-        //     var res;
-        //     res = (7.5625 * pos * pos);
-        //     // if ((pos) < (1 / 2.75)) {
-        //     //     res = (7.5625 * pos * pos);
-        //     // } else if (pos < (2 / 2.75)) {
-        //     //     res = (7.5625 * (pos -= (1.5 / 2.75)) * pos + 0.75);
-        //     // } else if (pos < (2.5 / 2.75)) {
-        //     //     res = (7.5625 * (pos -= (2.25 / 2.75)) * pos + 0.9375);
-        //     // } else {
-        //     //     res = (7.5625 * (pos -= (2.625 / 2.75)) * pos + 0.984375);
-        //     // }
-        //     res = 1 - res;
-        //     return res;
-        // };
+    function initFarsangMap(productSets) {
 
-        Highcharts.setOptions({
-            lang: {
-                drillUpText: '<< بازگشت به {series.name}'
-            }
-        });
+        if (typeof productSets === 'undefined') {
+            return false;
+        }
 
-        var chart = new Highcharts.chart(mapRoadId, {
+        var highchartPoints = getHighchartPoints(productSets),
+            farsangPoints = highchartPoints.farsangs,
+            mapRoadId = 'mapRoad';
+
+        // setCustomEaseOutBounce();
+        setHighchartOptions();
+        var chart = initHighchart(mapRoadId, farsangPoints);
+
+        setBackgroundForHighchart(mapRoadId);
+
+        // feedMapPoints(chart, farsangPoints);
+    }
+
+    function setBackgroundForHighchart(mapRoadId) {
+        $('#'+mapRoadId).prepend('<img class="background" src="/acm/image/raheAbrisham/mapbackground1.jpg">');
+        $('#'+mapRoadId).find('.highcharts-container').css({'width': '100%'}).find('svg').css({'width': '100%'});
+    }
+
+    function initHighchart(mapRoadId, farsangPoints) {
+        return new Highcharts.chart(mapRoadId, {
             chart: {
                 type: 'spline',
                 margin: [5, 20, 5, 20], // [up, right, down, left]
@@ -431,235 +478,211 @@ var InitAbrishamPage = function () {
                 headerFormat: '',
                 pointFormat: '{point.name}'
             },
-            plotOptions: {
-                enableMouseTracking: false,
-                // spline: {
-                //     marker: {
-                //         enable: false
-                //     }
-                // },
-                series: {
-                    cursor: 'pointer',
-                    // allowPointSelect: true,
-                    dataLabels: {
-                        enabled: true,
-                        color: 'white',
-                        style: {
-                            fontSize: '16px',
-                            textOutline: false ,
-                        },
-                        format: '{point.name}',
-                        // useHTML: true,
-                        // formatter: function () {
-                        //     console.log(this)
-                        //     return '<div>'+this.key+'</div>';
-                        // }
+            plotOptions: Highcharts_plotOptions(),
+
+            exporting: {
+                buttons: [{
+                    text: 'custom button',
+                    onclick: function () {
+                        alert('clicked');
                     },
-                    point: {
-                        events: {
-                            click: function() {
-                                // var data = this.series.data[this.index];
-                                // EntekhabeFarsang.showFarsang(data.set.id)
+                    theme: {
+                        'stroke-width': 1,
+                        stroke: 'silver',
+                        r: 0,
+                        states: {
+                            hover: {
+                                fill: '#a4edba'
+                            },
+                            select: {
+                                stroke: '#039',
+                                fill: '#a4edba'
                             }
                         }
                     }
-                },
+                }]
             },
-            series: [{
-                type: 'spline',
-                name: 'مسیر راه ابریشم',
-                data: farsangPoints,
-                // data: [],
-                color: '#da9d6c',
-                // animation: false,
-                animation: {
-                    duration: 2000,
-                    // Uses Math.easeOutBounce
-                    // easing: 'easeOutBounce'
-                }
-            }],
-
-
-
-            drilldown: {
-                drillUpButton: {
-                    position: {
-                        align: 'left'
-                    }
-                },
-                activeDataLabelStyle: {
-                    color: 'white',
-                    textDecoration: 'none'
-                },
-                margin: [5, 50, 5, 50], // [up, right, down, left]
-                series: [
-                    {
-                        type: 'organization',
-                        name: 'FarsangItems',
-                        id: 'FarsangItems',
-                        keys: ['from', 'to'],
-                        enableMouseTracking: false,
-                        hangingIndent: 100,
-                        data: [
-                            ['farsang1', 'CTO'],
-                            ['farsang1', 'CPO'],
-                            ['farsang1', 'CSO'],
-                            ['farsang1', 'CMO'],
-                        ],
-                        levels: [{
-                            level: 0,
-                            color: 'silver',
-                            dataLabels: {
-                                color: 'black'
-                            },
-                            width: 250,
-                            height: 250
-                        }, {
-                            level: 1,
-                            color: 'silver',
-                            dataLabels: {
-                                color: 'black'
-                            },
-                            width: 250,
-                            height: 250
-                        }, {
-                            level: 2,
-                            color: '#980104'
-                        }, {
-                            level: 4,
-                            color: '#359154'
-                        }],
-                        nodes: [{
-                            id: 'farsang1',
-                            title: 'فرسنگ اول',
-                            name: 'فرسنگ اول',
-                            image: 'https://wp-assets.highcharts.com/www-highcharts-com/blog/wp-content/uploads/2018/11/12132317/Grethe.jpg',
-                            layout: 'hanging'
-                        }, {
-                            id: 'CTO',
-                            title: 'CTO',
-                            name: 'Christer Vasseng',
-                            color: '#007ad0',
-                            column: 4,
-                            image: 'https://wp-assets.highcharts.com/www-highcharts-com/blog/wp-content/uploads/2018/11/12140620/Christer.jpg',
-                            layout: 'hanging'
-                        }, {
-                            id: 'CPO',
-                            title: 'CPO',
-                            name: 'Torstein Hønsi',
-                            column: 4,
-                            image: 'https://wp-assets.highcharts.com/www-highcharts-com/blog/wp-content/uploads/2018/11/12131849/Torstein1.jpg',
-                            layout: 'hanging'
-                        }, {
-                            id: 'CSO',
-                            title: 'CSO',
-                            name: 'Anita Nesse',
-                            column: 4,
-                            image: 'https://wp-assets.highcharts.com/www-highcharts-com/blog/wp-content/uploads/2018/11/12132313/Anita.jpg',
-                            layout: 'hanging'
-                        }, {
-                            id: 'CMO',
-                            title: 'CMO',
-                            name: 'Vidar Brekke',
-                            column: 4,
-                            image: 'https://wp-assets.highcharts.com/www-highcharts-com/blog/wp-content/uploads/2018/11/13105551/Vidar.jpg',
-                            layout: 'hanging'
-                        }],
-                        colorByPoint: false,
-                        color: '#007ad0',
-                        dataLabels: {
-                            color: 'white'
-                        },
-                        borderColor: 'white',
-                        nodeWidth: 90
-
-
-                        // data: [
-                        //     ['farsang1', 'تورق'],
-                        //     ['farsang1', 'صفر تا صد'],
-                        //     ['farsang1', 'کنکورچه'],
-                        //     ['farsang1', 'تست'],
-                        //     ['farsang1', 'پیش آزمون'],
-                        // ],
-                        // inverted: true,
-                        // levels: [
-                        //     {
-                        //         level: 0,
-                        //         color: '#980104',
-                        //         // dataLabels: {
-                        //         //     color: 'black'
-                        //         // },
-                        //         width: 100,
-                        //         height: 250
-                        //     }, {
-                        //         level: 1,
-                        //         color: '#980104',
-                        //         // dataLabels: {
-                        //         //     color: 'black'
-                        //         // },
-                        //         // height: 25
-                        //     }, {
-                        //         level: 2,
-                        //         color: '#980104'
-                        //     }, {
-                        //         level: 4,
-                        //         color: '#980104'
-                        //     }
-                        // ],
-                        // nodes: [
-                        //     {
-                        //         id: 'farsang1',
-                        //         title: 'فرسنگ اول',
-                        //         name: 'فرسنگ اول',
-                        //         image: 'https://wp-assets.highcharts.com/www-highcharts-com/blog/wp-content/uploads/2018/11/12132317/Grethe.jpg'
-                        //     },
-                        //     {
-                        //         id: 'تورق',
-                        //         title: 'تورق',
-                        //         name: 'تورق',
-                        //         column: 4,
-                        //         image: 'https://wp-assets.highcharts.com/www-highcharts-com/blog/wp-content/uploads/2018/11/12131849/Torstein1.jpg'
-                        //     },
-                        //     {
-                        //         id: 'صفر تا صد',
-                        //         title: 'صفر تا صد',
-                        //         name: 'صفر تا صد',
-                        //         column: 4,
-                        //         image: 'https://wp-assets.highcharts.com/www-highcharts-com/blog/wp-content/uploads/2018/11/12132313/Anita.jpg',
-                        //         layout: 'hanging'
-                        //     },
-                        //     {
-                        //         id: 'کنکورچه',
-                        //         title: 'کنکورچه',
-                        //         name: 'کنکورچه',
-                        //         column: 4,
-                        //         image: 'https://wp-assets.highcharts.com/www-highcharts-com/blog/wp-content/uploads/2018/11/13105551/Vidar.jpg',
-                        //         layout: 'hanging'
-                        //     }
-                        // ],
-                        // colorByPoint: true,
-                        // color: '#007ad0',
-                        // dataLabels: {
-                        //     color: 'white'
-                        // },
-                        // borderColor: 'white',
-                        // nodeWidth: 65,
-                    }
-                ]
-            }
-
-
-
+            series: Highcharts_series(farsangPoints),
+            // drilldown: Highcharts_drilldown()
         });
-
-        // $('#'+mapRoadId).prepend('<img class="background" src="/acm/image/raheAbrisham/mapBackground.png">');
-        $('#'+mapRoadId).prepend('<img class="background" src="/acm/image/raheAbrisham/mapbackground1.jpg">');
-        $('#'+mapRoadId).find('.highcharts-container').css({'width': '100%'}).find('svg').css({'width': '100%'});
-
-        // feedMapPoints(chart, farsangPoints);
-
-
     }
+
+    function setCustomEaseOutBounce() {
+        Math.easeOutBounce = function (pos) {
+            var res;
+            res = (7.5625 * pos * pos);
+            // if ((pos) < (1 / 2.75)) {
+            //     res = (7.5625 * pos * pos);
+            // } else if (pos < (2 / 2.75)) {
+            //     res = (7.5625 * (pos -= (1.5 / 2.75)) * pos + 0.75);
+            // } else if (pos < (2.5 / 2.75)) {
+            //     res = (7.5625 * (pos -= (2.25 / 2.75)) * pos + 0.9375);
+            // } else {
+            //     res = (7.5625 * (pos -= (2.625 / 2.75)) * pos + 0.984375);
+            // }
+            res = 1 - res;
+            return res;
+        };
+    }
+
+    function setHighchartOptions() {
+        Highcharts.setOptions({
+            lang: {
+                drillUpText: '<< بازگشت به {series.name}'
+            }
+        });
+    }
+
+    function Highcharts_series(farsangPoints) {
+        return [{
+            type: 'spline',
+            name: 'مسیر راه ابریشم',
+            data: farsangPoints,
+            // data: [],
+            color: '#da9d6c',
+            // animation: false,
+            animation: {
+                duration: 2000,
+                // Uses Math.easeOutBounce
+                // easing: 'easeOutBounce'
+            }
+        }];
+    }
+
+    function Highcharts_plotOptions() {
+        return {
+            enableMouseTracking: false,
+            // spline: {
+            //     marker: {
+            //         enable: false
+            //     }
+            // },
+            series: {
+                cursor: 'pointer',
+                // allowPointSelect: true,
+                dataLabels: {
+                    enabled: true,
+                    color: 'white',
+                    style: {
+                        fontSize: '16px',
+                        textOutline: false ,
+                    },
+                    format: '{point.name}',
+                    // useHTML: true,
+                    // formatter: function () {
+                    //     console.log(this)
+                    //     return '<div>'+this.key+'</div>';
+                    // }
+                },
+                point: {
+                    events: {
+                        click: function() {
+                            var data = this.series.data[this.index];
+                            EntekhabeFarsang.showFarsang(data.set.id)
+                        }
+                    }
+                }
+            },
+        };
+    }
+
+    function Highcharts_drilldown() {
+        return {
+            drillUpButton: {
+                position: {
+                    align: 'left'
+                }
+            },
+            activeDataLabelStyle: {
+                color: 'white',
+                textDecoration: 'none'
+            },
+            margin: [5, 50, 5, 50], // [up, right, down, left]
+            series: [
+                {
+                    type: 'organization',
+                    name: 'FarsangItems',
+                    id: 'FarsangItems',
+                    keys: ['from', 'to'],
+                    enableMouseTracking: false,
+                    hangingIndent: 100,
+                    data: [
+                        ['farsang1', 'CTO'],
+                        ['farsang1', 'CPO'],
+                        ['farsang1', 'CSO'],
+                        ['farsang1', 'CMO'],
+                    ],
+                    levels: [{
+                        level: 0,
+                        color: 'silver',
+                        dataLabels: {
+                            color: 'black'
+                        },
+                        width: 250,
+                        height: 250
+                    }, {
+                        level: 1,
+                        color: 'silver',
+                        dataLabels: {
+                            color: 'black'
+                        },
+                        width: 250,
+                        height: 250
+                    }, {
+                        level: 2,
+                        color: '#980104'
+                    }, {
+                        level: 4,
+                        color: '#359154'
+                    }],
+                    nodes: [{
+                        id: 'farsang1',
+                        title: 'فرسنگ اول',
+                        name: 'فرسنگ اول',
+                        image: 'https://wp-assets.highcharts.com/www-highcharts-com/blog/wp-content/uploads/2018/11/12132317/Grethe.jpg',
+                        layout: 'hanging'
+                    }, {
+                        id: 'CTO',
+                        title: 'CTO',
+                        name: 'Christer Vasseng',
+                        color: '#007ad0',
+                        column: 4,
+                        image: 'https://wp-assets.highcharts.com/www-highcharts-com/blog/wp-content/uploads/2018/11/12140620/Christer.jpg',
+                        layout: 'hanging'
+                    }, {
+                        id: 'CPO',
+                        title: 'CPO',
+                        name: 'Torstein Hønsi',
+                        column: 4,
+                        image: 'https://wp-assets.highcharts.com/www-highcharts-com/blog/wp-content/uploads/2018/11/12131849/Torstein1.jpg',
+                        layout: 'hanging'
+                    }, {
+                        id: 'CSO',
+                        title: 'CSO',
+                        name: 'Anita Nesse',
+                        column: 4,
+                        image: 'https://wp-assets.highcharts.com/www-highcharts-com/blog/wp-content/uploads/2018/11/12132313/Anita.jpg',
+                        layout: 'hanging'
+                    }, {
+                        id: 'CMO',
+                        title: 'CMO',
+                        name: 'Vidar Brekke',
+                        column: 4,
+                        image: 'https://wp-assets.highcharts.com/www-highcharts-com/blog/wp-content/uploads/2018/11/13105551/Vidar.jpg',
+                        layout: 'hanging'
+                    }],
+                    colorByPoint: false,
+                    color: '#007ad0',
+                    dataLabels: {
+                        color: 'white'
+                    },
+                    borderColor: 'white',
+                    nodeWidth: 90
+                }
+            ]
+        };
+    }
+
 
     function feedMapPoints(chart, farsangPoints) {
         var counter = 0,

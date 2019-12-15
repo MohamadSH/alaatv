@@ -582,6 +582,7 @@ class Mix {
                 'node_modules/highcharts/modules/sankey.js',
                 'node_modules/highcharts/modules/organization.js',
                 'node_modules/highcharts/modules/accessibility.js',
+                'node_modules/highcharts/modules/exporting.js',
 
                 'public/acm/AlaatvCustomFiles/components/AlaaLoading/script.js',
                 // 'public/acm/AlaatvCustomFiles/components/CustomDropDown/js.js',
