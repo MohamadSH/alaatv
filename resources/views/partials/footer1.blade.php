@@ -58,7 +58,7 @@
                 </a>
             </li>
             <li class="m-nav__item">
-                <a onclick='window.open("https://trustseal.enamad.ir/Verify.aspx?id=125806&amp;p=gCsnIb3IATIJnVIY", "Popup","toolbar=no, location=no, statusbar=no, menubar=no, scrollbars=1, resizable=0, width=580, height=600, top=30")' >
+                <a onclick='window.open("https://trustseal.enamad.ir/?id=125806&amp;Code=MIc5m5QgNzwT4U7FmBLE", "Popup","toolbar=no, location=no, statusbar=no, menubar=no, scrollbars=1, resizable=0, width=580, height=600, top=30")' >
                     <img class="lazy-image" src="https://cdn.alaatv.com/loder.jpg?w=1&h=1" data-src="https://cdn.alaatv.com/upload/enamad.png" alt="enamad.ir" style='cursor:pointer' data-name="enamad" width="56" height="46" data-toggle="m-tooltip" title="نماد اعتماد الکترونیکی" data-placement="top">
                 </a>
             </li>
