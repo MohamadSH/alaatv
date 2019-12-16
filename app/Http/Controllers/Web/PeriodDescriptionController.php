@@ -9,6 +9,32 @@ use Illuminate\Support\Facades\Cache;
 
 class PeriodDescriptionController extends Controller
 {
+    public function __construct()
+    {
+        $this->callMiddlewares($this->getAuthExceptionArray());
+    }
+
+    /**
+     * @return array
+     */
+    private function getAuthExceptionArray(): array
+    {
+        return [];
+    }
+
+    /**
+     * @param $authException
+     */
+    private function callMiddlewares(array $authException): void
+    {
+        $this->middleware('auth', ['except' => $authException]);
+        $this->middleware('permission:'.config('constants.LIST_PERIOD_DESCRIPTION_ACCESS'),    ['only' => ['index',],]);
+        $this->middleware('permission:'.config('constants.INSERT_PERIOD_DESCRIPTION_ACCESS'),  ['only' => ['store', 'create'],]);
+        $this->middleware('permission:'.config('constants.UPDATE_PERIOD_DESCRIPTION_ACCESS'),  ['only' => ['update',],]);
+        $this->middleware('permission:'.config('constants.SHOW_PERIOD_DESCRIPTION_ACCESS'),    ['only' => ['show','edit'],]);
+        $this->middleware('permission:'.config('constants.DELETE_PERIOD_DESCRIPTION_ACCESS'),  ['only' => ['destroy',],]);
+    }
+
     /**
      * Display a listing of the resource.
      *

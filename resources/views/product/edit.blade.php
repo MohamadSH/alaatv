@@ -157,7 +157,7 @@
         </div>
 
         <div class="col-md-12">
-        @permission((config('constants.INSERT_LIVE_DESCRIPTION_ACCESS')))
+        @permission((config('constants.LIST_LIVE_DESCRIPTION_ACCESS')))
         <!-- BEGIN LIVE DESCRIPTION TABLE PORTLET-->
         <div class="m-portlet m-portlet--head-solid-bg m-portlet--accent m-portlet--collapsed m-portlet--head-sm" m-portlet="true" id="productFiles-portlet">
             <div class="m-portlet__head">
@@ -226,7 +226,7 @@
         </div>
 
         <div class="col-md-12">
-        @permission((config('constants.INSERT_PERIOD_DESCRIPTION')))
+        @permission((config('constants.LIST_PERIOD_DESCRIPTION_ACCESS')))
         <!-- BEGIN LIVE DESCRIPTION TABLE PORTLET-->
         <div class="m-portlet m-portlet--head-solid-bg m-portlet--accent m-portlet--collapsed m-portlet--head-sm" m-portlet="true" id="periodDescription-portlet">
             <div class="m-portlet__head">
