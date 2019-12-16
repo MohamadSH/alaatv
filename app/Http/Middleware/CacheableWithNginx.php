@@ -16,6 +16,7 @@ class CacheableWithNginx
         '/goToPaymentRoute/*',
         '/checkout/*',
         '/api/login',
+        '/d/*'
     ];
 
     /**
@@ -31,12 +32,10 @@ class CacheableWithNginx
         if ($this->isNotCacheables($request)) {
             if ($this->methodIsGetOrHead($request) && !$request->hasCookie($this->cookieName)) {
                 setcookie($this->cookieName , '1', time() + (86400*30), '/');
-                Cookie::queue(cookie()->forever($this->cookieName, '1'));
             }
             return $next($request);
         }
         setcookie($this->cookieName , 'Expired', time() - 100000, '/');
-        Cookie::queue(cookie()->forget($this->cookieName));
         $response = $next($request);
 
         if ($this->isCacheables($request)) {
@@ -79,7 +78,7 @@ class CacheableWithNginx
      */
     private function isNotCacheables($request): bool
     {
-        return $request->user() || $this->inExceptArray($request);
+        return $request->user() || $this->inExceptArray($request) || !$this->methodIsGetOrHead($request);
     }
 
     /**
@@ -88,6 +87,6 @@ class CacheableWithNginx
      */
     private function isCacheables($request): bool
     {
-        return $this->methodIsGetOrHead($request) && !$this->isNotCacheables($request);
+        return  !$this->isNotCacheables($request);
     }
 }
