@@ -15,7 +15,7 @@
                 <a class="m-link" href="{{route('web.admin.product')}}">پنل مدیریتی محصولات</a>
             </li>
             <li class="breadcrumb-item active" aria-current="page">
-                <a class="m-link" href="{{route('product.edit' , ['product'=>$liveDescription->product])}}">اصلاح اطلاعات محصول</a>
+                <a class="m-link" href="{{route('product.edit' , $liveDescription->product)}}">اصلاح اطلاعات محصول</a>
             </li>
             <li class="breadcrumb-item active" aria-current="page">
                 <a class="m-link" href="#">اصلاح اطلاعات توضیح لحظه ای</a>
@@ -26,10 +26,9 @@
 
 @section('content')
     @include("systemMessage.flash")
-    <form method="POST" action="{{route('livedescription.update' , ['liveDescription'=>$liveDescription])}}">
+    <form method="POST" action="{{route('livedescription.update' , $liveDescription)}}">
         @method('PUT')
         @csrf
-        <input type="hidden" name="product_id" value="{{$liveDescription->product_id}}">
         <div class = "form-group">
             <label>عنوان</label>
             <input type="text" name="title" value="{{$liveDescription->title}}">
