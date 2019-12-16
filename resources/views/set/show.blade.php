@@ -46,8 +46,8 @@
                data-gtm-eec-promotion-name="جشنواره یلدایی آلاء"
                data-gtm-eec-promotion-creative="بالای لیست"
                data-gtm-eec-promotion-position="وسط">
-                <img data-src="{{ asset('/acm/image/yalda-festival_300.100.jpg') }}" class="a--full-width lazy-image" alt="جشنواره یلدایی آلاء">
-{{--                <video autoplay loop muted playsinline data-src="{{ asset('/acm/image/yalda-festival_300.100.mp4') }}" class="a--full-width lazy-image" alt="جشنواره یلدایی آلاء"></video>--}}
+                <img data-src="https://cdn.alaatv.com/upload/yalda-festival_300.100.jpg" class="a--full-width lazy-image" alt="جشنواره یلدایی آلاء">
+{{--                <video autoplay loop muted playsinline data-src="https://cdn.alaatv.com/upload/yalda-festival_300.100.jpg" class="a--full-width lazy-image" alt="جشنواره یلدایی آلاء"></video>--}}
             </a>
         </div>
     </div>
@@ -59,8 +59,8 @@
                data-gtm-eec-promotion-name="جشنواره یلدایی آلاء"
                data-gtm-eec-promotion-creative="بالای لیست"
                data-gtm-eec-promotion-position="وسط">
-{{--                <video autoplay loop muted playsinline data-src="{{ asset('/acm/image/yalda-festival_300.100.mp4') }}" class="a--full-width lazy-image" alt="جشنواره یلدایی آلاء"></video>--}}
-                <img data-src="{{ asset('/acm/image/yalda-festival_400.400.jpg') }}" class="a--full-width lazy-image" alt="جشنواره یلدایی آلاء">
+{{--                <video autoplay loop muted playsinline data-src="https://cdn.alaatv.com/upload/yalda-festival_300.100.jpg" class="a--full-width lazy-image" alt="جشنواره یلدایی آلاء"></video>--}}
+                <img data-src="https://cdn.alaatv.com/upload/yalda-festival_400.400.jpg" class="a--full-width lazy-image" alt="جشنواره یلدایی آلاء">
             </a>
         </div>
         <div class="col-lg-8 mx-auto">
