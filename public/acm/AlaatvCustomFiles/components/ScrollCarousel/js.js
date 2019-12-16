@@ -97,20 +97,36 @@ var ScrollCarousel = function () {
                 firstItemData = getData(firstItem),
                 lastItemItemData = getData(lastItem);
 
-            if (firstItemData === false || firstItemData.pltrp===firstItemData.thisWidthWithMargin) {
+            if (checkFirstItemIsFullyDisplayed(firstItemData)) {
                 $(this).find('.ScrollCarousel-previous').fadeOut();
             } else {
                 $(this).find('.ScrollCarousel-previous').fadeIn();
             }
 
-            var lastItemLeftPosition = lastItemItemData.thisPositionLeft + lastItemItemData.thisMarginLeft;
-            if (lastItemItemData !== false && lastItemLeftPosition < 0 && (Math.abs(lastItemItemData.thisPositionLeft)-lastItemItemData.thisMarginLeft) > 1) {
-                $(this).find('.ScrollCarousel-next').fadeIn();
-            } else if(lastItemItemData === false || lastItemLeftPosition > 0 || (Math.abs(lastItemItemData.thisPositionLeft)-lastItemItemData.thisMarginLeft) <= 1) {
+            if (checkLastItemIsFullyDisplayed(lastItemItemData)) {
                 $(this).find('.ScrollCarousel-next').fadeOut();
+            } else {
+                $(this).find('.ScrollCarousel-next').fadeIn();
             }
 
         });
+    }
+
+    function checkFirstItemIsFullyDisplayed(firstItemData) {
+        if (firstItemData === false || firstItemData.pltrp===firstItemData.thisWidthWithMargin) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    function checkLastItemIsFullyDisplayed(lastItemItemData) {
+        var lastItemLeftPosition = lastItemItemData.thisPositionLeft + lastItemItemData.thisMarginLeft;
+        if (lastItemItemData !== false && lastItemLeftPosition < 0 && (Math.abs(lastItemItemData.thisPositionLeft)-lastItemItemData.thisMarginLeft) > 1) {
+            return false;
+        } else if(lastItemItemData === false || lastItemLeftPosition > 0 || (Math.abs(lastItemItemData.thisPositionLeft)-lastItemItemData.thisMarginLeft) <= 1) {
+            return true;
+        }
     }
 
     function getScrollCarouselItems($scrollCarousel) {
@@ -118,6 +134,7 @@ var ScrollCarousel = function () {
     }
 
     function swipe($scrollCarousel, direction) {
+        setScrollDirection($scrollCarousel, direction);
         var scrollCarousel1Items = getScrollCarouselItems($scrollCarousel),
             scrollCarousel1ItemsLength = scrollCarousel1Items.length;
 
@@ -180,8 +197,59 @@ var ScrollCarousel = function () {
     }
 
     function swipeWithAnimate($scrollCarousel, newScrollPosition) {
+        $scrollCarousel.each(function () {
+            $(this).find('.ScrollCarousel-Items').animate({scrollLeft: newScrollPosition}, 200);
+        });
+    }
 
-        $scrollCarousel.find('.ScrollCarousel-Items').animate({scrollLeft: newScrollPosition}, 200);
+    function animateScroll($scrollCarousel) {
+        var counter = 0,
+            directions = [];
+
+        $scrollCarousel.each(function () {
+            var scrollCarousel1Items = getScrollCarouselItems($(this)),
+                scrollCarousel1ItemsLength = scrollCarousel1Items.length,
+                firstItem = scrollCarousel1Items[0],
+                lastItem = scrollCarousel1Items[scrollCarousel1ItemsLength-1];
+
+            directions[counter] = 'left';
+
+
+            var $that = $(this),
+                newScrollPosition = 0,
+                id = setInterval(function () {
+                    var firstItemData = getData(firstItem),
+                        lastItemItemData = getData(lastItem),
+                        direction = getScrollDirection($that); //directions[counter]
+
+                    if (direction === 'right' && checkFirstItemIsFullyDisplayed(firstItemData)) {
+                        setScrollDirection($that, 'left');
+                        newScrollPosition -= 1;
+                    } else if (direction === 'right' ) {
+                        newScrollPosition += 1;
+                    }
+
+                    if (direction === 'left' && checkLastItemIsFullyDisplayed(lastItemItemData)) {
+                        setScrollDirection($that, 'right');
+                        newScrollPosition += 1;
+                    } else if (direction === 'left' ) {
+                        newScrollPosition -= 1;
+                    }
+
+                    $that.find('.ScrollCarousel-Items').animate({scrollLeft: newScrollPosition}, 0);
+
+                }, 1);
+
+            counter++;
+        });
+    }
+
+    function setScrollDirection($scrollCarousel, direction) {
+        $scrollCarousel.attr('direction', direction);
+    }
+
+    function getScrollDirection($scrollCarousel) {
+        return (typeof $scrollCarousel.attr('direction') !== 'undefined') ? $scrollCarousel.attr('direction') : 'left';
     }
 
     return {
@@ -194,6 +262,9 @@ var ScrollCarousel = function () {
         },
         checkSwipIcons: function ($scrollCarousel) {
             checkSwipIcons($scrollCarousel)
+        },
+        animateScroll: function ($scrollCarousel) {
+            animateScroll($scrollCarousel)
         }
 
     };

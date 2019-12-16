@@ -3,7 +3,7 @@ var EntekhabeFarsang = function () {
     function showFarsang(setId) {
         showLoading();
         $('.selectEntekhabeFarsangVideoAndPamphlet').AnimateScrollTo();
-        getAjaxContent('/set/'+setId, function (data) {
+        getAjaxContent('/set/' + setId, function (data) {
             $('#selectFarsang .select-selected').html(data.set.name).attr('data-option-value', setId);
             setLists(data.files);
             setBtnMoreLink(data.set.url.web);
@@ -121,10 +121,10 @@ var EntekhabeFarsang = function () {
     function createVideoItem(data) {
         return '' +
             '<div class="item w-55443211">\n' +
-            '  <a href="'+data.link+'">' +
+            '  <a href="' + data.link + '">' +
             '    <img class="lazy-image a--full-width"\n' +
             '         src="https://cdn.alaatv.com/loder.jpg?w=16&h=9"\n' +
-            '         data-src="'+data.src+'"\n' +
+            '         data-src="' + data.src + '"\n' +
             '         alt="samplePhoto"\n' +
             '         width="253" height="142">\n' +
             '  </a>' +
@@ -134,7 +134,7 @@ var EntekhabeFarsang = function () {
     function createPamphletItem(data) {
         return '' +
             '<div class="item w-55443211">\n' +
-            '  <a href="'+data.link+'">' +
+            '  <a href="' + data.link + '">' +
             '    <div class="pamphletItem">\n' +
             '        <div class="pamphletItem-thumbnail">\n' +
             '            <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 512 512" style="enable-background:new 0 0 512 512;" xml:space="preserve">\n' +
@@ -151,7 +151,7 @@ var EntekhabeFarsang = function () {
             '            </svg>\n' +
             '        </div>\n' +
             '        <div class="pamphletItem-name">\n' +
-            '           '+data.name+'\n' +
+            '           ' + data.name + '\n' +
             '        </div>\n' +
             '    </div>\n' +
             '  </a>' +
@@ -222,12 +222,12 @@ var EntekhabeFarsang = function () {
     }
 
     function noDataMessage(message) {
-        return '<div class="alert alert-info text-center" role="alert" style="width: 100%;margin: auto;">'+message+'</div>';
+        return '<div class="alert alert-info text-center" role="alert" style="width: 100%;margin: auto;">' + message + '</div>';
     }
 
 
     return {
-        init: function() {
+        init: function () {
             checkNoData();
             refreshScrollCarouselSwipIcons();
         },
@@ -245,7 +245,7 @@ var InitAbrishamPage = function () {
     }
 
     function getFarsangMapHeight() {
-        return $('.productPicture').width()+'px';
+        return $('.productPicture').width() + 'px';
     }
 
     function splitFarsangAndNonFarsang(productSets) {
@@ -267,12 +267,12 @@ var InitAbrishamPage = function () {
             pileObject;
 
 
-        for(var i = 0; i < publishedProductSetsLength; i++) {
+        for (var i = 0; i < publishedProductSetsLength; i++) {
             var productSetItem = productSets[i];
 
             if (nonFarsangIds.indexOf(productSetItem.setId) === -1) {
                 freshFarsangs.push(productSetItem);
-            } else if(productSetItem.setId === pileSetId) {
+            } else if (productSetItem.setId === pileSetId) {
                 pileObject = productSetItem;
             } else {
                 freshNonFarsangs.push(productSetItem);
@@ -288,7 +288,7 @@ var InitAbrishamPage = function () {
     }
 
     function getItemName(omIndex) {
-        var omArray=[
+        var omArray = [
                 'پیله راه ابریشم',
                 'اول',
                 'دوم',
@@ -311,7 +311,7 @@ var InitAbrishamPage = function () {
                 'نوزدهم',
                 'بیستم'
             ],
-            name = (omIndex===0)?omArray[omIndex]:'فرسنگ '+omArray[omIndex];
+            name = (omIndex === 0) ? omArray[omIndex] : 'فرسنگ ' + omArray[omIndex];
         return name;
     }
 
@@ -371,11 +371,11 @@ var InitAbrishamPage = function () {
             farsangPointsLength = farsangPoints.length,
             currentStep = farsangsLength - 1;
 
-        for(var i = 0; i < farsangPointsLength; i++) {
+        for (var i = 0; i < farsangPointsLength; i++) {
             var footPrint = 'url(/acm/image/raheAbrisham/footPrint2.svg)',
                 farsangItem = farsangs[i];
 
-            if ( i < currentStep) {
+            if (i < currentStep) {
                 footPrint = 'url(/acm/image/raheAbrisham/footPrint1.svg)';
 
                 // farsangPoints[i].drilldown = "FarsangItems";
@@ -384,7 +384,7 @@ var InitAbrishamPage = function () {
                     id: farsangItem.setId,
                     name: farsangItem.name
                 };
-            } else if ( i === currentStep ) {
+            } else if (i === currentStep) {
 
                 footPrint = 'url(/acm/image/raheAbrisham/footPrint3.svg)';
 
@@ -426,8 +426,8 @@ var InitAbrishamPage = function () {
     }
 
     function setBackgroundForHighchart(mapRoadId) {
-        $('#'+mapRoadId).prepend('<img class="background" src="/acm/image/raheAbrisham/mapbackground1.jpg">');
-        $('#'+mapRoadId).find('.highcharts-container').css({'width': '100%'}).find('svg').css({'width': '100%'});
+        $('#' + mapRoadId).prepend('<img class="background" src="/acm/image/raheAbrisham/mapbackground1.jpg">');
+        $('#' + mapRoadId).find('.highcharts-container').css({'width': '100%'}).find('svg').css({'width': '100%'});
     }
 
     function initHighchart(mapRoadId, farsangPoints) {
@@ -479,29 +479,7 @@ var InitAbrishamPage = function () {
                 pointFormat: '{point.name}'
             },
             plotOptions: Highcharts_plotOptions(),
-
-            exporting: {
-                buttons: [{
-                    text: 'custom button',
-                    onclick: function () {
-                        alert('clicked');
-                    },
-                    theme: {
-                        'stroke-width': 1,
-                        stroke: 'silver',
-                        r: 0,
-                        states: {
-                            hover: {
-                                fill: '#a4edba'
-                            },
-                            select: {
-                                stroke: '#039',
-                                fill: '#a4edba'
-                            }
-                        }
-                    }
-                }]
-            },
+            exporting: Highcharts_exporting(),
             series: Highcharts_series(farsangPoints),
             // drilldown: Highcharts_drilldown()
         });
@@ -549,6 +527,38 @@ var InitAbrishamPage = function () {
         }];
     }
 
+    function Highcharts_exporting() {
+        return {
+            buttons: [
+                {
+                    align: 'left',
+                    verticalAlign: 'bottom',
+                    text: 'صفر تا صد',
+                    onclick: function () {
+                        EntekhabeFarsang.showFarsang(217);
+                    },
+                },
+                {
+                    align: 'left',
+                    verticalAlign: 'bottom',
+                    text: 'پیش آزمون',
+                    onclick: function () {
+                        EntekhabeFarsang.showFarsang(717);
+                    },
+                },
+                {
+                    // align: 'right',
+                    align: 'left',
+                    verticalAlign: 'bottom',
+                    text: 'بار انداز',
+                    onclick: function () {
+                        EntekhabeFarsang.showFarsang(665);
+                    },
+                }
+            ]
+        };
+    }
+
     function Highcharts_plotOptions() {
         return {
             enableMouseTracking: false,
@@ -565,7 +575,7 @@ var InitAbrishamPage = function () {
                     color: 'white',
                     style: {
                         fontSize: '16px',
-                        textOutline: false ,
+                        textOutline: false,
                     },
                     format: '{point.name}',
                     // useHTML: true,
@@ -576,9 +586,9 @@ var InitAbrishamPage = function () {
                 },
                 point: {
                     events: {
-                        click: function() {
+                        click: function () {
                             var data = this.series.data[this.index];
-                            EntekhabeFarsang.showFarsang(data.set.id)
+                            EntekhabeFarsang.showFarsang(data.set.id);
                         }
                     }
                 }
@@ -683,16 +693,15 @@ var InitAbrishamPage = function () {
         };
     }
 
-
     function feedMapPoints(chart, farsangPoints) {
         var counter = 0,
             farsangPointsLength = farsangPoints.length;
-        var i = setInterval(function(){
+        var i = setInterval(function () {
 
             chart.series[0].addPoint(farsangPoints[counter]);
 
             counter++;
-            if(counter === farsangPointsLength) {
+            if (counter === farsangPointsLength) {
                 clearInterval(i);
             }
         }, 400);
@@ -944,7 +953,6 @@ jQuery(document).ready(function () {
     // });
 
 
-
     // function renderNested(template_string, translate) {
     //     return function() {
     //         return function(text, render) {
@@ -989,4 +997,49 @@ jQuery(document).ready(function () {
     // }));
 
     imageObserver.observe();
+
+    // Expose to window namespase for testing purposes
+    window.zoomTiger = svgPanZoom('#demo-tiger', {
+        viewportSelector: '#container',
+        panEnabled: true,
+        zoomEnabled: true,
+        controlIconsEnabled: false,
+        fit: true,
+        center: true,
+
+        dblClickZoomEnabled: true,
+        mouseWheelZoomEnabled: true,
+        preventMouseEventsDefault: true,
+        zoomScaleSensitivity: 0.2,
+        minZoom: 0.5,
+        maxZoom: 10,
+        contain: false,
+        refreshRate: 'auto',
+        beforeZoom: function(){},
+        onZoom: function(data){
+            // console.log('data: ', data);
+            // console.log('this: ', this);
+            console.log('this.getPan(): ', this.getPan());
+            console.log('this.getZoom(): ', this.getZoom());
+        }
+        , beforePan: function(){}
+        , onPan: function(data){
+            console.log('data: ', data);
+            // console.log('this: ', this);
+            // console.log('this.getPan(): ', this.getPan());
+            // console.log('this.getZoom(): ', this.getZoom());
+        }
+        , onUpdatedCTM: function(){}
+        // , customEventsHandler: {}
+        // , eventsListenerElement: null
+    });
+
+    // document.getElementById('enable').addEventListener('click', function() {
+    //     window.zoomTiger.enableControlIcons();
+    // })
+    // document.getElementById('disable').addEventListener('click', function() {
+    //     window.zoomTiger.disableControlIcons();
+    // })
+
+
 });

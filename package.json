@@ -74,6 +74,7 @@
     "slick-carousel": "^1.8.1",
     "split-string": "^6.1.0",
     "summernote": "^0.8.12",
+    "svg-pan-zoom": "^3.6.1",
     "toastr": "^2.1.4",
     "tooltip": "^1.6.1",
     "truncatise": "0.0.8",

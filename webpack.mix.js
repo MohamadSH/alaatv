@@ -574,6 +574,9 @@ class Mix {
             ]),
             'public/css/product-show-RaheAbrisham.css',
             baseProductShow.js.concat([
+
+                'node_modules/svg-pan-zoom/dist/svg-pan-zoom.js',
+
                 'node_modules/highcharts/highcharts.js',
                 'node_modules/highcharts/modules/map.js',
                 'node_modules/highcharts/modules/drilldown.js',
