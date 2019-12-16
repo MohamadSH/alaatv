@@ -178,7 +178,8 @@ var AjaxLogin = function () {
                         status: status
                     });
                 } else if (typeof callbackOrRedirectLink === 'string') {
-                    window.location.href = callbackOrRedirectLink;
+                    // window.location.href = callbackOrRedirectLink;
+                    window.location.replace(callbackOrRedirectLink);
                 }
             },
             error: function (data) {
