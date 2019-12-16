@@ -42,7 +42,7 @@ class LiveDescriptionController extends Controller
      * Store a newly created resource in storage.
      *
      * @param Request $request
-     * @return Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function store(Request $request)
     {
@@ -63,11 +63,13 @@ class LiveDescriptionController extends Controller
      * Display the specified resource.
      *
      * @param LiveDescription $liveDescription
-     * @return LiveDescription
+     * @return \Illuminate\Http\JsonResponse
      */
     public function show(LiveDescription $liveDescription)
     {
-        return $liveDescription;
+        return response()->json([
+            $liveDescription
+        ]);
     }
 
     /**
@@ -86,7 +88,7 @@ class LiveDescriptionController extends Controller
      *
      * @param Request $request
      * @param LiveDescription $liveDescription
-     * @return Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function update(Request $request, LiveDescription $liveDescription)
     {
@@ -104,14 +106,21 @@ class LiveDescriptionController extends Controller
      * Remove the specified resource from storage.
      *
      * @param LiveDescription $liveDescription
-     * @return Response
+     * @return \Illuminate\Http\JsonResponse
      * @throws Exception
      */
     public function destroy(LiveDescription $liveDescription)
     {
-        $liveDescription->delete();
+        if($liveDescription->delete()){
+            return response()->json([
+                'message' => 'توضیح لخظه ای با موفقیت حذف شد',
+            ]);
+        }
+
         return response()->json([
-            'message' => 'توضیح لخظه ای با موفقیت حذف شد',
+            'error' => [
+               'message'    => 'Error on removing Description',
+            ]
         ]);
     }
 }

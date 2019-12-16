@@ -39,6 +39,7 @@
                                 <th>جلسه</th>
                                 <th> تیتر</th>
                                 <th>توضیحات</th>
+                                <th>سکشن</th>
                                 <th>فعال</th>
                                 <th>زمان نمایان شدن</th>
                                 <th>فیلم / جزوه</th>
@@ -59,6 +60,7 @@
                                         <td> {{ $content->order }}</td>
                                         <td> {{ $content->name }}</td>
                                         <td>{!!   $content->description !!}</td>
+                                        <td>{{(isset($content->section_id))?$content->section->name:'ندارد'}}</td>
                                         <td>{{($content->enable)?'بله':'خیر'}}</td>
                                         <td>{{ $content->ValidSince_Jalali() }}</td>
                                         <td>
