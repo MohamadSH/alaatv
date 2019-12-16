@@ -271,7 +271,7 @@
                                data-gtm-eec-promotion-name="جشنواره یلدایی آلاء"
                                data-gtm-eec-promotion-creative="سمت راست صفحه بالای توضیحات کانتنت"
                                data-gtm-eec-promotion-position="0">
-                                <img data-src="https://cdn.alaatv.com/upload/yalda-festival_300.100.jpg" class="a--full-width lazy-image" alt="جشنواره یلدایی آلاء">
+                                <img data-src="https://cdn.alaatv.com/upload/yalda-festival_300.100.jpg" class="a--full-width lazy-image" alt="جشنواره یلدایی آلاء" width="300" height="100">
                             </a>
                         </div>
                     </div>
@@ -391,7 +391,7 @@
 {{--                                                   data-gtm-eec-promotion-name="جشنواره یلدایی آلاء"--}}
 {{--                                                   data-gtm-eec-promotion-creative="جلوی لینک های مستقیم دانلود این فیلم"--}}
 {{--                                                   data-gtm-eec-promotion-position="0">--}}
-{{--                                                    <img data-src="https://cdn.alaatv.com/upload/yalda-festival_400.400.jpg" class="a--full-width lazy-image" alt="جشنواره یلدایی آلاء">--}}
+{{--                                                    <img data-src="https://cdn.alaatv.com/upload/yalda-festival_400.400.jpg" class="a--full-width lazy-image" alt="جشنواره یلدایی آلاء" width="400" height="400">--}}
 {{--                                                </a>--}}
                                             </div>
                                             <div class="col-md-6 text-center m--margin-bottom-5">
@@ -471,7 +471,7 @@
                                data-gtm-eec-promotion-name="جشنواره یلدایی آلاء"
                                data-gtm-eec-promotion-creative="سمت راست صفحه بالای توضیحات کانتنت"
                                data-gtm-eec-promotion-position="0">
-                                <img data-src="https://cdn.alaatv.com/upload/yalda-festival_300.100.jpg" class="a--full-width lazy-image" alt="جشنواره یلدایی آلاء">
+                                <img data-src="https://cdn.alaatv.com/upload/yalda-festival_300.100.jpg" class="a--full-width lazy-image" alt="جشنواره یلدایی آلاء" width="300" height="100">
                             </a>
                         </div>
                     </div>
@@ -551,7 +551,7 @@
                                data-gtm-eec-promotion-name="جشنواره یلدایی آلاء"
                                data-gtm-eec-promotion-creative="سمت راست صفحه بالای توضیحات کانتنت"
                                data-gtm-eec-promotion-position="0">
-                                <img data-src="https://cdn.alaatv.com/upload/yalda-festival_300.100.jpg" class="a--full-width lazy-image" alt="جشنواره یلدایی آلاء">
+                                <img data-src="https://cdn.alaatv.com/upload/yalda-festival_300.100.jpg" class="a--full-width lazy-image" alt="جشنواره یلدایی آلاء" width="300" height="100">
                             </a>
                         </div>
                     </div>
@@ -700,7 +700,7 @@
                        data-gtm-eec-promotion-name="جشنواره یلدایی آلاء"
                        data-gtm-eec-promotion-creative="سمت چپ صفحه پایین لیست کانتنت های مشابه"
                        data-gtm-eec-promotion-position="0">
-                        <img data-src="https://cdn.alaatv.com/upload/yalda-festival_300.100.jpg" class="a--full-width lazy-image" alt="جشنواره یلدایی آلاء">
+                        <img data-src="https://cdn.alaatv.com/upload/yalda-festival_300.100.jpg" class="a--full-width lazy-image" alt="جشنواره یلدایی آلاء" width="300" height="100">
                     </a>
                     {{--                    <a href="https://alaatv.com/product/312"--}}
                     {{--                       data-tooltip-content="همایش طلایی ریاضی تجربی کنکور"--}}
