@@ -10,7 +10,7 @@ use Illuminate\Support\{Arr, Collection, Facades\Cache, Facades\File, Facades\St
 use App\{Adapter\AlaaSftpAdapter,
     Block,
     Bon,
-    Content,
+    Descriptionwithperiod,
     Product,
     Attributeset,
     Attributetype,
@@ -214,8 +214,9 @@ class ProductController extends Controller
 //            $lastSet = $product->sets->sortByDesc('created_at')->first() ;
 //            $lastSetPamphlets = $lastSet->where('contenttype_id' , Content::CONTENT_TYPE_PAMPHLET);
 //            $lastSetVideos    = $lastSet->where('contenttype_id' , Content::CONTENT_TYPE_VIDEO);
+//            $periodDescription = $product->descriptionWithPeriod;
 //
-//            return view('product.customShow.raheAbrisham', compact('product', 'block', 'purchasedProductIdArray', 'allChildIsPurchased' , 'liveDescriptions' , 'children' , 'isFavored' , 'isForcedGift' , 'shouldBuyProductId' , 'shouldBuyProductName' , 'hasPurchasedShouldBuyProduct' , 'lastSet' , 'lastSetPamphlets' , 'lastSetVideos'));
+//            return view('product.customShow.raheAbrisham', compact('product', 'block', 'purchasedProductIdArray', 'allChildIsPurchased' , 'liveDescriptions' , 'children' , 'isFavored' , 'isForcedGift' , 'shouldBuyProductId' , 'shouldBuyProductName' , 'hasPurchasedShouldBuyProduct' , 'lastSet' , 'lastSetPamphlets' , 'lastSetVideos' , 'periodDescription'));
 //        }
 
         return view('product.show', compact('product', 'block', 'purchasedProductIdArray', 'allChildIsPurchased' , 'liveDescriptions' , 'children' , 'isFavored' , 'isForcedGift' , 'shouldBuyProductId' , 'shouldBuyProductName' , 'hasPurchasedShouldBuyProduct'));
@@ -284,11 +285,13 @@ class ProductController extends Controller
 
         $sets = $product->sets()->get();
 
+        $descriptionsWithPeriod = $product->descriptionWithPeriod ;
+
         return view('product.edit',
             compact('product', 'amountLimit', 'defaultAmountLimit', 'enableStatus', 'defaultEnableStatus',
                 'attributesets', 'bons', 'productFiles', 'blocks' , 'allBlocks' , 'sets',
                 'productFileTypes', 'defaultProductFileOrders', 'products', 'producttype', 'productPhotos',
-                'defaultProductPhotoOrder', 'tags' , 'sampleContents' , 'recommenderContents' , 'liveDescriptions'));
+                'defaultProductPhotoOrder', 'tags' , 'sampleContents' , 'recommenderContents' , 'liveDescriptions' , 'descriptionsWithPeriod'));
     }
 
     public function update(EditProductRequest $request, Product $product)

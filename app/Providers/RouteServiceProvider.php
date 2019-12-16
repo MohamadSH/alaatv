@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\{Cache, Route};
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 use App\{Category,
     City,
+    Descriptionwithperiod,
     LiveDescription,
     Role,
     Section,
@@ -38,6 +39,7 @@ use App\{Category,
     Articlecategory,
     Employeetimesheet,
     Afterloginformcontrol};
+use Illuminate\Http\Response;
 
 class RouteServiceProvider extends ServiceProvider
 {
@@ -76,7 +78,7 @@ class RouteServiceProvider extends ServiceProvider
             ])
                 ->remember($key, config('constants.CACHE_5'), function () use ($value) {
                     return User::where('id', $value)
-                            ->first() ?? abort(404);
+                            ->first() ?? abort(Response::HTTP_NOT_FOUND);
                 });
         });
         Route::bind('assignment', function ($value) {
@@ -87,7 +89,7 @@ class RouteServiceProvider extends ServiceProvider
                 'assignment_'.$value,
             ])->remember($key, config('constants.CACHE_5'), function () use ($value) {
                 return Assignment::where('id', $value)
-                        ->first() ?? abort(404);
+                        ->first() ?? abort(Response::HTTP_NOT_FOUND);
             });
         });
         Route::bind('consultation', function ($value) {
@@ -98,7 +100,7 @@ class RouteServiceProvider extends ServiceProvider
                 'consultation_'.$value,
             ])->remember($key, config('constants.CACHE_5'), function () use ($value) {
                 return Consultation::where('id', $value)
-                        ->first() ?? abort(404);
+                        ->first() ?? abort(Response::HTTP_NOT_FOUND);
             });
         });
         Route::bind('order', function ($value) {
@@ -109,7 +111,7 @@ class RouteServiceProvider extends ServiceProvider
                 'order_'.$value,
             ])->remember($key, config('constants.CACHE_5'), function () use ($value) {
                 return Order::where('id', $value)
-                        ->first() ?? abort(404);
+                        ->first() ?? abort(Response::HTTP_NOT_FOUND);
             });
         });
         Route::bind('product', function ($value) {
@@ -122,7 +124,7 @@ class RouteServiceProvider extends ServiceProvider
                 $product = Product::where('id', $value)
                     ->first();
                 if (!isset($product) || is_null($product)) {
-                    abort(404);
+                    abort(Response::HTTP_NOT_FOUND);
                 }
                 if (!$product->relationLoaded('producttype')) {
                     $product->load('producttype');
@@ -148,7 +150,7 @@ class RouteServiceProvider extends ServiceProvider
                 'orderproduct_'.$value,
             ])->remember($key, config('constants.CACHE_5'), function () use ($value) {
                 return Orderproduct::where('id', $value)
-                        ->first() ?? abort(404);
+                        ->first() ?? abort(Response::HTTP_NOT_FOUND);
             });
         });
         Route::bind('attributevalue', function ($value) {
@@ -159,7 +161,7 @@ class RouteServiceProvider extends ServiceProvider
                 'attributevalue_'.$value,
             ])->remember($key, config('constants.CACHE_5'), function () use ($value) {
                 return Attributevalue::where('id', $value)
-                        ->first() ?? abort(404);
+                        ->first() ?? abort(Response::HTTP_NOT_FOUND);
             });
         });
         Route::bind('permission', function ($value) {
@@ -170,7 +172,7 @@ class RouteServiceProvider extends ServiceProvider
                 'permissoin_'.$value,
             ])->remember($key, config('constants.CACHE_5'), function () use ($value) {
                 return Permission::where('id', $value)
-                        ->first() ?? abort(404);
+                        ->first() ?? abort(Response::HTTP_NOT_FOUND);
             });
         });
         Route::bind('role', function ($value) {
@@ -181,7 +183,7 @@ class RouteServiceProvider extends ServiceProvider
                 'role_'.$value,
             ])->remember($key, config('constants.CACHE_5'), function () use ($value) {
                 return Role::where('id', $value)
-                        ->first() ?? abort(404);
+                        ->first() ?? abort(Response::HTTP_NOT_FOUND);
             });
         });
         Route::bind('coupon', function ($value) {
@@ -192,7 +194,7 @@ class RouteServiceProvider extends ServiceProvider
                 'coupon_'.$value,
             ])->remember($key, config('constants.CACHE_5'), function () use ($value) {
                 return Coupon::where('id', $value)
-                        ->first() ?? abort(404);
+                        ->first() ?? abort(Response::HTTP_NOT_FOUND);
             });
         });
         Route::bind('userupload', function ($value) {
@@ -203,7 +205,7 @@ class RouteServiceProvider extends ServiceProvider
                 'userupload_'.$value,
             ])->remember($key, config('constants.CACHE_5'), function () use ($value) {
                 return Userupload::where('id', $value)
-                        ->first() ?? abort(404);
+                        ->first() ?? abort(Response::HTTP_NOT_FOUND);
             });
         });
         Route::bind('attribute', function ($value) {
@@ -214,7 +216,7 @@ class RouteServiceProvider extends ServiceProvider
                 'attribute_'.$value,
             ])->remember($key, config('constants.CACHE_5'), function () use ($value) {
                 return Attribute::where('id', $value)
-                        ->first() ?? abort(404);
+                        ->first() ?? abort(Response::HTTP_NOT_FOUND);
             });
         });
         Route::bind('attributeset', function ($value) {
@@ -225,7 +227,7 @@ class RouteServiceProvider extends ServiceProvider
                 'attributeset_'.$value,
             ])->remember($key, config('constants.CACHE_5'), function () use ($value) {
                 return Attributeset::where('id', $value)
-                        ->first() ?? abort(404);
+                        ->first() ?? abort(Response::HTTP_NOT_FOUND);
             });
         });
         Route::bind('attributegroup', function ($value) {
@@ -236,7 +238,7 @@ class RouteServiceProvider extends ServiceProvider
                 'attributegroup_'.$value,
             ])->remember($key, config('constants.CACHE_5'), function () use ($value) {
                 return Attributegroup::where('id', $value)
-                        ->first() ?? abort(404);
+                        ->first() ?? abort(Response::HTTP_NOT_FOUND);
             });
         });
         Route::bind('userbon', function ($value) {
@@ -247,7 +249,7 @@ class RouteServiceProvider extends ServiceProvider
                 'userbon_'.$value,
             ])->remember($key, config('constants.CACHE_5'), function () use ($value) {
                 return Userbon::where('id', $value)
-                        ->first() ?? abort(404);
+                        ->first() ?? abort(Response::HTTP_NOT_FOUND);
             });
         });
         Route::bind('mbtianswer', function ($value) {
@@ -258,7 +260,7 @@ class RouteServiceProvider extends ServiceProvider
                 'mbtianswer_'.$value,
             ])->remember($key, config('constants.CACHE_5'), function () use ($value) {
                 return Mbtianswer::where('id', $value)
-                        ->first() ?? abort(404);
+                        ->first() ?? abort(Response::HTTP_NOT_FOUND);
             });
         });
         Route::bind('contact', function ($value) {
@@ -269,7 +271,7 @@ class RouteServiceProvider extends ServiceProvider
                 'contact_'.$value,
             ])->remember($key, config('constants.CACHE_5'), function () use ($value) {
                 return Contact::where('id', $value)
-                        ->first() ?? abort(404);
+                        ->first() ?? abort(Response::HTTP_NOT_FOUND);
             });
         });
         Route::bind('phone', function ($value) {
@@ -280,7 +282,7 @@ class RouteServiceProvider extends ServiceProvider
                 'phone_'.$value,
             ])->remember($key, config('constants.CACHE_5'), function () use ($value) {
                 return Phone::where('id', $value)
-                        ->first() ?? abort(404);
+                        ->first() ?? abort(Response::HTTP_NOT_FOUND);
             });
         });
         Route::bind('afterloginformcontrol', function ($value) {
@@ -291,7 +293,7 @@ class RouteServiceProvider extends ServiceProvider
                 'afterloginformcontrol_'.$value,
             ])->remember($key, config('constants.CACHE_5'), function () use ($value) {
                 return Afterloginformcontrol::where('id', $value)
-                        ->first() ?? abort(404);
+                        ->first() ?? abort(Response::HTTP_NOT_FOUND);
             });
         });
         Route::bind('article', function ($value) {
@@ -302,7 +304,7 @@ class RouteServiceProvider extends ServiceProvider
                 'article_'.$value,
             ])->remember($key, config('constants.CACHE_5'), function () use ($value) {
                 return Article::where('id', $value)
-                        ->first() ?? abort(404);
+                        ->first() ?? abort(Response::HTTP_NOT_FOUND);
             });
         });
         Route::bind('articlecategory', function ($value) {
@@ -313,7 +315,7 @@ class RouteServiceProvider extends ServiceProvider
                 'atriclecategory_'.$value,
             ])->remember($key, config('constants.CACHE_5'), function () use ($value) {
                 return Articlecategory::where('id', $value)
-                        ->first() ?? abort(404);
+                        ->first() ?? abort(Response::HTTP_NOT_FOUND);
             });
         });
         Route::bind('slideshow', function ($value) {
@@ -324,7 +326,7 @@ class RouteServiceProvider extends ServiceProvider
                 'slideshow_'.$value,
             ])->remember($key, config('constants.CACHE_5'), function () use ($value) {
                 return Slideshow::where('id', $value)
-                        ->first() ?? abort(404);
+                        ->first() ?? abort(Response::HTTP_NOT_FOUND);
             });
         });
         Route::bind('websiteSetting', function ($value) {
@@ -335,7 +337,7 @@ class RouteServiceProvider extends ServiceProvider
                 'websiteSetting_'.$value,
             ])->remember($key, config('constants.CACHE_5'), function () use ($value) {
                 return Websitesetting::where('id', $value)
-                        ->first() ?? abort(404);
+                        ->first() ?? abort(Response::HTTP_NOT_FOUND);
             });
         });
         Route::bind('productfile', function ($value) {
@@ -346,7 +348,7 @@ class RouteServiceProvider extends ServiceProvider
                 'productfile_'.$value,
             ])->remember($key, config('constants.CACHE_5'), function () use ($value) {
                 return Productfile::where('id', $value)
-                        ->first() ?? abort(404);
+                        ->first() ?? abort(Response::HTTP_NOT_FOUND);
             });
         });
         Route::bind('city', function ($value) {
@@ -357,7 +359,7 @@ class RouteServiceProvider extends ServiceProvider
                 'city_'.$value,
             ])->remember($key, config('constants.CACHE_5'), function () use ($value) {
                 return City::where('id', $value)
-                        ->first() ?? abort(404);
+                        ->first() ?? abort(Response::HTTP_NOT_FOUND);
             });
         });
         /*
@@ -371,7 +373,7 @@ class RouteServiceProvider extends ServiceProvider
                            if (!$c->relationLoaded('contentsets'))
                                $c->load("contentsets");
                        }
-                        return  $c ?? abort(404);
+                        return  $c ?? abort(Response::HTTP_NOT_FOUND);
                     });
 
                 });
@@ -397,7 +399,7 @@ class RouteServiceProvider extends ServiceProvider
                     }
                 }
 
-                return $c ?? abort(404);
+                return $c ?? abort(Response::HTTP_NOT_FOUND);
             });
         });
 
@@ -411,7 +413,7 @@ class RouteServiceProvider extends ServiceProvider
                 $set = Contentset::where('id', $value)
                     ->first();
 
-                return $set ?? abort(404);
+                return $set ?? abort(Response::HTTP_NOT_FOUND);
             });
         });
 
@@ -423,7 +425,7 @@ class RouteServiceProvider extends ServiceProvider
                 'employeetimesheet_'.$value,
             ])->remember($key, config('constants.CACHE_5'), function () use ($value) {
                 return Employeetimesheet::where('id', $value)
-                        ->first() ?? abort(404);
+                        ->first() ?? abort(Response::HTTP_NOT_FOUND);
             });
         });
         Route::bind('productphoto', function ($value) {
@@ -434,7 +436,7 @@ class RouteServiceProvider extends ServiceProvider
                 'productphoto_'.$value,
             ])->remember($key, config('constants.CACHE_5'), function () use ($value) {
                 return Productphoto::where('id', $value)
-                        ->first() ?? abort(404);
+                        ->first() ?? abort(Response::HTTP_NOT_FOUND);
             });
         });
         Route::bind('wallet', function ($value) {
@@ -445,7 +447,7 @@ class RouteServiceProvider extends ServiceProvider
                 'wallet_'.$value,
             ])->remember($key, config('constants.CACHE_5'), function () use ($value) {
                 return Wallet::where('id', $value)
-                        ->first() ?? abort(404);
+                        ->first() ?? abort(Response::HTTP_NOT_FOUND);
             });
         });
         Route::bind('eventresult', function ($value) {
@@ -456,7 +458,7 @@ class RouteServiceProvider extends ServiceProvider
                 'eventresult_'.$value,
             ])->remember($key, config('constants.CACHE_5'), function () use ($value) {
                 return Eventresult::where('id', $value)
-                        ->first() ?? abort(404);
+                        ->first() ?? abort(Response::HTTP_NOT_FOUND);
             });
         });
 
@@ -468,7 +470,7 @@ class RouteServiceProvider extends ServiceProvider
                 'livedescription_'.$value,
             ])->remember($key, config('constants.CACHE_5'), function () use ($value) {
                 return LiveDescription::where('id', $value)
-                        ->first() ?? abort(404);
+                        ->first() ?? abort(Response::HTTP_NOT_FOUND);
             });
         });
 
@@ -480,7 +482,7 @@ class RouteServiceProvider extends ServiceProvider
                 'section_'.$value,
             ])->remember($key, config('constants.CACHE_5'), function () use ($value) {
                 return Section::where('id', $value)
-                        ->first() ?? abort(404);
+                        ->first() ?? abort(Response::HTTP_NOT_FOUND);
             });
         });
 
@@ -492,7 +494,19 @@ class RouteServiceProvider extends ServiceProvider
                 'category_'.$value,
             ])->remember($key, config('constants.CACHE_5'), function () use ($value) {
                 return Category::where('id', $value)
-                        ->first() ?? abort(404);
+                        ->first() ?? abort(Response::HTTP_NOT_FOUND);
+            });
+        });
+
+        Route::bind('periodDescription', function ($value) {
+            $key = 'periodDescription:'.$value;
+
+            return Cache::tags([
+                'periodDescription',
+                'periodDescription_'.$value,
+            ])->remember($key, config('constants.CACHE_5'), function () use ($value) {
+                return Descriptionwithperiod::where('id', $value)
+                        ->first() ?? abort(Response::HTTP_NOT_FOUND);
             });
         });
     }

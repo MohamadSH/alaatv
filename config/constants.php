@@ -204,6 +204,7 @@ return [
     'SEE_ORDER_IDENTITY_FILTERS'                  => 'seeOrderIdentityFilters',
     'UPLOAD_CENTER_ACCESS'                        => 'uploadCenterAccess',
     'LIST_UPLOAD_CENTER_FILES'                    => 'listUploadCenterFiles',
+    'INSERT_PERIOD_DESCRIPTION'                   => 'insertPeriodDescription',
 
     //Technician
     'SET_TECH_CODE'              => 'insertTechCode',

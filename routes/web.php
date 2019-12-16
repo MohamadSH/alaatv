@@ -8,6 +8,7 @@ use App\Http\Controllers\Web\LandingPageController;
 use App\Http\Controllers\Web\LiveController;
 use App\Http\Controllers\Web\OfflinePaymentController;
 use App\Http\Controllers\Web\OrderController;
+use App\Http\Controllers\Web\PeriodDescriptionController;
 use App\Http\Controllers\Web\ProductController;
 use App\Http\Controllers\Web\SanatisharifmergeController;
 use App\Http\Controllers\Web\SectionController;
@@ -160,7 +161,7 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::get('holdlottery', 'Web\LotteryController@holdLottery');
     Route::get('givePrize', 'Web\LotteryController@givePrizes');
-    Route::get('bot', 'Web\BotsController@bot')->name('web.bots');
+    Route::get('bot', [BotsController::class, 'bot'])->name('web.bots');
     Route::get('pointBot', [BotsController::class, 'pointBot'])->name('web.bot.point');
     Route::post('walletBot',[BotsController::class, 'walletBot'])->name('web.bot.wallet');
     Route::post('excelBot', [BotsController::class, 'excelBot'])->name('web.bot.excel');
@@ -262,9 +263,9 @@ Route::group(['middleware' => 'auth'], function () {
     Route::resource('file', 'Web\FileController');
     Route::resource('employeetimesheet', 'Web\EmployeetimesheetController');
     Route::resource('lottery', 'Web\LotteryController');
-
     Route::resource('livedescription', '\\'.LiveDescriptionController::class );
     Route::resource('section', '\\'.SectionController::class );
+    Route::resource('periodDescription', '\\'. PeriodDescriptionController::class );
 
     Route::get('copylessonfromremote', 'Web\RemoteDataCopyController@copyLesson');
     Route::get('copydepartmentfromremote', 'Web\RemoteDataCopyController@copyDepartment');
