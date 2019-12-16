@@ -83,7 +83,11 @@
                     </span>
                     </div>
                 </div>
+        @else
+            <input type = "text" name = "firstName" value = "{{ $user->firstName }}" class="d-none" disabled>
         @endif
+
+
         @if(!isset($user->lastName))
                 <div class = "form-group m-form__group {{ $errors->has('lastName') ? ' has-danger' : '' }}">
                     <label for = "lastName">نام خانوادگی</label>
@@ -96,7 +100,10 @@
                     </span>
                     </div>
                 </div>
+        @else
+                <input type = "text" name = "lastName" value = "{{ $user->lastName }}" class="d-none" disabled>
         @endif
+
         <div class = "form-group m-form__group {{ $errors->has('province') ? ' has-danger' : '' }}">
             <label for = "province">استان</label>
             <div class = "m-input-icon m-input-icon--left">
