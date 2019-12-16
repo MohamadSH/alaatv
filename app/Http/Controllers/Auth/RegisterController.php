@@ -75,7 +75,6 @@ class RegisterController extends Controller
 
     protected function create(array $data)
     {
-        $photo = Arr::get($data, 'photo');
         return User::create([
             'firstName'     => Arr::get($data, 'firstName'),
             'lastName'      => Arr::get($data, 'lastName'),
@@ -83,7 +82,7 @@ class RegisterController extends Controller
             'email'         => Arr::get($data, 'email'),
             'nationalCode'  => Arr::get($data, 'nationalCode'),
             'userstatus_id' => 1,
-            'photo'         => (!is_null($photo))?$photo: 'upload/images/profile/'.config('constants.PROFILE_DEFAULT_IMAGE'),
+            'photo'         => Arr::get($data, 'photo', 'upload/images/profile/'.config('constants.PROFILE_DEFAULT_IMAGE')),
             'password'      => bcrypt(Arr::get($data, 'password', Arr::get($data, 'nationalCode'))),
             'major_id'      => Arr::get($data, 'major_id'),
             'gender_id'     => Arr::get($data, 'gender_id'),
