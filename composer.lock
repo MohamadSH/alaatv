@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "92ac27a8e3f783b662ee8d841c4a007c",
+    "content-hash": "8ef4d56f9e56232e510b74b28a28edec",
     "packages": [
         {
             "name": "alaatv/mellat",
-            "version": "dev-master",
+            "version": "v1.3.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/alaatv/behpardakht-gateway-driver.git",
-                "reference": "6e418b9d7d47fc99aee561a51759e49239c0e9bc"
+                "reference": "8983ec0c22f6fb5f92f6918f4546d995953150e2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/alaatv/behpardakht-gateway-driver/zipball/6e418b9d7d47fc99aee561a51759e49239c0e9bc",
-                "reference": "6e418b9d7d47fc99aee561a51759e49239c0e9bc",
+                "url": "https://api.github.com/repos/alaatv/behpardakht-gateway-driver/zipball/8983ec0c22f6fb5f92f6918f4546d995953150e2",
+                "reference": "8983ec0c22f6fb5f92f6918f4546d995953150e2",
                 "shasum": ""
             },
             "require": {
@@ -56,20 +56,20 @@
                 "laravel5-package",
                 "php"
             ],
-            "time": "2019-12-15T10:06:15+00:00"
+            "time": "2019-12-17T07:22:52+00:00"
         },
         {
             "name": "alaatv/payment-gateways",
-            "version": "v1.8.1",
+            "version": "v1.8.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/alaatv/laravel-iranian-online-payments.git",
-                "reference": "1684629afd632bd4658194236b9b91cd142e32c6"
+                "reference": "d819eb67e630bf85388f39c1798b1273787e8d73"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/alaatv/laravel-iranian-online-payments/zipball/1684629afd632bd4658194236b9b91cd142e32c6",
-                "reference": "1684629afd632bd4658194236b9b91cd142e32c6",
+                "url": "https://api.github.com/repos/alaatv/laravel-iranian-online-payments/zipball/d819eb67e630bf85388f39c1798b1273787e8d73",
+                "reference": "d819eb67e630bf85388f39c1798b1273787e8d73",
                 "shasum": ""
             },
             "require": {
@@ -104,20 +104,20 @@
                 "laravel5-package",
                 "php"
             ],
-            "time": "2019-05-11T08:27:30+00:00"
+            "time": "2019-12-17T07:28:11+00:00"
         },
         {
             "name": "alaatv/zarinpal",
-            "version": "v1.1.7",
+            "version": "v1.1.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/alaatv/zarrinpal-gateway-driver.git",
-                "reference": "a95ea2f4a748b9853d287f550f5d0601d795553c"
+                "reference": "ba2c0647b7135f5f3ad95ba7cd841c04669154ec"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/alaatv/zarrinpal-gateway-driver/zipball/a95ea2f4a748b9853d287f550f5d0601d795553c",
-                "reference": "a95ea2f4a748b9853d287f550f5d0601d795553c",
+                "url": "https://api.github.com/repos/alaatv/zarrinpal-gateway-driver/zipball/ba2c0647b7135f5f3ad95ba7cd841c04669154ec",
+                "reference": "ba2c0647b7135f5f3ad95ba7cd841c04669154ec",
                 "shasum": ""
             },
             "require": {
@@ -157,7 +157,7 @@
                 "laravel5-package",
                 "php"
             ],
-            "time": "2019-05-11T08:25:14+00:00"
+            "time": "2019-12-17T07:24:57+00:00"
         },
         {
             "name": "algolia/algoliasearch-client-php",
@@ -3671,16 +3671,16 @@
         },
         {
             "name": "phpoption/phpoption",
-            "version": "1.7.1",
+            "version": "1.7.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/schmittjoh/php-option.git",
-                "reference": "100a25207566930efd926cf205542946aa692e01"
+                "reference": "77f7c4d2e65413aff5b5a8cc8b3caf7a28d81959"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/schmittjoh/php-option/zipball/100a25207566930efd926cf205542946aa692e01",
-                "reference": "100a25207566930efd926cf205542946aa692e01",
+                "url": "https://api.github.com/repos/schmittjoh/php-option/zipball/77f7c4d2e65413aff5b5a8cc8b3caf7a28d81959",
+                "reference": "77f7c4d2e65413aff5b5a8cc8b3caf7a28d81959",
                 "shasum": ""
             },
             "require": {
@@ -3722,7 +3722,7 @@
                 "php",
                 "type"
             ],
-            "time": "2019-12-14T13:46:39+00:00"
+            "time": "2019-12-15T19:35:24+00:00"
         },
         {
             "name": "phpseclib/phpseclib",
@@ -7305,16 +7305,16 @@
         },
         {
             "name": "myclabs/deep-copy",
-            "version": "1.9.3",
+            "version": "1.9.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/myclabs/DeepCopy.git",
-                "reference": "007c053ae6f31bba39dfa19a7726f56e9763bbea"
+                "reference": "579bb7356d91f9456ccd505f24ca8b667966a0a7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/myclabs/DeepCopy/zipball/007c053ae6f31bba39dfa19a7726f56e9763bbea",
-                "reference": "007c053ae6f31bba39dfa19a7726f56e9763bbea",
+                "url": "https://api.github.com/repos/myclabs/DeepCopy/zipball/579bb7356d91f9456ccd505f24ca8b667966a0a7",
+                "reference": "579bb7356d91f9456ccd505f24ca8b667966a0a7",
                 "shasum": ""
             },
             "require": {
@@ -7349,7 +7349,7 @@
                 "object",
                 "object graph"
             ],
-            "time": "2019-08-09T12:45:53+00:00"
+            "time": "2019-12-15T19:12:40+00:00"
         },
         {
             "name": "nunomaduro/collision",
@@ -8975,9 +8975,7 @@
     ],
     "aliases": [],
     "minimum-stability": "dev",
-    "stability-flags": {
-        "alaatv/mellat": 20
-    },
+    "stability-flags": [],
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {

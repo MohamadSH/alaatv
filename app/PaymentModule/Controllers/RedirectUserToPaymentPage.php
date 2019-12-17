@@ -4,7 +4,6 @@ namespace App\PaymentModule\Controllers;
 
 use App\Events\UserRedirectedToPayment;
 use App\Product;
-use Cache;
 use App\User;
 use App\Order;
 use App\Transaction;
@@ -23,19 +22,17 @@ use App\Http\Controllers\Web\TransactionController;
 use App\Classes\Payment\RefinementRequest\RefinementLauncher;
 use Illuminate\Routing\Redirector;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Log;
-use ImanGhafoori\Terminator\TerminateException;
 
 class RedirectUserToPaymentPage extends Controller
 {
     /**
      * redirect the user to online payment page
      *
-     * @param  Request  $request
-     * @param  string   $paymentMethod
-     * @param  string   $device
+     * @param string $paymentMethod
+     * @param string $device
      *
-     * @return JsonResponse|RedirectResponse|Redirector
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function __invoke(string $paymentMethod, string $device, Request $request)
     {
@@ -82,7 +79,7 @@ class RedirectUserToPaymentPage extends Controller
             $this->saveOrderInCookie($order);
         }
 
-        return view("order.checkout.gatewayRedirect", ['authority' => $authorityCode, 'paymentMethod' => $paymentMethod]);
+        return view("order.checkout.gatewayRedirect", ['authority' => $authorityCode, 'mobile' => $user->mobile , 'paymentMethod' => $paymentMethod]);
     }
 
     /**
