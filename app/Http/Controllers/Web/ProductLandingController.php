@@ -562,9 +562,9 @@ class ProductLandingController extends Controller
     /**
      * Products Special Landing Page
      *
-     * @param  Request  $request
+     * @param Request $request
      *
-     * @return Response
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function landing10(Request $request)
     {
@@ -629,7 +629,7 @@ class ProductLandingController extends Controller
             383 => [
                 'name' => 'همایش حسابان گدار',
                 'url' => route('product.show' , 383),
-                'hours' => 0
+                'hours' => 11
             ],
             385 => [
                 'name' => 'همایش ریاضی تجربی گدار (ویژه راه ابریشم)',
