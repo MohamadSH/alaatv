@@ -2,7 +2,7 @@
 <html lang="fa" direction="rtl" style="direction: rtl">
     <head>
         @include('partials.html-head')
-        
+
         <style>
             .redirectBackground {
                 position: fixed;
@@ -15,12 +15,12 @@
             .redirectBackground svg {
             }
         </style>
-        
+
     </head>
     <body>
 
         @include('partials.gtm-body')
-    
+
         <div class="redirectBackground">
             <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" preserveAspectRatio="xMidYMid" viewBox="0 0 1920 1280">
                 <g transform=""><defs>
@@ -1351,7 +1351,7 @@
                     <rect x="0" y="0" width="1920" height="1280" fill="url(#ldbk-photon-nq4q5u6dq7r-lg)" mask="url(#ldbk-photon-nq4q5u6dq7r-mask)"></rect></g>
             </svg>
         </div>
-        
+
         <div class="container">
             <div class="row align-items-center m--margin-top-100">
                 <div class="col-6 col-sm-5 col-md-4 col-lg-3 mx-auto align-self-center text-center">
@@ -1363,13 +1363,13 @@
                             @endif
                             class="a--full-width">
                 </div>
-                
+
                 <div class="col-6 col-sm-5 col-md-4 col-lg-3 mx-auto align-self-center text-center">
                     <img src="{{ asset('/acm/extra/Alaa-logo.png') }}" class="a--full-width">
                 </div>
             </div>
         </div>
-        {!! \AlaaTV\Gateways\HtmlFormGenerator::generate($authority, 0) !!}
+        {!! \AlaaTV\Gateways\HtmlFormGenerator::generate($authority, $mobile , 0) !!}
     </body>
 </html>
 

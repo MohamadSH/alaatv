@@ -12,7 +12,7 @@
     "ext-json": "*",
     "ext-pdo": "*",
     "ext-soap": "*",
-    "alaatv/mellat": "dev-master",
+    "alaatv/mellat": "1.*",
     "alaatv/payment-gateways": "1.*",
     "alaatv/zarinpal": "1.*",
     "algolia/algoliasearch-client-php": "^2.2",
