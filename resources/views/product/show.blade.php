@@ -468,14 +468,14 @@
                                                     <button class="btn btn-danger btn-lg m-btn  m-btn m-btn--icon">
                                                     <span>
                                                         <i class="flaticon-arrows"></i>
-                                                        <span>شما محصول راه ابریشم را خریداری کرده اید و این محصول به عنوان هدیه به شما تعلق خواهد گرفت</span>
+                                                        <span>شما محصول راه ابریشم را خریده اید و این محصول به عنوان هدیه به شما تعلق می گیرد</span>
                                                     </span>
                                                     </button>
                                                 @else
                                                     <a class="btn btn-focus btn-lg m-btn  m-btn m-btn--icon" href="{{ route('product.show' , $shouldBuyProductId ) }}">
                                                     <span>
                                                         <i class="flaticon-arrows"></i>
-                                                        <span>این محصول فروش تکی ندارد . برای تهیه این محصول باید  {{$shouldBuyProductName}} را تهیه کنید  برای خرید کلیک کنید</span>
+                                                        <span>این محصول بخشی از {{$shouldBuyProductName}} است برای خرید کلیک کنید </span>
                                                     </span>
                                                     </a>
                                                 @endif
@@ -653,14 +653,14 @@
                     <button class="btn btn-danger btn-lg m-btn  m-btn m-btn--icon">
                         <span>
                                 <i class="flaticon-arrows"></i>
-                                <span>شما محصول راه ابریشم را خریداری کرده اید و این محصول به عنوان هدیه به شما تعلق خواهد گرفت</span>
+                                <span>شما محصول راه ابریشم را خریده اید و این محصول به عنوان هدیه به شما تعلق می گیرد</span>
                         </span>
                     </button>
                 @else
                     <a class="btn btn-focus btn-lg m-btn  m-btn m-btn--icon" href="{{ route('product.show' , $shouldBuyProductId ) }}">
                             <span>
                                 <i class="flaticon-arrows"></i>
-                                <span>این محصول فروش تکی ندارد . برای تهیه این محصول باید  {{$shouldBuyProductName}} را تهیه کنید  برای خرید کلیک کنید</span>
+                                <span>این محصول بخشی از {{$shouldBuyProductName}} است برای خرید کلیک کنید </span>
                             </span>
                     </a>
                 @endif
