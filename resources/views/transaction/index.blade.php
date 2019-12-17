@@ -5,12 +5,12 @@
         <td>
             @if(isset($transaction->order->user->id)) @if(strlen($transaction->order->user->reverse_full_name) > 0)
                 <a target="_blank"
-                   href="{{action("Web\UserController@edit" , $transaction->order->user)}}">{{$transaction->order->user->reverse_full_name}}</a> @else
+                   href="{{route('user.edit' , $transaction->order->user)}}">{{$transaction->order->user->reverse_full_name}}</a> @else
                 <span class="m-badge m-badge--wide label-sm m-badge--danger"> درج نشده </span> @endif @endif
         </td>
         <td>
             @if($transaction->hasParents())
-                <a target="_blank" href="{{action('TransactionController@edit' , $transaction->getGrandParent())}}">رفتن
+                <a target="_blank" href="{{route('transaction.edit' , $transaction->getGrandParent())}}">رفتن
                     به تراکنش</a>
             @else ندارد @endif
         </td>
@@ -76,7 +76,7 @@
         <td>
             @permission((config('constants.EDIT_TRANSACTION_ACCESS')))
             <a target="_blank" class="btn btn-success"
-               href="{{action("Web\TransactionController@edit" , $transaction)}}">
+               href="{{route('transaction.edit' , $transaction)}}">
                 <i class="fa fa-pencil"></i>
                 اصلاح تراکنش
             </a>
@@ -106,7 +106,7 @@
             <div class="btn-group">
                 @if(isset($transaction->order->id))
                     @permission((config('constants.SHOW_ORDER_ACCESS')))
-                    <a target="_blank" class="btn btn-success" href="{{action("Web\OrderController@edit" , $transaction->order)}}">
+                    <a target="_blank" class="btn btn-success" href="{{route('order.edit' , $transaction->order)}}">
                         <i class="fa fa-pencil"></i>
                         اصلاح سفارش
                     </a>
