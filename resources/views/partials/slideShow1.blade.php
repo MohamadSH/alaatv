@@ -52,8 +52,8 @@
                                          width="1280"
                                          @if($pageName === 'shop')
                                          src="https://cdn.alaatv.com/loder.jpg?w=1&h=1"
-                                         data-height="300"
-                                         height="300"
+                                         data-height="354"
+                                         height="354"
                                          @else
                                          src="https://cdn.alaatv.com/loder.jpg?w=1&h=1"
                                          height="500"
