@@ -70,6 +70,19 @@ class HomeController extends Controller
 
     public function debug(Request $request, User $user = null)
     {
+        $users = \App\User::whereHas('orders' , function ($q){
+            $q->whereHas('orderproducts' , function ($q2){
+               $q2->where('product_id' , 347);
+            })->where('orderstatus_id' , 2)
+            ->where('paymentstatus_id' , config('constants.PAYMENT_STATUS_VERIFIED_INDEBTED'))
+            ->whereHas('transactions' , function ($q3){
+                $q3->where('transactionstatus_id' , config('constants.TRANSACTION_STATUS_UNPAID'))
+                    ->where('deadline_at' , '<=' , '2019-12-18 00:00');
+            });
+        });
+
+        dd($users->toSql());
+
         return view('admin.topicsTree.manageNodes');
     }
 
