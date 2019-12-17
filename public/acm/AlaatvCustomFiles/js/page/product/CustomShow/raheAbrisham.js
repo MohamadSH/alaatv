@@ -999,7 +999,7 @@ jQuery(document).ready(function () {
     imageObserver.observe();
 
     // Expose to window namespase for testing purposes
-    window.zoomTiger = svgPanZoom('#demo-tiger', {
+    window.zoomTiger = svgPanZoom('#farsangMappSvg', {
         viewportSelector: '#container',
         panEnabled: true,
         zoomEnabled: true,
@@ -1019,8 +1019,13 @@ jQuery(document).ready(function () {
         onZoom: function(data){
             // console.log('data: ', data);
             // console.log('this: ', this);
-            console.log('this.getPan(): ', this.getPan());
-            console.log('this.getZoom(): ', this.getZoom());
+            // console.log('this.getPan(): ', this.getPan());
+            // console.log('this.getZoom(): ', this.getZoom());
+            // if (this.getZoom()>1.2) {
+            //
+            //     // MapSVG.printFarsang('path123');
+            // }
+            MapSVG.updateZoomState(this.getZoom())
         }
         , beforePan: function(){}
         , onPan: function(data){
@@ -1043,3 +1048,72 @@ jQuery(document).ready(function () {
 
 
 });
+
+var MapSVG = function () {
+
+    function setZoomLevel(level) {
+        $('#farsangMappSvg').attr('zoom-level', level);
+    }
+
+    function getZoomLevel() {
+        var zoomLevel = $('#farsangMappSvg').attr('zoom-level');
+        if (typeof zoomLevel==='undefined') {
+            zoomLevel = 0;
+            setZoomLevel(0);
+        }
+        return zoomLevel;
+    }
+
+    function updateZoomState(zoom) {
+        if (parseInt(getZoomLevel()) !== 0 && zoom > 1 && zoom < 1.3) {
+            setZoomLevel(0);
+            onZoomStateChange(0);
+        } else if (parseInt(getZoomLevel()) !== 1 && zoom > 1.3 && zoom < 2) {
+            setZoomLevel(1);
+        } else if (parseInt(getZoomLevel()) !== 2 && zoom > 2 && zoom < 3) {
+            setZoomLevel(2);
+        }
+    }
+
+    function onZoomStateChange(state) {
+        if (state===1) {
+            printFarsang('path123');
+        }
+    }
+
+    function printFarsang(farsangID) {
+        var pathD = $('#'+farsangID).attr('d'),
+            cordinates = getfarsangCordinate(pathD),
+            smallFarsangID = farsangID+'small';
+        $('#'+farsangID).after(getFarsangSmallSvg(smallFarsangID, cordinates.x, cordinates.y));
+    }
+
+    function getfarsangCordinate(pathD) {
+        var pattern = /m\s?([0-9]*.?[0-9]*)\s?,\s?([0-9]*.?[0-9]*)/;
+        if(pattern.test(pathD)) {
+            var obj = pattern.exec(pathD),
+                cordinates = obj[0];
+            cordinates = cordinates.replace('m', '');
+            cordinates = cordinates.split(',');
+            return {
+                x: parseFloat(cordinates[0].trim())-5,
+                y: parseFloat(cordinates[1].trim())-5,
+            };
+        } else {
+            return false;
+        }
+    }
+
+    function getFarsangSmallSvg(farsandId, farsandX, farsandY) {
+        return $('#farsang-small').html().replace('(((smallFarsang-id)))', farsandId).replace('(((smallFarsang-x)))', farsandX).replace('(((smallFarsang-y)))', farsandY);
+    }
+
+    return {
+        printFarsang: function (farsangID) {
+            printFarsang(farsangID);
+        },
+        updateZoomState: function (zoom) {
+            updateZoomState(zoom);
+        }
+    }
+}();
