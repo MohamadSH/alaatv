@@ -20,8 +20,8 @@ class Grade extends JsonResource
     public function toArray($request)
     {
         return [
-            'name'           => $this->when(isset($this->name) , $this->name),
-            'display_name'   => $this->when(isset($this->displayName) , $this->displayName),
+            'id'     => $this->id,
+            'name'   => $this->when(isset($this->displayName) , $this->displayName),
         ];
     }
 }

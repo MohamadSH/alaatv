@@ -259,7 +259,7 @@ class ContentController extends Controller
         $contenttypes = [ 8 => 'فیلم' , 1 =>    'جزوه' , 9 => 'مقاله'];
         $sections    = Section::all()->pluck('name' , 'id')->toArray();
         $sections[0] = 'ندارد';
-        $sections    = array_sort_recursive($sections);
+        $sections    = Arr::sortRecursive($sections);
 
         $result = compact('content', 'validSinceTime', 'tags', 'contentset' , 'contenttypes' , 'sections' );
         $view = view('content.edit', $result);
@@ -528,12 +528,12 @@ class ContentController extends Controller
      */
     private function fillContentFromRequest(array $inputData, Content $content): void
     {
-        $validSinceDateTime = array_get($inputData , 'validSinceDate');
+        $validSinceDateTime = Arr::get($inputData , 'validSinceDate');
         $enabled    = Arr::has($inputData , 'enable');
         $isFree     = Arr::has($inputData , 'isFree');
-        $tagString  = array_get($inputData , 'tags');
-        $files      = array_get($inputData , 'files' , []);
-        $pamphlet   = array_get($inputData , 'pamphlet');
+        $tagString  = Arr::get($inputData , 'tags');
+        $files      = Arr::get($inputData , 'files' , []);
+        $pamphlet   = Arr::get($inputData , 'pamphlet');
 
         $content->fill($inputData);
 
@@ -547,7 +547,7 @@ class ContentController extends Controller
         $content->isFree     = $isFree ? 1 : 0;
         $content->tags       = convertTagStringToArray($tagString);
 
-        if(array_get($inputData , 'section_id') == 0){
+        if(Arr::get($inputData , 'section_id') == 0){
             $content->section_id = null;
         }
 

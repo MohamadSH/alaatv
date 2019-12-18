@@ -9,9 +9,7 @@ use Illuminate\Routing\Redirector;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Contracts\Encryption\DecryptException;
-use Illuminate\Support\Facades\{ Input, Config, Storage , File};
-use League\Flysystem\Filesystem;
-use League\Flysystem\Sftp\SftpAdapter;
+use Illuminate\Support\Facades\{  Config, Storage , File};
 use App\{Notifications\sendLink,
     UploadCenter,
     User,
@@ -98,15 +96,15 @@ class HomeController extends Controller
         /** @var User $user */
         $user = $request->user('alaatv');
         if ($user === null) {
-            abort(403, 'Not authorized.');
+            abort(Response::HTTP_FORBIDDEN, 'Not authorized.');
         }
         if ($data === null) {
-            abort(403, 'Invalid Link');
+            abort(Response::HTTP_FORBIDDEN, 'Invalid Link');
         }
         try {
             $data = (array) decrypt($data);
         } catch (DecryptException $e) {
-            abort(403, 'invalid Data!');
+            abort(Response::HTTP_FORBIDDEN, 'invalid Data!');
         }
         $url       = $data['url'];
         $contentId = $data['data']['content_id'];
@@ -165,7 +163,7 @@ class HomeController extends Controller
                 $diskName = config('constants.DISK10');
                 break;
             case 'فایل محصول' :
-                $productId = Input::get('pId');
+                $productId = $request->get('pId');
                 $diskName  = config('constants.DISK13');
 
                 if (isset($user) && !$user->can(config('constants.DOWNLOAD_PRODUCT_FILE'))) {
@@ -386,7 +384,7 @@ class HomeController extends Controller
 
     public function siteMapXML()
     {
-        return redirect(action('Web\SitemapController@index'), 301);
+        return redirect(action('Web\SitemapController@index'), Response::HTTP_MOVED_PERMANENTLY);
     }
 
     /**

@@ -13,6 +13,16 @@ $(document).ready( function() {
         'user_id': userIdDimensionValue
     });
 
+
+    function checkNoCache() {
+        var userId = GlobalJsVar.userId();
+        if (userId.trim().length===0) {
+            Cookie.set('nocache', 0, 1);
+        } else {
+            Cookie.set('nocache', 1, 1);
+        }
+    }
+
 });
 
 let imageObserver = LazyLoad.image();

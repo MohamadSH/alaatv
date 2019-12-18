@@ -53,7 +53,7 @@ Route::group(['prefix' => 'v1'], function () {
     Route::post('donate', [OrderController::class, 'donateOrder'])->name('api.v1.donate');
     Route::any('fetchContents', [ContentController::class, 'fetchContents'])->name('api.v1.fetch.content');
     Route::get('shop', '\\'. ShopPageController::class)->name('api.v1.shop');
-    Route::get('/', '\\'. IndexPageController::class)->name('api.v1.home');
+    Route::get('/home', '\\'. IndexPageController::class)->name('api.v1.home');
 
 
     Route::get('satra', [HomeController::class, 'satra']);

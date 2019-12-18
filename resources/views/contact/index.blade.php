@@ -141,7 +141,7 @@
                             </div>
                             <div class = "col-md-6">
                                 <p class = "{{ $errors->has('contacttype_id') ? ' has-danger' : '' }}">
-                                    {!! Form::select('contacttype_id', array_prepend($contacttypes->toArray(), 'نوع مخاطب'), null, ['class' => 'form-control', 'id' => 'contacttype_id'  ]) !!}
+                                    {!! Form::select('contacttype_id', Arr::prepend($contacttypes->toArray(), 'نوع مخاطب'), null, ['class' => 'form-control', 'id' => 'contacttype_id'  ]) !!}
                                     @if ($errors->has('contacttype_id'))
                                         <span class="form-control-feedback">
                                             <strong>{{ $errors->first('contacttype_id')}}</strong>
@@ -153,7 +153,7 @@
                         <div class = "row">
                             <div class = "col-md-6">
                                 <p class = "{{ $errors->has('relative_id') ? ' has-danger' : '' }}">
-                                    {!! Form::select('relative_id', array_prepend($relatives->toArray(),'نسبت مخاطب نامشخص'), null, ['class' => 'form-control', 'id' => 'relative_id' ]) !!}
+                                    {!! Form::select('relative_id', Arr::prepend($relatives->toArray(),'نسبت مخاطب نامشخص'), null, ['class' => 'form-control', 'id' => 'relative_id' ]) !!}
                                     @if ($errors->has('relative_id'))
                                         <span class="form-control-feedback">
                                             <strong>{{ $errors->first('relative_id')}}</strong>

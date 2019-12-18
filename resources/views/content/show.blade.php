@@ -265,7 +265,6 @@
 
                     @include('partials.ads.list', ['id'=>'contentShowPage-rightSide-0'])
 
-
                     <div class="m-portlet m-portlet--mobile">
                         <div class="m-portlet__body contentDetailesWrapper a--nuevo-alaa-theme">
 
@@ -455,7 +454,6 @@
 
                     @include('partials.ads.list', ['id'=>'contentShowPage-rightSide-0'])
 
-
                     @if(isset($content->description[0]))
                     <!--begin::Portlet-->
                         <div class="m-portlet m-portlet--mobile">
@@ -523,10 +521,8 @@
                     </div>
                     <!--end::Portlet-->
 
-
                     @include('partials.ads.list', ['id'=>'contentShowPage-rightSide-0'])
-
-
+                    
                 @endif
             @else
                 <div class="alert alert-danger" role="alert">
@@ -664,9 +660,9 @@
                     </div>
                 </div>
                 <!--end::Portlet-->
-
+                
                 @include('partials.ads.list', ['id'=>'contentShowPage-leftSide-1'])
-
+                
             </div>
         @endif
     </div>

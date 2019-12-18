@@ -10,16 +10,18 @@ use App\Productfile;
 use App\Productfiletype;
 use App\Traits\ProductCommon;
 use Carbon\Carbon;
+use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Input;
+
 use Illuminate\Support\Facades\Storage;
 
 class ProductfileController extends Controller
 {
     use ProductCommon;
-    
+
     protected $response;
-    
+
     function __construct()
     {
         $this->middleware('permission:'.config('constants.LIST_PRODUCT_FILE_ACCESS'), ['only' => 'index']);
@@ -37,15 +39,16 @@ class ProductfileController extends Controller
             ],
         ]);
     }
-    
-/**
+
+    /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function create()
+    public function create(Request $request)
     {
-        $productId                = Input::get("product");
+        $productId                = $request->get("product");
         $product                  = Product::FindOrFail($productId);
         $productFileTypes         = Productfiletype::pluck('displayName', 'id')
             ->toArray();
@@ -68,11 +71,11 @@ class ProductfileController extends Controller
                 ]);
             }
         }
-        $productFileTypes = array_add($productFileTypes, 0, "انتخاب کنید");
-        $productFileTypes = array_sort_recursive($productFileTypes);
-        
+        $productFileTypes = Arr::add($productFileTypes, 0, "انتخاب کنید");
+        $productFileTypes = Arr::sortRecursive($productFileTypes);
+
         $products = $this->makeProductCollection();
-        
+
         return view("product.productFile.create",
             compact("product", "products", "productFileTypes", "defaultProductFileOrders"));
     }
@@ -94,11 +97,11 @@ class ProductfileController extends Controller
             ->format('Y-m-d');
         $validSince              = $validSince." ".$time;
         $productFile->validSince = $validSince;
-        
+
         if ($request->get("enable") != 1) {
             $productFile->enable = 0;
         }
-        
+
         if ($request->hasFile("file")) {
             $file      = $request->file('file');
             $extension = $file->getClientOriginalExtension();
@@ -108,7 +111,7 @@ class ProductfileController extends Controller
                 $productFile->file = $fileName;
             }
         }
-        
+
         if ($request->has("cloudFile")) {
             $link                   = $request->get("cloudFile");
             $productFile->cloudFile = $link;
@@ -117,11 +120,11 @@ class ProductfileController extends Controller
                 $productFile->file = $fileName;
             }
         }
-        
+
         if ($productFile->productfiletype_id == 0) {
             $productFile->productfiletype_id = null;
         }
-        
+
         if ($request->has("order") && isset($productFile->product->id)) {
             if (strlen(preg_replace('/\s+/', '', $request->get("order"))) == 0) {
                 $productFile->order = 0;
@@ -142,14 +145,14 @@ class ProductfileController extends Controller
                 }
             }
         }
-        
+
         if ($productFile->save()) {
             session()->put('success', 'درج فایل با موفقیت انجام شد');
         }
         else {
             session()->put('error', 'خطای پایگاه داده');
         }
-        
+
         return redirect()->back();
     }
 
@@ -161,9 +164,9 @@ class ProductfileController extends Controller
             ->format('H:i');
         $productFileTypes = Productfiletype::pluck('displayName', 'id')
             ->toArray();
-        $productFileTypes = array_add($productFileTypes, 0, "انتخاب کنید");
-        $productFileTypes = array_sort_recursive($productFileTypes);
-        
+        $productFileTypes = Arr::add($productFileTypes, 0, "انتخاب کنید");
+        $productFileTypes = Arr::sortRecursive($productFileTypes);
+
         return view("product.productFile.edit", compact("productFile", "validDate", "validTime", "productFileTypes"));
     }
 
@@ -171,7 +174,7 @@ class ProductfileController extends Controller
     {
         $oldFile = $productFile->file;
         $productFile->fill($request->all());
-        
+
         $time = $request->get("time");
         if (strlen($time) > 0) {
             $time = Carbon::parse($time)
@@ -187,11 +190,11 @@ class ProductfileController extends Controller
             ->format('Y-m-d'); //Muhammad : added a day because it returns one day behind and IDK why!!
         $validSince              = $validSince." ".$time;
         $productFile->validSince = $validSince;
-        
+
         if ($request->get("enable") != 1) {
             $productFile->enable = 0;
         }
-        
+
         if ($request->hasFile("file")) {
             $file      = $request->file('file');
             $extension = $file->getClientOriginalExtension();
@@ -203,7 +206,7 @@ class ProductfileController extends Controller
                 $productFile->file = $fileName;
             }
         }
-        
+
         if ($request->has("cloudFile")) {
             $link                   = $request->get("cloudFile");
             $productFile->cloudFile = $link;
@@ -212,11 +215,11 @@ class ProductfileController extends Controller
                 $productFile->file = $fileName;
             }
         }
-        
+
         if ($productFile->productfiletype_id == 0) {
             $productFile->productfiletype_id = null;
         }
-        
+
         if ($request->has("order") && isset($productFile->product->id)) {
             if (strlen(preg_replace('/\s+/', '', $request->get("order"))) == 0) {
                 $productFile->order = 0;
@@ -238,14 +241,14 @@ class ProductfileController extends Controller
                 }
             }
         }
-        
+
         if ($productFile->update()) {
             session()->put('success', 'اصلاح جزوه با موفقیت انجام شد');
         }
         else {
             session()->put('error', 'خطای پایگاه داده');
         }
-        
+
         return redirect()->back();
     }
 }

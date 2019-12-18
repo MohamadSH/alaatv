@@ -113,7 +113,7 @@ class Block extends BaseModel
     public static function getShopBlocks(): ?BlockCollection
     {
         $blocks = Cache::tags(['block' , 'shop'])
-            ->remember('bock:getShopBlocks', config('constants.CACHE_600'), function () {
+            ->remember('block:getShopBlocks', config('constants.CACHE_600'), function () {
                 $offerBlock = self::getOfferBlock();
                 $blocks     = self::shop()
                     ->enable()
@@ -133,10 +133,15 @@ class Block extends BaseModel
         return $blocks;
     }
 
+    /**
+     * For API V1
+     *
+     * @return BlockCollection|null
+     */
     public static function getShopBlocksForApp(): ?BlockCollection
     {
-        $blocks = Cache::tags(['block' , 'shop'])
-            ->remember('bock:getShopBlocks', config('constants.CACHE_600'), function () {
+        return Cache::tags(['block' , 'shop'])
+            ->remember('block:getShopBlocksForApp', config('constants.CACHE_600'), function () {
                 $offerBlock = self::getOfferBlock();
                 $blocks     = self::shop()
                     ->enable()
@@ -152,8 +157,24 @@ class Block extends BaseModel
 
                 return $blocks->prepend($offerBlock);
             });
+    }
 
-        return $blocks;
+    /**
+     * For API V2
+     *
+     * @return mixed
+     */
+    public static function getShopBlocksForAppV2()
+    {
+        return Cache::tags(['block' , 'shop'])
+            ->remember('block:getShopBlocksForAppV2', config('constants.CACHE_600'), function () {
+                //ToDo: Adding offer block
+                return self::whereIn('type', [1,4])
+                            ->enable()
+                            ->where('id' , '<>' , 113)
+                            ->orderBy('order')
+                            ->paginate(5);
+            });
     }
 
     /**
@@ -216,6 +237,17 @@ class Block extends BaseModel
         }
 
         return $this;
+    }
+
+    public static function getMainBlocksForApp(): ?BlockCollection
+    {
+        return Cache::tags(['block' , 'home'])
+            ->remember('block:getMainBlocksForApp', config('constants.CACHE_600'), function () {
+                return self::main()
+                    ->enable()
+                    ->orderBy('order')
+                    ->paginate(5);
+            });
     }
 
     public static function getMainBlocks(): ?BlockCollection

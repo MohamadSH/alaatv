@@ -331,7 +331,7 @@ class Contentset extends BaseModel implements Taggable, SeoInterface , Favorable
 
     public function getWebUrlAttribute($value): string
     {
-        return route('set.show', ['set' => $this->id]);
+        return route('set.show', $this->id);
     }
 
     public function getLastActiveContent(): Content

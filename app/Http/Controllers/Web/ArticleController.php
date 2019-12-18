@@ -12,16 +12,14 @@ use App\Websitepage;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Facades\Image;
 
 class ArticleController extends Controller
 {
     protected $response;
-    
+
     function __construct()
     {
         /** setting permissions
@@ -39,7 +37,7 @@ class ArticleController extends Controller
                 'showList',
             ],
         ]);
-        
+
         $this->response = new Response();
     }
 
@@ -47,7 +45,7 @@ class ArticleController extends Controller
     {
         $articles = Article::all()
             ->sortByDesc("created_at");
-        
+
         return view('article.index', compact('articles'));
     }
 
@@ -55,7 +53,7 @@ class ArticleController extends Controller
     {
         $articlecategories = Articlecategory::where('enable', 1)
             ->pluck('name', 'id');
-        
+
         return view("article.create", compact("articlecategories"));
     }
 
@@ -67,7 +65,7 @@ class ArticleController extends Controller
             $article->articlecategory_id = null;
         }
         $article->user_id = Auth::user()->id;
-        
+
         if ($request->hasFile("image")) {
             $file      = $request->file('image');
             $extension = $file->getClientOriginalExtension();
@@ -90,7 +88,7 @@ class ArticleController extends Controller
         else {
             $article->image = config('constants.ARTICLE_DEFAULT_IMAGE');
         }
-        
+
         if ($request->has("order")) {
             if (strlen(preg_replace('/\s+/', '', $request->get("order"))) == 0) {
                 $article->order = 0;
@@ -108,14 +106,14 @@ class ArticleController extends Controller
                 }
             }
         }
-        
+
         if ($article->save()) {
             session()->put('success', 'درج مقاله با موفقیت انجام شد');
         }
         else {
             session()->put('error', 'خطای پایگاه داده');
         }
-        
+
         return redirect()->back();
     }
 
@@ -123,7 +121,7 @@ class ArticleController extends Controller
     {
         $articlecategories = Articlecategory::where('enable', 1)
             ->get();
-        
+
         $otherArticlesType = "same";
         $otherArticles     = $article->sameCategoryArticles(4)
             ->get();
@@ -132,14 +130,14 @@ class ArticleController extends Controller
                 ->get();
             $otherArticlesType = "recent";
         }
-        
+
         if (isset($article->keyword) && strlen($article->keyword) > 0) {
             $tags = explode('،', $article->keyword);
         }
         else {
             $tags = [];
         }
-        
+
         return view('article.show',
             compact('article', 'articlecategories', 'otherArticles', 'otherArticlesType', 'tags'));
     }
@@ -148,7 +146,7 @@ class ArticleController extends Controller
     {
         $articlecategories = Articlecategory::where('enable', 1)
             ->pluck('name', 'id');
-        
+
         return view('article.edit', compact('article', 'articlecategories'));
     }
 
@@ -159,7 +157,7 @@ class ArticleController extends Controller
         if (strlen($article->articlecategory_id) == 0 || !isset($article->articlecategory_id)) {
             $article->articlecategory_id = null;
         }
-        
+
         if ($request->hasFile("image")) {
             $file      = $request->file('image');
             $extension = $file->getClientOriginalExtension();
@@ -181,7 +179,7 @@ class ArticleController extends Controller
                         ->getPathPrefix().$fileName);
             }
         }
-        
+
         if ($request->has("order")) {
             if (strlen(preg_replace('/\s+/', '', $request->get("order"))) == 0) {
                 $article->order = 0;
@@ -201,14 +199,14 @@ class ArticleController extends Controller
                 }
             }
         }
-        
+
         if ($article->update()) {
             session()->put('success', 'اصلاح مقاله با موفقیت انجام شد');
         }
         else {
             session()->put('error', 'خطای پایگاه داده');
         }
-        
+
         return redirect()->back();
     }
 
@@ -220,18 +218,19 @@ class ArticleController extends Controller
         else {
             session()->put('error', 'خطای پایگاه داده');
         }
-        
+
         return redirect()->back();
     }
-    
+
     /**
      * Shows the list of articles to user
      *
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @return Response
      */
-    public function showList()
+    public function showList(Request $request)
     {
-        $categoryId        = Input::get('categoryId');
+        $categoryId        = $request->get('categoryId');
         $articlecategories = Articlecategory::where('enable', 1)
             ->orderBy('order')
             ->get();
@@ -249,11 +248,11 @@ class ArticleController extends Controller
         //                    break;
         //                }
         //            }
-        
+
         //        }
         $countWithoutCategory = Article::where('articlecategory_id', null)
             ->count();
-        if (!Input::has('categoryId')) {
+        if (!$request->has('categoryId')) {
             $itemsPerPage = 5;
             $articles     = Article::orderBy('created_at', 'desc')
                 ->paginate($itemsPerPage);
@@ -267,10 +266,10 @@ class ArticleController extends Controller
             $articleCategoryName = $articlecategories->where('id', $categoryId)
                 ->first()->name;
         }
-        
+
         $recentArticles = Article::recentArticles(4)
             ->get();
-        
+
         $websitePageId = Websitepage::all()
             ->where('url', "/لیست-مقالات")
             ->first()->id;
@@ -280,14 +279,14 @@ class ArticleController extends Controller
             ->sortBy("order");
         $slideCounter  = 1;
         $slideDisk     = 15;
-        
+
         $metaDescription = "";
         $metaKeywords    = "";
         foreach ($articles as $article) {
             $metaKeywords    .= $article->title."-";
             $metaDescription .= $article->title."-";
         }
-        
+
         return view('article.list',
             compact('articles', 'articlecategories', 'categoryId', 'articleCategoryName', 'countWithoutCategory',
                 'recentArticles', "slides", "slideCounter",

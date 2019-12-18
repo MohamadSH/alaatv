@@ -34,7 +34,7 @@ class PurchasedProduct extends JsonResource
         return [
             'id'            => $this->id,
             'redirect_url'  => $this->when(isset($this->redirectUrl) , $this->redirectUrl),
-            'name'          => $this->when(isset($this->name) , $this->name),
+            'title'          => $this->when(isset($this->name) , $this->name),
             'type'          => $this->when(isset($this->producttype_id) , function (){ return new Producttype($this->producttype);}),
 //            'type'          => $this->when(isset($this->producttype_id) , function (){ return New Producttype($this->producttype); }),
 //            'isFree'        => $this->isFree,

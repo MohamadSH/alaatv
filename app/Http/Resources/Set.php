@@ -27,16 +27,13 @@ class Set extends JsonResource
         return [
             'id'                    => $this->id,
             'redirect_url'          => $this->when(isset($this->redirectUrl) , $this->redirectUrl),
-            'name'                  => $this->when(isset($this->name) , $this->name),
-            'short_name'            => $this->when(isset($this->shortName) , $this->shortName),
+            'title'                  => $this->when(isset($this->name) , $this->name),
+            'short_title'            => $this->when(isset($this->shortName) , $this->shortName),
             'photo'                 => $this->when(isset($this->photo) , $this->photo),
             'tags'                  => $this->when(isset($this->tags) , function (){return new Tag($this->tags);}),
             'contents_count'        => $this->contents_count,
             'active_contents_count' => $this->activeContents->count() ,
             'url' => new Url($this) ,
-            'list_contents'            => [
-                    'web' => $this->content_url,
-            ],
             'author'         => $this->when(isset($this->author) , $this->author),
             'created_at'     => $this->when(isset($this->created_at) , function (){return $this->created_at;}),
             'updated_at'     => $this->when(isset($this->updated_at) , function (){return $this->updated_at;}),
