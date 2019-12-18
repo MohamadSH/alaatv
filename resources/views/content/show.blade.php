@@ -263,18 +263,8 @@
                         </div>
                     </div>
 
-                    <div class="row">
-                        <div class="col text-center m--margin-bottom-5 a--mobile-show a--tablet-show">
-                            <a href="{{ action("Web\ShopPageController") }}"
-                               class="a--gtm-eec-advertisement a--gtm-eec-advertisement-click"
-                               data-gtm-eec-promotion-id="contentShowPage-rightSide-0"
-                               data-gtm-eec-promotion-name="جشنواره یلدایی آلاء"
-                               data-gtm-eec-promotion-creative="سمت راست صفحه بالای توضیحات کانتنت"
-                               data-gtm-eec-promotion-position="0">
-                                <img src="https://cdn.alaatv.com/loder.jpg?w=1&h=1" data-src="https://cdn.alaatv.com/upload/yalda-festival_300.100.jpg" class="a--full-width lazy-image" alt="جشنواره یلدایی آلاء" width="600" height="150">
-                            </a>
-                        </div>
-                    </div>
+                    @include('partials.ads.list', ['id'=>'contentShowPage-rightSide-0'])
+
 
                     <div class="m-portlet m-portlet--mobile">
                         <div class="m-portlet__body contentDetailesWrapper a--nuevo-alaa-theme">
@@ -463,18 +453,8 @@
                     </div>
                     <!--end::Portlet-->
 
-                    <div class="row">
-                        <div class="col text-center m--margin-bottom-5 a--mobile-show a--tablet-show">
-                            <a href="{{ action("Web\ShopPageController") }}"
-                               class="a--gtm-eec-advertisement a--gtm-eec-advertisement-click"
-                               data-gtm-eec-promotion-id="contentShowPage-rightSide-0"
-                               data-gtm-eec-promotion-name="جشنواره یلدایی آلاء"
-                               data-gtm-eec-promotion-creative="سمت راست صفحه بالای توضیحات کانتنت"
-                               data-gtm-eec-promotion-position="0">
-                                <img src="https://cdn.alaatv.com/loder.jpg?w=1&h=1" data-src="https://cdn.alaatv.com/upload/yalda-festival_300.100.jpg" class="a--full-width lazy-image" alt="جشنواره یلدایی آلاء" width="600" height="150">
-                            </a>
-                        </div>
-                    </div>
+                    @include('partials.ads.list', ['id'=>'contentShowPage-rightSide-0'])
+
 
                     @if(isset($content->description[0]))
                     <!--begin::Portlet-->
@@ -543,18 +523,10 @@
                     </div>
                     <!--end::Portlet-->
 
-                    <div class="row">
-                        <div class="col text-center m--margin-bottom-5 a--mobile-show a--tablet-show">
-                            <a href="{{ action("Web\ShopPageController") }}"
-                               class="a--gtm-eec-advertisement a--gtm-eec-advertisement-click"
-                               data-gtm-eec-promotion-id="contentShowPage-rightSide-0"
-                               data-gtm-eec-promotion-name="جشنواره یلدایی آلاء"
-                               data-gtm-eec-promotion-creative="سمت راست صفحه بالای توضیحات کانتنت"
-                               data-gtm-eec-promotion-position="0">
-                                <img src="https://cdn.alaatv.com/loder.jpg?w=1&h=1" data-src="https://cdn.alaatv.com/upload/yalda-festival_300.100.jpg" class="a--full-width lazy-image" alt="جشنواره یلدایی آلاء" width="600" height="150">
-                            </a>
-                        </div>
-                    </div>
+
+                    @include('partials.ads.list', ['id'=>'contentShowPage-rightSide-0'])
+
+
                 @endif
             @else
                 <div class="alert alert-danger" role="alert">
@@ -692,27 +664,9 @@
                     </div>
                 </div>
                 <!--end::Portlet-->
-                <div class="a--desktop-show">
-                    <a href="{{ action("Web\ShopPageController") }}"
-                       data-tooltip-content="همایش طلایی شیمی کنکور"
-                       class="a--gtm-eec-advertisement a--gtm-eec-advertisement-click"
-                       data-gtm-eec-promotion-id="contentShowPage-leftSide-1"
-                       data-gtm-eec-promotion-name="جشنواره یلدایی آلاء"
-                       data-gtm-eec-promotion-creative="سمت چپ صفحه پایین لیست کانتنت های مشابه"
-                       data-gtm-eec-promotion-position="0">
-                        <img src="https://cdn.alaatv.com/loder.jpg?w=1&h=1" data-src="https://cdn.alaatv.com/upload/yalda-festival_300.100.jpg" class="a--full-width lazy-image" alt="جشنواره یلدایی آلاء" width="600" height="150">
-                    </a>
-                    {{--                    <a href="https://alaatv.com/product/312"--}}
-                    {{--                       data-tooltip-content="همایش طلایی ریاضی تجربی کنکور"--}}
-                    {{--                       class="a--gtm-eec-advertisement a--gtm-eec-advertisement-click"--}}
-                    {{--                       data-gtm-eec-promotion-id="contentShowPage-leftSide-1"--}}
-                    {{--                       data-gtm-eec-promotion-name="همایش طلایی ریاضی تجربی کنکور"--}}
-                    {{--                       data-gtm-eec-promotion-creative="سمت چپ صفحه پایین لیست کانتنت های مشابه"--}}
-                    {{--                       data-gtm-eec-promotion-position="0">--}}
-                    {{--                        <img data-src="https://cdn.alaatv.com/upload/riaziTajrobiKonkurNabakhte.gif" alt="همایش طلایی ریاضی تجربی کنکور"--}}
-                    {{--                             class="m--img-centered a--full-width lazy-image"/>--}}
-                    {{--                    </a>--}}
-                </div>
+
+                @include('partials.ads.list', ['id'=>'contentShowPage-leftSide-1'])
+
             </div>
         @endif
     </div>
