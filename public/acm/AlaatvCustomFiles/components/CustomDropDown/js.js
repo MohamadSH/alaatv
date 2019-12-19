@@ -152,11 +152,15 @@
     };
 
     $.fn.CustomDropDown.createSelectedItem = function ($this) {
-        var selectElement = $.fn.CustomDropDown.getSelectElement($this);
+        var selectElement = $.fn.CustomDropDown.getSelectElement($this),
+            countOfOptions = selectElement.options.length,
+            selectedIndex = (countOfOptions>0 && selectElement.selectedIndex === -1) ? 0 : selectElement.selectedIndex;
         /* For each element, create a new DIV that will act as the selected item: */
         var selectedItem = document.createElement("DIV");
         selectedItem.setAttribute("class", "select-selected");
-        selectedItem.innerHTML = selectElement.options[selectElement.selectedIndex].innerHTML;
+        if (countOfOptions>0) {
+            selectedItem.innerHTML = selectElement.options[selectedIndex].innerHTML;
+        }
         $this.append(selectedItem);
         return selectedItem;
     };

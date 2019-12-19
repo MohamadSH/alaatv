@@ -1,0 +1,1017 @@
+html {
+    font-family: IRANSans, tahoma, 'Open sans', sans-serif;
+    font-size: 13px;
+    min-height: 100%;
+    -ms-text-size-adjust: 100%;
+    -webkit-text-size-adjust: 100%;
+    -ms-overflow-style: scrollbar;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0)
+}
+
+body {
+    margin: 0;
+    line-height: 1.7;
+    font-family: IRANSans, tahoma, 'Open sans', sans-serif;
+    font-size: 1rem;
+    color: #373737;
+    background-color: #fff;
+    direction: rtl;
+    text-align: right;
+    font-weight: 400;
+}
+
+@-ms-viewport {
+    width: device-width
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    outline: 0;
+    -webkit-overflow-scrolling: touch
+}
+
+*, *:before, *:after {
+    box-sizing: border-box
+}
+
+article, details, section, summary, aside, main, menu, nav, figcaption, figure, footer, header, hgroup {
+    display: block
+}
+
+audio, canvas, progress, video {
+    display: inline-block;
+    vertical-align: baseline
+}
+
+audio:not([controls]) {
+    display: none;
+    height: 0
+}
+
+ul {
+    list-style: none
+}
+
+blockquote, q {
+    quotes: none
+}
+
+blockquote:before, blockquote:after, q:before, q:after {
+    content: '';
+    content: none
+}
+
+[hidden], template {
+    display: none
+}
+
+abbr[title] {
+    border-bottom: 1px dotted
+}
+
+dfn {
+    font-style: italic
+}
+
+mark {
+    background: #ff0;
+    color: #000
+}
+
+b, strong {
+    font-weight: bold
+}
+
+small {
+    font-size: 80%
+}
+
+sub, sup {
+    font-size: 75%;
+    line-height: 0;
+    position: relative;
+    vertical-align: baseline
+}
+
+sup {
+    top: -.5em
+}
+
+sub {
+    bottom: -.25em
+}
+
+img, video {
+    border: 0;
+    max-width: 100%;
+    height: auto
+}
+
+img {
+    -ms-interpolation-mode: bicubic;
+    vertical-align: middle
+}
+
+svg:not(:root) {
+    overflow: hidden
+}
+
+button, input, optgroup, select, textarea {
+    color: inherit;
+    font: inherit;
+    margin: 0
+}
+
+button {
+    overflow: visible
+}
+
+button, select {
+    text-transform: none
+}
+
+button, html input[type='button'], input[type='reset'], input[type='submit'] {
+    cursor: pointer;
+    -webkit-appearance: button
+}
+
+button[disabled], html input[disabled] {
+    cursor: default
+}
+
+button::-moz-focus-inner, input::-moz-focus-inner {
+    border: 0;
+    padding: 0
+}
+
+input {
+    line-height: normal
+}
+
+input[type='checkbox'], input[type='radio'] {
+    box-sizing: border-box;
+    padding: 0
+}
+
+input[type='number']::-webkit-inner-spin-button, input[type='number']::-webkit-outer-spin-button {
+    height: auto
+}
+
+input[type='search'] {
+    -webkit-appearance: textfield
+}
+
+input[type='search']::-webkit-search-cancel-button, input[type='search']::-webkit-search-decoration {
+    -webkit-appearance: none
+}
+
+fieldset {
+    border: 1px solid #c0c0c0;
+    margin: 0 2px;
+    padding: .35em .625em .75em
+}
+
+legend {
+    border: 0;
+    padding: 0
+}
+
+textarea {
+    overflow: auto
+}
+
+optgroup {
+    font-weight: bold
+}
+
+figure {
+    margin: 1em 40px
+}
+
+hr {
+    -moz-box-sizing: content-box;
+    box-sizing: content-box;
+    height: 0
+}
+
+pre {
+    overflow: auto
+}
+
+code, kbd, pre, samp {
+    font-family: monospace, monospace;
+    font-size: 1em
+}
+
+a {
+    background-color: transparent;
+    -ms-transition: all 200ms ease-in-out;
+    transition: all 200ms ease-in-out;
+}
+
+a:active, a:hover {
+    outline: 0
+}
+
+h1 a, h2 a, h3 a, .title a, .entry-title a {
+    color: inherit
+}
+
+table {
+    border-collapse: collapse;
+    border-spacing: 0
+}
+
+td, th {
+    padding: 0
+}
+
+summary {
+    display: list-item
+}
+
+output {
+    display: inline-block
+}
+
+::-webkit-file-upload-button {
+    font: inherit;
+    -webkit-appearance: button
+}
+
+code {
+    padding: 2px 4px;
+    font-size: 90%;
+    color: #c7254e;
+    background-color: #f9f2f4;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+    margin: 2px;
+    padding: 2px 4px;
+    white-space: nowrap;
+    direction: ltr;
+    text-align: left
+}
+
+pre {
+    display: block;
+    padding: 9.5px;
+    margin: 0 0 10px;
+    font-size: 13px;
+    line-height: 1.42857143;
+    color: #777;
+    word-break: break-all;
+    word-wrap: break-word;
+    background-color: #fbfbfb;
+    border: 1px solid #e4e4e4;
+    border-radius: 4px;
+    tab-size: 4
+}
+
+pre code {
+    padding: 0;
+    font-size: inherit;
+    color: inherit;
+    white-space: pre-wrap;
+    background-color: transparent;
+    border-radius: 0
+}
+
+li a {
+    color: inherit
+}
+
+.clearfix {
+    zoom: 1
+}
+
+.clearfix:before, .clearfix:after {
+    content: "";
+    display: table
+}
+
+.clearfix:after {
+    clear: both
+}
+
+.invisible {
+    opacity: 0;
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
+    filter: alpha(opacity=0);
+    visibility: hidden
+}
+
+.visible {
+    opacity: 1;
+    -ms-filter: none;
+    filter: none;
+    visibility: visible
+}
+
+.hide, .hidden {
+    display: none
+}
+
+.force-hide {
+    display: none !important
+}
+
+.text-hide {
+    font: 0/0 a;
+    color: transparent;
+    text-shadow: none;
+    background-color: transparent;
+    border: 0
+}
+
+.m-center {
+    margin-left: auto;
+    margin-right: auto
+}
+
+.middle {
+    position: relative;
+    top: 50%;
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%)
+}
+
+.abs-center {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto
+}
+
+.ltr {
+    direction: ltr
+}
+
+.rtl {
+    direction: rtl
+}
+
+.go-right {
+    float: right
+}
+
+.go-left {
+    float: left
+}
+
+.circle {
+    display: inline-block;
+    border-radius: 100%;
+}
+
+.grayscale {
+    filter: #808080;
+    filter: grayscale(1)
+}
+
+.ungrayscale {
+    filter: none
+}
+
+.flip-h {
+    -ms-filter: "progid:DXImageTransform.Microsoft.BasicImage(rotation=0, mirror=1)";
+    -ms-transform: scale(-1, 1);
+    transform: scale(-1, 1)
+}
+
+.flip-v {
+    -ms-filter: "progid:DXImageTransform.Microsoft.BasicImage(rotation=2, mirror=1)";
+    -ms-transform: scale(1, -1);
+    transform: scale(1, -1)
+}
+
+.in-height p {
+    line-height: inherit
+}
+
+.hr {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    border: 0;
+    border-top: 1px solid #eee
+}
+
+.no-p {
+    padding: 0
+}
+
+.says, .screen-reader-text {
+    clip: rect(1px, 1px, 1px, 1px);
+    height: 1px;
+    overflow: hidden;
+    position: absolute !important;
+    width: 1px;
+    word-wrap: normal !important
+}
+
+/*@font-face {*/
+/*    font-family: 'isans';*/
+/*    font-style: normal;*/
+/*    font-weight: 400;*/
+/*    src: url("../fonts/IRANSansWeb(FaNum).eot?nqj53a#");*/
+/*    src: url("../fonts/IRANSansWeb(FaNum).eot?nqj53a#iefix") format("embedded-opentype"), url("../fonts/IRANSansWeb(FaNum).woff2?nqj53a") format('woff2'), url("../fonts/IRANSansWeb(FaNum).woff?nqj53a") format('woff')*/
+/*}*/
+
+/*@font-face {*/
+/*    font-family: 'isans';*/
+/*    font-style: normal;*/
+/*    font-weight: 700;*/
+/*    src: url("../fonts/IRANSansWeb(FaNum)_Bold.eot?nqj53a#");*/
+/*    src: url("../fonts/IRANSansWeb(FaNum)_Bold.eot?nqj53a#iefix") format('embedded-opentype'), url("../fonts/IRANSansWeb(FaNum)_Bold.woff2?nqj53a") format('woff2'), url("../fonts/IRANSansWeb(FaNum)_Bold.woff?nqj53a") format('woff')*/
+/*}*/
+
+/*@font-face {*/
+/*    font-family: 'isans';*/
+/*    font-style: normal;*/
+/*    font-weight: 500;*/
+/*    src: url("../fonts/IRANSansWeb(FaNum)_Medium.eot?nqj53a#");*/
+/*    src: url("../fonts/IRANSansWeb(FaNum)_Medium.eot?nqj53a#iefix") format('embedded-opentype'), url("../fonts/IRANSansWeb(FaNum)_Medium.woff2?nqj53a") format('woff2'), url("../fonts/IRANSansWeb(FaNum)_Medium.woff?nqj53a") format('woff')*/
+/*}*/
+
+/*@font-face {*/
+/*    font-family: 'isans';*/
+/*    font-style: normal;*/
+/*    font-weight: 300;*/
+/*    src: url("../fonts/IRANSansWeb(FaNum)_Light.eot?nqj53a#");*/
+/*    src: url("../fonts/IRANSansWeb(FaNum)_Light.eot?nqj53a#iefix") format('embedded-opentype'), url("../fonts/IRANSansWeb(FaNum)_Light.woff2?nqj53a") format('woff2'), url("../fonts/IRANSansWeb(FaNum)_Light.woff?nqj53a") format('woff')*/
+/*}*/
+
+/*@font-face {*/
+/*    font-family: 'isans';*/
+/*    font-style: normal;*/
+/*    font-weight: 200;*/
+/*    src: url("../fonts/IRANSansWeb(FaNum)_UltraLight.eot?nqj53a#"), src url("../fonts/IRANSansWeb(FaNum)_UltraLight.eot?nqj53a#iefix") format('embedded-opentype'), url("../fonts/IRANSansWeb(FaNum)_UltraLight.woff2?nqj53a") format('woff2'), url("../fonts/IRANSansWeb(FaNum)_UltraLight.woff?nqj53a") format('woff')*/
+/*}*/
+
+svg.icon {
+    line-height: 1;
+    vertical-align: middle;
+    display: inline-block;
+    width: 1em;
+    height: 1em;
+    -ms-transition: 200ms all ease-in-out;
+    transition: 200ms all ease-in-out;
+}
+
+svg.icon path {
+    -ms-transition: inherit;
+    transition: inherit
+}
+
+::selection {
+    background: #aba870;
+    color: #fff
+}
+
+::-moz-selection {
+    background: #aba870;
+    color: #fff
+}
+
+a, ins {
+    text-decoration: none
+}
+
+img {
+    -ms-backface-visibility: hidden;
+    backface-visibility: hidden
+}
+
+.container {
+    width: 1200px;
+    margin: 0 auto;
+    max-width: 100%;
+    padding-right: 15px;
+    padding-left: 15px
+}
+
+.hero {
+    background-color: #addee2;
+    text-align: center;
+    padding: 70px 25px 0;
+    position: relative;
+    margin-bottom: 340px;
+}
+
+.hero:after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 269px;
+    background: url("https://cdn.alaatv.com/upload/donatePage-fade.png") repeat-x;
+    right: 0;
+    bottom: -269px;
+    z-index: 2
+}
+
+.hero .hero-title {
+    color: #254e51;
+    font-size: 13px;
+    font-weight: 400;
+    position: relative;
+    z-index: 1;
+}
+
+.hero .hero-title .helps-farsi {
+    width: 284px;
+    height: 43px;
+    background: url("https://cdn.alaatv.com/upload/donatePage-helps.png") no-repeat;
+    display: block;
+    margin: 0 auto 10px;
+    background-size: 100% 100%;
+    max-width: 80%
+}
+
+.hero img.hearts {
+    margin-top: -50px
+}
+
+.hero .donation-form {
+    color: #254e51;
+    font-size: 14px;
+    font-weight: 400;
+    position: absolute;
+    width: 100%;
+    right: 0;
+    top: 100%;
+    z-index: 4;
+    padding: 0 15px;
+}
+
+.hero .donation-form p {
+    margin-bottom: 20px
+}
+
+.hero .donation-form .textfield {
+    height: 58px;
+    background-color: #fff;
+    position: relative;
+    border-radius: 10px;
+    max-width: 445px;
+    margin: 0 auto;
+    width: 100%;
+    margin-bottom: 21px;
+}
+
+.hero .donation-form .textfield input {
+    width: 100%;
+    height: 100%;
+    border: 0;
+    background: none;
+    outline: none;
+    padding: 0 15px 0 65px;
+    color: #000;
+    font-size: 14px
+}
+
+.hero .donation-form .textfield .suffix {
+    position: absolute;
+    left: 20px;
+    color: #8b8b8b;
+    font-size: 14px;
+    font-weight: 300;
+    top: 50%;
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%)
+}
+
+.hero .donation-form button {
+    height: 109px;
+    background-color: #0ac945;
+    color: #fff;
+    font-size: 29px;
+    font-weight: 500;
+    border: 0;
+    outline: none;
+    border-bottom: 3px solid #0c7b2e;
+    border-radius: 10px;
+    display: block;
+    max-width: 445px;
+    margin: 0 auto;
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+}
+
+@media (max-width: 480px) {
+    .hero .donation-form button {
+        font-size: 18px;
+        height: 65px
+    }
+}
+
+.hero .donation-form button:before {
+    content: '';
+    position: absolute;
+    width: 200%;
+    height: 200%;
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 100%;
+    -ms-transform: translate(100%, 50%);
+    transform: translate(100%, 50%);
+    -ms-transition: 350ms all cubic-bezier(0.455, 0.03, 0.515, 0.955);
+    transition: 350ms all cubic-bezier(0.455, 0.03, 0.515, 0.955)
+}
+
+.hero .donation-form button:hover:before {
+    -ms-transform: translate(31%, -37%);
+    transform: translate(31%, -37%)
+}
+
+.last-donations {
+    margin-bottom: 25px;
+}
+
+.last-donations h3 {
+    color: #000;
+    font-size: 17px;
+    font-weight: 400;
+    padding-bottom: 10px;
+    height: 56px;
+    white-space: nowrap
+}
+
+.last-donations .row {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-direction: row;
+    flex-direction: row;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    margin: 0 auto;
+}
+
+.last-donations .list {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-direction: row;
+    flex-direction: row;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    margin: 0 -7px;
+}
+
+.last-donations .list li {
+    padding: 0 7px;
+    width: 33.33333%;
+    box-flex: 1;
+    -ms-flex: 0 0 33.33333%;
+    flex: 0 0 33.33333%;
+}
+
+@media (max-width: 992px) {
+    .last-donations .list li {
+        margin-bottom: 15px;
+        width: 50%;
+        box-flex: 1;
+        -ms-flex: 0 0 50%;
+        flex: 0 0 50%
+    }
+}
+
+@media (max-width: 468px) {
+    .last-donations .list li {
+        width: 100%;
+        box-flex: 1;
+        -ms-flex: 0 0 100%;
+        flex: 0 0 100%
+    }
+}
+
+.last-donations .recent-donators, .last-donations .best-donators {
+    width: 50%;
+    box-flex: 1;
+    -ms-flex: 0 0 50%;
+    flex: 0 0 50%;
+    padding: 0 47px;
+    position: relative;
+}
+
+@media (max-width: 768px) {
+    .last-donations .recent-donators, .last-donations .best-donators {
+        width: 100%;
+        box-flex: 1;
+        -ms-flex: 0 0 100%;
+        flex: 0 0 100%;
+        padding: 0;
+    }
+}
+
+.last-donations .best-donators:before {
+    content: '';
+    position: absolute;
+    height: 390px;
+    width: 50px;
+    background: url("https://cdn.alaatv.com/upload/donatePage-sep.png") no-repeat;
+    right: -47px;
+    top: 0;
+}
+
+@media (max-width: 768px) {
+    .last-donations .best-donators:before {
+        content: none
+    }
+}
+
+.last-donations .best-donators h3 {
+    color: #519296;
+    font-size: 27px;
+    font-weight: 400;
+    text-align: left;
+}
+
+@media (max-width: 768px) {
+    .last-donations .best-donators h3 {
+        text-align: right
+    }
+}
+
+.donator {
+    box-shadow: 0 2px 0 rgba(0, 0, 0, 0.15);
+    background-color: #f2f2f2;
+    height: 100%;
+    padding: 20px 12px;
+    border-radius: 10px;
+}
+
+.donator img {
+    width: 141px;
+    height: 141px;
+    border-radius: 100%;
+    display: block;
+    margin: 0 auto
+}
+
+.donator .name {
+    margin: 20px 0 3px
+}
+
+.donator .name, .donator .price {
+    display: block;
+    text-align: center;
+    color: #26323a;
+    font-size: 16px;
+    font-weight: 400
+}
+
+.donator .price .currency {
+    font-size: 9px
+}
+
+.best-donators .donator {
+    box-shadow: 0 2px 0 rgba(0, 0, 0, 0.15);
+    background-color: #addee1;
+    color: #2f5254;
+}
+
+.best-donators .donator .name, .best-donators .donator .price {
+    color: #2f5254
+}
+
+.monthly-charts {
+    background-color: #fff;
+    box-shadow: 0 19px 26px rgba(0, 0, 0, 0.1);
+    padding: 46px 0;
+    margin-bottom: 40px;
+}
+
+.monthly-charts .container {
+    display: -ms-flexbox;
+    display: box;
+    display: flex;
+    -ms-flex-direction: row;
+    flex-direction: row;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+}
+
+.monthly-charts .container .chart-by-month {
+    width: 75%;
+    box-flex: 1;
+    -ms-flex: 0 0 75%;
+    flex: 0 0 75%;
+    margin-right: auto;
+}
+
+@media (max-width: 768px) {
+    .monthly-charts .container .chart-by-month {
+        width: 100%;
+        box-flex: 1;
+        -ms-flex: 0 0 100%;
+        flex: 0 0 100%
+    }
+}
+
+.monthly-charts .container .totals {
+    box-flex: 1;
+    -ms-flex: 1;
+    flex: 1;
+    margin-left: 20px;
+}
+
+.monthly-charts .container .totals .total {
+    color: #26323a;
+    font-size: 26px;
+    font-weight: 500;
+    text-align: center;
+    padding: 60px 0;
+}
+
+.monthly-charts .container .totals .total .amount .currency {
+    font-size: 12px
+}
+
+.monthly-charts .container .totals .total .title {
+    display: block;
+    color: #ff5d7f;
+    font-size: 17px;
+    font-weight: 500;
+    margin-bottom: 10px
+}
+
+.monthly-charts .container .totals .total:first-child {
+    border-bottom: 1px solid #e4ebf0;
+}
+
+.monthly-charts .container .totals .total:first-child .title {
+    display: block;
+    color: #2a9deb
+}
+
+.provinces-charts {
+    margin-bottom: 65px;
+}
+
+.provinces-charts .container {
+    display: -ms-flexbox;
+    display: box;
+    display: flex;
+    -ms-flex-direction: row;
+    flex-direction: row;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap
+}
+
+.provinces-charts .chart-by-province {
+    width: 37%;
+    box-flex: 1;
+    -ms-flex: 0 0 37%;
+    flex: 0 0 37%;
+    align-self: center;
+    -ms-flex-item-align: center;
+    margin-top: 20px;
+}
+
+@media (max-width: 768px) {
+    .provinces-charts .chart-by-province {
+        width: 100%;
+        margin-bottom: 20px;
+        box-flex: 1;
+        -ms-flex: 0 0 100%;
+        flex: 0 0 100%
+    }
+}
+
+.provinces-charts .province-donations {
+    box-flex: 1;
+    -ms-flex: 1;
+    flex: 1;
+}
+
+.provinces-charts .province-donations h3 {
+    color: #000;
+    font-size: 17px;
+    font-weight: 400;
+}
+
+.provinces-charts .province-donations h3 strong {
+    font-size: 36px;
+    display: block
+}
+
+.provinces-charts .province-donations .list {
+    display: -ms-flexbox;
+    display: box;
+    display: flex;
+    -ms-flex-direction: row;
+    flex-direction: row;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    margin: 0 -30px;
+}
+
+.provinces-charts .province-donations .list li {
+    width: 50%;
+    box-flex: 1;
+    -ms-flex: 0 0 50%;
+    flex: 0 0 50%;
+    padding: 0 30px;
+    display: -ms-flexbox;
+    display: box;
+    display: flex;
+    -ms-flex-direction: row;
+    flex-direction: row;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    color: #000;
+    font-size: 14px;
+    font-weight: 400;
+}
+
+.provinces-charts .province-donations .list li:nth-child(2n+1) {
+    border-left: 1px solid #e8e8e8
+}
+
+@media (max-width: 992px) {
+    .provinces-charts .province-donations .list li {
+        width: 100%;
+        box-flex: 1;
+        -ms-flex: 0 0 100%;
+        flex: 0 0 100%;
+        border-left: 0 !important
+    }
+}
+
+@media (max-width: 992px) {
+    .provinces-charts .province-donations .list li {
+        width: 50%;
+        box-flex: 1;
+        -ms-flex: 0 0 50%;
+        flex: 0 0 50%
+    }
+
+    .provinces-charts .province-donations .list li:nth-child(2n+1) {
+        border-left: 1px solid #e8e8e8 !important
+    }
+}
+
+@media (max-width: 468px) {
+    .provinces-charts .province-donations .list li {
+        width: 100%;
+        box-flex: 1;
+        -ms-flex: 0 0 100%;
+        flex: 0 0 100%
+    }
+
+    .provinces-charts .province-donations .list li:nth-child(2n+1) {
+        border-left: 0 !important
+    }
+}
+
+.provinces-charts .province-donations .list li .color {
+    width: 27px;
+    height: 9px;
+    background-color: #ff839c;
+    margin-left: 20px;
+    align-self: center;
+    -ms-flex-item-align: center;
+}
+
+.provinces-charts .province-donations .list li .amount {
+    margin-right: auto;
+    text-align: left
+}
+
+.site-footer {
+    text-align: center;
+}
+
+.site-footer a.copyright {
+    width: 247px;
+    height: 166px;
+    background-color: #addfe3;
+    display: inline-block;
+    border-top-right-radius: 15px;
+    border-top-left-radius: 15px;
+    padding: 30px 0;
+    text-align: center
+}
+
+
+.chartjs-render-monitor {
+    max-width: 100%;
+}
+#monthlychart .highcharts-tooltip > span {
+    font-family: IRANSans,tahoma,'Open sans',sans-serif !important;
+    direction: rtl;
+    text-align: right;
+}
+#monthlychart .highcharts-tooltip > span > b {
+    display: inline-block;
+    text-align: left;
+    direction: ltr;
+}
+#monthlychart * {
+    font-family: IRANSans,tahoma,'Open sans',sans-serif;
+}
+
+/*# sourceMappingURL=styles.min.css.map */

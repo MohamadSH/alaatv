@@ -8,13 +8,14 @@
 
     {!! SEO::generate(true) !!}
 
-    <link rel="stylesheet" href="{{ asset('/acm/extra/donate/css/styles.min.css') }}">
+{{--    <link rel="stylesheet" href="{{ asset('/acm/extra/donate/css/styles.min.css') }}">--}}
 
-    <script src="{{ asset('/acm/extra/donate/js/jquery-2.2.4.min.js') }}"></script>
-
-    <!--[if lt IE 9]>
-    <script type="text/javascript" src="{{ asset('/acm/extra/donate/js/html5shiv.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('/acm/extra/donate/js/respond.min.js') }}"></script><![endif]-->
+    <link href="{{ mix('/css/page-donate.css') }}" rel="stylesheet" type="text/css"/>
+{{--    <script src="{{ asset('/acm/extra/donate/js/jquery-2.2.4.min.js') }}"></script>--}}
+{{--    <!--[if lt IE 9]>--}}
+{{--    <script type="text/javascript" src="{{ asset('/acm/extra/donate/js/html5shiv.js') }}"></script>--}}
+{{--    <script type="text/javascript" src="{{ asset('/acm/extra/donate/js/respond.min.js') }}"></script>--}}
+{{--    <![endif]-->--}}
 </head>
 <body>
 <div class="wrapper site-wrap" id="site_wrap">
@@ -24,7 +25,7 @@
             مجری طرح توسعه عدالت آموزشی
         </h1>
 
-        <img class="hearts" src="{{ asset('/acm/extra/donate/images/hearts.png') }}" alt="hearts">
+        <img class="hearts" src="https://cdn.alaatv.com/upload/donatePage-hearts.png" alt="hearts">
 
 {{--        {!! Form::open(['method'=>'POST' , 'action'=>'Web\OrderController@donateOrder' , 'class'=>'donation-form']) !!}--}}
         <div class="donation-form">
@@ -46,8 +47,8 @@
             <div class="recent-donators">
                 <h3>آخرین کمک های هفته</h3>
                 @if($latestDonors->isEmpty())
-                    <div class="hero" style="margin-bottom: 200px">
-                        <h2>کمکی نشده</h2>
+                    <div class="donator" style="margin-bottom: 200px; height: auto;">
+                        <h3 style="text-align: center;">کمکی نشده</h3>
                     </div>
                 @else
                     <ul class="list">
@@ -71,8 +72,8 @@
             <div class="best-donators">
                 <h3>بیشترین کمک های {{$currentJalaliMonthString}}</h3>
                 @if($maxDonors->isEmpty())
-                    <div class="hero" style="margin-bottom: 200px">
-                        <h2>کمکی نشده</h2>
+                    <div class="donator" style="margin-bottom: 200px; height: auto;">
+                        <h3 style="text-align: center;">کمکی نشده</h3>
                     </div>
                 @else
                     <ul class="list">
@@ -130,7 +131,8 @@
             </div><!-- .totals -->
 
             <div class="chart-by-month">
-                <canvas id="monthlychart"></canvas>
+{{--                <canvas id="monthlychart"></canvas>--}}
+                <div id="monthlychart"></div>
             </div><!-- .chart-by-month -->
 
         </div><!-- .container -->
@@ -242,43 +244,67 @@
 
     <footer class="site-footer">
         <a class="copyright" href="{{route('web.index')}}">
-            <img src="/acm/extra/donate/images/copyright.png" alt="Copyright">
+            <img src="https://cdn.alaatv.com/upload/donatePage-copyright.png" alt="Copyright">
         </a>
     </footer>
 
 </div><!-- #site_wrap -->
 
-<script src="/acm/extra/donate/js/Chart.bundle.min.js"></script>
+{{--<script src="/acm/extra/donate/js/Chart.bundle.min.js"></script>--}}
 
 <script>
     var MONTHS = {!! $chartData->pluck("month")->toJson() !!};
     var configBackendDatasets = [
         {
-            label: 'مجموع دونیت ها',
-            backgroundColor: '#49aaed',
-            borderColor: '#49aaed',
+            name: 'مجموع دونیت ها',
+            marker: {
+                symbol: 'square'
+            },
             data: [
                 @foreach($chartData as $chartDatum)
-                {{$chartDatum["totalIncome"]}},
+                    {{$chartDatum["totalIncome"]}},
                 @endforeach
-            ],
-            fill: false,
+            ]
+
         }, {
-            label: 'مجموع هزینه ها',
-            fill: false,
-            backgroundColor: '#ff597c',
-            borderColor: '#ff597c',
+            name: 'مجموع هزینه ها',
+            marker: {
+                symbol: 'diamond'
+            },
             data: [
                 @foreach($chartData as $chartDatum)
-                {{$chartDatum["totalSpend"]}},
-                // 25000000,
+                    {{$chartDatum["totalSpend"]}},
                 @endforeach
-            ],
+            ]
         }
+
+        {{--{--}}
+        {{--    label: 'مجموع دونیت ها',--}}
+        {{--    backgroundColor: '#49aaed',--}}
+        {{--    borderColor: '#49aaed',--}}
+        {{--    data: [--}}
+        {{--        @foreach($chartData as $chartDatum)--}}
+        {{--        {{$chartDatum["totalIncome"]}},--}}
+        {{--        @endforeach--}}
+        {{--    ],--}}
+        {{--    fill: false,--}}
+        {{--}, {--}}
+        {{--    label: 'مجموع هزینه ها',--}}
+        {{--    fill: false,--}}
+        {{--    backgroundColor: '#ff597c',--}}
+        {{--    borderColor: '#ff597c',--}}
+        {{--    data: [--}}
+        {{--        @foreach($chartData as $chartDatum)--}}
+        {{--        {{$chartDatum["totalSpend"]}},--}}
+        {{--        // 25000000,--}}
+        {{--        @endforeach--}}
+        {{--    ],--}}
+        {{--}--}}
     ];
+
 </script>
 
-<script src="{{ asset('/acm/AlaatvCustomFiles/js/page-donate.js') }}"></script>
+<script src="{{ mix('/js/page-donate.js') }}"></script>
 
 </body>
 
