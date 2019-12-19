@@ -203,9 +203,9 @@ class ProductController extends Controller
             $lastSet = $product->sets->sortByDesc('created_at')->first() ;
             $lastSetPamphlets = $lastSet->where('contenttype_id' , Content::CONTENT_TYPE_PAMPHLET);
             $lastSetVideos    = $lastSet->where('contenttype_id' , Content::CONTENT_TYPE_VIDEO);
-//            $periodDescription = $product->descriptionWithPeriod;
+            $periodDescription = $product->descriptionWithPeriod;
 
-            return view('product.customShow.raheAbrisham', compact('product', 'block' , 'liveDescriptions', 'isFavored' , 'lastSet' , 'lastSetPamphlets' , 'lastSetVideos' , 'hasPurchasedRaheAbrisham'));
+            return view('product.customShow.raheAbrisham', compact('product', 'block' , 'liveDescriptions', 'isFavored' , 'lastSet' , 'lastSetPamphlets' , 'lastSetVideos' , 'hasPurchasedRaheAbrisham' , 'periodDescription'));
         }
 
         $isForcedGift = false;
