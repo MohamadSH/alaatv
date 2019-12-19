@@ -243,6 +243,24 @@ class Mix {
             'public/js/login.js'
         );
     }
+    mixPageDonate() {
+        this.mixCssAndJs([
+                'node_modules/highcharts/css/highcharts.css',
+                'public/acm/webFonts/IRANSans/css/fontiran.css',
+                'public/acm/AlaatvCustomFiles/css/page/pages/donate.css'
+                // 'public/acm/extra/donate/css/styles.min.css'
+            ],
+            'public/css/page-donate.css',
+            [
+                'node_modules/jquery/dist/jquery.js',
+                'node_modules/highcharts/highcharts.js',
+                // 'public/acm/extra/donate/js/html5shiv.js',
+                // 'public/acm/extra/donate/js/respond.min.js',
+                // 'public/acm/extra/donate/js/Chart.bundle.min.js',
+                'public/acm/AlaatvCustomFiles/js/page-donate.js'
+            ],
+            'public/js/page-donate.js');
+    }
     mixPageHomePage() {
         this.mixCssAndJs([
                 'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/style.css',
@@ -307,6 +325,7 @@ class Mix {
         this.mixPageShop();
         this.mixPageError();
         this.mixAuthLogin();
+        this.mixPageDonate();
         this.mixPageHomePage();
         this.mixPageContactUs();
         this.mixPageContentSearch();

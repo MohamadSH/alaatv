@@ -1,4 +1,3 @@
-
 var config = {
     type: 'line',
     data: {
@@ -99,12 +98,24 @@ var config2 = {
     }
 };
 
-window.onload = function () {
-    var ctx = document.getElementById('monthlychart').getContext('2d');
-    window.myLine = new Chart(ctx, config);
+function getCurrencyUnit(value) {
+    if (value/1000000>0) {
+        return (value/1000000) + 'میلیون';
+    } else if (value/1000>0) {
+        return (value/1000) + 'هزار';
+    }
+}
 
-    var ctxx = document.getElementById('provincecharts').getContext('2d');
-    window.myPie = new Chart(ctxx, config2);
+window.onload = function () {
+    // if (document.getElementById('monthlychart') !== null) {
+    //     var ctx = document.getElementById('monthlychart').getContext('2d');
+    //     window.myLine = new Chart(ctx, config);
+    // }
+    //
+    // if (document.getElementById('provincecharts') !== null) {
+    //     var ctxx = document.getElementById('provincecharts').getContext('2d');
+    //     window.myPie = new Chart(ctxx, config2);
+    // }
 };
 
 $(document).ready(function () {
@@ -112,6 +123,74 @@ $(document).ready(function () {
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
+    });
+
+
+    Highcharts.chart('monthlychart', {
+        credits: {
+            enabled: false
+        },
+        chart: {
+            type: 'spline'
+        },
+        title: {
+            text: ''
+        },
+
+        subtitle: {
+            text: ''
+        },
+        xAxis: {
+            categories: MONTHS
+        },
+        tooltip: {
+            useHTML:true,
+            crosshairs: true,
+            shared: true,
+            formatter: function () {
+                var point0Html = (typeof this.points[0] !== 'undefined') ?
+                    '<span style="color:#7cb5ec">●</span> مجموع دونیت ها: ' +
+                    '<b>'+this.points[0].y+'</b>' +
+                    '<br>' : '',
+                    point1Html = (typeof this.points[1] !== 'undefined') ?
+                        '<span style="color:#434348">●</span> مجموع هزینه ها: ' +
+                        '<b>'+getCurrencyUnit(this.points[1].y)+'</b>' +
+                        '<br>' : '';
+                return '<span>' +
+                    '<span style="font-size: 10px">'+this.x+'</span>' +
+                    '<br>' +
+                    point0Html+
+                    point1Html+
+                    '</span>';
+            }
+        },
+        plotOptions: {
+            spline: {
+                marker: {
+                    radius: 4,
+                    lineColor: '#666666',
+                    lineWidth: 1
+                }
+            }
+        },
+        yAxis: {
+            title: {
+                text: 'مبلغ (تومان)'
+            },
+            labels: {
+                formatter: function () {
+                    return getCurrencyUnit(this.value);
+                }
+            }
+        },
+        legend: {
+            layout: 'horizontal',
+            align: 'center',
+            verticalAlign: 'bottom',
+        },
+
+        series: configBackendDatasets,
+
     });
 
     $(document).on('click', '#btnDonationNow', function (e) {

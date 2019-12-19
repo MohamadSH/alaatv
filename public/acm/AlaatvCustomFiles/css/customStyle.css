@@ -62,6 +62,10 @@
     font-size: 20px;
 }
 
+a.a--gtm-eec-advertisement-click {
+    display: block;
+}
+
 .m-brand .m-brand__tools .m-brand__toggler span::after,
 .m-brand .m-brand__tools .m-brand__toggler span::before,
 .m-brand .m-brand__tools .m-brand__toggler span,
