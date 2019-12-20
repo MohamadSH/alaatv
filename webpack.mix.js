@@ -44,6 +44,12 @@ class Mix {
             'public/assets/demo/demo12/base/scripts.bundle.js',
             'node_modules/block-ui/jquery.blockUI.js',
 
+            // 'node_modules/firebase/firebase.js',
+            // 'node_modules/firebase/firebase-analytics.js',
+            // 'node_modules/firebase/firebase-auth.js',
+            // 'node_modules/firebase/firebase-firestore.js',
+            // 'node_modules/firebase/firebase-messaging.js',
+
 
             'public/acm/AlaatvCustomFiles/js/mLayout.js',// quick search (ajax) in header
             'public/acm/AlaatvCustomFiles/components/AjaxLogin/script.js',
@@ -51,6 +57,7 @@ class Mix {
             'public/acm/AlaatvCustomFiles/js/Cookie.js',
             'public/acm/AlaatvCustomFiles/js/LoginBeforeClick.js',
             'public/acm/AlaatvCustomFiles/js/GoogleAnalyticsEnhancedEcommerce.js',
+            // 'public/acm/AlaatvCustomFiles/js/GoogleFirebase.js',
             'public/acm/AlaatvCustomFiles/components/MegaMenu/script.js',
             'public/acm/AlaatvCustomFiles/js/lazyLoad.js',
             'public/acm/AlaatvCustomFiles/js/app.js'
