@@ -9,6 +9,12 @@ use Illuminate\Http\Request;
 class CacheableWithNginx
 {
     private $cookieName = 'nocache';
+    /**
+     * The authentication guard.
+     *
+     * @var string
+     */
+    protected $guard;
     private $except     = [
         '/login',
         '/checkout/review',
@@ -22,28 +28,26 @@ class CacheableWithNginx
     /**
      * Handle an incoming request.
      *
-     * @param  Request  $request
-     * @param  Closure  $next
+     * @param Request $request
+     * @param Closure $next
      *
+     * @param null $guard
      * @return mixed
      */
-    public function handle($request, Closure $next)
+    public function handle($request, Closure $next, $guard = null)
     {
-        if ($this->isNotCacheables($request)) {
-            if ($this->methodIsGetOrHead($request) && !$request->hasCookie($this->cookieName)) {
-                setcookie($this->cookieName , '1', time() + (86400*30), '/');
-            }
+        $this->guard = $guard;
+        $requestHasUser = $this->requestHasUser($request);
+        if ($requestHasUser) {
+            setcookie($this->cookieName , '1', time() + (86400*30), '/');
+        }
+        if ($requestHasUser || $this->inExceptArray($request) || !$this->methodIsGetOrHead($request)) {
             return $next($request);
         }
-        setcookie($this->cookieName , 'Expired', time() - 100000, '/');
         $response = $next($request);
-
-        if ($this->isCacheables($request)) {
-            return $response->withHeaders([
-                'Cache-Control' => 'public, max-age='. 60 * (config('cache_time_in_minutes', 60)),
-            ]);
-        }
-        return $response;
+        return $response->withHeaders([
+            'Cache-Control' => 'public, max-age='. 60 * (config('cache_time_in_minutes', 60)),
+        ]);
     }
 
     private function methodIsGetOrHead(Request $request)
@@ -70,23 +74,13 @@ class CacheableWithNginx
 
         return false;
     }
-
     /**
      * @param  Request  $request
      *
      * @return bool
      */
-    private function isNotCacheables($request): bool
+    private function requestHasUser($request)
     {
-        return $request->user() || $this->inExceptArray($request) || !$this->methodIsGetOrHead($request);
-    }
-
-    /**
-     * @param $request
-     * @return bool
-     */
-    private function isCacheables($request): bool
-    {
-        return  !$this->isNotCacheables($request);
+        return $request->user($this->guard);
     }
 }

@@ -44,7 +44,14 @@
                                 @endif
 
                                 @if(!isset($blockUrlDisable) || !$blockUrlDisable)
-                                    <a @if(isset($block->customUrl))href="{{ $block->customUrl }}"@endif class="m-link">
+                                    <a @if(isset($block->customUrl))
+                                       href="{{ $block->customUrl }}"
+                                       @elseif(strlen(trim($block->url))>0)
+                                       href="{{ $block->url }}"
+                                       @endif
+
+
+                                       class="m-link">
                                         @endif
                                         @if(isset($blockTitle))
                                             {!! $blockTitle !!}

@@ -38,31 +38,13 @@
 @endsection
 
 @section('content')
+
+    @include('partials.ads.list', ['id'=>'setShow-TopOfList-mobileShow'])
+
     <div class="row">
-        <div class="col">
-            <a href="{{ action("Web\ShopPageController") }}"
-               class="a--gtm-eec-advertisement a--gtm-eec-advertisement-click a--mobile-show a--tablet-show m--margin-bottom-10"
-               data-gtm-eec-promotion-id="setShow-TopOfList-mobileShow"
-               data-gtm-eec-promotion-name="جشنواره یلدایی آلاء"
-               data-gtm-eec-promotion-creative="بالای لیست"
-               data-gtm-eec-promotion-position="وسط">
-                <img data-src="https://cdn.alaatv.com/upload/yalda-festival_300.100.jpg" class="a--full-width lazy-image" alt="جشنواره یلدایی آلاء" width="300" height="100">
-{{--                <video autoplay loop muted playsinline data-src="https://cdn.alaatv.com/upload/yalda-festival_300.100.jpg" class="a--full-width lazy-image" alt="جشنواره یلدایی آلاء" width="300" height="100"></video>--}}
-            </a>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-lg-2 a--desktop-show rightSideAdBanner">
-            <a href="{{ action("Web\ShopPageController") }}"
-               class="a--gtm-eec-advertisement a--gtm-eec-advertisement-click"
-               data-gtm-eec-promotion-id="setShow-TopOfList-mobileShow"
-               data-gtm-eec-promotion-name="جشنواره یلدایی آلاء"
-               data-gtm-eec-promotion-creative="بالای لیست"
-               data-gtm-eec-promotion-position="وسط">
-{{--                <video autoplay loop muted playsinline data-src="https://cdn.alaatv.com/upload/yalda-festival_300.100.jpg" class="a--full-width lazy-image" alt="جشنواره یلدایی آلاء" width="300" height="100"></video>--}}
-                <img data-src="https://cdn.alaatv.com/upload/yalda-festival_400.400.jpg" class="a--full-width lazy-image" alt="جشنواره یلدایی آلاء" width="400" height="400">
-            </a>
-        </div>
+
+        @include('partials.ads.list', ['id'=>'setShow-TopOfList-desktopShow'])
+        
         <div class="col-lg-8 mx-auto">
             <div class="m-portlet m-portlet--full-height ">
                 <div class="m-portlet__head contentsetListHead">
