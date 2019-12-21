@@ -1,11 +1,11 @@
 var ProductSwitch = function () {
 
     function changeChildCheckStatus(parentId, status) {
-        let items = $("input[name='products[]'].product.hasParent_" + parentId);
-        for (let index in items) {
+        var items = $("input[name='products[]'].product.hasParent_" + parentId);
+        for (var index in items) {
             if (!isNaN(index)) {
-                let hasChildren = $(items[index]).hasClass('hasChildren');
-                let defaultValue = items[index].defaultValue;
+                var hasChildren = $(items[index]).hasClass('hasChildren');
+                var defaultValue = items[index].defaultValue;
                 $(items[index]).prop('checked', status);
                 if (hasChildren) {
                     changeChildCheckStatus(defaultValue, status);
@@ -16,17 +16,17 @@ var ProductSwitch = function () {
 
     function singleUpdateSelectedProductsStatus() {
 
-        let items = $("input[name='products[]'].product");
-        for (let index in items) {
+        var items = $("input[name='products[]'].product");
+        for (var index in items) {
             if (!isNaN(index)) {
-                let hasChildren = $(items[index]).hasClass('hasChildren');
-                let thisValue = items[index].defaultValue;
-                let report1 = {
+                var hasChildren = $(items[index]).hasClass('hasChildren');
+                var thisValue = items[index].defaultValue;
+                var report1 = {
                     'allChildIsChecked': true,
                     'allChildIsNotChecked': true,
                     'counter': 0
                 };
-                let report = checkChildProduct(thisValue, report1);
+                var report = checkChildProduct(thisValue, report1);
                 if (hasChildren) {
                     if (report.allChildIsChecked) {
                         $(items[index]).prop('checked', true);
@@ -39,17 +39,17 @@ var ProductSwitch = function () {
     }
 
     function checkChildProduct(parentId, report) {
-        let items = $("input[name='products[]'].product.hasParent_" + parentId);
+        var items = $("input[name='products[]'].product.hasParent_" + parentId);
         report.counter++;
-        for (let index in items) {
+        for (var index in items) {
             if (isNaN(index)) {
                 continue;
             }
-            let defaultValue = items[index].defaultValue;
-            let thisCheckBox = $("input[name='products[]'][value='" + defaultValue + "'].product");
-            let hasChildren = thisCheckBox.hasClass('hasChildren');
-            let thisExist = thisCheckBox.length;
-            let thisIsChecked = thisCheckBox.prop('checked');
+            var defaultValue = items[index].defaultValue;
+            var thisCheckBox = $("input[name='products[]'][value='" + defaultValue + "'].product");
+            var hasChildren = thisCheckBox.hasClass('hasChildren');
+            var thisExist = thisCheckBox.length;
+            var thisIsChecked = thisCheckBox.prop('checked');
             if (thisExist > 0 && thisIsChecked !== true) {
                 report.allChildIsChecked = false;
             }
@@ -69,26 +69,26 @@ var ProductSwitch = function () {
         if (typeof $("input[name='products[]'].product")[0] === "undefined") {
             return 1;
         }
-        let firstDefaultValue = $("input[name='products[]'].product")[0].defaultValue;
-        let report1 = {
+        var firstDefaultValue = $("input[name='products[]'].product")[0].defaultValue;
+        var report1 = {
             'allChildIsChecked': true,
             'allChildIsNotChecked': true,
             'counter': 0
         };
-        let report = checkChildProduct(firstDefaultValue, report1);
+        var report = checkChildProduct(firstDefaultValue, report1);
         return report.counter;
     }
 
     function updateSelectedProductsStatus(childLevel, callback) {
-        for (let i = 0; i < childLevel; i++) {
+        for (var i = 0; i < childLevel; i++) {
             singleUpdateSelectedProductsStatus();
         }
         callback();
     }
 
     function checkChildrenOfParentOnInit() {
-        let items = $("input[name='products[]'].product.hasChildren:checked");
-        for (let index in items) {
+        var items = $("input[name='products[]'].product.hasChildren:checked");
+        for (var index in items) {
             if (isNaN(index)) {
                 continue;
             }
@@ -98,7 +98,7 @@ var ProductSwitch = function () {
 
     return {
         init: function () {
-            let childLevel = getChildLevel();
+            var childLevel = getChildLevel();
             checkChildrenOfParentOnInit();
             return childLevel;
         },
@@ -240,9 +240,9 @@ var ProductShowPage = function () {
             return c.indexOf(item) == pos
         });
 
-        let extraAttributes = [];
+        var extraAttributes = [];
 
-        for (let index in attributeState) {
+        for (var index in attributeState) {
             if (!isNaN(index)) {
                 extraAttributes.push({
                     'id': attributeState[index]
@@ -384,8 +384,10 @@ var ProductResponsivePage = function () {
         $('.productIntroVideoColumn .videoInformation').fadeOut(0);
         setProductAttributesColumnWidthModel2();
         $('.productIntroVideoColumn').css({'margin-top': '0'});
-        var marginTop = -1 * ($('.productIntroVideoColumn').offset().top - ($('.PicAttributesIntroVideoRow img').width() + $('.PicAttributesIntroVideoRow img').offset().top) - 15);
-        $('.productIntroVideoColumn').css({'margin-top': marginTop + 'px'});
+        if (typeof $('.PicAttributesIntroVideoRow img').offset() !== 'undefined') {
+            var marginTop = -1 * ($('.productIntroVideoColumn').offset().top - ($('.PicAttributesIntroVideoRow img').width() + $('.PicAttributesIntroVideoRow img').offset().top) - 15);
+            $('.productIntroVideoColumn').css({'margin-top': marginTop + 'px'});
+        }
     }
 
     // model 3
@@ -502,15 +504,15 @@ var InitPage = function () {
     }
 
     function initProductSwitchForSelectableProducts() {
-        let childLevel = ProductSwitch.init();
+        var childLevel = ProductSwitch.init();
 
-        let callBack = function () {
-            let productsState = ProductShowPage.getProductSelectValues();
+        var callBack = function () {
+            var productsState = ProductShowPage.getProductSelectValues();
             ProductShowPage.refreshPrice([], productsState, []);
         };
         $(document).on('change', "input[name='products[]'].product", function () {
-            let thisValue = this.defaultValue;
-            let hasChildren = $(this).hasClass('hasChildren');
+            var thisValue = this.defaultValue;
+            var hasChildren = $(this).hasClass('hasChildren');
             if (hasChildren) {
                 ProductSwitch.changeChildCheckStatus(thisValue, $(this).prop('checked'));
             }
@@ -583,10 +585,10 @@ var InitPage = function () {
 
             ProductShowPage.disableBtnAddToCart();
             var product = $("input[name=product_id]").val();
-            let mainAttributeStates = ProductShowPage.getMainAttributeStates();
-            let extraAttributeStates = ProductShowPage.getExtraAttributeStates();
-            let productSelectValues = ProductShowPage.getProductSelectValues();
-            let selectedProductObject = ProductShowPage.getSelectedProductObject();
+            var mainAttributeStates = ProductShowPage.getMainAttributeStates();
+            var extraAttributeStates = ProductShowPage.getExtraAttributeStates();
+            var productSelectValues = ProductShowPage.getProductSelectValues();
+            var selectedProductObject = ProductShowPage.getSelectedProductObject();
 
             // for (var index in selectedProductObject) {
             //     selectedProductObject[index].category = parentProductTags;
@@ -612,7 +614,7 @@ var InitPage = function () {
                     },
                     statusCode: {
                         200: function (response) {
-                            let successMessage = 'محصول مورد نظر به سبد خرید اضافه شد.';
+                            var successMessage = 'محصول مورد نظر به سبد خرید اضافه شد.';
 
                             toastr.success(successMessage);
 
@@ -634,7 +636,7 @@ var InitPage = function () {
 
             } else {
 
-                let data = {
+                var data = {
                     'product_id': $('input[name="product_id"][type="hidden"]').val(),
                     'attribute': mainAttributeStates,
                     'extraAttribute': extraAttributeStates,
@@ -643,7 +645,7 @@ var InitPage = function () {
 
                 UesrCart.addToCartInCookie(data);
 
-                let successMessage = 'محصول مورد نظر به سبد خرید اضافه شد.';
+                var successMessage = 'محصول مورد نظر به سبد خرید اضافه شد.';
 
 
                 toastr.success(successMessage);
@@ -768,7 +770,7 @@ var InitPage = function () {
             player.pic2pic();
 
             // player.on('mode',function(event,mode) {
-            //     let width = '100%';
+            //     var width = '100%';
             //     if(mode=='large') {
             //         // $('.productDetailesColumns .column1').addClass('order-2');
             //         // $('.productDetailesColumns .column2').addClass('order-3');
