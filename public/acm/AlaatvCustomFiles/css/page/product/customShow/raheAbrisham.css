@@ -15,7 +15,45 @@
     fill: transparent;
 }
 
+.descriptionBox .m-portlet__body .content.compact {
+    position: relative;
+    max-height: 250px;
+    overflow: hidden;
+}
+.descriptionBox .m-portlet__body .content.collapsed {
+    position: relative;
+}
+.descriptionBox .m-portlet__body .content.compact:after {
+    content: ' ';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 30px;
+    -webkit-box-shadow: inset 0 -10px 10px 10px rgb(255, 255, 255);
+    -moz-box-shadow: inset 0 -10px 10px 10px rgb(255, 255, 255);
+    box-shadow: inset 0 -10px 10px 10px rgb(255, 255, 255);
+    z-index: 2;
+}
+
 /*pictureAndMap*/
+.MapStepLabel {
+    position: fixed;
+    z-index: 9;
+    background: #b8a288;
+    color: white;
+    padding: 2px 5px;
+    border-radius: 5px;
+}
+.MapStepLabel:before {
+    content: ' ';
+    position: absolute;
+    border-top: solid 10px #b8a288;
+    border-left: solid 10px transparent;
+    border-right: solid 10px transparent;
+    top: 23px;
+    left: calc( 50% - 10px);
+}
 .display-5 {
     font-size: 2rem;
     font-weight: bold;

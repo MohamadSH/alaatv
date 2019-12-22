@@ -68,16 +68,30 @@ var EntekhabeFarsang = function () {
                     },
                     403: function (response) {
                         // responseMessage = response.responseJSON.message;
+                        hideLoading();
+                        checkNoData();
+                        toastr.warning('خطایی رخ داده است.');
                     },
                     404: function (response) {
+                        hideLoading();
+                        checkNoData();
+                        toastr.warning('خطایی رخ داده است.');
                     },
                     422: function (response) {
+                        hideLoading();
+                        checkNoData();
+                        toastr.warning('خطایی رخ داده است.');
                     },
                     429: function (response) {
+                        hideLoading();
+                        checkNoData();
+                        toastr.warning('خطایی رخ داده است.');
                     },
                     //The status for when there is error php code
                     500: function () {
-                        removeLoadingItem(owl, type);
+                        hideLoading();
+                        checkNoData();
+                        toastr.warning('خطایی رخ داده است.');
                     }
                 }
             }
@@ -244,469 +258,6 @@ var InitAbrishamPage = function () {
         $('.m-body .m-content').addClass('boxed');
     }
 
-    function getFarsangMapHeight() {
-        return $('.productPicture').width() + 'px';
-    }
-
-    function splitFarsangAndNonFarsang(productSets) {
-
-        if (typeof productSets === 'undefined') {
-            return false;
-        }
-
-        var publishedProductSetsLength = productSets.length,
-            pileSetId = 604, // پیله راه ابریشم (ریاضیات مقدماتی) (نظام آموزشی جدید) (99-1398) محمد صادق ثابتی
-            nonFarsangIds = [
-                717, // پیش آزمون قلمچی راه ابریشم (نظام آموزشی جدید) (99-1398) محمد صادق ثابتی
-                665, // بارانداز راه ابریشم ( پس آزمون)
-                217, // صفر تا صد ریاضی تجربی کنکور (نظام آموزشی جدید) (98-1397) محمد صادق ثابتی
-                pileSetId,
-            ],
-            freshFarsangs = [],
-            freshNonFarsangs = [],
-            pileObject;
-
-
-        for (var i = 0; i < publishedProductSetsLength; i++) {
-            var productSetItem = productSets[i];
-
-            if (nonFarsangIds.indexOf(productSetItem.setId) === -1) {
-                freshFarsangs.push(productSetItem);
-            } else if (productSetItem.setId === pileSetId) {
-                pileObject = productSetItem;
-            } else {
-                freshNonFarsangs.push(productSetItem);
-            }
-        }
-
-        freshFarsangs.push(pileObject);
-
-        return {
-            farsangs: freshFarsangs.reverse(),
-            nonFarsangs: freshNonFarsangs
-        };
-    }
-
-    function getItemName(omIndex) {
-        var omArray = [
-                'پیله راه ابریشم',
-                'اول',
-                'دوم',
-                'سوم',
-                'چهارم',
-                'پنجم',
-                'ششم',
-                'هفتم',
-                'هشتم',
-                'نهم',
-                'دهم',
-                'یازدهم',
-                'دوازدهم',
-                'سیزدهم',
-                'چهاردهم',
-                'پانزدهم',
-                'شانزدهم',
-                'هفدهم',
-                'هجدهم',
-                'نوزدهم',
-                'بیستم'
-            ],
-            name = (omIndex === 0) ? omArray[omIndex] : 'فرسنگ ' + omArray[omIndex];
-        return name;
-    }
-
-    function getHighchartPoints(productSets) {
-
-        var splitedFarsangAndNonFarsang = splitFarsangAndNonFarsang(productSets),
-            farsangs = splitedFarsangAndNonFarsang.farsangs,
-            nonFarsangs = splitedFarsangAndNonFarsang.nonFarsangs,
-            farsangsLength = farsangs.length,
-            nonFarsangsLength = nonFarsangs.length,
-            farsangPoints = [
-                {
-                    x: 0,
-                    y: 0,
-                },
-                {
-                    x: 10,
-                    y: 15,
-                },
-                {
-                    x: 20,
-                    y: -5,
-                },
-                {
-                    x: 30,
-                    y: -10,
-                },
-                {
-                    x: 40,
-                    y: -2,
-                },
-                {
-                    x: 50,
-                    y: 22,
-                },
-                {
-                    x: 60,
-                    y: 12,
-                },
-                {
-                    x: 70,
-                    y: -8,
-                },
-                {
-                    x: 80,
-                    y: 7,
-                },
-                {
-                    x: 90,
-                    y: 20,
-                },
-                {
-                    x: 100,
-                    y: 30,
-                },
-            ],
-            farsangPointsLength = farsangPoints.length,
-            currentStep = farsangsLength - 1;
-
-        for (var i = 0; i < farsangPointsLength; i++) {
-            var footPrint = 'url(/acm/image/raheAbrisham/footPrint2.svg)',
-                farsangItem = farsangs[i];
-
-            if (i < currentStep) {
-                footPrint = 'url(/acm/image/raheAbrisham/footPrint1.svg)';
-
-                // farsangPoints[i].drilldown = "FarsangItems";
-                // farsangPoints[i].dataLabels = {color: 'white'};
-                farsangPoints[i].set = {
-                    id: farsangItem.setId,
-                    name: farsangItem.name
-                };
-            } else if (i === currentStep) {
-
-                footPrint = 'url(/acm/image/raheAbrisham/footPrint3.svg)';
-
-                farsangPoints[i].set = {
-                    id: farsangItem.setId,
-                    name: farsangItem.name
-                };
-            }
-            farsangPoints[i].marker = {
-                // symbol: 'url(/acm/image/raheAbrisham/footPrint.svg)'
-                symbol: footPrint,
-            };
-            farsangPoints[i].name = getItemName(i);
-        }
-
-        return {
-            farsangs: farsangPoints,
-            nonFarsangs: []
-        };
-    }
-
-    function initFarsangMap(productSets) {
-
-        if (typeof productSets === 'undefined') {
-            return false;
-        }
-
-        var highchartPoints = getHighchartPoints(productSets),
-            farsangPoints = highchartPoints.farsangs,
-            mapRoadId = 'mapRoad';
-
-        // setCustomEaseOutBounce();
-        setHighchartOptions();
-        var chart = initHighchart(mapRoadId, farsangPoints);
-
-        setBackgroundForHighchart(mapRoadId);
-
-        // feedMapPoints(chart, farsangPoints);
-    }
-
-    function setBackgroundForHighchart(mapRoadId) {
-        $('#' + mapRoadId).prepend('<img class="background" src="/acm/image/raheAbrisham/mapbackground1.jpg">');
-        $('#' + mapRoadId).find('.highcharts-container').css({'width': '100%'}).find('svg').css({'width': '100%'});
-    }
-
-    function initHighchart(mapRoadId, farsangPoints) {
-        return new Highcharts.chart(mapRoadId, {
-            chart: {
-                type: 'spline',
-                margin: [5, 20, 5, 20], // [up, right, down, left]
-                // width: '100%',
-                height: getFarsangMapHeight(),
-                // inverted: true
-            },
-            credits: {
-                enabled: false
-            },
-            title: {
-                text: ''
-            },
-            subtitle: {
-                text: ''
-            },
-            xAxis: {
-                visible: false,
-                // reversed: true,
-                // title: {
-                //     enabled: true,
-                //     text: ''
-                // },
-                // labels: {
-                //     format: ''
-                // },
-                // maxPadding: 0.05,
-                // showLastLabel: false
-            },
-            yAxis: {
-                visible: false,
-                // title: {
-                //     text: ''
-                // },
-                // labels: {
-                //     format: ''
-                // },
-                // lineWidth: 2
-            },
-            legend: {
-                enabled: false
-            },
-            tooltip: {
-                headerFormat: '',
-                pointFormat: '{point.name}'
-            },
-            plotOptions: Highcharts_plotOptions(),
-            exporting: Highcharts_exporting(),
-            series: Highcharts_series(farsangPoints),
-            // drilldown: Highcharts_drilldown()
-        });
-    }
-
-    function setCustomEaseOutBounce() {
-        Math.easeOutBounce = function (pos) {
-            var res;
-            res = (7.5625 * pos * pos);
-            // if ((pos) < (1 / 2.75)) {
-            //     res = (7.5625 * pos * pos);
-            // } else if (pos < (2 / 2.75)) {
-            //     res = (7.5625 * (pos -= (1.5 / 2.75)) * pos + 0.75);
-            // } else if (pos < (2.5 / 2.75)) {
-            //     res = (7.5625 * (pos -= (2.25 / 2.75)) * pos + 0.9375);
-            // } else {
-            //     res = (7.5625 * (pos -= (2.625 / 2.75)) * pos + 0.984375);
-            // }
-            res = 1 - res;
-            return res;
-        };
-    }
-
-    function setHighchartOptions() {
-        Highcharts.setOptions({
-            lang: {
-                drillUpText: '<< بازگشت به {series.name}'
-            }
-        });
-    }
-
-    function Highcharts_series(farsangPoints) {
-        return [{
-            type: 'spline',
-            name: 'مسیر راه ابریشم',
-            data: farsangPoints,
-            // data: [],
-            color: '#da9d6c',
-            // animation: false,
-            animation: {
-                duration: 2000,
-                // Uses Math.easeOutBounce
-                // easing: 'easeOutBounce'
-            }
-        }];
-    }
-
-    function Highcharts_exporting() {
-        return {
-            buttons: [
-                {
-                    align: 'left',
-                    verticalAlign: 'bottom',
-                    text: 'صفر تا صد',
-                    onclick: function () {
-                        EntekhabeFarsang.showFarsang(217);
-                    },
-                },
-                {
-                    align: 'left',
-                    verticalAlign: 'bottom',
-                    text: 'پیش آزمون',
-                    onclick: function () {
-                        EntekhabeFarsang.showFarsang(717);
-                    },
-                },
-                {
-                    // align: 'right',
-                    align: 'left',
-                    verticalAlign: 'bottom',
-                    text: 'بار انداز',
-                    onclick: function () {
-                        EntekhabeFarsang.showFarsang(665);
-                    },
-                }
-            ]
-        };
-    }
-
-    function Highcharts_plotOptions() {
-        return {
-            enableMouseTracking: false,
-            // spline: {
-            //     marker: {
-            //         enable: false
-            //     }
-            // },
-            series: {
-                cursor: 'pointer',
-                // allowPointSelect: true,
-                dataLabels: {
-                    enabled: true,
-                    color: 'white',
-                    style: {
-                        fontSize: '16px',
-                        textOutline: false,
-                    },
-                    format: '{point.name}',
-                    // useHTML: true,
-                    // formatter: function () {
-                    //     console.log(this)
-                    //     return '<div>'+this.key+'</div>';
-                    // }
-                },
-                point: {
-                    events: {
-                        click: function () {
-                            var data = this.series.data[this.index];
-                            EntekhabeFarsang.showFarsang(data.set.id);
-                        }
-                    }
-                }
-            },
-        };
-    }
-
-    function Highcharts_drilldown() {
-        return {
-            drillUpButton: {
-                position: {
-                    align: 'left'
-                }
-            },
-            activeDataLabelStyle: {
-                color: 'white',
-                textDecoration: 'none'
-            },
-            margin: [5, 50, 5, 50], // [up, right, down, left]
-            series: [
-                {
-                    type: 'organization',
-                    name: 'FarsangItems',
-                    id: 'FarsangItems',
-                    keys: ['from', 'to'],
-                    enableMouseTracking: false,
-                    hangingIndent: 100,
-                    data: [
-                        ['farsang1', 'CTO'],
-                        ['farsang1', 'CPO'],
-                        ['farsang1', 'CSO'],
-                        ['farsang1', 'CMO'],
-                    ],
-                    levels: [{
-                        level: 0,
-                        color: 'silver',
-                        dataLabels: {
-                            color: 'black'
-                        },
-                        width: 250,
-                        height: 250
-                    }, {
-                        level: 1,
-                        color: 'silver',
-                        dataLabels: {
-                            color: 'black'
-                        },
-                        width: 250,
-                        height: 250
-                    }, {
-                        level: 2,
-                        color: '#980104'
-                    }, {
-                        level: 4,
-                        color: '#359154'
-                    }],
-                    nodes: [{
-                        id: 'farsang1',
-                        title: 'فرسنگ اول',
-                        name: 'فرسنگ اول',
-                        image: 'https://wp-assets.highcharts.com/www-highcharts-com/blog/wp-content/uploads/2018/11/12132317/Grethe.jpg',
-                        layout: 'hanging'
-                    }, {
-                        id: 'CTO',
-                        title: 'CTO',
-                        name: 'Christer Vasseng',
-                        color: '#007ad0',
-                        column: 4,
-                        image: 'https://wp-assets.highcharts.com/www-highcharts-com/blog/wp-content/uploads/2018/11/12140620/Christer.jpg',
-                        layout: 'hanging'
-                    }, {
-                        id: 'CPO',
-                        title: 'CPO',
-                        name: 'Torstein Hønsi',
-                        column: 4,
-                        image: 'https://wp-assets.highcharts.com/www-highcharts-com/blog/wp-content/uploads/2018/11/12131849/Torstein1.jpg',
-                        layout: 'hanging'
-                    }, {
-                        id: 'CSO',
-                        title: 'CSO',
-                        name: 'Anita Nesse',
-                        column: 4,
-                        image: 'https://wp-assets.highcharts.com/www-highcharts-com/blog/wp-content/uploads/2018/11/12132313/Anita.jpg',
-                        layout: 'hanging'
-                    }, {
-                        id: 'CMO',
-                        title: 'CMO',
-                        name: 'Vidar Brekke',
-                        column: 4,
-                        image: 'https://wp-assets.highcharts.com/www-highcharts-com/blog/wp-content/uploads/2018/11/13105551/Vidar.jpg',
-                        layout: 'hanging'
-                    }],
-                    colorByPoint: false,
-                    color: '#007ad0',
-                    dataLabels: {
-                        color: 'white'
-                    },
-                    borderColor: 'white',
-                    nodeWidth: 90
-                }
-            ]
-        };
-    }
-
-    function feedMapPoints(chart, farsangPoints) {
-        var counter = 0,
-            farsangPointsLength = farsangPoints.length;
-        var i = setInterval(function () {
-
-            chart.series[0].addPoint(farsangPoints[counter]);
-
-            counter++;
-            if (counter === farsangPointsLength) {
-                clearInterval(i);
-            }
-        }, 400);
-    }
-
     function initCustomDropDown() {
         $('.CustomDropDown').CustomDropDown({
             onChange: function (data) {
@@ -740,6 +291,13 @@ var InitAbrishamPage = function () {
             $('.helpMessageRow').fadeIn();
             $('.helpMessageRow').AnimateScrollTo();
         });
+        $(document).on('click', '.descriptionBox .readMoreBtn', function () {
+            $(this).fadeOut();
+            $(this).parents('.descriptionBox').find('.content').removeClass('compact').addClass('collapsed');
+        });
+        $(document).on('click', '.descriptionBox .btnCloseDescriptionBox', function () {
+            $(this).parents('.descriptionBox').fadeOut();
+        });
     }
 
     function initLiveDescription() {
@@ -752,12 +310,12 @@ var InitAbrishamPage = function () {
     }
 
     return {
-        init: function (farsangs) {
+        init: function () {
 
             initRepurchaseRowAndHelpMessageRow();
             EntekhabeFarsang.init();
             makePageBoxedForLargScreen();
-            initFarsangMap(farsangs);
+            MapSVG.init();
             initCustomDropDown();
             initScrollCarousel();
             initLiveDescription();
@@ -767,191 +325,297 @@ var InitAbrishamPage = function () {
     };
 }();
 
+var MapSVG = function () {
+
+    var marker = true,
+        panzoom,
+        delta,
+        direction,
+        interval = 1,
+        counter1 = 0,
+        counter2,
+        counter3,
+        counter4;
+
+    function getMapSteps() {
+        return {
+            'pishAzmoon': {
+                contentId: 717,
+                tooltipName: 'پیش آزمون'
+            },
+            'SefrTaSad': {
+                contentId: 217,
+                tooltipName: 'صفر تا صد'
+            },
+            'BarAndaz': {
+                contentId: 665,
+                tooltipName: 'بار انداز'
+            },
+            'Gift-Godar': {
+                contentId: 747,
+                tooltipName: 'گدار'
+            },
+            'farsang-step-pile': {
+                contentId: 604,
+                tooltipName: 'پیله'
+            },
+            'farsang-step-1': {
+                contentId: 617,
+                tooltipName: 'فرسنگ اول'
+            },
+            'farsang-step-2': {
+                contentId: 642,
+                tooltipName: 'فرسنگ دوم'
+            },
+            'farsang-step-3': {
+                contentId: 643,
+                tooltipName: 'فرسنگ سوم'
+            },
+            'farsang-step-4': {
+                contentId: 644,
+                tooltipName: 'فرسنگ چهارم'
+            },
+            'farsang-step-5': {
+                contentId: null,
+                tooltipName: 'فرسنگ پنجم'
+            },
+            'farsang-step-6': {
+                contentId: null,
+                tooltipName: 'فرسنگ ششم'
+            },
+            'farsang-step-7': {
+                contentId: null,
+                tooltipName: 'فرسنگ هفتم'
+            },
+            'farsang-step-8': {
+                contentId: null,
+                tooltipName: 'فرسنگ هشتم'
+            },
+            'farsang-step-9': {
+                contentId: null,
+                tooltipName: 'فرسنگ نهم'
+            },
+            'farsang-step-10': {
+                contentId: null,
+                tooltipName: 'فرسنگ دهم'
+            }
+
+        };
+    }
+
+    function getElementsSelector() {
+        var mapSteps = getMapSteps(),
+            selectorString = '';
+
+        for (let key in mapSteps){
+            selectorString += '#'+key+', ';
+        }
+        selectorString = selectorString.substring(0, selectorString.length-2);
+
+        return selectorString;
+    }
+
+    function addClickEvent() {
+        $(document).on('click', getElementsSelector(), function () {
+            var itemId = $(this).attr('id'),
+                contentId = getContentIdFromElementId(itemId);
+            if (typeof contentId !== 'undefined' && contentId.trim().length>0) {
+                EntekhabeFarsang.showFarsang(contentId);
+            } else {
+                toastr.info('این فرسنگ هنوز منتشر نشده است.');
+            }
+        });
+        $(document).on('touchend', getElementsSelector(), function () {
+            var itemId = $(this).attr('id'),
+                contentId = getContentIdFromElementId(itemId);
+            if (typeof contentId !== 'undefined' && contentId.trim().length>0) {
+                EntekhabeFarsang.showFarsang(contentId);
+            } else {
+                toastr.info('این فرسنگ هنوز منتشر نشده است.');
+            }
+        });
+
+        $(document).on('AnimateScrollTo.beforeScroll', function () {
+            hideAllTooltip();
+        });
+    }
+
+    function setStepPointer() {
+        $(getElementsSelector()).css({'cursor': 'pointer'});
+    }
+
+    function getContentIdFromElementId(elementId) {
+        return $('#'+elementId).attr('data-content-id');
+    }
+
+    function addTooltip($object, name) {
+        // $object.attr('data-toggle', 'm-tooltip').attr('data-placement', 'top').attr('title', name);
+        // $('[data-toggle="m-tooltip"]').tooltip();
+        var boundingClientRect = $object[0].getBoundingClientRect(),
+            tooltipWidth = 75,
+            tooltipHeight = 25,
+            width = boundingClientRect.width,
+            top = boundingClientRect.top - tooltipHeight,
+            left = boundingClientRect.left + (width / 2) - (tooltipWidth / 2);
+        $('#mapContainer').append('<div class="MapStepLabel" style="top: '+top+'px; left: '+left+'px;">'+name+'</div>')
+    }
+
+    function setStepsTooltip() {
+        var mapSteps = getMapSteps(),
+            selectorString = '';
+
+        for (let key in mapSteps){
+            addTooltip($('#'+key), mapSteps[key].tooltipName);
+        }
+    }
+
+    function setStepsIds() {
+        var mapSteps = getMapSteps(),
+            selectorString = '';
+
+        for (let key in mapSteps){
+            $('#'+key).attr('data-content-id', mapSteps[key].contentId);
+        }
+    }
+
+    function getFarsangMapHeight() {
+        return $('.productPicture').width();
+    }
+
+    function getHeightOfMapOnInit() {
+        return $('#farsangMappSvg').height();
+    }
+
+    function calculateMapZoomForInit() {
+        var farsangMapHeight = getFarsangMapHeight(),
+            heightOfMapOnInit = getHeightOfMapOnInit(),
+            zoom = farsangMapHeight/heightOfMapOnInit;
+
+        return zoom;
+    }
+
+    function showAllTooltip() {
+        // $('#mapContainer [data-toggle="m-tooltip"]:visible').tooltip().mouseover();
+        setStepsTooltip();
+    }
+
+    function hideAllTooltip() {
+        $('.MapStepLabel').remove();
+        // $('#mapContainer [data-toggle="m-tooltip"]').tooltip('hide');
+    }
+
+    function refreshAllTooltipWithDelay() {
+        // hideAllTooltip();
+        // showAllTooltip();
+        setTimeout(function () {
+            hideAllTooltip();
+            showAllTooltip();
+        }, 1000);
+    }
+
+    function initPanZoom() {
+        $('#mapContainer').css({'height': getFarsangMapHeight() + 'px'});
+        calculateMapZoomForInit();
+        var svgMapElement = document.getElementById('farsangMappSvg'),
+            startScale = calculateMapZoomForInit();
+        // https://github.com/timmywil/panzoom#documentation
+        panzoom = Panzoom(svgMapElement, {
+            contain: 'outside',
+            // panOnlyWhenZoomed: false,
+            step: 1.5, // The step affects zoom calculation when zooming with a mouse wheel, when pinch zooming, or when using zoomIn/zoomOut
+            startScale: 1, // Scale used to set the beginning transform
+            maxScale: 10, // The maximum scale when zooming
+            minScale: startScale // The minimum scale when zooming
+        });
+
+        // panzoom.zoom(startScale, {
+        //     disableZoom: false,
+        //     step: 1.5,
+        //     focal: {
+        //         x: 0,
+        //         y: 0
+        //     },
+        //     maxScale: 2000,
+        //     minScale: 1,
+        // });
+        panzoom.pan(5, 5);
+        const parent = svgMapElement.parentElement;
+        // parent.addEventListener('wheel', panzoom.zoomWithWheel)
+        parent.addEventListener('wheel',wheelEvent);
+
+        document.addEventListener('wheel',function () {
+            hideAllTooltip();
+        });
+        document.addEventListener('touchstart',function () {
+            hideAllTooltip();
+        });
+        svgMapElement.addEventListener('panzoomstart', (event) => {
+            hideAllTooltip();
+        });
+        svgMapElement.addEventListener('panzoomend', (event) => {
+            showAllTooltip();
+        });
+        svgMapElement.addEventListener('panzoompan', (event) => {
+            refreshAllTooltipWithDelay();
+        });
+    }
+
+    function wheelEvent(e){
+        if (!e.shiftKey) {
+            panzoom.zoomWithWheel(e);
+        }
+        counter1 += 1;
+        delta = e.deltaY;
+        if (delta > 0) {direction = 'up'} else {direction = 'down'}
+        if (marker) {wheelEventStart()}
+        return false;
+    }
+    function wheelEventStart(){
+        refreshAllTooltipWithDelay();
+        hideAllTooltip();
+        marker = false;
+        wheelEventAct();
+        counter3 = new Date();
+        // info.innerHTML = 'Start event. Direction: ' + direction;
+    }
+    function wheelEventAct(){
+        counter2 = counter1;
+        setTimeout(function(){
+            if (counter2 === counter1) {
+                wheelEventEnd();
+            } else {
+                // info.innerHTML = info.innerHTML + '<br>...';
+                wheelEventAct();
+            }
+        },interval);
+    }
+    function wheelEventEnd(){
+        showAllTooltip();
+        counter4 = new Date();
+        // info.innerHTML = info.innerHTML + '<br>End event. Duration: ' + (counter4-counter3) + ' ms';
+        marker = true;
+        counter1 = 0;
+        counter2 = false;
+        counter3 = false;
+        counter4 = false;
+    }
+
+    return {
+        init: function () {
+            initPanZoom();
+            setStepsIds();
+            setStepPointer();
+            setStepsTooltip();
+            addClickEvent();
+        }
+    }
+}();
 
 jQuery(document).ready(function () {
 
-
-    InitAbrishamPage.init(farsangs);
-
-
-    //
-    // function setChart(options) {
-    //     chart.series[0].remove(false);
-    //     chart.addSeries({
-    //         type: options.type,
-    //         name: options.name,
-    //         data: options.data,
-    //         color: options.color || 'white'
-    //     }, false);
-    //     chart.xAxis[0].setCategories(options.categories, false);
-    //     chart.redraw();
-    // }
-
-
-    // Highcharts.addEvent(
-    //     Highcharts.Series,
-    //     'afterSetOptions',
-    //     function (e) {
-    //         var colors = [
-    //                 '#0AFF00',
-    //                 '#55F000',
-    //                 '#9AF100',
-    //                 '#DFF000',
-    //                 '#F0DB00',
-    //                 '#FFCF00',
-    //                 '#F0AB00',
-    //                 '#F08F00',
-    //                 '#FF7B00',
-    //                 '#FF5900',
-    //                 '#F03300',
-    //                 '#F01300',
-    //                 '#FF002E',
-    //             ],
-    //             i = 0,
-    //             nodes = {},
-    //             omArray=[
-    //                 '',
-    //                 'اول',
-    //                 'دوم',
-    //                 'سوم',
-    //                 'چهارم',
-    //                 'پنجم',
-    //                 'ششم',
-    //                 'هفتم',
-    //                 'هشتم',
-    //                 'نهم',
-    //                 'دهم',
-    //                 'یازدهم',
-    //                 'دوازدهم',
-    //                 'سیزدهم',
-    //             ];
-    //
-    //         if (
-    //             this instanceof Highcharts.seriesTypes.networkgraph &&
-    //             e.options.id === 'raheAbrishamOption'
-    //         ) {
-    //             e.options.data.forEach(function (link) {
-    //
-    //                 nodes[link[0]] = {
-    //                     id: link[0],
-    //                     dataLabels: {
-    //                         format: 'فرسنگ ' + omArray[link[0]]
-    //                     },
-    //                     color: colors[i]
-    //                 };
-    //                 nodes[link[1]] = {
-    //                     id: link[1],
-    //                     dataLabels: {
-    //                         format: 'فرسنگ ' + omArray[link[1]]
-    //                     },
-    //                     color: colors[i++]
-    //                 };
-    //             });
-    //
-    //             e.options.nodes = Object.keys(nodes).map(function (id) {
-    //                 return nodes[id];
-    //             });
-    //         }
-    //     }
-    // );
-    //
-    //
-    // Highcharts.chart('mapRoad', {
-    //     chart: {
-    //         type: 'networkgraph',
-    //         height: '300px'
-    //     },
-    //     title: {
-    //         text: 'لیست محصولات شما'
-    //     },
-    //     subtitle: {
-    //         text: 'لیست درختی محصولات شما'
-    //     },
-    //     plotOptions: {
-    //         networkgraph: {
-    //             keys: ['from', 'to'],
-    //             layoutAlgorithm: {
-    //                 enableSimulation: true,
-    //                 integration: 'verlet', // euler - verlet
-    //                 linkLength: 100,
-    //                 friction: -0.99
-    //             }
-    //         }
-    //     },
-    //
-    //
-    //     series: [{
-    //         id: 'raheAbrishamOption',
-    //         dataLabels: {
-    //             enabled: true,
-    //             linkFormat: '',
-    //             // linkFormat: '{point.fromNode.name} \u2192 {point.toNode.name}',
-    //             // linkFormat: 'به سمت {point.toNode.name}',
-    //             allowOverlap: true,
-    //             textPath: {
-    //                 enabled: false,
-    //                 attributes: {
-    //                     dy: 14,
-    //                     startOffset: '45%',
-    //                     textLength: 80
-    //                 }
-    //             },
-    //             format: 'فرسنگ {point.name}'
-    //
-    //         },
-    //         marker: {
-    //             radius: 13
-    //         },
-    //         color: '#0AFF00',
-    //         data: [
-    //             ['13', '12'],
-    //             ['12', '11'],
-    //             ['11', '10'],
-    //             ['10', '9'],
-    //             ['9', '8'],
-    //             ['8', '7'],
-    //             ['7', '6'],
-    //             ['6', '5'],
-    //             ['5', '4'],
-    //             ['4', '3'],
-    //             ['3', '2'],
-    //             ['2', '1'],
-    //             // {
-    //             //     id: '1',
-    //             //     name: 'step1',
-    //             //     from: 1,
-    //             //     to: 2,
-    //             //     color: '#FF002E',
-    //             //     colorIndex: '#FF002E',
-    //             //     selected: true,
-    //             //     drilldown: 'step1'
-    //             // }
-    //         ]
-    //     }],
-    //
-    //     drilldown: {
-    //         series: [{
-    //             id: '2',
-    //             name: '2',
-    //             data: [
-    //                 ['Cats', 4],
-    //                 ['Dogs', 2],
-    //                 ['Cows', 1],
-    //                 ['Sheep', 2],
-    //                 ['Pigs', 1]
-    //             ]
-    //         }, {
-    //             id: 'step1',
-    //             name: 'step1',
-    //             data: [
-    //                 ['Apples', 4],
-    //                 ['Oranges', 2]
-    //             ]
-    //         }]
-    //     }
-    //
-    // });
-
+    if (typeof farsangs !== 'undefined') {
+        InitAbrishamPage.init(farsangs);
+    }
 
     // function renderNested(template_string, translate) {
     //     return function() {
@@ -996,124 +660,7 @@ jQuery(document).ready(function () {
     //     }
     // }));
 
-    imageObserver.observe();
-
-    // Expose to window namespase for testing purposes
-    window.zoomTiger = svgPanZoom('#farsangMappSvg', {
-        viewportSelector: '#container',
-        panEnabled: true,
-        zoomEnabled: true,
-        controlIconsEnabled: false,
-        fit: true,
-        center: true,
-
-        dblClickZoomEnabled: true,
-        mouseWheelZoomEnabled: true,
-        preventMouseEventsDefault: true,
-        zoomScaleSensitivity: 0.2,
-        minZoom: 0.5,
-        maxZoom: 10,
-        contain: false,
-        refreshRate: 'auto',
-        beforeZoom: function(){},
-        onZoom: function(data){
-            // console.log('data: ', data);
-            // console.log('this: ', this);
-            // console.log('this.getPan(): ', this.getPan());
-            // console.log('this.getZoom(): ', this.getZoom());
-            // if (this.getZoom()>1.2) {
-            //
-            //     // MapSVG.printFarsang('path123');
-            // }
-            MapSVG.updateZoomState(this.getZoom())
-        }
-        , beforePan: function(){}
-        , onPan: function(data){
-            console.log('data: ', data);
-            // console.log('this: ', this);
-            // console.log('this.getPan(): ', this.getPan());
-            // console.log('this.getZoom(): ', this.getZoom());
-        }
-        , onUpdatedCTM: function(){}
-        // , customEventsHandler: {}
-        // , eventsListenerElement: null
-    });
-
-    // document.getElementById('enable').addEventListener('click', function() {
-    //     window.zoomTiger.enableControlIcons();
-    // })
-    // document.getElementById('disable').addEventListener('click', function() {
-    //     window.zoomTiger.disableControlIcons();
-    // })
-
+    // imageObserver.observe();
 
 });
 
-var MapSVG = function () {
-
-    function setZoomLevel(level) {
-        $('#farsangMappSvg').attr('zoom-level', level);
-    }
-
-    function getZoomLevel() {
-        var zoomLevel = $('#farsangMappSvg').attr('zoom-level');
-        if (typeof zoomLevel==='undefined') {
-            zoomLevel = 0;
-            setZoomLevel(0);
-        }
-        return zoomLevel;
-    }
-
-    function updateZoomState(zoom) {
-        if (parseInt(getZoomLevel()) !== 0 && zoom > 1 && zoom < 1.3) {
-            setZoomLevel(0);
-            onZoomStateChange(0);
-        } else if (parseInt(getZoomLevel()) !== 1 && zoom > 1.3 && zoom < 2) {
-            setZoomLevel(1);
-        } else if (parseInt(getZoomLevel()) !== 2 && zoom > 2 && zoom < 3) {
-            setZoomLevel(2);
-        }
-    }
-
-    function onZoomStateChange(state) {
-        if (state===1) {
-            printFarsang('path123');
-        }
-    }
-
-    function printFarsang(farsangID) {
-        var pathD = $('#'+farsangID).attr('d'),
-            cordinates = getfarsangCordinate(pathD),
-            smallFarsangID = farsangID+'small';
-        $('#'+farsangID).after(getFarsangSmallSvg(smallFarsangID, cordinates.x, cordinates.y));
-    }
-
-    function getfarsangCordinate(pathD) {
-        var pattern = /m\s?([0-9]*.?[0-9]*)\s?,\s?([0-9]*.?[0-9]*)/;
-        if(pattern.test(pathD)) {
-            var obj = pattern.exec(pathD),
-                cordinates = obj[0];
-            cordinates = cordinates.replace('m', '');
-            cordinates = cordinates.split(',');
-            return {
-                x: parseFloat(cordinates[0].trim())-5,
-                y: parseFloat(cordinates[1].trim())-5,
-            };
-        } else {
-            return false;
-        }
-    }
-
-    function getFarsangSmallSvg(farsandId, farsandX, farsandY) {
-        return $('#farsang-small').html().replace('(((smallFarsang-id)))', farsandId).replace('(((smallFarsang-x)))', farsandX).replace('(((smallFarsang-y)))', farsandY);
-    }
-
-    return {
-        printFarsang: function (farsangID) {
-            printFarsang(farsangID);
-        },
-        updateZoomState: function (zoom) {
-            updateZoomState(zoom);
-        }
-    }
-}();

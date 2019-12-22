@@ -1,4 +1,4 @@
-<div class="row @if(isset($class)) {{$class}} @endif">
+<div class="row @if(isset($class)) {{$class}} @endif descriptionBox">
     <div class="col">
         <div class="m-portlet @if(isset($color) && $color === 'transparentBack') transparentBack @elseif(isset($color) && $color === 'red') m-portlet--danger m-portlet--head-solid-bg @endif">
             @if(isset($title))
@@ -7,7 +7,7 @@
                         <div class="m-portlet__head-title">
                             <h3 class="m-portlet__head-text">
                                 @if(isset($closeIcon) && $closeIcon === true)
-                                    <i class="fa fa-times" onclick="$(this).parents('.row').fadeOut();"></i>
+                                    <i class="fa fa-times btnCloseDescriptionBox"></i>
                                 @endif
 
                                 @if(isset($color) && $color === 'red')
@@ -26,10 +26,12 @@
                 </div>
             @endif
             <div class="m-portlet__body">
-                {!! $content !!}
+                <div class="content @if(isset($btnMoreText) && $btnMoreText!==false) compact @endif">
+                    {!! $content !!}
+                </div>
                 @if(isset($btnMoreText) && $btnMoreText!==false)
                     <div class="text-right">
-                        <button type="button" class="btn m-btn--square btn-metal @if(isset($btnMoreClass)) {{$btnMoreClass}} @endif">
+                        <button type="button" class="btn m-btn--square btn-metal readMoreBtn @if(isset($btnMoreClass)) {{$btnMoreClass}} @endif">
                             {{ $btnMoreText }}
                         </button>
                     </div>
