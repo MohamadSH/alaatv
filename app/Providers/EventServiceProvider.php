@@ -39,6 +39,7 @@ class EventServiceProvider extends ServiceProvider
         Registered::class          => [
             //            SendMobileVerificationNotification::class,
             //            SendEmailVerificationNotification::class,
+            AuthenticatedListener::class,
         ],
         MobileVerified::class      => [
             MobileVerifiedListener::class,

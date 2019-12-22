@@ -99,10 +99,6 @@ class RegisterController extends Controller
      */
     protected function registered(Request $request, User $user)
     {
-        event(new Registered($user));
-        $this->guard()
-            ->login($user);
-
         if ($request->expectsJson()) {
             $token = $user->getAppToken();
             $data  = array_merge([
@@ -116,5 +112,6 @@ class RegisterController extends Controller
                 'data'       => $data,
             ], Response::HTTP_OK);
         }
+        return null;
     }
 }
