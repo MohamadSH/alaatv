@@ -13,6 +13,7 @@ use App\Events\UserAvatarUploaded;
 use App\Events\UserRedirectedToPayment;
 use App\Listeners\FavoriteEventListener;
 use App\Listeners\RedirectContentListener;
+use App\Listeners\RegisteredListener;
 use App\Listeners\RemoveOldUserAvatarListener;
 use App\Listeners\UnfavoriteEventListener;
 use App\Listeners\UserRedirectedToPaymentListener;
@@ -39,7 +40,7 @@ class EventServiceProvider extends ServiceProvider
         Registered::class          => [
             //            SendMobileVerificationNotification::class,
             //            SendEmailVerificationNotification::class,
-            AuthenticatedListener::class,
+            RegisteredListener::class,
         ],
         MobileVerified::class      => [
             MobileVerifiedListener::class,
