@@ -212,7 +212,7 @@ class ProductController extends Controller
         $shouldBuyProductId = null;
         $shouldBuyProductName = '';
         $hasPurchasedShouldBuyProduct = false;
-        if($product->id == 347){
+        if($product->id == Product::RAHE_GODARE_RIYAZI_TAJROBI_SABETI){
             return $this->createRaheAbrishamView($product, $user, compact('product', 'block', 'purchasedProductIdArray', 'allChildIsPurchased' , 'liveDescriptions' , 'children' , 'isFavored' , 'isForcedGift' , 'shouldBuyProductId' , 'shouldBuyProductName' , 'hasPurchasedShouldBuyProduct'));
         }
 
@@ -1170,10 +1170,10 @@ class ProductController extends Controller
         /** @var \App\User $user */
         if (isset($user)) {
             $key = 'user:hasPurchasedShouldBuyProduct:'.$user->cacheKey();
-            $hasPurchasedShouldBuyProduct = Cache::tags(['user_'.$user->id.'_closedOrders'])->remember($key, config('constants.CACHE_600'),
-                    function () use ($user, $shouldBuyProductId) {
-                        return $user->products()->contains($shouldBuyProductId);
-                    });
+            $hasPurchasedShouldBuyProduct = Cache::tags(['user_'.$user->id.'_closedOrders' ])
+                ->remember($key, config('constants.CACHE_600'), function () use ($user , $shouldBuyProductId) {
+                    return $user->products()->contains($shouldBuyProductId);
+                });
         }
 
         $sets = $product->sets->sortByDesc('created_at');

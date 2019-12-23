@@ -1,10 +1,9 @@
-<p style="text-align:right;direction:rtl;unicode-bidi:
-embed"><span>راه ابریشم، مسیری کامل و مرحله به مرحله برای فراگیری ریاضی تجربی تا کنکور
-است. این پروژه شامل ریاضی صفر (ریاضی مقدماتی)، تورق سریع و مرور مطالب، تست های
-استاندارد (از نظر کمی و کیفی)، آزمون‌های موضوعی برای تسلط بر مباحث و همینطور
-پیش آزمون و پس آزمونِ آزمون‌های آزمایشی گزینه دو و قلمچی است.<br>
-<br>
-</span>
+<p>
+    <span>
+        راه ابریشم، مسیری کامل و مرحله به مرحله برای فراگیری ریاضی تجربی تا کنکور است. این پروژه شامل ریاضی صفر (ریاضی مقدماتی)، تورق سریع و مرور مطالب، تست های استاندارد (از نظر کمی و کیفی)، آزمون‌های موضوعی برای تسلط بر مباحث و همینطور پیش آزمون و پس آزمونِ آزمون‌های آزمایشی گزینه دو و قلمچی است.
+        <br>
+        <br>
+    </span>
     <b>
         <span style="font-size:12.0pt;line-height:107%;">گام صفرم: پیله راه ابریشم (ریاضی مقدماتی - آموزش)</span>
     </b>
@@ -13,23 +12,23 @@ embed"><span>راه ابریشم، مسیری کامل و مرحله به مرح
     </b>
 </p>
 
-<p style="margin-right:.3in;line-height:normal;direction:rtl;">
+<p style="margin-right:.3in;">
     <span>شنیدین همیشه و همه جا میگن که این مشکل شما به پایه ریاضیتون برمیگرده و اگه پایه ریاضی خوبی داشتین الان مشکلی نبود؟</span>
-    <span ></span>
-    <span ></span>
-    <span >
-        <span ></span>
-        <span ></span>!
+    <span></span>
+    <span></span>
+    <span>
+        <span></span>
+        <span></span>!
     </span>
     <span>
         <br>
         در واقع تو پیله‌ها ما دست گذاشتیم رو همین مشکل و موضوعات پایه‌ای ریاضی رو در مجموعه‌ای مجزا و کوتاه به صورت مبحث به مبحث تهیه کردیم و کافیه شما نهایتا 6 ساعت وقت بذارین تا با&nbsp;استفاده‌اش خیلی از مشکلات پایه‌ایتون حل بشه
     </span>
-    <span ></span>
-    <span ></span>
-    <span >
-        <span ></span>
-        <span ></span>
+    <span></span>
+    <span></span>
+    <span>
+        <span></span>
+        <span></span>
         .
     </span>
     <span>
@@ -38,7 +37,7 @@ embed"><span>راه ابریشم، مسیری کامل و مرحله به مرح
     </span>
 </p>
 
-<p style="margin-right: .6in;margin-left:0;line-height:normal;">
+<p style="margin-right: .6in;margin-left:0;">
     <span>
         حل معادله درجه یک
         <br>
@@ -66,7 +65,7 @@ embed"><span>راه ابریشم، مسیری کامل و مرحله به مرح
     </span>
 </p>
 
-<p style="margin-right:.3in;text-align:right;line-height:normal;">
+<p style="margin-right:.3in;">
     <span>
         البته در طول راه ابریشم ممکنه پیله‌های جدیدی هم به درخواست شما اضافه کنیم. کسایی که راه ابریشم رو تهیه میکنن میتونن درخواست پیله جدید بدن که در صورت تایید، به پیله‌ها اضافه میشه
     </span>
@@ -80,110 +79,133 @@ embed"><span>راه ابریشم، مسیری کامل و مرحله به مرح
     <span></span>
 </p>
 
-<p style="text-align:right;line-height:normal;">
+<p>
     <span>&nbsp;</span>
 </p>
 
-<p   style="text-align:right;direction:rtl;unicode-bidi:
-embed"><b><span style=",serif;mso-bidi-language:
-FA" lang="FA">&nbsp;</span></b></p>
-
-<p   style="text-align:right;direction:rtl;unicode-bidi:
-embed"><b><span style=",serif;mso-bidi-language:
-FA" lang="FA">گام اول: صفر تا صد (تدریس کامل - آموزش)</span></b></p>
-
-<p   style="mso-margin-top-alt:auto;margin-right:.3in;
-mso-margin-bottom-alt:auto;text-align:right;line-height:normal;direction:rtl;
-unicode-bidi:embed"><span style=",serif;
-mso-fareast-font-family:;Times New Roman;" lang="AR-SA">در ابتدای هر فرسنگ، به آموزش کامل
-مبحثِ اون فرسنگ ‌نیاز دارین. برای یادگیری کامل</span><span
-        style=";Times New Roman;;
-mso-bidi-language:FA" lang="FA"> میتونین </span><span style=",serif;
-mso-fareast-font-family:;Times New Roman;" lang="AR-SA">از دوره صفر تا صد ریاضی تجربی دبیر از
-همین لینک استفاده کنین که دسترسی عمومی هم داره.<br>
-افرادی که موضوعات گفته شده تو هر فرسنگ رو بلد هستن میتونن از این گام بگذرن و یا
-فقط از اون مباحثی که نیاز دارن استفاده کنن.</span></p>
-
-<p   style="mso-margin-top-alt:auto;mso-margin-bottom-alt:
-auto;text-align:right;line-height:normal;direction:rtl;unicode-bidi:embed"><span style="
-;Times New Roman;" lang="AR-SA">&nbsp;</span></p>
-
-<p   style="text-align:right;direction:rtl;unicode-bidi:
-embed"><b><span style=",serif;mso-bidi-language:
-FA" lang="FA">گام دوم: تورق راه ابریشم (مرور جامع و تکنیکی درس - آموزش)</span></b><b><span
-                                                                                           style=""></span></b>
+<p>
+    <b>
+        <span>&nbsp;</span>
+    </b>
 </p>
 
-<p   style="mso-margin-top-alt:auto;margin-right:.3in;
-mso-margin-bottom-alt:auto;text-align:right;line-height:normal;direction:rtl;
-unicode-bidi:embed"><span style=",serif;
-mso-fareast-font-family:;Times New Roman;" lang="AR-SA">دومین گام تو راه ابریشم تورقه که بعد
-صفر تا صد ها وارد این مرحله میشین و مرور سریعی بر درسه که تمام نکات و ریزه کاری‌ها
-براتون مجددن گفته میشه و شما رو برای گام سوم یعنی حل تست‌‌ها آماده میکنه.</span></p>
+<p>
+    <b>
+        <span>گام اول: صفر تا صد (تدریس کامل - آموزش)</span>
+    </b>
+</p>
+<p style="margin-right:.3in;">
+    <span>
+        در ابتدای هر فرسنگ، به آموزش کامل مبحثِ اون فرسنگ ‌نیاز دارین. برای یادگیری کامل
+    </span>
+    <span>
+        میتونین
+    </span>
+    <span>
+        از دوره صفر تا صد ریاضی تجربی دبیر از همین لینک استفاده کنین که دسترسی عمومی هم داره.
+        <br>
+        افرادی که موضوعات گفته شده تو هر فرسنگ رو بلد هستن میتونن از این گام بگذرن و یا فقط از اون مباحثی که نیاز دارن استفاده کنن.
+    </span>
+</p>
 
-<p   style="mso-margin-top-alt:auto;mso-margin-bottom-alt:
-auto;text-align:right;line-height:normal;direction:rtl;unicode-bidi:embed"><span style="
-;Times New Roman;" lang="AR-SA">&nbsp;</span></p>
+<p>
+    <span>&nbsp;</span>
+</p>
 
-<p   style="text-align:right;direction:rtl;unicode-bidi:
-embed"><a name="_Hlk27691825"><b><span style=",serif;
-mso-bidi-language:FA" lang="FA">گام سوم: دفترچه تست و حل تست راه ابریشم (تثبیت)</span></b></a></p>
+<p>
+    <b>
+        <span>گام دوم: تورق راه ابریشم (مرور جامع و تکنیکی درس - آموزش)</span>
+    </b>
+    <b>
+        <span></span>
+    </b>
+</p>
 
-<p   style="mso-margin-top-alt:auto;margin-right:.25in;
-mso-margin-bottom-alt:auto;text-align:right;line-height:normal;direction:rtl;
-unicode-bidi:embed"><span style="mso-bookmark:_Hlk27691825"><span
-            style=";Times New Roman;" lang="AR-SA">با
-3 گام اول تمام مطالب لازم رو یادگرفتین و حالا وقت تمرین و تثبیت مطالبه.<br>
-برای هر فرسنگ، دفترچه تست‌هایی قرار میگیره که به صورت </span></span><span style="mso-bookmark:_Hlk27691825"><span
-                                                                                                                  style=",serif;
-mso-fareast-font-family:;Times New Roman;">pdf</span></span><span style="mso-bookmark:_Hlk27691825"><span ></span><span
-            ></span><span style=";Times New Roman;;
-mso-bidi-language:FA" lang="FA"><span ></span><span ></span> میتونین دانلود
-کنین. ابتدا تست‌ها رو حل میکنین و به اندازه کافی روشون فکر میکنین و بعد هم میرین
-سراغ حل دبیر و با کمک دبیر تمام نکات هر تست رو یاد میگیرین.<br>
-این قسمت راه ابریشم مهمترین بخش راهه، پس حسابی جدی بگیرینش، روش فکر کنین و روی
-حل دبیر هم وقت بذارین.</span></span><span style="mso-bookmark:_Hlk27691825"></span><span style="
-;Times New Roman;" lang="AR-SA"></span></p>
+<p style="margin-right:.3in;">
+    <span>
+        دومین گام تو راه ابریشم تورقه که بعد صفر تا صد ها وارد این مرحله میشین و مرور سریعی بر درسه که تمام نکات و ریزه کاری‌ها براتون مجددن گفته میشه و شما رو برای گام سوم یعنی حل تست‌‌ها آماده میکنه.
+    </span>
+</p>
 
-<p   style="mso-margin-top-alt:auto;mso-margin-bottom-alt:
-auto;text-align:right;line-height:normal;direction:rtl;unicode-bidi:embed"><span style="
-;Times New Roman;" lang="AR-SA">&nbsp;</span></p>
+<p>
+    <span>&nbsp;</span>
+</p>
 
-<p   style="text-align:right;direction:rtl;unicode-bidi:
-embed"><b><span style=",serif;mso-bidi-language:
-FA" lang="FA">گام چهارم: کنکورچه‌های راه ابریشم (تسلط و سرعت) </span></b></p>
+<p>
+    <a>
+        <b>
+            <span>گام سوم: دفترچه تست و حل تست راه ابریشم (تثبیت)</span>
+        </b>
+    </a>
+</p>
 
-<p   style="mso-margin-top-alt:auto;margin-right:.3in;
-mso-margin-bottom-alt:auto;text-align:right;line-height:normal;direction:rtl;
-unicode-bidi:embed"><span style=",serif;
-mso-fareast-font-family:;Times New Roman;;mso-bidi-language:FA" lang="FA">بعد از گام سوم
-یعنی تست‌ها باید به مبحث تسلط پیدا کنین و سرعت تست‌زنی‌تون رو افزایش بدین. <br>
-برای اینکه بتونین به تسلط برسین و تمام مباحث یک فرسنگ رو توی تعداد تست کم مرور
-کنین 3 کنکورچه براتون قرار دادیم که توصیه میکنیم به صورت زماندار این 3 آزمون رو
-حل کنین. (یعنی برای حل هر تست به طور میانگین حدود 90 ثانیه زمان دارین.)<br>
-کنکورچه اول، فیلم حل دبیر رو داره تا کامل براتون رفع اشکال بشه، کنکورچه دوم
-پاسخ تشریحی داره و کنکورچه سوم هم پاسخنامه کلیدی داره.<br>
-توصیه میشه کنکورچه اول رو حتما حل کنین و کنکورچه دوم و سوم هم برای تمرین بیشتره
-که میتونین استفاده کنین.<br>
-تا اینجا مبحث رو به طور کامل یادگرفتین و نکات و جزئیات رو هم مرور کردین، با تست‌ها
-چندین بار مطلب رو کار کردین و مطالب رو تثبیت کردین و با کنکورچه‌ها هم به موضوع
-تسلط پیدا کردین و تمرین آزمون دادن کردین.<br>
-حالا باید برای آزمون آماده بشین، پس با گام پنجم راه ابریشم همراه بشین.</span></p>
+<p style="margin-right:.25in;">
+    <span>
+        <span>
+            با 3 گام اول تمام مطالب لازم رو یادگرفتین و حالا وقت تمرین و تثبیت مطالبه.
+            <br>
+            برای هر فرسنگ، دفترچه تست‌هایی قرار میگیره که به صورت
+        </span>
+    </span>
+    <span>
+        <span>pdf</span>
+    </span>
+    <span>
+        <span></span>
+        <span></span>
+        <span>
+            <span></span>
+            <span></span>
+            میتونین دانلود کنین. ابتدا تست‌ها رو حل میکنین و به اندازه کافی روشون فکر میکنین و بعد هم میرین سراغ حل دبیر و با کمک دبیر تمام نکات هر تست رو یاد میگیرین.
+            <br>
+            این قسمت راه ابریشم مهمترین بخش راهه، پس حسابی جدی بگیرینش، روش فکر کنین و روی حل دبیر هم وقت بذارین.
+        </span>
+    </span>
+    <span></span>
+    <span></span>
+</p>
 
-<p   style="mso-margin-top-alt:auto;mso-margin-bottom-alt:
-auto;text-align:right;line-height:normal;direction:rtl;unicode-bidi:embed"><span style="
-;Times New Roman;" lang="AR-SA">&nbsp;</span></p>
+<p>
+    <span>&nbsp;</span>
+</p>
 
-<p   style="text-align:right;direction:rtl;unicode-bidi:
-embed"><b><span style=",serif;mso-bidi-language:
-FA" lang="FA">گام پنجم: پیش آزمون و پس آزمون راه ابریشم (تسلط و سرعت)</span></b></p>
+<p>
+    <b>
+        <span>گام چهارم: کنکورچه‌های راه ابریشم (تسلط و سرعت) </span>
+    </b>
+</p>
 
-<p   style="mso-margin-top-alt:auto;margin-right:.25in;
-mso-margin-bottom-alt:auto;text-align:right;line-height:normal;direction:rtl;
-unicode-bidi:embed"><span style=",serif;
-mso-fareast-font-family:;Times New Roman;" lang="AR-SA">در آخرین گام از هر فرسنگ به پیش
-آزمون اون فرسنگ میرسیم. در این مرحله، آزمونِ آزمایشی سال گذشته‌ برای آمادگی قبل
-از آزمون براتون حل میشه. بعد از اینکه در آزمون آزمایشی شرکت کردین هم حالا نوبت
-پس آزمونه و ما آزمونی که در اون شرکت کردین رو در مرحله بار انداز یا پس آزمون
-براتون حل و حلاجی می‌کنیم و رفع اشکال و جمع‌ بندی نهایی اون فرسنگ رو با دبیر
-انجام میدین.<br>
+<p style="margin-right:.3in;">
+    <span>
+        بعد از گام سوم یعنی تست‌ها باید به مبحث تسلط پیدا کنین و سرعت تست‌زنی‌تون رو افزایش بدین.
+        <br>
+        برای اینکه بتونین به تسلط برسین و تمام مباحث یک فرسنگ رو توی تعداد تست کم مرور کنین 3 کنکورچه براتون قرار دادیم که توصیه میکنیم به صورت زماندار این 3 آزمون رو حل کنین. (یعنی برای حل هر تست به طور میانگین حدود 90 ثانیه زمان دارین.)
+        <br>
+        کنکورچه اول، فیلم حل دبیر رو داره تا کامل براتون رفع اشکال بشه، کنکورچه دوم پاسخ تشریحی داره و کنکورچه سوم هم پاسخنامه کلیدی داره.
+        <br>
+        توصیه میشه کنکورچه اول رو حتما حل کنین و کنکورچه دوم و سوم هم برای تمرین بیشتره که میتونین استفاده کنین.
+        <br>
+        تا اینجا مبحث رو به طور کامل یادگرفتین و نکات و جزئیات رو هم مرور کردین، با تست‌ها چندین بار مطلب رو کار کردین و مطالب رو تثبیت کردین و با کنکورچه‌ها هم به موضوع تسلط پیدا کردین و تمرین آزمون دادن کردین.
+        <br>
+        حالا باید برای آزمون آماده بشین، پس با گام پنجم راه ابریشم همراه بشین.
+    </span>
+</p>
+
+<p>
+    <span>&nbsp;</span>
+</p>
+
+<p>
+    <b>
+        <span>
+            گام پنجم: پیش آزمون و پس آزمون راه ابریشم (تسلط و سرعت)
+        </span>
+    </b>
+</p>
+
+<p   style="margin-right:.25in;">
+    <span>
+        در آخرین گام از هر فرسنگ به پیش آزمون اون فرسنگ میرسیم. در این مرحله، آزمونِ آزمایشی سال گذشته‌ برای آمادگی قبل از آزمون براتون حل میشه. بعد از اینکه در آزمون آزمایشی شرکت کردین هم حالا نوبت پس آزمونه و ما آزمونی که در اون شرکت کردین رو در مرحله بار انداز یا پس آزمون براتون حل و حلاجی می‌کنیم و رفع اشکال و جمع‌ بندی نهایی اون فرسنگ رو با دبیر انجام میدین.
+        <br>
+    </span>
+</p>
