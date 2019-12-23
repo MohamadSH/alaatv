@@ -3,14 +3,13 @@
 namespace App\Http\Resources;
 
 use Illuminate\Http\Request;
-use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
  * Class Product
  *
  * @mixin \App\Product
  * */
-class Child extends JsonResource
+class Child extends AlaaJsonResource
 {
     function __construct(\App\Product $model)
     {
@@ -20,7 +19,7 @@ class Child extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  Request  $request
+     * @param Request $request
      * @return array
      */
     public function toArray($request)

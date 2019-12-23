@@ -4,14 +4,13 @@ namespace App\Http\Resources;
 
 use App\Transaction;
 use Illuminate\Http\Request;
-use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
  * Class Transaction
  *
  * @mixin Transaction
  * */
-class SuccessfulTransaction extends JsonResource
+class SuccessfulTransaction extends AlaaJsonResource
 {
     function __construct(Transaction $model)
     {
@@ -21,12 +20,12 @@ class SuccessfulTransaction extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  Request  $request
+     * @param Request $request
      * @return array
      */
     public function toArray($request)
     {
-        if (!($this->resource instanceof \App\Transaction)) {
+        if (!($this->resource instanceof Transaction)) {
             return [];
         }
         $this->loadMissing('paymentmethod' , 'transactionstatus' , 'transactiongateway');

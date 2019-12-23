@@ -2,19 +2,20 @@
 
 namespace App\Http\Resources;
 
-use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Http\Request;
 
 /**
  * Class \App\Contenttype
  *
  * @mixin \App\Contenttype
  * */
-class Contenttype extends JsonResource
+class Contenttype extends AlaaJsonResource
 {
     /**
      * Transform the resource into an array.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param Request $request
+     *
      * @return array
      */
     public function toArray($request)
@@ -24,7 +25,7 @@ class Contenttype extends JsonResource
         }
 
         return [
-            'type'          => $this->id,
+            'id' => $this->id,
         ];
     }
 }

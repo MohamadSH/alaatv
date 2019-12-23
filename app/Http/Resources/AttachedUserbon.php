@@ -4,14 +4,13 @@ namespace App\Http\Resources;
 
 use App\Userbon;
 use Illuminate\Http\Request;
-use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
  * Class Userbon
  *
  * @mixin Userbon
  * */
-class AttachedUserbon extends JsonResource
+class AttachedUserbon extends AlaaJsonResource
 {
     function __construct(Userbon $model)
     {
@@ -21,7 +20,7 @@ class AttachedUserbon extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  Request  $request
+     * @param Request $request
      * @return array
      */
     public function toArray($request)
