@@ -208,7 +208,8 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
     public const ASIATECH_PRODUCT = 224;
 
     public const RAHE_ABRISHAM = 347;
-    public const RAHE_GODARE_RIYAZI_TAJROBI_SABETI = 347;
+    public const GODARE_RIYAZI_TAJROBI_SABETI = 385;
+    public const GODAR_ZIST= 389;
 
     public const AMOUNT_LIMIT = [
         'نامحدود',
