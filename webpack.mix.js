@@ -45,12 +45,20 @@ class Mix {
             'public/assets/demo/demo12/base/scripts.bundle.js',
             'node_modules/block-ui/jquery.blockUI.js',
 
+            // 'node_modules/firebase/firebase.js',
+            // 'node_modules/firebase/firebase-analytics.js',
+            // 'node_modules/firebase/firebase-auth.js',
+            // 'node_modules/firebase/firebase-firestore.js',
+            // 'node_modules/firebase/firebase-messaging.js',
+
 
             'public/acm/AlaatvCustomFiles/js/mLayout.js',// quick search (ajax) in header
             'public/acm/AlaatvCustomFiles/components/AjaxLogin/script.js',
             'public/acm/AlaatvCustomFiles/js/GlobalJsVar.js',
+            'public/acm/AlaatvCustomFiles/js/Cookie.js',
             'public/acm/AlaatvCustomFiles/js/LoginBeforeClick.js',
             'public/acm/AlaatvCustomFiles/js/GoogleAnalyticsEnhancedEcommerce.js',
+            // 'public/acm/AlaatvCustomFiles/js/GoogleFirebase.js',
             'public/acm/AlaatvCustomFiles/components/MegaMenu/script.js',
             'public/acm/AlaatvCustomFiles/js/lazyLoad.js',
             'public/acm/AlaatvCustomFiles/js/app.js'
@@ -243,6 +251,24 @@ class Mix {
             'public/js/login.js'
         );
     }
+    mixPageDonate() {
+        this.mixCssAndJs([
+                'node_modules/highcharts/css/highcharts.css',
+                'public/acm/webFonts/IRANSans/css/fontiran.css',
+                'public/acm/AlaatvCustomFiles/css/page/pages/donate.css'
+                // 'public/acm/extra/donate/css/styles.min.css'
+            ],
+            'public/css/page-donate.css',
+            [
+                'node_modules/jquery/dist/jquery.js',
+                'node_modules/highcharts/highcharts.js',
+                // 'public/acm/extra/donate/js/html5shiv.js',
+                // 'public/acm/extra/donate/js/respond.min.js',
+                // 'public/acm/extra/donate/js/Chart.bundle.min.js',
+                'public/acm/AlaatvCustomFiles/js/page-donate.js'
+            ],
+            'public/js/page-donate.js');
+    }
     mixPageHomePage() {
         this.mixCssAndJs([
                 'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/style.css',
@@ -307,6 +333,7 @@ class Mix {
         this.mixPageShop();
         this.mixPageError();
         this.mixAuthLogin();
+        this.mixPageDonate();
         this.mixPageHomePage();
         this.mixPageContactUs();
         this.mixPageContentSearch();
@@ -462,6 +489,7 @@ class Mix {
             'public/css/set-show.css',
             [
                 'node_modules/toastr/build/toastr.min.js',
+                'public/acm/AlaatvCustomFiles/components/aSticky/aSticky.js',
                 'public/acm/AlaatvCustomFiles/components/Favorite/script.js',
                 'public/acm/AlaatvCustomFiles/js/page/set-show.js'
             ],

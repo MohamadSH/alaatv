@@ -2,7 +2,6 @@
 
 @section('page-css')
     <link href="{{ mix('/css/product-show.css') }}" rel="stylesheet" type="text/css"/>
-    <link href="{{ asset('/acm/AlaatvCustomFiles/components/CustomDropDown/style.css') }}" rel="stylesheet" type="text/css"/>
     <style>
         @if(
             (!isset($block) || !isset($block->contents) || $block->contents->count() === 0) &&
@@ -69,7 +68,6 @@
 
     </script>
 @endsection
-
 @section('pageBar')
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
@@ -121,25 +119,25 @@
                                     <div class="col-lg-3">
                                         <div class="m--margin-bottom-45">
                                             <img src="{{$product->photo}}?w=400&h=400" alt="عکس محصول@if(isset($product->name)) {{$product->name}} @endif" class="img-fluid m--marginless a--full-width"/>
-                                            @if(isset($product->bons->first()->pivot->bonPlus))
-                                                <div class="m-alert m-alert--icon m-alert--air m-alert--square alert alert-success alert-dismissible fade show" role="alert">
-                                                    <div class="m-alert__icon">
-                                                        <i class="flaticon-interface-9"></i>
-                                                    </div>
-                                                    <div class="m-alert__text">
-                                                        <strong>{{ $product->bons->first()->pivot->bonPlus }}+ آلاء بن</strong>
-                                                    </div>
-                                                </div>
-                                            @else
-                                                <div class="m-alert m-alert--icon m-alert--air m-alert--square alert alert-warning alert-dismissible fade show" role="alert">
-                                                    <div class="m-alert__icon">
-                                                        <i class="flaticon-interface-9"></i>
-                                                    </div>
-                                                    <div class="m-alert__text">
-                                                        این محصول بن ندارد
-                                                    </div>
-                                                </div>
-                                            @endif
+                                            {{--                                        @if(isset($product->bons->first()->pivot->bonPlus))--}}
+                                            {{--                                            <div class="m-alert m-alert--icon m-alert--air m-alert--square alert alert-success alert-dismissible fade show" role="alert">--}}
+                                            {{--                                                <div class="m-alert__icon">--}}
+                                            {{--                                                    <i class="flaticon-interface-9"></i>--}}
+                                            {{--                                                </div>--}}
+                                            {{--                                                <div class="m-alert__text">--}}
+                                            {{--                                                    <strong>{{ $product->bons->first()->pivot->bonPlus }}+ آلاء بن</strong>--}}
+                                            {{--                                                </div>--}}
+                                            {{--                                            </div>--}}
+                                            {{--                                        @else--}}
+                                            {{--                                            <div class="m-alert m-alert--icon m-alert--air m-alert--square alert alert-warning alert-dismissible fade show" role="alert">--}}
+                                            {{--                                                <div class="m-alert__icon">--}}
+                                            {{--                                                    <i class="flaticon-interface-9"></i>--}}
+                                            {{--                                                </div>--}}
+                                            {{--                                                <div class="m-alert__text">--}}
+                                            {{--                                                    این محصول بن ندارد--}}
+                                            {{--                                                </div>--}}
+                                            {{--                                            </div>--}}
+                                            {{--                                        @endif--}}
                                         </div>
 
                                     </div>
@@ -149,9 +147,9 @@
                                         <div class="row">
                                             @if(optional(optional(optional($product->attributes)->get('information'))->where('control', 'simple'))->count()>0 ||  optional(optional( optional($product->attributes)->get('main'))->where('control', 'simple'))->count()>0)
                                                 <div class="col-12
-                                                @if(optional(optional(optional($product->attributes)->get('information'))->where('control', 'checkBox'))->count())
+                                            @if(optional(optional(optional($product->attributes)->get('information'))->where('control', 'checkBox'))->count())
                                                         col-md-6
-                                                @endif">
+@endif">
 
                                                     <div class="m-portlet m-portlet--bordered m-portlet--full-height productAttributes">
                                                         <div class="m-portlet__head">
@@ -175,9 +173,9 @@
                                                                                     <i class="flaticon-like m--font-info"></i>
                                                                                 </div>
                                                                                 <div class="m-widget4__info">
-                                                                                    <span class="m-widget4__text">
-                                                                                        {{ $informationItem->title }}:
-                                                                                    </span>
+                                                                                <span class="m-widget4__text">
+                                                                                    {{ $informationItem->title }}:
+                                                                                </span>
                                                                                 </div>
                                                                             </div>
                                                                         @endif
@@ -192,13 +190,13 @@
                                                                                     @endif
                                                                                 </div>
                                                                                 <div class="m-widget4__info">
-                                                                                    <span class="m-widget4__text">
-                                                                                        @if(count($informationItem->data) > 1)
-                                                                                           {{ $informationItemData->name }}
-                                                                                        @else
-                                                                                            {{ $informationItem->title }}: {{ $informationItemData->name }}
-                                                                                        @endif
-                                                                                    </span>
+                                                                                <span class="m-widget4__text">
+                                                                                    @if(count($informationItem->data) > 1)
+                                                                                       {{ $informationItemData->name }}
+                                                                                    @else
+                                                                                        {{ $informationItem->title }}: {{ $informationItemData->name }}
+                                                                                    @endif
+                                                                                </span>
                                                                                 </div>
                                                                             </div>
 
@@ -214,9 +212,9 @@
                                                                                     <i class="flaticon-like m--font-warning"></i>
                                                                                 </div>
                                                                                 <div class="m-widget4__info">
-                                                                                    <span class="m-widget4__text">
-                                                                                        {{ $informationItem->title }}:
-                                                                                    </span>
+                                                                                <span class="m-widget4__text">
+                                                                                    {{ $informationItem->title }}:
+                                                                                </span>
                                                                                 </div>
                                                                             </div>
                                                                         @endif
@@ -230,13 +228,13 @@
                                                                                     @endif
                                                                                 </div>
                                                                                 <div class="m-widget4__info">
-                                                                                    <span class="m-widget4__text">
-                                                                                        @if(count($informationItem->data) > 1)
-                                                                                            {{ $informationItemData->name }}
-                                                                                        @else
-                                                                                            {{ $informationItem->title }}: {{ $informationItemData->name }}
-                                                                                        @endif
-                                                                                    </span>
+                                                                                <span class="m-widget4__text">
+                                                                                    @if(count($informationItem->data) > 1)
+                                                                                        {{ $informationItemData->name }}
+                                                                                    @else
+                                                                                        {{ $informationItem->title }}: {{ $informationItemData->name }}
+                                                                                    @endif
+                                                                                </span>
                                                                                 </div>
                                                                                 @if(isset($informationItemData->id))
                                                                                     <input type="hidden" value="{{ $informationItemData->id }}" name="attribute[]">
@@ -255,9 +253,9 @@
                                             @endif
                                             @if(optional(optional(optional($product->attributes)->get('information'))->where('control', 'checkBox'))->count())
                                                 <div class="col-12
-                                                @if(optional(optional(optional($product->attributes)->get('information'))->where('control', 'simple'))->count()>0 ||  optional(optional( optional($product->attributes)->get('main'))->where('control', 'simple'))->count()>0)
+                                            @if(optional(optional(optional($product->attributes)->get('information'))->where('control', 'simple'))->count()>0 ||  optional(optional( optional($product->attributes)->get('main'))->where('control', 'simple'))->count()>0)
                                                         col-md-6
-                                                @endif">
+@endif">
 
                                                     <div class="m-portlet m-portlet--bordered m-portlet--full-height productInformation">
                                                         <div class="m-portlet__head">
@@ -285,13 +283,13 @@
                                                                                 <i class="fa fa-check"></i>
                                                                             </div>
                                                                             <div class="m-widget4__info">
-                                                                                <span class="m-widget4__text">
-                                                                                    @if(count($informationItem->data) > 1)
-                                                                                        {{ $informationItemData->name }}
-                                                                                    @else
-                                                                                        {{ $informationItem->title }}: {{ $informationItemData->name }}
-                                                                                    @endif
-                                                                                </span>
+                                                                            <span class="m-widget4__text">
+                                                                                @if(count($informationItem->data) > 1)
+                                                                                    {{ $informationItemData->name }}
+                                                                                @else
+                                                                                    {{ $informationItem->title }}: {{ $informationItemData->name }}
+                                                                                @endif
+                                                                            </span>
                                                                             </div>
                                                                         </div>
                                                                     @endforeach
@@ -311,9 +309,9 @@
                                                 <div class="m-portlet__head">
                                                     <div class="m-portlet__head-caption col">
                                                         <div class="m-portlet__head-title">
-                                                                        <span class="m-portlet__head-icon">
-                                                                            <i class="flaticon-confetti"></i>
-                                                                        </span>
+                                                                    <span class="m-portlet__head-icon">
+                                                                        <i class="flaticon-confetti"></i>
+                                                                    </span>
                                                             <h3 class="m-portlet__head-text">
                                                                 خدماتی که برای این محصول نیاز دارید را انتخاب کنید:
                                                             </h3>
@@ -338,9 +336,9 @@
                                                 <div class="m-portlet__head">
                                                     <div class="m-portlet__head-caption col">
                                                         <div class="m-portlet__head-title">
-                                                                    <span class="m-portlet__head-icon">
-                                                                        <i class="flaticon-multimedia-5"></i>
-                                                                    </span>
+                                                                <span class="m-portlet__head-icon">
+                                                                    <i class="flaticon-multimedia-5"></i>
+                                                                </span>
                                                             <h3 class="m-portlet__head-text">
                                                                 موارد مورد نظر خود را انتخاب کنید:
                                                             </h3>
@@ -368,9 +366,9 @@
                                                 <div class="m-portlet__head">
                                                     <div class="m-portlet__head-caption col">
                                                         <div class="m-portlet__head-title">
-                                                                    <span class="m-portlet__head-icon">
-                                                                        <i class="flaticon-settings-1"></i>
-                                                                    </span>
+                                                                <span class="m-portlet__head-icon">
+                                                                    <i class="flaticon-settings-1"></i>
+                                                                </span>
                                                             <h3 class="m-portlet__head-text">
                                                                 ویژگی های مورد نظر خود را انتخاب کنید:
                                                             </h3>
@@ -420,7 +418,7 @@
                                         {!! Form::hidden('product_id',$product->id) !!}
 
                                         {{--دکمه افزودن به سبد خرید--}}
-                                        @if($product->enable)
+                                        @if($product->enable && !$isForcedGift)
 
 
                                             @if($allChildIsPurchased)
@@ -429,16 +427,16 @@
                                                 </div>
                                             @else
                                                 <h5 class="m--font-danger">
-                                                    <span id="a_product-price">
-                                                        @if($product->priceText['discount'] == 0 )
-                                                            {{ $product->priceText['basePriceText'] }}
-                                                        @else
-                                                            قیمت محصول: <strike>{{ $product->priceText['basePriceText'] }} </strike><br>
-                                                            قیمت با تخفیف
-                                                            <span class="m-badge m-badge--info m-badge--wide m-badge--rounded" id="a_product-discount">{{ ($product->price['discount']*100/$product->price['base']) }}%</span>
-                                                            :  {{ $product->priceText['finalPriceText'] }}
-                                                        @endif
-                                                    </span>
+                                                <span id="a_product-price">
+                                                    @if($product->priceText['discount'] == 0 )
+                                                        {{ $product->priceText['basePriceText'] }}
+                                                    @else
+                                                        قیمت محصول: <strike>{{ $product->priceText['basePriceText'] }} </strike><br>
+                                                        قیمت با تخفیف
+                                                        <span class="m-badge m-badge--info m-badge--wide m-badge--rounded" id="a_product-discount">{{ ($product->price['discount']*100/$product->price['base']) }}%</span>
+                                                        :  {{ $product->priceText['finalPriceText'] }}
+                                                    @endif
+                                                </span>
                                                 </h5>
                                             @endif
 
@@ -458,90 +456,118 @@
                                                 </button>
                                             @endif
                                         @else
-                                            <button class="btn btn-danger btn-lg m-btn  m-btn m-btn--icon">
+                                            @if(!$product->enable)
+                                                <button class="btn btn-danger btn-lg m-btn  m-btn m-btn--icon">
                                                 <span>
                                                     <i class="flaticon-shopping-basket"></i>
                                                     <span>این محصول غیر فعال است.</span>
                                                 </span>
-                                            </button>
+                                                </button>
+                                            @elseif($isForcedGift)
+                                                @if($hasPurchasedShouldBuyProduct)
+                                                    <button class="btn btn-danger btn-lg m-btn  m-btn m-btn--icon">
+                                                    <span>
+                                                        <i class="flaticon-arrows"></i>
+                                                        <span>شما محصول راه ابریشم را خریده اید و این محصول به عنوان هدیه به شما تعلق می گیرد</span>
+                                                    </span>
+                                                    </button>
+                                                @else
+                                                    <a class="btn btn-focus btn-lg m-btn  m-btn m-btn--icon" href="{{ route('product.show' , $shouldBuyProductId ) }}">
+                                                    <span>
+                                                        <i class="flaticon-arrows"></i>
+                                                        <span>این محصول بخشی از {{$shouldBuyProductName}} است برای خرید کلیک کنید </span>
+                                                    </span>
+                                                    </a>
+                                                @endif
+                                            @endif
                                         @endif
 
                                     </div>
 
                                     @if( isset($product->introVideo) || (isset($product->gift) && $product->gift->isNotEmpty()))
-                                    <div class="col-lg-4">
+                                        <div class="col-lg-4">
 
-                                        <div class="m-portlet m-portlet--bordered-semi m-portlet--rounded-force m--margin-bottom-45 videoPlayerPortlet @if(!isset($product->introVideo)) m--hide @endif">
-                                            <div class="m-portlet__body">
-                                                <div class="m-widget19 a--nuevo-alaa-theme a--media-parent">
-                                                    <div class="m-widget19__pic m-portlet-fit--top m-portlet-fit--sides a--video-wraper">
-
-                                                        @if( $product->introVideo )
-                                                            <input type="hidden" name="introVideo"
-                                                                   value="{{ $product->introVideo }}">
-                                                        @endif
-
-                                                        <video
-                                                                id="videoPlayer"
-                                                                class="
-                                                               video-js
-                                                               vjs-fluid
-                                                               vjs-default-skin
-                                                               vjs-big-play-centered"
-                                                                controls
-                                                                {{-- preload="auto"--}}
-                                                                preload="none"
-                                                                @if(isset($product->introVideoThumbnail))
-                                                                poster = "{{$product->introVideoThumbnail}}?w=400&h=225"
-                                                                @else
-                                                                poster = "https://cdn.alaatv.com/media/204/240p/204054ssnv.jpg"
-                                                                @endif >
-
-                                                            {{--                                                        <source--}}
-                                                            {{--                                                                src="{{$product->introVideo}}"--}}
-                                                            {{--                                                                id="videoPlayerSource"--}}
-                                                            {{--                                                                type = 'video/mp4'/>--}}
-
-                                                            {{--<p class="vjs-no-js">جهت پخش آنلاین فیلم، ابتدا مطمئن شوید که جاوا اسکریپت در مرور گر شما فعال است و از آخرین نسخه ی مرورگر استفاده می کنید.</p>--}}
-                                                        </video>
-
-                                                        <div class="m-widget19__shadow"></div>
-                                                    </div>
-                                                    <div class="m-widget19__content">
-                                                        <div class="m-widget19__header">
-                                                            <h4 id="videoPlayerTitle">
-                                                                کلیپ معرفی
-                                                            </h4>
-                                                        </div>
-                                                        <div class="m-widget19__body text-left" id="videoPlayerDescription"></div>
-                                                    </div>
-                                                </div>
-                                                </div>
-                                        </div>
-
-                                        @if(isset($product->gift) && $product->gift->isNotEmpty())
-                                            <div class="m-portlet m-portlet--bordered m-portlet--creative m-portlet--bordered-semi m--margin-top-25">
-                                                <div class="m-portlet__head">
-                                                    <div class="m-portlet__head-caption col">
-                                                        <div class="m-portlet__head-title">
-                                                            <span class="m-portlet__head-icon">
-                                                                <i class="flaticon-gift"></i>
-                                                            </span>
-                                                            <h3 class="m-portlet__head-text">
-                                                                این محصول شامل هدایای زیر می باشد:
-                                                            </h3>
-                                                            <h2 class="m-portlet__head-label m-portlet__head-label--accent">
-                                                                <span>هدایا</span>
-                                                            </h2>
-                                                        </div>
-                                                    </div>
-                                                </div>
+                                            <div class="m-portlet m-portlet--bordered-semi m-portlet--rounded-force m--margin-bottom-45 videoPlayerPortlet @if(!isset($product->introVideo)) m--hide @endif">
                                                 <div class="m-portlet__body">
-                                                    <div class="row justify-content-center productGifts">
-                                                        @foreach($product->gift as $gift)
-                                                            <div class="col-12">
-                                                                @if(strlen($gift->url)>0)
-                                                                    <a target="_blank" href="{{ $gift->url }}">
+                                                    <div class="m-widget19 a--nuevo-alaa-theme a--media-parent">
+                                                        <div class="m-widget19__pic m-portlet-fit--top m-portlet-fit--sides a--video-wraper">
+
+                                                            @if( $product->introVideo )
+                                                                <input type="hidden" name="introVideo"
+                                                                       value="{{ $product->introVideo }}">
+                                                            @endif
+
+                                                            <video
+                                                                    id="videoPlayer"
+                                                                    class="
+                                                           video-js
+                                                           vjs-fluid
+                                                           vjs-default-skin
+                                                           vjs-big-play-centered"
+                                                                    controls
+                                                                    {{-- preload="auto"--}}
+                                                                    preload="none"
+                                                                    @if(isset($product->introVideoThumbnail))
+                                                                    poster = "{{$product->introVideoThumbnail}}?w=400&h=225"
+                                                                    @else
+                                                                    poster = "https://cdn.alaatv.com/media/204/240p/204054ssnv.jpg"
+                                                                    @endif >
+
+                                                                {{--                                                        <source--}}
+                                                                {{--                                                                src="{{$product->introVideo}}"--}}
+                                                                {{--                                                                id="videoPlayerSource"--}}
+                                                                {{--                                                                type = 'video/mp4'/>--}}
+
+                                                                {{--<p class="vjs-no-js">جهت پخش آنلاین فیلم، ابتدا مطمئن شوید که جاوا اسکریپت در مرور گر شما فعال است و از آخرین نسخه ی مرورگر استفاده می کنید.</p>--}}
+                                                            </video>
+
+                                                            <div class="m-widget19__shadow"></div>
+                                                        </div>
+                                                        <div class="m-widget19__content">
+                                                            <div class="m-widget19__header">
+                                                                <h4 id="videoPlayerTitle">
+                                                                    کلیپ معرفی
+                                                                </h4>
+                                                            </div>
+                                                            <div class="m-widget19__body text-left" id="videoPlayerDescription"></div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            @if(isset($product->gift) && $product->gift->isNotEmpty())
+                                                <div class="m-portlet m-portlet--bordered m-portlet--creative m-portlet--bordered-semi m--margin-top-25">
+                                                    <div class="m-portlet__head">
+                                                        <div class="m-portlet__head-caption col">
+                                                            <div class="m-portlet__head-title">
+                                                        <span class="m-portlet__head-icon">
+                                                            <i class="flaticon-gift"></i>
+                                                        </span>
+                                                                <h3 class="m-portlet__head-text">
+                                                                    این محصول شامل هدایای زیر می باشد:
+                                                                </h3>
+                                                                <h2 class="m-portlet__head-label m-portlet__head-label--accent">
+                                                                    <span>هدایا</span>
+                                                                </h2>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="m-portlet__body">
+                                                        <div class="row justify-content-center productGifts">
+                                                            @foreach($product->gift as $gift)
+                                                                <div class="col-12">
+                                                                    @if(strlen($gift->url)>0)
+                                                                        <a target="_blank" href="{{ $gift->url }}">
+                                                                            <div>
+                                                                                <img src="{{ $gift->photo }}" class="rounded-circle">
+                                                                            </div>
+                                                                            <div>
+                                                                                <button type="button" class="btn m-btn--pill m-btn--air m-btn m-btn--gradient-from-info m-btn--gradient-to-accent">
+                                                                                    {{ $gift->name }}
+                                                                                </button>
+                                                                            </div>
+                                                                        </a>
+                                                                    @else
                                                                         <div>
                                                                             <img src="{{ $gift->photo }}" class="rounded-circle">
                                                                         </div>
@@ -550,24 +576,14 @@
                                                                                 {{ $gift->name }}
                                                                             </button>
                                                                         </div>
-                                                                    </a>
-                                                                @else
-                                                                    <div>
-                                                                        <img src="{{ $gift->photo }}" class="rounded-circle">
-                                                                    </div>
-                                                                    <div>
-                                                                        <button type="button" class="btn m-btn--pill m-btn--air m-btn m-btn--gradient-from-info m-btn--gradient-to-accent">
-                                                                            {{ $gift->name }}
-                                                                        </button>
-                                                                    </div>
-                                                                @endif
-                                                            </div>
-                                                        @endforeach
+                                                                    @endif
+                                                                </div>
+                                                            @endforeach
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                        @endif
-                                    </div>
+                                            @endif
+                                        </div>
                                     @endif
                                 </div>
                                 <!--end::Preview-->
@@ -581,9 +597,11 @@
         </div>
     @endif
 
+
+
     {{--دکمه افزودن به سبد خرید--}}
     <div class="addToCartForMobileDeviceWrapper" >
-        @if($product->enable && !$isForcedGift)
+    @if($product->enable && !$isForcedGift)
             @if($allChildIsPurchased)
                 <a class="btn m-btn m-btn--pill m-btn--air m-btn--gradient-from-focus m-btn--gradient-to-danger  animated infinite pulse" role="button" href="{{ action("Web\UserController@userProductFiles") }}">
                     <i class="fa fa-play-circle"></i>
@@ -608,13 +626,13 @@
                     <span id="a_product-price_mobile">
                         @include('product.partials.price', ['price'=>$product->price])
 
-                        {{--                        @if($product->priceText['discount'] == 0 )--}}
-                        {{--                            <span>{{ $product->priceText['finalPriceText'] }} </span>--}}
+{{--                        @if($product->priceText['discount'] == 0 )--}}
+{{--                            <span>{{ $product->priceText['finalPriceText'] }} </span>--}}
 
-                        {{--                        @else--}}
-                        {{--                            <strike>{{ $product->priceText['basePriceText'] }} </strike>--}}
-                        {{--                            <span class="m-badge m-badge--danger m-badge--wide m-badge--rounded">{{ $product->priceText['finalPriceText'] }}</span>--}}
-                        {{--                        @endif--}}
+{{--                        @else--}}
+{{--                            <strike>{{ $product->priceText['basePriceText'] }} </strike>--}}
+{{--                            <span class="m-badge m-badge--danger m-badge--wide m-badge--rounded">{{ $product->priceText['finalPriceText'] }}</span>--}}
+{{--                        @endif--}}
 
 
 
@@ -622,43 +640,44 @@
                 </div>
             @endif
 
-        @else
-            @if(!$product->enable)
-                <button class="btn btn-danger btn-lg m-btn  m-btn m-btn--icon">
+    @else
+        @if(!$product->enable)
+            <button class="btn btn-danger btn-lg m-btn  m-btn m-btn--icon">
                     <span>
                         <i class="flaticon-shopping-basket"></i>
                         <span>این محصول غیر فعال است.</span>
                     </span>
-                </button>
-            @elseif($isForcedGift)
+            </button>
+        @elseif($isForcedGift)
                 @if($hasPurchasedShouldBuyProduct)
                     <button class="btn btn-danger btn-lg m-btn  m-btn m-btn--icon">
                         <span>
                                 <i class="flaticon-arrows"></i>
-                                <span>شما محصول راه ابریشم را خریداری کرده اید و این محصول به عنوان هدیه به شما تعلق خواهد گرفت</span>
+                                <span>شما محصول راه ابریشم را خریده اید و این محصول به عنوان هدیه به شما تعلق می گیرد</span>
                         </span>
                     </button>
                 @else
                     <a class="btn btn-focus btn-lg m-btn  m-btn m-btn--icon" href="{{ route('product.show' , $shouldBuyProductId ) }}">
                             <span>
                                 <i class="flaticon-arrows"></i>
-                                <span>این محصول فروش تکی ندارد . برای تهیه این محصول باید  {{$shouldBuyProductName}} را تهیه کنید  برای خرید کلیک کنید</span>
+                                <span>این محصول بخشی از {{$shouldBuyProductName}} است برای خرید کلیک کنید </span>
                             </span>
                     </a>
                 @endif
-            @endif
         @endif
-    </div>
+    @endif
+</div>
 
     {{--نمونه فیلم--}}
     @include('block.partials.block', [
-        'blockTitle'=>view('product.partials.productInfoNav', ['targetId'=>'sampleVideo']),
+        'blockTitle'=>view('product.partials.productInfoNav', ['targetId'=>'sampleVideo' , 'product'=>$product , 'isForcedGift'=>$isForcedGift]),
         'blockUrlDisable'=>true,
         'blockType'=>'productSampleVideo',
         'imageDimension'=>'?w=300&h=169',
         'squareSing'=>false,
         'blockCustomClass'=>'a--owl-carousel-type-2 productShowBlock sampleVideo a--block-widget-1',
-        'blockCustomId'=>'Block-sampleVideo'
+        'blockCustomId'=>'Block-sampleVideo',
+        'btnLoadMore'=>true
         ])
 
     {{--نمونه جزوه--}}
@@ -668,7 +687,7 @@
     @if(mb_strlen(trim(strip_tags($product->shortDescription))) > 0 || mb_strlen(trim(strip_tags($product->longDescription))) > 0)
         <div class="row m--margin-top-10">
             <div class="col m--margin-bottom-25">
-                <div class="m-portlet m-portlet--tabs productDetailes" id="productDetailes">
+                <div class="m-portlet m-portlet--tabs productDetailes boxed" id="productDetailes">
                     <div class="m-portlet__head">
                         <div class="m-portlet__head-caption">
                             <div class="m-portlet__head-title">
@@ -769,17 +788,19 @@
 
     {{--  محصولات مرتبط  --}}
     @include('block.partials.block', [
-        'blockTitle'=>view('product.partials.productInfoNav', ['targetId'=>'relatedProduct']),
+        'blockTitle'=>view('product.partials.productInfoNav', ['targetId'=>'relatedProduct', 'product'=>$product , 'isForcedGift'=>$isForcedGift]),
         'blockUrlDisable'=>true,
         'blockType'=>'product',
         'squareSing'=>false,
         'blockCustomClass'=>'a--owl-carousel-type-2 productShowBlock relatedProduct',
-        'blockCustomId'=>'Block-relatedProduct'
+        'blockCustomId'=>'Block-relatedProduct',
+        'btnLoadMore'=>true
         ])
 
 @endsection
 
 @section('page-js')
+    <script src="{{ mix('/js/product-show.js') }}"></script>
     <script>
         var TotalQuantityAddedToCart = 0;
         var parentProduct = {

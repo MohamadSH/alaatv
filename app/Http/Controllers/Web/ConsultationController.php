@@ -12,9 +12,11 @@ use App\Question;
 use App\User;
 use App\Usersurveyanswer;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
+use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Input;
+
 use Illuminate\Support\Facades\Storage;
 
 class ConsultationController extends Controller
@@ -171,12 +173,13 @@ class ConsultationController extends Controller
     /**
      * Show consultant admin entekhab reshte
      *
+     * @param Request $request
      * @return Response
      * @throws FileNotFoundException
      */
-    public function consultantEntekhabReshte()
+    public function consultantEntekhabReshte(Request $request)
     {
-        $user = User::FindOrFail(Input::get('user'));
+        $user = User::FindOrFail($request->get('user'));
         if (Storage::disk('entekhabReshte')
             ->exists($user->id.'-'.$user->major->id.'.txt')) {
             $storedMajors     = json_decode(Storage::disk('entekhabReshte')
@@ -194,7 +197,7 @@ class ConsultationController extends Controller
                     ->first();
                 $majorCode      = $storedMajor->pivot->majorCode;
                 $majorName      = $storedMajorInfo->name;
-                $selectedMajors = array_add($selectedMajors, $majorCode, $majorName);
+                $selectedMajors = Arr::add($selectedMajors, $majorCode, $majorName);
             }
         }
         $eventId       = 1;

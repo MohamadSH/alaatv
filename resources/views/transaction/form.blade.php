@@ -144,7 +144,7 @@
         </div>
     </div>
 </div>
-@if(isset($defaultValues) && array_has( $defaultValues , "transactionstatus" ))
+@if(isset($defaultValues) && Arr::has( $defaultValues , "transactionstatus" ))
     {!! Form::hidden("transactionstatus_id" , $defaultValues["transactionstatus"]) !!}
 @elseif(!isset($excluded) || !in_array("transactionstatus" , $excluded))
     <div class="row static-info margin-top-20">

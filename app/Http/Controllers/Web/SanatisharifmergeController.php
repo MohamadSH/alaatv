@@ -14,7 +14,7 @@ use Illuminate\Http\Response;
 use App\Traits\CharacterCommon;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Input;
+
 
 class SanatisharifmergeController extends Controller
 {
@@ -3528,13 +3528,13 @@ class SanatisharifmergeController extends Controller
         }
     }
 
-    public function copyContent(ContentController $controller)
+    public function copyContent( Request $request ,  ContentController $controller)
     {
         try {
-            if (!Input::has("t")) {
+            if (!$request->has("t")) {
                 return response()->json(["message" => "Wrong inputs: Please pass parameter t. Available values: p , v"] , Response::HTTP_UNPROCESSABLE_ENTITY );
             } else {
-                $contentType = Input::get("t");
+                $contentType = $request->get("t");
             }
 
             switch ($contentType) {
@@ -3561,8 +3561,8 @@ class SanatisharifmergeController extends Controller
 
             $sanatisharifRecords = Sanatisharifmerge::whereNotNull($contentTypeLable."id")
                 ->where($contentTypeLable."Transferred", 0);
-            if (Input::has("id")) {
-                $id = Input::get("id");
+            if ($request->has("id")) {
+                $id = $request->get("id");
                 $sanatisharifRecords->where($idColumn, $id);
             }
             $sanatisharifRecords = $sanatisharifRecords->get();
@@ -4175,7 +4175,7 @@ class SanatisharifmergeController extends Controller
                                 "url" : "https://sanatisharif.ir/Alaa-App/10",
                                 "type": 0,
                                 "courses" : [
-                                
+
                                     {
                                         "title" : "متن خوانی عربی دهم",
                                         "teacher" : "مهدی ناصر شریعت",
@@ -4243,7 +4243,7 @@ class SanatisharifmergeController extends Controller
                                         "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/5/37/"
                                     }
                                 ]
-                            
+
                             },
                             {
                                 "title" : "همایش و جمع بندی",
@@ -4307,11 +4307,11 @@ class SanatisharifmergeController extends Controller
                 $json = '
                 {
                     "items" : [
-                     {                                                                                        
-                         "title" : "جمع‌بندی آمار و مدلسازی",                                                          
-                         "teacher" : "وحید کبریایی",                                                          
+                     {
+                         "title" : "جمع‌بندی آمار و مدلسازی",
+                         "teacher" : "وحید کبریایی",
                          "image_url": "https://cdn.sanatisharif.ir/upload/contentset/departmentlesson/180204101956.jpg?w=280&h=150",
-                         "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/20/46/"              
+                         "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/20/46/"
                                     },
                                     {
                                         "title" : "جمعبندی زبان کنکور",
@@ -4663,7 +4663,7 @@ class SanatisharifmergeController extends Controller
                             },
                             {
                                 "title" : "عربی دهم",
-                                "teacher" : "ناصر حشمتی",  
+                                "teacher" : "ناصر حشمتی",
                                 "image_url" : "https://cdn.sanatisharif.ir/upload/contentset/departmentlesson/170920012145.jpg?w=280&h=150",
                                 "video_list_url" : "https://sanatisharif.ir/Sanati-Sharif-Video/5/37/"
                             },

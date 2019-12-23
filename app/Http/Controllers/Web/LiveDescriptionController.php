@@ -11,11 +11,37 @@ use Illuminate\Support\Facades\Cache;
 
 class LiveDescriptionController extends Controller
 {
+    public function __construct()
+    {
+        $this->callMiddlewares($this->getAuthExceptionArray());
+    }
+
+    /**
+     * @return array
+     */
+    private function getAuthExceptionArray(): array
+    {
+        return [];
+    }
+
+    /**
+     * @param $authException
+     */
+    private function callMiddlewares(array $authException): void
+    {
+        $this->middleware('auth', ['except' => $authException]);
+        $this->middleware('permission:'.config('constants.LIST_LIVE_DESCRIPTION_ACCESS'),    ['only' => ['index',],]);
+        $this->middleware('permission:'.config('constants.INSERT_LIVE_DESCRIPTION_ACCESS'),  ['only' => ['store', 'create'],]);
+        $this->middleware('permission:'.config('constants.UPDATE_LIVE_DESCRIPTION_ACCESS'),  ['only' => ['update',],]);
+        $this->middleware('permission:'.config('constants.SHOW_LIVE_DESCRIPTION_ACCESS'),    ['only' => ['show','edit'],]);
+        $this->middleware('permission:'.config('constants.DELETE_LIVE_DESCRIPTION_ACCESS'),  ['only' => ['destroy',],]);
+    }
+
     /**
      * Display a listing of the resource.
      *
      * @param Request $request
-     * @return void
+     * @return \Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection
      */
     public function index(Request $request)
     {
@@ -42,7 +68,7 @@ class LiveDescriptionController extends Controller
      * Store a newly created resource in storage.
      *
      * @param Request $request
-     * @return Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function store(Request $request)
     {
@@ -63,18 +89,20 @@ class LiveDescriptionController extends Controller
      * Display the specified resource.
      *
      * @param LiveDescription $liveDescription
-     * @return LiveDescription
+     * @return \Illuminate\Http\JsonResponse
      */
     public function show(LiveDescription $liveDescription)
     {
-        return $liveDescription;
+        return response()->json([
+            $liveDescription
+        ]);
     }
 
     /**
      * Show the form for editing the specified resource.
      *
      * @param LiveDescription $liveDescription
-     * @return void
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function edit(LiveDescription $liveDescription)
     {
@@ -86,7 +114,7 @@ class LiveDescriptionController extends Controller
      *
      * @param Request $request
      * @param LiveDescription $liveDescription
-     * @return Response
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function update(Request $request, LiveDescription $liveDescription)
     {
@@ -104,14 +132,21 @@ class LiveDescriptionController extends Controller
      * Remove the specified resource from storage.
      *
      * @param LiveDescription $liveDescription
-     * @return Response
+     * @return \Illuminate\Http\JsonResponse
      * @throws Exception
      */
     public function destroy(LiveDescription $liveDescription)
     {
-        $liveDescription->delete();
+        if($liveDescription->delete()){
+            return response()->json([
+                'message' => 'توضیح لخظه ای با موفقیت حذف شد',
+            ]);
+        }
+
         return response()->json([
-            'message' => 'توضیح لخظه ای با موفقیت حذف شد',
+            'error' => [
+               'message'    => 'Error on removing Description',
+            ]
         ]);
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\User;
 use App\Http\Controllers\{Controller};
 use Illuminate\Http\Request;
 use App\Traits\RedirectTrait;
@@ -161,11 +162,17 @@ class LoginController extends Controller
      *
      * @return mixed
      */
-    protected function authenticated(Request $request, $user)
+    protected function authenticated(Request $request, User $user)
     {
         event(new Authenticated($user));
         if (!$request->expectsJson()) {
             return redirect($this->redirectTo($request));
+        }
+
+        if($user->userstatus_id == config('constants.USER_STATUS_INACTIVE')){
+            return response()->json([
+                'message' => 'User account has been deactivated'
+            ] , Response::HTTP_FORBIDDEN);
         }
 
         $token = $user->getAppToken();

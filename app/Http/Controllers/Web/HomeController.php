@@ -9,9 +9,7 @@ use Illuminate\Routing\Redirector;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Contracts\Encryption\DecryptException;
-use Illuminate\Support\Facades\{ Input, Config, Storage , File};
-use League\Flysystem\Filesystem;
-use League\Flysystem\Sftp\SftpAdapter;
+use Illuminate\Support\Facades\{  Config, Storage , File};
 use App\{Notifications\sendLink,
     UploadCenter,
     User,
@@ -72,6 +70,47 @@ class HomeController extends Controller
 
     public function debug(Request $request, User $user = null)
     {
+//        $orders = \App\Order::where('orderstatus_id' , config('constants.ORDER_STATUS_CLOSED'))
+//                            ->whereIn('paymentstatus_id' , [ config('constants.PAYMENT_STATUS_VERIFIED_INDEBTED') , config('constants.PAYMENT_STATUS_PAID') , config('constants.PAYMENT_STATUS_INDEBTED') ])
+//                            ->whereHas('orderproducts' , function ($q2){
+//                                $q2->where('product_id' , Product::RAHE_ABRISHAM );
+//                            })->get();
+//
+//        foreach ($orders as $order){
+//            $orderproduct = \App\Orderproduct::create([
+//                'order_id' => $order->id ,
+//                'product_id' => 385 ,
+//                'orderproducttype_id' => config('constants.ORDER_PRODUCT_GIFT'),
+//                'cost' => 74000,
+//            ]);
+//        }
+//
+//        dd('DONE');
+
+
+//        $orders = \App\Order::where('orderstatus_id' , config('constants.ORDER_STATUS_CLOSED'))
+//            ->where('paymentstatus_id' , config('constants.PAYMENT_STATUS_VERIFIED_INDEBTED'))
+//            ->whereHas('orderproducts' , function ($q2){
+//                $q2->where('product_id' , Product::RAHE_ABRISHAM )
+//                    ->havingRaw('COUNT(*) = 1 ');
+//            })->whereHas('transactions' , function ($q3){
+//                $q3->where('transactionstatus_id' , config('constants.TRANSACTION_STATUS_UNPAID'))
+//                    ->where('deadline_at' , '<=' , '2019-12-18 00:00' )
+//                    ->havingRaw('COUNT(*) > 1 ');
+//            })->get();
+//
+//        dump($orders->pluck('id') , $orders->count());
+//
+//        /** @var \App\Order $order */
+//        foreach ($orders as $order){
+//            $result = $order->update(['paymentstatus_id' => config('constants.PAYMENT_STATUS_INDEBTED')]) ;
+//            if(!$result){
+//                dump('error on #'.$orders->id);
+//            }
+//        }
+//
+//        dd('DONE!');
+
         return view('admin.topicsTree.manageNodes');
     }
 
@@ -98,15 +137,15 @@ class HomeController extends Controller
         /** @var User $user */
         $user = $request->user('alaatv');
         if ($user === null) {
-            abort(403, 'Not authorized.');
+            abort(Response::HTTP_FORBIDDEN, 'Not authorized.');
         }
         if ($data === null) {
-            abort(403, 'Invalid Link');
+            abort(Response::HTTP_FORBIDDEN, 'Invalid Link');
         }
         try {
             $data = (array) decrypt($data);
         } catch (DecryptException $e) {
-            abort(403, 'invalid Data!');
+            abort(Response::HTTP_FORBIDDEN, 'invalid Data!');
         }
         $url       = $data['url'];
         $contentId = $data['data']['content_id'];
@@ -165,7 +204,7 @@ class HomeController extends Controller
                 $diskName = config('constants.DISK10');
                 break;
             case 'فایل محصول' :
-                $productId = Input::get('pId');
+                $productId = $request->get('pId');
                 $diskName  = config('constants.DISK13');
 
                 if (isset($user) && !$user->can(config('constants.DOWNLOAD_PRODUCT_FILE'))) {
@@ -386,7 +425,7 @@ class HomeController extends Controller
 
     public function siteMapXML()
     {
-        return redirect(action('Web\SitemapController@index'), 301);
+        return redirect(action('Web\SitemapController@index'), Response::HTTP_MOVED_PERMANENTLY);
     }
 
     /**

@@ -117,7 +117,7 @@
 
         <div class="col-md-12">
         <!-- BEGIN BLOCK TABLE PORTLET-->
-        <div class="m-portlet m-portlet--head-solid-bg m-portlet--accent m-portlet--collapsed m-portlet--head-sm" m-portlet="true" id="productFiles-portlet">
+        <div class="m-portlet m-portlet--head-solid-bg m-portlet--accent m-portlet--collapsed m-portlet--head-sm" m-portlet="true" id="liveDescription-portlet">
             <div class="m-portlet__head">
                 <div class="m-portlet__head-caption">
                     <div class="m-portlet__head-title">
@@ -137,7 +137,7 @@
                             </a>
                         </li>
                         <li class="m-portlet__nav-item">
-                            <a href="#" m-portlet-tool="fullscreen" class="m-portlet__nav-link m-portlet__nav-link--icon" id="product-expand">
+                            <a href="#" m-portlet-tool="fullscreen" class="m-portlet__nav-link m-portlet__nav-link--icon" id="block-expand">
                                 <i class="fa fa-expand-arrows-alt"></i>
                             </a>
                         </li>
@@ -157,7 +157,7 @@
         </div>
 
         <div class="col-md-12">
-        @permission((config('constants.INSERT_LIVE_DESCRIPTION_ACCESS')))
+        @permission((config('constants.LIST_LIVE_DESCRIPTION_ACCESS')))
         <!-- BEGIN LIVE DESCRIPTION TABLE PORTLET-->
         <div class="m-portlet m-portlet--head-solid-bg m-portlet--accent m-portlet--collapsed m-portlet--head-sm" m-portlet="true" id="productFiles-portlet">
             <div class="m-portlet__head">
@@ -179,7 +179,7 @@
                             </a>
                         </li>
                         <li class="m-portlet__nav-item">
-                            <a href="#" m-portlet-tool="fullscreen" class="m-portlet__nav-link m-portlet__nav-link--icon" id="product-expand">
+                            <a href="#" m-portlet-tool="fullscreen" class="m-portlet__nav-link m-portlet__nav-link--icon" id="liveDescription-expand">
                                 <i class="fa fa-expand-arrows-alt"></i>
                             </a>
                         </li>
@@ -210,8 +210,8 @@
                                 <h5  style="font-weight: bolder"><span style="color:red;text-decoration: underline">عنوان: </span>{{$liveDescription->title}}</h5>
                                 <p  style="font-size:1.2rem ; direction: ltr"><span style="color:red;text-decoration: underline">تاریخ : </span>{{$liveDescription->CreatedAt_Jalali_WithTime()}}</p>
                                 <p style="font-size:1.2rem"><span style="color:red;text-decoration: underline">توضیح :</span> {!! $liveDescription->description !!}</p>
-                                <a class="btn btn-accent" target="_blank" href="{{route('livedescription.edit' , ['liveDescription' => $liveDescription])}}">اصلاح</a>
-                                <a  href="#" class="btn btn-danger removeLiveDescription" data-action="{{route('livedescription.destroy' , ['liveDescription' => $liveDescription])}}" >حذف</a>
+                                <a class="btn btn-accent" target="_blank" href="{{route('livedescription.edit' , $liveDescription)}}">اصلاح</a>
+                                <a  href="#" class="btn btn-danger removeLiveDescription" data-action="{{route('livedescription.destroy' , $liveDescription)}}" >حذف</a>
                             </li>
                             <hr>
                         @endforeach
@@ -225,6 +225,79 @@
         @endpermission
         </div>
 
+        <div class="col-md-12">
+        @permission((config('constants.LIST_PERIOD_DESCRIPTION_ACCESS')))
+        <!-- BEGIN LIVE DESCRIPTION TABLE PORTLET-->
+        <div class="m-portlet m-portlet--head-solid-bg m-portlet--accent m-portlet--collapsed m-portlet--head-sm" m-portlet="true" id="periodDescription-portlet">
+            <div class="m-portlet__head">
+                <div class="m-portlet__head-caption">
+                    <div class="m-portlet__head-title">
+                    <span class="m-portlet__head-icon">
+                        <i class="fa fa-cogs"></i>
+                    </span>
+                        <h3 class="m-portlet__head-text">
+                            توضیحات بازه ای
+                        </h3>
+                    </div>
+                </div>
+                <div class="m-portlet__head-tools">
+                    <ul class="m-portlet__nav">
+                        <li class="m-portlet__nav-item">
+                            <a href="#" m-portlet-tool="toggle" class="m-portlet__nav-link m-portlet__nav-link--icon">
+                                <i class="fa fa-angle-down"></i>
+                            </a>
+                        </li>
+                        <li class="m-portlet__nav-item">
+                            <a href="#" m-portlet-tool="fullscreen" class="m-portlet__nav-link m-portlet__nav-link--icon" id="periodDescription-expand">
+                                <i class="fa fa-expand-arrows-alt"></i>
+                            </a>
+                        </li>
+                        <li class="m-portlet__nav-item">
+                            <a href="#" m-portlet-tool="remove" class="m-portlet__nav-link m-portlet__nav-link--icon">
+                                <i class="fa fa-times"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="m-portlet__body">
+                {!! Form::open(['method'=>'POST' , 'route'=>'periodDescription.store']) !!}
+                    <input type="hidden" name="product_id" value="{{$product->id}}">
+                <div class = "form-group">
+                    <input id = "periodDescriptionSince" type = "text" class = "form-control" value = "" dir = "ltr">
+                    <input name = "since" id = "periodDescriptionSinceAlt" type = "text" class = "form-control d-none">
+                </div>
+                <div class = "form-group">
+                    <input id = "periodDescriptionTill" type = "text" class = "form-control" value = "" dir = "ltr">
+                    <input name = "till" id = "periodDescriptionTillAlt" type = "text" class = "form-control d-none">
+                </div>
+                <div class = "form-group">
+                    <textarea id="productPeriodDescriptionSummerNote" name="description" placeholder="توضیح"></textarea>
+                </div>
+                    <input type="submit" value="ذخیره">
+                {!! Form::close() !!}
+                <hr>
+                @if($descriptionsWithPeriod->isNotEmpty())
+                    <ul>
+                        @foreach($descriptionsWithPeriod as $descriptionWithPeriod)
+                            <li>
+                                <p  style="font-size:1.2rem ; direction: ltr"><span style="color:red;text-decoration: underline">از تاریخ : </span>{{$descriptionWithPeriod->Since_Jalali()}}</p>
+                                <p  style="font-size:1.2rem ; direction: ltr"><span style="color:red;text-decoration: underline">تا تاریخ : </span>{{$descriptionWithPeriod->Until_Jalali()}}</p>
+                                <p style="font-size:1.2rem"><span style="color:red;text-decoration: underline">توضیح :</span> {!! $descriptionWithPeriod->description !!}</p>
+                                <a class="btn btn-accent" target="_blank" href="{{route('periodDescription.edit' , $descriptionWithPeriod)}}">اصلاح</a>
+                                <a  href="#" class="btn btn-danger removePeriodDescription" data-action="{{route('periodDescription.destroy' , $descriptionWithPeriod)}}" >حذف</a>
+                            </li>
+                            <hr>
+                        @endforeach
+                    </ul>
+                @else
+                    <h4>اطلاعاتی برای نمایش وجود ندارد</h4>
+                @endif
+            </div>
+        </div>
+        <!-- END SAMPLE TABLE PORTLET-->
+        @endpermission
+        </div>
 
         <div class="col-md-12">
         <!-- BEGIN PRODUCT TABLE PORTLET-->
@@ -253,7 +326,7 @@
                             </a>
                         </li>
                         <li class="m-portlet__nav-item">
-                            <a href="#" m-portlet-tool="fullscreen" class="m-portlet__nav-link m-portlet__nav-link--icon" id="product-expand">
+                            <a href="#" m-portlet-tool="fullscreen" class="m-portlet__nav-link m-portlet__nav-link--icon" id="productFile-expand">
                                 <i class="fa fa-expand-arrows-alt"></i>
                             </a>
                         </li>
@@ -301,7 +374,7 @@
                                 </a>
                             </li>
                             <li class="m-portlet__nav-item">
-                                <a href="#" m-portlet-tool="fullscreen" class="m-portlet__nav-link m-portlet__nav-link--icon" id="product-expand">
+                                <a href="#" m-portlet-tool="fullscreen" class="m-portlet__nav-link m-portlet__nav-link--icon" id="samplePhoto-expand">
                                     <i class="fa fa-expand-arrows-alt"></i>
                                 </a>
                             </li>
@@ -348,7 +421,7 @@
                             </a>
                         </li>
                         <li class="m-portlet__nav-item">
-                            <a href="#" m-portlet-tool="fullscreen" class="m-portlet__nav-link m-portlet__nav-link--icon" id="product-expand">
+                            <a href="#" m-portlet-tool="fullscreen" class="m-portlet__nav-link m-portlet__nav-link--icon" id="complementaryProduct-expand">
                                 <i class="fa fa-expand-arrows-alt"></i>
                             </a>
                         </li>
@@ -394,7 +467,7 @@
                             </a>
                         </li>
                         <li class="m-portlet__nav-item">
-                            <a href="#" m-portlet-tool="fullscreen" class="m-portlet__nav-link m-portlet__nav-link--icon" id="product-expand">
+                            <a href="#" m-portlet-tool="fullscreen" class="m-portlet__nav-link m-portlet__nav-link--icon" id="giftProduct-expand">
                                 <i class="fa fa-expand-arrows-alt"></i>
                             </a>
                         </li>
@@ -587,6 +660,7 @@
                     multiColumnButton: summernoteMultiColumnButton
                 }
             });
+
             $('#productLiveDescriptionSummerNote').summernote({
                 lang: 'fa-IR',
                 height: 300,
@@ -613,7 +687,55 @@
                 }
             });
 
+            $('#productPeriodDescriptionSummerNote').summernote({
+                lang: 'fa-IR',
+                height: 300,
+                popover: {
+                    image: [],
+                    link: [],
+                    air: []
+                },
+                toolbar: [
+                    ['style', ['style']],
+                    ['font', ['bold', 'italic', 'underline', 'clear']],
+                    ['fontname', ['fontname']],
+                    ['color', ['color']],
+                    ['para', ['ul', 'ol', 'paragraph']],
+                    ['height', ['height']],
+                    ['table', ['table']],
+                    ['insert', ['link', 'picture', 'hr']],
+                    ['view', ['fullscreen', 'codeview']],
+                    ['help', ['help']],
+                    ['mybutton', ['multiColumnButton']]
+                ],
+                buttons: {
+                    multiColumnButton: summernoteMultiColumnButton
+                }
+            });
 
+            $("#periodDescriptionSince").persianDatepicker({
+                altField: '#periodDescriptionSinceAlt',
+                altFormat: "YYYY MM DD",
+                observer: true,
+                format: 'YYYY/MM/DD',
+                altFieldFormatter: function (unixDate) {
+                    var d = new Date(unixDate).toISOString();
+                    d = d.substring(0, d.indexOf('T'));
+                    return d;
+                }
+            });
+
+            $("#periodDescriptionTill").persianDatepicker({
+                altField: '#periodDescriptionTillAlt',
+                altFormat: "YYYY MM DD",
+                observer: true,
+                format: 'YYYY/MM/DD',
+                altFieldFormatter: function (unixDate) {
+                    var d = new Date(unixDate).toISOString();
+                    d = d.substring(0, d.indexOf('T'));
+                    return d;
+                }
+            });
         });
 
         $(document).on('change', '#productFileTypeSelect', function () {
@@ -622,7 +744,6 @@
         });
 
         $(document).on('click', '.removeLiveDescription', function () {
-            console.log($(this).data('action'));
             $.ajax({
                 type: 'POST',
                 url: $(this).data('action'),
@@ -633,25 +754,55 @@
                         location.reload();
                     },
                     401: function (ressponse) {
-                        location.reload();
+                        toastr['error']('خطای 401', 'پیام سیستم');
                     },
                     403: function (response) {
-                        window.location.replace('/403');
+                        toastr['error']('خطای 403. دسترسی غیرمجاز', 'پیام سیستم');
                     },
                     404: function (response) {
-                        window.location.replace('/404');
+                        toastr['error']('خطای 404. یافت نشد', 'پیام سیستم');
                     },
                     500: function (response) {
                         console.log(response.responseText);
-                        toastr['error']('خطای برنامه!', 'پیام سیستم');
+                        toastr['error']('خطای 500 . خطای برنامه!', 'پیام سیستم');
                     },
                     503: function (response) {
-                        toastr['error']('خطای پایگاه داده!', 'پیام سیستم');
+                        toastr['error']('خطای 503', 'پیام سیستم');
+                    }
+                }
+            });
+        });
+
+        $(document).on('click', '.removePeriodDescription', function () {
+            $.ajax({
+                type: 'POST',
+                url: $(this).data('action'),
+                data: {_method:'DELETE'},
+                statusCode: {
+                    200: function (response) {
+                        toastr['success']('توضیح بازه ای با موفقیت حذف شد', 'پیام سیستم');
+                        location.reload();
+                    },
+                    401: function (ressponse) {
+                        toastr['error']('خطای 401', 'پیام سیستم');
+                    },
+                    403: function (response) {
+                        toastr['error']('خطای 403. دسترسی غیرمجاز', 'پیام سیستم');
+                    },
+                    404: function (response) {
+                        toastr['error']('خطای 404. یافت نشد', 'پیام سیستم');
+                    },
+                    500: function (response) {
+                        console.log(response.responseText);
+                        toastr['error']('خطای 500 . خطای برنامه!', 'پیام سیستم');
+                    },
+                    503: function (response) {
+                        toastr['error']('خطای 503', 'پیام سیستم');
                     }
                 }
             });
         });
     </script>
-    
+
     <script src="/acm/AlaatvCustomFiles/js/admin/page-productAdmin.js" type="text/javascript"></script>
 @endsection

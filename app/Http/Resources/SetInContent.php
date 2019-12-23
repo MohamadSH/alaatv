@@ -31,13 +31,10 @@ class SetInContent extends JsonResource
         return [
             'id'                        => $this->id,
             'redirect_url'              => $this->when(isset($this->redirectUrl) , $this->redirectUrl),
-            'name'                      => $this->when(isset($this->name) , $this->name),
-            'short_name'                => $this->when(isset($this->shortName) , $this->shortName),
+            'title'                      => $this->when(isset($this->name) , $this->name),
+            'short_title'                => $this->when(isset($this->shortName) , $this->shortName),
             'photo'                     => $this->when(isset($this->photo) , $this->photo),
             'url'                       => new Url($this),
-            'list_contents'             => [
-                'web' => $this->content_url,
-            ],
         ];
     }
 }

@@ -676,7 +676,7 @@
                     </ul>
                 </div>
             </li>
-            
+
 
 {{--            <li class="m-menu__item  m-menu__item--submenu d-none @if(isset($pageName) && strcmp($pageName , "content")==0) m-menu__item--active @endif" aria-haspopup="true" m-menu-submenu-toggle="hover">--}}
 {{--                <a href="javascript:" class="m-menu__link m-menu__toggle">--}}
@@ -879,6 +879,16 @@
                     </li>
                     @endrole
 
+                    @permission((config('constants.REPORT_ADMIN_PANEL_ACCESS')))
+                    <li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1">
+                        <a href="{{ action("Web\AdminController@adminReport") }}" class="m-menu__link ">
+                            <span class="m-menu__item-here"></span>
+                            <i class="m-menu__link-icon flaticon-technology"></i>
+                            <span class="m-menu__link-text">گزارش خاص</span>
+                        </a>
+                    </li>
+                    @endpermission
+
                     @permission((config('constants.LIST_BLOCK_ACCESS')))
                     <li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1">
                         <a href="{{ action("Web\AdminController@adminBlock") }}" class="m-menu__link ">
@@ -951,16 +961,6 @@
                         </a>
                     </li>
                     @endpermission
-
-                {{--                    @permission((config('constants.REPORT_ADMIN_PANEL_ACCESS')))--}}
-{{--                    <li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1">--}}
-{{--                        <a href="{{ action("Web\AdminController@adminReport") }}" class="m-menu__link ">--}}
-{{--                            <span class="m-menu__item-here"></span>--}}
-{{--                            <i class="m-menu__link-icon flaticon-technology"></i>--}}
-{{--                            <span class="m-menu__link-text">گزارش</span>--}}
-{{--                        </a>--}}
-{{--                    </li>--}}
-{{--                    @endpermission--}}
 
                     @role((config("constants.ROLE_ADMIN")))
                     <li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1">

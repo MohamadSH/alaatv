@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Web;
 
 use Carbon\Carbon;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\{DB, Input};
+use Illuminate\Support\Facades\{DB};
 use Illuminate\Support\Str;
 use App\Http\Controllers\Controller;
 use App\{Bon,
@@ -1000,22 +1000,22 @@ class BotsController extends Controller
         //        $rows = Excel::load('storage\\exports\\'. $fileName)->get();
     }
 
-    public function tagBot()
+    public function tagBot(Request $request)
     {
         $counter = 0;
         try {
             dump("start time:".Carbon::now("asia/tehran"));
-            if (!Input::has("t")) {
+            if (!$request->has("t")) {
                 return response()->json(["message" => "Wrong inputs: Please pass parameter t. Available values: v , p , cs , pr , e , b ,a"], Response::HTTP_UNPROCESSABLE_ENTITY);
             }
-            $type = Input::get("t");
+            $type = $request->get("t");
             switch ($type) {
                 case "v": //Video
                     $bucket = "content";
                     $items  = Content::where("contenttype_id", 8)
                         ->where("enable", 1);
-                    if (Input::has("id")) {
-                        $contentId = Input::get("id");
+                    if ($request->has("id")) {
+                        $contentId = $request->get("id");
                         $items->where("id", $contentId);
                     }
                     $items = $items->get();
@@ -1219,8 +1219,8 @@ class BotsController extends Controller
                     $bucket = "content";
                     $items  = Content::where("contenttype_id", 1)
                         ->where("enable", 1);
-                    if (Input::has("id")) {
-                        $contentId = Input::get("id");
+                    if ($request->has("id")) {
+                        $contentId = $request->get("id");
                         $items->where("id", $contentId);
                     }
                     $items = $items->get();
@@ -1500,8 +1500,8 @@ class BotsController extends Controller
                     $bucket = "contentset";
                     $items  = Contentset::orderBy("id")
                         ->where("enable", 1);
-                    if (Input::has("id")) {
-                        $id    = Input::get("id");
+                    if ($request->has("id")) {
+                        $id    = $request->get("id");
                         $items = $items->where("id", $id);
                     }
                     $items = $items->get();
@@ -1509,8 +1509,8 @@ class BotsController extends Controller
                     break;
                 case "pr": //Product
                     $bucket = "product";
-                    if (Input::has("id")) {
-                        $id         = Input::get("id");
+                    if ($request->has("id")) {
+                        $id         = $request->get("id");
                         $productIds = [$id];
                     } else {
                         $productIds = [

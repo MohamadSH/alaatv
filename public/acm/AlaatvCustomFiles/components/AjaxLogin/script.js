@@ -178,7 +178,8 @@ var AjaxLogin = function () {
                         status: status
                     });
                 } else if (typeof callbackOrRedirectLink === 'string') {
-                    window.location.href = callbackOrRedirectLink;
+                    // window.location.href = callbackOrRedirectLink;
+                    window.location.replace(callbackOrRedirectLink);
                 }
             },
             error: function (data) {
@@ -221,7 +222,7 @@ var AjaxLogin = function () {
             if (!checkExistLoginModal()) {
                 appendLoginModalToBody();
             }
-            $(document).off('click', '#AlaaAjaxLoginModal .AjaxLoginSubmit').on('click', '#AlaaAjaxLoginModal .AjaxLoginSubmit', function () {
+            $(document).off('click', '.AjaxLoginSubmit').on('click', '.AjaxLoginSubmit', function () {
                 validateAndSendRequest(callbackOrRedirectLink);
             });
             $(document).off('keypress', '#AlaaAjaxLoginModal input').on('keypress', '#AlaaAjaxLoginModal input', function () {

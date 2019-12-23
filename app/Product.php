@@ -176,6 +176,7 @@ use App\Traits\{DateTrait,
  * @property array recommender_contents
  * @property array sample_contents
  * @property mixed blocks
+ * @property mixed descriptionWithPeriod
  * @method static Builder|Product whereBlockId($value)
  * @method static Builder|Product whereIntroVideos($value)
  */
@@ -207,6 +208,7 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
     public const ASIATECH_PRODUCT = 224;
 
     public const RAHE_ABRISHAM = 347;
+    public const RAHE_GODARE_RIYAZI_TAJROBI_SABETI = 385;
 
     public const AMOUNT_LIMIT = [
         'نامحدود',
@@ -925,6 +927,10 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
     public function livedescriptions()
     {
         return $this->hasMany(LiveDescription::class);
+    }
+
+    public function descriptionWithPeriod(){
+        return $this->hasMany(Descriptionwithperiod::Class , 'product_id' , 'id');
     }
 
 

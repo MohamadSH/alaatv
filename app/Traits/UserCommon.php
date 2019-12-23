@@ -3,6 +3,7 @@
 use App\Events\UserAvatarUploaded;
 use App\User;
 use App\Transaction;
+use Illuminate\Support\Arr;
 use Illuminate\Validation\Rule;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
@@ -134,7 +135,7 @@ trait UserCommon
                     ->country('AUTO,IR'),
                 Rule::unique('users')
                     ->where(static function ($query) use ($data) {
-                        $query->where('nationalCode', array_get($data, 'nationalCode'))
+                        $query->where('nationalCode', Arr::get($data, 'nationalCode'))
                             ->where('deleted_at', null);
                     }),
             ],
@@ -145,7 +146,7 @@ trait UserCommon
                 'validate:nationalCode',
                 Rule::unique('users')
                     ->where(static function ($query) use ($data) {
-                        $query->where('mobile', array_get($data, 'mobile'))
+                        $query->where('mobile', Arr::get($data, 'mobile'))
                             ->where('deleted_at', null);
                     }),
             ],

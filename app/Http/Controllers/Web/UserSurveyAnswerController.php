@@ -6,17 +6,17 @@ use App\Http\Controllers\Controller;
 use App\Usersurveyanswer;
 use Auth;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Input;
+
 
 class UserSurveyAnswerController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $eventIds    = Input::get("event_id");
-        $surveyIds   = Input::get("survey_id");
-        $questionIds = Input::get("question_id");
-        if (Input::has("user_id")) {
-            $userIds = Input::get("user_id");
+        $eventIds    = $request->get("event_id");
+        $surveyIds   = $request->get("survey_id");
+        $questionIds = $request->get("question_id");
+        if ($request->has("user_id")) {
+            $userIds = $request->get("user_id");
         }
         else {
             $userIds = [Auth::user()->id];
@@ -25,19 +25,19 @@ class UserSurveyAnswerController extends Controller
         if (isset($eventIds)) {
             $userAnswers = $userAnswers->whereIn("event_id", $eventIds);
         }
-        
+
         if (isset($surveyIds)) {
             $userAnswers = $userAnswers->whereIn("survey_id", $surveyIds);
         }
-        
+
         if (isset($questionIds)) {
             $userAnswers = $userAnswers->whereIn("question_id", $questionIds);
         }
-        
+
         if (isset($userIds)) {
             $userAnswers = $userAnswers->whereIn("user_id", $userIds);
         }
-        
+
         $output = collect();
         foreach ($userAnswers->get() as $userAnswer) {
             $output->push([
@@ -45,7 +45,7 @@ class UserSurveyAnswerController extends Controller
                 "userAnswer"             => $userAnswer,
             ]);
         }
-        
+
         return $output;
     }
 
@@ -60,7 +60,7 @@ class UserSurveyAnswerController extends Controller
         else {
             $userId = Auth::user()->id;
         }
-        
+
         $userSurveyAnswer = Usersurveyanswer::where("user_id", $userId)
             ->where("event_id", $eventId)
             ->where("question_id", $questionId)

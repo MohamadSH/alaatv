@@ -11,6 +11,7 @@ use App\{Adapter\AlaaSftpAdapter,
     Block,
     Bon,
     Content,
+    Descriptionwithperiod,
     Product,
     Attributeset,
     Attributetype,
@@ -191,6 +192,22 @@ class ProductController extends Controller
 
         $isFavored = optional(optional(optional(optional($user)->favoredProducts())->where('id' , $product->id))->get())->isNotEmpty();
 
+
+        /*if($product->id == Product::RAHE_ABRISHAM && isset($user)){
+            $key = 'user:hasPurchasedRaheAbrisham:'.$user->cacheKey();
+            $hasPurchasedRaheAbrisham =   Cache::tags(['user_'.$user->id.'_closedOrders' ])
+                ->remember($key, config('constants.CACHE_600'), function () use ($user) {
+                    return $user->products()->contains(Product::RAHE_ABRISHAM);
+                });
+
+            $lastSet = $product->sets->sortByDesc('created_at')->first() ;
+            $lastSetPamphlets = $lastSet->where('contenttype_id' , Content::CONTENT_TYPE_PAMPHLET);
+            $lastSetVideos    = $lastSet->where('contenttype_id' , Content::CONTENT_TYPE_VIDEO);
+            $periodDescription = $product->descriptionWithPeriod;
+
+            return view('product.customShow.raheAbrisham', compact('product', 'block' , 'liveDescriptions', 'isFavored' , 'lastSet' , 'lastSetPamphlets' , 'lastSetVideos' , 'hasPurchasedRaheAbrisham' , 'periodDescription'));
+        }*/
+
         $isForcedGift = false;
         $shouldBuyProductId = null;
         $shouldBuyProductName = '';
@@ -265,11 +282,13 @@ class ProductController extends Controller
 
         $sets = $product->sets()->get();
 
+        $descriptionsWithPeriod = $product->descriptionWithPeriod ;
+
         return view('product.edit',
             compact('product', 'amountLimit', 'defaultAmountLimit', 'enableStatus', 'defaultEnableStatus',
                 'attributesets', 'bons', 'productFiles', 'blocks' , 'allBlocks' , 'sets',
                 'productFileTypes', 'defaultProductFileOrders', 'products', 'producttype', 'productPhotos',
-                'defaultProductPhotoOrder', 'tags' , 'sampleContents' , 'recommenderContents' , 'liveDescriptions'));
+                'defaultProductPhotoOrder', 'tags' , 'sampleContents' , 'recommenderContents' , 'liveDescriptions' , 'descriptionsWithPeriod'));
     }
 
     public function update(EditProductRequest $request, Product $product)

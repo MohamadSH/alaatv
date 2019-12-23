@@ -143,7 +143,6 @@ class SlideShowController extends Controller
 
         if ($slide->update()) {
             session()->put('success', 'اسلاید با موفقیت اصلاح شد!');
-            session()->put('warning', 'کش را پاک کنید');
         }
         else {
             session()->put('error', 'خطای پایگاه داده!');

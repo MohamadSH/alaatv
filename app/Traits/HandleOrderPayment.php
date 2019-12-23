@@ -50,8 +50,8 @@ trait HandleOrderPayment
     protected function updateOrderPaymentStatus(Order $order): array
     {
         if($order->totalPaidCost() < $order->totalCost()){
-            if($order->paymentstatus_id != config('constants.PAYMENT_STATUS_VERIFIED_INDEBTED'))
-            {
+            $paymentstatus_id = $order->paymentstatus_id;
+            if($order->paymentstatus_id != config('constants.PAYMENT_STATUS_VERIFIED_INDEBTED')) {
                 $paymentstatus_id = config('constants.PAYMENT_STATUS_INDEBTED');
             }
         }else{

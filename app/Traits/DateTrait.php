@@ -167,16 +167,18 @@ trait DateTrait
     /**
      * Converting validSince field to Jalali
      *
+     * @param bool $withTime
      * @return string
      */
     public function ValidSince_Jalali($withTime=true):string
     {
-        $explodedDateTime = explode(" ", $this->validSince);
+        $validSince = $this->validSince;
+        $explodedDateTime = explode(' ', $validSince);
         $explodedTime     = $explodedDateTime[1];
-        $explodedDate     = $this->convertDate($this->validSince, "toJalali");
+        $explodedDate     = $this->convertDate($validSince, 'toJalali');
 
         if($withTime) {
-            return ($explodedDate." ".$explodedTime);
+            return ($explodedDate.' '.$explodedTime);
         }else{
             return $explodedDate.'';
         }
@@ -185,15 +187,17 @@ trait DateTrait
     /**
      * Converting validUntil field to Jalali
      *
+     * @param bool $withTime
      * @return string
      */
     public function ValidUntil_Jalali()
     {
-        $explodedDateTime = explode(" ", $this->validUntil);
+        $validUntil = $this->validUntil;
+        $explodedDateTime = explode(' ', $validUntil);
         $explodedTime     = $explodedDateTime[1];
-        $explodedDate     = $this->convertDate($this->validUntil, "toJalali");
+        $explodedDate     = $this->convertDate($validUntil, 'toJalali');
 
-        return ($explodedDate." ".$explodedTime);
+        return ($explodedDate.' '.$explodedTime);
     }
 
     /**

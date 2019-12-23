@@ -14,7 +14,6 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Input;
 use SEO;
 
 class ProductLandingController extends Controller
@@ -95,8 +94,8 @@ class ProductLandingController extends Controller
         return redirect()->route('web.landing.5', $request->all());
 
         $gheireHozoori = config('constants.ORDOO_GHEIRE_HOZOORI_NOROOZ_97_PRODUCT_ALLTOGHETHER');
-        if (Input::has('utm_term')) {
-            $utm_term = Input::get('utm_term');
+        if ($request->has('utm_term')) {
+            $utm_term = $request->get('utm_term');
             switch ($utm_term) {
                 case '700':
                     $gheireHozoori = config('constants.ORDOO_GHEIRE_HOZOORI_NOROOZ_97_PRODUCT_ALLTOGHETHER');
@@ -563,9 +562,9 @@ class ProductLandingController extends Controller
     /**
      * Products Special Landing Page
      *
-     * @param  Request  $request
+     * @param Request $request
      *
-     * @return Response
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function landing10(Request $request)
     {
@@ -630,12 +629,12 @@ class ProductLandingController extends Controller
             383 => [
                 'name' => 'همایش حسابان گدار',
                 'url' => route('product.show' , 383),
-                'hours' => 0
+                'hours' => 11
             ],
             385 => [
                 'name' => 'همایش ریاضی تجربی گدار (ویژه راه ابریشم)',
                 'url' => route('product.show' , 385),
-                'hours' => 0
+                'hours' => 7
             ],
         ];
 
