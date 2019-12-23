@@ -51,6 +51,7 @@ class Product extends AlaaJsonResource
             'sample_photos' => $this->when($this->hasSamplePhoto(), $this->getSamplePhoto()), //It is not a relationship
             'gift'          => $this->when($this->gift->isNotEmpty(), $this->getGift()), //It is not a relationship
             'sets'          => $this->when($this->sets->isNotEmpty(), $this->getSet()),
+            'blocks'        => new BlockCollection(optional($this)->blocks),
             'attributes'    => $this->getAttributes(),
             'children'      => $this->when($this->children->isNotEmpty(), $this->getChildren()),
             'page_view'     => $this->when(isset($this->page_view), $this->page_view),
