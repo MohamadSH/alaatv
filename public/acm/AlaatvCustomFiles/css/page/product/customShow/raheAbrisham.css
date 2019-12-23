@@ -115,6 +115,10 @@
     left: 25%;
     top: -25px;
 }
+.entekhabeFarsangVideoAndPamphlet .m-portlet__body {
+    position: relative;
+    padding-bottom: 10px;
+}
 .entekhabeFarsangVideoAndPamphlet .nav.nav-tabs {
     width: max-content;
     margin: auto;
@@ -147,6 +151,9 @@
     top: 20px;
     right: 20px;
 }
+.entekhabeFarsangVideoAndPamphlet .tab-content {
+    padding-right: 40px;
+}
 .entekhabeFarsangVideoAndPamphlet .tab-content .tab-pane {
     position: relative;
 }
@@ -159,6 +166,9 @@
     width: 145px;
     background: transparent;
     background: linear-gradient(90deg, rgb(255, 255, 255) 0%, rgba(255,255,255,0) 60%);
+}
+.entekhabeFarsangVideoAndPamphlet .tab-content .ScrollCarousel  {
+    min-height: 110px;
 }
 .entekhabeFarsangVideoAndPamphlet .tab-content .tab-pane .ScrollCarousel-next,
 .entekhabeFarsangVideoAndPamphlet .tab-content .tab-pane .ScrollCarousel-previous {
@@ -222,6 +232,36 @@
     align-items: center;
     overflow: hidden;
 }
+.sectionFilterCol {
+    position: absolute;
+    top: 70px;
+    right: -10px;
+}
+.sectionFilterCol .sectionFilter-item {
+    margin-bottom: 5px;
+    background: rgb(255, 204, 0);
+    color: #020200;
+    padding: 5px;
+    -webkit-box-shadow: 5px 5px 10px -7px rgba(0,0,0,0.75);
+    -moz-box-shadow: 5px 5px 10px -7px rgba(0,0,0,0.75);
+    box-shadow: 5px 5px 10px -7px rgba(0,0,0,0.75);
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.1s;
+}
+.sectionFilterCol .sectionFilter-itemselected {
+
+}
+.sectionFilterCol .sectionFilter-item:hover {
+    -webkit-box-shadow: 5px 5px 10px -5px rgba(0,0,0,0.75);
+    -moz-box-shadow: 5px 5px 10px -5px rgba(0,0,0,0.75);
+    box-shadow: 5px 5px 10px -5px
+    rgba(0,0,0,0.75);
+    transform: scale(1.1, 1);
+    transform-origin: left;
+}
 /*entekhabeFarsang*/
 
 
@@ -277,9 +317,9 @@
 
 .RepurchaseRow .Repurchase-priceAndAddToCart .col {
     display: flex;
-    justify-content: space-between;
-    padding-right: 50px;
-    padding-top: 10px;
+    justify-content: flex-start;
+    padding-right: 15px;
+    padding-top: 0;
 }
 .RepurchaseRow .Repurchase-priceAndAddToCart .col .btnAddToCart {
     font-size: 1.2rem;

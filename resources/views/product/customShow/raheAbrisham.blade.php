@@ -82,7 +82,7 @@
         'title' => 'خرید مجدد دوره راه ابریشم',
         'closeIcon' => true,
         'class' => 'RepurchaseRow',
-        'content' => view('product.partials.raheAbrisham.repurchase')
+        'content' => view('product.partials.raheAbrisham.repurchase', compact('product'))
     ])
 
     @include('product.partials.raheAbrisham.descriptionBox', [
@@ -164,6 +164,41 @@
             },
             @endforeach
         ];
+        var LastSetData = {
+            set: {
+                id: '{{$sets->first()->id}}',
+                name: '{{$sets->first()->name}}',
+                url: {
+                    web: '{{$sets->first()->url}}'
+                }
+            },
+            files: {
+                pamphlets: [
+                    @foreach($lastSetPamphlets as $item)
+                        {
+                            name: '{{$item->name}}',
+                            file: {
+                                pamphlet: [
+                                    {
+                                        link: '$item->file->first()->first()->link'
+                                    }
+                                ]
+                            }
+                        },
+                    @endforeach
+                ],
+                videos: [
+                    @foreach($lastSetVideos as $item)
+                        {
+                            thumbnail: '{{$item->thumbnail}}',
+                            url: {
+                                web: '{{$item->url}}'
+                            }
+                        },
+                    @endforeach
+                ]
+            }
+        };
     </script>
 {{--    <script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>--}}
     <script src="{{ asset('/acm/AlaatvCustomFiles/components/ScrollCarousel/js.js') }}"></script>
