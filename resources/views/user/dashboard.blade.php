@@ -99,7 +99,7 @@
                                         'key'=> $productKey,
                                         'name'=> $product->name,
                                         'src'=> $product->photo,
-                                        'sets'=> $product->sets,
+                                        'sets'=> $product->sets->sortBy('pivot.order'),
                                         'category'=> $product->category,
                                         'sort1' => $product->sorting['completed_at_desc'],
                                         'sort2' => $product->sorting['completed_at_asc']

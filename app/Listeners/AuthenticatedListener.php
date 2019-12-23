@@ -16,6 +16,6 @@ class AuthenticatedListener
      */
     public function handle(Authenticated $event)
     {
-        Cookie::queue(cookie()->forever('nocache', '1'));
+        setcookie( 'nocache', '1', time() + (86400*30), '/');
     }
 }
