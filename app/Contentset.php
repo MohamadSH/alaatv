@@ -324,6 +324,11 @@ class Contentset extends BaseModel implements Taggable, SeoInterface , Favorable
         return isset($contentId) ? route('c.show' , $contentId) : '';
     }
 
+    public function getShowUrlAttribute()
+    {
+        return route('set.show' , $this->id);
+    }
+
     public function getSetUrlAttribute($value): string
     {
         return route('set.show' , $this->id );

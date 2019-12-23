@@ -212,7 +212,7 @@ class ProductController extends Controller
         $shouldBuyProductId = null;
         $shouldBuyProductName = '';
         $hasPurchasedShouldBuyProduct = false;
-        if($product->id == Product::RAHE_GODARE_RIYAZI_TAJROBI_SABETI){
+        if($product->id == Product::GODARE_RIYAZI_TAJROBI_SABETI){
             $isForcedGift = true;
             $shouldBuyProductName = 'راه ابریشم';
             $shouldBuyProductId = Product::RAHE_ABRISHAM  ;
