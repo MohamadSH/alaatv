@@ -3,6 +3,7 @@
 namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Arr;
 
 /**
  * Class Content
@@ -43,6 +44,15 @@ class ContentInSet extends JsonResource
                 return [
                     'video'    => $this->when(isset($videoFileCollection) , function () use ($videoFileCollection) { return VideoFile::collection($videoFileCollection); } ),
                     'pamphlet' => $this->when(isset($pamphletFileCollection) , function () use ($pamphletFileCollection) { return PamphletFile::collection($pamphletFileCollection); } ),
+//                    'pamphlet' => $this->when(isset($pamphletFileCollection) , function () use ($pamphletFileCollection)
+//                    {
+//                        return [
+//                            'link'    => $pamphletFileCollection[0]->link,
+//                            'ext'     => $pamphletFileCollection[0]->ext,
+//                            'size'    => $pamphletFileCollection[0]->size,
+//                            'caption' => $pamphletFileCollection[0]->caption
+//                            ];
+//                    } ),
                 ];
             }),
             'duration'       => $this->when(isset($this->duration) , $this->duration),

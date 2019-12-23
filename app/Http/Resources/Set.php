@@ -33,7 +33,7 @@ class Set extends JsonResource
             'tags'                  => $this->when(isset($this->tags) , function (){return new Tag($this->tags);}),
             'contents_count'        => $this->contents_count,
             'active_contents_count' => $this->activeContents->count() ,
-            'url' => new Url($this) ,
+            'url' => new UrlForSet($this) ,
             'author'         => $this->when(isset($this->author) , $this->author),
             'created_at'     => $this->when(isset($this->created_at) , function (){return $this->created_at;}),
             'updated_at'     => $this->when(isset($this->updated_at) , function (){return $this->updated_at;}),
