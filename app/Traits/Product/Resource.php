@@ -6,12 +6,31 @@ namespace App\Traits\Product;
 
 use App\Http\Resources\Child;
 use App\Http\Resources\Gift;
+use App\Http\Resources\Price;
 use App\Http\Resources\ProductSamplePhoto;
 use App\Http\Resources\ProductSet;
 use App\Http\Resources\Tag;
+use App\Http\Resources\Url;
 
 trait Resource
 {
+
+    /**
+     * @return Url
+     */
+    private function getUrl(): Url
+    {
+        return new Url($this);
+    }
+
+    /**
+     * @return Price
+     */
+    private function getPrice(): Price
+    {
+        return new Price($this->price);
+    }
+
     private function getChildren()
     {
         return $this->children->isNotEmpty() ? Child::collection($this->children) : null;

@@ -45,9 +45,9 @@ class Child extends AlaaJsonResource
             'id'           => $this->id,
             'redirect_url' => $this->when(isset($this->redirectUrl), $this->redirectUrl),
             'title'        => $this->when(isset($this->name), $this->name),
-            'price'        => $this->price,
+            'price'        => $this->getPrice(),
             'intro_video'  => $this->when(isset($this->introVideo), $this->introVideo),
-            'url'          => new Url($this),
+            'url'          => $this->getUrl(),
             'photo'        => $this->when(isset($this->photo), $this->photo),
             'gift'         => $this->when($this->gift->isNotEmpty(), $this->getGift()), //It is not a relationship
             'attributes'   => $this->getAttributes(),

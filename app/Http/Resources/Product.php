@@ -43,10 +43,10 @@ class Product extends AlaaJsonResource
             'category'      => $this->when(isset($this->category), $this->category),
             'title'         => $this->when(isset($this->name), $this->name),
             'description'   => $this->getDescription(),
-            'price'         => new Price($this->price),
+            'price'         => $this->getPrice(),
             'tags'          => $this->when(isset($this->tags), $this->getTags()),
             'intro_video'   => $this->when(isset($this->introVideo), $this->introVideo),
-            'url'           => new Url($this),
+            'url'           => $this->getUrl(),
             'photo'         => $this->when(isset($this->photo), $this->photo),
             'sample_photos' => $this->when($this->hasSamplePhoto(), $this->getSamplePhoto()), //It is not a relationship
             'gift'          => $this->when($this->gift->isNotEmpty(), $this->getGift()), //It is not a relationship
