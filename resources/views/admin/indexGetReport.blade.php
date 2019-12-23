@@ -97,19 +97,18 @@
                                         @endif
                                     </td>
                                     <td>
-                                        <?php $raheAbrisham = \App\Order::where('orderstatus_id' , config('constants.ORDER_STATUS_CLOSED'))
-                                                ->where('user_id' , $user->id)
-                                                ->whereIn('paymentstatus_id' , [config('constants.PAYMENT_STATUS_UNPAID')])
-                                                ->whereHas('orderproducts' , function ($q2){
-                                                    $q2->where('product_id' , \App\Product::RAHE_ABRISHAM );
-                                                })->get()->isNotEmpty() &&
-                                            \App\Order::where('orderstatus_id' , config('constants.ORDER_STATUS_CLOSED'))
-                                                ->where('user_id' , $user->id)
-                                                ->whereIn('paymentstatus_id' , [config('constants.PAYMENT_STATUS_PAID') , config('constants.PAYMENT_STATUS_INDEBTED') , config('constants.PAYMENT_STATUS_VERIFIED_INDEBTED') ])
-                                                ->whereHas('orderproducts' , function ($q4){
-                                                    $q4->where('product_id' , \App\Product::RAHE_ABRISHAM );
-                                                })->get() ?>
-                                        @if(->isEmpty())
+                                        @if(\App\Order::where('orderstatus_id' , config('constants.ORDER_STATUS_CLOSED'))
+                                                        ->where('user_id' , $user->id)
+                                              ->whereIn('paymentstatus_id' , [config('constants.PAYMENT_STATUS_UNPAID')])
+                                              ->whereHas('orderproducts' , function ($q2){
+                                                  $q2->where('product_id' , \App\Product::RAHE_ABRISHAM );
+                                              })->get()->isNotEmpty() &&
+                                      \App\Order::where('orderstatus_id' , config('constants.ORDER_STATUS_CLOSED'))
+                                            ->where('user_id' , $user->id)
+                                            ->whereIn('paymentstatus_id' , [config('constants.PAYMENT_STATUS_PAID') , config('constants.PAYMENT_STATUS_INDEBTED') , config('constants.PAYMENT_STATUS_VERIFIED_INDEBTED') ])
+                                            ->whereHas('orderproducts' , function ($q4){
+                                                $q4->where('product_id' , \App\Product::RAHE_ABRISHAM );
+                                            })->get()->isEmpty())
                                             ✅
                                         @else
                                             ❌
