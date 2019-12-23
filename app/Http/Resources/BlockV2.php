@@ -39,7 +39,7 @@ class BlockV2 extends JsonResource
             'id'         => $this->id,
             'title'      => $this->when(isset($this->title) ,$this->title),
             'offer'      => $this->when(isset($this->offer) , $this->offer),
-            'url'        => $this->when(isset($this->url) , $this->url),
+            'url'        => new UrlForBlock($this),
             'order'      => $this->order,
             'contents'   => $this->when(isset($contents) && $contents->isNotEmpty() , function () use ($contents) { return ContentInBlock::collection($contents) ;}),
             'sets'       => $this->when(isset($sets) && $sets->isNotEmpty() , function () use ($sets) { return SetInBlock::collection($sets) ;}),
