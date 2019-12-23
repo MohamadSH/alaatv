@@ -204,7 +204,7 @@ class SetController extends Controller
             return redirect($contentSet->redirectUrl, Response::HTTP_FOUND, $request->headers->all());
         }
 
-        if ($request->expectsJson()) {
+        if ($request->expectsJson() && !$request->has('raheAbrisham')) {
             return response()->json($contentSet);
         }
 
@@ -226,42 +226,7 @@ class SetController extends Controller
         $videos    = $contents->where('contenttype_id' , Content::CONTENT_TYPE_VIDEO);
         $articles  = $contents->where('contenttype_id' , Content::CONTENT_TYPE_ARTICLE);
 
-        $jsonLdArray = $this->getJsonLdArray($videos, $pamphlets, $articles);
-
-        $this->generateSeoMetaTags($contentSet);
-
-        $isFavored = optional(optional(optional(optional($user)->favoredSets())->where('id' , $contentSet->id))->get())->isNotEmpty();
-
-        return view('set.show', compact('contentSet', 'videos', 'pamphlets', 'articles', 'jsonLdArray' , 'order' , 'isFavored'));
-
-
-        //////////////// New Code For Rahe Abrisham
-
-        /*$user = $request->user();
-        $order = $request->get('order' , 'asc');
-        if (isset($contentSet->redirectUrl)) {
-            return redirect($contentSet->redirectUrl, Response::HTTP_FOUND, $request->headers->all());
-        }
-
-        $contents = $contentSet->getActiveContents2();
-        if ($order === 'desc') {
-            $contents = $contents->sortByDesc('order');
-        }
-
-
-        // ToDo : To get sorted contents grouped by section
-//        Note : can't add sortBy to this
-//        $contents = $contentSet->active_contents_by_section;
-
-        if($contents->isEmpty()){
-            return redirect(route('web.home'));
-        }
-
-        $pamphlets = $contents->where('contenttype_id' , Content::CONTENT_TYPE_PAMPHLET);
-        $videos    = $contents->where('contenttype_id' , Content::CONTENT_TYPE_VIDEO);
-        $articles  = $contents->where('contenttype_id' , Content::CONTENT_TYPE_ARTICLE);
-
-        if ($request->expectsJson()) {
+        if ($request->expectsJson() ) {
             $files = [];
             if(isset($pamphlets) && $pamphlets->isNotEmpty()){
                 $files['pamphlets'] = ContentResource::collection($pamphlets);
@@ -287,7 +252,7 @@ class SetController extends Controller
 
         $isFavored = optional(optional(optional(optional($user)->favoredSets())->where('id' , $contentSet->id))->get())->isNotEmpty();
 
-        return view('set.show', compact('contentSet', 'videos', 'pamphlets', 'articles', 'jsonLdArray' , 'order' , 'isFavored'));*/
+        return view('set.show', compact('contentSet', 'videos', 'pamphlets', 'articles', 'jsonLdArray' , 'order' , 'isFavored'));
     }
 
     public function edit(Contentset $set)
