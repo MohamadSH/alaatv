@@ -89,14 +89,14 @@ class Mix {
 
     mixAll() {
         this.mixBase();
-        // this.mixPages();
+        this.mixPages();
         // this.mixUser();
         // this.mixLanding();
         this.mixProduct();
         // this.mixPageContentShow();
         // this.mixPageSetShow();
         // this.mixCheckout();
-        this.mixAdmin();
+        // this.mixAdmin();
         this.mixCopyDirectory();
 
         // if (this.mix.inProduction()) {
@@ -329,14 +329,14 @@ class Mix {
         );
     }
     mixPages() {
-        this.mixPageLive();
-        this.mixPageShop();
-        this.mixPageError();
+        // this.mixPageLive();
+        // this.mixPageShop();
+        // this.mixPageError();
         this.mixAuthLogin();
-        this.mixPageDonate();
-        this.mixPageHomePage();
-        this.mixPageContactUs();
-        this.mixPageContentSearch();
+        // this.mixPageDonate();
+        // this.mixPageHomePage();
+        // this.mixPageContactUs();
+        // this.mixPageContentSearch();
     }
 
     mixPageUserOrders() {

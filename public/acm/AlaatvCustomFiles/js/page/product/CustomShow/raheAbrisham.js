@@ -128,24 +128,65 @@ var MapSVG = function () {
     function addTooltip($object, name) {
         // $object.attr('data-toggle', 'm-tooltip').attr('data-placement', 'top').attr('title', name);
         // $('[data-toggle="m-tooltip"]').tooltip();
-        var boundingClientRect = $object[0].getBoundingClientRect(),
-            mapContainerBoundingClientRect = getMapContainerBoundingClientRect(),
+        var element = $object[0].getBoundingClientRect(),
+            mapContainerRect = getMapContainerBoundingClientRect(),
             tooltipWidth = 75,
             tooltipHeight = 25,
-            width = boundingClientRect.width,
-            top = boundingClientRect.top - tooltipHeight,
-            left = boundingClientRect.left + (width / 2) - (tooltipWidth / 2);
+            width = element.width,
+            top = element.top - tooltipHeight,
+            left = element.left + (width / 2) - (tooltipWidth / 2);
 
-        if (checkSvgElementIsVisible(boundingClientRect, mapContainerBoundingClientRect)) {
-            $('#mapContainer').append('<div class="MapStepLabel" style="top: '+top+'px; left: '+left+'px;">'+name+'</div>')
+        if (checkSvgElementIsVisible(element, mapContainerRect)) {
+            var tooltipPosition = calculateTooltipPosition(element, mapContainerRect);
+            $('#mapContainer').append(createTooltipHtml(tooltipPosition, name))
         }
     }
 
-    function checkSvgElementIsVisible(element, mapContainerBoundingClientRect) {
-        if (mapContainerBoundingClientRect.top < element.top &&
-            mapContainerBoundingClientRect.bottom > element.bottom &&
-            mapContainerBoundingClientRect.left < element.left &&
-            mapContainerBoundingClientRect.right > element.right) {
+    function createTooltipHtml(tooltipPosition, name) {
+        var cssLeftOrRight = (tooltipPosition.position === 'left') ? 'right' : 'left';
+        return '<div class="MapStepLabel '+tooltipPosition.position+'" style="top: '+tooltipPosition.top+'px; '+cssLeftOrRight+': '+tooltipPosition.left+'px;">'+name+'</div>';
+    }
+
+    function calculateTooltipPosition(element, mapContainerRect) {
+        var tooltipWidth = 75,
+            tooltipHeight = 25,
+            tooltipPointerHeight = 10,
+            elementWidth = element.width,
+            top = element.top - tooltipHeight,
+            midTop = element.top + (element.height/2),
+            left = element.left + (elementWidth / 2) - (tooltipWidth / 2),
+            direction = 'top',
+            screenWidth =  screen.width;
+
+        if (top < mapContainerRect.top) {
+            top = element.bottom + tooltipPointerHeight;
+            direction = 'bottom';
+        } else {
+            direction = 'top';
+        }
+
+        if (left < mapContainerRect.left && direction !== 'top') {
+            left = element.right + tooltipPointerHeight;
+            top = midTop;
+            direction = 'right';
+        } else if (element.right > mapContainerRect.right && direction !== 'top') {
+            left = screenWidth -  element.left + tooltipPointerHeight;
+            top = midTop;
+            direction = 'left';
+        }
+
+        return {
+            top: top,
+            left: left,
+            position: direction
+        };
+    }
+
+    function checkSvgElementIsVisible(element, mapContainerRect) {
+        if (mapContainerRect.top < element.bottom &&
+            mapContainerRect.bottom > element.top &&
+            mapContainerRect.left < element.right &&
+            mapContainerRect.right > element.left) {
             return true;
         } else {
             return false;
@@ -206,17 +247,17 @@ var MapSVG = function () {
     }
 
     function initPanZoom() {
-        $('#mapContainer').css({'height': getFarsangMapHeight() + 'px'});
-        calculateMapZoomForInit();
-        var svgMapElement = document.getElementById('farsangMappSvg'),
+        setHeightOfMap();
+        var svgMapElement = getSvgMapElement(),
             startScale = calculateMapZoomForInit();
+
         // https://github.com/timmywil/panzoom#documentation
         panzoom = Panzoom(svgMapElement, {
             contain: 'outside',
             // panOnlyWhenZoomed: false,
             step: 1.5, // The step affects zoom calculation when zooming with a mouse wheel, when pinch zooming, or when using zoomIn/zoomOut
             startScale: 1, // Scale used to set the beginning transform
-            maxScale: 10, // The maximum scale when zooming
+            maxScale: 15, // The maximum scale when zooming
             minScale: startScale // The minimum scale when zooming
         });
 
@@ -230,7 +271,20 @@ var MapSVG = function () {
         //     maxScale: 2000,
         //     minScale: 1,
         // });
-        panzoom.pan(5, 5);
+        // panzoom.pan(5, 5);
+        addEventListener();
+    }
+
+    function setHeightOfMap() {
+        $('#mapContainer').css({'height': getFarsangMapHeight() + 'px'});
+    }
+
+    function getSvgMapElement() {
+        return document.getElementById('farsangMappSvg');
+    }
+
+    function addEventListener() {
+        var svgMapElement = getSvgMapElement();
         const parent = svgMapElement.parentElement;
         // parent.addEventListener('wheel', panzoom.zoomWithWheel)
         parent.addEventListener('wheel',wheelEvent);
@@ -271,6 +325,7 @@ var MapSVG = function () {
         // info.innerHTML = 'Start event. Direction: ' + direction;
     }
     function wheelEventAct(){
+        refreshAllTooltipWithDelay();
         counter2 = counter1;
         setTimeout(function(){
             if (counter2 === counter1) {
@@ -282,7 +337,8 @@ var MapSVG = function () {
         },interval);
     }
     function wheelEventEnd(){
-        showAllTooltip();
+        refreshAllTooltipWithDelay();
+        // console.log('panzoom.getScale(): ', panzoom.getScale());
         counter4 = new Date();
         // info.innerHTML = info.innerHTML + '<br>End event. Duration: ' + (counter4-counter3) + ' ms';
         marker = true;
@@ -372,6 +428,9 @@ var EntekhabeFarsang = function () {
         $.ajax({
                 type: "GET",
                 url: action,
+                data: {
+                    raheAbrisham: true
+                },
                 accept: "application/json; charset=utf-8",
                 dataType: "json",
                 contentType: "application/json; charset=utf-8",
@@ -423,7 +482,7 @@ var EntekhabeFarsang = function () {
             htmlData = '';
         for (i = 0; i < dataLength; i++) {
             htmlData += createVideoItem({
-                thumbnail: data[i].thumbnail,
+                photo: data[i].photo,
                 link: data[i].url.web
             });
         }
@@ -438,7 +497,7 @@ var EntekhabeFarsang = function () {
             htmlData = '';
         for (i = 0; i < dataLength; i++) {
             htmlData += createPamphletItem({
-                name: data[i].name,
+                title: data[i].title,
                 link: data[i].file.pamphlet[0].link
             });
         }
@@ -451,7 +510,7 @@ var EntekhabeFarsang = function () {
             '  <a href="' + data.link + '">' +
             '    <img class="lazy-image a--full-width"\n' +
             '         src="https://cdn.alaatv.com/loder.jpg?w=16&h=9"\n' +
-            '         data-src="' + data.thumbnail + '"\n' +
+            '         data-src="' + data.photo + '"\n' +
             '         alt="samplePhoto"\n' +
             '         width="253" height="142">\n' +
             '  </a>' +
@@ -478,7 +537,7 @@ var EntekhabeFarsang = function () {
             '            </svg>\n' +
             '        </div>\n' +
             '        <div class="pamphletItem-name">\n' +
-            '           ' + data.name + '\n' +
+            '           ' + data.title + '\n' +
             '        </div>\n' +
             '    </div>\n' +
             '  </a>' +
@@ -608,6 +667,9 @@ var InitAbrishamPage = function () {
             $('.helpMessageRow').fadeIn();
             $('.helpMessageRow').AnimateScrollTo();
         });
+        $(document).on('click', '.btnShowLiveDescription', function () {
+            $('.liveDescriptionRow').AnimateScrollTo();
+        });
         $(document).on('click', '.descriptionBox .readMoreBtn', function () {
             $(this).fadeOut();
             $(this).parents('.descriptionBox').find('.content').removeClass('compact').addClass('collapsed');
@@ -694,4 +756,3 @@ jQuery(document).ready(function () {
     // imageObserver.observe();
 
 });
-
