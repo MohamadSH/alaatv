@@ -21,6 +21,7 @@ class PurchasedOrderproduct extends AlaaJsonResource
      * Transform the resource into an array.
      *
      * @param Request $request
+     *
      * @return array
      */
     public function toArray($request)
@@ -29,18 +30,48 @@ class PurchasedOrderproduct extends AlaaJsonResource
             return [];
         }
 
-        $this->loadMissing('product' , 'product.grand' , 'product.grand' , 'orderproducttype' , 'attributevalues');
+        $this->loadMissing('product', 'product.grand', 'product.grand', 'orderproducttype', 'attributevalues');
 
         return [
             'id'               => $this->id,
-//            'quantity'          => $this->quantity,
-            'orderproducttype' => $this->when(isset($this->orderproducttype_id) , function (){ return new Orderproducttype($this->orderproducttype);}),
-            'product'          => $this->when(isset($this->product_id) , function (){ return new PurchasedProduct($this->product); }),
-            'grandProduct'     => $this->when(isset($this->product_id) && isset($this->product->grand_id) , function () {return new PurchasedProduct($this->product->grand);}),
+            'quantity'         => $this->quantity,
+            'type'             => $this->when(isset($this->orderproducttype_id), $this->orderproducttype_id),
+            'product'          => $this->when(isset($this->product_id), $this->getProduct()),
+            'grand'            => $this->when($this->haseGrand(), $this->getGrand()),
             'price'            => $this->price,
-//            'bons'              => AttachedUserbon::collection($this->bons),
-            'attributevalues'  => $this->when($this->attributevalues->isNotEmpty() , function (){return Attributevalue::collection($this->attributevalues);}), //Not a relationship
-            'photo'            => $this->when(isset($this->photo) , $this->photo),
+            'photo'            => $this->when(isset($this->photo), $this->photo),
+            'extra_attributes' => $this->when($this->hasAttributesValues(), $this->getAttributeValues()), //Not a relationship
         ];
+    }
+
+    private function getAttributeValues()
+    {
+        return $this->hasAttributesValues() ? Attributevalue::collection($this->attributevalues) : null;
+    }
+
+    private function getProduct()
+    {
+        return isset($this->product_id) ? new PurchasedProduct($this->product) : null;
+    }
+
+    private function getGrand()
+    {
+        return $this->haseGrand() ? new PurchasedProduct($this->product->grand) : null;
+    }
+
+    /**
+     * @return bool
+     */
+    private function haseGrand(): bool
+    {
+        return isset($this->product_id) && isset($this->product->grand_id);
+    }
+
+    /**
+     * @return bool
+     */
+    private function hasAttributesValues(): bool
+    {
+        return $this->attributevalues->isNotEmpty();
     }
 }

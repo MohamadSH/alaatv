@@ -25,8 +25,9 @@ class Attributevalue extends AlaaJsonResource
         }
 
         return [
-            'attribute_id' => $this->attribute_id ,
-            'name'         => $this->when(isset($this->name) , $this->name),
+            'attribute_id' => $this->attribute_id,
+            'name'         => $this->name,
+            'extra_cost'   => optional($this->pivot)->extraCost,
         ];
     }
 }
