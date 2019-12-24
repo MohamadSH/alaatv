@@ -4,12 +4,9 @@ namespace App\Http\Middleware;
 
 use App\Http\Controllers\Web\OrderController;
 use App\Traits\OrderCommon;
-use App\User;
-use App\Userbon;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\DB;
 
 class CheckPermissionForSendOrderId
 {
@@ -37,9 +34,9 @@ class CheckPermissionForSendOrderId
     /**
      * Handle an incoming request.
      *
-     * @param \Illuminate\Http\Request $request
-     * @param \Closure $next
-     * @param null $guard
+     * @param Request $request
+     * @param Closure $next
+     * @param null    $guard
      *
      * @return mixed
      */
@@ -53,7 +50,7 @@ class CheckPermissionForSendOrderId
                 ], Response::HTTP_FORBIDDEN);
             }
         } else {
-            $openOrder = $request->user()->getOpenOrder();;
+            $openOrder = $this->user->getOpenOrder();
             $request->offsetSet('order_id', $openOrder->id);
             $request->offsetSet('openOrder', $openOrder);
         }

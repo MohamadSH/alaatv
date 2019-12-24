@@ -11,6 +11,8 @@ use App\Product;
 use App\Traits\OrderCommon;
 use App\Traits\ProductCommon;
 use Cache;
+use Exception;
+use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
@@ -23,7 +25,6 @@ class OrderproductController extends Controller
 
     function __construct(\App\Http\Controllers\Web\OrderproductController $orderproductController)
     {
-        $this->middleware(['CheckPermissionForSendOrderId',], ['only' => ['store'],]);
         $this->orderproductController = $orderproductController;
     }
 
@@ -102,11 +103,11 @@ class OrderproductController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Orderproduct         $orderproduct
+     * @param Request      $request
+     * @param Orderproduct $orderproduct
      *
-     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\Response
-     * @throws \Exception
+     * @return ResponseFactory|Response
+     * @throws Exception
      */
     public function destroy(Request $request, Orderproduct $orderproduct)
     {
