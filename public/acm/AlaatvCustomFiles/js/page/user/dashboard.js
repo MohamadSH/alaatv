@@ -197,7 +197,7 @@ var LoadContentSet = function () {
             var link = videos[i].link,
                 title = videos[i].caption;
             if (title==='کیفیت بالا') {
-                groupBtn += '<a href="'+link+'"><button type="button" class="btn btn-success"><i class="fa fa-cloud-download-alt m--margin-right-5"></i> '+title+'</button></a>';
+                groupBtn += '<a href="' + link + '?download=1"><button type="button" class="btn btn-success"><i class="fa fa-cloud-download-alt m--margin-right-5"></i> ' + title + '</button></a>';
             }
         }
         groupBtn += '<a href="'+data.link+'"><button type="button" class="btn btn-success"><i class="fa fa-ellipsis-h m--margin-right-5"></i> بیشتر</button></a>';
