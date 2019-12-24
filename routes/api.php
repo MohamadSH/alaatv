@@ -5,13 +5,13 @@
 */
 
 use App\Http\Controllers\Api\AppVersionController;
+use App\Http\Controllers\Api\ContentController;
 use App\Http\Controllers\Api\DashboardPageController;
 use App\Http\Controllers\Api\FirebasetokenController;
+use App\Http\Controllers\Api\GetPaymentRedirectEncryptedLink;
 use App\Http\Controllers\Api\HomeController;
 use App\Http\Controllers\Api\IndexPageController;
 use App\Http\Controllers\Api\OrderController;
-use App\Http\Controllers\Api\ContentController;
-use App\Http\Controllers\Api\GetPaymentRedirectEncryptedLink;
 use App\Http\Controllers\Api\OrderproductController;
 use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\SetController;
@@ -19,11 +19,9 @@ use App\Http\Controllers\Api\ShopPageController;
 use App\Http\Controllers\Api\TagController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\ZarinpalTransactionController;
+use App\Http\Controllers\Auth\LoginController;
 
-Route::group(['middleware' => 'web'], function () {
-    Auth::routes(['verify' => true]);
-});
-
+Auth::routes(['verify' => true]);
 /*
 |--------------------------------------------------------------------------
 | V1
@@ -89,6 +87,7 @@ Route::group(['prefix' => 'v1'], function () {
 
 Route::group(['prefix' => 'v2'], function () {
     Route::get('lastVersion', [AppVersionController::class, 'show']);
+    Route::post('login', [LoginController::class, 'login']);
     Route::get('authTest', [HomeController::class, 'authTest'])->name('api.v2.authTest');
 
     Route::get('c/{c}', [ContentController::class, 'showV2'])->name('api.v2.content.show');
