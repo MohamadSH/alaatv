@@ -40,11 +40,16 @@ class Set extends AlaaJsonResource
             'tags'                  => $this->when(isset($this->tags), $this->getTags()),
             'contents_count'        => $this->contents_count,
             'active_contents_count' => $this->activeContents->count(),
-            'url'                   => new UrlForSet($this),
+            'url'                   => $this->when($this->hasUrl(), $this->hasUrl() ? new UrlForSet($this) : null),
             'author'                => $this->when(isset($this->author), $this->getAuthor()),
             'created_at'            => $this->when(isset($this->created_at), $this->created_at),
             'updated_at'            => $this->when(isset($this->updated_at), $this->updated_at),
         ];
+    }
+
+    private function hasUrl()
+    {
+        return isset($this->show_url) || isset($this->api_url_v2);
     }
 
     private function getTags()

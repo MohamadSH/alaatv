@@ -21,11 +21,12 @@ class Slideshow extends AlaaJsonResource
     public function toArray($request)
     {
         return [
-            'title'     => $this->when(isset($this->title) , $this->title),
-            'body'      => $this->when(isset($this->shortDescription) , $this->shortDescription),
-            'photo'     => $this->when(isset($this->photo) , $this->photo),
-            'link'      => $this->when(isset($this->link) , $this->link),
-            'order'     => $this->when(isset($this->order) , $this->order),
+            'id'    => $this->id,
+            'title' => $this->when(isset($this->title), $this->title),
+            'body'  => $this->when(isset($this->shortDescription), $this->shortDescription),
+            'photo' => $this->when(isset($this->photo), $this->photo),
+            'link'  => $this->when(isset($this->link), $this->link),
+            'order' => $this->when(isset($this->order), $this->order),
         ];
     }
 }
