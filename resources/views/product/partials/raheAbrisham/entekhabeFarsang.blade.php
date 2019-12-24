@@ -1,4 +1,4 @@
-<div class="alert alert-danger m--padding-30 selectEntekhabeFarsangVideoAndPamphlet" role="alert">
+<div class="alert alert-danger m--padding-30 m--margin-bottom-5 selectEntekhabeFarsangVideoAndPamphlet" role="alert">
     <div class="row">
         <div class="col-md-6">
             <p class="display-6 m--marginless">

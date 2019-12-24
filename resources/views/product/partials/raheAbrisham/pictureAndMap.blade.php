@@ -1,7 +1,7 @@
 <div class="row" id="a_top_section">
     <div class="col">
         <!--begin::Portlet-->
-        <div class="m-portlet">
+        <div class="m-portlet m--margin-bottom-10">
             <div class="m-portlet__body">
 
                 @include('partials.favorite', [
@@ -15,11 +15,11 @@
                 <div class="m-section m-section--last">
                     <div class="m-section__content">
                         <!--begin::Preview-->
-                        <div class="row">
+                        <div class="row no-gutters">
                             <div class="col-lg-3">
                                 <div>
                                     <img src="{{$product->photo}}?w=400&h=400" alt="عکس محصول@if(isset($product->name)) {{$product->name}} @endif" class="img-fluid productPicture m--marginless a--full-width"/>
-                                    <button type="button" class="btn m-btn--square btn-metal a--full-width m--margin-top-15 btnShowRepurchase">
+                                    <button type="button" class="btn m-btn--square btn-metal a--full-width m--margin-top-5 btnShowRepurchase">
                                         <p class="display-6 m--marginless">
                                             خرید مجدد این دوره
                                         </p>
@@ -27,17 +27,11 @@
                                     {!! Form::hidden('product_id',$product->id) !!}
                                 </div>
                             </div>
-                            <div class="col">
-                                <div class="row">
+                            <div class="col m--padding-left-5">
+                                <div class="row no-gutters">
                                     <div class="col">
 
-{{--                                        <div id="mapRoad"></div>--}}
-
-                                        <div class="MapStepLabel">
-                                            فرسنگ چهارم
-                                        </div>
-
-                                        <div id="mapContainer" style="width: 100%; height: 500px;">
+                                        <div id="mapContainer">
 
                                             <svg id="farsangMappSvg" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#"
                                                  xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:svg="http://www.w3.org/2000/svg" xmlns="http://www.w3.org/2000/svg"
@@ -3954,10 +3948,9 @@
 
                                         </div>
 
-{{--                                        <img src="/acm/image/raheAbrisham/raheAbrisham_konkur.png" class="img-fluid m--marginless a--full-width">--}}
                                     </div>
                                 </div>
-                                <div class="row no-gutters m--margin-top-15">
+                                <div class="row no-gutters m--margin-top-5">
                                     <div class="col-6 m--padding-right-5">
                                         <button class="btn m-btn--square btn-success a--full-width btnShowHelpMessage">
                                             <p class="display-5 m--marginless">
@@ -3966,7 +3959,7 @@
                                         </button>
                                     </div>
                                     <div class="col-6 m--padding-left-5">
-                                        <button class="btn m-btn--square btn-outline-metal a--full-width" onclick="$('.liveDescriptionRow').AnimateScrollTo();">
+                                        <button class="btn m-btn--square btn-outline-metal a--full-width btnShowLiveDescription">
                                             <p class="display-5 m--marginless">
                                                 مشاهده آخرین تغییرات
                                             </p>
@@ -3974,7 +3967,6 @@
                                     </div>
                                 </div>
                             </div>
-
                         </div>
                         <!--end::Preview-->
                     </div>
