@@ -232,7 +232,7 @@ class LoginController extends Controller
      */
     protected function sendLoginResponse(Request $request)
     {
-        if (!Str::contains($request->path(), 'api')) {
+        if ($request->hasSession()) {
             $request->session()->regenerate();
         }
 
