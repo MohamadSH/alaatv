@@ -4,13 +4,12 @@
         <div class="m-portlet">
             <div class="m-portlet__body">
 
-                <input type="hidden" name="favoriteActionUrl" value="{{ route('web.mark.favorite.product', [ 'product' => $product->id ]) }}">
-                <input type="hidden" name="unFavoriteActionUrl" value="{{ route('web.mark.unfavorite.product', [ 'product' => $product->id ]) }}">
+                @include('partials.favorite', [
+                    'favActionUrl' => route('web.mark.favorite.product', [ 'product' => $product->id ]),
+                    'unfavActionUrl' => route('web.mark.unfavorite.product', [ 'product' => $product->id ]),
+                    'isFavored' => $isFavored
+                ])
 
-                <div class="btnFavorite">
-                    <img class="btnFavorite-on {{ ($isFavored) ? '' : 'a--d-none' }}" src="https://cdn.alaatv.com/upload/fav-on.svg" width="50">
-                    <img class="btnFavorite-off {{ ($isFavored) ? 'a--d-none' : '' }}" src="https://cdn.alaatv.com/upload/fav-off.svg" width="50">
-                </div>
 
                 <!--begin::Section-->
                 <div class="m-section m-section--last">
