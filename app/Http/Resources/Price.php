@@ -2,20 +2,21 @@
 
 namespace App\Http\Resources;
 
-use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 
-class Price extends JsonResource
+class Price extends AlaaJsonResource
 {
     /**
      * Transform the resource into an array.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param Request $request
+     *
      * @return array
      */
     public function toArray($request)
     {
-        $array = (array) $this->resource;
+        $array = (array)$this->resource;
         return [
             'base'      => $this->when(Arr::has($array, 'base') , Arr::get($array, 'base') ) ,
             'discount'  => $this->when(Arr::has($array, 'discount') , Arr::get($array, 'discount') ) ,

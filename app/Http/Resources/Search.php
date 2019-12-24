@@ -2,15 +2,15 @@
 
 namespace App\Http\Resources;
 
+use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
-use Illuminate\Http\Resources\Json\JsonResource;
 
-class Search extends JsonResource
+class Search extends AlaaJsonResource
 {
     /**
      * Transform the resource into an array.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param Request $request
      *
      * @return array
      */

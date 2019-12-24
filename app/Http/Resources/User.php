@@ -2,19 +2,19 @@
 
 namespace App\Http\Resources;
 
-use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Http\Request;
 
 /**
  * Class User
  *
  * @mixin \App\User
  * */
-class User extends JsonResource
+class User extends AlaaJsonResource
 {
     /**
      * Transform the resource into an array.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param Request $request
      *
      * @return array
      */

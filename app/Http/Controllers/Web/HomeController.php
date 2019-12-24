@@ -2,30 +2,31 @@
 
 namespace App\Http\Controllers\Web;
 
-use Exception;
-use Carbon\Carbon;
-use Illuminate\Http\Response;
-use Illuminate\Routing\Redirector;
-use App\Http\Controllers\Controller;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Contracts\Encryption\DecryptException;
-use Illuminate\Support\Facades\{  Config, Storage , File};
-use App\{Notifications\sendLink,
-    UploadCenter,
-    User,
+use App\{Classes\Repository\ContentRepositoryInterface,
+    Classes\Repository\ProductRepository as ProductRepository,
+    Http\Requests\ContactUsFormRequest,
+    Http\Requests\Request,
+    Notifications\sendLink,
     Product,
     Productfile,
+    Traits\APIRequestCommon,
+    Traits\CharacterCommon,
     Traits\Helper,
-    Websitesetting,
-    Traits\UserCommon,
     Traits\ProductCommon,
     Traits\RequestCommon,
-    Http\Requests\Request,
-    Traits\CharacterCommon,
-    Traits\APIRequestCommon,
-    Http\Requests\ContactUsFormRequest,
-    Classes\Repository\ContentRepositoryInterface,
-    Classes\Repository\ProductRepository as ProductRepository};
+    Traits\UserCommon,
+    UploadCenter,
+    User,
+    Websitesetting
+};
+use App\Http\Controllers\Controller;
+use Carbon\Carbon;
+use Exception;
+use Illuminate\Contracts\Encryption\DecryptException;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Response;
+use Illuminate\Routing\Redirector;
+use Illuminate\Support\Facades\{Config, File, Storage};
 
 class HomeController extends Controller
 {
@@ -155,7 +156,7 @@ class HomeController extends Controller
                 ->action('Web\ContentController@show', $content)
                 ->setStatusCode(Response::HTTP_FOUND);
         }
-        $finalLink = $this->getSecureUrl($url);
+        $finalLink = $this->getSecureUrl($url, $request);
 
         return redirect($finalLink);
     }
@@ -771,22 +772,29 @@ class HomeController extends Controller
     }
 
     /**
-     * @param $url
+     * @param         $url
+     *
+     * @param Request $request
      *
      * @return string
      */
-    private function getSecureUrl($url): string
+    private function getSecureUrl($url, Request $request): string
     {
+        $download = $request->get('download', null);
+
         $unixTime = Carbon::today()
             ->addDays(2)->timestamp;
-        $userIP   = request()->ip();
+        $userIP = request()->ip();
         //TODO: fix diffrent Ip
-        $ipArray    = explode('.', $userIP);
+        $ipArray = explode('.', $userIP);
         $ipArray[3] = 0;
-        $userIP     = implode('.', $ipArray);
+        $userIP = implode('.', $ipArray);
 
-        $linkHash  = $this->generateSecurePathHash($unixTime, $userIP, 'TakhteKhak', $url);
-        $finalLink = $url.'?md5='.$linkHash.'&expires='.$unixTime;
+        $linkHash = $this->generateSecurePathHash($unixTime, $userIP, 'TakhteKhak', $url);
+        $finalLink = $url . '?md5=' . $linkHash . '&expires=' . $unixTime;
+        if (isset($download)) {
+            $finalLink .= '&download=1';
+        }
         return $finalLink;
     }
 }

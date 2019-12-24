@@ -4,14 +4,13 @@ namespace App\Http\Resources;
 
 use App\Contentset;
 use Illuminate\Http\Request;
-use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
  * Class Set
  *
  * @mixin Contentset
  * */
-class ProductSet extends JsonResource
+class ProductSet extends AlaaJsonResource
 {
     function __construct(Contentset $model)
     {
@@ -21,7 +20,7 @@ class ProductSet extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  Request  $request
+     * @param Request $request
      * @return array
      */
     public function toArray($request)
