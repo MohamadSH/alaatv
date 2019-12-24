@@ -3,19 +3,19 @@
 namespace App\Http\Resources;
 
 use Illuminate\Http\Request;
-use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
  * Class \App\Coupontype
  *
  * @mixin \App\Coupontype
  * */
-class Coupontype extends JsonResource
+class Coupontype extends AlaaJsonResource
 {
     /**
      * Transform the resource into an array.
      *
-     * @param  Request  $request
+     * @param Request $request
+     *
      * @return array
      */
     public function toArray($request)

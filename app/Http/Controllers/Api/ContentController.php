@@ -3,12 +3,12 @@
 namespace App\Http\Controllers\Api;
 
 use App\Content;
+use App\Http\Controllers\Controller;
+use App\Http\Resources\Content as ContentResource;
+use App\Traits\Content\ContentControllerResponseTrait;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use App\Http\Controllers\Controller;
-use App\Traits\Content\ContentControllerResponseTrait;
-use \App\Http\Resources\Content as ContentResource;
 
 class ContentController extends Controller
 {
@@ -16,7 +16,9 @@ class ContentController extends Controller
 
     public function indexV2(Request $request)
     {
-        return response();
+        return response()->json([
+            'test' => 1,
+        ]);
     }
 
     public function show(Request $request, Content $content)

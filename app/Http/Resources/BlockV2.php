@@ -3,14 +3,13 @@
 namespace App\Http\Resources;
 
 use Illuminate\Http\Request;
-use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
  * Class Block
  *
  * @mixin \App\Block
  * */
-class BlockV2 extends JsonResource
+class BlockV2 extends AlaaJsonResource
 {
     function __construct(\App\Block $model)
     {
@@ -20,7 +19,8 @@ class BlockV2 extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  Request  $request
+     * @param Request $request
+     *
      * @return array
      */
     public function toArray($request)
@@ -32,20 +32,45 @@ class BlockV2 extends JsonResource
         }
 
         $contents = $this->notRedirectedContents;
-        $sets     = $this->notRedirectedSets;
+        $sets = $this->notRedirectedSets;
         $products = $this->products;
-        $banners  = $this->banners;
+        $banners = $this->banners;
         return [
             'id'         => $this->id,
-            'title'      => $this->when(isset($this->title) ,$this->title),
-            'offer'      => $this->when(isset($this->offer) , $this->offer),
-            'url'        => new UrlForBlock($this),
+            'title'      => $this->when(isset($this->title), $this->title),
+            'offer'      => $this->when(isset($this->offer), $this->offer),
+            'url'        => $this->when(isset($this->url), isset($this->url) ? new UrlForBlock($this) : null),
             'order'      => $this->order,
-            'contents'   => $this->when(isset($contents) && $contents->isNotEmpty() , function () use ($contents) { return ContentInBlock::collection($contents) ;}),
-            'sets'       => $this->when(isset($sets) && $sets->isNotEmpty() , function () use ($sets) { return SetInBlock::collection($sets) ;}),
-            'products'   => $this->when(isset($products) && $products->isNotEmpty() , function () use ($products){ return ProductInBlock::collection($products);}),
-            'banners'    => $this->when(isset($banners) && $banners->isNotEmpty() , function () use ($banners){ return Slideshow::collection($banners);}),
-            'updated_at' => $this->when(isset($this->updated_at) , function (){ return $this->updated_at; }),
+            'contents'   => $this->when($this->collectionIsNotEmpty($contents), $this->getContents($contents)),
+            'sets'       => $this->when($this->collectionIsNotEmpty($sets), $this->getSets($sets)),
+            'products'   => $this->when($this->collectionIsNotEmpty($products), $this->getProducts($products)),
+            'banners'    => $this->when($this->collectionIsNotEmpty($banners), $this->getBanners($banners)),
+            'updated_at' => $this->when(isset($this->updated_at), $this->updated_at),
         ];
+    }
+
+    private function getContents($contents)
+    {
+        return $this->collectionIsNotEmpty($contents) ? ContentInBlock::collection($contents) : null;
+    }
+
+    private function getProducts($products)
+    {
+        return $this->collectionIsNotEmpty($products) ? ProductInBlock::collection($products) : null;
+    }
+
+    private function getSets($sets)
+    {
+        return $this->collectionIsNotEmpty($sets) ? SetInBlock::collection($sets) : null;
+    }
+
+    private function getBanners($banners)
+    {
+        return $this->collectionIsNotEmpty($banners) ? Slideshow::collection($banners) : null;
+    }
+
+    private function collectionIsNotEmpty($collection)
+    {
+        return isset($collection) && $collection->isNotEmpty();
     }
 }

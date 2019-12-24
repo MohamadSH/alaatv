@@ -2,16 +2,17 @@
 
 namespace App\Http\Resources;
 
-use Illuminate\Http\Resources\Json\JsonResource;
+use App\Contentset;
+use Illuminate\Http\Request;
 
 /**
  * Class Set
  *
- * @mixin \App\Contentset
+ * @mixin Contentset
  * */
-class SetInContent extends JsonResource
+class SetInContent extends AlaaJsonResource
 {
-    function __construct(\App\Contentset $model)
+    function __construct(Contentset $model)
     {
         parent::__construct($model);
     }
@@ -19,12 +20,13 @@ class SetInContent extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param Request $request
+     *
      * @return array
      */
     public function toArray($request)
     {
-        if (!($this->resource instanceof \App\Contentset)) {
+        if (!($this->resource instanceof Contentset)) {
             return [];
         }
 
