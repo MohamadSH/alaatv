@@ -100,41 +100,71 @@ var AjaxLogin = function () {
         $input.parents('.form-group').find('.form-control-feedback').html(message);
     }
 
+    function arabicToPersianWithEnNumber(inputString) {
+        if (typeof inputString === 'undefined' || inputString === null || inputString.length === 0) {
+            return '';
+        }
+        inputString = persianJs(inputString).arabicChar().toEnglishNumber().toString();
+        return inputString;
+    }
+
+    function getUsername() {
+        return arabicToPersianWithEnNumber(getUsernameObject().val().trim());
+    }
+
+    function getPassword() {
+        return arabicToPersianWithEnNumber(getPasswordObject().val().trim());
+    }
+
     function validateForm() {
-        var usernameObject = getUsernameObject(),
-            passwordObject = getPasswordObject(),
+        var $usernameObject = getUsernameObject(),
+            $passwordObject = getPasswordObject(),
+            usernameString = getUsername(),
+            passwordString = getPassword(),
+            $focusObject = null,
             status = true,
             message,
             regexMobile = RegExp('^09[0-9]{9}$'),
             regexMelliCode = RegExp('^\\d{10}$');
 
-        if (usernameObject.val().trim().length === 0) {
+        if (usernameString.length === 0) {
             status = false;
             message = 'شماره همراه خود را وارد کنید.';
-            changeInputFeedback(usernameObject, message);
-        } else if (!regexMobile.test(usernameObject.val().trim())) {
+            changeInputFeedback($usernameObject, message);
+            $focusObject = $usernameObject;
+        } else if (!regexMobile.test(usernameString)) {
             status = false;
             message = 'شماره همراه خود را به درستی وارد نکرده اید.';
-            changeInputFeedback(usernameObject, message);
+            changeInputFeedback($usernameObject, message);
+            $focusObject = $usernameObject;
         } else {
-            changeInputFeedback(usernameObject, '');
+            changeInputFeedback($usernameObject, '');
+            $focusObject = $passwordObject;
         }
 
-        if (passwordObject.val().trim().length === 0) {
+        if (passwordString.length === 0) {
             status = false;
             message = 'کد ملی خود را وارد کنید.';
-            changeInputFeedback(passwordObject, message);
-        } else if (passwordObject.val().trim().length !== 10) {
+            changeInputFeedback($passwordObject, message);
+            $focusObject = ($focusObject === null) ? $passwordObject : $focusObject;
+        } else if (passwordString.length !== 10) {
             status = false;
             message = 'کد ملی می بایست ده رقم باشد.';
-            changeInputFeedback(passwordObject, message);
-        } else if (!regexMelliCode.test(passwordObject.val().trim())) {
+            changeInputFeedback($passwordObject, message);
+            $focusObject = ($focusObject === null) ? $passwordObject : $focusObject;
+        } else if (!regexMelliCode.test(passwordString)) {
             status = false;
             message = 'کد ملی خود را به درستی وارد نکرده اید.';
-            changeInputFeedback(passwordObject, message);
+            changeInputFeedback($passwordObject, message);
+            $focusObject = ($focusObject === null) ? $passwordObject : $focusObject;
         } else {
-            changeInputFeedback(passwordObject, '');
+            changeInputFeedback($passwordObject, '');
         }
+
+        if($focusObject !== null) {
+            $focusObject.focus();
+        }
+
 
         return status
     }
@@ -156,22 +186,24 @@ var AjaxLogin = function () {
         showLoading();
         ajaxSetup();
 
-        var usernameObject = getUsernameObject(),
-            passwordObject = getPasswordObject();
+        var $usernameObject = getUsernameObject(),
+            $passwordObject = getPasswordObject(),
+            usernameString = getUsername(),
+            passwordString = getPassword();
 
         $.ajax({
             type: 'POST',
             url : getLoginUrlAction(),
             dataType: 'json',
             data: {
-                mobile: getUsernameObject().val().trim(),
-                password: getPasswordObject().val().trim(),
+                mobile: usernameString,
+                password: passwordString,
             },
             success: function (data) {
                 hideLoading();
                 showMessage('success', 'به آلاء خوش آمدید');
-                changeInputFeedback(usernameObject, '');
-                changeInputFeedback(passwordObject, '');
+                changeInputFeedback($usernameObject, '');
+                changeInputFeedback($passwordObject, '');
                 if (typeof callbackOrRedirectLink === 'function') {
                     callbackOrRedirectLink({
                         data: data,
@@ -186,11 +218,11 @@ var AjaxLogin = function () {
 
                 var errors = data.responseJSON.errors; // An array with all errors.
                 if(typeof errors.nationalCode !== 'undefined'){
-                    changeInputFeedback(passwordObject, errors.nationalCode[0]);
+                    changeInputFeedback($passwordObject, errors.nationalCode[0]);
                 }
                 if(typeof errors.mobile !== 'undefined'){
                     if (data.status === 422) {
-                        changeInputFeedback(usernameObject, errors.mobile[0]);
+                        changeInputFeedback($usernameObject, errors.mobile[0]);
                     } else {
                         showMessage('danger', errors.mobile[0]);
                     }
@@ -216,18 +248,30 @@ var AjaxLogin = function () {
         }
     }
 
+    function addEvents(callbackOrRedirectLink) {
+        $(document).off('click', '.AjaxLoginSubmit').on('click', '.AjaxLoginSubmit', function () {
+            validateAndSendRequest(callbackOrRedirectLink);
+        });
+        $(document).off('keypress', '#AlaaAjaxLoginModal input').on('keyup', '#AlaaAjaxLoginModal input', function () {
+            validateAndSendRequest(callbackOrRedirectLink);
+            // var code = e.keyCode || e.which;
+            // if(code === 13) { //Enter keycode
+            //     validateAndSendRequest(callbackOrRedirectLink);
+            // } else {
+            //     validateForm();
+            // }
+        });
+    }
+
     return {
         showLogin: function (loginUrlAction, callbackOrRedirectLink) {
             setLoginUrlAction(loginUrlAction);
             if (!checkExistLoginModal()) {
                 appendLoginModalToBody();
             }
-            $(document).off('click', '.AjaxLoginSubmit').on('click', '.AjaxLoginSubmit', function () {
-                validateAndSendRequest(callbackOrRedirectLink);
-            });
-            $(document).off('keypress', '#AlaaAjaxLoginModal input').on('keypress', '#AlaaAjaxLoginModal input', function () {
-                validateAndSendRequest(callbackOrRedirectLink);
-            });
+
+            addEvents(callbackOrRedirectLink);
+
             showLoginModal();
         },
         showLoginLoading: function (status, message) {

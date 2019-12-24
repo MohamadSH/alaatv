@@ -105,7 +105,7 @@ Route::group(['prefix' => 'v2'], function () {
         Route::any('user/auth2/profile', [UserController::class, 'getAuth2Profile']);
         Route::get('user/{user}', [UserController::class, 'showV2'])->name('api.v2.user.show');
         Route::put('user/{user}', [UserController::class, 'updateV2'])->name('api.v2.user.update');
-        Route::post('orderproduct', [OrderproductController::class, 'storeV2'])->name('api.v2.orderproduct.store');
+        Route::post('orderproduct', [OrderproductController::class, 'storeV2'])->name('api.v2.orderproduct.store')->middleware('CheckPermissionForSendOrderId');
         Route::delete('orderproduct/{orderproduct}', [OrderproductController::class, 'destroy'])->name('api.v2.orderproduct.destroy');
         Route::post('transaction', '\\'.ZarinpalTransactionController::class)->name('api.v2.zarinpal.transaction.store');
         Route::post('orderCoupon', [OrderController::class, 'submitCouponV2'])->name('api.v2.coupon.submit');
