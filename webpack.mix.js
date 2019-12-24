@@ -43,6 +43,7 @@ class Mix {
             'public/assets/vendors/base/vendors.bundle.js',
             'public/assets/demo/demo12/base/scripts.bundle.js',
             'node_modules/block-ui/jquery.blockUI.js',
+            'node_modules/persianjs/persian.min.js',
 
             // 'node_modules/firebase/firebase.js',
             // 'node_modules/firebase/firebase-analytics.js',
@@ -366,7 +367,6 @@ class Mix {
                 'node_modules/bootstrap-fileinput/js/fileinput.js',
                 'node_modules/persian-date/dist/persian-date.js',
                 'node_modules/persian-datepicker/dist/js/persian-datepicker.js',
-                'node_modules/persianjs/persian.min.js',
                 'public/acm/AlaatvCustomFiles/js/page/user/profile.js'
             ],
             'public/js/user-profile.js'
