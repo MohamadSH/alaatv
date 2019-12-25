@@ -2,8 +2,12 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Classes\Search\ContentSearch;
+use App\Classes\Search\ContentsetSearch;
+use App\Classes\Search\ProductSearch;
 use App\Content;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\ContentIndexRequest;
 use App\Http\Resources\Content as ContentResource;
 use App\Traits\Content\ContentControllerResponseTrait;
 use Carbon\Carbon;
@@ -14,12 +18,16 @@ class ContentController extends Controller
 {
     use ContentControllerResponseTrait;
 
-    public function indexV2(Request $request)
+    public function indexV2(ContentIndexRequest $request, ContentSearch $contentSearch, ContentsetSearch $setSearch, ProductSearch $productSearch)
     {
-        return response()->json([
-            'test' => 1,
-        ]);
+        $request->offsetSet('free', $request->get('free', [1]));
+        $contentTypes = array_filter($request->get('contentType', ['video']));
+        $filters = $request->all();
+
+        $result = $contentSearch->get(compact('filters', 'contentTypes'));
+        return ContentResource::collection($result->get($contentTypes[0]));
     }
+
 
     public function show(Request $request, Content $content)
     {
@@ -30,7 +38,7 @@ class ContentController extends Controller
 
         if (!$content->isActive()) {
             $message = '';
-            $code    = Response::HTTP_LOCKED;
+            $code = Response::HTTP_LOCKED;
             return response()->json([
                 'message' => $message,
             ], $code);
@@ -42,10 +50,11 @@ class ContentController extends Controller
 
         $productsThatHaveThisContent = $content->activeProducts();
 
-        return $this->getUserCanNotSeeContentJsonResponse($content, $productsThatHaveThisContent, function ($msg) {});
+        return $this->getUserCanNotSeeContentJsonResponse($content, $productsThatHaveThisContent, function ($msg) {
+        });
     }
 
-    public function showV2(Request $request , Content $content)
+    public function showV2(Request $request, Content $content)
     {
         if (!is_null($content->redirectUrl)) {
             return redirect(convertRedirectUrlToApiVersion($content->redirectUrl),
@@ -54,36 +63,38 @@ class ContentController extends Controller
 
         if (!$content->isActive()) {
             $message = '';
-            $code    = Response::HTTP_LOCKED;
+            $code = Response::HTTP_LOCKED;
             return response()->json([
                 'message' => $message,
             ], $code);
         }
 
         if ($this->userCanSeeContent($request, $content, 'api')) {
-            return ( new ContentResource($content))->response();
+            return (new ContentResource($content))->response();
         }
 
         $productsThatHaveThisContent = $content->activeProducts();
 
-        return $this->getUserCanNotSeeContentJsonResponse($content, $productsThatHaveThisContent, function ($msg) {});
+        return $this->getUserCanNotSeeContentJsonResponse($content, $productsThatHaveThisContent, function ($msg) {
+        });
     }
 
-    public function fetchContents(Request $request){
+    public function fetchContents(Request $request)
+    {
         $since = $request->get('timestamp');
 
         $contents = Content::active()->free()->type(config('constants.CONTENT_TYPE_VIDEO'));
         if ($since !== null) {
-            $contents->where(function($q) use ($since){
-                $q->where('created_at' , '>=' , Carbon::createFromTimestamp($since))
-                    ->orWhere('updated_at' , '>=' , Carbon::createFromTimestamp($since));
+            $contents->where(function ($q) use ($since) {
+                $q->where('created_at', '>=', Carbon::createFromTimestamp($since))
+                    ->orWhere('updated_at', '>=', Carbon::createFromTimestamp($since));
             });
         }
-        $contents->orderBy('created_at' , 'DESC');
+        $contents->orderBy('created_at', 'DESC');
         $contents = $contents->paginate(25, ['*'], 'page');
 
         $items = [];
-        foreach ($contents as $key=>$content) {
+        foreach ($contents as $key => $content) {
             $items[$key]['id'] = $content->id;
             $items[$key]['type'] = 'content';
             $items[$key]['name'] = $content->name;
@@ -94,18 +105,18 @@ class ContentController extends Controller
 
         $currentPage = $contents->currentPage();
         $nextPageUrl = null;
-        if($currentPage < 40){
+        if ($currentPage < 40) {
             $nextPageUrl = $contents->nextPageUrl();
         }
 
         $contents->appends([$request->input()]);
         $pagination = [
-            'current_page'    => $currentPage,
-            'next_page_url'   => $nextPageUrl,
-            'last_page'       => 40,
-            'data'            => $items,
+            'current_page'  => $currentPage,
+            'next_page_url' => $nextPageUrl,
+            'last_page'     => 40,
+            'data'          => $items,
         ];
 
-        return response()->json($pagination,Response::HTTP_OK , [] ,JSON_UNESCAPED_SLASHES);
+        return response()->json($pagination, Response::HTTP_OK, [], JSON_UNESCAPED_SLASHES);
     }
 }

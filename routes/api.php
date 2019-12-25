@@ -47,6 +47,7 @@ Route::group(['prefix' => 'v1'], function () {
     Route::get('c/{c}', [ContentController::class, 'show'])->name('api.v1.content.show');
     Route::get('product/{product}', [ProductController::class, 'show'])->name('api.v1.product.show');
     Route::get('set/{set}', [SetController::class, 'show'])->name('api.v1.set.show');
+    Route::get('set', [SetController::class, 'index'])->name('api.v1.set.show');
     Route::post('getPrice/{product}', [ProductController::class, 'refreshPrice'])->name('api.v1.refreshPrice');
     Route::post('donate', [OrderController::class, 'donateOrder'])->name('api.v1.donate');
     Route::any('fetchContents', [ContentController::class, 'fetchContents'])->name('api.v1.fetch.content');
@@ -59,7 +60,8 @@ Route::group(['prefix' => 'v1'], function () {
     Route::group(['middleware' => 'auth:api'], function () {
         Route::any('user/auth2/profile', [UserController::class, 'getAuth2Profile']);
         Route::resource('user', '\\'. UserController::class);
-        Route::resource('orderproduct', '\\'. OrderproductController::class);
+        Route::post('orderproduct', [OrderproductController::class, 'store'])->name('api.v1.orderproduct.store')->middleware('CheckPermissionForSendOrderId');
+        Route::delete('orderproduct/{orderproduct}', [OrderproductController::class, 'destroy'])->name('api.v1.orderproduct.destroy');
         Route::post('transaction', '\\'.ZarinpalTransactionController::class)->name('api.v1.zarinpal.transaction.store');
         Route::post('orderCoupon', [OrderController::class, 'submitCoupon'])->name('api.v1.coupon.submit');
         Route::delete('orderCoupon', [OrderController::class, 'removeCoupon'])->name('api.v1.coupon.remove');
@@ -95,6 +97,7 @@ Route::group(['prefix' => 'v2'], function () {
     Route::get('product/{product}', [ProductController::class, 'showV2'])->name('api.v2.product.show');
     Route::get('product', [ProductController::class, 'indexV2'])->name('api.v2.product.index');
     Route::get('set/{set}', [SetController::class, 'showV2'])->name('api.v2.set.show');
+    Route::get('set', [SetController::class, 'index'])->name('api.v2.set.show');
     Route::post('getPrice/{product}', [ProductController::class, 'refreshPrice'])->name('api.v2.refreshPrice');
     Route::post('donate', [OrderController::class, 'donateOrder'])->name('api.v2.make.donate');
     Route::any('fetchContents', [ContentController::class, 'fetchContents'])->name('api.v2.fetch.content');
