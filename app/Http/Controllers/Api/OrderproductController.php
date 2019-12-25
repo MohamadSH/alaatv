@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Api;
 use App\Collection\OrderproductCollection;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\OrderProduct\OrderProductStoreRequest;
-use App\Http\Resources\PurchasedOrderproduct as OrderproductResource;
 use App\Orderproduct;
 use App\Product;
 use App\Traits\OrderCommon;
@@ -33,8 +32,8 @@ class OrderproductController extends Controller
         if ($request->has('extraAttribute')) {
             if (!$request->user()
                 ->can(config("constants.ATTACH_EXTRA_ATTRIBUTE_ACCESS"))) {
-                $productId        = $request->get('product_id');
-                $product          = Product::findOrFail($productId);
+                $productId = $request->get('product_id');
+                $product = Product::findOrFail($productId);
                 $attributesValues = $this->orderproductController->getAttributesValuesFromProduct($request, $product);
                 $this->orderproductController->syncExtraAttributesCost($request, $attributesValues);
                 $request->offsetSet('parentProduct', $product);
@@ -77,27 +76,7 @@ class OrderproductController extends Controller
             }
         }
 
-        $result        = $this->orderproductController->new($request->all());
-        $orderproducts = new OrderproductCollection();
-        if (isset($result['data']['storedOrderproducts'])) {
-            $orderproducts = $result['data']['storedOrderproducts'];
-        }
-
-        if ($orderproducts->isEmpty()) {
-            $responseContent = [
-                'error' => [
-                    'code'    => Response::HTTP_NOT_MODIFIED,
-                    'message' => 'No orderproducts added to the order',
-                ],
-            ];
-        }
-        else {
-            $responseContent = [
-                'orderproducts' => OrderproductResource::collection($orderproducts),
-            ];
-        }
-
-        return response($responseContent, Response::HTTP_OK);
+        return response()->json(null);
     }
 
     /**
