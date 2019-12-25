@@ -41,6 +41,7 @@
     "cross-env": "^6.0.3",
     "diff-match-patch": "^1.0.4",
     "dotenv": "^8.2.0",
+    "firebase": "^7.6.1",
     "flat-icons": "^1.0.0",
     "flipclock": "^0.10.8",
     "font-awesome": "^4.7.0",
