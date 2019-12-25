@@ -130,7 +130,7 @@ var ScrollCarousel = function () {
     }
 
     function getScrollCarouselItems($scrollCarousel) {
-        return $scrollCarousel.find('.item').toArray();
+        return $scrollCarousel.find('.item:visible').toArray();
     }
 
     function swipe($scrollCarousel, direction) {

@@ -2,14 +2,43 @@
     <div class="col-md-5">
         <div class="Repurchase-infoVideo">
             <div class="video">
-                <img class="lazy-image a--full-width"
-                     src="https://cdn.alaatv.com/loder.jpg?w=16&h=9"
-                     data-src="/acm/image/raheAbrisham/samplePhoto.png"
-                     alt="samplePhoto"
-                     width="253" height="142">
+
+                @if( $product->introVideo )
+                    <input type="hidden" name="introVideo"
+                           value="{{ $product->introVideo }}">
+                @endif
+
+                <video
+                    id="videoPlayer"
+                    class="
+                                                           video-js
+                                                           vjs-fluid
+                                                           vjs-default-skin
+                                                           vjs-big-play-centered"
+                    controls
+                    {{-- preload="auto"--}}
+                    preload="none"
+                    @if(isset($product->introVideoThumbnail))
+                    poster = "{{$product->introVideoThumbnail}}?w=400&h=225"
+                    @else
+                    poster = "https://cdn.alaatv.com/media/204/240p/204054ssnv.jpg"
+                    @endif >
+
+                    {{--                                                        <source--}}
+                    {{--                                                                src="{{$product->introVideo}}"--}}
+                    {{--                                                                id="videoPlayerSource"--}}
+                    {{--                                                                type = 'video/mp4'/>--}}
+
+                    {{--<p class="vjs-no-js">جهت پخش آنلاین فیلم، ابتدا مطمئن شوید که جاوا اسکریپت در مرور گر شما فعال است و از آخرین نسخه ی مرورگر استفاده می کنید.</p>--}}
+                </video>
+{{--                    --}}
+{{--                <img class="lazy-image a--full-width"--}}
+{{--                     src="https://cdn.alaatv.com/loder.jpg?w=16&h=9"--}}
+{{--                     data-src="/acm/image/raheAbrisham/samplePhoto.png"--}}
+{{--                     alt="samplePhoto"--}}
+{{--                     width="253" height="142">--}}
             </div>
             <div class="title">
-                کلیپ معرفی
             </div>
         </div>
     </div>

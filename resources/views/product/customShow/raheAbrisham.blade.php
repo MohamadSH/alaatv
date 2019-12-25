@@ -89,7 +89,7 @@
         'title' => 'راهنمایی آلایی هایی که تازه ثبت نام کردند',
         'closeIcon' => true,
         'class' => 'helpMessageRow',
-        'content' => view('product.partials.raheAbrisham.helpMessage')
+        'content' => view('product.partials.raheAbrisham.helpMessage', ['periodDescription'=>$periodDescription]),
     ])
 
     @include('product.partials.raheAbrisham.entekhabeFarsang')
@@ -116,7 +116,6 @@
                 'title' => 'نحوه دریافت هدایای ارزشمند آموزشی ویژه شما عزیزان',
                 'closeIcon' => true,
                 'content' => view('product.partials.raheAbrisham.nahveDariaftHadaia'),
-                'btnMoreText' => 'مطالعه کامل توضیحات',
             ])
         </div>
         <div class="col-md-6">
@@ -183,7 +182,11 @@
                                         link: '$item->file->first()->first()->link'
                                     }
                                 ]
-                            }
+                            },
+                            // section: {
+                            //     id: '',
+                            //     name: ''
+                            // }
                         },
                     @endforeach
                 ],

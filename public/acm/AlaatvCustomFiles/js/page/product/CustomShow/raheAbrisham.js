@@ -11,6 +11,18 @@ var MapSVG = function () {
         counter4;
 
     function getMapSteps() {
+        var zoomLevel = getZoomLevel();
+
+        if (zoomLevel === 1) {
+            return getMapStepLevel1();
+        } else if (zoomLevel === 2) {
+            return getMapStepLevel2();
+        } else {
+            return [];
+        }
+    }
+
+    function getMajorStep() {
         return {
             'pishAzmoon': {
                 contentId: 717,
@@ -28,10 +40,15 @@ var MapSVG = function () {
                 contentId: 747,
                 tooltipName: 'گدار'
             },
-            'farsang-step-pile': {
+            'Pile': {
                 contentId: 604,
                 tooltipName: 'پیله'
             },
+        };
+    }
+
+    function getMapStepLevel1() {
+        return Object.assign({}, getMajorStep(), {
             'farsang-step-1': {
                 contentId: 617,
                 tooltipName: 'فرسنگ اول'
@@ -72,62 +89,357 @@ var MapSVG = function () {
                 contentId: null,
                 tooltipName: 'فرسنگ دهم'
             }
-
-        };
+        });
     }
 
-    function getElementsSelector() {
-        var mapSteps = getMapSteps(),
-            selectorString = '';
+    function getMapStepLevel2() {
+        var mapStepLevel1 = getMapStepLevel1();
+        return Object.assign({}, getMajorStep(), {
+            'farsang-step-1-Pish-Azmoon': {
+                contentId: mapStepLevel1['farsang-step-1'].contentId,
+                sectionId: 5,
+                tooltipName: 'پیش آزمون'
+            },
+            'farsang-step-1-Konkorche': {
+                contentId: mapStepLevel1['farsang-step-1'].contentId,
+                sectionId: 4,
+                tooltipName: 'کنکورچه'
+            },
+            'farsang-step-1-Hal-Test': {
+                contentId: mapStepLevel1['farsang-step-1'].contentId,
+                sectionId: 3,
+                tooltipName: 'حل تست'
+            },
+            'farsang-step-1-Tavarogh': {
+                contentId: mapStepLevel1['farsang-step-1'].contentId,
+                sectionId: 2,
+                tooltipName: 'تورق سریع'
+            },
+            'farsang-step-1-Tablo-Rahnama': {
+                contentId: mapStepLevel1['farsang-step-1'].contentId,
+                sectionId: 1,
+                tooltipName: 'تابلو راهنما'
+            },
 
-        for (let key in mapSteps){
-            selectorString += '#'+key+', ';
-        }
-        selectorString = selectorString.substring(0, selectorString.length-2);
+            'farsang-step-2-Pish-Azmoon': {
+                contentId: mapStepLevel1['farsang-step-2'].contentId,
+                sectionId: 5,
+                tooltipName: 'پیش آزمون'
+            },
+            'farsang-step-2-Konkorche': {
+                contentId: mapStepLevel1['farsang-step-2'].contentId,
+                sectionId: 4,
+                tooltipName: 'کنکورچه'
+            },
+            'farsang-step-2-Hal-Test': {
+                contentId: mapStepLevel1['farsang-step-2'].contentId,
+                sectionId: 3,
+                tooltipName: 'حل تست'
+            },
+            'farsang-step-2-Tavarogh': {
+                contentId: mapStepLevel1['farsang-step-2'].contentId,
+                sectionId: 2,
+                tooltipName: 'تورق سریع'
+            },
+            'farsang-step-2-Tablo-Rahnama': {
+                contentId: mapStepLevel1['farsang-step-2'].contentId,
+                sectionId: 1,
+                tooltipName: 'تابلو راهنما'
+            },
 
-        return selectorString;
+            'farsang-step-3-Pish-Azmoon': {
+                contentId: mapStepLevel1['farsang-step-3'].contentId,
+                sectionId: 5,
+                tooltipName: 'پیش آزمون'
+            },
+            'farsang-step-3-Konkorche': {
+                contentId: mapStepLevel1['farsang-step-3'].contentId,
+                sectionId: 4,
+                tooltipName: 'کنکورچه'
+            },
+            'farsang-step-3-Hal-Test': {
+                contentId: mapStepLevel1['farsang-step-3'].contentId,
+                sectionId: 3,
+                tooltipName: 'حل تست'
+            },
+            'farsang-step-3-Tavarogh': {
+                contentId: mapStepLevel1['farsang-step-3'].contentId,
+                sectionId: 2,
+                tooltipName: 'تورق سریع'
+            },
+            'farsang-step-3-Tablo-Rahnama': {
+                contentId: mapStepLevel1['farsang-step-3'].contentId,
+                sectionId: 1,
+                tooltipName: 'تابلو راهنما'
+            },
+
+            'farsang-step-4-Pish-Azmoon': {
+                contentId: mapStepLevel1['farsang-step-4'].contentId,
+                sectionId: 5,
+                tooltipName: 'پیش آزمون'
+            },
+            'farsang-step-4-Konkorche': {
+                contentId: mapStepLevel1['farsang-step-4'].contentId,
+                sectionId: 4,
+                tooltipName: 'کنکورچه'
+            },
+            'farsang-step-4-Hal-Test': {
+                contentId: mapStepLevel1['farsang-step-4'].contentId,
+                sectionId: 3,
+                tooltipName: 'حل تست'
+            },
+            'farsang-step-4-Tavarogh': {
+                contentId: mapStepLevel1['farsang-step-4'].contentId,
+                sectionId: 2,
+                tooltipName: 'تورق سریع'
+            },
+            'farsang-step-4-Tablo-Rahnama': {
+                contentId: mapStepLevel1['farsang-step-4'].contentId,
+                sectionId: 1,
+                tooltipName: 'تابلو راهنما'
+            },
+
+            'farsang-step-5-Pish-Azmoon': {
+                contentId: mapStepLevel1['farsang-step-5'].contentId,
+                sectionId: 5,
+                tooltipName: 'پیش آزمون'
+            },
+            'farsang-step-5-Konkorche': {
+                contentId: mapStepLevel1['farsang-step-5'].contentId,
+                sectionId: 4,
+                tooltipName: 'کنکورچه'
+            },
+            'farsang-step-5-Hal-Test': {
+                contentId: mapStepLevel1['farsang-step-5'].contentId,
+                sectionId: 3,
+                tooltipName: 'حل تست'
+            },
+            'farsang-step-5-Tavarogh': {
+                contentId: mapStepLevel1['farsang-step-5'].contentId,
+                sectionId: 2,
+                tooltipName: 'تورق سریع'
+            },
+            'farsang-step-5-Tablo-Rahnama': {
+                contentId: mapStepLevel1['farsang-step-5'].contentId,
+                sectionId: 1,
+                tooltipName: 'تابلو راهنما'
+            },
+
+            'farsang-step-6-Pish-Azmoon': {
+                contentId: mapStepLevel1['farsang-step-6'].contentId,
+                sectionId: 5,
+                tooltipName: 'پیش آزمون'
+            },
+            'farsang-step-6-Konkorche': {
+                contentId: mapStepLevel1['farsang-step-6'].contentId,
+                sectionId: 4,
+                tooltipName: 'کنکورچه'
+            },
+            'farsang-step-6-Hal-Test': {
+                contentId: mapStepLevel1['farsang-step-6'].contentId,
+                sectionId: 3,
+                tooltipName: 'حل تست'
+            },
+            'farsang-step-6-Tavarogh': {
+                contentId: mapStepLevel1['farsang-step-6'].contentId,
+                sectionId: 2,
+                tooltipName: 'تورق سریع'
+            },
+            'farsang-step-6-Tablo-Rahnama': {
+                contentId: mapStepLevel1['farsang-step-6'].contentId,
+                sectionId: 1,
+                tooltipName: 'تابلو راهنما'
+            },
+
+            'farsang-step-7-Pish-Azmoon': {
+                contentId: mapStepLevel1['farsang-step-7'].contentId,
+                sectionId: 5,
+                tooltipName: 'پیش آزمون'
+            },
+            'farsang-step-7-Konkorche': {
+                contentId: mapStepLevel1['farsang-step-7'].contentId,
+                sectionId: 4,
+                tooltipName: 'کنکورچه'
+            },
+            'farsang-step-7-Hal-Test': {
+                contentId: mapStepLevel1['farsang-step-7'].contentId,
+                sectionId: 3,
+                tooltipName: 'حل تست'
+            },
+            'farsang-step-7-Tavarogh': {
+                contentId: mapStepLevel1['farsang-step-7'].contentId,
+                sectionId: 2,
+                tooltipName: 'تورق سریع'
+            },
+            'farsang-step-7-Tablo-Rahnama': {
+                contentId: mapStepLevel1['farsang-step-7'].contentId,
+                sectionId: 1,
+                tooltipName: 'تابلو راهنما'
+            },
+
+            'farsang-step-8-Pish-Azmoon': {
+                contentId: mapStepLevel1['farsang-step-8'].contentId,
+                sectionId: 5,
+                tooltipName: 'پیش آزمون'
+            },
+            'farsang-step-8-Konkorche': {
+                contentId: mapStepLevel1['farsang-step-8'].contentId,
+                sectionId: 4,
+                tooltipName: 'کنکورچه'
+            },
+            'farsang-step-8-Hal-Test': {
+                contentId: mapStepLevel1['farsang-step-8'].contentId,
+                sectionId: 3,
+                tooltipName: 'حل تست'
+            },
+            'farsang-step-8-Tavarogh': {
+                contentId: mapStepLevel1['farsang-step-8'].contentId,
+                sectionId: 2,
+                tooltipName: 'تورق سریع'
+            },
+            'farsang-step-8-Tablo-Rahnama': {
+                contentId: mapStepLevel1['farsang-step-8'].contentId,
+                sectionId: 1,
+                tooltipName: 'تابلو راهنما'
+            },
+
+            'farsang-step-9-Pish-Azmoon': {
+                contentId: mapStepLevel1['farsang-step-9'].contentId,
+                sectionId: 5,
+                tooltipName: 'پیش آزمون'
+            },
+            'farsang-step-9-Konkorche': {
+                contentId: mapStepLevel1['farsang-step-9'].contentId,
+                sectionId: 4,
+                tooltipName: 'کنکورچه'
+            },
+            'farsang-step-9-Hal-Test': {
+                contentId: mapStepLevel1['farsang-step-9'].contentId,
+                sectionId: 3,
+                tooltipName: 'حل تست'
+            },
+            'farsang-step-9-Tavarogh': {
+                contentId: mapStepLevel1['farsang-step-9'].contentId,
+                sectionId: 2,
+                tooltipName: 'تورق سریع'
+            },
+            'farsang-step-9-Tablo-Rahnama': {
+                contentId: mapStepLevel1['farsang-step-9'].contentId,
+                sectionId: 1,
+                tooltipName: 'تابلو راهنما'
+            },
+
+            'farsang-step-10-Pish-Azmoon': {
+                contentId: mapStepLevel1['farsang-step-10'].contentId,
+                sectionId: 5,
+                tooltipName: 'پیش آزمون'
+            },
+            'farsang-step-10-Konkorche': {
+                contentId: mapStepLevel1['farsang-step-10'].contentId,
+                sectionId: 4,
+                tooltipName: 'کنکورچه'
+            },
+            'farsang-step-10-Hal-Test': {
+                contentId: mapStepLevel1['farsang-step-10'].contentId,
+                sectionId: 3,
+                tooltipName: 'حل تست'
+            },
+            'farsang-step-10-Tavarogh': {
+                contentId: mapStepLevel1['farsang-step-10'].contentId,
+                sectionId: 2,
+                tooltipName: 'تورق سریع'
+            },
+            'farsang-step-10-Tablo-Rahnama': {
+                contentId: mapStepLevel1['farsang-step-10'].contentId,
+                sectionId: 1,
+                tooltipName: 'تابلو راهنما'
+            },
+        });
     }
 
     function getMapContainerBoundingClientRect() {
         return $('#mapContainer')[0].getBoundingClientRect();
     }
 
-    function addClickEvent() {
-        $(document).on('click', getElementsSelector(), function () {
-            var itemId = $(this).attr('id'),
-                contentId = getContentIdFromElementId(itemId);
-            if (typeof contentId !== 'undefined' && contentId.trim().length>0) {
-                EntekhabeFarsang.showFarsangFromServer(contentId);
-            } else {
-                toastr.info('این فرسنگ هنوز منتشر نشده است.');
-            }
-        });
-        $(document).on('touchend', getElementsSelector(), function () {
-            var itemId = $(this).attr('id'),
-                contentId = getContentIdFromElementId(itemId);
-            if (typeof contentId !== 'undefined' && contentId.trim().length>0) {
-                EntekhabeFarsang.showFarsangFromServer(contentId);
-            } else {
-                toastr.info('این فرسنگ هنوز منتشر نشده است.');
-            }
-        });
+    function unsetClickOnStepsEvent() {
+        $(document).off('click', '.farsangStep, .MajorStep');
+        $(document).off('touchend', '.farsangStep, .MajorStep');
+        $(document).off('click', '.farsangStep-cityItem, .MajorStep');
+        $(document).off('touchend', '.farsangStep-cityItem, .MajorStep');
+    }
 
-        $(document).on('AnimateScrollTo.beforeScroll', function () {
-            hideAllTooltip();
-        });
+    function setClickOnStepsEvent() {
+        unsetClickOnStepsEvent();
+
+        var zoomLevel = getZoomLevel();
+
+        if (zoomLevel === 1) {
+            $(document).on('click', '.farsangStep, .MajorStep', function () {
+                var itemId = $(this).attr('id'),
+                    contentId = getSetIdFromElementId(itemId);
+                if (typeof contentId !== 'undefined' && contentId.trim().length>0) {
+                    EntekhabeFarsang.showFarsangFromServer(contentId);
+                } else {
+                    toastr.info('این فرسنگ هنوز منتشر نشده است.');
+                }
+            });
+            $(document).on('touchend', '.farsangStep, .MajorStep', function () {
+                var itemId = $(this).attr('id'),
+                    contentId = getSetIdFromElementId(itemId);
+                if (typeof contentId !== 'undefined' && contentId.trim().length>0) {
+                    EntekhabeFarsang.showFarsangFromServer(contentId);
+                } else {
+                    toastr.info('این فرسنگ هنوز منتشر نشده است.');
+                }
+            });
+        } else if (zoomLevel === 2) {
+            $(document).on('click', '.farsangStep-cityItem, .MajorStep', function () {
+                var itemId = $(this).attr('id'),
+                    sectionId = $(this).attr('data-section-id'),
+                    setId = getSetIdFromElementId(itemId);
+                if (typeof setId !== 'undefined' && setId.trim().length>0) {
+                    EntekhabeFarsang.showFarsangFromServer(setId, sectionId);
+                } else {
+                    toastr.info('این فرسنگ هنوز منتشر نشده است.');
+                }
+            });
+            $(document).on('touchend', '.farsangStep-cityItem, .MajorStep', function () {
+                var itemId = $(this).attr('id'),
+                    sectionId = $(this).attr('data-section-id'),
+                    setId = getSetIdFromElementId(itemId);
+                if (typeof setId !== 'undefined' && setId.trim().length>0) {
+                    EntekhabeFarsang.showFarsangFromServer(setId, sectionId);
+                } else {
+                    toastr.info('این فرسنگ هنوز منتشر نشده است.');
+                }
+            });
+        }
     }
 
     function setStepPointer() {
-        $(getElementsSelector()).css({'cursor': 'pointer'});
+        var zoomLevel = getZoomLevel();
+
+        $('.farsangStep-cityItem, .farsangStep, .MajorStep').css({'cursor': ''});
+
+        if (zoomLevel === 1) {
+            $('.farsangStep, .MajorStep').css({'cursor': 'pointer'});
+        } else if (zoomLevel === 2) {
+            $('.farsangStep-cityItem, .MajorStep').css({'cursor': 'pointer'});
+        }
+
+
     }
 
-    function getContentIdFromElementId(elementId) {
+    function getSetIdFromElementId(elementId) {
         return $('#'+elementId).attr('data-content-id');
     }
 
     function addTooltip($object, name) {
         // $object.attr('data-toggle', 'm-tooltip').attr('data-placement', 'top').attr('title', name);
         // $('[data-toggle="m-tooltip"]').tooltip();
+        if (typeof $object === 'undefined' || typeof $object[0] === 'undefined') {
+            return;
+        }
         var element = $object[0].getBoundingClientRect(),
             mapContainerRect = getMapContainerBoundingClientRect(),
             tooltipWidth = 75,
@@ -153,7 +465,6 @@ var MapSVG = function () {
             tooltipPointerHeight = 10,
             elementWidth = element.width,
             top = element.top - tooltipHeight,
-            midTop = element.top + (element.height/2),
             left = element.left + (elementWidth / 2) - (tooltipWidth / 2),
             direction = 'top',
             screenWidth =  screen.width;
@@ -165,13 +476,13 @@ var MapSVG = function () {
             direction = 'top';
         }
 
-        if (left < mapContainerRect.left && direction !== 'top') {
+        if (left < mapContainerRect.left) {
             left = element.right + tooltipPointerHeight;
-            top = midTop;
+            top = calculateTopOfTooltip(element, mapContainerRect);
             direction = 'right';
-        } else if (element.right > mapContainerRect.right && direction !== 'top') {
+        } else if (element.right > mapContainerRect.right) {
             left = screenWidth -  element.left + tooltipPointerHeight;
-            top = midTop;
+            top = calculateTopOfTooltip(element, mapContainerRect);
             direction = 'left';
         }
 
@@ -182,18 +493,36 @@ var MapSVG = function () {
         };
     }
 
+    function calculateTopOfTooltip(element, mapContainerRect) {
+        var top = 0;
+        if (element.top < mapContainerRect.top) {
+            top = element.bottom;
+        } else if (element.bottom > mapContainerRect.bottom) {
+            top = element.top;
+        } else {
+            top = element.top + (element.height / 2);
+        }
+        return top;
+    }
+
     function checkSvgElementIsVisible(element, mapContainerRect) {
-        if (mapContainerRect.top < element.bottom &&
+        return mapContainerRect.top < element.bottom &&
             mapContainerRect.bottom > element.top &&
             mapContainerRect.left < element.right &&
-            mapContainerRect.right > element.left) {
-            return true;
+            mapContainerRect.right > element.left;
+    }
+
+    function getZoomLevel() {
+        // if (panzoom.getScale() > 1.7) {
+        if ( $('#farsang-step-5')[0].getBoundingClientRect().width > 100) {
+            return 2;
         } else {
-            return false;
+            return 1;
         }
     }
 
     function setStepsTooltip() {
+
         var mapSteps = getMapSteps(),
             selectorString = '';
 
@@ -202,12 +531,18 @@ var MapSVG = function () {
         }
     }
 
-    function setStepsIds() {
-        var mapSteps = getMapSteps(),
+    function setStepsDataAttributes() {
+        var mapSteps =  Object.assign({}, getMapStepLevel1(), getMapStepLevel2()),
             selectorString = '';
 
         for (let key in mapSteps){
             $('#'+key).attr('data-content-id', mapSteps[key].contentId);
+            if (typeof mapSteps[key].sectionId !== 'undefined') {
+                $('#'+key).attr('data-section-id', mapSteps[key].sectionId);
+            }
+            if (mapSteps[key].contentId === null) {
+                $('#'+key+'-ground').attr('fill', '#ffc582');
+            }
         }
     }
 
@@ -223,7 +558,8 @@ var MapSVG = function () {
         var farsangMapHeight = getFarsangMapHeight(),
             heightOfMapOnInit = getHeightOfMapOnInit(),
             zoom = farsangMapHeight/heightOfMapOnInit;
-
+        console.log('screen.width', screen.width);
+        console.log('fwidth', $('#farsang-step-5')[0].getBoundingClientRect().width);
         return zoom;
     }
 
@@ -237,13 +573,15 @@ var MapSVG = function () {
         // $('#mapContainer [data-toggle="m-tooltip"]').tooltip('hide');
     }
 
-    function refreshAllTooltipWithDelay() {
-        // hideAllTooltip();
-        // showAllTooltip();
-        setTimeout(function () {
-            hideAllTooltip();
-            showAllTooltip();
-        }, 1000);
+    function refreshAllTooltip() {
+        hideAllTooltip();
+        showAllTooltip();
+        // console.log('refreshAllTooltip');
+        // setTimeout(function () {
+        //     console.log('refreshAllTooltip-10');
+        //     hideAllTooltip();
+        //     showAllTooltip();
+        // }, 10);
     }
 
     function initPanZoom() {
@@ -299,11 +637,16 @@ var MapSVG = function () {
             hideAllTooltip();
         });
         svgMapElement.addEventListener('panzoomend', (event) => {
-            showAllTooltip();
+            refreshMapEvents();
         });
         svgMapElement.addEventListener('panzoompan', (event) => {
-            refreshAllTooltipWithDelay();
+            refreshMapEvents();
         });
+
+        $(document).on('AnimateScrollTo.beforeScroll', function () {
+            hideAllTooltip();
+        });
+        setClickOnStepsEvent();
     }
 
     function wheelEvent(e){
@@ -317,7 +660,7 @@ var MapSVG = function () {
         return false;
     }
     function wheelEventStart(){
-        refreshAllTooltipWithDelay();
+        refreshMapEvents();
         hideAllTooltip();
         marker = false;
         wheelEventAct();
@@ -325,7 +668,7 @@ var MapSVG = function () {
         // info.innerHTML = 'Start event. Direction: ' + direction;
     }
     function wheelEventAct(){
-        refreshAllTooltipWithDelay();
+        // refreshAllTooltip();
         counter2 = counter1;
         setTimeout(function(){
             if (counter2 === counter1) {
@@ -337,8 +680,7 @@ var MapSVG = function () {
         },interval);
     }
     function wheelEventEnd(){
-        refreshAllTooltipWithDelay();
-        // console.log('panzoom.getScale(): ', panzoom.getScale());
+        refreshMapEvents();
         counter4 = new Date();
         // info.innerHTML = info.innerHTML + '<br>End event. Duration: ' + (counter4-counter3) + ' ms';
         marker = true;
@@ -348,39 +690,48 @@ var MapSVG = function () {
         counter4 = false;
     }
 
+    function refreshMapEvents() {
+        refreshAllTooltip();
+        setClickOnStepsEvent();
+        setStepPointer();
+    }
+
     return {
         init: function () {
             initPanZoom();
-            setStepsIds();
+            setStepsDataAttributes();
             setStepPointer();
             setStepsTooltip();
-            addClickEvent();
         }
     }
 }();
 
 var EntekhabeFarsang = function () {
 
-    function showFarsangFromServer(setId) {
+    function showFarsangFromServer(setId, sectionId) {
         $('.selectEntekhabeFarsangVideoAndPamphlet').AnimateScrollTo();
-        getFarsangData(setId, showFarsangData);
+        getFarsangData(setId, sectionId, showFarsangData);
     }
 
-    function showFarsangData(data) {
-        $('#selectFarsang .select-selected').html(data.set.name).attr('data-option-value', data.set.id);
+    function showFarsangData(data, sectionId) {
+        initSectionList(data.files);
+        $('#selectFarsang .select-selected').html(data.set.short_title).attr('data-option-value', data.set.id);
         setLists(data.files);
         setBtnMoreLink(data.set.url.web);
         checkNoData();
         refreshScrollCarouselSwipIcons();
         showLists();
         imageObserver.observe();
+        if (typeof sectionId !== 'undefined') {
+            showSection(sectionId);
+        }
         hideLoading();
     }
 
-    function getFarsangData(setId, callback) {
+    function getFarsangData(setId, sectionId, callback) {
         showLoading();
         getAjaxContent('/set/' + setId, function (data) {
-            callback(data);
+            callback(data, sectionId);
         })
     }
 
@@ -480,8 +831,9 @@ var EntekhabeFarsang = function () {
         }
         var dataLength = data.length,
             htmlData = '';
-        for (i = 0; i < dataLength; i++) {
+        for (var i = 0; i < dataLength; i++) {
             htmlData += createVideoItem({
+                section: (typeof data[i].section !== 'undefined') ? data[i].section : {id: '', name: ''},
                 photo: data[i].photo,
                 link: data[i].url.web
             });
@@ -495,8 +847,9 @@ var EntekhabeFarsang = function () {
         }
         var dataLength = data.length,
             htmlData = '';
-        for (i = 0; i < dataLength; i++) {
+        for (var i = 0; i < dataLength; i++) {
             htmlData += createPamphletItem({
+                section: (typeof data[i].section !== 'undefined') ? data[i].section : {id: '', name: ''},
                 title: data[i].title,
                 link: data[i].file.pamphlet[0].link
             });
@@ -506,7 +859,7 @@ var EntekhabeFarsang = function () {
 
     function createVideoItem(data) {
         return '' +
-            '<div class="item w-55443211">\n' +
+            '<div class="item w-55443211" data-section-id="'+data.section.id+'" data-section-name="'+data.section.name+'">\n' +
             '  <a href="' + data.link + '">' +
             '    <img class="lazy-image a--full-width"\n' +
             '         src="https://cdn.alaatv.com/loder.jpg?w=16&h=9"\n' +
@@ -519,7 +872,7 @@ var EntekhabeFarsang = function () {
 
     function createPamphletItem(data) {
         return '' +
-            '<div class="item w-55443211">\n' +
+            '<div class="item w-55443211" data-section-id="'+data.section.id+'" data-section-name="'+data.section.name+'">\n' +
             '  <a href="' + data.link + '">' +
             '    <div class="pamphletItem">\n' +
             '        <div class="pamphletItem-thumbnail">\n' +
@@ -611,15 +964,122 @@ var EntekhabeFarsang = function () {
         return '<div class="alert alert-info text-center" role="alert" style="width: 100%;margin: auto;">' + message + '</div>';
     }
 
+    function getTotalSectionList() {
+        return [
+            {
+                id: 1,
+                enable: false,
+                name: 'تابلو راهنما'
+            },
+            {
+                id: 2,
+                enable: false,
+                name: 'تورق سریع'
+            },
+            {
+                id: 3,
+                enable: false,
+                name: 'حل تست'
+            },
+            {
+                id: 4,
+                enable: false,
+                name: 'کنکورچه'
+            },
+            {
+                id: 5,
+                enable: false,
+                name: 'پیش آزمون'
+            }
+        ];
+    }
+
+    function getSectionListFromContent(data) {
+        var dataLength = data.length,
+            sections = [],
+            totalSectionList = getTotalSectionList();
+
+        checkSections(data.pamphlets, totalSectionList);
+        checkSections(data.videos, totalSectionList);
+
+        return totalSectionList;
+    }
+
+    function checkSections(data, totalSectionList) {
+        if (typeof data === 'undefined') {
+            return;
+        }
+        var dataLength = data.length;
+        for (var i = 0; i < dataLength; i++) {
+            if (typeof data[i].section !== 'undefined') {
+                checkInTotalSectionList(data[i].section, totalSectionList);
+            }
+        }
+    }
+
+    function checkInTotalSectionList(itemSection, totalSectionList) {
+        var totalSectionListLength = totalSectionList.length;
+        for (var j = 0; j < totalSectionListLength; j++) {
+            if (itemSection.id === totalSectionList[j].id) {
+                totalSectionList[j].enable = true;
+            }
+        }
+    }
+
+    function initSectionList(data) {
+        var listHtml = '',
+            sectionList = getSectionListFromContent(data),
+            sectionListLength = sectionList.length;
+
+        for (var i = 0; i < sectionListLength; i++) {
+            if (sectionList[i].enable) {
+                listHtml += createSectionItem(sectionList[i]);
+            }
+        }
+        $('.sectionFilterCol').html(listHtml);
+    }
+
+    function createSectionItem(data) {
+        return '<div class="sectionFilter-item" data-section-id="'+data.id+'" data-section-name="'+data.name+'">'+data.name+'</div>';
+    }
+
+    function showSection(sectionId) {
+        var animateSpeed = 0;
+        $('.sectionFilterCol .sectionFilter-item').removeClass('selected');
+        $('.entekhabeFarsangVideoAndPamphlet .tab-content .ScrollCarousel .ScrollCarousel-Items .item').fadeIn(animateSpeed);
+        if (typeof sectionId === 'undefined' || sectionId === 'all') {
+        } else {
+            $('.sectionFilterCol .sectionFilter-item[data-section-id="'+sectionId+'"]').addClass('selected');
+            $('.entekhabeFarsangVideoAndPamphlet .tab-content .ScrollCarousel .ScrollCarousel-Items .item').each(function () {
+                var thisSectionId = $(this).attr('data-section-id');
+                if (parseInt(thisSectionId) !== parseInt(sectionId)) {
+                    $(this).fadeOut(animateSpeed);
+                }
+            });
+        }
+
+        setTimeout(function () {
+            refreshScrollCarouselSwipIcons();
+        }, animateSpeed + 10);
+
+    }
+
+    function addClickEvents() {
+        $(document).on('click', '.sectionFilterCol .sectionFilter-item', function () {
+            var sectionId = $(this).attr('data-section-id');
+            showSection(sectionId);
+        });
+    }
 
     return {
         init: function (data) {
             showFarsangData(data);
+            addClickEvents();
             // checkNoData();
             // refreshScrollCarouselSwipIcons();
         },
-        showFarsangFromServer: function (setId) {
-            showFarsangFromServer(setId);
+        showFarsangFromServer: function (setId, sectionId) {
+            showFarsangFromServer(setId, sectionId);
         },
         showFarsangData: function (data) {
 
@@ -629,6 +1089,10 @@ var EntekhabeFarsang = function () {
 }();
 
 var InitAbrishamPage = function () {
+
+    function initPeriodDescription() {
+        $('.periodDescription').css({'min-height':'200px'});
+    }
 
     function makePageBoxedForLargScreen() {
         $('.m-body .m-content').addClass('boxed');
@@ -676,6 +1140,10 @@ var InitAbrishamPage = function () {
         });
         $(document).on('click', '.descriptionBox .btnCloseDescriptionBox', function () {
             $(this).parents('.descriptionBox').fadeOut();
+        });
+        $(document).on('click', '.btnShowTotalPeriodDescription', function () {
+            $('.periodDescription').removeClass('compact');
+            $(this).fadeOut();
         });
     }
 

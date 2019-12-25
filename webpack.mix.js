@@ -90,13 +90,13 @@ class Mix {
     mixAll() {
         this.mixBase();
         this.mixPages();
-        // this.mixUser();
-        // this.mixLanding();
+        this.mixUser();
+        this.mixLanding();
         this.mixProduct();
-        // this.mixPageContentShow();
-        // this.mixPageSetShow();
-        // this.mixCheckout();
-        // this.mixAdmin();
+        this.mixPageContentShow();
+        this.mixPageSetShow();
+        this.mixCheckout();
+        this.mixAdmin();
         this.mixCopyDirectory();
 
         // if (this.mix.inProduction()) {
@@ -329,14 +329,14 @@ class Mix {
         );
     }
     mixPages() {
-        // this.mixPageLive();
-        // this.mixPageShop();
-        // this.mixPageError();
+        this.mixPageLive();
+        this.mixPageShop();
+        this.mixPageError();
         this.mixAuthLogin();
-        // this.mixPageDonate();
-        // this.mixPageHomePage();
-        // this.mixPageContactUs();
-        // this.mixPageContentSearch();
+        this.mixPageDonate();
+        this.mixPageHomePage();
+        this.mixPageContactUs();
+        this.mixPageContentSearch();
     }
 
     mixPageUserOrders() {
@@ -743,9 +743,9 @@ class Mix {
                 'public/acm/AlaatvCustomFiles/js/page/product/product-show.js',
             ]
         };
-        // this.mixPageProductShow(baseProductShow);
+        this.mixPageProductShow(baseProductShow);
         this.mixPageProductShowRaheAbrisham(baseProductShow);
-        // this.mixPageProductContentEmbed();
+        this.mixPageProductContentEmbed();
     }
 
     mixPageCheckoutReview() {

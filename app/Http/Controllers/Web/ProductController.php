@@ -1171,7 +1171,8 @@ class ProductController extends Controller
             ->remember($key, config('constants.CACHE_600'), function () use ($user) {
                 return $user->products()->contains(Product::RAHE_ABRISHAM);
             });
-        $sets = $product->sets->sortByDesc('created_at');
+//        $sets = $product->sets->sortByDesc('created_at');
+        $sets = $product->sets->sortBy('created_at');
         $lastSet = $sets->first();
         $lastSetPamphlets = $lastSet->where('contenttype_id' , Content::CONTENT_TYPE_PAMPHLET);
         $lastSetVideos    = $lastSet->where('contenttype_id' , Content::CONTENT_TYPE_VIDEO);

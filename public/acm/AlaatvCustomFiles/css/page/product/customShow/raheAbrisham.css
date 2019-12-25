@@ -15,14 +15,16 @@
     fill: transparent;
 }
 
+.periodDescription.compact,
 .descriptionBox .m-portlet__body .content.compact {
     position: relative;
-    max-height: 250px;
+    max-height: 150px;
     overflow: hidden;
 }
 .descriptionBox .m-portlet__body .content.collapsed {
     position: relative;
 }
+.periodDescription.compact:after,
 .descriptionBox .m-portlet__body .content.compact:after {
     content: ' ';
     position: absolute;
@@ -48,38 +50,39 @@
     color: white;
     padding: 2px 5px;
     border-radius: 5px;
+    border: solid 2px white;
 }
 .MapStepLabel:before {
     content: ' ';
     position: absolute;
 }
 .MapStepLabel.top:before {
-    border-top: solid 10px #b8a288;
+    border-top: solid 10px white;
     border-left: solid 10px transparent;
     border-right: solid 10px transparent;
-    top: 23px;
+    top: 24px;
     left: calc( 50% - 10px);
 }
 .MapStepLabel.bottom:before {
     border-left: solid 10px transparent;
     border-right: solid 10px transparent;
-    border-bottom: solid 10px #b8a288;
+    border-bottom: solid 10px white;
     top: -10px;
     left: calc( 50% - 10px);
 }
 .MapStepLabel.left:before {
     border-top: solid 10px transparent;
     border-bottom: solid 10px transparent;
-    border-left: solid 10px #b8a288;
+    border-left: solid 10px white;
     top: calc( 50% - 10px);
-    right: -8px;
+    right: -10px;
 }
 .MapStepLabel.right:before {
     border-top: solid 10px transparent;
     border-bottom: solid 10px transparent;
-    border-right: solid 10px #b8a288;
+    border-right: solid 10px white;
     top: calc( 50% - 10px);
-    left: -8px;
+    left: -10px;
 }
 .display-5 {
     font-size: 2rem;
@@ -294,8 +297,15 @@
     text-align: center;
     transition: all 0.1s;
 }
-.sectionFilterCol .sectionFilter-itemselected {
-
+.sectionFilterCol .sectionFilter-item.selected {
+    background: #f66e84;
+    color: white;
+    font-weight: bold;
+    -webkit-box-shadow: 5px 5px 10px -5px rgba(0,0,0,0.75);
+    -moz-box-shadow: 5px 5px 10px -5px rgba(0,0,0,0.75);
+    box-shadow: 5px 5px 10px -5px rgba(0,0,0,0.75);
+    transform: scale(1.2, 1);
+    transform-origin: left;
 }
 .sectionFilterCol .sectionFilter-item:hover {
     -webkit-box-shadow: 5px 5px 10px -5px rgba(0,0,0,0.75);
