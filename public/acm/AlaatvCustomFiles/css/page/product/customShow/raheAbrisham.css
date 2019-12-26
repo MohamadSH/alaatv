@@ -121,7 +121,6 @@
 .m-portlet.transparentBack {
     background-color: transparent;
     box-shadow: none;
-    margin-top: -25px;
 }
 .m-portlet.transparentBack .m-portlet__head {
     background-color: transparent;
@@ -243,18 +242,6 @@
     cursor: pointer;
 }
 
-@media (max-width: 767px) {
-    .entekhabeFarsangVideoAndPamphlet:before {
-        left: 50%;
-    }
-}
-
-@media (max-width: 400px) {
-    .entekhabeFarsangVideoAndPamphlet .nav-tabs .nav-item .nav-link, .entekhabeFarsangVideoAndPamphlet .nav-tabs .nav-link {
-        font-size: 1.2rem;
-    }
-}
-
 .pamphletItem {
     display: flex;
     flex-flow: row;
@@ -314,6 +301,27 @@
     rgba(0,0,0,0.75);
     transform: scale(1.1, 1);
     transform-origin: left;
+}
+
+@media (max-width: 767px) {
+    .entekhabeFarsangVideoAndPamphlet:before {
+        left: 50%;
+    }
+    .entekhabeFarsangVideoAndPamphlet .tab-content {
+        padding-right: 65px;
+    }
+    .sectionFilterCol {
+        right: 8px;
+    }
+    .sectionFilterCol .sectionFilter-item {
+        font-size: 0.8em;
+    }
+}
+
+@media (max-width: 400px) {
+    .entekhabeFarsangVideoAndPamphlet .nav-tabs .nav-item .nav-link, .entekhabeFarsangVideoAndPamphlet .nav-tabs .nav-link {
+        font-size: 1.2rem;
+    }
 }
 /*entekhabeFarsang*/
 

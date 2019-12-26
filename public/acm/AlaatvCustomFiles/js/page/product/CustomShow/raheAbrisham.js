@@ -1029,12 +1029,20 @@ var EntekhabeFarsang = function () {
     function initSectionList(data) {
         var listHtml = '',
             sectionList = getSectionListFromContent(data),
-            sectionListLength = sectionList.length;
+            sectionListLength = sectionList.length,
+            activrSectionCount = 0;
 
         for (var i = 0; i < sectionListLength; i++) {
             if (sectionList[i].enable) {
+                activrSectionCount++;
                 listHtml += createSectionItem(sectionList[i]);
             }
+        }
+
+        if (activrSectionCount>0) {
+            $('.entekhabeFarsangVideoAndPamphlet .tab-content').css({'padding-right':''});
+        } else {
+            $('.entekhabeFarsangVideoAndPamphlet .tab-content').css({'padding-right':'0'});
         }
         $('.sectionFilterCol').html(listHtml);
     }
