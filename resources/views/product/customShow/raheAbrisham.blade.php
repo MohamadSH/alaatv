@@ -2,8 +2,6 @@
 
 @section('page-css')
     <link href="{{ mix('/css/product-show-RaheAbrisham.css') }}" rel="stylesheet" type="text/css"/>
-    <link href="{{ asset('/acm/AlaatvCustomFiles/components/CustomDropDown/style.css') }}" rel="stylesheet" type="text/css"/>
-    <link href="{{ asset('/acm/AlaatvCustomFiles/css/page/product/customShow/raheAbrisham.css') }}" rel="stylesheet" type="text/css"/>
 @endsection
 
 @section('page-head')
@@ -203,10 +201,5 @@
             }
         };
     </script>
-{{--    <script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>--}}
-    <script src="{{ asset('/acm/AlaatvCustomFiles/components/ScrollCarousel/js.js') }}"></script>
-    <script src="{{ asset('/acm/AlaatvCustomFiles/components/CustomDropDown/js.js') }}"></script>
-{{--    <script src="{{ asset('/acm/AlaatvCustomFiles/js/page/product/CustomShow/svg-pan-zoom.js') }}"></script>--}}
     <script src="{{ mix('/js/product-show-RaheAbrisham.js') }}"></script>
-    <script src="{{ asset('/acm/AlaatvCustomFiles/js/page/product/CustomShow/raheAbrisham.js') }}"></script>
 @endsection

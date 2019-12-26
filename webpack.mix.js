@@ -599,7 +599,9 @@ class Mix {
         this.mixCssAndJs(
             baseProductShow.css.concat([
                 // 'node_modules/highcharts/css/highcharts.css',
+                'public/acm/AlaatvCustomFiles/components/CustomDropDown/style.css',
                 'public/acm/AlaatvCustomFiles/components/AlaaLoading/style.css',
+                'public/acm/AlaatvCustomFiles/css/page/product/customShow/raheAbrisham.css',
             ])
             ,
             'public/css/product-show-RaheAbrisham.css',
@@ -663,9 +665,9 @@ class Mix {
                 // 'node_modules/highcharts/modules/exporting.js',
 
                 'public/acm/AlaatvCustomFiles/components/AlaaLoading/script.js',
-                // 'public/acm/AlaatvCustomFiles/components/CustomDropDown/js.js',
+                'public/acm/AlaatvCustomFiles/components/CustomDropDown/js.js',
 
-                // 'public/acm/AlaatvCustomFiles/js/page/product/CustomShow/raheAbrisham.js',
+                'public/acm/AlaatvCustomFiles/js/page/product/CustomShow/raheAbrisham.js',
             ]),
             'public/js/product-show-RaheAbrisham.js'
         );
@@ -732,7 +734,7 @@ class Mix {
                 'public/acm/videojs/plugins/seek-to-point.js',
                 'public/acm/videojs/lang/fa.js',
 
-                // 'public/acm/AlaatvCustomFiles/components/ScrollCarousel/js.js',
+                'public/acm/AlaatvCustomFiles/components/ScrollCarousel/js.js',
                 'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/js.js',
                 'public/acm/AlaatvCustomFiles/components/AnimateScrollTo/js.js',
                 'public/acm/AlaatvCustomFiles/components/aSticky/aSticky.js',

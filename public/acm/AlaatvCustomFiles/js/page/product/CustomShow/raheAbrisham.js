@@ -834,7 +834,7 @@ var EntekhabeFarsang = function () {
         for (var i = 0; i < dataLength; i++) {
             htmlData += createVideoItem({
                 section: (typeof data[i].section !== 'undefined') ? data[i].section : {id: '', name: ''},
-                photo: data[i].photo,
+                photo: (typeof data[i].photo !== 'undefined') ? data[i].photo : data[i].thumbnail,
                 link: data[i].url.web
             });
         }
@@ -850,7 +850,7 @@ var EntekhabeFarsang = function () {
         for (var i = 0; i < dataLength; i++) {
             htmlData += createPamphletItem({
                 section: (typeof data[i].section !== 'undefined') ? data[i].section : {id: '', name: ''},
-                title: data[i].title,
+                title: (typeof data[i].title !== 'undefined') ? data[i].title : data[i].name,
                 link: data[i].file.pamphlet[0].link
             });
         }
