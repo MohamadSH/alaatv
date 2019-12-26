@@ -1,46 +1,46 @@
 <?php
 
 
+use App\Http\Controllers\Web\AdminController;
 use App\Http\Controllers\Web\BotsController;
+use App\Http\Controllers\Web\ConsultationController;
+use App\Http\Controllers\Web\ContentController;
+use App\Http\Controllers\Web\DashboardPageController;
+use App\Http\Controllers\Web\EmployeetimesheetController;
+use App\Http\Controllers\Web\ErrorPageController;
 use App\Http\Controllers\Web\FavorableController;
 use App\Http\Controllers\Web\HomeController;
+use App\Http\Controllers\Web\IndexPageController;
 use App\Http\Controllers\Web\LandingPageController;
 use App\Http\Controllers\Web\LiveController;
+use App\Http\Controllers\Web\LiveDescriptionController;
+use App\Http\Controllers\Web\LotteryController;
+use App\Http\Controllers\Web\MobileVerificationController;
 use App\Http\Controllers\Web\OfflinePaymentController;
 use App\Http\Controllers\Web\OrderController;
+use App\Http\Controllers\Web\OrderproductController;
+use App\Http\Controllers\Web\PaymentStatusController;
 use App\Http\Controllers\Web\PeriodDescriptionController;
 use App\Http\Controllers\Web\ProductController;
+use App\Http\Controllers\Web\ProductLandingController;
+use App\Http\Controllers\Web\SalesReportController;
 use App\Http\Controllers\Web\SanatisharifmergeController;
 use App\Http\Controllers\Web\SectionController;
 use App\Http\Controllers\Web\SetController;
+use App\Http\Controllers\Web\SharifSchoolController;
+use App\Http\Controllers\Web\ShopPageController;
+use App\Http\Controllers\Web\SitemapController;
+use App\Http\Controllers\Web\SurveyController;
 use App\Http\Controllers\Web\TopicsTreeController;
 use App\Http\Controllers\Web\UserController;
-use App\Http\Controllers\Web\AdminController;
-use App\Http\Controllers\Web\SurveyController;
 use App\Http\Controllers\Web\WalletController;
-use App\Http\Controllers\Web\ContentController;
-use App\Http\Controllers\Web\LotteryController;
-use App\Http\Controllers\Web\SitemapController;
-use App\Http\Controllers\Web\ShopPageController;
-use App\Http\Controllers\Web\ErrorPageController;
-use App\Http\Controllers\Web\IndexPageController;
-use App\Http\Controllers\Web\SalesReportController;
-use App\Http\Controllers\Web\ConsultationController;
-use App\Http\Controllers\Web\OrderproductController;
-use App\Http\Controllers\Web\SharifSchoolController;
-use App\Http\Controllers\Web\DashboardPageController;
-use App\Http\Controllers\Web\PaymentStatusController;
-use App\Http\Controllers\Web\ProductLandingController;
-use App\Http\Controllers\Web\LiveDescriptionController;
-use App\Http\Controllers\Web\EmployeetimesheetController;
-use App\Http\Controllers\Web\MobileVerificationController;
-use App\PaymentModule\Controllers\RedirectUserToPaymentPage;
 use App\PaymentModule\Controllers\PaymentVerifierController;
 use App\PaymentModule\Controllers\RedirectAPIUserToPaymentRoute;
+use App\PaymentModule\Controllers\RedirectUserToPaymentPage;
 
 
-Route::get('embed/c/{content}', [ContentController::class , 'embed'])->name('web.c.embed');
-Route::get('/', '\\'.IndexPageController::class)->name('web.index');
+Route::get('embed/c/{content}', [ContentController::class, 'embed'])->name('web.c.embed');
+Route::get('/', '\\' . IndexPageController::class)->name('web.index');
 Route::get('shop', '\\'.ShopPageController::class)->name('web.shop');
 Route::get('home', [HomeController::class , 'home'])->name('web.home');
 Route::get('404',  [ErrorPageController::class , 'error404']);
@@ -145,7 +145,6 @@ Route::group(['middleware' => 'auth'], function () {
     /*** Admin routes */
 
 
-    Route::get('asset', [UserController::class, 'userProductFiles'])->name('web.user.asset');
     Route::get('complete-register', [UserController::class, 'completeRegister'])->name('completeRegister');
     Route::get('survey',  [SurveyController::class, 'show']);
     Route::resource('survey', '\\'. SurveyController::class);
@@ -286,14 +285,16 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('endlive'   , [LiveController::class, 'endLive'])->name('web.end.live');
 
     Route::get('block/detach/{block}/{type}/{id}', 'Web\BlockController@detachFromBlock');
-    Route::get('serpSim' , [AdminController::class, 'serpSim'] );
-    Route::get('process_serpsim' , [AdminController::class, 'processSerpsim'] );
+    Route::get('serpSim', [AdminController::class, 'serpSim']);
+    Route::get('process_serpsim', [AdminController::class, 'processSerpsim']);
 
-    Route::get('uuupppllloooodddd' , [HomeController::class, 'uploadCenter'] )->name('web.uploadCenter');
-    Route::post('upload' , [HomeController::class, 'bigUpload'] )->name('web.bigUpload');
+    Route::get('uuupppllloooodddd', [HomeController::class, 'uploadCenter'])->name('web.uploadCenter');
+    Route::post('upload', [HomeController::class, 'bigUpload'])->name('web.bigUpload');
 
-    Route::post('smsLink' , [HomeController::class, 'smsLink'] )->name('web.sms.link');
+    Route::post('smsLink', [HomeController::class, 'smsLink'])->name('web.sms.link');
 });
+
+Route::get('asset', [UserController::class, 'userProductFiles'])->name('web.user.asset');
 Route::resource('cat', 'Web\CategoryController');
 
 Route::group(['prefix' => 'set'], function () {

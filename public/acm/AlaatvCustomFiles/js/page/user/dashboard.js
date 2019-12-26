@@ -601,89 +601,98 @@ function moveUpBtns(dom) {
 }
 
 $(document).ready(function () {
-    var OwlCarouselType2Option = {
-        OwlCarousel: {
-            btnSwfitchEvent: function () {
-                imageObserver.observe();
-                gtmEecProductObserver.observe();
-            }
-        },
-        grid: {
-            btnSwfitchEvent: function () {
-                imageObserver.observe();
-                gtmEecProductObserver.observe();
-            }
-        },
-        defaultView: 'grid',
-    };
-    $('#owlCarouselMyProduct').OwlCarouselType2(OwlCarouselType2Option);
-    $('#owlCarouselMyFavoritSet').OwlCarouselType2(OwlCarouselType2Option);
-    $('#owlCarouselMyFavoritContent').OwlCarouselType2(OwlCarouselType2Option);
-    $('#owlCarouselMyFavoritProducts').OwlCarouselType2(OwlCarouselType2Option);
 
-    PurchaseAndFavoriteTabPage.init();
+    var userId = GlobalJsVar.userId();
 
-    $('.CustomDropDown').CustomDropDown({
-        onChange: function (data) {
-            if (!data.target.hasClass('btnViewVideo') && !data.target.hasClass('btnViewContentSet')) {
-                return false;
+    if (userId.trim().length > 0) {
+        var OwlCarouselType2Option = {
+            OwlCarousel: {
+                btnSwfitchEvent: function () {
+                    imageObserver.observe();
+                    gtmEecProductObserver.observe();
+                }
+            },
+            grid: {
+                btnSwfitchEvent: function () {
+                    imageObserver.observe();
+                    gtmEecProductObserver.observe();
+                }
+            },
+            defaultView: 'grid',
+        };
+        $('#owlCarouselMyProduct').OwlCarouselType2(OwlCarouselType2Option);
+        $('#owlCarouselMyFavoritSet').OwlCarouselType2(OwlCarouselType2Option);
+        $('#owlCarouselMyFavoritContent').OwlCarouselType2(OwlCarouselType2Option);
+        $('#owlCarouselMyFavoritProducts').OwlCarouselType2(OwlCarouselType2Option);
+
+        PurchaseAndFavoriteTabPage.init();
+
+        $('.CustomDropDown').CustomDropDown({
+            onChange: function (data) {
+                if (!data.target.hasClass('btnViewVideo') && !data.target.hasClass('btnViewContentSet')) {
+                    return false;
+                }
+                // { index: 2, totalCount: 5, value: "3", text: "فرسنگ سوم" }
+            },
+            onChanged: function (data) {
+                // { index: 2, totalCount: 5, value: "3", text: "فرسنگ سوم" }
+            },
+            onRendered: function (data) {
+                $('[data-toggle="m-tooltip"]').tooltip();
+            },
+            parentOptions: function ($this) {
+                var parentId = $this.attr('data-parent-id');
+                return '#' + parentId;
+            },
+            renderOption: function (optionObject) {
+
+                var label = optionObject.innerHTML,
+                    value = optionObject.getAttribute('value'),
+                    productKey = optionObject.getAttribute('data-product-key'),
+                    hasVideo = optionObject.getAttribute('data-has-video'),
+                    hasPamphlet = optionObject.getAttribute('data-has-pamphlet'),
+                    btnVideo =
+                        '    <button type="button"\n' +
+                        '            class="btn btn-warning btnViewContentSet btnViewVideo"\n' +
+                        '            data-product-key="' + productKey + '"\n' +
+                        '            data-content-type="video"\n' +
+                        '            data-content-url="' + value + '">\n' +
+                        '        فیلم ها\n' +
+                        '    </button>\n',
+                    btnPamphlet =
+                        '    <button type="button"\n' +
+                        '            class="btn btn-secondary btnViewContentSet btnViewPamphlet"\n' +
+                        '            data-product-key="' + productKey + '"\n' +
+                        '            data-content-type="pamphlet"\n' +
+                        '            data-content-url="' + value + '">\n' +
+                        '        جزوات\n' +
+                        '    </button>',
+                    actionBtn = '';
+
+                if (hasVideo === '1') {
+                    actionBtn += btnVideo;
+                }
+                if (hasPamphlet === '1') {
+                    actionBtn += btnPamphlet;
+                }
+                return '' +
+                    '<div class="setRow">' +
+                    '  <div class="setRow-label" data-toggle="m-tooltip" data-placement="top" data-original-title="' + label + '">' +
+                    label +
+                    '  </div>' +
+                    '  <div class="setRow-action">' +
+                    actionBtn +
+                    '  </div>' +
+                    '</div>';
             }
-            // { index: 2, totalCount: 5, value: "3", text: "فرسنگ سوم" }
-        },
-        onChanged: function (data) {
-            // { index: 2, totalCount: 5, value: "3", text: "فرسنگ سوم" }
-        },
-        onRendered: function (data) {
-            $('[data-toggle="m-tooltip"]').tooltip();
-        },
-        parentOptions: function ($this) {
-            var parentId = $this.attr('data-parent-id');
-            return '#'+parentId;
-        },
-        renderOption: function (optionObject) {
+        });
 
-            var label = optionObject.innerHTML,
-                value = optionObject.getAttribute('value'),
-                productKey = optionObject.getAttribute('data-product-key'),
-                hasVideo = optionObject.getAttribute('data-has-video'),
-                hasPamphlet = optionObject.getAttribute('data-has-pamphlet'),
-                btnVideo =
-                    '    <button type="button"\n' +
-                    '            class="btn btn-warning btnViewContentSet btnViewVideo"\n' +
-                    '            data-product-key="'+productKey+'"\n' +
-                    '            data-content-type="video"\n' +
-                    '            data-content-url="'+value+'">\n' +
-                    '        فیلم ها\n' +
-                    '    </button>\n',
-                btnPamphlet =
-                    '    <button type="button"\n' +
-                    '            class="btn btn-secondary btnViewContentSet btnViewPamphlet"\n' +
-                    '            data-product-key="'+productKey+'"\n' +
-                    '            data-content-type="pamphlet"\n' +
-                    '            data-content-url="'+value+'">\n' +
-                    '        جزوات\n' +
-                    '    </button>',
-                actionBtn = '';
-
-            if (hasVideo==='1') {
-                actionBtn += btnVideo;
-            }
-            if (hasPamphlet==='1') {
-                actionBtn += btnPamphlet;
-            }
-            return '' +
-                '<div class="setRow">' +
-                '  <div class="setRow-label" data-toggle="m-tooltip" data-placement="top" data-original-title="'+label+'">'+
-                label+
-                '  </div>' +
-                '  <div class="setRow-action">'+
-                actionBtn +
-                '  </div>' +
-                '</div>';
-        }
-    });
-
-    FilterAndSort.init();
-    LoadContentSet.init();
+        FilterAndSort.init();
+        LoadContentSet.init();
+    } else {
+        AjaxLogin.showLogin(GlobalJsVar.loginActionUrl(), function () {
+            window.location.reload();
+        });
+    }
 
 });
