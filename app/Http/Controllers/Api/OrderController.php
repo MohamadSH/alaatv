@@ -2,11 +2,16 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Classes\Pricing\Alaa\AlaaInvoiceGenerator;
 use App\Collection\OrderCollections;
+use App\Coupon;
+use App\Http\Controllers\Controller;
 use App\Http\Controllers\Web\OrderproductController;
 use App\Http\Requests\DonateRequest;
+use App\Http\Requests\SubmitCouponRequest;
+use App\Http\Resources\Coupon as CouponResource;
+use App\Http\Resources\Invoice as InvoiceResource;
 use App\Order;
-use App\Coupon;
 use App\Orderproduct;
 use App\Product;
 use Exception;
@@ -14,12 +19,7 @@ use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Cache;
-use App\Http\Requests\SubmitCouponRequest;
-use App\Classes\Pricing\Alaa\AlaaInvoiceGenerator;
-use App\Http\Resources\Coupon as CouponResource;
-use App\Http\Resources\Invoice as InvoiceResource;
 
 class OrderController extends Controller
 {
@@ -28,7 +28,7 @@ class OrderController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('SubmitOrderCoupon', ['only' => ['submitCoupon'],]);
+        $this->middleware('SubmitOrderCoupon', ['only' => ['submitCoupon', 'submitCouponV2'],]);
         $this->middleware('RemoveOrderCoupon', ['only' => ['removeCoupon'],]);
     }
 
@@ -127,21 +127,19 @@ class OrderController extends Controller
         $coupon = Coupon::code($request->get('code'))->first();
         if ($request->has('openOrder')) {
             $order = $request->get('openOrder');
-        }
-        else {
+        } else {
             $order_id = $request->get('order_id');
             $order    = Order::Find($order_id);
         }
 
-        list($resultCode, $resultText) = $this->processCoupon($invoiceGenerator, $coupon, $order);
+        [$resultCode, $resultText] = $this->processCoupon($invoiceGenerator, $coupon, $order);
 
         if ($resultCode == Response::HTTP_OK) {
             $response = [
                 $coupon,
                 'message' => 'Coupon attached successfully',
             ];
-        }
-        else {
+        } else {
             $response = [
                 'error' => [
                     'code'    => $resultCode ?? $resultCode,
@@ -162,21 +160,19 @@ class OrderController extends Controller
         $coupon = Coupon::code($request->get('code'))->first();
         if ($request->has('openOrder')) {
             $order = $request->get('openOrder');
-        }
-        else {
+        } else {
             $order_id = $request->get('order_id');
             $order    = Order::Find($order_id);
         }
 
-        list($resultCode, $resultText) = $this->processCoupon($invoiceGenerator, $coupon, $order);
+        [$resultCode, $resultText] = $this->processCoupon($invoiceGenerator, $coupon, $order);
 
         if ($resultCode == Response::HTTP_OK) {
             $response = [
                 new CouponResource($coupon),
                 'message' => 'Coupon attached successfully',
             ];
-        }
-        else {
+        } else {
             $response = [
                 'error' => [
                     'code'    => $resultCode ?? $resultCode,
@@ -201,8 +197,7 @@ class OrderController extends Controller
     {
         if ($request->has('openOrder')) {
             $order = $request->get('openOrder');
-        }
-        else {
+        } else {
             $order_id = $request->get('order_id');
             $order    = Order::Find($order_id);
         }
@@ -216,18 +211,15 @@ class OrderController extends Controller
                     $coupon->update();
                     $resultCode = Response::HTTP_OK;
                     $resultText = "Coupon detached successfully";
-                }
-                else {
+                } else {
                     $resultCode = Response::HTTP_SERVICE_UNAVAILABLE;
                     $resultText = "Database error";
                 }
-            }
-            else {
+            } else {
                 $resultCode = Response::HTTP_BAD_REQUEST;
                 $resultText = "No coupon found for this order";
             }
-        }
-        else {
+        } else {
             $resultCode = Response::HTTP_BAD_REQUEST;
             $resultText = "Unknown order";
         }
@@ -236,8 +228,7 @@ class OrderController extends Controller
             $response = [
                 'message' => 'Coupon detached successfully',
             ];
-        }
-        else {
+        } else {
             $response = [
                 'error' => [
                     'code'    => $resultCode ?? $resultCode,
@@ -261,7 +252,7 @@ class OrderController extends Controller
     {
         $user = $request->user('alaatv');
         if ($user === null) {
-            abort(403, 'Not authorized.');
+            abort(Response::HTTP_FORBIDDEN, 'Not authorized.');
         }
         $amount       = $request->get('amount');
         /** @var OrderCollections $donateOrders */
@@ -270,9 +261,9 @@ class OrderController extends Controller
             $donateOrder = $donateOrders->first();
         } else {
             $donateOrder = Order::create([
-                'orderstatus_id'      =>  config('constants.ORDER_STATUS_OPEN_DONATE'),
-                'paymentstatus_id'    =>  config('constants.PAYMENT_STATUS_UNPAID'),
-                'user_id'             =>  $user->id,
+                'orderstatus_id'   =>  config('constants.ORDER_STATUS_OPEN_DONATE'),
+                'paymentstatus_id' =>  config('constants.PAYMENT_STATUS_UNPAID'),
+                'user_id'          =>  $user->id,
             ]);
         }
 
@@ -282,31 +273,81 @@ class OrderController extends Controller
             ->where('product_id', $donateProduct->id)
             ->get();
 
-        if($oldOrderproducts->isNotEmpty())
-        {
+        if($oldOrderproducts->isNotEmpty()) {
             $oldOrderproduct = $oldOrderproducts->first();
             $oldOrderproduct->cost = $amount;
             $oldOrderproduct->update();
         }else{
             $donateOrderproduct = Orderproduct::Create([
-                'order_id'  =>  $donateOrder->id,
-                'product_id' => $donateProduct->id,
-                'cost'  =>  $amount,
-                'orderproducttype_id'  =>  config('constants.ORDER_PRODUCT_TYPE_DEFAULT'),
+                'order_id'            =>  $donateOrder->id,
+                'product_id'          => $donateProduct->id,
+                'cost'                =>  $amount,
+                'orderproducttype_id' =>  config('constants.ORDER_PRODUCT_TYPE_DEFAULT'),
             ]);
         }
 
-        $donateOrder                    = $donateOrder->fresh();
-        $orderCost                      = $donateOrder->obtainOrderCost(true, false);
-        $donateOrder->cost              = $orderCost['rawCostWithDiscount'];
+        $donateOrder = $donateOrder->fresh();
+        $orderCost = $donateOrder->obtainOrderCost(true, false);
+        $donateOrder->cost = $orderCost['rawCostWithDiscount'];
         $donateOrder->costwithoutcoupon = $orderCost['rawCostWithoutDiscount'];
         $donateOrder->update();
 
-        return redirect()->route('api.v1.payment.getEncryptedLink' , ['order_id'  =>  $donateOrder->id]);
+        return redirect()->route('api.v1.payment.getEncryptedLink', ['order_id' => $donateOrder->id]);
+    }
+
+    public function donateOrderV2(DonateRequest $request)
+    {
+        $user = $request->user('alaatv');
+        if ($user === null) {
+            abort(Response::HTTP_FORBIDDEN, 'Not authorized.');
+        }
+        $amount = $request->get('amount');
+        /** @var OrderCollections $donateOrders */
+        $donateOrders = $user->orders->where('orderstatus_id', config('constants.ORDER_STATUS_OPEN_DONATE'));
+        if ($donateOrders->isNotEmpty()) {
+            $donateOrder = $donateOrders->first();
+        } else {
+            $donateOrder = Order::create([
+                'orderstatus_id'   => config('constants.ORDER_STATUS_OPEN_DONATE'),
+                'paymentstatus_id' => config('constants.PAYMENT_STATUS_UNPAID'),
+                'user_id'          => $user->id,
+            ]);
+        }
+
+        $donateProduct = Product::FindOrFail(Product::CUSTOM_DONATE_PRODUCT);
+
+        $oldOrderproducts = $donateOrder->orderproducts(config('constants.ORDER_PRODUCT_TYPE_DEFAULT'))
+            ->where('product_id', $donateProduct->id)
+            ->get();
+
+        if ($oldOrderproducts->isNotEmpty()) {
+            $oldOrderproduct = $oldOrderproducts->first();
+            $oldOrderproduct->cost = $amount;
+            $oldOrderproduct->update();
+        } else {
+            $donateOrderproduct = Orderproduct::Create([
+                'order_id'            => $donateOrder->id,
+                'product_id'          => $donateProduct->id,
+                'cost'                => $amount,
+                'orderproducttype_id' => config('constants.ORDER_PRODUCT_TYPE_DEFAULT'),
+            ]);
+        }
+
+        $donateOrder = $donateOrder->fresh();
+        $orderCost = $donateOrder->obtainOrderCost(true, false);
+        $donateOrder->cost = $orderCost['rawCostWithDiscount'];
+        $donateOrder->costwithoutcoupon = $orderCost['rawCostWithoutDiscount'];
+        $donateOrder->update();
+
+        return [
+            'data' => [
+                'link' => route('api.v1.payment.getEncryptedLink', ['order_id' => $donateOrder->id]),
+            ],
+        ];
     }
 
     /**
-     * @param AlaaInvoiceGenerator $invoiceGenerator
+     * @param AlaaInvoiceGenerator                             $invoiceGenerator
      * @param                                                  $coupon
      * @param                                                  $order
      *
@@ -324,10 +365,9 @@ class OrderController extends Controller
         /** @var Coupon $coupon */
         $couponValidationStatus = $coupon->validateCoupon();
         if ($couponValidationStatus == Coupon::COUPON_VALIDATION_STATUS_OK) {
-            list($resultCode, $resultText) = $this->handleValidCoupon($invoiceGenerator, $coupon, $order);
-        }
-        else {
-            list($resultText, $resultCode) = $this->handleInvalidCoupon($couponValidationStatus);
+            [$resultCode, $resultText] = $this->handleValidCoupon($invoiceGenerator, $coupon, $order);
+        } else {
+            [$resultText, $resultCode] = $this->handleInvalidCoupon($couponValidationStatus);
         }
 
         return [$resultCode, $resultText];
@@ -353,8 +393,7 @@ class OrderController extends Controller
             if ($coupon->discounttype_id == config('constants.DISCOUNT_TYPE_COST')) {
                 $order->couponDiscount       = 0;
                 $order->couponDiscountAmount = (int) $coupon->discount;
-            }
-            else {
+            } else {
                 $order->couponDiscount       = $coupon->discount;
                 $order->couponDiscountAmount = 0;
             }
@@ -390,8 +429,7 @@ class OrderController extends Controller
         if ($coupon->discounttype_id == config('constants.DISCOUNT_TYPE_COST')) {
             $order->couponDiscount       = 0;
             $order->couponDiscountAmount = (int) $coupon->discount;
-        }
-        else {
+        } else {
             $order->couponDiscount       = $coupon->discount;
             $order->couponDiscountAmount = 0;
         }
