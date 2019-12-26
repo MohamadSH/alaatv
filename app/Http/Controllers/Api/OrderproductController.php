@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Api;
 use App\Collection\OrderproductCollection;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\OrderProduct\OrderProductStoreRequest;
-use App\Http\Resources\PurchasedOrderproduct as OrderproductResource;
 use App\Orderproduct;
 use App\Product;
 use App\Traits\OrderCommon;
@@ -25,6 +24,7 @@ class OrderproductController extends Controller
 
     function __construct(\App\Http\Controllers\Web\OrderproductController $orderproductController)
     {
+        $this->middleware(['CheckPermissionForSendOrderId',], ['only' => ['store', 'storeV2'],]);
         $this->orderproductController = $orderproductController;
     }
 
@@ -33,8 +33,8 @@ class OrderproductController extends Controller
         if ($request->has('extraAttribute')) {
             if (!$request->user()
                 ->can(config("constants.ATTACH_EXTRA_ATTRIBUTE_ACCESS"))) {
-                $productId        = $request->get('product_id');
-                $product          = Product::findOrFail($productId);
+                $productId = $request->get('product_id');
+                $product = Product::findOrFail($productId);
                 $attributesValues = $this->orderproductController->getAttributesValuesFromProduct($request, $product);
                 $this->orderproductController->syncExtraAttributesCost($request, $attributesValues);
                 $request->offsetSet('parentProduct', $product);
@@ -69,35 +69,17 @@ class OrderproductController extends Controller
         if ($request->has('extraAttribute')) {
             if (!$request->user()
                 ->can(config("constants.ATTACH_EXTRA_ATTRIBUTE_ACCESS"))) {
-                $productId        = $request->get('product_id');
-                $product          = Product::findOrFail($productId);
+                $productId = $request->get('product_id');
+                $product = Product::findOrFail($productId);
                 $attributesValues = $this->orderproductController->getAttributesValuesFromProduct($request, $product);
                 $this->orderproductController->syncExtraAttributesCost($request, $attributesValues);
                 $request->offsetSet('parentProduct', $product);
             }
         }
 
-        $result        = $this->orderproductController->new($request->all());
-        $orderproducts = new OrderproductCollection();
-        if (isset($result['data']['storedOrderproducts'])) {
-            $orderproducts = $result['data']['storedOrderproducts'];
-        }
+        $this->orderproductController->new($request->all());
 
-        if ($orderproducts->isEmpty()) {
-            $responseContent = [
-                'error' => [
-                    'code'    => Response::HTTP_NOT_MODIFIED,
-                    'message' => 'No orderproducts added to the order',
-                ],
-            ];
-        }
-        else {
-            $responseContent = [
-                'orderproducts' => OrderproductResource::collection($orderproducts),
-            ];
-        }
-
-        return response($responseContent, Response::HTTP_OK);
+        return response()->json(null);
     }
 
     /**
@@ -141,10 +123,49 @@ class OrderproductController extends Controller
             return response([
                 'message' => 'Orderproduct removed successfully',
             ], Response::HTTP_OK);
-        }
-        else {
+        } else {
             return response([
                 'message' => 'Database error on removing orderproduct',
+            ], Response::HTTP_SERVICE_UNAVAILABLE);
+        }
+    }
+
+    public function destroyV2(Request $request, Orderproduct $orderproduct)
+    {
+        $authenticatedUser = $request->user('api');
+        $orderUser = optional(optional($orderproduct)->order)->user;
+
+        if ($authenticatedUser->id != $orderUser->id) {
+            abort(Response::HTTP_FORBIDDEN, 'Orderproduct does not belong to this user.');
+        }
+
+        $orderproduct_userbons = $orderproduct->userbons;
+        foreach ($orderproduct_userbons as $orderproduct_userbon) {
+            $orderproduct_userbon->usedNumber = $orderproduct_userbon->usedNumber - $orderproduct_userbon->pivot->usageNumber;
+            $orderproduct_userbon->userbonstatus_id = config("constants.USERBON_STATUS_ACTIVE");
+            if ($orderproduct_userbon->usedNumber >= 0) {
+                $orderproduct_userbon->update();
+            }
+        }
+
+        if ($orderproduct->delete()) {
+            foreach ($orderproduct->children as $child) {
+                $child->delete();
+            }
+
+            Cache::tags([
+                'order_' . $orderproduct->order_id . '_products',
+                'order_' . $orderproduct->order_id . '_orderproducts',
+                'order_' . $orderproduct->order_id . '_cost',
+                'order_' . $orderproduct->order_id . '_bon',
+            ])->flush();
+
+            return response()->json(null);
+        } else {
+            return response([
+                'error' => [
+                    'message' => 'Database error on removing orderproduct',
+                ],
             ], Response::HTTP_SERVICE_UNAVAILABLE);
         }
     }

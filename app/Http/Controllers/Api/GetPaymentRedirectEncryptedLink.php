@@ -2,31 +2,41 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Http\Controllers\Controller;
 use App\User;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\URL;
-use App\Http\Controllers\Controller;
+use Illuminate\Support\Str;
 
 class GetPaymentRedirectEncryptedLink extends Controller
 {
     /**
      * Handle the incoming request.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param Request $request
      *
-     * @return \Illuminate\Http\Response
+     * @return array|JsonResponse
      */
     public function __invoke(Request $request)
     {
         $paymentMethod = $request->get('paymentMethod', 'zarinpal');
-        $device        = $request->get('device', 'android');
-        $orderId       = $request->get('order_id');
-        $user          = $request->user();
+        $device = $request->get('device', 'android');
+        $orderId = $request->get('order_id');
+        $user = $request->user();
 
-        $encryptedPostfix = $this->getEncryptedPostfix($user , $orderId);
+        $encryptedPostfix = $this->getEncryptedPostfix($user, $orderId);
 
         $redirectTo = $this->getEncryptedUrl($paymentMethod, $device, $encryptedPostfix);
+
+        if (Str::contains($request->path(), 'v2')) {
+            return [
+                'data' => [
+                    'url' => $redirectTo,
+                ],
+            ];
+        }
 
         return response()->json([
             'url' => $redirectTo,
@@ -43,8 +53,7 @@ class GetPaymentRedirectEncryptedLink extends Controller
     {
         $toEncrypt = ['user_id' => $user->id,];
 
-        if(isset($orderId))
-        {
+        if(isset($orderId)) {
             $toEncrypt = Arr::add($toEncrypt , 'order_id' , $orderId);
         }
 

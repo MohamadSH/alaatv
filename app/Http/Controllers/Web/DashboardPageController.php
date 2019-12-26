@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\Web;
 
+use App\Http\Controllers\Controller;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use App\Http\Controllers\Controller;
 
 class DashboardPageController extends Controller
 {
@@ -19,22 +19,21 @@ class DashboardPageController extends Controller
         if ($request->user()->id != $user->id) {
             abort(Response::HTTP_FORBIDDEN, 'you can\'nt get user '.$user->id.' dashboard!.');
         }
-        $pageName             = "shop";
         $userInfoCompletion   = $user->completion();
         $userAssetsCollection = $user->getDashboardBlocks();
 
         if ($request->expectsJson()) {
             return response()->json([
-                'user_id'   => $user->id,
-                'data'      => $userAssetsCollection,
+                'user_id' => $user->id,
+                'data'    => $userAssetsCollection,
             ]);
         }
 
 
         $categoryArray = [
             [
-                'name'  => 'همه',
-                'value' => 'all',
+                'name'     => 'همه',
+                'value'    => 'all',
                 'selected' => true,
             ],
             [
@@ -62,6 +61,6 @@ class DashboardPageController extends Controller
                 'value' => 'VIP',
             ],
         ];
-        return view('user.dashboard', compact('user', 'pageName', 'userAssetsCollection' , 'categoryArray', 'userInfoCompletion'));
+        return view('user.dashboard', compact('user', 'userAssetsCollection', 'categoryArray', 'userInfoCompletion'));
     }
 }
