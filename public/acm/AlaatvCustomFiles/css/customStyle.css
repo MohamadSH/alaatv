@@ -283,6 +283,18 @@ a.a--gtm-eec-advertisement-click {
     content: "\f104" !important;
 }
 
+.m-accordion.m-accordion--toggle-arrow .m-accordion__item .m-accordion__item-head .m-accordion__item-mode,
+.m-accordion.m-accordion--toggle-arrow .m-accordion__item .m-accordion__item-head.collapsed .m-accordion__item-mode {
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+}
+.m-accordion.m-accordion--toggle-arrow .m-accordion__item .m-accordion__item-head.collapsed .m-accordion__item-mode::before {
+    content: "\f078";
+}
+.m-accordion.m-accordion--toggle-arrow .m-accordion__item .m-accordion__item-head .m-accordion__item-mode::before {
+    content: "\f077";
+}
+
 .m-switch.m-switch--icon input:empty ~ span::after {
     font-family: "Font Awesome 5 Free";
     content: "\f00c";
@@ -392,8 +404,10 @@ a.a--gtm-eec-advertisement-click {
         margin-left: 65px;
         margin-right: 65px;
     }
+    .m-body .m-content.boxed {
+        padding: 10px 100px 30px 100px;
+    }
 }
-
 @media only screen and (max-width: 1800px) {
     #carouselMainSlideShow .carousel-inner {
         min-height: 719.922px;

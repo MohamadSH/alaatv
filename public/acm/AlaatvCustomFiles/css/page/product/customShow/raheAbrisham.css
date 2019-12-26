@@ -1,0 +1,392 @@
+#mapRoad {
+    position: relative;
+}
+#mapRoad img.background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+#mapRoad * {
+    font-family: IRANSans;
+}
+#mapRoad .highcharts-background {
+    fill: transparent;
+}
+
+.periodDescription.compact,
+.descriptionBox .m-portlet__body .content.compact {
+    position: relative;
+    max-height: 150px;
+    overflow: hidden;
+}
+.descriptionBox .m-portlet__body .content.collapsed {
+    position: relative;
+}
+.periodDescription.compact:after,
+.descriptionBox .m-portlet__body .content.compact:after {
+    content: ' ';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 30px;
+    -webkit-box-shadow: inset 0 -10px 10px 10px rgb(255, 255, 255);
+    -moz-box-shadow: inset 0 -10px 10px 10px rgb(255, 255, 255);
+    box-shadow: inset 0 -10px 10px 10px rgb(255, 255, 255);
+    z-index: 2;
+}
+
+/*pictureAndMap*/
+.mapContainer {
+    width: 100%;
+    height: 500px;
+}
+.MapStepLabel {
+    position: fixed;
+    z-index: 9;
+    background: #b8a288;
+    color: white;
+    padding: 2px 5px;
+    border-radius: 5px;
+    border: solid 2px white;
+}
+.MapStepLabel:before {
+    content: ' ';
+    position: absolute;
+}
+.MapStepLabel.top:before {
+    border-top: solid 10px white;
+    border-left: solid 10px transparent;
+    border-right: solid 10px transparent;
+    top: 24px;
+    left: calc( 50% - 10px);
+}
+.MapStepLabel.bottom:before {
+    border-left: solid 10px transparent;
+    border-right: solid 10px transparent;
+    border-bottom: solid 10px white;
+    top: -10px;
+    left: calc( 50% - 10px);
+}
+.MapStepLabel.left:before {
+    border-top: solid 10px transparent;
+    border-bottom: solid 10px transparent;
+    border-left: solid 10px white;
+    top: calc( 50% - 10px);
+    right: -10px;
+}
+.MapStepLabel.right:before {
+    border-top: solid 10px transparent;
+    border-bottom: solid 10px transparent;
+    border-right: solid 10px white;
+    top: calc( 50% - 10px);
+    left: -10px;
+}
+.display-5 {
+    font-size: 2rem;
+    font-weight: bold;
+    line-height: 1.9;
+}
+.display-6 {
+    font-size: 1.5rem;
+    font-weight: bold;
+    line-height: 2.5;
+}
+
+.highcharts-null-point {
+    fill: transparent;
+}
+
+.btnShowRepurchase,
+.btnShowHelpMessage,
+.btnShowLiveDescription {
+    min-height: 74px;
+}
+@media (max-width: 800px) {
+    .display-5 {
+        font-size: 1.2rem;
+        line-height: 1;
+    }
+    .display-6 {
+        font-size: 1rem;
+        line-height: 1.5;
+    }
+}
+/*pictureAndMap*/
+
+
+/*descriptionBox*/
+.m-portlet.transparentBack {
+    background-color: transparent;
+    box-shadow: none;
+}
+.m-portlet.transparentBack .m-portlet__head {
+    background-color: transparent;
+    border: none;
+}
+.m-portlet.transparentBack .m-portlet__body {
+    padding: 0;
+}
+.m-portlet .m-portlet__head .m-portlet__head-text .fa.fa-times  {
+    cursor: pointer;
+}
+/*descriptionBox*/
+
+
+
+/*entekhabeFarsang*/
+.entekhabeFarsangVideoAndPamphlet {
+    position: relative;
+}
+.entekhabeFarsangVideoAndPamphlet:before {
+    content: ' ';
+    border-right: solid 25px transparent;
+    border-left: solid 25px transparent;
+    border-bottom: solid 25px white;
+    position: absolute;
+    left: 25%;
+    top: -25px;
+}
+.entekhabeFarsangVideoAndPamphlet .m-portlet__body {
+    position: relative;
+    padding-bottom: 10px;
+}
+.entekhabeFarsangVideoAndPamphlet .nav.nav-tabs {
+    width: max-content;
+    margin: auto;
+}
+.entekhabeFarsangVideoAndPamphlet .nav-tabs .nav-item {
+    margin: 0;
+}
+.entekhabeFarsangVideoAndPamphlet .nav-tabs .nav-item .nav-link,
+.entekhabeFarsangVideoAndPamphlet .nav-tabs .nav-link {
+    background-color: white;
+    color: #b6b6b6;
+    border-top: none;
+    border-right: none;
+    border-left: none;
+    border-bottom: solid 3px #b6b6b6;
+    font-size: 2rem;
+    font-weight: bold;
+    padding: 10px 50px;
+}
+.entekhabeFarsangVideoAndPamphlet .nav-tabs .nav-item.show .nav-link,
+.entekhabeFarsangVideoAndPamphlet .nav-tabs .nav-link.active {
+    color: black;
+    border-bottom: solid 3px black;
+}
+.entekhabeFarsangVideoAndPamphlet .m-portlet__body {
+    padding-top: 0 !important;
+}
+.entekhabeFarsangVideoAndPamphlet .m-portlet__body .closeBtn {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+}
+#m_tabs_pamphlet .ScrollCarousel .ScrollCarousel-Items{
+    min-height: 150px;
+    align-items: center;
+}
+.entekhabeFarsangVideoAndPamphlet .tab-content {
+    padding-right: 40px;
+}
+.entekhabeFarsangVideoAndPamphlet .tab-content .showVideoMessage,
+.entekhabeFarsangVideoAndPamphlet .tab-content .showPamphletMessage {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    top: calc( 50% - 20px );
+}
+.entekhabeFarsangVideoAndPamphlet .tab-content .tab-pane {
+    position: relative;
+}
+.entekhabeFarsangVideoAndPamphlet .tab-content .tab-pane .whiteShadow {
+    content: ' ';
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: calc( 100% - 10px);
+    width: 145px;
+    background: transparent;
+    background: linear-gradient(90deg, rgb(255, 255, 255) 0%, rgba(255,255,255,0) 60%);
+}
+.entekhabeFarsangVideoAndPamphlet .tab-content .ScrollCarousel  {
+    min-height: 155px;
+}
+.entekhabeFarsangVideoAndPamphlet .tab-content .tab-pane .ScrollCarousel-next,
+.entekhabeFarsangVideoAndPamphlet .tab-content .tab-pane .ScrollCarousel-previous {
+    position: absolute;
+    height: calc( 100% - 15px);
+    color: #f66e84;
+    top: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 5;
+    cursor: pointer;
+}
+
+.entekhabeFarsangVideoAndPamphlet .tab-content .tab-pane .ScrollCarousel-next .fa,
+.entekhabeFarsangVideoAndPamphlet .tab-content .tab-pane .ScrollCarousel-previous .fa {
+    font-size: 3rem;
+}
+.entekhabeFarsangVideoAndPamphlet .tab-content .tab-pane .ScrollCarousel-next {
+    left: 0;
+}
+.entekhabeFarsangVideoAndPamphlet .tab-content .tab-pane .ScrollCarousel-previous {
+    right: 0;
+}
+.m-portlet .m-portlet__body .closeBtn {
+    cursor: pointer;
+}
+
+.pamphletItem {
+    display: flex;
+    flex-flow: row;
+    -webkit-box-shadow: 0 0 5px -4px rgba(0,0,0,0.75);
+    -moz-box-shadow: 0 0 5px -4px rgba(0,0,0,0.75);
+    box-shadow: 0 0 5px -4px rgba(0,0,0,0.75);
+    margin-top: 5px;
+    padding: 5px;
+}
+.pamphletItem .pamphletItem-thumbnail {
+    flex-basis: 15%;
+    max-width: 15%;
+    display: flex;
+    align-items: center;
+}
+.pamphletItem .pamphletItem-name {
+    flex-basis: 85%;
+    max-width: 85%;
+    padding-right: 5px;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+}
+.sectionFilterCol {
+    position: absolute;
+    top: 70px;
+    right: -10px;
+}
+.sectionFilterCol .sectionFilter-item {
+    margin-bottom: 5px;
+    background: rgb(255, 204, 0);
+    color: #020200;
+    padding: 5px;
+    -webkit-box-shadow: 5px 5px 10px -7px rgba(0,0,0,0.75);
+    -moz-box-shadow: 5px 5px 10px -7px rgba(0,0,0,0.75);
+    box-shadow: 5px 5px 10px -7px rgba(0,0,0,0.75);
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.1s;
+}
+.sectionFilterCol .sectionFilter-item.selected {
+    background: #f66e84;
+    color: white;
+    font-weight: bold;
+    -webkit-box-shadow: 5px 5px 10px -5px rgba(0,0,0,0.75);
+    -moz-box-shadow: 5px 5px 10px -5px rgba(0,0,0,0.75);
+    box-shadow: 5px 5px 10px -5px rgba(0,0,0,0.75);
+    transform: scale(1.2, 1);
+    transform-origin: left;
+}
+.sectionFilterCol .sectionFilter-item:hover {
+    -webkit-box-shadow: 5px 5px 10px -5px rgba(0,0,0,0.75);
+    -moz-box-shadow: 5px 5px 10px -5px rgba(0,0,0,0.75);
+    box-shadow: 5px 5px 10px -5px
+    rgba(0,0,0,0.75);
+    transform: scale(1.1, 1);
+    transform-origin: left;
+}
+
+@media (max-width: 767px) {
+    .entekhabeFarsangVideoAndPamphlet:before {
+        left: 50%;
+    }
+    .entekhabeFarsangVideoAndPamphlet .tab-content {
+        padding-right: 65px;
+    }
+    .sectionFilterCol {
+        right: 8px;
+    }
+    .sectionFilterCol .sectionFilter-item {
+        font-size: 0.8em;
+    }
+}
+
+@media (max-width: 400px) {
+    .entekhabeFarsangVideoAndPamphlet .nav-tabs .nav-item .nav-link, .entekhabeFarsangVideoAndPamphlet .nav-tabs .nav-link {
+        font-size: 1.2rem;
+    }
+}
+/*entekhabeFarsang*/
+
+
+/*soalateMotedavel*/
+
+.soalateMotedavel.m-accordion.m-accordion--section .m-accordion__item {
+    margin-bottom: 0.5rem;
+}
+.soalateMotedavel.m-accordion.m-accordion--section .m-accordion__item .m-accordion__item-head,
+.soalateMotedavel.m-accordion.m-accordion--solid .m-accordion__item .m-accordion__item-head.collapsed {
+    background-color: #bebebe;
+    color: white !important;
+    font-weight: bold;
+}
+.soalateMotedavel.m-accordion.m-accordion--toggle-arrow .m-accordion__item .m-accordion__item-head .m-accordion__item-mode,
+.soalateMotedavel.m-accordion.m-accordion--toggle-arrow .m-accordion__item .m-accordion__item-head.collapsed .m-accordion__item-mode {
+    color: white !important;
+}
+.soalateMotedavel.m-accordion.m-accordion--section .m-accordion__item .m-accordion__item-body .m-accordion__item-content,
+.soalateMotedavel.m-accordion.m-accordion--section .m-accordion__item .m-accordion__item-body > span {
+    padding-top: 1.5rem;
+}
+/*soalateMotedavel*/
+
+
+/*liveDescription*/
+.m-timeline-3 .m-timeline-3__item.m-timeline-3__item--danger .m-timeline-3__item-desc .m-timeline-3__item-user-name .m-timeline-3__item-link {
+    color: #f4516c;
+}
+/*liveDescription*/
+
+
+/*Repurchase*/
+.RepurchaseRow .Repurchase-description {
+    border: solid 1px #efefef;
+}
+.RepurchaseRow .Repurchase-description .title {
+    background: #efefef;
+    padding-right: 5px;
+}
+.RepurchaseRow .Repurchase-description .vlues {
+    padding-right: 10px;
+    padding-top: 10px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+.RepurchaseRow .Repurchase-description .vlues .item {
+    line-height: 30px;
+}
+.RepurchaseRow .Repurchase-description .attributes .vlues {
+    border-left: solid 1px #efefef;
+}
+
+.RepurchaseRow .Repurchase-priceAndAddToCart .col {
+    display: flex;
+    justify-content: flex-start;
+    padding-right: 15px;
+    padding-top: 0;
+}
+.RepurchaseRow .Repurchase-priceAndAddToCart .col .btnAddToCart {
+    font-size: 1.2rem;
+    background-color: #62e885;
+    border: none;
+    padding-top: 0;
+    padding-bottom: 0;
+}
+/*Repurchase*/

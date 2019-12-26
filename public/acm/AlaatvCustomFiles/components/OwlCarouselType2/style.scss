@@ -551,6 +551,7 @@
 }
 
 .recomenderSquare,
+.whiteSquare,
 .blueSquare,
 .redSquare {
   width: 10px;
@@ -564,6 +565,10 @@
 .recomenderSquare {
   background: red;
   border: solid 2px #36a3f7;
+}
+
+.whiteSquare {
+  background: white;
 }
 
 .redSquare {
