@@ -6,20 +6,25 @@
         return this.each(function () { //Loop over each element in the set and return them to keep the chain alive.
             let $this = $(this),
                 lastId = $.fn.CustomDropDown.getNewCustomDropDownId();
-
             if ($.fn.CustomDropDown.checkExistSelectElement($this)) {
                 $this.attr('data-custom-dropdown-id', lastId);
                 $.fn.CustomDropDown.clean($this);
                 $.fn.CustomDropDown.createCustomDropDown($this);
                 $.fn.CustomDropDown.options.onRendered($this);
+
+                this.myPublicMethod = function() {
+
+                    // do something ...
+
+                };
             }
         });
     };
 
     $.fn.CustomDropDown.clean = function ($this) {
         // console.log($this.find('.select-selected'));
-        // $this.find('.select-selected').remove();
-        // $.fn.CustomDropDown.getItemsElement($this).remove();
+        $this.find('.select-selected').remove();
+        $.fn.CustomDropDown.getItemsElement($this).remove();
     };
 
     $.fn.CustomDropDown.checkExistSelectElement = function ($this) {
