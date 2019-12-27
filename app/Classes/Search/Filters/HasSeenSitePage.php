@@ -13,9 +13,9 @@ use Illuminate\Database\Eloquent\Builder;
 class HasSeenSitePage extends FilterAbstract
 {
     protected $attribute = 'hasseensitepage';
-    
+
     protected $relation = "seensitepages";
-    
+
     public function apply(Builder $builder, $value, FilterCallback $callback): Builder
     {
         return $builder->whereHas($this->relation, function ($q) use ($value) {

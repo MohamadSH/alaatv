@@ -2,30 +2,29 @@
 
 namespace App\Http\Controllers\Web;
 
-use App\Bon;
 use App\Events\FillTmpShareOfOrder;
+use App\Http\Controllers\Controller;
 use App\Notifications\DownloadNotice;
+use App\Notifications\InvoicePaid;
+use App\Order;
 use App\Traits\OrderCommon;
 use App\User;
-use App\Order;
 use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use App\Notifications\InvoicePaid;
-use App\Http\Controllers\Controller;
 use Illuminate\Routing\Redirector;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Request as RequestFcade;
 
 class OfflinePaymentController extends Controller
 {
 
     use OrderCommon;
+
     /**
      * OfflinePaymentController constructor.
      *
-     * @param  Request  $request
+     * @param Request $request
      */
     public function __construct(Request $request)
     {
@@ -33,19 +32,19 @@ class OfflinePaymentController extends Controller
     }
 
     /**
-     * @param  Request  $request
-     * @param  string   $paymentMethod
-     * @param  string   $device
+     * @param Request $request
+     * @param string  $paymentMethod
+     * @param string  $device
      *
      * @return RedirectResponse|Redirector
      */
     public function verifyPayment(Request $request, string $paymentMethod, string $device)
     {
 
-        $user = $request->user();
+        $user                = $request->user();
         $customerDescription = session()->get('customerDescription');
 
-        $getOrder = $this->getOrder($request , $user);
+        $getOrder = $this->getOrder($request, $user);
         if ($getOrder['error']) {
             return response($getOrder['text'], $getOrder['httpStatusCode']);
         }
@@ -54,22 +53,22 @@ class OfflinePaymentController extends Controller
         /** @var Order $order */
         $order = $getOrder['data']['order'];
 
-        $check = $this->checkOrder($order , $user);
+        $check = $this->checkOrder($order, $user);
         if ($check['error'])
             return response($check['text'], $check['httpStatusCode']);
 
 
-        if (!$this->processVerification($order, $paymentMethod , $customerDescription))
+        if (!$this->processVerification($order, $paymentMethod, $customerDescription))
             return response(['message' => 'Invalid inputs'], Response::HTTP_BAD_REQUEST);
 
-        $assetLink          = '
-            <a href="'.route('web.user.asset').'" class="btn m-btn--pill m-btn--air m-btn m-btn--gradient-from-info m-btn--gradient-to-accent animated infinite heartBeat">
+        $assetLink = '
+            <a href="' . route('web.user.asset') . '" class="btn m-btn--pill m-btn--air m-btn m-btn--gradient-from-info m-btn--gradient-to-accent animated infinite heartBeat">
                 دانلودهای من
             </a>';
 
         $responseMessages = [
             'سفارش شما با موفقیت ثبت شد',
-            'برای دانلود محصولاتی که خریده اید به صفحه روبرو بروید: '.$assetLink,
+            'برای دانلود محصولاتی که خریده اید به صفحه روبرو بروید: ' . $assetLink,
             'توجه کنید که محصولات پیش خرید شده در تاریخ مقرر شده برای دانلود قرار داده می شوند',
         ];
         RequestFcade::session()
@@ -84,7 +83,7 @@ class OfflinePaymentController extends Controller
 
         event(new FillTmpShareOfOrder($order));
 
-        if($device == 'android') {
+        if ($device == 'android') {
             $order->user->notify(new DownloadNotice($order));
         }
 
@@ -98,15 +97,15 @@ class OfflinePaymentController extends Controller
     /**
      * @param Request $request
      *
-     * @param User $user
+     * @param User    $user
+     *
      * @return array
      */
-    private function getOrder(Request $request , User $user): array
+    private function getOrder(Request $request, User $user): array
     {
         if ($request->has('coi')) {
             $order = Order::Find($request->coi);
-        }
-        else{
+        } else {
             $order = $user->openOrders->first();
         }
 
@@ -130,7 +129,7 @@ class OfflinePaymentController extends Controller
         return $result;
     }
 
-    private function checkOrder(Order $order , User $user): array
+    private function checkOrder(Order $order, User $user): array
     {
         $result = [
             'error' => false,
@@ -143,8 +142,7 @@ class OfflinePaymentController extends Controller
                     'text'           => "Order doesn't belong to you",
                 ];
             }
-        }
-        else {
+        } else {
             $result = [
                 'error'          => true,
                 'httpStatusCode' => Response::HTTP_NOT_FOUND,
@@ -156,12 +154,13 @@ class OfflinePaymentController extends Controller
     }
 
     /**
-     * @param Order $order
+     * @param Order  $order
      * @param string $paymentMethod
      * @param string $customerDescription
+     *
      * @return bool
      */
-    private function processVerification(Order $order, string $paymentMethod , string $customerDescription=null): bool
+    private function processVerification(Order $order, string $paymentMethod, string $customerDescription = null): bool
     {
         $done = true;
         switch ($paymentMethod) {
@@ -176,15 +175,15 @@ class OfflinePaymentController extends Controller
                 /** Wallet transactions */
 //                $order->closeWalletPendingTransactions();
                 $wallets = optional($order->user)->wallets;
-                if(isset($wallets)) {
+                if (isset($wallets)) {
                     $this->withdrawWalletPendings($order->id, $wallets);
                 }
 
                 $order = $order->fresh();
                 /** End */
 
-                $order->orderstatus_id   = config('constants.ORDER_STATUS_CLOSED');
-                $order->completed_at     = Carbon::now('Asia/Tehran');
+                $order->orderstatus_id = config('constants.ORDER_STATUS_CLOSED');
+                $order->completed_at   = Carbon::now('Asia/Tehran');
                 if ($order->hasCost()) {
                     $cost = $order->totalCost() - $order->totalPaidCost();
                     if ($cost == 0) {
@@ -198,8 +197,7 @@ class OfflinePaymentController extends Controller
                         /** End */
 
                         $order->paymentstatus_id = config('constants.PAYMENT_STATUS_PAID');
-                        if(strlen($customerDescription)>0)
-                        {
+                        if (strlen($customerDescription) > 0) {
                             $order->customerDescription = $customerDescription;
                         }
                     }

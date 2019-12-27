@@ -14,6 +14,7 @@ use App\Http\Controllers\Api\IndexPageController;
 use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Api\OrderproductController;
 use App\Http\Controllers\Api\ProductController;
+use App\Http\Controllers\Api\SearchController;
 use App\Http\Controllers\Api\SetController;
 use App\Http\Controllers\Api\ShopPageController;
 use App\Http\Controllers\Api\TagController;
@@ -88,6 +89,7 @@ Route::group(['prefix' => 'v1'], function () {
 */
 
 Route::group(['prefix' => 'v2'], function () {
+    Route::get('search', [SearchController::class, 'index'])->name('api.v2.search');
     Route::get('lastVersion', [AppVersionController::class, 'showV2']);
     Route::post('login', [LoginController::class, 'login']);
     Route::get('authTest', [HomeController::class, 'authTestV2'])->name('api.v2.authTest');

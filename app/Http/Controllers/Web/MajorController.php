@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers\Web;
 
+use App\Http\Controllers\Controller;
+use App\Http\Requests\InsertMajorRequest;
 use App\Major;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
-
-use App\Http\Requests\InsertMajorRequest;
 
 class MajorController extends Controller
 {
@@ -79,13 +78,11 @@ class MajorController extends Controller
                         'majorCode'       => $majorCode,
                     ]);
                 session()->put('success', 'رشته با موفقیت درج شد');
-            }
-            else {
+            } else {
                 $parentMajor = Major::FindOrFail($parentMajorId);
-                session()->put('warning', 'این رشته برای '.$parentMajor->name.' قبلا درج شده است');
+                session()->put('warning', 'این رشته برای ' . $parentMajor->name . ' قبلا درج شده است');
             }
-        }
-        else {
+        } else {
             session()->put('success', 'خطای پایگاه داده در درج رشته');
         }
 

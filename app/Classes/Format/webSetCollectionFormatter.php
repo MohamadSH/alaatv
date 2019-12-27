@@ -10,14 +10,15 @@ namespace App\Classes\Format;
 
 use App\Collection\SetCollection;
 use App\Contentset;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
 
 class webSetCollectionFormatter implements SetCollectionFormatter
 {
     /**
-     * @param  SetCollection  $sets
+     * @param SetCollection $sets
      *
-     * @return \Illuminate\Support\Collection
+     * @return Collection
      */
     public function format(SetCollection $sets)
     {
@@ -30,15 +31,15 @@ class webSetCollectionFormatter implements SetCollectionFormatter
     }
 
     /**
-     * @param  \App\Contentset  $set
+     * @param Contentset $set
      *
      * @return array
      */
     private function formatSet(Contentset $set): array
     {
-        $key = 'set:formatSet:'.$set->id;
-        return Cache::tags([ 'set' , 'set_'.$set->id , 'set_'.$set->id.'_formatSet'])
-            ->remember($key , config('constants.CACHE_60'), function () use ($set) {
+        $key = 'set:formatSet:' . $set->id;
+        return Cache::tags(['set', 'set_' . $set->id, 'set_' . $set->id . '_formatSet'])
+            ->remember($key, config('constants.CACHE_60'), function () use ($set) {
                 $content = $set->getLastActiveContent();
                 $lesson  = [
                     "displayName"   => $set->shortName,

@@ -20,14 +20,31 @@ trait FavoredTrait
     | relations
     |--------------------------------------------------------------------------
     */
+    public function getActiveFavoredContents()
+    {
+        return Cache::tags(['favorite', 'user', 'user_' . $this->id, 'user_' . $this->id . '_favorites', 'user_' . $this->id . '_favoriteContents'])
+            ->remember('user:favorite:contents:' . $this->cacheKey(), config('constants.CACHE_10'), function () {
+                return $this->favoredContents()
+                    ->active()
+                    ->get()
+                    ->sortBy('pivot.created_at');
+            });
+    }
+
     public function favoredContents()
     {
         return $this->morphedByMany(Content::class, 'favorable')->withTimestamps();
     }
 
-    public function favoredSets()
+    public function getActiveFavoredProducts()
     {
-        return $this->morphedByMany(Contentset::class, 'favorable')->withTimestamps();
+        return Cache::tags(['favorite', 'user', 'user_' . $this->id, 'user_' . $this->id . '_favorites', 'user_' . $this->id . '_favoriteProducts'])
+            ->remember('user:favorite:products:' . $this->cacheKey(), config('constants.CACHE_10'), function () {
+                return $this->favoredProducts()
+                    ->active()
+                    ->get()
+                    ->sortByDesc('pivot.created_at');
+            });
     }
 
     public function favoredProducts()
@@ -35,36 +52,19 @@ trait FavoredTrait
         return $this->morphedByMany(Product::class, 'favorable')->withTimestamps();
     }
 
-    public function getActiveFavoredContents()
-    {
-        return Cache::tags(['favorite' , 'user' , 'user_'.$this->id , 'user_'.$this->id.'_favorites' , 'user_'.$this->id.'_favoriteContents'])
-            ->remember('user:favorite:contents:'.$this->cacheKey(), config('constants.CACHE_10'), function () {
-            return $this->favoredContents()
-                        ->active()
-                        ->get()
-                        ->sortBy('pivot.created_at');
-        });
-    }
-
-    public function getActiveFavoredProducts()
-    {
-        return Cache::tags(['favorite' , 'user' , 'user_'.$this->id , 'user_'.$this->id.'_favorites' , 'user_'.$this->id.'_favoriteProducts'])
-            ->remember('user:favorite:products:'.$this->cacheKey(), config('constants.CACHE_10'), function () {
-            return $this->favoredProducts()
-                        ->active()
-                        ->get()
-                        ->sortByDesc('pivot.created_at');
-        });
-    }
-
     public function getActiveFavoredSets()
     {
-        return Cache::tags(['favorite' , 'user' , 'user_'.$this->id , 'user_'.$this->id.'_favorites' , 'user_'.$this->id.'_favoriteSets'])
-            ->remember('user:favorite:sets:'.$this->cacheKey(), config('constants.CACHE_10'), function () {
-            return $this->favoredSets()
-                        ->active()
-                        ->get()
-                        ->sortByDesc('pivot.created_at');
-        });
+        return Cache::tags(['favorite', 'user', 'user_' . $this->id, 'user_' . $this->id . '_favorites', 'user_' . $this->id . '_favoriteSets'])
+            ->remember('user:favorite:sets:' . $this->cacheKey(), config('constants.CACHE_10'), function () {
+                return $this->favoredSets()
+                    ->active()
+                    ->get()
+                    ->sortByDesc('pivot.created_at');
+            });
+    }
+
+    public function favoredSets()
+    {
+        return $this->morphedByMany(Contentset::class, 'favorable')->withTimestamps();
     }
 }

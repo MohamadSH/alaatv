@@ -12,5 +12,5 @@ use Illuminate\Database\Eloquent\Collection;
 
 class BlockCollection extends Collection
 {
-    
+
 }

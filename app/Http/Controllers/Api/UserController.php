@@ -2,17 +2,19 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\User;
-use App\Traits\UserCommon;
-use Illuminate\Http\Request;
-use App\Traits\RequestCommon;
-use Illuminate\Http\Response;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Cache;
 use App\Http\Requests\EditUserRequest;
-use Illuminate\Contracts\Filesystem\FileNotFoundException;
-use App\Http\Resources\User as UserResource;
 use App\Http\Resources\Order as OrderResource;
+use App\Http\Resources\User as UserResource;
+use App\Traits\RequestCommon;
+use App\Traits\UserCommon;
+use App\User;
+use Illuminate\Contracts\Filesystem\FileNotFoundException;
+use Illuminate\Contracts\Routing\ResponseFactory;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Cache;
 
 class UserController extends Controller
 {
@@ -23,8 +25,8 @@ class UserController extends Controller
      * Update the specified resource in storage.
      * Note: Requests to this method must pass \App\Http\Middleware\trimUserRequest middle ware
      *
-     * @param  EditUserRequest  $request
-     * @param  User             $user
+     * @param EditUserRequest $request
+     * @param User            $user
      *
      * @return array|Response
      */
@@ -59,8 +61,7 @@ class UserController extends Controller
 
             $message = 'User profile updated successfully';
             $status  = Response::HTTP_OK;
-        }
-        else {
+        } else {
             $message = 'Database error on updating user';
             $status  = Response::HTTP_SERVICE_UNAVAILABLE;
         }
@@ -70,8 +71,7 @@ class UserController extends Controller
                 'user'    => $user,
                 'message' => $message,
             ];
-        }
-        else {
+        } else {
             $response = [
                 'error' => [
                     'code'    => $status,
@@ -80,7 +80,7 @@ class UserController extends Controller
             ];
         }
 
-        Cache::tags('user_'.$user->id)->flush();
+        Cache::tags('user_' . $user->id)->flush();
 
         return response($response, Response::HTTP_OK);
     }
@@ -116,8 +116,7 @@ class UserController extends Controller
 
             $message = 'User profile updated successfully';
             $status  = Response::HTTP_OK;
-        }
-        else {
+        } else {
             $message = 'Database error on updating user';
             $status  = Response::HTTP_SERVICE_UNAVAILABLE;
         }
@@ -127,8 +126,7 @@ class UserController extends Controller
                 'user'    => new UserResource($user),
                 'message' => $message,
             ];
-        }
-        else {
+        } else {
             $response = [
                 'error' => [
                     'code'    => $status,
@@ -137,7 +135,7 @@ class UserController extends Controller
             ];
         }
 
-        Cache::tags('user_'.$user->id)->flush();
+        Cache::tags('user_' . $user->id)->flush();
 
         return response($response, Response::HTTP_OK);
     }
@@ -158,7 +156,7 @@ class UserController extends Controller
         return response($user, Response::HTTP_OK);
     }
 
-    public function showV2(Request $request , User $user)
+    public function showV2(Request $request, User $user)
     {
         $authenticatedUser = $request->user('api');
 
@@ -177,11 +175,11 @@ class UserController extends Controller
     /**
      * Gets a list of user orders
      *
-     * @param  Request  $request
+     * @param Request $request
      *
-     * @param  User     $user
+     * @param User    $user
      *
-     * @return \Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Http\JsonResponse|Response
+     * @return ResponseFactory|JsonResponse|Response
      */
     public function userOrders(Request $request, User $user)
     {
@@ -197,7 +195,7 @@ class UserController extends Controller
             ], Response::HTTP_OK);
         }
 
-        $orders = $user->getClosedOrders($request->get('orders' , 1));
+        $orders = $user->getClosedOrders($request->get('orders', 1));
 
         return response()->json($orders);
     }
@@ -216,7 +214,7 @@ class UserController extends Controller
             ], Response::HTTP_OK);
         }
 
-        $orders = $user->getClosedOrders($request->get('orders' , 1));
+        $orders = $user->getClosedOrders($request->get('orders', 1));
 
         return OrderResource::collection($orders);
     }
@@ -227,7 +225,7 @@ class UserController extends Controller
         return response()->json([
             'id'    => $user->id,
             'name'  => $user->fullName,
-            'email' => md5($user->mobile).'@sanatisharif.ir',
+            'email' => md5($user->mobile) . '@sanatisharif.ir',
 
         ]);
     }

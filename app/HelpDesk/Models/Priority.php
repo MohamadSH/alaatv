@@ -3,25 +3,30 @@
 namespace App\HelpDesk\Models;
 
 use App\BaseModel;
+use Eloquent;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Carbon;
 
 
 /**
  * App\HelpDesk\Models\Priority
  *
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\HelpDesk\Models\Ticket[] $tickets
- * @method static \Illuminate\Database\Eloquent\Builder|\App\HelpDesk\Models\Priority newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\HelpDesk\Models\Priority newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\HelpDesk\Models\Priority query()
- * @mixin \Eloquent
- * @property int $id
- * @property string $name
- * @property string $color
- * @property \Illuminate\Support\Carbon|null $deleted_at
- * @property-read int|null $tickets_count
- * @method static \Illuminate\Database\Eloquent\Builder|\App\HelpDesk\Models\Priority whereColor($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\HelpDesk\Models\Priority whereDeletedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\HelpDesk\Models\Priority whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\HelpDesk\Models\Priority whereName($value)
+ * @property-read Collection|Ticket[] $tickets
+ * @method static Builder|Priority newModelQuery()
+ * @method static Builder|Priority newQuery()
+ * @method static Builder|Priority query()
+ * @mixin Eloquent
+ * @property int                                                    $id
+ * @property string                                                 $name
+ * @property string                                                 $color
+ * @property Carbon|null                                            $deleted_at
+ * @property-read int|null                                          $tickets_count
+ * @method static Builder|Priority whereColor($value)
+ * @method static Builder|Priority whereDeletedAt($value)
+ * @method static Builder|Priority whereId($value)
+ * @method static Builder|Priority whereName($value)
  */
 class Priority extends BaseModel
 {
@@ -30,9 +35,9 @@ class Priority extends BaseModel
      *
      * @var bool
      */
-    public    $timestamps = false;
-    protected $table      = 'help_priorities';
-    protected $fillable   = [
+    public $timestamps = false;
+    protected $table = 'help_priorities';
+    protected $fillable = [
         'name',
         'color',
     ];
@@ -40,7 +45,7 @@ class Priority extends BaseModel
     /**
      * Get related tickets.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return HasMany
      */
     public function tickets()
     {

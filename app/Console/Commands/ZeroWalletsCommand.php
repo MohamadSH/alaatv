@@ -39,14 +39,14 @@ class ZeroWalletsCommand extends Command
      */
     public function handle()
     {
-        $wallets = Wallet::where('balance' , '>' ,  0)
-                    ->where('wallettype_id' , config('constants.WALLET_TYPE_GIFT'))->get();
+        $wallets = Wallet::where('balance', '>', 0)
+            ->where('wallettype_id', config('constants.WALLET_TYPE_GIFT'))->get();
 
         $walletCount = $wallets->count();
-        if($this->confirm("$walletCount wallets found , Do you want to continue zeroing these wallets", true)) {
-            $bar = $this->output->createProgressBar($walletCount);
+        if ($this->confirm("$walletCount wallets found , Do you want to continue zeroing these wallets", true)) {
+            $bar              = $this->output->createProgressBar($walletCount);
             $completedWallets = 0;
-            $failedWallets = 0;
+            $failedWallets    = 0;
             foreach ($wallets as $wallet) {
                 $transaction = $wallet->transactions()
                     ->create([
@@ -55,18 +55,18 @@ class ZeroWalletsCommand extends Command
                         'transactionstatus_id' => config('constants.TRANSACTION_STATUS_SUCCESSFUL'),
                         'paymentmethod_id'     => config('constants.PAYMENT_METHOD_WALLET'),
                         'completed_at'         => Carbon::now('Asia/Tehran'),
-                        'managerComment'       => 'تراکنش سیستمی . صفر کردن کیف پول ها در 13 مهر 1398' ,
-                        'description'          => 'پایان اعتبار کیف پول' ,
+                        'managerComment'       => 'تراکنش سیستمی . صفر کردن کیف پول ها در 13 مهر 1398',
+                        'description'          => 'پایان اعتبار کیف پول',
                     ]);
 
-                if(isset($transaction)){
+                if (isset($transaction)) {
                     $wallet->update([
-                        'balance' => 0 ,
-                        'pending_to_reduce' => 0
+                        'balance'           => 0,
+                        'pending_to_reduce' => 0,
                     ]);
                     $completedWallets++;
-                }else{
-                    $this->info('Wallet #'.$wallet->id.' could not be updated');
+                } else {
+                    $this->info('Wallet #' . $wallet->id . ' could not be updated');
                     $this->info("\n\n");
                     $failedWallets++;
                 }
@@ -74,9 +74,9 @@ class ZeroWalletsCommand extends Command
             }
             $bar->finish();
             $this->info("\n\n");
-            $this->info($completedWallets .' wallets zeroed successfully');
+            $this->info($completedWallets . ' wallets zeroed successfully');
             $this->info("\n\n");
-            $this->info($failedWallets .' wallets failed');
+            $this->info($failedWallets . ' wallets failed');
             $this->info("\n\n");
         }
     }

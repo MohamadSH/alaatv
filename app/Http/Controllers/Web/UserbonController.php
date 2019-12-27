@@ -22,9 +22,9 @@ class UserbonController extends Controller
         /** setting permissions
          *
          */
-        $this->middleware('permission:'.config('constants.INSERT_USER_BON_ACCESS'), ['only' => 'store']);
-        $this->middleware('permission:'.config('constants.LIST_USER_BON_ACCESS'), ['only' => 'index']);
-        $this->middleware('permission:'.config('constants.REMOVE_USER_BON_ACCESS'), ['only' => 'destroy']);
+        $this->middleware('permission:' . config('constants.INSERT_USER_BON_ACCESS'), ['only' => 'store']);
+        $this->middleware('permission:' . config('constants.LIST_USER_BON_ACCESS'), ['only' => 'index']);
+        $this->middleware('permission:' . config('constants.REMOVE_USER_BON_ACCESS'), ['only' => 'destroy']);
     }
 
     public function index(Request $request)
@@ -56,8 +56,7 @@ class UserbonController extends Controller
                 $userbons = $userbons->whereHas("orderproduct", function ($q) use ($productsId) {
                     $q->whereIn("product_id", $productsId);
                 });
-            }
-            else {
+            } else {
                 $userbons = $userbons->whereHas("orderproduct");
             }
         }
@@ -65,28 +64,28 @@ class UserbonController extends Controller
         $firstName = trim($request->get('firstName'));
         if (isset($firstName) && strlen($firstName) > 0) {
             $userbons = $userbons->whereHas('user', function ($q) use ($firstName) {
-                $q->where('firstName', 'like', '%'.$firstName.'%');
+                $q->where('firstName', 'like', '%' . $firstName . '%');
             });
         }
 
         $lastName = trim($request->get('lastName'));
         if (isset($lastName) && strlen($lastName) > 0) {
             $userbons = $userbons->whereHas('user', function ($q) use ($lastName) {
-                $q->where('lastName', 'like', '%'.$lastName.'%');
+                $q->where('lastName', 'like', '%' . $lastName . '%');
             });
         }
 
         $nationalCode = trim($request->get('nationalCode'));
         if (isset($nationalCode) && strlen($nationalCode) > 0) {
             $userbons = $userbons->whereHas('user', function ($q) use ($nationalCode) {
-                $q->where('nationalCode', 'like', '%'.$nationalCode.'%');
+                $q->where('nationalCode', 'like', '%' . $nationalCode . '%');
             });
         }
 
         $mobile = trim($request->get('mobile'));
         if (isset($mobile) && strlen($mobile) > 0) {
             $userbons = $userbons->whereHas('user', function ($q) use ($mobile) {
-                $q->where('mobile', 'like', '%'.$mobile.'%');
+                $q->where('mobile', 'like', '%' . $mobile . '%');
             });
         }
 
@@ -106,9 +105,8 @@ class UserbonController extends Controller
         $userbon->fill($request->all());
         if ($userbon->save()) {
             return response()->json();
-        }
-        else {
-            return response()->json([] , Response::HTTP_SERVICE_UNAVAILABLE);
+        } else {
+            return response()->json([], Response::HTTP_SERVICE_UNAVAILABLE);
         }
     }
 

@@ -10,35 +10,39 @@ namespace App;
 
 use App\Traits\DateTrait;
 use App\Traits\Helper;
+use Carbon\Carbon;
+use Eloquent;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Laratrust\Models\LaratrustPermission;
 
 /**
  * App\Permission
  *
- * @property int                                                       $id
- * @property string                                                    $name
- * @property string|null                                               $display_name
- * @property string|null                                               $description
- * @property \Carbon\Carbon|null                                       $created_at
- * @property \Carbon\Carbon|null                                       $updated_at
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Role[] $roles
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Permission whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Permission whereDescription($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Permission whereDisplayName($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Permission whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Permission whereName($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Permission whereUpdatedAt($value)
- * @mixin \Eloquent
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Permission newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Permission newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Permission query()
- * @property-read int|null $roles_count
+ * @property int                                                  $id
+ * @property string                                               $name
+ * @property string|null                                          $display_name
+ * @property string|null                                          $description
+ * @property Carbon|null                                  $created_at
+ * @property Carbon|null                                  $updated_at
+ * @property-read Collection|Role[] $roles
+ * @method static Builder|Permission whereCreatedAt($value)
+ * @method static Builder|Permission whereDescription($value)
+ * @method static Builder|Permission whereDisplayName($value)
+ * @method static Builder|Permission whereId($value)
+ * @method static Builder|Permission whereName($value)
+ * @method static Builder|Permission whereUpdatedAt($value)
+ * @mixin Eloquent
+ * @method static Builder|Permission newModelQuery()
+ * @method static Builder|Permission newQuery()
+ * @method static Builder|Permission query()
+ * @property-read int|null                                             $roles_count
  */
 class Permission extends LaratrustPermission
 {
     use Helper;
     use DateTrait;
-    
+
     /**
      * @var array
      */
@@ -47,7 +51,7 @@ class Permission extends LaratrustPermission
         'display_name',
         'description',
     ];
-    
+
     protected $dates = [
         'created_at',
         'updated_at',

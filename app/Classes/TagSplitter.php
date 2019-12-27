@@ -50,7 +50,7 @@ class TagSplitter
         'جبر_و_احتمال',
         'تحلیلی',
         'المپیاد_نجوم',
-        'آمار_و_احتمال'
+        'آمار_و_احتمال',
     ];
 
     //Dabir
@@ -130,7 +130,7 @@ class TagSplitter
     public function group(array $tags): Collection
     {
         return Cache::tags(['tagGroup'])
-            ->remember('group_of_tags:/'.md5(implode(' ', $tags)), config('constants.CACHE_600'),
+            ->remember('group_of_tags:/' . md5(implode(' ', $tags)), config('constants.CACHE_600'),
                 function () use ($tags) {
                     $groupedTags = collect();
                     foreach ($tags as $tag) {
@@ -143,27 +143,27 @@ class TagSplitter
                 });
     }
 
-    private function findGroupOfTag(string $tag) :int
+    private function findGroupOfTag(string $tag): int
     {
         return Cache::tags(['tagGroup'])
-            ->remember('group_number_'.$tag, config('constants.CACHE_600'), function () use ($tag) {
-                if(in_array($tag, self::G0)){
-                    return 0 ;
+            ->remember('group_number_' . $tag, config('constants.CACHE_600'), function () use ($tag) {
+                if (in_array($tag, self::G0)) {
+                    return 0;
                 }
                 if (in_array($tag, self::G1)) {
-                    return 1 ;
+                    return 1;
                 }
                 if (in_array($tag, self::G2)) {
-                    return 2 ;
+                    return 2;
                 }
                 if (in_array($tag, self::G3)) {
-                    return 3 ;
+                    return 3;
                 }
                 if (in_array($tag, self::G4)) {
-                    return 4 ;
+                    return 4;
                 }
                 if (in_array($tag, self::G5)) {
-                    return 5 ;
+                    return 5;
                 }
                 return 6;
             });

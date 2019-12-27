@@ -11,19 +11,19 @@ namespace App\Console\Commands\CategoryTree;
 abstract class GetTree
 {
     abstract function getTree(): array;
-    
+
     abstract function getLastUpdatedByLernito(): array;
-    
+
     public function getTotalTree()
     {
         $Riazi     = new Riazi();
         $Tajrobi   = new Tajrobi();
         $Ensani    = new Ensani();
         $totalTree = array_merge($Riazi->getTree(), $Tajrobi->getTree(), $Ensani->getTree());
-        
+
         return $totalTree;
     }
-    
+
     protected function treeToLernitoJson(array $tree)
     {
         $return = [];
@@ -33,7 +33,7 @@ abstract class GetTree
                 'children' => $this->getChildIds($value['children']),
             ];
         });
-        
+
         return $return;
 
 //        $lernitoJsonTree = [];
@@ -52,16 +52,16 @@ abstract class GetTree
 //            }
 //        }
     }
-    
+
     protected function getChildIds(array $children)
     {
         return array_column($children, 'id');
     }
-    
+
     protected function convertLernito(array $lernitoTree)
     {
         $convertedStyle = [];
-        
+
         return $resultChildren = $this->getChildrenFromLernitoStyle($lernitoTree, $lernitoTree[0]['children']);
 //        foreach ($lernitoTree as $key=>$value) {
 //            $resultChildren = $this->getChildrenFromLernitoStyle($lernitoTree, $value['children']);
@@ -72,7 +72,7 @@ abstract class GetTree
 ////            }
 //        }
     }
-    
+
     private function getChildrenFromLernitoStyle(array &$lernitoTree, array $children)
     {
         $resultChildren = [];
@@ -86,17 +86,17 @@ abstract class GetTree
                     $value['children']);
             }
         }
-        
+
         return $resultChildren;
     }
-    
+
     protected function compareWithLernito(array $lernitoTree, array $targetTree)
     {
         $diff = $this->compareSingleLevel($lernitoTree, $targetTree);
-        
+
         return $diff;
     }
-    
+
     private function compareSingleLevel(array $lernito, array $target)
     {
         $localKeyChain = [];
@@ -119,8 +119,7 @@ abstract class GetTree
                                 'alaaNode'    => $targetValue,
                             ];
                         }
-                    }
-                    else {
+                    } else {
                         if (isset($lernitoValue['children'])) {
                             $diff[] = [
                                 'diff'        => $lernitoValue['children'],
@@ -139,7 +138,7 @@ abstract class GetTree
             }
             $localKeyChain = [];
         }
-        
+
         return $diff;
     }
 }

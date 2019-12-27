@@ -22,13 +22,13 @@ class InsertProductfileRequest extends FormRequest
             'productfiletype_id' => 'required|exists:productfiletypes,id',
         ];
     }
-    
+
     public function prepareForValidation()
     {
         $this->replaceNumbers();
         parent::prepareForValidation();
     }
-    
+
     protected function replaceNumbers()
     {
         $input = $this->request->all();
@@ -36,12 +36,12 @@ class InsertProductfileRequest extends FormRequest
             $input["cloudFile"] = preg_replace('/\s+/', '', $input["cloudFile"]);
             $input["cloudFile"] = $this->convertToEnglish($input["cloudFile"]);
         }
-    
+
         if (isset($input["order"])) {
             $input["order"] = preg_replace('/\s+/', '', $input["order"]);
             $input["order"] = $this->convertToEnglish($input["order"]);
         }
-    
+
         $this->replace($input);
     }
 }

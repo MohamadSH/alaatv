@@ -13,7 +13,7 @@ use Illuminate\Database\Eloquent\Builder;
 class UserStatus extends FilterAbstract
 {
     protected $attribute = 'userstatus_id';
-    
+
     public function apply(Builder $builder, $value, FilterCallback $callback): Builder
     {
         return $builder->whereIn($this->attribute, $value);

@@ -12,6 +12,6 @@ class OrderBy extends FilterAbstract
 
     public function apply(Builder $builder, $value, FilterCallback $callback): Builder
     {
-        return $builder->orderBy($value , 'desc');
+        return $builder->orderBy($value, 'desc');
     }
 }

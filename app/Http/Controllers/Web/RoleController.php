@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers\Web;
 
-use App\Role;
-use App\Permission;
-use Exception;
-use Illuminate\Http\Response;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\EditRoleRequest;
 use App\Http\Requests\InsertRoleRequest;
+use App\Permission;
+use App\Role;
+use Exception;
+use Illuminate\Http\Response;
 
 class RoleController extends Controller
 {
@@ -20,7 +20,7 @@ class RoleController extends Controller
     public function index()
     {
         $roles = Role::all()
-            ->sortByDesc('created_at');;
+            ->sortByDesc('created_at');
 
         return view("role.index", compact('roles'));
     }
@@ -35,7 +35,7 @@ class RoleController extends Controller
 
             return response()->json();
         } else {
-            return response()->json([] , Response::HTTP_SERVICE_UNAVAILABLE);
+            return response()->json([], Response::HTTP_SERVICE_UNAVAILABLE);
         }
     }
 
@@ -96,7 +96,7 @@ class RoleController extends Controller
                 'error'   => $e->getMessage(),
                 'line'    => $e->getLine(),
                 'file'    => $e->getFile(),
-            ] , Response::HTTP_INTERNAL_SERVER_ERROR);
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
 
         return redirect()->back();

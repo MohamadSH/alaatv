@@ -10,14 +10,14 @@ use Illuminate\Support\Carbon;
 /**
  * App\Dayofweek
  *
- * @property int $id
- * @property string|null $name نام روز
- * @property string|null $display_name نام قابل نمایش روز
- * @property Carbon|null $created_at
- * @property Carbon|null $updated_at
- * @property Carbon|null $deleted_at
+ * @property int                    $id
+ * @property string|null            $name         نام روز
+ * @property string|null            $display_name نام قابل نمایش روز
+ * @property Carbon|null            $created_at
+ * @property Carbon|null            $updated_at
+ * @property Carbon|null            $deleted_at
  * @property-read Collection|Live[] $lives
- * @property-read int|null $lives_count
+ * @property-read int|null          $lives_count
  * @method static Builder|Dayofweek newModelQuery()
  * @method static Builder|Dayofweek newQuery()
  * @method static Builder|Dayofweek query()
@@ -45,7 +45,8 @@ class Dayofweek extends BaseModel
         'displayName',
     ];
 
-    public function lives(){
+    public function lives()
+    {
         return $this->hasMany(Live::Class);
     }
 }

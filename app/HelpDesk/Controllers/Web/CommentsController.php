@@ -4,7 +4,6 @@ namespace App\HelpDesk\Controllers\Web;
 
 use App\HelpDesk\Models\Comment;
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 
 class CommentsController extends Controller
 {
@@ -12,6 +11,11 @@ class CommentsController extends Controller
     {
         $isAnswer = $this->userCanAnswer(auth()->user(), $tid);
 
+    }
+
+    private function userCanAnswer($user, $tid)
+    {
+        return 1;
     }
 
     public function answer($tid)
@@ -25,12 +29,31 @@ class CommentsController extends Controller
         respondWith(back()->with('status', 'ok'));
     }
 
-    public function question()
+    /**
+     * @param Request $request
+     */
+    private function validateRequest(): void
     {
-        $this->validateRequest();
-        $this->submitCommentCommand();
 
-        respondWith(back()->with('status', 'ok'));
+        $validationRules = [
+            'ticket_id' => 'required|exists:' . tickets_table . ',id',
+            'content'   => 'required|min:6',
+        ];
+
+        $this->validate(request(), $validationRules);
+    }
+
+    private function ensureTicketIsOpen()
+    {
+
+    }
+
+    /**
+     * @param Request $request
+     */
+    private function submitCommentCommand($tid)
+    {
+        return $this->submitComment(request('content'), $tid, auth()->id(), auth()->user()->canAnswer($tid));
     }
 
     /**
@@ -40,43 +63,19 @@ class CommentsController extends Controller
      */
     private function submitComment($content, $ticket_id, $uid, $is_answer): bool
     {
-        $comment = new Comment();
-        $comment->content = $content;
+        $comment            = new Comment();
+        $comment->content   = $content;
         $comment->ticket_id = $ticket_id;
-        $comment->user_id = $uid;
+        $comment->user_id   = $uid;
         $comment->is_answer = 1;
         return $comment->save();
     }
 
-    /**
-     * @param \App\HelpDesk\Controllers\Web\Request $request
-     */
-    private function validateRequest(): void
+    public function question()
     {
+        $this->validateRequest();
+        $this->submitCommentCommand();
 
-        $validationRules = [
-            'ticket_id' => 'required|exists:'.tickets_table.',id',
-            'content' => 'required|min:6',
-        ];
-
-        $this->validate(request(), $validationRules);
-    }
-
-    /**
-     * @param \App\HelpDesk\Controllers\Web\Request $request
-     */
-    private function submitCommentCommand($tid)
-    {
-        return $this->submitComment(request('content'), $tid, auth()->id(), auth()->user()->canAnswer($tid));
-    }
-
-    private function ensureTicketIsOpen()
-    {
-
-    }
-
-    private function userCanAnswer($user, $tid)
-    {
-        return 1;
+        respondWith(back()->with('status', 'ok'));
     }
 }

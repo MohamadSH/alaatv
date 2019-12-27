@@ -19,14 +19,14 @@ class RefinementLauncher
      * @var Refinement $refinement
      */
     private $refinement;
-    
+
     public function __construct($refinement)
     {
         $this->refinement = $this->gteRefinementRequestStrategy($refinement);
     }
-    
+
     /**
-     * @param  array  $inputData
+     * @param array $inputData
      *
      * @return Refinement
      */
@@ -34,20 +34,17 @@ class RefinementLauncher
     {
         if (isset($inputData['transaction_id'])) { // closed order
             return new TransactionRefinement();
-        }
-        elseif (isset($inputData['order_id'])) { // closed order
+        } else if (isset($inputData['order_id'])) { // closed order
             return new OrderIdRefinement();
-        }
-        elseif (isset($inputData['walletId']) && isset($inputData['walletChargingAmount'])) { // Charging Wallet
+        } else if (isset($inputData['walletId']) && isset($inputData['walletChargingAmount'])) { // Charging Wallet
             return new ChargingWalletRefinement();
-        }
-        else { // open order
+        } else { // open order
             return new OpenOrderRefinement();
         }
     }
-    
+
     /**
-     * @param  array  $inputData
+     * @param array $inputData
      *
      * @return array: [statusCode, message, user, order, cost, donateCost, transaction]
      */
@@ -58,5 +55,5 @@ class RefinementLauncher
             ->loadData()
             ->getData();
     }
-    
+
 }

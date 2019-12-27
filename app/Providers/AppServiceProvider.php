@@ -2,32 +2,31 @@
 
 namespace App\Providers;
 
-use Illuminate\Http\Resources\Json\Resource;
-use Laravel\Horizon\Horizon;
-use League\Flysystem\Filesystem;
-use Illuminate\Support\Collection;
-use Illuminate\Support\ServiceProvider;
-use Illuminate\Support\Facades\{Auth, Schema, Storage, Validator};
-use App\{Block,
+use App\{Adapter\AlaaSftpAdapter,
+    Block,
     Content,
+    Contentset,
+    Employeetimesheet,
     Observers\BlockObserver,
+    Observers\ContentObserver,
+    Observers\EmployeetimesheetObserver,
+    Observers\OrderproductObserver,
+    Observers\ProductObserver,
+    Observers\SetObserver,
     Observers\SlideshowObserver,
     Observers\TransactionObserver,
     Observers\UserObserver,
-    Product,
-    Contentset,
     Orderproduct,
-    Employeetimesheet,
+    Product,
     Slideshow,
     Traits\UserCommon,
-    Observers\SetObserver,
-    Adapter\AlaaSftpAdapter,
-    Observers\ProductObserver,
-    Observers\ContentObserver,
-    Observers\OrderproductObserver,
-    Observers\EmployeetimesheetObserver,
     Transaction,
     User};
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\{Auth, Schema, Storage, Validator};
+use Illuminate\Support\ServiceProvider;
+use Laravel\Horizon\Horizon;
+use League\Flysystem\Filesystem;
 
 class AppServiceProvider extends ServiceProvider
 {

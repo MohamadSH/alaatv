@@ -19,7 +19,7 @@ trait ModelTrackerTrait
     {
         $this->attributes['page_view'] = json_encode($input, JSON_UNESCAPED_UNICODE);
     }
-    
+
     /**
      *
      * @param $value

@@ -13,7 +13,7 @@ use Illuminate\Database\Eloquent\Builder;
 class Enable extends FilterAbstract
 {
     protected $attribute = 'enable';
-    
+
     public function apply(Builder $builder, $value, FilterCallback $callback): Builder
     {
         return $builder->where($this->attribute, $value);

@@ -8,15 +8,15 @@ class TotalTree
 {
     private $treePathData;
     private $ignoredUpdateItemPath = 'lernitoIgnoredUpdateItems.txt';
-    
+
     public function getLernitoTreeHtmlPrint()
     {
         $Riazi   = new Riazi();
         $Tajrobi = new Tajrobi();
         $Ensani  = new Ensani();
-        
+
         $lastUpdatedByLernito = $this->getLastUpdatedByLernito();
-        
+
         $mote2 = [
             [
                 'id'       => '6321',
@@ -37,43 +37,41 @@ class TotalTree
                 'children' => $Ensani->getLernitoStyle(),
             ],
         ];
-        
-        $htmlPrint    = '';
+
+        $htmlPrint          = '';
         $this->treePathData = [];
         // loop in reshte
         $htmlPrint .= '<ul>';
         foreach ($mote2 as $key => $value) {
             $pathString1 = $value['text'];
             $pathId1     = $value['id'];
-            
+
             $lastUpdatedByLernitoKey = '';
             if ($key == 0) {
                 $lastUpdatedByLernitoKey = 'riaziUpdate';
-            }
-            elseif ($key == 1) {
+            } else if ($key == 1) {
                 $lastUpdatedByLernitoKey = 'tajrobiUpdate';
-            }
-            elseif ($key == 2) {
+            } else if ($key == 2) {
                 $lastUpdatedByLernitoKey = 'ensaniUpdate';
             }
-            
+
             if (isset($lastUpdatedByLernito[$lastUpdatedByLernitoKey]) && count($lastUpdatedByLernito[$lastUpdatedByLernitoKey]['diff']) > 0) {
                 $value['hasNewItem'] = true;
                 $this->updatePaieNodes($lastUpdatedByLernito[$lastUpdatedByLernitoKey], $value['children']);
             }
-            
+
             $hasNew = '0';
             if (isset($value['hasNewItem']) && $value['hasNewItem'] === true) {
                 $hasNew = '1';
             }
-            $htmlPrint .= '<li class="no_checkbox" data-has-new="'.$hasNew.'" data-alaa-node-id="'.$value['id'].'" data-jstree=\'{"checkbox_disabled":true, "icon":"/acm/extra/topicsTree/img/parent-icon.png"}\'>رشته: "'.$value['text'];
-            
+            $htmlPrint .= '<li class="no_checkbox" data-has-new="' . $hasNew . '" data-alaa-node-id="' . $value['id'] . '" data-jstree=\'{"checkbox_disabled":true, "icon":"/acm/extra/topicsTree/img/parent-icon.png"}\'>رشته: "' . $value['text'];
+
             // loop in paie
             $htmlPrint .= '<ul>';
             foreach ($value['children'] as $key1 => $value1) {
-                $pathString2 = $pathString1.'@@**@@'.$value1['name'];
-                $pathId2     = $pathId1.'-'.$value1['id'];
-                
+                $pathString2 = $pathString1 . '@@**@@' . $value1['name'];
+                $pathId2     = $pathId1 . '-' . $value1['id'];
+
                 $hasNew = '0';
                 if (isset($value1['hasNewItem']) && $value1['hasNewItem'] === true) {
                     $hasNew = '1';
@@ -82,26 +80,26 @@ class TotalTree
                 if (isset($value1['isNewItem']) && $value1['isNewItem'] === true) {
                     $isNew = '1';
                 }
-                
-                $htmlPrint .= '<li class="no_checkbox" data-has-new="'.$hasNew.'" data-is-new="'.$isNew.'" data-alaa-node-id="'.$value1['id'].'" data-jstree=\'{"checkbox_disabled":true, "icon":"/acm/extra/topicsTree/img/parent-icon.png"}\'>پایه: '.$value1['name'];
-                
+
+                $htmlPrint .= '<li class="no_checkbox" data-has-new="' . $hasNew . '" data-is-new="' . $isNew . '" data-alaa-node-id="' . $value1['id'] . '" data-jstree=\'{"checkbox_disabled":true, "icon":"/acm/extra/topicsTree/img/parent-icon.png"}\'>پایه: ' . $value1['name'];
+
                 // loop in dars
                 $htmlPrint .= '<ul>';
                 foreach ($value1['children'] as $key2 => $value2) {
-                    $pathString3 = $pathString2.'@@**@@'.$value2['name'];
-                    $pathId3     = $pathId2.'-'.$value2['id'];
+                    $pathString3 = $pathString2 . '@@**@@' . $value2['name'];
+                    $pathId3     = $pathId2 . '-' . $value2['id'];
                     $htmlPrint   .= $this->printDars($value2, $pathString3, $pathId3);
                 }
-                
+
                 $htmlPrint .= '</ul></li>';
             }
             $htmlPrint .= '</ul></li>';
         }
         $htmlPrint .= '</ul>';
-        
+
         return [$htmlPrint, $this->treePathData];
     }
-    
+
     private function getLastUpdatedByLernito(): array
     {
         $Riazi                = new Riazi();
@@ -135,30 +133,29 @@ class TotalTree
         ];
         return $lastUpdatedByLernito;
     }
-    
+
     private function updatePaieNodes(array $lastUpdatedByLernito, &$oldChildren)
     {
         if (isset($lastUpdatedByLernito['diff'])) {
             foreach ($lastUpdatedByLernito['diff'] as $diffKey => $diffNode) {
                 if (!isset($diffNode['diff']) && isset($diffNode['lernitoNode'])) {
                     $this->changeLernitoNodeChildren($diffNode['lernitoNode']);
-                    $newItem = $diffNode['lernitoNode'];
+                    $newItem              = $diffNode['lernitoNode'];
                     $newItem['isNewItem'] = true;
-                    $checkNodeIsIgnored = $this->checkNodeIsIgnored($newItem['orginalId']);
+                    $checkNodeIsIgnored   = $this->checkNodeIsIgnored($newItem['orginalId']);
                     if (!$checkNodeIsIgnored) {
                         $oldChildren[] = $newItem;
                     }
-                }
-                elseif (isset($diffNode['diff']) && isset($diffNode['lernitoNode']) && isset($diffNode['alaaNode'])) {
+                } else if (isset($diffNode['diff']) && isset($diffNode['lernitoNode']) && isset($diffNode['alaaNode'])) {
                     foreach ($oldChildren as $oldChildrenKey => $oldChildrenValue) {
                         if ($diffNode['alaaNode']['id'] == $oldChildrenValue['id']) {
-    
-                            if($oldChildren[$oldChildrenKey]['id'] == '11674') {
+
+                            if ($oldChildren[$oldChildrenKey]['id'] == '11674') {
 //                                dd($oldChildrenValue);
 //                                dd($diffNode);
 //                                dd($oldChildren[$oldChildrenKey]);
                             }
-                            
+
                             if ($this->checkHasNewItemBasedIgnoredNode($diffNode)) {
                                 $oldChildren[$oldChildrenKey]['hasNewItem'] = true;
                             }
@@ -169,8 +166,46 @@ class TotalTree
             }
         }
     }
-    
-    private function checkHasNewItemBasedIgnoredNode($lastUpdatedByLernito) {
+
+    private function changeLernitoNodeChildren(array &$lernitoNodeChildren)
+    {
+        $lernitoNodeChildren['id']        = time() . '-' . $lernitoNodeChildren['_id'];
+        $lernitoNodeChildren['orginalId'] = $lernitoNodeChildren['_id'];
+        $lernitoNodeChildren['name']      = $lernitoNodeChildren['label'];
+        $lernitoNodeChildren['tags']      = json_encode([str_replace(' ', '_', $lernitoNodeChildren['label'])],
+            JSON_UNESCAPED_UNICODE);
+        unset($lernitoNodeChildren['_id']);
+        unset($lernitoNodeChildren['label']);
+        if (isset($lernitoNodeChildren['children'])) {
+            foreach ($lernitoNodeChildren['children'] as $key => $child) {
+                $this->changeLernitoNodeChildren($lernitoNodeChildren['children'][$key]);
+            }
+        }
+    }
+
+    private function checkNodeIsIgnored($nodeId)
+    {
+        $ignoredIdsArray = $this->getIgnoredUpdateItems();
+        if (in_array($nodeId, $ignoredIdsArray)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function getIgnoredUpdateItems()
+    {
+        $ignoredIds      = Storage::get($this->ignoredUpdateItemPath);
+        $ignoredIdsArray = json_decode($ignoredIds, true);
+        if ($ignoredIdsArray === null) {
+            return [];
+        } else {
+            return $ignoredIdsArray;
+        }
+    }
+
+    private function checkHasNewItemBasedIgnoredNode($lastUpdatedByLernito)
+    {
         if (isset($lastUpdatedByLernito['diff'])) {
             foreach ($lastUpdatedByLernito['diff'] as $diffKey => $diffNode) {
                 $checkHasNewItemBasedIgnoredNode = $this->checkHasNewItemBasedIgnoredNode($diffNode);
@@ -186,39 +221,24 @@ class TotalTree
         }
         return false;
     }
-    
-    private function changeLernitoNodeChildren(array &$lernitoNodeChildren)
-    {
-        $lernitoNodeChildren['id']   = time().'-'.$lernitoNodeChildren['_id'];
-        $lernitoNodeChildren['orginalId']   = $lernitoNodeChildren['_id'];
-        $lernitoNodeChildren['name'] = $lernitoNodeChildren['label'];
-        $lernitoNodeChildren['tags'] = json_encode([str_replace(' ', '_', $lernitoNodeChildren['label'])],
-            JSON_UNESCAPED_UNICODE);
-        unset($lernitoNodeChildren['_id']);
-        unset($lernitoNodeChildren['label']);
-        if (isset($lernitoNodeChildren['children'])) {
-            foreach ($lernitoNodeChildren['children'] as $key => $child) {
-                $this->changeLernitoNodeChildren($lernitoNodeChildren['children'][$key]);
-            }
-        }
-    }
-    
+
     private function printDars(array $nodeData, string $ps, string $pid)
     {
-        $name = 'درس: '.$nodeData['name'];
+        $name = 'درس: ' . $nodeData['name'];
         $data = $nodeData['children'];
         $id   = $nodeData['id'];
-        
+
         $hasNew = '0';
         if (isset($nodeData['hasNewItem']) && $nodeData['hasNewItem'] === true) {
             $hasNew = '1';
         }
-        $isNew = '0';
-        $ignoreBtn = '';
+        $isNew              = '0';
+        $ignoreBtn          = '';
         $checkNodeIsIgnored = false;
         if (isset($nodeData['isNewItem']) && $nodeData['isNewItem'] === true) {
-            $isNew = '1';
-            $ignoreBtn = '<button type="button" class="btn btn-sm btn-info btnIgnoreUpdateItem" data-ignore="'.$nodeData['orginalId'].'">ignore</button>';
+            $isNew              = '1';
+            $ignoreBtn          =
+                '<button type="button" class="btn btn-sm btn-info btnIgnoreUpdateItem" data-ignore="' . $nodeData['orginalId'] . '">ignore</button>';
             $checkNodeIsIgnored = $this->checkNodeIsIgnored($nodeData['orginalId']);
         }
         if ($id == '11669') {
@@ -227,30 +247,31 @@ class TotalTree
         if ($checkNodeIsIgnored) {
             return '';
         }
-        $htmlPrint = '<li class="no_checkbox" data-has-new="'.$hasNew.'" data-is-new="'.$isNew.'" data-alaa-node-id="'.$id.'" data-jstree=\'{"checkbox_disabled":true, "icon":"/acm/extra/topicsTree/img/parent-icon.png"}\'>'.$name.$ignoreBtn.'<ul>';
+        $htmlPrint =
+            '<li class="no_checkbox" data-has-new="' . $hasNew . '" data-is-new="' . $isNew . '" data-alaa-node-id="' . $id . '" data-jstree=\'{"checkbox_disabled":true, "icon":"/acm/extra/topicsTree/img/parent-icon.png"}\'>' . $name . $ignoreBtn . '<ul>';
         foreach ($data as $key => $value) {
-            $pathString = $ps.'@@**@@'.$value['name'];
-            $pathId     = $pid.'-'.$value['id'];
-            
+            $pathString = $ps . '@@**@@' . $value['name'];
+            $pathId     = $pid . '-' . $value['id'];
+
             if (isset($value['children']) && count($value['children']) > 0) {
                 //                $htmlPrint .= '<li>('.$value['name'].')'.$this->printDars($value['name'], $value['children'], $value['id'], $pathString, $pathId).'</li>';
                 $htmlPrint .= $this->printDars($value, $pathString, $pathId);
-            }
-            else {
-                
-                $isNewItem = '0';
-                $ignoreBtn = '';
+            } else {
+
+                $isNewItem          = '0';
+                $ignoreBtn          = '';
                 $checkNodeIsIgnored = false;
                 if (isset($value['isNewItem']) && $value['isNewItem'] === true) {
-                    $isNewItem = '1';
-                    $ignoreBtn = '<button type="button" class="btn btn-sm btn-info btnIgnoreUpdateItem" data-ignore="'.$value['orginalId'].'">ignore</button>';
+                    $isNewItem          = '1';
+                    $ignoreBtn          =
+                        '<button type="button" class="btn btn-sm btn-info btnIgnoreUpdateItem" data-ignore="' . $value['orginalId'] . '">ignore</button>';
                     $checkNodeIsIgnored = $this->checkNodeIsIgnored($value['orginalId']);
                 }
-    
+
                 if (!$checkNodeIsIgnored) {
-                    $htmlPrint .= '<li data-jstree=\'{"icon":"/acm/extra/topicsTree/img/book-icon-1.png"}\' data-alaa-node-id="'.$value['id'].'" data-is-new="'.$isNewItem.'" ps="'.$pathString.'" pid="'.$pathId.'" id="'.$value['id'].'">'.$value['name'].$ignoreBtn.'</li>';
+                    $htmlPrint .= '<li data-jstree=\'{"icon":"/acm/extra/topicsTree/img/book-icon-1.png"}\' data-alaa-node-id="' . $value['id'] . '" data-is-new="' . $isNewItem . '" ps="' . $pathString . '" pid="' . $pathId . '" id="' . $value['id'] . '">' . $value['name'] . $ignoreBtn . '</li>';
                 }
-                
+
                 $this->treePathData[$value['id']] = [
                     'ps'  => $pathString,
                     'pid' => $pathId,
@@ -260,25 +281,25 @@ class TotalTree
         $htmlPrint .= '</ul></li>';
         return $htmlPrint;
     }
-    
+
     public function getTreeNodeByIdInHtmlString($lnid)
     {
-        
+
         if (!is_numeric($lnid)) {
             return '';
         }
         $lernitoNodeId        = $lnid;
         $lastUpdatedByLernito = $this->getLastUpdatedByLernito();
         $maxId                = $this->getLastIdOfTopicsTree();
-        
+
         $nodeFound = $this->findLernitoNodeById($lastUpdatedByLernito, $lernitoNodeId);
         $this->changeLernitoNodeChildren($nodeFound);
         $stringFormat = str_replace('"', "'", $this->convertAlaaNodeArrayToStringFormat($nodeFound, $maxId));
         $stringFormat = str_replace(PHP_EOL, '', $stringFormat);
-        
+
         return $stringFormat;
     }
-    
+
     private function getLastIdOfTopicsTree(): int
     {
         $maxId     = 0;
@@ -286,7 +307,7 @@ class TotalTree
         $maxId     = $this->iterateThroughTotalTree($totalTree);
         return $maxId;
     }
-    
+
     private function getTotalTopicsTree(): array
     {
         $Riazi     = new Riazi();
@@ -295,12 +316,12 @@ class TotalTree
         $totalTree = array_merge($Riazi->getTree(), $Tajrobi->getTree(), $Ensani->getTree());
         return $totalTree;
     }
-    
+
     private function iterateThroughTotalTree($tree)
     {
         $maxId = 0;
         if (isset($tree['id'])) {
-            $tree['id'] = (int) $tree['id'];
+            $tree['id'] = (int)$tree['id'];
             if ($tree['id'] > $maxId) {
                 $maxId = $tree['id'];
             }
@@ -310,11 +331,10 @@ class TotalTree
                     $maxId = $newMaxId;
                 }
             }
-        }
-        else {
+        } else {
             foreach ($tree as $key => $value) {
                 if (isset($value['id'])) {
-                    $value['id'] = (int) $value['id'];
+                    $value['id'] = (int)$value['id'];
                 }
                 if (isset($value['id']) && $value['id'] > $maxId) {
                     $maxId = $value['id'];
@@ -329,15 +349,14 @@ class TotalTree
         }
         return $maxId;
     }
-    
+
     private function findLernitoNodeById(array $lastUpdatedByLernito, int $lernitoNodeId)
     {
         $nodeFound = null;
         foreach ($lastUpdatedByLernito as $key => $value) {
             if (isset($value['lernitoNode']['_id']) && $value['lernitoNode']['_id'] == $lernitoNodeId) {
                 return $value['lernitoNode'];
-            }
-            elseif (isset($value['diff'])) {
+            } else if (isset($value['diff'])) {
                 $nodeFound = $this->findLernitoNodeById($value['diff'], $lernitoNodeId);
                 if ($nodeFound != null) {
                     return $nodeFound;
@@ -346,10 +365,10 @@ class TotalTree
         }
         return $nodeFound;
     }
-    
+
     private function convertAlaaNodeArrayToStringFormat(array $alaaNode, &$nodeId): string
     {
-        
+
         if (isset($alaaNode['name'])) {
             $nodeId++;
             $nodeArrayString = "
@@ -358,16 +377,15 @@ class TotalTree
             $nodeArrayString .= "
                     <div class='objectBody'>
                         <div>'id' => '$nodeId',</div>
-                        <div>'name' => '".$alaaNode['name']."',</div>
-                        <div>'tags' => json_encode(['".str_replace(' ', '_', $alaaNode['name'])."'], JSON_UNESCAPED_UNICODE),</div>
-                        <div>'children' => ".$this->convertAlaaNodeArrayToStringFormat((isset($alaaNode['children'])) ? $alaaNode['children'] : [],
-                    $nodeId)."</div>
+                        <div>'name' => '" . $alaaNode['name'] . "',</div>
+                        <div>'tags' => json_encode(['" . str_replace(' ', '_', $alaaNode['name']) . "'], JSON_UNESCAPED_UNICODE),</div>
+                        <div>'children' => " . $this->convertAlaaNodeArrayToStringFormat((isset($alaaNode['children'])) ? $alaaNode['children'] : [],
+                    $nodeId) . "</div>
                     </div>";
             $nodeArrayString .= "
                 <div>]</div>
             </div>";
-        }
-        else {
+        } else {
             $nodeArrayString = "[";
             foreach ($alaaNode as $key => $value) {
                 $nodeId++;
@@ -377,11 +395,11 @@ class TotalTree
                 $nodeArrayString .= "
                             <div class='objectBody'>
                                 <div>'id' => '$nodeId',</div>
-                                <div>'name' => '".$value['name']."',</div>
-                                <div>'tags' => ".json_encode([str_replace(' ', '_', $value['name'])],
-                        JSON_UNESCAPED_UNICODE).",</div>
-                                <div>'children' => ".$this->convertAlaaNodeArrayToStringFormat((isset($value['children'])) ? $value['children'] : [],
-                        $nodeId)."</div>
+                                <div>'name' => '" . $value['name'] . "',</div>
+                                <div>'tags' => " . json_encode([str_replace(' ', '_', $value['name'])],
+                        JSON_UNESCAPED_UNICODE) . ",</div>
+                                <div>'children' => " . $this->convertAlaaNodeArrayToStringFormat((isset($value['children'])) ? $value['children'] : [],
+                        $nodeId) . "</div>
                             </div>";
                 $nodeArrayString .= "
                         <div>],</div>
@@ -390,36 +408,17 @@ class TotalTree
             if (count($alaaNode) > 0) {
                 $nodeArrayString .= "
                     <div>]</div>";
-            }
-            else {
+            } else {
                 $nodeArrayString .= "]";
             }
         }
         return $nodeArrayString;
     }
-    
-    public function getIgnoredUpdateItems() {
-        $ignoredIds = Storage::get($this->ignoredUpdateItemPath);
-        $ignoredIdsArray = json_decode($ignoredIds, true);
-        if ($ignoredIdsArray === null) {
-            return [];
-        } else {
-            return $ignoredIdsArray;
-        }
-    }
-    
-    public function saveNewIgnoredUpdateItem($iuid) {
-        $ignoredIdsArray = $this->getIgnoredUpdateItems();
+
+    public function saveNewIgnoredUpdateItem($iuid)
+    {
+        $ignoredIdsArray   = $this->getIgnoredUpdateItems();
         $ignoredIdsArray[] = $iuid;
-        Storage::put( $this->ignoredUpdateItemPath, json_encode($ignoredIdsArray));
-    }
-    
-    private function checkNodeIsIgnored($nodeId) {
-        $ignoredIdsArray = $this->getIgnoredUpdateItems();
-        if (in_array($nodeId, $ignoredIdsArray)) {
-            return true;
-        } else {
-            return false;
-        }
+        Storage::put($this->ignoredUpdateItemPath, json_encode($ignoredIdsArray));
     }
 }

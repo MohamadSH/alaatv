@@ -27,7 +27,7 @@ class MobileVerified extends Notification implements ShouldQueue
     /**
      * Get the notification's delivery channels.
      *
-     * @param  mixed  $notifiable
+     * @param mixed $notifiable
      *
      * @return array
      */
@@ -54,11 +54,6 @@ class MobileVerified extends Notification implements ShouldQueue
 //            ->action('برو به سایت آلاء', url('/'));
 //    }
 
-    private function msg(): string
-    {
-        return "آلایی عزیز، شماره موبایل شما در آلاء تایید شد.";
-    }
-
     /**
      * @param $notifiable
      *
@@ -72,21 +67,26 @@ class MobileVerified extends Notification implements ShouldQueue
             ->sendAt(Carbon::now());
     }
 
+    private function msg(): string
+    {
+        return "آلایی عزیز، شماره موبایل شما در آلاء تایید شد.";
+    }
+
     private function getInputData(): array
     {
         return [
-            'name' => $this->getUserFullName(),
-            'request' => 'شماره موبایل',
-            'supportLink' => ''
+            'name'        => $this->getUserFullName(),
+            'request'     => 'شماره موبایل',
+            'supportLink' => '',
         ];
     }
 
     /**
      * @return mixed
      */
-    private function getUserFullName():string
+    private function getUserFullName(): string
     {
         $userFullName = optional($this->user)->full_name;
-        return (isset($userFullName))?$userFullName:'آلایی' ;
+        return (isset($userFullName)) ? $userFullName : 'آلایی';
     }
 }

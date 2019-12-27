@@ -4,11 +4,11 @@ namespace App\Http\Controllers\Web;
 
 use App\Content;
 use App\Contentset;
+use App\Http\Controllers\Controller;
 use App\Product;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\{Cache};
 use Watson\Sitemap\Facades\Sitemap;
-use App\Http\Controllers\Controller;
-use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 class SitemapController extends Controller
 {
@@ -26,6 +26,77 @@ class SitemapController extends Controller
 
         // Return the sitemap to the client.
         return Sitemap::index();
+    }
+
+    private function addContentsSiteMapUrl($type): void
+    {
+        $paginate = $this->getContentByType($type);
+        $lastPage = $paginate->lastPage();
+        for ($i = 1; $i <= $lastPage; $i++) {
+            if ($paginate->isNotEmpty()) {
+                Sitemap::addSitemap(action([__CLASS__, $type], ['page' => $i]));
+            }
+        }
+    }
+
+    /**
+     * @param $type
+     * @param $page
+     *
+     * @return mixed
+     */
+    function getContentByType($type, $page = 1): LengthAwarePaginator
+    {
+        $key =
+            'sitemap-contents/NotRedirected/' . $type . 'page/' . $this->getPageNameByContentType($type) . ':' . $page;
+        return Cache::tags(['content'])
+            ->remember($key, config('constants.CACHE_600'),
+                function ()
+                use ($type, $page) {
+                    return Content::select()
+                        ->free()
+                        ->active()
+                        ->$type()
+                        ->notRedirected()
+                        ->orderBy('id')
+                        ->paginate(500, ['*'], $this->getPageNameByContentType($type), $page);
+                });
+    }
+
+    /**
+     * @param $type
+     *
+     * @return string
+     */
+    function getPageNameByContentType($type): string
+    {
+        return 'c-' . $type;
+    }
+
+    private function addSetsSiteMapUrl()
+    {
+        $paginate = $this->getSet();
+        $lastPage = $paginate->lastPage();
+        for ($i = 1; $i <= $lastPage; $i++) {
+            if ($paginate->isNotEmpty()) {
+                Sitemap::addSitemap(action([__CLASS__, 'set'], ['page' => $i]));
+            }
+        }
+    }
+
+    private function getSet(int $page = 1): LengthAwarePaginator
+    {
+        $key = 'sitemap-sets/NotRedirected/page/' . $page;
+        return Cache::tags(['set'])
+            ->remember($key, config('constants.CACHE_600'),
+                function ()
+                use ($page) {
+                    return Contentset::select()
+                        ->active()
+                        ->notRedirected()
+                        ->orderBy('id')
+                        ->paginate(500, ['*'], 'set', $page);
+                });
     }
 
     public function product()
@@ -62,6 +133,21 @@ class SitemapController extends Controller
         $contents = $this->getContentByType('video', $page);
         $this->addContentsTagLine($contents);
         return Sitemap::render();
+    }
+
+    /**
+     * @param $contents
+     */
+    private function addContentsTagLine($contents): void
+    {
+        foreach ($contents as $content) {
+            $caption = $content->metaTitle;
+            $image   = $content->thumbnail;
+            $tag     = Sitemap::addTag(route('c.show', $content), $content->updated_at, 'monthly', '0.9');
+            if (isset($image)) {
+                $tag->addImage($image, $caption);
+            }
+        }
     }
 
     public function pamphlet($page = 1)
@@ -103,99 +189,14 @@ class SitemapController extends Controller
         return Sitemap::render();
     }
 
-    /**
-     * @param $type
-     * @param $page
-     *
-     * @return mixed
-     */
-    function getContentByType($type, $page = 1): LengthAwarePaginator
-    {
-        $key = 'sitemap-contents/NotRedirected/'.$type.'page/'.$this->getPageNameByContentType($type).':'.$page;
-        return Cache::tags(['content'])
-            ->remember($key, config('constants.CACHE_600'),
-                function ()
-                use ($type, $page) {
-                return Content::select()
-                    ->free()
-                    ->active()
-                    ->$type()
-                    ->notRedirected()
-                    ->orderBy('id')
-                    ->paginate(500, ['*'], $this->getPageNameByContentType($type), $page);
-            });
-    }
-
-    /**
-     * @param $type
-     *
-     * @return string
-     */
-    function getPageNameByContentType($type): string
-    {
-        return 'c-'.$type;
-    }
-
-    /**
-     * @param $contents
-     */
-    private function addContentsTagLine($contents): void
-    {
-        foreach ($contents as $content) {
-            $caption = $content->metaTitle;
-            $image   = $content->thumbnail;
-            $tag     = Sitemap::addTag(route('c.show', $content), $content->updated_at, 'monthly', '0.9');
-            if (isset($image)) {
-                $tag->addImage($image, $caption);
-            }
-        }
-    }
-
-    private function addContentsSiteMapUrl($type): void
-    {
-        $paginate = $this->getContentByType($type);
-        $lastPage = $paginate->lastPage();
-        for ($i = 1; $i <= $lastPage; $i++) {
-            if ($paginate->isNotEmpty()) {
-                Sitemap::addSitemap(action([__CLASS__, $type], ['page' => $i]));
-            }
-        }
-    }
-
-    private function getSet(int $page = 1): LengthAwarePaginator
-    {
-        $key = 'sitemap-sets/NotRedirected/page/'.$page;
-        return Cache::tags(['set'])
-            ->remember($key, config('constants.CACHE_600'),
-                function ()
-                use ($page) {
-                    return Contentset::select()
-                        ->active()
-                        ->notRedirected()
-                        ->orderBy('id')
-                        ->paginate(500, ['*'], 'set', $page);
-                });
-    }
-
-    private function addSetTagLine(LengthAwarePaginator $sets):void
+    private function addSetTagLine(LengthAwarePaginator $sets): void
     {
         foreach ($sets as $set) {
             $caption = $set->metaTitle;
-            $image = $set->photo;
-            $tag = Sitemap::addTag(route('set.show', $set), $set->updated_at, 'daily', '0.9');
+            $image   = $set->photo;
+            $tag     = Sitemap::addTag(route('set.show', $set), $set->updated_at, 'daily', '0.9');
             if (isset($image)) {
                 $tag->addImage($image, $caption);
-            }
-        }
-    }
-
-    private function addSetsSiteMapUrl()
-    {
-        $paginate = $this->getSet();
-        $lastPage = $paginate->lastPage();
-        for ($i = 1; $i <= $lastPage; $i++) {
-            if ($paginate->isNotEmpty()) {
-                Sitemap::addSitemap(action([__CLASS__, 'set'], ['page' => $i]));
             }
         }
     }

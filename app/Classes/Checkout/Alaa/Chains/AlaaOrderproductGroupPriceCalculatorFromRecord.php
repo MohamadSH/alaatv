@@ -17,21 +17,21 @@ use Illuminate\Support\Collection;
 class AlaaOrderproductGroupPriceCalculatorFromRecord extends OrderproductGroupPriceCalculatorFromRecord
 {
     const MODE = OrderproductPriceCalculator::ORDERPRODUCT_CALCULATOR_MODE_CALCULATE_FROM_RECORD;
-    
+
     protected function getOrderproductGroupPrice(Collection $orderproductsToCalculateFromRecord)
     {
         foreach ($orderproductsToCalculateFromRecord as $orderproduct) {
             $priceInfo = $this->getOrderproductPrice($orderproduct);
             $orderproductsToCalculateFromRecord->setNewPriceForItem($orderproduct, $priceInfo);
         }
-        
+
         return $orderproductsToCalculateFromRecord;
     }
-    
+
     /**
      * Gets Orderproduct price
      *
-     * @param  Orderproduct  $orderproduct
+     * @param Orderproduct $orderproduct
      *
      * @return mixed
      */
@@ -39,7 +39,7 @@ class AlaaOrderproductGroupPriceCalculatorFromRecord extends OrderproductGroupPr
     {
         $orderproductCalculator = new AlaaOrderproductPriceCalculator($orderproduct);
         $orderproductCalculator->setMode(self::MODE);
-        
+
         return $orderproductCalculator->getPrice();
     }
 }

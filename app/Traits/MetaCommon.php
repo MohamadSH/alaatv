@@ -1,9 +1,10 @@
 <?php namespace App\Traits;
 
-use SEO;
 use App\Classes\SEO\SeoInterface;
-use App\Helpers\colossalMindMbKeywordGen;
 use App\Classes\SEO\SeoMetaTagsGenerator;
+use App\Helpers\colossalMindMbKeywordGen;
+use Exception;
+use SEO;
 
 trait MetaCommon
 {
@@ -12,22 +13,22 @@ trait MetaCommon
         if (isset($metaData['title'])) {
             SEO::setTitle($metaData['title']);
         }
-        
+
         if (isset($metaData['url'])) {
             SEO::opengraph()
                 ->setUrl($metaData['url']);
             SEO::setCanonical($metaData['url']);
         }
-        
+
         if (isset($metaData['siteName'])) {
             SEO::twitter()
                 ->setSite(isset($metaData['siteName']));
         }
-        
+
         if (isset($metaData['description'])) {
             SEO::setDescription($metaData['description']);
         }
-        
+
         if (isset($metaData['image'])) {
             SEO::opengraph()
                 ->addImage(route('image', [
@@ -41,15 +42,15 @@ trait MetaCommon
                 ]);
         }
     }
-    
+
     protected function generateSeoMetaTags(SeoInterface $item)
     {
         try {
             $seo = new SeoMetaTagsGenerator($item);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
         }
     }
-    
+
     /**
      *
      * Multibyte Keyword Generator
@@ -59,22 +60,22 @@ trait MetaCommon
      *
      * https://github.com/peterkahl/multibyte-keyword-generator
      * @param          $text
-     * @param  string  $article_kw
-     * @param  string  $global_kw
-     * @param  int     $min_word_length
-     * @param  int     $min_word_occur
-     * @param  int     $min_2words_length
-     * @param  int     $min_2words_phrase_length
-     * @param  int     $min_2words_phrase_occur
-     * @param  int     $min_3words_length
-     * @param  int     $min_3words_phrase_length
-     * @param  int     $min_3words_phrase_occur
-     * @param  string  $encoding
-     * @param  string  $lang
+     * @param string   $article_kw
+     * @param string   $global_kw
+     * @param int      $min_word_length
+     * @param int      $min_word_occur
+     * @param int      $min_2words_length
+     * @param int      $min_2words_phrase_length
+     * @param int      $min_2words_phrase_occur
+     * @param int      $min_3words_length
+     * @param int      $min_3words_phrase_length
+     * @param int      $min_3words_phrase_occur
+     * @param string   $encoding
+     * @param string   $lang
      *
      * @return string
      */
-    
+
     private function generateKeywordsMeta(
         $text /* the text */,
         $article_kw = '' /*  if some keywords are written by hand (by the author) ,
@@ -102,7 +103,7 @@ trait MetaCommon
         // ignore languages
         //	$params['ignore'] = array('zh_CN', 'zh_TW', 'ja_JP'); // must be an array; lower case; case sensitive !!!
         //----------------------------------------------------------------------
-        
+
         // REQUIRED
         // load the text, either from database or a file
         // text MAY contain HTML tags
@@ -123,18 +124,18 @@ trait MetaCommon
         $params['min_3words_length']        = $min_3words_length;
         $params['min_3words_phrase_length'] = $min_3words_phrase_length;
         $params['min_3words_phrase_occur']  = $min_3words_phrase_occur;
-        
+
         //----------------------------------------------------------------------
         //REQUIRED
         $keyword = new colossalMindMbKeywordGen($params);
         // REQUIRED
         $autoKeywords = $keyword->get_keywords();
-        
-        $keywords = $global_kw.','.$autoKeywords.','.$article_kw;
+
+        $keywords = $global_kw . ',' . $autoKeywords . ',' . $article_kw;
         // BONUS FUNCTION
         // clean up keywords; remove ONLY duplicate words; remove identical PLURAL words (English)
         $keywords = $keyword->removeDuplicateKw($keywords);
-        
+
         return $keywords;
     }
 }

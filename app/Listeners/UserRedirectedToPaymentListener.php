@@ -20,26 +20,28 @@ class UserRedirectedToPaymentListener
     /**
      * Handle the event.
      *
-     * @param  UserRedirectedToPaymentListener  $event
+     * @param UserRedirectedToPaymentListener $event
+     *
      * @return void
      */
     public function handle(UserRedirectedToPayment $event)
     {
         $user = $event->user;
         Cache::tags([
-            'user_'.$user->id.'_closedOrders' ,
-            'user_'.$user->id.'_transactions' ,
-            'user_'.$user->id.'_instalments' ,
-            'user_'.$user->id.'_totalBonNumber' ,
-            'user_'.$user->id.'_validBons' ,
-            'user_'.$user->id.'_hasBon'] )->flush();
+            'user_' . $user->id . '_closedOrders',
+            'user_' . $user->id . '_transactions',
+            'user_' . $user->id . '_instalments',
+            'user_' . $user->id . '_totalBonNumber',
+            'user_' . $user->id . '_validBons',
+            'user_' . $user->id . '_hasBon',
+        ])->flush();
 
-        if(isset($event->order)) {
-            Cache::tags('order_'.$event->order->id)->flush();
+        if (isset($event->order)) {
+            Cache::tags('order_' . $event->order->id)->flush();
         }
 
-        if(isset($event->transaction)) {
-            Cache::tags('transaction_'.$event->transaction->id)->flush();
+        if (isset($event->transaction)) {
+            Cache::tags('transaction_' . $event->transaction->id)->flush();
         }
     }
 }

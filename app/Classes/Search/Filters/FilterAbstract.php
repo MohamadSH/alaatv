@@ -21,7 +21,7 @@ class FilterAbstract implements Filter
     public function __construct()
     {
         if (!isset($this->attribute)) {
-            throw new LogicException(get_class($this).' must have a $attribute');
+            throw new LogicException(get_class($this) . ' must have a $attribute');
         }
     }
 
@@ -29,7 +29,7 @@ class FilterAbstract implements Filter
     {
         $value = $this->getSearchValue($value);
 
-        return $builder->where($this->attribute, 'LIKE', "%".$value."%");
+        return $builder->where($this->attribute, 'LIKE', "%" . $value . "%");
     }
 
     protected function getSearchValue($value)

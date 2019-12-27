@@ -8,6 +8,7 @@ use App\Http\Requests\InsertZarinpalTransaction;
 use App\Order;
 use App\Traits\HandleOrderPayment;
 use App\Traits\ZarinpalGateway;
+use App\Transaction;
 use Carbon\Carbon;
 use Illuminate\Http\Response;
 
@@ -15,11 +16,11 @@ class ZarinpalTransactionController extends Controller
 {
     use ZarinpalGateway;
     use HandleOrderPayment;
-    
+
     const GATE_WAY_NAME = 'zarinpal';
-    
+
     protected $transactionController;
-    
+
 
     function __construct(TransactionController $transactionController)
     {
@@ -37,50 +38,46 @@ class ZarinpalTransactionController extends Controller
         if (strlen($initialDescription) > 0) {
             $initialDescription .= ' - ';
         }
-        
+
         if ($request->has('openOrder')) {
             $order = $request->get('openOrder');
-        }
-        else {
+        } else {
             $order = Order::findorfail($orderId);
         }
-        
+
         $gatewayResult      = $this->buildZarinpalGateway(self::GATE_WAY_NAME, false);
         $gateway            = $gatewayResult['gatewayComposer'];
         $transactionGateway = $gatewayResult['transactiongateway'];
-        
+
         $gatewayVerify = $this->verify($gateway, $amount, $paymentData["Authority"]);
-        
+
         if ($gatewayVerify['status']) {
             if ($gatewayVerify['data']['RefID'] != $refId) {
                 $refIdStatus = Response::HTTP_FORBIDDEN;
                 $message     = 'Reference number is wrong';
-            }
-            else {
+            } else {
                 $refIdStatus = Response::HTTP_OK;
             }
-            
+
             if ($refIdStatus == Response::HTTP_OK) {
-                $description = 'اپ آلاء - '.$initialDescription;
+                $description = 'اپ آلاء - ' . $initialDescription;
                 $description = $this->setTransactionDescription($description, optional($order)->user, $order);
                 $transaction = $this->getNewTransaction($amount, $orderId, $transactionGateway->id, $description,
                     $paymentData['Authority'], $refId);
                 if (isset($transaction)) {
                     $verifyResult['OrderSuccessPaymentResult'] = $this->handleOrderSuccessPayment($transaction->order);
                     $resultCode                                = Response::HTTP_OK;
-                }
-                else {
+                } else {
                     $resultCode = Response::HTTP_SERVICE_UNAVAILABLE;
                     $message    = 'Database error on inserting transaction';
                 }
             }
-        }
-        else {
+        } else {
             $resultCode = Response::HTTP_BAD_REQUEST;
             $message    = 'Unverified transaction';
 //            $verifyResult['OrderCanceledPaymentResult'] = $this->handleOrderCanceledPayment($transaction);
         }
-        
+
         if ($resultCode != Response::HTTP_OK) {
             $responseContent = [
                 'error' => [
@@ -88,26 +85,25 @@ class ZarinpalTransactionController extends Controller
                     'message' => $message ?? $message,
                 ],
             ];
-        }
-        else {
+        } else {
             $responseContent = [
                 'message' => 'Transaction saved successfully',
             ];
         }
-        
+
         return response($responseContent, Response::HTTP_OK);
     }
-    
+
     /**
-     * @param  int     $cost
-     * @param  int     $orderId
-     * @param  int     $transactionGatewayId
-     * @param  string  $description
-     * @param  string  $authority
+     * @param int    $cost
+     * @param int    $orderId
+     * @param int    $transactionGatewayId
+     * @param string $description
+     * @param string $authority
      *
-     * @param  string  $refId
+     * @param string $refId
      *
-     * @return \App\Transaction|null
+     * @return Transaction|null
      */
     private function getNewTransaction(int $cost, int $orderId, int $transactionGatewayId, string $description, string $authority, string $refId)
     {
@@ -125,8 +121,7 @@ class ZarinpalTransactionController extends Controller
         $result                            = $this->transactionController->new($data);
         if ($result['statusCode'] == Response::HTTP_OK) {
             return $result['transaction'];
-        }
-        else {
+        } else {
             return null;
         }
     }

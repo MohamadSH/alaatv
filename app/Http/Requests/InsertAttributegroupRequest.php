@@ -3,7 +3,6 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Support\Facades\Config;
 
 class InsertAttributegroupRequest extends FormRequest
 {
@@ -15,7 +14,7 @@ class InsertAttributegroupRequest extends FormRequest
             ->can(config('constants.INSERT_ATTRIBUTEGROUP_ACCESS'))) {
             return true;
         }
-        
+
         return false;
     }
 

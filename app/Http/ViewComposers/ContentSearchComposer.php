@@ -18,7 +18,7 @@ class ContentSearchComposer
     /**
      * Create a new ContentSearch composer.
      *
-     * @param  Request  $request
+     * @param Request $request
      */
     public function __construct(Request $request)
     {
@@ -28,14 +28,14 @@ class ContentSearchComposer
     /**
      * Bind data to the view.
      *
-     * @param  View  $view
+     * @param View $view
      *
      * @return void
      */
     public function compose(View $view)
     {
         $sideBarMode = "closed";
-        list($ads1, $ads2, $tags, $extraTags, $filterData) = $this->getData();
+        [$ads1, $ads2, $tags, $extraTags, $filterData] = $this->getData();
 
         $view->with(compact('sideBarMode', 'ads1', 'ads2', 'tags', 'extraTags', 'filterData'));
     }
@@ -669,7 +669,7 @@ class ContentSearchComposer
                     "lastName"  => "ثابتی",
                     "firstName" => "محمد صادق",
                     "value"     => "محمد_صادق_ثابتی",
-                ]
+                ],
             ])
                 ->sortBy("lastName")
                 ->values(),

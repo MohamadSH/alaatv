@@ -16,15 +16,15 @@ class EditTransactionRequest extends FormRequest
 
     public function rules()
     {
-        $transaction = $this->route('transaction');
+        $transaction   = $this->route('transaction');
         $transactionId = $transaction->id;
-        $rules       = [
+        $rules         = [
             'cost'            => 'required|integer',
-            'referenceNumber' => 'unique:transactions,referenceNumber,'.$transactionId.',id,deleted_at,NULL|numeric|nullable',
-            'traceNumber'     => 'unique:transactions,traceNumber,'.$transactionId.',id,deleted_at,NULL|numeric|nullable',
-            'transactionID'   => 'unique:transactions,transactionID,'.$transactionId.',id,deleted_at,NULL|nullable',
-            'authority'       => 'unique:transactions,authority,'.$transactionId.',id,deleted_at,NULL|nullable',
-            'paycheckNumber'  => 'unique:transactions,paycheckNumber,'.$transaction->id.',id,deleted_at,NULL|nullable',
+            'referenceNumber' => 'unique:transactions,referenceNumber,' . $transactionId . ',id,deleted_at,NULL|numeric|nullable',
+            'traceNumber'     => 'unique:transactions,traceNumber,' . $transactionId . ',id,deleted_at,NULL|numeric|nullable',
+            'transactionID'   => 'unique:transactions,transactionID,' . $transactionId . ',id,deleted_at,NULL|nullable',
+            'authority'       => 'unique:transactions,authority,' . $transactionId . ',id,deleted_at,NULL|nullable',
+            'paycheckNumber'  => 'unique:transactions,paycheckNumber,' . $transaction->id . ',id,deleted_at,NULL|nullable',
         ];
 
         return $rules;
@@ -52,28 +52,28 @@ class EditTransactionRequest extends FormRequest
                 $input["referenceNumber"] = $this->convertToEnglish($input["referenceNumber"]);
             }
         }
-    
+
         if (isset($input["traceNumber"])) {
             $input["traceNumber"] = preg_replace('/\s+/', '', $input["traceNumber"]);
             if (strlen($input["traceNumber"]) > 0) {
                 $input["traceNumber"] = $this->convertToEnglish($input["traceNumber"]);
             }
         }
-    
+
         if (isset($input["transactionID"])) {
             $input["transactionID"] = preg_replace('/\s+/', '', $input["transactionID"]);
             if (strlen($input["transactionID"]) > 0) {
                 $input["transactionID"] = $this->convertToEnglish($input["transactionID"]);
             }
         }
-    
+
         if (isset($input["authority"])) {
             $input["authority"] = preg_replace('/\s+/', '', $input["authority"]);
             if (strlen($input["authority"]) > 0) {
                 $input["authority"] = $this->convertToEnglish($input["authority"]);
             }
         }
-    
+
         if (isset($input["paycheckNumber"])) {
             if (strlen($input["paycheckNumber"]) > 0) {
                 $input["paycheckNumber"] = $this->convertToEnglish($input["paycheckNumber"]);

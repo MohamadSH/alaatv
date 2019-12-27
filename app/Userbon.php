@@ -3,7 +3,9 @@
 namespace App;
 
 use Carbon\Carbon;
-use Illuminate\Support\Facades\Config;
+use Eloquent;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 
 /**
  * App\Userbon
@@ -19,45 +21,45 @@ use Illuminate\Support\Facades\Config;
  *           استفاده کرده
  * @property int|null                                                          $userbonstatus_id آی دی مشخص کننده وضعیت
  *           این بن کاربر
- * @property string|null                                                       $validSince       زمان شروع استفاده از
+ * @property string|null                    $validSince       زمان شروع استفاده از
  *           کپن ، نال به معنای شروع از زمان ایجاد است
- * @property string|null                                                       $validUntil       زمان پایان استفاده از
+ * @property string|null                    $validUntil       زمان پایان استفاده از
  *           کپن ، نال به معنای بدون محدودیت می باشد
- * @property int|null                                                          $orderproduct_id  آی دی مشخص کننده آیتمی
+ * @property int|null                       $orderproduct_id  آی دی مشخص کننده آیتمی
  *           که به واسطه آن این بن به کاربر اختصاص داده شده
- * @property \Carbon\Carbon|null                                               $created_at
- * @property \Carbon\Carbon|null                                               $updated_at
- * @property string|null                                                       $deleted_at
- * @property-read \App\Bon                                                     $bon
- * @property-read \App\Orderproduct|null                                       $orderproduct
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Orderproduct[] $orderproducts
- * @property-read \App\User                                                    $user
- * @property-read \App\Userbonstatus|null                                      $userbonstatus
+ * @property Carbon|null            $created_at
+ * @property Carbon|null            $updated_at
+ * @property string|null                    $deleted_at
+ * @property-read Bon                       $bon
+ * @property-read Orderproduct|null         $orderproduct
+ * @property-read Collection|Orderproduct[] $orderproducts
+ * @property-read User                      $user
+ * @property-read Userbonstatus|null        $userbonstatus
  * @method static bool|null forceDelete()
- * @method static \Illuminate\Database\Query\Builder|\App\Userbon onlyTrashed()
+ * @method static \Illuminate\Database\Query\Builder|Userbon onlyTrashed()
  * @method static bool|null restore()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Userbon whereBonId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Userbon whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Userbon whereDeletedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Userbon whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Userbon whereOrderproductId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Userbon whereTotalNumber($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Userbon whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Userbon whereUsedNumber($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Userbon whereUserId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Userbon whereUserbonstatusId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Userbon whereValidSince($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Userbon whereValidUntil($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Userbon withTrashed()
- * @method static \Illuminate\Database\Query\Builder|\App\Userbon withoutTrashed()
- * @mixin \Eloquent
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Userbon newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Userbon newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Userbon query()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel disableCache()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel withCacheCooldownSeconds($seconds)
+ * @method static Builder|Userbon whereBonId($value)
+ * @method static Builder|Userbon whereCreatedAt($value)
+ * @method static Builder|Userbon whereDeletedAt($value)
+ * @method static Builder|Userbon whereId($value)
+ * @method static Builder|Userbon whereOrderproductId($value)
+ * @method static Builder|Userbon whereTotalNumber($value)
+ * @method static Builder|Userbon whereUpdatedAt($value)
+ * @method static Builder|Userbon whereUsedNumber($value)
+ * @method static Builder|Userbon whereUserId($value)
+ * @method static Builder|Userbon whereUserbonstatusId($value)
+ * @method static Builder|Userbon whereValidSince($value)
+ * @method static Builder|Userbon whereValidUntil($value)
+ * @method static \Illuminate\Database\Query\Builder|Userbon withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|Userbon withoutTrashed()
+ * @mixin Eloquent
+ * @method static Builder|Userbon newModelQuery()
+ * @method static Builder|Userbon newQuery()
+ * @method static Builder|Userbon query()
+ * @method static Builder|BaseModel disableCache()
+ * @method static Builder|BaseModel withCacheCooldownSeconds($seconds)
  * @property-read mixed                                                        $cache_cooldown_seconds
- * @property-read int|null $orderproducts_count
+ * @property-read int|null                                                     $orderproducts_count
  */
 class Userbon extends BaseModel
 {

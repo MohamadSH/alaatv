@@ -15,26 +15,26 @@ use App\Collection\OrderproductCollection;
 class GroupOrderproductCheckout extends CheckoutInvoker
 {
     private $orderproducts;
-    
+
     private $orderproductsToCalculateFromBaseIds;
-    
+
     /**
      * OrderCheckout constructor.
      *
-     * @param  OrderproductCollection  $orderproducts
-     * @param  array                   $orderproductsToCalculateFromBaseIds
+     * @param OrderproductCollection $orderproducts
+     * @param array                  $orderproductsToCalculateFromBaseIds
      */
     public function __construct(OrderproductCollection $orderproducts, array $orderproductsToCalculateFromBaseIds = [])
     {
         $this->orderproducts                       = $orderproducts;
         $this->orderproductsToCalculateFromBaseIds = $orderproductsToCalculateFromBaseIds;
     }
-    
+
     public function getChainClassesNameSpace(): string
     {
-        return __NAMESPACE__."\\Chains";
+        return __NAMESPACE__ . "\\Chains";
     }
-    
+
     /**
      * @return array
      */
@@ -46,19 +46,19 @@ class GroupOrderproductCheckout extends CheckoutInvoker
             "AlaaOrderproductSumCalculator",
         ];
     }
-    
+
     protected function initiateCashier(): Cashier
     {
         $orderproducts = $this->orderproducts;
-        
+
         $orderproductsToCalculateFromBase   = $orderproducts->whereIn("id", $this->orderproductsToCalculateFromBaseIds);
         $orderproductsToCalculateFromRecord = $orderproducts->whereNotIn("id",
             $this->orderproductsToCalculateFromBaseIds);
-        
+
         $alaaCashier = new AlaaCashier();
         $alaaCashier->setRawOrderproductsToCalculateFromBase($orderproductsToCalculateFromBase);
         $alaaCashier->setRawOrderproductsToCalculateFromRecord($orderproductsToCalculateFromRecord);
-        
+
         return $alaaCashier;
     }
 }

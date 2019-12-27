@@ -19,7 +19,7 @@ class PasswordRecoveryRequest extends FormRequest
         } else {
             $rules = [];
         }
-    
+
         return $rules;
     }
 }

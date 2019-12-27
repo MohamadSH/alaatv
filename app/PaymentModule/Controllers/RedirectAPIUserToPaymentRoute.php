@@ -34,8 +34,8 @@ class RedirectAPIUserToPaymentRoute extends Controller
     {
         $decryptedData = $this->getDecryptedData($request->encryptionData);
 
-        $userId = Arr::get($decryptedData, 'user_id');
-        $orderId= Arr::get($decryptedData, 'order_id');
+        $userId  = Arr::get($decryptedData, 'user_id');
+        $orderId = Arr::get($decryptedData, 'order_id');
 
         $user = $this->getUser($userId)
             ->orFailWith([Response::class, 'sendErrorResponse', ['User not found', Response::HTTP_BAD_REQUEST]]);
@@ -44,7 +44,7 @@ class RedirectAPIUserToPaymentRoute extends Controller
         event(new Authenticated($user));
 
         $parameters = ['paymentMethod' => $paymentMethod, 'device' => $device];
-        if(isset($orderId)) {
+        if (isset($orderId)) {
             $parameters = Arr::add($parameters, 'order_id', $orderId);
         }
 
@@ -53,13 +53,13 @@ class RedirectAPIUserToPaymentRoute extends Controller
 
     private function getDecryptedData(string $encryptedData)
     {
-        return (array) decrypt($encryptedData);
+        return (array)decrypt($encryptedData);
     }
 
     private function getUser(int $userId)
     {
         $user = User::find($userId);
 
-        return nullable($user , ['User not found' , Response::HTTP_BAD_REQUEST]);
+        return nullable($user, ['User not found', Response::HTTP_BAD_REQUEST]);
     }
 }

@@ -27,7 +27,7 @@ class VerifyMobile extends Notification implements ShouldQueue
     /**
      * Get the notification's delivery channels.
      *
-     * @param  mixed  $notifiable
+     * @param mixed $notifiable
      *
      * @return array
      */
@@ -56,7 +56,8 @@ class VerifyMobile extends Notification implements ShouldQueue
 
     private function msg(): string
     {
-        $messageCore = "کد تایید شماره موبایل شما در آلاء:"."\n".$this->user->getMobileVerificationCode()."\n"."alaatv.com";
+        $messageCore =
+            "کد تایید شماره موبایل شما در آلاء:" . "\n" . $this->user->getMobileVerificationCode() . "\n" . "alaatv.com";
         $message     = $messageCore;
 
         return $message;
@@ -73,9 +74,9 @@ class VerifyMobile extends Notification implements ShouldQueue
     /**
      * @return mixed
      */
-    private function getUserFullName():string
+    private function getUserFullName(): string
     {
         $userFullName = optional($this->user)->full_name;
-        return (isset($userFullName))?$userFullName:'آلایی' ;
+        return (isset($userFullName)) ? $userFullName : 'آلایی';
     }
 }

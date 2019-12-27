@@ -25,11 +25,11 @@ class Gift extends AlaaJsonResource
         }
 
         return [
-            'id'               => $this->id,
-            'redirect_url'     => $this->when(isset($this->redirectUrl) , $this->redirectUrl),
-            'title'             => $this->when(isset($this->name) , $this->name),
-            'url'              => new Url($this),
-            'photo'            => $this->when(isset($this->photo) , $this->photo),
+            'id'           => $this->id,
+            'redirect_url' => $this->when(isset($this->redirectUrl), $this->redirectUrl),
+            'title'        => $this->when(isset($this->name), $this->name),
+            'url'          => new Url($this),
+            'photo'        => $this->when(isset($this->photo), $this->photo),
         ];
     }
 }

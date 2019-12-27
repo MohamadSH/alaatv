@@ -15,10 +15,10 @@ class SaveNewBlockRequest extends FormRequest
     {
         return [
 //            'order'  => 'required|numeric',
-            'title'     => 'required|string',
+            'title' => 'required|string',
 //            'customUrl'   => 'string',
 //            'class' => 'string',
-            'type' => 'required|numeric',
+            'type'  => 'required|numeric',
 //            'tags' => 'string',
         ];
     }

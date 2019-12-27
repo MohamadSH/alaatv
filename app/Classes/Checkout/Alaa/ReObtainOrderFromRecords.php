@@ -15,19 +15,19 @@ use App\Order;
 class ReObtainOrderFromRecords extends CheckoutInvoker
 {
     private $order;
-    
+
     private $totalRawPriceWhichHasDiscount;
-    
+
     private $totalRawPriceWhichDoesntHaveDiscount;
-    
+
     private $couponDiscountType;
-    
+
     private $orderDiscount;
-    
+
     /**
      * OrderCheckout constructor.
      *
-     * @param  Order  $order
+     * @param Order $order
      */
     public function __construct(Order $order)
     {
@@ -37,12 +37,12 @@ class ReObtainOrderFromRecords extends CheckoutInvoker
         $this->couponDiscountType                   = $order->coupon_discount_type;
         $this->orderDiscount                        = $order->discount;
     }
-    
+
     public function getChainClassesNameSpace(): string
     {
-        return __NAMESPACE__."\\Chains";
+        return __NAMESPACE__ . "\\Chains";
     }
-    
+
     protected function fillChainArray(): array
     {
         return [
@@ -52,30 +52,29 @@ class ReObtainOrderFromRecords extends CheckoutInvoker
             "AlaaOrderDiscountCostAmountCalculator",
         ];
     }
-    
+
     protected function initiateCashier(): Cashier
     {
         $alaaCashier = new AlaaCashier();
-        
+
         $couponDiscountCostAmount = 0;
         $couponDiscountPercentage = 0;
         $couponType               = $this->order->coupon_discount_type;
         if ($couponType !== false) {
             if ($couponType["type"] == config("constants.DISCOUNT_TYPE_PERCENTAGE")) {
                 $couponDiscountPercentage = $couponType["discount"] / 100;
-            }
-            elseif ($couponType["type"] == config("constants.DISCOUNT_TYPE_COST")) {
+            } else if ($couponType["type"] == config("constants.DISCOUNT_TYPE_COST")) {
                 $couponDiscountCostAmount = $couponType["discount"];
             }
         }
-        
+
         $alaaCashier->setOrder($this->order)
             ->setTotalRawPriceWhichHasDiscount($this->totalRawPriceWhichHasDiscount)
             ->setTotalRawPriceWhichDoesntHaveDiscount($this->totalRawPriceWhichDoesntHaveDiscount)
             ->setOrderCouponDiscountPercentage($couponDiscountPercentage)
             ->setOrderCouponDiscountCostAmount($couponDiscountCostAmount)
             ->setOrderDiscountCostAmount($this->orderDiscount);
-        
+
         return $alaaCashier;
     }
 }

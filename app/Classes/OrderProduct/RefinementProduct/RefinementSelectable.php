@@ -15,13 +15,13 @@ use Exception;
 class RefinementSelectable implements RefinementInterface
 {
     private $selectedProductsIds;
-    
+
     private $product;
-    
+
     /**
      * RefinementSelectable constructor.
      *
-     * @param  Product  $product
+     * @param Product   $product
      * @param           $data
      *
      * @throws Exception
@@ -31,12 +31,11 @@ class RefinementSelectable implements RefinementInterface
         if (isset($data['products'])) {
             $this->selectedProductsIds = $data["products"];
             $this->product             = $product;
-        }
-        else {
+        } else {
             throw new Exception('products not set!');
         }
     }
-    
+
     /**
      * @return ProductCollection|null
      */
@@ -45,9 +44,9 @@ class RefinementSelectable implements RefinementInterface
         /** @var ProductCollection $selectedProductsItems */
         $selectedProductsItems = Product::whereIn('id', $this->selectedProductsIds)
             ->get();
-        
+
         $selectedProductsItems->keepOnlyParents();
-        
+
         return $selectedProductsItems;
     }
 }

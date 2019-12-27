@@ -1,14 +1,14 @@
 <?php namespace App\Traits;
 
 use App\Events\UserAvatarUploaded;
-use App\User;
 use App\Transaction;
-use Illuminate\Support\Arr;
-use Illuminate\Validation\Rule;
-use Illuminate\Database\Eloquent\Builder;
+use App\User;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\Rule;
 
 trait UserCommon
 {
@@ -20,7 +20,7 @@ trait UserCommon
      *
      * @return array
      */
-    public function exchangeLottery($user, $points):array
+    public function exchangeLottery($user, $points): array
     {
         /**   giving coupon */ /**do {
      * $couponCode = str_random(5);
@@ -59,7 +59,7 @@ trait UserCommon
         $done          = $depositResult['result'];
         $responseText  = $depositResult['responseText'];
         $objectId      = $depositResult['wallet'];
-        $prizeName     = 'مبلغ '.number_format($amount).' تومان اعتبار هدیه';
+        $prizeName     = 'مبلغ ' . number_format($amount) . ' تومان اعتبار هدیه';
 
         return [
             $done,
@@ -76,7 +76,7 @@ trait UserCommon
      *
      * @return bool
      */
-    public function validateNationalCode($value):bool
+    public function validateNationalCode($value): bool
     {
         $flag = false;
         if (!preg_match('/^[0-9]{10}$/', $value)) {
@@ -84,7 +84,7 @@ trait UserCommon
         }
 
         for ($i = 0; $i < 10; $i++) {
-            if (preg_match('/^'.$i.'{10}$/', $value)) {
+            if (preg_match('/^' . $i . '{10}$/', $value)) {
                 $flag = false;
             }
         }
@@ -118,7 +118,7 @@ trait UserCommon
     /**
      * Returns validation rules for inserting a user
      *
-     * @param  array  $data
+     * @param array $data
      *
      * @return array
      */
@@ -162,18 +162,20 @@ trait UserCommon
     }
 
     /**
-     * @param User $user
+     * @param User   $user
      * @param        $file
+     *
      * @return string|null
      * @throws FileNotFoundException
      */
     protected function storePhotoOfUser(User $user, $file): ?string
     {
         $extension = $file->getClientOriginalExtension();
-        $fileName  = basename($file->getClientOriginalName(), '.'.$extension).'_'.date('YmdHis').'.'.$extension;
+        $fileName  =
+            basename($file->getClientOriginalName(), '.' . $extension) . '_' . date('YmdHis') . '.' . $extension;
         if (Storage::disk(config('constants.DISK24'))->put($fileName, File::get($file))) {
-            $path = 'upload/images/profile/'.$fileName;
-            event(new UserAvatarUploaded($user , $path));
+            $path = 'upload/images/profile/' . $fileName;
+            event(new UserAvatarUploaded($user, $path));
             return $path;
         }
 
@@ -181,15 +183,15 @@ trait UserCommon
     }
 
     /**
-     * @param  array  $newRoleIds
-     * @param  User   $staffUser
-     * @param  User   $user
+     * @param array $newRoleIds
+     * @param User  $staffUser
+     * @param User  $user
      */
     protected function syncRoles(array $newRoleIds, User $user): void
     {
         $oldRolesIds = $user->roles->pluck('id')
             ->toArray();
-        if(!empty($oldRolesIds)) {
+        if (!empty($oldRolesIds)) {
             $user->roles()->detach($oldRolesIds);
         }
         $user->roles()->attach($newRoleIds);

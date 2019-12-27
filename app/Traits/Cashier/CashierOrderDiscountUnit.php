@@ -11,7 +11,7 @@ namespace App\Traits\Cashier;
 trait CashierOrderDiscountUnit
 {
     protected $orderDiscountCostAmount;
-    
+
     /**
      * @return mixed
      */
@@ -19,16 +19,16 @@ trait CashierOrderDiscountUnit
     {
         return $this->orderDiscountCostAmount;
     }
-    
+
     /**
-     * @param  mixed  $orderDiscountCostAmount
+     * @param mixed $orderDiscountCostAmount
      *
      * @return mixed
      */
     public function setOrderDiscountCostAmount($orderDiscountCostAmount)
     {
         $this->orderDiscountCostAmount = $orderDiscountCostAmount;
-        
+
         return $this;
     }
 }

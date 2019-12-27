@@ -23,16 +23,16 @@ class RelatedProductSearch extends SearchAbstract
     ];
 
     /**
-     * @param  array  $filters
+     * @param array $filters
      *
      * @return mixed
      */
     protected function apply(array $filters): LengthAwarePaginator
     {
         $this->pageNum = $this->setPageNum($filters);
-        $key = $this->makeCacheKey($filters);
+        $key           = $this->makeCacheKey($filters);
 
-        return Cache::tags(['relatedProduct' , 'relatedProduct_search' , 'search'])->remember($key, $this->cacheTime, function () use ($filters) {
+        return Cache::tags(['relatedProduct', 'relatedProduct_search', 'search'])->remember($key, $this->cacheTime, function () use ($filters) {
             $query = $this->applyDecoratorsFromFiltersArray($filters, $this->model->newQuery());
 
             return $this->getResults($query);
@@ -40,7 +40,7 @@ class RelatedProductSearch extends SearchAbstract
     }
 
     /**
-     * @param  Builder  $query
+     * @param Builder $query
      *
      * @return mixed
      */

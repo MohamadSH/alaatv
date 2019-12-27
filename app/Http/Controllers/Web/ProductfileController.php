@@ -10,11 +10,12 @@ use App\Productfile;
 use App\Productfiletype;
 use App\Traits\ProductCommon;
 use Carbon\Carbon;
+use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\File;
-
 use Illuminate\Support\Facades\Storage;
+use Illuminate\View\View;
 
 class ProductfileController extends Controller
 {
@@ -24,15 +25,15 @@ class ProductfileController extends Controller
 
     function __construct()
     {
-        $this->middleware('permission:'.config('constants.LIST_PRODUCT_FILE_ACCESS'), ['only' => 'index']);
-        $this->middleware('permission:'.config('constants.INSERT_PRODUCT_FILE_ACCESS'), [
+        $this->middleware('permission:' . config('constants.LIST_PRODUCT_FILE_ACCESS'), ['only' => 'index']);
+        $this->middleware('permission:' . config('constants.INSERT_PRODUCT_FILE_ACCESS'), [
             'only' => [
                 'create',
                 'store',
             ],
         ]);
-        $this->middleware('permission:'.config('constants.REMOVE_PRODUCT_FILE_ACCESS'), ['only' => 'destroy']);
-        $this->middleware('permission:'.config('constants.EDIT_PRODUCT_FILE_ACCESS'), [
+        $this->middleware('permission:' . config('constants.REMOVE_PRODUCT_FILE_ACCESS'), ['only' => 'destroy']);
+        $this->middleware('permission:' . config('constants.EDIT_PRODUCT_FILE_ACCESS'), [
             'only' => [
                 'edit',
                 'update',
@@ -44,7 +45,8 @@ class ProductfileController extends Controller
      * Show the form for creating a new resource.
      *
      * @param Request $request
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     *
+     * @return Factory|View
      */
     public function create(Request $request)
     {
@@ -63,8 +65,7 @@ class ProductfileController extends Controller
                     "fileTypeId" => $key,
                     "lastOrder"  => $lastOrderNumber,
                 ]);
-            }
-            else {
+            } else {
                 $defaultProductFileOrders->push([
                     "fileTypeId" => $key,
                     "lastOrder"  => 1,
@@ -88,14 +89,13 @@ class ProductfileController extends Controller
         if (strlen($time) > 0) {
             $time = Carbon::parse($time)
                 ->format('H:i:s');
-        }
-        else {
+        } else {
             $time = "00:00:00";
         }
         $validSince              = $request->get("validSinceDate");
         $validSince              = Carbon::parse($validSince)
             ->format('Y-m-d');
-        $validSince              = $validSince." ".$time;
+        $validSince              = $validSince . " " . $time;
         $productFile->validSince = $validSince;
 
         if ($request->get("enable") != 1) {
@@ -105,7 +105,8 @@ class ProductfileController extends Controller
         if ($request->hasFile("file")) {
             $file      = $request->file('file');
             $extension = $file->getClientOriginalExtension();
-            $fileName  = basename($file->getClientOriginalName(), ".".$extension)."_".date("YmdHis").'.'.$extension;
+            $fileName  =
+                basename($file->getClientOriginalName(), "." . $extension) . "_" . date("YmdHis") . '.' . $extension;
             if (Storage::disk(config('constants.DISK13'))
                 ->put($fileName, File::get($file))) {
                 $productFile->file = $fileName;
@@ -148,8 +149,7 @@ class ProductfileController extends Controller
 
         if ($productFile->save()) {
             session()->put('success', 'درج فایل با موفقیت انجام شد');
-        }
-        else {
+        } else {
             session()->put('error', 'خطای پایگاه داده');
         }
 
@@ -179,8 +179,7 @@ class ProductfileController extends Controller
         if (strlen($time) > 0) {
             $time = Carbon::parse($time)
                 ->format('H:i:s');
-        }
-        else {
+        } else {
             $time = "00:00:00";
         }
         $validSince = $request->get("validSinceDate");
@@ -188,7 +187,7 @@ class ProductfileController extends Controller
         $validSince              = Carbon::parse($validSince)
             ->addDay()
             ->format('Y-m-d'); //Muhammad : added a day because it returns one day behind and IDK why!!
-        $validSince              = $validSince." ".$time;
+        $validSince              = $validSince . " " . $time;
         $productFile->validSince = $validSince;
 
         if ($request->get("enable") != 1) {
@@ -198,7 +197,8 @@ class ProductfileController extends Controller
         if ($request->hasFile("file")) {
             $file      = $request->file('file');
             $extension = $file->getClientOriginalExtension();
-            $fileName  = basename($file->getClientOriginalName(), ".".$extension)."_".date("YmdHis").'.'.$extension;
+            $fileName  =
+                basename($file->getClientOriginalName(), "." . $extension) . "_" . date("YmdHis") . '.' . $extension;
             if (Storage::disk(config('constants.DISK13'))
                 ->put($fileName, File::get($file))) {
                 Storage::disk(config('constants.DISK13'))
@@ -244,8 +244,7 @@ class ProductfileController extends Controller
 
         if ($productFile->update()) {
             session()->put('success', 'اصلاح جزوه با موفقیت انجام شد');
-        }
-        else {
+        } else {
             session()->put('error', 'خطای پایگاه داده');
         }
 

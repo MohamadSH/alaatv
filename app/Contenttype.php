@@ -11,17 +11,17 @@ use Illuminate\Support\Facades\Cache;
 /**
  * App\Contenttype
  *
- * @property int                                                              $id
- * @property string|null                                                      $name        نام
- * @property string|null                                                      $displayName نام قابل نمایش
- * @property string|null                                                      $description توضیح
- * @property int                                                              $order       ترتیب
- * @property int                                                              $enable      فعال یا غیر فعال
- * @property Carbon|null                                              $created_at
- * @property Carbon|null                                              $updated_at
- * @property Carbon|null                                              $deleted_at
+ * @property int                           $id
+ * @property string|null                   $name        نام
+ * @property string|null                   $displayName نام قابل نمایش
+ * @property string|null                   $description توضیح
+ * @property int                           $order       ترتیب
+ * @property int                           $enable      فعال یا غیر فعال
+ * @property Carbon|null                   $created_at
+ * @property Carbon|null                   $updated_at
+ * @property Carbon|null                   $deleted_at
  * @property-read Collection|Contenttype[] $children
- * @property-read Collection|Content[] $contents
+ * @property-read Collection|Content[]     $contents
  * @property-read Collection|Contenttype[] $parents
  * @method static bool|null forceDelete()
  * @method static \Illuminate\Database\Query\Builder|Contenttype onlyTrashed()
@@ -43,10 +43,10 @@ use Illuminate\Support\Facades\Cache;
  * @method static Builder|Contenttype query()
  * @method static Builder|BaseModel disableCache()
  * @method static Builder|BaseModel withCacheCooldownSeconds($seconds)
- * @property-read mixed                                                       $cache_cooldown_seconds
- * @property-read int|null $children_count
- * @property-read int|null $contents_count
- * @property-read int|null $parents_count
+ * @property-read mixed                    $cache_cooldown_seconds
+ * @property-read int|null                 $children_count
+ * @property-read int|null                 $contents_count
+ * @property-read int|null                 $parents_count
  */
 class Contenttype extends BaseModel
 {
@@ -64,6 +64,13 @@ class Contenttype extends BaseModel
             'video',
             'pamphlet',
             'article',
+        ];
+    }
+
+    public static function video(): array
+    {
+        return [
+            'video',
         ];
     }
 
@@ -88,7 +95,7 @@ class Contenttype extends BaseModel
             ->withPivot('relationtype_id')
             ->join('contenttypeinterraltions', 'relationtype_id',
                 'contenttypeinterraltions.id')//            ->select('major1_id AS id', 'majorinterrelationtypes.name AS pivot_relationName' , 'majorinterrelationtypes.displayName AS pivot_relationDisplayName')
-        ->where("relationtype_id", 1);
+            ->where("relationtype_id", 1);
     }
 
     public function children()

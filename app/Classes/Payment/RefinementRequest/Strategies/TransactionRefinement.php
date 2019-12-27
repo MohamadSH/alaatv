@@ -24,29 +24,29 @@ class TransactionRefinement extends Refinement
         if ($this->statusCode != Response::HTTP_OK) {
             return $this;
         }
-        
+
         $transaction = $this->getTransaction();
         if ($transaction === false) {
             $this->statusCode = Response::HTTP_NOT_FOUND;
             $this->message    = 'تراکنشی یافت نشد.';
-            
+
             return $this;
         }
-        
+
         $this->transaction = $transaction;
         $order             = $this->getOrder();
-        
+
         if ($order === false) {
             $this->statusCode = Response::HTTP_NOT_FOUND;
             $this->message    = 'سفارش یافت نشد.';
-            
+
             return $this;
         }
-        
-        $this->order = $order;
-        $this->orderUniqueId = $order->id.Carbon::now()->timestamp;
-        $this->user  = $this->order->user;
-        $this->cost  = $this->transaction->cost;
+
+        $this->order         = $order;
+        $this->orderUniqueId = $order->id . Carbon::now()->timestamp;
+        $this->user          = $this->order->user;
+        $this->cost          = $this->transaction->cost;
 //        if ($this->canDeductFromWallet()) {
 //            $this->payByWallet();
 //        }
@@ -54,15 +54,15 @@ class TransactionRefinement extends Refinement
         $this->resetWalletPendingCredit();
         $this->statusCode  = Response::HTTP_OK;
         $this->description .= $this->getDescription();
-        
+
         return $this;
     }
-    
+
     private function getTransaction(): Transaction
     {
         return Transaction::find($this->inputData["transaction_id"]);
     }
-    
+
     /**
      * @return Order|bool
      */
@@ -72,15 +72,15 @@ class TransactionRefinement extends Refinement
         if (!isset($transaction)) {
             return false;
         }
-        
+
         $order = $transaction->order->load(['transactions', 'coupon']);
         if (!isset($order)) {
             return false;
         }
-        
+
         return $order;
     }
-    
+
     /**
      * @return string
      */
@@ -90,7 +90,7 @@ class TransactionRefinement extends Refinement
         if (isset($this->inputData['transaction_id'])) {
             $description = 'پرداخت قسط -';
         }
-        
+
         return $description;
     }
 }

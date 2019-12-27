@@ -37,8 +37,8 @@ abstract class ProductPriceCalculator
     /**
      * CostCentre constructor.
      *
-     * @param  User     $user
-     * @param  Product  $product
+     * @param User    $user
+     * @param Product $product
      */
     public function __construct(Product $product, User $user = null)
     {
@@ -49,7 +49,7 @@ abstract class ProductPriceCalculator
 
         $bonName              = config("constants.BON1");
         $this->bonName        = $bonName;
-        $this->totalBonNumber = (int) optional($user)->userHasBon($bonName);
+        $this->totalBonNumber = (int)optional($user)->userHasBon($bonName);
         if (isset($user)) //Note: With out this if we query the database every time even when there is nothing to do with bon discount like calculating order's cost
         {
             $this->bonDiscountPercentage = $product->obtainBonDiscount($bonName);
@@ -76,7 +76,7 @@ abstract class ProductPriceCalculator
     */
 
     /**
-     * @param  int  $rawCost
+     * @param int $rawCost
      *
      * @return ProductPriceCalculator
      */
@@ -88,7 +88,7 @@ abstract class ProductPriceCalculator
     }
 
     /**
-     * @param  int  $discountPercentage
+     * @param int $discountPercentage
      *
      * @return ProductPriceCalculator
      */
@@ -100,7 +100,7 @@ abstract class ProductPriceCalculator
     }
 
     /**
-     * @param  int  $bonDiscountPercentage
+     * @param int $bonDiscountPercentage
      *
      * @return ProductPriceCalculator
      */
@@ -112,7 +112,7 @@ abstract class ProductPriceCalculator
     }
 
     /**
-     * @param  int  $totalBonNumber
+     * @param int $totalBonNumber
      *
      * @return ProductPriceCalculator
      */
@@ -124,7 +124,7 @@ abstract class ProductPriceCalculator
     }
 
     /**
-     * @param  int  $discountCashAmount
+     * @param int $discountCashAmount
      *
      * @return ProductPriceCalculator
      */
@@ -178,7 +178,7 @@ abstract class ProductPriceCalculator
      */
     protected function getBonTotalPercentage()
     {
-        return min($this->bonDiscountPercentage * $this->totalBonNumber , 1);
+        return min($this->bonDiscountPercentage * $this->totalBonNumber, 1);
     }
 
     /**

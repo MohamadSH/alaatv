@@ -11,23 +11,23 @@ namespace App\Collection;
 use App\Classes\Abstracts\Pricing\OrderproductPriceCalculator;
 use App\Classes\Checkout\Alaa\GroupOrderproductCheckout;
 use App\Orderproduct;
-use App\Product;
 use App\Traits\JsonResponseFormat;
+use Exception;
 use Illuminate\Database\Eloquent\Collection;
 
 class OrderproductCollection extends Collection
 {
     const MODE = OrderproductPriceCalculator::ORDERPRODUCT_CALCULATOR_MODE_CALCULATE_FROM_BASE;
-    
+
     private $newPrices = [];
-    
+
     use JsonResponseFormat;
-    
+
     /**
      * Sets new price value in Newprices array for an item in the orderproduct collection
      * indexing it with orderproduct's id
      *
-     * @param  Orderproduct  $orderproduct
+     * @param Orderproduct   $orderproduct
      * @param                $newPrice
      *
      * @return array
@@ -39,19 +39,19 @@ class OrderproductCollection extends Collection
             ->toArray())) {
             $this->newPrices[$orderproductId] = $newPrice;
         }
-        
+
         return $this->newPrices;
     }
-    
+
     public function merge($items)
     {
         $totalNewPrices               = $this->mergeNewPrices($items);
         $newTotalColection            = parent::merge($items);
         $newTotalColection->newPrices = $totalNewPrices;
-        
+
         return $newTotalColection;
     }
-    
+
     /**
      * Merges two collections new prices
      *
@@ -64,10 +64,10 @@ class OrderproductCollection extends Collection
         $myNewPrices    = $this->newPrices;
         $otherNewPrices = $items->newPrices;
         $totalNewPrices = $myNewPrices + $otherNewPrices;
-        
+
         return $totalNewPrices;
     }
-    
+
     public function updateCostValues()
     {
         /** @var Orderproduct $orderproduct */
@@ -78,11 +78,11 @@ class OrderproductCollection extends Collection
             $orderproduct->update();
         }
     }
-    
+
     /**
      * Gets new price value for an item in an Orderproduct collection
      *
-     * @param  Orderproduct  $orderproduct
+     * @param Orderproduct $orderproduct
      *
      * @return mixed|null
      */
@@ -93,15 +93,15 @@ class OrderproductCollection extends Collection
         if (isset($this->newPrices[$orderproductId])) {
             $newPrice = $this->newPrices[$orderproductId];
         }
-        
+
         return $newPrice;
     }
-    
+
     /**
      * Updates orderproduct items' cost up to new conditions
      *
      * @return void
-     * @throws \Exception
+     * @throws Exception
      */
     public function reCheckOrderproducs(): void
     {
@@ -109,20 +109,19 @@ class OrderproductCollection extends Collection
         foreach ($this as $orderproduct) {
             if (!$orderproduct->isPurchasable()) {
                 $orderproduct->delete();
-            }
-            else {
-                
+            } else {
+
                 //ToDo : Should be removed and be replaced with an event
                 $orderproduct->renewAttributeValue();
-                
+
                 //ToDo : If there should be a rule like this , this should be replaced with an event
 //                $orderproduct->renewUserBons();
-                
+
                 $orderproduct->fresh();
             }
         }
     }
-    
+
     /**
      * @return array
      */
@@ -130,19 +129,19 @@ class OrderproductCollection extends Collection
     {
         return $this->newPrices;
     }
-    
+
     /**
-     * @param  array  $newPrices
+     * @param array $newPrices
      *
      * @return OrderproductCollection
      */
     public function setNewPrices(array $newPrices): OrderproductCollection
     {
         $this->newPrices = $newPrices;
-        
+
         return $this;
     }
-    
+
     /**
      * Makes links of every orderproduct
      *
@@ -157,10 +156,10 @@ class OrderproductCollection extends Collection
                 $orderproductLinks->put($orderproduct->id, $orderproductLink);
             }
         }
-        
+
         return $orderproductLinks;
     }
-    
+
     /**
      * Calculates orderproducts prices of this collection
      *
@@ -170,23 +169,23 @@ class OrderproductCollection extends Collection
     {
         $alaaGroupOrderproductCollection = new GroupOrderproductCheckout($this, $this->pluck("id")->toArray());
 
-        $priceInfo                       = $alaaGroupOrderproductCollection->checkout();
-        $calculatedOrderproducts         = $priceInfo["orderproductsInfo"]["calculatedOrderproducts"];
-        $newPrices                       = $calculatedOrderproducts->newPrices;
-        $rawCost                         = $priceInfo["totalPriceInfo"]["sumOfOrderproductsRawCost"];
-        $customerCost                    = $priceInfo["totalPriceInfo"]["sumOfOrderproductsCustomerCost"];
-        
+        $priceInfo               = $alaaGroupOrderproductCollection->checkout();
+        $calculatedOrderproducts = $priceInfo["orderproductsInfo"]["calculatedOrderproducts"];
+        $newPrices               = $calculatedOrderproducts->newPrices;
+        $rawCost                 = $priceInfo["totalPriceInfo"]["sumOfOrderproductsRawCost"];
+        $customerCost            = $priceInfo["totalPriceInfo"]["sumOfOrderproductsCustomerCost"];
+
         return [
             "newPrices"    => $newPrices,
             "rawCost"      => $rawCost,
             "customerCost" => $customerCost,
         ];
     }
-    
+
     /**
      *  Filters type of orderproducts of this collection
      *
-     * @param  array  $type
+     * @param array $type
      *
      * @return OrderproductCollection
      */
@@ -200,7 +199,8 @@ class OrderproductCollection extends Collection
      *
      * @return ProductCollection
      */
-    public function getPurchasedProducts(){
+    public function getPurchasedProducts()
+    {
         $products = new ProductCollection();
 //        $orderproducts = $this->whereNotIn('product_id' , [Product::DONATE_PRODUCT_5_HEZAR , Product::CUSTOM_DONATE_PRODUCT]);
         foreach ($this as $orderproduct) {

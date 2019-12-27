@@ -12,6 +12,7 @@ class OrderproductObserver
      * Handle the orderproduct "created" event.
      *
      * @param Orderproduct $orderproduct
+     *
      * @return void
      */
     public function created(Orderproduct $orderproduct)
@@ -22,6 +23,7 @@ class OrderproductObserver
      * Handle the orderproduct "updated" event.
      *
      * @param Orderproduct $orderproduct
+     *
      * @return void
      */
     public function updated(Orderproduct $orderproduct)
@@ -33,6 +35,7 @@ class OrderproductObserver
      * Handle the orderproduct "deleted" event.
      *
      * @param Orderproduct $orderproduct
+     *
      * @return void
      */
     public function deleted(Orderproduct $orderproduct)
@@ -43,6 +46,7 @@ class OrderproductObserver
      * Handle the orderproduct "restored" event.
      *
      * @param Orderproduct $orderproduct
+     *
      * @return void
      */
     public function restored(Orderproduct $orderproduct)
@@ -54,6 +58,7 @@ class OrderproductObserver
      * Handle the orderproduct "force deleted" event.
      *
      * @param Orderproduct $orderproduct
+     *
      * @return void
      */
     public function forceDeleted(Orderproduct $orderproduct)
@@ -70,7 +75,8 @@ class OrderproductObserver
     public function saved(Orderproduct $orderproduct)
     {
         Cache::tags([
-            'order_'.$orderproduct->order_id , 'orderproduct_'.$orderproduct->id ])->flush();
+            'order_' . $orderproduct->order_id, 'orderproduct_' . $orderproduct->id,
+        ])->flush();
     }
 
 }

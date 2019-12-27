@@ -3,26 +3,27 @@
 namespace App\Repositories;
 
 use App\Classes\Util\Boolean;
-use Carbon\Carbon;
 use App\Transaction;
+use Carbon\Carbon;
 
 class TransactionRepo
 {
     /**
      * @param string $authority
-     * @param    int      $transactionId
-     * @param $gatewayId
+     * @param int    $transactionId
+     * @param        $gatewayId
      * @param string $description
      *
      * @param string $device
+     *
      * @return bool
      */
-    public static function setAuthorityForTransaction(string $authority, int $transactionId, $gatewayId , string $description , string $device): Boolean
+    public static function setAuthorityForTransaction(string $authority, int $transactionId, $gatewayId, string $description, string $device): Boolean
     {
         $deviceMap = [
-          'web'     => 1,
-          'android' => 2,
-          'ios'     => 3,
+            'web'     => 1,
+            'android' => 2,
+            'ios'     => 3,
         ];
 
         $data = [
@@ -65,7 +66,7 @@ class TransactionRepo
 
     /**
      * @param          $data
-     * @param  string  $column
+     * @param string   $column
      * @param          $transaction
      *
      * @return mixed
@@ -85,16 +86,15 @@ class TransactionRepo
 
     /**
      * @param Transaction $transaction
-     * @param  string            $refId
-     * @param  string|null       $cardPanMask
+     * @param string      $refId
+     * @param string|null $cardPanMask
      */
     public static function handleTransactionStatus(Transaction $transaction, string $refId, string $cardPanMask = null)
     {
-        $user = optional($transaction->order)->user;
+        $user          = optional($transaction->order)->user;
         $bankAccountId = null;
-        if (!is_null($cardPanMask) && !is_null($user))
-        {
-            $parameters = ['user_id'=>$user->id , 'cardNumber'=>$cardPanMask];
+        if (!is_null($cardPanMask) && !is_null($user)) {
+            $parameters    = ['user_id' => $user->id, 'cardNumber' => $cardPanMask];
             $bankAccountId = BankaccountRepo::firstOrCreateBankAccount($parameters)->id;
         }
 
@@ -103,8 +103,8 @@ class TransactionRepo
 
     /**
      * @param            $id
-     * @param  string    $transactionID
-     * @param  int|null  $bankAccountId
+     * @param string     $transactionID
+     * @param int|null   $bankAccountId
      */
     private static function changeTransactionStatusToSuccessful($id, string $transactionID, int $bankAccountId = null)
     {
@@ -113,6 +113,6 @@ class TransactionRepo
             'transactionID'             => $transactionID,
             'destinationBankAccount_id' => $bankAccountId,
             'transactionstatus_id'      => config('constants.TRANSACTION_STATUS_SUCCESSFUL'),
-        ], (int) $id);
+        ], (int)$id);
     }
 }

@@ -7,6 +7,8 @@ use App\Http\Controllers\Controller;
 use App\Repositories\WebsitePageRepo;
 use App\Slideshow;
 use App\Traits\FileCommon;
+use Illuminate\Contracts\Filesystem\FileNotFoundException;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
@@ -17,17 +19,17 @@ class SlideShowController extends Controller
 
     function __construct()
     {
-        $this->middleware('permission:'.config('constants.LIST_SLIDESHOW_ACCESS'), ['only' => 'index']);
-        $this->middleware('permission:'.config('constants.INSERT_SLIDESHOW_ACCESS'), [
+        $this->middleware('permission:' . config('constants.LIST_SLIDESHOW_ACCESS'), ['only' => 'index']);
+        $this->middleware('permission:' . config('constants.INSERT_SLIDESHOW_ACCESS'), [
             'only' => 'create',
             'store',
         ]);
-        $this->middleware('permission:'.config('constants.EDIT_SLIDESHOW_ACCESS'), [
+        $this->middleware('permission:' . config('constants.EDIT_SLIDESHOW_ACCESS'), [
             'only' => 'update',
             'edit',
         ]);
-        $this->middleware('permission:'.config('constants.REMOVE_SLIDESHOW_ACCESS'), ['only' => 'destroy']);
-        $this->middleware('permission:'.config('constants.SHOW_SLIDESHOW_ACCESS'), ['only' => 'show']);
+        $this->middleware('permission:' . config('constants.REMOVE_SLIDESHOW_ACCESS'), ['only' => 'destroy']);
+        $this->middleware('permission:' . config('constants.SHOW_SLIDESHOW_ACCESS'), ['only' => 'show']);
     }
 
     public function index()
@@ -49,12 +51,11 @@ class SlideShowController extends Controller
 
         if (strlen($slide->link) == 0) {
             $slide->link = null;
-        }
-        else {
+        } else {
             if (isset($slide->link)) {
                 if (strcmp($slide->link[0], "#") != 0) {
                     if (!preg_match("/^http:\/\//", $slide->link) && !preg_match("/^https:\/\//", $slide->link)) {
-                        $slide->link = "https://".$slide->link;
+                        $slide->link = "https://" . $slide->link;
                     }
                 }
             }
@@ -63,28 +64,28 @@ class SlideShowController extends Controller
         if ($request->hasFile("photo")) {
             $file      = $request->file('photo');
             $extension = $file->getClientOriginalExtension();
-            $fileName  = basename($file->getClientOriginalName(), ".".$extension)."_".date("YmdHis").'.'.$extension;
+            $fileName  =
+                basename($file->getClientOriginalName(), "." . $extension) . "_" . date("YmdHis") . '.' . $extension;
 
             $disk = Storage::disk(config('constants.DISK22'));
             /** @var AlaaSftpAdapter $adaptor */
             $adaptor = $disk->getAdapter();
             if ($disk->put($fileName, File::get($file))) {
-                $fullPath = $adaptor->getRoot();
-                $partialPath = $this->getSubDirectoryInCDN($fullPath);
-                $slide->photo = $partialPath.$fileName;
-            }else{
+                $fullPath     = $adaptor->getRoot();
+                $partialPath  = $this->getSubDirectoryInCDN($fullPath);
+                $slide->photo = $partialPath . $fileName;
+            } else {
                 session()->put('error', 'بارگذاری عکس بسته با مشکل مواجه شد!');
             }
         }
 
-        $slide->isEnable = ($request->has("isEnable"))?1:0;
-        $slide->in_new_tab = ($request->has("in_new_tab"))?1:0;
+        $slide->isEnable   = ($request->has("isEnable")) ? 1 : 0;
+        $slide->in_new_tab = ($request->has("in_new_tab")) ? 1 : 0;
 
 
         if ($slide->save()) {
             session()->put('success', 'اسلاید با موفقیت افزوده شد!');
-        }
-        else {
+        } else {
             session()->put('error', 'خطای پایگاه داده!');
         }
 
@@ -93,24 +94,27 @@ class SlideShowController extends Controller
 
     public function edit($slide)
     {
-        $previousUrl = action("Web\AdminController@adminSlideShow");
+        $previousUrl        = action("Web\AdminController@adminSlideShow");
         $slideWebsitepageId = $slide->websitepage->id;
         $slideDisk          = 9;
-        $websitePages = WebsitePageRepo::getWebsitePages(
-            ['url' => [
-                '/home',
-                '/shop',
-            ]]
-        )->pluck('displayName' , 'id');
+        $websitePages       = WebsitePageRepo::getWebsitePages(
+            [
+                'url' => [
+                    '/home',
+                    '/shop',
+                ],
+            ]
+        )->pluck('displayName', 'id');
 
         return view("slideShow.edit", compact('slide', 'slideDisk', 'slideWebsitepageId', 'previousUrl', 'websitePages'));
     }
 
     /**
-     * @param Request $request
+     * @param Request   $request
      * @param Slideshow $slide
-     * @return \Illuminate\Http\RedirectResponse
-     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
+     *
+     * @return RedirectResponse
+     * @throws FileNotFoundException
      */
     public function update(Request $request, Slideshow $slide)
     {
@@ -121,7 +125,8 @@ class SlideShowController extends Controller
         if ($request->hasFile("photo")) {
             $file      = $request->file('photo');
             $extension = $file->getClientOriginalExtension();
-            $fileName  = basename($file->getClientOriginalName(), ".".$extension)."_".date("YmdHis").'.'.$extension;
+            $fileName  =
+                basename($file->getClientOriginalName(), "." . $extension) . "_" . date("YmdHis") . '.' . $extension;
 
             $disk = Storage::disk(config('constants.DISK22'));
             /** @var AlaaSftpAdapter $adaptor */
@@ -129,22 +134,21 @@ class SlideShowController extends Controller
             if ($disk->put($fileName, File::get($file))) {
                 $disk->delete($oldPhoto);
 
-                $fullPath = $adaptor->getRoot();
-                $partialPath = $this->getSubDirectoryInCDN($fullPath);
-                $slide->photo = $partialPath.$fileName;
-            }else{
+                $fullPath     = $adaptor->getRoot();
+                $partialPath  = $this->getSubDirectoryInCDN($fullPath);
+                $slide->photo = $partialPath . $fileName;
+            } else {
                 session()->put('error', 'بارگذاری عکس بسته با مشکل مواجه شد!');
             }
 
         }
 
-        $slide->isEnable = ($request->has("isEnable"))?1:0;
-        $slide->in_new_tab = ($request->has("in_new_tab"))?1:0;
+        $slide->isEnable   = ($request->has("isEnable")) ? 1 : 0;
+        $slide->in_new_tab = ($request->has("in_new_tab")) ? 1 : 0;
 
         if ($slide->update()) {
             session()->put('success', 'اسلاید با موفقیت اصلاح شد!');
-        }
-        else {
+        } else {
             session()->put('error', 'خطای پایگاه داده!');
         }
 
@@ -155,8 +159,7 @@ class SlideShowController extends Controller
     {
         if ($slide->delete()) {
             session()->put('success', 'اسلاید با موفقیت حذف شد!');
-        }
-        else {
+        } else {
             session()->put('error', 'خطای پایگاه داده!');
         }
 

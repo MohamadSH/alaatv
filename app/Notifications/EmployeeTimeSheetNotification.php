@@ -55,7 +55,7 @@ class EmployeeTimeSheetNotification extends Notification implements ShouldQueue
     /**
      * Get the notification's delivery channels.
      *
-     * @param  mixed  $notifiable
+     * @param mixed $notifiable
      *
      * @return array
      */
@@ -84,7 +84,8 @@ class EmployeeTimeSheetNotification extends Notification implements ShouldQueue
 
     private function msg(): string
     {
-        $messageCore = "سلام ".$this->user->firstName." جان"."\n".$this->date."\n"."از"." ".$this->in." "."تا".$this->out."\n"."موظفی"." ".$this->mh."\n"."اضافه"." ".$this->eh;
+        $messageCore =
+            "سلام " . $this->user->firstName . " جان" . "\n" . $this->date . "\n" . "از" . " " . $this->in . " " . "تا" . $this->out . "\n" . "موظفی" . " " . $this->mh . "\n" . "اضافه" . " " . $this->eh;
 
         return $messageCore;
     }
@@ -92,12 +93,12 @@ class EmployeeTimeSheetNotification extends Notification implements ShouldQueue
     private function getInputData(): array
     {
         return [
-            'name' => $this->user->firstName,
-            'inTime'   => $this->in,
-            'outTime'  => $this->out,
-            'shiftTime'   => $this->mh,
-            'overTime'   => $this->eh,
-            'date' => $this->date,
+            'name'      => $this->user->firstName,
+            'inTime'    => $this->in,
+            'outTime'   => $this->out,
+            'shiftTime' => $this->mh,
+            'overTime'  => $this->eh,
+            'date'      => $this->date,
         ];
     }
 }

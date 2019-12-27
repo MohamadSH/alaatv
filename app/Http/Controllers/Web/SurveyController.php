@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\Web;
 
 use App\Event;
+use App\Http\Controllers\Controller;
 use App\Province;
 use App\Survey;
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Response;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
@@ -22,23 +22,23 @@ class SurveyController extends Controller
     public function show()
     {
         // return redirect(action("Web\ErrorPageController@error404"));
-        $event   = Event::FindOrFail(1);
-        $survey = $event->surveys->first();
+        $event         = Event::FindOrFail(1);
+        $survey        = $event->surveys->first();
         $questionsData = collect();
         $answersData   = collect();
-        $questions     = (isset($survey))?$survey->questions->sortBy("pivot.order"):collect();
+        $questions     = (isset($survey)) ? $survey->questions->sortBy("pivot.order") : collect();
         $this->getQuestionsAndAnswerData($questions, $event, $survey, $answersData, $questionsData);
         $pageName = "showSurvey";
 
-        return view("survey.show", compact("event" , 'survey', "questions", "questionsData", "answersData", "pageName"));
+        return view("survey.show", compact("event", 'survey', "questions", "questionsData", "answersData", "pageName"));
     }
 
     /**
      * @param                                  $questions
      * @param                                  $event
-     * @param  Survey                     $survey
-     * @param  Collection                      $answersData
-     * @param  Collection                      $questionsData
+     * @param Survey                           $survey
+     * @param Collection                       $answersData
+     * @param Collection                       $questionsData
      */
     private function getQuestionsAndAnswerData($questions, $event, Survey $survey, Collection &$answersData, Collection &$questionsData): void
     {
@@ -57,15 +57,15 @@ class SurveyController extends Controller
 
     /**
      * @param                                  $event
-     * @param  Survey                     $survey
-     * @param  Collection                      $answersData
+     * @param Survey                           $survey
+     * @param Collection                       $answersData
      * @param                                  $question
      * @param                                  $requestBaseUrl
      */
     private function getRawAnswer($event, Survey $survey, Collection &$answersData, $question, $requestBaseUrl): void
     {
         $requestUrl    = action("Web\UserSurveyAnswerController@index");
-        $requestUrl    .= "?event_id[]=".$event->id."&survey_id[]=".$survey->id."&question_id[]=".$question->id;
+        $requestUrl    .= "?event_id[]=" . $event->id . "&survey_id[]=" . $survey->id . "&question_id[]=" . $question->id;
         $originalInput = Request::input();
         $request       = Request::create($requestUrl, 'GET');
         Request::replace($request->input());
@@ -76,7 +76,7 @@ class SurveyController extends Controller
         foreach ($answersCollection as $answerCollection) {
             /** Making answers */
             $answerArray   = $answerCollection->userAnswer->answer;
-            $requestUrl    = url("/").$requestBaseUrl."?ids=$answerArray";
+            $requestUrl    = url("/") . $requestBaseUrl . "?ids=$answerArray";
             $originalInput = Request::input();
             $request       = Request::create($requestUrl, 'GET');
             Request::replace($request->input());
@@ -91,7 +91,7 @@ class SurveyController extends Controller
     }
 
     /**
-     * @param  Collection                      $questionsData
+     * @param Collection                       $questionsData
      * @param                                  $question
      * @param                                  $requestBaseUrl
      */
@@ -99,14 +99,13 @@ class SurveyController extends Controller
     {
         if (strpos($question->dataSourceUrl, "major") !== false) {
             $this->getQusetionDataInMajorStatus($questionsData, $question, $requestBaseUrl);
-        }
-        elseif (strpos($question->dataSourceUrl, "city") !== false) {
+        } else if (strpos($question->dataSourceUrl, "city") !== false) {
             $this->getQuestionDataInCityStatus($questionsData, $question, $requestBaseUrl);
         }
     }
 
     /**
-     * @param  Collection                      $questionsData
+     * @param Collection                       $questionsData
      * @param                                  $question
      * @param                                  $requestBaseUrl
      */
@@ -114,7 +113,7 @@ class SurveyController extends Controller
     {
         $userMajor  = Auth()->user()->major;
         $userMajors = $this->getUserMajors($userMajor);
-        $requestUrl = url("/").$requestBaseUrl."?";
+        $requestUrl = url("/") . $requestBaseUrl . "?";
         foreach ($userMajors as $major) {
             $requestUrl .= "&parents[]=$major";
         }
@@ -155,7 +154,7 @@ class SurveyController extends Controller
     }
 
     /**
-     * @param  Collection                      $questionsData
+     * @param Collection                       $questionsData
      * @param                                  $question
      * @param                                  $requestBaseUrl
      */
@@ -165,7 +164,7 @@ class SurveyController extends Controller
             ->get();
         $provinceCityArray = [];
         foreach ($provinces as $province) {
-            $requestUrl    = url("/").$requestBaseUrl."?provinces[]=$province->id";
+            $requestUrl    = url("/") . $requestBaseUrl . "?provinces[]=$province->id";
             $originalInput = Request::input();
             $request       = Request::create($requestUrl, 'GET');
             Request::replace($request->input());

@@ -14,6 +14,6 @@ class AlaaOrderCouponCalculatorBasedOnPercentage extends OrderCouponCalculatorBa
 {
     protected function calculateDiscount($couponDiscountPercentage, $totalRawPriceWhichHasDiscount): int
     {
-        return (int) ((1 - $couponDiscountPercentage) * $totalRawPriceWhichHasDiscount);
+        return (int)((1 - $couponDiscountPercentage) * $totalRawPriceWhichHasDiscount);
     }
 }

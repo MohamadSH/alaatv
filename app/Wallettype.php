@@ -2,37 +2,42 @@
 
 namespace App;
 
+use Carbon\Carbon;
+use Eloquent;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
+
 /**
  * App\Wallettype
  *
- * @property int                                                         $id
- * @property string                                                      $name        نام
- * @property string|null                                                 $displayName نام قابل نمایش
- * @property string|null                                                 $description توضیح کوتاه
- * @property \Carbon\Carbon|null                                         $created_at
- * @property \Carbon\Carbon|null                                         $updated_at
- * @property \Carbon\Carbon|null                                         $deleted_at
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Wallet[] $wallets
+ * @property int                                                    $id
+ * @property string                                                 $name        نام
+ * @property string|null                                            $displayName نام قابل نمایش
+ * @property string|null                                            $description توضیح کوتاه
+ * @property Carbon|null                                    $created_at
+ * @property Carbon|null                                    $updated_at
+ * @property Carbon|null                                    $deleted_at
+ * @property-read Collection|Wallet[] $wallets
  * @method static bool|null forceDelete()
- * @method static \Illuminate\Database\Query\Builder|\App\Wallettype onlyTrashed()
+ * @method static \Illuminate\Database\Query\Builder|Wallettype onlyTrashed()
  * @method static bool|null restore()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Wallettype whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Wallettype whereDeletedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Wallettype whereDescription($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Wallettype whereDisplayName($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Wallettype whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Wallettype whereName($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Wallettype whereUpdatedAt($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Wallettype withTrashed()
- * @method static \Illuminate\Database\Query\Builder|\App\Wallettype withoutTrashed()
- * @mixin \Eloquent
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Wallettype newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Wallettype newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Wallettype query()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel disableCache()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel withCacheCooldownSeconds($seconds)
+ * @method static Builder|Wallettype whereCreatedAt($value)
+ * @method static Builder|Wallettype whereDeletedAt($value)
+ * @method static Builder|Wallettype whereDescription($value)
+ * @method static Builder|Wallettype whereDisplayName($value)
+ * @method static Builder|Wallettype whereId($value)
+ * @method static Builder|Wallettype whereName($value)
+ * @method static Builder|Wallettype whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Query\Builder|Wallettype withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|Wallettype withoutTrashed()
+ * @mixin Eloquent
+ * @method static Builder|Wallettype newModelQuery()
+ * @method static Builder|Wallettype newQuery()
+ * @method static Builder|Wallettype query()
+ * @method static Builder|BaseModel disableCache()
+ * @method static Builder|BaseModel withCacheCooldownSeconds($seconds)
  * @property-read mixed                                                  $cache_cooldown_seconds
- * @property-read int|null $wallets_count
+ * @property-read int|null                                               $wallets_count
  */
 class Wallettype extends BaseModel
 {
@@ -44,7 +49,7 @@ class Wallettype extends BaseModel
         'displayName',
         'description',
     ];
-    
+
     public function wallets()
     {
         return $this->hasMany("\App\Wallet");

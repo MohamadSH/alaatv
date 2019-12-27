@@ -11,13 +11,13 @@ class TopicsTreeController extends Controller
     public function lernitoTree(Request $request)
     {
         $TotalTree = new TotalTree();
-        list($htmlPrint, $treePathData) = $TotalTree->getLernitoTreeHtmlPrint();
+        [$htmlPrint, $treePathData] = $TotalTree->getLernitoTreeHtmlPrint();
         return view('admin.topicsTree.index', compact('htmlPrint', 'treePathData'));
     }
 
     public function getTreeInPHPArrayString(Request $request, $lnid)
     {
-        $TotalTree = new TotalTree();
+        $TotalTree    = new TotalTree();
         $stringFormat = $TotalTree->getTreeNodeByIdInHtmlString($lnid);
         return $stringFormat;
     }

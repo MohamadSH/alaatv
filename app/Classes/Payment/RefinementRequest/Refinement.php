@@ -100,7 +100,7 @@ abstract class Refinement
     }
 
     /**
-     * @param  array  $inputData
+     * @param array $inputData
      *
      * @return Refinement
      */
@@ -143,15 +143,15 @@ abstract class Refinement
     public function getData(): array
     {
         return [
-            'statusCode'   => $this->statusCode,
-            'message'      => $this->message,
-            'user'         => $this->user,
-            'order'        => $this->order,
-            'orderUniqueId'=> $this->orderUniqueId,
-            'cost'         => $this->cost,
-            'donateCost'   => $this->donateCost,
-            'transaction'  => $this->transaction,
-            'description'  => $this->description,
+            'statusCode'    => $this->statusCode,
+            'message'       => $this->message,
+            'user'          => $this->user,
+            'order'         => $this->order,
+            'orderUniqueId' => $this->orderUniqueId,
+            'cost'          => $this->cost,
+            'donateCost'    => $this->donateCost,
+            'transaction'   => $this->transaction,
+            'description'   => $this->description,
         ];
     }
 
@@ -177,7 +177,7 @@ abstract class Refinement
     }
 
     /**
-     * @param  bool  $deposit
+     * @param bool $deposit
      *
      * @return array
      */
@@ -185,8 +185,7 @@ abstract class Refinement
     {
         if ($deposit) {
             $data['cost'] = $this->cost;
-        }
-        else {
+        } else {
             $data['cost'] = ($this->cost * (-1));
         }
 
@@ -209,25 +208,24 @@ abstract class Refinement
         return true;
 
         //ToDo:  Option for choosing whether to pay from wallet or not
-/*        if (isset($this->inputData['payByWallet']) && $this->inputData['payByWallet'] == true) {
-            return true;
-        }
-        else {
-            return false;
-        }*/
+        /*        if (isset($this->inputData['payByWallet']) && $this->inputData['payByWallet'] == true) {
+                    return true;
+                }
+                else {
+                    return false;
+                }*/
     }
 
     protected function payByWallet(): void
     {
         $deductibleCostFromWallet = $this->cost - $this->donateCost;
         $remainedCost             = $deductibleCostFromWallet;
-        if($deductibleCostFromWallet == 0)
-        {
+        if ($deductibleCostFromWallet == 0) {
             $this->paidFromWalletCost = 0;
-            return ;
+            return;
         }
 
-        $walletPayResult          = $this->canPayOrderByWallet($this->user, $deductibleCostFromWallet);
+        $walletPayResult = $this->canPayOrderByWallet($this->user, $deductibleCostFromWallet);
         if ($walletPayResult['result']) {
             $remainedCost = $walletPayResult['cost'];
         }
@@ -237,9 +235,10 @@ abstract class Refinement
     }
 
 
-    protected function resetWalletPendingCredit():void
+    protected function resetWalletPendingCredit(): void
     {
-        $wallets        = $this->user->wallets->sortByDesc("wallettype_id"); //Chon mikhastim aval az kife poole hedie kam shavad!
+        $wallets =
+            $this->user->wallets->sortByDesc("wallettype_id"); //Chon mikhastim aval az kife poole hedie kam shavad!
 
         /** @var Wallet $wallet */
         foreach ($wallets as $wallet) {

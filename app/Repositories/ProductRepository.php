@@ -11,29 +11,34 @@ class ProductRepository
 {
     /**
      * @param array $setIds
-     * @return Product|\Illuminate\Database\Eloquent\Builder
+     *
+     * @return Product|Builder
      */
-    public static function getProductsByUserId(array $setIds):Builder{
+    public static function getProductsByUserId(array $setIds): Builder
+    {
         return Product::whereHas('sets', function ($q) use ($setIds) {
-                            $q->whereIn('contentset_id', $setIds)
-                                ->whereNotNull('grand_id');
-                        });
+            $q->whereIn('contentset_id', $setIds)
+                ->whereNotNull('grand_id');
+        });
     }
 
     /**
      * @param string $teacherName
-     * @return \Illuminate\Database\Eloquent\Builder
+     *
+     * @return Builder
      */
     public static function getProductByTag(string $teacherName): Builder
     {
         return Product::where('tags', 'like', '%' . $teacherName . '%');
     }
 
-    public static function getUnPurchasableProducts(){
-        return [Product::DONATE_PRODUCT_5_HEZAR , Product::CUSTOM_DONATE_PRODUCT , Product::ASIATECH_PRODUCT];
+    public static function getUnPurchasableProducts()
+    {
+        return [Product::DONATE_PRODUCT_5_HEZAR, Product::CUSTOM_DONATE_PRODUCT, Product::ASIATECH_PRODUCT];
     }
 
-    public static function getDonateProducts(){
-        return [Product::DONATE_PRODUCT_5_HEZAR , Product::CUSTOM_DONATE_PRODUCT ];
+    public static function getDonateProducts()
+    {
+        return [Product::DONATE_PRODUCT_5_HEZAR, Product::CUSTOM_DONATE_PRODUCT];
     }
 }

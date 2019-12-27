@@ -20,7 +20,7 @@ class ProductRepository
     /**
      * @param $fileName
      *
-     * @return \App\Collection\ProductCollection
+     * @return ProductCollection
      */
     public static function getProductsThatHaveValidProductFileByFileNameRecursively(string $fileName)
     {
@@ -34,13 +34,13 @@ class ProductRepository
 
         return self::getTotalProducts($products);
     }
-    
+
     /**
      * @param $fileName
      *
-     * @return \Illuminate\Support\Collection
+     * @return Collection
      */
-    public static function getArrayOfProductsIdThatHaveValidProductFileByFileName($fileName): \Illuminate\Support\Collection
+    public static function getArrayOfProductsIdThatHaveValidProductFileByFileName($fileName): Collection
     {
         return Product::whereHas('validProductfiles', function ($query) use ($fileName) {
             $query->where("file", $fileName);
@@ -48,13 +48,13 @@ class ProductRepository
             ->get()
             ->pluck("id");
     }
-    
+
     /**
      * @param $fileName
      *
-     * @return \Illuminate\Support\Collection
+     * @return Collection
      */
-    public static function getArrayOfProductsIdThatTheirParentHaveValidProductFileByFileName($fileName): \Illuminate\Support\Collection
+    public static function getArrayOfProductsIdThatTheirParentHaveValidProductFileByFileName($fileName): Collection
     {
         return Product::whereHas('parents', function ($q) use ($fileName) {
             $q->whereHas('validProductfiles', function ($q) use ($fileName) {
@@ -64,13 +64,13 @@ class ProductRepository
             ->get()
             ->pluck("id");
     }
-    
+
     /**
      * @param $fileName
      *
-     * @return \Illuminate\Support\Collection
+     * @return Collection
      */
-    public static function getArrayOfProductsIdThatTheirComplimentaryHaveValidProductFileByFileName($fileName): \Illuminate\Support\Collection
+    public static function getArrayOfProductsIdThatTheirComplimentaryHaveValidProductFileByFileName($fileName): Collection
     {
         return Product::whereHas('complimentaryproducts', function ($q) use ($fileName) {
             $q->whereHas('validProductfiles', function ($q) use ($fileName) {
@@ -80,13 +80,13 @@ class ProductRepository
             ->get()
             ->pluck("id");
     }
-    
+
     /**
      * @param $fileName
      *
-     * @return \Illuminate\Support\Collection
+     * @return Collection
      */
-    public static function getArrayOfProductsIdThatTheirGiftHaveValidProductFileByFileName($fileName): \Illuminate\Support\Collection
+    public static function getArrayOfProductsIdThatTheirGiftHaveValidProductFileByFileName($fileName): Collection
     {
         return Product::whereHas('gifts', function ($q) use ($fileName) {
             $q->whereHas('validProductfiles', function ($q) use ($fileName) {
@@ -96,13 +96,13 @@ class ProductRepository
             ->get()
             ->pluck("id");
     }
-    
+
     /**
      * @param $fileName
      *
-     * @return \Illuminate\Support\Collection
+     * @return Collection
      */
-    public static function getArrayOfProductsIdThatTheirParentComplimentaryHaveValidProductFileByFileName($fileName): \Illuminate\Support\Collection
+    public static function getArrayOfProductsIdThatTheirParentComplimentaryHaveValidProductFileByFileName($fileName): Collection
     {
         return Product::whereHas('parents', function ($q) use ($fileName) {
             $q->whereHas('complimentaryproducts', function ($q) use ($fileName) {
@@ -117,6 +117,7 @@ class ProductRepository
 
     /**
      * @param Collection $products
+     *
      * @return ProductCollection
      */
     private static function getTotalProducts(Collection $products)
