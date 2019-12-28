@@ -20,6 +20,7 @@ use App\{Afterloginformcontrol,
     Descriptionwithperiod,
     Employeetimesheet,
     Eventresult,
+    Faq,
     LiveDescription,
     Mbtianswer,
     Order,
@@ -506,6 +507,17 @@ class RouteServiceProvider extends ServiceProvider
                 'periodDescription_' . $value,
             ])->remember($key, config('constants.CACHE_5'), function () use ($value) {
                 return Descriptionwithperiod::where('id', $value)
+                        ->first() ?? abort(Response::HTTP_NOT_FOUND);
+            });
+        });
+
+        Route::bind('faq', function ($value) {
+            $key = 'faq:' . $value;
+            return Cache::tags([
+                'faq',
+                'faq_' . $value,
+            ])->remember($key, config('constants.CACHE_5'), function () use ($value) {
+                return Faq::where('id', $value)
                         ->first() ?? abort(Response::HTTP_NOT_FOUND);
             });
         });

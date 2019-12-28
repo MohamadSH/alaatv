@@ -167,17 +167,18 @@ use Purify;
  * @property-read mixed                                                     $jalali_valid_until
  * @property-read mixed                                                     $remove_link
  * @property-read int|null                                                  $gifts_count
- * @property-read int|null                                                  $orderproducts_count
- * @property-read int|null                                                  $parents_count
- * @property-read int|null                                                  $photos_count
- * @property-read int|null                                                  $productfiles_count
- * @property-read int|null                                                  $sets_count
- * @property mixed                                                          livedescriptions
- * @property mixed                                                          category
- * @property array                                                          recommender_contents
- * @property array                                                          sample_contents
- * @property mixed                                                          blocks
- * @property mixed                                                          descriptionWithPeriod
+ * @property-read int|null $orderproducts_count
+ * @property-read int|null $parents_count
+ * @property-read int|null $photos_count
+ * @property-read int|null $productfiles_count
+ * @property-read int|null $sets_count
+ * @property mixed         livedescriptions
+ * @property mixed         category
+ * @property array         recommender_contents
+ * @property array         sample_contents
+ * @property mixed         blocks
+ * @property mixed         descriptionWithPeriod
+ * @property mixed         faqs
  * @method static Builder|Product whereBlockId($value)
  * @method static Builder|Product whereIntroVideos($value)
  */
@@ -935,6 +936,11 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
     public function productfiles()
     {
         return $this->hasMany(Productfile::class);
+    }
+
+    public function faqs()
+    {
+        return $this->hasMany(Faq::Class);
     }
 
 

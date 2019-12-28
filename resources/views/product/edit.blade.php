@@ -300,6 +300,74 @@
         </div>
 
         <div class="col-md-12">
+        @permission((config('constants.LIST_PERIOD_DESCRIPTION_ACCESS')))
+        <!-- BEGIN LIVE DESCRIPTION TABLE PORTLET-->
+        <div class="m-portlet m-portlet--head-solid-bg m-portlet--accent m-portlet--collapsed m-portlet--head-sm" m-portlet="true" id="periodDescription-portlet">
+            <div class="m-portlet__head">
+                <div class="m-portlet__head-caption">
+                    <div class="m-portlet__head-title">
+                    <span class="m-portlet__head-icon">
+                        <i class="fa fa-cogs"></i>
+                    </span>
+                        <h3 class="m-portlet__head-text">
+                            سؤالات متدول
+                        </h3>
+                    </div>
+                </div>
+                <div class="m-portlet__head-tools">
+                    <ul class="m-portlet__nav">
+                        <li class="m-portlet__nav-item">
+                            <a href="#" m-portlet-tool="toggle" class="m-portlet__nav-link m-portlet__nav-link--icon">
+                                <i class="fa fa-angle-down"></i>
+                            </a>
+                        </li>
+                        <li class="m-portlet__nav-item">
+                            <a href="#" m-portlet-tool="fullscreen" class="m-portlet__nav-link m-portlet__nav-link--icon" id="periodDescription-expand">
+                                <i class="fa fa-expand-arrows-alt"></i>
+                            </a>
+                        </li>
+                        <li class="m-portlet__nav-item">
+                            <a href="#" m-portlet-tool="remove" class="m-portlet__nav-link m-portlet__nav-link--icon">
+                                <i class="fa fa-times"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="m-portlet__body">
+                {!! Form::open(['method'=>'POST' , 'route'=>'faq.store']) !!}
+                <input type="hidden" name="product_id" value="{{$product->id}}">
+                <div class = "form-group">
+                    <input type="text" name="title" placeholder="عنوان">
+                </div>
+                <div class = "form-group">
+                    <textarea id="productFaqSummerNote" name="body" placeholder="توضیح"></textarea>
+                </div>
+                    <input type="submit" value="ذخیره">
+                {!! Form::close() !!}
+                <hr>
+                @if($faqs->isNotEmpty())
+                    <ul>
+                        @foreach($faqs as $faq)
+                            <li>
+                                <h5  style="font-weight: bolder"><span style="color:red;text-decoration: underline">عنوان: </span>{{$faq->title}}</h5>
+                                <p style="font-size:1.2rem"><span style="color:red;text-decoration: underline">توضیح :</span> {!! $faq->body !!}</p>
+                                <a class="btn btn-accent" target="_blank" href="{{route('faq.edit' , $faq)}}">اصلاح</a>
+                                <a  href="#" class="btn btn-danger removeFaq" data-action="{{route('faq.destroy' , $faq)}}" >حذف</a>
+                            </li>
+                            <hr>
+                        @endforeach
+                    </ul>
+                @else
+                    <h4>اطلاعاتی برای نمایش وجود ندارد</h4>
+                @endif
+            </div>
+        </div>
+        <!-- END SAMPLE TABLE PORTLET-->
+        @endpermission
+        </div>
+
+        <div class="col-md-12">
         <!-- BEGIN PRODUCT TABLE PORTLET-->
         <div class="m-portlet m-portlet--head-solid-bg m-portlet--accent m-portlet--collapsed m-portlet--head-sm" m-portlet="true" id="productFiles-portlet">
             <div class="m-portlet__head">
@@ -344,7 +412,6 @@
         </div>
         <!-- END SAMPLE TABLE PORTLET-->
         </div>
-
 
         <div class="col-md-12">
         @permission((config('constants.LIST_PRODUCT_SAMPLE_PHOTO_ACCESS')))
@@ -713,6 +780,32 @@
                 }
             });
 
+            $('#productFaqSummerNote').summernote({
+                lang: 'fa-IR',
+                height: 300,
+                popover: {
+                    image: [],
+                    link: [],
+                    air: []
+                },
+                toolbar: [
+                    ['style', ['style']],
+                    ['font', ['bold', 'italic', 'underline', 'clear']],
+                    ['fontname', ['fontname']],
+                    ['color', ['color']],
+                    ['para', ['ul', 'ol', 'paragraph']],
+                    ['height', ['height']],
+                    ['table', ['table']],
+                    ['insert', ['link', 'picture', 'hr']],
+                    ['view', ['fullscreen', 'codeview']],
+                    ['help', ['help']],
+                    ['mybutton', ['multiColumnButton']]
+                ],
+                buttons: {
+                    multiColumnButton: summernoteMultiColumnButton
+                }
+            });
+
             $("#periodDescriptionSince").persianDatepicker({
                 altField: '#periodDescriptionSinceAlt',
                 altFormat: "YYYY MM DD",
@@ -781,6 +874,36 @@
                 statusCode: {
                     200: function (response) {
                         toastr['success']('توضیح بازه ای با موفقیت حذف شد', 'پیام سیستم');
+                        location.reload();
+                    },
+                    401: function (ressponse) {
+                        toastr['error']('خطای 401', 'پیام سیستم');
+                    },
+                    403: function (response) {
+                        toastr['error']('خطای 403. دسترسی غیرمجاز', 'پیام سیستم');
+                    },
+                    404: function (response) {
+                        toastr['error']('خطای 404. یافت نشد', 'پیام سیستم');
+                    },
+                    500: function (response) {
+                        console.log(response.responseText);
+                        toastr['error']('خطای 500 . خطای برنامه!', 'پیام سیستم');
+                    },
+                    503: function (response) {
+                        toastr['error']('خطای 503', 'پیام سیستم');
+                    }
+                }
+            });
+        });
+
+        $(document).on('click', '.removeFaq', function () {
+            $.ajax({
+                type: 'POST',
+                url: $(this).data('action'),
+                data: {_method:'DELETE'},
+                statusCode: {
+                    200: function (response) {
+                        toastr['success']('سوال متداول با موفقیت حذف شد', 'پیام سیستم');
                         location.reload();
                     },
                     401: function (ressponse) {
