@@ -338,17 +338,18 @@ use Laravel\Passport\Token;
  * @property-read int|null                              $orders_count
  * @property-read int|null                              $permissions_count
  * @property-read int|null                              $productvouchers_count
- * @property-read int|null                              $roles_count
- * @property-read int|null                              $seensitepages_count
- * @property-read TicketCollection|Ticket[]             $tickets
- * @property-read int|null                              $tickets_count
- * @property-read int|null                              $tokens_count
- * @property-read int|null                              $transactions_count
- * @property-read int|null                              $userbons_count
- * @property-read int|null                              $usersurveyanswers_count
- * @property-read int|null                              $useruploads_count
- * @property-read int|null                              $wallet_transactions_count
- * @property-read int|null                              $wallets_count
+ * @property-read int|null                  $roles_count
+ * @property-read int|null                  $seensitepages_count
+ * @property-read TicketCollection|Ticket[] $tickets
+ * @property-read int|null                  $tickets_count
+ * @property-read int|null                  $tokens_count
+ * @property-read int|null                  $transactions_count
+ * @property-read int|null                  $userbons_count
+ * @property-read int|null                  $usersurveyanswers_count
+ * @property-read int|null                  $useruploads_count
+ * @property-read int|null                  $wallet_transactions_count
+ * @property-read int|null                  $wallets_count
+ * @property ProductCollection               favoredProducts
  * @method static Builder|User helpAdmins()
  * @method static Builder|User helpAgents()
  * @method static Builder|User permissionName($permissionName)
@@ -588,6 +589,10 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber, 
         return new UserCollection($models);
     }
 
+    public function hasFavoredProduct(Product $product):bool
+    {
+        return $this->favoredProducts->where('id', $product->id)->isNotEmpty();
+    }
 
     /*
     |--------------------------------------------------------------------------
@@ -696,33 +701,6 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber, 
             ->withPivot("rank", "prizes");
     }
 
-    /**
-     * Compares user's password with a new password
-     *
-     * @param $password
-     *
-     * @return bool
-     *  True : equal / False : not equal
-     */
-    public function compareWithCurrentPassword($password): bool
-    {
-        if (Hash::check($password, $this->password)) {
-            $result = true;
-        } else {
-            $result = false;
-        }
-
-        return $result;
-    }
-
-    /**
-     * @param $newPassword
-     */
-    public function changePassword($newPassword): void
-    {
-        $this->fill(['password' => bcrypt($newPassword)]);
-    }
-
     public function getOpenOrder(): Order
     {
         $openOrder = $this->firstOrCreateOpenOrder($this);
@@ -780,7 +758,6 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber, 
     {
         return $this->belongsToMany(Category::class, 'help_categories_users', 'user_id', 'category_id');
     }
-
 
     /**
      * Checks whether user has default avatar or not

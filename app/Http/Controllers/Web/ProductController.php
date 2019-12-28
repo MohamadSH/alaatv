@@ -395,7 +395,7 @@ class ProductController extends Controller
             $children = $product->children()->enable()->get();
         }
 
-        $isFavored = optional(optional(optional(optional($user)->favoredProducts())->where('id', $product->id))->get())->isNotEmpty();
+        $isFavored = (isset($user))?$user->hasFavoredProduct($product):false;
 
 
         if ($this->canSeeRaheAbrishamSpecialPage($product , $user)) {
