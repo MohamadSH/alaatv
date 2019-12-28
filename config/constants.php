@@ -252,6 +252,7 @@ return [
     'DISK24'                     => 'profileImageSFTP',
     'DISK25'                     => 'contentThumbnailSFTP',
     'DISK26'                     => 'uploadCenterSftp',
+    'DISK27'                     => 'periodDescriptionPhotoSFTP',
 
     'DISK_FREE_CONTENT'              => 'alaaCdnSFTP',
     'DISK_PRODUCT_CONTENT'           => 'productFileSFTP',
