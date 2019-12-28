@@ -886,7 +886,7 @@ var EntekhabeFarsang = function () {
             htmlData += createPamphletItem({
                 section: (typeof data[key].section !== 'undefined' && data[key].section !== null) ? data[key].section : {id: '', name: ''},
                 title: (typeof data[key].title !== 'undefined') ? data[key].title : data[key].name,
-                link: (typeof data[key].file !== 'undefined' && data[key].file !== null) ? data[key].file.pamphlet[0].link : '#'
+                link: (typeof data[key].file !== 'undefined' && data[key].file !== null) ? data[key].file.pamphlet.data[0].link : '#'
             });
 
         }
