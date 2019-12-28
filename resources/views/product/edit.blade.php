@@ -261,8 +261,11 @@
                 </div>
             </div>
             <div class="m-portlet__body">
-                {!! Form::open(['method'=>'POST' , 'route'=>'periodDescription.store']) !!}
+                {!! Form::open(['files'=>true  , 'method'=>'POST' , 'route'=>'periodDescription.store' , 'accept-charset'=>'UTF-8']) !!}
                     <input type="hidden" name="product_id" value="{{$product->id}}">
+                <div class = "form-group">
+                    <input type="file" name="photo">
+                </div>
                 <div class = "form-group">
                     <input id = "periodDescriptionSince" type = "text" class = "form-control" value = "" dir = "ltr">
                     <input name = "since" id = "periodDescriptionSinceAlt" type = "text" class = "form-control d-none">

@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers\Web;
 
+use App\Adapter\AlaaSftpAdapter;
 use App\Descriptionwithperiod;
 use App\Http\Controllers\Controller;
+use App\Traits\FileCommon;
+use App\Traits\RequestCommon;
 use Exception;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Database\Eloquent\Builder;
@@ -13,10 +16,14 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 
 class PeriodDescriptionController extends Controller
 {
+    use FileCommon , RequestCommon;
+
     public function __construct()
     {
         $this->callMiddlewares($this->getAuthExceptionArray());
@@ -76,7 +83,8 @@ class PeriodDescriptionController extends Controller
      *
      * @param Request $request
      *
-     * @return JsonResponse
+     * @return RedirectResponse
+     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
      */
     public function store(Request $request)
     {
@@ -84,6 +92,20 @@ class PeriodDescriptionController extends Controller
         $request->offsetSet('staff_id', $request->user()->id);
         $description = Descriptionwithperiod::create($request->all());
         date_default_timezone_set('UTC');
+
+        $file       = $this->getRequestFile($request->all() , 'photo');
+        if(isset($file)){
+            $extension = $file->getClientOriginalExtension();
+            $fileName  = basename($file->getClientOriginalName(), '.' . $extension) . '_' . date('YmdHis') . '.' . $extension;
+            $disk      = Storage::disk(config('constants.DISK27'));
+            /** @var AlaaSftpAdapter $adaptor */
+            if ($disk->put($fileName, File::get($file))) {
+                $fullPath          = $disk->getAdapter()->getRoot();
+                $partialPath       = $this->getSubDirectoryInCDN($fullPath);
+                $description->photo = config('constants.DOWNLOAD_SERVER_PROTOCOL') . config('constants.CDN_SERVER_NAME') . '/' . $partialPath . $fileName;
+                $description->update();
+            }
+        }
 
         if (isset($description)) {
             session()->flash('success', 'توضیح بازه ای با موفقیت درج شد');
