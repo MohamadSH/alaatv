@@ -17,7 +17,7 @@ class CreateFaqsTable extends Migration
             $table->increments('id');
             $table->unsignedInteger('product_id')->nullable()->comment('آیدی محصول');
             $table->string('title')->nullable()->comment('عنوان');
-            $table->string('body')->nullable()->comment('متن');
+            $table->longText('body')->nullable()->comment('متن');
             $table->softDeletes();
             $table->timestamps();
 
