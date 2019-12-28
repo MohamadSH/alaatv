@@ -53,7 +53,9 @@
             <div class="searchResult">
                 <div class="carouselType">
                     <div class="ScrollCarousel">
+                        <div class="ScrollCarousel-Items">
 
+                        </div>
                     </div>
                 </div>
 

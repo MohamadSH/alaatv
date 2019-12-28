@@ -193,20 +193,9 @@ class ProductController extends Controller
         $isFavored = optional(optional(optional(optional($user)->favoredProducts())->where('id' , $product->id))->get())->isNotEmpty();
 
 
-        /*if($product->id == Product::RAHE_ABRISHAM && isset($user)){
-            $key = 'user:hasPurchasedRaheAbrisham:'.$user->cacheKey();
-            $hasPurchasedRaheAbrisham =   Cache::tags(['user_'.$user->id.'_closedOrders' ])
-                ->remember($key, config('constants.CACHE_600'), function () use ($user) {
-                    return $user->products()->contains(Product::RAHE_ABRISHAM);
-                });
-
-            $lastSet = $product->sets->sortByDesc('created_at')->first() ;
-            $lastSetPamphlets = $lastSet->where('contenttype_id' , Content::CONTENT_TYPE_PAMPHLET);
-            $lastSetVideos    = $lastSet->where('contenttype_id' , Content::CONTENT_TYPE_VIDEO);
-            $periodDescription = $product->descriptionWithPeriod;
-
-            return view('product.customShow.raheAbrisham', compact('product', 'block' , 'liveDescriptions', 'isFavored' , 'lastSet' , 'lastSetPamphlets' , 'lastSetVideos' , 'hasPurchasedRaheAbrisham' , 'periodDescription'));
-        }*/
+        if($product->id == Product::RAHE_ABRISHAM && isset($user)){
+            return $this->createRaheAbrishamView($product, $user, compact('product', 'block', 'purchasedProductIdArray', 'allChildIsPurchased' , 'liveDescriptions' , 'children' , 'isFavored'));
+        }
 
         $isForcedGift = false;
         $shouldBuyProductId = null;
@@ -224,8 +213,9 @@ class ProductController extends Controller
                         return $user->products()->contains($shouldBuyProductId);
                     });
             }
-
         }
+
+
 
         return view('product.show', compact('product', 'block', 'purchasedProductIdArray', 'allChildIsPurchased' , 'liveDescriptions' , 'children' , 'isFavored' , 'isForcedGift' , 'shouldBuyProductId' , 'shouldBuyProductName' , 'hasPurchasedShouldBuyProduct'));
     }
@@ -1165,5 +1155,28 @@ class ProductController extends Controller
         $blockContents = optional(optional(optional($block)->contents)->pluck('id'))->toArray();
         $blockFirstSetContents = optional(optional(optional(optional($block->sets)->first())->contents)->pluck('id'))->toArray();
         return array_unique(array_merge(!is_null($blockContents) ? $blockContents : [], !is_null($blockFirstSetContents) ? $blockFirstSetContents : []), SORT_REGULAR);
+    }
+
+    /**
+     * @param \App\Product $product
+     * @param \App\User|null $user
+     * @param $compact
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    private function createRaheAbrishamView(Product $product, \App\User $user, $compact)
+    {
+        extract($compact);
+        $key = 'user:hasPurchasedRaheAbrisham:'.$user->cacheKey();
+        $hasPurchasedRaheAbrisham =   Cache::tags(['user_'.$user->id.'_closedOrders' ])
+            ->remember($key, config('constants.CACHE_600'), function () use ($user) {
+                return $user->products()->contains(Product::RAHE_ABRISHAM);
+            });
+        $sets = $product->sets->sortByDesc('created_at');
+        $lastSet = $sets->first();
+        $lastSetPamphlets = $lastSet->getActiveContents2(Content::CONTENT_TYPE_PAMPHLET);
+        $lastSetVideos = $lastSet->getActiveContents2(Content::CONTENT_TYPE_VIDEO);
+        $periodDescription = $product->descriptionWithPeriod;
+
+        return view('product.customShow.raheAbrisham', compact('product', 'block' , 'liveDescriptions', 'isFavored' , 'lastSet' , 'lastSetPamphlets' , 'lastSetVideos' , 'hasPurchasedRaheAbrisham' , 'periodDescription', 'sets'));
     }
 }
