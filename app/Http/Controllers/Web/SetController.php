@@ -9,7 +9,7 @@ use App\Contentset;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ContentsetIndexRequest;
 use App\Http\Requests\InsertContentsetRequest;
-use App\Http\Resources\ContentInSet as ContentResource;
+use App\Http\Resources\ContentInSet2 as ContentResource;
 use App\Http\Resources\Set as SetResource;
 use App\Traits\FileCommon;
 use App\Traits\MetaCommon;
@@ -282,7 +282,6 @@ class SetController extends Controller
 
         $pamphlets = $contents->where('contenttype_id', Content::CONTENT_TYPE_PAMPHLET);
         $videos    = $contents->where('contenttype_id', Content::CONTENT_TYPE_VIDEO);
-        $articles  = $contents->where('contenttype_id', Content::CONTENT_TYPE_ARTICLE);
 
         if ($request->expectsJson()) {
             $files = [];
@@ -292,10 +291,6 @@ class SetController extends Controller
 
             if (isset($videos) && $videos->isNotEmpty()) {
                 $files['videos'] = ContentResource::collection($videos);
-            }
-
-            if (isset($articles) && $articles->isNotEmpty()) {
-                $files['articles'] = ContentResource::collection($articles);
             }
 
             return response()->json([
