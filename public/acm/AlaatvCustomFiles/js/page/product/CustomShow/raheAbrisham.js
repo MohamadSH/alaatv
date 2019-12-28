@@ -835,6 +835,7 @@ var EntekhabeFarsang = function () {
             htmlData += createVideoItem({
                 section: (typeof data[i].section !== 'undefined') ? data[i].section : {id: '', name: ''},
                 photo: (typeof data[i].photo !== 'undefined') ? data[i].photo : data[i].thumbnail,
+                title: (typeof data[i].name !== 'undefined') ? data[i].name : data[i].title,
                 link: data[i].url.web
             });
         }
@@ -864,7 +865,7 @@ var EntekhabeFarsang = function () {
             '    <img class="lazy-image a--full-width"\n' +
             '         src="https://cdn.alaatv.com/loder.jpg?w=16&h=9"\n' +
             '         data-src="' + data.photo + '"\n' +
-            '         alt="samplePhoto"\n' +
+            '         alt="' + data.title + '"\n' +
             '         width="253" height="142">\n' +
             '  </a>' +
             '</div>';
@@ -910,8 +911,16 @@ var EntekhabeFarsang = function () {
         getBtnMorePamphlet().parents('a').attr('href', link);
     }
 
+    function setVideoTooltip() {
+        $('#m_tabs_video .ScrollCarousel .ScrollCarousel-Items .item img').each(function () {
+            $(this).parents('a').attr('data-toggle', 'm-tooltip').attr('data-placement', 'top').attr('data-original-title', $(this).attr('alt'));
+        });
+        $('#m_tabs_video .ScrollCarousel .ScrollCarousel-Items .item img a').tooltip();
+    }
+
     function setLists(data) {
         setVideoList(createVideoList(data.videos));
+        setVideoTooltip();
         setPamphletList(createPamphletList(data.pamphlets));
     }
 
