@@ -9,7 +9,7 @@ use App\Contentset;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ContentsetIndexRequest;
 use App\Http\Requests\InsertContentsetRequest;
-use App\Http\Resources\ContentInSet as ContentResource;
+use App\Http\Resources\ContentInSet2 as ContentResource;
 use App\Http\Resources\Set as SetResource;
 use App\Traits\FileCommon;
 use App\Traits\MetaCommon;
