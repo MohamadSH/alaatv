@@ -124,7 +124,7 @@
     @include('product.partials.raheAbrisham.descriptionBox', [
         'title' => 'سوالات متداول درباره این دوره',
         'color' => 'transparentBack',
-        'content' => view('product.partials.raheAbrisham.soalateMotedavel')
+        'content' => view('product.partials.raheAbrisham.soalateMotedavel', compact('faqs'))
     ])
 
 
