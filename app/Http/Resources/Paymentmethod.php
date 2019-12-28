@@ -2,19 +2,20 @@
 
 namespace App\Http\Resources;
 
-use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Http\Request;
 
 /**
  * Class Paymentmethod
  *
  * @mixin \App\Paymentmethod
  * */
-class Paymentmethod extends JsonResource
+class Paymentmethod extends AlaaJsonResource
 {
     /**
      * Transform the resource into an array.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param Request $request
+     *
      * @return array
      */
     public function toArray($request)

@@ -2,19 +2,20 @@
 
 namespace App\Http\Resources;
 
-use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Http\Request;
 
 /**
  * Class Gender
  *
  * @mixin \App\Gender
  * */
-class Gender extends JsonResource
+class Gender extends AlaaJsonResource
 {
     /**
      * Transform the resource into an array.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param Request $request
+     *
      * @return array
      */
     public function toArray($request)

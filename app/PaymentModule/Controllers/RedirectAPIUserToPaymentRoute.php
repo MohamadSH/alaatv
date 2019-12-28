@@ -2,12 +2,15 @@
 
 namespace App\PaymentModule\Controllers;
 
+use App\Events\Authenticated;
 use App\User;
-use Illuminate\Support\Arr;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Routing\Controller;
+use Illuminate\Routing\Redirector;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 
 class RedirectAPIUserToPaymentRoute extends Controller
@@ -21,11 +24,11 @@ class RedirectAPIUserToPaymentRoute extends Controller
     /**
      * redirect the user to online payment page
      *
-     * @param  Request  $request
-     * @param  string   $paymentMethod
-     * @param  string   $device
+     * @param Request $request
+     * @param string  $paymentMethod
+     * @param string  $device
      *
-     * @return JsonResponse|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     * @return JsonResponse|RedirectResponse|Redirector
      */
     public function __invoke(string $paymentMethod, string $device, Request $request)
     {
@@ -38,10 +41,10 @@ class RedirectAPIUserToPaymentRoute extends Controller
             ->orFailWith([Response::class, 'sendErrorResponse', ['User not found', Response::HTTP_BAD_REQUEST]]);
 
         Auth::login($user);
+        event(new Authenticated($user));
 
         $parameters = ['paymentMethod' => $paymentMethod, 'device' => $device];
-        if(isset($orderId))
-        {
+        if(isset($orderId)) {
             $parameters = Arr::add($parameters, 'order_id', $orderId);
         }
 

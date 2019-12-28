@@ -2,18 +2,19 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\User;
-use App\Http\Controllers\{Controller};
-use Illuminate\Http\Request;
-use App\Traits\RedirectTrait;
-use Illuminate\Http\Response;
 use App\Events\Authenticated;
+use App\Http\Controllers\{Controller};
+use App\Http\Resources\User as UserResource;
 use App\Traits\CharacterCommon;
+use App\Traits\RedirectTrait;
+use App\User;
+use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
-use Illuminate\Foundation\Auth\AuthenticatesUsers;
-use App\Http\Resources\User as   UserResource ;
 
 class LoginController extends Controller
 {
@@ -58,8 +59,8 @@ class LoginController extends Controller
     /**
      * Handle a login request to the application.
      *
-     * @param  Request             $request
-     * @param  RegisterController  $registerController
+     * @param Request            $request
+     * @param RegisterController $registerController
      *
      * @return RedirectResponse|Response|JsonResponse
      *
@@ -114,7 +115,7 @@ class LoginController extends Controller
     /**
      * Log the user out of the application.
      *
-     * @param  Request  $request
+     * @param Request $request
      *
      * @return Response
      */
@@ -139,7 +140,7 @@ class LoginController extends Controller
     /**
      * The user has logged out of the application.
      *
-     * @param  Request  $request
+     * @param Request $request
      *
      * @return mixed
      */
@@ -157,8 +158,8 @@ class LoginController extends Controller
     /**
      * The user has been authenticated.
      *
-     * @param  Request  $request
-     * @param  mixed    $user
+     * @param Request $request
+     * @param mixed   $user
      *
      * @return mixed
      */
@@ -168,15 +169,22 @@ class LoginController extends Controller
         if (!$request->expectsJson()) {
             return redirect($this->redirectTo($request));
         }
-
-        if($user->userstatus_id == config('constants.USER_STATUS_INACTIVE')){
+        if ($user->userstatus_id == config('constants.USER_STATUS_INACTIVE')) {
             return response()->json([
-                'message' => 'User account has been deactivated'
-            ] , Response::HTTP_FORBIDDEN);
+                'message' => 'User account has been deactivated',
+            ], Response::HTTP_FORBIDDEN);
         }
 
+        if (Str::contains($request->path(), 'v2')) {
+            return $this->authenticatedV2($request, $user);
+        }
+        return $this->authenticatedV1($request, $user);
+    }
+
+    protected function authenticatedV1(Request $request, User $user)
+    {
         $token = $user->getAppToken();
-        $data  = array_merge([
+        $data = array_merge([
             'user' => $user,  //Can't change this line because of current Android application
 //              'user' => new UserResource($user)
         ], $token);
@@ -185,6 +193,18 @@ class LoginController extends Controller
             'msg'        => 'user sign in.',
             'redirectTo' => $this->redirectTo($request),
             'data'       => $data,
+        ], Response::HTTP_OK);
+    }
+
+    protected function authenticatedV2(Request $request, User $user)
+    {
+        $token = $user->getAppToken();
+        $data = array_merge([
+            'user'       => new UserResource($user),
+            'redirectTo' => $this->redirectTo($request),
+        ], $token);
+        return response()->json([
+            'data' => $data,
         ], Response::HTTP_OK);
     }
 
@@ -201,5 +221,24 @@ class LoginController extends Controller
     public function username()
     {
         return 'mobile';
+    }
+
+    /**
+     * Send the response after the user was authenticated.
+     *
+     * @param Request $request
+     *
+     * @return Response
+     */
+    protected function sendLoginResponse(Request $request)
+    {
+        if ($request->hasSession()) {
+            $request->session()->regenerate();
+        }
+
+        $this->clearLoginAttempts($request);
+
+        return $this->authenticated($request, $this->guard()->user())
+            ?: redirect()->intended($this->redirectPath());
     }
 }

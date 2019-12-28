@@ -2,55 +2,58 @@
 
 namespace App\Http\Controllers\Web;
 
-use stdClass;
-use Carbon\Carbon;
-use Jenssegers\Agent\Agent;
-use Kalnoy\Nestedset\QueryBuilder;
+use App\{Afterloginformcontrol,
+    Bloodtype,
+    Collection\OrderCollections,
+    Contact,
+    Contacttype,
+    Event,
+    Gender,
+    Grade,
+    Http\Requests\EditOrderRequest,
+    Http\Requests\EditUserRequest,
+    Http\Requests\InsertContactRequest,
+    Http\Requests\InsertPhoneRequest,
+    Http\Requests\InsertUserRequest,
+    Http\Requests\UserIndexRequest,
+    Lottery,
+    Major,
+    Order,
+    Phone,
+    Phonetype,
+    Product,
+    Relative,
+    Role,
+    Traits\CharacterCommon,
+    Traits\DateTrait,
+    Traits\Helper,
+    Traits\MetaCommon,
+    Traits\RequestCommon,
+    Traits\SearchCommon,
+    Traits\UserCommon,
+    Transactiongateway,
+    User,
+    Userstatus,
+    Websitesetting
+};
 use App\Http\Controllers\Controller;
-use Illuminate\{
+use Carbon\Carbon;
+use Exception;
+use Illuminate\{Contracts\Filesystem\FileNotFoundException,
     Contracts\View\Factory,
+    Http\RedirectResponse,
     Http\Request,
     Http\Response,
     Support\Arr,
     Support\Collection,
+    Support\Facades\Cache,
     Support\Facades\DB,
     Support\Facades\View,
-    Support\Facades\Cache,
-    Contracts\Filesystem\FileNotFoundException,
-    Validation\ValidationException};
-use App\{Collection\OrderCollections,
-    Contacttype,
-    Http\Requests\EditOrderRequest,
-    Http\Requests\InsertContactRequest,
-    Http\Requests\InsertPhoneRequest,
-    Phonetype,
-    Relative,
-    Role,
-    User,
-    Event,
-    Grade,
-    Major,
-    Order,
-    Phone,
-    Gender,
-    Contact,
-    Lottery,
-    Product,
-    Bloodtype,
-    Userstatus,
-    Traits\Helper,
-    Websitesetting,
-    Traits\DateTrait,
-    Traits\MetaCommon,
-    Traits\UserCommon,
-    Transactiongateway,
-    Traits\SearchCommon,
-    Traits\RequestCommon,
-    Afterloginformcontrol,
-    Traits\CharacterCommon,
-    Http\Requests\EditUserRequest,
-    Http\Requests\UserIndexRequest,
-    Http\Requests\InsertUserRequest};
+    Validation\ValidationException
+};
+use Jenssegers\Agent\Agent;
+use Kalnoy\Nestedset\QueryBuilder;
+use stdClass;
 
 class UserController extends Controller
 {
@@ -629,8 +632,7 @@ class UserController extends Controller
                 $responseContent = [
                     'user' => $savedUser ?? $savedUser,
                 ];
-            }
-            else {
+            } else {
                 $responseContent = [
                     'error' => [
                         'message' => $resultMessage,
@@ -639,7 +641,7 @@ class UserController extends Controller
             }
 
             return response($responseContent, Response::HTTP_OK);
-        } catch (\Exception    $e) {
+        } catch (Exception    $e) {
             return response([
                 'message' => 'unexpected error',
                 'error'   => $e->getMessage(),
@@ -827,13 +829,17 @@ class UserController extends Controller
     /**
      * Showing files to user which he has got for his orders
      *
-     * @param  Request  $request
+     * @param Request $request
      *
-     * @return Response
+     * @return Factory|RedirectResponse|\Illuminate\View\View
      */
     public function userProductFiles(Request $request)
     {
-        return redirect()->route('web.user.dashboard', [$request->user()]);
+        if ($request->user()) {
+            return redirect()->route('web.user.dashboard', [$request->user()]);
+        }
+
+        return view('user.dashboard');
     }
 
     /**
@@ -1425,9 +1431,7 @@ class UserController extends Controller
      */
     private function getAuthExceptionArray(Agent $agent): array
     {
-        $authException = ['show'];
-
-        return $authException;
+        return ['show', 'userProductFiles'];
     }
 
     /**

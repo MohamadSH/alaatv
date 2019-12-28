@@ -2,16 +2,18 @@
 
 namespace App\Http\Resources;
 
-use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Support\Arr;
+use App\Traits\Content\Resource;
+use Illuminate\Http\Request;
 
 /**
  * Class Content
  *
  * @mixin \App\Content
  * */
-class ContentInSet extends JsonResource
+class ContentInSet extends AlaaJsonResource
 {
+    use Resource;
+
     function __construct(\App\Content $model)
     {
         parent::__construct($model);
@@ -20,7 +22,8 @@ class ContentInSet extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param Request $request
+     *
      * @return array
      */
     public function toArray($request)
@@ -32,34 +35,21 @@ class ContentInSet extends JsonResource
         $this->loadMissing('contenttype' , 'section' , 'user' , 'set');
 
         return [
-            'id'             => $this->id,
-            'redirect_url'   => $this->when(isset($this->redirectUrl) , $this->redirectUrl),
-            'contenttype'    => $this->when(isset($this->contenttype_id) , function () {return New Contenttype($this->contenttype);}) ,
-            'section'        => $this->when(isset($this->section_id) , function (){ return New Section($this->section);}),
-            'title'           => $this->when(isset($this->name) , $this->name),
-            'file'           => $this->when($this->contenttype_id == config('constants.CONTENT_TYPE_PAMPHLET') || $this->contenttype_id == config('constants.CONTENT_TYPE_VIDEO') , function (){
-                $file                   = $this->file;
-                $videoFileCollection    = $file->get('video');
-                $pamphletFileCollection = $file->get('pamphlet');
-                return [
-                    'video'    => $this->when(isset($videoFileCollection) , function () use ($videoFileCollection) { return VideoFile::collection($videoFileCollection); } ),
-                    'pamphlet' => $this->when(isset($pamphletFileCollection) , function () use ($pamphletFileCollection) { return PamphletFile::collection($pamphletFileCollection); } ),
-//                    'pamphlet' => $this->when(isset($pamphletFileCollection) , function () use ($pamphletFileCollection)
-//                    {
-//                        return [
-//                            'link'    => $pamphletFileCollection[0]->link,
-//                            'ext'     => $pamphletFileCollection[0]->ext,
-//                            'size'    => $pamphletFileCollection[0]->size,
-//                            'caption' => $pamphletFileCollection[0]->caption
-//                            ];
-//                    } ),
-                ];
+            'id'           => $this->id,
+            'redirect_url' => $this->when(isset($this->redirectUrl), $this->redirectUrl),
+            'content_type' => $this->when(isset($this->contenttype_id), function () {
+                return New Contenttype($this->contenttype);
             }),
-            'duration'       => $this->when(isset($this->duration) , $this->duration),
-            'photo'          => $this->when(isset($this->thumbnail) , $this->thumbnail),
-            'isFree'         => $this->isFree,
-            'order'          => $this->order,
-            'url'            => new Url($this),
+            'section'      => $this->when(isset($this->section_id), function () {
+                return New Section($this->section);
+            }),
+            'title'        => $this->when(isset($this->name), $this->name),
+            'file'         => $this->when($this->hasFile(), $this->getContentFile()),
+            'duration'     => $this->when(isset($this->duration), $this->duration),
+            'photo'        => $this->when(isset($this->thumbnail), $this->thumbnail),
+            'isFree'       => $this->isFree,
+            'order'        => $this->order,
+            'url'          => new Url($this),
         ];
     }
 }

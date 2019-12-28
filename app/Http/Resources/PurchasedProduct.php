@@ -2,16 +2,18 @@
 
 namespace App\Http\Resources;
 
+use App\Traits\Product\Resource;
 use Illuminate\Http\Request;
-use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
  * Class Product
  *
  * @mixin \App\Product
  * */
-class PurchasedProduct extends JsonResource
+class PurchasedProduct extends AlaaJsonResource
 {
+    use Resource;
+
     function __construct(\App\Product $model)
     {
         parent::__construct($model);
@@ -20,7 +22,8 @@ class PurchasedProduct extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  Request  $request
+     * @param Request $request
+     *
      * @return array
      */
     public function toArray($request)
@@ -28,22 +31,25 @@ class PurchasedProduct extends JsonResource
         if (!($this->resource instanceof \App\Product)) {
             return [];
         }
+        if (isset($this->redirectUrl)) {
+            return [
+                'id'           => $this->id,
+                'redirect_url' => $this->redirectUrl,
+            ];
+        }
 
-        $this->loadMissing('sets' , 'children' , 'producttype');
+        $this->loadMissing('sets', 'children', 'producttype');
 
         return [
-            'id'            => $this->id,
-            'redirect_url'  => $this->when(isset($this->redirectUrl) , $this->redirectUrl),
-            'title'          => $this->when(isset($this->name) , $this->name),
-            'type'          => $this->when(isset($this->producttype_id) , function (){ return new Producttype($this->producttype);}),
-//            'type'          => $this->when(isset($this->producttype_id) , function (){ return New Producttype($this->producttype); }),
-//            'isFree'        => $this->isFree,
-            'url'           => new Url($this),
-            'photo'         => $this->photo,
-            'attributes'    => [
-                'info' =>  $this->when(!empty($this->info_attributes) , $this->info_attributes),
-                'extra' => $this->when(!empty($this->extra_attributes) , $this->extra_attributes),
-            ],
+            'id'           => $this->id,
+            'redirect_url' => $this->when(isset($this->redirectUrl), $this->redirectUrl),
+            'type'         => $this->when(isset($this->producttype_id), $this->getType()),
+            'category'     => $this->when(isset($this->category), $this->category),
+            'title'        => $this->when(isset($this->name), $this->name),
+            'isFree'       => $this->isFree,
+            'url'          => $this->getUrl(),
+            'photo'        => $this->when(isset($this->photo), $this->photo),
+            'attributes'   => $this->getAttributes(),
 
         ];
     }

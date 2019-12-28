@@ -61,9 +61,9 @@ class Contenttype extends BaseModel
     public static function List(): array
     {
         return [
-            "video",
-            "pamphlet",
-            "article",
+            'video',
+            'pamphlet',
+            'article',
         ];
     }
 

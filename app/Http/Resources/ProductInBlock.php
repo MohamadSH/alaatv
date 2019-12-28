@@ -2,14 +2,14 @@
 
 namespace App\Http\Resources;
 
-use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Http\Request;
 
 /**
  * Class Product
  *
  * @mixin \App\Product
  * */
-class ProductInBlock extends JsonResource
+class ProductInBlock extends AlaaJsonResource
 {
     function __construct(\App\Product $model)
     {
@@ -19,7 +19,8 @@ class ProductInBlock extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param Request $request
+     *
      * @return array
      */
     public function toArray($request)

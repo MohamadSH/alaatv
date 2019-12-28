@@ -239,7 +239,7 @@ class Block extends BaseModel
         return $this;
     }
 
-    public static function getMainBlocksForApp(): ?BlockCollection
+    public static function getMainBlocksForApp(): ? \Illuminate\Pagination\LengthAwarePaginator
     {
         return Cache::tags(['block' , 'home'])
             ->remember('block:getMainBlocksForApp', config('constants.CACHE_600'), function () {

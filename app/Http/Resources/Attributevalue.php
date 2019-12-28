@@ -2,19 +2,20 @@
 
 namespace App\Http\Resources;
 
-use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Http\Request;
 
 /**
  * Class Attributevalue
  *
  * @mixin \App\Attributevalue
  * */
-class Attributevalue extends JsonResource
+class Attributevalue extends AlaaJsonResource
 {
     /**
      * Transform the resource into an array.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param Request $request
+     *
      * @return array
      */
     public function toArray($request)
@@ -24,8 +25,9 @@ class Attributevalue extends JsonResource
         }
 
         return [
-            'attribute_id' => $this->attribute_id ,
-            'name'         => $this->when(isset($this->name) , $this->name),
+            'attribute_id' => $this->attribute_id,
+            'name'         => $this->name,
+            'extra_cost'   => optional($this->pivot)->extraCost,
         ];
     }
 }
