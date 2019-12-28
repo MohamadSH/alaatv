@@ -191,6 +191,7 @@
                 videos: [
                     @foreach($lastSetVideos as $item)
                         {
+                            title: '{{$item->name}}',
                             thumbnail: '{{$item->thumbnail}}',
                             url: {
                                 web: '{{$item->url}}'
