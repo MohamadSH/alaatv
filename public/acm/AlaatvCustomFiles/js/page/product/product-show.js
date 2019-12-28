@@ -494,7 +494,7 @@ var ProductResponsivePage = function () {
     };
 }();
 
-var InitPage = function () {
+var InitProductPagePage = function () {
 
     function initGAEE() {
         GAEE.productDetailViews('product.show', parentProduct);
@@ -590,10 +590,6 @@ var InitPage = function () {
             var productSelectValues = ProductShowPage.getProductSelectValues();
             var selectedProductObject = ProductShowPage.getSelectedProductObject();
 
-            // for (var index in selectedProductObject) {
-            //     selectedProductObject[index].category = parentProductTags;
-            //     selectedProductObject[index].variant = 'simple';
-            // }
             selectedProductObject.push(parentProduct);
             TotalQuantityAddedToCart = selectedProductObject.length;
             GAEE.productAddToCart('product.addToCart', selectedProductObject);
@@ -612,25 +608,26 @@ var InitPage = function () {
                         attribute: mainAttributeStates,
                         extraAttribute: extraAttributeStates
                     },
-                    statusCode: {
-                        200: function (response) {
-                            var successMessage = 'محصول مورد نظر به سبد خرید اضافه شد.';
+                    success: function (data) {
+                        var successMessage = 'محصول مورد نظر به سبد خرید اضافه شد.';
 
-                            toastr.success(successMessage);
+                        toastr.success(successMessage);
 
-                            window.location.replace('/checkout/review');
+                        window.location.replace('/checkout/review');
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        var message = '';
+                        // if (jqXHR.status === 403) {
+                        //     message = 'کد وارد شده اشتباه است.';
+                        // } else if (jqXHR.status === 422) {
+                        //     message = 'کد را وارد نکرده اید.';
+                        // } else {
+                        //     message = 'خطای سیستمی رخ داده است.';
+                        // }
 
-                        },
-                        500: function (response) {
+                        toastr.error('خطای سیستمی رخ داده است.');
 
-                            toastr.error('خطای سیستمی رخ داده است.');
-
-                            ProductShowPage.enableBtnAddToCart();
-                        },
-                        503: function (response) {
-                            toastr.error('خطای پایگاه داده!');
-                            ProductShowPage.enableBtnAddToCart();
-                        }
+                        ProductShowPage.enableBtnAddToCart();
                     }
                 });
 
@@ -847,6 +844,6 @@ var InitPage = function () {
     };
 }();
 
-jQuery(document).ready(function () {
-    InitPage.init();
+$(document).ready(function () {
+    InitProductPagePage.init();
 });

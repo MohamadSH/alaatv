@@ -405,7 +405,7 @@ class ProductController extends Controller
                 $lastSetVideos     = $lastSet->getActiveContents2(Content::CONTENT_TYPE_VIDEO);
                 $periodDescription = $product->descriptionWithPeriod;
                 $faqs              = $product->faqs ;
-                return view('product.customShow.raheAbrisham', compact('product', 'block', 'liveDescriptions', 'isFavored', 'lastSet', 'lastSetPamphlets', 'lastSetVideos', 'hasPurchasedRaheAbrisham', 'periodDescription', 'sets' , 'faqs'));
+                return view('product.customShow.raheAbrisham', compact('product', 'block', 'liveDescriptions', 'isFavored', 'lastSet', 'lastSetPamphlets', 'lastSetVideos', 'periodDescription', 'sets' , 'faqs'));
         }
 
         $isForcedGift                 = false;

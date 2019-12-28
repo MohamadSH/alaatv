@@ -153,7 +153,7 @@
             quantity: 1
         };
         var parentProductTags = '{{ ($product->tags !== null) ? implode(',',optional($product->tags)->tags) : '-' }}';
-        var farsangs = [
+        var allSetsOfRaheAbrisham = [
                 @foreach($sets as $setItem)
             {
                 name: '{{$setItem->name}}',
@@ -161,18 +161,19 @@
             },
             @endforeach
         ];
-        var LastSetData = {
+        var lastSetData = {
             set: {
                 id: '{{$sets->first()->id}}',
                 name: '{{$sets->first()->name}}',
                 url: {
-                    web: '{{$sets->first()->url}}'
+                    web: '{{$sets->first()->show_url}}'
                 }
             },
             files: {
-                pamphlets: [
-                    @foreach($lastSetPamphlets as $item)
-                        {
+                pamphlets: {
+                    data: {
+                        @foreach($lastSetPamphlets as $item)
+                        '{{$item}}': {
                             name: '{{$item->name}}',
                             file: {
                                 pamphlet: [
@@ -180,25 +181,24 @@
                                         link: '$item->file->first()->first()->link'
                                     }
                                 ]
-                            },
-                            // section: {
-                            //     id: '',
-                            //     name: ''
-                            // }
-                        },
-                    @endforeach
-                ],
-                videos: [
-                    @foreach($lastSetVideos as $item)
-                        {
-                            title: '{{$item->name}}',
-                            thumbnail: '{{$item->thumbnail}}',
-                            url: {
-                                web: '{{$item->url}}'
                             }
                         },
-                    @endforeach
-                ]
+                        @endforeach
+                    }
+                },
+                videos: {
+                    data: {
+                        @foreach($lastSetVideos as $item)
+                            '{{$item}}': {
+                                title: '{{$item->name}}',
+                                thumbnail: '{{$item->thumbnail}}',
+                                url: {
+                                    web: '{{$item->url}}'
+                                }
+                            },
+                        @endforeach
+                    }
+                }
             }
         };
     </script>

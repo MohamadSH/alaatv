@@ -596,8 +596,6 @@
         </div>
     @endif
 
-
-
     {{--دکمه افزودن به سبد خرید--}}
     <div class="addToCartForMobileDeviceWrapper" >
     @if($product->enable && !$isForcedGift)
@@ -799,7 +797,6 @@
 @endsection
 
 @section('page-js')
-    <script src="{{ mix('/js/product-show.js') }}"></script>
     <script>
         var TotalQuantityAddedToCart = 0;
         var parentProduct = {

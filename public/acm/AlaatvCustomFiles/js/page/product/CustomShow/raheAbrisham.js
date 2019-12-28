@@ -1,6 +1,7 @@
 var MapSVG = function () {
 
-    var marker = true,
+    var farsaneSetIdArray = [],
+        marker = true,
         panzoom,
         delta,
         direction,
@@ -43,46 +44,84 @@ var MapSVG = function () {
         };
     }
 
+    function getUnfarsangSetIdArray() {
+        return [
+            getMajorStep()['pishAzmoon'].contentId,
+            getMajorStep()['SefrTaSad'].contentId,
+            getMajorStep()['BarAndaz'].contentId,
+            getMajorStep()['Pile'].contentId,
+            getMapStepLevel2()['Gift-Godar'].contentId,
+        ];
+    }
+
+    function setFarsangSetIdArray() {
+        var allSets = allSetsOfRaheAbrisham;
+
+        farsaneSetIdArray = [];
+
+        var allSetsOfRaheAbrishamLength = allSets.length,
+            unfarsaneSetIdArray = getUnfarsangSetIdArray();
+
+        for (var i = 0; i < allSetsOfRaheAbrishamLength; i++) {
+            if (!unfarsaneSetIdArray.includes(allSets[i].setId)) {
+                farsaneSetIdArray.push(allSets[i]);
+            }
+        }
+
+        farsaneSetIdArray.reverse();
+    }
+
+    function getFarsangStep(index) {
+        if (typeof farsaneSetIdArray[index] === 'undefined') {
+            return {
+                name: '',
+                setId: null
+            };
+        } else {
+            return farsaneSetIdArray[index];
+        }
+    }
+
     function getMapStepLevel1() {
         return Object.assign({}, getMajorStep(), {
             'farsang-step-1': {
-                contentId: 617,
+                contentId: getFarsangStep(0).setId,
                 tooltipName: 'فرسنگ اول'
             },
             'farsang-step-2': {
-                contentId: 642,
+                contentId: getFarsangStep(1).setId,
                 tooltipName: 'فرسنگ دوم'
             },
             'farsang-step-3': {
-                contentId: 643,
+                contentId: getFarsangStep(2).setId,
                 tooltipName: 'فرسنگ سوم'
             },
             'farsang-step-4': {
-                contentId: 644,
+                contentId: getFarsangStep(3).setId,
                 tooltipName: 'فرسنگ چهارم'
             },
             'farsang-step-5': {
-                contentId: null,
+                contentId: getFarsangStep(4).setId,
                 tooltipName: 'فرسنگ پنجم'
             },
             'farsang-step-6': {
-                contentId: null,
+                contentId: getFarsangStep(5).setId,
                 tooltipName: 'فرسنگ ششم'
             },
             'farsang-step-7': {
-                contentId: null,
+                contentId: getFarsangStep(6).setId,
                 tooltipName: 'فرسنگ هفتم'
             },
             'farsang-step-8': {
-                contentId: null,
+                contentId: getFarsangStep(7).setId,
                 tooltipName: 'فرسنگ هشتم'
             },
             'farsang-step-9': {
-                contentId: null,
+                contentId: getFarsangStep(8).setId,
                 tooltipName: 'فرسنگ نهم'
             },
             'farsang-step-10': {
-                contentId: null,
+                contentId: getFarsangStep(9).setId,
                 tooltipName: 'فرسنگ دهم'
             }
         });
@@ -514,7 +553,7 @@ var MapSVG = function () {
 
     function getZoomLevel() {
         // if (panzoom.getScale() > 1.7) {
-        if ( $('#farsang-step-1')[0].getBoundingClientRect().width > 100) {
+        if ( $('#farsang-step-1')[0].getBoundingClientRect().width > 180) {
             return 2;
         } else {
             return 1;
@@ -694,16 +733,17 @@ var MapSVG = function () {
         setStepPointer();
     }
 
-    function farsangStepUpdate() {
-
-    }
-
     return {
         init: function () {
+            setFarsangSetIdArray();
             initPanZoom();
             setStepsDataAttributes();
             setStepPointer();
             setStepsTooltip();
+        },
+        getFarsangSteps: function () {
+            setFarsangSetIdArray();
+            return farsaneSetIdArray;
         }
     }
 }();
@@ -711,6 +751,12 @@ var MapSVG = function () {
 var EntekhabeFarsang = function () {
 
     function showFarsangFromServer(setId, sectionId) {
+
+        if (typeof setId === 'undefined' || setId === null || setId === 'null' || setId.trim().length === 0) {
+            toastr.info('این فرسنگ هنوز منتشر نشده است.');
+            return;
+        }
+
         $('.selectEntekhabeFarsangVideoAndPamphlet').AnimateScrollTo();
         getFarsangData(setId, sectionId, showFarsangData);
     }
@@ -727,6 +773,7 @@ var EntekhabeFarsang = function () {
         if (typeof sectionId !== 'undefined') {
             showSection(sectionId);
         }
+        farsangStepUpdate(data.set.id);
         hideLoading();
     }
 
@@ -787,37 +834,13 @@ var EntekhabeFarsang = function () {
                 accept: "application/json; charset=utf-8",
                 dataType: "json",
                 contentType: "application/json; charset=utf-8",
-                statusCode: {
-                    200: function (response) {
-                        callback(response);
-                    },
-                    403: function (response) {
-                        // responseMessage = response.responseJSON.message;
-                        hideLoading();
-                        checkNoData();
-                        toastr.warning('خطایی رخ داده است.');
-                    },
-                    404: function (response) {
-                        hideLoading();
-                        checkNoData();
-                        toastr.warning('خطایی رخ داده است.');
-                    },
-                    422: function (response) {
-                        hideLoading();
-                        checkNoData();
-                        toastr.warning('خطایی رخ داده است.');
-                    },
-                    429: function (response) {
-                        hideLoading();
-                        checkNoData();
-                        toastr.warning('خطایی رخ داده است.');
-                    },
-                    //The status for when there is error php code
-                    500: function () {
-                        hideLoading();
-                        checkNoData();
-                        toastr.warning('خطایی رخ داده است.');
-                    }
+                success: function (data) {
+                    callback(data);
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    hideLoading();
+                    checkNoData();
+                    toastr.warning('خطایی رخ داده است.');
                 }
             }
         );
@@ -831,16 +854,25 @@ var EntekhabeFarsang = function () {
         if (typeof data === 'undefined') {
             return '';
         }
-        var dataLength = data.length,
-            htmlData = '';
-        for (var i = 0; i < dataLength; i++) {
+        var htmlData = '';
+        for (let key in data){
             htmlData += createVideoItem({
-                section: (typeof data[i].section !== 'undefined') ? data[i].section : {id: '', name: ''},
-                photo: (typeof data[i].photo !== 'undefined') ? data[i].photo : data[i].thumbnail,
-                title: (typeof data[i].name !== 'undefined') ? data[i].name : data[i].title,
-                link: data[i].url.web
+                section: (typeof data[key].section !== 'undefined' && data[key].section !== null) ? data[key].section : {id: '', name: ''},
+                photo: (typeof data[key].photo !== 'undefined') ? data[key].photo : data[key].thumbnail,
+                title: (typeof data[key].name !== 'undefined') ? data[key].name : data[key].title,
+                link: data[key].url.web
             });
         }
+        // var dataLength = data.length,
+        //     htmlData = '';
+        // for (var i = 0; i < dataLength; i++) {
+        //     htmlData += createVideoItem({
+        //         section: (typeof data[i].section !== 'undefined') ? data[i].section : {id: '', name: ''},
+        //         photo: (typeof data[i].photo !== 'undefined') ? data[i].photo : data[i].thumbnail,
+        //         title: (typeof data[i].name !== 'undefined') ? data[i].name : data[i].title,
+        //         link: data[i].url.web
+        //     });
+        // }
         return htmlData;
     }
 
@@ -848,15 +880,26 @@ var EntekhabeFarsang = function () {
         if (typeof data === 'undefined') {
             return '';
         }
-        var dataLength = data.length,
-            htmlData = '';
-        for (var i = 0; i < dataLength; i++) {
+
+        var htmlData = '';
+        for (let key in data){
             htmlData += createPamphletItem({
-                section: (typeof data[i].section !== 'undefined') ? data[i].section : {id: '', name: ''},
-                title: (typeof data[i].title !== 'undefined') ? data[i].title : data[i].name,
-                link: data[i].file.pamphlet[0].link
+                section: (typeof data[key].section !== 'undefined' && data[key].section !== null) ? data[key].section : {id: '', name: ''},
+                title: (typeof data[key].title !== 'undefined') ? data[key].title : data[key].name,
+                link: (typeof data[key].file !== 'undefined' && data[key].file !== null) ? data[key].file.pamphlet[0].link : '#'
             });
+
         }
+
+        // var dataLength = data.length,
+        //     htmlData = '';
+        // for (var i = 0; i < dataLength; i++) {
+        //     htmlData += createPamphletItem({
+        //         section: (typeof data[i].section !== 'undefined') ? data[i].section : {id: '', name: ''},
+        //         title: (typeof data[i].title !== 'undefined') ? data[i].title : data[i].name,
+        //         link: data[i].file.pamphlet[0].link
+        //     });
+        // }
         return htmlData;
     }
 
@@ -901,8 +944,13 @@ var EntekhabeFarsang = function () {
     }
 
     function setBtnMoreLink(link) {
-        setBtnMoreVideoLink(link);
-        setBtnMorePamphletLink(link);
+        setBtnMoreContentsLink(link);
+        // setBtnMoreVideoLink(link);
+        // setBtnMorePamphletLink(link);
+    }
+
+    function setBtnMoreContentsLink(link) {
+        getBtnMoreContents().parents('a').attr('href', link);
     }
 
     function setBtnMoreVideoLink(link) {
@@ -921,9 +969,9 @@ var EntekhabeFarsang = function () {
     }
 
     function setLists(data) {
-        setVideoList(createVideoList(data.videos));
+        setVideoList(createVideoList(data.videos.data));
         setVideoTooltip();
-        setPamphletList(createPamphletList(data.pamphlets));
+        setPamphletList(createPamphletList(data.pamphlets.data));
     }
 
     function setVideoList(html) {
@@ -948,6 +996,10 @@ var EntekhabeFarsang = function () {
 
     function setVideoMessage(html) {
         $('.showVideoMessage').html(html);
+    }
+
+    function getBtnMoreContents() {
+        return $('.btnShowMoreContents');
     }
 
     function getBtnMoreVideo() {
@@ -1010,8 +1062,8 @@ var EntekhabeFarsang = function () {
             sections = [],
             totalSectionList = getTotalSectionList();
 
-        checkSections(data.pamphlets, totalSectionList);
-        checkSections(data.videos, totalSectionList);
+        checkSections(data.pamphlets.data, totalSectionList);
+        checkSections(data.videos.data, totalSectionList);
 
         return totalSectionList;
     }
@@ -1020,12 +1072,19 @@ var EntekhabeFarsang = function () {
         if (typeof data === 'undefined') {
             return;
         }
-        var dataLength = data.length;
-        for (var i = 0; i < dataLength; i++) {
-            if (typeof data[i].section !== 'undefined') {
-                checkInTotalSectionList(data[i].section, totalSectionList);
+
+        for (let key in data){
+            if (typeof data[key].section !== 'undefined' && data[key].section !== null) {
+                checkInTotalSectionList(data[key].section, totalSectionList);
             }
         }
+
+        // var dataLength = data.length;
+        // for (var i = 0; i < dataLength; i++) {
+        //     if (typeof data[i].section !== 'undefined') {
+        //         checkInTotalSectionList(data[i].section, totalSectionList);
+        //     }
+        // }
     }
 
     function checkInTotalSectionList(itemSection, totalSectionList) {
@@ -1088,7 +1147,62 @@ var EntekhabeFarsang = function () {
             var sectionId = $(this).attr('data-section-id');
             showSection(sectionId);
         });
+        $(document).on('click', '.farsangStepProgressBar-step', function () {
+            var setId = $(this).attr('data-content-id');
+            showFarsangFromServer(setId);
+        });
     }
+
+    function farsangStepUpdate(setId) {
+
+        var farsangLength = 10,
+            farsangSteps = MapSVG.getFarsangSteps(),
+            farsangStepProgressBarHtml = '';
+
+        for (var i = 0; i < farsangLength; i++) {
+            var itemIcon = '<i class="fa fa-ban"></i>',
+                tooltipName = 'فرسنگ ' + getOmArray(i),
+                orginalSetId = (typeof farsangSteps[i] !== 'undefined') ? farsangSteps[i].setId : null,
+                dataContentId = 'data-content-id="'+orginalSetId+'"';
+
+            if (orginalSetId !== null && orginalSetId === setId) {
+                tooltipName += ' (انخاب شما)';
+                itemIcon = '<i class="fa fa-check-circle"></i>';
+            } else if (orginalSetId !== null) {
+                itemIcon = '<i class="fa fa-circle"></i>';
+            } else {
+                tooltipName += ' (منتشر نشده)';
+            }
+            farsangStepProgressBarHtml += '<div class="farsangStepProgressBar-step" '+dataContentId+' data-toggle="m-tooltip" data-placement="top" data-original-title="'+tooltipName+'">'+itemIcon+'</div>';
+        }
+        $('.farsangStepProgressBar').html(farsangStepProgressBarHtml);
+        $('[data-toggle="m-tooltip"]').tooltip();
+    }
+
+    function getOmArray(index) {
+        if (index === 0) {
+            return 'اول';
+        } else if (index === 1) {
+            return 'دوم';
+        } else  if (index === 2) {
+            return 'سوم';
+        } else  if (index === 3) {
+            return 'چهارم';
+        } else  if (index === 4) {
+            return 'پنجم';
+        } else  if (index === 5) {
+            return 'ششم';
+        } else  if (index === 6) {
+            return 'هفتم';
+        } else  if (index === 7) {
+            return 'هشتم';
+        } else  if (index === 8) {
+            return 'نهم';
+        } else  if (index === 9) {
+            return 'دهم';
+        }
+    }
+
 
     return {
         init: function (data) {
@@ -1176,12 +1290,12 @@ var InitAbrishamPage = function () {
     }
 
     return {
-        init: function (LastSetData) {
+        init: function (lastSetData, allSetsOfRaheAbrisham) {
 
             initRepurchaseRowAndHelpMessageRow();
-            EntekhabeFarsang.init(LastSetData);
+            EntekhabeFarsang.init(lastSetData);
             makePageBoxedForLargScreen();
-            MapSVG.init();
+            MapSVG.init(allSetsOfRaheAbrisham);
             initCustomDropDown();
             initScrollCarousel();
             initLiveDescription();
@@ -1193,8 +1307,8 @@ var InitAbrishamPage = function () {
 
 jQuery(document).ready(function () {
 
-    if (typeof LastSetData !== 'undefined') {
-        InitAbrishamPage.init(LastSetData);
+    if (typeof lastSetData !== 'undefined') {
+        InitAbrishamPage.init(lastSetData, allSetsOfRaheAbrisham);
     }
 
     // function renderNested(template_string, translate) {

@@ -10,10 +10,6 @@
                     'isFavored' => $isFavored
                 ])
 
-{{--                <i class="fa fa-ban"></i>--}}
-{{--                <i class="fa fa-check-circle"></i>--}}
-{{--                <i class="fa fa-circle"></i>--}}
-
                 <!--begin::Section-->
                 <div class="m-section m-section--last">
                     <div class="m-section__content">
