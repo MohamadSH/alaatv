@@ -303,6 +303,19 @@
     transform-origin: left;
 }
 
+.farsangStepProgressBar {
+    display: flex;
+    flex-flow: row;
+    justify-content: center;
+    margin-top: 10px;
+}
+.farsangStepProgressBar .farsangStepProgressBar-step {
+    padding: 0 10px;
+}
+.farsangStepProgressBar .farsangStepProgressBar-step .fa {
+    font-size: 1.8rem;
+    cursor: pointer;
+}
 @media (max-width: 767px) {
     .entekhabeFarsangVideoAndPamphlet:before {
         left: 50%;
@@ -315,6 +328,9 @@
     }
     .sectionFilterCol .sectionFilter-item {
         font-size: 0.8em;
+    }
+    .farsangStepProgressBar .farsangStepProgressBar-step {
+        padding: 0 1px;
     }
 }
 

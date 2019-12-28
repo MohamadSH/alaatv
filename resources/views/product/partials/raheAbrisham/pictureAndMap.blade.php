@@ -10,7 +10,6 @@
                     'isFavored' => $isFavored
                 ])
 
-
                 <!--begin::Section-->
                 <div class="m-section m-section--last">
                     <div class="m-section__content">
