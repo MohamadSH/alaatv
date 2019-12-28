@@ -14,7 +14,7 @@
 
         <div class="periodDescription compact">
 
-            {!! $periodDescription->first() !!}
+            {!! $periodDescription->first()->description !!}
 
 
             <span>
