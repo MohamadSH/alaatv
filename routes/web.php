@@ -1,7 +1,7 @@
 <?php
 
 
-use App\Http\Controllers\FaqController;
+use App\Http\Controllers\Web\FaqController;
 use App\Http\Controllers\Web\AdminController;
 use App\Http\Controllers\Web\BotsController;
 use App\Http\Controllers\Web\ConsultationController;
