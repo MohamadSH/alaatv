@@ -36,10 +36,6 @@ var MapSVG = function () {
                 contentId: 665,
                 tooltipName: 'بار انداز'
             },
-            'Gift-Godar': {
-                contentId: 747,
-                tooltipName: 'گدار'
-            },
             'Pile': {
                 contentId: 604,
                 tooltipName: 'پیله'
@@ -223,6 +219,10 @@ var MapSVG = function () {
                 contentId: mapStepLevel1['farsang-step-5'].contentId,
                 sectionId: 1,
                 tooltipName: 'تابلو راهنما'
+            },
+            'Gift-Godar': {
+                contentId: 747,
+                tooltipName: 'گدار'
             },
 
             'farsang-step-6-Pish-Azmoon': {
@@ -514,7 +514,7 @@ var MapSVG = function () {
 
     function getZoomLevel() {
         // if (panzoom.getScale() > 1.7) {
-        if ( $('#farsang-step-5')[0].getBoundingClientRect().width > 100) {
+        if ( $('#farsang-step-1')[0].getBoundingClientRect().width > 100) {
             return 2;
         } else {
             return 1;
@@ -558,8 +558,6 @@ var MapSVG = function () {
         var farsangMapHeight = getFarsangMapHeight(),
             heightOfMapOnInit = getHeightOfMapOnInit(),
             zoom = farsangMapHeight/heightOfMapOnInit;
-        console.log('screen.width', screen.width);
-        console.log('fwidth', $('#farsang-step-5')[0].getBoundingClientRect().width);
         return zoom;
     }
 
@@ -912,10 +910,10 @@ var EntekhabeFarsang = function () {
     }
 
     function setVideoTooltip() {
-        $('#m_tabs_video .ScrollCarousel .ScrollCarousel-Items .item img').each(function () {
-            $(this).parents('a').attr('data-toggle', 'm-tooltip').attr('data-placement', 'top').attr('data-original-title', $(this).attr('alt'));
-        });
-        $('#m_tabs_video .ScrollCarousel .ScrollCarousel-Items .item img a').tooltip();
+        // $('#m_tabs_video .ScrollCarousel .ScrollCarousel-Items .item img').each(function () {
+        //     $(this).parents('a').attr('data-toggle', 'm-tooltip').attr('data-placement', 'top').attr('data-original-title', $(this).attr('alt'));
+        // });
+        // $('#m_tabs_video .ScrollCarousel .ScrollCarousel-Items .item a').tooltip();
     }
 
     function setLists(data) {
