@@ -21,8 +21,12 @@
     <div class="col">
         <div class="m-portlet entekhabeFarsangVideoAndPamphlet">
             <div class="m-portlet__body">
-                <div class="closeBtn" onclick="$(this).parents('.row').fadeOut();">
-                    <i class="fa fa-times"></i>
+                <div class="closeBtn">
+                    <a href="#" data-toggle="m-tooltip" data-placement="top" data-original-title="مشاهده تمام فیلم ها و جزوات" >
+                        <button type="button" class="btn m-btn--pill btn-outline-danger btnShowMoreContents">
+                            <i class="fa fa-reply"></i>
+                        </button>
+                    </a>
                 </div>
                 <div class="sectionFilterCol">
                     <div class="sectionFilter-item">تابلو راهنما</div>
@@ -69,11 +73,8 @@
 
                         </div>
                         <div class="text-center showVideoMessage"></div>
-                        <div class="text-center m--margin-top-10">
-                            <a href="#">
-                                <button type="button" class="btn m-btn--pill btn-outline-danger btnShowMoreVideo">مشاهده تمام فیلم ها</button>
-                            </a>
-                        </div>
+                        <div class="farsangStepProgressBar"></div>
+
                     </div>
                     <div class="tab-pane" id="m_tabs_pamphlet" role="tabpanel">
                         <div class="ScrollCarousel">
@@ -116,11 +117,12 @@
 
                         </div>
                         <div class="text-center showPamphletMessage"></div>
-                        <div class="text-center m--margin-top-10">
-                            <a href="#">
-                                <button type="button" class="btn m-btn--pill btn-outline-danger btnShowMorePamphlet">مشاهده تمام جزوات</button>
-                            </a>
-                        </div>
+{{--                        <div class="text-center m--margin-top-10">--}}
+{{--                            <a href="#">--}}
+{{--                                <button type="button" class="btn m-btn--pill btn-outline-danger btnShowMorePamphlet">مشاهده تمام جزوات</button>--}}
+{{--                            </a>--}}
+{{--                        </div>--}}
+                        <div class="farsangStepProgressBar"></div>
                     </div>
                 </div>
             </div>
