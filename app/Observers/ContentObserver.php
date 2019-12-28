@@ -2,7 +2,6 @@
 
 namespace App\Observers;
 
-use App\Classes\SatraSyncer;
 use App\Classes\Search\TaggingInterface;
 use App\Content;
 use App\Events\ContentRedirected;
@@ -24,7 +23,7 @@ class ContentObserver
     /**
      * Handle the content "created" event.
      *
-     * @param  \App\Content  $content
+     * @param Content $content
      *
      * @return void
      */
@@ -36,7 +35,7 @@ class ContentObserver
     /**
      * Handle the content "updated" event.
      *
-     * @param  \App\Content  $content
+     * @param Content $content
      *
      * @return void
      */
@@ -48,7 +47,7 @@ class ContentObserver
     /**
      * Handle the content "deleted" event.
      *
-     * @param  \App\Content  $content
+     * @param Content $content
      *
      * @return void
      */
@@ -60,7 +59,7 @@ class ContentObserver
     /**
      * Handle the content "restored" event.
      *
-     * @param  \App\Content  $content
+     * @param Content $content
      *
      * @return void
      */
@@ -72,7 +71,7 @@ class ContentObserver
     /**
      * Handle the content "force deleted" event.
      *
-     * @param  \App\Content  $content
+     * @param Content $content
      *
      * @return void
      */
@@ -86,7 +85,7 @@ class ContentObserver
      * the saved and updated model events will not be fired for the updated models.
      * This is because the models are never actually retrieved when issuing a mass update.
      *
-     * @param  Content  $content
+     * @param Content $content
      */
     public function saving(Content $content)
     {
@@ -101,27 +100,29 @@ class ContentObserver
     private function findTemplateIdOfaContent($content)
     {
         return [
-                   Content::CONTENT_TYPE_PAMPHLET => Content::CONTENT_TEMPLATE_PAMPHLET,
-                   Content::CONTENT_TYPE_EXAM     => Content::CONTENT_TEMPLATE_EXAM,
-                   Content::CONTENT_TYPE_VIDEO    => Content::CONTENT_TEMPLATE_VIDEO,
-                   Content::CONTENT_TYPE_ARTICLE    => Content::CONTENT_TEMPLATE_ARTICLE,
-               ][$content->contenttype_id] ?? null;
+                Content::CONTENT_TYPE_PAMPHLET => Content::CONTENT_TEMPLATE_PAMPHLET,
+                Content::CONTENT_TYPE_EXAM     => Content::CONTENT_TEMPLATE_EXAM,
+                Content::CONTENT_TYPE_VIDEO    => Content::CONTENT_TEMPLATE_VIDEO,
+                Content::CONTENT_TYPE_ARTICLE  => Content::CONTENT_TEMPLATE_ARTICLE,
+            ][$content->contenttype_id] ?? null;
     }
 
     public function saved(Content $content)
     {
-        if(isset($content->redirectUrl)){
-            if($content->isFree && auth()->check() && auth()->user()->can(config('constants.REMOVE_EDUCATIONAL_CONTENT_FILE_ACCESS'))){
+        if (isset($content->redirectUrl)) {
+            if ($content->isFree && auth()->check() && auth()->user()->can(config('constants.REMOVE_EDUCATIONAL_CONTENT_FILE_ACCESS'))) {
                 event(new ContentRedirected($content));
             }
             $this->removeTagsOfTaggable($content, $this->tagging);
-        }else{
+        } else {
             $this->sendTagsOfTaggableToApi($content, $this->tagging);
         }
 
-        Cache::tags(['content_'.$content->id ,
-                    'set_'.$content->contentset_id.'_contents' ,
-                    'set_'.$content->contentset_id.'_setMates' ,
-                    'content_search' ])->flush();
+        Cache::tags([
+            'content_' . $content->id,
+            'set_' . $content->contentset_id . '_contents',
+            'set_' . $content->contentset_id . '_setMates',
+            'content_search',
+        ])->flush();
     }
 }

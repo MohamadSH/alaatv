@@ -22,13 +22,13 @@ class CheckPermissionForSendExtraAttributesCost
     /**
      * OrderCheck constructor.
      *
-     * @param Request $request
+     * @param Request         $request
      * @param OrderController $controller
      */
     public function __construct(Request $request, OrderController $controller)
     {
         $this->orderController = $controller;
-        $this->user = $request->user();
+        $this->user            = $request->user();
     }
 
     /**
@@ -36,22 +36,22 @@ class CheckPermissionForSendExtraAttributesCost
      *
      * @param Request $request
      * @param Closure $next
-     * @param null $guard
+     * @param null    $guard
      *
      * @return mixed
      */
     public function handle(Request $request, Closure $next, $guard = null)
     {
-        if (! Auth::guard($guard)->check()) {
+        if (!Auth::guard($guard)->check()) {
             return response()->json(['error' => 'Unauthenticated',], Response::HTTP_UNAUTHORIZED);
         }
 
-        if (! $request->has('extraAttribute') || $this->user->can(config("constants.ATTACH_EXTRA_ATTRIBUTE_ACCESS"))) {
+        if (!$request->has('extraAttribute') || $this->user->can(config("constants.ATTACH_EXTRA_ATTRIBUTE_ACCESS"))) {
             return $next($request);
         }
 
-        $productId = $request->get('product_id');
-        $product = Product::findOrFail($productId);
+        $productId        = $request->get('product_id');
+        $product          = Product::findOrFail($productId);
         $attributesValues = $this->getAttributesValuesFromProduct($request, $product);
         $this->syncExtraAttributesCost($request, $attributesValues);
         $request->offsetSet('parentProduct', $product);
@@ -67,15 +67,15 @@ class CheckPermissionForSendExtraAttributesCost
      */
     private function getAttributesValuesFromProduct(Request $request, Product $product): ?Collection
     {
-        $extraAttributes = $request->get('extraAttribute');
+        $extraAttributes   = $request->get('extraAttribute');
         $extraAttributesId = array_column($extraAttributes, 'id');
-        $attributesValues = $product->getAttributesValueByIds($extraAttributesId);
+        $attributesValues  = $product->getAttributesValueByIds($extraAttributesId);
 
         return $attributesValues;
     }
 
     /**
-     * @param Request $request
+     * @param Request    $request
      * @param Collection $attributesValues
      */
     public function syncExtraAttributesCost(Request $request, Collection $attributesValues)
@@ -84,7 +84,7 @@ class CheckPermissionForSendExtraAttributesCost
         foreach ($attributesValues as $key => $attributesValue) {
             foreach ($extraAttributes as $key1 => $extraAttribute) {
                 if ($extraAttribute['id'] == $attributesValue['id']) {
-                    $extraAttributes[$key1]['cost'] = $attributesValue->pivot->extraCost;
+                    $extraAttributes[$key1]['cost']   = $attributesValue->pivot->extraCost;
                     $extraAttributes[$key1]['object'] = $attributesValue;
                 }
             }

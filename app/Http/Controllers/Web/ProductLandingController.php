@@ -6,14 +6,16 @@ use App\Attribute;
 use App\Block;
 use App\Classes\SEO\SeoDummyTags;
 use App\Collection\BlockCollection;
+use App\Http\Controllers\Controller;
 use App\Product;
 use App\Traits\MetaCommon;
 use App\Traits\ProductCommon;
 use App\Websitesetting;
+use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\View\View;
 use SEO;
 
 class ProductLandingController extends Controller
@@ -25,14 +27,14 @@ class ProductLandingController extends Controller
 
     public function __construct(Websitesetting $setting)
     {
-        $this->setting  = $setting->setting;
+        $this->setting = $setting->setting;
     }
 
 
     /**
      * Products Special Landing Page
      *
-     * @param  Request  $request
+     * @param Request $request
      *
      * @return Response
      */
@@ -85,7 +87,7 @@ class ProductLandingController extends Controller
     /**
      * Products Special Landing Page
      *
-     * @param  Request  $request
+     * @param Request $request
      *
      * @return Response
      */
@@ -128,7 +130,7 @@ class ProductLandingController extends Controller
     /**
      * Products Special Landing Page
      *
-     * @param  Request  $request
+     * @param Request $request
      *
      * @return Response
      */
@@ -152,7 +154,7 @@ class ProductLandingController extends Controller
     /**
      * Products Special Landing Page
      *
-     * @param  Request  $request
+     * @param Request $request
      *
      * @return Response
      */
@@ -176,7 +178,7 @@ class ProductLandingController extends Controller
     /**
      * Products Special Landing Page
      *
-     * @param  Request  $request
+     * @param Request $request
      *
      * @return Response
      */
@@ -284,7 +286,7 @@ class ProductLandingController extends Controller
                 'type'              => $reshteIdArray[$value->id],
                 'price'             => $value->price,
                 'priceWithDiscount' => $priceWithDiscount,
-                'image'             => $value->photo.'?w=350&h=350',
+                'image'             => $value->photo . '?w=350&h=350',
                 'name'              => $value->name,
                 'link'              => action('Web\ProductController@show', $value->id)
                 //                'link'              => null,
@@ -299,7 +301,7 @@ class ProductLandingController extends Controller
     /**
      * Products Special Landing Page
      *
-     * @param  Request  $request
+     * @param Request $request
      *
      * @return Response
      */
@@ -365,7 +367,7 @@ class ProductLandingController extends Controller
     /**
      * Products Special Landing Page
      *
-     * @param  Request  $request
+     * @param Request $request
      *
      * @return Response
      */
@@ -397,7 +399,7 @@ class ProductLandingController extends Controller
     /**
      * Products Special Landing Page
      *
-     * @param  Request  $request
+     * @param Request $request
      *
      * @return Response
      */
@@ -425,69 +427,69 @@ class ProductLandingController extends Controller
             326,
             328,
             342,
-            294
+            294,
         ];
 
         $productHoures = [
             294 => [
-                'name' => 'الماس عربی',
-                'url' => action('Web\ProductController@show', 294),
-                'hours' => 2
+                'name'  => 'الماس عربی',
+                'url'   => action('Web\ProductController@show', 294),
+                'hours' => 2,
             ],
             298 => [
-                'name' => 'همایش عربی',
-                'url' => action('Web\ProductController@show', 298),
-                'hours' => 5
+                'name'  => 'همایش عربی',
+                'url'   => action('Web\ProductController@show', 298),
+                'hours' => 5,
             ],
             342 => [
-                'name' => 'همایش ادبیات',
-                'url' => action('Web\ProductController@show', 342),
-                'hours' => 10
+                'name'  => 'همایش ادبیات',
+                'url'   => action('Web\ProductController@show', 342),
+                'hours' => 10,
             ],
             302 => [
-                'name' => 'همایش دین و زندگی',
-                'url' => action('Web\ProductController@show', 302),
-                'hours' => 12
+                'name'  => 'همایش دین و زندگی',
+                'url'   => action('Web\ProductController@show', 302),
+                'hours' => 12,
             ],
             308 => [
-                'name' => 'همایش زبان انگلیسی',
-                'url' => action('Web\ProductController@show', 308),
-                'hours' => 12
+                'name'  => 'همایش زبان انگلیسی',
+                'url'   => action('Web\ProductController@show', 308),
+                'hours' => 12,
             ],
             326 => [
-                'name' => 'همایش زیست',
-                'url' => action('Web\ProductController@show', 326),
-                'hours' => 23
+                'name'  => 'همایش زیست',
+                'url'   => action('Web\ProductController@show', 326),
+                'hours' => 23,
             ],
             318 => [
-                'name' => 'همایش 45 تست کنکور ریاضی',
-                'url' => action('Web\ProductController@show', 318),
-                'hours' => 30
+                'name'  => 'همایش 45 تست کنکور ریاضی',
+                'url'   => action('Web\ProductController@show', 318),
+                'hours' => 30,
             ],
             328 => [
-                'name' => 'همایش ریاضی تجربی(آقای نباخته)',
-                'url' => action('Web\ProductController@show', 328),
-                'hours' => 11
+                'name'  => 'همایش ریاضی تجربی(آقای نباخته)',
+                'url'   => action('Web\ProductController@show', 328),
+                'hours' => 11,
             ],
             316 => [
-                'name' => 'همایش ریاضی تجربی(آقای امینی)',
-                'url' => action('Web\ProductController@show', 316),
-                'hours' => 15
+                'name'  => 'همایش ریاضی تجربی(آقای امینی)',
+                'url'   => action('Web\ProductController@show', 316),
+                'hours' => 15,
             ],
             322 => [
-                'name' => 'همایش ریاضی تجربی(آقای ثابتی)',
-                'url' => action('Web\ProductController@show', 322),
-                'hours' => 18
+                'name'  => 'همایش ریاضی تجربی(آقای ثابتی)',
+                'url'   => action('Web\ProductController@show', 322),
+                'hours' => 18,
             ],
             306 => [
-                'name' => 'همایش فیزیک',
-                'url' => action('Web\ProductController@show', 306),
-                'hours' => 16
+                'name'  => 'همایش فیزیک',
+                'url'   => action('Web\ProductController@show', 306),
+                'hours' => 16,
             ],
             312 => [
-                'name' => 'همایش شیمی',
-                'url' => action('Web\ProductController@show', 312),
-                'hours' => 18
+                'name'  => 'همایش شیمی',
+                'url'   => action('Web\ProductController@show', 312),
+                'hours' => 18,
             ],
         ];
 
@@ -531,7 +533,7 @@ class ProductLandingController extends Controller
     /**
      * Products Special Landing Page
      *
-     * @param  Request  $request
+     * @param Request $request
      *
      * @return Response
      */
@@ -564,7 +566,7 @@ class ProductLandingController extends Controller
      *
      * @param Request $request
      *
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @return Factory|View
      */
     public function landing10(Request $request)
     {
@@ -592,49 +594,49 @@ class ProductLandingController extends Controller
 
         $productHoures = [
             373 => [
-                'name' => 'همایش فیزیک گدار',
-                'url' => route('product.show' , 373),
-                'hours' => 11
+                'name'  => 'همایش فیزیک گدار',
+                'url'   => route('product.show', 373),
+                'hours' => 11,
             ],
             381 => [
-                'name' => 'همایش هندسه گدار',
-                'url' => route('product.show' , 381),
-                'hours' => 8
+                'name'  => 'همایش هندسه گدار',
+                'url'   => route('product.show', 381),
+                'hours' => 8,
             ],
             375 => [
-                'name' => 'همایش ریاضی انسانی گدار',
-                'url' => route('product.show' , 375),
-                'hours' => 6
+                'name'  => 'همایش ریاضی انسانی گدار',
+                'url'   => route('product.show', 375),
+                'hours' => 6,
             ],
             377 => [
-                'name' => 'همایش ریاضی تجربی گدار',
-                'url' => route('product.show' , 377),
-                'hours' => 10
+                'name'  => 'همایش ریاضی تجربی گدار',
+                'url'   => route('product.show', 377),
+                'hours' => 10,
             ],
             379 => [
-                'name' => 'همایش گسسته گدار',
-                'url' => route('product.show' , 379),
-                'hours' => 14
+                'name'  => 'همایش گسسته گدار',
+                'url'   => route('product.show', 379),
+                'hours' => 14,
             ],
             387 => [
-                'name' => 'همایش شیمی گدار',
-                'url' => route('product.show' , 387),
-                'hours' => 14
+                'name'  => 'همایش شیمی گدار',
+                'url'   => route('product.show', 387),
+                'hours' => 14,
             ],
             389 => [
-                'name' => 'همایش زیست شناسی گدار',
-                'url' => route('product.show' , 389),
-                'hours' => 18
+                'name'  => 'همایش زیست شناسی گدار',
+                'url'   => route('product.show', 389),
+                'hours' => 18,
             ],
             383 => [
-                'name' => 'همایش حسابان گدار',
-                'url' => route('product.show' , 383),
-                'hours' => 11
+                'name'  => 'همایش حسابان گدار',
+                'url'   => route('product.show', 383),
+                'hours' => 11,
             ],
             385 => [
-                'name' => 'همایش ریاضی تجربی گدار (ویژه راه ابریشم)',
-                'url' => route('product.show' , 385),
-                'hours' => 7
+                'name'  => 'همایش ریاضی تجربی گدار (ویژه راه ابریشم)',
+                'url'   => route('product.show', 385),
+                'hours' => 7,
             ],
         ];
 

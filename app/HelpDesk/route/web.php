@@ -2,6 +2,7 @@
 
 use App\HelpDesk\Controllers\TicketController;
 use App\HelpDesk\Controllers\Web\CommentsController;
+use Illuminate\Routing\Events\RouteMatched;
 
 Route::group(['middleware' => ['web', 'auth'], 'prefix' => 'h'], function () {
 
@@ -12,6 +13,6 @@ Route::group(['middleware' => ['web', 'auth'], 'prefix' => 'h'], function () {
     Route::post('t/{ticket_id}/add-comment', [CommentsController::class, 'addComment'])->name('ticket.addComment');
     Route::post('t/{ticket_id}/change-agent', [CommentsController::class, 'changeAgent'])->name('ticket.changeAgent');
 });
-\Event::listen(\Illuminate\Routing\Events\RouteMatched::class, function($t){
+Event::listen(RouteMatched::class, function ($t) {
 //    dd($t->route->getName());
 });

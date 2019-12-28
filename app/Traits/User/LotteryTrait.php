@@ -24,7 +24,7 @@ trait LotteryTrait
         $lottery         = null;
         $lotteryMessage  = "";
         $lotteryName     = "";
-        
+
         $now        = Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now());
         $startTime2 = Carbon::create(2018, 06, 15, 07, 00, 00, 'Asia/Tehran');
         $endTime2   = Carbon::create(2018, 06, 15, 23, 59, 30, 'Asia/Tehran');
@@ -48,16 +48,16 @@ trait LotteryTrait
                         ->first();
                     if (isset($userLottery)) {
                         $lotteryName    = $lottery->displayName;
-                        $lotteryMessage = "شما در قرعه کشی ".$lotteryName." شرکت داده شدید و متاسفانه برنده نشدید.";
+                        $lotteryMessage = "شما در قرعه کشی " . $lotteryName . " شرکت داده شدید و متاسفانه برنده نشدید.";
                         if (isset($userLottery->pivot->prizes)) {
                             $lotteryRank = $userLottery->pivot->rank;
                             if ($lotteryRank == 0) {
-                                $lotteryMessage = "شما از قرعه کشی ".$lotteryName." انصراف دادید.";
+                                $lotteryMessage = "شما از قرعه کشی " . $lotteryName . " انصراف دادید.";
+                            } else {
+                                $lotteryMessage =
+                                    "شما در قرعه کشی " . $lotteryName . " برنده " . $lotteryRank . " شدید.";
                             }
-                            else {
-                                $lotteryMessage = "شما در قرعه کشی ".$lotteryName." برنده ".$lotteryRank." شدید.";
-                            }
-                            
+
                             $prizes          = json_decode($userLottery->pivot->prizes)->items;
                             $prizeCollection = collect();
                             foreach ($prizes as $prize) {
@@ -66,10 +66,9 @@ trait LotteryTrait
                                     $model_name = $prize->objectType;
                                     $model      = new $model_name;
                                     $model->find($id);
-                                    
+
                                     $prizeCollection->push(["name" => $prize->name]);
-                                }
-                                else {
+                                } else {
                                     $prizeCollection->push(["name" => $prize->name]);
                                 }
                             }
@@ -78,7 +77,7 @@ trait LotteryTrait
                 }
             }
         }
-        
+
         return [
             $exchangeAmount,
             $userPoints,
@@ -90,7 +89,7 @@ trait LotteryTrait
             $lotteryName,
         ];
     }
-    
+
     public function lotteries()
     {
         return $this->belongsToMany("\App\Lottery")

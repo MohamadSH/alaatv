@@ -3,25 +3,26 @@
 namespace App\Http\Controllers\Web;
 
 use App\Coupon;
-use App\Product;
-use Carbon\Carbon;
 use App\Coupontype;
-use Illuminate\Http\Response;
-use App\Http\Requests\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\EditCouponRequest;
 use App\Http\Requests\InsertCouponRequest;
+use App\Http\Requests\Request;
+use App\Product;
+use Carbon\Carbon;
+use Exception;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\Response;
 
 class CouponController extends Controller
 {
 
     public function __construct()
     {
-        $this->middleware('permission:'.config('constants.LIST_COUPON_ACCESS'), ['only' => 'index']);
-        $this->middleware('permission:'.config('constants.INSERT_COUPON_ACCESS'), ['only' => 'create', 'store', 'generateRandomCoupon']);
-        $this->middleware('permission:'.config('constants.REMOVE_COUPON_ACCESS'), ['only' => 'destroy']);
-        $this->middleware('permission:'.config('constants.SHOW_COUPON_ACCESS'), ['only' => 'edit']);
+        $this->middleware('permission:' . config('constants.LIST_COUPON_ACCESS'), ['only' => 'index']);
+        $this->middleware('permission:' . config('constants.INSERT_COUPON_ACCESS'), ['only' => 'create', 'store', 'generateRandomCoupon']);
+        $this->middleware('permission:' . config('constants.REMOVE_COUPON_ACCESS'), ['only' => 'destroy']);
+        $this->middleware('permission:' . config('constants.SHOW_COUPON_ACCESS'), ['only' => 'edit']);
     }
 
     public function index()
@@ -101,6 +102,36 @@ class CouponController extends Controller
         return redirect()->back();
     }
 
+    private function setValidSince(FormRequest $request)
+    {
+        if (!$request->has('validSinceEnable') || !$request->has('validSince') || strlen($request->get('validSince')) <= 0) {
+            return null;
+        }
+
+        $validSince = Carbon::parse($request->get('validSince'))
+            ->format('Y-m-d');
+        $sinceTime  = $request->get('sinceTime');
+        $sinceTime  = $sinceTime != '' ? Carbon::parse($sinceTime)
+            ->format('H:i:s') : '00:00:00';
+
+        return $validSince . ' ' . $sinceTime;
+    }
+
+    private function getValidUntil(FormRequest $request)
+    {
+        if (!$request->has('validUntilEnable') || !$request->has('validUntil') || strlen($request->get('validUntil')) <= 0) {
+            return null;
+        }
+
+        $validUntil = Carbon::parse($request->get('validUntil'))
+            ->format('Y-m-d');
+        $untilTime  = $request->get('untilTime');
+        $untilTime  = $untilTime != '' ? Carbon::parse($untilTime)
+            ->format('H:i:s') : '00:00:00';
+
+        return $validUntil . ' ' . $untilTime;
+    }
+
     public function destroy($coupon)
     {
         $coupon->delete();
@@ -111,7 +142,7 @@ class CouponController extends Controller
     /**
      * This method was made temporarily for a period of time in Dey 1398
      *
-     * @param  Request  $request
+     * @param Request $request
      *
      * @return Response
      */
@@ -148,10 +179,10 @@ class CouponController extends Controller
                 }
             }
 
-            $storeCouponRequest = new \App\Http\Requests\InsertCouponRequest();
+            $storeCouponRequest = new InsertCouponRequest();
             $storeCouponRequest->merge($request->all());
             return $this->store($storeCouponRequest);
-        } catch (\Exception    $e) {
+        } catch (Exception    $e) {
             return response()->json([
                 'message' => 'unexpected error',
                 'error'   => $e->getMessage(),
@@ -197,35 +228,5 @@ class CouponController extends Controller
             'id'      => $coupon->id,
             'code'    => $coupon->code,
         ]);
-    }
-
-    private function getValidUntil(FormRequest $request)
-    {
-        if (!$request->has('validUntilEnable') || !$request->has('validUntil') || strlen($request->get('validUntil')) <= 0) {
-            return null;
-        }
-
-        $validUntil = Carbon::parse($request->get('validUntil'))
-            ->format('Y-m-d');
-        $untilTime  = $request->get('untilTime');
-        $untilTime  = $untilTime != '' ? Carbon::parse($untilTime)
-            ->format('H:i:s') : '00:00:00';
-
-        return $validUntil.' '.$untilTime;
-    }
-
-    private function setValidSince(FormRequest $request)
-    {
-        if (!$request->has('validSinceEnable') || !$request->has('validSince') || strlen($request->get('validSince')) <= 0) {
-            return null;
-        }
-
-        $validSince = Carbon::parse($request->get('validSince'))
-            ->format('Y-m-d');
-        $sinceTime  = $request->get('sinceTime');
-        $sinceTime  = $sinceTime != '' ? Carbon::parse($sinceTime)
-            ->format('H:i:s') : '00:00:00';
-
-        return $validSince.' '.$sinceTime;
     }
 }

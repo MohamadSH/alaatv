@@ -25,7 +25,7 @@ class Wallettype extends AlaaJsonResource
         }
 
         return [
-            'name'   => $this->displayName,
+            'name' => $this->displayName,
         ];
     }
 }

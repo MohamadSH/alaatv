@@ -34,8 +34,7 @@ use App\{Afterloginformcontrol,
     Transactiongateway,
     User,
     Userstatus,
-    Websitesetting
-};
+    Websitesetting};
 use App\Http\Controllers\Controller;
 use Carbon\Carbon;
 use Exception;
@@ -49,8 +48,7 @@ use Illuminate\{Contracts\Filesystem\FileNotFoundException,
     Support\Facades\Cache,
     Support\Facades\DB,
     Support\Facades\View,
-    Validation\ValidationException
-};
+    Validation\ValidationException};
 use Jenssegers\Agent\Agent;
 use Kalnoy\Nestedset\QueryBuilder;
 use stdClass;
@@ -74,13 +72,36 @@ class UserController extends Controller
         $this->callMiddlewares($authException);
     }
 
+    /**
+     * @param Agent $agent
+     *
+     * @return array
+     */
+    private function getAuthExceptionArray(Agent $agent): array
+    {
+        return ['show', 'userProductFiles'];
+    }
+
+    /**
+     * @param array $authException
+     */
+    private function callMiddlewares(array $authException): void
+    {
+        $this->middleware('auth', ['except' => $authException]);
+        $this->middleware('permission:' . config('constants.LIST_USER_ACCESS') . '|' . config('constants.GET_BOOK_SELL_REPORT') . '|' . config('constants.GET_USER_REPORT'),
+            ['only' => 'index']);
+        $this->middleware('permission:' . config('constants.INSERT_USER_ACCESS'), ['only' => 'create']);
+        $this->middleware('permission:' . config('constants.REMOVE_USER_ACCESS'), ['only' => 'destroy']);
+        $this->middleware('permission:' . config('constants.SHOW_USER_ACCESS'), ['only' => 'edit']);
+    }
+
     public function index(UserIndexRequest $request)
     {
-        $products = [];
-        $lotteries = [];
-        $reportType   = null;
-        $hasPishtaz = [];
-        $orders = null;
+        $products    = [];
+        $lotteries   = [];
+        $reportType  = null;
+        $hasPishtaz  = [];
+        $orders      = null;
         $seePaidCost = null;
 
 
@@ -89,13 +110,12 @@ class UserController extends Controller
         $createdTillDate   = $request->get('createdTillDate');
         if (strlen($createdSinceDate) > 0 && strlen($createdTillDate) > 0 && isset($createdTimeEnable)) {
             $createdSinceDate = Carbon::parse($createdSinceDate)
-                    ->format('Y-m-d').' 00:00:00';
+                    ->format('Y-m-d') . ' 00:00:00';
             $createdTillDate  = Carbon::parse($createdTillDate)
-                    ->format('Y-m-d').' 23:59:59';
+                    ->format('Y-m-d') . ' 23:59:59';
             $users            = User::whereBetween('created_at', [$createdSinceDate, $createdTillDate])
                 ->orderBy('created_at', 'Desc');
-        }
-        else {
+        } else {
             $users = User::orderBy('created_at', 'Desc');
         }
 
@@ -109,22 +129,22 @@ class UserController extends Controller
         //filter by firstName, lastName, nationalCode, mobile
         $firstName = trim($request->get('firstName'));
         if (isset($firstName) && strlen($firstName) > 0) {
-            $users = $users->where('firstName', 'like', '%'.$firstName.'%');
+            $users = $users->where('firstName', 'like', '%' . $firstName . '%');
         }
 
         $lastName = trim($request->get('lastName'));
         if (isset($lastName) && strlen($lastName) > 0) {
-            $users = $users->where('lastName', 'like', '%'.$lastName.'%');
+            $users = $users->where('lastName', 'like', '%' . $lastName . '%');
         }
 
         $nationalCode = trim($request->get('nationalCode'));
         if (isset($nationalCode) && strlen($nationalCode) > 0) {
-            $users = $users->where('nationalCode', 'like', '%'.$nationalCode.'%');
+            $users = $users->where('nationalCode', 'like', '%' . $nationalCode . '%');
         }
 
         $mobile = trim($request->get('mobile'));
         if (isset($mobile) && strlen($mobile) > 0) {
-            $users = $users->where('mobile', 'like', '%'.$mobile.'%');
+            $users = $users->where('mobile', 'like', '%' . $mobile . '%');
         }
 
         //filter by role, major , coupon
@@ -152,8 +172,7 @@ class UserController extends Controller
                                 config('constants.ORDER_STATUS_OPEN_BY_ADMIN'),
                             ]);
                 });
-            }
-            else {
+            } else {
                 $users = $users->whereHas('orders', function ($q) use ($couponsId) {
                     $q->whereIn('coupon_id', $couponsId)
                         ->whereNotIn('orderstatus_id',
@@ -192,8 +211,7 @@ class UserController extends Controller
                         config('constants.ORDER_STATUS_PENDING'),
                     ]);
                 });
-            }
-            elseif (in_array(0, $productsId)) {
+            } else if (in_array(0, $productsId)) {
                 $users = $users->whereHas('orders', function ($query) {
                     $query->whereNotIn('orderstatus_id', [
                         config('constants.ORDER_STATUS_OPEN'),
@@ -203,8 +221,7 @@ class UserController extends Controller
                         config('constants.ORDER_STATUS_PENDING'),
                     ]);
                 });
-            }
-            elseif (isset($productsId)) {
+            } else if (isset($productsId)) {
                 $products = Product::whereIn('id', $productsId)
                     ->get();
                 foreach ($products as $product) {
@@ -228,16 +245,14 @@ class UserController extends Controller
                                 ->whereNull('checkoutstatus_id');
                         })
                             ->whereNotIn('orderstatus_id', [config('constants.ORDER_STATUS_OPEN')]);
-                    }
-                    else {
+                    } else {
                         $orders = Order::whereHas('orderproducts', function ($q) use ($productsId, $checkoutStatuses) {
                             $q->whereIn('product_id', $productsId)
                                 ->whereIn('checkoutstatus_id', $checkoutStatuses);
                         })
                             ->whereNotIn('orderstatus_id', [config('constants.ORDER_STATUS_OPEN')]);
                     }
-                }
-                else {
+                } else {
                     $orders = Order::whereHas('orderproducts', function ($q) use ($productsId) {
                         $q->whereIn('product_id', $productsId);
                     })
@@ -254,16 +269,14 @@ class UserController extends Controller
                 $users  = $users->whereIn('id', $orders->pluck('user_id')
                     ->toArray());
             }
-        }
-        elseif ($request->has('checkoutStatusEnable')) {
+        } else if ($request->has('checkoutStatusEnable')) {
             $checkoutStatuses = $request->get('checkoutStatuses');
             if (in_array(0, $checkoutStatuses)) {
                 $orders = Order::whereHas('orderproducts', function ($q) use ($productsId) {
                     $q->whereNull('checkoutstatus_id');
                 })
                     ->whereNotIn('orderstatus_id', [config('constants.ORDER_STATUS_OPEN')]);
-            }
-            else {
+            } else {
                 $orders = Order::whereHas('orderproducts', function ($q) use ($productsId, $checkoutStatuses) {
                     $q->whereIn('checkoutstatus_id', $checkoutStatuses);
                 })
@@ -283,8 +296,7 @@ class UserController extends Controller
 
             if (!isset($orders)) {
                 $orders = Order::all();
-            }
-            else {
+            } else {
                 $orders = Order::paymentStatusFilter($orders, $paymentStatusesId);
             }
             $users = $users->whereIn('id', $orders->pluck('user_id')
@@ -299,8 +311,7 @@ class UserController extends Controller
 //            });
             if (!isset($orders)) {
                 $orders = Order::all();
-            }
-            else {
+            } else {
                 $orders = Order::orderStatusFilter($orders, $orderStatusesId);
             }
             $users = $users->whereIn('id', $orders->pluck('user_id')
@@ -311,8 +322,7 @@ class UserController extends Controller
         if (isset($genderId) && strlen($genderId) > 0) {
             if ($genderId == 0) {
                 $users = $users->whereDoesntHave('gender');
-            }
-            else {
+            } else {
                 $users = $users->where('gender_id', $genderId);
             }
         }
@@ -339,11 +349,10 @@ class UserController extends Controller
                 $q->whereNull('postalCode')
                     ->orWhere('postalCode', '');
             });
-        }
-        else {
+        } else {
             $postalCode = $request->get('postalCode');
             if (isset($postalCode) && strlen($postalCode) > 0) {
-                $users = $users->where('postalCode', 'like', '%'.$postalCode.'%');
+                $users = $users->where('postalCode', 'like', '%' . $postalCode . '%');
             }
         }
 
@@ -353,11 +362,10 @@ class UserController extends Controller
                 $q->whereNull('province')
                     ->orWhere('province', '');
             });
-        }
-        else {
+        } else {
             $province = $request->get('province');
             if (isset($province) && strlen($province) > 0) {
-                $users = $users->where('province', 'like', '%'.$province.'%');
+                $users = $users->where('province', 'like', '%' . $province . '%');
             }
         }
 
@@ -367,11 +375,10 @@ class UserController extends Controller
                 $q->whereNull('city')
                     ->orWhere('city', '');
             });
-        }
-        else {
+        } else {
             $city = $request->get('city');
             if (isset($city) && strlen($city) > 0) {
-                $users = $users->where('city', 'like', '%'.$city.'%');
+                $users = $users->where('city', 'like', '%' . $city . '%');
             }
         }
 
@@ -393,7 +400,7 @@ class UserController extends Controller
                 case '0':
                     $address = $request->get('address');
                     if (isset($address) && strlen($address) > 0) {
-                        $users = $users->where('address', 'like', '%'.$address.'%');
+                        $users = $users->where('address', 'like', '%' . $address . '%');
                     }
                     break;
                 case '1':
@@ -411,11 +418,10 @@ class UserController extends Controller
                 default:
                     break;
             }
-        }
-        else {
+        } else {
             $address = $request->get('address');
             if (isset($address) && strlen($address) > 0) {
-                $users = $users->where('address', 'like', '%'.$address.'%');
+                $users = $users->where('address', 'like', '%' . $address . '%');
             }
         }
 
@@ -425,11 +431,10 @@ class UserController extends Controller
                 $q->whereNull('school')
                     ->orWhere('school', '');
             });
-        }
-        else {
+        } else {
             $school = $request->get('school');
             if (isset($school) && strlen($school) > 0) {
-                $users = $users->where('school', 'like', '%'.$school.'%');
+                $users = $users->where('school', 'like', '%' . $school . '%');
             }
         }
 
@@ -439,17 +444,16 @@ class UserController extends Controller
                 $q->whereNull('email')
                     ->orWhere('email', '');
             });
-        }
-        else {
+        } else {
             $email = $request->get('email');
             if (isset($email) && strlen($email) > 0) {
-                $users = $users->where('email', 'like', '%'.$email.'%');
+                $users = $users->where('email', 'like', '%' . $email . '%');
             }
         }
 
-        $previousPath         = url()->previous();
+        $previousPath = url()->previous();
         if (strcmp($previousPath, action('Web\AdminController@adminSMS')) == 0 || $request->has('smsAdmin')) {
-            $index                = 'user.index2';
+            $index = 'user.index2';
 
             $items = $users->get();
 
@@ -462,14 +466,13 @@ class UserController extends Controller
             if (strlen($sortBy) > 0 && strlen($sortType) > 0) {
                 if (strcmp($sortType, 'desc') == 0) {
                     $items = $items->sortByDesc($sortBy);
-                }
-                else {
+                } else {
                     $items = $items->sortBy($sortBy);
                 }
             }
 
             $uniqueUsers = $items->groupBy('nationalCode');
-            $uniqueItems       = collect();
+            $uniqueItems = collect();
             foreach ($uniqueUsers as $user) {
                 if ($user->where('mobileNumberVerification', 1)->isNotEmpty())
                     $uniqueItems->push($user->where('mobileNumberVerification', 1)->first());
@@ -477,8 +480,8 @@ class UserController extends Controller
                     $uniqueItems->push($user->first());
             }
 
-            $uniqueItemsId              = $uniqueItems->pluck('id');
-            $uniqueItemsIdCount         = $uniqueItemsId->count();
+            $uniqueItemsId        = $uniqueItems->pluck('id');
+            $uniqueItemsIdCount   = $uniqueItemsId->count();
             $numberOfFatherPhones = Phone::whereIn('contact_id',
                 Contact::whereIn('user_id', $uniqueItemsId)
                     ->where('relative_id', 1)
@@ -491,8 +494,7 @@ class UserController extends Controller
                     ->pluck('id'))
                 ->where('phonetype_id', 1)
                 ->count();
-        }
-        elseif (strcmp($previousPath, action('Web\AdminController@admin')) == 0 || $request->has('userAdmin')) {
+        } else if (strcmp($previousPath, action('Web\AdminController@admin')) == 0 || $request->has('userAdmin')) {
             $items = $users->paginate(10, ['*'], 'orders');
 
             $sortBy   = $request->get('sortBy');
@@ -500,15 +502,13 @@ class UserController extends Controller
             if (strlen($sortBy) > 0 && strlen($sortType) > 0) {
                 if (strcmp($sortType, 'desc') == 0) {
                     $items = $items->sortByDesc($sortBy);
-                }
-                else {
+                } else {
                     $items = $items->sortBy($sortBy);
                 }
             }
 
             return $items;
-        }
-        elseif (strcmp($previousPath, action('Web\AdminController@adminReport')) == 0 || $request->has('reportAdmin')) {
+        } else if (strcmp($previousPath, action('Web\AdminController@adminReport')) == 0 || $request->has('reportAdmin')) {
             $index = 'admin.partials.getReportIndex';
 
             $items = $users->get();
@@ -518,12 +518,10 @@ class UserController extends Controller
             if (strlen($sortBy) > 0 && strlen($sortType) > 0) {
                 if (strcmp($sortType, 'desc') == 0) {
                     $items = $items->sortByDesc($sortBy);
-                }
-                else {
+                } else {
                     $items = $items->sortBy($sortBy);
                 }
             }
-
 
 
             /** For selling books */
@@ -558,7 +556,7 @@ class UserController extends Controller
                             $transactionSum += $transaction->cost;
                         }
                     }
-                    if ($transactionSum < (int) $minCost) {
+                    if ($transactionSum < (int)$minCost) {
                         $items->forget($key);
                     }
                 }
@@ -577,8 +575,7 @@ class UserController extends Controller
             if ($request->has('seePaidCost')) {
                 $seePaidCost = true;
             }
-        }
-        else {
+        } else {
             $items = $users->get();
 
             $sortBy   = $request->get('sortBy');
@@ -586,8 +583,7 @@ class UserController extends Controller
             if (strlen($sortBy) > 0 && strlen($sortType) > 0) {
                 if (strcmp($sortType, 'desc') == 0) {
                     $items = $items->sortByDesc($sortBy);
-                }
-                else {
+                } else {
                     $items = $items->sortBy($sortBy);
                 }
             }
@@ -602,12 +598,12 @@ class UserController extends Controller
             'index'                => View::make($index,
                 compact('items', 'products', 'paymentStatusesId', 'reportType', 'hasPishtaz', 'orders', 'seePaidCost',
                     'lotteries'))->render(),
-            'products'             => $products ,
-            'lotteries'            => $lotteries ,
-            'allUsers'             => $uniqueItemsId??[],
-            'allUsersNumber'       => $uniqueItemsIdCount??0,
-            'numberOfFatherPhones' => $numberOfFatherPhones??0,
-            'numberOfMotherPhones' => $numberOfMotherPhones??0,
+            'products'             => $products,
+            'lotteries'            => $lotteries,
+            'allUsers'             => $uniqueItemsId ?? [],
+            'allUsersNumber'       => $uniqueItemsIdCount ?? 0,
+            'numberOfFatherPhones' => $numberOfFatherPhones ?? 0,
+            'numberOfMotherPhones' => $numberOfMotherPhones ?? 0,
         ];
 
         return response(json_encode($result), Response::HTTP_OK)->header('Content-Type', 'application/json');
@@ -621,8 +617,7 @@ class UserController extends Controller
             if (isset($result['error'])) {
                 $resultMessage = 'خطا در ذخیره کاربر';
                 $resultCode    = Response::HTTP_INTERNAL_SERVER_ERROR;
-            }
-            else {
+            } else {
                 $resultMessage = 'درج کاربر با موفقیت انجام شد';
                 $resultCode    = Response::HTTP_OK;
                 $savedUser     = $result['user'];
@@ -652,8 +647,8 @@ class UserController extends Controller
     }
 
     /**
-     * @param  array      $data
-     * @param  User|null  $authenticatedUser
+     * @param array     $data
+     * @param User|null $authenticatedUser
      *
      * @return array
      */
@@ -703,8 +698,7 @@ class UserController extends Controller
             $user->lockHisProfile();
         }
 
-        if (in_array('roles', $data) && isset($data['roles']) && $authenticatedUser->can(config('constants.INSET_USER_ROLE')))
-        {
+        if (in_array('roles', $data) && isset($data['roles']) && $authenticatedUser->can(config('constants.INSET_USER_ROLE'))) {
             $this->syncRoles($data['roles'], $user);
         }
 
@@ -713,6 +707,26 @@ class UserController extends Controller
         return [
             'user' => $user,
         ];
+    }
+
+    /**
+     * @param array $inputData
+     * @param User  $user
+     *
+     * @return void
+     * @throws FileNotFoundException
+     */
+    private function fillUserFromRequest(array $inputData, User $user): void
+    {
+        $user->fillByPublic($inputData);
+
+        $file = $this->getRequestFile($inputData, 'photo');
+        if ($file !== false) {
+            $storePicResult = $this->storePhotoOfUser($user, $file);
+            if (isset($storePicResult)) {
+                $user->photo = $storePicResult;
+            }
+        }
     }
 
     public function show(Request $request, User $user = null)
@@ -733,8 +747,8 @@ class UserController extends Controller
         }
         $userCompletion = $user->info['completion'];
 
-        $genders     = Gender::pluck('name', 'id')->prepend('نامشخص');
-        $majors      = Major::pluck('name', 'id')->prepend('نامشخص');
+        $genders = Gender::pluck('name', 'id')->prepend('نامشخص');
+        $majors  = Major::pluck('name', 'id')->prepend('نامشخص');
 
 //        /** LOTTERY */
 //        [
@@ -750,31 +764,42 @@ class UserController extends Controller
 
 
         $sideBarMode = 'closed';
-        $pageType = 'profile';
+        $pageType    = 'profile';
         return view('user.profile.profile',
-            compact('user', 'genders', 'majors', 'sideBarMode',  'userCompletion' , 'pageType'
-                /*'exchangeAmount', 'userPoints', 'userLottery', 'prizeCollection', 'lotteryRank', 'lottery', 'lotteryMessage', 'lotteryName' , */
+            compact('user', 'genders', 'majors', 'sideBarMode', 'userCompletion', 'pageType'
+            /*'exchangeAmount', 'userPoints', 'userLottery', 'prizeCollection', 'lotteryRank', 'lottery', 'lotteryMessage', 'lotteryName' , */
             ));
+    }
+
+    /**
+     * @param User $authenticaedUser
+     * @param User $user
+     *
+     * @return bool
+     */
+    private function authenticatedUserCantSeeThisUser(User $authenticaedUser, User $user): bool
+    {
+        return ($user->id !== $authenticaedUser->id) && !($authenticaedUser->can(config('constants.SHOW_USER_ACCESS')));
     }
 
     public function submitKonkurResult(Request $request)
     {
-        $user = $request->user();
+        $user           = $request->user();
         $userCompletion = $user->info['completion'];
 
         $event            = Event::name('konkur98')->first();
         $userKonkurResult = $user->eventresults->where('event_id', $event->id)->first();
 
         $sideBarMode = 'closed';
-        $pageType = 'sabteRotbe';
+        $pageType    = 'sabteRotbe';
         return view('user.profile.profile',
-            compact('user', 'event', 'userKonkurResult', 'sideBarMode', 'userCompletion' , 'pageType'));
+            compact('user', 'event', 'userKonkurResult', 'sideBarMode', 'userCompletion', 'pageType'));
     }
 
     /**
      * Display a listing user's orders.
      *
-     * @param  Request  $request
+     * @param Request $request
      *
      * @return Response
      */
@@ -784,46 +809,50 @@ class UserController extends Controller
         $user = $request->user();
 
         /** @var OrderCollections $orders */
-        $orders = $user->getClosedOrders($request->get('orders' , 1));
+        $orders = $user->getClosedOrders($request->get('orders', 1));
 
-        $key          = 'user:transactions:'.$user->cacheKey();
-        $transactions = Cache::tags(['user' , 'transaction' ,  'user_'.$user->id , 'user_'.$user->id.'_transactions'])->remember($key, config('constants.CACHE_60'), function () use ($user) {
-            return $user->getShowableTransactions()
-                        ->get()
-                        ->groupBy('order_id');
-        });
+        $key          = 'user:transactions:' . $user->cacheKey();
+        $transactions =
+            Cache::tags(['user', 'transaction', 'user_' . $user->id, 'user_' . $user->id . '_transactions'])->remember($key, config('constants.CACHE_60'), function () use ($user) {
+                return $user->getShowableTransactions()
+                    ->get()
+                    ->groupBy('order_id');
+            });
 
-        $key         = 'user:instalments:'.$user->cacheKey();
-        $instalments = Cache::tags(['user' , 'instalment' , 'user_'.$user->id , 'user_'.$user->id.'_instalments'])->remember($key, config('constants.CACHE_60'), function () use ($user) {
-            return $user->getInstalments()
-                ->get()
-                ->sortBy('deadline_at');
-        });
+        $key         = 'user:instalments:' . $user->cacheKey();
+        $instalments =
+            Cache::tags(['user', 'instalment', 'user_' . $user->id, 'user_' . $user->id . '_instalments'])->remember($key, config('constants.CACHE_60'), function () use ($user) {
+                return $user->getInstalments()
+                    ->get()
+                    ->sortBy('deadline_at');
+            });
 
         $gatewaysCollection = Transactiongateway::enable()
             ->get()
             ->sortBy('order');
 
         $gateways = [];
-        foreach ($gatewaysCollection as  $gateway){
-            $gateways[route('redirectToBank', ['paymentMethod'=> $gateway->name, 'device'=>'web'])] = $gateway->displayName;
+        foreach ($gatewaysCollection as $gateway) {
+            $gateways[route('redirectToBank', ['paymentMethod' => $gateway->name, 'device' => 'web'])] =
+                $gateway->displayName;
         }
 
         $orderIdString = $orders->pluck('id')->implode('-');
-        $key          = 'orders:coupons:'.md5($orderIdString);
-        $cacheTags = ['order' , 'coupon'];
+        $key           = 'orders:coupons:' . md5($orderIdString);
+        $cacheTags     = ['order', 'coupon'];
         foreach ($orders as $order) {
-            $cacheTags[] = 'order_'.$order->id;
-            $cacheTags[] = 'order_'.$order->id.'_coupon';
+            $cacheTags[] = 'order_' . $order->id;
+            $cacheTags[] = 'order_' . $order->id . '_coupon';
         }
-        $orderCoupons = Cache::tags($cacheTags)->remember($key, config('constants.CACHE_60'), function () use ($orders) {
-            return $orders->getCoupons();
-        });
+        $orderCoupons =
+            Cache::tags($cacheTags)->remember($key, config('constants.CACHE_60'), function () use ($orders) {
+                return $orders->getCoupons();
+            });
 
         $credit = $user->getTotalWalletBalance();
 
         return view('user.ordersList',
-            compact('orders', 'gateways', 'transactions', 'instalments', 'orderCoupons' , 'credit'));
+            compact('orders', 'gateways', 'transactions', 'instalments', 'orderCoupons', 'credit'));
     }
 
     /**
@@ -845,7 +874,7 @@ class UserController extends Controller
     /**
      * Display the list of uploaded files by user
      *
-     * @param  Request  $request
+     * @param Request $request
      *
      * @return Response
      */
@@ -884,7 +913,7 @@ class UserController extends Controller
     /**
      * Show the form for completing information of the specified resource.(Created for orduatalaee 97)
      *
-     * @param  Request  $request
+     * @param Request $request
      *
      * @return Response
      */
@@ -896,7 +925,7 @@ class UserController extends Controller
     /**
      * Show the form for completing information of the specified resource.(Created for orduatalaee 97)
      *
-     * @param  User  $user
+     * @param User $user
      *
      * @return Factory|\Illuminate\View\View
      */
@@ -1010,15 +1039,14 @@ class UserController extends Controller
         if ($userHasMedicalQuestions) {
             $completionFields      = $user->returnCompletionItems();
             $completionFieldsCount = count($completionFields);
-            $completionPercentage  = (int) $user->completion('completeInfo');
-        }
-        else {
+            $completionPercentage  = (int)$user->completion('completeInfo');
+        } else {
             $completionFields      = array_diff($user->returnCompletionItems(), $user->returnMedicalItems());
             $completionFieldsCount = count($completionFields);
-            $completionPercentage  = (int) $user->completion('custom', $completionFields);
+            $completionPercentage  = (int)$user->completion('custom', $completionFields);
         }
 
-        $completedFieldsCount = (int) ceil(($completionPercentage * $completionFieldsCount) / 100);
+        $completedFieldsCount = (int)ceil(($completionPercentage * $completionFieldsCount) / 100);
         if ($orderFiles->isNotEmpty()) {
             $completedFieldsCount++;
         }
@@ -1044,7 +1072,7 @@ class UserController extends Controller
         }
         $completionFieldsCount++;
 
-        $completionPercentage = (int) (($completedFieldsCount / $completionFieldsCount) * 100);
+        $completionPercentage = (int)(($completedFieldsCount / $completionFieldsCount) * 100);
 
         if ($completionPercentage == 100 && $user->completion('lockProfile') == 100) {
             $user->lockHisProfile();
@@ -1057,10 +1085,16 @@ class UserController extends Controller
                 'lockedFields', 'completionPercentage', 'customerExtraInfo'));
     }
 
+    /*
+    |--------------------------------------------------------------------------
+    | Private Methods
+    |--------------------------------------------------------------------------
+    */
+
     /**
      * Showing the form to the user for adding extra information after registeration
      *
-     * @param  Request  $request
+     * @param Request $request
      *
      * @return Response
      */
@@ -1068,8 +1102,7 @@ class UserController extends Controller
     {
         if ($request->has('redirectTo')) {
             $targetUrl = $request->get('redirectTo');
-        }
-        else {
+        } else {
             $targetUrl = action('Web\IndexPageController');
         }
 
@@ -1082,8 +1115,7 @@ class UserController extends Controller
         if (strcmp($previousPath, route('login')) == 0) {
             $formByPass = false;
             $note       = 'برای ورود به سایت لطفا اطلاعات زیر را تکمیل نمایید';
-        }
-        else {
+        } else {
             $formByPass = true;
             $note       = 'برای استفاده از این خدمت سایت لطفا اطلاعات زیر را تکمیل نمایید';
         }
@@ -1106,13 +1138,13 @@ class UserController extends Controller
     /**
      * Store the complentary information of specified resource in storage.
      *
-     * @param  User               $user
+     * @param User              $user
      *
-     * @param  Request            $request
-     * @param  UserController     $userController
-     * @param  PhoneController    $phoneController
-     * @param  ContactController  $contactController
-     * @param  OrderController    $orderController
+     * @param Request           $request
+     * @param UserController    $userController
+     * @param PhoneController   $phoneController
+     * @param ContactController $contactController
+     * @param OrderController   $orderController
      *
      * @return Response
      * @throws FileNotFoundException
@@ -1161,8 +1193,7 @@ class UserController extends Controller
             if ($order->user_id != $request->user()->id) {
                 abort(Response::HTTP_FORBIDDEN);
             }
-        }
-        else {
+        } else {
             return response([], Response::HTTP_UNPROCESSABLE_ENTITY);
         }
         /**
@@ -1229,8 +1260,7 @@ class UserController extends Controller
                     $responseContent = json_decode($response->getContent('contact'));
                     $parentContact   = $responseContent->contact;
                 }
-            }
-            else {
+            } else {
                 $parentContact = $parentContacts->first();
             }
             if (!isset($parentContact)) {
@@ -1248,8 +1278,7 @@ class UserController extends Controller
                 $storePhoneRequest->offsetSet('phonetype_id', $mobilePhoneType->id);
                 $response = $phoneController->store($storePhoneRequest);
                 $response->getStatusCode();
-            }
-            else {
+            } else {
                 $parentMobile              = $parentMobiles->first();
                 $parentMobile->phoneNumber = $mobile;
                 $parentMobile->update();
@@ -1274,13 +1303,12 @@ class UserController extends Controller
                 $obj->info = $customerExtraInfoAnswers[$key];
             }
             if (strlen($jsonConcats) > 0) {
-                $jsonConcats = $jsonConcats.','.json_encode($obj, JSON_UNESCAPED_UNICODE);
-            }
-            else {
+                $jsonConcats = $jsonConcats . ',' . json_encode($obj, JSON_UNESCAPED_UNICODE);
+            } else {
                 $jsonConcats = json_encode($obj, JSON_UNESCAPED_UNICODE);
             }
         }
-        $customerExtraInfo = '['.$jsonConcats.']';
+        $customerExtraInfo = '[' . $jsonConcats . ']';
         $updateOrderRequest->offsetSet('customerExtraInfo', $customerExtraInfo);
         $orderController->update($updateOrderRequest, $order);
 
@@ -1294,7 +1322,7 @@ class UserController extends Controller
      * Note: Requests to this method must pass \App\Http\Middleware\trimUserRequest middle ware
      *
      * @param EditUserRequest $request
-     * @param User $user
+     * @param User            $user
      *
      * @return array|Response
      */
@@ -1305,16 +1333,15 @@ class UserController extends Controller
             $user = $authenticatedUser;
         }
 
-        if($user->isUserProfileLocked() && !$authenticatedUser->can(config('constants.EDIT_USER_ACCESS')))
-            return response(['message'=>'User profile is locked'] , Response::HTTP_LOCKED);
+        if ($user->isUserProfileLocked() && !$authenticatedUser->can(config('constants.EDIT_USER_ACCESS')))
+            return response(['message' => 'User profile is locked'], Response::HTTP_LOCKED);
         try {
-            if($request->has('moderator') && $authenticatedUser->can(config('constants.EDIT_USER_ACCESS')))
-            {
+            if ($request->has('moderator') && $authenticatedUser->can(config('constants.EDIT_USER_ACCESS'))) {
                 $this->fillUserFromModeratorRequest($request->all(), $user);
                 if ($authenticatedUser->can(config('constants.INSET_USER_ROLE'))) {
-                    $this->syncRoles($request->get('roles' , []), $user);
+                    $this->syncRoles($request->get('roles', []), $user);
                 }
-            }else{
+            } else {
                 $this->fillUserFromRequest($request->all(), $user);
             }
         } catch (FileNotFoundException $e) {
@@ -1335,8 +1362,7 @@ class UserController extends Controller
         if ($user->update()) {
             $message = 'اطلاعات با موفقیت اصلاح شد';
             $status  = Response::HTTP_OK;
-        }
-        else {
+        } else {
             $message = 'Database error on updating user';
             $status  = Response::HTTP_SERVICE_UNAVAILABLE;
         }
@@ -1347,8 +1373,7 @@ class UserController extends Controller
                     'user'    => $user,
                     'message' => $message,
                 ];
-            }
-            else {
+            } else {
                 $response = [
                     'error' => [
                         'code'    => $status,
@@ -1358,27 +1383,71 @@ class UserController extends Controller
             }
 
             return response($response, Response::HTTP_OK);
-        }
-        else {
-            session()->flash('success' , $message);
+        } else {
+            session()->flash('success', $message);
             return redirect()->back();
         }
     }
 
-    public function partialUpdate(Request $request){
+    /**
+     * @param array $inputData
+     * @param User  $user
+     *
+     * @return void
+     * @throws FileNotFoundException
+     */
+    private function fillUserFromModeratorRequest(array $inputData, User $user): void
+    {
+        // Checks both if $inputData has password index and it is not null
+        $hasPassword = isset($inputData['password']);
+
+        if ($hasPassword) {
+            $user->password = bcrypt($inputData['password']);
+        }
+
+        Arr::pull($inputData, 'password');
+        $user->fill($inputData);
+        $hasMobileVerifiedAt = isset($inputData['mobile_verified_at']);
+
+        //ToDo : When a moderator is updating his profile, this won't work
+        if ($hasMobileVerifiedAt) {
+            $user->mobile_verified_at = ($inputData['mobile_verified_at'] == '1') ? Carbon::now()
+                ->setTimezone('Asia/Tehran') : null;
+        } else {
+            $user->mobile_verified_at = null;
+        }
+
+        $hasLockProfile = isset($inputData['lockProfile']);
+        if ($hasLockProfile) {
+            $user->lockProfile = ($inputData['lockProfile'] == '1') ? 1 : 0;
+        } else {
+            $user->lockProfile = 0;
+        }
+
+        $file = $this->getRequestFile($inputData, 'photo');
+        if ($file !== false) {
+            $storePicResult = $this->storePhotoOfUser($user, $file);
+            if (isset($storePicResult)) {
+                $user->photo = $storePicResult;
+            }
+        }
+    }
+
+    public function partialUpdate(Request $request)
+    {
         $user = $request->user();
         $this->fillUserFromRequest($request->all(), $user);
 
         $updateResult = false;
-        if($user->update()){
-           $updateResult = true;
+        if ($user->update()) {
+            $updateResult = true;
         }
 
-        if(!$updateResult){
+        if (!$updateResult) {
             return response()->json([
-                'error' =>[
+                'error' => [
                     'message' => 'خطا در اصلاح اطلاعات کاربر',
-                ]
+                ],
             ]);
         }
 
@@ -1412,113 +1481,9 @@ class UserController extends Controller
 //        }
 
         return response()->json([
-            'error' =>[
+            'error' => [
                 'message' => 'اطلاعات شما تکمیل نیست',
-            ]
+            ],
         ]);
-    }
-
-    /*
-    |--------------------------------------------------------------------------
-    | Private Methods
-    |--------------------------------------------------------------------------
-    */
-
-    /**
-     * @param  Agent  $agent
-     *
-     * @return array
-     */
-    private function getAuthExceptionArray(Agent $agent): array
-    {
-        return ['show', 'userProductFiles'];
-    }
-
-    /**
-     * @param  array  $authException
-     */
-    private function callMiddlewares(array $authException): void
-    {
-        $this->middleware('auth', ['except' => $authException]);
-        $this->middleware('permission:'.config('constants.LIST_USER_ACCESS').'|'.config('constants.GET_BOOK_SELL_REPORT').'|'.config('constants.GET_USER_REPORT'),
-            ['only' => 'index']);
-        $this->middleware('permission:'.config('constants.INSERT_USER_ACCESS'), ['only' => 'create']);
-        $this->middleware('permission:'.config('constants.REMOVE_USER_ACCESS'), ['only' => 'destroy']);
-        $this->middleware('permission:'.config('constants.SHOW_USER_ACCESS'), ['only' => 'edit']);
-    }
-
-    /**
-     * @param array $inputData
-     * @param User $user
-     *
-     * @return void
-     * @throws FileNotFoundException
-     */
-    private function fillUserFromRequest(array $inputData, User $user): void
-    {
-        $user->fillByPublic($inputData);
-
-        $file = $this->getRequestFile($inputData, 'photo');
-        if ($file !== false) {
-            $storePicResult = $this->storePhotoOfUser($user, $file);
-            if(isset($storePicResult)){
-                $user->photo = $storePicResult;
-            }
-        }
-    }
-
-    /**
-     * @param array $inputData
-     * @param User $user
-     *
-     * @return void
-     * @throws FileNotFoundException
-     */
-    private function fillUserFromModeratorRequest(array $inputData, User $user): void
-    {
-        // Checks both if $inputData has password index and it is not null
-        $hasPassword = isset($inputData['password']);
-
-        if ($hasPassword) {
-            $user->password = bcrypt($inputData['password']);
-        }
-
-        Arr::pull($inputData , 'password') ;
-        $user->fill($inputData);
-        $hasMobileVerifiedAt = isset($inputData['mobile_verified_at']);
-
-        //ToDo : When a moderator is updating his profile, this won't work
-        if ($hasMobileVerifiedAt) {
-            $user->mobile_verified_at = ($inputData['mobile_verified_at'] == '1') ? Carbon::now()
-                ->setTimezone('Asia/Tehran') : null;
-        }else{
-            $user->mobile_verified_at = null ;
-        }
-
-        $hasLockProfile = isset($inputData['lockProfile']);
-        if($hasLockProfile){
-            $user->lockProfile = ($inputData['lockProfile'] == '1') ? 1:0;
-        }else{
-            $user->lockProfile = 0 ;
-        }
-
-        $file = $this->getRequestFile($inputData, 'photo');
-        if ($file !== false) {
-            $storePicResult = $this->storePhotoOfUser($user, $file);
-            if(isset($storePicResult)){
-                $user->photo = $storePicResult;
-            }
-        }
-    }
-
-    /**
-     * @param  User  $authenticaedUser
-     * @param  User  $user
-     *
-     * @return bool
-     */
-    private function authenticatedUserCantSeeThisUser(User $authenticaedUser, User $user): bool
-    {
-        return ($user->id !== $authenticaedUser->id) && !($authenticaedUser->can(config('constants.SHOW_USER_ACCESS')));
     }
 }

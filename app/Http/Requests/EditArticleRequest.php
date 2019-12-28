@@ -3,7 +3,6 @@
 namespace App\Http\Requests;
 
 use App\Traits\CharacterCommon;
-use Illuminate\Support\Facades\Config;
 use Illuminate\Foundation\Http\FormRequest;
 
 class EditArticleRequest extends FormRequest
@@ -32,13 +31,13 @@ class EditArticleRequest extends FormRequest
             'articlecategory_id' => 'exists:articlecategories,id',
         ];
     }
-    
+
     public function prepareForValidation()
     {
         $this->replaceNumbers();
         parent::prepareForValidation();
     }
-    
+
     protected function replaceNumbers()
     {
         $input = $this->request->all();

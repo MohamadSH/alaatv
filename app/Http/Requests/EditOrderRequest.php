@@ -3,7 +3,6 @@
 namespace App\Http\Requests;
 
 use App\Traits\CharacterCommon;
-
 use Illuminate\Foundation\Http\FormRequest;
 
 class EditOrderRequest extends FormRequest

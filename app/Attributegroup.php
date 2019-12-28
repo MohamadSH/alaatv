@@ -2,41 +2,46 @@
 
 namespace App;
 
+use Carbon\Carbon;
+use Eloquent;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
+
 /**
  * App\Attributegroup
  *
- * @property int                                                            $id
- * @property string|null                                                    $name            نام گروه
- * @property string|null                                                    $description     توضیح گروه
- * @property int|null                                                       $attributeset_id آی دی مشخص کننده دسته صفت
+ * @property int                                                       $id
+ * @property string|null                                               $name            نام گروه
+ * @property string|null                                               $description     توضیح گروه
+ * @property int|null                                                  $attributeset_id آی دی مشخص کننده دسته صفت
  *           مربوطه
- * @property int                                                            $order           ترتیب گروه صفت
- * @property \Carbon\Carbon|null                                            $created_at
- * @property \Carbon\Carbon|null                                            $updated_at
- * @property \Carbon\Carbon|null                                            $deleted_at
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Attribute[] $attributes
- * @property-read \App\Attributeset|null                                    $attributeset
+ * @property int                                                       $order           ترتیب گروه صفت
+ * @property Carbon|null                                       $created_at
+ * @property Carbon|null                                       $updated_at
+ * @property Carbon|null                                       $deleted_at
+ * @property-read Collection|Attribute[] $attributes
+ * @property-read Attributeset|null                                    $attributeset
  * @method static bool|null forceDelete()
- * @method static \Illuminate\Database\Query\Builder|\App\Attributegroup onlyTrashed()
+ * @method static \Illuminate\Database\Query\Builder|Attributegroup onlyTrashed()
  * @method static bool|null restore()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Attributegroup whereAttributesetId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Attributegroup whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Attributegroup whereDeletedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Attributegroup whereDescription($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Attributegroup whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Attributegroup whereName($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Attributegroup whereOrder($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Attributegroup whereUpdatedAt($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Attributegroup withTrashed()
- * @method static \Illuminate\Database\Query\Builder|\App\Attributegroup withoutTrashed()
- * @mixin \Eloquent
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Attributegroup newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Attributegroup newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Attributegroup query()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel disableCache()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel withCacheCooldownSeconds($seconds)
+ * @method static Builder|Attributegroup whereAttributesetId($value)
+ * @method static Builder|Attributegroup whereCreatedAt($value)
+ * @method static Builder|Attributegroup whereDeletedAt($value)
+ * @method static Builder|Attributegroup whereDescription($value)
+ * @method static Builder|Attributegroup whereId($value)
+ * @method static Builder|Attributegroup whereName($value)
+ * @method static Builder|Attributegroup whereOrder($value)
+ * @method static Builder|Attributegroup whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Query\Builder|Attributegroup withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|Attributegroup withoutTrashed()
+ * @mixin Eloquent
+ * @method static Builder|Attributegroup newModelQuery()
+ * @method static Builder|Attributegroup newQuery()
+ * @method static Builder|Attributegroup query()
+ * @method static Builder|BaseModel disableCache()
+ * @method static Builder|BaseModel withCacheCooldownSeconds($seconds)
  * @property-read mixed                                                     $cache_cooldown_seconds
- * @property-read int|null $attributes_count
+ * @property-read int|null                                                  $attributes_count
  */
 class Attributegroup extends BaseModel
 {
@@ -45,7 +50,7 @@ class Attributegroup extends BaseModel
         'description',
         'attributeset_id',
     ];
-    
+
     public function attributes()
     {
         return $this->belongsToMany('App\Attribute')
@@ -53,7 +58,7 @@ class Attributegroup extends BaseModel
             ->withTimestamps()
             ->orderBy('order');
     }
-    
+
     public function attributeset()
     {
         return $this->belongsTo('App\Attributeset');

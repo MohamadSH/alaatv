@@ -463,7 +463,7 @@
                                                 </span>
                                                 </button>
                                             @elseif($isForcedGift)
-                                                @if($hasPurchasedShouldBuyProduct)
+                                                @if($hasPurchasedEssentialProduct)
                                                     <button class="btn btn-danger btn-lg m-btn  m-btn m-btn--icon">
                                                     <span>
                                                         <i class="flaticon-arrows"></i>
@@ -648,7 +648,7 @@
                     </span>
             </button>
         @elseif($isForcedGift)
-                @if($hasPurchasedShouldBuyProduct)
+                @if($hasPurchasedEssentialProduct)
                     <button class="btn btn-danger btn-lg m-btn  m-btn m-btn--icon">
                         <span>
                                 <i class="flaticon-arrows"></i>

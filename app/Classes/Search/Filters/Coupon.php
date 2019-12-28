@@ -13,7 +13,7 @@ use Illuminate\Database\Eloquent\Builder;
 class Coupon extends FilterAbstract
 {
     protected $attribute = 'coupon_id';
-    
+
     public function apply(Builder $builder, $value, FilterCallback $callback): Builder
     {
         return $builder->whereIn($this->attribute, $value);

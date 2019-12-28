@@ -17,8 +17,7 @@ class UserSurveyAnswerController extends Controller
         $questionIds = $request->get("question_id");
         if ($request->has("user_id")) {
             $userIds = $request->get("user_id");
-        }
-        else {
+        } else {
             $userIds = [Auth::user()->id];
         }
         $userAnswers = Usersurveyanswer::OrderBy("created_at");
@@ -56,8 +55,7 @@ class UserSurveyAnswerController extends Controller
         $questionId = $request->get("question_id");
         if ($request->has("user_id")) {
             $userId = $request->get("user_id");
-        }
-        else {
+        } else {
             $userId = Auth::user()->id;
         }
 
@@ -74,8 +72,7 @@ class UserSurveyAnswerController extends Controller
             $userSurveyAnswer->user_id = $userId;
             $userSurveyAnswer->answer  = json_encode($request->get("answer"), JSON_UNESCAPED_UNICODE);
             $userSurveyAnswer->save();
-        }
-        else {
+        } else {
             $userSurveyAnswer->answer = json_encode($request->get("answer"), JSON_UNESCAPED_UNICODE);
             $userSurveyAnswer->update();
         }

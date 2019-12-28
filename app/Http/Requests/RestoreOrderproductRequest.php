@@ -24,7 +24,7 @@ class RestoreOrderproductRequest extends FormRequest
     public function rules()
     {
         return [
-            'orderproductId' => 'required'
+            'orderproductId' => 'required',
         ];
     }
 }

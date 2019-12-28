@@ -3,11 +3,12 @@
 namespace App\Console\Commands;
 
 use App\Content;
-use App\Product;
-use Carbon\Carbon;
 use App\Contentset;
-use Illuminate\Console\Command;
+use App\Product;
 use App\Traits\APIRequestCommon;
+use Carbon\Carbon;
+use Exception;
+use Illuminate\Console\Command;
 use Illuminate\Http\Response;
 
 class TagsCommand extends Command
@@ -19,14 +20,14 @@ class TagsCommand extends Command
      * @var string
      */
     protected $signature = 'alaaTv:tag';
-    
+
     /**
      * The console command description.
      *
      * @var string
      */
     protected $description = 'init tags';
-    
+
     /**
      * Create a new command instance.
      *
@@ -36,7 +37,7 @@ class TagsCommand extends Command
     {
         parent::__construct();
     }
-    
+
     /**
      * Execute the console command.
      *
@@ -48,9 +49,9 @@ class TagsCommand extends Command
         $this->allTaggable($bar);
         $bar->finish();
         $this->info("Done!");
-        
+
     }
-    
+
     private function allTaggable($bar)
     {
 //        $this->contentTag();
@@ -62,7 +63,7 @@ class TagsCommand extends Command
 //        $this->productTag();
         $bar->advance();
     }
-    
+
     private function productTag()
     {
         $bucket = "product";
@@ -72,19 +73,19 @@ class TagsCommand extends Command
         $this->setItemsTags($items, $bucket);
         $this->info("Product Tag Done!");
     }
-    
+
     private function setItemsTags($items, $bucket)
     {
         $counter = 0;
         $bar     = $this->output->createProgressBar($items->count());
         foreach ($items as $item) {
             if (!isset($item)) {
-                $this->error("invalid item at bucket: ".$bucket." counter".$counter);
+                $this->error("invalid item at bucket: " . $bucket . " counter" . $counter);
                 $counter++;
                 continue;
             }
             if (!isset($item->tags)) {
-                $this->error("no tags found for bucket: ".$bucket." item".$item->id);
+                $this->error("no tags found for bucket: " . $bucket . " item" . $item->id);
                 $counter++;
                 continue;
             }
@@ -95,9 +96,9 @@ class TagsCommand extends Command
             $bar->advance();
         }
         $bar->finish();
-        $this->info($bucket." Done!");
+        $this->info($bucket . " Done!");
     }
-    
+
     /**
      * @param $bucket
      * @param $item
@@ -107,7 +108,7 @@ class TagsCommand extends Command
      */
     private function setAnItemTags($bucket, $item, $counter): array
     {
-        
+
         $itemTagsArray = $item->tags->tags;
         if (is_array($itemTagsArray) && !empty($itemTagsArray) && isset($item["id"])) {
             $params = [
@@ -118,22 +119,22 @@ class TagsCommand extends Command
             }
             try {
                 $response = $this->sendRequest(
-                    config("constants.TAG_API_URL")."id/$bucket/".$item->id,
+                    config("constants.TAG_API_URL") . "id/$bucket/" . $item->id,
                     "PUT",
                     $params
                 );
                 if ($response["statusCode"] != Response::HTTP_OK) {
-                    $this->error("item #".$item["id"]." failed. response : ".$response["statusCode"]);
+                    $this->error("item #" . $item["id"] . " failed. response : " . $response["statusCode"]);
                 }
-            } catch (\Exception    $e) {
-                $this->error("item #".$item["id"]." failed.");
+            } catch (Exception    $e) {
+                $this->error("item #" . $item["id"] . " failed.");
             }
             $counter++;
-            
+
         } else {
             if (is_array($itemTagsArray) && empty($itemTagsArray)) {
                 $counter++;
-                $this->error("no tags found for bucket: ".$bucket." item".$item->id);
+                $this->error("no tags found for bucket: " . $bucket . " item" . $item->id);
             }
         }
         return [
@@ -141,7 +142,7 @@ class TagsCommand extends Command
             $counter,
         ];
     }
-    
+
     private function contentTag()
     {
         $bucket = "content";
@@ -152,7 +153,7 @@ class TagsCommand extends Command
         $this->setItemsTags($items, $bucket);
         $this->info("Content Tag Done!");
     }
-    
+
     private function contentSetTag()
     {
         $bucket = "contentset";

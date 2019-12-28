@@ -2,9 +2,9 @@
 
 namespace App\Http\Middleware;
 
+use App\Traits\CharacterCommon;
 use Closure;
 use Illuminate\Http\Request;
-use App\Traits\CharacterCommon;
 
 class ModifyRequestInputMiddleware
 {
@@ -15,8 +15,8 @@ class ModifyRequestInputMiddleware
     /**
      * Handle an incoming request.
      *
-     * @param \Illuminate\Http\Request $request
-     * @param \Closure $next
+     * @param Request                    $request
+     * @param Closure                    $next
      * @param                            $index
      *
      * @return mixed
@@ -27,7 +27,7 @@ class ModifyRequestInputMiddleware
 
         return $next($request);
     }
-    
+
     protected function replaceNumbers(Request $request, array $array)
     {
         $input = $request->all();

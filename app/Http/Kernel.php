@@ -3,32 +3,32 @@
 namespace App\Http;
 
 use App\Http\Middleware\Authenticate;
-use App\Http\Middleware\CompleteInfo;
-use Laratrust\Middleware\LaratrustRole;
-use Illuminate\Auth\Middleware\Authorize;
-use App\Http\Middleware\RemoveOrderCoupon;
-use Laratrust\Middleware\LaratrustAbility;
-use Nckg\Minify\Middleware\MinifyResponse;
 use App\Http\Middleware\CacheableWithNginx;
-use Laratrust\Middleware\LaratrustPermission;
-use Illuminate\Http\Middleware\SetCacheHeaders;
-use Illuminate\Session\Middleware\StartSession;
-use App\Http\Middleware\CheckForMaintenanceMode;
-use App\Http\Middleware\RedirectIfAuthenticated;
 use App\Http\Middleware\CanAccessEmployeeTimeSheet;
+use App\Http\Middleware\CheckForMaintenanceMode;
+use App\Http\Middleware\CompleteInfo;
+use App\Http\Middleware\ModifyRequestInputMiddleware;
+use App\Http\Middleware\RedirectIfAuthenticated;
+use App\Http\Middleware\RemoveOrderCoupon;
+use Illuminate\Auth\Middleware\AuthenticateWithBasicAuth;
+use Illuminate\Auth\Middleware\Authorize;
+use Illuminate\Auth\Middleware\EnsureEmailIsVerified;
+use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
+use Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull;
+use Illuminate\Foundation\Http\Middleware\ValidatePostSize;
+use Illuminate\Http\Middleware\SetCacheHeaders;
+use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Routing\Middleware\ThrottleRequests;
 use Illuminate\Routing\Middleware\ValidateSignature;
-use Illuminate\Auth\Middleware\EnsureEmailIsVerified;
-use App\Http\Middleware\ModifyRequestInputMiddleware;
-use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\AuthenticateSession;
+use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
-use Illuminate\Auth\Middleware\AuthenticateWithBasicAuth;
+use Laratrust\Middleware\LaratrustAbility;
+use Laratrust\Middleware\LaratrustPermission;
+use Laratrust\Middleware\LaratrustRole;
 use Laravel\Passport\Http\Middleware\CreateFreshApiToken;
-use Illuminate\Foundation\Http\Middleware\ValidatePostSize;
-use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
-use Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull;
+use Nckg\Minify\Middleware\MinifyResponse;
 
 class Kernel extends HttpKernel
 {

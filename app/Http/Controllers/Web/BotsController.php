@@ -3,33 +3,34 @@
 namespace App\Http\Controllers\Web;
 
 
+use App\{Bon,
+    Content,
+    Contentset,
+    Contenttype,
+    Coupon,
+    Events\FreeInternetAccept,
+    Http\Requests\Request,
+    Notifications\GiftGiven,
+    Order,
+    Orderproduct,
+    Product,
+    Productvoucher,
+    Traits\APIRequestCommon,
+    Traits\CharacterCommon,
+    Traits\Helper,
+    Traits\ProductCommon,
+    Traits\RequestCommon,
+    Traits\UserCommon,
+    Transaction,
+    User,
+    Userbon,
+    Websitesetting};
+use App\Http\Controllers\Controller;
 use Carbon\Carbon;
+use Exception;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\{DB};
 use Illuminate\Support\Str;
-use App\Http\Controllers\Controller;
-use App\{Bon,
-    Coupon,
-    Orderproduct,
-    User,
-    Order,
-    Content,
-    Product,
-    Userbon,
-    Contentset,
-    Contenttype,
-    Transaction,
-    Traits\Helper,
-    Productvoucher,
-    Websitesetting,
-    Traits\UserCommon,
-    Traits\ProductCommon,
-    Traits\RequestCommon,
-    Http\Requests\Request,
-    Traits\CharacterCommon,
-    Notifications\GiftGiven,
-    Traits\APIRequestCommon,
-    Events\FreeInternetAccept};
 use Zarinpal\Zarinpal;
 
 class BotsController extends Controller
@@ -54,49 +55,51 @@ class BotsController extends Controller
     public function __construct(Websitesetting $setting)
     {
         $this->middleware('role:admin');
-        $this->setting  = $setting->setting;
+        $this->setting = $setting->setting;
     }
 
     public function bot(Request $request)
     {
         try {
-            if($request->has('fixContentsTags')){
-                $contents = \App\Content::where('created_at' , '>=' , '2019-11-05 00:00' )
-                    ->orWhere('updated_at' , '>=' , '2019-11-05 00:00:00' )
+            if ($request->has('fixContentsTags')) {
+                $contents = Content::where('created_at', '>=', '2019-11-05 00:00')
+                    ->orWhere('updated_at', '>=', '2019-11-05 00:00:00')
                     ->get();
 
                 foreach ($contents as $content) {
                     $itemTagsArray = $content->tags->tags;
-                    $params = [
+                    $params        = [
                         'tags' => json_encode($itemTagsArray, JSON_UNESCAPED_UNICODE),
                     ];
                     if (isset($content->created_at) && strlen($content->created_at) > 0) {
                         $params['score'] = Carbon::createFromFormat('Y-m-d H:i:s', $content->created_at)->timestamp;
                     }
 
-                    $response = $this->sendRequest(config('constants.TAG_API_URL').'id/content/'.$content->id, 'PUT', $params);
-                    if($response["statusCode"] != Response::HTTP_OK){
-                        dump('Error on tagging content #'.$content->id);
+                    $response =
+                        $this->sendRequest(config('constants.TAG_API_URL') . 'id/content/' . $content->id, 'PUT', $params);
+                    if ($response["statusCode"] != Response::HTTP_OK) {
+                        dump('Error on tagging content #' . $content->id);
                     }
                 }
                 dd('DONE');
             }
 
-            if($request->has('fixSetTags')){
-                $sets = \App\Contentset::orderByDesc('id')->limit(20)->get();
+            if ($request->has('fixSetTags')) {
+                $sets = Contentset::orderByDesc('id')->limit(20)->get();
 
                 foreach ($sets as $set) {
                     $itemTagsArray = $set->tags->tags;
-                    $params = [
+                    $params        = [
                         'tags' => json_encode($itemTagsArray, JSON_UNESCAPED_UNICODE),
                     ];
                     if (isset($set->created_at) && strlen($set->created_at) > 0) {
                         $params['score'] = Carbon::createFromFormat('Y-m-d H:i:s', $set->created_at)->timestamp;
                     }
 
-                    $response = $this->sendRequest(config('constants.TAG_API_URL').'id/contentset/'.$set->id, 'PUT', $params);
-                    if($response["statusCode"] != Response::HTTP_OK){
-                        dump('Error on tagging content #'.$set->id);
+                    $response =
+                        $this->sendRequest(config('constants.TAG_API_URL') . 'id/contentset/' . $set->id, 'PUT', $params);
+                    if ($response["statusCode"] != Response::HTTP_OK) {
+                        dump('Error on tagging content #' . $set->id);
                     }
                 }
                 dd('DONE');
@@ -114,7 +117,7 @@ class BotsController extends Controller
                     })
                     ->orderBy("completed_at")
                     ->get();
-                echo "<span style='color:blue'>Number of orders: ".$voucherPendingOrders->count()."</span>";
+                echo "<span style='color:blue'>Number of orders: " . $voucherPendingOrders->count() . "</span>";
                 echo "<br>";
                 $counter     = 0;
                 $nowDateTime = Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now())
@@ -146,130 +149,126 @@ class BotsController extends Controller
                                     event(new FreeInternetAccept($orderUser));
                                     $counter++;
                                 } else {
-                                    echo "<span style='color:red'>Error on giving voucher to user #".$orderUser->id."</span>";
+                                    echo "<span style='color:red'>Error on giving voucher to user #" . $orderUser->id . "</span>";
                                     echo "<br>";
                                 }
                             } else {
-                                echo "<span style='color:orangered'>User  #".$orderUser->id." already has a voucher code</span>";
+                                echo "<span style='color:orangered'>User  #" . $orderUser->id . " already has a voucher code</span>";
                                 echo "<br>";
                             }
                         } else {
-                            echo "<span style='color:red'>Error on updating order #".$voucherOrder->id." for user #".$orderUser->id."</span>";
+                            echo "<span style='color:red'>Error on updating order #" . $voucherOrder->id . " for user #" . $orderUser->id . "</span>";
                             echo "<br>";
                         }
                     } else {
-                        echo "<span style='color:orangered'>Could not find voucher for user  #".$orderUser->id."</span>";
+                        echo "<span style='color:orangered'>Could not find voucher for user  #" . $orderUser->id . "</span>";
                         echo "<br>";
                     }
                 }
-                echo "<span style='color:green'>Number of processed orders: ".$counter."</span>";
+                echo "<span style='color:green'>Number of processed orders: " . $counter . "</span>";
                 echo "<br>";
                 dd("DONE!");
             }
 
-            if($request->has('checkghesdi')){
-                $orders = Order::whereIn('paymentstatus_id', [config('constants.PAYMENT_STATUS_INDEBTED') ,config('constants.PAYMENT_STATUS_UNPAID') ])
-                                ->whereDoesntHave('orderproducts' , function ($q){
-                                    $q->where('product_id' , Product::CUSTOM_DONATE_PRODUCT);
-                                });
+            if ($request->has('checkghesdi')) {
+                $orders =
+                    Order::whereIn('paymentstatus_id', [config('constants.PAYMENT_STATUS_INDEBTED'), config('constants.PAYMENT_STATUS_UNPAID')])
+                        ->whereDoesntHave('orderproducts', function ($q) {
+                            $q->where('product_id', Product::CUSTOM_DONATE_PRODUCT);
+                        });
 
                 $since = $request->get('since');
-                if(isset($since))
-                    $orders->where('completed_at' , '>=' , $since.' 00:00:00');
+                if (isset($since))
+                    $orders->where('completed_at', '>=', $since . ' 00:00:00');
 
                 $till = $request->get('till');
-                if(isset($till))
-                    $orders->where('completed_at' , '<=' , $till.' 23:59:59');
+                if (isset($till))
+                    $orders->where('completed_at', '<=', $till . ' 23:59:59');
 
                 $orders = $orders->get();
-                dump('Found total '.$orders->count().' indebted orders');
+                dump('Found total ' . $orders->count() . ' indebted orders');
                 $counter = 0;
-                foreach ($orders as $order){
-                    if($order->totalCost() == $order->totalPaidCost())
-                    {
+                foreach ($orders as $order) {
+                    if ($order->totalCost() == $order->totalPaidCost()) {
                         $counter++;
-                        $orderLink = action('Web\OrderController@edit' , $order);
-                        echo $counter.' - ';
-                        echo('<a target="_blank" href="'.$orderLink.'">'.$order->id.'</a>');
+                        $orderLink = action('Web\OrderController@edit', $order);
+                        echo $counter . ' - ';
+                        echo('<a target="_blank" href="' . $orderLink . '">' . $order->id . '</a>');
                         echo('<br>');
                     }
                 }
-                if($counter == 0 )
-                {
+                if ($counter == 0) {
                     dump('No corrupted orders found');
                 }
                 dd('Done!');
 
             }
 
-            if($request->has('checkorderproducts')){
+            if ($request->has('checkorderproducts')) {
                 $mode = 'paid_more';
-                if($request->has('notpaid')){
+                if ($request->has('notpaid')) {
                     $mode = 'not_paid';
                 }
-                $orders = Order::where('paymentstatus_id' , config('constants.PAYMENT_STATUS_PAID'))
-                                ->where('orderstatus_id' , config('constants.ORDER_STATUS_CLOSED'));
+                $orders = Order::where('paymentstatus_id', config('constants.PAYMENT_STATUS_PAID'))
+                    ->where('orderstatus_id', config('constants.ORDER_STATUS_CLOSED'));
 
                 $since = $request->get('since');
-                if(isset($since))
-                    $orders->where('completed_at' , '>=' , $since.' 00:00:00');
+                if (isset($since))
+                    $orders->where('completed_at', '>=', $since . ' 00:00:00');
 
                 $till = $request->get('till');
-                if(isset($till))
-                    $orders->where('completed_at' , '<=' , $till.' 23:59:59');
+                if (isset($till))
+                    $orders->where('completed_at', '<=', $till . ' 23:59:59');
 
                 $orders = $orders->get();
-                dump('Found total '.$orders->count().' orders');
+                dump('Found total ' . $orders->count() . ' orders');
                 $counter = 0;
-                foreach ($orders as $order){
-                    $orderTotalCost = (int)$order->obtainOrderCost(true , false)['totalCost'];
-                    if($mode == 'paid_more'){
-                        $condition = (( $order->totalPaidCost() - $orderTotalCost ) > 5)?true:false ;
-                    }else{
-                        $condition = ( $orderTotalCost > $order->totalPaidCost() )?true:false ;
+                foreach ($orders as $order) {
+                    $orderTotalCost = (int)$order->obtainOrderCost(true, false)['totalCost'];
+                    if ($mode == 'paid_more') {
+                        $condition = (($order->totalPaidCost() - $orderTotalCost) > 5) ? true : false;
+                    } else {
+                        $condition = ($orderTotalCost > $order->totalPaidCost()) ? true : false;
                     }
-                    if($condition)
-                    {
+                    if ($condition) {
                         $counter++;
-                        $orderLink = action('Web\OrderController@edit' , $order);
-                        echo $counter.' - ';
-                        echo('<a target="_blank" href="'.$orderLink.'">'.$order->id.'</a>');
+                        $orderLink = action('Web\OrderController@edit', $order);
+                        echo $counter . ' - ';
+                        echo('<a target="_blank" href="' . $orderLink . '">' . $order->id . '</a>');
                         echo('<br>');
                     }
                 }
-                if($counter == 0 )
-                {
+                if ($counter == 0) {
                     dump('No corrupted orders found');
                 }
                 dd('Done!');
 
             }
 
-            if($request->has('checktransactions')){
+            if ($request->has('checktransactions')) {
                 $transactions = Transaction::whereNotNull('transactionID')
-                                            ->where('transactionstatus_id' , config('constants.TRANSACTION_STATUS_UNSUCCESSFUL'));
+                    ->where('transactionstatus_id', config('constants.TRANSACTION_STATUS_UNSUCCESSFUL'));
 
                 $transactions = $transactions->get();
-                $totalCount = $transactions->count();
-                if($totalCount == 0 )
-                {
+                $totalCount   = $transactions->count();
+                if ($totalCount == 0) {
                     dd('No corrupted transactions found');
                 }
 
-                dump('Found total '.$totalCount.' transactions');
+                dump('Found total ' . $totalCount . ' transactions');
                 $counter = 0;
                 foreach ($transactions as $transaction) {
                     $counter++;
-                    $transactionLink = action('Web\TransactionController@edit' , $transaction);
-                    echo $counter.' - ';
-                    echo('<a target="_blank" href="'.$transactionLink.'">'.$transaction->id.'</a>');
+                    $transactionLink = action('Web\TransactionController@edit', $transaction);
+                    echo $counter . ' - ';
+                    echo('<a target="_blank" href="' . $transactionLink . '">' . $transaction->id . '</a>');
                     echo('<br>');
                 }
                 dd('Done!');
             }
 
-            if($request->has('walletquery')){
-                $query = User::whereHas('transactions' , function ($q) {
+            if ($request->has('walletquery')) {
+                $query = User::whereHas('transactions', function ($q) {
                     $q->where('paymentmethod_id', config('constants.PAYMENT_METHOD_WALLET'))
                         ->where('transactionstatus_id', config('constants.TRANSACTION_STATUS_SUSPENDED'))
                         ->where('cost', '>', 0)
@@ -282,31 +281,31 @@ class BotsController extends Controller
                 dd($query);
             }
 
-            if($request->has('teacherrank')){
+            if ($request->has('teacherrank')) {
                 $otherProducts = [306, 316, 322, 318, 302, 326, 312, 298, 308, 328, 342];
-                    $orderproducts = Orderproduct::select(DB::raw('COUNT("*") as count , product_id'))
-                        ->whereIn('product_id', $otherProducts)
-                        ->where('orderproducttype_id', config('constants.ORDER_PRODUCT_TYPE_DEFAULT'))
-                        ->whereHas('order', function ($q) {
-                            $q->where('orderstatus_id', config('constants.ORDER_STATUS_CLOSED'))
-                                ->where('paymentstatus_id', config('constants.PAYMENT_STATUS_PAID'));
-                        })
-                        ->groupBy('product_id')
-                        ->get()
-                        ->pluck('count' , 'product_id')
-                        ->toArray();
+                $orderproducts = Orderproduct::select(DB::raw('COUNT("*") as count , product_id'))
+                    ->whereIn('product_id', $otherProducts)
+                    ->where('orderproducttype_id', config('constants.ORDER_PRODUCT_TYPE_DEFAULT'))
+                    ->whereHas('order', function ($q) {
+                        $q->where('orderstatus_id', config('constants.ORDER_STATUS_CLOSED'))
+                            ->where('paymentstatus_id', config('constants.PAYMENT_STATUS_PAID'));
+                    })
+                    ->groupBy('product_id')
+                    ->get()
+                    ->pluck('count', 'product_id')
+                    ->toArray();
 
-                    dd($orderproducts);
+                dd($orderproducts);
             }
-        } catch (\Exception    $e) {
+        } catch (Exception    $e) {
             $message = "unexpected error";
 
-            return response()->json( [
+            return response()->json([
                 "message" => $message,
                 "error"   => $e->getMessage(),
                 "line"    => $e->getLine(),
                 "file"    => $e->getFile(),
-            ] , Response::HTTP_SERVICE_UNAVAILABLE);
+            ], Response::HTTP_SERVICE_UNAVAILABLE);
         }
     }
 
@@ -530,7 +529,7 @@ class BotsController extends Controller
                         if (!empty($idArray) && strlen($filterType) > 0) {
                             foreach ($idArray as $key => $ids) {
                                 if ($key > 0) {
-                                    $myFilterType = "or".$filterType;
+                                    $myFilterType = "or" . $filterType;
                                 } else {
                                     $myFilterType = $filterType;
                                 }
@@ -554,7 +553,7 @@ class BotsController extends Controller
         }
 
         $users = $users->get();
-        dump("Total number of users:".$users->count());
+        dump("Total number of users:" . $users->count());
 
         if (!$request->has("giveGift")) {
             dd("Done!");
@@ -574,7 +573,7 @@ class BotsController extends Controller
                 $successCounter++;
             } else {
                 $failedCounter++;
-                dump("Credit for user: ".$user->id." was not given!"."wallet: ".$wallet." ,response: ".$result["responseText"]);
+                dump("Credit for user: " . $user->id . " was not given!" . "wallet: " . $wallet . " ,response: " . $result["responseText"]);
             }
         }
         dump("Number of successfully processed users: ", $successCounter);
@@ -589,37 +588,37 @@ class BotsController extends Controller
         $warningCounter = 0;
         $users          = collect();
 
-        if($request->has('summer98')){
+        if ($request->has('summer98')) {
             $transactions = Transaction::whereHas("order", function ($q) {
-                $q->whereIn("orderstatus_id", [config("constants.ORDER_STATUS_CLOSED") , config('constants.ORDER_STATUS_POSTED')])
-                    ->whereIn("paymentstatus_id", [config("constants.PAYMENT_STATUS_PAID") , config('constants.PAYMENT_STATUS_VERIFIED_INDEBTED')])
-                    ->whereHas('orderproducts' , function ($q2){
-                        $q2->whereNotIn('product_id' , [Product::CUSTOM_DONATE_PRODUCT , Product::DONATE_PRODUCT_5_HEZAR , Product::ASIATECH_PRODUCT]) ;
+                $q->whereIn("orderstatus_id", [config("constants.ORDER_STATUS_CLOSED"), config('constants.ORDER_STATUS_POSTED')])
+                    ->whereIn("paymentstatus_id", [config("constants.PAYMENT_STATUS_PAID"), config('constants.PAYMENT_STATUS_VERIFIED_INDEBTED')])
+                    ->whereHas('orderproducts', function ($q2) {
+                        $q2->whereNotIn('product_id', [Product::CUSTOM_DONATE_PRODUCT, Product::DONATE_PRODUCT_5_HEZAR, Product::ASIATECH_PRODUCT]);
                     });
             })
-            ->where("created_at" , '>=', "2019-08-11 19:30:00") // 20 mordad 98 saat 12 shab tehran
-            ->where('created_at' , '<=', "2019-09-01 19:30:00") // 2 shahrivar 98 saat 12 shab
-            ->where("transactionstatus_id", config("constants.TRANSACTION_STATUS_SUCCESSFUL"))
-            ->where('paymentmethod_id' , '<>' , config('constants.PAYMENT_METHOD_WALLET'))
-            ->where("cost", ">", 0)
-            ->get();
+                ->where("created_at", '>=', "2019-08-11 19:30:00") // 20 mordad 98 saat 12 shab tehran
+                ->where('created_at', '<=', "2019-09-01 19:30:00") // 2 shahrivar 98 saat 12 shab
+                ->where("transactionstatus_id", config("constants.TRANSACTION_STATUS_SUCCESSFUL"))
+                ->where('paymentmethod_id', '<>', config('constants.PAYMENT_METHOD_WALLET'))
+                ->where("cost", ">", 0)
+                ->get();
 
             $pointMultiply = 1;
-            $amountUnit     = 50000;
+            $amountUnit    = 50000;
             foreach ($transactions as $transaction) {
                 $user = $transaction->order->user;
                 if (isset($user)) {
                     $userRecords = $users->where("user_id", $user->id);
                     if ($userRecords->isNotEmpty()) {
-                        foreach ($userRecords as $key => $userRecord){
+                        foreach ($userRecords as $key => $userRecord) {
                             $userRecord["totalAmount"] += $transaction->cost;
-                            $point                      = (int) ($userRecord["totalAmount"] / $amountUnit);
-                            $userRecord["point"]        = $point ;
+                            $point                     = (int)($userRecord["totalAmount"] / $amountUnit);
+                            $userRecord["point"]       = $point;
 //                          $userRecord["point"]       = $point * $pointMultiply;
-                            $users->put($key , $userRecord);
+                            $users->put($key, $userRecord);
                         }
                     } else {
-                        $point = (int) ($transaction->cost / $amountUnit);
+                        $point = (int)($transaction->cost / $amountUnit);
                         $users->push([
                             "user_id"     => $user->id,
                             "totalAmount" => $transaction->cost,
@@ -628,89 +627,88 @@ class BotsController extends Controller
                         ]);
                     }
                 } else {
-                    dump("Warning: User was not found for transaction ".$transaction->id);
+                    dump("Warning: User was not found for transaction " . $transaction->id);
                     $warningCounter++;
                 }
             }
-        }
-        elseif($request->has('riyazi')){
+        } else if ($request->has('riyazi')) {
             // riyazi [318]
-            $riyaziComplete = User::whereHas('orderproducts' , function ($q){
-                $q->whereHas('order' , function ($q2){
-                    $q2->whereIn("orderstatus_id", [config("constants.ORDER_STATUS_CLOSED") , config('constants.ORDER_STATUS_POSTED')])
+            $riyaziComplete = User::whereHas('orderproducts', function ($q) {
+                $q->whereHas('order', function ($q2) {
+                    $q2->whereIn("orderstatus_id", [config("constants.ORDER_STATUS_CLOSED"), config('constants.ORDER_STATUS_POSTED')])
                         ->whereIn("paymentstatus_id", [config("constants.PAYMENT_STATUS_PAID")])
-                    ->whereHas('transactions' , function ($q3){
-                        $q3->where("transactionstatus_id", config("constants.TRANSACTION_STATUS_SUCCESSFUL"))
-                            ->where('paymentmethod_id' , '<>' , config('constants.PAYMENT_METHOD_WALLET'))
-                            ->where("cost", ">", 0);
-                    });
-                })->where('product_id' , 298);
-            })->whereHas('orderproducts' , function ($q){
-                $q->whereHas('order' , function ($q2){
-                    $q2->whereIn("orderstatus_id", [config("constants.ORDER_STATUS_CLOSED") , config('constants.ORDER_STATUS_POSTED')])
-                        ->whereIn("paymentstatus_id", [config("constants.PAYMENT_STATUS_PAID")])
-                        ->whereHas('transactions' , function ($q3){
+                        ->whereHas('transactions', function ($q3) {
                             $q3->where("transactionstatus_id", config("constants.TRANSACTION_STATUS_SUCCESSFUL"))
-                                ->where('paymentmethod_id' , '<>' , config('constants.PAYMENT_METHOD_WALLET'))
+                                ->where('paymentmethod_id', '<>', config('constants.PAYMENT_METHOD_WALLET'))
+                                ->where("cost", ">", 0);
+                        });
+                })->where('product_id', 298);
+            })->whereHas('orderproducts', function ($q) {
+                $q->whereHas('order', function ($q2) {
+                    $q2->whereIn("orderstatus_id", [config("constants.ORDER_STATUS_CLOSED"), config('constants.ORDER_STATUS_POSTED')])
+                        ->whereIn("paymentstatus_id", [config("constants.PAYMENT_STATUS_PAID")])
+                        ->whereHas('transactions', function ($q3) {
+                            $q3->where("transactionstatus_id", config("constants.TRANSACTION_STATUS_SUCCESSFUL"))
+                                ->where('paymentmethod_id', '<>', config('constants.PAYMENT_METHOD_WALLET'))
                                 ->where("cost", ">", 0);
                         });
                 })
-                    ->where('product_id' , 312);
-            })->whereHas('orderproducts' , function ($q){
-                $q->whereHas('order' , function ($q2){
-                    $q2->whereIn("orderstatus_id", [config("constants.ORDER_STATUS_CLOSED") , config('constants.ORDER_STATUS_POSTED')])
+                    ->where('product_id', 312);
+            })->whereHas('orderproducts', function ($q) {
+                $q->whereHas('order', function ($q2) {
+                    $q2->whereIn("orderstatus_id", [config("constants.ORDER_STATUS_CLOSED"), config('constants.ORDER_STATUS_POSTED')])
                         ->whereIn("paymentstatus_id", [config("constants.PAYMENT_STATUS_PAID")])
-                        ->whereHas('transactions' , function ($q3){
+                        ->whereHas('transactions', function ($q3) {
                             $q3->where("transactionstatus_id", config("constants.TRANSACTION_STATUS_SUCCESSFUL"))
-                                ->where('paymentmethod_id' , '<>' , config('constants.PAYMENT_METHOD_WALLET'))
+                                ->where('paymentmethod_id', '<>', config('constants.PAYMENT_METHOD_WALLET'))
                                 ->where("cost", ">", 0);
                         });
                 })
-                    ->where('product_id' , 308);
-            })->whereHas('orderproducts' , function ($q){
-                $q->whereHas('order' , function ($q2){
-                    $q2->whereIn("orderstatus_id", [config("constants.ORDER_STATUS_CLOSED") , config('constants.ORDER_STATUS_POSTED')])
+                    ->where('product_id', 308);
+            })->whereHas('orderproducts', function ($q) {
+                $q->whereHas('order', function ($q2) {
+                    $q2->whereIn("orderstatus_id", [config("constants.ORDER_STATUS_CLOSED"), config('constants.ORDER_STATUS_POSTED')])
                         ->whereIn("paymentstatus_id", [config("constants.PAYMENT_STATUS_PAID")])
-                        ->whereHas('transactions' , function ($q3){
+                        ->whereHas('transactions', function ($q3) {
                             $q3->where("transactionstatus_id", config("constants.TRANSACTION_STATUS_SUCCESSFUL"))
-                                ->where('paymentmethod_id' , '<>' , config('constants.PAYMENT_METHOD_WALLET'))
+                                ->where('paymentmethod_id', '<>', config('constants.PAYMENT_METHOD_WALLET'))
                                 ->where("cost", ">", 0);
                         });
                 })
-                    ->where('product_id' , 306);
-            })->whereHas('orderproducts' , function ($q){
-                $q->whereHas('order' , function ($q2){
-                    $q2->whereIn("orderstatus_id", [config("constants.ORDER_STATUS_CLOSED") , config('constants.ORDER_STATUS_POSTED')])
+                    ->where('product_id', 306);
+            })->whereHas('orderproducts', function ($q) {
+                $q->whereHas('order', function ($q2) {
+                    $q2->whereIn("orderstatus_id", [config("constants.ORDER_STATUS_CLOSED"), config('constants.ORDER_STATUS_POSTED')])
                         ->whereIn("paymentstatus_id", [config("constants.PAYMENT_STATUS_PAID")])
-                        ->whereHas('transactions' , function ($q3){
+                        ->whereHas('transactions', function ($q3) {
                             $q3->where("transactionstatus_id", config("constants.TRANSACTION_STATUS_SUCCESSFUL"))
-                                ->where('paymentmethod_id' , '<>' , config('constants.PAYMENT_METHOD_WALLET'))
+                                ->where('paymentmethod_id', '<>', config('constants.PAYMENT_METHOD_WALLET'))
                                 ->where("cost", ">", 0);
                         });
                 })
-                    ->where('product_id' , 302);
-            })->whereHas('orderproducts' , function ($q){
-                $q->whereHas('order' , function ($q2){
-                    $q2->whereIn("orderstatus_id", [config("constants.ORDER_STATUS_CLOSED") , config('constants.ORDER_STATUS_POSTED')])
+                    ->where('product_id', 302);
+            })->whereHas('orderproducts', function ($q) {
+                $q->whereHas('order', function ($q2) {
+                    $q2->whereIn("orderstatus_id", [config("constants.ORDER_STATUS_CLOSED"), config('constants.ORDER_STATUS_POSTED')])
                         ->whereIn("paymentstatus_id", [config("constants.PAYMENT_STATUS_PAID")])
-                        ->whereHas('transactions' , function ($q3){
+                        ->whereHas('transactions', function ($q3) {
                             $q3->where("transactionstatus_id", config("constants.TRANSACTION_STATUS_SUCCESSFUL"))
-                                ->where('paymentmethod_id' , '<>' , config('constants.PAYMENT_METHOD_WALLET'))
+                                ->where('paymentmethod_id', '<>', config('constants.PAYMENT_METHOD_WALLET'))
                                 ->where("cost", ">", 0);
                         });
                 })
-                    ->where('product_id' , 342);
-            })->whereHas('orderproducts' , function ($q){
-                $q->whereHas('order' , function ($q2){
-                    $q2->whereIn("orderstatus_id", [config("constants.ORDER_STATUS_CLOSED") , config('constants.ORDER_STATUS_POSTED')])
+                    ->where('product_id', 342);
+            })->whereHas('orderproducts', function ($q) {
+                $q->whereHas('order', function ($q2) {
+                    $q2->whereIn("orderstatus_id", [config("constants.ORDER_STATUS_CLOSED"), config('constants.ORDER_STATUS_POSTED')])
                         ->whereIn("paymentstatus_id", [config("constants.PAYMENT_STATUS_PAID")])
-                        ->whereHas('transactions' , function ($q3){
+                        ->whereHas('transactions', function ($q3) {
                             $q3->where("transactionstatus_id", config("constants.TRANSACTION_STATUS_SUCCESSFUL"))
-                                ->where('paymentmethod_id' , '<>' , config('constants.PAYMENT_METHOD_WALLET'))
+                                ->where('paymentmethod_id', '<>', config('constants.PAYMENT_METHOD_WALLET'))
                                 ->where("cost", ">", 0);
                         });
                 })
-                    ->where('product_id' , 318);
+                    ->where('product_id', 318);
             })->get();
 
             foreach ($riyaziComplete as $user) {
@@ -720,72 +718,71 @@ class BotsController extends Controller
                     "point"       => 1,
                 ]);
             }
-        }
-        elseif($request->has('tajrobi')){
+        } else if ($request->has('tajrobi')) {
             // tajrobi [328 ,322,316] zist[326]
-            $tajrobiComplete = User::whereHas('orderproducts' , function ($q){
-                $q->where('product_id' , 298)
-                    ->whereHas('order' , function ($q2){
-                        $q2->whereIn("orderstatus_id", [config("constants.ORDER_STATUS_CLOSED") , config('constants.ORDER_STATUS_POSTED')])
+            $tajrobiComplete = User::whereHas('orderproducts', function ($q) {
+                $q->where('product_id', 298)
+                    ->whereHas('order', function ($q2) {
+                        $q2->whereIn("orderstatus_id", [config("constants.ORDER_STATUS_CLOSED"), config('constants.ORDER_STATUS_POSTED')])
                             ->whereIn("paymentstatus_id", [config("constants.PAYMENT_STATUS_PAID")])
-                            ->whereHas('transactions' , function ($q3){
+                            ->whereHas('transactions', function ($q3) {
                                 $q3->where("transactionstatus_id", config("constants.TRANSACTION_STATUS_SUCCESSFUL"))
-                                    ->where('paymentmethod_id' , '<>' , config('constants.PAYMENT_METHOD_WALLET'))
+                                    ->where('paymentmethod_id', '<>', config('constants.PAYMENT_METHOD_WALLET'))
                                     ->where("cost", ">", 0);
                             });
                     });
-            })->whereHas('orderproducts' , function ($q){
-                $q->where('product_id' , 312)
-                    ->whereHas('order' , function ($q2){
-                        $q2->whereIn("orderstatus_id", [config("constants.ORDER_STATUS_CLOSED") , config('constants.ORDER_STATUS_POSTED')])
+            })->whereHas('orderproducts', function ($q) {
+                $q->where('product_id', 312)
+                    ->whereHas('order', function ($q2) {
+                        $q2->whereIn("orderstatus_id", [config("constants.ORDER_STATUS_CLOSED"), config('constants.ORDER_STATUS_POSTED')])
                             ->whereIn("paymentstatus_id", [config("constants.PAYMENT_STATUS_PAID")])
-                            ->whereHas('transactions' , function ($q3){
+                            ->whereHas('transactions', function ($q3) {
                                 $q3->where("transactionstatus_id", config("constants.TRANSACTION_STATUS_SUCCESSFUL"))
-                                    ->where('paymentmethod_id' , '<>' , config('constants.PAYMENT_METHOD_WALLET'))
+                                    ->where('paymentmethod_id', '<>', config('constants.PAYMENT_METHOD_WALLET'))
                                     ->where("cost", ">", 0);
                             });
                     });
-            })->whereHas('orderproducts' , function ($q){
-                $q->where('product_id' , 308)
-                    ->whereHas('order' , function ($q2){
-                        $q2->whereIn("orderstatus_id", [config("constants.ORDER_STATUS_CLOSED") , config('constants.ORDER_STATUS_POSTED')])
+            })->whereHas('orderproducts', function ($q) {
+                $q->where('product_id', 308)
+                    ->whereHas('order', function ($q2) {
+                        $q2->whereIn("orderstatus_id", [config("constants.ORDER_STATUS_CLOSED"), config('constants.ORDER_STATUS_POSTED')])
                             ->whereIn("paymentstatus_id", [config("constants.PAYMENT_STATUS_PAID")])
-                            ->whereHas('transactions' , function ($q3){
+                            ->whereHas('transactions', function ($q3) {
                                 $q3->where("transactionstatus_id", config("constants.TRANSACTION_STATUS_SUCCESSFUL"))
-                                    ->where('paymentmethod_id' , '<>' , config('constants.PAYMENT_METHOD_WALLET'))
+                                    ->where('paymentmethod_id', '<>', config('constants.PAYMENT_METHOD_WALLET'))
                                     ->where("cost", ">", 0);
                             });
                     });
-            })->whereHas('orderproducts' , function ($q){
-                $q->where('product_id' , 306)
-                    ->whereHas('order' , function ($q2){
-                        $q2->whereIn("orderstatus_id", [config("constants.ORDER_STATUS_CLOSED") , config('constants.ORDER_STATUS_POSTED')])
+            })->whereHas('orderproducts', function ($q) {
+                $q->where('product_id', 306)
+                    ->whereHas('order', function ($q2) {
+                        $q2->whereIn("orderstatus_id", [config("constants.ORDER_STATUS_CLOSED"), config('constants.ORDER_STATUS_POSTED')])
                             ->whereIn("paymentstatus_id", [config("constants.PAYMENT_STATUS_PAID")])
-                            ->whereHas('transactions' , function ($q3){
+                            ->whereHas('transactions', function ($q3) {
                                 $q3->where("transactionstatus_id", config("constants.TRANSACTION_STATUS_SUCCESSFUL"))
-                                    ->where('paymentmethod_id' , '<>' , config('constants.PAYMENT_METHOD_WALLET'))
+                                    ->where('paymentmethod_id', '<>', config('constants.PAYMENT_METHOD_WALLET'))
                                     ->where("cost", ">", 0);
                             });
                     });
-            })->whereHas('orderproducts' , function ($q){
-                $q->where('product_id' , 302)
-                    ->whereHas('order' , function ($q2){
-                        $q2->whereIn("orderstatus_id", [config("constants.ORDER_STATUS_CLOSED") , config('constants.ORDER_STATUS_POSTED')])
+            })->whereHas('orderproducts', function ($q) {
+                $q->where('product_id', 302)
+                    ->whereHas('order', function ($q2) {
+                        $q2->whereIn("orderstatus_id", [config("constants.ORDER_STATUS_CLOSED"), config('constants.ORDER_STATUS_POSTED')])
                             ->whereIn("paymentstatus_id", [config("constants.PAYMENT_STATUS_PAID")])
-                            ->whereHas('transactions' , function ($q3){
+                            ->whereHas('transactions', function ($q3) {
                                 $q3->where("transactionstatus_id", config("constants.TRANSACTION_STATUS_SUCCESSFUL"))
-                                    ->where('paymentmethod_id' , '<>' , config('constants.PAYMENT_METHOD_WALLET'))
+                                    ->where('paymentmethod_id', '<>', config('constants.PAYMENT_METHOD_WALLET'))
                                     ->where("cost", ">", 0);
                             });
                     });
-            })->whereHas('orderproducts' , function ($q){
-                $q->whereIn('product_id' , [322,316,328])
-                    ->whereHas('order' , function ($q2){
-                        $q2->whereIn("orderstatus_id", [config("constants.ORDER_STATUS_CLOSED") , config('constants.ORDER_STATUS_POSTED')])
+            })->whereHas('orderproducts', function ($q) {
+                $q->whereIn('product_id', [322, 316, 328])
+                    ->whereHas('order', function ($q2) {
+                        $q2->whereIn("orderstatus_id", [config("constants.ORDER_STATUS_CLOSED"), config('constants.ORDER_STATUS_POSTED')])
                             ->whereIn("paymentstatus_id", [config("constants.PAYMENT_STATUS_PAID")])
-                            ->whereHas('transactions' , function ($q3){
+                            ->whereHas('transactions', function ($q3) {
                                 $q3->where("transactionstatus_id", config("constants.TRANSACTION_STATUS_SUCCESSFUL"))
-                                    ->where('paymentmethod_id' , '<>' , config('constants.PAYMENT_METHOD_WALLET'))
+                                    ->where('paymentmethod_id', '<>', config('constants.PAYMENT_METHOD_WALLET'))
                                     ->where("cost", ">", 0);
                             });
                     });
@@ -802,7 +799,7 @@ class BotsController extends Controller
         }
 
 
-        $users = $users->where("point"  , ">" , 0);
+        $users = $users->where("point", ">", 0);
 //        dump($users->count());
 //        dd("STOP points");
         /** Extra point */
@@ -843,13 +840,13 @@ class BotsController extends Controller
             dd("Bon not found");
         }
 
-        dump("Number of available users: ".$users->count());
+        dump("Number of available users: " . $users->count());
 
         foreach ($users as $userPoint) {
             $userId = $userPoint["user_id"];
             $points = $userPoint["point"];
 
-            echo "User Id: ".$userId." , Points: ".$points;
+            echo "User Id: " . $userId . " , Points: " . $points;
             echo "<br>";
 
             if ($points == 0) {
@@ -872,17 +869,17 @@ class BotsController extends Controller
                 $user = $userBon->user;
 //                $user->notify(new GeneralNotice($message));
                 echo "<span style='color:green'>";
-                echo "User ".$userId." get $points points , ".$user->mobile;
+                echo "User " . $userId . " get $points points , " . $user->mobile;
                 echo "</span>";
                 echo "<br>";
                 $successCounter++;
             } else {
                 $failedCounter++;
-                dump("Error: Userbon for user ".$userId." was not created");
+                dump("Error: Userbon for user " . $userId . " was not created");
             }
         }
-        dump("number of successfully processed users: ".$successCounter);
-        dump("number of failed users: ".$failedCounter);
+        dump("number of successfully processed users: " . $successCounter);
+        dump("number of failed users: " . $failedCounter);
         dd("Done!");
     }
 
@@ -959,11 +956,11 @@ class BotsController extends Controller
                                 $response = $this->registerUserAndGiveOrderproduct($request);
                                 if ($response->getStatusCode() == Response::HTTP_OK) {
                                     $counter++;
-                                    echo "User inserted: ".$lastName." ".$mobile;
+                                    echo "User inserted: " . $lastName . " " . $mobile;
                                     echo "<br>";
                                 } else {
                                     echo "<span style='color:red'>";
-                                    echo "Error on inserting user: ".$lastName." ".$mobile;
+                                    echo "Error on inserting user: " . $lastName . " " . $mobile;
                                     echo "</span>";
                                     echo "<br>";
                                 }
@@ -978,13 +975,13 @@ class BotsController extends Controller
                                 }
 
                                 echo "<span style='color:orange'>";
-                                echo "Warning! user wrong information: ".$lastName.$fault." ,in sheet : ".$sheetName;
+                                echo "Warning! user wrong information: " . $lastName . $fault . " ,in sheet : " . $sheetName;
                                 echo "</span>";
                                 echo "<br>";
                             }
                         } else {
                             echo "<span style='color:orange'>";
-                            echo "Warning! user incomplete information: ".$lastName." ,in sheet : ".$sheetName;
+                            echo "Warning! user incomplete information: " . $lastName . " ,in sheet : " . $sheetName;
                             echo "</span>";
                             echo "<br>";
                         }
@@ -993,7 +990,7 @@ class BotsController extends Controller
             });
         });
         echo "<span style='color:green'>";
-        echo "Inserted users: ".$counter;
+        echo "Inserted users: " . $counter;
         echo "</span>";
         echo "<br>";
         dd("Done!");
@@ -1004,7 +1001,7 @@ class BotsController extends Controller
     {
         $counter = 0;
         try {
-            dump("start time:".Carbon::now("asia/tehran"));
+            dump("start time:" . Carbon::now("asia/tehran"));
             if (!$request->has("t")) {
                 return response()->json(["message" => "Wrong inputs: Please pass parameter t. Available values: v , p , cs , pr , e , b ,a"], Response::HTTP_UNPROCESSABLE_ENTITY);
             }
@@ -1860,19 +1857,19 @@ class BotsController extends Controller
                     return response()->json(["message" => "Unprocessable input t."], Response::HTTP_UNPROCESSABLE_ENTITY);
                     break;
             }
-            dump("available items: ".$items->count());
+            dump("available items: " . $items->count());
             $successCounter = 0;
             $failedCounter  = 0;
             $warningCounter = 0;
             foreach ($items as $item) {
                 if (!isset($item)) {
                     $warningCounter++;
-                    dump("invalid item at counter".$counter);
+                    dump("invalid item at counter" . $counter);
                     continue;
                 } else {
                     if (!isset($item->tags)) {
                         $warningCounter++;
-                        dump("no tags found for".$item->id);
+                        dump("no tags found for" . $item->id);
                         continue;
                     } else {
                         $itemTagsArray = $item->tags->tags;
@@ -1887,71 +1884,73 @@ class BotsController extends Controller
                         $params["score"] = Carbon::createFromFormat("Y-m-d H:i:s", $item->created_at)->timestamp;
                     }
 
-                    $response = $this->sendRequest(config("constants.TAG_API_URL")."id/$bucket/".$item->id, "PUT",
+                    $response = $this->sendRequest(config("constants.TAG_API_URL") . "id/$bucket/" . $item->id, "PUT",
                         $params);
 
                     if ($response["statusCode"] == Response::HTTP_OK) {
                         $successCounter++;
                     } else {
-                        dump("item #".$item["id"]." failed. response : ".$response["statusCode"]);
+                        dump("item #" . $item["id"] . " failed. response : " . $response["statusCode"]);
                         $failedCounter++;
                     }
                     $counter++;
                 } else {
                     if (is_array($itemTagsArray) && empty($itemTagsArray)) {
                         $warningCounter++;
-                        dump("warning no tags found for item #".$item->id);
+                        dump("warning no tags found for item #" . $item->id);
                     }
                 }
             }
-            dump($successCounter." items successfully done");
-            dump($failedCounter." items failed");
-            dump($warningCounter." warnings");
-            dump("finish time:".Carbon::now("asia/tehran"));
+            dump($successCounter . " items successfully done");
+            dump($failedCounter . " items failed");
+            dump($warningCounter . " warnings");
+            dump("finish time:" . Carbon::now("asia/tehran"));
 
-            return response()->json(["message" => "Done! number of processed items : $counter"] , Response::HTTP_OK);
-        } catch (\Exception $e) {
+            return response()->json(["message" => "Done! number of processed items : $counter"], Response::HTTP_OK);
+        } catch (Exception $e) {
             $message = "unexpected error";
-            dump($successCounter." items successfully done");
-            dump($failedCounter." items failed");
-            dump($warningCounter." warnings");
+            dump($successCounter . " items successfully done");
+            dump($failedCounter . " items failed");
+            dump($warningCounter . " warnings");
 
             return response()->json([
                 "message"                                => $message,
                 "number of successfully processed items" => $counter,
                 "error"                                  => $e->getMessage(),
                 "line"                                   => $e->getLine(),
-            ] , Response::HTTP_SERVICE_UNAVAILABLE );
+            ], Response::HTTP_SERVICE_UNAVAILABLE);
         }
     }
 
-    public function ZarinpalVerifyPaymentBot(Request $request){
+    public function ZarinpalVerifyPaymentBot(Request $request)
+    {
         $authority = $request->get('authority');
-        $cost = $request->get('cost');
+        $cost      = $request->get('cost');
 
-        if(is_null($authority) || is_null($cost))
+        if (is_null($authority) || is_null($cost))
             dd('Please provide authority and cost');
 
         $zarinpal = new Zarinpal(config('Zarinpal.merchantID'));
-        $result = $zarinpal->verify($cost, $authority);
+        $result   = $zarinpal->verify($cost, $authority);
         return response()->json([
-            'result'  => $result
+            'result' => $result,
         ]);
     }
 
-    public function fixthumbnail(Request $request){
+    public function fixthumbnail(Request $request)
+    {
         $setId = $request->get('set');
-        $set = Contentset::Find($setId);
-        if(!isset($set))
-            return response()->json(['message'=>'Bad request. set has not been set'] , Response::HTTP_BAD_REQUEST);
+        $set   = Contentset::Find($setId);
+        if (!isset($set))
+            return response()->json(['message' => 'Bad request. set has not been set'], Response::HTTP_BAD_REQUEST);
 
-        $contents = $set->contents()->where('contenttype_id' , 8)->whereNull('thumbnail')->get();
+        $contents = $set->contents()->where('contenttype_id', 8)->whereNull('thumbnail')->get();
 
         foreach ($contents as $content) {
-            $baseUrl = "https://cdn.sanatisharif.ir/media/";
-            $videoFileName = basename($content->file_for_admin->get('video')->first()->fileName);
-            $thumbnailFileName = pathinfo($videoFileName, PATHINFO_FILENAME).".jpg";
-            $thumbnailUrl      = $baseUrl."thumbnails/".$setId."/".$thumbnailFileName;
+            $baseUrl           = "https://cdn.sanatisharif.ir/media/";
+            $videoFileName     = basename($content->file_for_admin->get('video')->first()->fileName);
+            $thumbnailFileName = pathinfo($videoFileName, PATHINFO_FILENAME) . ".jpg";
+            $thumbnailUrl      = $baseUrl . "thumbnails/" . $setId . "/" . $thumbnailFileName;
 
             $size = null;
             $type = 'thumbnail';
@@ -1972,25 +1971,26 @@ class BotsController extends Controller
         }
 
         return response()->json([
-            'message'  => 'thumbnails fixed successfully'
+            'message' => 'thumbnails fixed successfully',
         ]);
     }
 
-    public function introContentTags(Request $request){
-        $product = Product::find($request->get('product'));
-        $contents = Content::whereIn('id' , convertTagStringToArray($request->get('contents' , [])))->get();
-        if(!isset($product) || $contents->isEmpty()){
+    public function introContentTags(Request $request)
+    {
+        $product  = Product::find($request->get('product'));
+        $contents = Content::whereIn('id', convertTagStringToArray($request->get('contents', [])))->get();
+        if (!isset($product) || $contents->isEmpty()) {
             return response()->json([
-                'error'=>[
-                    'code'  => Response::HTTP_BAD_REQUEST,
-                    'message'   => 'please set product and contents argument'
-                ]
+                'error' => [
+                    'code'    => Response::HTTP_BAD_REQUEST,
+                    'message' => 'please set product and contents argument',
+                ],
             ]);
         }
 
         $tags = [];
         foreach ($contents as $content) {
-            array_push($tags , 'c-'.$content->id);
+            array_push($tags, 'c-' . $content->id);
         }
 
         $params = [
@@ -2001,30 +2001,32 @@ class BotsController extends Controller
             $params["score"] = Carbon::createFromFormat("Y-m-d H:i:s", $product->created_at)->timestamp;
         }
 
-        $response = $this->sendRequest(config("constants.TAG_API_URL")."id/relatedproduct/".$product->id, "PUT", $params);
+        $response =
+            $this->sendRequest(config("constants.TAG_API_URL") . "id/relatedproduct/" . $product->id, "PUT", $params);
 
         return response()->json([
-           'result'=> $response
+            'result' => $response,
         ]);
     }
 
-    public function generateMassiveRandomCoupon(Request $request){
-        $codePreFix = $request->get('codePrefix' , '');
+    public function generateMassiveRandomCoupon(Request $request)
+    {
+        $codePreFix = $request->get('codePrefix', '');
 
         $numberOfCodes = $request->get('number');
-        for ($i = 1 ; $i <= $numberOfCodes ; $i++) {
+        for ($i = 1; $i <= $numberOfCodes; $i++) {
             do {
-                $code = $codePreFix.random_int(100, 999);
+                $code = $codePreFix . random_int(100, 999);
             } while (Coupon::where('code', $code)->get()->isNotEmpty());
 
             $coupon = Coupon::create([
-                'code' => $code,
-                'discount' => $request->get('discount'),
-                'coupontype_id' => config('constants.COUPON_TYPE_OVERALL'),
+                'code'            => $code,
+                'discount'        => $request->get('discount'),
+                'coupontype_id'   => config('constants.COUPON_TYPE_OVERALL'),
                 'discounttype_id' => config('constants.DISCOUNT_TYPE_PERCENTAGE'),
-                'name' => $request->get('name'),
-                'validUntil' => $request->get('validUntil') ,
-                'usageLimit' => $request->get('usageLimit'),
+                'name'            => $request->get('name'),
+                'validUntil'      => $request->get('validUntil'),
+                'usageLimit'      => $request->get('usageLimit'),
             ]);
 
             echo $coupon->code;
@@ -2036,23 +2038,24 @@ class BotsController extends Controller
         ]);
     }
 
-    public function fixtag(Request $request){
-        $contentset   = Contentset::Find($request->get('contentset_id'));
-        $contenttype   = $request->get('contenttype_id');
-        if(!isset($contentset)){
+    public function fixtag(Request $request)
+    {
+        $contentset  = Contentset::Find($request->get('contentset_id'));
+        $contenttype = $request->get('contenttype_id');
+        if (!isset($contentset)) {
             return response()->json([
-                'message' => 'Contentset not found'
-            ] , Response::HTTP_NOT_FOUND);
+                'message' => 'Contentset not found',
+            ], Response::HTTP_NOT_FOUND);
         }
 
-        $tagString  = $request->get('tags');
-        $tags       = convertTagStringToArray($tagString);
-        $contents   = $contentset->contents->where('contenttype_id' , $contenttype);
-       if($contents->count() == 0){
-           return response()->json([
-               'message' => 'No contents found for this set'
-           ] , Response::HTTP_BAD_REQUEST);
-       }
+        $tagString = $request->get('tags');
+        $tags      = convertTagStringToArray($tagString);
+        $contents  = $contentset->contents->where('contenttype_id', $contenttype);
+        if ($contents->count() == 0) {
+            return response()->json([
+                'message' => 'No contents found for this set',
+            ], Response::HTTP_BAD_REQUEST);
+        }
 
 
         foreach ($contents as $content) {
@@ -2061,22 +2064,22 @@ class BotsController extends Controller
         }
 
         return response()->json([
-            'message'   => 'Tags successfully inserted',
+            'message' => 'Tags successfully inserted',
         ]);
     }
 
     public function closeOrders(Request $request)
     {
-        $products = convertTagStringToArray($request->get('products'));
-        $tillDateTime = $request->get('tillDate').' '.$request->get('tillTime');
+        $products     = convertTagStringToArray($request->get('products'));
+        $tillDateTime = $request->get('tillDate') . ' ' . $request->get('tillTime');
 
-        $orders = \App\Order::where('orderstatus_id' , config('constants.ORDER_STATUS_CLOSED'))
-                            ->where('paymentstatus_id' , config('constants.PAYMENT_STATUS_UNPAID'))
-                            ->where('completed_at' , '<' , $tillDateTime);
+        $orders = Order::where('orderstatus_id', config('constants.ORDER_STATUS_CLOSED'))
+            ->where('paymentstatus_id', config('constants.PAYMENT_STATUS_UNPAID'))
+            ->where('completed_at', '<', $tillDateTime);
 
-        if(!empty($products)){
-            $orders->whereHas('orderproducts' , function ($q) use ($products) {
-                $q->whereIn('product_id' , $products);
+        if (!empty($products)) {
+            $orders->whereHas('orderproducts', function ($q) use ($products) {
+                $q->whereIn('product_id', $products);
             });
         }
 
@@ -2087,13 +2090,13 @@ class BotsController extends Controller
                 'orderstatus_id' => config('constants.ORDER_STATUS_CANCELED'),
             ]);
 
-            if(!$result){
-                dump('Order #'.$order->id.' was not updated.');
+            if (!$result) {
+                dump('Order #' . $order->id . ' was not updated.');
             }
         }
 
         return response()->json([
-            'message' => $orders->count().' orders were processed',
+            'message' => $orders->count() . ' orders were processed',
         ]);
     }
 }

@@ -21,7 +21,7 @@ class TransactionStatus extends AlaaJsonResource
     public function toArray($request)
     {
         return [
-            'name' => $this->when(isset($this->displayName) , $this->displayName),
+            'name' => $this->when(isset($this->displayName), $this->displayName),
         ];
     }
 }

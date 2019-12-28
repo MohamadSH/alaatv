@@ -58,7 +58,7 @@ class HelpDeskSeeder extends Seeder
         ];
         DB::table('help_statuses')
             ->insert($status);
-        
+
         $priorities = [
             [
                 'id'    => 1,
@@ -87,24 +87,24 @@ class HelpDeskSeeder extends Seeder
 
         $tickets = [
             [
-                'id' => 1,
-                'subject' => 'asdcad',
-                'content' => 'sdcsd',
-                'user_id' => 37191,
-                'agent_id' => 37189,
+                'id'          => 1,
+                'subject'     => 'asdcad',
+                'content'     => 'sdcsd',
+                'user_id'     => 37191,
+                'agent_id'    => 37189,
                 'category_id' => 1,
                 'priority_id' => 1,
-                'status_id' => 1,
+                'status_id'   => 1,
             ],
             [
-                'id' => 2,
-                'subject' => 'saxas',
-                'content' => 'fyukfgu',
-                'user_id' => 37189,
-                'agent_id' => 37190,
+                'id'          => 2,
+                'subject'     => 'saxas',
+                'content'     => 'fyukfgu',
+                'user_id'     => 37189,
+                'agent_id'    => 37190,
                 'category_id' => 2,
                 'priority_id' => 2,
-                'status_id' => 2,
+                'status_id'   => 2,
             ],
         ];
         DB::table('help_tickets')->insert($tickets);

@@ -2,37 +2,38 @@
 
 namespace App\PaymentModule\Controllers;
 
-use App\Events\UserRedirectedToPayment;
-use App\Product;
-use App\User;
-use App\Order;
-use App\Transaction;
 use AlaaTV\Gateways\Money;
-use Illuminate\Http\RedirectResponse;
+use AlaaTV\Gateways\PaymentDriver;
+use App\Classes\Payment\RefinementRequest\RefinementLauncher;
+use App\Events\UserRedirectedToPayment;
+use App\Http\Controllers\Web\TransactionController;
+use App\Order;
+use App\PaymentModule\Repositories\OrdersRepo;
+use App\PaymentModule\Responses;
+use App\Product;
+use App\Repositories\TransactionGatewayRepo;
+use App\Repositories\TransactionRepo;
+use App\Transaction;
+use App\User;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use App\PaymentModule\Responses;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Routing\Controller;
-use AlaaTV\Gateways\PaymentDriver;
-use App\Repositories\TransactionRepo;
-use App\Repositories\TransactionGatewayRepo;
-use App\PaymentModule\Repositories\OrdersRepo;
-use App\Http\Controllers\Web\TransactionController;
-use App\Classes\Payment\RefinementRequest\RefinementLauncher;
-use Illuminate\Routing\Redirector;
 use Illuminate\Support\Collection;
+use Illuminate\View\View;
 
 class RedirectUserToPaymentPage extends Controller
 {
     /**
      * redirect the user to online payment page
      *
-     * @param string $paymentMethod
-     * @param string $device
+     * @param string  $paymentMethod
+     * @param string  $device
      *
      * @param Request $request
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     *
+     * @return Factory|View
      */
     public function __invoke(string $paymentMethod, string $device, Request $request)
     {
@@ -40,7 +41,7 @@ class RedirectUserToPaymentPage extends Controller
         $data = $this->getRefinementData($request->all(), $request->user());
 
         if ($data['statusCode'] != Response::HTTP_OK) {
-            $this->sendErrorResponse($data['message'] ?: '', $data['statusCode'] ?: Response::HTTP_SERVICE_UNAVAILABLE );
+            $this->sendErrorResponse($data['message'] ?: '', $data['statusCode'] ?: Response::HTTP_SERVICE_UNAVAILABLE);
         }
 
         /** @var User $user */
@@ -50,7 +51,7 @@ class RedirectUserToPaymentPage extends Controller
         /** @var Order $order */
         $orderUniqueId = $data['orderUniqueId'];
         /** @var Money $cost */
-        $cost = Money::fromTomans((int) $data['cost']);
+        $cost = Money::fromTomans((int)$data['cost']);
         /** @var Transaction $transaction */
         $transaction = $data['transaction'];
 
@@ -59,27 +60,26 @@ class RedirectUserToPaymentPage extends Controller
         $customerDescription = $request->get('customerDescription');
 
         $this->shouldGoToOfflinePayment($cost->rials())
-            ->thenRespondWith([[Responses::class, 'sendToOfflinePaymentProcess'], [$device, $order,$customerDescription]]);
+            ->thenRespondWith([[Responses::class, 'sendToOfflinePaymentProcess'], [$device, $order, $customerDescription]]);
 
         /** @var string $description */
-        $description = $this->getTransactionDescription($data['description'] , $device, $user->mobile, $order);
+        $description = $this->getTransactionDescription($data['description'], $device, $user->mobile, $order);
 
         $paymentClient = PaymentDriver::select($paymentMethod);
-        $url = $this->comeBackFromGateWayUrl($paymentMethod, $device);
+        $url           = $this->comeBackFromGateWayUrl($paymentMethod, $device);
 
         $authorityCode = nullable($paymentClient->generateAuthorityCode($url, $cost, $description, $orderUniqueId))
-            ->orFailWith([Responses::class, 'noResponseFromBankError'] );
+            ->orFailWith([Responses::class, 'noResponseFromBankError']);
 
-        TransactionRepo::setAuthorityForTransaction($authorityCode, $transaction->id , $this->getGatewyId($paymentMethod), $description , $device)
+        TransactionRepo::setAuthorityForTransaction($authorityCode, $transaction->id, $this->getGatewyId($paymentMethod), $description, $device)
             ->orRespondWith([Responses::class, 'editTransactionError']);
 
-        if ($this->shouldCloseOrder($order))
-        {
+        if ($this->shouldCloseOrder($order)) {
             OrdersRepo::closeOrder($order->id, ['customerDescription' => $customerDescription]);
             $this->saveOrderInCookie($order);
         }
 
-        return view("order.checkout.gatewayRedirect", ['authority' => $authorityCode, 'mobile' => $user->mobile , 'paymentMethod' => $paymentMethod]);
+        return view("order.checkout.gatewayRedirect", ['authority' => $authorityCode, 'mobile' => $user->mobile, 'paymentMethod' => $paymentMethod]);
     }
 
     /**
@@ -98,7 +98,7 @@ class RedirectUserToPaymentPage extends Controller
 
     /**
      * @param string $msg
-     * @param int $statusCode
+     * @param int    $statusCode
      *
      * @return JsonResponse
      * @throws TerminateException
@@ -109,42 +109,7 @@ class RedirectUserToPaymentPage extends Controller
     }
 
     /**
-     * @param string $description
-     * @param string $device
-     * @param              $mobile
-     * @param Order|null $order
-     *
-     * @return string
-     */
-    private function getTransactionDescription(string $description ,string $device, $mobile, $order = null)
-    {
-        $description = '';
-        if($device == 'web'){
-            $description .= 'سایت آلاء - ';
-        }elseif($device == 'android'){
-            $description .= 'اپ اندروید آلاء - ';
-        }
-        $description .= $mobile.' - محصولات: ';
-
-        if (is_null($order)) {
-            return $description;
-        }
-
-        $order->orderproducts->load('product');
-
-        foreach ($order->orderproducts as $orderProduct) {
-            if (isset($orderProduct->product->id)) {
-                $description .= $orderProduct->product->name.' , ';
-            } else {
-                $description .= 'یک محصول نامشخص , ';
-            }
-        }
-
-        return $description;
-    }
-
-    /**
-     * @param  int  $cost
+     * @param int $cost
      *
      * @return Boolean
      */
@@ -154,8 +119,43 @@ class RedirectUserToPaymentPage extends Controller
     }
 
     /**
-     * @param  string  $paymentMethod
-     * @param  string  $device
+     * @param string       $description
+     * @param string       $device
+     * @param              $mobile
+     * @param Order|null   $order
+     *
+     * @return string
+     */
+    private function getTransactionDescription(string $description, string $device, $mobile, $order = null)
+    {
+        $description = '';
+        if ($device == 'web') {
+            $description .= 'سایت آلاء - ';
+        } else if ($device == 'android') {
+            $description .= 'اپ اندروید آلاء - ';
+        }
+        $description .= $mobile . ' - محصولات: ';
+
+        if (is_null($order)) {
+            return $description;
+        }
+
+        $order->orderproducts->load('product');
+
+        foreach ($order->orderproducts as $orderProduct) {
+            if (isset($orderProduct->product->id)) {
+                $description .= $orderProduct->product->name . ' , ';
+            } else {
+                $description .= 'یک محصول نامشخص , ';
+            }
+        }
+
+        return $description;
+    }
+
+    /**
+     * @param string $paymentMethod
+     * @param string $device
      *
      * @return string
      */
@@ -165,15 +165,17 @@ class RedirectUserToPaymentPage extends Controller
             ['paymentMethod' => $paymentMethod, 'device' => $device, '_token' => csrf_token()]);
     }
 
-    private function getGatewyId(string $gateway){
+    private function getGatewyId(string $gateway)
+    {
         $myGateway = TransactionGatewayRepo::getTransactionGatewayByName($gateway)
-            ->orFailWith([Responses::class, 'sendErrorResponse'] , ['msg'   =>  'No DB record found for this gateway' , Response::HTTP_BAD_REQUEST]);
+            ->orFailWith([Responses::class, 'sendErrorResponse'], ['msg' => 'No DB record found for this gateway', Response::HTTP_BAD_REQUEST]);
 
         return $myGateway->id;
     }
 
     /**
      * @param Order $order
+     *
      * @return bool
      */
     private function shouldCloseOrder(Order $order): bool
@@ -188,16 +190,17 @@ class RedirectUserToPaymentPage extends Controller
      */
     private function saveOrderInCookie(Order $order)
     {
-        $orderproducts = $order->orderproducts ;
+        $orderproducts = $order->orderproducts;
 
         $totalCookie = $this->handleOrders($orderproducts);
 
-        if($totalCookie->isNotEmpty())
+        if ($totalCookie->isNotEmpty())
             setcookie('cartItems', $totalCookie->toJson(), time() + 3600, '/');
     }
 
     /**
      * @param $orderproducts
+     *
      * @return Collection
      */
     private function handleOrders(Collection $orderproducts)
@@ -205,14 +208,14 @@ class RedirectUserToPaymentPage extends Controller
         $totalCookie = collect();
         foreach ($orderproducts as $orderproduct) {
             $extraAttributesIds = $orderproduct->attributevalues->pluck('id')->toArray();
-            $myProduct = $orderproduct->product;
+            $myProduct          = $orderproduct->product;
 
             $grandProduct = $myProduct->grand;
             if (is_null($grandProduct)) {
                 $totalCookie->push([
-                    'product_id' => $myProduct->id,
-                    'products' => [],
-                    'extraAttribute' => $extraAttributesIds
+                    'product_id'     => $myProduct->id,
+                    'products'       => [],
+                    'extraAttribute' => $extraAttributesIds,
                 ]);
                 continue;
             }
@@ -220,7 +223,7 @@ class RedirectUserToPaymentPage extends Controller
             $grandType = $grandProduct->producttype_id;
             if ($grandType == config('constants.PRODUCT_TYPE_SELECTABLE')) {
                 $this->makeCookieForSelectableGrand($totalCookie, $grandProduct, $myProduct, $extraAttributesIds);
-            } elseif ($grandType == config('constants.PRODUCT_TYPE_CONFIGURABLE')) {
+            } else if ($grandType == config('constants.PRODUCT_TYPE_CONFIGURABLE')) {
                 $this->makeCookieForConfigurableGrand($totalCookie, $myProduct, $grandProduct, $extraAttributesIds);
             }
 
@@ -231,23 +234,23 @@ class RedirectUserToPaymentPage extends Controller
 
     /**
      * @param Collection $totalCookie
-     * @param $grandProduct
-     * @param $myProduct
-     * @param $extraAttributesIds
+     * @param            $grandProduct
+     * @param            $myProduct
+     * @param            $extraAttributesIds
      */
     private function makeCookieForSelectableGrand(Collection $totalCookie, Product $grandProduct, Product $myProduct, array $extraAttributesIds): void
     {
         $isAdded = $totalCookie->where('product_id', $grandProduct->id);
         if ($isAdded->isEmpty()) {
             $totalCookie->push([
-                'product_id' => $grandProduct->id,
-                'products' => [$myProduct->id],
-                'extraAttribute' => $extraAttributesIds
+                'product_id'     => $grandProduct->id,
+                'products'       => [$myProduct->id],
+                'extraAttribute' => $extraAttributesIds,
             ]);
         } else {
-            $key = $isAdded->keys()->last();
-            $addedCookie = $isAdded->first();
-            $addedCookie['products'] = array_merge_recursive($addedCookie['products'], [$myProduct->id]);
+            $key                           = $isAdded->keys()->last();
+            $addedCookie                   = $isAdded->first();
+            $addedCookie['products']       = array_merge_recursive($addedCookie['products'], [$myProduct->id]);
             $addedCookie['extraAttribute'] = array_merge_recursive($addedCookie['extraAttribute'], $extraAttributesIds);
             $totalCookie->put($key, $addedCookie);
         }
@@ -255,9 +258,9 @@ class RedirectUserToPaymentPage extends Controller
 
     /**
      * @param Collection $totalCookie
-     * @param $myProduct
-     * @param $grandProduct
-     * @param $extraAttributesIds
+     * @param            $myProduct
+     * @param            $grandProduct
+     * @param            $extraAttributesIds
      */
     private function makeCookieForConfigurableGrand(Collection $totalCookie, Product $myProduct, Product $grandProduct, array $extraAttributesIds): void
     {
@@ -265,8 +268,8 @@ class RedirectUserToPaymentPage extends Controller
 
         if (!empty($attributeValueIds)) {
             $totalCookie->push([
-                'product_id' => $grandProduct->id,
-                'attribute' => $attributeValueIds,
+                'product_id'     => $grandProduct->id,
+                'attribute'      => $attributeValueIds,
                 'extraAttribute' => $extraAttributesIds,
             ]);
         }
@@ -274,6 +277,7 @@ class RedirectUserToPaymentPage extends Controller
 
     /**
      * @param $myProduct
+     *
      * @return mixed
      */
     private function getProductAttributes(Product $myProduct)

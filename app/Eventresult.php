@@ -2,7 +2,9 @@
 
 namespace App;
 
-use PhpParser\Builder\Class_;
+use Carbon\Carbon;
+use Eloquent;
+use Illuminate\Database\Eloquent\Builder;
 
 /**
  * App\Eventresult
@@ -10,43 +12,43 @@ use PhpParser\Builder\Class_;
  * @property int                              $id
  * @property int                              $user_id               آی دی مشخص کننده کاربر
  * @property int                              $event_id              آی دی مشخص کننده رخداد
- * @property int|null                         $eventresultstatus_id  آیدی مشخص کننده وضعیت نتیجه
- * @property int|null                         $rank                  رتبه کاربر در کنکور
- * @property string|null                      $participationCode     شماره داوطلبی کاربر در رخداد
- * @property string|null                      $participationCodeHash هش شماره داوطلبی
- * @property string|null                      $reportFile            فایل کارنامه کاربر
- * @property int|null                         $enableReportPublish   اجازه یا عدم اجازه انتشار کارنامه و نتیجه
- * @property string|null                      $comment               نظر کاربر درباره نتیجه و رخداد
- * @property \Carbon\Carbon|null              $created_at
- * @property \Carbon\Carbon|null              $updated_at
- * @property \Carbon\Carbon|null              $deleted_at
- * @property-read \App\Event                  $event
- * @property-read \App\Eventresultstatus|null $eventresultstatus
- * @property-read \App\User                   $user
+ * @property int|null                    $eventresultstatus_id  آیدی مشخص کننده وضعیت نتیجه
+ * @property int|null                    $rank                  رتبه کاربر در کنکور
+ * @property string|null                 $participationCode     شماره داوطلبی کاربر در رخداد
+ * @property string|null                 $participationCodeHash هش شماره داوطلبی
+ * @property string|null                 $reportFile            فایل کارنامه کاربر
+ * @property int|null                    $enableReportPublish   اجازه یا عدم اجازه انتشار کارنامه و نتیجه
+ * @property string|null                 $comment               نظر کاربر درباره نتیجه و رخداد
+ * @property Carbon|null         $created_at
+ * @property Carbon|null         $updated_at
+ * @property Carbon|null         $deleted_at
+ * @property-read Event                  $event
+ * @property-read Eventresultstatus|null $eventresultstatus
+ * @property-read User                   $user
  * @method static bool|null forceDelete()
- * @method static \Illuminate\Database\Query\Builder|\App\Eventresult onlyTrashed()
+ * @method static \Illuminate\Database\Query\Builder|Eventresult onlyTrashed()
  * @method static bool|null restore()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Eventresult whereComment($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Eventresult whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Eventresult whereDeletedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Eventresult whereEnableReportPublish($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Eventresult whereEventId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Eventresult whereEventresultstatusId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Eventresult whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Eventresult whereParticipationCode($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Eventresult whereParticipationCodeHash($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Eventresult whereRank($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Eventresult whereReportFile($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Eventresult whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Eventresult whereUserId($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Eventresult withTrashed()
- * @method static \Illuminate\Database\Query\Builder|\App\Eventresult withoutTrashed()
- * @mixin \Eloquent
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Eventresult newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Eventresult newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Eventresult query()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel disableCache()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel withCacheCooldownSeconds($seconds)
+ * @method static Builder|Eventresult whereComment($value)
+ * @method static Builder|Eventresult whereCreatedAt($value)
+ * @method static Builder|Eventresult whereDeletedAt($value)
+ * @method static Builder|Eventresult whereEnableReportPublish($value)
+ * @method static Builder|Eventresult whereEventId($value)
+ * @method static Builder|Eventresult whereEventresultstatusId($value)
+ * @method static Builder|Eventresult whereId($value)
+ * @method static Builder|Eventresult whereParticipationCode($value)
+ * @method static Builder|Eventresult whereParticipationCodeHash($value)
+ * @method static Builder|Eventresult whereRank($value)
+ * @method static Builder|Eventresult whereReportFile($value)
+ * @method static Builder|Eventresult whereUpdatedAt($value)
+ * @method static Builder|Eventresult whereUserId($value)
+ * @method static \Illuminate\Database\Query\Builder|Eventresult withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|Eventresult withoutTrashed()
+ * @mixin Eloquent
+ * @method static Builder|Eventresult newModelQuery()
+ * @method static Builder|Eventresult newQuery()
+ * @method static Builder|Eventresult query()
+ * @method static Builder|BaseModel disableCache()
+ * @method static Builder|BaseModel withCacheCooldownSeconds($seconds)
  * @property-read mixed                       $cache_cooldown_seconds
  */
 class Eventresult extends BaseModel

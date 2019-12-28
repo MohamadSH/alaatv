@@ -3,16 +3,16 @@
 namespace App\Console\Commands;
 
 //use App\Classes\Search\Tag\ProductTagManagerViaApi;
-use Exception;
-use App\Product;
-use Carbon\Carbon;
-use App\Orderproduct;
-use App\Traits\ProductCommon;
-use Illuminate\Http\Response;
-use Illuminate\Console\Command;
-use App\Traits\APIRequestCommon;
-use Illuminate\Support\Facades\Artisan;
 use App\Http\Controllers\Web\ProductController;
+use App\Orderproduct;
+use App\Product;
+use App\Traits\APIRequestCommon;
+use App\Traits\ProductCommon;
+use Carbon\Carbon;
+use Exception;
+use Illuminate\Console\Command;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Artisan;
 
 //use App\Traits\TaggableTrait;
 
@@ -22,37 +22,37 @@ class MergeProductCommand extends Command
     use APIRequestCommon;
 
 //    use TaggableTrait;  //Has not been merged in to project yet
-    
+
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
     protected $signature = 'alaaTv:merge:products';
-    
+
     /**
      * The console command description.
      *
      * @var string
      */
     protected $description = 'Merging old products';
-    
+
     private $productArray;
-    
+
     private $tagging;
-    
-    
+
+
     public function __construct()
     {
         parent::__construct();
         $this->productArray = $this->initializing();
 //        $this->tagging = $tagging;
     }
-    
+
     /**
      * Create a new command instance.
      *
-     * @param  ProductTagManagerViaApi  $tagging
+     * @param ProductTagManagerViaApi $tagging
      */
 //    public function __construct(ProductTagManagerViaApi $tagging)
     /**
@@ -351,13 +351,13 @@ class MergeProductCommand extends Command
 //        }
 //
 //        return $initialArray;
-        
+
     }
-    
+
     /**
      * Execute the console command.
      *
-     * @param  ProductController  $productController
+     * @param ProductController $productController
      *
      * @return mixed
      * @throws Exception
@@ -367,22 +367,21 @@ class MergeProductCommand extends Command
         //TODO: pull from master
         dd("TODO");
         $productCount = count($this->productArray);
-        if ($this->confirm('Products will be merged into '.$productCount.'. Do you wish to continue?', true)) {
+        if ($this->confirm('Products will be merged into ' . $productCount . '. Do you wish to continue?', true)) {
             $this->performMergingForAllProducts($productController, $productCount);
-            
+
             if ($this->confirm('Do you want to clear cache ', true)) {
                 Artisan::call('cache:clear');
             }
-            
+
             $this->info("Merging Successfully Done!");
-        }
-        else {
+        } else {
             $this->info("Action Aborted");
         }
     }
-    
+
     /**
-     * @param  ProductController  $productController
+     * @param ProductController   $productController
      * @param                     $productCount
      *
      * @return void
@@ -391,24 +390,23 @@ class MergeProductCommand extends Command
     {
         $bar = $this->output->createProgressBar($productCount);
         foreach ($this->productArray as $productElement) {
-            
+
             $allCategoryProduct         = $this->getParent($productElement);
             $totalGrandChildrenCost     = 0;
             $totalGrandChildrenDiscount = 25;
-            
+
             if ($allCategoryProduct->hasParents()) {
                 $grandParent = $allCategoryProduct->grandParent;
-            }
-            else {
+            } else {
                 //This should not happen
-                $this->info("Warning! Could not find grandparent for #".$allCategoryProduct->id);
+                $this->info("Warning! Could not find grandparent for #" . $allCategoryProduct->id);
                 continue;
             }
-            
+
             $children = $productElement["children"];
             foreach ($children as $child) {
                 $grandChildren = $this->extractChildren($child, $allCategoryProduct);
-                
+
                 $newParent = $this->getParent($child);
                 $parent    = $allCategoryProduct;
                 if (isset($newParent)) {
@@ -416,61 +414,61 @@ class MergeProductCommand extends Command
                     $allCategoryProduct->children()
                         ->updateExistingPivot($parent->id, ["description" => $child["description"]]);
                 }
-                
+
                 $grandChildrenCount = count($grandChildren);
-                $this->info("\n Found ".$grandChildrenCount." items for ".$productElement["title"]);
+                $this->info("\n Found " . $grandChildrenCount . " items for " . $productElement["title"]);
                 $subBar = $this->output->createProgressBar($grandChildrenCount);
                 foreach ($grandChildren as $grandChild) {
                     $newProductId = $grandChild["id"];
-                    
+
                     $hasConfigurableParent = false;
                     if ($grandChild["type"] == config("constants.PRODUCT_TYPE_CONFIGURABLE")) {
                         $hasConfigurableParent = true;
                     }
-                    
+
                     if ($hasConfigurableParent) {
                         $originalProduct = Product::Find($grandChild["id"]);
                         if (!isset($originalProduct)) {
-                            $this->info("\n Could not find original product #:".$grandChild["id"]);
+                            $this->info("\n Could not find original product #:" . $grandChild["id"]);
                             continue;
                         }
-                        
+
                         if (isset($originalProduct)) {
                             $newProductId = $this->copyOriginalProduct($productController, $originalProduct);
                         }
                     }
-                    
+
                     $newProduct = Product::Find($newProductId);
                     if (!isset($newProduct)) {
-                        $this->info("\n Could not find new product of original product #:".$grandChild["id"]);
+                        $this->info("\n Could not find new product of original product #:" . $grandChild["id"]);
                         continue;
                     }
                     $totalGrandChildrenCost += $newProduct->basePrice;
-                    
+
                     $newCost     = $newProduct->basePrice;
                     $newDiscount = $newProduct->discount;
                     if ($hasConfigurableParent) {
                         $newCost     = $originalProduct->basePrice;
                         $newDiscount = $originalProduct->discount;
-                        
+
                         $this->copyProductBelongings($originalProduct, $newProduct, $grandChild["title"]);
-                        
+
                         $originalProduct->setDisable();
                         $originalProduct->update();
-                        
+
                         if ($originalProduct->hasParents()) {
                             $originalProductParent = $originalProduct->parents->first();
                             $this->copyProductBelongings($originalProductParent, $newProduct, $grandChild["title"]);
-                            
+
                             $originalProductParent->setDisable();
                             $originalProductParent->update();
                         }
-                        
+
                         $this->info("Deleting orderproducts");
                         Orderproduct::deleteOpenedTransactions([$originalProduct->id],
                             [config("constants.ORDER_STATUS_OPEN")]);
                     }
-                    
+
                     ///////////////////////////
                     //Update new product //////
                     ///////////////////////////
@@ -480,7 +478,7 @@ class MergeProductCommand extends Command
                     ////////////////////////////
                     /////////////End ///////////
                     ////////////////////////////
-                    
+
                     ///////////////////////////
                     //Attaching children //////
                     ///////////////////////////
@@ -493,12 +491,12 @@ class MergeProductCommand extends Command
                     ///////////////////////////
                     ////////////End////////////
                     ///////////////////////////
-                    
+
                     $subBar->advance();
                 }
                 $subBar->finish();
             }
-            
+
             ///////////////////////////////////////
             //Update grandparent and setting tags///
             ////////////////////////////////////////
@@ -508,22 +506,22 @@ class MergeProductCommand extends Command
             ///////////////////////////
             //////////End//////////////
             ///////////////////////////
-            
+
             $allCategoryProduct->basePrice = $totalGrandChildrenCost;
             $allCategoryProduct->discount  = $totalGrandChildrenDiscount;
             $allCategoryProduct->setEnable();
             $allCategoryProduct->update();
-            
+
             $this->info("\n\n");
             $this->info("Total Progress:");
             $bar->advance();
             $this->info("\n\n");
         }
-        
+
         $bar->finish();
         $this->info("\n");
     }
-    
+
     /**
      * @param $productElement
      *
@@ -535,15 +533,15 @@ class MergeProductCommand extends Command
         if (isset($productElement["parent"])) {
             $parent = $productElement["parent"];
         }
-        
+
         return $parent;
     }
-    
+
     /**
      * Extracts children
      *
      * @param           $child
-     * @param  Product  $currentParent
+     * @param Product   $currentParent
      *
      * @return array
      */
@@ -551,16 +549,15 @@ class MergeProductCommand extends Command
     {
         if (isset($child["children"])) {
             $grandChildren = $child["children"];
-        }
-        else {
+        } else {
             $grandChildren = [$child];
         }
-        
+
         return $grandChildren;
     }
-    
+
     /**
-     * @param  ProductController  $productController
+     * @param ProductController   $productController
      * @param                     $originalProduct
      *
      * @return mixed
@@ -571,14 +568,13 @@ class MergeProductCommand extends Command
         $responseContent = json_decode($response->getContent());
         if ($response->getStatusCode() == Response::HTTP_OK) {
             $newProductId = $responseContent->newProductId;
-        }
-        else {
+        } else {
             $newProductId = 0;
         }
-        
+
         return $newProductId;
     }
-    
+
     /**
      * @param $originalProduct
      * @param $newProduct
@@ -588,13 +584,13 @@ class MergeProductCommand extends Command
      */
     private function copyProductBelongings($originalProduct, $newProduct, $title): void
     {
-        
+
         $this->copyProductFiles($originalProduct, $newProduct);
-        
-        $newProductPhotoInfo = ["title" => "نمونه جزوه ".$title, "description" => ""];
+
+        $newProductPhotoInfo = ["title" => "نمونه جزوه " . $title, "description" => ""];
         $this->copyProductPhotos($originalProduct, $newProduct, $newProductPhotoInfo);
     }
-    
+
     /**
      * @param $title
      * @param $newProduct
@@ -609,9 +605,9 @@ class MergeProductCommand extends Command
         $newProduct->discount    = $newDiscount;
         $newProduct->redirectUrl = action("Web\ProductController@show", $grandParent);
     }
-    
+
     /**
-     * @param  Product  $product
+     * @param Product $product
      *
      * @return void
      */
@@ -623,17 +619,17 @@ class MergeProductCommand extends Command
             $params        = [
                 "tags" => json_encode($itemTagsArray),
             ];
-            
+
             if (isset($product->created_at) && strlen($product->created_at) > 0) {
                 $params["score"] = Carbon::createFromFormat("Y-m-d H:i:s", $product->created_at)->timestamp;
             }
-            
-            $response = $this->sendRequest(config("constants.TAG_API_URL")."id/product/".$product->id, "PUT", $params);
-            
+
+            $response =
+                $this->sendRequest(config("constants.TAG_API_URL") . "id/product/" . $product->id, "PUT", $params);
+
             if ($response["statusCode"] == Response::HTTP_OK) {
                 //
-            }
-            else {
+            } else {
             }
         }
     }

@@ -14,17 +14,17 @@ use App\Product;
 class RefinementSimple implements RefinementInterface
 {
     private $product;
-    
+
     public function __construct(Product $product, $data)
     {
         $this->product = $product;
     }
-    
+
     public function getProducts(): ?ProductCollection
     {
         $simpleProduct = new ProductCollection();
         $simpleProduct->push($this->product);
-        
+
         return $simpleProduct;
     }
 }

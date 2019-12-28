@@ -8,15 +8,17 @@
 
 namespace App\Classes\Search;
 
+use App\Classes\Search\{Filters\Tags, Tag\ContentTagManagerViaApi};
 use App\Content;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Contracts\Pagination\LengthAwarePaginator;
-use App\Classes\Search\{Filters\Tags, Tag\ContentTagManagerViaApi};
+use InvalidArgumentException;
 
 class ContentSearch extends SearchAbstract
 {
+
     protected $model = Content::class;
 
     protected $pageName = 'contentPage';
@@ -32,7 +34,7 @@ class ContentSearch extends SearchAbstract
         'createdAtTill',
         'isFree',
         'free',
-        'orderBy'
+        'orderBy',
     ];
 
     public function get(array ...$params)
@@ -41,15 +43,15 @@ class ContentSearch extends SearchAbstract
         $contentTypes = $this->getFromParams($params, 'contentTypes');
         $items        = collect();
         foreach ($contentTypes as $contentType) {
-            ${$contentType.'Result'} = $this->getFiltered($filters, ['contentType' => (array) $contentType]);
-            $items->offsetSet($contentType, $this->normalizeResult(${$contentType.'Result'}));
+            ${$contentType . 'Result'} = $this->getFiltered($filters, ['contentType' => (array)$contentType]);
+            $items->offsetSet($contentType, $this->normalizeResult(${$contentType . 'Result'}));
         }
 
         return $items;
     }
 
     /**
-     * @param  array  ...$filters
+     * @param array ...$filters
      *
      * @return LengthAwarePaginator|null
      */
@@ -58,10 +60,10 @@ class ContentSearch extends SearchAbstract
         $filters     = array_merge(...$filters);
         $contentType = Arr::get($filters, 'contentType');
         if ($contentType === null) {
-            throw new \InvalidArgumentException('filters[contentType] should be set.');
+            throw new InvalidArgumentException('filters[contentType] should be set.');
         }
 
-        return $this->setPageName($contentType[0].'Page')
+        return $this->setPageName($contentType[0] . 'Page')
             ->apply($filters);
     }
 
@@ -71,7 +73,7 @@ class ContentSearch extends SearchAbstract
     }
 
     /**
-     * @param  array  $filters
+     * @param array $filters
      *
      * @return mixed
      */
@@ -80,7 +82,7 @@ class ContentSearch extends SearchAbstract
         $this->pageNum = $this->setPageNum($filters);
         $key           = $this->makeCacheKey($filters);
 
-        return Cache::tags(['content' , 'content_search' , 'search'])
+        return Cache::tags(['content', 'content_search', 'search'])
             ->remember($key, $this->cacheTime, function () use ($filters) {
                 $query = $this->applyDecoratorsFromFiltersArray($filters, $this->model->newQuery());
                 return $this->getResults($query)

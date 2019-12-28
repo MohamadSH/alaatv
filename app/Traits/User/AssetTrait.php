@@ -19,7 +19,7 @@ trait AssetTrait
 
     /**  Determines whether user has this content or not
      *
-     * @param  \App\Content  $content
+     * @param Content $content
      *
      * @return bool
      */
@@ -29,7 +29,7 @@ trait AssetTrait
     }
 
     /**
-     * @param  \App\Content  $content
+     * @param Content $content
      *
      * @return bool
      */
@@ -49,7 +49,7 @@ trait AssetTrait
     }
 
     /**
-     * @return \App\Collection\ProductCollection
+     * @return ProductCollection
      */
     public function products(): ProductCollection
     {
@@ -73,10 +73,10 @@ trait AssetTrait
             })
             ->join('users', 'users.id', '=', 'orders.user_id')
             ->select([
-                'products.*' , 'orders.completed_at',
+                'products.*', 'orders.completed_at',
             ])
             ->where('users.id', '=', $this->getKey())
-            ->whereNotIn('products.id' , [Product::DONATE_PRODUCT_5_HEZAR , Product::CUSTOM_DONATE_PRODUCT , Product::ASIATECH_PRODUCT ])
+            ->whereNotIn('products.id', [Product::DONATE_PRODUCT_5_HEZAR, Product::CUSTOM_DONATE_PRODUCT, Product::ASIATECH_PRODUCT])
             ->whereNull('products.deleted_at')
             ->distinct()
             ->get();
@@ -85,7 +85,7 @@ trait AssetTrait
     }
 
     /**
-     * @param  \App\Content  $content
+     * @param Content $content
      *
      * @return array
      */

@@ -15,7 +15,7 @@ trait JsonResponseFormat
     /**
      *  call setVisible for every item
      *
-     * @param  array  $attributes
+     * @param array $attributes
      */
     public function setVisible(array $attributes): void
     {

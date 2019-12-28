@@ -3,12 +3,11 @@
 namespace App\Http\Controllers\Api;
 
 use App\Classes\Search\ContentSearch;
-use App\Classes\Search\ContentsetSearch;
-use App\Classes\Search\ProductSearch;
 use App\Content;
+use App\Contenttype;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\ContentIndexRequest;
 use App\Http\Resources\Content as ContentResource;
+use App\Http\Resources\ContentInSet as ContentInSearch;
 use App\Traits\Content\ContentControllerResponseTrait;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -18,14 +17,15 @@ class ContentController extends Controller
 {
     use ContentControllerResponseTrait;
 
-    public function indexV2(ContentIndexRequest $request, ContentSearch $contentSearch, ContentsetSearch $setSearch, ProductSearch $productSearch)
+    public function indexV2(Request $request, ContentSearch $contentSearch)
     {
+        //TODO:// validate
         $request->offsetSet('free', $request->get('free', [1]));
-        $contentTypes = array_filter($request->get('contentType', ['video']));
-        $filters = $request->all();
+        $contentTypes = array_filter($request->get('contentType', Contenttype::video()));
+        $filters      = $request->all();
 
         $result = $contentSearch->get(compact('filters', 'contentTypes'));
-        return ContentResource::collection($result->get($contentTypes[0]));
+        return ContentInSearch::collection($result->get($contentTypes[0]));
     }
 
 
@@ -38,7 +38,7 @@ class ContentController extends Controller
 
         if (!$content->isActive()) {
             $message = '';
-            $code = Response::HTTP_LOCKED;
+            $code    = Response::HTTP_LOCKED;
             return response()->json([
                 'message' => $message,
             ], $code);
@@ -63,14 +63,14 @@ class ContentController extends Controller
 
         if (!$content->isActive()) {
             $message = '';
-            $code = Response::HTTP_LOCKED;
+            $code    = Response::HTTP_LOCKED;
             return response()->json([
                 'message' => $message,
             ], $code);
         }
 
         if ($this->userCanSeeContent($request, $content, 'api')) {
-            return (new ContentResource($content))->response();
+            return (new ContentResource($content));
         }
 
         $productsThatHaveThisContent = $content->activeProducts();
@@ -95,12 +95,12 @@ class ContentController extends Controller
 
         $items = [];
         foreach ($contents as $key => $content) {
-            $items[$key]['id'] = $content->id;
-            $items[$key]['type'] = 'content';
-            $items[$key]['name'] = $content->name;
-            $items[$key]['link'] = $content->url;
+            $items[$key]['id']    = $content->id;
+            $items[$key]['type']  = 'content';
+            $items[$key]['name']  = $content->name;
+            $items[$key]['link']  = $content->url;
             $items[$key]['image'] = $content->thumbnail;
-            $items[$key]['tags'] = $content->tags;
+            $items[$key]['tags']  = $content->tags;
         }
 
         $currentPage = $contents->currentPage();

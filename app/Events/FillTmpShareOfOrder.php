@@ -8,7 +8,7 @@ use Illuminate\Queue\SerializesModels;
 class FillTmpShareOfOrder
 {
     use SerializesModels;
-    
+
     /**
      * The verified user.
      *

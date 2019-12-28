@@ -11,7 +11,7 @@ namespace App\Classes\sms;
 interface SmsSenderClient
 {
     /**
-     * @param  array  $params
+     * @param array $params
      *
      * @return array
      */

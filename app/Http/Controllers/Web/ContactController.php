@@ -3,23 +3,23 @@
 namespace App\Http\Controllers\Web;
 
 use App\Contact;
-use App\Relative;
-use App\Phonetype;
 use App\Contacttype;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\EditContactRequest;
+use App\Http\Requests\EditPhoneRequest;
+use App\Http\Requests\InsertContactRequest;
+use App\Phonetype;
+use App\Relative;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use App\Http\Controllers\Controller;
-use App\Http\Requests\EditPhoneRequest;
-use App\Http\Requests\EditContactRequest;
-use App\Http\Requests\InsertContactRequest;
 
 class ContactController extends Controller
 {
     function __construct()
     {
-        $this->middleware('permission:'.config('constants.LIST_CONTACT_ACCESS'), ['only' => 'index']);
-        $this->middleware('permission:'.config('constants.REMOVE_CONTACT_ACCESS'), ['only' => 'destroy']);
-        $this->middleware('permission:'.config('constants.EDIT_CONTACT_ACCESS'), ['only' => 'edit']);
+        $this->middleware('permission:' . config('constants.LIST_CONTACT_ACCESS'), ['only' => 'index']);
+        $this->middleware('permission:' . config('constants.REMOVE_CONTACT_ACCESS'), ['only' => 'destroy']);
+        $this->middleware('permission:' . config('constants.EDIT_CONTACT_ACCESS'), ['only' => 'edit']);
     }
 
     public function index(Request $request)
@@ -31,8 +31,7 @@ class ContactController extends Controller
                 ->get();
             $relatives    = Relative::pluck('displayName', 'id');
             $contacttypes = Contacttype::pluck('displayName', 'id');
-        }
-        else {
+        } else {
             $contacts = Contact::all()
                 ->sortByDesc("created_at");
         }
@@ -54,7 +53,7 @@ class ContactController extends Controller
         }
 
         if ($request->has("isServiceRequest")) {
-            return response()->json([] , Response::HTTP_SERVICE_UNAVAILABLE);
+            return response()->json([], Response::HTTP_SERVICE_UNAVAILABLE);
         }
         session()->put("error", "خطای پایگاه داده.");
 
@@ -81,11 +80,11 @@ class ContactController extends Controller
 
         $flag = true;
         foreach ($contact->phones as $key => $phone) {
-            $phoneUpdate = new PhoneController();
-            $phoneRequest = new EditPhoneRequest();
-            $phoneRequest["phoneNumber"] = $request->get("phoneNumber")[$key];
+            $phoneUpdate                  = new PhoneController();
+            $phoneRequest                 = new EditPhoneRequest();
+            $phoneRequest["phoneNumber"]  = $request->get("phoneNumber")[$key];
             $phoneRequest["phonetype_id"] = $request->get("phonetype_id")[$key];
-            $phoneRequest["priority"] = $request->get("priority")[$key];
+            $phoneRequest["priority"]     = $request->get("priority")[$key];
             if (!$phoneUpdate->update($phoneRequest, $phone)) {
                 $flag = false;
                 break;

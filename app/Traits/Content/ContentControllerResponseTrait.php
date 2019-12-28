@@ -4,52 +4,23 @@
 namespace App\Traits\Content;
 
 
-use stdClass;
+use App\Collection\ProductCollection;
 use App\Content;
-use Carbon\Carbon;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Str;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Http\JsonResponse;
-use App\Collection\ProductCollection;
-use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
+use stdClass;
 
 trait ContentControllerResponseTrait
 {
 
     /**
-     * @param                                     $message
-     * @param  int                                $code
+     * @param Request $request
+     * @param Content $content
      *
-     * @param  Content                            $content
-     * @param  ProductCollection                  $productsThatHaveThisContent
-     * @param  bool                               $productInResponse
-     *
-     * @return JsonResponse
-     */
-    protected function userCanNotSeeContentResponse(string $message, int $code, Content $content, ProductCollection $productsThatHaveThisContent = null,
-        bool $productInResponse = false): JsonResponse
-    {
-        if ($productInResponse) {
-            return response()->json([
-                'message' => $message,
-                'content' => $content->makeHidden('file'),
-                'product' => isset($productsThatHaveThisContent) && $productsThatHaveThisContent->isEmpty() ? null :
-                    $productsThatHaveThisContent,
-            ], $code);
-
-        }
-        return response()->json([
-            'message' => $message,
-        ], $code);
-    }
-
-    /**
-     * @param  Request  $request
-     * @param  Content  $content
-     *
-     * @param  string   $gard
+     * @param string  $gard
      *
      * @return bool
      */
@@ -66,11 +37,38 @@ trait ContentControllerResponseTrait
             '0' => trans('content.Not Free'),
             '1' => trans('content.Not Free And you can\'t buy it'),
         ];
-        $message            = Arr::get($messageLookupTable, (int) $product_that_have_this_content_is_empty);
+        $message            = Arr::get($messageLookupTable, (int)$product_that_have_this_content_is_empty);
 
         $callback($message);
         return $this->userCanNotSeeContentResponse($message,
             Response::HTTP_FORBIDDEN, $content, $productsThatHaveThisContent, true);
+    }
+
+    /**
+     * @param                                     $message
+     * @param int                                 $code
+     *
+     * @param Content                             $content
+     * @param ProductCollection                   $productsThatHaveThisContent
+     * @param bool                                $productInResponse
+     *
+     * @return JsonResponse
+     */
+    protected function userCanNotSeeContentResponse(string $message, int $code, Content $content, ProductCollection $productsThatHaveThisContent = null,
+                                                    bool $productInResponse = false): JsonResponse
+    {
+        if ($productInResponse) {
+            return response()->json([
+                'message' => $message,
+                'content' => $content->makeHidden('file'),
+                'product' => isset($productsThatHaveThisContent) && $productsThatHaveThisContent->isEmpty() ? null :
+                    $productsThatHaveThisContent,
+            ], $code);
+
+        }
+        return response()->json([
+            'message' => $message,
+        ], $code);
     }
 
     /**
@@ -96,32 +94,10 @@ trait ContentControllerResponseTrait
     /**
      * @param string $filename
      * @param string $disk
-     * @param string $res
      *
-     * @param null $url
      * @return stdClass
      */
-    private function makeVideoFileStdClass(string $filename,string $disk, string $res , $url=null): stdClass
-    {
-        $file          = new stdClass();
-        $file->name    = $filename;
-        $file->res     = $res;
-        $file->caption = Content::videoFileCaptionTable()[$res];
-        $file->type    = "video";
-        $file->url     = $url;
-        $file->size    = null;
-        $file->disk    = $disk;
-
-
-        return $file;
-    }
-
-    /**
-     * @param string $filename
-     * @param string $disk
-     * @return stdClass
-     */
-    private function makePamphletFileStdClass(string $filename , string $disk): stdClass
+    private function makePamphletFileStdClass(string $filename, string $disk): stdClass
     {
         $file          = new stdClass();
         $file->name    = $filename;
@@ -137,27 +113,53 @@ trait ContentControllerResponseTrait
 
     /**
      * @param string $fileName
-     * @param int $contentset_id
+     * @param int    $contentset_id
      *
      * @return string
      */
     private function makeThumbnailUrlFromFileName(string $fileName, int $contentset_id): string
     {
-        $baseUrl = config('constants.DOWNLOAD_SERVER_PROTOCOL').config('constants.CDN_SERVER_NAME').config('constants.DOWNLOAD_SERVER_MEDIA_PARTIAL_PATH');
-        return $baseUrl."thumbnails/".$contentset_id."/".$fileName;
+        $baseUrl =
+            config('constants.DOWNLOAD_SERVER_PROTOCOL') . config('constants.CDN_SERVER_NAME') . config('constants.DOWNLOAD_SERVER_MEDIA_PARTIAL_PATH');
+        return $baseUrl . "thumbnails/" . $contentset_id . "/" . $fileName;
     }
 
     /**
-     * @param array $fileUrl
+     * @param array  $fileUrl
      * @param string $disk
+     *
      * @return array
      */
-    private function makeFilesArray(array $fileUrl , string $disk): array
+    private function makeFilesArray(array $fileUrl, string $disk): array
     {
         $files = [];
         foreach ($fileUrl as $key => $url) {
-            $files[] = $this->makeVideoFileStdClass($url['partialPath'], $disk, $key , $url['url']);
+            $files[] = $this->makeVideoFileStdClass($url['partialPath'], $disk, $key, $url['url']);
         }
         return $files;
+    }
+
+    /**
+     * @param string $filename
+     * @param string $disk
+     * @param string $res
+     *
+     * @param null   $url
+     *
+     * @return stdClass
+     */
+    private function makeVideoFileStdClass(string $filename, string $disk, string $res, $url = null): stdClass
+    {
+        $file          = new stdClass();
+        $file->name    = $filename;
+        $file->res     = $res;
+        $file->caption = Content::videoFileCaptionTable()[$res];
+        $file->type    = "video";
+        $file->url     = $url;
+        $file->size    = null;
+        $file->disk    = $disk;
+
+
+        return $file;
     }
 }

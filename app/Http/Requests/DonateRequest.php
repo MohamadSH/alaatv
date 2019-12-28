@@ -20,13 +20,13 @@ class DonateRequest extends FormRequest
             "amount" => "required|integer|min:100",
         ];
     }
-    
+
     public function prepareForValidation()
     {
         $this->replaceNumbers();
         parent::prepareForValidation();
     }
-    
+
     protected function replaceNumbers()
     {
         $input = $this->request->all();
@@ -34,7 +34,7 @@ class DonateRequest extends FormRequest
             $input["amount"] = preg_replace('/\s+/', '', $input["amount"]);
             $input["amount"] = $this->convertToEnglish($input["amount"]);
         }
-    
+
         $this->replace($input);
     }
 }

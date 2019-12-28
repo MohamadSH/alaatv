@@ -2,42 +2,47 @@
 
 namespace App;
 
+use Carbon\Carbon;
+use Eloquent;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
+
 /**
  * App\Lottery
  *
- * @property int                                                       $id
- * @property string|null                                               $name            نام قرعه کشی
- * @property string|null                                               $displayName     نام قابل نمایش قرعه کشی
- * @property string|null                                               $holdingDate     تاریخ برگزاری
- * @property int                                                       $essentialPoints تعداد امتیاز لازم برای شرکت در
+ * @property int                                                  $id
+ * @property string|null                                          $name            نام قرعه کشی
+ * @property string|null                                          $displayName     نام قابل نمایش قرعه کشی
+ * @property string|null                                          $holdingDate     تاریخ برگزاری
+ * @property int                                                  $essentialPoints تعداد امتیاز لازم برای شرکت در
  *           قرعه کشی
- * @property string|null                                               $prizes          جوایز قرعه کشی
- * @property \Carbon\Carbon|null                                       $created_at
- * @property \Carbon\Carbon|null                                       $updated_at
- * @property \Carbon\Carbon|null                                       $deleted_at
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\User[] $users
+ * @property string|null                                          $prizes          جوایز قرعه کشی
+ * @property Carbon|null                                  $created_at
+ * @property Carbon|null                                  $updated_at
+ * @property Carbon|null                                  $deleted_at
+ * @property-read Collection|User[] $users
  * @method static bool|null forceDelete()
- * @method static \Illuminate\Database\Query\Builder|\App\Lottery onlyTrashed()
+ * @method static \Illuminate\Database\Query\Builder|Lottery onlyTrashed()
  * @method static bool|null restore()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Lottery whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Lottery whereDeletedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Lottery whereDisplayName($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Lottery whereEssentialPoints($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Lottery whereHoldingDate($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Lottery whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Lottery whereName($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Lottery wherePrizes($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Lottery whereUpdatedAt($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Lottery withTrashed()
- * @method static \Illuminate\Database\Query\Builder|\App\Lottery withoutTrashed()
- * @mixin \Eloquent
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Lottery newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Lottery newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Lottery query()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel disableCache()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel withCacheCooldownSeconds($seconds)
+ * @method static Builder|Lottery whereCreatedAt($value)
+ * @method static Builder|Lottery whereDeletedAt($value)
+ * @method static Builder|Lottery whereDisplayName($value)
+ * @method static Builder|Lottery whereEssentialPoints($value)
+ * @method static Builder|Lottery whereHoldingDate($value)
+ * @method static Builder|Lottery whereId($value)
+ * @method static Builder|Lottery whereName($value)
+ * @method static Builder|Lottery wherePrizes($value)
+ * @method static Builder|Lottery whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Query\Builder|Lottery withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|Lottery withoutTrashed()
+ * @mixin Eloquent
+ * @method static Builder|Lottery newModelQuery()
+ * @method static Builder|Lottery newQuery()
+ * @method static Builder|Lottery query()
+ * @method static Builder|BaseModel disableCache()
+ * @method static Builder|BaseModel withCacheCooldownSeconds($seconds)
  * @property-read mixed                                                $cache_cooldown_seconds
- * @property-read int|null $users_count
+ * @property-read int|null                                             $users_count
  */
 class Lottery extends BaseModel
 {

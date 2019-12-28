@@ -13,9 +13,9 @@ use Illuminate\Database\Eloquent\Builder;
 class HasProduct extends FilterAbstract
 {
     protected $attribute = 'product_id';
-    
+
     protected $relation = 'closedorderproducts';
-    
+
     public function apply(Builder $builder, $value, FilterCallback $callback): Builder
     {
         return $builder->whereHas($this->relation, function ($q) use ($value) {

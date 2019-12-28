@@ -8,9 +8,9 @@
 
 namespace App\Classes\Search;
 
-use Illuminate\Support\Facades\{Cache};
-use Illuminate\Database\Eloquent\{Builder};
 use App\Classes\Search\{Filters\Tags, Tag\ContentsetTagManagerViaApi};
+use Illuminate\Database\Eloquent\{Builder};
+use Illuminate\Support\Facades\{Cache};
 
 class ContentsetSearch extends SearchAbstract
 {
@@ -24,20 +24,20 @@ class ContentsetSearch extends SearchAbstract
         'name',
         'tags',
         'enable',
-        'display'
+        'display',
     ];
 
     /**
-     * @param  array  $filters
+     * @param array $filters
      *
      * @return mixed
      */
     protected function apply(array $filters)
     {
         $this->pageNum = $this->setPageNum($filters);
-        $key = $this->makeCacheKey($filters);
+        $key           = $this->makeCacheKey($filters);
 
-        return Cache::tags(['set' , 'set_search' , 'search'])
+        return Cache::tags(['set', 'set_search', 'search'])
             ->remember($key, $this->cacheTime, function () use ($filters) {
                 $query = $this->applyDecoratorsFromFiltersArray($filters, $this->model->newQuery());
 
@@ -47,7 +47,7 @@ class ContentsetSearch extends SearchAbstract
     }
 
     /**
-     * @param  Builder  $query
+     * @param Builder $query
      *
      * @return mixed
      */

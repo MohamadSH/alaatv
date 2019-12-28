@@ -13,13 +13,13 @@ use App\Order;
 trait CashierOrderUnit
 {
     protected $order;
-    
+
     protected $totalPrice; // Total price before calculating Order's discount
-    
+
     protected $temporaryFinalPrice;
-    
+
     protected $finalPrice;
-    
+
     /**
      * @return Order
      */
@@ -27,19 +27,19 @@ trait CashierOrderUnit
     {
         return $this->order;
     }
-    
+
     /**
-     * @param  mixed  $order
+     * @param mixed $order
      *
      * @return mixed
      */
     public function setOrder($order)
     {
         $this->order = $order;
-        
+
         return $this;
     }
-    
+
     /**
      * @return mixed
      */
@@ -47,9 +47,9 @@ trait CashierOrderUnit
     {
         return $this->totalPrice;
     }
-    
+
     /**
-     * @param  mixed  $totalPrice
+     * @param mixed $totalPrice
      *
      * @return mixed
      */
@@ -57,10 +57,10 @@ trait CashierOrderUnit
     {
         $this->totalPrice          = $totalPrice;
         $this->temporaryFinalPrice = $totalPrice;
-        
+
         return $this;
     }
-    
+
     /**
      * @return mixed
      */
@@ -68,19 +68,19 @@ trait CashierOrderUnit
     {
         return $this->temporaryFinalPrice;
     }
-    
+
     /**
-     * @param  mixed  $temporaryFinalPrice
+     * @param mixed $temporaryFinalPrice
      *
      * @return mixed
      */
     public function setTemporaryFinalPrice($temporaryFinalPrice)
     {
         $this->temporaryFinalPrice = $temporaryFinalPrice;
-        
+
         return $this;
     }
-    
+
     /**
      * @return mixed
      */
@@ -88,9 +88,9 @@ trait CashierOrderUnit
     {
         return $this->finalPrice;
     }
-    
+
     /**
-     * @param  mixed  $finalPrice
+     * @param mixed $finalPrice
      *
      * @return mixed
      */
@@ -98,7 +98,7 @@ trait CashierOrderUnit
     {
         $this->finalPrice          = $finalPrice;
         $this->temporaryFinalPrice = $finalPrice;
-        
+
         return $this;
     }
 }

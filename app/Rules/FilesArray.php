@@ -2,20 +2,22 @@
 
 namespace App\Rules;
 
+use Illuminate\Contracts\Translation\Translator;
 use Illuminate\Contracts\Validation\Rule;
+use stdClass;
 
 class FilesArray implements Rule
 {
     protected $nameIsSet;
-    
+
     protected $fieldsAreString;
-    
+
     protected $isArray;
-    
+
     protected $eachItemIsStdClass;
-    
+
     protected $attribute;
-    
+
     /**
      * Create a new rule instance.
      *
@@ -25,12 +27,12 @@ class FilesArray implements Rule
     {
         $this->fieldsAreString = $this->eachItemIsStdClass = $this->isArray = $this->nameIsSet = true;
     }
-    
+
     /**
      * Determine if the validation rule passes.
      *
-     * @param  string  $attribute
-     * @param  mixed   $value
+     * @param string $attribute
+     * @param mixed  $value
      *
      * @return bool
      */
@@ -38,36 +40,34 @@ class FilesArray implements Rule
     {
         $value           = json_decode($value);
         $this->attribute = $attribute;
-        
+
         if (!is_array($value)) {
             $this->isArray = false;
-        }
-        else {
+        } else {
             foreach ($value as $item) {
                 if (!$this->validate()) {
                     break;
                 }
-                
-                if ($item instanceof \stdClass) {
+
+                if ($item instanceof stdClass) {
                     if (!isset($item->name[0])) {
                         $this->nameIsSet = false;
                     }
-                    
+
                     foreach ($item as $k => $v) {
                         if (!is_string($v)) {
                             $this->fieldsAreString = false;
                         }
                     }
-                }
-                else {
+                } else {
                     $this->eachItemIsStdClass = false;
                 }
             }
         }
-        
+
         return $this->validate();
     }
-    
+
     /**
      * @return bool
      */
@@ -75,7 +75,7 @@ class FilesArray implements Rule
     {
         return $this->isArray && $this->nameIsSet && $this->eachItemIsStdClass && $this->fieldsAreString;
     }
-    
+
     /**
      * Get the validation error message.
      *
@@ -96,10 +96,10 @@ class FilesArray implements Rule
         if (!$this->isArray) {
             $message = $this->messageLookupTable()["isArray"];
         }
-        
+
         return $message;
     }
-    
+
     protected function messageLookupTable(): array
     {
         return [
@@ -113,12 +113,12 @@ class FilesArray implements Rule
                 ['attribute' => $this->getAttributeName()]),
         ];
     }
-    
+
     /**
-     * @return array|\Illuminate\Contracts\Translation\Translator|null|string
+     * @return array|Translator|null|string
      */
     protected function getAttributeName()
     {
-        return trans('validation.attributes.'.$this->attribute);
+        return trans('validation.attributes.' . $this->attribute);
     }
 }

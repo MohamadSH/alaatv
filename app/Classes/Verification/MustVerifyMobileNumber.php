@@ -16,35 +16,35 @@ interface MustVerifyMobileNumber
      * @return bool
      */
     public function hasVerifiedMobile();
-    
+
     /**
      * Mark the given user's mobile as verified.
      *
      * @return bool
      */
     public function markMobileAsVerified();
-    
+
     /**
      * Send the mobile verification notification.
      *
      * @return void
      */
     public function sendMobileVerificationNotification();
-    
+
     /**
      * Send the mobile verified notification.
      *
      * @return void
      */
     public function sendMobileVerifiedNotification();
-    
+
     /**
      * get user's verification code
      *
      * @return void
      */
     public function getMobileVerificationCode();
-    
+
     /**
      * generate a verification code for given user
      *

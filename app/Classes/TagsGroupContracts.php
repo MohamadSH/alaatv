@@ -10,12 +10,12 @@ interface TagsGroupContracts
      * @return array
      */
     public function getTagsArray(): array;
-    
+
     /**
      * @return Collection
      */
     public function getTagsGroup(): Collection;
-    
+
     /**
      * @return int
      */

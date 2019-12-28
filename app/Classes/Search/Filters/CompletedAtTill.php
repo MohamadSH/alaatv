@@ -13,7 +13,7 @@ use Illuminate\Database\Eloquent\Builder;
 class CompletedAtTill extends FilterAbstract
 {
     protected $attribute = 'completed_at';
-    
+
     public function apply(Builder $builder, $value, FilterCallback $callback): Builder
     {
         return $builder->where($this->attribute, "<=", $value);

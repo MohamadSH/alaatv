@@ -9,7 +9,7 @@ class FreeInternetAcceptListener
     /**
      * Handle the event.
      *
-     * @param  FreeInternetAccept  $event
+     * @param FreeInternetAccept $event
      *
      * @return void
      */

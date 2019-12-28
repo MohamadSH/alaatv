@@ -21,6 +21,7 @@ class ProductSet extends AlaaJsonResource
      * Transform the resource into an array.
      *
      * @param Request $request
+     *
      * @return array
      */
     public function toArray($request)
@@ -30,11 +31,11 @@ class ProductSet extends AlaaJsonResource
         }
 
         return [
-            'id'                    => $this->id,
-            'redirect_url'          => $this->when(isset($this->redirectUrl) , $this->redirectUrl),
-            'title'                  => $this->when(isset($this->name) , $this->name),
-            'short_title'            => $this->when(isset($this->short_name) , $this->short_name),
-            'url'                   => new Url($this),
+            'id'           => $this->id,
+            'redirect_url' => $this->when(isset($this->redirectUrl), $this->redirectUrl),
+            'title'        => $this->when(isset($this->name), $this->name),
+            'short_title'  => $this->when(isset($this->short_name), $this->short_name),
+            'url'          => new Url($this),
         ];
     }
 }

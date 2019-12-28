@@ -2,8 +2,8 @@
 
 namespace App;
 
-use Cache;
 use App\Collection\TransactionCollection;
+use Cache;
 use Carbon\Carbon;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
@@ -14,46 +14,46 @@ use Illuminate\Support\Arr;
 /**
  * App\Transaction
  *
- * @property int                                                              $id
- * @property int|null                                                         $order_id                  آیدی مشخص
+ * @property int                           $id
+ * @property int|null                      $order_id                  آیدی مشخص
  *           کننده سفارشی که تراکنش متعلق به آن است
- * @property int|null                                                         $wallet_id                 آیدی مشخص
+ * @property int|null                      $wallet_id                 آیدی مشخص
  *           کننده کیف پولی که تراکنش متعلق به آن است
- * @property int|null                                                         $cost                      مبلغ تراکنش
- * @property string|null                                                      $authority                 شماره اتوریتی
+ * @property int|null                      $cost                      مبلغ تراکنش
+ * @property string|null                   $authority                 شماره اتوریتی
  *           تولید شده از طرف درگاه
- * @property string|null                                                      $transactionID             کد پیگیری
+ * @property string|null                   $transactionID             کد پیگیری
  *           تراکنش
- * @property string|null                                                      $traceNumber               شماره پیگیری
- * @property string|null                                                      $referenceNumber           شماره مرجع
- * @property string|null                                                      $paycheckNumber            شماره چک (در
+ * @property string|null                   $traceNumber               شماره پیگیری
+ * @property string|null                   $referenceNumber           شماره مرجع
+ * @property string|null                   $paycheckNumber            شماره چک (در
  *           صورت پرداخت با چک بانکی)
- * @property string|null                                                      $managerComment            توضیح مسئول
+ * @property string|null                   $managerComment            توضیح مسئول
  *           درباره تراکنش
- * @property int|null                                                         $sourceBankAccount_id      آی دی مشخص
+ * @property int|null                      $sourceBankAccount_id      آی دی مشخص
  *           کننده شماره حساب مبدا
- * @property int|null                                                         $destinationBankAccount_id آی دی مشخص
+ * @property int|null                      $destinationBankAccount_id آی دی مشخص
  *           کننده شماره حساب مقصد
- * @property int|null                                                         $paymentmethod_id          آی دی مشخص
+ * @property int|null                      $paymentmethod_id          آی دی مشخص
  *           کننده روش پرداخت
- * @property int|null                                                         $transactiongateway_id     آیدی مشخص
+ * @property int|null                      $transactiongateway_id     آیدی مشخص
  *           کننده درگاه تراکنش
- * @property int|null                                                         $transactionstatus_id      آیدی مشخص
+ * @property int|null                      $transactionstatus_id      آیدی مشخص
  *           کننده وضعیت تراکنش
- * @property Carbon|null                                              $created_at
- * @property string|null                                                      $deadline_at               مهلت پرداخت
- * @property string|null                                                      $completed_at              تاریخ پرداخت
- * @property Carbon|null                                              $updated_at
- * @property Carbon|null                                              $deleted_at
+ * @property Carbon|null                   $created_at
+ * @property string|null                   $deadline_at               مهلت پرداخت
+ * @property string|null                   $completed_at              تاریخ پرداخت
+ * @property Carbon|null                   $updated_at
+ * @property Carbon|null                   $deleted_at
  * @property-read Collection|Transaction[] $children
- * @property-read Bankaccount $destinationBankAccount
- * @property-read Order|null                                             $order
+ * @property-read Bankaccount              $destinationBankAccount
+ * @property-read Order|null               $order
  * @property-read Collection|Transaction[] $parents
- * @property-read Paymentmethod|null                                     $paymentmethod
- * @property-read Bankaccount $sourceBankAccount
- * @property-read Transactiongateway|null                                $transactiongateway
- * @property-read Transactionstatus|null                                 $transactionstatus
- * @property-read Wallet|null                                            $wallet
+ * @property-read Paymentmethod|null       $paymentmethod
+ * @property-read Bankaccount              $sourceBankAccount
+ * @property-read Transactiongateway|null  $transactiongateway
+ * @property-read Transactionstatus|null   $transactionstatus
+ * @property-read Wallet|null              $wallet
  * @method static bool|null forceDelete()
  * @method static \Illuminate\Database\Query\Builder|Transaction onlyTrashed()
  * @method static bool|null restore()
@@ -87,18 +87,18 @@ use Illuminate\Support\Arr;
  * @method static Builder|BaseModel disableCache()
  * @method static Builder|Transaction walletMethod()
  * @method static Builder|BaseModel withCacheCooldownSeconds($seconds)
- * @property string|null                                                      $description               توضیح تراکنش
+ * @property string|null                   $description               توضیح تراکنش
  * @method static Builder|Transaction whereDescription($value)
- * @property-read mixed                                                       $jalali_completed_at
- * @property-read mixed                                                       $jalali_deadline_at
- * @property-read mixed                                                       $transaction_gateway
- * @property-read mixed                                                       $cache_cooldown_seconds
- * @property mixed jalali_created_at
- * @property int|null $device_id آی دی دیوایس کاربر
- * @property-read int|null $children_count
- * @property-read mixed $edit_link
- * @property-read mixed $remove_link
- * @property-read int|null $parents_count
+ * @property-read mixed                    $jalali_completed_at
+ * @property-read mixed                    $jalali_deadline_at
+ * @property-read mixed                    $transaction_gateway
+ * @property-read mixed                    $cache_cooldown_seconds
+ * @property mixed                         jalali_created_at
+ * @property int|null                      $device_id                 آی دی دیوایس کاربر
+ * @property-read int|null                 $children_count
+ * @property-read mixed                    $edit_link
+ * @property-read mixed                    $remove_link
+ * @property-read int|null                 $parents_count
  * @method static Builder|Transaction whereDeviceId($value)
  */
 class Transaction extends BaseModel
@@ -147,7 +147,7 @@ class Transaction extends BaseModel
     /**
      * Create a new Eloquent Collection instance.
      *
-     * @param  array  $models
+     * @param array $models
      *
      * @return TransactionCollection
      */
@@ -202,7 +202,7 @@ class Transaction extends BaseModel
             ->withPivot('relationtype_id')
             ->join('transactioninterraltions', 'relationtype_id',
                 'transactioninterraltions.id')//            ->select('major1_id AS id', 'majorinterrelationtypes.name AS pivot_relationName' , 'majorinterrelationtypes.displayName AS pivot_relationDisplayName')
-        ->where("relationtype_id", config("constants.TRANSACTION_INTERRELATION_PARENT_CHILD"));
+            ->where("relationtype_id", config("constants.TRANSACTION_INTERRELATION_PARENT_CHILD"));
     }
 
     public function children()
@@ -226,8 +226,7 @@ class Transaction extends BaseModel
         }
         if (empty($parentsArray)) {
             return false;
-        }
-        else {
+        } else {
             return Arr::last($parentsArray);
         }
     }
@@ -245,8 +244,7 @@ class Transaction extends BaseModel
         }
         if ($myTransaction->id == $this->id || $counter != $depth) {
             return false;
-        }
-        else {
+        } else {
             return true;
         }
     }
@@ -254,21 +252,17 @@ class Transaction extends BaseModel
     public function getCode()
     {
         if (isset($this->transactionID)) {
-            return "شماره تراکنش: ".$this->transactionID;
-        }
-        else {
+            return "شماره تراکنش: " . $this->transactionID;
+        } else {
             if (isset($this->traceNumber)) {
-                return "شماره پیگیری: ".$this->traceNumber;
-            }
-            else {
+                return "شماره پیگیری: " . $this->traceNumber;
+            } else {
                 if (isset($this->referenceNumber)) {
-                    return "شماره مرجع: ".$this->referenceNumber;
-                }
-                else {
+                    return "شماره مرجع: " . $this->referenceNumber;
+                } else {
                     if (isset($this->paycheckNumber)) {
-                        return "شماره چک: ".$this->paycheckNumber;
-                    }
-                    else {
+                        return "شماره چک: " . $this->paycheckNumber;
+                    } else {
                         return false;
                     }
                 }
@@ -277,8 +271,8 @@ class Transaction extends BaseModel
     }
 
     /**
-     * @param  Builder  $query
-     * @param  string                                 $authority
+     * @param Builder $query
+     * @param string  $authority
      *
      * @return Builder
      */
@@ -288,7 +282,7 @@ class Transaction extends BaseModel
     }
 
     /**
-     * @param  Builder  $query
+     * @param Builder $query
      *
      * @return Builder
      */
@@ -303,8 +297,7 @@ class Transaction extends BaseModel
         $amount = $this->cost;
         if (isset($wallet)) {
             $response = $wallet->deposit($amount);
-        }
-        else {
+        } else {
             $response = ["result" => false];
         }
 
@@ -344,10 +337,10 @@ class Transaction extends BaseModel
     public function getJalaliCompletedAtAttribute()
     {
         $transaction = $this;
-        $key         = "transaction:jalaliCompletedAt:".$transaction->cacheKey();
+        $key         = "transaction:jalaliCompletedAt:" . $transaction->cacheKey();
         return Cache::tags(["transaction"])
             ->remember($key, config("constants.CACHE_600"), function () use ($transaction) {
-                if(isset($transaction->completed_at))
+                if (isset($transaction->completed_at))
                     return $this->convertDate($transaction->completed_at, "toJalali");
 
                 return null;
@@ -357,10 +350,10 @@ class Transaction extends BaseModel
     public function getJalaliDeadlineAtAttribute()
     {
         $transaction = $this;
-        $key         = "transaction:jalaliDeadlineAt:".$transaction->cacheKey();
+        $key         = "transaction:jalaliDeadlineAt:" . $transaction->cacheKey();
         return Cache::tags(["transaction"])
             ->remember($key, config("constants.CACHE_600"), function () use ($transaction) {
-                if(isset($transaction->deadline_at))
+                if (isset($transaction->deadline_at))
                     return $this->convertDate($transaction->deadline_at, "toJalali");
 
                 return null;
@@ -370,10 +363,10 @@ class Transaction extends BaseModel
     public function getJalaliCreatedAtAttribute()
     {
         $transaction = $this;
-        $key         = "transaction:jalaliCreatedAt:".$transaction->cacheKey();
+        $key         = "transaction:jalaliCreatedAt:" . $transaction->cacheKey();
         return Cache::tags(["transaction"])
             ->remember($key, config("constants.CACHE_600"), function () use ($transaction) {
-                if(isset($transaction->created_at))
+                if (isset($transaction->created_at))
                     return $this->convertDate($transaction->created_at, "toJalali");
 
                 return null;

@@ -3,17 +3,17 @@
 namespace App;
 
 use Eloquent;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\Pivot;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Support\Carbon;
 
 /**
  * App\ProductSet
  *
- * @property int                             $contentset_id
- * @property int                             $product_id
- * @property int                             $order ترتیب
+ * @property int         $contentset_id
+ * @property int         $product_id
+ * @property int         $order ترتیب
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property Carbon|null $deleted_at

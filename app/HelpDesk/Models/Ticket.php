@@ -3,23 +3,24 @@
 namespace App\HelpDesk\Models;
 
 
+use App\BaseModel;
+use App\HelpDesk\Collection\TicketCollection;
+use App\HelpDesk\Models\Category as Category;
 use App\User;
 use Eloquent;
-use App\BaseModel;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
-use App\HelpDesk\Models\Category as Category;
-use App\HelpDesk\Collection\TicketCollection;
+use Illuminate\Support\Carbon;
 
 /**
  * App\HelpDesk\Models\Ticket
  *
- * @property-read User                 $agent
- * @property-read Category             $category
- * @property-read Collection|Comment[] $comments
- * @property-read Priority             $priority
- * @property-read Status               $status
- * @property-read User                 $user
+ * @property-read User                       $agent
+ * @property-read Category                   $category
+ * @property-read Collection|Comment[]       $comments
+ * @property-read Priority                   $priority
+ * @property-read Status                     $status
+ * @property-read User                       $user
  * @method static Builder|Ticket agentTickets($id)
  * @method static Builder|Ticket close()
  * @method static Builder|Ticket newModelQuery()
@@ -28,31 +29,31 @@ use App\HelpDesk\Collection\TicketCollection;
  * @method static Builder|Ticket query()
  * @method static Builder|Ticket userTickets($id)
  * @mixin Eloquent
- * @property int $id
- * @property string $subject
- * @property string|null $content
- * @property int $status_id
- * @property int $priority_id
- * @property int $user_id
- * @property int $agent_id
- * @property int $category_id
- * @property \Illuminate\Support\Carbon|null $close_at
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property \Illuminate\Support\Carbon|null $deleted_at
- * @property-read int|null $comments_count
- * @method static \Illuminate\Database\Eloquent\Builder|\App\HelpDesk\Models\Ticket whereAgentId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\HelpDesk\Models\Ticket whereCategoryId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\HelpDesk\Models\Ticket whereCloseAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\HelpDesk\Models\Ticket whereContent($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\HelpDesk\Models\Ticket whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\HelpDesk\Models\Ticket whereDeletedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\HelpDesk\Models\Ticket whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\HelpDesk\Models\Ticket wherePriorityId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\HelpDesk\Models\Ticket whereStatusId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\HelpDesk\Models\Ticket whereSubject($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\HelpDesk\Models\Ticket whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\HelpDesk\Models\Ticket whereUserId($value)
+ * @property int                             $id
+ * @property string                          $subject
+ * @property string|null                     $content
+ * @property int                             $status_id
+ * @property int                             $priority_id
+ * @property int                             $user_id
+ * @property int                             $agent_id
+ * @property int                             $category_id
+ * @property Carbon|null $close_at
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property Carbon|null $deleted_at
+ * @property-read int|null                   $comments_count
+ * @method static Builder|Ticket whereAgentId($value)
+ * @method static Builder|Ticket whereCategoryId($value)
+ * @method static Builder|Ticket whereCloseAt($value)
+ * @method static Builder|Ticket whereContent($value)
+ * @method static Builder|Ticket whereCreatedAt($value)
+ * @method static Builder|Ticket whereDeletedAt($value)
+ * @method static Builder|Ticket whereId($value)
+ * @method static Builder|Ticket wherePriorityId($value)
+ * @method static Builder|Ticket whereStatusId($value)
+ * @method static Builder|Ticket whereSubject($value)
+ * @method static Builder|Ticket whereUpdatedAt($value)
+ * @method static Builder|Ticket whereUserId($value)
  */
 class Ticket extends BaseModel
 {
@@ -86,7 +87,7 @@ class Ticket extends BaseModel
     /**
      * Create a new Eloquent Collection instance.
      *
-     * @param  array  $models
+     * @param array $models
      *
      * @return TicketCollection
      */
@@ -97,7 +98,7 @@ class Ticket extends BaseModel
 
     public function isClose(): bool
     {
-        return (bool) $this->close_at;
+        return (bool)$this->close_at;
     }
 
     public function scopeClose($query)

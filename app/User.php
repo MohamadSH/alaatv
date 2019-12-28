@@ -2,53 +2,53 @@
 
 namespace App;
 
+use App\Classes\Taggable;
+use App\Classes\Verification\MustVerifyMobileNumber;
 use App\Collection\ContentCollection;
 use App\Collection\OrderCollections;
 use App\Collection\OrderproductCollection;
+use App\Collection\ProductCollection;
+use App\Collection\UserCollection;
+use App\HelpDesk\AgentInterface;
 use App\HelpDesk\Collection\TicketCollection;
+use App\HelpDesk\Models\Category;
 use App\HelpDesk\Models\Ticket;
-use Eloquent;
-use Hash;
-use Carbon\Carbon;
-use App\Traits\Helper;
-use App\Classes\Taggable;
+use App\HelpDesk\Traits\AgentTrait;
+use App\Traits\APIRequestCommon;
+use App\Traits\CharacterCommon;
 use App\Traits\DateTrait;
 use App\Traits\HasWallet;
-use App\Traits\OrderCommon;
-use App\Traits\CharacterCommon;
-use App\HelpDesk\AgentInterface;
-use App\Traits\APIRequestCommon;
-use App\HelpDesk\Models\Category;
-use App\Collection\UserCollection;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Notifications\DatabaseNotification;
-use Illuminate\Notifications\DatabaseNotificationCollection;
-use Kalnoy\Nestedset\QueryBuilder;
-use Laravel\Passport\Client;
-use Laravel\Passport\HasApiTokens;
-use App\HelpDesk\Traits\AgentTrait;
-use App\Collection\ProductCollection;
-use Illuminate\Notifications\Notifiable;
-use Laratrust\Traits\LaratrustUserTrait;
+use App\Traits\Helper;
 use App\Traits\MustVerifyMobileNumberTrait;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Iatstuti\Database\Support\CascadeSoftDeletes;
-use App\Classes\Verification\MustVerifyMobileNumber;
-use Illuminate\Foundation\Auth\User as Authenticatable;
+use App\Traits\OrderCommon;
 use App\Traits\User\{BonTrait,
-    TrackTrait,
+    DashboardTrait,
     LotteryTrait,
     MutatorTrait,
     PaymentTrait,
     ProfileTrait,
+    TaggableUserTrait,
     TeacherTrait,
-    VouchersTrait,
-    DashboardTrait,
-    TaggableUserTrait};
+    TrackTrait,
+    VouchersTrait};
+use Carbon\Carbon;
+use Eloquent;
+use Hash;
+use Iatstuti\Database\Support\CascadeSoftDeletes;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\DatabaseNotification;
+use Illuminate\Notifications\DatabaseNotificationCollection;
+use Illuminate\Notifications\Notifiable;
+use Kalnoy\Nestedset\QueryBuilder;
+use Laratrust\Traits\LaratrustUserTrait;
+use Laravel\Passport\Client;
+use Laravel\Passport\HasApiTokens;
 use Laravel\Passport\Token;
 
 /**
@@ -124,21 +124,21 @@ use Laravel\Passport\Token;
  *               $diet                     رژیم غذایی خاص
  * @property string|null
  *               $techCode                 کد تکنسین
- * @property string    $full_name
- * @property string    whatsapp
- * @property string    skype
- * @property string    province
- * @property string    city
- * @property string    address
- * @property string    postalCode
- * @property string    school
- * @property string    bio
- * @property string    introducedBy
- * @property int    bloodtype_id
- * @property string    allergy
- * @property string    medicalCondition
- * @property string    diet
- * @property Userstatus    userstatus
+ * @property string                                     $full_name
+ * @property string                                     whatsapp
+ * @property string                                     skype
+ * @property string                                     province
+ * @property string                                     city
+ * @property string                                     address
+ * @property string                                     postalCode
+ * @property string                                     school
+ * @property string                                     bio
+ * @property string                                     introducedBy
+ * @property int                                        bloodtype_id
+ * @property string                                     allergy
+ * @property string                                     medicalCondition
+ * @property string                                     diet
+ * @property Userstatus                                 userstatus
  * @property-read Collection|Bankaccount[]
  *                    $bankaccounts
  * @property-read Bloodtype|null
@@ -260,101 +260,101 @@ use Laravel\Passport\Token;
  *                    $favoredSets
  * @method static Builder|User whereMobileVerifiedAt($value)
  * @method static Builder|User whereMobileVerifiedCode($value)
- * @property string|null                                                              $email_verified_at
- * @property-read mixed                                                               $reverse_full_name
- * @property-write mixed                                                              $first_name
- * @property-write mixed                                                              $last_name
- * @property-write mixed                                                              $medical_condition
- * @property-write mixed                                                              $postal_code
+ * @property string|null                                $email_verified_at
+ * @property-read mixed                                 $reverse_full_name
+ * @property-write mixed                                $first_name
+ * @property-write mixed                                $last_name
+ * @property-write mixed                                $medical_condition
+ * @property-write mixed                                $postal_code
  * @method static Builder|User newModelQuery()
  * @method static Builder|User newQuery()
  * @method static Builder|User query()
  * @method static Builder|User whereEmailVerifiedAt($value)
  * @property-read OrderproductCollection|Orderproduct[] $closedorderproducts
- * @property mixed                                                                    mobile
- * @property string                                                                   lastName
- * @property string                                                                   firstName
- * @property int                                                                      id
+ * @property mixed                                      mobile
+ * @property string                                     lastName
+ * @property string                                     firstName
+ * @property int                                        id
  * @method static Builder|User active()
  * @method static select()
- * @property-read mixed                                                               $number_of_products_in_basket
- * @property-read mixed                                                               $short_name
- * @property-read mixed                                                               $completion_info
- * @property-read mixed                                                               $gender_info
- * @property-read mixed                                                               $grade_info
- * @property-read mixed                                                               $major_info
- * @property-read mixed                                                               $wallet_info
- * @property-read Collection|Client[] $clients
- * @property-read mixed                                                               $info
- * @property-read Collection|Token[]  $tokens
- * @property mixed                                                                    openOrders
- * @property mixed                                                                    nameSlug
- * @property mixed                                                                    nationalCode
- * @property mixed                                                                    userstatus_id
- * @property mixed                                                                    techCode
- * @property string                                                                   password
- * @property int                                                                      lockProfile
- * @property string                                                                   photo
- * @property mixed                                                                    roles
- * @property null                                                              mobile_verified_at
- * @property mixed                                                                    email
- * @property-read OrderCollections|Order[] $closedOrders
- * @property-read Collection|Firebasetoken[] $firebasetokens
- * @property-read mixed                                                               $user_status
- * @property mixed updated_at
- * @property mixed created_at
+ * @property-read mixed                                 $number_of_products_in_basket
+ * @property-read mixed                                 $short_name
+ * @property-read mixed                                 $completion_info
+ * @property-read mixed                                 $gender_info
+ * @property-read mixed                                 $grade_info
+ * @property-read mixed                                 $major_info
+ * @property-read mixed                                 $wallet_info
+ * @property-read Collection|Client[]                   $clients
+ * @property-read mixed                                 $info
+ * @property-read Collection|Token[]                    $tokens
+ * @property mixed                                      openOrders
+ * @property mixed                                      nameSlug
+ * @property mixed                                      nationalCode
+ * @property mixed                                      userstatus_id
+ * @property mixed                                      techCode
+ * @property string                                     password
+ * @property int                                        lockProfile
+ * @property string                                     photo
+ * @property mixed                                      roles
+ * @property null                                       mobile_verified_at
+ * @property mixed                                      email
+ * @property-read OrderCollections|Order[]              $closedOrders
+ * @property-read Collection|Firebasetoken[]            $firebasetokens
+ * @property-read mixed                                 $user_status
+ * @property mixed                                      updated_at
+ * @property mixed                                      created_at
  * @method static Builder|User orWherePermissionIs($permission = '')
  * @method static Builder|User orWhereRoleIs($role = '', $team = null)
- * @property string|null                                                        $lastServiceCall آخرین تماس کارمندان روابط عمومی با کاربر
+ * @property string|null                                $lastServiceCall آخرین تماس کارمندان روابط عمومی با کاربر
  * @method static Builder|User whereLastServiceCall($value)
- * @property-read TicketCollection|Ticket[] $agentTickets
- * @property-read int|null $agent_tickets_count
- * @property-read int|null $bankaccounts_count
- * @property-read int|null $clients_count
- * @property-read int|null $closedorderproducts_count
- * @property-read int|null $contacts_count
- * @property-read int|null $contents_count
- * @property-read Collection|Contract[] $contracts
- * @property-read int|null $contracts_count
- * @property-read int|null $eventresults_count
- * @property-read int|null $favored_contents_count
- * @property-read int|null $favored_products_count
- * @property-read int|null $favored_sets_count
- * @property-read int|null $firebasetokens_count
- * @property-read mixed $edit_link
- * @property-read mixed $jalali_created_at
- * @property-read mixed $jalali_updated_at
- * @property-read mixed $remove_link
- * @property-read mixed $total_bon_number
- * @property-read Collection|Category[] $helpCategories
- * @property-read int|null $help_categories_count
- * @property-read int|null $lotteries_count
- * @property-read int|null $mbtianswers_count
- * @property-read int|null $notifications_count
- * @property-read int|null $open_orders_count
- * @property-read int|null $order_transactions_count
- * @property-read int|null $ordermanagercomments_count
- * @property-read int|null $orderproducts_count
- * @property-read int|null $orders_count
- * @property-read int|null $permissions_count
- * @property-read int|null $productvouchers_count
- * @property-read int|null $roles_count
- * @property-read int|null $seensitepages_count
- * @property-read TicketCollection|Ticket[] $tickets
- * @property-read int|null $tickets_count
- * @property-read int|null $tokens_count
- * @property-read int|null $transactions_count
- * @property-read int|null $userbons_count
- * @property-read int|null $usersurveyanswers_count
- * @property-read int|null $useruploads_count
- * @property-read int|null $wallet_transactions_count
- * @property-read int|null $wallets_count
+ * @property-read TicketCollection|Ticket[]             $agentTickets
+ * @property-read int|null                              $agent_tickets_count
+ * @property-read int|null                              $bankaccounts_count
+ * @property-read int|null                              $clients_count
+ * @property-read int|null                              $closedorderproducts_count
+ * @property-read int|null                              $contacts_count
+ * @property-read int|null                              $contents_count
+ * @property-read Collection|Contract[]                 $contracts
+ * @property-read int|null                              $contracts_count
+ * @property-read int|null                              $eventresults_count
+ * @property-read int|null                              $favored_contents_count
+ * @property-read int|null                              $favored_products_count
+ * @property-read int|null                              $favored_sets_count
+ * @property-read int|null                              $firebasetokens_count
+ * @property-read mixed                                 $edit_link
+ * @property-read mixed                                 $jalali_created_at
+ * @property-read mixed                                 $jalali_updated_at
+ * @property-read mixed                                 $remove_link
+ * @property-read mixed                                 $total_bon_number
+ * @property-read Collection|Category[]                 $helpCategories
+ * @property-read int|null                              $help_categories_count
+ * @property-read int|null                              $lotteries_count
+ * @property-read int|null                              $mbtianswers_count
+ * @property-read int|null                              $notifications_count
+ * @property-read int|null                              $open_orders_count
+ * @property-read int|null                              $order_transactions_count
+ * @property-read int|null                              $ordermanagercomments_count
+ * @property-read int|null                              $orderproducts_count
+ * @property-read int|null                              $orders_count
+ * @property-read int|null                              $permissions_count
+ * @property-read int|null                              $productvouchers_count
+ * @property-read int|null                              $roles_count
+ * @property-read int|null                              $seensitepages_count
+ * @property-read TicketCollection|Ticket[]             $tickets
+ * @property-read int|null                              $tickets_count
+ * @property-read int|null                              $tokens_count
+ * @property-read int|null                              $transactions_count
+ * @property-read int|null                              $userbons_count
+ * @property-read int|null                              $usersurveyanswers_count
+ * @property-read int|null                              $useruploads_count
+ * @property-read int|null                              $wallet_transactions_count
+ * @property-read int|null                              $wallets_count
  * @method static Builder|User helpAdmins()
  * @method static Builder|User helpAgents()
  * @method static Builder|User permissionName($permissionName)
  * @method static Builder|User roleName($roleName)
  */
-class User extends Authenticatable implements Taggable, MustVerifyMobileNumber, MustVerifyEmail , AgentInterface
+class User extends Authenticatable implements Taggable, MustVerifyMobileNumber, MustVerifyEmail, AgentInterface
 {
     use HasApiTokens;
     use MustVerifyMobileNumberTrait;
@@ -528,7 +528,7 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber, 
         'password',
         'remember_token',
         'wallets',
-        'userbons'
+        'userbons',
     ];
 
     public static function getNullInstant($visibleArray = [])
@@ -540,12 +540,16 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber, 
         return $user;
     }
 
-    public static function roleFilter($users ,$rolesId){
-        $users =  $users->whereHas('roles', function($q) use ($rolesId) {$q->whereIn("id", $rolesId);});
+    public static function roleFilter($users, $rolesId)
+    {
+        $users = $users->whereHas('roles', function ($q) use ($rolesId) {
+            $q->whereIn("id", $rolesId);
+        });
         return $users;
     }
 
-    public static function majorFilter($users ,$majorsId){
+    public static function majorFilter($users, $majorsId)
+    {
 
         if (in_array(0, $majorsId))
             $users = $users->whereDoesntHave("major");
@@ -575,7 +579,7 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber, 
     /**
      * Create a new Eloquent Collection instance.
      *
-     * @param  array  $models
+     * @param array $models
      *
      * @return UserCollection
      */
@@ -592,8 +596,8 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber, 
     */
 
     /**
-     * @param  Builder  $query
-     * @param  array                                  $roles
+     * @param Builder $query
+     * @param array   $roles
      *
      * @return mixed
      */
@@ -606,9 +610,9 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber, 
     }
 
     /**
-     * @param  Builder  $query
+     * @param Builder $query
      *
-     * @param  string                                 $roleName
+     * @param string  $roleName
      *
      * @return mixed
      */
@@ -620,10 +624,10 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber, 
     }
 
     /**
-     * @param  Builder  $query
+     * @param Builder $query
      *
      *
-     * @param  string                                 $permissionName
+     * @param string  $permissionName
      *
      * @return mixed
      */
@@ -635,9 +639,8 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber, 
     }
 
 
-
     /**
-     * @param  Builder  $query
+     * @param Builder $query
      *
      * @return mixed
      */
@@ -677,7 +680,8 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber, 
         return $this->hasMany(Eventresult::class);
     }
 
-    public function contracts(){
+    public function contracts()
+    {
         return $this->hasMany(Contract::Class);
     }
 
@@ -774,7 +778,7 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber, 
      */
     public function helpCategories()
     {
-        return $this->belongsToMany(Category::class, 'help_categories_users',  'user_id','category_id');
+        return $this->belongsToMany(Category::class, 'help_categories_users', 'user_id', 'category_id');
     }
 
 

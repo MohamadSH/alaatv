@@ -93,6 +93,6 @@ class SetObserver
     public function saved(Contentset $set)
     {
         $this->sendTagsOfTaggableToApi($set, $this->tagging);
-        Cache::tags(['set_'.$set->id , 'set_search' ])->flush();
+        Cache::tags(['set_' . $set->id, 'set_search'])->flush();
     }
 }

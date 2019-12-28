@@ -14,8 +14,8 @@ trait Resource
     public function getContentFile()
     {
         if ($this->resource instanceof Content) {
-            $file = $this->file;
-            $videoFileCollection = $file->get('video') ?? collect();
+            $file                   = $this->file;
+            $videoFileCollection    = $file->get('video') ?? collect();
             $pamphletFileCollection = $file->get('pamphlet') ?? collect();
             return [
                 'video'    => $this->when(isset($videoFileCollection), function () use ($videoFileCollection) {

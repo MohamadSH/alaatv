@@ -9,13 +9,14 @@
 namespace App\Classes\Format;
 
 use App\Collection\BlockCollection;
+use Illuminate\Support\Collection;
 
 interface BlockCollectionFormatter
 {
     /**
-     * @param  BlockCollection  $blocks
+     * @param BlockCollection $blocks
      *
-     * @return \Illuminate\Support\Collection
+     * @return Collection
      */
     public function format(BlockCollection $blocks);
 }

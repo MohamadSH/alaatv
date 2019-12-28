@@ -3,6 +3,9 @@
 namespace App;
 
 use Carbon\Carbon;
+use Eloquent;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 
 /**
  * App\Coupon
@@ -14,60 +17,60 @@ use Carbon\Carbon;
  * @property int                                                          $enable          فعال یا غیرفعال بودن کپن
  *           برای استفاده جدید
  * @property string|null                                                  $description     توضیحات کپن
- * @property string|null                                                  $code            کد کپن
- * @property float                                                        $discount        میزان تخفیف کپن به درصد
- * @property int|null                                                     $maxCost         بیشسینه قیمت مورد نیاز برای
+ * @property string|null               $code            کد کپن
+ * @property float                     $discount        میزان تخفیف کپن به درصد
+ * @property int|null                  $maxCost         بیشسینه قیمت مورد نیاز برای
  *           استفاده از این کپن
- * @property int|null                                                     $usageLimit      حداکثر تعداد مجاز تعداد
+ * @property int|null                  $usageLimit      حداکثر تعداد مجاز تعداد
  *           استفاده از کپن - اگر نال باشد یعنی نامحدود
- * @property int                                                          $usageNumber     تعداد استفاده ها از کپن تا
+ * @property int                       $usageNumber     تعداد استفاده ها از کپن تا
  *           این لحظه
- * @property string|null                                                  $validSince      تاریخ شروع معتبر بودن کپن
- * @property string|null                                                  $validUntil      تاریخ پایان معتبر بودن کپن
- * @property \Carbon\Carbon|null                                          $created_at
- * @property \Carbon\Carbon|null                                          $updated_at
- * @property \Carbon\Carbon|null                                          $deleted_at
- * @property-read \App\Coupontype|null                                    $coupontype
- * @property-read \App\Discounttype|null                                  $discounttype
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\User[]    $marketers
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Order[]   $orders
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Product[] $products
+ * @property string|null               $validSince      تاریخ شروع معتبر بودن کپن
+ * @property string|null               $validUntil      تاریخ پایان معتبر بودن کپن
+ * @property Carbon|null               $created_at
+ * @property Carbon|null               $updated_at
+ * @property Carbon|null               $deleted_at
+ * @property-read Coupontype|null      $coupontype
+ * @property-read Discounttype|null    $discounttype
+ * @property-read Collection|User[]    $marketers
+ * @property-read Collection|Order[]   $orders
+ * @property-read Collection|Product[] $products
  * @method static bool|null forceDelete()
- * @method static \Illuminate\Database\Query\Builder|\App\Coupon onlyTrashed()
+ * @method static \Illuminate\Database\Query\Builder|Coupon onlyTrashed()
  * @method static bool|null restore()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Coupon whereCoupontypeId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Coupon whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Coupon whereDeletedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Coupon whereDescription($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Coupon whereDiscount($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Coupon whereDiscounttypeId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Coupon whereEnable($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Coupon whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Coupon whereMaxCost($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Coupon whereName($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Coupon whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Coupon whereUsageLimit($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Coupon whereUsageNumber($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Coupon whereValidSince($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Coupon whereValidUntil($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Coupon withTrashed()
- * @method static \Illuminate\Database\Query\Builder|\App\Coupon withoutTrashed()
- * @mixin \Eloquent
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Coupon newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Coupon newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Coupon query()
+ * @method static Builder|Coupon whereCoupontypeId($value)
+ * @method static Builder|Coupon whereCreatedAt($value)
+ * @method static Builder|Coupon whereDeletedAt($value)
+ * @method static Builder|Coupon whereDescription($value)
+ * @method static Builder|Coupon whereDiscount($value)
+ * @method static Builder|Coupon whereDiscounttypeId($value)
+ * @method static Builder|Coupon whereEnable($value)
+ * @method static Builder|Coupon whereId($value)
+ * @method static Builder|Coupon whereMaxCost($value)
+ * @method static Builder|Coupon whereName($value)
+ * @method static Builder|Coupon whereUpdatedAt($value)
+ * @method static Builder|Coupon whereUsageLimit($value)
+ * @method static Builder|Coupon whereUsageNumber($value)
+ * @method static Builder|Coupon whereValidSince($value)
+ * @method static Builder|Coupon whereValidUntil($value)
+ * @method static \Illuminate\Database\Query\Builder|Coupon withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|Coupon withoutTrashed()
+ * @mixin Eloquent
+ * @method static Builder|Coupon newModelQuery()
+ * @method static Builder|Coupon newQuery()
+ * @method static Builder|Coupon query()
  * @property-read mixed                                                   $coupon_type
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Coupon enable()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Coupon valid()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel disableCache()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel withCacheCooldownSeconds($seconds)
+ * @method static Builder|Coupon enable()
+ * @method static Builder|Coupon valid()
+ * @method static Builder|BaseModel disableCache()
+ * @method static Builder|BaseModel withCacheCooldownSeconds($seconds)
  * @method static code($couponCode)
  * @property-read mixed                                                   $discount_type
  * @property-read mixed                                                   $cache_cooldown_seconds
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Coupon whereCode($value)
- * @property-read int|null $marketers_count
- * @property-read int|null $orders_count
- * @property-read int|null $products_count
+ * @method static Builder|Coupon whereCode($value)
+ * @property-read int|null                                                $marketers_count
+ * @property-read int|null                                                $orders_count
+ * @property-read int|null                                                $products_count
  */
 class Coupon extends BaseModel
 {
@@ -76,16 +79,16 @@ class Coupon extends BaseModel
     | Traits
     |--------------------------------------------------------------------------
     */
-    
+
     /*
     |--------------------------------------------------------------------------
     | Properties
     |--------------------------------------------------------------------------
     */
-    public const COUPON_VALIDATION_STATUS_OK                   = 0;
-    public const COUPON_VALIDATION_STATUS_DISABLED             = 1;
+    public const COUPON_VALIDATION_STATUS_OK = 0;
+    public const COUPON_VALIDATION_STATUS_DISABLED = 1;
     public const COUPON_VALIDATION_STATUS_USAGE_TIME_NOT_BEGUN = 2;
-    public const COUPON_VALIDATION_STATUS_EXPIRED              = 3;
+    public const COUPON_VALIDATION_STATUS_EXPIRED = 3;
     public const COUPON_VALIDATION_STATUS_USAGE_LIMIT_FINISHED = 4;
     /**
      * @var array
@@ -104,11 +107,11 @@ class Coupon extends BaseModel
         'coupontype_id',
         'discounttype_id',
     ];
-    protected $appends  = [
+    protected $appends = [
         'couponType',
         'discountType',
     ];
-    protected $hidden   = [
+    protected $hidden = [
         'id',
         'enable',
         'maxCost',
@@ -122,52 +125,52 @@ class Coupon extends BaseModel
         'coupontype_id',
         'discounttype_id',
     ];
-    
+
     /*
     |--------------------------------------------------------------------------
     | Relations
     |--------------------------------------------------------------------------
     */
-    
+
     public function marketers()
     {
         return $this->belongsToMany('App\User');
     }
-    
+
     public function orders()
     {
         return $this->belongsToMany('App\Order');
     }
-    
+
     public function products()
     {
         return $this->belongsToMany('App\Product');
     }
-    
+
     /**
      * Scope a query to only include enable(or disable) Coupons.
      *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @param Builder $query
      *
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @return Builder
      */
     public function scopeEnable($query)
     {
         return $query->where('enable', '=', 1);
     }
-    
+
     /**
      * Scope a query to only include valid Coupons.
      *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @param Builder $query
      *
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @return Builder
      */
     public function scopeValid($query)
     {
         $now = Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now())
             ->timezone('Asia/Tehran');
-        
+
         return $query->where(function ($q) use ($now) {
             $q->where('validSince', '<', $now)
                 ->orWhereNull('validSince');
@@ -177,24 +180,24 @@ class Coupon extends BaseModel
                     ->orWhereNull('validUntil');
             });
     }
-    
+
     /*
     |--------------------------------------------------------------------------
     | Accessor
     |--------------------------------------------------------------------------
     */
-    
+
     /*
     |--------------------------------------------------------------------------
     | Scopes
     |--------------------------------------------------------------------------
     */
-    
+
     /**
      * Scope a query by coupon code
      *
      * @param          $query
-     * @param  string  $code
+     * @param string   $code
      *
      * @return mixed
      */
@@ -202,7 +205,7 @@ class Coupon extends BaseModel
     {
         return $query->where('code', $code);
     }
-    
+
     /**
      * Validates a coupon
      *
@@ -210,7 +213,7 @@ class Coupon extends BaseModel
      */
     public function validateCoupon()
     {
-        
+
         if (!$this->isEnable()) {
             return self::COUPON_VALIDATION_STATUS_DISABLED;
         }
@@ -223,10 +226,10 @@ class Coupon extends BaseModel
         if ($this->hasTotalNumberFinished()) {
             return self::COUPON_VALIDATION_STATUS_USAGE_LIMIT_FINISHED;
         }
-    
+
         return self::COUPON_VALIDATION_STATUS_OK;
     }
-    
+
     /**
      * Determines whether this coupon is enabled or not
      *
@@ -236,13 +239,13 @@ class Coupon extends BaseModel
     {
         return $this->enable ? true : false;
     }
-    
+
     /*
     |--------------------------------------------------------------------------
     | Others
     |--------------------------------------------------------------------------
     */
-    
+
     /**
      * Determines whether this coupon usage time has started or not
      *
@@ -253,7 +256,7 @@ class Coupon extends BaseModel
         return !isset($this->validSince) || Carbon::now()
                 ->setTimezone('Asia/Tehran') >= $this->validSince;
     }
-    
+
     /**
      * Determines whether this coupon usage time has ended or not
      *
@@ -264,7 +267,7 @@ class Coupon extends BaseModel
         return !isset($this->validUntil) || Carbon::now()
                 ->setTimezone('Asia/Tehran') <= $this->validUntil;
     }
-    
+
     /**
      * Determines whether this coupon total number has finished or not
      *
@@ -274,7 +277,7 @@ class Coupon extends BaseModel
     {
         return isset($this->usageLimit) && $this->usageNumber >= $this->usageLimit;
     }
-    
+
     public function getCouponTypeAttribute()
     {
         return optional($this->coupontype()
@@ -284,23 +287,23 @@ class Coupon extends BaseModel
             'description',
         ]);
     }
-    
+
     public function coupontype()
     {
         return $this->belongsTo('App\Coupontype');
     }
-    
+
     /**
      * Determines whether this coupon has the passed product or not
      *
-     * @param  Product  $product
+     * @param Product $product
      *
      * @return bool
      */
     public function hasProduct(Product $product): bool
     {
 
-        if(in_array($product->id, [Product::CUSTOM_DONATE_PRODUCT , Product::DONATE_PRODUCT_5_HEZAR]))
+        if (in_array($product->id, [Product::CUSTOM_DONATE_PRODUCT, Product::DONATE_PRODUCT_5_HEZAR]))
             return false;
 
         $flag = true;
@@ -308,20 +311,20 @@ class Coupon extends BaseModel
             $couponProducts = $this->products;
             $flag           = $couponProducts->contains($product);
         }
-        
+
         return $flag;
     }
-    
+
     public function decreaseUseNumber()
     {
         $this->usageNumber--;
     }
-    
+
     public function encreaseUserNumber()
     {
         $this->usageNumber++;
     }
-    
+
     public function getDiscountTypeAttribute()
     {
         return optional($this->discounttype()
@@ -332,7 +335,7 @@ class Coupon extends BaseModel
                 'description',
             ]);
     }
-    
+
     public function discounttype()
     {
         return $this->belongsTo('\App\Discounttype');

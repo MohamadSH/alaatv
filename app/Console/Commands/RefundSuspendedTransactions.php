@@ -4,6 +4,8 @@ namespace App\Console\Commands;
 
 use App\Order;
 use App\Transaction;
+use App\Wallet;
+use Exception;
 use Illuminate\Console\Command;
 
 class RefundSuspendedTransactions extends Command
@@ -36,77 +38,76 @@ class RefundSuspendedTransactions extends Command
      * Execute the console command.
      *
      * @return mixed
-     * @throws \Exception
+     * @throws Exception
      */
     public function handle()
     {
-        $walletTransactions = Transaction::where('paymentmethod_id' , config('constants.PAYMENT_METHOD_WALLET'))
-                                        ->where('transactionstatus_id' , config('constants.TRANSACTION_STATUS_SUSPENDED'))
-                                        ->get();
+        $walletTransactions = Transaction::where('paymentmethod_id', config('constants.PAYMENT_METHOD_WALLET'))
+            ->where('transactionstatus_id', config('constants.TRANSACTION_STATUS_SUSPENDED'))
+            ->get();
 
         $totalTransactionCount = $walletTransactions->count();
-        $this->info('total transactions: '.$totalTransactionCount);
+        $this->info('total transactions: ' . $totalTransactionCount);
         $this->info("\n\n");
-        $this->info('total transactions cost: '.number_format($walletTransactions->sum('cost')).' Tomans');
+        $this->info('total transactions cost: ' . number_format($walletTransactions->sum('cost')) . ' Tomans');
         $this->info("\n\n");
         $totalRefund = 0;
-        $bar = $this->output->createProgressBar($totalTransactionCount);
+        $bar         = $this->output->createProgressBar($totalTransactionCount);
         /** @var Transaction $walletTransaction */
 
         $depositFlag = false;
-        if($this->confirm('Do you want to refund these transactions? type No if you only want to analyze them', true)) {
-            $depositFlag= true;
+        if ($this->confirm('Do you want to refund these transactions? type No if you only want to analyze them', true)) {
+            $depositFlag = true;
         }
 
         foreach ($walletTransactions as $walletTransaction) {
             /** @var Order $order */
             $order = $walletTransaction->order;
-            /** @var \App\Wallet $wallet */
+            /** @var Wallet $wallet */
             $wallet = $walletTransaction->wallet;
-            if(!isset($order)) {
-                $this->info('Transaction does not have order: '.$walletTransaction->id);
+            if (!isset($order)) {
+                $this->info('Transaction does not have order: ' . $walletTransaction->id);
                 $this->info("\n\n");
                 continue;
             }
 
-            if(!isset($wallet)) {
-                $this->info('Transaction does not have wallet: '.$walletTransaction->id);
+            if (!isset($wallet)) {
+                $this->info('Transaction does not have wallet: ' . $walletTransaction->id);
                 $this->info("\n\n");
                 continue;
             }
 
-            if($walletTransaction->cost < 0){
-                $this->info('Transaction cost is minus: '.$walletTransaction->id);
+            if ($walletTransaction->cost < 0) {
+                $this->info('Transaction cost is minus: ' . $walletTransaction->id);
                 $this->info("\n\n");
                 continue;
             }
 
-            if($walletTransaction->cost == 0){
-                $this->info('Transaction cost is zero: '.$walletTransaction->id);
+            if ($walletTransaction->cost == 0) {
+                $this->info('Transaction cost is zero: ' . $walletTransaction->id);
                 $this->info("\n\n");
                 continue;
             }
 
-            if($order->paymentstatus_id == config('constants.PAYMENT_STATUS_PAID')){
-                $this->info('Order status is paid: '.$walletTransaction->id);
+            if ($order->paymentstatus_id == config('constants.PAYMENT_STATUS_PAID')) {
+                $this->info('Order status is paid: ' . $walletTransaction->id);
                 $this->info("\n\n");
                 continue;
             }
 
-            if($order->orderstatus_id != config('constants.ORDER_STATUS_CLOSED') && $order->orderstatus_id != config('constants.ORDER_STATUS_CANCELED')){
-                $this->info('Order status is not closed: '.$order->orderstatus_id.' '.$walletTransaction->id);
+            if ($order->orderstatus_id != config('constants.ORDER_STATUS_CLOSED') && $order->orderstatus_id != config('constants.ORDER_STATUS_CANCELED')) {
+                $this->info('Order status is not closed: ' . $order->orderstatus_id . ' ' . $walletTransaction->id);
                 $this->info("\n\n");
                 continue;
             }
 
-            if($depositFlag){
+            if ($depositFlag) {
                 $result = $walletTransaction->depositThisWalletTransaction();
-                if($result['result'])
-                {
+                if ($result['result']) {
                     $totalRefund += $walletTransaction->cost;
                     $walletTransaction->delete();
-                }else{
-                    $this->info('Could not update wallet '.$wallet->id.' : '.$walletTransaction->id);
+                } else {
+                    $this->info('Could not update wallet ' . $wallet->id . ' : ' . $walletTransaction->id);
                     $this->info("\n\n");
                 }
             }
@@ -117,6 +118,6 @@ class RefundSuspendedTransactions extends Command
         $bar->finish();
 
         $this->info("\n\n");
-        $this->info('total refunded : '.number_format($totalRefund));
+        $this->info('total refunded : ' . number_format($totalRefund));
     }
 }

@@ -8,18 +8,18 @@ use Illuminate\Queue\SerializesModels;
 class FreeInternetAccept
 {
     use SerializesModels;
-    
+
     /**
      * The verified user.
      *
      * @var User
      */
     public $user;
-    
+
     /**
      * Create a new event instance.
      *
-     * @param  User  $user
+     * @param User $user
      *
      * @return void
      */

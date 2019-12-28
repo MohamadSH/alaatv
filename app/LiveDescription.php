@@ -10,13 +10,14 @@ class LiveDescription extends BaseModel
 
     protected $table = 'livedescriptions';
 
-    protected $fillable=[
+    protected $fillable = [
         'product_id',
         'title',
         'description',
     ];
 
-    public function product(){
+    public function product()
+    {
         return $this->belongsTo(Product::class);
     }
 }

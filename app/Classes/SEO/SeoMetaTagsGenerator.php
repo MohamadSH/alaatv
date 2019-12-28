@@ -8,6 +8,7 @@
 
 namespace App\Classes\SEO;
 
+use Exception;
 use SEO;
 
 class SeoMetaTagsGenerator
@@ -83,9 +84,9 @@ class SeoMetaTagsGenerator
     /**
      * SeoMetaTagsGenerator constructor.
      *
-     * @param  SeoInterface  $seo
+     * @param SeoInterface $seo
      *
-     * @throws \Exception
+     * @throws Exception
      */
     public function __construct(SeoInterface $seo)
     {
@@ -97,7 +98,7 @@ class SeoMetaTagsGenerator
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     protected function build(): void
     {
@@ -120,7 +121,7 @@ class SeoMetaTagsGenerator
                     ->setType(self::SEO_TYPE_WEBSITE);
                 break;
             default:
-                throw new \Exception('seoMod should be set!');
+                throw new Exception('seoMod should be set!');
         }
     }
 

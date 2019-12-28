@@ -5,24 +5,23 @@ namespace App\Http\Controllers\Web;
 use App\File;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\InsertFileRequest;
-use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
 class FileController extends Controller
 {
     protected $response;
-    
+
     function __construct()
     {
         $this->response = new Response();
     }
-    
-/**
+
+    /**
      * Store a newly created resource in storage.
      *
-     * @param  \App\Http\Requests\InsertFileRequest  $request
+     * @param InsertFileRequest $request
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function store(InsertFileRequest $request)
     {
@@ -33,10 +32,9 @@ class FileController extends Controller
                 $file->disks()
                     ->attach($request->get("disk_id"));
             }
-            
+
             return $file->id;
-        }
-        else {
+        } else {
             return false;
         }
     }
@@ -45,10 +43,9 @@ class FileController extends Controller
     {
         if ($file->delete()) {
             session()->put('success', 'فایل با موفقیت اصلاح شد');
-            
+
             return $this->response->setStatusCode(Response::HTTP_OK);
-        }
-        else {
+        } else {
             //            session()->put('error', 'خطای پایگاه داده');
             return $this->response->setStatusCode(Response::HTTP_SERVICE_UNAVAILABLE);
         }

@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers\Web;
 
-use Auth;
-use App\User;
-use App\Product;
+use App\Http\Controllers\Controller;
 use App\Mbtianswer;
+use App\Product;
+use App\User;
+use Auth;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use App\Http\Controllers\Controller;
 
 
 class MbtianswerController extends Controller
@@ -22,7 +22,7 @@ class MbtianswerController extends Controller
         /** setting permissions
          *
          */
-        $this->middleware('permission:'.config('constants.LIST_MBTIANSWER_ACCESS'), ['only' => 'index']);
+        $this->middleware('permission:' . config('constants.LIST_MBTIANSWER_ACCESS'), ['only' => 'index']);
 
         $this->response          = new Response();
         $this->numberOfQuestions = config('constants.MBTI_NUMBER_OF_QUESTIONS');
@@ -198,8 +198,8 @@ class MbtianswerController extends Controller
 
         $answers = [];
         for ($i = 1; $i <= $this->numberOfQuestions; $i++) {
-            if ($request->has("question".$i)) {
-                array_push($answers, $request->get("question".$i));
+            if ($request->has("question" . $i)) {
+                array_push($answers, $request->get("question" . $i));
             }
         }
 
@@ -226,7 +226,7 @@ class MbtianswerController extends Controller
     /**
      * Display a description about MBTI and a link to begin the exam
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function introduction()
     {

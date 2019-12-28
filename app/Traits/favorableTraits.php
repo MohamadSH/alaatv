@@ -15,18 +15,11 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 trait favorableTraits
 {
-    public function favoring(User $user):bool
+    public function favoring(User $user): bool
     {
         $syncResult = $this->favoriteBy()->sync($user, false);
         event(new FavoriteEvent($user, $this));
         return !empty($syncResult['attached']);
-    }
-
-    public function unfavoring(User $user):bool
-    {
-        $detachResult = $this->favoriteBy()->detach($user)  ;
-        event(new UnfavoriteEvent($user, $this));
-        return $detachResult;
     }
 
     /**
@@ -37,5 +30,12 @@ trait favorableTraits
     public function favoriteBy()
     {
         return $this->morphToMany('App\User', 'favorable')->withTimestamps();
+    }
+
+    public function unfavoring(User $user): bool
+    {
+        $detachResult = $this->favoriteBy()->detach($user);
+        event(new UnfavoriteEvent($user, $this));
+        return $detachResult;
     }
 }

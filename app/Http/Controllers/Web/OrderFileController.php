@@ -15,9 +15,8 @@ class OrderFileController extends Controller
         $orderFile->fill($request->all());
         if ($orderFile->save()) {
             return response()->json();
-        }
-        else {
-            return response()->json([] , Response::HTTP_INTERNAL_SERVER_ERROR);
+        } else {
+            return response()->json([], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 }

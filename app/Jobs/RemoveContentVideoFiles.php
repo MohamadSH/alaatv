@@ -4,10 +4,10 @@ namespace App\Jobs;
 
 use App\Content;
 use Illuminate\Bus\Queueable;
-use Illuminate\Queue\SerializesModels;
-use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
+use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Storage;
 
 class RemoveContentVideoFiles implements ShouldQueue
@@ -34,9 +34,9 @@ class RemoveContentVideoFiles implements ShouldQueue
     public function handle()
     {
         $CDNDisk = config('constants.DISK_FREE_CONTENT');
-        foreach ($this->content->getVideos() as $video){
+        foreach ($this->content->getVideos() as $video) {
             $path = explode('cdn.alaatv.com', $video->link)[1];
-            if(Storage::disk($CDNDisk)->exists($path)) {
+            if (Storage::disk($CDNDisk)->exists($path)) {
                 Storage::disk($CDNDisk)->delete($path);
             }
         }

@@ -8,9 +8,9 @@
 
 namespace App\Classes\Search;
 
-use LogicException;
-use Illuminate\Http\Response;
 use App\Traits\APIRequestCommon;
+use Illuminate\Http\Response;
+use LogicException;
 
 abstract class RedisTagManagerViaApi implements TaggingInterface
 {
@@ -34,13 +34,13 @@ abstract class RedisTagManagerViaApi implements TaggingInterface
     {
         $this->apiUrl = config('constants.TAG_API_URL');
         if (!isset($this->bucket)) {
-            throw new LogicException(get_class($this).' must have a $bucket');
+            throw new LogicException(get_class($this) . ' must have a $bucket');
         }
     }
 
     public function setTags($taggableId, array $tags, $score = 0)
     {
-        $url    = $this->apiUrl.'id/'.$this->bucket.'/'.$taggableId;
+        $url    = $this->apiUrl . 'id/' . $this->bucket . '/' . $taggableId;
         $method = 'PUT';
 
         $params = [
@@ -56,17 +56,6 @@ abstract class RedisTagManagerViaApi implements TaggingInterface
         }
     }
 
-    public function removeTags($taggableId)
-    {
-        $url    = $this->apiUrl.'id/'.$this->bucket.'/'.$taggableId;
-        $method = 'DELETE';
-
-        $response = $this->sendRequest($url, $method);
-        if ($response['statusCode'] == Response::HTTP_OK) {
-            //TODO:// Redis Response
-        }
-    }
-
     /**
      * @param $taggableId
      *
@@ -74,15 +63,14 @@ abstract class RedisTagManagerViaApi implements TaggingInterface
      */
     public function getTags($taggableId): array
     {
-        $url      = $this->apiUrl.'id/'.$this->bucket.'/'.$taggableId;
+        $url      = $this->apiUrl . 'id/' . $this->bucket . '/' . $taggableId;
         $method   = 'GET';
         $response = $this->sendRequest($url, $method);
 
         if ($response['statusCode'] == Response::HTTP_OK) {
             $result = json_decode($response['result']);
             $tags   = $result->data->tags;
-        }
-        else {
+        } else {
             $tags = [];
         }
 
@@ -90,50 +78,14 @@ abstract class RedisTagManagerViaApi implements TaggingInterface
     }
 
     /**
-     * @param  mixed  $limit_PerPage
-     *
-     * @return RedisTagManagerViaApi
-     */
-    public function setLimitPerPage($limit_PerPage)
-    {
-        $this->limit_PerPage = $limit_PerPage;
-
-        return $this;
-    }
-
-    /**
-     * @param  mixed  $limit_PageNum
-     *
-     * @return RedisTagManagerViaApi
-     */
-    public function setLimitPageNum($limit_PageNum)
-    {
-        $this->limit_PageNum = $limit_PageNum;
-
-        return $this;
-    }
-
-    /**
-     * @param  mixed  $limit_WithScores
-     *
-     * @return RedisTagManagerViaApi
-     */
-    public function setLimitWithScores($limit_WithScores)
-    {
-        $this->limit_WithScores = $limit_WithScores;
-
-        return $this;
-    }
-
-    /**
-     * @param  array  $tags
+     * @param array $tags
      *
      * @return array
      */
     public function getTaggable(array $tags): array
     {
         $tags     = $this->getStrTags($tags);
-        $url      = $this->apiUrl.'tags/'.$this->bucket.'?tags='.$tags.'&'.$this->getOptions();
+        $url      = $this->apiUrl . 'tags/' . $this->bucket . '?tags=' . $tags . '&' . $this->getOptions();
         $method   = 'GET';
         $response = $this->sendRequest($url, $method);
 
@@ -167,9 +119,9 @@ abstract class RedisTagManagerViaApi implements TaggingInterface
 
     protected function getOptions()
     {
-        $options = 'withscores='.(int) $this->limit_WithScores;
-        $options .= '&limit='.(int) $this->limit_PerPage;
-        $options .= '&offset='.$this->getOffset();
+        $options = 'withscores=' . (int)$this->limit_WithScores;
+        $options .= '&limit=' . (int)$this->limit_PerPage;
+        $options .= '&offset=' . $this->getOffset();
 
         return $options;
     }
@@ -179,6 +131,53 @@ abstract class RedisTagManagerViaApi implements TaggingInterface
      */
     protected function getOffset()
     {
-        return (int) $this->limit_PerPage * ((int) $this->limit_PageNum - 1);
+        return (int)$this->limit_PerPage * ((int)$this->limit_PageNum - 1);
+    }
+
+    public function removeTags($taggableId)
+    {
+        $url    = $this->apiUrl . 'id/' . $this->bucket . '/' . $taggableId;
+        $method = 'DELETE';
+
+        $response = $this->sendRequest($url, $method);
+        if ($response['statusCode'] == Response::HTTP_OK) {
+            //TODO:// Redis Response
+        }
+    }
+
+    /**
+     * @param mixed $limit_PerPage
+     *
+     * @return RedisTagManagerViaApi
+     */
+    public function setLimitPerPage($limit_PerPage)
+    {
+        $this->limit_PerPage = $limit_PerPage;
+
+        return $this;
+    }
+
+    /**
+     * @param mixed $limit_PageNum
+     *
+     * @return RedisTagManagerViaApi
+     */
+    public function setLimitPageNum($limit_PageNum)
+    {
+        $this->limit_PageNum = $limit_PageNum;
+
+        return $this;
+    }
+
+    /**
+     * @param mixed $limit_WithScores
+     *
+     * @return RedisTagManagerViaApi
+     */
+    public function setLimitWithScores($limit_WithScores)
+    {
+        $this->limit_WithScores = $limit_WithScores;
+
+        return $this;
     }
 }

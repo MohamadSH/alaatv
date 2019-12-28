@@ -21,8 +21,8 @@ class Grade extends AlaaJsonResource
     public function toArray($request)
     {
         return [
-            'id'     => $this->id,
-            'name'   => $this->when(isset($this->displayName) , $this->displayName),
+            'id'   => $this->id,
+            'name' => $this->when(isset($this->displayName), $this->displayName),
         ];
     }
 }

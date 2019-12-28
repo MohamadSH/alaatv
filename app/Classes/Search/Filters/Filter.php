@@ -15,9 +15,9 @@ interface Filter
     /**
      * Apply a given search value to the builder instance.
      *
-     * @param  Builder         $builder
-     * @param  mixed           $value
-     * @param  FilterCallback  $callback
+     * @param Builder        $builder
+     * @param mixed          $value
+     * @param FilterCallback $callback
      *
      * @return Builder $builder
      */

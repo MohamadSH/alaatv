@@ -2,12 +2,13 @@
 
 namespace App\Http\Middleware;
 
-use Cookie;
-use Closure;
+use App\Http\Controllers\Web\OrderproductController;
 use App\User;
+use Closure;
+use Cookie;
+use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
-use App\Http\Controllers\Web\OrderproductController;
 
 class OrderCheckoutReview
 {
@@ -16,7 +17,7 @@ class OrderCheckoutReview
     /**
      * StoreOrderproductCookieInOpenOrder constructor.
      *
-     * @param OrderproductController  $orderproductController
+     * @param OrderproductController $orderproductController
      */
     public function __construct(OrderproductController $orderproductController)
     {
@@ -26,16 +27,16 @@ class OrderCheckoutReview
     /**
      * Handle an incoming request.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure                  $next
+     * @param Request $request
+     * @param Closure $next
      *
-     * @param  null                      $guard
+     * @param null    $guard
      *
      * @return mixed
      */
     public function handle($request, Closure $next, $guard = null)
     {
-        if (! Auth::guard($guard)->check()) {
+        if (!Auth::guard($guard)->check()) {
             return $next($request);
         }
         /** @var User $user */
@@ -75,6 +76,6 @@ class OrderCheckoutReview
      */
     private function validateCookieOrderproducts($cookieOrderproducts): bool
     {
-        return is_array($cookieOrderproducts) && ! empty($cookieOrderproducts);
+        return is_array($cookieOrderproducts) && !empty($cookieOrderproducts);
     }
 }

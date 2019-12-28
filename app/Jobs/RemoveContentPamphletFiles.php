@@ -4,10 +4,10 @@ namespace App\Jobs;
 
 use App\Content;
 use Illuminate\Bus\Queueable;
-use Illuminate\Queue\SerializesModels;
-use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
+use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Storage;
 
 class RemoveContentPamphletFiles implements ShouldQueue
@@ -34,9 +34,9 @@ class RemoveContentPamphletFiles implements ShouldQueue
     public function handle()
     {
         $CDNDisk = config('constants.DISK19_CLOUD');
-        foreach ($this->content->getPamphlets() as $pamphlet){
+        foreach ($this->content->getPamphlets() as $pamphlet) {
             $path = basename($pamphlet->link);
-            if(Storage::disk($CDNDisk)->exists($path)) {
+            if (Storage::disk($CDNDisk)->exists($path)) {
                 Storage::disk($CDNDisk)->delete($path);
             }
         }

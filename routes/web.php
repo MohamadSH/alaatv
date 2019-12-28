@@ -1,6 +1,7 @@
 <?php
 
 
+use App\Http\Controllers\FaqController;
 use App\Http\Controllers\Web\AdminController;
 use App\Http\Controllers\Web\BotsController;
 use App\Http\Controllers\Web\ConsultationController;
@@ -265,6 +266,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::resource('livedescription', '\\'.LiveDescriptionController::class );
     Route::resource('section', '\\'.SectionController::class );
     Route::resource('periodDescription', '\\'. PeriodDescriptionController::class );
+    Route::resource('faq', '\\'. FaqController::class );
 
     Route::get('copylessonfromremote', 'Web\RemoteDataCopyController@copyLesson');
     Route::get('copydepartmentfromremote', 'Web\RemoteDataCopyController@copyDepartment');

@@ -13,7 +13,7 @@ use Illuminate\Database\Eloquent\Builder;
 class WithoutEmail extends FilterAbstract
 {
     protected $attribute = 'email';
-    
+
     public function apply(Builder $builder, $value, FilterCallback $callback): Builder
     {
         return $builder->where(function ($q) {

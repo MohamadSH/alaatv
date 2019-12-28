@@ -28,8 +28,7 @@ class ProductCollection extends Collection
             if (isset($parent)) {
                 if ($this->contains($parent)) {
                     $this->forget($key);
-                }
-                else {
+                } else {
                     //ToDo :  bug: it includes grand parent in collection when the collection includes children in first depth
 
                     // if all children selected and father not selected then select father and remove all children
@@ -53,7 +52,7 @@ class ProductCollection extends Collection
      * Used in ProductCollection's keepOnlyParents method in order ro remove
      * a product's all descendants from a collection
      *
-     * @param  Product  $product
+     * @param Product $product
      */
     public function removeProductDescendants(Product $product): void
     {
@@ -75,15 +74,16 @@ class ProductCollection extends Collection
         }
     }
 
-    public function addSorting(){
+    public function addSorting()
+    {
         $completedAtAscending  = $this->sortBy('completed_at')->values();
         $completedAtDescending = $this->sortByDesc('completed_at')->values();
 
         foreach ($this as $item) {
-            $sorting = [];
-            $sorting['completed_at_asc'] = $completedAtAscending->where('id' , $item->id)->keys()[0];
-            $sorting['completed_at_desc'] = $completedAtDescending->where('id' , $item->id)->keys()[0];
-            $item->sorting = $sorting;
+            $sorting                      = [];
+            $sorting['completed_at_asc']  = $completedAtAscending->where('id', $item->id)->keys()[0];
+            $sorting['completed_at_desc'] = $completedAtDescending->where('id', $item->id)->keys()[0];
+            $item->sorting                = $sorting;
         }
     }
 }

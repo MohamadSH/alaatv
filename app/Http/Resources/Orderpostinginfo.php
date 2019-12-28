@@ -26,7 +26,7 @@ class Orderpostinginfo extends AlaaJsonResource
 
 
         return [
-            'post_code' => $this->when(isset($this->postCode) , $this->postCode)
+            'post_code' => $this->when(isset($this->postCode), $this->postCode),
         ];
     }
 }

@@ -22,9 +22,9 @@ class GetPaymentRedirectEncryptedLink extends Controller
     public function __invoke(Request $request)
     {
         $paymentMethod = $request->get('paymentMethod', 'zarinpal');
-        $device = $request->get('device', 'android');
-        $orderId = $request->get('order_id');
-        $user = $request->user();
+        $device        = $request->get('device', 'android');
+        $orderId       = $request->get('order_id');
+        $user          = $request->user();
 
         $encryptedPostfix = $this->getEncryptedPostfix($user, $orderId);
 
@@ -44,17 +44,18 @@ class GetPaymentRedirectEncryptedLink extends Controller
     }
 
     /**
-     * @param User $user
+     * @param User     $user
      *
      * @param int|null $orderId
+     *
      * @return string
      */
-    private function getEncryptedPostfix(User $user , $orderId): string
+    private function getEncryptedPostfix(User $user, $orderId): string
     {
         $toEncrypt = ['user_id' => $user->id,];
 
-        if(isset($orderId)) {
-            $toEncrypt = Arr::add($toEncrypt , 'order_id' , $orderId);
+        if (isset($orderId)) {
+            $toEncrypt = Arr::add($toEncrypt, 'order_id', $orderId);
         }
 
         return encrypt($toEncrypt);

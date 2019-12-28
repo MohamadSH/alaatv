@@ -16,8 +16,8 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\File;
-
 use Illuminate\Support\Facades\Storage;
+use Lang;
 
 class ConsultationController extends Controller
 {
@@ -26,10 +26,10 @@ class ConsultationController extends Controller
         /** setting permissions
          *
          */
-        $this->middleware('permission:'.config('constants.LIST_CONSULTATION_ACCESS'), ['only' => 'index']);
-        $this->middleware('permission:'.config('constants.INSERT_CONSULTATION_ACCESS'), ['only' => 'create']);
-        $this->middleware('permission:'.config('constants.REMOVE_CONSULTATION_ACCESS'), ['only' => 'destroy']);
-        $this->middleware('permission:'.config('constants.SHOW_CONSULTATION_ACCESS'), ['only' => 'edit']);
+        $this->middleware('permission:' . config('constants.LIST_CONSULTATION_ACCESS'), ['only' => 'index']);
+        $this->middleware('permission:' . config('constants.INSERT_CONSULTATION_ACCESS'), ['only' => 'create']);
+        $this->middleware('permission:' . config('constants.REMOVE_CONSULTATION_ACCESS'), ['only' => 'destroy']);
+        $this->middleware('permission:' . config('constants.SHOW_CONSULTATION_ACCESS'), ['only' => 'edit']);
         $this->middleware('completeInfo', ['only' => ['uploadConsultingQuestion']]);
     }
 
@@ -55,27 +55,27 @@ class ConsultationController extends Controller
         if (strlen($request->get("videoPageLink")) > 0) {
             if (!preg_match("/^http:\/\//", $consultation->videoPageLink) && !preg_match("/^https:\/\//",
                     $consultation->videoPageLink)) {
-                $consultation->videoPageLink = "https://".$consultation->videoPageLink;
+                $consultation->videoPageLink = "https://" . $consultation->videoPageLink;
             }
         }
 
         if (strlen($request->get("textScriptLink")) > 0) {
             if (!preg_match("/^http:\/\//", $consultation->textScriptLink) && !preg_match("/^https:\/\//",
                     $consultation->textScriptLink)) {
-                $consultation->textScriptLink = "https://".$consultation->textScriptLink;
+                $consultation->textScriptLink = "https://" . $consultation->textScriptLink;
             }
         }
 
         if ($request->hasFile("thumbnail")) {
             $file      = $request->file('thumbnail');
             $extension = $file->getClientOriginalExtension();
-            $fileName  = basename($file->getClientOriginalName(), ".".$extension)."_".date("YmdHis").'.'.$extension;
+            $fileName  =
+                basename($file->getClientOriginalName(), "." . $extension) . "_" . date("YmdHis") . '.' . $extension;
             if (Storage::disk(config('constants.DISK7'))
                 ->put($fileName, File::get($file))) {
                 $consultation->thumbnail = $fileName;
             }
-        }
-        else {
+        } else {
             $consultation->thumbnail = config('constants.CONSULTATION_DEFAULT_IMAGE');
         }
 
@@ -84,9 +84,8 @@ class ConsultationController extends Controller
                 ->sync($request->get('majors', []));
 
             return response()->json();
-        }
-        else {
-            return response()->json([] , Response::HTTP_SERVICE_UNAVAILABLE);
+        } else {
+            return response()->json([], Response::HTTP_SERVICE_UNAVAILABLE);
         }
     }
 
@@ -115,7 +114,8 @@ class ConsultationController extends Controller
         if ($request->hasFile("thumbnail")) {
             $file      = $request->file('thumbnail');
             $extension = $file->getClientOriginalExtension();
-            $fileName  = basename($file->getClientOriginalName(), ".".$extension)."_".date("YmdHis").'.'.$extension;
+            $fileName  =
+                basename($file->getClientOriginalName(), "." . $extension) . "_" . date("YmdHis") . '.' . $extension;
             if (Storage::disk(config('constants.DISK7'))
                 ->put($fileName, File::get($file))) {
                 Storage::disk(config('constants.DISK7'))
@@ -127,22 +127,21 @@ class ConsultationController extends Controller
         if (strlen($request->get("videoPageLink")) > 0) {
             if (!preg_match("/^http:\/\//", $consultation->videoPageLink) && !preg_match("/^https:\/\//",
                     $consultation->videoPageLink)) {
-                $consultation->videoPageLink = "https://".$consultation->videoPageLink;
+                $consultation->videoPageLink = "https://" . $consultation->videoPageLink;
             }
         }
 
         if (strlen($request->get("textScriptLink")) > 0) {
             if (!preg_match("/^http:\/\//", $consultation->textScriptLink) && !preg_match("/^https:\/\//",
                     $consultation->textScriptLink)) {
-                $consultation->textScriptLink = "https://".$consultation->textScriptLink;
+                $consultation->textScriptLink = "https://" . $consultation->textScriptLink;
             }
         }
 
         if ($consultation->update()) {
             session()->put("success", "اطلاعات مشاوره با موفقیت اصلاح شد");
-        }
-        else {
-            session()->put("error", \Lang::get("responseText.Database error."));
+        } else {
+            session()->put("error", Lang::get("responseText.Database error."));
         }
 
         return redirect()->back();
@@ -152,8 +151,7 @@ class ConsultationController extends Controller
     {
         if ($consultation->delete()) {
             session()->put('success', 'مشاوره با موفقیت اصلاح شد');
-        }
-        else {
+        } else {
             session()->put('error', 'خطای پایگاه داده');
         }
 
@@ -174,6 +172,7 @@ class ConsultationController extends Controller
      * Show consultant admin entekhab reshte
      *
      * @param Request $request
+     *
      * @return Response
      * @throws FileNotFoundException
      */
@@ -181,9 +180,9 @@ class ConsultationController extends Controller
     {
         $user = User::FindOrFail($request->get('user'));
         if (Storage::disk('entekhabReshte')
-            ->exists($user->id.'-'.$user->major->id.'.txt')) {
+            ->exists($user->id . '-' . $user->major->id . '.txt')) {
             $storedMajors     = json_decode(Storage::disk('entekhabReshte')
-                ->get($user->id.'-'.$user->major->id.'.txt'));
+                ->get($user->id . '-' . $user->major->id . '.txt'));
             $parentMajorId    = $user->major->id;
             $storedMajorsInfo = Major::whereHas('parents', function ($q) use ($storedMajors, $parentMajorId) {
                 $q->where('major1_id', $parentMajorId)
@@ -203,7 +202,7 @@ class ConsultationController extends Controller
         $eventId       = 1;
         $surveyId      = 1;
         $requestUrl    = action("Web\UserSurveyAnswerController@index");
-        $requestUrl    .= '?event_id[]='.$eventId.'&survey_id[]='.$surveyId.'&user_id[]='.$user->id;
+        $requestUrl    .= '?event_id[]=' . $eventId . '&survey_id[]=' . $surveyId . '&user_id[]=' . $user->id;
         $originalInput = \Illuminate\Support\Facades\Request::input();
         $request       = \Illuminate\Support\Facades\Request::create($requestUrl, 'GET');
         \Illuminate\Support\Facades\Request::replace($request->input());
@@ -215,7 +214,7 @@ class ConsultationController extends Controller
             $answerArray    = $answerCollection->userAnswer->answer;
             $question       = Question::FindOrFail($answerCollection->userAnswer->question_id);
             $requestBaseUrl = $question->dataSourceUrl;
-            $requestUrl     = url('/').$requestBaseUrl."?ids=$answerArray";
+            $requestUrl     = url('/') . $requestBaseUrl . "?ids=$answerArray";
             $originalInput  = \Illuminate\Support\Facades\Request::input();
             $request        = \Illuminate\Support\Facades\Request::create($requestUrl, 'GET');
             \Illuminate\Support\Facades\Request::replace($request->input());
@@ -260,7 +259,7 @@ class ConsultationController extends Controller
      *
      * @return Response
      */
-    public function consultantStoreEntekhabReshte(\Illuminate\Http\Request $request)
+    public function consultantStoreEntekhabReshte(Request $request)
     {
         $userId      = $request->get('user');
         $user        = User::FindOrFail($userId);
@@ -268,9 +267,9 @@ class ConsultationController extends Controller
         $majorCodes  = json_encode($request->get('majorCodes'), JSON_UNESCAPED_UNICODE);
 
         Storage::disk('entekhabReshte')
-            ->delete($userId.'-'.$parentMajor.'.txt');
+            ->delete($userId . '-' . $parentMajor . '.txt');
         Storage::disk('entekhabReshte')
-            ->put($userId.'-'.$parentMajor.'.txt', $majorCodes);
+            ->put($userId . '-' . $parentMajor . '.txt', $majorCodes);
         session()->put('success', 'رشته های انتخاب شده با موفقیت درج شدند');
 
         return redirect(action("Web\HomeController@consultantEntekhabReshte", ['user' => $user]));

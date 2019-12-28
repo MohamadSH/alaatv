@@ -2,26 +2,26 @@
 
 namespace App\Http\Controllers\Web;
 
+use App\Adapter\AlaaSftpAdapter;
+use App\Classes\Search\ContentsetSearch;
 use App\Content;
 use App\Contentset;
-use App\Websitesetting;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\ContentsetIndexRequest;
+use App\Http\Requests\InsertContentsetRequest;
+use App\Http\Resources\ContentInSet as ContentResource;
+use App\Http\Resources\Set as SetResource;
 use App\Traits\FileCommon;
 use App\Traits\MetaCommon;
-use Illuminate\Support\Arr;
-use Illuminate\Http\Request;
 use App\Traits\ProductCommon;
 use App\Traits\RequestCommon;
+use App\Websitesetting;
+use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use App\Adapter\AlaaSftpAdapter;
-use App\Http\Controllers\Controller;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
-use App\Classes\Search\ContentsetSearch;
-use App\Http\Resources\Set as SetResource;
-use App\Http\Resources\ContentInSet as ContentResource;
-use App\Http\Requests\ContentsetIndexRequest;
-use App\Http\Requests\InsertContentsetRequest;
 
 class SetController extends Controller
 {
@@ -70,36 +70,36 @@ class SetController extends Controller
     private function callMiddlewares($authException): void
     {
         $this->middleware('auth', ['except' => $authException]);
-        $this->middleware('permission:'.config('constants.REMOVE_CONTENT_SET_ACCESS'), [
+        $this->middleware('permission:' . config('constants.REMOVE_CONTENT_SET_ACCESS'), [
             'only' => [
                 'destroy',
             ],
         ]);
-        $this->middleware('permission:'.config('constants.EDIT_CONTENT_SET_ACCESS'), [
+        $this->middleware('permission:' . config('constants.EDIT_CONTENT_SET_ACCESS'), [
             'only' => [
                 'update',
             ],
         ]);
 
-        $this->middleware('permission:'.config('constants.INSERT_CONTENT_SET_ACCESS'), [
+        $this->middleware('permission:' . config('constants.INSERT_CONTENT_SET_ACCESS'), [
             'only' => [
                 'store',
             ],
         ]);
 
-        $this->middleware('permission:'.config('constants.LIST_CONTENT_SET_ACCESS'), [
+        $this->middleware('permission:' . config('constants.LIST_CONTENT_SET_ACCESS'), [
             'only' => [
 //                'index',
             ],
         ]);
 
-        $this->middleware('permission:'.config('constants.LIST_CONTENTS_OF_CONTENT_SET_ACCESS'), [
+        $this->middleware('permission:' . config('constants.LIST_CONTENTS_OF_CONTENT_SET_ACCESS'), [
             'only' => [
                 'indexContent',
             ],
         ]);
 
-        $this->middleware('permission:'.config('constants.SHOW_CONTENT_SET_ACCESS'), [
+        $this->middleware('permission:' . config('constants.SHOW_CONTENT_SET_ACCESS'), [
             'only' => [
                 'edit',
                 //                'show',
@@ -112,8 +112,8 @@ class SetController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @param  ContentsetIndexRequest  $request
-     * @param  ContentsetSearch        $setSearch
+     * @param ContentsetIndexRequest $request
+     * @param ContentsetSearch       $setSearch
      *
      * @return Response
      */
@@ -158,7 +158,7 @@ class SetController extends Controller
                 $this->syncProducts($products, $contentSet);
             }
 
-            session()->put('success', 'دسته با موفقیت درج شد . شماره دسته : '.$contentSet->id);
+            session()->put('success', 'دسته با موفقیت درج شد . شماره دسته : ' . $contentSet->id);
             return redirect()->back();
         }
 
@@ -166,115 +166,8 @@ class SetController extends Controller
         return redirect()->back();
     }
 
-    public function update(Request $request, Contentset $contentSet)
-    {
-        $this->fillContentFromRequest($request->all(), $contentSet);
-
-        if ($contentSet->update()) {
-
-            if ($request->has('redirectAllContents')) {
-                foreach ($contentSet->contents as $content) {
-                    $content->update([
-                        'redirectUrl' => $request->get('redirectUrl'),
-                    ]);
-                }
-            }
-
-            $products = $request->get('products');
-            if(is_null($products))
-                $products = [];
-
-            if($request->user()->can(config('constants.ADD_PRODUCT_TO_SET_ACCESS'))){
-                $this->syncProducts($products , $contentSet);
-            }
-
-            session()->put('success', 'دسته با موفقیت اصلاح شد');
-            return redirect()->back();
-        }
-
-        session()->put('error', 'خطای پایگاه داده');
-        return redirect()->back();
-    }
-
-    public function show(Request $request, Contentset $contentSet)
-    {
-        $user = $request->user();
-        $order = $request->get('order' , 'asc');
-        if (isset($contentSet->redirectUrl)) {
-            return redirect($contentSet->redirectUrl, Response::HTTP_FOUND, $request->headers->all());
-        }
-
-        if ($request->expectsJson() && !$request->has('raheAbrisham')) {
-            return response()->json($contentSet);
-        }
-
-        $contents = $contentSet->getActiveContents2();
-        if ($order === 'desc') {
-            $contents = $contents->sortByDesc('order');
-        }
-
-
-        // ToDo : To get sorted contents grouped by section
-//        Note : can't add sortBy to this
-//        $contents = $contentSet->active_contents_by_section;
-
-        if($contents->isEmpty()){
-            return redirect(route('web.home'));
-        }
-
-        $pamphlets = $contents->where('contenttype_id' , Content::CONTENT_TYPE_PAMPHLET);
-        $videos    = $contents->where('contenttype_id' , Content::CONTENT_TYPE_VIDEO);
-        $articles  = $contents->where('contenttype_id' , Content::CONTENT_TYPE_ARTICLE);
-
-        if ($request->expectsJson() ) {
-            $files = [];
-            if(isset($pamphlets) && $pamphlets->isNotEmpty()){
-                $files['pamphlets'] = ContentResource::collection($pamphlets);
-            }
-
-            if(isset($videos) && $videos->isNotEmpty()){
-                $files['videos'] = ContentResource::collection($videos);
-            }
-
-            if(isset($articles) && $articles->isNotEmpty()){
-                $files['articles'] = ContentResource::collection($articles);
-            }
-
-            return response()->json([
-                'set'   => new SetResource($contentSet),
-                'files' => $files
-            ]);
-        }
-
-        $jsonLdArray = $this->getJsonLdArray($videos, $pamphlets, $articles);
-
-        $this->generateSeoMetaTags($contentSet);
-
-        $isFavored = optional(optional(optional(optional($user)->favoredSets())->where('id' , $contentSet->id))->get())->isNotEmpty();
-
-        return view('set.show', compact('contentSet', 'videos', 'pamphlets', 'articles', 'jsonLdArray' , 'order' , 'isFavored'));
-    }
-
-    public function edit(Contentset $set)
-    {
-        $setProducts = $set->products()->whereNull('contentset_product.deleted_at')->get();
-        $products    = $this->makeProductCollection();
-        return view('set.edit', compact('set', 'setProducts', 'products'));
-    }
-
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return Response
-     */
-    public function create()
-    {
-        $products = $this->makeProductCollection();
-        return view('set.create', compact('products'));
-    }
-
-    /**
-     * @param array $inputData
+     * @param array      $inputData
      * @param Contentset $contentSet
      *
      * @return void
@@ -295,38 +188,130 @@ class SetController extends Controller
             $this->storePhotoOfSet($contentSet, Arr::get($inputData, 'photo'));
         }
 
-        if(isset($contentSet->redirectUrl)){
-            $contentSet->display =  0 ;
+        if (isset($contentSet->redirectUrl)) {
+            $contentSet->display = 0;
         }
-    }
-
-    private function syncProducts(array $products, Contentset $contentSet)
-    {
-        foreach ($contentSet->products as $product) {
-            Cache::tags(['product_'.$product->id.'_sets'])->flush();
-        }
-
-        $contentSet->products()->detach();
-        $contentSet->products()->attach($products);
-
-        foreach ($products as $productId) {
-            Cache::tags(['product_'.$productId.'_sets'])->flush();
-        }
-
     }
 
     private function storePhotoOfSet(Contentset $contentSet, $file): void
     {
         $extension = $file->getClientOriginalExtension();
-        $fileName  = basename($file->getClientOriginalName(), '.'.$extension).'_'.date('YmdHis').'.'.$extension;
+        $fileName  =
+            basename($file->getClientOriginalName(), '.' . $extension) . '_' . date('YmdHis') . '.' . $extension;
         $disk      = Storage::disk(config('constants.DISK23'));
         /** @var AlaaSftpAdapter $adaptor */
         if ($disk->put($fileName, File::get($file))) {
             $fullPath          = $disk->getAdapter()
                 ->getRoot();
             $partialPath       = $this->getSubDirectoryInCDN($fullPath);
-            $contentSet->photo = config('constants.DOWNLOAD_SERVER_PROTOCOL').config('constants.CDN_SERVER_NAME').'/'.$partialPath.$fileName;
+            $contentSet->photo =
+                config('constants.DOWNLOAD_SERVER_PROTOCOL') . config('constants.CDN_SERVER_NAME') . '/' . $partialPath . $fileName;
         }
+    }
+
+    private function syncProducts(array $products, Contentset $contentSet)
+    {
+        foreach ($contentSet->products as $product) {
+            Cache::tags(['product_' . $product->id . '_sets'])->flush();
+        }
+
+        $contentSet->products()->detach();
+        $contentSet->products()->attach($products);
+
+        foreach ($products as $productId) {
+            Cache::tags(['product_' . $productId . '_sets'])->flush();
+        }
+
+    }
+
+    public function update(Request $request, Contentset $contentSet)
+    {
+        $this->fillContentFromRequest($request->all(), $contentSet);
+
+        if ($contentSet->update()) {
+
+            if ($request->has('redirectAllContents')) {
+                foreach ($contentSet->contents as $content) {
+                    $content->update([
+                        'redirectUrl' => $request->get('redirectUrl'),
+                    ]);
+                }
+            }
+
+            $products = $request->get('products');
+            if (is_null($products))
+                $products = [];
+
+            if ($request->user()->can(config('constants.ADD_PRODUCT_TO_SET_ACCESS'))) {
+                $this->syncProducts($products, $contentSet);
+            }
+
+            session()->put('success', 'دسته با موفقیت اصلاح شد');
+            return redirect()->back();
+        }
+
+        session()->put('error', 'خطای پایگاه داده');
+        return redirect()->back();
+    }
+
+    public function show(Request $request, Contentset $contentSet)
+    {
+        $user  = $request->user();
+        $order = $request->get('order', 'asc');
+        if (isset($contentSet->redirectUrl)) {
+            return redirect($contentSet->redirectUrl, Response::HTTP_FOUND, $request->headers->all());
+        }
+
+        if ($request->expectsJson() && !$request->has('raheAbrisham')) {
+            return response()->json($contentSet);
+        }
+
+        $contents = $contentSet->getActiveContents2();
+        if ($order === 'desc') {
+            $contents = $contents->sortByDesc('order');
+        }
+
+
+        // ToDo : To get sorted contents grouped by section
+//        Note : can't add sortBy to this
+//        $contents = $contentSet->active_contents_by_section;
+
+        if ($contents->isEmpty()) {
+            return redirect(route('web.home'));
+        }
+
+        $pamphlets = $contents->where('contenttype_id', Content::CONTENT_TYPE_PAMPHLET);
+        $videos    = $contents->where('contenttype_id', Content::CONTENT_TYPE_VIDEO);
+        $articles  = $contents->where('contenttype_id', Content::CONTENT_TYPE_ARTICLE);
+
+        if ($request->expectsJson()) {
+            $files = [];
+            if (isset($pamphlets) && $pamphlets->isNotEmpty()) {
+                $files['pamphlets'] = ContentResource::collection($pamphlets);
+            }
+
+            if (isset($videos) && $videos->isNotEmpty()) {
+                $files['videos'] = ContentResource::collection($videos);
+            }
+
+            if (isset($articles) && $articles->isNotEmpty()) {
+                $files['articles'] = ContentResource::collection($articles);
+            }
+
+            return response()->json([
+                'set'   => new SetResource($contentSet),
+                'files' => $files,
+            ]);
+        }
+
+        $jsonLdArray = $this->getJsonLdArray($videos, $pamphlets, $articles);
+
+        $this->generateSeoMetaTags($contentSet);
+
+        $isFavored =
+            optional(optional(optional(optional($user)->favoredSets())->where('id', $contentSet->id))->get())->isNotEmpty();
+
+        return view('set.show', compact('contentSet', 'videos', 'pamphlets', 'articles', 'jsonLdArray', 'order', 'isFavored'));
     }
 
     /**
@@ -347,7 +332,7 @@ class SetController extends Controller
                     'url'      => action([ContentController::class, 'show'], $item),
                 ];
             }
-        } elseif ($pamphlets->isNotEmpty()) {
+        } else if ($pamphlets->isNotEmpty()) {
             foreach ($pamphlets as $item) {
                 $jsonLdItems[] = [
                     '@type'    => 'ListItem',
@@ -355,7 +340,7 @@ class SetController extends Controller
                     'url'      => action([ContentController::class, 'show'], $item),
                 ];
             }
-        } elseif ($articles->isNotEmpty()) {
+        } else if ($articles->isNotEmpty()) {
             foreach ($articles as $item) {
                 $jsonLdItems[] = [
                     '@type'    => 'ListItem',
@@ -364,7 +349,7 @@ class SetController extends Controller
                 ];
             }
         }
-            $jsonLdArray = null;
+        $jsonLdArray = null;
         if (!empty($jsonLdItems)) {
             $jsonLdArray = [
                 '@context'        => 'https://schema.org',
@@ -373,5 +358,23 @@ class SetController extends Controller
             ];
         }
         return $jsonLdArray;
+    }
+
+    public function edit(Contentset $set)
+    {
+        $setProducts = $set->products()->whereNull('contentset_product.deleted_at')->get();
+        $products    = $this->makeProductCollection();
+        return view('set.edit', compact('set', 'setProducts', 'products'));
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return Response
+     */
+    public function create()
+    {
+        $products = $this->makeProductCollection();
+        return view('set.create', compact('products'));
     }
 }
