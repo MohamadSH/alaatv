@@ -694,6 +694,10 @@ var MapSVG = function () {
         setStepPointer();
     }
 
+    function farsangStepUpdate() {
+
+    }
+
     return {
         init: function () {
             initPanZoom();
