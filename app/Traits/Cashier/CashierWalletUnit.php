@@ -11,7 +11,7 @@ namespace App\Traits\Cashier;
 trait CashierWalletUnit
 {
     protected $payableAmountByWallet;
-    
+
     /**
      * @return mixed
      */
@@ -19,16 +19,16 @@ trait CashierWalletUnit
     {
         return $this->payableAmountByWallet;
     }
-    
+
     /**
-     * @param  mixed  $payableAmountByWallet
+     * @param mixed $payableAmountByWallet
      *
      * @return mixed
      */
     public function setPayableAmountByWallet($payableAmountByWallet)
     {
         $this->payableAmountByWallet = $payableAmountByWallet;
-        
+
         return $this;
     }
 }

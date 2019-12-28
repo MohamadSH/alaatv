@@ -11,9 +11,10 @@ class BankaccountRepo
 {
     /**
      * @param array $parameters
+     *
      * @return Bankaccount
      */
-    public static function firstOrCreateBankAccount(array $parameters):Bankaccount
+    public static function firstOrCreateBankAccount(array $parameters): Bankaccount
     {
         $bankAccount = self::findBankAccount($parameters)->get();
         if ($bankAccount->isEmpty()) {
@@ -25,14 +26,14 @@ class BankaccountRepo
 
     /**
      * @param array $parameters
+     *
      * @return Bankaccount|Builder
      */
     public static function findBankAccount(array $parameters)
     {
         $bankAccount = Bankaccount::query();
-        foreach ($parameters as $key=> $parameter)
-        {
-            $bankAccount->where($key , $parameter);
+        foreach ($parameters as $key => $parameter) {
+            $bankAccount->where($key, $parameter);
         }
 
         return $bankAccount;

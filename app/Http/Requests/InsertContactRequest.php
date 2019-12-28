@@ -2,7 +2,6 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Support\Facades\Config;
 use Illuminate\Foundation\Http\FormRequest;
 
 class InsertContactRequest extends FormRequest
@@ -28,7 +27,7 @@ class InsertContactRequest extends FormRequest
         return [
             'name'           => 'required',
             'contacttype_id' => 'exists:contacttypes,id',
-            'relative_id'    => 'unique:contacts,relative_id,NULL,id,deleted_at,NULL,user_id,'.$userId,
+            'relative_id'    => 'unique:contacts,relative_id,NULL,id,deleted_at,NULL,user_id,' . $userId,
             'user_id'        => 'exists:users,id',
         ];
     }

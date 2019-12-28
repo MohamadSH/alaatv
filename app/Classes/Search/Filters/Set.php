@@ -13,11 +13,11 @@ use Illuminate\Database\Eloquent\Builder;
 class Set extends FilterAbstract
 {
     protected $attribute = 'contentset_id';
-    
+
     public function apply(Builder $builder, $value, FilterCallback $callback): Builder
     {
         $value = $this->getSearchValue($value);
-        
+
         return $builder->where($this->attribute, $value);
     }
 }

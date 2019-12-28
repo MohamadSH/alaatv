@@ -27,7 +27,7 @@ class DownloadNotice extends Notification implements ShouldQueue
     /**
      * Create a new notification instance.
      *
-     * @param  Order  $invoice
+     * @param Order $invoice
      */
     public function __construct(Order $invoice)
     {
@@ -37,7 +37,7 @@ class DownloadNotice extends Notification implements ShouldQueue
     /**
      * Get the notification's delivery channels.
      *
-     * @param  mixed  $notifiable
+     * @param mixed $notifiable
      *
      * @return array
      */
@@ -69,21 +69,21 @@ class DownloadNotice extends Notification implements ShouldQueue
     private function getInputData(): array
     {
         return [
-            'name' => $this->getUserFullName() ,
+            'name' => $this->getUserFullName(),
         ];
     }
 
     /**
      * @return mixed
      */
-    private function getUserFullName():string
+    private function getUserFullName(): string
     {
         $userFullName = optional($this->getInvoiceUser())->full_name;
-        return (isset($userFullName))?$userFullName:'آلایی' ;
+        return (isset($userFullName)) ? $userFullName : 'آلایی';
     }
 
     private function getInvoiceUser(): User
     {
-        return  $this->invoice->user;
+        return $this->invoice->user;
     }
 }

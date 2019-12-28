@@ -26,8 +26,8 @@ class Orderstatus extends AlaaJsonResource
 
 
         return [
-            'name'         => $this->when(isset($this->name) , $this->name) ,
-            'display_name' => $this->when(isset($this->displayName) , $this->displayName) ,
+            'name'         => $this->when(isset($this->name), $this->name),
+            'display_name' => $this->when(isset($this->displayName), $this->displayName),
         ];
     }
 }

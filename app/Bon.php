@@ -12,20 +12,20 @@ use Illuminate\Support\Facades\Schema;
 /**
  * App\Bon
  *
- * @property int                                                          $id
- * @property string|null                                                  $name        نام بن
- * @property string|null                                                  $displayName نام قابل نمایش بن
- * @property int|null                                                     $bontype_id  آی دی مشحص کننده نوع بن
- * @property string|null                                                  $description توضیح درباره بن
- * @property int                                                          $isEnable    فعال/غیرفعال
- * @property int                                                          $order       ترتیب بن
- * @property Carbon|null                                          $created_at
- * @property Carbon|null                                          $updated_at
- * @property Carbon|null                                          $deleted_at
- * @property-read Bontype|null                                       $bontype
+ * @property int                       $id
+ * @property string|null               $name        نام بن
+ * @property string|null               $displayName نام قابل نمایش بن
+ * @property int|null                  $bontype_id  آی دی مشحص کننده نوع بن
+ * @property string|null               $description توضیح درباره بن
+ * @property int                       $isEnable    فعال/غیرفعال
+ * @property int                       $order       ترتیب بن
+ * @property Carbon|null               $created_at
+ * @property Carbon|null               $updated_at
+ * @property Carbon|null               $deleted_at
+ * @property-read Bontype|null         $bontype
  * @property-read Collection|Product[] $products
  * @property-read Collection|Userbon[] $userbons
- * @property-read Collection|User[] $users
+ * @property-read Collection|User[]    $users
  * @method static Builder|Bon enable()
  * @method static bool|null forceDelete()
  * @method static \Illuminate\Database\Query\Builder|Bon onlyTrashed()
@@ -49,10 +49,10 @@ use Illuminate\Support\Facades\Schema;
  * @method static Builder|Bon query()
  * @method static Builder|BaseModel disableCache()
  * @method static Builder|BaseModel withCacheCooldownSeconds($seconds)
- * @property-read mixed                                                   $cache_cooldown_seconds
- * @property-read int|null $products_count
- * @property-read int|null $userbons_count
- * @property-read int|null $users_count
+ * @property-read mixed                $cache_cooldown_seconds
+ * @property-read int|null             $products_count
+ * @property-read int|null             $userbons_count
+ * @property-read int|null             $users_count
  */
 class Bon extends BaseModel
 {
@@ -135,8 +135,8 @@ class Bon extends BaseModel
     }
 
     /**
-     * @param  Builder  $query
-     * @param  mixed                                  $name
+     * @param Builder $query
+     * @param mixed   $name
      *
      * @return Builder
      */

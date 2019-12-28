@@ -3,6 +3,7 @@
 use App\Classes\Nullable;
 use App\Classes\Util\Boolean as UtilBoolean;
 use Carbon\Carbon;
+use Illuminate\Cache\CacheManager;
 
 if (!function_exists('nullable')) {
     function nullable($result, $data = []): Nullable
@@ -52,18 +53,17 @@ if (!function_exists('convertTagStringToArray')) {
 
 }
 if (!function_exists('rankInArray')) {
-    function rankInArray(array $array , $value): int
+    function rankInArray(array $array, $value): int
     {
         $rank = count($array);
         rsort($array);
         foreach ($array as $key => $item) {
-            if($value >= $item )
-            {
+            if ($value >= $item) {
                 $rank = $key;
                 break;
             }
         }
-        return $rank+1;
+        return $rank + 1;
     }
 
 }
@@ -74,34 +74,35 @@ if (!function_exists('getCurrentWeekDateViaDayName')) {
         $startOfWeekDate = Carbon::now('Asia/Tehran')->startOfWeek(Carbon::SATURDAY);
         if ($dayEnglishName == 'saturday') {
             $date = $startOfWeekDate->toDateString();
-        } elseif ($dayEnglishName == 'sunday') {
+        } else if ($dayEnglishName == 'sunday') {
             $date = $startOfWeekDate->addDay()->toDateString();
-        } elseif ($dayEnglishName == 'monday') {
+        } else if ($dayEnglishName == 'monday') {
             $date = $startOfWeekDate->addDays(2)->toDateString();
-        } elseif ($dayEnglishName == 'tuesday') {
+        } else if ($dayEnglishName == 'tuesday') {
             $date = $startOfWeekDate->addDays(3)->toDateString();
-        } elseif ($dayEnglishName == 'wednesday') {
+        } else if ($dayEnglishName == 'wednesday') {
             $date = $startOfWeekDate->addDays(4)->toDateString();
-        } elseif ($dayEnglishName == 'thursday') {
+        } else if ($dayEnglishName == 'thursday') {
             $date = $startOfWeekDate->addDays(5)->toDateString();
-        } elseif ($dayEnglishName == 'friday') {
+        } else if ($dayEnglishName == 'friday') {
             $date = $startOfWeekDate->addDays(6)->toDateString();
         }
-        return (isset($date))?$date:null;
+        return (isset($date)) ? $date : null;
     }
 
 }
 
-if (! function_exists('alaaSetting')) {
+if (!function_exists('alaaSetting')) {
     /**
      * Get / set the specified cache value.
      *
      * If an array is passed, we'll assume you want to put to the cache.
      *
-     * @param  dynamic  key|key,default|data,expiration|null
-     * @return mixed|\Illuminate\Cache\CacheManager
+     * @param dynamic  key|key,default|data,expiration|null
      *
-     * @throws \Exception
+     * @return mixed|CacheManager
+     *
+     * @throws Exception
      */
     function alaaSetting()
     {
@@ -109,11 +110,11 @@ if (! function_exists('alaaSetting')) {
     }
 }
 
-if(! function_exists('convertRedirectUrlToApiVersion')){
+if (!function_exists('convertRedirectUrlToApiVersion')) {
     function convertRedirectUrlToApiVersion($url)
     {
         $url = parse_url($url);
 
-        return url('/api/v1'.$url['path']);
+        return url('/api/v1' . $url['path']);
     }
 }

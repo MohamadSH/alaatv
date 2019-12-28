@@ -21,13 +21,13 @@ class SubmitCouponRequest extends FormRequest
             'order_id' => 'required',
         ];
     }
-    
+
     public function prepareForValidation()
     {
         $this->replaceNumbers();
         parent::prepareForValidation();
     }
-    
+
     protected function replaceNumbers()
     {
         $input = $this->request->all();

@@ -2,7 +2,9 @@
 
 namespace App;
 
-use Illuminate\Support\Facades\Config;
+use Carbon\Carbon;
+use Eloquent;
+use Illuminate\Database\Eloquent\Builder;
 
 /**
  * App\Mbtianswer
@@ -10,27 +12,27 @@ use Illuminate\Support\Facades\Config;
  * @property int                 $id
  * @property int                 $user_id آی دی مشخص کننده کاربری که آزمون داده است
  * @property string|null         $answers آرایه ی مشخص کننده گزینه های انتخاب شده
- * @property \Carbon\Carbon|null $created_at
- * @property \Carbon\Carbon|null $updated_at
- * @property \Carbon\Carbon|null $deleted_at
- * @property-read \App\User      $user
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property Carbon|null $deleted_at
+ * @property-read User           $user
  * @method static bool|null forceDelete()
- * @method static \Illuminate\Database\Query\Builder|\App\Mbtianswer onlyTrashed()
+ * @method static \Illuminate\Database\Query\Builder|Mbtianswer onlyTrashed()
  * @method static bool|null restore()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Mbtianswer whereAnswers($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Mbtianswer whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Mbtianswer whereDeletedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Mbtianswer whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Mbtianswer whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Mbtianswer whereUserId($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Mbtianswer withTrashed()
- * @method static \Illuminate\Database\Query\Builder|\App\Mbtianswer withoutTrashed()
- * @mixin \Eloquent
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Mbtianswer newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Mbtianswer newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Mbtianswer query()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel disableCache()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel withCacheCooldownSeconds($seconds)
+ * @method static Builder|Mbtianswer whereAnswers($value)
+ * @method static Builder|Mbtianswer whereCreatedAt($value)
+ * @method static Builder|Mbtianswer whereDeletedAt($value)
+ * @method static Builder|Mbtianswer whereId($value)
+ * @method static Builder|Mbtianswer whereUpdatedAt($value)
+ * @method static Builder|Mbtianswer whereUserId($value)
+ * @method static \Illuminate\Database\Query\Builder|Mbtianswer withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|Mbtianswer withoutTrashed()
+ * @mixin Eloquent
+ * @method static Builder|Mbtianswer newModelQuery()
+ * @method static Builder|Mbtianswer newQuery()
+ * @method static Builder|Mbtianswer query()
+ * @method static Builder|BaseModel disableCache()
+ * @method static Builder|BaseModel withCacheCooldownSeconds($seconds)
  * @property-read mixed          $cache_cooldown_seconds
  */
 class Mbtianswer extends BaseModel
@@ -44,12 +46,12 @@ class Mbtianswer extends BaseModel
         'user_id',
         'answers',
     ];
-    
+
     public function user()
     {
         return $this->belongsTo('\App\User');
     }
-    
+
     public function getUserOrderInfo($output)
     {
         $ordooOrder = $this->user->orders()
@@ -64,21 +66,19 @@ class Mbtianswer extends BaseModel
             })
             ->whereIn("orderstatus_id", [config("constants.ORDER_STATUS_CLOSED")])
             ->get();
-        
+
         switch ($output) {
             case "productName":
                 if ($ordooOrder->isEmpty()) {
                     return "";
-                }
-                else {
+                } else {
                     return $ordooOrder->first()->orderproducts->first()->product->name;
                 }
                 break;
             case "orderStatus":
                 if ($ordooOrder->isEmpty()) {
                     return "";
-                }
-                else {
+                } else {
                     return $ordooOrder->first()->orderstatus->displayName;
                 }
                 break;

@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Classes\Search\ContentsetSearch;
 use App\Contentset;
 use App\Http\Controllers\Controller;
-use App\Http\Resources\Set as SetResource;
+use App\Http\Resources\SetInIndex as SetResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
@@ -28,15 +28,15 @@ class SetController extends Controller
                 Response::HTTP_FOUND, $request->headers->all());
         }
 
-        return (new SetResource($set))->response();
+        return (new SetResource($set));
     }
 
     public function index(Request $request, ContentsetSearch $contentSearch)
     {
-        $setFilters = $request->all();
-        $setFilters['enable'] = 1;
+        $setFilters            = $request->all();
+        $setFilters['enable']  = 1;
         $setFilters['display'] = 1;
-        $setResult = $contentSearch->get($setFilters);
+        $setResult             = $contentSearch->get($setFilters);
 
         return SetResource::collection($setResult);
     }

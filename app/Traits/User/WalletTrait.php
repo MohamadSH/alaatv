@@ -24,7 +24,7 @@ trait WalletTrait
                 'balance' => $this->getWalletBalance($wallet->wallettype_id),
             ]);
         }
-        
+
         return $walletsArrayForReturn ?: null;
     }
 }

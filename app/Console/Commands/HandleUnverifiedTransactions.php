@@ -2,9 +2,11 @@
 
 namespace App\Console\Commands;
 
+use AlaaTV\Gateways\Contracts\OnlineGateway;
+use AlaaTV\Gateways\Contracts\OnlinePaymentVerificationResponseInterface;
+use AlaaTV\Gateways\Money;
 use AlaaTV\ZarinpalGatewayDriver\VerificationResponse;
 use App\Repositories\TransactionRepo;
-use AlaaTV\Gateways\Money;
 use Illuminate\Console\Command;
 use Zarinpal\Zarinpal;
 
@@ -36,6 +38,11 @@ class HandleUnverifiedTransactions extends Command
         $this->gateway = $this->getGatewayComposer();
     }
 
+    public function getGatewayComposer()
+    {
+        return new Zarinpal(config('Zarinpal.merchantID'));
+    }
+
     /**
      * Execute the console command.
      *
@@ -48,14 +55,14 @@ class HandleUnverifiedTransactions extends Command
         $result = $this->getUnverifiedTransactions();
 
         if ($result['Status'] != 'success') {
-            $this->info('Failed on receiving unverified transactions. Response status: '.$result['Status']);
+            $this->info('Failed on receiving unverified transactions. Response status: ' . $result['Status']);
             return null;
         }
 
         $transactions = $result['Authorities'];
-        $this->info( count($transactions).' unverified transactions were received');
+        $this->info(count($transactions) . ' unverified transactions were received');
         $this->info('Verifying transactions started:');
-        list($notExistTransactions, $unverifiedTransactionsDueToError) = $this->handleTransactions($transactions);
+        [$notExistTransactions, $unverifiedTransactionsDueToError] = $this->handleTransactions($transactions);
         $this->info('Verifying transactions finished');
 
         if (count($unverifiedTransactionsDueToError) > 0) {
@@ -71,7 +78,7 @@ class HandleUnverifiedTransactions extends Command
         $this->logError($notExistTransactions);
 
         if ($this->confirm('Do you wish to force-verify these transactions?', true)) {
-            $unverifiedTransactions = [] ;
+            $unverifiedTransactions = [];
             foreach ($notExistTransactions as $item) {
                 $gateWayVerify = $this->verifyTransaction(Money::fromTomans($item['Amount']), $item['Authority']);
                 if (!$gateWayVerify->isSuccessfulPayment()) {
@@ -84,33 +91,18 @@ class HandleUnverifiedTransactions extends Command
 
     private function getUnverifiedTransactions()
     {
-        return $this->gateway->getDriver()->unverifiedTransactions(['MerchantID'=>config('Zarinpal.merchantID')]);
+        return $this->gateway->getDriver()->unverifiedTransactions(['MerchantID' => config('Zarinpal.merchantID')]);
     }
 
     /**
-     * @param array $items
-     * @return mixed
-     */
-    private function logError(array $items)
-    {
-        foreach ($items as $item) {
-            $authority = $item['Authority'];
-            $amount = $item['Amount'];
-            $channel = $item['Channel'];
-            $cellPhone = $item['CellPhone'];
-            $date = $item['Date'];
-            $this->info('authority: {'.$authority.'} amount: {'.$amount.'} channel: {'.$channel.'} cellPhone: {'.$cellPhone.'} date: {'.$date.'}');
-        }
-    }
-
-    /**
-     * @param $transactions
-     * @param \AlaaTV\Gateways\Contracts\OnlineGateway $paymentClient
+     * @param                                          $transactions
+     * @param OnlineGateway $paymentClient
+     *
      * @return array
      */
     private function handleTransactions($transactions): array
     {
-        $notExistTransactions = [];
+        $notExistTransactions             = [];
         $unverifiedTransactionsDueToError = [];
         foreach ($transactions as $item) {
 
@@ -137,20 +129,34 @@ class HandleUnverifiedTransactions extends Command
         return [$notExistTransactions, $unverifiedTransactionsDueToError];
     }
 
-    public function getGatewayComposer(){
-        return new Zarinpal(config('Zarinpal.merchantID'));
-    }
-
     /**
      * @param $cost
      * @param $authority
-     * @return \AlaaTV\Gateways\Contracts\OnlinePaymentVerificationResponseInterface
+     *
+     * @return OnlinePaymentVerificationResponseInterface
      */
-    private function verifyTransaction($cost, $authority): \AlaaTV\Gateways\Contracts\OnlinePaymentVerificationResponseInterface
+    private function verifyTransaction($cost, $authority): OnlinePaymentVerificationResponseInterface
     {
         //ToDo : Bug with Money::fromTomansx
 //        $result = $this->gateway->verify(Money::fromTomans($cost), $authority);
-        $result['Status'] = 'success' ;
+        $result['Status'] = 'success';
         return VerificationResponse::instance($result);
+    }
+
+    /**
+     * @param array $items
+     *
+     * @return mixed
+     */
+    private function logError(array $items)
+    {
+        foreach ($items as $item) {
+            $authority = $item['Authority'];
+            $amount    = $item['Amount'];
+            $channel   = $item['Channel'];
+            $cellPhone = $item['CellPhone'];
+            $date      = $item['Date'];
+            $this->info('authority: {' . $authority . '} amount: {' . $amount . '} channel: {' . $channel . '} cellPhone: {' . $cellPhone . '} date: {' . $date . '}');
+        }
     }
 }

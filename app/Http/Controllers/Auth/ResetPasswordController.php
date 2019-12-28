@@ -17,9 +17,9 @@ class ResetPasswordController extends Controller
     | explore this trait and override any methods you wish to tweak.
     |
     */
-    
+
     use ResetsPasswords;
-    
+
     /**
      * Create a new controller instance.
      *

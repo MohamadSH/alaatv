@@ -16,7 +16,7 @@ class Tag extends AlaaJsonResource
      */
     public function toArray($request)
     {
-        $array = (array) $this->resource;
+        $array = (array)$this->resource;
         return Arr::get($array, 'tags');
     }
 }

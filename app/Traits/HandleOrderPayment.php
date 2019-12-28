@@ -10,7 +10,6 @@ namespace App\Traits;
 
 use App\Bon;
 use App\Order;
-use App\Wallet;
 use Illuminate\Support\Facades\Cache;
 
 trait HandleOrderPayment
@@ -25,13 +24,13 @@ trait HandleOrderPayment
         $order->closeWalletPendingTransactions();
 
         $wallets = optional($order->user)->wallets;
-        if(isset($wallets)) {
+        if (isset($wallets)) {
             $this->withdrawWalletPendings($order->id, $wallets);
         }
 
         //refreshing order after closing it's wallet transactions
         // issue #1763
-        Cache::tags('order_'.$order->id)->flush();
+        Cache::tags('order_' . $order->id)->flush();
         $order = Order::Find($order->id);
 
         $updateOrderPaymentStatusResult = $this->updateOrderPaymentStatus($order);
@@ -43,25 +42,25 @@ trait HandleOrderPayment
     }
 
     /**
-     * @param  \App\Order  $order
+     * @param Order $order
      *
      * @return array
      */
     protected function updateOrderPaymentStatus(Order $order): array
     {
-        if($order->totalPaidCost() < $order->totalCost()){
+        if ($order->totalPaidCost() < $order->totalCost()) {
             $paymentstatus_id = $order->paymentstatus_id;
-            if($order->paymentstatus_id != config('constants.PAYMENT_STATUS_VERIFIED_INDEBTED')) {
+            if ($order->paymentstatus_id != config('constants.PAYMENT_STATUS_VERIFIED_INDEBTED')) {
                 $paymentstatus_id = config('constants.PAYMENT_STATUS_INDEBTED');
             }
-        }else{
+        } else {
             $paymentstatus_id = config('constants.PAYMENT_STATUS_PAID');
         }
 
         $result['paymentstatus_id'] = $paymentstatus_id;
 
 //        uncomment if you don't close order before redirecting to gateway
-        if(in_array($order->orderstatus_id , Order::OPEN_ORDER_STATUSES))
+        if (in_array($order->orderstatus_id, Order::OPEN_ORDER_STATUSES))
             $order->close();
 
         $order->paymentstatus_id = $paymentstatus_id;
@@ -71,7 +70,7 @@ trait HandleOrderPayment
     }
 
     /**
-     * @param  \App\Order  $order
+     * @param Order $order
      *
      * @return array
      */
@@ -85,7 +84,7 @@ trait HandleOrderPayment
             return;
         }
 
-        list($givenBonNumber, $failedBonNumber) = $order->giveUserBons($bonName);
+        [$givenBonNumber, $failedBonNumber] = $order->giveUserBons($bonName);
 
     }
 }

@@ -5,10 +5,10 @@ namespace App;
 /**
  * App\Section
  *
- * @property string|null                                                      $name        نام
- * @property int                                                              $order ترتیب
- * @property int                                                              $id
- * @property boolean                                                      enable فعال/غیرفعال
+ * @property string|null $name        نام
+ * @property int         $order       ترتیب
+ * @property int         $id
+ * @property boolean     enable       فعال/غیرفعال
  */
 class Section extends BaseModel
 {

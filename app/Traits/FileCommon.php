@@ -6,14 +6,14 @@ trait FileCommon
 {
     /** Obtains file size based on it's url
      *
-     * @param  string  $url
+     * @param string $url
      *
      * @return string
      */
     public function curlGetFileSize($url): string
     {
         $curl = curl_init($url);
-        
+
         // Issue a HEAD request and follow any redirects.
         curl_setopt($curl, CURLOPT_NOBODY, true);
         curl_setopt($curl, CURLOPT_HEADER, true);
@@ -23,7 +23,7 @@ trait FileCommon
             curl_setopt($curl, CURLOPT_USERAGENT, $_SERVER["HTTP_USER_AGENT"]);
         }
         curl_setopt($curl, CURLOPT_MAXREDIRS, 3);
-        
+
         curl_exec($curl);
         $fileSizeString = "";
         if (!curl_errno($curl)) {
@@ -37,10 +37,10 @@ trait FileCommon
             }
         }
         curl_close($curl);
-        
+
         return $fileSizeString;
     }
-    
+
     /** Converts file size to Persian string
      *
      * @param $bytes
@@ -73,23 +73,24 @@ trait FileCommon
                 "VALUE" => 1,
             ],
         ];
-        
+
         foreach ($arBytes as $arItem) {
             if ($bytes >= $arItem["VALUE"]) {
                 $result = $bytes / $arItem["VALUE"];
-                $result = str_replace(".", ".", strval(round($result, 2)))." ".$arItem["UNIT"];
+                $result = str_replace(".", ".", strval(round($result, 2))) . " " . $arItem["UNIT"];
                 break;
             }
         }
-        
+
         return $result;
     }
 
     /**
      * @param string $fullPath
+     *
      * @return string
      */
-    protected function getSubDirectoryInCDN(string $fullPath):string
+    protected function getSubDirectoryInCDN(string $fullPath): string
     {
         $baseRoot = Storage::Disk(config('constants.DISK_FREE_CONTENT'))->getAdapter()->getRoot();
         return explode($baseRoot, $fullPath)[1];

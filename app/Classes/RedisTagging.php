@@ -3,8 +3,8 @@
 namespace App\Classes;
 
 use Carbon\Carbon;
-use Mockery\Exception;
 use Illuminate\Support\Facades\Redis;
+use Mockery\Exception;
 
 // https://github.com/smrchy/redis-tagging/blob/master/index.coffee
 
@@ -16,7 +16,7 @@ class RedisTagging
 
     protected $prefix = 'tagging';
 
-    protected  $redis;
+    protected $redis;
 
     /**
      * RedisTagging constructor.
@@ -30,8 +30,8 @@ class RedisTagging
     /**
      * Get all tags for an ID
      *
-     * @param  string  $bucket
-     * @param  string  $id
+     * @param string   $bucket
+     * @param string   $id
      * @param          $cb
      *
      * @return array
@@ -45,11 +45,11 @@ class RedisTagging
             ];
         }
 
-        $ns       = $this->prefix.':'.$bucket;
-        $id_index = $ns.':ID:'.$id;
+        $ns       = $this->prefix . ':' . $bucket;
+        $id_index = $ns . ':ID:' . $id;
 
         try {
-            $tags =  $this->redis->sMembers($id_index);
+            $tags = $this->redis->sMembers($id_index);
         } catch (Exception $e) {
 
             $cb($e, [
@@ -81,8 +81,8 @@ class RedisTagging
     /**
      * Remove / Delete an item
      *
-     * @param string $bucket
-     * @param string $id
+     * @param string   $bucket
+     * @param string   $id
      * @param          $cb
      *
      * @return void Returns `true` even if that id did not exist.
@@ -95,35 +95,35 @@ class RedisTagging
     /**
      * Set (insert or update) an item
      *
-     * @param  string  $bucket
-     * @param  string  $id
-     * @param          $tags   (Array)
-     * @param  int     $score  (Number) *optional* Default: 0
+     * @param string   $bucket
+     * @param string   $id
+     * @param          $tags  (Array)
+     * @param int      $score (Number) *optional* Default: 0
      * @param          $cb
      *
      * @return bool Returns `true` when the item was set.
      */
-    public function set($bucket, $id, $tags,  $cb , $score = 0)
+    public function set($bucket, $id, $tags, $cb, $score = 0)
     {
 
         if (!$this->validation($bucket)) {
             return false;
         }
 
-        $ns       = $this->prefix.':'.$bucket;
-        $id_index = $ns.':ID:'.$id;
+        $ns       = $this->prefix . ':' . $bucket;
+        $id_index = $ns . ':ID:' . $id;
 
         $this->delete($ns, $id);
 
         try {
-            $pipeResult =   $this->redis->pipeline(function ($pipe) use ($tags, $score, $id, $id_index, $ns) {
+            $pipeResult = $this->redis->pipeline(function ($pipe) use ($tags, $score, $id, $id_index, $ns) {
                 foreach ($tags as $tag) {
-                    $pipe->zincrby($ns.':TagCount', 1, $tag);
+                    $pipe->zincrby($ns . ':TagCount', 1, $tag);
                     $pipe->sAdd($id_index, $tag);
-                    $pipe->zAdd($ns.':TAGS:'.$tag, $score, $id);
+                    $pipe->zAdd($ns . ':TAGS:' . $tag, $score, $id);
                 }
                 if (count($tags) > 0) {
-                    $pipe->sAdd($ns.':IDs', $id);
+                    $pipe->sAdd($ns . ':IDs', $id);
                 }
             });
 
@@ -138,21 +138,21 @@ class RedisTagging
     private function delete($ns, $id)
     {
         try {
-            $id_index = $ns.':ID:'.$id;
-            $tags     =  $this->redis->sMembers($id_index);
+            $id_index = $ns . ':ID:' . $id;
+            $tags     = $this->redis->sMembers($id_index);
 
             $this->redis->pipeline(function ($pipe) use ($tags, $id, $id_index, $ns) {
                 # This ID already has tags. We will delete them first
                 foreach ($tags as $tag) {
-                    $pipe->zincrby($ns.':TagCount', -1, $tag);
-                    $pipe->zRem($ns.':TAGS:'.$tag, $id);
+                    $pipe->zincrby($ns . ':TagCount', -1, $tag);
+                    $pipe->zRem($ns . ':TAGS:' . $tag, $id);
                 }
                 # Also delete the index for this ID
                 $pipe->unlink($id_index);
                 # Delete the id in the IDS list
-                $pipe->sRem($ns.':IDs', $id);
+                $pipe->sRem($ns . ':IDs', $id);
                 # Clean up the TAGCOUNT
-                $pipe->zremrangebyscore($ns.':TagCount', 0, 0);
+                $pipe->zremrangebyscore($ns . ':TagCount', 0, 0);
             });
 
         } catch (\Exception $e) {
@@ -164,21 +164,21 @@ class RedisTagging
     /**
      * Return the IDs of an either a single tag or an intersection/union of two or more tags
      *
-     * @param  string  $bucket      (String)
-     * @param          $tags_group  (TagsGroupContracts) One or more group of tags
-     * @param  int     $limit       *optional* Default=100 (0 will return 0 items but will return the total_items!)
-     * @param  int     $offset      *optional* Default=0
-     * @param  int     $withScores  *optional* Default=0 Set this to 1 to output the scores
-     * @param  string  $order       *optional* "inter", "union" Default: "inter"
-     * @param  string  $type        *optional* Default ="desc"
+     * @param string   $bucket     (String)
+     * @param          $tags_group (TagsGroupContracts) One or more group of tags
+     * @param int      $limit      *optional* Default=100 (0 will return 0 items but will return the total_items!)
+     * @param int      $offset     *optional* Default=0
+     * @param int      $withScores *optional* Default=0 Set this to 1 to output the scores
+     * @param string   $order      *optional* "inter", "union" Default: "inter"
+     * @param string   $type       *optional* Default ="desc"
      * @param          $cb
      */
     public function tags($bucket, TagsGroupContracts $tags_group, $cb, $limit = 100, $offset = 0,
-        $withScores = 0, $order = 'desc', $type = 'inter'): void
+                         $withScores = 0, $order = 'desc', $type = 'inter'): void
     {
 
-        $ns     = $this->prefix.':'.$bucket;
-        $prefix = $ns.':TAGS:';
+        $ns     = $this->prefix . ':' . $bucket;
+        $prefix = $ns . ':TAGS:';
         # The last element to get
         $lastElement = $offset + $limit - 1;
 
@@ -198,7 +198,7 @@ class RedisTagging
             ]);
             return;
         }
-        $pipe      =  $this->redis->pipeline();
+        $pipe      = $this->redis->pipeline();
         $tagGroups = $tags_group->getTagsGroup();
 
         $resultKeyForGroups = [];
@@ -209,7 +209,7 @@ class RedisTagging
                 $randKey = $this->makeRandomKeyForRedis($ns);
                 $keys    = [];
                 foreach ($tags as $tag) {
-                    $keys[] = $prefix.$tag;
+                    $keys[] = $prefix . $tag;
                 }
                 try {
                     $pipe->zunionstore($randKey, $keys, null, 'min');
@@ -217,8 +217,8 @@ class RedisTagging
                 }
                 $resultKeyForGroups[] = $randKey;
                 $shouldRemoveKeys[]   = $randKey;
-            } elseif ($cTags === 1) {
-                $resultKeyForGroups[] = $prefix.$tags[0];
+            } else if ($cTags === 1) {
+                $resultKeyForGroups[] = $prefix . $tags[0];
             }
         }
         $cTags     = $tags_group->getNumberOfTotalTags();
@@ -231,7 +231,7 @@ class RedisTagging
             } else {
                 $pipe->zRange($resultkey, $offset, $lastElement, ['withscores' => $withScores]);
             }
-            $pipeLineResult =  $this->redis->exec();
+            $pipeLineResult = $this->redis->exec();
         } catch (Exception $e) {
             $this->redis->discard();
 
@@ -285,6 +285,17 @@ class RedisTagging
         ]);
     }
 
+    /**
+     * @param string $ns
+     *
+     * @return string
+     */
+    private function makeRandomKeyForRedis(string $ns): string
+    {
+        $randKey = $ns . str_random(10) . '_' . Carbon::now()->micro;
+        return $randKey;
+    }
+
     public function flushDB($cb)
     {
         abort(403);
@@ -296,15 +307,15 @@ class RedisTagging
     /**
      *  Get all IDs for a single bucket
      *
-     * @param  string  $bucket
+     * @param string $bucket
      *
      * @return array
      */
     private function allIds($bucket, $cb)
     {
-        $ns    = $this->prefix.':'.$bucket;
+        $ns = $this->prefix . ':' . $bucket;
         try {
-            $ids =  $this->redis->sMembers($ns.':IDS');
+            $ids = $this->redis->sMembers($ns . ':IDS');
         } catch (\Exception $e) {
             return [];
         }
@@ -315,8 +326,8 @@ class RedisTagging
     /**
      * TopTags
      *
-     * @param  string  $bucket
-     * @param  string  $amount
+     * @param string $bucket
+     * @param string $amount
      *
      * @return array
      */
@@ -326,11 +337,11 @@ class RedisTagging
             return ['error' => 'bucket should not Equal to " TAGS " '];
         }
 
-        $ns       = $this->prefix.':'.$bucket;
+        $ns       = $this->prefix . ':' . $bucket;
         $amount   = $amount - 1;
-        $redisKey = $ns.':TagCount';
+        $redisKey = $ns . ':TagCount';
         $num      = $redisKey->zCard($redisKey);
-        $result   =  $this->redis->zRevRange($redisKey, 0, $amount, true);
+        $result   = $this->redis->zRevRange($redisKey, 0, $amount, true);
 
         $cb(null, [
             'total_items' => $num,
@@ -362,16 +373,5 @@ class RedisTagging
         if (!$this->validation($bucket)) {
             return false;
         }
-    }
-
-    /**
-     * @param  string  $ns
-     *
-     * @return string
-     */
-    private function makeRandomKeyForRedis(string $ns): string
-    {
-        $randKey = $ns.str_random(10).'_'.Carbon::now()->micro;
-        return $randKey;
     }
 }

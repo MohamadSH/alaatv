@@ -13,7 +13,7 @@ use App\Classes\Abstracts\Facade\CallControllerStoreFacade;
 class CallOrderproductControllerStoreFacade extends CallControllerStoreFacade
 {
     const CLASS_NAME = "OrderproductController";
-    
+
     protected function getControllerName(): string
     {
         return self::CLASS_NAME;

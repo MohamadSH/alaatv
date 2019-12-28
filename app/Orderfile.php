@@ -2,6 +2,10 @@
 
 namespace App;
 
+use Carbon\Carbon;
+use Eloquent;
+use Illuminate\Database\Eloquent\Builder;
+
 /**
  * App\Orderfile
  *
@@ -10,29 +14,29 @@ namespace App;
  * @property int|null            $user_id     آی دی مشخص کننده کاربر آپلود کننده فایل
  * @property string              $file        فایل آپلود شده
  * @property string|null         $description توضیح درباره فایل
- * @property \Carbon\Carbon|null $created_at
- * @property \Carbon\Carbon|null $updated_at
- * @property \Carbon\Carbon|null $deleted_at
- * @property-read \App\Order     $order
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property Carbon|null $deleted_at
+ * @property-read Order          $order
  * @method static bool|null forceDelete()
- * @method static \Illuminate\Database\Query\Builder|\App\Orderfile onlyTrashed()
+ * @method static \Illuminate\Database\Query\Builder|Orderfile onlyTrashed()
  * @method static bool|null restore()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Orderfile whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Orderfile whereDeletedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Orderfile whereDescription($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Orderfile whereFile($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Orderfile whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Orderfile whereOrderId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Orderfile whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Orderfile whereUserId($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Orderfile withTrashed()
- * @method static \Illuminate\Database\Query\Builder|\App\Orderfile withoutTrashed()
- * @mixin \Eloquent
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Orderfile newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Orderfile newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Orderfile query()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel disableCache()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel withCacheCooldownSeconds($seconds)
+ * @method static Builder|Orderfile whereCreatedAt($value)
+ * @method static Builder|Orderfile whereDeletedAt($value)
+ * @method static Builder|Orderfile whereDescription($value)
+ * @method static Builder|Orderfile whereFile($value)
+ * @method static Builder|Orderfile whereId($value)
+ * @method static Builder|Orderfile whereOrderId($value)
+ * @method static Builder|Orderfile whereUpdatedAt($value)
+ * @method static Builder|Orderfile whereUserId($value)
+ * @method static \Illuminate\Database\Query\Builder|Orderfile withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|Orderfile withoutTrashed()
+ * @mixin Eloquent
+ * @method static Builder|Orderfile newModelQuery()
+ * @method static Builder|Orderfile newQuery()
+ * @method static Builder|Orderfile query()
+ * @method static Builder|BaseModel disableCache()
+ * @method static Builder|BaseModel withCacheCooldownSeconds($seconds)
  * @property-read mixed          $cache_cooldown_seconds
  */
 class Orderfile extends BaseModel
@@ -46,7 +50,7 @@ class Orderfile extends BaseModel
         'file',
         'description',
     ];
-    
+
     public function order()
     {
         return $this->belongsTo('\App\Order');

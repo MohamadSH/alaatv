@@ -2,7 +2,6 @@
 
 namespace App\Console\Commands;
 
-use App\Orderproduct;
 use App\Userbon;
 use Illuminate\Console\Command;
 
@@ -39,11 +38,11 @@ class DetachOpenUserbonsCommand extends Command
      */
     public function handle()
     {
-        $openUserbons = Userbon::whereHas('orderproducts' , function ($q){
-                                $q->whereHas('order' , function ($q2){
-                                   $q2->where('orderstatus_id' ,  config('constants.ORDER_STATUS_OPEN'));
-                                });
-                            })->get();
+        $openUserbons = Userbon::whereHas('orderproducts', function ($q) {
+            $q->whereHas('order', function ($q2) {
+                $q2->where('orderstatus_id', config('constants.ORDER_STATUS_OPEN'));
+            });
+        })->get();
 
         $openUserbonsCount = $openUserbons->count();
 
@@ -55,9 +54,9 @@ class DetachOpenUserbonsCommand extends Command
             foreach ($openUserbons as $openUserbon) {
                 /** @var Userbon $usedUserbon */
                 $openUserbon->update([
-                        'usedNumber' => 0,
-                        'userbonstatus_id' => 1,
-                    ]);
+                    'usedNumber'       => 0,
+                    'userbonstatus_id' => 1,
+                ]);
                 $openUserbon->orderproducts()->detach();
                 $bar2->advance();
             }

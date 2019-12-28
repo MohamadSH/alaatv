@@ -9,18 +9,17 @@
 namespace App\Classes\Pricing\Alaa;
 
 use App\Collection\OrderproductCollection;
-use App\Http\Resources\PurchasedProduct;
 use App\Order;
+use Exception;
 use Illuminate\Support\Collection;
-use App\Http\Resources\PurchasedOrderproduct as OrderproductResource;
 
 class AlaaInvoiceGenerator
 {
     /**
-     * @param  Order  $order
+     * @param Order $order
      *
      * @return array
-     * @throws \Exception
+     * @throws Exception
      */
     public function generateOrderInvoice(Order $order): array
     {
@@ -49,7 +48,7 @@ class AlaaInvoiceGenerator
     }
 
     /**
-     * @param  Order  $order
+     * @param Order $order
      *
      * @return array
      */
@@ -70,7 +69,7 @@ class AlaaInvoiceGenerator
     /**
      * Formats orderproduct collection and return total number of orderproducts
      *
-     * @param  OrderproductCollection  $orderproducts
+     * @param OrderproductCollection $orderproducts
      *
      * @return int
      */
@@ -83,7 +82,7 @@ class AlaaInvoiceGenerator
             ->map(function ($orderproducts) use (&$orderProductCount) {
                 $orderProductCount += $orderproducts->count();
 
-                $grand = $orderproducts->first()->grandProduct ;
+                $grand = $orderproducts->first()->grandProduct;
                 return [
                     'grand'         => $orderproducts->first()->grandProduct ?? null,
                     'orderproducts' => $orderproducts,
@@ -117,7 +116,7 @@ class AlaaInvoiceGenerator
     }
 
     /**
-     * @param  Collection  $fakeOrderproducts
+     * @param Collection $fakeOrderproducts
      *
      * @return array
      */

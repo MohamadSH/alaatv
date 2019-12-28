@@ -10,17 +10,17 @@ use Illuminate\Database\Eloquent\Collection;
 /**
  * App\Wallet
  *
- * @property int                                                              $id
- * @property int|null                                                         $user_id       آیدی مشخص کننده کاربر صاحب
+ * @property int                           $id
+ * @property int|null                      $user_id           آیدی مشخص کننده کاربر صاحب
  *           کیف پول
- * @property int|null                                                         $wallettype_id آیدی مشخص کننده نوع کیف
+ * @property int|null                      $wallettype_id     آیدی مشخص کننده نوع کیف
  *           پول
- * @property int                                                              $balance       اعتبار کیف پول
- * @property Carbon|null                                              $created_at
- * @property Carbon|null                                              $updated_at
- * @property Carbon|null                                              $deleted_at
+ * @property int                           $balance           اعتبار کیف پول
+ * @property Carbon|null                   $created_at
+ * @property Carbon|null                   $updated_at
+ * @property Carbon|null                   $deleted_at
  * @property-read Collection|Transaction[] $transactions
- * @property-read User|null                                              $user
+ * @property-read User|null                $user
  * @method static bool|null forceDelete()
  * @method static \Illuminate\Database\Query\Builder|Wallet onlyTrashed()
  * @method static bool|null restore()
@@ -39,10 +39,10 @@ use Illuminate\Database\Eloquent\Collection;
  * @method static Builder|Wallet query()
  * @method static Builder|BaseModel disableCache()
  * @method static Builder|BaseModel withCacheCooldownSeconds($seconds)
- * @property-read Wallettype|null                                        $walletType
- * @property-read mixed                                                       $cache_cooldown_seconds
- * @property int $pending_to_reduce مبلغی که علی الحساب از کیف پول کم شده است
- * @property-read int|null $transactions_count
+ * @property-read Wallettype|null          $walletType
+ * @property-read mixed                    $cache_cooldown_seconds
+ * @property int                           $pending_to_reduce مبلغی که علی الحساب از کیف پول کم شده است
+ * @property-read int|null                 $transactions_count
  * @method static Builder|Wallet wherePendingToReduce($value)
  */
 class Wallet extends BaseModel
@@ -68,7 +68,7 @@ class Wallet extends BaseModel
     /**
      * Force to move credits from this account
      *
-     * @param  integer  $amount
+     * @param integer $amount
      *
      * @return array
      */
@@ -81,13 +81,14 @@ class Wallet extends BaseModel
      * Attempt to add credits to this wallet
      *
      * @param integer $amount
-     * @param null $orderId
+     * @param null    $orderId
      * @param boolean $shouldCheckWithdraw
      *
-     * @param bool $withCreatingTransaction
+     * @param bool    $withCreatingTransaction
+     *
      * @return array
      */
-    public function withdraw($amount, $orderId = null, $shouldCheckWithdraw = true , $withCreatingTransaction=true)
+    public function withdraw($amount, $orderId = null, $shouldCheckWithdraw = true, $withCreatingTransaction = true)
     {
         /**
          * unused variable
@@ -104,7 +105,7 @@ class Wallet extends BaseModel
                 if ($result) {
                     $responseText = 'SUCCESSFUL';
                     $failed       = false;
-                    if($withCreatingTransaction){
+                    if ($withCreatingTransaction) {
                         $this->transactions()
                             ->create([
                                 'order_id'             => $orderId,
@@ -115,18 +116,16 @@ class Wallet extends BaseModel
                                 'completed_at'         => Carbon::now('Asia/Tehran'),
                             ]);
                     }
-                }
-                else {
+                } else {
                     $failed       = true;
                     $responseText = 'CAN_NOT_UPDATE_WALLET';
                 }
-            }
-            else {
+            } else {
                 $failed       = true;
                 $responseText = 'CAN_NOT_WITHDRAW';
             }
 
-        }else{
+        } else {
             $failed       = true;
             $responseText = 'CAN_NOT_WITHDRAW';
         }
@@ -140,7 +139,7 @@ class Wallet extends BaseModel
     /**
      * Determine if the user can withdraw from this wallet
      *
-     * @param  integer  $amount
+     * @param integer $amount
      *
      * @return boolean
      */
@@ -160,8 +159,8 @@ class Wallet extends BaseModel
     /**
      * Attempt to move credits from this wallet
      *
-     * @param  integer  $amount
-     * @param  bool     $withoutTransaction
+     * @param integer $amount
+     * @param bool    $withoutTransaction
      *
      * @return array
      */
@@ -171,39 +170,37 @@ class Wallet extends BaseModel
          * unused variable
          */
 
-        if($amount > 0)
-        {
+        if ($amount > 0) {
             $newBalance    = $this->balance + $amount;
             $this->balance = $newBalance;
             $result        = $this->update();
             if ($result) {
                 if (!$withoutTransaction) {
                     $transactionStatus = config('constants.TRANSACTION_STATUS_SUCCESSFUL');
-                    $transaction = $this->transactions()
-                                            ->create([
-                                                'wallet_id'            => $this->id,
-                                                'cost'                 => -$amount,
-                                                'transactionstatus_id' => $transactionStatus,
-                                                'completed_at'         => Carbon::now('Asia/Tehran'),
-                                            ]);
+                    $transaction       = $this->transactions()
+                        ->create([
+                            'wallet_id'            => $this->id,
+                            'cost'                 => -$amount,
+                            'transactionstatus_id' => $transactionStatus,
+                            'completed_at'         => Carbon::now('Asia/Tehran'),
+                        ]);
 
-                    if(isset($transaction)){
+                    if (isset($transaction)) {
                         $responseText = 'SUCCESSFUL';
                         $failed       = false;
-                    }else{
+                    } else {
                         $failed       = true;
                         $responseText = 'CAN_NOT_UPDATE_WALLET';
                     }
-                }else{
+                } else {
                     $responseText = 'SUCCESSFUL';
                     $failed       = false;
                 }
-            }
-            else {
+            } else {
                 $failed       = true;
                 $responseText = 'CAN_NOT_UPDATE_WALLET';
             }
-        }else{
+        } else {
             $failed       = true;
             $responseText = 'WRONG_AMOUNT';
         }

@@ -14,45 +14,45 @@ use Illuminate\Queue\SerializesModels;
 class GeneralNotice extends Notification implements ShouldQueue
 {
     use Queueable, SerializesModels;
-    
+
     public $timeout = 120;
-    
+
     /**
      * @var string
      */
     protected $message;
-    
+
     /**
      * @var User
      */
     protected $user;
-    
+
     /**
      * Create a new notification instance.
      *
-     * @param  int  $giftCost
+     * @param int $giftCost
      */
     public function __construct($message)
     {
         $this->message = $message;
     }
-    
+
     /**
      * Get the notification's delivery channels.
      *
-     * @param  mixed  $notifiable
+     * @param mixed $notifiable
      *
      * @return array
      */
     public function via($notifiable)
     {
         $this->user = $notifiable;
-        
+
         return [
             MedianaChannel::class,
         ];
     }
-    
+
     /**
      * @param $notifiable
      *
@@ -60,16 +60,16 @@ class GeneralNotice extends Notification implements ShouldQueue
      */
     public function toMediana($notifiable)
     {
-        
+
         return (new MedianaMessage())->content($this->msg())
             ->sendAt(Carbon::now());
     }
-    
+
     private function msg(): string
     {
         $messageCore = $this->message;
         $message     = $messageCore;
-        
+
         return $message;
     }
 }

@@ -3,14 +3,14 @@
 namespace App\Http\Controllers\Web;
 
 use App\Block;
-use App\Http\Requests\SaveNewBlockRequest;
-use App\Product;
 use App\Content;
 use App\Contentset;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\SaveNewBlockRequest;
+use App\Product;
 use App\Traits\ProductCommon;
 use Exception;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Response;
 use Jenssegers\Agent\Agent;
 
@@ -22,6 +22,7 @@ class BlockController extends Controller
 
     /**
      * BlockController constructor.
+     *
      * @param Agent $agent
      */
     public function __construct(Agent $agent)
@@ -31,39 +32,39 @@ class BlockController extends Controller
     }
 
     /**
-     * @param  Agent  $agent
+     * @param Agent $agent
      *
      * @return array
      */
     private function getAuthExceptionArray(Agent $agent): array
     {
         return [
-            'show'
+            'show',
         ];
     }
 
     /**
-     * @param  array  $authException
+     * @param array $authException
      */
     private function callMiddlewares(array $authException): void
     {
         $this->middleware('auth', ['except' => $authException]);
-        $this->middleware('permission:'.config('constants.LIST_BLOCK_ACCESS'), ['only' => 'index']);
-        $this->middleware('permission:'.config('constants.INSERT_BLOCK_ACCESS'), ['only' => 'store']);
-        $this->middleware('permission:'.config('constants.REMOVE_BLOCK_ACCESS'), ['only' => 'destroy']);
-        $this->middleware('permission:'.config('constants.EDIT_BLOCK_ACCESS'), ['only' => 'update']);
+        $this->middleware('permission:' . config('constants.LIST_BLOCK_ACCESS'), ['only' => 'index']);
+        $this->middleware('permission:' . config('constants.INSERT_BLOCK_ACCESS'), ['only' => 'store']);
+        $this->middleware('permission:' . config('constants.REMOVE_BLOCK_ACCESS'), ['only' => 'destroy']);
+        $this->middleware('permission:' . config('constants.EDIT_BLOCK_ACCESS'), ['only' => 'update']);
     }
 
 
     public function index(Request $request)
     {
         $perPage = ($request->has('length')) ? $request->get('length') : 10;
-        $blocks = Block::orderByDesc('created_at')
-        ->withCount('products')
-        ->withCount('sets')
-        ->withCount('contents')
-        ->withCount('banners')
-        ->paginate($perPage);
+        $blocks  = Block::orderByDesc('created_at')
+            ->withCount('products')
+            ->withCount('sets')
+            ->withCount('contents')
+            ->withCount('banners')
+            ->paginate($perPage);
         $blocks->each(function ($items) {
             $items->append('editLink');
             $items->append('removeLink');
@@ -78,24 +79,24 @@ class BlockController extends Controller
 
     public function edit(Request $request, Block $block)
     {
-        $blockTypes = [
+        $blockTypes      = [
             [
                 'value' => '1',
-                'name' => 'صفحه اصلی',
+                'name'  => 'صفحه اصلی',
             ],
             [
                 'value' => '2',
-                'name' => 'فروشگاه',
+                'name'  => 'فروشگاه',
             ],
             [
                 'value' => '3',
-                'name' => 'صفحه محصول',
-            ]
+                'name'  => 'صفحه محصول',
+            ],
         ];
-        $products = $this->makeProductCollection();
-        $sets = Contentset::all();
-        $blockSets = $block->sets;
-        $blockContents = $block->contents;
+        $products        = $this->makeProductCollection();
+        $sets            = Contentset::all();
+        $blockSets       = $block->sets;
+        $blockContents   = $block->contents;
         $blockProductsId = $block->products->pluck('id');
         return view('block.edit', compact('block', 'products', 'sets', 'blockSets', 'blockContents', 'blockProductsId', 'blockTypes'));
     }
@@ -103,9 +104,9 @@ class BlockController extends Controller
     public function update(Request $request, Block $block)
     {
 
-        $productsId = $request->get('block-products' , []);
-        $setsId = $request->get('block-sets' , []);
-        $contentsId = convertTagStringToArray($request->get('contents' , ''));
+        $productsId = $request->get('block-products', []);
+        $setsId     = $request->get('block-sets', []);
+        $contentsId = convertTagStringToArray($request->get('contents', ''));
 
         $this->fillBlockFromRequest($request, $block);
 
@@ -123,8 +124,26 @@ class BlockController extends Controller
     }
 
     /**
-     * @param  Block  $block
-     * @param  array  $productsId
+     * @param Request $request
+     * @param Block   $block
+     */
+    private function fillBlockFromRequest(Request $request, Block $block): void
+    {
+        $tags             = convertTagStringToArray($request->get('tags'));
+        $block->title     = $request->get('title');
+        $block->customUrl = $request->get('customUrl');
+        $block->class     = $request->get('class');
+        $order            = $request->get('order');
+        $block->order     = (!is_null($order)) ? $order : 0;
+        $enable           = $request->get('enable');
+        $block->enable    = (!is_null($enable)) ? $enable : 0;
+        $block->type      = $request->get('type');
+        $block->tags      = json_encode($tags);
+    }
+
+    /**
+     * @param Block $block
+     * @param array $productsId
      */
     public function attachProducts(Block $block, array $productsId): void
     {
@@ -132,8 +151,8 @@ class BlockController extends Controller
     }
 
     /**
-     * @param  Block  $block
-     * @param  array  $setsId
+     * @param Block $block
+     * @param array $setsId
      */
     public function attachSets(Block $block, array $setsId): void
     {
@@ -141,8 +160,8 @@ class BlockController extends Controller
     }
 
     /**
-     * @param  Block  $block
-     * @param  array  $contentsId
+     * @param Block $block
+     * @param array $contentsId
      */
     public function attachContents(Block $block, array $contentsId): void
     {
@@ -153,13 +172,13 @@ class BlockController extends Controller
     {
         $block = new Block();
 
-        $productsId = $request->get('block-products' , []);
-        $setsId = $request->get('block-sets' , []);
-        $contentsId =convertTagStringToArray($request->get('contents' , ''));
+        $productsId = $request->get('block-products', []);
+        $setsId     = $request->get('block-sets', []);
+        $contentsId = convertTagStringToArray($request->get('contents', ''));
 
         $this->fillBlockFromRequest($request, $block);
 
-        if($block->save()) {
+        if ($block->save()) {
             $this->attachProducts($block, $productsId);
 
             $this->attachSets($block, $setsId);
@@ -178,8 +197,8 @@ class BlockController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  Response  $response
-     * @param  Block     $block
+     * @param Response $response
+     * @param Block    $block
      *
      * @return Response
      * @throws Exception
@@ -198,44 +217,30 @@ class BlockController extends Controller
         return $response->setStatusCode(Response::HTTP_SERVICE_UNAVAILABLE);
     }
 
-    /**
-     * @param  Request  $request
-     * @param  Block    $block
-     */
-    private function fillBlockFromRequest(Request $request, Block $block): void
+    public function detachFromBlock(Block $block, string $type, int $id)
     {
-        $tags =convertTagStringToArray($request->get('tags'));
-        $block->title     = $request->get('title');
-        $block->customUrl = $request->get('customUrl');
-        $block->class     = $request->get('class');
-        $order = $request->get('order');
-        $block->order     = (!is_null($order))?$order:0;
-        $enable = $request->get('enable');
-        $block->enable    = (!is_null($enable))?$enable:0;
-        $block->type      = $request->get('type');
-        $block->tags      = json_encode($tags);
-    }
-
-    public function detachFromBlock(Block $block, string $type, int $id) {
         $detachType = [
             'product' => 'detachProduct',
-            'set' => 'detachSet',
-            'content' => 'detachContent'
+            'set'     => 'detachSet',
+            'content' => 'detachContent',
         ];
         $methodName = $detachType[$type];
         $this->$methodName($block, $id);
         return redirect()->back();
     }
 
-    private function detachProduct(Block $block, int $id) {
+    private function detachProduct(Block $block, int $id)
+    {
         $block->products()->detach(Product::find($id));
     }
 
-    private function detachSet(Block $block, int $id) {
+    private function detachSet(Block $block, int $id)
+    {
         $block->sets()->detach(Contentset::find($id));
     }
 
-    private function detachContent(Block $block, int $id) {
+    private function detachContent(Block $block, int $id)
+    {
         $block->contents()->detach(Content::find($id));
     }
 }

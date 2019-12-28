@@ -25,12 +25,12 @@ class ArticleController extends Controller
         /** setting permissions
          *
          */
-        $this->middleware('permission:'.config('constants.LIST_ARTICLE_ACCESS'), ['only' => 'index']);
-        $this->middleware('permission:'.config('constants.INSERT_ARTICLE_ACCESS'), ['only' => 'create']);
-        $this->middleware('permission:'.config('constants.INSERT_ARTICLE_ACCESS'), ['only' => 'store']);
-        $this->middleware('permission:'.config('constants.REMOVE_ARTICLE_ACCESS'), ['only' => 'destroy']);
-        $this->middleware('permission:'.config('constants.SHOW_ARTICLE_ACCESS'), ['only' => 'edit']);
-        $this->middleware('permission:'.config('constants.EDIT_ARTICLE_ACCESS'), ['only' => 'update']);
+        $this->middleware('permission:' . config('constants.LIST_ARTICLE_ACCESS'), ['only' => 'index']);
+        $this->middleware('permission:' . config('constants.INSERT_ARTICLE_ACCESS'), ['only' => 'create']);
+        $this->middleware('permission:' . config('constants.INSERT_ARTICLE_ACCESS'), ['only' => 'store']);
+        $this->middleware('permission:' . config('constants.REMOVE_ARTICLE_ACCESS'), ['only' => 'destroy']);
+        $this->middleware('permission:' . config('constants.SHOW_ARTICLE_ACCESS'), ['only' => 'edit']);
+        $this->middleware('permission:' . config('constants.EDIT_ARTICLE_ACCESS'), ['only' => 'update']);
         $this->middleware('auth', [
             'except' => [
                 'show',
@@ -69,7 +69,8 @@ class ArticleController extends Controller
         if ($request->hasFile("image")) {
             $file      = $request->file('image');
             $extension = $file->getClientOriginalExtension();
-            $fileName  = basename($file->getClientOriginalName(), ".".$extension)."_".date("YmdHis").'.'.$extension;
+            $fileName  =
+                basename($file->getClientOriginalName(), "." . $extension) . "_" . date("YmdHis") . '.' . $extension;
             if (Storage::disk(config('constants.DISK8'))
                 ->put($fileName, File::get($file))) {
                 $article->image = $fileName;
@@ -82,10 +83,9 @@ class ArticleController extends Controller
                 $img->resize(766, 249);
                 $img->save(Storage::disk(config('constants.DISK8'))
                         ->getAdapter()
-                        ->getPathPrefix().$fileName);
+                        ->getPathPrefix() . $fileName);
             }
-        }
-        else {
+        } else {
             $article->image = config('constants.ARTICLE_DEFAULT_IMAGE');
         }
 
@@ -109,8 +109,7 @@ class ArticleController extends Controller
 
         if ($article->save()) {
             session()->put('success', 'درج مقاله با موفقیت انجام شد');
-        }
-        else {
+        } else {
             session()->put('error', 'خطای پایگاه داده');
         }
 
@@ -133,8 +132,7 @@ class ArticleController extends Controller
 
         if (isset($article->keyword) && strlen($article->keyword) > 0) {
             $tags = explode('،', $article->keyword);
-        }
-        else {
+        } else {
             $tags = [];
         }
 
@@ -161,7 +159,8 @@ class ArticleController extends Controller
         if ($request->hasFile("image")) {
             $file      = $request->file('image');
             $extension = $file->getClientOriginalExtension();
-            $fileName  = basename($file->getClientOriginalName(), ".".$extension)."_".date("YmdHis").'.'.$extension;
+            $fileName  =
+                basename($file->getClientOriginalName(), "." . $extension) . "_" . date("YmdHis") . '.' . $extension;
             if (Storage::disk(config('constants.DISK8'))
                 ->put($fileName, File::get($file))) {
                 Storage::disk(config('constants.DISK8'))
@@ -176,7 +175,7 @@ class ArticleController extends Controller
                 $img->resize(766, 249);
                 $img->save(Storage::disk(config('constants.DISK8'))
                         ->getAdapter()
-                        ->getPathPrefix().$fileName);
+                        ->getPathPrefix() . $fileName);
             }
         }
 
@@ -202,8 +201,7 @@ class ArticleController extends Controller
 
         if ($article->update()) {
             session()->put('success', 'اصلاح مقاله با موفقیت انجام شد');
-        }
-        else {
+        } else {
             session()->put('error', 'خطای پایگاه داده');
         }
 
@@ -214,8 +212,7 @@ class ArticleController extends Controller
     {
         if ($article->delete()) {
             session()->put('success', 'مقاله با موفقیت حذف شد');
-        }
-        else {
+        } else {
             session()->put('error', 'خطای پایگاه داده');
         }
 
@@ -226,6 +223,7 @@ class ArticleController extends Controller
      * Shows the list of articles to user
      *
      * @param Request $request
+     *
      * @return Response
      */
     public function showList(Request $request)
@@ -256,8 +254,7 @@ class ArticleController extends Controller
             $itemsPerPage = 5;
             $articles     = Article::orderBy('created_at', 'desc')
                 ->paginate($itemsPerPage);
-        }
-        else {
+        } else {
             $articles = Article::where('articlecategory_id', $categoryId)
                 ->orderBy('order')
                 ->get();
@@ -283,8 +280,8 @@ class ArticleController extends Controller
         $metaDescription = "";
         $metaKeywords    = "";
         foreach ($articles as $article) {
-            $metaKeywords    .= $article->title."-";
-            $metaDescription .= $article->title."-";
+            $metaKeywords    .= $article->title . "-";
+            $metaDescription .= $article->title . "-";
         }
 
         return view('article.list',

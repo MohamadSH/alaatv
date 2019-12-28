@@ -13,7 +13,7 @@ trait OrderCommon
      * but firstOrCreate method in laravel just return inserted values and does not return other fields when create and
      * insert new OpenOrder
      *
-     * @param  User  $user
+     * @param User $user
      *
      * @return Order
      */
@@ -32,17 +32,37 @@ trait OrderCommon
         return $openOrder;
     }
 
+    /**
+     * @param int $orderId
+     * @param     $wallets
+     */
+    public function withdrawWalletPendings(int $orderId, $wallets): void
+    {
+        /** @var Wallet $wallet */
+        foreach ($wallets as $wallet) {
+            if ($wallet->balance > 0 && $wallet->pending_to_reduce > 0) {
+                $withdrawResult = $wallet->withdraw($wallet->pending_to_reduce, $orderId);
+                if ($withdrawResult['result']) {
+                    $wallet->update([
+                        'pending_to_reduce' => 0,
+                    ]);
+                }
+            }
+        }
+    }
+
     protected function payOrderCostByWallet($user, $order, $cost)
     {
         $walletPaidFlag = false;
-        $wallets        = $user->wallets->sortByDesc("wallettype_id"); //Chon mikhastim aval az kife poole hedie kam shavad!
+        $wallets        =
+            $user->wallets->sortByDesc("wallettype_id"); //Chon mikhastim aval az kife poole hedie kam shavad!
         /** @var Wallet $wallet */
         foreach ($wallets as $wallet) {
             if ($cost <= 0) {
                 break;
             }
             $amount = $wallet->balance;
-            if($amount <= 0 )
+            if ($amount <= 0)
                 continue;
 
             if ($cost < $amount) {
@@ -65,7 +85,8 @@ trait OrderCommon
     protected function canPayOrderByWallet(User $user, int $cost)
     {
         $canPayByWallet = false;
-        $wallets        = $user->wallets->sortByDesc("wallettype_id"); //Chon mikhastim aval az kife poole hedie kam shavad!
+        $wallets        =
+            $user->wallets->sortByDesc("wallettype_id"); //Chon mikhastim aval az kife poole hedie kam shavad!
 
         /** @var Wallet $wallet */
         foreach ($wallets as $wallet) {
@@ -74,7 +95,7 @@ trait OrderCommon
             }
 
             $amount = $wallet->balance;
-            if($amount <= 0 )
+            if ($amount <= 0)
                 continue;
 
             if ($cost < $amount) {
@@ -84,8 +105,7 @@ trait OrderCommon
             $canWithDraw = $wallet->canWithdraw($amount);
             if ($canWithDraw) {
                 $wallet->pending_to_reduce = $amount;
-                if($wallet->update())
-                {
+                if ($wallet->update()) {
                     $cost           = $cost - $amount;
                     $canPayByWallet = true;
                 }
@@ -98,11 +118,10 @@ trait OrderCommon
         ];
     }
 
-
     /**
-     * @param  Order         $order
-     * @param  Orderproduct  $orderProduct
-     * @param  Product       $product
+     * @param Order        $order
+     * @param Orderproduct $orderProduct
+     * @param Product      $product
      */
     private function applyOrderGifts(Order &$order, Orderproduct $orderProduct, Product $product)
     {
@@ -118,9 +137,9 @@ trait OrderCommon
 
     /** Attaches a gift to the order of this orderproduct
      *
-     * @param  Order         $order
-     * @param  Product       $gift
-     * @param  Orderproduct  $orderproduct
+     * @param Order        $order
+     * @param Product      $gift
+     * @param Orderproduct $orderproduct
      *
      * @return Orderproduct
      */
@@ -139,24 +158,5 @@ trait OrderCommon
                 ["relationtype_id" => config("constants.ORDER_PRODUCT_INTERRELATION_PARENT_CHILD")]);
 
         return $giftOrderproduct;
-    }
-
-    /**
-     * @param int $orderId
-     * @param $wallets
-     */
-    public function withdrawWalletPendings(int $orderId, $wallets): void
-    {
-        /** @var Wallet $wallet */
-        foreach ($wallets as $wallet) {
-            if ($wallet->balance > 0 && $wallet->pending_to_reduce > 0) {
-                $withdrawResult = $wallet->withdraw($wallet->pending_to_reduce, $orderId);
-                if ($withdrawResult['result']) {
-                    $wallet->update([
-                        'pending_to_reduce' => 0,
-                    ]);
-                }
-            }
-        }
     }
 }

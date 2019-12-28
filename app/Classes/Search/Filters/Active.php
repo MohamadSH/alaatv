@@ -13,7 +13,7 @@ use Illuminate\Database\Eloquent\Builder;
 class Active extends FilterAbstract
 {
     protected $attribute = 'active()';
-    
+
     public function apply(Builder $builder, $value, FilterCallback $callback): Builder
     {
         //ToDo

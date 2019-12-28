@@ -24,15 +24,19 @@ class Coupon extends AlaaJsonResource
             return [];
         }
 
-        $this->loadMissing('coupontype' , 'discounttype') ;
+        $this->loadMissing('coupontype', 'discounttype');
 
         return [
-            'name'          => $this->when(isset($this->name) , $this->name),
-            'code'          => $this->when(isset($this->code) , $this->code),
-            'discount'      => $this->discount,
+            'name'         => $this->when(isset($this->name), $this->name),
+            'code'         => $this->when(isset($this->code), $this->code),
+            'discount'     => $this->discount,
 //            'usage_number'  => $this->usageNumber,
-            'coupontype'    => $this->when(isset($this->coupontype_id) , function (){ return new Coupontype($this->coupontype);}),
-            'discounttype'  => $this->when(isset($this->discounttype_id) , function (){ return new Discounttype($this->discounttype);}),
+            'coupontype'   => $this->when(isset($this->coupontype_id), function () {
+                return new Coupontype($this->coupontype);
+            }),
+            'discounttype' => $this->when(isset($this->discounttype_id), function () {
+                return new Discounttype($this->discounttype);
+            }),
         ];
     }
 }

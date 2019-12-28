@@ -14,52 +14,50 @@ class  colossal_mind_mb_keyword_gen
 {
     //declare variables
     var $contents;
-    
+
     var $encoding;
-    
+
     var $lang;
-    
+
     var $ignore; // array; languages to ignore
-    
+
     // generated keywords
     var $keywords;
-    
+
     // minimum word length for inclusion into the single word metakeys
     var $wordLengthMin;
-    
+
     var $wordOccuredMin;
-    
+
     // minimum word length for inclusion into the 2-word phrase metakeys
     var $word2WordPhraseLengthMin;
-    
+
     var $phrase2WordLengthMinOccur;
-    
+
     // minimum word length for inclusion into the 3-word phrase metakeys
     var $word3WordPhraseLengthMin;
-    
+
     // minimum phrase length for inclusion into the 2-word phrase metakeys
     var $phrase2WordLengthMin;
-    
+
     var $phrase3WordLengthMinOccur;
-    
+
     // minimum phrase length for inclusion into the 3-word phrase metakeys
     var $phrase3WordLengthMin;
-    
+
     //------------------------------------------------------------------
     function colossal_mind_mb_keyword_gen($params)
     {
         // language or default language; if not defined
         if (!isset($params['lang'])) {
             $this->lang = 'en_GB';
-        }
-        else {
+        } else {
             $this->lang = $params['lang'];
         } // case sensitive
         // multibyte internal encoding
         if (!isset($params['encoding'])) {
             $this->encoding = 'UTF-8';
-        }
-        else {
+        } else {
             $this->encoding = strtoupper($params['encoding']);
         } // case insensitive
         mb_internal_encoding($this->encoding);
@@ -81,15 +79,13 @@ class  colossal_mind_mb_keyword_gen
         // single keyword
         if (isset($params['min_word_length'])) { // value 0 means disable
             $this->wordLengthMin = $params['min_word_length'];
-        }
-        else {
+        } else {
             // if not set, use this default
             $this->wordLengthMin = 5;
         }
         if (isset($params['min_word_occur'])) {
             $this->wordOccuredMin = $params['min_word_occur'];
-        }
-        else {
+        } else {
             // if not set, use this default
             $this->wordOccuredMin = 3;
         }
@@ -97,14 +93,12 @@ class  colossal_mind_mb_keyword_gen
         // 2-word keyphrase
         if (isset($params['min_2words_length']) && $params['min_2words_length'] == 0) { // value 0 means disable
             $this->word2WordPhraseLengthMin = false;
-        }
-        else {
+        } else {
             if (isset($params['min_2words_length']) && $params['min_2words_length'] !== 0) {
                 $this->word2WordPhraseLengthMin  = $params['min_2words_length'];
                 $this->phrase2WordLengthMin      = $params['min_2words_phrase_length'];
                 $this->phrase2WordLengthMinOccur = $params['min_2words_phrase_occur'];
-            }
-            else {
+            } else {
                 // if not set, use these defaults
                 $this->word2WordPhraseLengthMin  = 4;
                 $this->phrase2WordLengthMin      = 8;
@@ -115,14 +109,12 @@ class  colossal_mind_mb_keyword_gen
         // 3-word keyphrase
         if (isset($params['min_3words_length']) && $params['min_3words_length'] == 0) { // value 0 means disable
             $this->word3WordPhraseLengthMin = false;
-        }
-        else {
+        } else {
             if (isset($params['min_3words_length']) && $params['min_3words_length'] !== 0) {
                 $this->word3WordPhraseLengthMin  = $params['min_3words_length'];
                 $this->phrase3WordLengthMin      = $params['min_3words_phrase_length'];
                 $this->phrase3WordLengthMinOccur = $params['min_3words_phrase_occur'];
-            }
-            else {
+            } else {
                 // if not set, use these defaults
                 $this->word3WordPhraseLengthMin  = 4;
                 $this->phrase3WordLengthMin      = 12;
@@ -131,9 +123,9 @@ class  colossal_mind_mb_keyword_gen
         }
         //--------------------------------------------------------------
     }
-    
+
     //------------------------------------------------------------------
-    
+
     function process_text($str)
     {
         if (preg_match('/^\s*$/', $str)) {
@@ -144,7 +136,7 @@ class  colossal_mind_mb_keyword_gen
         //convert all characters to lower case
         $str = mb_strtolower($str, $this->encoding);
         // some cleanup
-        $str = ' '.$str.' '; // pad that is necessary
+        $str = ' ' . $str . ' '; // pad that is necessary
         $str = preg_replace('#\ [a-z]{1,2}\ #i', ' ', $str); // remove 2 letter words and numbers
         $str = preg_replace('#[0-9\,\.:]#', '',
             $str); // remove numerals, including commas and dots that are part of the numeral
@@ -153,11 +145,11 @@ class  colossal_mind_mb_keyword_gen
         // IGNORE WORDS LIST
         // add, remove, edit as needed
         // make sure that paths are correct and necessary files are uploaded to your server
-        require_once(dirname(__FILE__).'/common-words-'.$this->lang.'.php');
+        require_once(dirname(__FILE__) . '/common-words-' . $this->lang . '.php');
         if (isset($common)) {
             //			var_dump($common);
             foreach ($common as $word) {
-                $str = str_replace(' '.$word.' ', ' ', $str);
+                $str = str_replace(' ' . $word . ' ', ' ', $str);
             }
             unset($common);
         }
@@ -173,8 +165,7 @@ class  colossal_mind_mb_keyword_gen
         foreach ($arrA as $key => $value) {
             if (strpos($value, '.') !== false) {
                 $arrB[$key] = explode('.', $value);
-            }
-            else {
+            } else {
                 $arrB[$key] = $value;
             }
         }
@@ -183,8 +174,7 @@ class  colossal_mind_mb_keyword_gen
         foreach ($arrB as $key => $value) {
             if (strpos($value, '!') !== false) {
                 $arrC[$key] = explode('!', $value);
-            }
-            else {
+            } else {
                 $arrC[$key] = $value;
             }
         }
@@ -193,8 +183,7 @@ class  colossal_mind_mb_keyword_gen
         foreach ($arrC as $key => $value) {
             if (strpos($value, '?') !== false) {
                 $arrD[$key] = explode('?', $value);
-            }
-            else {
+            } else {
                 $arrD[$key] = $value;
             }
         }
@@ -203,8 +192,7 @@ class  colossal_mind_mb_keyword_gen
         foreach ($arrD as $key => $value) {
             if (strpos($value, ',') !== false) {
                 $arrE[$key] = explode(',', $value);
-            }
-            else {
+            } else {
                 $arrE[$key] = $value;
             }
         }
@@ -213,8 +201,7 @@ class  colossal_mind_mb_keyword_gen
         foreach ($arrE as $key => $value) {
             if (strpos($value, ';') !== false) {
                 $arrF[$key] = explode(';', $value);
-            }
-            else {
+            } else {
                 $arrF[$key] = $value;
             }
         }
@@ -223,20 +210,19 @@ class  colossal_mind_mb_keyword_gen
         foreach ($arrF as $key => $value) {
             if (strpos($value, ':') !== false) {
                 $arrG[$key] = explode(':', $value);
-            }
-            else {
+            } else {
                 $arrG[$key] = $value;
             }
         }
         $arrG = $this->array_flatten($arrG);
         unset($arrF);
-        
+
         //--------------------------------------------------------------
         return $arrG;
     }
-    
+
     //------------------------------------------------------------------
-    
+
     function html2txt($str)
     {
         if ($str == '') {
@@ -265,12 +251,12 @@ class  colossal_mind_mb_keyword_gen
         $str      = preg_replace('/&nbsp;/i', ' ', $str); // remove &nbsp;
         $str      = preg_replace('/&[a-z]{2,5};/i', '', $str); // remove &trade;  &copy;
         $str      = preg_replace('/\s\s+/', ' ', $str); // replace multiple white spaces
-        
+
         return trim($str);
     }
-    
+
     //single words
-    
+
     function array_flatten($array, $flat = false)
     {
         if (!is_array($array) || empty($array)) {
@@ -282,17 +268,16 @@ class  colossal_mind_mb_keyword_gen
         foreach ($array as $key => $val) {
             if (is_array($val)) {
                 $flat = $this->array_flatten($val, $flat);
-            }
-            else {
+            } else {
                 $flat[] = $val;
             }
         }
-        
+
         return $flat;
     }
-    
+
     // 2-word phrases
-    
+
     function get_keywords()
     {
         if ($this->contents === false) {
@@ -306,7 +291,7 @@ class  colossal_mind_mb_keyword_gen
             $cnt = count($onew_arr);
             for ($i = 0; $i < $cnt - 1; $i++) {
                 foreach ($twow_arr as $key => $phrase) {
-                    if ($onew_arr[$i].' '.$onew_arr[$i + 1] === $phrase) {
+                    if ($onew_arr[$i] . ' ' . $onew_arr[$i + 1] === $phrase) {
                         unset($twow_arr[$key]);
                     }
                 }
@@ -317,7 +302,7 @@ class  colossal_mind_mb_keyword_gen
             $cnt = count($onew_arr);
             for ($i = 0; $i < $cnt - 2; $i++) {
                 foreach ($thrw_arr as $key => $phrase) {
-                    if ($onew_arr[$i].' '.$onew_arr[$i + 1].' '.$onew_arr[$i + 2] === $phrase) {
+                    if ($onew_arr[$i] . ' ' . $onew_arr[$i + 1] . ' ' . $onew_arr[$i + 2] === $phrase) {
                         unset($thrw_arr[$key]);
                     }
                 }
@@ -330,11 +315,11 @@ class  colossal_mind_mb_keyword_gen
                 for ($i = 0; $i < $cnt - 1; $i++) {
                     for ($j = $i + 1; $j < $cnt; $j++) {
                         if (array_key_exists($i, $onew_arr) && array_key_exists($j, $onew_arr)) {
-                            if ($onew_arr[$i].'s' == $onew_arr[$j]) {
+                            if ($onew_arr[$i] . 's' == $onew_arr[$j]) {
                                 unset($onew_arr[$j]);
                             }
                             if (array_key_exists($j, $onew_arr)) {
-                                if ($onew_arr[$i] == $onew_arr[$j].'s') {
+                                if ($onew_arr[$i] == $onew_arr[$j] . 's') {
                                     unset($onew_arr[$i]);
                                 }
                             }
@@ -345,30 +330,27 @@ class  colossal_mind_mb_keyword_gen
         }
         // ready for output - implode arrays
         if ($onew_arr !== false) {
-            $onew_kw = implode(',', $onew_arr).',';
-        }
-        else {
+            $onew_kw = implode(',', $onew_arr) . ',';
+        } else {
             $onew_kw = '';
         }
         if ($twow_arr !== false) {
-            $twow_kw = implode(',', $twow_arr).',';
-        }
-        else {
+            $twow_kw = implode(',', $twow_arr) . ',';
+        } else {
             $twow_kw = '';
         }
         if ($thrw_arr !== false) {
-            $thrw_kw = implode(',', $thrw_arr).',';
-        }
-        else {
+            $thrw_kw = implode(',', $thrw_arr) . ',';
+        } else {
             $thrw_kw = '';
         }
-        $keywords = $onew_kw.$twow_kw.$thrw_kw;
-        
+        $keywords = $onew_kw . $twow_kw . $thrw_kw;
+
         return rtrim($keywords, ',');
     }
-    
+
     // 3-word phrases
-    
+
     function parse_words()
     {
         if ($this->wordLengthMin === 0) {
@@ -389,12 +371,12 @@ class  colossal_mind_mb_keyword_gen
         }
         // count the words; this is the real magic!
         $k = array_count_values($k);
-        
+
         return $this->occure_filter($k, $this->wordOccuredMin);
     }
-    
+
     //------------------------------------------------------------------
-    
+
     function strip_punctuations($str)
     {
         if ($str == '') {
@@ -497,12 +479,12 @@ class  colossal_mind_mb_keyword_gen
             '”',
         ];
         $str          = str_replace($punctuations, ' ', $str);
-        
+
         return preg_replace('/\s\s+/', ' ', $str);
     }
     //------------------------------------------------------------------
     // converts any-dimensional to 1-dimensional array
-    
+
     function occure_filter($array, $min)
     {
         $cnt = 0;
@@ -515,12 +497,12 @@ class  colossal_mind_mb_keyword_gen
         if (isset($new)) {
             return $new;
         }
-        
+
         return false;
     }
-    
+
     //------------------------------------------------------------------
-    
+
     function parse_2words()
     {
         if ($this->word2WordPhraseLengthMin === false) {
@@ -538,7 +520,7 @@ class  colossal_mind_mb_keyword_gen
                 if ((mb_strlen($arr[$a][$i],
                             $this->encoding) >= $this->word2WordPhraseLengthMin) && (mb_strlen($arr[$a][$i + 1],
                             $this->encoding) >= $this->word2WordPhraseLengthMin)) {
-                    $y[$z] = $arr[$a][$i]." ".$arr[$a][$i + 1];
+                    $y[$z] = $arr[$a][$i] . " " . $arr[$a][$i + 1];
                     $z++;
                 }
             }
@@ -548,12 +530,12 @@ class  colossal_mind_mb_keyword_gen
         }
         // count the words; this is the real magic!
         $y = array_count_values($y);
-        
+
         return $this->occure_filter($y, $this->phrase2WordLengthMinOccur);
     }
-    
+
     //------------------------------------------------------------------
-    
+
     function parse_3words()
     {
         if ($this->word3WordPhraseLengthMin === false) {
@@ -572,7 +554,7 @@ class  colossal_mind_mb_keyword_gen
                             $this->encoding) >= $this->word3WordPhraseLengthMin) && (mb_strlen($arr[$a][$i + 1],
                             $this->encoding) >= $this->word3WordPhraseLengthMin) && (mb_strlen($arr[$a][$i + 2],
                             $this->encoding) >= $this->word3WordPhraseLengthMin)) {
-                    $y[$z] = $arr[$a][$i]." ".$arr[$a][$i + 1]." ".$arr[$a][$i + 2];
+                    $y[$z] = $arr[$a][$i] . " " . $arr[$a][$i + 1] . " " . $arr[$a][$i + 2];
                     $z++;
                 }
             }
@@ -582,12 +564,12 @@ class  colossal_mind_mb_keyword_gen
         }
         // count the words; this is the real magic!
         $y = array_count_values($y);
-        
+
         return $this->occure_filter($y, $this->phrase3WordLengthMinOccur);
     }
-    
+
     //------------------------------------------------------------------
-    
+
     function remove_duplicate_keywords($str)
     {
         if ($str == '') {
@@ -604,7 +586,7 @@ class  colossal_mind_mb_keyword_gen
         $kw_arr = array_unique($kw_arr);
         // remove duplicate ENGLISH plural words
         if (substr($this->lang, 0, 2) != 'en') {
-            
+
             return implode(',', $kw_arr);
         }
         $cnt = count($kw_arr);
@@ -614,22 +596,20 @@ class  colossal_mind_mb_keyword_gen
                     $kw_arr = array_values($kw_arr);
                     continue;
                 }
-                if ($kw_arr[$i].'s' == $kw_arr[$j]) {
+                if ($kw_arr[$i] . 's' == $kw_arr[$j]) {
                     unset($kw_arr[$j]);
-                }
-                else {
-                    if ($kw_arr[$i] == $kw_arr[$j].'s') {
+                } else {
+                    if ($kw_arr[$i] == $kw_arr[$j] . 's') {
                         unset($kw_arr[$i]);
                     } //--------------
                     else {
                         if (preg_match('#ss$#', $kw_arr[$j])) {
-                            if ($kw_arr[$i] === $kw_arr[$j].'es') {
+                            if ($kw_arr[$i] === $kw_arr[$j] . 'es') {
                                 unset($kw_arr[$i]);
                             } // addresses VS address
-                        }
-                        else {
+                        } else {
                             if (preg_match('#ss$#', $kw_arr[$i])) {
-                                if ($kw_arr[$i].'es' === $kw_arr[$j]) {
+                                if ($kw_arr[$i] . 'es' === $kw_arr[$j]) {
                                     unset($kw_arr[$j]);
                                 } // address VS addresses
                             }
@@ -640,10 +620,10 @@ class  colossal_mind_mb_keyword_gen
             }
             $kw_arr = array_values($kw_arr);
         }
-        
+
         return implode(',', $kw_arr);
     }
-    
+
     //------------------------------------------------------------------
     function removeDuplicateKw($keywordsStr)
     {

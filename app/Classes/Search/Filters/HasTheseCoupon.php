@@ -13,9 +13,9 @@ use Illuminate\Database\Eloquent\Builder;
 class HasTheseCoupon extends FilterAbstract
 {
     protected $attribute = 'coupon_id';
-    
+
     protected $relation = 'openOrders';
-    
+
     public function apply(Builder $builder, $value, FilterCallback $callback): Builder
     {
         return $builder->whereHas($this->relation, function ($q) use ($value) {

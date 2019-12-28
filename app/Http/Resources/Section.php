@@ -26,7 +26,7 @@ class Section extends AlaaJsonResource
 
         return [
             'id'   => $this->id,
-            'name' => $this->when(isset($this->name) , $this->name) ,
+            'name' => $this->when(isset($this->name), $this->name),
         ];
     }
 }

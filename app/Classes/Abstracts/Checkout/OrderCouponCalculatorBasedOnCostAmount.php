@@ -19,19 +19,19 @@ abstract class OrderCouponCalculatorBasedOnCostAmount extends CheckoutProcessor
         if (!isset($temporaryTotalRawPriceWhichHasDiscount)) {
             throw new Exception('Temporary total price with discount has not been set');
         }
-        
+
         if (!isset($couponDiscountCostAmount)) {
             throw new Exception('Coupon discount cost amount has not been set');
         }
-        
+
         $totalPriceWithDiscount = $this->calculateDiscount($couponDiscountCostAmount,
             $temporaryTotalRawPriceWhichHasDiscount);
-        
+
         $cashier->setTotalPriceWithDiscount($totalPriceWithDiscount);
-        
+
         return $this->next($cashier);
     }
-    
+
     /**
      * Calculates discount for passed price and coupon discount type
      *

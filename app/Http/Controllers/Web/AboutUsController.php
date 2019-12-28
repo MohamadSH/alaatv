@@ -11,9 +11,9 @@ use Illuminate\Http\Request;
 class AboutUsController extends Controller
 {
     use MetaCommon;
-    
+
     private $setting;
-    
+
     public function __construct(Websitesetting $setting)
     {
         $this->setting = $setting->setting;
@@ -30,7 +30,7 @@ class AboutUsController extends Controller
                 'h'        => '100',
                 'filename' => $this->setting->site->siteLogo,
             ]), '100', '100', null));
-        
+
         return view("pages.aboutUs");
     }
 }

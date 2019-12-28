@@ -10,6 +10,7 @@ namespace App\Classes\Format;
 
 use App\Block;
 use App\Collection\BlockCollection;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
 
 class webBlockCollectionFormatter implements BlockCollectionFormatter
@@ -25,9 +26,9 @@ class webBlockCollectionFormatter implements BlockCollectionFormatter
     }
 
     /**
-     * @param  BlockCollection  $blocks
+     * @param BlockCollection $blocks
      *
-     * @return \Illuminate\Support\Collection
+     * @return Collection
      */
     public function format(BlockCollection $blocks)
     {
@@ -50,14 +51,14 @@ class webBlockCollectionFormatter implements BlockCollectionFormatter
     }
 
     /**
-     * @param  Block  $block
+     * @param Block $block
      *
      * @return array
      */
     private function blockFormatter(Block $block): array
     {
-        return Cache::tags(['block' , 'block_',$block->id])
-            ->remember('block:formatBlock:'.$block->id, config('constants.CACHE_600'), function () use ($block) {
+        return Cache::tags(['block', 'block_', $block->id])
+            ->remember('block:formatBlock:' . $block->id, config('constants.CACHE_600'), function () use ($block) {
                 $section = [
                     "name"            => $block->class,
                     "displayName"     => $block->title,

@@ -23,20 +23,21 @@ class UnfavoriteEventListener
     /**
      * Handle the event.
      *
-     * @param  UnfavoriteEvent  $event
+     * @param UnfavoriteEvent $event
+     *
      * @return void
      */
     public function handle(UnfavoriteEvent $event)
     {
-        if($event instanceof Content){
-            Cache::tags('user_'.$event->user->id.'_favoriteContents')->flush();
-        }elseif($event instanceof Contentset){
-            Cache::tags('user_'.$event->user->id.'_favoriteSets')->flush();
-        }elseif($event instanceof Product){
-            Cache::tags('user_'.$event->user->id.'_favoriteProducts')->flush();
-        }else{
-            Cache::tags('user_'.$event->user->id.'_favorites')->flush();
+        if ($event instanceof Content) {
+            Cache::tags('user_' . $event->user->id . '_favoriteContents')->flush();
+        } else if ($event instanceof Contentset) {
+            Cache::tags('user_' . $event->user->id . '_favoriteSets')->flush();
+        } else if ($event instanceof Product) {
+            Cache::tags('user_' . $event->user->id . '_favoriteProducts')->flush();
+        } else {
+            Cache::tags('user_' . $event->user->id . '_favorites')->flush();
         }
-        Cache::tags('favorite_'.$event->favorable->id)->flush();
+        Cache::tags('favorite_' . $event->favorable->id)->flush();
     }
 }

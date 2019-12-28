@@ -46,7 +46,7 @@ class LotteryWinner extends Notification implements ShouldQueue
     /**
      * Create a new notification instance.
      *
-     * @param  \App\Lottery  $lottery
+     * @param Lottery        $lottery
      * @param                $rank
      * @param                $prize
      * @param                $memorial
@@ -62,7 +62,7 @@ class LotteryWinner extends Notification implements ShouldQueue
     /**
      * Get the notification's delivery channels.
      *
-     * @param  mixed  $notifiable
+     * @param mixed $notifiable
      *
      * @return array
      */
@@ -95,20 +95,20 @@ class LotteryWinner extends Notification implements ShouldQueue
         $gender      = $this->getGender();
 
         if (strlen($prize) > 0) {
-            $messageCore = "شما برنده ".$rank." در قرعه کشی ".$lotteryName." شده اید. جایزه شما ".$prize." می باشد و در سریع ترین زمان به شما تقدیم خواهد شد.";
-        }
-        else {
+            $messageCore =
+                "شما برنده " . $rank . " در قرعه کشی " . $lotteryName . " شده اید. جایزه شما " . $prize . " می باشد و در سریع ترین زمان به شما تقدیم خواهد شد.";
+        } else {
             if (strlen($memorial) > 0) {
-                $messageCore = "شما در قرعه کشی ".$lotteryName." شرکت داده شدید و متاسفانه چیزی برنده نشدید. به رسم یادبود ".$memorial." تقدیمتان شده است.";
-            }
-            else {
-                $messageCore = "شما در قرعه کشی ".$lotteryName." شرکت داده شدید و متاسفانه برنده نشدید.";
+                $messageCore =
+                    "شما در قرعه کشی " . $lotteryName . " شرکت داده شدید و متاسفانه چیزی برنده نشدید. به رسم یادبود " . $memorial . " تقدیمتان شده است.";
+            } else {
+                $messageCore = "شما در قرعه کشی " . $lotteryName . " شرکت داده شدید و متاسفانه برنده نشدید.";
             }
         }
 
-        $messageCore = $messageCore."\n"."آلاء"."\n"."alaatv.com";
+        $messageCore = $messageCore . "\n" . "آلاء" . "\n" . "alaatv.com";
 
-        return "سلام ".$gender.$this->user->full_name."\n".$messageCore;
+        return "سلام " . $gender . $this->user->full_name . "\n" . $messageCore;
     }
 
     /**

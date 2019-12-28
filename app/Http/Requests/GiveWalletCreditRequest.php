@@ -24,9 +24,9 @@ class GiveWalletCreditRequest extends FormRequest
     public function rules()
     {
         return [
-            'mobile'        => 'required',
-            'nationalCode'  => 'required',
-            'credit'        => 'required|numeric|min:100',
+            'mobile'       => 'required',
+            'nationalCode' => 'required',
+            'credit'       => 'required|numeric|min:100',
         ];
     }
 }

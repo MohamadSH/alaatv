@@ -6,7 +6,7 @@
                 <div class="panel-heading">
                     <i class="fa fa-ticket">تیکت های من</i>
                 </div>
-            
+
                 <div class="panel-body">
                     @if ($tickets->isEmpty())
                         <p>شما تا کنون تیکتی ایجاد نکردید.</p>
@@ -45,7 +45,7 @@
                             @endforeach
                             </tbody>
                         </table>
-                    
+
                         {{ $tickets->render() }}
                     @endif
                 </div>

@@ -16,9 +16,9 @@ class AlaaOrderPayablePriceByWalletCalculator extends OrderPayablePriceByWalletC
     protected function calculateAmountPaidByWallet(Order $order, $finalPrice): int
     {
         $donateCost = $order->donate_amount;
-        
+
         $payableByWallet = $finalPrice - $donateCost;
-        
+
         return $payableByWallet;
     }
 }

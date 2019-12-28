@@ -13,7 +13,7 @@ use App\Classes\Search\RedisTagManagerViaApi;
 class ContentTagManagerViaApi extends RedisTagManagerViaApi
 {
     protected $bucket = "content";
-    
+
     /**
      * RedisTagViaApi constructor.
      */
@@ -24,17 +24,17 @@ class ContentTagManagerViaApi extends RedisTagManagerViaApi
         $this->limit_WithScores = 1;
         $this->limit_PageNum    = 1;
     }
-    
+
     public function getVideos(array $tags)
     {
         return $this->getTaggable(array_merge($tags, ['فیلم']));
     }
-    
+
     public function getPamphlets(array $tags)
     {
         return $this->getTaggable(array_merge($tags, ['جزوه']));
     }
-    
+
     public function getArticles(array $tags)
     {
         return $this->getTaggable(array_merge($tags, ['مقاله']));

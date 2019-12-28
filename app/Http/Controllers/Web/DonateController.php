@@ -2,16 +2,18 @@
 
 namespace App\Http\Controllers\Web;
 
-use App\Order;
-use App\Product;
-use Carbon\Carbon;
-use App\Orderproduct;
-use App\Websitesetting;
-use App\Traits\DateTrait;
-use App\Traits\MetaCommon;
-use Illuminate\Http\Request;
 use App\Classes\SEO\SeoDummyTags;
 use App\Http\Controllers\Controller;
+use App\Order;
+use App\Orderproduct;
+use App\Product;
+use App\Traits\DateTrait;
+use App\Traits\MetaCommon;
+use App\Websitesetting;
+use Carbon\Carbon;
+use Illuminate\Database\Query\Builder;
+use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 
 class DonateController extends Controller
@@ -60,11 +62,11 @@ class DonateController extends Controller
         array_push($donateProductArray, Product::CUSTOM_DONATE_PRODUCT);
         $orders = $this->repo_getOrders($donateProductArray);
 
-        list($currentJalaliYear, $currentJalaliMonth, $currentJalaliDay) = $this->todayJalaliSplittedDate();
+        [$currentJalaliYear, $currentJalaliMonth, $currentJalaliDay] = $this->todayJalaliSplittedDate();
         $currentJalaliMonthString = $this->convertToJalaliMonth($currentJalaliMonth);
         $currentJalaliMonthDays   = $this->getJalaliMonthDays($currentJalaliMonthString);
 
-        $currentJalaliDateString = $currentJalaliDay." ".$currentJalaliMonthString;
+        $currentJalaliDateString = $currentJalaliDay . " " . $currentJalaliMonthString;
 
         /** THIS WEEK/TODAY LATEST DONATES **/
         $latestDonors = collect();
@@ -73,7 +75,7 @@ class DonateController extends Controller
             if (isset($donate->user->id)) {
                 $firstName = $donate->user->firstName;
                 $lastName  = $donate->user->lastName;
-                $avatar    = $donate->user->getCustomSizePhoto(150,150);
+                $avatar    = $donate->user->getCustomSizePhoto(150, 150);
             }
 
             $donateAmount = $donate->orderproducts(config('constants.ORDER_PRODUCT_TYPE_DEFAULT'))
@@ -106,7 +108,7 @@ class DonateController extends Controller
             if (isset($maxDonate->order->user->id)) {
                 $firstName = $maxDonate->order->user->firstName;
                 $lastName  = $maxDonate->order->user->lastName;
-                $avatar    = $donate->user->getCustomSizePhoto(150,150);
+                $avatar    = $donate->user->getCustomSizePhoto(150, 150);
             }
 
             $donateAmount = $maxDonate->cost;
@@ -129,7 +131,7 @@ class DonateController extends Controller
         $totalIncome = 0;
 
         if ($currentJalaliMonthString == $firstMonth) {
-            $months=array();
+            $months        = [];
             $currentDayKey = array_search($currentJalaliDay, $allDays);
             $days          = array_splice($allDays, 0, $currentDayKey + 1);
             $date          = $monthToPeriodConvert->where("month", $currentJalaliMonthString)->first();
@@ -144,11 +146,11 @@ class DonateController extends Controller
                     $mehrGregorianMonth++;
                     $mehrGregorianEndDay = $mehrGregorianEndDay - 30;
                     if ($mehrGregorianEndDay < 10) {
-                        $mehrGregorianEndDay = "0".$mehrGregorianEndDay;
+                        $mehrGregorianEndDay = "0" . $mehrGregorianEndDay;
                     }
                 }
                 if ($mehrGregorianMonth < 10) {
-                    $mehrGregorianMonth = "0".$mehrGregorianMonth;
+                    $mehrGregorianMonth = "0" . $mehrGregorianMonth;
                 }
 
                 $donates = $orders->where("completed_at", ">=",
@@ -164,12 +166,12 @@ class DonateController extends Controller
                     $totalMonthIncome += $amount;
                 }
                 $dayRatio        = 1 / $currentJalaliMonthDays;
-                $totalMonthSpend = (int) round($MONTH_SPEND * $dayRatio);
+                $totalMonthSpend = (int)round($MONTH_SPEND * $dayRatio);
 
                 $totalIncome += $totalMonthIncome;
                 $totalSpend  += $totalMonthSpend;
 
-                $monthData = $day." ".$currentJalaliMonthString;
+                $monthData = $day . " " . $currentJalaliMonthString;
                 $chartData->push([
                     "month"       => $monthData,
                     "totalIncome" => $totalMonthIncome,
@@ -201,9 +203,8 @@ class DonateController extends Controller
                         }
                         if ($month == $currentJalaliMonthString) {
                             $dayRatio        = $currentJalaliDay / $currentJalaliMonthDays;
-                            $totalMonthSpend = (int) round($MONTH_SPEND * $dayRatio);
-                        }
-                        else {
+                            $totalMonthSpend = (int)round($MONTH_SPEND * $dayRatio);
+                        } else {
                             $totalMonthSpend = $MONTH_SPEND;
                         }
                         break;
@@ -211,7 +212,7 @@ class DonateController extends Controller
                 $totalIncome += $totalMonthIncome;
                 $totalSpend  += $totalMonthSpend;
                 if ($month == $currentJalaliMonthString) {
-                    $monthData = $currentJalaliDay." ".$month;
+                    $monthData = $currentJalaliDay . " " . $month;
                 } else {
                     $monthData = $month;
                 }
@@ -236,9 +237,9 @@ class DonateController extends Controller
     }
 
     /**
-     * @param  array  $donateProductArray
+     * @param array $donateProductArray
      *
-     * @return \App\Order[]|\Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection|\Illuminate\Database\Query\Builder[]|\Illuminate\Support\Collection
+     * @return Order[]|\Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection|Builder[]|Collection
      */
     private function repo_getOrders(array $donateProductArray)
     {
@@ -250,28 +251,6 @@ class DonateController extends Controller
                 config("constants.PAYMENT_STATUS_PAID"))
             ->orderBy("completed_at", "DESC")
             ->get();
-    }
-
-    /**
-     * @param  array  $thisMonthDonates
-     * @param  array  $donateProductArray
-     * @param  int    $LATEST_MAX_NUMBER
-     *
-     * @return \Illuminate\Support\Collection
-     */
-    private function repo_MaxDonates(array $thisMonthDonates, array $donateProductArray, int $LATEST_MAX_NUMBER): \Illuminate\Support\Collection
-    {
-        $maxDonates = Orderproduct::whereIn("order_id", $thisMonthDonates)
-            ->where(function ($q) {
-                $q->where("orderproducttype_id", config('constants.ORDER_PRODUCT_TYPE_DEFAULT'));
-            })
-            ->whereIn("product_id", $donateProductArray)
-            ->orderBy("cost", "DESC")
-            ->orderBy("created_at", "DESC")
-            ->take($LATEST_MAX_NUMBER)
-            ->get();
-
-        return $maxDonates;
     }
 
     /**
@@ -290,8 +269,30 @@ class DonateController extends Controller
     }
 
     /**
+     * @param array $thisMonthDonates
+     * @param array $donateProductArray
+     * @param int   $LATEST_MAX_NUMBER
+     *
+     * @return Collection
+     */
+    private function repo_MaxDonates(array $thisMonthDonates, array $donateProductArray, int $LATEST_MAX_NUMBER): Collection
+    {
+        $maxDonates = Orderproduct::whereIn("order_id", $thisMonthDonates)
+            ->where(function ($q) {
+                $q->where("orderproducttype_id", config('constants.ORDER_PRODUCT_TYPE_DEFAULT'));
+            })
+            ->whereIn("product_id", $donateProductArray)
+            ->orderBy("cost", "DESC")
+            ->orderBy("created_at", "DESC")
+            ->take($LATEST_MAX_NUMBER)
+            ->get();
+
+        return $maxDonates;
+    }
+
+    /**
      * @param         $donate
-     * @param  array  $donateProductArray
+     * @param array   $donateProductArray
      *
      * @return mixed
      */

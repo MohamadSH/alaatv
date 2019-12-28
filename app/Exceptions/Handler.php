@@ -4,16 +4,16 @@ namespace App\Exceptions;
 
 use Auth;
 use Exception;
+use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Auth\AuthenticationException;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Session;
-use Illuminate\Auth\AuthenticationException;
 use Illuminate\Session\TokenMismatchException;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Validation\ValidationException;
-use Illuminate\Auth\Access\AuthorizationException;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
-use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class Handler extends ExceptionHandler
@@ -31,7 +31,7 @@ class Handler extends ExceptionHandler
         TokenMismatchException::class,
         ValidationException::class,
     ];
-    
+
     /**
      * A list of the inputs that are never flashed for validation exceptions.
      *
@@ -41,11 +41,11 @@ class Handler extends ExceptionHandler
         'password',
         'password_confirmation',
     ];
-    
+
     /**
      * Report or log an exception.
      *
-     * @param  Exception  $exception
+     * @param Exception $exception
      *
      * @return void
      */
@@ -53,12 +53,12 @@ class Handler extends ExceptionHandler
     {
         parent::report($exception);
     }
-    
+
     /**
      * Render an exception into an HTTP response.
      *
-     * @param  Request    $request
-     * @param  Exception  $exception
+     * @param Request   $request
+     * @param Exception $exception
      *
      * @return Response
      */
@@ -67,10 +67,10 @@ class Handler extends ExceptionHandler
         if ($exception instanceof TokenMismatchException) {
             Auth::logout();
             Session::flush();
-            
+
             return redirect()->back();
         }
-        
+
         if ($exception instanceof ModelNotFoundException && $request->wantsJson()) {
             return response()->json([
                 'error' => 'Resource not found',
@@ -81,22 +81,22 @@ class Handler extends ExceptionHandler
                 'error' => 'not found',
             ], 404);
         }
-    
+
         if ($exception instanceof HttpException && $request->wantsJson()) {
             return response()->json([
                 'error' => $exception->getMessage(),
             ], $exception->getStatusCode());
-        
+
         }
-        
+
         return parent::render($request, $exception);
     }
-    
+
     /**
      * Convert an authentication exception into an unauthenticated response.
      *
-     * @param  Request                  $request
-     * @param  AuthenticationException  $exception
+     * @param Request                 $request
+     * @param AuthenticationException $exception
      *
      * @return Response
      */
@@ -105,7 +105,7 @@ class Handler extends ExceptionHandler
         if ($request->expectsJson()) {
             return response()->json(['error' => 'Unauthenticated.'], 401);
         }
-        
+
         return redirect()->guest('login');
     }
 }

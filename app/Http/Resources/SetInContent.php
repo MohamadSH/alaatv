@@ -31,12 +31,12 @@ class SetInContent extends AlaaJsonResource
         }
 
         return [
-            'id'                        => $this->id,
-            'redirect_url'              => $this->when(isset($this->redirectUrl) , $this->redirectUrl),
-            'title'                      => $this->when(isset($this->name) , $this->name),
-            'short_title'                => $this->when(isset($this->shortName) , $this->shortName),
-            'photo'                     => $this->when(isset($this->photo) , $this->photo),
-            'url'                       => new Url($this),
+            'id'           => $this->id,
+            'redirect_url' => $this->when(isset($this->redirectUrl), $this->redirectUrl),
+            'title'        => $this->when(isset($this->name), $this->name),
+            'short_title'  => $this->when(isset($this->shortName), $this->shortName),
+            'photo'        => $this->when(isset($this->photo), $this->photo),
+            'url'          => new Url($this),
         ];
     }
 }

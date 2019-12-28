@@ -39,7 +39,7 @@ class sendLink extends Notification implements ShouldQueue
     /**
      * Get the notification's delivery channels.
      *
-     * @param  mixed  $notifiable
+     * @param mixed $notifiable
      *
      * @return array
      */
@@ -82,9 +82,9 @@ class sendLink extends Notification implements ShouldQueue
     /**
      * @return mixed
      */
-    private function getUserFullName():string
+    private function getUserFullName(): string
     {
         $userFullName = optional($this->user)->full_name;
-        return (isset($userFullName))?$userFullName:'' ;
+        return (isset($userFullName)) ? $userFullName : '';
     }
 }

@@ -5,9 +5,9 @@ namespace App\Http\Controllers\Api;
 use App\Classes\Search\ProductSearch;
 use App\Collection\ProductCollection;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\ProductIndexRequest;
 use App\Http\Resources\Price as PriceResource;
 use App\Http\Resources\Product as ProductResource;
+use App\Http\Resources\ProductInBlock as ProductInSearch;
 use App\Product;
 use App\Traits\ProductCommon;
 use Carbon\Carbon;
@@ -19,21 +19,22 @@ class ProductController extends Controller
 {
     use ProductCommon;
 
-    public function indexV2(ProductIndexRequest $request, ProductSearch $productSearch)
+    public function indexV2(Request $request, ProductSearch $productSearch)
     {
-        $filters       = $request->all();
-        $pageName      = 'productPage';
-        $filters['doesntHaveGrand']  = 1;
-        $filters['active'] = 1 ;
+        //TODO:// validate
+        $filters                    = $request->all();
+        $pageName                   = 'productPage';
+        $filters['doesntHaveGrand'] = 1;
+        $filters['active']          = 1;
 
         $productSearch->setPageName($pageName);
-        if($request->has('length')){
+        if ($request->has('length')) {
             $productSearch->setNumberOfItemInEachPage($request->get('length'));
         }
 
         $productResult = $productSearch->get($filters);
 
-        return ProductResource::collection($productResult)->response();
+        return ProductInSearch::collection($productResult);
     }
 
     /**
@@ -46,8 +47,8 @@ class ProductController extends Controller
      */
     public function show(Request $request, Product $product)
     {
-        if($product->id == 385){
-            return redirect( route('api.v1.product.show' , Product::RAHE_ABRISHAM ),
+        if ($product->id == 385) {
+            return redirect(route('api.v1.product.show', Product::RAHE_ABRISHAM),
                 Response::HTTP_FOUND, $request->headers->all());
         }
 
@@ -64,7 +65,7 @@ class ProductController extends Controller
         return response()->json($product);
     }
 
-    public function showV2(Request $request , Product $product)
+    public function showV2(Request $request, Product $product)
     {
         if (!is_null($product->redirectUrl)) {
             return redirect(convertRedirectUrlToApiVersion($product->redirectUrl),
@@ -76,14 +77,14 @@ class ProductController extends Controller
                 $request->headers->all());
         }
 
-        return (new ProductResource($product))->response();
+        return (new ProductResource($product));
     }
 
     /**
      *
      *
      * @param Request $request
-     * @param  Product                   $grandProduct
+     * @param Product $grandProduct
      *
      * @return Response
      */
@@ -95,9 +96,10 @@ class ProductController extends Controller
 
         $user = $request->user('alaatv');
 
-        $key = 'product:refreshPrice:'.$grandProduct->cacheKey()."-user\\".(isset($user) && !is_null($user) ? $user->cacheKey() : '')."-mainAttributeValues\\".(isset($mainAttributeValues) ? implode('',
-                $mainAttributeValues) : '-')."-subProducts\\".(isset($selectedSubProductIds) ? implode('',
-                $selectedSubProductIds) : '-')."-extraAttributeValues\\".(isset($extraAttributeValues) ? implode('',
+        $key =
+            'product:refreshPrice:' . $grandProduct->cacheKey() . "-user\\" . (isset($user) && !is_null($user) ? $user->cacheKey() : '') . "-mainAttributeValues\\" . (isset($mainAttributeValues) ? implode('',
+                $mainAttributeValues) : '-') . "-subProducts\\" . (isset($selectedSubProductIds) ? implode('',
+                $selectedSubProductIds) : '-') . "-extraAttributeValues\\" . (isset($extraAttributeValues) ? implode('',
                 $extraAttributeValues) : '-');
 
         return Cache::tags('bon')
@@ -145,23 +147,20 @@ class ProductController extends Controller
                         if ($product->isInStock()) {
                             if (isset($user)) {
                                 $costArray = $product->calculatePayablePrice($user);
-                            }
-                            else {
+                            } else {
                                 $costArray = $product->calculatePayablePrice();
                             }
 
                             $cost            += $costArray['cost'];
                             $costForCustomer += $costArray['customerPrice'];
-                        }
-                        else {
+                        } else {
                             $outOfStocks->push([
                                 'id'   => $product->id,
                                 'name' => $product->name,
                             ]);
                         }
                     }
-                }
-                else {
+                } else {
                     $error     = true;
                     $errorCode = Response::HTTP_NOT_FOUND;
                     $errorText = 'No products found';
@@ -196,13 +195,14 @@ class ProductController extends Controller
 
     public function refreshPriceV2(Request $request, Product $grandProduct)
     {
-        $mainAttributeValues = $request->get('mainAttributeValues');
+        $mainAttributeValues   = $request->get('mainAttributeValues');
         $selectedSubProductIds = $request->get('products');
-        $extraAttributeValues = $request->get('extraAttributeValues');
+        $extraAttributeValues  = $request->get('extraAttributeValues');
 
         $user = $request->user('alaatv');
 
-        $key = 'product:refreshPrice:' . $grandProduct->cacheKey() . "-user\\" . (isset($user) && !is_null($user) ? $user->cacheKey() : '') . "-mainAttributeValues\\" . (isset($mainAttributeValues) ? implode('',
+        $key =
+            'product:refreshPrice:' . $grandProduct->cacheKey() . "-user\\" . (isset($user) && !is_null($user) ? $user->cacheKey() : '') . "-mainAttributeValues\\" . (isset($mainAttributeValues) ? implode('',
                 $mainAttributeValues) : '-') . "-subProducts\\" . (isset($selectedSubProductIds) ? implode('',
                 $selectedSubProductIds) : '-') . "-extraAttributeValues\\" . (isset($extraAttributeValues) ? implode('',
                 $extraAttributeValues) : '-');
@@ -243,10 +243,10 @@ class ProductController extends Controller
                         break;
                 }
 
-                $cost = 0;
+                $cost            = 0;
                 $costForCustomer = 0;
-                $outOfStocks = collect();
-                $error = false;
+                $outOfStocks     = collect();
+                $error           = false;
                 if ($intendedProducts->isNotEmpty()) {
                     foreach ($intendedProducts as $product) {
                         if ($product->isInStock()) {
@@ -256,7 +256,7 @@ class ProductController extends Controller
                                 $costArray = $product->calculatePayablePrice();
                             }
 
-                            $cost += $costArray['cost'];
+                            $cost            += $costArray['cost'];
                             $costForCustomer += $costArray['customerPrice'];
                         } else {
                             $outOfStocks->push([
@@ -266,7 +266,7 @@ class ProductController extends Controller
                         }
                     }
                 } else {
-                    $error = true;
+                    $error     = true;
                     $errorCode = Response::HTTP_NOT_FOUND;
                     $errorText = 'No products found';
                 }
@@ -302,30 +302,30 @@ class ProductController extends Controller
         $products = Product::active()->whereNull('grand_id');
         if (!is_null($since)) {
             $products->where(function ($q) use ($since) {
-                    $q->where('created_at' , '>=' , Carbon::createFromTimestamp($since))
-                        ->orWhere('updated_at' , '>=' , Carbon::createFromTimestamp($since));
+                $q->where('created_at', '>=', Carbon::createFromTimestamp($since))
+                    ->orWhere('updated_at', '>=', Carbon::createFromTimestamp($since));
             });
         }
         $products = $products->paginate(25, ['*'], 'page');
 
         $items = [];
-        foreach ($products as $key=>$product) {
-            $items[$key]['id'] = $product->id;
-            $items[$key]['type'] = 'product';
-            $items[$key]['name'] = $product->name;
-            $items[$key]['link'] = $product->url;
+        foreach ($products as $key => $product) {
+            $items[$key]['id']    = $product->id;
+            $items[$key]['type']  = 'product';
+            $items[$key]['name']  = $product->name;
+            $items[$key]['link']  = $product->url;
             $items[$key]['image'] = $product->photo;
-            $items[$key]['tags'] = $product->tags;
+            $items[$key]['tags']  = $product->tags;
         }
 
         $products->appends([$request->input()]);
         $pagination = [
-          'current_page'    => $products->currentPage(),
-          'next_page_url'   => $products->nextPageUrl(),
-          'last_page'       => $products->lastPage(),
-          'data'            => $items,
+            'current_page'  => $products->currentPage(),
+            'next_page_url' => $products->nextPageUrl(),
+            'last_page'     => $products->lastPage(),
+            'data'          => $items,
         ];
 
-        return response()->json($pagination,Response::HTTP_OK , [] ,JSON_UNESCAPED_SLASHES);
+        return response()->json($pagination, Response::HTTP_OK, [], JSON_UNESCAPED_SLASHES);
     }
 }

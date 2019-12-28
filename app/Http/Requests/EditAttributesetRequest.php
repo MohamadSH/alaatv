@@ -2,7 +2,6 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Support\Facades\Config;
 use Illuminate\Foundation\Http\FormRequest;
 
 class EditAttributesetRequest extends FormRequest
@@ -14,7 +13,7 @@ class EditAttributesetRequest extends FormRequest
             ->can(config('constants.EDIT_ATTRIBUTESET_ACCESS'))) {
             return true;
         }
-    
+
         return false;
     }
 

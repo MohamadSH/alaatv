@@ -13,14 +13,14 @@ class Eidi98 extends Command
      * @var string
      */
     protected $signature = 'alaaTv:eidi98';
-    
+
     /**
      * The console command description.
      *
      * @var string
      */
     protected $description = 'Give users Eidi';
-    
+
     /**
      * Create a new command instance.
      *
@@ -30,7 +30,7 @@ class Eidi98 extends Command
     {
         parent::__construct();
     }
-    
+
     /**
      * Execute the console command.
      *
@@ -39,7 +39,7 @@ class Eidi98 extends Command
     public function handle()
     {
         $users = User::all();
-        if ($this->confirm('Giving `Eidi` to  '.$users->count().' users. Do you wish to continue?', true)) {
+        if ($this->confirm('Giving `Eidi` to  ' . $users->count() . ' users. Do you wish to continue?', true)) {
             $bar = $this->output->createProgressBar($users->count());
             foreach ($users as $user) {
                 $user->deposit(30000, 2);

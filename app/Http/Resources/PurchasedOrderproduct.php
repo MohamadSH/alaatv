@@ -44,19 +44,9 @@ class PurchasedOrderproduct extends AlaaJsonResource
         ];
     }
 
-    private function getAttributeValues()
-    {
-        return $this->hasAttributesValues() ? Attributevalue::collection($this->attributevalues) : null;
-    }
-
     private function getProduct()
     {
         return isset($this->product_id) ? new PurchasedProduct($this->product) : null;
-    }
-
-    private function getGrand()
-    {
-        return $this->haseGrand() ? new PurchasedProduct($this->product->grand) : null;
     }
 
     /**
@@ -67,11 +57,21 @@ class PurchasedOrderproduct extends AlaaJsonResource
         return isset($this->product_id) && isset($this->product->grand_id);
     }
 
+    private function getGrand()
+    {
+        return $this->haseGrand() ? new PurchasedProduct($this->product->grand) : null;
+    }
+
     /**
      * @return bool
      */
     private function hasAttributesValues(): bool
     {
         return $this->attributevalues->isNotEmpty();
+    }
+
+    private function getAttributeValues()
+    {
+        return $this->hasAttributesValues() ? Attributevalue::collection($this->attributevalues) : null;
     }
 }

@@ -19,26 +19,25 @@ abstract class OrderproductGroupPriceCalculatorFromNewBase extends CheckoutProce
         if (!isset($orderproductsToCalculateFromNewBase)) {
             throw new Exception('Orderproducts to recalculate have not been set');
         }
-        
+
         $calculatedOrderproductsFromNewBase = $this->getOrderproductGroupPrice($orderproductsToCalculateFromNewBase);
-        
+
         $calculatedOrderproducts = $cashier->getCalculatedOrderproducts();
         if (isset($calculatedOrderproducts)) {
             $calculatedOrderproducts = $calculatedOrderproducts->merge($calculatedOrderproductsFromNewBase);
-        }
-        else {
+        } else {
             $calculatedOrderproducts = $calculatedOrderproductsFromNewBase;
         }
-        
+
         $cashier->setCalculatedOrderproducts($calculatedOrderproducts);
-        
+
         return $this->next($cashier);
     }
-    
+
     /**
      * Gets price for a group of Orderproducts
      *
-     * @param  Collection  $orderproductsToCalculateFromNewBase
+     * @param Collection $orderproductsToCalculateFromNewBase
      *
      * @return mixed
      */

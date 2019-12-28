@@ -1,20 +1,20 @@
 <?php namespace App\Traits;
 
 use GuzzleHttp\Client;
-use PHPUnit\Framework\Exception;
-use Illuminate\Support\Facades\Log;
 use GuzzleHttp\Exception\GuzzleException;
+use Illuminate\Support\Facades\Log;
+use PHPUnit\Framework\Exception;
 
 trait APIRequestCommon
 {
-    public function sendRequest($path, $method, $parameters = [] , $headers = [])
+    public function sendRequest($path, $method, $parameters = [], $headers = [])
     {
-        $client  = new Client();
+        $client = new Client();
         try {
-            if(empty($headers)){
+            if (empty($headers)) {
                 $res = $client->request($method, $path, ['form_params' => $parameters]);
-            }else{
-               $res = $client->request($method, $path, ['query' => $parameters , 'headers' => $headers]);
+            } else {
+                $res = $client->request($method, $path, ['query' => $parameters, 'headers' => $headers]);
             }
         } catch (GuzzleException $e) {
             Log::error($e->getMessage());

@@ -25,7 +25,7 @@ class Userstatus extends AlaaJsonResource
         }
 
         return [
-            'name'          => $this->when(isset($this->name) , $this->name),
+            'name' => $this->when(isset($this->name), $this->name),
         ];
     }
 }

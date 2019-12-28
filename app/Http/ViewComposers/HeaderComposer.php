@@ -12,24 +12,24 @@ class HeaderComposer
      * @var Request
      */
     private $request;
-    
+
     private $defaultProfileImg;
-    
+
     /**
      * Create a new Profile composer.
      *
-     * @param  Request  $request
+     * @param Request $request
      */
     public function __construct(Request $request)
     {
         $this->request           = $request;
         $this->defaultProfileImg = config('constants.PROFILE_DEFAULT_IMAGE');
     }
-    
+
     /**
      * Bind data to the view.
      *
-     * @param  View  $view
+     * @param View $view
      *
      * @return void
      */
@@ -42,6 +42,6 @@ class HeaderComposer
         //Checking for liveStream
         $live = LiveStreamAssistant::isThereLiveStream();
 
-        $view->with(compact('profileImage' , 'live'));
+        $view->with(compact('profileImage', 'live'));
     }
 }

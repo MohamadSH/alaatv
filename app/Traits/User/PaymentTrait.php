@@ -119,6 +119,18 @@ trait PaymentTrait
         return $this->hasManyThrough("\App\Transaction", "\App\Wallet");
     }
 
+    public function getClosedOrders($pageNumber = 1)
+    {
+        $user = $this;
+        $key  = 'user:closedOrders:page-' . $pageNumber . ':' . $user->cacheKey();
+
+        return Cache::tags(['user', 'order', 'closedOrder', 'user_' . $user->id, 'user_' . $user->id . '_closedOrders'])->remember($key, config("constants.CACHE_10"), function () use ($user, $pageNumber) {
+            return $user->closedOrders()
+                ->orderBy('completed_at', 'desc')
+                ->paginate(10, ['*'], 'orders', $pageNumber);
+        });
+    }
+
     /**
      * Get user's orders that he is allowed to see
      *
@@ -133,17 +145,5 @@ trait PaymentTrait
     public function orders()
     {
         return $this->hasMany('App\Order');
-    }
-
-    public function getClosedOrders($pageNumber=1)
-    {
-        $user   = $this;
-        $key    = 'user:closedOrders:page-'.$pageNumber.':'.$user->cacheKey();
-
-        return Cache::tags(['user', 'order' , 'closedOrder' , 'user_'.$user->id , 'user_'.$user->id.'_closedOrders'])->remember($key, config("constants.CACHE_10"), function () use ($user , $pageNumber) {
-            return $user->closedOrders()
-                ->orderBy('completed_at', 'desc')
-                ->paginate(10, ['*'], 'orders',$pageNumber);
-        });
     }
 }
