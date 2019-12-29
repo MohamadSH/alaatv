@@ -19,9 +19,8 @@ class ProductController extends Controller
 {
     use ProductCommon;
 
-    public function indexV2(Request $request, ProductSearch $productSearch)
+    public function index(Request $request, ProductSearch $productSearch)
     {
-        //TODO:// validate
         $filters                    = $request->all();
         $pageName                   = 'productPage';
         $filters['doesntHaveGrand'] = 1;
