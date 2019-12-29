@@ -3,29 +3,29 @@
 namespace App\Http\Controllers\Web;
 
 use App\Block;
-use App\Slideshow;
-use App\Websitesetting;
-use App\Traits\MetaCommon;
-use Illuminate\Http\Request;
+use App\Classes\Format\BlockCollectionFormatter;
 use App\Classes\SEO\SeoDummyTags;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Block as BlockResource;
-use App\Classes\Format\BlockCollectionFormatter;
+use App\Slideshow;
+use App\Traits\MetaCommon;
+use App\Websitesetting;
+use Illuminate\Http\Request;
 
 class IndexPageController extends Controller
 {
     use MetaCommon;
-    
+
     private $setting;
-    
+
     public function __construct(Websitesetting $setting)
     {
         $this->setting = $setting->setting;
     }
-    
+
     public function __invoke(Request $request, BlockCollectionFormatter $blockCollectionFormatter)
     {
-        
+
         $url = $request->url();
         $this->generateSeoMetaTags(new SeoDummyTags($this->setting->site->seo->homepage->metaTitle,
             $this->setting->site->seo->homepage->metaDescription, $url,
@@ -35,7 +35,7 @@ class IndexPageController extends Controller
                 'h'        => '100',
                 'filename' => $this->setting->site->siteLogo,
             ]), '100', '100', null));
-        
+
         $slides = Slideshow::getMainBanner();
         $blocks = Block::getMainBlocks();
         if (request()->expectsJson()) {
@@ -59,6 +59,6 @@ class IndexPageController extends Controller
         }
         $sections = $blockCollectionFormatter->format($blocks);
         $pageName = "dashboard";
-        return view('pages.dashboard1', compact('pageName', 'sections', 'slides' , 'blocks'));
+        return view('pages.dashboard1', compact('pageName', 'sections', 'slides', 'blocks'));
     }
 }

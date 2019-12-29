@@ -78,11 +78,6 @@ class Content extends AlaaJsonResource
         return new Tag($this->tags);
     }
 
-    private function getSetInContent()
-    {
-        return new SetInContent($this->set);
-    }
-
     private function getUrl($url)
     {
         return new Url($url);
@@ -91,6 +86,11 @@ class Content extends AlaaJsonResource
     private function getAuthor()
     {
         return new Author($this->user);
+    }
+
+    private function getSetInContent()
+    {
+        return new SetInContent($this->set);
     }
 
     private function getRelatedProducts()

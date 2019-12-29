@@ -50,7 +50,7 @@ abstract class OrderproductPriceCalculator
     }
 
     /**
-     * @param  string  $mode
+     * @param string $mode
      *
      * @return OrderproductPriceCalculator
      */
@@ -84,7 +84,7 @@ abstract class OrderproductPriceCalculator
     /**
      * Gets intended Orderproduct calculated price
      *
-     * @param  Orderproduct  $orderproduct
+     * @param Orderproduct $orderproduct
      *
      * @return array
      */
@@ -98,8 +98,8 @@ abstract class OrderproductPriceCalculator
     /**
      * Calculates intended Orderproduct price
      *
-     * @param  Orderproduct  $orderproduct
-     * @param  bool          $calculate
+     * @param Orderproduct $orderproduct
+     * @param bool         $calculate
      *
      * @return array
      */
@@ -112,8 +112,7 @@ abstract class OrderproductPriceCalculator
             $productDiscountPercentage = $priceArray["productDiscount"];
             $productDiscountValue      = $priceArray["productDiscountValue"];
             $productDiscountAmount     = $priceArray["productDiscountAmount"];
-        }
-        else {
+        } else {
             $price                     = $orderproduct->cost;
             $productDiscountValue      = $orderproduct->getOriginal("discountPercentage");
             $productDiscountPercentage = $orderproduct->discountPercentage;
@@ -125,9 +124,10 @@ abstract class OrderproductPriceCalculator
         $totalBonDiscountPercentage = $orderproduct->getTotalBonDiscountPercentage();
         $totalBonDiscountValue      = $orderproduct->getTotalBonDiscountDecimalValue();
 
-        $price = (int) $price;
+        $price = (int)$price;
 
-        $customerPrice = (int) (($price * (1 - $productDiscountPercentage)) * (1 - $totalBonDiscountPercentage) - $productDiscountAmount);
+        $customerPrice =
+            (int)(($price * (1 - $productDiscountPercentage)) * (1 - $totalBonDiscountPercentage) - $productDiscountAmount);
         $discount      = $price - $customerPrice;
         $totalPrice    = $orderproduct->quantity * $customerPrice;
 
@@ -139,7 +139,7 @@ abstract class OrderproductPriceCalculator
             "productDiscountPercentage" => $productDiscountPercentage,
             'bonDiscount'               => $totalBonDiscountValue,
             'bonDiscountPercentage'     => $totalBonDiscountPercentage,
-            "productDiscountAmount"     => (int) $productDiscountAmount,
+            "productDiscountAmount"     => (int)$productDiscountAmount,
             ////////////////////Total///////////////////////
             'customerCost'              => $customerPrice,
             'discount'                  => $discount,
@@ -150,7 +150,7 @@ abstract class OrderproductPriceCalculator
     /**
      * Gets intended Orderproduct price records
      *
-     * @param  Orderproduct  $orderproduct
+     * @param Orderproduct $orderproduct
      *
      * @return array
      */

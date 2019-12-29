@@ -11,9 +11,9 @@ use Illuminate\Http\Request;
 class ContactUsController extends Controller
 {
     use MetaCommon;
-    
+
     private $setting;
-    
+
     public function __construct(Websitesetting $setting)
     {
         $this->setting = $setting->setting;
@@ -30,19 +30,19 @@ class ContactUsController extends Controller
                 'h'        => '100',
                 'filename' => $this->setting->site->siteLogo,
             ]), '100', '100', null));
-        
+
         $emergencyContacts = collect();
         foreach ($this->setting->branches->main->emergencyContacts as $emergencyContact) {
             $number = "";
             if (isset($emergencyContact->number) && strlen($emergencyContact->number) > 0) {
                 $number = $emergencyContact->number;
             }
-            
+
             $description = "";
             if (isset($emergencyContact->description) && strlen($emergencyContact->description) > 0) {
                 $description = $emergencyContact->description;
             }
-            
+
             if (strlen($number) > 0 || strlen($description) > 0) {
                 $emergencyContacts->push([
                     "number"      => $number,
@@ -50,7 +50,7 @@ class ContactUsController extends Controller
                 ]);
             }
         }
-        
+
         return view("pages.contactUs", compact("emergencyContacts"));
     }
 }

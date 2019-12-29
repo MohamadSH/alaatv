@@ -21,6 +21,7 @@ class AttachedUserbon extends AlaaJsonResource
      * Transform the resource into an array.
      *
      * @param Request $request
+     *
      * @return array
      */
     public function toArray($request)
@@ -30,10 +31,10 @@ class AttachedUserbon extends AlaaJsonResource
         }
 
         return [
-            'bon_id'            => $this->bon_id,
-            'user_id'           => $this->user_id,
-            'total_number'       => $this->totalNumber,
-            'used_number'        => $this->usedNumber,
+            'bon_id'       => $this->bon_id,
+            'user_id'      => $this->user_id,
+            'total_number' => $this->totalNumber,
+            'used_number'  => $this->usedNumber,
         ];
     }
 }

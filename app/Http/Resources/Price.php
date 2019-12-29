@@ -18,9 +18,9 @@ class Price extends AlaaJsonResource
     {
         $array = (array)$this->resource;
         return [
-            'base'      => $this->when(Arr::has($array, 'base') , Arr::get($array, 'base') ) ,
-            'discount'  => $this->when(Arr::has($array, 'discount') , Arr::get($array, 'discount') ) ,
-            'final'     => $this->when(Arr::has($array, 'final') , Arr::get($array, 'final') ) ,
+            'base'     => $this->when(Arr::has($array, 'base'), Arr::get($array, 'base')),
+            'discount' => $this->when(Arr::has($array, 'discount'), Arr::get($array, 'discount')),
+            'final'    => $this->when(Arr::has($array, 'final'), Arr::get($array, 'final')),
         ];
     }
 }

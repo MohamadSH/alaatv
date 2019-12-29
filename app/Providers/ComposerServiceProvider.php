@@ -26,6 +26,7 @@ class ComposerServiceProvider extends ServiceProvider
             'content.show',
             'pages.product-search',
             'product.show',
+            'product.customShow.raheAbrisham',
             'pages.content-search',
             'pages.shop',
             'order.checkout.review',
@@ -41,7 +42,7 @@ class ComposerServiceProvider extends ServiceProvider
             'pages.sharifLanding',
             'pages.liveView',
             'set.show',
-            'user.completeRegister2'
+            'user.completeRegister2',
         ], function ($view) {
             $closedSideBar = true;
             $view->with(compact('closedSideBar'));
@@ -54,9 +55,10 @@ class ComposerServiceProvider extends ServiceProvider
          */
         View::composer([
 //            'pages.dashboard1',
-                'partials.sidebar',
+            'partials.sidebar',
         ], function ($view) {
-            $sections = (new webBlockCollectionFormatter(new webSetCollectionFormatter()))->format(Block::getMainBlocks());
+            $sections =
+                (new webBlockCollectionFormatter(new webSetCollectionFormatter()))->format(Block::getMainBlocks());
 //            $sections = collect();
 //            dd($sections);
             $view->with(compact('sections'));
@@ -79,13 +81,13 @@ class ComposerServiceProvider extends ServiceProvider
         });
 
         View::composer([
-            '*'
-        ], function ($view){
-            $view->with('bonName',Bon::getAlaaBonDisplayName());
+            '*',
+        ], function ($view) {
+            $view->with('bonName', Bon::getAlaaBonDisplayName());
             $view->with('userIpAddress', Request::ip());
-            $view->with('wSetting',optional(alaaSetting())->setting);
-            $view->with('wLogoUrl',optional(alaaSetting())->site_logo_url);
-            $view->with('setting',alaaSetting());
+            $view->with('wSetting', optional(alaaSetting())->setting);
+            $view->with('wLogoUrl', optional(alaaSetting())->site_logo_url);
+            $view->with('setting', alaaSetting());
         });
     }
 

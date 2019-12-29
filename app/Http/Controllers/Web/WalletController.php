@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\GiveWalletCreditRequest;
 use App\User;
 use App\Wallet;
-use App\Websitesetting;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Jenssegers\Agent\Agent;
@@ -20,6 +19,23 @@ class WalletController extends Controller
         $this->callMiddlewares($authException);
     }
 
+    /**
+     * @param Agent $agent
+     *
+     * @return array
+     */
+    private function getAuthExceptionArray(Agent $agent): array
+    {
+        return [];
+    }
+
+    /**
+     * @param array $authException
+     */
+    private function callMiddlewares(array $authException): void
+    {
+        $this->middleware('permission:' . config('constants.GIVE_WALLET_CREDIT'), ['only' => 'giveCredit']);
+    }
 
     public function store(Request $request)
     {
@@ -34,12 +50,17 @@ class WalletController extends Controller
         if ($request->expectsJson()) {
             if ($done) {
                 return response()->json(["wallet" => $wallet]);
-            }
-            else {
-                return response()->json( [] , Response::HTTP_SERVICE_UNAVAILABLE);
+            } else {
+                return response()->json([], Response::HTTP_SERVICE_UNAVAILABLE);
             }
         }
     }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Private Methods
+    |--------------------------------------------------------------------------
+    */
 
     public function update(Request $request, Wallet $wallet)
     {
@@ -52,65 +73,42 @@ class WalletController extends Controller
         if ($request->expectsJson()) {
             if ($done) {
                 return response()->json();
-            }
-            else {
-                return response()->json([] , Response::HTTP_SERVICE_UNAVAILABLE);
+            } else {
+                return response()->json([], Response::HTTP_SERVICE_UNAVAILABLE);
             }
         }
     }
 
-    public function giveCredit(GiveWalletCreditRequest $request){
-        $credit = $request->get('credit' , 0);
-        $user = User::where('mobile' , $request->get('mobile'))->where('nationalCode' , $request->get('nationalCode'))->first();
-        if(!isset($user)){
+    public function giveCredit(GiveWalletCreditRequest $request)
+    {
+        $credit = $request->get('credit', 0);
+        $user   =
+            User::where('mobile', $request->get('mobile'))->where('nationalCode', $request->get('nationalCode'))->first();
+        if (!isset($user)) {
             return response()->json([
                 'error' => [
-                    'code'  => Response::HTTP_NOT_FOUND,
-                    'message'   => 'User not found',
-                ]
+                    'code'    => Response::HTTP_NOT_FOUND,
+                    'message' => 'User not found',
+                ],
             ]);
         }
 
-        $depositResult =  $user->deposit( $credit , config('constants.WALLET_TYPE_GIFT'));
-        if($depositResult['result']){
+        $depositResult = $user->deposit($credit, config('constants.WALLET_TYPE_GIFT'));
+        if ($depositResult['result']) {
             return response()->json([
-                'message'   => 'Credit added successfully',
-                'userFullName' => $user->full_name
+                'message'      => 'Credit added successfully',
+                'userFullName' => $user->full_name,
             ]);
         }
 
         return response()->json([
             [
-                'error'=>[
-                    'code' => Response::HTTP_SERVICE_UNAVAILABLE ,
+                'error' => [
+                    'code'    => Response::HTTP_SERVICE_UNAVAILABLE,
                     'message' => 'Unexpected error',
-                ]
-            ]
+                ],
+            ],
         ]);
-    }
-
-    /*
-    |--------------------------------------------------------------------------
-    | Private Methods
-    |--------------------------------------------------------------------------
-    */
-
-    /**
-     * @param  Agent  $agent
-     *
-     * @return array
-     */
-    private function getAuthExceptionArray(Agent $agent): array
-    {
-        return [];
-    }
-
-    /**
-     * @param  array  $authException
-     */
-    private function callMiddlewares(array $authException): void
-    {
-        $this->middleware('permission:'.config('constants.GIVE_WALLET_CREDIT'), ['only' => 'giveCredit']);
     }
 
 }

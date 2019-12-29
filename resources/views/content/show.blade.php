@@ -270,13 +270,11 @@
 
                             <h1 class="m--regular-font-size-lg3 m--font-bold m--font-focus contentTitleH1">{{ $content->displayName }}</h1>
 
-                            <input type="hidden" name="favoriteActionUrl" value="{{ route('web.mark.favorite.content', [ 'c' => $content->id ]) }}">
-                            <input type="hidden" name="unFavoriteActionUrl" value="{{ route('web.mark.unfavorite.content', [ 'c' => $content->id ]) }}">
-
-                            <div class="btnFavorite">
-                                <img class="btnFavorite-on {{ ($isFavored) ? '' : 'a--d-none' }}" src="https://cdn.alaatv.com/upload/fav-on.svg" width="50">
-                                <img class="btnFavorite-off {{ ($isFavored) ? 'a--d-none' : '' }}" src="https://cdn.alaatv.com/upload/fav-off.svg" width="50">
-                            </div>
+                            @include('partials.favorite', [
+                                'favActionUrl' => route('web.mark.favorite.content', [ 'c' => $content->id ]),
+                                'unfavActionUrl' => route('web.mark.unfavorite.content', [ 'c' => $content->id ]),
+                                'isFavored' => $isFavored
+                            ])
 
                             @if(isset($content->author_id))
                                 <div class="m-widget3">
@@ -522,7 +520,7 @@
                     <!--end::Portlet-->
 
                     @include('partials.ads.list', ['id'=>'contentShowPage-rightSide-0'])
-                    
+
                 @endif
             @else
                 <div class="alert alert-danger" role="alert">
@@ -660,9 +658,9 @@
                     </div>
                 </div>
                 <!--end::Portlet-->
-                
+
                 @include('partials.ads.list', ['id'=>'contentShowPage-leftSide-1'])
-                
+
             </div>
         @endif
     </div>
@@ -693,10 +691,9 @@
                             </a>
                         </div>
                     </div>
-                    <div class="m-portlet__body m-portlet__body--no-padding a--owl-carousel-body">
+                    <div class="m-portlet__body m-portlet__body--no-padding a--owl-carousel-body ScrollCarousel">
 
-                        <div
-                            class="m-widget_head-owlcarousel-items ScrollCarousel owl-carousel a--owl-carousel-type-2 carousel_block_owlCarouselParentProducts">
+                        <div class="m-widget_head-owlcarousel-items ScrollCarousel-Items owl-carousel a--owl-carousel-type-2 carousel_block_owlCarouselParentProducts">
                             @foreach($productsThatHaveThisContent as $productKey=>$product)
                                 <div class="item carousel a--block-item a--block-type-product w-55443211"
                                      data-position="{{ $productKey }}"

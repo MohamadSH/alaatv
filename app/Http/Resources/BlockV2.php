@@ -32,9 +32,9 @@ class BlockV2 extends AlaaJsonResource
         }
 
         $contents = $this->notRedirectedContents;
-        $sets = $this->notRedirectedSets;
+        $sets     = $this->notRedirectedSets;
         $products = $this->products;
-        $banners = $this->banners;
+        $banners  = $this->banners;
         return [
             'id'         => $this->id,
             'title'      => $this->when(isset($this->title), $this->title),
@@ -49,9 +49,19 @@ class BlockV2 extends AlaaJsonResource
         ];
     }
 
+    private function collectionIsNotEmpty($collection)
+    {
+        return isset($collection) && $collection->isNotEmpty();
+    }
+
     private function getContents($contents)
     {
-        return $this->collectionIsNotEmpty($contents) ? ContentInBlock::collection($contents) : null;
+        return $this->collectionIsNotEmpty($contents) ? ContentInSet::collection($contents) : null;
+    }
+
+    private function getSets($sets)
+    {
+        return $this->collectionIsNotEmpty($sets) ? SetInIndex::collection($sets) : null;
     }
 
     private function getProducts($products)
@@ -59,18 +69,8 @@ class BlockV2 extends AlaaJsonResource
         return $this->collectionIsNotEmpty($products) ? ProductInBlock::collection($products) : null;
     }
 
-    private function getSets($sets)
-    {
-        return $this->collectionIsNotEmpty($sets) ? SetInBlock::collection($sets) : null;
-    }
-
     private function getBanners($banners)
     {
         return $this->collectionIsNotEmpty($banners) ? Slideshow::collection($banners) : null;
-    }
-
-    private function collectionIsNotEmpty($collection)
-    {
-        return isset($collection) && $collection->isNotEmpty();
     }
 }

@@ -4,11 +4,11 @@ namespace App\Http\Controllers\Web;
 
 use App\Event;
 use App\Eventresult;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\RegisterForSanatiSharifHighSchoolRequest;
 use App\User;
 use Auth;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Response;
 use SEO;
 
@@ -17,90 +17,90 @@ class SharifSchoolController extends Controller
     public function sharifLanding(Request $request)
     {
         $sharifStudentsIds =
-                    [
-                        302630,
-                        302644,
-                        302658,
-                        302748,
-                        302754,
-                        302742,
-                        302790,
-                        302800,
-                        302806,
-                        302810,
-                        302812,
-                        302814,
-                        302832,
-                        302840,
-                        302848,
-                        302850,
-                        302862,
-                        302870,
-                        302886,
-                        302896,
-                    ];
-        $sharifStudents = User::whereIn('id' , $sharifStudentsIds)->get();
+            [
+                302630,
+                302644,
+                302658,
+                302748,
+                302754,
+                302742,
+                302790,
+                302800,
+                302806,
+                302810,
+                302812,
+                302814,
+                302832,
+                302840,
+                302848,
+                302850,
+                302862,
+                302870,
+                302886,
+                302896,
+            ];
+        $sharifStudents    = User::whereIn('id', $sharifStudentsIds)->get();
 
-        $amirKabirStudentsIds =[
-                    302930,
-                    302936,
-                    302940,
-                    302944,
-                    302944,
-                    302952,
-                    302958,
-                    302962,
-                    302964,
-                    302968,
-                    302974,
-                    302978,
-                    302986,
-                    302994,
-                    302998,
-                    303006,
-                    302922,
-            ] ;
-        $amirKabirStudents = User::whereIn('id' , $amirKabirStudentsIds)->get();
+        $amirKabirStudentsIds = [
+            302930,
+            302936,
+            302940,
+            302944,
+            302944,
+            302952,
+            302958,
+            302962,
+            302964,
+            302968,
+            302974,
+            302978,
+            302986,
+            302994,
+            302998,
+            303006,
+            302922,
+        ];
+        $amirKabirStudents    = User::whereIn('id', $amirKabirStudentsIds)->get();
 
         $tehranStudentsIds = [
-                    303042,
-                    303048,
-                    303050,
-                    303058,
-                    303062,
-                    303064,
-                    303066,
-                    303078,
-                    303082,
-                    303092,
-                    303098,
-                    303102,
-                    303104,
-                    303112,
-                    303126,
-                    303132,
-                    303134,
-                    303142,
-                    303146,
-                    303038,
-                    303024,
-                            ];
-        $tehranStudents = User::whereIn('id' , $tehranStudentsIds)->get();
+            303042,
+            303048,
+            303050,
+            303058,
+            303062,
+            303064,
+            303066,
+            303078,
+            303082,
+            303092,
+            303098,
+            303102,
+            303104,
+            303112,
+            303126,
+            303132,
+            303134,
+            303142,
+            303146,
+            303038,
+            303024,
+        ];
+        $tehranStudents    = User::whereIn('id', $tehranStudentsIds)->get();
 
         $beheshtiStudentsIds = [
-                    303154,
-                    303158,
-                    303162,
-                    303170,
-                    303172,
-                    303178,
-                    303182,
-                    303184,
-                    303190,
-                            ];
-        $beheshtiStudents = User::whereIn('id' , $beheshtiStudentsIds)->get();
+            303154,
+            303158,
+            303162,
+            303170,
+            303172,
+            303178,
+            303182,
+            303184,
+            303190,
+        ];
+        $beheshtiStudents    = User::whereIn('id', $beheshtiStudentsIds)->get();
 
-        return view('pages.sharifLanding' , compact('sharifStudents' , 'amirKabirStudents' , 'tehranStudents' , 'beheshtiStudents'));
+        return view('pages.sharifLanding', compact('sharifStudents', 'amirKabirStudents', 'tehranStudents', 'beheshtiStudents'));
     }
 
     public function schoolRegisterLanding(Request $request)
@@ -167,7 +167,7 @@ class SharifSchoolController extends Controller
      * Register student for sanati sharif highschool
      *
      * @param RegisterForSanatiSharifHighSchoolRequest $request
-     * @param EventresultController $eventResultController
+     * @param EventresultController                    $eventResultController
      *
      * @return Response
      */
@@ -181,8 +181,7 @@ class SharifSchoolController extends Controller
 
         if (Auth::check()) {
             $user = $request->user();
-        }
-        else {
+        } else {
             $registeredUser = User::where('mobile', $request->get('mobile'))
                 ->where('nationalCode', $request->get('nationalCode'))
                 ->first();
@@ -190,14 +189,14 @@ class SharifSchoolController extends Controller
 
         if (!isset($user) && !isset($registeredUser)) {
             $user = User::create([
-                'firstName'     => $request->get('firstName') ,
-                'lastName'      => $request->get('lastName') ,
-                'mobile'        => $request->get('mobile') ,
-                'nationalCode'  => $request->get('nationalCode') ,
-                'major_id'      => $request->get('major_id') ,
-                'grade_id'      => $request->get('grade_id') ,
+                'firstName'    => $request->get('firstName'),
+                'lastName'     => $request->get('lastName'),
+                'mobile'       => $request->get('mobile'),
+                'nationalCode' => $request->get('nationalCode'),
+                'major_id'     => $request->get('major_id'),
+                'grade_id'     => $request->get('grade_id'),
             ]);
-            if(!isset($user)){
+            if (!isset($user)) {
                 session()->put('error', 'خطایی در ثبت اطلاعات شما اتفاق افتاد . لطفا دوباره اقدام نمایید.');
                 return redirect()->back();
             }
@@ -209,9 +208,9 @@ class SharifSchoolController extends Controller
                 'firstName' => $request->get('firstName'),
                 'lastName'  => $request->get('lastName'),
                 'major_id'  => $request->get('major_id'),
-                'grade_id'  => $request->get('grade_id')
+                'grade_id'  => $request->get('grade_id'),
             ]);
-            if(!$updateUserResult){
+            if (!$updateUserResult) {
                 session()->put('error', 'خطایی در ثبت اطلاعات شما رخ داد. لطفا مجددا اقدام نمایید');
                 return redirect()->back();
             }
@@ -223,12 +222,11 @@ class SharifSchoolController extends Controller
             session()->put('error', 'شما قبلا ثبت نام کرده اید');
 
             return redirect()->back();
-        }
-        else {
+        } else {
             $eventResult = Eventresult::create([
                 'user_id', $user->id,
                 'event_id', $event->id,
-                'participationCodeHash', $request->get('score')
+                'participationCodeHash', $request->get('score'),
             ]);
             if (!$eventResult) {
                 session()->put('error', 'خطایی در ثبت نام شما رخ داد. لطفا مجددا اقدام نمایید');
@@ -238,7 +236,7 @@ class SharifSchoolController extends Controller
 
         $message = 'پیش ثبت نام شما در دبیرستان دانشگاه صنعتی شریف با موفقیت انجام شد .';
         if (isset($participationCode)) {
-            $message .= 'کد داوطلبی شما: '.$participationCode;
+            $message .= 'کد داوطلبی شما: ' . $participationCode;
         }
         session()->put('success', $message);
 

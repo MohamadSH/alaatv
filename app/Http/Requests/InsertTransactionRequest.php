@@ -3,7 +3,6 @@
 namespace App\Http\Requests;
 
 use App\Traits\CharacterCommon;
-use Illuminate\Support\Facades\Config;
 use Illuminate\Foundation\Http\FormRequest;
 
 class InsertTransactionRequest extends FormRequest
@@ -66,7 +65,7 @@ class InsertTransactionRequest extends FormRequest
             $input['paycheckNumber'] = $this->convertToEnglish($input['paycheckNumber']);
         }
         if (isset($input['managerComment']) && strlen($input['managerComment']) > 0) {
-                $input['managerComment'] = $this->convertToEnglish($input['managerComment']);
+            $input['managerComment'] = $this->convertToEnglish($input['managerComment']);
         }
         $this->replace($input);
     }

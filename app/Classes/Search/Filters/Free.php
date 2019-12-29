@@ -14,7 +14,7 @@ use Illuminate\Database\Eloquent\Builder;
 class Free extends FilterAbstract
 {
     protected $attribute = 'isFree';
-    
+
     public function apply(Builder $builder, $value, FilterCallback $callback): Builder
     {
         return $builder->whereIn($this->attribute, $value);

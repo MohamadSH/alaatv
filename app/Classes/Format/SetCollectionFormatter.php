@@ -9,13 +9,14 @@
 namespace App\Classes\Format;
 
 use App\Collection\SetCollection;
+use Illuminate\Support\Collection;
 
 interface SetCollectionFormatter
 {
     /**
-     * @param  SetCollection  $sets
+     * @param SetCollection $sets
      *
-     * @return \Illuminate\Support\Collection
+     * @return Collection
      */
     public function format(SetCollection $sets);
 }

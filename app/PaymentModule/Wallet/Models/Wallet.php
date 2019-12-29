@@ -3,45 +3,53 @@
 namespace App\PaymentModule\Wallet\Models;
 
 use App\BaseModel;
+use App\Transaction;
+use App\User;
 use Carbon\Carbon;
+use Eloquent;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 
 /**
  * App\Wallet
  *
- * @property int                                                              $id
- * @property int|null                                                         $user_id       آیدی مشخص کننده کاربر صاحب
- *           کیف پول
- * @property int|null                                                         $wallettype_id آیدی مشخص کننده نوع کیف
+ * @property int                           $id
+ * @property int|null                      $user_id           آیدی مشخص کننده کاربر
+ *           صاحب کیف پول
+ * @property int|null                      $wallettype_id     آیدی مشخص کننده نوع
+ *           کیف
  *           پول
- * @property int                                                              $balance       اعتبار کیف پول
- * @property \Carbon\Carbon|null                                              $created_at
- * @property \Carbon\Carbon|null                                              $updated_at
- * @property \Carbon\Carbon|null                                              $deleted_at
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Transaction[] $transactions
- * @property-read \App\User|null                                              $user
+ * @property int                           $balance           اعتبار کیف پول
+ * @property Carbon|null                   $created_at
+ * @property Carbon|null                   $updated_at
+ * @property Carbon|null                   $deleted_at
+ * @property-read Collection|Transaction[] $transactions
+ * @property-read User|null                $user
  * @method static bool|null forceDelete()
  * @method static \Illuminate\Database\Query\Builder|\App\Wallet onlyTrashed()
  * @method static bool|null restore()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Wallet whereBalance($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Wallet whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Wallet whereDeletedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Wallet whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Wallet whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Wallet whereUserId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Wallet whereWallettypeId($value)
+ * @method static Builder|\App\Wallet whereBalance($value)
+ * @method static Builder|\App\Wallet whereCreatedAt($value)
+ * @method static Builder|\App\Wallet whereDeletedAt($value)
+ * @method static Builder|\App\Wallet whereId($value)
+ * @method static Builder|\App\Wallet whereUpdatedAt($value)
+ * @method static Builder|\App\Wallet whereUserId($value)
+ * @method static Builder|\App\Wallet whereWallettypeId($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Wallet withTrashed()
  * @method static \Illuminate\Database\Query\Builder|\App\Wallet withoutTrashed()
- * @mixin \Eloquent
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Wallet newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Wallet newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Wallet query()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel disableCache()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel withCacheCooldownSeconds($seconds)
+ * @mixin Eloquent
+ * @method static Builder|\App\Wallet newModelQuery()
+ * @method static Builder|\App\Wallet newQuery()
+ * @method static Builder|\App\Wallet query()
+ * @method static Builder|BaseModel disableCache()
+ * @method static Builder|BaseModel withCacheCooldownSeconds($seconds)
  * @property-read \App\Wallettype|null                                        $walletType
  * @property-read mixed                                                       $cache_cooldown_seconds
- * @property int $pending_to_reduce مبلغی که علی الحساب از کیف پول کم شده است
- * @property-read int|null $transactions_count
- * @method static \Illuminate\Database\Eloquent\Builder|\App\PaymentModule\Wallet\Models\Wallet wherePendingToReduce($value)
+ * @property int                                                              $pending_to_reduce مبلغی که علی الحساب از
+ *           کیف پول کم شده است
+ * @property-read int|null                                                    $transactions_count
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\PaymentModule\Wallet\Models\Wallet
+ *         wherePendingToReduce($value)
  */
 class Wallet extends BaseModel
 {
@@ -65,7 +73,7 @@ class Wallet extends BaseModel
     /**
      * Force to move credits from this account
      *
-     * @param  integer  $amount
+     * @param integer $amount
      *
      * @return array
      */
@@ -106,7 +114,7 @@ class Wallet extends BaseModel
     /**
      * Determine if the user can withdraw from this wallet
      *
-     * @param  integer  $amount
+     * @param integer $amount
      *
      * @return boolean
      */
@@ -126,8 +134,8 @@ class Wallet extends BaseModel
     /**
      * Attempt to add credits to this wallet
      *
-     * @param  integer  $amount
-     * @param  null     $orderId
+     * @param integer $amount
+     * @param null    $orderId
      *
      * @return array
      */
@@ -139,8 +147,8 @@ class Wallet extends BaseModel
     /**
      * Attempt to move credits from this wallet
      *
-     * @param  integer  $amount
-     * @param  bool     $withoutTransaction
+     * @param integer $amount
+     * @param bool    $withoutTransaction
      *
      * @return array
      */
@@ -184,7 +192,7 @@ class Wallet extends BaseModel
 
     /**
      * @param        $msg
-     * @param  bool  $status
+     * @param bool   $status
      *
      * @return array
      */

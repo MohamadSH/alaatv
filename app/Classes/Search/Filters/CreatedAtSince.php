@@ -13,7 +13,7 @@ use Illuminate\Database\Eloquent\Builder;
 class CreatedAtSince extends FilterAbstract
 {
     protected $attribute = 'created_at';
-    
+
     public function apply(Builder $builder, $value, FilterCallback $callback): Builder
     {
         return $builder->where($this->attribute, ">=", $value);

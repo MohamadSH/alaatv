@@ -13,7 +13,7 @@ class HomeController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth:api' , ['except' =>[ 'satra' , 'bigUpload' ]]);
+        $this->middleware('auth:api', ['except' => ['satra', 'bigUpload']]);
     }
 
     public function debug(Request $request)
@@ -49,14 +49,14 @@ class HomeController extends Controller
 
         $contentArray = [];
         foreach ($contents as $content) {
-            $validSince = $content->ValidSince_Jalali(false);
-            $createdAt  = $content->CreatedAt_Jalali();
+            $validSince     = $content->ValidSince_Jalali(false);
+            $createdAt      = $content->CreatedAt_Jalali();
             $contentArray[] = [
                 'id'           => $content->id,
                 'url'          => $content->url,
                 'title'        => $content->name,
-                'published_at' => isset($validSince)?$validSince:$createdAt,
-                'visit_count'  => 0
+                'published_at' => isset($validSince) ? $validSince : $createdAt,
+                'visit_count'  => 0,
             ];
         }
 

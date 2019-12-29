@@ -19,14 +19,14 @@ class Nullable
     public function __construct($result, $data)
     {
         $this->result = $result;
-        $this->data = $data;
+        $this->data   = $data;
     }
-    
+
     public function otherwise($response)
     {
         $this->orFailWith($response);
     }
-    
+
     /**
      * @param $response
      *
@@ -38,11 +38,11 @@ class Nullable
             if (is_callable($response)) {
                 $response = call_user_func($response, ...(array)$this->data);
             }
-            
+
             throw new HttpResponseException($response);
         });
     }
-    
+
     /**
      * @param $default
      *
@@ -56,13 +56,13 @@ class Nullable
 
         if (is_null($default)) {
             return optional();
-        } elseif (is_callable($default)) {
+        } else if (is_callable($default)) {
             return call_user_func($default);
         } else {
             return $default;
         }
     }
-    
+
     public function then($response)
     {
         if ($this->result) {

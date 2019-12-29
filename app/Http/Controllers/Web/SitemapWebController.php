@@ -12,9 +12,9 @@ use Illuminate\Http\Request;
 class SiteMapWebController extends Controller
 {
     use MetaCommon;
-    
+
     private $setting;
-    
+
     public function __construct(Websitesetting $setting)
     {
         $this->setting = $setting->setting;
@@ -31,7 +31,7 @@ class SiteMapWebController extends Controller
                 'h'        => '100',
                 'filename' => $this->setting->site->siteLogo,
             ]), '100', '100', null));
-        
+
         $products = Product::getProducts(0, 1)
             ->orderBy("order")
             ->get();

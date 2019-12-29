@@ -16,20 +16,19 @@ use Illuminate\Support\Collection;
 class AlaaOrderproductCouponChecker extends OrderproductCouponChecker
 {
     use ProductCommon;
-    
+
     protected function IsIncludedInCoupon(Collection $orderproducts, Coupon $coupon): Collection
     {
         foreach ($orderproducts as $orderproduct) {
             $couponHasProduct = $coupon->hasProduct($orderproduct->product);
-            
+
             if ($couponHasProduct) {
                 $orderproduct->includeInCoupon();
-            }
-            else {
+            } else {
                 $orderproduct->excludeFromCoupon();
             }
         }
-        
+
         return $orderproducts;
     }
 }

@@ -13,7 +13,7 @@ use Illuminate\Database\Eloquent\Builder;
 class UpdatedAtTill extends FilterAbstract
 {
     protected $attribute = 'updated_at';
-    
+
     public function apply(Builder $builder, $value, FilterCallback $callback): Builder
     {
         return $builder->where($this->attribute, "<=", $value);

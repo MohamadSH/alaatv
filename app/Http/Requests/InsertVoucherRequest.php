@@ -28,16 +28,16 @@ class InsertVoucherRequest extends FormRequest
             "major_id"     => "required|exists:majors,id",
             "introducedBy" => "required",
         ];
-    
+
         return $rules;
     }
-    
+
     public function prepareForValidation()
     {
         $this->replaceNumbers();
         parent::prepareForValidation();
     }
-    
+
     protected function replaceNumbers()
     {
         $input = $this->request->all();
@@ -49,15 +49,15 @@ class InsertVoucherRequest extends FormRequest
             $input["postalCode"] = preg_replace('/\s+/', '', $input["postalCode"]);
             $input["postalCode"] = $this->convertToEnglish($input["postalCode"]);
         }
-    
+
         if (isset($input["address"])) {
             $input["address"] = $this->convertToEnglish($input["address"]);
         }
-    
+
         if (isset($input["school"])) {
             $input["school"] = $this->convertToEnglish($input["school"]);
         }
-    
+
         if (isset($input["introducedBy"])) {
             $input["introducedBy"] = $this->convertToEnglish($input["introducedBy"]);
         }

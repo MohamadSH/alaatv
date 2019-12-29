@@ -3,11 +3,11 @@
 namespace App\Providers;
 
 use App\Websitesetting;
+use Illuminate\Contracts\Support\DeferrableProvider;
 use Illuminate\Support\Facades\{Cache};
 use Illuminate\Support\ServiceProvider;
-use Illuminate\Contracts\Support\DeferrableProvider;
 
-class WebsiteSettingProvider extends ServiceProvider  implements DeferrableProvider
+class WebsiteSettingProvider extends ServiceProvider implements DeferrableProvider
 {
     /**
      * Register services.
@@ -37,7 +37,7 @@ class WebsiteSettingProvider extends ServiceProvider  implements DeferrableProvi
     public function provides()
     {
         return [
-            Websitesetting::class
+            Websitesetting::class,
         ];
     }
 }

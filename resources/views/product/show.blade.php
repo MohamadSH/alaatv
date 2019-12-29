@@ -103,13 +103,12 @@
                 <div class="m-portlet">
                     <div class="m-portlet__body">
 
-                        <input type="hidden" name="favoriteActionUrl" value="{{ route('web.mark.favorite.product', [ 'product' => $product->id ]) }}">
-                        <input type="hidden" name="unFavoriteActionUrl" value="{{ route('web.mark.unfavorite.product', [ 'product' => $product->id ]) }}">
+                        @include('partials.favorite', [
+                            'favActionUrl' => route('web.mark.favorite.product', [ 'product' => $product->id ]),
+                            'unfavActionUrl' => route('web.mark.unfavorite.product', [ 'product' => $product->id ]),
+                            'isFavored' => $isFavored
+                        ])
 
-                        <div class="btnFavorite">
-                            <img class="btnFavorite-on {{ ($isFavored) ? '' : 'a--d-none' }}" src="https://cdn.alaatv.com/upload/fav-on.svg" width="50">
-                            <img class="btnFavorite-off {{ ($isFavored) ? 'a--d-none' : '' }}" src="https://cdn.alaatv.com/upload/fav-off.svg" width="50">
-                        </div>
 
                         <!--begin::Section-->
                         <div class="m-section m-section--last">
@@ -448,11 +447,11 @@
                                                 </a>
                                             @else
                                                 <button class="btn m-btn--air btn-success m-btn--icon m--margin-bottom-5 btnAddToCart gta-track-add-to-card">
-                                                <span>
-                                                    <i class="fa fa-cart-arrow-down"></i>
-                                                    <i class="fas fa-sync-alt fa-spin m--hide"></i>
-                                                    <span>افزودن به سبد خرید</span>
-                                                </span>
+                                                    <span>
+                                                        <i class="fa fa-cart-arrow-down"></i>
+                                                        <i class="fas fa-sync-alt fa-spin m--hide"></i>
+                                                        <span>افزودن به سبد خرید</span>
+                                                    </span>
                                                 </button>
                                             @endif
                                         @else
@@ -464,7 +463,7 @@
                                                 </span>
                                                 </button>
                                             @elseif($isForcedGift)
-                                                @if($hasPurchasedShouldBuyProduct)
+                                                @if($hasPurchasedEssentialProduct)
                                                     <button class="btn btn-danger btn-lg m-btn  m-btn m-btn--icon">
                                                     <span>
                                                         <i class="flaticon-arrows"></i>
@@ -597,8 +596,6 @@
         </div>
     @endif
 
-
-
     {{--دکمه افزودن به سبد خرید--}}
     <div class="addToCartForMobileDeviceWrapper" >
     @if($product->enable && !$isForcedGift)
@@ -649,7 +646,7 @@
                     </span>
             </button>
         @elseif($isForcedGift)
-                @if($hasPurchasedShouldBuyProduct)
+                @if($hasPurchasedEssentialProduct)
                     <button class="btn btn-danger btn-lg m-btn  m-btn m-btn--icon">
                         <span>
                                 <i class="flaticon-arrows"></i>
@@ -800,7 +797,6 @@
 @endsection
 
 @section('page-js')
-    <script src="{{ mix('/js/product-show.js') }}"></script>
     <script>
         var TotalQuantityAddedToCart = 0;
         var parentProduct = {
@@ -814,4 +810,5 @@
         };
         var parentProductTags = '{{ ($product->tags !== null) ? implode(',',optional($product->tags)->tags) : '-' }}';
     </script>
+    <script src="{{ mix('/js/product-show.js') }}"></script>
 @endsection

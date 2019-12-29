@@ -22,13 +22,13 @@ class CheckPermissionForSendOrderId
     /**
      * OrderCheck constructor.
      *
-     * @param Request $request
+     * @param Request         $request
      * @param OrderController $controller
      */
     public function __construct(Request $request, OrderController $controller, $guard = null)
     {
         $this->orderController = $controller;
-        $this->user = $request->user();
+        $this->user            = $request->user();
     }
 
     /**
@@ -44,9 +44,9 @@ class CheckPermissionForSendOrderId
     {
 
         if ($request->has('order_id')) {
-            if (! $this->user->can(config('constants.INSERT_ORDERPRODUCT_ACCESS'))) {
+            if (!$this->user->can(config('constants.INSERT_ORDERPRODUCT_ACCESS'))) {
                 return response()->json([
-                    'error' => 'You are not allowed to submit order_id: '.$request->get('order_id'),
+                    'error' => 'You are not allowed to submit order_id: ' . $request->get('order_id'),
                 ], Response::HTTP_FORBIDDEN);
             }
         } else {

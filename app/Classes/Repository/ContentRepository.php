@@ -16,8 +16,8 @@ class ContentRepository implements ContentRepositoryInterface
 {
     public function getContentById($contentId): Content
     {
-        $key = 'content:'.$contentId;
-        return Cache::tags(['content' , 'content_'.$contentId])
+        $key = 'content:' . $contentId;
+        return Cache::tags(['content', 'content_' . $contentId])
             ->remember($key, config("constants.CACHE_600"), function () use ($contentId) {
                 return Content::find($contentId) ?: new Content();
             });

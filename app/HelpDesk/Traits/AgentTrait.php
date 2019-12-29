@@ -4,8 +4,9 @@
 namespace App\HelpDesk\Traits;
 
 
-use App\HelpDesk\Models\Ticket;
 use App\HelpDesk\Models\Category;
+use App\HelpDesk\Models\Ticket;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 trait AgentTrait
 {
@@ -14,26 +15,26 @@ trait AgentTrait
         return $query->roleName(config('helpDesk.ROLE_HELP_DESK_AGENT'));
 //        $query->permissionName('ticketit_agent');
     }
-    
+
     public function scopeHelpAdmins($query)
     {
         return $query->roleName(config('helpDesk.ROLE_HELP_DESK_ADMIN'));
     }
-    
+
     public function isHelpAgent(): bool
     {
         return $this->hasRole(config('helpDesk.ROLE_HELP_DESK_AGENT'));
     }
-    
+
     public function isHelpAdmin(): bool
     {
         return $this->hasRole(config('helpDesk.ROLE_HELP_DESK_Admin'));
     }
-    
+
     /**
      * Check if user is the assigned agent for a ticket.
      *
-     * @param  Ticket  $ticket
+     * @param Ticket $ticket
      *
      * @return bool
      */
@@ -41,11 +42,11 @@ trait AgentTrait
     {
         return ($ticket->agent_id === $this->id && $this->isHelpAdmin());
     }
-    
+
     /**
      * Check if user is the owner for a ticket.
      *
-     * @param  Ticket  $ticket
+     * @param Ticket $ticket
      *
      * @return bool
      */
@@ -53,11 +54,11 @@ trait AgentTrait
     {
         return ($this->id === $ticket->user_id);
     }
-    
+
     /**
      * Get related categories.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return HasMany
      */
     public function helpCategories()
     {
@@ -79,19 +80,19 @@ trait AgentTrait
         return $this->tickets()
             ->close();
     }
-    
+
     public function agentCloseTickets()
     {
         return $this->agentTickets()
             ->close();
     }
-    
+
     public function openTickets()
     {
         return $this->tickets()
             ->open();
     }
-    
+
     public function agentOpenTickets()
     {
         return $this->agentTickets()

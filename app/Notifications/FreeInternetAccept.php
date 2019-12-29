@@ -22,7 +22,7 @@ class FreeInternetAccept extends Notification implements ShouldQueue
     /**
      * Get the notification's delivery channels.
      *
-     * @param  mixed  $notifiable
+     * @param mixed $notifiable
      *
      * @return array
      */
@@ -38,9 +38,9 @@ class FreeInternetAccept extends Notification implements ShouldQueue
     /**
      * Get the mail representation of the notification.
      *
-     * @param  mixed  $notifiable
+     * @param mixed $notifiable
      *
-     * @return \Illuminate\Notifications\Messages\MailMessage
+     * @return MailMessage
      */
     public function toMail($notifiable)
     {
@@ -50,7 +50,8 @@ class FreeInternetAccept extends Notification implements ShouldQueue
 
     private function msg(): string
     {
-        $messageCore = "آلایی عزیز با درخواست اینترنت رایگان شما موافقت شد"."\n".'دریافت فایل راهنما از'.'https://alaatv.com/v/asiatech';
+        $messageCore =
+            "آلایی عزیز با درخواست اینترنت رایگان شما موافقت شد" . "\n" . 'دریافت فایل راهنما از' . 'https://alaatv.com/v/asiatech';
 
         return $messageCore;
     }

@@ -9,18 +9,17 @@
 namespace App\Classes\Search\Filters;
 
 
-use App\BaseModel;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Cache;
 
 class Q extends FilterAbstract
 {
     protected $attribute = 'q';
-    
+
     /**
-     * @param  Builder         $builder
+     * @param Builder          $builder
      * @param                  $value
-     * @param  FilterCallback  $callback
+     * @param FilterCallback   $callback
      *
      * @return Builder
      */
@@ -29,23 +28,23 @@ class Q extends FilterAbstract
         $model = $builder->getModel();
         if (method_exists($model, 'bootSearchable')) {
             $value = $this->getSearchValue($value);
-            
+
             $ids = $this->getResultFromScout($value, $model);
-            
+
             return $builder->whereIn('id', $ids);
         }
         return $builder;
     }
-    
+
     /**
      * @param $value
      * @param $model
      *
      * @return mixed
      */
-    private function getResultFromScout($value,$model)
+    private function getResultFromScout($value, $model)
     {
-        return Cache::remember(md5($value), config("constants.CACHE_600"), function () use($value, $model) {
+        return Cache::remember(md5($value), config("constants.CACHE_600"), function () use ($value, $model) {
             $ids = $model::search($value)
                 ->get()
                 ->pluck('id')

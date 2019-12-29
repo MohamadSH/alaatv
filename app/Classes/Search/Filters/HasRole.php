@@ -13,9 +13,9 @@ use Illuminate\Database\Eloquent\Builder;
 class HasRole extends FilterAbstract
 {
     protected $attribute = 'id';
-    
+
     protected $relation = 'roles';
-    
+
     public function apply(Builder $builder, $value, FilterCallback $callback): Builder
     {
         return $builder->whereHas($this->relation, function ($q) use ($value) {

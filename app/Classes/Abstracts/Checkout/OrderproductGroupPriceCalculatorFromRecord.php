@@ -19,26 +19,25 @@ abstract class OrderproductGroupPriceCalculatorFromRecord extends CheckoutProces
         if (!isset($orderproductsToCalculateFromRecord)) {
             throw new Exception('Orderproducts to calculate from records have not been set');
         }
-        
+
         $calculatedOrderproductsFromRecord = $this->getOrderproductGroupPrice($orderproductsToCalculateFromRecord);
-        
+
         $calculatedOrderproducts = $cashier->getCalculatedOrderproducts();
         if (isset($calculatedOrderproducts)) {
             $calculatedOrderproducts = $calculatedOrderproducts->merge($calculatedOrderproductsFromRecord);
-        }
-        else {
+        } else {
             $calculatedOrderproducts = $calculatedOrderproductsFromRecord;
         }
-        
+
         $cashier->setCalculatedOrderproducts($calculatedOrderproducts);
-        
+
         return $this->next($cashier);
     }
-    
+
     /**
      * Gets price for a group of Orderproducts
      *
-     * @param  Collection  $orderproductsToCalculateFromRecord
+     * @param Collection $orderproductsToCalculateFromRecord
      *
      * @return mixed
      */

@@ -6,10 +6,10 @@
                 <div class="panel-heading">
                     #{{ $ticket->ticket_id }} - {{ $ticket->subject }}
                 </div>
-                
+
                 <div class="panel-body">
                     @include('helpDesk::includes.flash')
-                    
+
                     <div class="ticket-info">
                         <p>{{ $ticket->content }}</p>
                         <p>بخش: {{ $category->name }}</p>
@@ -22,25 +22,25 @@
                         </p>
                         <p>تاریخ ایجاد: {{ $ticket->created_at->diffForHumans() }}</p>
                     </div>
-                    
+
                     <hr>
-                    
+
                     <div class="comment-form">
                         <form action="{{ url('comment') }}" method="POST" class="form">
                             {!! csrf_field() !!}
-                            
+
                             <input type="hidden" name="ticket_id" value="{{ $ticket->id }}">
-                            
+
                             <div class="form-group{{ $errors->has('comment') ? ' has-error' : '' }}">
                                 <textarea rows="10" id="comment" class="form-control" name="comment"></textarea>
-                                
+
                                 @if ($errors->has('comment'))
                                     <span class="help-block">
                                         <strong>{{ $errors->first('comment') }}</strong>
                                     </span>
                                 @endif
                             </div>
-                            
+
                             <div class="form-group">
                                 <button type="submit" class="btn btn-primary">ثبت</button>
                             </div>

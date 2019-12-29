@@ -7,19 +7,18 @@ use App\Http\Requests\EditPhoneRequest;
 use App\Http\Requests\InsertPhoneRequest;
 use App\Phone;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Config;
 
 class PhoneController extends Controller
 {
     protected $response;
-    
+
     function __construct()
     {
         /** setting permissions
          *
          */
-        $this->middleware('permission:'.config('constants.EDIT_CONTACT_ACCESS'), ['only' => 'edit']);
-        
+        $this->middleware('permission:' . config('constants.EDIT_CONTACT_ACCESS'), ['only' => 'edit']);
+
         $this->response = new Response();
     }
 
@@ -33,8 +32,7 @@ class PhoneController extends Controller
         }
         if ($phone->save()) {
             return $this->response->setStatusCode(Response::HTTP_OK);
-        }
-        else {
+        } else {
             return $this->response->setStatusCode(Response::HTTP_SERVICE_UNAVAILABLE);
         }
     }
@@ -44,15 +42,14 @@ class PhoneController extends Controller
         $phone->fill($request->all());
         if ($phone->update()) {
             session()->put("success", "شماره تماس با موفقیت اصلاح شد");
-            
+
             return true;
-        }
-        else {
+        } else {
             session()->put("error", "خطای پایگاه داده.");
-            
+
             return false;
         }
-        
+
         return redirect()->back();
     }
 

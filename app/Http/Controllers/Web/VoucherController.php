@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Web;
 
 use App\Gender;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\EditUserRequest;
 use App\Http\Requests\InsertVoucherRequest;
 use App\Major;
@@ -12,10 +13,12 @@ use App\Traits\RequestCommon;
 use App\Websitesetting;
 use Carbon\Carbon;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
+use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Response;
+use Illuminate\Routing\Redirector;
+use Illuminate\View\View;
 use Jenssegers\Agent\Agent;
 use SEO;
 
@@ -31,15 +34,40 @@ class VoucherController extends Controller
     }
 
     /**
+     * @param Agent $agent
+     *
+     * @return array
+     */
+    private function getAuthExceptionArray(Agent $agent): array
+    {
+        $authException = ['show'];
+
+        return $authException;
+    }
+
+    /**
+     * @param array $authException
+     */
+    private function callMiddlewares(array $authException): void
+    {
+        $this->middleware('auth', ['except' => $authException]);
+        $this->middleware('permission:' . config('constants.LIST_USER_ACCESS') . "|" . config('constants.GET_BOOK_SELL_REPORT') . "|" . config('constants.GET_USER_REPORT'),
+            ['only' => 'index']);
+        $this->middleware('permission:' . config('constants.INSERT_USER_ACCESS'), ['only' => 'create']);
+        $this->middleware('permission:' . config('constants.REMOVE_USER_ACCESS'), ['only' => 'destroy']);
+        $this->middleware('permission:' . config('constants.SHOW_USER_ACCESS'), ['only' => 'edit']);
+    }
+
+    /**
      * Submit user request for voucher request
      *
      * @param Request $request
      *
-     * @return \Illuminate\Contracts\View\Factory|RedirectResponse|\Illuminate\Routing\Redirector|\Illuminate\View\View
+     * @return Factory|RedirectResponse|Redirector|View
      */
     public function voucherRequest(Request $request)
     {
-        return redirect(route('web.index') , Response::HTTP_FOUND);
+        return redirect(route('web.index'), Response::HTTP_FOUND);
 
         $url   = $request->url();
         $title = "آلاء| درخواست اینترنت آسیاتک";
@@ -81,14 +109,13 @@ class VoucherController extends Controller
             ->orderBy("completed_at")
             ->get();
         $userAsitechPendingOrders = $asitechPendingOrders->where("user_id", $user->id);
-        $rank=0;
+        $rank                     = 0;
         if ($userAsitechPendingOrders->isNotEmpty()) {
             $rank = $userAsitechPendingOrders->keys()
                     ->first() + 1;
 
             $userHasRegistered = true;
-        }
-        else {
+        } else {
             $asitechApprovedOrders = $user->orders()
                 ->whereHas("orderproducts", function ($q) use ($asiatechProduct) {
                     $q->where("product_id", $asiatechProduct);
@@ -116,7 +143,7 @@ class VoucherController extends Controller
     /**
      * Submit user request for voucher request
      *
-     * @param  InsertVoucherRequest InsertVoucherRequest
+     * @param InsertVoucherRequest InsertVoucherRequest
      *
      * @return Response
      * @throws FileNotFoundException
@@ -208,31 +235,6 @@ class VoucherController extends Controller
         $user->update();
 
         return redirect()->back();
-    }
-
-    /**
-     * @param  Agent  $agent
-     *
-     * @return array
-     */
-    private function getAuthExceptionArray(Agent $agent): array
-    {
-        $authException = ['show'];
-
-        return $authException;
-    }
-
-    /**
-     * @param  array  $authException
-     */
-    private function callMiddlewares(array $authException): void
-    {
-        $this->middleware('auth', ['except' => $authException]);
-        $this->middleware('permission:'.config('constants.LIST_USER_ACCESS')."|".config('constants.GET_BOOK_SELL_REPORT')."|".config('constants.GET_USER_REPORT'),
-            ['only' => 'index']);
-        $this->middleware('permission:'.config('constants.INSERT_USER_ACCESS'), ['only' => 'create']);
-        $this->middleware('permission:'.config('constants.REMOVE_USER_ACCESS'), ['only' => 'destroy']);
-        $this->middleware('permission:'.config('constants.SHOW_USER_ACCESS'), ['only' => 'edit']);
     }
 
     /**

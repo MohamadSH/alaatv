@@ -14,6 +14,6 @@ class AlaaOrderCouponCalculatorBasedOnCostAmount extends OrderCouponCalculatorBa
 {
     protected function calculateDiscount($couponDiscountCostAmount, $totalRawPriceWhichHasDiscount): int
     {
-        return (int) (max($totalRawPriceWhichHasDiscount - $couponDiscountCostAmount, 0));
+        return (int)(max($totalRawPriceWhichHasDiscount - $couponDiscountCostAmount, 0));
     }
 }

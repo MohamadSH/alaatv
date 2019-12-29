@@ -2,24 +2,26 @@
 
 namespace App\Http\Controllers\Web;
 
-use App\Order;
-use App\Repositories\TransactionGatewayRepo;
-use Carbon\Carbon;
-use App\Transaction;
-use App\Orderproduct;
-use App\Paymentmethod;
-use App\Traits\Helper;
-use Zarinpal\Zarinpal;
-use App\Transactionstatus;
-use App\Traits\OrderCommon;
-use Illuminate\Http\Request;
-use App\Traits\RequestCommon;
-use Illuminate\Http\Response;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\View;
-use App\Repositories\TransactionRepo;
 use App\Http\Requests\EditTransactionRequest;
 use App\Http\Requests\InsertTransactionRequest;
+use App\Order;
+use App\Orderproduct;
+use App\Paymentmethod;
+use App\Repositories\TransactionGatewayRepo;
+use App\Repositories\TransactionRepo;
+use App\Traits\Helper;
+use App\Traits\OrderCommon;
+use App\Traits\RequestCommon;
+use App\Transaction;
+use App\Transactionstatus;
+use App\Wallet;
+use Carbon\Carbon;
+use Exception;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\View;
+use Zarinpal\Zarinpal;
 
 class TransactionController extends Controller
 {
@@ -29,10 +31,10 @@ class TransactionController extends Controller
 
     function __construct()
     {
-        $this->middleware('permission:'.config('constants.LIST_TRANSACTION_ACCESS'), ['only' => 'index']);
-        $this->middleware('permission:'.config('constants.SHOW_TRANSACTION_ACCESS'), ['only' => 'edit']);
-        $this->middleware('permission:'.config('constants.EDIT_TRANSACTION_ACCESS'), ['only' => 'update']);
-        $this->middleware('permission:'.config('constants.INSERT_TRANSACTION_ACCESS'),['only'=>'store']);
+        $this->middleware('permission:' . config('constants.LIST_TRANSACTION_ACCESS'), ['only' => 'index']);
+        $this->middleware('permission:' . config('constants.SHOW_TRANSACTION_ACCESS'), ['only' => 'edit']);
+        $this->middleware('permission:' . config('constants.EDIT_TRANSACTION_ACCESS'), ['only' => 'update']);
+        $this->middleware('permission:' . config('constants.INSERT_TRANSACTION_ACCESS'), ['only' => 'store']);
         $this->middleware('role:admin', ['only' => 'getUnverifiedTransactions']);
     }
 
@@ -64,25 +66,25 @@ class TransactionController extends Controller
 
             $transactionGatewayFilter = $request->get('transactiongateway_id');
             if (isset($transactionGatewayFilter)) {
-                $transactions            = $transactions->where('transactiongateway_id', $transactionGatewayFilter);
+                $transactions = $transactions->where('transactiongateway_id', $transactionGatewayFilter);
             }
 
             $transactionCode = trim($request->get('transactionCode'));
             if (isset($transactionCode[0])) {
                 $transactions = $transactions->where(function ($q) use ($transactionCode) {
-                    $q->where('traceNumber', 'like', '%'.$transactionCode.'%')
+                    $q->where('traceNumber', 'like', '%' . $transactionCode . '%')
                         ->orWhere('referenceNumber', 'like',
-                            '%'.$transactionCode.'%')
-                        ->orWhere('paycheckNumber', 'like', '%'.$transactionCode.'%')
+                            '%' . $transactionCode . '%')
+                        ->orWhere('paycheckNumber', 'like', '%' . $transactionCode . '%')
                         ->orWhere('transactionID', 'like',
-                            '%'.$transactionCode.'%');
+                            '%' . $transactionCode . '%');
                 });
             }
 
             $transactionManagerComment = $request->get('transactionManagerComment');
             if (isset($transactionManagerComment[0])) {
                 $transactions = $transactions->where(function ($q) use ($transactionManagerComment) {
-                    $q->where('managerComment', 'like', '%'.$transactionManagerComment.'%');
+                    $q->where('managerComment', 'like', '%' . $transactionManagerComment . '%');
                 });
             }
 
@@ -90,7 +92,7 @@ class TransactionController extends Controller
             if (isset($firstName) && strlen($firstName) > 0) {
                 $transactions = $transactions->whereHas('order', function ($query) use ($firstName) {
                     $query->whereHas('user', function ($q) use ($firstName) {
-                        $q->where('firstName', 'like', '%'.$firstName.'%');
+                        $q->where('firstName', 'like', '%' . $firstName . '%');
                     });
                 });
             }
@@ -99,7 +101,7 @@ class TransactionController extends Controller
             if (isset($lastName) && strlen($lastName) > 0) {
                 $transactions = $transactions->whereHas('order', function ($query) use ($lastName) {
                     $query->whereHas('user', function ($q) use ($lastName) {
-                        $q->where('lastName', 'like', '%'.$lastName.'%');
+                        $q->where('lastName', 'like', '%' . $lastName . '%');
                     });
                 });
             }
@@ -108,7 +110,7 @@ class TransactionController extends Controller
             if (isset($nationalCode) && strlen($nationalCode) > 0) {
                 $transactions = $transactions->whereHas('order', function ($query) use ($nationalCode) {
                     $query->whereHas('user', function ($q) use ($nationalCode) {
-                        $q->where('nationalCode', 'like', '%'.$nationalCode.'%');
+                        $q->where('nationalCode', 'like', '%' . $nationalCode . '%');
                     });
                 });
             }
@@ -117,7 +119,7 @@ class TransactionController extends Controller
             if (isset($mobile) && strlen($mobile) > 0) {
                 $transactions = $transactions->whereHas('order', function ($query) use ($mobile) {
                     $query->whereHas('user', function ($q) use ($mobile) {
-                        $q->where('mobile', 'like', '%'.$mobile.'%');
+                        $q->where('mobile', 'like', '%' . $mobile . '%');
                     });
                 });
             }
@@ -155,8 +157,7 @@ class TransactionController extends Controller
             if (isset($transactionType) && strlen($transactionType) > 0) {
                 if ($transactionType == 0) {
                     $transactions = $transactions->where('cost', '>', 0);
-                }
-                else {
+                } else {
                     if ($transactionType == 1) {
                         $transactions = $transactions->where('cost', '<', 0);
                     }
@@ -168,24 +169,24 @@ class TransactionController extends Controller
             $totaolCost = number_format($transactions->sum('cost'));
 
             return json_encode([
-                'index'                      => View::make('transaction.index',
+                'index'     => View::make('transaction.index',
                     compact('transactions'))
                     ->render(),
-                'totalCost'                  => $totaolCost,
+                'totalCost' => $totaolCost,
             ], JSON_UNESCAPED_UNICODE);
-        } catch (\Exception    $e) {
+        } catch (Exception    $e) {
             return response()->json([
                 'message' => 'unexpected error',
                 'error'   => $e->getMessage(),
                 'line'    => $e->getLine(),
                 'file'    => $e->getFile(),
-            ] , Response::HTTP_SERVICE_UNAVAILABLE);
+            ], Response::HTTP_SERVICE_UNAVAILABLE);
         }
     }
 
     /**
-     * @param  Transaction  $transaction
-     * @param  array        $data
+     * @param Transaction $transaction
+     * @param array       $data
      *
      * @return array
      */
@@ -229,8 +230,7 @@ class TransactionController extends Controller
         if ($transaction->update()) {
             $result['statusCode'] = Response::HTTP_OK;
             $result['message']    = 'تراکنش با موفقیت اصلاح شد';
-        }
-        else {
+        } else {
             $result['statusCode'] = Response::HTTP_SERVICE_UNAVAILABLE;
             $result['message']    = 'خطای پایگاه داده';
         }
@@ -249,36 +249,35 @@ class TransactionController extends Controller
             ], Response::HTTP_NOT_FOUND);
         }
 
-        if($request->get('paymentmethod_id') == config('constants.PAYMENT_METHOD_WALLET') && $request->has('walletWithdraw')){
-            if(!isset($order->user)){
+        if ($request->get('paymentmethod_id') == config('constants.PAYMENT_METHOD_WALLET') && $request->has('walletWithdraw')) {
+            if (!isset($order->user)) {
                 return response()->json([
                     'error' => 'کاربر صاحب سفارش یافت نشد',
                 ], Response::HTTP_NOT_FOUND);
             }
-            /** @var \App\Wallet $wallet */
+            /** @var Wallet $wallet */
             $wallet = $order->user->wallets->where("wallettype_id", config('constants.WALLET_TYPE_GIFT'))->first();
             $request->offsetSet('wallet_id', $wallet->id);
-            $withdrawResult = $wallet->withdraw($request->get('cost') , $order->id , true , false);
-            if(!$withdrawResult['result']){
-                session()->flash('error' , 'امکان برداشت مبلغ مورد نظر از کیف پول وجود ندارد');
+            $withdrawResult = $wallet->withdraw($request->get('cost'), $order->id, true, false);
+            if (!$withdrawResult['result']) {
+                session()->flash('error', 'امکان برداشت مبلغ مورد نظر از کیف پول وجود ندارد');
                 return redirect()->back();
             }
         }
 
         $result = $this->new($request->all());
 
-        if($result['statusCode'] == Response::HTTP_OK) {
-            session()->flash('success' , $result['message']);
-        }
-        else {
-            session()->flash('error' , $result['message']);
+        if ($result['statusCode'] == Response::HTTP_OK) {
+            session()->flash('success', $result['message']);
+        } else {
+            session()->flash('error', $result['message']);
         }
 
         return redirect()->back();
     }
 
     /**
-     * @param  array  $data
+     * @param array $data
      *
      * @return array
      */
@@ -297,8 +296,7 @@ class TransactionController extends Controller
             $result['statusCode']  = Response::HTTP_OK;
             $result['message']     = 'تراکنش با موفقیت ثبت شد.';
             $result['transaction'] = $transaction;
-        }
-        else {
+        } else {
             $result['statusCode'] = Response::HTTP_INTERNAL_SERVER_ERROR;
             $result['message']    = 'خطای پایگاه داده در ثبت تراکنش';
         }
@@ -314,22 +312,23 @@ class TransactionController extends Controller
             ->orderBy('order')
             ->pluck('displayName', 'id')
             ->toArray();
-        $deadlineAt = null;
+        $deadlineAt                = null;
         if (isset($transaction->deadline_at)) {
             $deadlineAt = Carbon::parse($transaction->deadline_at)
                 ->format('Y-m-d');
         }
-        $completedAt=null;
+        $completedAt = null;
         if (isset($transaction->completed_at)) {
             $completedAt = Carbon::parse($transaction->completed_at)
                 ->format('Y-m-d');
         }
 
-        $transactionGateways = TransactionGatewayRepo::getTransactionGateways(['enable'=>1])->get()->pluck('displayName' , 'id');
+        $transactionGateways =
+            TransactionGatewayRepo::getTransactionGateways(['enable' => 1])->get()->pluck('displayName', 'id');
 
         return view('transaction.edit',
             compact('transaction', 'transactionPaymentmethods', 'transactionStatuses',
-                'deadlineAt', 'completedAt' , 'transactionGateways'));
+                'deadlineAt', 'completedAt', 'transactionGateways'));
     }
 
     public function limitedUpdate(Request $request, Transaction $transaction)
@@ -365,12 +364,10 @@ class TransactionController extends Controller
             $response = $this->update($editRequest, $transaction);
             if ($response->getStatusCode() == Response::HTTP_OK) {
                 session()->put('success', 'تراکنش با موفقیت ثبت شد');
-            }
-            else {
+            } else {
                 if ($response->getStatusCode() == Response::HTTP_SERVICE_UNAVAILABLE) {
                     session()->put('error', 'خطای پایگاه داده ، لطفا مجددا اقدام نمایید.');
-                }
-                else {
+                } else {
                     session()->put('error', 'خطای نا مشخص');
                 }
             }
@@ -390,14 +387,13 @@ class TransactionController extends Controller
         if (TransactionRepo::modify($request->all(), $transaction->id)) {
             $result['statusCode'] = Response::HTTP_OK;
             $result['message']    = 'تراکنش با موفقیت اصلاح شد';
-        }
-        else {
+        } else {
             $result['statusCode'] = Response::HTTP_SERVICE_UNAVAILABLE;
             $result['message']    = 'خطای پایگاه داده';
         }
 
         if ($request->expectsJson()) {
-            return response()->json([],$result['statusCode']);
+            return response()->json([], $result['statusCode']);
         }
         session()->put('success', $result['message']);
 
@@ -408,8 +404,7 @@ class TransactionController extends Controller
     {
         if ($transaction->delete()) {
             session()->put('success', 'تراکنش با موفقیت حذف شد');
-        }
-        else {
+        } else {
             session()->put('error', 'خطای پایگاه داده');
         }
 
@@ -422,30 +417,31 @@ class TransactionController extends Controller
     public function getUnverifiedTransactions()
     {
         try {
-            $merchant     = config('Zarinpal.merchantID');
+            $merchant = config('Zarinpal.merchantID');
 
-            $zarinPal     = new Zarinpal($merchant);
-            $result       = $zarinPal->getDriver()->unverifiedTransactions(['MerchantID'=>$merchant]);
+            $zarinPal = new Zarinpal($merchant);
+            $result   = $zarinPal->getDriver()->unverifiedTransactions(['MerchantID' => $merchant]);
 
-            $error=null;
+            $error        = null;
             $transactions = collect();
             if ($result['Status'] == 'success') {
                 $authorities = $result['Authorities'];
-                if(is_null($authorities)) {
+                if (is_null($authorities)) {
                     $authorities = collect();
                 }
 
                 foreach ($authorities as $authority) {
                     /** @var Transaction $transaction */
-                    $transaction = TransactionRepo::getTransactionByAuthority($authority['Authority'])->getValue(null);
-                    $userId= null;
-                    $firstName   = '';
-                    $lastName    = '';
-                    $mobile      = '';
-                    $jalaliCreatedAt  = '';
+                    $transaction     =
+                        TransactionRepo::getTransactionByAuthority($authority['Authority'])->getValue(null);
+                    $userId          = null;
+                    $firstName       = '';
+                    $lastName        = '';
+                    $mobile          = '';
+                    $jalaliCreatedAt = '';
                     if (!is_null($transaction)) {
                         $jalaliCreatedAt = $transaction->jalali_created_at;
-                        $user       = optional($transaction->order)->user;
+                        $user            = optional($transaction->order)->user;
                         if (isset($user)) {
                             $userId    = $user->id;
                             $firstName = $user->firstName;
@@ -464,68 +460,68 @@ class TransactionController extends Controller
                         'created_at' => $jalaliCreatedAt,
                     ]);
                 }
-            }
-            else {
+            } else {
                 dd($result);
                 $error = $result['error'];
             }
             $pageName = 'admin';
 
             return view('transaction.unverifiedTransactions', compact('transactions', 'error', 'pageName'));
-        } catch (\Exception    $e) {
+        } catch (Exception    $e) {
             return response()->json([
                 'message' => 'unexpected error',
                 'error'   => $e->getMessage(),
                 'line'    => $e->getLine(),
                 'file'    => $e->getFile(),
-            ] , Response::HTTP_SERVICE_UNAVAILABLE);
+            ], Response::HTTP_SERVICE_UNAVAILABLE);
         }
     }
 
     public function convertToDonate(Transaction $transaction)
     {
         if ($transaction->cost >= 0 || isset($transaction->traceNumber)) {
-            return response()->json( ['message' => 'این تراکنش بازگشت هزینه نمی باشد'] , Response::HTTP_SERVICE_UNAVAILABLE);
+            return response()->json(['message' => 'این تراکنش بازگشت هزینه نمی باشد'], Response::HTTP_SERVICE_UNAVAILABLE);
         }
 
-        $order = Order::FindOrFail($transaction->order->id);
-        $donateOrderproduct = new Orderproduct();
-        $donateOrderproduct->order_id = $order->id;
+        $order                          = Order::FindOrFail($transaction->order->id);
+        $donateOrderproduct             = new Orderproduct();
+        $donateOrderproduct->order_id   = $order->id;
         $donateOrderproduct->product_id = 182;
-        $donateOrderproduct->cost = -$transaction->cost;
+        $donateOrderproduct->cost       = -$transaction->cost;
 
         if (!$donateOrderproduct->save()) {
-            return response()->json( ['message' => 'خطا در ایجاد آیتم کمک مالی . لطفا دوباره اقدام نمایید.'] , Response::HTTP_SERVICE_UNAVAILABLE);
+            return response()->json(['message' => 'خطا در ایجاد آیتم کمک مالی . لطفا دوباره اقدام نمایید.'], Response::HTTP_SERVICE_UNAVAILABLE);
         }
 
         if (!$transaction->forceDelete()) {
-            return response()->json( ['message' => 'خطا در بروز رسانی تراکنش . لطفا تراکنش را دستی اصلاح نمایید.'] , Response::HTTP_SERVICE_UNAVAILABLE);
+            return response()->json(['message' => 'خطا در بروز رسانی تراکنش . لطفا تراکنش را دستی اصلاح نمایید.'], Response::HTTP_SERVICE_UNAVAILABLE);
         }
 
-        $newOrder = Order::where('id', $order->id)->get()->first();
-        $orderCostArray = $newOrder->obtainOrderCost(true, false, 'REOBTAIN');
-        $newOrder->cost = $orderCostArray['rawCostWithDiscount'];
+        $newOrder                    = Order::where('id', $order->id)->get()->first();
+        $orderCostArray              = $newOrder->obtainOrderCost(true, false, 'REOBTAIN');
+        $newOrder->cost              = $orderCostArray['rawCostWithDiscount'];
         $newOrder->costwithoutcoupon = $orderCostArray['rawCostWithoutDiscount'];
         if ($newOrder->update()) {
             return response()->json(['message' => 'عملیات تبدیل با موفقیت انجام شد.']);
         } else {
-            return response()->json( ['message' => 'خطا در بروز رسانی سفارش . لطفا سفارش را دستی اصلاح نمایید.'] , Response::HTTP_SERVICE_UNAVAILABLE);
+            return response()->json(['message' => 'خطا در بروز رسانی سفارش . لطفا سفارش را دستی اصلاح نمایید.'], Response::HTTP_SERVICE_UNAVAILABLE);
         }
     }
 
-    public function completeTransaction(\Illuminate\Http\Request $request, Transaction $transaction)
+    public function completeTransaction(Request $request, Transaction $transaction)
     {
         if (isset($transaction->traceNumber)) {
             return;
         }
 
-        $transaction->traceNumber = $request->get('traceNumber');
+        $transaction->traceNumber      = $request->get('traceNumber');
         $transaction->paymentmethod_id = config('constants.PAYMENT_METHOD_ATM');
-        $transaction->managerComment = $transaction->managerComment.'شماره کارت مقصد: \n'.$request->get('managerComment');
+        $transaction->managerComment   =
+            $transaction->managerComment . 'شماره کارت مقصد: \n' . $request->get('managerComment');
         if ($transaction->update()) {
             return response()->json(['message' => 'اطلاعات تراکنش با موفقیت ذخیره شد']);
         } else {
-            return response()->json( ['message' => 'خطا در ذخیره اطلاعات . لفطا مجددا اقدام نمایید'] , Response::HTTP_SERVICE_UNAVAILABLE);
+            return response()->json(['message' => 'خطا در ذخیره اطلاعات . لفطا مجددا اقدام نمایید'], Response::HTTP_SERVICE_UNAVAILABLE);
         }
     }
 

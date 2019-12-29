@@ -2,39 +2,44 @@
 
 namespace App;
 
+use Carbon\Carbon;
+use Eloquent;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
+
 /**
  * App\Phonetype
  *
- * @property int                                                        $id
- * @property string|null                                                $displayName نام قابل نمایش این نوع
- * @property string|null                                                $name        نام این نوع در سیستم
- * @property string|null                                                $description توضیحات این نوع
- * @property int                                                        $isEnable    نوع شماره تلفن فعال است یا خیر
- * @property \Carbon\Carbon|null                                        $created_at
- * @property \Carbon\Carbon|null                                        $updated_at
- * @property \Carbon\Carbon|null                                        $deleted_at
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Phone[] $phones
+ * @property int                                                   $id
+ * @property string|null                                           $displayName نام قابل نمایش این نوع
+ * @property string|null                                           $name        نام این نوع در سیستم
+ * @property string|null                                           $description توضیحات این نوع
+ * @property int                                                   $isEnable    نوع شماره تلفن فعال است یا خیر
+ * @property Carbon|null                                   $created_at
+ * @property Carbon|null                                   $updated_at
+ * @property Carbon|null                                   $deleted_at
+ * @property-read Collection|Phone[] $phones
  * @method static bool|null forceDelete()
- * @method static \Illuminate\Database\Query\Builder|\App\Phonetype onlyTrashed()
+ * @method static \Illuminate\Database\Query\Builder|Phonetype onlyTrashed()
  * @method static bool|null restore()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Phonetype whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Phonetype whereDeletedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Phonetype whereDescription($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Phonetype whereDisplayName($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Phonetype whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Phonetype whereIsEnable($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Phonetype whereName($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Phonetype whereUpdatedAt($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Phonetype withTrashed()
- * @method static \Illuminate\Database\Query\Builder|\App\Phonetype withoutTrashed()
- * @mixin \Eloquent
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Phonetype newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Phonetype newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Phonetype query()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel disableCache()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel withCacheCooldownSeconds($seconds)
+ * @method static Builder|Phonetype whereCreatedAt($value)
+ * @method static Builder|Phonetype whereDeletedAt($value)
+ * @method static Builder|Phonetype whereDescription($value)
+ * @method static Builder|Phonetype whereDisplayName($value)
+ * @method static Builder|Phonetype whereId($value)
+ * @method static Builder|Phonetype whereIsEnable($value)
+ * @method static Builder|Phonetype whereName($value)
+ * @method static Builder|Phonetype whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Query\Builder|Phonetype withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|Phonetype withoutTrashed()
+ * @mixin Eloquent
+ * @method static Builder|Phonetype newModelQuery()
+ * @method static Builder|Phonetype newQuery()
+ * @method static Builder|Phonetype query()
+ * @method static Builder|BaseModel disableCache()
+ * @method static Builder|BaseModel withCacheCooldownSeconds($seconds)
  * @property-read mixed                                                 $cache_cooldown_seconds
- * @property-read int|null $phones_count
+ * @property-read int|null                                              $phones_count
  */
 class Phonetype extends BaseModel
 {
@@ -47,7 +52,7 @@ class Phonetype extends BaseModel
         'description',
         'isEnable',
     ];
-    
+
     public function phones()
     {
         return $this->hasMany('\App\Phone');

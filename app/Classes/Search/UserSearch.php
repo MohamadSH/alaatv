@@ -78,7 +78,7 @@ class UserSearch extends SearchAbstract
         $this->pageNum = $this->setPageNum($filters);
         $key           = $this->makeCacheKey($filters);
 
-        return Cache::tags(['user' , 'user_search' , 'search'])
+        return Cache::tags(['user', 'user_search', 'search'])
             ->remember($key, $this->cacheTime, function () use ($filters) {
                 $query = $this->applyDecoratorsFromFiltersArray($filters, $this->model->newQuery());
 

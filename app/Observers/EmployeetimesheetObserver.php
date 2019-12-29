@@ -10,7 +10,7 @@ class EmployeetimesheetObserver
     /**
      * Handle the content "created" event.
      *
-     * @param  \App\Employeetimesheet  $employeetimesheet
+     * @param Employeetimesheet $employeetimesheet
      *
      * @return void
      */
@@ -22,7 +22,7 @@ class EmployeetimesheetObserver
     /**
      * Handle the content "updated" event.
      *
-     * @param  \App\Employeetimesheet  $employeetimesheet
+     * @param Employeetimesheet $employeetimesheet
      *
      * @return void
      */
@@ -33,7 +33,7 @@ class EmployeetimesheetObserver
     /**
      * Handle the content "deleted" event.
      *
-     * @param  \App\Employeetimesheet  $employeetimesheet
+     * @param Employeetimesheet $employeetimesheet
      *
      * @return void
      */
@@ -45,7 +45,7 @@ class EmployeetimesheetObserver
     /**
      * Handle the content "restored" event.
      *
-     * @param  \App\Employeetimesheet  $employeetimesheet
+     * @param Employeetimesheet $employeetimesheet
      *
      * @return void
      */
@@ -57,7 +57,7 @@ class EmployeetimesheetObserver
     /**
      * Handle the content "force deleted" event.
      *
-     * @param  \App\Employeetimesheet  $employeetimesheet
+     * @param Employeetimesheet $employeetimesheet
      *
      * @return void
      */
@@ -71,7 +71,7 @@ class EmployeetimesheetObserver
      * the saved and updated model events will not be fired for the updated models.
      * This is because the models are never actually retrieved when issuing a mass update.
      *
-     * @param  Employeetimesheet  $employeetimesheet
+     * @param Employeetimesheet $employeetimesheet
      */
     public function saving(Employeetimesheet $employeetimesheet)
     {
@@ -79,6 +79,6 @@ class EmployeetimesheetObserver
 
     public function saved(Employeetimesheet $employeetimesheet)
     {
-        Cache::tags(['employeetimesheet_'.$employeetimesheet->id])->flush();
+        Cache::tags(['employeetimesheet_' . $employeetimesheet->id])->flush();
     }
 }

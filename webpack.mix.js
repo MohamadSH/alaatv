@@ -6,14 +6,15 @@ class Mix {
         this.outputCssFile = [];
         this.mix = require('laravel-mix');
         this.purify = require("purify-css");
+        this.mix.sass('public/acm/AlaatvCustomFiles/components/Favorite/style.scss', 'public/acm/AlaatvCustomFiles/components/Favorite');
+        this.mix.sass('public/acm/AlaatvCustomFiles/components/MegaMenu/style.scss', 'public/acm/AlaatvCustomFiles/components/MegaMenu');
+        this.mix.sass('public/acm/AlaatvCustomFiles/components/AjaxLogin/style.scss', 'public/acm/AlaatvCustomFiles/components/AjaxLogin');
+        this.mix.sass('public/acm/AlaatvCustomFiles/components/CustomDropDown/style.scss', 'public/acm/AlaatvCustomFiles/components/CustomDropDown');
+        this.mix.sass('public/acm/AlaatvCustomFiles/components/ScrollCarousel/style.scss', 'public/acm/AlaatvCustomFiles/components/ScrollCarousel');
+        this.mix.sass('public/acm/AlaatvCustomFiles/components/SearchBoxFilter/style.scss', 'public/acm/AlaatvCustomFiles/components/SearchBoxFilter');
         this.mix.sass('public/acm/AlaatvCustomFiles/components/OwlCarouselType2/style.scss', 'public/acm/AlaatvCustomFiles/components/OwlCarouselType2');
         this.mix.sass('public/acm/AlaatvCustomFiles/components/MultiLevelSearch/style.scss', 'public/acm/AlaatvCustomFiles/components/MultiLevelSearch');
-        this.mix.sass('public/acm/AlaatvCustomFiles/components/SearchBoxFilter/style.scss', 'public/acm/AlaatvCustomFiles/components/SearchBoxFilter');
-        this.mix.sass('public/acm/AlaatvCustomFiles/components/ScrollCarousel/style.scss', 'public/acm/AlaatvCustomFiles/components/ScrollCarousel');
         this.mix.sass('public/acm/AlaatvCustomFiles/components/ScrollCarousel/itemStyle.scss', 'public/acm/AlaatvCustomFiles/components/ScrollCarousel');
-        this.mix.sass('public/acm/AlaatvCustomFiles/components/Favorite/style.scss', 'public/acm/AlaatvCustomFiles/components/Favorite');
-        this.mix.sass('public/acm/AlaatvCustomFiles/components/AjaxLogin/style.scss', 'public/acm/AlaatvCustomFiles/components/AjaxLogin');
-        this.mix.sass('public/acm/AlaatvCustomFiles/components/MegaMenu/style.scss', 'public/acm/AlaatvCustomFiles/components/MegaMenu');
         this.mix.sass('public/acm/AlaatvCustomFiles/css/page/pages/content-search/searchResult.scss', 'public/acm/AlaatvCustomFiles/css/page/pages/content-search');
     }
 
@@ -525,15 +526,16 @@ class Mix {
     }
     mixLanding8() {
         this.mixCssAndJs([
-                'node_modules/flipclock/dist/flipclock.css',
+                // 'node_modules/metrojs/release/MetroJs.Full/MetroJs.min.css',
+                // 'node_modules/flipclock/dist/flipclock.css',
                 'public/acm/AlaatvCustomFiles/components/imageWithCaption/style.css',
                 'public/acm/AlaatvCustomFiles/components/ribbon/style.css',
                 'public/acm/AlaatvCustomFiles/css/page/product/landing/8.css',
             ],
             'public/css/page-landing8.css',
             [
-                'node_modules/flipclock/dist/flipclock.js',
-                'public/acm/AlaatvCustomFiles/js/page/product/landing/8.js',
+                // 'node_modules/flipclock/dist/flipclock.js',
+                // 'public/acm/AlaatvCustomFiles/js/page/product/landing/8.js',
             ],
             'public/js/page-landing8.js'
         );
@@ -589,51 +591,30 @@ class Mix {
         this.mixLanding10();
     }
 
-    mixPageProductShow() {
-        this.mixCssAndJs([
-                'node_modules/toastr/build/toastr.css',
-                'node_modules/bootstrap-switch/dist/css/bootstrap3/bootstrap-switch.css',
-                'node_modules/lightgallery/src/css/lightgallery.css',
-                'public/acm/videojs/skins/alaa-theme/videojs.css',
-                'public/acm/videojs/plugins/pip/videojs.pip.min.css',
-                'public/acm/videojs/plugins/pip/videojs.pip.rtl.css',
-                'public/acm/videojs/plugins/seek-to-point.css',
-                'public/acm/AlaatvCustomFiles/components/imageWithCaption/style.css',
-                'public/acm/AlaatvCustomFiles/components/ribbon/style.css',
-                'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/style.css',
-                'public/acm/AlaatvCustomFiles/components/ScrollCarousel/style.css',
-                'public/acm/AlaatvCustomFiles/components/Favorite/style.css',
-                'public/acm/AlaatvCustomFiles/css/page/product/show.css',
-            ],
-            'public/css/product-show.css',
-            [
-                'node_modules/toastr/build/toastr.min.js',
-                'node_modules/bootstrap-switch/dist/js/bootstrap-switch.js',
-                'public/acm/AlaatvCustomFiles/components/ScrollCarousel/js.js',
-                'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/js.js',
-                'node_modules/lightgallery/src/js/lightgallery.js',
-                'node_modules/lightgallery/modules/lg-thumbnail.min.js',
-                'node_modules/lightgallery/modules/lg-autoplay.min.js',
-                'node_modules/lightgallery/modules/lg-fullscreen.min.js',
-                'node_modules/lightgallery/modules/lg-pager.min.js',
-                'node_modules/lightgallery/modules/lg-hash.min.js',
-                'node_modules/lightgallery/modules/lg-share.min.js',
-                'node_modules/lightgallery/modules/lg-zoom.min.js',
-                'public/assets/demo/demo12/custom/components/base/bootstrap-notify.js',
-                'public/acm/videojs/video.min.js',
-                'public/acm/videojs/plugins/pip/videojs.pip.min.js',
-                'public/acm/videojs/nuevo.min.js',
-                'public/acm/videojs/plugins/videojs.p2p.min.js',
-                'public/acm/videojs/plugins/videojs.hotkeys.min.js',
-                'public/acm/videojs/plugins/seek-to-point.js',
-                'public/acm/videojs/lang/fa.js',
-                'public/acm/AlaatvCustomFiles/js/UserCart.js',
-                'public/acm/AlaatvCustomFiles/components/aSticky/aSticky.js',
-                'public/acm/AlaatvCustomFiles/components/Favorite/script.js',
+    mixPageProductShow(baseProductShow) {
+        this.mixCssAndJs(baseProductShow.css, 'public/css/product-show.css',
+            baseProductShow.js, 'public/js/product-show.js');
+    }
+    mixPageProductShowRaheAbrisham(baseProductShow) {
+        this.mixCssAndJs(
+            baseProductShow.css.concat([
+                'public/acm/AlaatvCustomFiles/components/CustomDropDown/style.css',
+                'public/acm/AlaatvCustomFiles/components/AlaaLoading/style.css',
+                'public/acm/AlaatvCustomFiles/css/page/product/customShow/raheAbrisham.css',
+            ])
+            ,
+            'public/css/product-show-RaheAbrisham.css',
+            baseProductShow.js.concat([
 
-                'public/acm/AlaatvCustomFiles/js/page/product/product-show.js',
-            ],
-            'public/js/product-show.js'
+                'node_modules/hammerjs/hammer.js',
+                'node_modules/@panzoom/panzoom/dist/panzoom.js',
+
+                'public/acm/AlaatvCustomFiles/components/AlaaLoading/script.js',
+                'public/acm/AlaatvCustomFiles/components/CustomDropDown/js.js',
+
+                'public/acm/AlaatvCustomFiles/js/page/product/CustomShow/raheAbrisham.js',
+            ]),
+            'public/js/product-show-RaheAbrisham.js'
         );
     }
     mixPageProductContentEmbed() {
@@ -659,7 +640,57 @@ class Mix {
         );
     }
     mixProduct() {
-        this.mixPageProductShow();
+        var baseProductShow = {
+            css: [
+                'node_modules/toastr/build/toastr.css',
+                'node_modules/bootstrap-switch/dist/css/bootstrap3/bootstrap-switch.css',
+                'node_modules/lightgallery/src/css/lightgallery.css',
+                'public/acm/videojs/skins/alaa-theme/videojs.css',
+                'public/acm/videojs/plugins/pip/videojs.pip.min.css',
+                'public/acm/videojs/plugins/pip/videojs.pip.rtl.css',
+                'public/acm/videojs/plugins/seek-to-point.css',
+                'public/acm/AlaatvCustomFiles/components/imageWithCaption/style.css',
+                'public/acm/AlaatvCustomFiles/components/ribbon/style.css',
+                'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/style.css',
+                'public/acm/AlaatvCustomFiles/components/ScrollCarousel/style.css',
+                'public/acm/AlaatvCustomFiles/components/Favorite/style.css',
+                'public/acm/AlaatvCustomFiles/css/page/product/show.css',
+            ],
+            js: [
+                'node_modules/toastr/build/toastr.min.js',
+                'node_modules/bootstrap-switch/dist/js/bootstrap-switch.js',
+                'node_modules/lightgallery/src/js/lightgallery.js',
+                'node_modules/lightgallery/modules/lg-thumbnail.min.js',
+                'node_modules/lightgallery/modules/lg-autoplay.min.js',
+                'node_modules/lightgallery/modules/lg-fullscreen.min.js',
+                'node_modules/lightgallery/modules/lg-pager.min.js',
+                'node_modules/lightgallery/modules/lg-hash.min.js',
+                'node_modules/lightgallery/modules/lg-share.min.js',
+                'node_modules/lightgallery/modules/lg-zoom.min.js',
+
+                'public/assets/demo/demo12/custom/components/base/bootstrap-notify.js',
+
+                'public/acm/videojs/video.min.js',
+                'public/acm/videojs/plugins/pip/videojs.pip.min.js',
+                'public/acm/videojs/nuevo.min.js',
+                'public/acm/videojs/plugins/videojs.p2p.min.js',
+                'public/acm/videojs/plugins/videojs.hotkeys.min.js',
+                'public/acm/videojs/plugins/seek-to-point.js',
+                'public/acm/videojs/lang/fa.js',
+
+                'public/acm/AlaatvCustomFiles/components/ScrollCarousel/js.js',
+                'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/js.js',
+                'public/acm/AlaatvCustomFiles/components/AnimateScrollTo/js.js',
+                'public/acm/AlaatvCustomFiles/components/aSticky/aSticky.js',
+                'public/acm/AlaatvCustomFiles/components/Favorite/script.js',
+
+                'public/acm/AlaatvCustomFiles/js/UserCart.js',
+
+                'public/acm/AlaatvCustomFiles/js/page/product/product-show.js',
+            ]
+        };
+        this.mixPageProductShow(baseProductShow);
+        this.mixPageProductShowRaheAbrisham(baseProductShow);
         this.mixPageProductContentEmbed();
     }
 

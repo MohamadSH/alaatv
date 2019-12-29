@@ -2,32 +2,32 @@
 
 namespace App\Http\Controllers\Web;
 
-use App\Bon;
-use App\Http\Requests\RestoreOrderproductRequest;
-use App\Repositories\OrderproductRepo;
-use App\User;
-use App\Order;
-use App\Product;
 use App\Attribute;
-use App\Orderproduct;
 use App\Attributevalue;
+use App\Bon;
 use App\Checkoutstatus;
+use App\Classes\OrderProduct\RefinementProduct\RefinementFactory;
+use App\Collection\OrderproductCollection;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\InsertUserBonRequest;
+use App\Http\Requests\OrderProduct\OrderProductStoreRequest;
+use App\Http\Requests\RestoreOrderproductRequest;
+use App\Order;
+use App\Orderproduct;
+use App\Product;
+use App\Repositories\OrderproductRepo;
 use App\Traits\OrderCommon;
-use Carbon\Carbon;
-use Illuminate\Http\Request;
 use App\Traits\ProductCommon;
+use App\User;
+use Carbon\Carbon;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
-use Kalnoy\Nestedset\QueryBuilder;
-use Illuminate\Support\Facades\URL;
-use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Cache;
-use App\Collection\OrderproductCollection;
-use App\Http\Requests\InsertUserBonRequest;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
-use App\Http\Requests\OrderProduct\OrderProductStoreRequest;
-use App\Classes\OrderProduct\RefinementProduct\RefinementFactory;
+use Illuminate\Support\Facades\URL;
+use Kalnoy\Nestedset\QueryBuilder;
 
 class OrderproductController extends Controller
 {
@@ -36,43 +36,44 @@ class OrderproductController extends Controller
 
     function __construct()
     {
-        $this->middleware('permission:'.config('constants.LIST_ORDERPRODUCT_ACCESS'), ['only' => 'index']);
-        $this->middleware('permission:'.config('constants.UPDATE_ORDERPRODUCT_ACCESS'), ['only' => 'update']);
-        $this->middleware('permission:'.config('constants.SHOW_ORDERPRODUCT_ACCESS'), ['only' => 'edit']);
-        $this->middleware('permission:'.config('constants.RESTORE_ORDERPRODUCT_ACCESS'), ['only' => 'restore']);
+        $this->middleware('permission:' . config('constants.LIST_ORDERPRODUCT_ACCESS'), ['only' => 'index']);
+        $this->middleware('permission:' . config('constants.UPDATE_ORDERPRODUCT_ACCESS'), ['only' => 'update']);
+        $this->middleware('permission:' . config('constants.SHOW_ORDERPRODUCT_ACCESS'), ['only' => 'edit']);
+        $this->middleware('permission:' . config('constants.RESTORE_ORDERPRODUCT_ACCESS'), ['only' => 'restore']);
         $this->middleware(['CheckPermissionForSendOrderId',], ['only' => ['store'],]);
     }
 
-    public function index(Request $request){
+    public function index(Request $request)
+    {
         $timeFilterEnable = $request->get('dateFilterEnable');
-        $checkoutEnable = $request->get('checkoutEnable');
-        $checkoutStatus = $request->get('checkoutStatus');
-        $pageNumber = ($request->get('page' , 0) - 1);
-        $productIds = $request->get('product_id',[]);
+        $checkoutEnable   = $request->get('checkoutEnable');
+        $checkoutStatus   = $request->get('checkoutStatus');
+        $pageNumber       = ($request->get('page', 0) - 1);
+        $productIds       = $request->get('product_id', []);
 
         $since = null;
-        $till = null ;
-        if($timeFilterEnable) {
-            $since = Carbon::createFromFormat('Y-n-j H:i:s', explode(' ' , $request->get('since'))[0].' 00:00:00');
-            $till = Carbon::createFromFormat('Y-n-j H:i:s', explode(' ' , $request->get('till'))[0].' 23:59:59');
+        $till  = null;
+        if ($timeFilterEnable) {
+            $since = Carbon::createFromFormat('Y-n-j H:i:s', explode(' ', $request->get('since'))[0] . ' 00:00:00');
+            $till  = Carbon::createFromFormat('Y-n-j H:i:s', explode(' ', $request->get('till'))[0] . ' 23:59:59');
         }
 
-        if($checkoutStatus == 0){
+        if ($checkoutStatus == 0) {
             $chechoutFilter = OrderproductRepo::CHECKOUT_ALL;
-        }elseif($checkoutStatus == 1){
+        } else if ($checkoutStatus == 1) {
             $chechoutFilter = OrderproductRepo::NOT_CHECKEDOUT_ORDERPRODUCT;
-        }else{
+        } else {
             $chechoutFilter = OrderproductRepo::CHECKEDOUT_ORDERPRODUCT;
         }
 
-        if(in_array(0,$productIds))
+        if (in_array(0, $productIds))
             $productIds = [];
-        $orderproducts = OrderproductRepo::getPurchasedOrderproducts( $productIds , $since , $till , $chechoutFilter)
-            ->with(['order', 'order.transactions' , 'order.normalOrderproducts'])->get();
+        $orderproducts = OrderproductRepo::getPurchasedOrderproducts($productIds, $since, $till, $chechoutFilter)
+            ->with(['order', 'order.transactions', 'order.normalOrderproducts'])->get();
 
         $totalNubmer = $orderproducts->count();
 
-        if($pageNumber > 1) {
+        if ($pageNumber > 1) {
             $orderproducts->chunk(20)[$pageNumber];
             return response()->json([
                 'orderproducts' => $orderproducts,
@@ -82,21 +83,22 @@ class OrderproductController extends Controller
 
         $totalSale = 0;
         foreach ($orderproducts as $orderproduct) {
-            $toAdd = $orderproduct->getSharedCostOfTransaction() ;
+            $toAdd     = $orderproduct->getSharedCostOfTransaction();
             $totalSale += $toAdd;
         }
 
         $checkoutResult = false;
-        if($checkoutEnable && $request->user()->can(config('constants.CHECKOUT_ORDERPRODUCT_ACCESS'))){
-            $checkoutResult = Orderproduct::whereIn('id' , $orderproducts->pluck('id')->toArray())->update(['checkoutstatus_id' => config('constants.ORDERPRODUCT_CHECKOUT_STATUS_PAID')]);
+        if ($checkoutEnable && $request->user()->can(config('constants.CHECKOUT_ORDERPRODUCT_ACCESS'))) {
+            $checkoutResult =
+                Orderproduct::whereIn('id', $orderproducts->pluck('id')->toArray())->update(['checkoutstatus_id' => config('constants.ORDERPRODUCT_CHECKOUT_STATUS_PAID')]);
         }
 
-        $orderproducts = $orderproducts->chunk(20)[max($pageNumber , 0)];
+        $orderproducts = $orderproducts->chunk(20)[max($pageNumber, 0)];
         return response()->json([
-            'orderproducts' => $orderproducts,
-            'totalNumber'   => $totalNubmer,
-            'totalSale'     => number_format((int)$totalSale),
-            'checkoutResult'    =>  $checkoutResult,
+            'orderproducts'  => $orderproducts,
+            'totalNumber'    => $totalNubmer,
+            'totalSale'      => number_format((int)$totalSale),
+            'checkoutResult' => $checkoutResult,
         ]);
     }
 
@@ -119,6 +121,148 @@ class OrderproductController extends Controller
         return response()->json([
             'orderproducts' => $orderproducts,
         ]);
+    }
+
+    /**
+     * @param Request $request
+     * @param Product $product
+     *
+     * @return Collection|null
+     */
+    public function getAttributesValuesFromProduct(Request $request, Product $product): ?Collection
+    {
+        $extraAttributes   = $request->get('extraAttribute');
+        $extraAttributesId = array_column($extraAttributes, 'id');
+        $attributesValues  = $product->getAttributesValueByIds($extraAttributesId);
+
+        return $attributesValues;
+    }
+
+    /**
+     * @param Request    $request
+     * @param Collection $attributesValues
+     */
+    public function syncExtraAttributesCost(Request $request, Collection $attributesValues)
+    {
+        $extraAttributes = $request->get('extraAttribute');
+        foreach ($attributesValues as $key => $attributesValue) {
+            foreach ($extraAttributes as $key1 => $extraAttribute) {
+                if ($extraAttribute['id'] == $attributesValue['id']) {
+                    $extraAttributes[$key1]['cost']   = $attributesValue->pivot->extraCost;
+                    $extraAttributes[$key1]['object'] = $attributesValue;
+                }
+            }
+        }
+        $request->offsetSet('extraAttribute', $extraAttributes);
+    }
+
+    /**
+     * Saves a new Orderproduct
+     *
+     * @param array $data
+     *
+     * @return array
+     */
+    public function new(array $data): array
+    {
+        $report = [
+            'status'  => true,
+            'message' => [],
+            'data'    => [],
+        ];
+
+        //ToDo : discuss getting order from request /** @var Order $order */
+        /*if(isset($data['order'])) {
+            $order = $data['order'];
+        } else {
+            $order = Order::FindorFail($orderId)->first();
+        }*/
+
+        $data = array_merge([
+            'product_id'     => null,
+            'order_id'       => null,
+            'products'       => null,
+            'attribute'      => null,
+            'extraAttribute' => null,
+            'withoutBon'     => null,
+        ], $data);
+
+        $productId = $data['product_id'];
+        $orderId   = $data['order_id'];
+
+        try {
+            $order   = Order::FindorFail($orderId);
+            $product = Product::FindorFail($productId);
+        } catch (ModelNotFoundException $e) {
+            report($e);
+            $report['status']    = false;
+            $report['message'][] = 'Unknown order or product';
+
+            return $report;
+        }
+        $user = $order->user;
+
+        $simpleProducts = (new RefinementFactory($product, $data))->getRefinementClass()->getProducts();
+
+        $notDuplicateProduct = $order->checkProductsExistInOrderProducts($simpleProducts);
+
+        if (count($simpleProducts) != 0 && count($notDuplicateProduct) == 0) {
+            $report['status']           = false;
+            $report['message'][]        = 'This product has been added to order before';
+            $report['data']['products'] = $simpleProducts;
+        } else {
+            if (count($simpleProducts) == 0) {
+                $report['status']           = false;
+                $report['message'][]        = 'No products has been selected';
+                $report['data']['products'] = $simpleProducts;
+            }
+        }
+
+        $storedOrderproducts = new OrderproductCollection();
+        /**
+         * save orderproduct and attach extraAttribute
+         */
+        foreach ($notDuplicateProduct as $key => $productItem) {
+            $orderProduct                      = new Orderproduct();
+            $orderProduct->product_id          = $productItem->id;
+            $orderProduct->order_id            = $order->id;
+            $orderProduct->orderproducttype_id = config('constants.ORDER_PRODUCT_TYPE_DEFAULT');
+            if (isset($data['cost'])) {
+                $orderProduct->cost = $data['cost'];
+            }
+            if (!$orderProduct->save()) {
+                continue;
+            }
+            $productItem->decreaseProductAmountWithValue(1);
+
+            if (isset($data['extraAttribute']) && is_array($data['extraAttribute'])) {
+                $this->attachExtraAttributes($data['extraAttribute'], $orderProduct);
+            }
+
+//            $this->applyOrderProductBon($data, $user, $orderProduct, $productItem);
+
+            $this->applyOrderGifts($order, $orderProduct, $productItem);
+
+            $storedOrderproducts->push($orderProduct);
+        }
+
+        $report['data']['storedOrderproducts'] = $storedOrderproducts;
+
+        return $report;
+    }
+
+    /**
+     * @param array        $extraAttributes
+     * @param Orderproduct $orderProduct
+     */
+    public function attachExtraAttributes(array $extraAttributes, Orderproduct $orderProduct): void
+    {
+        foreach ($extraAttributes as $value) {
+            $orderProduct->attributevalues()
+                ->attach($value['id'], [
+                    'extraCost' => $value['cost'],
+                ]);
+        }
     }
 
     public function edit($orderproduct)
@@ -150,7 +294,7 @@ class OrderproductController extends Controller
             ->toArray();
         $checkoutStatuses       = Arr::sortRecursive($checkoutStatuses);
 
-        $product  = $orderproduct->product()
+        $product = $orderproduct->product()
             ->first();
 
         return view('order.orderproduct.edit',
@@ -160,11 +304,106 @@ class OrderproductController extends Controller
     }
 
     /**
+     * @param                                  $attributevalues
+     * @param                                  $controlName
+     * @param                                  $orderproductAttributevalues
+     * @param Collection                       $extraSelectCollection
+     * @param static                           $attribute
+     * @param Collection                       $extraCheckboxCollection
+     */
+    private function processAttrValues(
+        $attributevalues,
+        $controlName,
+        $orderproductAttributevalues,
+        Collection $extraSelectCollection,
+        $attribute,
+        Collection $extraCheckboxCollection
+    )
+    {
+        if ($attributevalues->isEmpty()) {
+            return;
+        }
+        switch ($controlName) {
+            case 'select':
+                $this->processSelect($attributevalues, $orderproductAttributevalues, $extraSelectCollection,
+                    $attribute);
+                break;
+            case 'groupedCheckbox':
+                $this->processGroupedCheckbox($attributevalues, $orderproductAttributevalues, $attribute,
+                    $extraCheckboxCollection);
+                break;
+            default:
+                break;
+        }
+
+    }
+
+    /**
+     * @param                                  $attributevalues
+     * @param                                  $orderproductAttributevalues
+     * @param Collection                       $extraSelectCollection
+     * @param                                  $attribute
+     */
+    private function processSelect($attributevalues, $orderproductAttributevalues, Collection $extraSelectCollection, $attribute): void
+    {
+        $select         = [];
+        $extraCostArray = [];
+        foreach ($attributevalues as $attributevalue) {
+            if ($orderproductAttributevalues->contains($attributevalue->id)) {
+                $extraCost = $orderproductAttributevalues->where('id', $attributevalue->id)
+                    ->first()->pivot->extraCost;
+            } else {
+                $extraCost = null;
+            }
+            $attributevalueIndex = $attributevalue->name;
+            $select              = Arr::add($select, $attributevalue->id, $attributevalueIndex);
+            $extraCostArray      = Arr::add($extraCostArray, $attributevalue->id, $extraCost);
+        }
+        $select[0] = 'هیچکدام';
+        $select    = Arr::sortRecursive($select);
+        if (!empty($select)) {
+            $extraSelectCollection->put($attribute->id, [
+                'attributeDescription' => $attribute->displayName,
+                'attributevalues'      => $select,
+                'extraCost'            => $extraCostArray,
+            ]);
+        }
+    }
+
+    /**
+     * @param                                  $attributevalues
+     * @param                                  $orderproductAttributevalues
+     * @param                                  $attribute
+     * @param Collection                       $extraCheckboxCollection
+     */
+    private function processGroupedCheckbox($attributevalues, $orderproductAttributevalues, $attribute, Collection $extraCheckboxCollection): void
+    {
+        $groupedCheckbox = collect();
+        foreach ($attributevalues as $attributevalue) {
+            $attributevalueIndex = $attributevalue->name;
+            if ($orderproductAttributevalues->contains($attributevalue->id)) {
+                $extraCost = $orderproductAttributevalues->where('id', $attributevalue->id)
+                    ->first()->pivot->extraCost;
+            } else {
+                $extraCost = null;
+            }
+
+            $groupedCheckbox->put($attributevalue->id, [
+                'index'     => $attributevalueIndex,
+                'extraCost' => $extraCost,
+            ]);
+        }
+        if (!empty($groupedCheckbox)) {
+            $extraCheckboxCollection->put($attribute->displayName, $groupedCheckbox);
+        }
+    }
+
+    /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Orderproduct         $orderproduct
-     * @param  UserbonController         $userbonController
+     * @param Request           $request
+     * @param Orderproduct      $orderproduct
+     * @param UserbonController $userbonController
      *
      * @return Response
      */
@@ -280,7 +519,8 @@ class OrderproductController extends Controller
     {
         $orderproduct_userbons = $orderproduct->userbons;
         foreach ($orderproduct_userbons as $orderproduct_userbon) {
-            $orderproduct_userbon->usedNumber       = $orderproduct_userbon->usedNumber - $orderproduct_userbon->pivot->usageNumber;
+            $orderproduct_userbon->usedNumber       =
+                $orderproduct_userbon->usedNumber - $orderproduct_userbon->pivot->usageNumber;
             $orderproduct_userbon->userbonstatus_id = config('constants.USERBON_STATUS_ACTIVE');
             if ($orderproduct_userbon->usedNumber >= 0) {
                 $orderproduct_userbon->update();
@@ -300,195 +540,55 @@ class OrderproductController extends Controller
         }
 
         if (!$deleteFlag) {
-            return response()->json(['message' => 'خطا در حذف محصول سفارش'] , Response::HTTP_SERVICE_UNAVAILABLE );
+            return response()->json(['message' => 'خطا در حذف محصول سفارش'], Response::HTTP_SERVICE_UNAVAILABLE);
         }
 
         foreach ($orderproduct->children as $child) {
             $child->delete();
         }
         Cache::tags([
-            'order_'.$orderproduct->order_id.'_products' ,
-            'order_'.$orderproduct->order_id.'_orderproducts' ,
-            'order_'.$orderproduct->order_id.'_cost' ,
-            'order_'.$orderproduct->order_id.'_bon' ])->flush();
+            'order_' . $orderproduct->order_id . '_products',
+            'order_' . $orderproduct->order_id . '_orderproducts',
+            'order_' . $orderproduct->order_id . '_cost',
+            'order_' . $orderproduct->order_id . '_bon',
+        ])->flush();
 
         return response()->json(['message' => 'محصول سفارش با موفقیت حذف شد!']);
     }
 
-    public function restore(RestoreOrderproductRequest $request){
+    public function restore(RestoreOrderproductRequest $request)
+    {
         $orderproduct = Orderproduct::onlyTrashed()->find($request->get('orderproductId'));
-        if(!isset($orderproduct)) {
+        if (!isset($orderproduct)) {
             return response()->json([
-                    'error' => [
-                        'code'   =>  Response::HTTP_NOT_FOUND,
-                        'message'=> 'Orderproduct not found',
-                    ]
+                'error' => [
+                    'code'    => Response::HTTP_NOT_FOUND,
+                    'message' => 'Orderproduct not found',
+                ],
             ]);
         }
 
 
         $restoreResult = $orderproduct->restore();
-        if($restoreResult) {
+        if ($restoreResult) {
             return response()->json([
-                'message' => 'Orderproduct restored successfully'
+                'message' => 'Orderproduct restored successfully',
             ]);
         }
 
         return response()->json([
-               'error' => [
-                   'code'   =>  Response::HTTP_SERVICE_UNAVAILABLE,
-                   'message'=> 'Unexpected error',
-               ]
+            'error' => [
+                'code'    => Response::HTTP_SERVICE_UNAVAILABLE,
+                'message' => 'Unexpected error',
+            ],
         ]);
-    }
-
-    /**
-     * Saves a new Orderproduct
-     *
-     * @param  array  $data
-     *
-     * @return array
-     */
-    public function new(array $data): array
-    {
-        $report = [
-            'status'  => true,
-            'message' => [],
-            'data'    => [],
-        ];
-
-        //ToDo : discuss getting order from request /** @var Order $order */
-        /*if(isset($data['order'])) {
-            $order = $data['order'];
-        } else {
-            $order = Order::FindorFail($orderId)->first();
-        }*/
-
-        $data = array_merge([
-            'product_id'     => null,
-            'order_id'       => null,
-            'products'       => null,
-            'attribute'      => null,
-            'extraAttribute' => null,
-            'withoutBon'     => null,
-        ], $data);
-
-        $productId = $data['product_id'];
-        $orderId   = $data['order_id'];
-
-        try {
-            $order   = Order::FindorFail($orderId);
-            $product = Product::FindorFail($productId);
-        } catch (ModelNotFoundException $e) {
-            report($e);
-            $report['status']    = false;
-            $report['message'][] = 'Unknown order or product';
-
-            return $report;
-        }
-        $user = $order->user;
-
-        $simpleProducts = (new RefinementFactory($product, $data))->getRefinementClass()->getProducts();
-
-        $notDuplicateProduct = $order->checkProductsExistInOrderProducts($simpleProducts);
-
-        if (count($simpleProducts) != 0 && count($notDuplicateProduct) == 0) {
-            $report['status']           = false;
-            $report['message'][]        = 'This product has been added to order before';
-            $report['data']['products'] = $simpleProducts;
-        } else {
-            if (count($simpleProducts) == 0) {
-                $report['status']           = false;
-                $report['message'][]        = 'No products has been selected';
-                $report['data']['products'] = $simpleProducts;
-            }
-        }
-
-        $storedOrderproducts = new OrderproductCollection();
-        /**
-         * save orderproduct and attach extraAttribute
-         */
-        foreach ($notDuplicateProduct as $key => $productItem) {
-            $orderProduct                      = new Orderproduct();
-            $orderProduct->product_id          = $productItem->id;
-            $orderProduct->order_id            = $order->id;
-            $orderProduct->orderproducttype_id = config('constants.ORDER_PRODUCT_TYPE_DEFAULT');
-            if (isset($data['cost'])) {
-                $orderProduct->cost = $data['cost'];
-            }
-            if (!$orderProduct->save()) {
-                continue;
-            }
-            $productItem->decreaseProductAmountWithValue(1);
-
-            if (isset($data['extraAttribute']) && is_array($data['extraAttribute'])) {
-                $this->attachExtraAttributes($data['extraAttribute'], $orderProduct);
-            }
-
-//            $this->applyOrderProductBon($data, $user, $orderProduct, $productItem);
-
-            $this->applyOrderGifts($order, $orderProduct, $productItem);
-
-            $storedOrderproducts->push($orderProduct);
-        }
-
-        $report['data']['storedOrderproducts'] = $storedOrderproducts;
-
-        return $report;
-    }
-
-    /**
-     * @param  Request  $request
-     * @param  Product  $product
-     *
-     * @return Collection|null
-     */
-    public function getAttributesValuesFromProduct(Request $request, Product $product): ?Collection
-    {
-        $extraAttributes   = $request->get('extraAttribute');
-        $extraAttributesId = array_column($extraAttributes, 'id');
-        $attributesValues  = $product->getAttributesValueByIds($extraAttributesId);
-
-        return $attributesValues;
-    }
-
-    /**
-     * @param  Request     $request
-     * @param  Collection  $attributesValues
-     */
-    public function syncExtraAttributesCost(Request $request, Collection $attributesValues)
-    {
-        $extraAttributes = $request->get('extraAttribute');
-        foreach ($attributesValues as $key => $attributesValue) {
-            foreach ($extraAttributes as $key1 => $extraAttribute) {
-                if ($extraAttribute['id'] == $attributesValue['id']) {
-                    $extraAttributes[$key1]['cost']   = $attributesValue->pivot->extraCost;
-                    $extraAttributes[$key1]['object'] = $attributesValue;
-                }
-            }
-        }
-        $request->offsetSet('extraAttribute', $extraAttributes);
-    }
-
-    /**
-     * @param array $extraAttributes
-     * @param Orderproduct $orderProduct
-     */
-    public function attachExtraAttributes(array $extraAttributes, Orderproduct $orderProduct): void
-    {
-        foreach ($extraAttributes as $value) {
-            $orderProduct->attributevalues()
-                ->attach($value['id'], [
-                    'extraCost' => $value['cost'],
-                ]);
-        }
     }
 
     /**
      * Stores an array of json objects , each containing of an orderproduct info
      *
      * @param         $orderproductJsonObject
-     * @param  array  $data
+     * @param array   $data
      *
      * @return mixed
      */
@@ -509,10 +609,10 @@ class OrderproductController extends Controller
     }
 
     /**
-     * @param  array         $data
-     * @param  User          $user
-     * @param  Orderproduct  $orderProduct
-     * @param  Product       $product
+     * @param array        $data
+     * @param User         $user
+     * @param Orderproduct $orderProduct
+     * @param Product      $product
      */
     private function applyOrderProductBon(array $data, User $user, Orderproduct $orderProduct, Product $product): void
     {
@@ -533,117 +633,22 @@ class OrderproductController extends Controller
     }
 
     /**
-     * @param  array       $data
-     * @param  Product     $product
-     * @param  Collection  $bon
+     * @param array      $data
+     * @param Product    $product
+     * @param Collection $bon
      *
      * @return bool
      */
     private function canApplyBonForRequest(array $data, Product $product, Collection $bon): bool
     {
         if (!isset($data['withoutBon']) || !$data['withoutBon']) {
-            if($bon->isEmpty()){
+            if ($bon->isEmpty()) {
                 return false;
             }
 
             return $product->canApplyBon($bon->first());
         } else {
             return false;
-        }
-    }
-
-    /**
-     * @param                                  $attributevalues
-     * @param                                  $controlName
-     * @param                                  $orderproductAttributevalues
-     * @param  \Illuminate\Support\Collection  $extraSelectCollection
-     * @param  static                          $attribute
-     * @param  \Illuminate\Support\Collection  $extraCheckboxCollection
-     */
-    private function processAttrValues(
-        $attributevalues,
-        $controlName,
-        $orderproductAttributevalues,
-        Collection $extraSelectCollection,
-        $attribute,
-        Collection $extraCheckboxCollection
-    )
-    {
-        if ($attributevalues->isEmpty()) {
-            return;
-        }
-        switch ($controlName) {
-            case 'select':
-                $this->processSelect($attributevalues, $orderproductAttributevalues, $extraSelectCollection,
-                    $attribute);
-                break;
-            case 'groupedCheckbox':
-                $this->processGroupedCheckbox($attributevalues, $orderproductAttributevalues, $attribute,
-                    $extraCheckboxCollection);
-                break;
-            default:
-                break;
-        }
-
-    }
-
-    /**
-     * @param                                  $attributevalues
-     * @param                                  $orderproductAttributevalues
-     * @param  \Illuminate\Support\Collection  $extraSelectCollection
-     * @param                                  $attribute
-     */
-    private function processSelect($attributevalues, $orderproductAttributevalues, Collection $extraSelectCollection, $attribute): void
-    {
-        $select         = [];
-        $extraCostArray = [];
-        foreach ($attributevalues as $attributevalue) {
-            if ($orderproductAttributevalues->contains($attributevalue->id)) {
-                $extraCost = $orderproductAttributevalues->where('id', $attributevalue->id)
-                    ->first()->pivot->extraCost;
-            } else {
-                $extraCost = null;
-            }
-            $attributevalueIndex = $attributevalue->name;
-            $select              = Arr::add($select, $attributevalue->id, $attributevalueIndex);
-            $extraCostArray      = Arr::add($extraCostArray, $attributevalue->id, $extraCost);
-        }
-        $select[0] = 'هیچکدام';
-        $select    = Arr::sortRecursive($select);
-        if (!empty($select)) {
-            $extraSelectCollection->put($attribute->id, [
-                'attributeDescription' => $attribute->displayName,
-                'attributevalues'      => $select,
-                'extraCost'            => $extraCostArray,
-            ]);
-        }
-    }
-
-    /**
-     * @param                                  $attributevalues
-     * @param                                  $orderproductAttributevalues
-     * @param                                  $attribute
-     * @param  \Illuminate\Support\Collection  $extraCheckboxCollection
-     */
-    private function processGroupedCheckbox($attributevalues, $orderproductAttributevalues, $attribute, Collection $extraCheckboxCollection): void
-    {
-        $groupedCheckbox = collect();
-        foreach ($attributevalues as $attributevalue) {
-            $attributevalueIndex = $attributevalue->name;
-            if ($orderproductAttributevalues->contains($attributevalue->id)) {
-                $extraCost = $orderproductAttributevalues->where('id', $attributevalue->id)
-                    ->first()->pivot->extraCost;
-            } else {
-                $extraCost = null;
-            }
-
-            $groupedCheckbox->put($attributevalue->id, [
-                'index'     => $attributevalueIndex,
-                'extraCost' => $extraCost,
-            ]);
-        }
-        if (!empty($groupedCheckbox)) {
-            $extraCheckboxCollection->put($attribute->displayName, $groupedCheckbox);
         }
     }
 }

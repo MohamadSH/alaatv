@@ -15,38 +15,37 @@ use Illuminate\Support\Collection;
 class AlaaOrderproductSumCalculator extends OrderproductSumCalculator
 {
     /**
-     * @param  Collection  $calculatedOrderproducts
+     * @param Collection $calculatedOrderproducts
      *
      * @return array
      */
     protected function calculateSum(Collection $calculatedOrderproducts): array
     {
         /** @var OrderproductCollection $calculatedOrderproducts */
-        
+
         $sumOfOrderproductsRawPrice           = 0;
         $sumOfOrderproductsCustomerPrice      = 0;
         $totalRawPriceWhichHasDiscount        = 0;
         $totalRawPriceWhichDoesntHaveDiscount = 0;//totalRawPriceWhichDoesntHaveDiscount
-        
+
         foreach ($calculatedOrderproducts as $orderproduct) {
             $orderproductPriceInfo = $calculatedOrderproducts->getNewPriceForItem($orderproduct);
-            
+
             $orderproductPrice               = $orderproductPriceInfo['totalCost'];
             $orderproductExtraPrice          = $orderproductPriceInfo['extraCost'];
             $sumOfOrderproductsRawPrice      += $orderproductPriceInfo['cost'];
             $sumOfOrderproductsCustomerPrice += $orderproductPriceInfo['customerCost'];
-            
+
             if ($orderproduct->includedInCoupon == 1) {
                 $totalRawPriceWhichHasDiscount += $orderproductPrice;
-            }
-            else {
+            } else {
                 $totalRawPriceWhichDoesntHaveDiscount += $orderproductPrice;
             }
-            
+
             $totalRawPriceWhichDoesntHaveDiscount += $orderproductExtraPrice;
             $sumOfOrderproductsRawPrice           += $orderproductExtraPrice;
         }
-        
+
         return [
             'totalRawPriceWhichHasDiscount'        => $totalRawPriceWhichHasDiscount,
             'totalRawPriceWhichDoesntHaveDiscount' => $totalRawPriceWhichDoesntHaveDiscount,

@@ -17,11 +17,11 @@ class GaReportGetUsersFromPageView extends GaReportGetPathPageViews
         // Init the Dimension object.
         $this->dimension->setName('ga:dimension2');
     }
-    
+
     protected function format(Google_Service_AnalyticsReporting_GetReportsResponse $reports)
     {
         $out = $this->baseFormat($reports);
-        
+
         return $out;
     }
 }

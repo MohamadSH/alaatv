@@ -10,14 +10,14 @@ use Illuminate\Database\Eloquent\Collection;
 /**
  * App\Transactionstatus
  *
- * @property int                                                              $id
- * @property string|null                                                      $name        نام وضعیت
- * @property string|null                                                      $displayName نام قابل نمایش این وضعیت
- * @property int                                                              $order       ترتیب
- * @property string|null                                                      $description توضیح درباره وضعیت
- * @property Carbon|null                                              $created_at
- * @property Carbon|null                                              $updated_at
- * @property Carbon|null                                              $deleted_at
+ * @property int                           $id
+ * @property string|null                   $name        نام وضعیت
+ * @property string|null                   $displayName نام قابل نمایش این وضعیت
+ * @property int                           $order       ترتیب
+ * @property string|null                   $description توضیح درباره وضعیت
+ * @property Carbon|null                   $created_at
+ * @property Carbon|null                   $updated_at
+ * @property Carbon|null                   $deleted_at
  * @property-read Collection|Transaction[] $transactions
  * @method static bool|null forceDelete()
  * @method static \Illuminate\Database\Query\Builder|Transactionstatus onlyTrashed()
@@ -38,8 +38,8 @@ use Illuminate\Database\Eloquent\Collection;
  * @method static Builder|Transactionstatus query()
  * @method static Builder|BaseModel disableCache()
  * @method static Builder|BaseModel withCacheCooldownSeconds($seconds)
- * @property-read mixed                                                       $cache_cooldown_seconds
- * @property-read int|null $transactions_count
+ * @property-read mixed                    $cache_cooldown_seconds
+ * @property-read int|null                 $transactions_count
  */
 class Transactionstatus extends BaseModel
 {

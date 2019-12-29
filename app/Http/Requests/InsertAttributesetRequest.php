@@ -2,7 +2,6 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Support\Facades\Config;
 use Illuminate\Foundation\Http\FormRequest;
 
 class InsertAttributesetRequest extends FormRequest
@@ -14,7 +13,7 @@ class InsertAttributesetRequest extends FormRequest
             ->can(config('constants.INSERT_ATTRIBUTESET_ACCESS'))) {
             return true;
         }
-    
+
         return false;
     }
 

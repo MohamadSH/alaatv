@@ -25,7 +25,7 @@ class Producttype extends AlaaJsonResource
         }
 
         return [
-            'type'        => $this->id ,
+            'type' => $this->id,
         ];
     }
 }

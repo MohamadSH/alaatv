@@ -39,7 +39,7 @@ class PostCodeNotification extends Notification implements ShouldQueue
     /**
      * Get the notification's delivery channels.
      *
-     * @param  mixed  $notifiable
+     * @param mixed $notifiable
      *
      * @return array
      */
@@ -68,7 +68,7 @@ class PostCodeNotification extends Notification implements ShouldQueue
 
     private function msg(): string
     {
-        $messageCore = "آلایی عزیز سلام،"."\n"."کد رهگیری پست شما"."\n".$this->code."\n"."است.";
+        $messageCore = "آلایی عزیز سلام،" . "\n" . "کد رهگیری پست شما" . "\n" . $this->code . "\n" . "است.";
 
         return $messageCore;
     }
@@ -76,8 +76,8 @@ class PostCodeNotification extends Notification implements ShouldQueue
     private function getInputData(): array
     {
         return [
-            'name' => 'آلایی',
-            'code'  => $this->code,
+            'name'        => 'آلایی',
+            'code'        => $this->code,
             'supportLink' => '',
         ];
     }

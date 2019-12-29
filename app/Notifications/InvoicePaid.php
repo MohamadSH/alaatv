@@ -28,7 +28,7 @@ class InvoicePaid extends Notification implements ShouldQueue
     /**
      * Create a new notification instance.
      *
-     * @param  Order  $invoice
+     * @param Order $invoice
      */
     public function __construct(Order $invoice)
     {
@@ -38,7 +38,7 @@ class InvoicePaid extends Notification implements ShouldQueue
     /**
      * Get the notification's delivery channels.
      *
-     * @param  mixed  $notifiable
+     * @param mixed $notifiable
      *
      * @return array
      */
@@ -71,24 +71,24 @@ class InvoicePaid extends Notification implements ShouldQueue
     private function getInputData(): array
     {
         return [
-            'code'                   => $this->invoice->id,
-            'name' => $this->getUserFullName() ,
-            'assetLink' => route('web.user.asset') ,
+            'code'        => $this->invoice->id,
+            'name'        => $this->getUserFullName(),
+            'assetLink'   => route('web.user.asset'),
             'supportLink' => 'https://goo.gl/jme5VU',
         ];
-    }
-
-    private function getInvoiceUser(): User
-    {
-        return $this->invoice->user;
     }
 
     /**
      * @return mixed
      */
-    private function getUserFullName():string
+    private function getUserFullName(): string
     {
         $userFullName = optional($this->getInvoiceUser())->full_name;
-        return (isset($userFullName) && strlen($userFullName) > 0)?$userFullName:'آلایی' ;
+        return (isset($userFullName) && strlen($userFullName) > 0) ? $userFullName : 'آلایی';
+    }
+
+    private function getInvoiceUser(): User
+    {
+        return $this->invoice->user;
     }
 }

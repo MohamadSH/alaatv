@@ -39,25 +39,25 @@ class InsertContentsToSatraCommand extends Command
      */
     public function handle()
     {
-        $contentId = (int) $this->argument('id');
-        if($contentId > 0){
+        $contentId = (int)$this->argument('id');
+        if ($contentId > 0) {
             $contents = Content::query()
-                                ->where('id' , '>=' , $contentId)
-                                ->where('contenttype_id' , config('constants.CONTENT_TYPE_VIDEO'))
-                                ->whereNull('redirectUrl')
-                                ->active()
-                                ->get();
-        }else{
+                ->where('id', '>=', $contentId)
+                ->where('contenttype_id', config('constants.CONTENT_TYPE_VIDEO'))
+                ->whereNull('redirectUrl')
+                ->active()
+                ->get();
+        } else {
             $contents = Content::query()
-                                ->where('contenttype_id' , config('constants.CONTENT_TYPE_VIDEO'))
-                                ->whereNull('redirectUrl')
-                                ->active()
-                                ->get();
+                ->where('contenttype_id', config('constants.CONTENT_TYPE_VIDEO'))
+                ->whereNull('redirectUrl')
+                ->active()
+                ->get();
         }
 
         $contentsCount = $contents->count();
 
-        if ($this->confirm('Found '.$contentsCount.' contents, Would you like to continue ?', true)) {
+        if ($this->confirm('Found ' . $contentsCount . ' contents, Would you like to continue ?', true)) {
 
             $bar = $this->output->createProgressBar($contentsCount);
             foreach ($contents as $content) {

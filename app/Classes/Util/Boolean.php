@@ -16,30 +16,23 @@ class Boolean
     /**
      * Nullable constructor.
      *
-     * @param $result
+     * @param       $result
      * @param array $data
      */
     public function __construct($result, $data = [])
     {
         $this->result = $result;
-        $this->data = $data;
+        $this->data   = $data;
     }
-    
+
     public static function if($boolean)
     {
         return new static($boolean);
     }
-    
+
     public function thenRespondWith($response)
     {
         if ($this->result) {
-            $this->respond($response);
-        }
-    }
-
-    public function orRespondWith($response)
-    {
-        if (! $this->result) {
             $this->respond($response);
         }
     }
@@ -54,5 +47,12 @@ class Boolean
         }
 
         throw new HttpResponseException($response);
+    }
+
+    public function orRespondWith($response)
+    {
+        if (!$this->result) {
+            $this->respond($response);
+        }
     }
 }

@@ -2,27 +2,31 @@
 
 namespace App;
 
+use Carbon\Carbon;
+use Eloquent;
+use Illuminate\Database\Eloquent\Builder;
+
 /**
  * App\Workdaytype
  *
  * @property int                 $id
  * @property string|null         $displayName نام نوع
  * @property string|null         $description توضیح درباره این نوع
- * @property \Carbon\Carbon|null $created_at
- * @property \Carbon\Carbon|null $updated_at
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
  * @property string|null         $deleted_at
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Workdaytype whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Workdaytype whereDeletedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Workdaytype whereDescription($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Workdaytype whereDisplayName($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Workdaytype whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Workdaytype whereUpdatedAt($value)
- * @mixin \Eloquent
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Workdaytype newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Workdaytype newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Workdaytype query()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel disableCache()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel withCacheCooldownSeconds($seconds)
+ * @method static Builder|Workdaytype whereCreatedAt($value)
+ * @method static Builder|Workdaytype whereDeletedAt($value)
+ * @method static Builder|Workdaytype whereDescription($value)
+ * @method static Builder|Workdaytype whereDisplayName($value)
+ * @method static Builder|Workdaytype whereId($value)
+ * @method static Builder|Workdaytype whereUpdatedAt($value)
+ * @mixin Eloquent
+ * @method static Builder|Workdaytype newModelQuery()
+ * @method static Builder|Workdaytype newQuery()
+ * @method static Builder|Workdaytype query()
+ * @method static Builder|BaseModel disableCache()
+ * @method static Builder|BaseModel withCacheCooldownSeconds($seconds)
  * @property-read mixed          $cache_cooldown_seconds
  */
 class Workdaytype extends BaseModel

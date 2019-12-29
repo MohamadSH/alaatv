@@ -8,13 +8,13 @@
 
 namespace App\Traits\User;
 
-use Auth;
-use App\User;
-use App\Major;
-use App\Grade;
-use App\Gender;
-use App\Bloodtype;
 use App\Afterloginformcontrol;
+use App\Bloodtype;
+use App\Gender;
+use App\Grade;
+use App\Major;
+use App\User;
+use Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Schema;
 
@@ -73,21 +73,21 @@ trait ProfileTrait
     {
         return Cache::tags([
             'user',
-            'user_'.$this->id ,
+            'user_' . $this->id,
             'user_major',
             'user_grade',
             'user_gender',
             'user_completion',
             'user_wallet',
         ])->remember($this->cacheKey(), config('constants.CACHE_600'), function () {
-                return [
-                    'major'      => $this->getMajor(),
-                    'grade'      => $this->getGrade(),
-                    'gender'     => $this->getGender(),
-                    'completion' => (int) $this->completion(),
-                    'wallet'     => $this->getWallet(),
-                ];
-            });
+            return [
+                'major'      => $this->getMajor(),
+                'grade'      => $this->getGrade(),
+                'gender'     => $this->getGender(),
+                'completion' => (int)$this->completion(),
+                'wallet'     => $this->getWallet(),
+            ];
+        });
     }
 
     /**
@@ -105,8 +105,7 @@ trait ProfileTrait
                 'name'        => $major->name,
                 'description' => $major->description,
             ];
-        }
-        else {
+        } else {
             $majorReturn = null;
         }
 
@@ -130,8 +129,7 @@ trait ProfileTrait
                 'hint'        => $grade->displayName,
                 'description' => $grade->description,
             ];
-        }
-        else {
+        } else {
             $gradeReturn = null;
         }
 
@@ -153,8 +151,7 @@ trait ProfileTrait
                 'name'        => $gender->name,
                 'description' => $gender->description,
             ];
-        }
-        else {
+        } else {
             $genderReturn = null;
         }
 
@@ -164,8 +161,8 @@ trait ProfileTrait
     /**
      * Calculates user profile completion percentage based on passed mode
      *
-     * @param  string  $type
-     * @param  array   $columns
+     * @param string $type
+     * @param array  $columns
      *
      * @return float|int
      */
@@ -227,15 +224,14 @@ trait ProfileTrait
                 if (in_array($tableColumn, $importantColumns)) {
                     if (strcmp($tableColumn, 'photo') == 0 && strcmp(Auth::user()->photo, config('constants.PROFILE_DEFAULT_IMAGE')) == 0) {
                         $unsetColumns++;
-                    } elseif (!isset($this->$tableColumn) || strlen(preg_replace('/\s+/', '', $this->$tableColumn)) == 0) {
+                    } else if (!isset($this->$tableColumn) || strlen(preg_replace('/\s+/', '', $this->$tableColumn)) == 0) {
                         $unsetColumns++;
                     }
                 }
             }
 
             return (1 - ($unsetColumns / $numberOfColumns)) * 100;
-        }
-        else {
+        } else {
             return 100;
         }
     }
@@ -274,7 +270,7 @@ trait ProfileTrait
     /**
      * Fills model from data provided by user
      *
-     * @param  array  $data
+     * @param array $data
      */
     public function fillByPublic(array $data)
     {
@@ -298,8 +294,8 @@ trait ProfileTrait
     public function getUserStatusAttribute()
     {
         $user = $this;
-        $key  = 'user:userstatus'.$user->cacheKey();
-        return Cache::tags(['user' , 'userstatus' , 'user_'.$user->id , 'user_'.$user->id.'_userstatus'])
+        $key  = 'user:userstatus' . $user->cacheKey();
+        return Cache::tags(['user', 'userstatus', 'user_' . $user->id, 'user_' . $user->id . '_userstatus'])
             ->remember($key, config('constants.CACHE_600'), function () use ($user) {
                 return optional($this->userstatus()
                     ->first())
@@ -315,7 +311,7 @@ trait ProfileTrait
     {
         //ToDo :
 //        if (hasAuthenticatedUserPermission('constants.SHOW_USER_EMAIL'))
-            return $value;
+        return $value;
 
 
 //        return null;
@@ -325,16 +321,17 @@ trait ProfileTrait
     {
         //ToDo :
 //        if (hasAuthenticatedUserPermission('constants.SHOW_USER_MOBILE'))
-            return $value;
+        return $value;
 
 
 //        return null;
     }
 
-    public function getRolesAttribute($value){
+    public function getRolesAttribute($value)
+    {
         $user = $this;
-        $key  = 'user:role'.$user->cacheKey();
-        return Cache::tags(['user', 'role' , 'user_'.$user->id , 'user_'.$user->id.'_role'])
+        $key  = 'user:role' . $user->cacheKey();
+        return Cache::tags(['user', 'role', 'user_' . $user->id, 'user_' . $user->id . '_role'])
             ->remember($key, config('constants.CACHE_600'), function () use ($user) {
                 if (hasAuthenticatedUserPermission(config('constants.SHOW_USER_ROLE')))
                     return $this->roles()->get();
@@ -343,10 +340,11 @@ trait ProfileTrait
             });
     }
 
-    public function getTotalBonNumberAttribute($value){
+    public function getTotalBonNumberAttribute($value)
+    {
         $user = $this;
-        $key  = 'user:totalBonNumber'.$user->cacheKey();
-        return Cache::tags(['user' , 'bon' , 'user_'.$user->id , 'user_'.$user->id.'_totalBonNumber'])
+        $key  = 'user:totalBonNumber' . $user->cacheKey();
+        return Cache::tags(['user', 'bon', 'user_' . $user->id, 'user_' . $user->id . '_totalBonNumber'])
             ->remember($key, config('constants.CACHE_600'), function () use ($user) {
                 if (hasAuthenticatedUserPermission(config('constants.SHOW_USER_TOTAL_BON_NUMBER')))
                     return $this->userHasBon();
@@ -358,10 +356,10 @@ trait ProfileTrait
     public function getJalaliUpdatedAtAttribute()
     {
         $user = $this;
-        $key  = 'user:jalaliUpdatedAt:'.$user->cacheKey();
-        return Cache::tags(['user' , 'jalaliUpdatedAt' , 'user_'.$user->id , 'user_'.$user->id.'_jalaliUpdatedAt'])
+        $key  = 'user:jalaliUpdatedAt:' . $user->cacheKey();
+        return Cache::tags(['user', 'jalaliUpdatedAt', 'user_' . $user->id, 'user_' . $user->id . '_jalaliUpdatedAt'])
             ->remember($key, config('constants.CACHE_600'), function () use ($user) {
-                if(isset($user->updated_at))
+                if (isset($user->updated_at))
                     if (hasAuthenticatedUserPermission(config('constants.SHOW_USER_ACCESS'))) {
                         /** @var User $user */
                         return $this->convertDate($user->updated_at, 'toJalali');
@@ -375,10 +373,10 @@ trait ProfileTrait
     public function getJalaliCreatedAtAttribute()
     {
         $user = $this;
-        $key  = 'user:jalaliCreatedAt:'.$user->cacheKey();
-        return Cache::tags(['user' , 'jalaliCreatedAt' , 'user_'.$user->id , 'user_'.$user->id.'_jalaliCreatedAt'])
+        $key  = 'user:jalaliCreatedAt:' . $user->cacheKey();
+        return Cache::tags(['user', 'jalaliCreatedAt', 'user_' . $user->id, 'user_' . $user->id . '_jalaliCreatedAt'])
             ->remember($key, config('constants.CACHE_600'), function () use ($user) {
-                if(isset($user->created_at))
+                if (isset($user->created_at))
                     if (hasAuthenticatedUserPermission(config('constants.SHOW_USER_ACCESS'))) {
                         /** @var User $user */
                         return $this->convertDate($user->created_at, 'toJalali');

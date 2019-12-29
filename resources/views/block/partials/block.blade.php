@@ -92,51 +92,54 @@
 
                     <div class="m-widget_head-owlcarousel-items ScrollCarousel a--owl-carousel-type-2 carousel_block_{{ $block->id }}">
 
+                        <div class="ScrollCarousel-Items">
 
-                        @if(((isset($blockType) && ($blockType === 'product' || $blockType === 'product2') && isset($block->products) && $block->products->count() > 0) || !isset($blockType)) && isset($block->products))
-                            @if(!isset($blockType) || $blockType === 'product')
-                                @foreach($block->products as $productKey=>$product)
-                                    @include('block.partials.product')
+                            @if(((isset($blockType) && ($blockType === 'product' || $blockType === 'product2') && isset($block->products) && $block->products->count() > 0) || !isset($blockType)) && isset($block->products))
+                                @if(!isset($blockType) || $blockType === 'product')
+                                    @foreach($block->products as $productKey=>$product)
+                                        @include('block.partials.product')
+                                    @endforeach
+                                @elseif($blockType === 'product2')
+                                    @foreach($block->products as $productKey=>$product)
+                                        @include('block.partials.product2')
+                                    @endforeach
+                                @endif
+                                {{-- old content block loop --}}
+                            @elseif(((isset($blockType) && $blockType === 'content' && isset($block->contents) && $block->contents->count() > 0) || !isset($blockType)) && isset($block->contents))
+                                @foreach($block->contents as $contentKey=>$content)
+                                    @include('block.partials.content')
                                 @endforeach
-                            @elseif($blockType === 'product2')
-                                @foreach($block->products as $productKey=>$product)
-                                    @include('block.partials.product2')
+                            @elseif(((isset($blockType) && $blockType === 'set' && isset($block->sets) && $block->sets->count() > 0) || !isset($blockType)) && isset($block->sets))
+                                @foreach($block->sets as $setsKey=>$set)
+                                    @include('block.partials.set')
+                                @endforeach
+                            @elseif((isset($blockType) && $blockType === 'productSampleVideo') &&
+                                  (
+                                  (!is_null($block->getActiveContent()) && $block->getActiveContent()->count() > 0 && !is_null($block->sets->first()))
+                                  ||
+                                  (optional(optional(optional($block->sets)->first())->getActiveContents2())->count() > 0)
+                                  ) )
+                                @foreach($block->sets->first()->getActiveContents2() as $contentKey=>$content)
+                                    @include('block.partials.content')
                                 @endforeach
                             @endif
-                        {{-- old content block loop --}}
-                        @elseif(((isset($blockType) && $blockType === 'content' && isset($block->contents) && $block->contents->count() > 0) || !isset($blockType)) && isset($block->contents))
-                            @foreach($block->contents as $contentKey=>$content)
-                                @include('block.partials.content')
-                            @endforeach
-                        @elseif(((isset($blockType) && $blockType === 'set' && isset($block->sets) && $block->sets->count() > 0) || !isset($blockType)) && isset($block->sets))
-                            @foreach($block->sets as $setsKey=>$set)
-                                @include('block.partials.set')
-                            @endforeach
-                        @elseif((isset($blockType) && $blockType === 'productSampleVideo') &&
-                              (
-                              (!is_null($block->getActiveContent()) && $block->getActiveContent()->count() > 0 && !is_null($block->sets->first()))
-                              ||
-                              (optional(optional(optional($block->sets)->first())->getActiveContents2())->count() > 0)
-                              ) )
-                            @foreach($block->sets->first()->getActiveContents2() as $contentKey=>$content)
-                                @include('block.partials.content')
-                            @endforeach
-                        @endif
 
-                        @if(strlen(trim($block->url))>0 && isset($btnLoadMore) && $btnLoadMore)
-                            <div class="item carousel a--block-item a--block-item-showMoreItem w-44333211">
-                                <a href="{{ $block->url }}">
-                                    <button type="button" class="btn m-btn--air btn-outline-accent m-btn m-btn--custom m-btn--outline-2x">
-                                        نمایش بیشتر از
-                                        @if(isset($blockTitle))
-                                            {{ $blockTitle }}
-                                        @else
-                                            {{ $block->title }}
-                                        @endif
-                                    </button>
-                                </a>
-                            </div>
-                        @endif
+                            @if(strlen(trim($block->url))>0 && isset($btnLoadMore) && $btnLoadMore)
+                                <div class="item carousel a--block-item a--block-item-showMoreItem w-44333211">
+                                    <a href="{{ $block->url }}">
+                                        <button type="button" class="btn m-btn--air btn-outline-accent m-btn m-btn--custom m-btn--outline-2x">
+                                            نمایش بیشتر از
+                                            @if(isset($blockTitle))
+                                                {{ $blockTitle }}
+                                            @else
+                                                {{ $block->title }}
+                                            @endif
+                                        </button>
+                                    </a>
+                                </div>
+                            @endif
+
+                        </div>
 
                     </div>
 

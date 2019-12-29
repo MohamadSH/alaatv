@@ -29,10 +29,11 @@ class BonToWallet extends Notification implements ShouldQueue
 
     /**
      * BonToWallet constructor.
+     *
      * @param $number
      * @param $credit
      */
-    public function __construct($number , $credit)
+    public function __construct($number, $credit)
     {
         $this->number = $number;
         $this->credit = $credit;
@@ -42,7 +43,7 @@ class BonToWallet extends Notification implements ShouldQueue
     /**
      * Get the notification's delivery channels.
      *
-     * @param  mixed  $notifiable
+     * @param mixed $notifiable
      *
      * @return array
      */
@@ -54,11 +55,6 @@ class BonToWallet extends Notification implements ShouldQueue
             MedianaPatternChannel::class,
 //            'mail',
         ];
-    }
-
-    private function msg(): string
-    {
-        return "آلایی عزیز، شماره موبایل شما در آلاء تایید شد.";
     }
 
     /**
@@ -74,22 +70,27 @@ class BonToWallet extends Notification implements ShouldQueue
             ->sendAt(Carbon::now());
     }
 
+    private function msg(): string
+    {
+        return "آلایی عزیز، شماره موبایل شما در آلاء تایید شد.";
+    }
+
     private function getInputData(): array
     {
         return [
-            'name' => $this->getUserFullName(),
-            'number' => $this->number,
-            'credit' => $this->credit,
-            'supportLink' => 'alaatv.com'
+            'name'        => $this->getUserFullName(),
+            'number'      => $this->number,
+            'credit'      => $this->credit,
+            'supportLink' => 'alaatv.com',
         ];
     }
 
     /**
      * @return mixed
      */
-    private function getUserFullName():string
+    private function getUserFullName(): string
     {
         $userFullName = optional($this->user)->full_name;
-        return (isset($userFullName))?$userFullName:'آلایی' ;
+        return (isset($userFullName)) ? $userFullName : 'آلایی';
     }
 }

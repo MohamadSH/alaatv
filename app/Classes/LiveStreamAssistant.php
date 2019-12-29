@@ -32,8 +32,8 @@ class LiveStreamAssistant
         return Cache::tags(['live'])
             ->remember($key, config('constants.CACHE_5'), function () {
                 $todayStringDate = Carbon::today()->setTimezone('Asia/Tehran')->toDateString();
-                $live = ConductorRepo::isThereLiveStream($todayStringDate)->first();
-                return (isset($live))?true:false;
+                $live            = ConductorRepo::isThereLiveStream($todayStringDate)->first();
+                return (isset($live)) ? true : false;
             });
     }
 

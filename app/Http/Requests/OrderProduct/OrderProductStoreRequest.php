@@ -7,7 +7,7 @@ use Illuminate\Foundation\Http\FormRequest;
 class OrderProductStoreRequest extends FormRequest
 {
     private $hasPermission = false;
-    
+
 
     public function authorize()
     {
@@ -28,7 +28,7 @@ class OrderProductStoreRequest extends FormRequest
             'extraAttribute.*.id' => 'sometimes|required|numeric',
             'withoutBon'          => 'sometimes|required|boolean',
         ];
-        
+
         return $rules;
     }
 }

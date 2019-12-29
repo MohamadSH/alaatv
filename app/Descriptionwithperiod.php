@@ -2,8 +2,6 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
-
 /**
  * @property mixed id
  * @property mixed till
@@ -41,19 +39,20 @@ class Descriptionwithperiod extends BaseModel
      * Converting since field to Jalali
      *
      * @param bool $withTime
+     *
      * @return string
      */
-    public function Since_Jalali($withTime = false):string
+    public function Since_Jalali($withTime = false): string
     {
-        $since = $this->since;
+        $since            = $this->since;
         $explodedDateTime = explode(' ', $since);
         $explodedTime     = $explodedDateTime[1];
         $explodedDate     = $this->convertDate($since, 'toJalali');
 
-        if($withTime) {
-            return ($explodedDate.' '.$explodedTime);
-        }else{
-            return $explodedDate.'';
+        if ($withTime) {
+            return ($explodedDate . ' ' . $explodedTime);
+        } else {
+            return $explodedDate . '';
         }
     }
 
@@ -61,19 +60,20 @@ class Descriptionwithperiod extends BaseModel
      * Converting till field to Jalali
      *
      * @param bool $withTime
+     *
      * @return string
      */
-    public function Until_Jalali($withTime = false):string
+    public function Until_Jalali($withTime = false): string
     {
-        $till = $this->till;
+        $till             = $this->till;
         $explodedDateTime = explode(' ', $till);
         $explodedTime     = $explodedDateTime[1];
         $explodedDate     = $this->convertDate($till, 'toJalali');
 
-        if($withTime) {
-            return ($explodedDate.' '.$explodedTime);
-        }else{
-            return $explodedDate.'';
+        if ($withTime) {
+            return ($explodedDate . ' ' . $explodedTime);
+        } else {
+            return $explodedDate . '';
         }
     }
 }

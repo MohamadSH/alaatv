@@ -48,7 +48,7 @@ class SendEmployeeTimeSheetCommand extends Command
      */
     public function handle()
     {
-        $employeeId = (int) $this->argument('employee');
+        $employeeId = (int)$this->argument('employee');
         if ($employeeId > 0) {
             try {
                 $user = User::findOrFail($employeeId);
@@ -57,18 +57,17 @@ class SendEmployeeTimeSheetCommand extends Command
 
                 return;
             }
-            if ($this->confirm('You have chosen '.$user->full_name.'. Do you wish to continue?', true)) {
+            if ($this->confirm('You have chosen ' . $user->full_name . '. Do you wish to continue?', true)) {
                 $this->performTimeSheetTaskForAnEmployee($user);
             }
-        }
-        else {
+        } else {
             $this->performTimeSheetTaskForAllEmployee();
         }
     }
 
     private function performTimeSheetTaskForAnEmployee(User $user)
     {
-        $this->info("send TimeSheet to".$user->full_name);
+        $this->info("send TimeSheet to" . $user->full_name);
         $dayOfWeekJalali = $this->convertToJalaliDay(Carbon::today('Asia/Tehran')
             ->format('l'));
         $toDayDate       = Carbon::today('Asia/Tehran')
@@ -109,21 +108,17 @@ class SendEmployeeTimeSheetCommand extends Command
             if ($newEmplployeeTimeSheet->save()) {
                 $realWorkTime = $newEmplployeeTimeSheet->obtainRealWorkTime('IN_SECONDS');
                 $done         = $newEmplployeeTimeSheet->id;
-            }
-            else {
+            } else {
                 $done = false;
             }
-        }
-        elseif (!$employeeTimeSheet->getOriginal("timeSheetLock")) {
+        } else if (!$employeeTimeSheet->getOriginal("timeSheetLock")) {
             if (strcmp($employeeTimeSheet->clockIn, "00:00:00") == 0) {
                 if (strcmp($employeeTimeSheet->beginLunchBreak, "00:00:00") != 0) {
                     $employeeTimeSheet->clockIn = $employeeTimeSheet->beginLunchBreak;
-                }
-                else {
+                } else {
                     if (strcmp($employeeTimeSheet->finishLunchBreak, "00:00:00") != 0) {
                         $employeeTimeSheet->clockIn = $employeeTimeSheet->finishLunchBreak;
-                    }
-                    else {
+                    } else {
                         if (strcmp($employeeTimeSheet->clockOut, "00:00:00") != 0) {
                             $employeeTimeSheet->clockIn = $employeeTimeSheet->clockOut;
                         }
@@ -133,12 +128,10 @@ class SendEmployeeTimeSheetCommand extends Command
             if (strcmp($employeeTimeSheet->clockOut, "00:00:00") == 0) {
                 if (strcmp($employeeTimeSheet->finishLunchBreak, "00:00:00") != 0) {
                     $employeeTimeSheet->clockOut = $employeeTimeSheet->finishLunchBreak;
-                }
-                else {
+                } else {
                     if (strcmp($employeeTimeSheet->beginLunchBreak, "00:00:00") != 0) {
                         $employeeTimeSheet->clockOut = $employeeTimeSheet->beginLunchBreak;
-                    }
-                    else {
+                    } else {
                         if (strcmp($employeeTimeSheet->clockIn, "00:00:00") != 0) {
                             $employeeTimeSheet->clockOut = $employeeTimeSheet->clockIn;
                         }
@@ -170,11 +163,10 @@ class SendEmployeeTimeSheetCommand extends Command
 
             if ($employeeTimeSheet->update()) {
                 $done = $employeeTimeSheet->id;
-            }
-            else {
+            } else {
                 $done = false;
             }
-            }
+        }
 
         if ($done) {
             $employeeTimeSheet = Employeetimesheet::all()
@@ -190,7 +182,7 @@ class SendEmployeeTimeSheetCommand extends Command
             $jalaliMonth            = $this->convertToJalaliMonth($todayJalaliDate[1]);
             $jalaliDay              = $todayJalaliDate[2];
             $jalaliYear             = substr($jalaliYear, -2);
-            $todayJalaliDateCaption = $jalaliDay." ".$jalaliMonth." ".$jalaliYear;
+            $todayJalaliDateCaption = $jalaliDay . " " . $jalaliMonth . " " . $jalaliYear;
             $persianShiftTime       = $employeeTimeSheet->obtainShiftTime("PERSIAN_FORMAT");
 
             if ($persianShiftTime !== 0) {

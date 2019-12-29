@@ -14,7 +14,8 @@ class RemoveOldUserAvatarListener
     /**
      * Handle the event.
      *
-     * @param  UserAvatarUploaded  $event
+     * @param UserAvatarUploaded $event
+     *
      * @return void
      */
     public function handle(UserAvatarUploaded $event)

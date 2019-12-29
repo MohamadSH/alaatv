@@ -4,7 +4,6 @@ namespace App\Http\Requests;
 
 use App\Traits\CharacterCommon;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Support\Facades\Config;
 
 class InsertArticlecategoryRequest extends FormRequest
 {
@@ -17,7 +16,7 @@ class InsertArticlecategoryRequest extends FormRequest
             ->can(config('constants.INSERT_ARTICLECATEGORY_ACCESS'))) {
             return true;
         }
-        
+
         return false;
     }
 
@@ -28,13 +27,13 @@ class InsertArticlecategoryRequest extends FormRequest
             'order' => 'integer|min:0',
         ];
     }
-    
+
     public function prepareForValidation()
     {
         $this->replaceNumbers();
         parent::prepareForValidation();
     }
-    
+
     protected function replaceNumbers()
     {
         $input = $this->request->all();

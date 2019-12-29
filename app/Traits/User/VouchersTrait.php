@@ -8,12 +8,14 @@
 
 namespace App\Traits\User;
 
+use Illuminate\Database\Eloquent\Relations\HasMany;
+
 trait VouchersTrait
 {
     /**
      * Retrieve all product vouchers of this user
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return HasMany
      */
     public function productvouchers()
     {

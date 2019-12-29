@@ -20,8 +20,7 @@ trait mutatorTrait
     {
         if ($this->strIsEmpty($value)) {
             $this->attributes["firstName"] = null;
-        }
-        else {
+        } else {
             $this->attributes["firstName"] = $value;
         }
     }
@@ -34,8 +33,7 @@ trait mutatorTrait
     {
         if ($this->strIsEmpty($value)) {
             $this->attributes["lastName"] = null;
-        }
-        else {
+        } else {
             $this->attributes["lastName"] = $value;
         }
     }
@@ -48,8 +46,7 @@ trait mutatorTrait
     {
         if ($value == 0) {
             $this->attributes["major_id"] = null;
-        }
-        else {
+        } else {
             $this->attributes["major_id"] = $value;
         }
     }
@@ -62,8 +59,7 @@ trait mutatorTrait
     {
         if ($value == 0) {
             $this->attributes["bloodtype_id"] = null;
-        }
-        else {
+        } else {
             $this->attributes["bloodtype_id"] = $value;
         }
     }
@@ -76,8 +72,7 @@ trait mutatorTrait
     {
         if ($value == 0) {
             $this->attributes["gender_id"] = null;
-        }
-        else {
+        } else {
             $this->attributes["gender_id"] = $value;
         }
     }
@@ -90,8 +85,7 @@ trait mutatorTrait
     {
         if ($value == 0) {
             $this->attributes["grade_id"] = null;
-        }
-        else {
+        } else {
             $this->attributes["grade_id"] = $value;
         }
     }
@@ -104,8 +98,7 @@ trait mutatorTrait
     {
         if ($this->strIsEmpty($value)) {
             $this->attributes["email"] = null;
-        }
-        else {
+        } else {
             $this->attributes["email"] = $value;
         }
     }
@@ -118,8 +111,7 @@ trait mutatorTrait
     {
         if ($this->strIsEmpty($value)) {
             $this->attributes["phone"] = null;
-        }
-        else {
+        } else {
             $this->attributes["phone"] = $value;
         }
     }
@@ -132,8 +124,7 @@ trait mutatorTrait
     {
         if ($this->strIsEmpty($value)) {
             $this->attributes["city"] = null;
-        }
-        else {
+        } else {
             $this->attributes["city"] = $value;
         }
     }
@@ -146,8 +137,7 @@ trait mutatorTrait
     {
         if ($this->strIsEmpty($value)) {
             $this->attributes["province"] = null;
-        }
-        else {
+        } else {
             $this->attributes["province"] = $value;
         }
     }
@@ -160,8 +150,7 @@ trait mutatorTrait
     {
         if ($this->strIsEmpty($value)) {
             $this->attributes["address"] = null;
-        }
-        else {
+        } else {
             $this->attributes["address"] = $value;
         }
     }
@@ -174,8 +163,7 @@ trait mutatorTrait
     {
         if ($this->strIsEmpty($value)) {
             $this->attributes["postalCode"] = null;
-        }
-        else {
+        } else {
             $this->attributes["postalCode"] = $value;
         }
     }
@@ -188,8 +176,7 @@ trait mutatorTrait
     {
         if ($this->strIsEmpty($value)) {
             $this->attributes["school"] = null;
-        }
-        else {
+        } else {
             $this->attributes["school"] = $value;
         }
     }
@@ -202,8 +189,7 @@ trait mutatorTrait
     {
         if ($this->strIsEmpty($value)) {
             $this->attributes["allergy"] = null;
-        }
-        else {
+        } else {
             $this->attributes["allergy"] = $value;
         }
     }
@@ -216,8 +202,7 @@ trait mutatorTrait
     {
         if ($this->strIsEmpty($value)) {
             $this->attributes["medicalCondition"] = null;
-        }
-        else {
+        } else {
             $this->attributes["medicalCondition"] = $value;
         }
     }
@@ -230,8 +215,7 @@ trait mutatorTrait
     {
         if ($this->strIsEmpty($value)) {
             $this->attributes["diet"] = null;
-        }
-        else {
+        } else {
             $this->attributes["diet"] = $value;
         }
     }
@@ -241,22 +225,23 @@ trait mutatorTrait
      */
     public function getReverseFullNameAttribute()
     {
-        return ucfirst($this->lastName).' '.ucfirst($this->firstName);
+        return ucfirst($this->lastName) . ' ' . ucfirst($this->firstName);
     }
 
     public function getPhotoAttribute($value)
     {
         $diskAdapter = Storage::disk('alaaCdnSFTP')->getAdapter();
-        $imageUrl =  $diskAdapter->getUrl($value);
-        return isset($imageUrl)?$imageUrl."?w=100&h=100" :'/acm/image/255x255.png';
+        $imageUrl    = $diskAdapter->getUrl($value);
+        return isset($imageUrl) ? $imageUrl . "?w=100&h=100" : '/acm/image/255x255.png';
     }
 
-    public function getCustomSizePhoto(int $width , int $height){
+    public function getCustomSizePhoto(int $width, int $height)
+    {
         $value = $this->getOriginal('photo');
 
         $diskAdapter = Storage::disk('alaaCdnSFTP')->getAdapter();
-        $imageUrl =  $diskAdapter->getUrl($value);
-        return isset($imageUrl)?$imageUrl."?w=$width&h=$height" :'/acm/image/255x255.png';
+        $imageUrl    = $diskAdapter->getUrl($value);
+        return isset($imageUrl) ? $imageUrl . "?w=$width&h=$height" : '/acm/image/255x255.png';
     }
 
     public function getShortNameAttribute()
@@ -273,10 +258,10 @@ trait mutatorTrait
 
     public function getFullNameAttribute($value)
     {
-        if(!isset($this->firstName) && !isset($this->lastName)){
+        if (!isset($this->firstName) && !isset($this->lastName)) {
             return null;
         }
 
-        return ucfirst($this->firstName).' '.ucfirst($this->lastName);
+        return ucfirst($this->firstName) . ' ' . ucfirst($this->lastName);
     }
 }

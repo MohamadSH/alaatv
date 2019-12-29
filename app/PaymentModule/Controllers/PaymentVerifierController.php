@@ -2,20 +2,20 @@
 
 namespace App\PaymentModule\Controllers;
 
+use AlaaTV\Gateways\Contracts\OnlinePaymentVerificationResponseInterface;
+use AlaaTV\Gateways\Money;
+use AlaaTV\Gateways\PaymentDriver;
 use App\Events\FillTmpShareOfOrder;
 use App\Notifications\DownloadNotice;
-use App\Order;
-use AlaaTV\Gateways\Money;
-use App\PaymentModule\Responses;
 use App\Notifications\InvoicePaid;
+use App\Order;
+use App\PaymentModule\Responses;
+use App\Repositories\TransactionRepo;
 use App\Traits\HandleOrderPayment;
 use App\Traits\OrderCommon;
-use Illuminate\Routing\Controller;
-use AlaaTV\Gateways\PaymentDriver;
 use Illuminate\Http\RedirectResponse;
-use App\Repositories\TransactionRepo;
-use Illuminate\Support\Facades\{Cache, Request};
-use AlaaTV\Gateways\Contracts\OnlinePaymentVerificationResponseInterface;
+use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\{Request};
 
 class PaymentVerifierController extends Controller
 {
@@ -23,8 +23,8 @@ class PaymentVerifierController extends Controller
     use OrderCommon;
 
     /**
-     * @param  string  $paymentMethod
-     * @param  string  $device
+     * @param string $paymentMethod
+     * @param string $device
      *
      * @return RedirectResponse
      */
@@ -55,14 +55,14 @@ class PaymentVerifierController extends Controller
             );
             $this->handleOrderSuccessPayment($myOrder);
             $assetLink          = '
-            <a href="'.route('web.user.asset').'" class="btn m-btn--pill m-btn--air m-btn m-btn--gradient-from-info m-btn--gradient-to-accent animated infinite heartBeat">
+            <a href="' . route('web.user.asset') . '" class="btn m-btn--pill m-btn--air m-btn m-btn--gradient-from-info m-btn--gradient-to-accent animated infinite heartBeat">
                 دانلودهای من
             </a>';
-            $responseMessages[] = 'برای دانلود محصولاتی که خریده اید به صفحه روبرو بروید: '.$assetLink;
+            $responseMessages[] = 'برای دانلود محصولاتی که خریده اید به صفحه روبرو بروید: ' . $assetLink;
             $responseMessages[] = 'توجه کنید که محصولات پیش خرید شده در تاریخ مقرر شده برای دانلود قرار داده می شوند';
 
             $myOrder->user->notify(new InvoicePaid($myOrder));
-            if($device == 'android') {
+            if ($device == 'android') {
                 $myOrder->user->notify(new DownloadNotice($myOrder));
             }
         } else {
@@ -70,10 +70,11 @@ class PaymentVerifierController extends Controller
             $this->handleOrderCanceledTransaction($transaction);
             $transaction->update();
             $myOrdersPage       = '
-            <a href="'.action('Web\UserController@userOrders').'" class="btn m-btn--pill m-btn--air m-btn m-btn--gradient-from-info m-btn--gradient-to-accent animated infinite heartBeat">
+            <a href="' . action('Web\UserController@userOrders') . '" class="btn m-btn--pill m-btn--air m-btn m-btn--gradient-from-info m-btn--gradient-to-accent animated infinite heartBeat">
                 سفارش های من
             </a>';
-            $responseMessages[] = 'یک سفارش پرداخت نشده به لیست سفارش های شما افزوده شده است که می توانید با رفتن به صفحه '.$myOrdersPage.' آن را پرداخت کنید';
+            $responseMessages[] =
+                'یک سفارش پرداخت نشده به لیست سفارش های شما افزوده شده است که می توانید با رفتن به صفحه ' . $myOrdersPage . ' آن را پرداخت کنید';
         }
 
         setcookie('cartItems', '', time() - 3600, '/');
@@ -100,7 +101,7 @@ class PaymentVerifierController extends Controller
     }
 
     /**
-     * @param  Order  $order
+     * @param Order $order
      *
      * @return array
      */

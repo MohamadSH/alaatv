@@ -30,7 +30,7 @@ class CheckoutPaymentRequest extends FormRequest
         } else {
             $rules = [];
         }
-    
+
         return $rules;
     }
 }

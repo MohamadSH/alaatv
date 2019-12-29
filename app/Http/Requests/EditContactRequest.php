@@ -2,7 +2,6 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Support\Facades\Config;
 use Illuminate\Foundation\Http\FormRequest;
 
 class EditContactRequest extends FormRequest
@@ -25,8 +24,8 @@ class EditContactRequest extends FormRequest
         return [
             'name'           => 'required',
             'contacttype_id' => 'exists:contacttypes,id',
-            'relative_id'    => 'unique:contacts,relative_id'.$contactId.'id,deleted_at,NULL|exists:relatives,id',
-    
+            'relative_id'    => 'unique:contacts,relative_id' . $contactId . 'id,deleted_at,NULL|exists:relatives,id',
+
             'phoneNumber.*'  => 'required|numeric',
             'priority.*'     => 'numeric',
             'contact_id.*'   => 'exists:contacts,id',

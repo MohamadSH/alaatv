@@ -34,7 +34,7 @@ class CounselingStatusChanged extends Notification implements ShouldQueue
     /**
      * Get the notification's delivery channels.
      *
-     * @param  mixed  $notifiable
+     * @param mixed $notifiable
      *
      * @return array
      */
@@ -63,7 +63,8 @@ class CounselingStatusChanged extends Notification implements ShouldQueue
 
     private function msg(): string
     {
-        $messageCore = " آلایی عزیز وضعیت سوال مشاوره ای شما به ".$this->orderStatus." تغییر کرد."."\n"."alaatv.com";
+        $messageCore =
+            " آلایی عزیز وضعیت سوال مشاوره ای شما به " . $this->orderStatus . " تغییر کرد." . "\n" . "alaatv.com";
 
         return $messageCore;
     }
@@ -71,9 +72,9 @@ class CounselingStatusChanged extends Notification implements ShouldQueue
     private function getInputData(): array
     {
         return [
-            'name' => 'آلایی',
-            'request' => 'سوال مشاوره ای',
-            'status' => $this->orderStatus,
+            'name'        => 'آلایی',
+            'request'     => 'سوال مشاوره ای',
+            'status'      => $this->orderStatus,
             'supportLink' => '',
         ];
     }

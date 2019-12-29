@@ -12,7 +12,7 @@ class TagsGroup implements TagsGroupContracts
      * @var array
      */
     protected $tagsArray;
-    
+
     /**
      * @var Collection
      */
@@ -21,26 +21,26 @@ class TagsGroup implements TagsGroupContracts
      * @var int
      */
     protected $numberOfTotalTags;
-    
+
     /**
      * TagsGroup constructor.
      *
-     * @param  array  $tags
+     * @param array $tags
      */
     public function __construct(array $tags)
     {
         $this->tagsArray = $tags;
-        
+
         $this->init();
     }
-    
+
     private function init(): void
     {
         $tagsSplitter            = app(TagSplitter::class);
         $this->tagsGroup         = $tagsSplitter->group($this->tagsArray);
         $this->numberOfTotalTags = count($this->tagsArray);
     }
-    
+
     /**
      * @return array
      */
@@ -48,7 +48,7 @@ class TagsGroup implements TagsGroupContracts
     {
         return $this->tagsArray ?? [];
     }
-    
+
     /**
      * @return Collection
      */
@@ -56,7 +56,7 @@ class TagsGroup implements TagsGroupContracts
     {
         return $this->tagsGroup ?? collect();
     }
-    
+
     /**
      * @return int
      */

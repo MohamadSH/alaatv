@@ -43,8 +43,10 @@
 
     <div class="row">
 
-        @include('partials.ads.list', ['id'=>'setShow-TopOfList-desktopShow'])
-        
+        <div class="col-lg-2 a--desktop-show rightSideAdBanner">
+            @include('partials.ads.list', ['id'=>'setShow-TopOfList-desktopShow'])
+        </div>
+
         <div class="col-lg-8 mx-auto">
             <div class="m-portlet m-portlet--full-height ">
                 <div class="m-portlet__head contentsetListHead">

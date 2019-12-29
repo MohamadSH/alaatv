@@ -25,8 +25,8 @@ class Bon extends AlaaJsonResource
         }
 
         return [
-            'name'          => $this->name,
-            'display_name'   => $this->displayName,
+            'name'         => $this->name,
+            'display_name' => $this->displayName,
         ];
     }
 }

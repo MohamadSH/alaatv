@@ -21,9 +21,9 @@ use Storage;
  * @property string|null           $link
  * @property int                   $order
  * @property int                   $isEnable
- * @property Carbon|null   $created_at
- * @property Carbon|null   $updated_at
- * @property Carbon|null   $deleted_at
+ * @property Carbon|null           $created_at
+ * @property Carbon|null           $updated_at
+ * @property Carbon|null           $deleted_at
  * @property-read Websitepage|null $websitepage
  * @method static bool|null forceDelete()
  * @method static \Illuminate\Database\Query\Builder|Slideshow onlyTrashed()
@@ -45,11 +45,11 @@ use Storage;
  * @method static Builder|Slideshow newModelQuery()
  * @method static Builder|Slideshow newQuery()
  * @method static Builder|Slideshow query()
- * @property-read mixed                 $url
+ * @property-read mixed            $url
  * @method static Builder|BaseModel disableCache()
  * @method static Builder|BaseModel withCacheCooldownSeconds($seconds)
- * @property-read mixed  $cache_cooldown_seconds
- * @property int in_new_tab
+ * @property-read mixed            $cache_cooldown_seconds
+ * @property int                   in_new_tab
  */
 class Slideshow extends BaseModel
 {
@@ -87,15 +87,15 @@ class Slideshow extends BaseModel
             'page',
         ])->remember('getMainBanner', config('constants.CACHE_600'), function () {
 
-                $page = Websitepage::where('url', "/home")
-                    ->first();
+            $page = Websitepage::where('url', "/home")
+                ->first();
 
-                return !isset($page) ? collect() : $page
-                        ->slides()
-                        ->where("isEnable", 1)
-                        ->orderBy("order")
-                        ->get() ?? collect();
-            });
+            return !isset($page) ? collect() : $page
+                    ->slides()
+                    ->where("isEnable", 1)
+                    ->orderBy("order")
+                    ->get() ?? collect();
+        });
     }
 
     public static function getShopBanner()
@@ -106,22 +106,22 @@ class Slideshow extends BaseModel
             'page',
         ])->remember('getShopBanner', config('constants.CACHE_600'), function () {
 
-                $page = Websitepage::where('url', "/shop")
-                    ->first();
-                return !isset($page) ? collect() : $page
-                    ->slides()
-                    ->where("isEnable", 1)
-                    ->orderBy("order")
-                    ->get();
-            });
+            $page = Websitepage::where('url', "/shop")
+                ->first();
+            return !isset($page) ? collect() : $page
+                ->slides()
+                ->where("isEnable", 1)
+                ->orderBy("order")
+                ->get();
+        });
     }
 
     public function getUrlAttribute($value): string
     {
         /** @var AlaaSftpAdapter $diskAdapter */
         $diskAdapter = Storage::disk('alaaCdnSFTP')->getAdapter();
-        $imageUrl =  $diskAdapter->getUrl($this->photo);
-        return isset($imageUrl)?$imageUrl.'?w=1280&h=500' :'/acm/image/255x255.png';
+        $imageUrl    = $diskAdapter->getUrl($this->photo);
+        return isset($imageUrl) ? $imageUrl . '?w=1280&h=500' : '/acm/image/255x255.png';
 
 //        return route('image', ['category' => 9, 'w' => '1280', 'h' => '500', 'filename' => $this->photo]);
     }
@@ -142,7 +142,7 @@ class Slideshow extends BaseModel
             if (strcmp($explodedDateTime[0], "0000-00-00") != 0) {
                 $explodedTime = $explodedDateTime[1];
 
-                return $this->convertDate($explodedDateTime[0], 1)." ".$explodedTime;
+                return $this->convertDate($explodedDateTime[0], 1) . " " . $explodedTime;
             }
         }
 
@@ -160,7 +160,7 @@ class Slideshow extends BaseModel
             if (strcmp($explodedDateTime[0], "0000-00-00") != 0) {
                 $explodedTime = $explodedDateTime[1];
 
-                return $this->convertDate($explodedDateTime[0], 1)." ".$explodedTime;
+                return $this->convertDate($explodedDateTime[0], 1) . " " . $explodedTime;
             }
         }
 

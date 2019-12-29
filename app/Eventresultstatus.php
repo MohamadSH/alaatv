@@ -2,6 +2,10 @@
 
 namespace App;
 
+use Carbon\Carbon;
+use Eloquent;
+use Illuminate\Database\Eloquent\Builder;
+
 /**
  * App\Eventresultstatus
  *
@@ -9,22 +13,22 @@ namespace App;
  * @property string|null         $name        نام این وضعیت
  * @property string|null         $displayName نام قابل نمایش این وضعیت
  * @property string|null         $description توضیح این وضعیت
- * @property \Carbon\Carbon|null $created_at
- * @property \Carbon\Carbon|null $updated_at
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
  * @property string|null         $deleted_at
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Eventresultstatus whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Eventresultstatus whereDeletedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Eventresultstatus whereDescription($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Eventresultstatus whereDisplayName($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Eventresultstatus whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Eventresultstatus whereName($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Eventresultstatus whereUpdatedAt($value)
- * @mixin \Eloquent
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Eventresultstatus newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Eventresultstatus newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Eventresultstatus query()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel disableCache()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel withCacheCooldownSeconds($seconds)
+ * @method static Builder|Eventresultstatus whereCreatedAt($value)
+ * @method static Builder|Eventresultstatus whereDeletedAt($value)
+ * @method static Builder|Eventresultstatus whereDescription($value)
+ * @method static Builder|Eventresultstatus whereDisplayName($value)
+ * @method static Builder|Eventresultstatus whereId($value)
+ * @method static Builder|Eventresultstatus whereName($value)
+ * @method static Builder|Eventresultstatus whereUpdatedAt($value)
+ * @mixin Eloquent
+ * @method static Builder|Eventresultstatus newModelQuery()
+ * @method static Builder|Eventresultstatus newQuery()
+ * @method static Builder|Eventresultstatus query()
+ * @method static Builder|BaseModel disableCache()
+ * @method static Builder|BaseModel withCacheCooldownSeconds($seconds)
  * @property-read mixed          $cache_cooldown_seconds
  */
 class Eventresultstatus extends BaseModel
