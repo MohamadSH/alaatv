@@ -39,7 +39,7 @@ class BlockV2 extends AlaaJsonResource
             'id'         => $this->id,
             'title'      => $this->when(isset($this->title), $this->title),
             'offer'      => $this->when(isset($this->offer), $this->offer),
-            'url'        => $this->when(isset($this->url), isset($this->url) ? new UrlForBlock($this) : null),
+            'url'        => $this->when(isset($this->url_v2), isset($this->url_v2) ? new UrlForBlock($this) : null),
             'order'      => $this->order,
             'contents'   => $this->when($this->collectionIsNotEmpty($contents), $this->getContents($contents)),
             'sets'       => $this->when($this->collectionIsNotEmpty($sets), $this->getSets($sets)),
@@ -56,21 +56,21 @@ class BlockV2 extends AlaaJsonResource
 
     private function getContents($contents)
     {
-        return $this->collectionIsNotEmpty($contents) ? ContentInSet::collection($contents) : null;
+        return $this->collectionIsNotEmpty($contents) ? ContentInSetWithoutPagination::collection($contents) : null;
     }
 
     private function getSets($sets)
     {
-        return $this->collectionIsNotEmpty($sets) ? SetInIndex::collection($sets) : null;
+        return $this->collectionIsNotEmpty($sets) ? SetInIndexWithoutPagination::collection($sets) : null;
     }
 
     private function getProducts($products)
     {
-        return $this->collectionIsNotEmpty($products) ? ProductInBlock::collection($products) : null;
+        return $this->collectionIsNotEmpty($products) ? ProductInBlockWithoutPagination::collection($products) : null;
     }
 
     private function getBanners($banners)
     {
-        return $this->collectionIsNotEmpty($banners) ? Slideshow::collection($banners) : null;
+        return $this->collectionIsNotEmpty($banners) ? SlideshowWithoutPagination::collection($banners) : null;
     }
 }

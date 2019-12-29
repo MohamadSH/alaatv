@@ -16,8 +16,8 @@ class UrlForBlock extends AlaaJsonResource
     public function toArray($request)
     {
         return [
-            'web' => $this->when(isset($this->url), $this->url),
-            'api' => $this->when(isset($this->url), $this->url),
+            'web' => $this->when(isset($this->url_v2), $this->url_v2),
+            'api' => $this->when(isset($this->url_v2), $this->url_v2),
         ];
     }
 }
