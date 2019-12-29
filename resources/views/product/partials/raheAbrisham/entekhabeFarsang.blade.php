@@ -23,9 +23,7 @@
             <div class="m-portlet__body">
                 <div class="closeBtn">
                     <a href="#" data-toggle="m-tooltip" data-placement="top" data-original-title="مشاهده تمام فیلم ها و جزوات" >
-                        <button type="button" class="btn m-btn--pill btn-outline-danger btnShowMoreContents">
-                            <i class="fa fa-reply"></i>
-                        </button>
+                        <i class="fa fa-share-square m--font-danger btnShowMoreContents"></i>
                     </a>
                 </div>
                 <div class="sectionFilterCol">

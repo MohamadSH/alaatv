@@ -207,13 +207,24 @@
     position: absolute;
     left: 0;
     top: 0;
-    height: calc( 100% - 10px);
-    width: 145px;
-    background: transparent;
-    background: linear-gradient(90deg, rgb(255, 255, 255) 0%, rgba(255,255,255,0) 60%);
+    height: calc(100% - 10px);
+    width: 60px;
+    background: 0 0;
+    background: linear-gradient(90deg, #fff 20px,rgba(255,255,255,0) 100%);
 }
 .entekhabeFarsangVideoAndPamphlet .tab-content .ScrollCarousel  {
     min-height: 155px;
+}
+.entekhabeFarsangVideoAndPamphlet .tab-content .ScrollCarousel .ScrollCarousel-tooltip {
+    background:var(--alaa-color-danger);
+    border: solid 2px var(--alaa-color-warning);
+    border-radius: 5px;
+}
+.entekhabeFarsangVideoAndPamphlet .tab-content .ScrollCarousel .ScrollCarousel-tooltip:after {
+    border-top: solid 10px var(--alaa-color-warning);
+}
+.entekhabeFarsangVideoAndPamphlet .tab-content .ScrollCarousel .ScrollCarousel-Items .item a {
+    display: block;
 }
 .entekhabeFarsangVideoAndPamphlet .tab-content .tab-pane .ScrollCarousel-next,
 .entekhabeFarsangVideoAndPamphlet .tab-content .tab-pane .ScrollCarousel-previous {
