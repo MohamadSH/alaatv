@@ -905,7 +905,7 @@ var EntekhabeFarsang = function () {
 
     function createVideoItem(data) {
         return '' +
-            '<div class="item w-55443211" data-section-id="'+data.section.id+'" data-section-name="'+data.section.name+'">\n' +
+            '<div class="item w-55443211" data-section-id="'+data.section.id+'" data-section-name="'+data.section.name+'" data-tooltip-content="' + data.title + '">\n' +
             '  <a href="' + data.link + '">' +
             '    <img class="lazy-image a--full-width"\n' +
             '         src="https://cdn.alaatv.com/loder.jpg?w=16&h=9"\n' +
@@ -962,10 +962,31 @@ var EntekhabeFarsang = function () {
     }
 
     function setVideoTooltip() {
+        ScrollCarousel.addTooltip($('#m_tabs_video .ScrollCarousel'));
+
         // $('#m_tabs_video .ScrollCarousel .ScrollCarousel-Items .item img').each(function () {
         //     $(this).parents('a').attr('data-toggle', 'm-tooltip').attr('data-placement', 'top').attr('data-original-title', $(this).attr('alt'));
         // });
         // $('#m_tabs_video .ScrollCarousel .ScrollCarousel-Items .item a').tooltip();
+
+
+        // $('#m_tabs_video .ScrollCarousel .ScrollCarousel-Items .item img').each(function () {
+        //     $(this).attr('data-toggle', 'm-tooltip').attr('data-placement', 'top').attr('data-original-title', $(this).attr('alt'));
+        // });
+        // $('#m_tabs_video .ScrollCarousel .ScrollCarousel-Items .item img').tooltip();
+
+
+        // $('#m_tabs_video .ScrollCarousel .ScrollCarousel-Items .item img').each(function () {
+        //     $(this).parents('.item').attr('data-toggle', 'm-tooltip').attr('data-placement', 'top').attr('data-original-title', $(this).attr('alt'));
+        // });
+        // $('#m_tabs_video .ScrollCarousel .ScrollCarousel-Items .item').tooltip();
+
+
+        // $('#m_tabs_video .ScrollCarousel .ScrollCarousel-Items .item img').each(function () {
+        //     $(this).parents('.item').attr('data-toggle', 'm-tooltip').attr('data-placement', 'top').attr('data-original-title', $(this).attr('alt'));
+        // });
+        // $('#m_tabs_video .ScrollCarousel .ScrollCarousel-Items .item').tooltip();
+
     }
 
     function setLists(data) {
@@ -1246,12 +1267,13 @@ var InitAbrishamPage = function () {
 
     function initEvents() {
         $(document).on('click', '.showMoreLiveDescriptions', function () {
-            var $target = $('.liveDescriptionRow .m-timeline-3 .m-timeline-3__items .m-timeline-3__item:not(:first-child)');
-            if ($target.is(":visible")) {
-                $target.fadeOut();
+            var $moreLiveDescriptions = $('.liveDescriptionRow .m-timeline-3 .m-timeline-3__items .m-timeline-3__item:not(:first-child)');
+            if ($moreLiveDescriptions.is(":visible")) {
+                $moreLiveDescriptions.fadeOut();
+                $(this).html($(this).attr('data-read-more-text'));
             } else {
-                $target.fadeIn();
-                $(this).fadeOut();
+                $moreLiveDescriptions.fadeIn();
+                $(this).html('بستن');
             }
         });
         $(document).on('click', '.btnShowRepurchase', function () {
@@ -1268,8 +1290,19 @@ var InitAbrishamPage = function () {
             $('.liveDescriptionRow').AnimateScrollTo();
         });
         $(document).on('click', '.descriptionBox .readMoreBtn', function () {
-            $(this).fadeOut();
-            $(this).parents('.descriptionBox').find('.content').removeClass('compact').addClass('collapsed');
+            if ($(this).parents('.descriptionBox').find('.content').hasClass('compact')) {
+                $(this).html('بستن')
+                    .parents('.descriptionBox')
+                    .find('.content')
+                    .removeClass('compact')
+                    .addClass('collapsed');
+            } else {
+                $(this).html($(this).attr('data-read-more-text'))
+                    .parents('.descriptionBox')
+                    .find('.content')
+                    .removeClass('collapsed')
+                    .addClass('compact');
+            }
         });
         $(document).on('click', '.descriptionBox .btnCloseDescriptionBox', function () {
             $(this).parents('.descriptionBox').fadeOut();

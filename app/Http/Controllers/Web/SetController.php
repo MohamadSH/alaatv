@@ -256,6 +256,7 @@ class SetController extends Controller
 
     public function show(Request $request, Contentset $contentSet)
     {
+        /** @var \App\User $user */
         $user  = $request->user();
         $order = $request->get('order', 'asc');
         if (isset($contentSet->redirectUrl)) {
@@ -308,8 +309,7 @@ class SetController extends Controller
 
         $this->generateSeoMetaTags($contentSet);
 
-        $isFavored =
-            optional(optional(optional(optional($user)->favoredSets())->where('id', $contentSet->id))->get())->isNotEmpty();
+        $isFavored = (isset($user))?$user->hasFavoredSet($contentSet):false;
 
         return view('set.show', compact('contentSet', 'videos', 'pamphlets', 'articles', 'jsonLdArray', 'order', 'isFavored'));
     }
