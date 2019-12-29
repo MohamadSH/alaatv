@@ -2,6 +2,11 @@
 
 @section('page-css')
     <link href="{{ mix('/css/product-show-RaheAbrisham.css') }}" rel="stylesheet" type="text/css"/>
+    <style>
+        .fa-ban:before {
+            content:"\f05e"
+        }
+    </style>
 @endsection
 
 @section('page-head')
@@ -111,8 +116,6 @@
         'content' => view('product.partials.raheAbrisham.soalateMotedavel', compact('faqs'))
     ])
 
-
-
     @include('product.partials.raheAbrisham.descriptionBox', [
         'title' => 'توضیحات لحظه ای و آخرین تغییرات',
         'class' => 'liveDescriptionRow',
@@ -189,4 +192,5 @@
         };
     </script>
     <script src="{{ mix('/js/product-show-RaheAbrisham.js') }}"></script>
+    <script src="{{ asset('/acm/AlaatvCustomFiles/js/page/product/CustomShow/raheAbrisham.js') }}"></script>
 @endsection

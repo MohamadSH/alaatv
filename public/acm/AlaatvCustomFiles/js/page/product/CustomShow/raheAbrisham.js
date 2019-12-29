@@ -1187,7 +1187,7 @@ var EntekhabeFarsang = function () {
                 dataContentId = 'data-content-id="'+orginalSetId+'"';
 
             if (orginalSetId !== null && orginalSetId === setId) {
-                tooltipName += ' (انخاب شما)';
+                tooltipName += ' (انتخاب شما)';
                 itemIcon = '<i class="fa fa-check-circle"></i>';
             } else if (orginalSetId !== null) {
                 itemIcon = '<i class="fa fa-circle"></i>';

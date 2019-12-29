@@ -90,14 +90,14 @@ class Mix {
 
     mixAll() {
         this.mixBase();
-        this.mixPages();
-        this.mixUser();
-        this.mixLanding();
+        // this.mixPages();
+        // this.mixUser();
+        // this.mixLanding();
         this.mixProduct();
-        this.mixPageContentShow();
-        this.mixPageSetShow();
-        this.mixCheckout();
-        this.mixAdmin();
+        // this.mixPageContentShow();
+        // this.mixPageSetShow();
+        // this.mixCheckout();
+        // this.mixAdmin();
         this.mixCopyDirectory();
 
         // if (this.mix.inProduction()) {
@@ -612,7 +612,7 @@ class Mix {
                 'public/acm/AlaatvCustomFiles/components/AlaaLoading/script.js',
                 'public/acm/AlaatvCustomFiles/components/CustomDropDown/js.js',
 
-                'public/acm/AlaatvCustomFiles/js/page/product/CustomShow/raheAbrisham.js',
+                // 'public/acm/AlaatvCustomFiles/js/page/product/CustomShow/raheAbrisham.js',
             ]),
             'public/js/product-show-RaheAbrisham.js'
         );
