@@ -287,17 +287,8 @@ class SetController extends Controller
 
         if ($request->expectsJson()) {
             $files = [];
-            if (isset($pamphlets) && $pamphlets->isNotEmpty()) {
-                $files['pamphlets'] = ContentResource::collection($pamphlets);
-            }
-
-            if (isset($videos) && $videos->isNotEmpty()) {
-                $files['videos'] = ContentResource::collection($videos);
-            }
-
-            if (isset($articles) && $articles->isNotEmpty()) {
-                $files['articles'] = ContentResource::collection($articles);
-            }
+            $files['pamphlets'] = ContentResource::collection($pamphlets);
+            $files['videos'] = ContentResource::collection($videos);
 
             return response()->json([
                 'set'   => new SetResource($contentSet),
