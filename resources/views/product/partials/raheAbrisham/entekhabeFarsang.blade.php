@@ -71,6 +71,7 @@
 
                         </div>
                         <div class="text-center showVideoMessage"></div>
+                        <div class="farsangStepProgressBar"></div>
 
                     </div>
                     <div class="tab-pane" id="m_tabs_pamphlet" role="tabpanel">
@@ -119,9 +120,9 @@
 {{--                                <button type="button" class="btn m-btn--pill btn-outline-danger btnShowMorePamphlet">مشاهده تمام جزوات</button>--}}
 {{--                            </a>--}}
 {{--                        </div>--}}
+                        <div class="farsangStepProgressBar"></div>
                     </div>
                 </div>
-                <div class="farsangStepProgressBar"></div>
             </div>
         </div>
     </div>

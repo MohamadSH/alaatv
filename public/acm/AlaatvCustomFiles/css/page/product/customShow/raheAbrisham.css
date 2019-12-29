@@ -331,15 +331,6 @@
     font-size: 1.8rem;
     cursor: pointer;
 }
-.mapCol {
-    padding-right: 5px !important;
-}
-@media (max-width: 991px) {
-    .mapCol {
-        padding-right: 0 !important;
-        padding-top: 5px !important;
-    }
-}
 @media (max-width: 767px) {
     .entekhabeFarsangVideoAndPamphlet:before {
         left: 50%;

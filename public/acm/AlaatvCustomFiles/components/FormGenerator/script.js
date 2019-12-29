@@ -2,15 +2,7 @@
 
     $.fn.FormGenerator = function(customOptions) {
 
-        var defaultOptions = {
-                inputData: []
-            },
-            defaultOptions_inputText = {
-                type: 'text',
-                name: '',
-                placeholder: '',
-                id: ''
-            },
+        var defaultOptions = {},
             options = $.extend(true, {}, defaultOptions, customOptions);
 
         if (this.length > 1) {
@@ -26,72 +18,20 @@
 
         // private methods
 
-        var createFormHtml = function(inputData) {
-            if (typeof inputData.type === 'undefined') {
-                return '';
-            }
-            if (inputData.type === 'text') {
-                return createInput_text(inputData);
-            } else {
-                return '';
-            }
+        var createInput = function(inputType, inputData) {
+
         };
-
-        var createFormGroup = function(inputItemData) {
-
-            var withIconClass = '',
-                withIconDirectionClass = '',
-                spanOfIcon = '',
-                hasIcon = true,
-                hasLabel = (typeof inputItemData.label !== 'undefined'),
-                label = '';
-
-            if (typeof inputItemData.icons !== 'undefined') {
-                withIconClass = 'withIcon';
-                if (typeof inputItemData.icons.left !== 'undefined') {
-                    withIconDirectionClass = 'left';
-                } else if (typeof inputItemData.icons.right !== 'undefined') {
-                    withIconDirectionClass = 'right';
-                } else {
-                    hasIcon = false;
-                }
-            }
-
-            if (hasIcon) {
-                spanOfIcon =
-                    '    <span class="'+withIconDirectionClass+'">' +
-                    '      <span>'+inputItemData.icons.right+'</span>' +
-                    '    </span>';
-            }
-
-            if (hasLabel) {
-                label = '  <label for="'+inputItemData.id+'">'+inputItemData.label+'</label>';
-            }
-
+        var createInput_text = function(inputData) {
             return '' +
                 '<div class="form-group">' +
-                '  ' + label +
-                '  <div class="'+withIconClass+'">' +
-                '    ' + createInput(inputItemData) +
-                '    ' + spanOfIcon +
+                '  <label for="'+inputData.id+'">'+inputData.label+'</label>' +
+                '  <div class="FormGenerator-input-wrapper m-input-icon m-input-icon--left">' +
+                '    <input type="text" name="'+inputData.name+'" id="'+inputData.id+'" class="form-control m-input m-input--air '+inputData.placeholder+'" placeholder="'+inputData.placeholder+'">' +
+                '    <span class="m-input-icon__icon m-input-icon__icon--left">' +
+                '      <span><i class="fa fa-university"></i></span>' +
+                '    </span>' +
                 '  </div>' +
                 '</div>';
-        };
-
-        var createInput = function(inputItemData) {
-            if (typeof inputItemData.type === 'undefined') {
-                return '';
-            }
-            if (inputItemData.type === 'text') {
-                return createInput_text(inputItemData);
-            } else {
-                return '';
-            }
-        };
-
-        var createInput_text = function(inputItemData) {
-            inputItemData = $.extend(true, {}, defaultOptions_inputText, inputItemData);
-            return '    <input type="text" name="'+inputItemData.name+'" id="'+inputItemData.id+'" class="form-control" placeholder="'+inputItemData.placeholder+'">';
         };
 
         // public methods

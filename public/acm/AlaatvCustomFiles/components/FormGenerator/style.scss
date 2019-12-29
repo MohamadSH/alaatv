@@ -1,30 +1,5 @@
 .FormGenerator {
     .form-group > div {
-        position: relative;
-        padding: 0;
-        width: 100%;
 
-        &.withIcon {
-            input,
-            select {
-                padding-right: 2.8rem;
-                -webkit-box-shadow: 0 3px 20px 0 rgba(51,51,51,.11);
-                box-shadow: 0 3px 20px 0 rgba(51,51,51,.11);
-            }
-            span.inputIcon {
-                position: absolute;
-                height: 100%;
-                display: inline-block;
-                text-align: center;
-                top: 0;
-                width: 3.2rem;
-                &.left {
-                    left: 0;
-                }
-                &.right {
-                    right: 0;
-                }
-            }
-        }
     }
 }
