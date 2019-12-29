@@ -192,5 +192,4 @@
         };
     </script>
     <script src="{{ mix('/js/product-show-RaheAbrisham.js') }}"></script>
-    <script src="{{ asset('/acm/AlaatvCustomFiles/js/page/product/CustomShow/raheAbrisham.js') }}"></script>
 @endsection

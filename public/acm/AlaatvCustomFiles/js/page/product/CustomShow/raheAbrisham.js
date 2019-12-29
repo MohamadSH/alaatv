@@ -631,7 +631,7 @@ var MapSVG = function () {
             contain: 'outside',
             // panOnlyWhenZoomed: false,
             step: 1.5, // The step affects zoom calculation when zooming with a mouse wheel, when pinch zooming, or when using zoomIn/zoomOut
-            startScale: 1, // Scale used to set the beginning transform
+            startScale: startScale, // Scale used to set the beginning transform
             maxScale: 15, // The maximum scale when zooming
             minScale: startScale // The minimum scale when zooming
         });
@@ -674,10 +674,11 @@ var MapSVG = function () {
             hideAllTooltip();
         });
         svgMapElement.addEventListener('panzoomend', (event) => {
-            refreshMapEvents();
+            // refreshMapEvents();
+            showAllTooltip();
         });
         svgMapElement.addEventListener('panzoompan', (event) => {
-            refreshMapEvents();
+            // refreshMapEvents();
         });
 
         $(document).on('AnimateScrollTo.beforeScroll', function () {
