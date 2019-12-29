@@ -8,6 +8,7 @@ use App\Collection\ContentCollection;
 use App\Collection\OrderCollections;
 use App\Collection\OrderproductCollection;
 use App\Collection\ProductCollection;
+use App\Collection\SetCollection;
 use App\Collection\UserCollection;
 use App\HelpDesk\AgentInterface;
 use App\HelpDesk\Collection\TicketCollection;
@@ -349,7 +350,8 @@ use Laravel\Passport\Token;
  * @property-read int|null                  $useruploads_count
  * @property-read int|null                  $wallet_transactions_count
  * @property-read int|null                  $wallets_count
- * @property ProductCollection               favoredProducts
+ * @property ProductCollection              favoredProducts
+ * @property SetCollection                  favoredSets
  * @method static Builder|User helpAdmins()
  * @method static Builder|User helpAgents()
  * @method static Builder|User permissionName($permissionName)
@@ -592,6 +594,11 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber, 
     public function hasFavoredProduct(Product $product):bool
     {
         return $this->favoredProducts->where('id', $product->id)->isNotEmpty();
+    }
+
+    public function hasFavoredSet(Contentset $contentSet):bool
+    {
+        return $this->favoredSets->where('id', $contentSet->id)->isNotEmpty();
     }
 
     /*
