@@ -251,7 +251,59 @@ var ScrollCarousel = function () {
     function getScrollDirection($scrollCarousel) {
         return (typeof $scrollCarousel.attr('direction') !== 'undefined') ? $scrollCarousel.attr('direction') : 'left';
     }
+    /* swipe icons */
 
+    /* Tooltip */
+    function addHoverEvent($scrollCarousel) {
+        $scrollCarousel.find('.ScrollCarousel-Items .item').hover( handlerInForTooltip, handlerOutForTooltip );
+    }
+    function handlerInForTooltip() {
+        const tooltipText = $(this).attr('data-tooltip-content');
+        $(this).parents('.ScrollCarousel').append('<div class="ScrollCarousel-tooltip">'+tooltipText+'</div>');
+        var $scrollCarouselObject =  $(this).parents('.ScrollCarousel'),
+            $tooltipObject = getTooltipObject($scrollCarouselObject);
+        setTooltipPosition($tooltipObject, $(this));
+    }
+    function handlerOutForTooltip() {
+        getTooltipObject($(this).parents('.ScrollCarousel')).remove();
+    }
+    function getTooltipObject($scrollCarouselObject) {
+        return $scrollCarouselObject.find('.ScrollCarousel-tooltip');
+    }
+    function setTooltipPosition($tooltip, $item) {
+        setTooltipLeftPosition($tooltip, $item);
+        setTooltipTopPosition($tooltip);
+    }
+    function setTooltipTopPosition($tooltip) {
+        const tooltipHeight = $tooltip.outerHeight(),
+            tooltipPointerHeight = 10,
+            topPosition = -1*(tooltipHeight+tooltipPointerHeight);
+
+        $tooltip.css({
+            'top': topPosition
+        });
+    }
+    function setTooltipLeftPosition($tooltip, $item) {
+        const tooltipWidth = $tooltip.width(),
+            itemWidth = $item.width(),
+            outerWidthMargin = $item.outerWidth(true) - $item.innerWidth(),
+            itemLeftPosition = $item.position().left,
+            leftPosition = calculateLeftPosition(itemWidth, tooltipWidth, itemLeftPosition, outerWidthMargin);
+
+        $tooltip.css({
+            'max-width': itemWidth,
+            'left': leftPosition
+        });
+    }
+
+    function calculateLeftPosition(itemWidth, tooltipWidth, itemLeftPosition, outerWidthMargin) {
+        var shiftToRight = outerWidthMargin;
+        if (itemWidth > tooltipWidth) {
+            shiftToRight += (itemWidth - tooltipWidth) / 2
+        }
+        return itemLeftPosition + shiftToRight;
+    }
+    /* Tooltip */
     return {
         init: function() {
             sliders = document.getElementsByClassName('ScrollCarousel-Items');
@@ -265,6 +317,9 @@ var ScrollCarousel = function () {
         },
         animateScroll: function ($scrollCarousel) {
             animateScroll($scrollCarousel)
+        },
+        addTooltip: function ($scrollCarousel) {
+            addHoverEvent($scrollCarousel);
         }
 
     };

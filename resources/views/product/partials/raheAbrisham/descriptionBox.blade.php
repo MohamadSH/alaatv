@@ -31,7 +31,7 @@
                 </div>
                 @if(isset($btnMoreText) && $btnMoreText!==false)
                     <div class="text-right">
-                        <button type="button" class="btn m-btn--square btn-metal readMoreBtn @if(isset($btnMoreClass)) {{$btnMoreClass}} @endif">
+                        <button type="button" class="btn m-btn--square btn-metal readMoreBtn @if(isset($btnMoreClass)) {{$btnMoreClass}} @endif" data-read-more-text="{{ $btnMoreText }}">
                             {{ $btnMoreText }}
                         </button>
                     </div>
