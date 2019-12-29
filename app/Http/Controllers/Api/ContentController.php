@@ -3,15 +3,11 @@
 namespace App\Http\Controllers\Api;
 
 use App\Classes\Search\ContentSearch;
-use App\Classes\Search\ContentsetSearch;
-use App\Classes\Search\ProductSearch;
 use App\Content;
 use App\Contenttype;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\ContentIndexRequest;
 use App\Http\Resources\Content as ContentResource;
 use App\Http\Resources\ContentInSet as ContentInSearch;
-use App\Http\Resources\Search;
 use App\Traits\Content\ContentControllerResponseTrait;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -21,31 +17,8 @@ class ContentController extends Controller
 {
     use ContentControllerResponseTrait;
 
-    public function index(ContentIndexRequest $request, ContentSearch $contentSearch, ContentsetSearch $setSearch, ProductSearch $productSearch)
+    public function index(Request $request, ContentSearch $contentSearch)
     {
-        $request->offsetSet('free', $request->get('free', [1]));
-        $contentTypes = array_filter($request->get('contentType', Contenttype::List()));
-        $contentOnly  = $request->get('contentOnly', false);
-        $filters      = $request->all();
-
-        $result = $contentSearch->get(compact('filters', 'contentTypes'));
-
-        $setFilters            = $filters;
-        $setFilters['enable']  = 1;
-        $setFilters['display'] = 1;
-        $result->offsetSet('set', !$contentOnly ? $setSearch->get($setFilters) : null);
-
-        $productFilters                    = $filters;
-        $productFilters['active']          = 1;
-        $productFilters['doesntHaveGrand'] = 1;
-        $result->offsetSet('product', !$contentOnly ? $productSearch->get($productFilters) : null);
-
-        return Search::collection($result);
-    }
-
-    public function indexV2(Request $request, ContentSearch $contentSearch)
-    {
-        //TODO:// validate
         $request->offsetSet('free', $request->get('free', [1]));
         $contentTypes = array_filter($request->get('contentType', Contenttype::video()));
         $filters      = $request->all();

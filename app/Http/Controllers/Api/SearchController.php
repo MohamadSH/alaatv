@@ -38,24 +38,26 @@ class SearchController extends Controller
         $setFilters            = $filters;
         $setFilters['enable']  = 1;
         $setFilters['display'] = 1;
-        $sets = $setSearch->get($setFilters);
-        $sets = !$contentOnly && isset($sets) && $sets->count()>0 ? SetInIndex::collection($sets) : null;
+        $sets                  = $setSearch->get($setFilters);
+        $sets                  =
+            !$contentOnly && isset($sets) && $sets->count() > 0 ? SetInIndex::collection($sets) : null;
 
         $productFilters                    = $filters;
         $productFilters['active']          = 1;
         $productFilters['doesntHaveGrand'] = 1;
-        $products = $productSearch->get($productFilters);
+        $products                          = $productSearch->get($productFilters);
 
-        $products = !$contentOnly && isset($products) && $products->count()>0 ? ProductInBlock::collection($products) : null;
+        $products =
+            !$contentOnly && isset($products) && $products->count() > 0 ? ProductInBlock::collection($products) : null;
 
         return response()->json([
             'data' => [
-                'videos' => $videos,
+                'videos'    => $videos,
                 'pamphlets' => null,
-                'articles' => null,
-                'products' => $products,
-                'sets'     => $sets,
-                'tags'   => empty($tags) ? null : $tags,
+                'articles'  => null,
+                'products'  => $products,
+                'sets'      => $sets,
+                'tags'      => empty($tags) ? null : $tags,
             ],
         ]);
     }
