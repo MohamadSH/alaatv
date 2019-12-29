@@ -3,7 +3,7 @@
         <div>
             <img class="lazy-image a--full-width"
                  src="https://cdn.alaatv.com/loder.jpg?w=16&h=9"
-                 data-src="{{ asset('/acm/image/raheAbrisham/helpMessagePic.svg') }}"
+                 data-src="https://cdn.alaatv.com/upload/raheAbrisham-helpMessagePic.svg"
                  alt="samplePhoto"
                  width="253" height="142">
         </div>
