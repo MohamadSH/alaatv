@@ -46,6 +46,7 @@ Route::group(['prefix' => 'v1'], function () {
     Route::get('authTest', [HomeController::class, 'authTest'])->name('api.v1.authTest');
 
     Route::get('c/{c}', [ContentController::class, 'show'])->name('api.v1.content.show');
+    Route::get('c', [ContentController::class, 'index'])->name('api.v1.content.index');
     Route::get('product/{product}', [ProductController::class, 'show'])->name('api.v1.product.show');
     Route::get('set/{set}', [SetController::class, 'show'])->name('api.v1.set.show');
     Route::get('set', [SetController::class, 'index'])->name('api.v1.set.show');
