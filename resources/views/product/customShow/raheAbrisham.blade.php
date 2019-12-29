@@ -2,6 +2,11 @@
 
 @section('page-css')
     <link href="{{ mix('/css/product-show-RaheAbrisham.css') }}" rel="stylesheet" type="text/css"/>
+    <style>
+        .fa-ban:before {
+            content:"\f05e"
+        }
+    </style>
 @endsection
 
 @section('page-head')
