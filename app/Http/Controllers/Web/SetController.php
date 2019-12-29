@@ -9,7 +9,7 @@ use App\Contentset;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ContentsetIndexRequest;
 use App\Http\Requests\InsertContentsetRequest;
-use App\Http\Resources\ContentInSet2 as ContentResource;
+use App\Http\Resources\ContentInSetWithFile as ContentResource;
 use App\Http\Resources\Set as SetResource;
 use App\Traits\FileCommon;
 use App\Traits\MetaCommon;
@@ -256,6 +256,7 @@ class SetController extends Controller
 
     public function show(Request $request, Contentset $contentSet)
     {
+        /** @var \App\User $user */
         $user  = $request->user();
         $order = $request->get('order', 'asc');
         if (isset($contentSet->redirectUrl)) {
@@ -286,17 +287,8 @@ class SetController extends Controller
 
         if ($request->expectsJson()) {
             $files = [];
-            if (isset($pamphlets) && $pamphlets->isNotEmpty()) {
-                $files['pamphlets'] = ContentResource::collection($pamphlets);
-            }
-
-            if (isset($videos) && $videos->isNotEmpty()) {
-                $files['videos'] = ContentResource::collection($videos);
-            }
-
-            if (isset($articles) && $articles->isNotEmpty()) {
-                $files['articles'] = ContentResource::collection($articles);
-            }
+            $files['pamphlets'] = ContentResource::collection($pamphlets);
+            $files['videos'] = ContentResource::collection($videos);
 
             return response()->json([
                 'set'   => new SetResource($contentSet),
@@ -308,8 +300,7 @@ class SetController extends Controller
 
         $this->generateSeoMetaTags($contentSet);
 
-        $isFavored =
-            optional(optional(optional(optional($user)->favoredSets())->where('id', $contentSet->id))->get())->isNotEmpty();
+        $isFavored = (isset($user))?$user->hasFavoredSet($contentSet):false;
 
         return view('set.show', compact('contentSet', 'videos', 'pamphlets', 'articles', 'jsonLdArray', 'order', 'isFavored'));
     }

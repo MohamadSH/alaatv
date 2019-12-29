@@ -4,9 +4,8 @@ namespace App\Http\Resources;
 
 use App\Traits\Content\Resource;
 use Illuminate\Http\Request;
-use Illuminate\Http\Resources\Json\JsonResource;
 
-class ContentInSet2 extends AlaaJsonResource
+class ContentInSetWithFile extends AlaaJsonResource
 {
     use Resource;
 
