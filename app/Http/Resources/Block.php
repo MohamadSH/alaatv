@@ -3,6 +3,7 @@
 namespace App\Http\Resources;
 
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
  * Class Block
@@ -12,7 +13,7 @@ use Illuminate\Http\Request;
  * @property mixed notRedirectedContents
  * @property mixed notRedirectedSets
  */
-class Block extends AlaaJsonResource
+class Block extends JsonResource
 {
     /**
      * Transform the resource into an array.
