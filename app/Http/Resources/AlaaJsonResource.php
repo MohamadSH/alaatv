@@ -3,22 +3,12 @@
 
 namespace App\Http\Resources;
 
-
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Http\Resources\MissingValue;
 
-class AlaaJsonResource extends JsonResource
+class AlaaJsonResource extends AlaaJsonResourceWithoutPagination
 {
-    protected function when($condition, $value, $default = null)
-    {
-        if ($condition || true) {
-            return value($value);
-        }
-
-        return func_num_args() === 3 ? value($default) : new MissingValue;
-    }
-
     /**
      * Create new anonymous resource collection.
      *
@@ -33,15 +23,5 @@ class AlaaJsonResource extends JsonResource
                 $collection->preserveKeys = (new static([]))->preserveKeys === true;
             }
         });
-    }
-
-    public function toArray($request)
-    {
-        return array_merge(parent::toArray($request),
-            [
-                'meta' => [
-                    'count' => $this->count()
-                ],
-            ]);
     }
 }

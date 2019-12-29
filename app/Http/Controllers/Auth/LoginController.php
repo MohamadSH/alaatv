@@ -173,8 +173,7 @@ class LoginController extends Controller
     {
         $token = $user->getAppToken();
         $data  = array_merge([
-            'user' => $user,  //Can't change this line because of current Android application
-//              'user' => new UserResource($user)
+            'user' => $user,
         ], $token);
         return response()->json([
             'status'     => 1,

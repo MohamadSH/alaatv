@@ -4,18 +4,18 @@
         <div class="m-portlet m--margin-bottom-10">
             <div class="m-portlet__body">
 
-                @include('partials.favorite', [
-                    'favActionUrl' => route('web.mark.favorite.product', [ 'product' => $product->id ]),
-                    'unfavActionUrl' => route('web.mark.unfavorite.product', [ 'product' => $product->id ]),
-                    'isFavored' => $isFavored
-                ])
+            @include('partials.favorite', [
+                'favActionUrl' => route('web.mark.favorite.product', [ 'product' => $product->id ]),
+                'unfavActionUrl' => route('web.mark.unfavorite.product', [ 'product' => $product->id ]),
+                'isFavored' => $isFavored
+            ])
 
-                <!--begin::Section-->
+            <!--begin::Section-->
                 <div class="m-section m-section--last">
                     <div class="m-section__content">
                         <!--begin::Preview-->
                         <div class="row no-gutters">
-                            <div class="col-lg-3">
+                            <div class="col-lg-3 pictureCol">
                                 <div>
                                     <img src="{{$product->photo}}?w=400&h=400" alt="عکس محصول@if(isset($product->name)) {{$product->name}} @endif" class="img-fluid productPicture m--marginless a--full-width"/>
                                     <button type="button" class="btn m-btn--square btn-metal a--full-width m--margin-top-5 btnShowRepurchase">
@@ -26,8 +26,8 @@
                                     {!! Form::hidden('product_id',$product->id) !!}
                                 </div>
                             </div>
-                            <div class="col m--padding-left-5">
-                                <div class="row no-gutters">
+                            <div class="col-lg-9 mapCol">
+                                <div class="row">
                                     <div class="col">
 
                                         <div id="mapContainer">
@@ -38,7 +38,7 @@
 
                                     </div>
                                 </div>
-                                <div class="row no-gutters m--margin-top-5">
+                                <div class="row m--margin-top-5">
                                     <div class="col-6 m--padding-right-5">
                                         <button class="btn m-btn--square btn-success a--full-width btnShowHelpMessage">
                                             <p class="display-5 m--marginless">
