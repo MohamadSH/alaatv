@@ -204,6 +204,24 @@
         );
     }
 
+    .ScrollCarousel-tooltip {
+        position: absolute;
+        background: black;
+        color: white;
+        padding: 5px;
+        text-align: center;
+
+        &:after {
+            content: ' ';
+            position: absolute;
+            bottom: -10px;
+            left: calc( 50% - 10px );
+            border-right: solid 10px transparent;
+            border-left: solid 10px transparent;
+            border-top: solid 10px black;
+        }
+    }
+
     .ScrollCarousel-next,
     .ScrollCarousel-previous {
         position: absolute;

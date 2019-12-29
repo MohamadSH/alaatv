@@ -55,19 +55,6 @@
 
 @section('content')
 
-
-
-{{--    <script id="ScrollCarousel_base" type="x-tmpl-mustache">--}}
-{{--        @include('partials.ScrollCarousel.mustache_base')--}}
-{{--    </script>--}}
-
-{{--    <script id="ScrollCarousel_item" type="x-tmpl-mustache">--}}
-{{--        @include('partials.ScrollCarousel.mustache_item')--}}
-{{--    </script>--}}
-
-{{--    <div id="mustacheTest"></div>--}}
-{{--    <div id="mustacheTest2"></div>--}}
-
     <div class="row">
         <div class="col">
             @include('systemMessage.flash')
@@ -109,15 +96,12 @@
                 'btnMoreText' => 'مطالعه کامل توضیحات',
             ])
         </div>
-        <div class="col-md-6">
+        <div class="col-md-9">
             @include('product.partials.raheAbrisham.descriptionBox', [
                 'title' => 'نحوه دریافت هدایای ارزشمند آموزشی ویژه شما عزیزان',
                 'closeIcon' => true,
                 'content' => view('product.partials.raheAbrisham.nahveDariaftHadaia'),
             ])
-        </div>
-        <div class="col-md-6">
-            <img src="https://cdn.alaatv.com/upload/megamenuBackground-talaee.jpg?w=1083&amp;h=0" class="a--full-width">
         </div>
     </div>
 
@@ -205,5 +189,4 @@
         };
     </script>
     <script src="{{ mix('/js/product-show-RaheAbrisham.js') }}"></script>
-    <script src="{{ asset('/acm/AlaatvCustomFiles/js/page/product/CustomShow/raheAbrisham.js') }}"></script>
 @endsection
