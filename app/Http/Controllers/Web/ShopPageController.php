@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Web;
 use App\Block;
 use App\Classes\SEO\SeoDummyTags;
 use App\Http\Controllers\Controller;
-use App\Http\Resources\Block as BlockResource;
+use App\Http\Resources\BlockV1 as BlockResource;
 use App\Slideshow;
 use App\Traits\MetaCommon;
 use App\Websitesetting;
