@@ -13,7 +13,7 @@ use Illuminate\Database\Eloquent\Builder;
 class MobileNotVerified extends FilterAbstract
 {
     protected $attribute = 'mobile_verified_at';
-    
+
     public function apply(Builder $builder, $value, FilterCallback $callback): Builder
     {
         return $builder->whereNull($this->attribute);

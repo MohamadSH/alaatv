@@ -2,37 +2,42 @@
 
 namespace App;
 
+use Carbon\Carbon;
+use Eloquent;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
+
 /**
  * App\Bontype
  *
- * @property int                                                      $id
- * @property string                                                   $name        نام نوع بن
- * @property string|null                                              $displayName نام قابل نمایش نوع بن
- * @property string|null                                              $description توضیح درباره نوع بن
- * @property \Carbon\Carbon|null                                      $created_at
- * @property \Carbon\Carbon|null                                      $updated_at
- * @property \Carbon\Carbon|null                                      $deleted_at
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Bon[] $bons
+ * @property int                                                 $id
+ * @property string                                              $name        نام نوع بن
+ * @property string|null                                         $displayName نام قابل نمایش نوع بن
+ * @property string|null                                         $description توضیح درباره نوع بن
+ * @property Carbon|null                                 $created_at
+ * @property Carbon|null                                 $updated_at
+ * @property Carbon|null                                 $deleted_at
+ * @property-read Collection|Bon[] $bons
  * @method static bool|null forceDelete()
- * @method static \Illuminate\Database\Query\Builder|\App\Bontype onlyTrashed()
+ * @method static \Illuminate\Database\Query\Builder|Bontype onlyTrashed()
  * @method static bool|null restore()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Bontype whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Bontype whereDeletedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Bontype whereDescription($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Bontype whereDisplayName($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Bontype whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Bontype whereName($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Bontype whereUpdatedAt($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Bontype withTrashed()
- * @method static \Illuminate\Database\Query\Builder|\App\Bontype withoutTrashed()
- * @mixin \Eloquent
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Bontype newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Bontype newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Bontype query()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel disableCache()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel withCacheCooldownSeconds($seconds)
+ * @method static Builder|Bontype whereCreatedAt($value)
+ * @method static Builder|Bontype whereDeletedAt($value)
+ * @method static Builder|Bontype whereDescription($value)
+ * @method static Builder|Bontype whereDisplayName($value)
+ * @method static Builder|Bontype whereId($value)
+ * @method static Builder|Bontype whereName($value)
+ * @method static Builder|Bontype whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Query\Builder|Bontype withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|Bontype withoutTrashed()
+ * @mixin Eloquent
+ * @method static Builder|Bontype newModelQuery()
+ * @method static Builder|Bontype newQuery()
+ * @method static Builder|Bontype query()
+ * @method static Builder|BaseModel disableCache()
+ * @method static Builder|BaseModel withCacheCooldownSeconds($seconds)
  * @property-read mixed                                               $cache_cooldown_seconds
- * @property-read int|null $bons_count
+ * @property-read int|null                                            $bons_count
  */
 class Bontype extends BaseModel
 {
@@ -41,7 +46,7 @@ class Bontype extends BaseModel
         'displayName',
         'description',
     ];
-    
+
     public function bons()
     {
         return $this->hasMany("\App\Bon");

@@ -11,9 +11,11 @@ class WebsitePageRepo
 {
     /**
      * @param array $filters
+     *
      * @return \Illuminate\Database\Eloquent\Collection
      */
-    public static function getWebsitePages(array $filters = []):Collection{
+    public static function getWebsitePages(array $filters = []): Collection
+    {
         $websitePages = Websitepage::query();
         self::filter($filters, $websitePages);
         return $websitePages->get();
@@ -21,17 +23,14 @@ class WebsitePageRepo
 
     /**
      * @param array $filters
-     * @param $websitePages
+     * @param       $websitePages
      */
     private static function filter(array $filters, Builder $websitePages): void
     {
         foreach ($filters as $key => $filter) {
-            if(is_array($filter))
-            {
+            if (is_array($filter)) {
                 $websitePages->WhereIn($key, $filter);
-            }
-            else
-            {
+            } else {
                 $websitePages->where($key, $filter);
             }
         }

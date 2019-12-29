@@ -2,25 +2,26 @@
 
 namespace App;
 
-use Eloquent;
-use Illuminate\Support\Carbon;
-use App\Collection\SetCollection;
 use App\Collection\BlockCollection;
-use App\Collection\ProductCollection;
 use App\Collection\ContentCollection;
-use Illuminate\Support\Facades\Cache;
+use App\Collection\ProductCollection;
+use App\Collection\SetCollection;
+use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Cache;
 
 /**
  * App\Block
  *
- * @property int         $id
- * @property string|null $title
- * @property string|null $tags
- * @property int         $order
- * @property int         $enable
- * @property Carbon|null $created_at
+ * @property int                              $id
+ * @property string|null                      $title
+ * @property string|null                      $tags
+ * @property int                              $order
+ * @property int                              $enable
+ * @property Carbon|null                      $created_at
  * @property Carbon|null                      $updated_at
  * @property-read ContentCollection|Content[] $contents
  * @property-read ProductCollection|Product[] $products
@@ -35,30 +36,30 @@ use Illuminate\Database\Eloquent\Collection;
  * @method static Builder|Block whereTitle($value)
  * @method static Builder|Block whereUpdatedAt($value)
  * @mixin Eloquent
- * @property string|null                                           $class
+ * @property string|null                      $class
  * @method static Builder|Block whereClass($value)
  * @method static Builder|Block newModelQuery()
  * @method static Builder|Block newQuery()
  * @method static Builder|Block query()
- * @property int                                                       $type
- * @property Carbon|null                           $deleted_at
- * @property-read Collection|Slideshow[] $banners
- * @property-read string                                               $url
+ * @property int                              $type
+ * @property Carbon|null                      $deleted_at
+ * @property-read Collection|Slideshow[]      $banners
+ * @property-read string                      $url
  * @method static Builder|BaseModel disableCache()
  * @method static Builder|Block main()
  * @method static Builder|Block shop()
  * @method static Builder|Block whereDeletedAt($value)
  * @method static Builder|Block whereType($value)
  * @method static Builder|BaseModel withCacheCooldownSeconds($seconds)
- * @property mixed                                                     $offer
- * @property-read mixed                                                $cache_cooldown_seconds
- * @property mixed customUrl
- * @property-read int|null $banners_count
- * @property-read int|null $contents_count
- * @property-read mixed $edit_link
- * @property-read mixed $remove_link
- * @property-read int|null $products_count
- * @property-read int|null $sets_count
+ * @property mixed                            $offer
+ * @property-read mixed                       $cache_cooldown_seconds
+ * @property mixed                            customUrl
+ * @property-read int|null                    $banners_count
+ * @property-read int|null                    $contents_count
+ * @property-read mixed                       $edit_link
+ * @property-read mixed                       $remove_link
+ * @property-read int|null                    $products_count
+ * @property-read int|null                    $sets_count
  * @method static bool|null forceDelete()
  * @method static \Illuminate\Database\Query\Builder|Block onlyTrashed()
  * @method static bool|null restore()
@@ -112,12 +113,12 @@ class Block extends BaseModel
 
     public static function getShopBlocks(): ?BlockCollection
     {
-        $blocks = Cache::tags(['block' , 'shop'])
+        $blocks = Cache::tags(['block', 'shop'])
             ->remember('block:getShopBlocks', config('constants.CACHE_600'), function () {
                 $offerBlock = self::getOfferBlock();
                 $blocks     = self::shop()
                     ->enable()
-                    ->where('id' , '<>' , 115)
+                    ->where('id', '<>', 115)
                     ->orderBy('order')
                     ->get()
                     ->loadMissing([
@@ -131,50 +132,6 @@ class Block extends BaseModel
             });
 
         return $blocks;
-    }
-
-    /**
-     * For API V1
-     *
-     * @return BlockCollection|null
-     */
-    public static function getShopBlocksForApp(): ?BlockCollection
-    {
-        return Cache::tags(['block' , 'shop'])
-            ->remember('block:getShopBlocksForApp', config('constants.CACHE_600'), function () {
-                $offerBlock = self::getOfferBlock();
-                $blocks     = self::shop()
-                    ->enable()
-                    ->where('id' , '<>' , 113)
-                    ->orderBy('order')
-                    ->get()
-                    ->loadMissing([
-                        'contents',
-                        'sets',
-                        'products',
-                        'banners',
-                    ]);
-
-                return $blocks->prepend($offerBlock);
-            });
-    }
-
-    /**
-     * For API V2
-     *
-     * @return mixed
-     */
-    public static function getShopBlocksForAppV2()
-    {
-        return Cache::tags(['block' , 'shop'])
-            ->remember('block:getShopBlocksForAppV2', config('constants.CACHE_600'), function () {
-                //ToDo: Adding offer block
-                return self::whereIn('type', [1,4])
-                            ->enable()
-                            ->where('id' , '<>' , 113)
-                            ->orderBy('order')
-                            ->paginate(5);
-            });
     }
 
     /**
@@ -239,9 +196,53 @@ class Block extends BaseModel
         return $this;
     }
 
-    public static function getMainBlocksForApp(): ? \Illuminate\Pagination\LengthAwarePaginator
+    /**
+     * For API V1
+     *
+     * @return BlockCollection|null
+     */
+    public static function getShopBlocksForApp(): ?BlockCollection
     {
-        return Cache::tags(['block' , 'home'])
+        return Cache::tags(['block', 'shop'])
+            ->remember('block:getShopBlocksForApp', config('constants.CACHE_600'), function () {
+                $offerBlock = self::getOfferBlock();
+                $blocks     = self::shop()
+                    ->enable()
+                    ->where('id', '<>', 113)
+                    ->orderBy('order')
+                    ->get()
+                    ->loadMissing([
+                        'contents',
+                        'sets',
+                        'products',
+                        'banners',
+                    ]);
+
+                return $blocks->prepend($offerBlock);
+            });
+    }
+
+    /**
+     * For API V2
+     *
+     * @return mixed
+     */
+    public static function getShopBlocksForAppV2()
+    {
+        return Cache::tags(['block', 'shop'])
+            ->remember('block:getShopBlocksForAppV2', config('constants.CACHE_600'), function () {
+                //ToDo: Adding offer block
+                return self::whereIn('type', [1, 4])
+                    ->enable()
+                    ->where('id', '<>', 113)
+                    ->orderBy('order')
+                    ->paginate(5);
+            });
+    }
+
+    public static function getMainBlocksForApp(): ?LengthAwarePaginator
+    {
+        return Cache::tags(['block', 'home'])
             ->remember('block:getMainBlocksForApp', config('constants.CACHE_600'), function () {
                 return self::main()
                     ->enable()
@@ -252,7 +253,7 @@ class Block extends BaseModel
 
     public static function getMainBlocks(): ?BlockCollection
     {
-        $blocks = Cache::tags(['block' , 'home'])
+        $blocks = Cache::tags(['block', 'home'])
             ->remember('block:getMainBlocks', config('constants.CACHE_600'), function () {
                 $blocks = self::main()
                     ->enable()
@@ -270,8 +271,9 @@ class Block extends BaseModel
         return $blocks;
     }
 
-    public static function getContentBlocks(): ?BlockCollection{
-        $blocks = Cache::tags(['block' , 'content'])
+    public static function getContentBlocks(): ?BlockCollection
+    {
+        $blocks = Cache::tags(['block', 'content'])
             ->remember('block:getContentBlocks', config('constants.CACHE_600'), function () {
                 $blocks = self::findMany([115])
                     ->loadMissing([
@@ -289,7 +291,7 @@ class Block extends BaseModel
     /**
      * Scope a query to only blocks for shop.
      *
-     * @param  Builder  $query
+     * @param Builder $query
      *
      * @return Builder
      */
@@ -301,7 +303,7 @@ class Block extends BaseModel
     /**
      * Scope a query to only blocks for HomePage.
      *
-     * @param  Builder  $query
+     * @param Builder $query
      *
      * @return Builder
      */
@@ -317,7 +319,7 @@ class Block extends BaseModel
 
     public function setOfferAttribute($value)
     {
-        return $this->isOfferBlock = (boolean) $value;
+        return $this->isOfferBlock = (boolean)$value;
     }
 
     /**
@@ -327,7 +329,7 @@ class Block extends BaseModel
      */
     public function getUrlAttribute($value): ?string
     {
-        if(isset($this->customUrl))
+        if (isset($this->customUrl))
             return $this->customUrl;
         return isset(self::$actionLookupTable[$this->type]) ? $this->makeUrl(self::$actionLookupTable[$this->type],
             $this->tags) : null;
@@ -345,7 +347,7 @@ class Block extends BaseModel
     /**
      * Create a new Eloquent Collection instance.
      *
-     * @param  array  $models
+     * @param array $models
      *
      * @return BlockCollection
      */
@@ -362,7 +364,7 @@ class Block extends BaseModel
     /**
      * Scope a query to only include enable Blocks.
      *
-     * @param  Builder  $query
+     * @param Builder $query
      *
      * @return Builder
      */
@@ -374,7 +376,7 @@ class Block extends BaseModel
     /**
      * Scope a query to only include active Contents.
      *
-     * @param  Builder  $query
+     * @param Builder $query
      *
      * @return Builder
      */
@@ -383,22 +385,14 @@ class Block extends BaseModel
         return $query->enable();
     }
 
-    public function contents()
-    {
-        return $this->morphedByMany(Content::class, 'blockable')
-                    ->withTimestamps()
-                    ->withPivot(['order'])
-                    ->orderBy('blockables.order');
-    }
-
     public function notRedirectedContents()
     {
         return $this->contents()->active()->notRedirected();
     }
 
-    public function sets()
+    public function contents()
     {
-        return $this->morphedByMany(Contentset::class, 'blockable')
+        return $this->morphedByMany(Content::class, 'blockable')
             ->withTimestamps()
             ->withPivot(['order'])
             ->orderBy('blockables.order');
@@ -409,13 +403,12 @@ class Block extends BaseModel
         return $this->sets()->active()->notRedirected();
     }
 
-    public function products()
+    public function sets()
     {
-        return $this->morphedByMany(Product::class, 'blockable')
+        return $this->morphedByMany(Contentset::class, 'blockable')
             ->withTimestamps()
             ->withPivot(['order'])
             ->orderBy('blockables.order');
-
     }
 
     public function banners()
@@ -445,7 +438,7 @@ class Block extends BaseModel
 
     public function getActiveContent(): ContentCollection
     {
-        return Cache::tags(['block' , 'block_'.$this->id , 'block_'.$this->id.'_activeContents'])->remember('block:activeContent:'.$this->cacheKey(), config('constants.CACHE_60'), function () {
+        return Cache::tags(['block', 'block_' . $this->id, 'block_' . $this->id . '_activeContents'])->remember('block:activeContent:' . $this->cacheKey(), config('constants.CACHE_60'), function () {
             return $this->contents()
                 ->active()
                 ->get()->sortBy('pivot.order');
@@ -454,7 +447,7 @@ class Block extends BaseModel
 
     public function getActiveSets(): SetCollection
     {
-        return Cache::tags(['block' , 'block_'.$this->id , 'block_'.$this->id.'_activeSets'])->remember('block:activeSets:'.$this->cacheKey(), config('constants.CACHE_60'), function () {
+        return Cache::tags(['block', 'block_' . $this->id, 'block_' . $this->id . '_activeSets'])->remember('block:activeSets:' . $this->cacheKey(), config('constants.CACHE_60'), function () {
             return $this->sets()
                 ->active()
                 ->get()->sortBy('pivot.order');
@@ -463,10 +456,19 @@ class Block extends BaseModel
 
     public function getActiveProducts(): ProductCollection
     {
-        return Cache::tags(['block' , 'block_'.$this->id , 'block_'.$this->id.'_activeProducts'])->remember('block:activeProducts:'.$this->cacheKey(), config('constants.CACHE_60'), function () {
+        return Cache::tags(['block', 'block_' . $this->id, 'block_' . $this->id . '_activeProducts'])->remember('block:activeProducts:' . $this->cacheKey(), config('constants.CACHE_60'), function () {
             return $this->products()
                 ->active()
                 ->get()->sortBy('pivot.order');
         });
+    }
+
+    public function products()
+    {
+        return $this->morphedByMany(Product::class, 'blockable')
+            ->withTimestamps()
+            ->withPivot(['order'])
+            ->orderBy('blockables.order');
+
     }
 }

@@ -3,11 +3,11 @@
 namespace App\Http\Controllers\Web;
 
 use App\Adapter\AlaaSftpAdapter;
+use App\Http\Controllers\Controller;
 use App\Productphoto;
 use App\Traits\FileCommon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 
@@ -31,14 +31,15 @@ class ProductphotoController extends Controller
         if ($request->hasFile("file")) {
             $file      = $request->file('file');
             $extension = $file->getClientOriginalExtension();
-            $fileName  = basename($file->getClientOriginalName(), ".".$extension)."_".date("YmdHis").'.'.$extension;
-            $disk = Storage::disk(config('constants.DISK21'));
+            $fileName  =
+                basename($file->getClientOriginalName(), "." . $extension) . "_" . date("YmdHis") . '.' . $extension;
+            $disk      = Storage::disk(config('constants.DISK21'));
             /** @var AlaaSftpAdapter $adaptor */
             $adaptor = $disk->getAdapter();
             if ($disk->put($fileName, File::get($file))) {
-                $fullPath = $adaptor->getRoot();
+                $fullPath    = $adaptor->getRoot();
                 $partialPath = $this->getSubDirectoryInCDN($fullPath);
-                $photo->file = $partialPath.$fileName;
+                $photo->file = $partialPath . $fileName;
             }
         }
 
@@ -58,23 +59,23 @@ class ProductphotoController extends Controller
 //                }
 //            }
 //        }
-    
+
         if ($photo->save()) {
             session()->put('success', 'درج عکس با موفقیت انجام شد');
         } else {
             session()->put('error', 'خطای پایگاه داده');
         }
-    
+
         return redirect()->back();
     }
-    
-    
+
+
     public function destroy(Productphoto $productphoto)
     {
         if ($productphoto->delete()) {
-            return response()->json([] , Response::HTTP_OK);
+            return response()->json([], Response::HTTP_OK);
         } else {
-            return response()->json([] , Response::HTTP_SERVICE_UNAVAILABLE);
+            return response()->json([], Response::HTTP_SERVICE_UNAVAILABLE);
         }
     }
 }

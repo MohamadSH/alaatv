@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers\Web;
 
+use App\Belonging;
 use App\Http\Controllers\Controller;
 use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
+use Lang;
 
 class BelongingController extends Controller
 {
@@ -14,9 +17,9 @@ class BelongingController extends Controller
 
     function __construct()
     {
-        $this->middleware('permission:'.config('constants.LIST_BELONGING_ACCESS'), ['only' => 'index']);
-        $this->middleware('permission:'.config('constants.INSERT_BELONGING_ACCESS'), ['only' => 'store']);
-        $this->middleware('permission:'.config('constants.REMOVE_BELONGING_ACCESS'), ['only' => 'destroy']);
+        $this->middleware('permission:' . config('constants.LIST_BELONGING_ACCESS'), ['only' => 'index']);
+        $this->middleware('permission:' . config('constants.INSERT_BELONGING_ACCESS'), ['only' => 'store']);
+        $this->middleware('permission:' . config('constants.REMOVE_BELONGING_ACCESS'), ['only' => 'destroy']);
     }
 
     public function index(Request $request)
@@ -25,8 +28,7 @@ class BelongingController extends Controller
         if (isset($userId)) {
             $user       = User::FindOrFail($userId);
             $belongings = $user->belongings->sortByDesc("cearted_at");
-        }
-        else {
+        } else {
             $belongings = Belonging::all()
                 ->sortByDesc("created_at");
         }
@@ -52,7 +54,8 @@ class BelongingController extends Controller
         if ($request->hasFile("file")) {
             $file      = $request->file('file');
             $extension = $file->getClientOriginalExtension();
-            $fileName  = basename($file->getClientOriginalName(), ".".$extension)."_".date("YmdHis").'.'.$extension;
+            $fileName  =
+                basename($file->getClientOriginalName(), "." . $extension) . "_" . date("YmdHis") . '.' . $extension;
             if (Storage::disk(config('constants.DISK12'))
                 ->put($fileName, File::get($file))) {
                 $belonging->file = $fileName;
@@ -64,9 +67,8 @@ class BelongingController extends Controller
                 $this->attachUserBelonging($request, $belonging);
             }
             session()->put("success", "اسناد فنی با موفقیت درج شد!");
-        }
-        else {
-            session()->put("success", \Lang::get("responseText.Database error."));
+        } else {
+            session()->put("success", Lang::get("responseText.Database error."));
         }
 
         return redirect()->back();
@@ -75,11 +77,11 @@ class BelongingController extends Controller
     /**
      * Attaching a belonging to a user
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\User                 $user
-     * @param  \App\Belonging            $belonging
+     * @param Request   $request
+     * @param User      $user
+     * @param Belonging $belonging
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function attachUserBelonging(Request $request, Belonging $belonging)
     {
@@ -91,8 +93,7 @@ class BelongingController extends Controller
     {
         if ($belonging->delete()) {
             session()->put('success', 'اسناد فنی با موفقیت حذف شد');
-        }
-        else {
+        } else {
             session()->put('error', 'خطای پایگاه داده');
         }
 

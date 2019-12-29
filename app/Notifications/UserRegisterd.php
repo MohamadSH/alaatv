@@ -27,7 +27,7 @@ class UserRegisterd extends Notification implements ShouldQueue
     /**
      * Get the notification's delivery channels.
      *
-     * @param  mixed  $notifiable
+     * @param mixed $notifiable
      *
      * @return array
      */
@@ -61,8 +61,9 @@ class UserRegisterd extends Notification implements ShouldQueue
     private function msg(): string
     {
         $gender      = $this->getGender();
-        $messageCore = "به آلاء خوش آمدید، اطلاعات کاربری شما:"."\n"."نام کاربری:"."\n".$this->user->mobile."\n"."رمز عبور:"."\n".$this->user->nationalCode."\n"."پشتیبانی:"."\n"."https://goo.gl/jme5VU";
-        $message     = "سلام ".$gender.$this->user->full_name."\n".$messageCore;
+        $messageCore =
+            "به آلاء خوش آمدید، اطلاعات کاربری شما:" . "\n" . "نام کاربری:" . "\n" . $this->user->mobile . "\n" . "رمز عبور:" . "\n" . $this->user->nationalCode . "\n" . "پشتیبانی:" . "\n" . "https://goo.gl/jme5VU";
+        $message     = "سلام " . $gender . $this->user->full_name . "\n" . $messageCore;
 
         return $message;
     }
@@ -91,8 +92,8 @@ class UserRegisterd extends Notification implements ShouldQueue
     {
 
         return [
-            'username'              => $this->user->mobile,
-            'password'              => $this->user->nationalCode,
+            'username'    => $this->user->mobile,
+            'password'    => $this->user->nationalCode,
             'supportLink' => 'https://goo.gl/jme5VU',
         ];
     }

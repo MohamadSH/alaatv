@@ -4,17 +4,15 @@ namespace App\Http\Controllers\Web;
 
 use App\Order;
 use Illuminate\Routing\Controller;
-use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Request;
 
 class PaymentStatusController extends Controller
 {
     /**
-     * @param  string   $status
-     * @param  string   $paymentMethod
-     * @param  string   $device
-     * @param  Request  $request
+     * @param string  $status
+     * @param string  $paymentMethod
+     * @param string  $device
+     * @param Request $request
      *
      * @return void
      */
@@ -33,7 +31,7 @@ class PaymentStatusController extends Controller
     }
 
     /**
-     * @param  string  $device
+     * @param string   $device
      * @param          $result
      *
      * @return array
@@ -46,7 +44,7 @@ class PaymentStatusController extends Controller
             $orderproducts = $order->orderproducts;
             $orderproducts->loadMissing('product');
 
-            $gtmEec        = [
+            $gtmEec = [
                 'actionField' => [
                     'id'          => (string)$order->id,
                     'affiliation' => $device,
@@ -55,14 +53,14 @@ class PaymentStatusController extends Controller
                     'shipping'    => '0.00',
                     'coupon'      => (string)optional($order->coupon)->code ?? '',
                 ],
-                'products'    => []
+                'products'    => [],
             ];
 
             foreach ($orderproducts as $orderproduct) {
                 $gtmEec['products'][] = [
                     'id'       => (string)$orderproduct->product->id,
                     'name'     => $orderproduct->product->name,
-                    'category' => (isset($orderproduct->product->category))?$orderproduct->product->category:'-',
+                    'category' => (isset($orderproduct->product->category)) ? $orderproduct->product->category : '-',
                     'variant'  => '-',
                     'brand'    => 'آلاء',
                     'quantity' => 1,

@@ -16,24 +16,24 @@ class AuthorTagCommand extends Command
      * @var string
      */
     protected $signature = 'alaaTv:seed:tag:author {author : The ID of the teacher}';
-    
+
     use TaggableTrait;
-    
+
     /**
      * The console command description.
      *
      * @var string
      */
     protected $description = 'add Tags for an Author';
-    
+
     private $tagging;
-    
+
     public function __construct(TaggingInterface $tagging)
     {
         parent::__construct();
         $this->tagging = $tagging;
     }
-    
+
     /**
      * Execute the console command.
      *
@@ -41,24 +41,23 @@ class AuthorTagCommand extends Command
      */
     public function handle()
     {
-        $authorId = (int) $this->argument('author');
+        $authorId = (int)$this->argument('author');
         if ($authorId > 0) {
             try {
                 $user = User::findOrFail($authorId);
             } catch (ModelNotFoundException $exception) {
                 $this->error($exception->getMessage());
-                
+
                 return;
             }
-            if ($this->confirm('You have chosen '.$user->full_name.'. Do you wish to continue?', true)) {
+            if ($this->confirm('You have chosen ' . $user->full_name . '. Do you wish to continue?', true)) {
                 $this->performTaggingTaskForAnAuthor($user);
             }
-        }
-        else {
+        } else {
             $this->performTaggingTaskForAllAuthors();
         }
     }
-    
+
     /**
      * @param $user
      */
@@ -66,13 +65,12 @@ class AuthorTagCommand extends Command
     {
         $userContents = $user->contents;
         if (count($userContents) == 0) {
-            $this->error("user ".$user->full_name." has no content.");
-        }
-        else {
+            $this->error("user " . $user->full_name . " has no content.");
+        } else {
             $this->sendTagsOfTaggableToApi($user, $this->tagging);
         }
     }
-    
+
     private function performTaggingTaskForAllAuthors(): void
     {
         $users = User::getTeachers();

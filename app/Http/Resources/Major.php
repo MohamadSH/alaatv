@@ -21,8 +21,8 @@ class Major extends AlaaJsonResource
     public function toArray($request)
     {
         return [
-            'id'            => $this->id,
-            'name'          => $this->when(isset($this->name) , $this->name),
+            'id'   => $this->id,
+            'name' => $this->when(isset($this->name), $this->name),
         ];
     }
 }

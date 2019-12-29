@@ -8,10 +8,10 @@
 
 namespace App\Classes\Search;
 
-use Illuminate\Support\Arr;
-use LogicException;
 use App\Classes\Search\Filters\Filter;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Arr;
+use LogicException;
 
 abstract class SearchAbstract
 {
@@ -36,11 +36,11 @@ abstract class SearchAbstract
     public function __construct()
     {
         if (!isset($this->model)) {
-            throw new LogicException(get_class($this).' must have a $model');
+            throw new LogicException(get_class($this) . ' must have a $model');
         }
 
         $this->dummyFilterCallBack = new DummyFilterCallBack();
-        $this->cacheKey            = get_class($this).':';
+        $this->cacheKey            = get_class($this) . ':';
         $this->cacheTime           = config('constants.CACHE_60');
         $this->pageNum             = self::DEFAULT_PAGE_NUMBER;
         $this->model               = (new $this->model);
@@ -55,7 +55,7 @@ abstract class SearchAbstract
     abstract protected function apply(array $filters);
 
     /**
-     * @param  int  $numberOfItemInEachPage
+     * @param int $numberOfItemInEachPage
      *
      * @return SearchAbstract
      */
@@ -67,7 +67,7 @@ abstract class SearchAbstract
     }
 
     /**
-     * @param  string  $pageName
+     * @param string $pageName
      *
      * @return SearchAbstract
      */
@@ -96,7 +96,7 @@ abstract class SearchAbstract
 
     protected function createFilterDecorator($name)
     {
-        return __NAMESPACE__.'\\Filters\\'.studly_case($name);
+        return __NAMESPACE__ . '\\Filters\\' . studly_case($name);
     }
 
     protected function isValidFilter($filterName)
@@ -119,19 +119,20 @@ abstract class SearchAbstract
     abstract protected function getResults(Builder $query);
 
     /**
-     * @param  array  $array
+     * @param array $array
      *
      * @return string
      */
     protected function makeCacheKey(array $array): string
     {
-        $key = $this->cacheKey.$this->pageName.'-'.$this->pageNum.':'.md5(serialize($this->validFilters).serialize($array));
+        $key =
+            $this->cacheKey . $this->pageName . '-' . $this->pageNum . ':' . md5(serialize($this->validFilters) . serialize($array));
 
         return $key;
     }
 
     /**
-     * @param  array  $filters
+     * @param array $filters
      *
      * @return int|mixed
      */
@@ -141,12 +142,12 @@ abstract class SearchAbstract
     }
 
     /**
-     * @param  array  $params
+     * @param array $params
      *
      * @return array
      */
     protected function getFromParams(array $params, $index): array
     {
-        return (array) Arr::get(array_merge(...$params), $index);
+        return (array)Arr::get(array_merge(...$params), $index);
     }
 }

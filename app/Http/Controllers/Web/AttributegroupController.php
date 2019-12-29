@@ -14,10 +14,10 @@ class AttributegroupController extends Controller
 {
     function __construct()
     {
-        $this->middleware('permission:'.config('constants.LIST_ATTRIBUTEGROUP_ACCESS'), ['only' => 'index']);
-        $this->middleware('permission:'.config('constants.INSERT_ATTRIBUTEGROUP_ACCESS'), ['only' => 'create']);
-        $this->middleware('permission:'.config('constants.REMOVE_ATTRIBUTEGROUP_ACCESS'), ['only' => 'destroy']);
-        $this->middleware('permission:'.config('constants.SHOW_ATTRIBUTEGROUP_ACCESS'), ['only' => 'edit']);
+        $this->middleware('permission:' . config('constants.LIST_ATTRIBUTEGROUP_ACCESS'), ['only' => 'index']);
+        $this->middleware('permission:' . config('constants.INSERT_ATTRIBUTEGROUP_ACCESS'), ['only' => 'create']);
+        $this->middleware('permission:' . config('constants.REMOVE_ATTRIBUTEGROUP_ACCESS'), ['only' => 'destroy']);
+        $this->middleware('permission:' . config('constants.SHOW_ATTRIBUTEGROUP_ACCESS'), ['only' => 'edit']);
     }
 
     public function index(Request $request)
@@ -41,7 +41,7 @@ class AttributegroupController extends Controller
             return response()->json();
         }
 
-        return response()->json([] , Response::HTTP_SERVICE_UNAVAILABLE);
+        return response()->json([], Response::HTTP_SERVICE_UNAVAILABLE);
     }
 
     public function edit(Attributegroup $attributegroup)
@@ -65,8 +65,7 @@ class AttributegroupController extends Controller
 
         if ($attributegroup->update()) {
             session()->put("success", "اطلاعات گروه صفت با موفقیت اصلاح شد");
-        }
-        else {
+        } else {
             session()->put("error", "خطای پایگاه داده.");
         }
 
@@ -77,8 +76,7 @@ class AttributegroupController extends Controller
     {
         if ($attributegroup->delete()) {
             session()->put('success', 'گروه صفت با موفقیت حذف شد');
-        }
-        else {
+        } else {
             session()->put('error', 'خطای پایگاه داده');
         }
 

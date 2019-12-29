@@ -1,11 +1,11 @@
 var ProductSwitch = function () {
 
     function changeChildCheckStatus(parentId, status) {
-        let items = $("input[name='products[]'].product.hasParent_"+parentId);
-        for (let index in items) {
-            if(!isNaN(index)) {
-                let hasChildren = $(items[index]).hasClass('hasChildren');
-                let defaultValue = items[index].defaultValue;
+        var items = $("input[name='products[]'].product.hasParent_" + parentId);
+        for (var index in items) {
+            if (!isNaN(index)) {
+                var hasChildren = $(items[index]).hasClass('hasChildren');
+                var defaultValue = items[index].defaultValue;
                 $(items[index]).prop('checked', status);
                 if (hasChildren) {
                     changeChildCheckStatus(defaultValue, status);
@@ -16,19 +16,19 @@ var ProductSwitch = function () {
 
     function singleUpdateSelectedProductsStatus() {
 
-        let items = $("input[name='products[]'].product");
-        for (let index in items) {
-            if(!isNaN(index)) {
-                let hasChildren = $(items[index]).hasClass('hasChildren');
-                let thisValue = items[index].defaultValue;
-                let report1 = {
+        var items = $("input[name='products[]'].product");
+        for (var index in items) {
+            if (!isNaN(index)) {
+                var hasChildren = $(items[index]).hasClass('hasChildren');
+                var thisValue = items[index].defaultValue;
+                var report1 = {
                     'allChildIsChecked': true,
                     'allChildIsNotChecked': true,
                     'counter': 0
                 };
-                let report = checkChildProduct(thisValue, report1);
-                if(hasChildren) {
-                    if(report.allChildIsChecked) {
+                var report = checkChildProduct(thisValue, report1);
+                if (hasChildren) {
+                    if (report.allChildIsChecked) {
                         $(items[index]).prop('checked', true);
                     } else {
                         $(items[index]).prop('checked', false);
@@ -39,17 +39,17 @@ var ProductSwitch = function () {
     }
 
     function checkChildProduct(parentId, report) {
-        let items = $("input[name='products[]'].product.hasParent_"+parentId);
+        var items = $("input[name='products[]'].product.hasParent_" + parentId);
         report.counter++;
-        for (let index in items) {
-            if(isNaN(index)) {
-               continue;
+        for (var index in items) {
+            if (isNaN(index)) {
+                continue;
             }
-            let defaultValue = items[index].defaultValue;
-            let thisCheckBox = $("input[name='products[]'][value='" + defaultValue + "'].product");
-            let hasChildren = thisCheckBox.hasClass('hasChildren');
-            let thisExist = thisCheckBox.length;
-            let thisIsChecked = thisCheckBox.prop('checked');
+            var defaultValue = items[index].defaultValue;
+            var thisCheckBox = $("input[name='products[]'][value='" + defaultValue + "'].product");
+            var hasChildren = thisCheckBox.hasClass('hasChildren');
+            var thisExist = thisCheckBox.length;
+            var thisIsChecked = thisCheckBox.prop('checked');
             if (thisExist > 0 && thisIsChecked !== true) {
                 report.allChildIsChecked = false;
             }
@@ -69,27 +69,27 @@ var ProductSwitch = function () {
         if (typeof $("input[name='products[]'].product")[0] === "undefined") {
             return 1;
         }
-        let firstDefaultValue = $("input[name='products[]'].product")[0].defaultValue;
-        let report1 = {
+        var firstDefaultValue = $("input[name='products[]'].product")[0].defaultValue;
+        var report1 = {
             'allChildIsChecked': true,
             'allChildIsNotChecked': true,
             'counter': 0
         };
-        let report = checkChildProduct(firstDefaultValue, report1);
+        var report = checkChildProduct(firstDefaultValue, report1);
         return report.counter;
     }
 
     function updateSelectedProductsStatus(childLevel, callback) {
-        for (let i=0; i<childLevel; i++) {
+        for (var i = 0; i < childLevel; i++) {
             singleUpdateSelectedProductsStatus();
         }
         callback();
     }
 
     function checkChildrenOfParentOnInit() {
-        let items = $("input[name='products[]'].product.hasChildren:checked");
-        for (let index in items) {
-            if(isNaN(index)) {
+        var items = $("input[name='products[]'].product.hasChildren:checked");
+        for (var index in items) {
+            if (isNaN(index)) {
                 continue;
             }
             changeChildCheckStatus(items[index].defaultValue, true);
@@ -97,8 +97,8 @@ var ProductSwitch = function () {
     }
 
     return {
-        init:function () {
-            let childLevel = getChildLevel();
+        init: function () {
+            var childLevel = getChildLevel();
             checkChildrenOfParentOnInit();
             return childLevel;
         },
@@ -124,7 +124,7 @@ var ProductShowPage = function () {
         mApp.unblock('.btnAddToCart');
     }
 
-    function refreshPrice(mainAttributeState , productState , extraAttributeState) {
+    function refreshPrice(mainAttributeState, productState, extraAttributeState) {
         var product = $("input[name=product_id]").val();
 
         $('#a_product-price').html('<div class="m-loader m-loader--success"></div>');
@@ -139,8 +139,8 @@ var ProductShowPage = function () {
         }
         $.ajax({
             type: "POST",
-            url: "/api/v1/getPrice/"+product,
-            data: { mainAttributeValues: mainAttributeState , products: productState , extraAttributeValues: extraAttributeState },
+            url: "/api/v1/getPrice/" + product,
+            data: {mainAttributeValues: mainAttributeState, products: productState, extraAttributeValues: extraAttributeState},
             statusCode: {
                 //The status for when action was successful
                 200: function (response) {
@@ -159,11 +159,11 @@ var ProductShowPage = function () {
 
                         if (response_costForCustomer < response_cost) {
                             $('#a_product-price').html('قیمت محصول: <del>' + response_cost.toLocaleString('fa') + '</del> تومان <br>قیمت برای مشتری: ' + response_costForCustomer.toLocaleString('fa') + ' تومان ');
-                            $('#a_product-price_mobile').html('<strike>'+response_cost.toLocaleString('fa') + ' تومان '+'</strike>' +
-                                '<span class="m-badge m-badge--danger m-badge--wide m-badge--rounded">'+response_costForCustomer.toLocaleString('fa') + ' تومان '+'</span>');
+                            $('#a_product-price_mobile').html('<strike>' + response_cost.toLocaleString('fa') + ' تومان ' + '</strike>' +
+                                '<span class="m-badge m-badge--danger m-badge--wide m-badge--rounded">' + response_costForCustomer.toLocaleString('fa') + ' تومان ' + '</span>');
                         } else {
                             $('#a_product-price').html('قیمت محصول: ' + response_costForCustomer.toLocaleString('fa') + ' تومان ');
-                            $('#a_product-price_mobile').html('<span>'+response_costForCustomer.toLocaleString('fa') + ' تومان '+'</span>');
+                            $('#a_product-price_mobile').html('<span>' + response_costForCustomer.toLocaleString('fa') + ' تومان ' + '</span>');
                         }
                     } else {
 
@@ -201,46 +201,48 @@ var ProductShowPage = function () {
         });
     }
 
-    function getMainAttributeStates()
-    {
-        var staticAttributeState = $('input[type=hidden][name="attribute[]"]').map(function(){
+    function getMainAttributeStates() {
+        var staticAttributeState = $('input[type=hidden][name="attribute[]"]').map(function () {
             if ($(this).val())
                 return $(this).val();
         }).get();
-        var selectAttributeState = $('select[name="attribute[]"]').map(function(){
+        var selectAttributeState = $('select[name="attribute[]"]').map(function () {
             if ($(this).val())
                 return $(this).val();
         }).get();
-        var checkboxAttributeState = $('input[type=checkbox][name="attribute[]"]:checked').map(function(){
+        var checkboxAttributeState = $('input[type=checkbox][name="attribute[]"]:checked').map(function () {
             if ($(this).val())
                 return $(this).val();
         }).get();
 
-        var c = $.merge($.merge(selectAttributeState , checkboxAttributeState) , staticAttributeState);
-        var attributeState= c.filter(function (item, pos) {return c.indexOf(item) == pos});
+        var c = $.merge($.merge(selectAttributeState, checkboxAttributeState), staticAttributeState);
+        var attributeState = c.filter(function (item, pos) {
+            return c.indexOf(item) == pos
+        });
 
-        return attributeState ;
+        return attributeState;
     }
 
-    function getExtraAttributeStates()
-    {
-        var selectAttributeState = $('select[name="extraAttribute[]"]').map(function(){
+    function getExtraAttributeStates() {
+        var selectAttributeState = $('select[name="extraAttribute[]"]').map(function () {
             if ($(this).val())
                 return $(this).val();
         }).get();
 
-        var checkboxAttributeState = $('input[type=checkbox][name="extraAttribute[]"]:checked').map(function(){
+        var checkboxAttributeState = $('input[type=checkbox][name="extraAttribute[]"]:checked').map(function () {
             if ($(this).val())
                 return $(this).val();
         }).get();
 
 
-        var c = $.merge(selectAttributeState , checkboxAttributeState);
-        var attributeState= c.filter(function (item, pos) {return c.indexOf(item) == pos});
+        var c = $.merge(selectAttributeState, checkboxAttributeState);
+        var attributeState = c.filter(function (item, pos) {
+            return c.indexOf(item) == pos
+        });
 
-        let extraAttributes = [];
+        var extraAttributes = [];
 
-        for (let index in attributeState) {
+        for (var index in attributeState) {
             if (!isNaN(index)) {
                 extraAttributes.push({
                     'id': attributeState[index]
@@ -250,8 +252,7 @@ var ProductShowPage = function () {
         return extraAttributes;
     }
 
-    function getProductSelectValues()
-    {
+    function getProductSelectValues() {
         // var productsState = $('input[type=checkbox][name="products[]"]:enabled:checked').map(function(){
         //     if ($(this).val())
         //         return $(this).val();
@@ -262,17 +263,16 @@ var ProductShowPage = function () {
         }).get();
     }
 
-    function getSelectedProductObject()
-    {
+    function getSelectedProductObject() {
         return $('input[type=checkbox][name="products[]"]:checked').map(function () {
             if ($(this).val()) {
                 return {
-                    id:       $(this).data('gtm-eec-product-id').toString(),      // (String) The SKU of the product. Example: 'P12345'
-                    name:     $(this).data('gtm-eec-product-name').toString(),    // (String) The name of the product. Example: 'T-Shirt'
-                    price:    $(this).data('gtm-eec-product-price').toString(),
-                    brand:    $(this).data('gtm-eec-product-brand').toString(),   // (String) The brand name of the product. Example: 'NIKE'
+                    id: $(this).data('gtm-eec-product-id').toString(),      // (String) The SKU of the product. Example: 'P12345'
+                    name: $(this).data('gtm-eec-product-name').toString(),    // (String) The name of the product. Example: 'T-Shirt'
+                    price: $(this).data('gtm-eec-product-price').toString(),
+                    brand: $(this).data('gtm-eec-product-brand').toString(),   // (String) The brand name of the product. Example: 'NIKE'
                     category: $(this).data('gtm-eec-product-category').toString(),// (String) Product category of the item. Can have maximum five levels of hierarchy. Example: 'clothes/shirts/t-shirts'
-                    variant:  $(this).data('gtm-eec-product-variant').toString(), // (String) What variant of the main product this is. Example: 'Large'
+                    variant: $(this).data('gtm-eec-product-variant').toString(), // (String) What variant of the main product this is. Example: 'Large'
                     quantity: $(this).data('gtm-eec-product-quantity'),
                 };
             }
@@ -288,8 +288,8 @@ var ProductShowPage = function () {
             enableBtnAddToCart();
         },
 
-        refreshPrice: function (mainAttributeState , productState , extraAttributeState) {
-            refreshPrice(mainAttributeState , productState , extraAttributeState);
+        refreshPrice: function (mainAttributeState, productState, extraAttributeState) {
+            refreshPrice(mainAttributeState, productState, extraAttributeState);
         },
 
         getMainAttributeStates: function () {
@@ -314,14 +314,17 @@ var ProductResponsivePage = function () {
 
 
     function fx(a, b, x) {
-        return (a*x)+b;
+        return (a * x) + b;
     }
+
     function setColuimnWidth($column, width) {
-        $column.css({'flex':'0 0 '+width+'%', 'max-width':width+'%'});
+        $column.css({'flex': '0 0 ' + width + '%', 'max-width': width + '%'});
     }
+
     function removeColuimnWidth($column) {
-        $column.css({'flex':'', 'max-width':''});
+        $column.css({'flex': '', 'max-width': ''});
     }
+
     function getColumnWidthInPercent($column) {
         return parseFloat($column.css('max-width'));
     }
@@ -334,16 +337,17 @@ var ProductResponsivePage = function () {
 
         setColuimnWidth($('.productIntroVideoColumn'), PicAttributesIntroVideoRowWidth);
     }
+
     function applyModel1(a, b, windowWidth) {
 
         //reset
-        $('.servicesRows .servicesRow').css({'max-height':'', 'min-height': ''});
+        $('.servicesRows .servicesRow').css({'max-height': '', 'min-height': ''});
         removeColuimnWidth($('.productAttributesColumn'));
         $('.productIntroVideoColumn').css({'margin-top': ''});
-        $('.productAttributesColumn').css({'margin-top':'', 'order': ''});
+        $('.productAttributesColumn').css({'margin-top': '', 'order': ''});
         removeColuimnWidth($('.attributeRow .col'));
-        $('.attributeRow').css({'justify-content':''});
-        $('.attributeRow .col').css({'margin-top':''});
+        $('.attributeRow').css({'justify-content': ''});
+        $('.attributeRow .col').css({'margin-top': ''});
         $('.priceAndAddToCartRow .btnAddToCart').fadeIn(0);
 
 
@@ -352,7 +356,7 @@ var ProductResponsivePage = function () {
         setVideoColumnWidthModel1();
         $('.productAttributesRows .videoInformation').fadeOut(0);
         $('.productIntroVideoColumn .videoInformation').fadeIn(0);
-        $('.servicesRows').css({'padding-bottom':'8px'});
+        $('.servicesRows').css({'padding-bottom': '8px'});
 
     }
 
@@ -362,15 +366,15 @@ var ProductResponsivePage = function () {
             productAttributesColumnwWidth = 100 - productPicColumnWidth;
         setColuimnWidth($('.productAttributesColumn'), productAttributesColumnwWidth);
     }
+
     function applyModel2(a, b, windowWidth) {
 
-        $('.servicesRows .servicesRow').css({'max-height':'', 'min-height': ''});
-        $('.productAttributesColumn').css({'margin-top':'', 'order': ''});
+        $('.servicesRows .servicesRow').css({'max-height': '', 'min-height': ''});
+        $('.productAttributesColumn').css({'margin-top': '', 'order': ''});
         removeColuimnWidth($('.attributeRow .col'));
-        $('.attributeRow').css({'justify-content':''});
-        $('.attributeRow .col').css({'margin-top':''});
+        $('.attributeRow').css({'justify-content': ''});
+        $('.attributeRow .col').css({'margin-top': ''});
         $('.priceAndAddToCartRow .btnAddToCart').fadeIn(0);
-
 
 
         var picColumnWidth = fx(a, b, windowWidth);
@@ -380,8 +384,10 @@ var ProductResponsivePage = function () {
         $('.productIntroVideoColumn .videoInformation').fadeOut(0);
         setProductAttributesColumnWidthModel2();
         $('.productIntroVideoColumn').css({'margin-top': '0'});
-        var marginTop = -1 *  ($('.productIntroVideoColumn').offset().top - ($('.PicAttributesIntroVideoRow img').width() + $('.PicAttributesIntroVideoRow img').offset().top) - 15);
-        $('.productIntroVideoColumn').css({'margin-top': marginTop + 'px'});
+        if (typeof $('.PicAttributesIntroVideoRow img').offset() !== 'undefined') {
+            var marginTop = -1 * ($('.productIntroVideoColumn').offset().top - ($('.PicAttributesIntroVideoRow img').width() + $('.PicAttributesIntroVideoRow img').offset().top) - 15);
+            $('.productIntroVideoColumn').css({'margin-top': marginTop + 'px'});
+        }
     }
 
     // model 3
@@ -392,14 +398,14 @@ var ProductResponsivePage = function () {
         setColuimnWidth($('.productAttributesColumn'), 100);
         $('.productAttributesRows .videoInformation').fadeIn(0);
         $('.productIntroVideoColumn .videoInformation').fadeOut(0);
-        $('.servicesRows .servicesRow').css({'max-height':'unset', 'min-height': 'unset'});
-        $('.productAttributesColumn').css({'margin-top':'10px', 'order': '2'});
+        $('.servicesRows .servicesRow').css({'max-height': 'unset', 'min-height': 'unset'});
+        $('.productAttributesColumn').css({'margin-top': '10px', 'order': '2'});
 
 
         $('.priceAndAddToCartRow .btnAddToCart').fadeIn(0);
         removeColuimnWidth($('.attributeRow .col'));
-        $('.attributeRow').css({'justify-content':''});
-        $('.attributeRow .col').css({'margin-top':''});
+        $('.attributeRow').css({'justify-content': ''});
+        $('.attributeRow .col').css({'margin-top': ''});
     }
 
     // model 4
@@ -410,13 +416,13 @@ var ProductResponsivePage = function () {
         setColuimnWidth($('.productAttributesColumn'), 100);
         $('.productAttributesRows .videoInformation').fadeIn(0);
         $('.productIntroVideoColumn .videoInformation').fadeOut(0);
-        $('.servicesRows .servicesRow').css({'max-height':'unset', 'min-height': 'unset'});
-        $('.productAttributesColumn').css({'margin-top':'10px', 'order': '2'});
+        $('.servicesRows .servicesRow').css({'max-height': 'unset', 'min-height': 'unset'});
+        $('.productAttributesColumn').css({'margin-top': '10px', 'order': '2'});
 
         $('.priceAndAddToCartRow .btnAddToCart').fadeIn(0);
         removeColuimnWidth($('.attributeRow .col'));
-        $('.attributeRow').css({'justify-content':''});
-        $('.attributeRow .col').css({'margin-top':''});
+        $('.attributeRow').css({'justify-content': ''});
+        $('.attributeRow .col').css({'margin-top': ''});
     }
 
     // model 5
@@ -429,10 +435,10 @@ var ProductResponsivePage = function () {
         $('.productAttributesRows .videoInformation').fadeIn(0);
         $('.productIntroVideoColumn .videoInformation').fadeOut(0);
         $('.priceAndAddToCartRow .btnAddToCart').fadeOut(0);
-        $('.productAttributesColumn').css({'margin-top':'10px', 'order': '2'});
-        $('.servicesRows .servicesRow').css({'max-height':'unset', 'min-height': 'unset'});
-        $('.attributeRow').css({'justify-content':'center'});
-        $('.attributeRow .col').css({'margin-top':'5px'});
+        $('.productAttributesColumn').css({'margin-top': '10px', 'order': '2'});
+        $('.servicesRows .servicesRow').css({'max-height': 'unset', 'min-height': 'unset'});
+        $('.attributeRow').css({'justify-content': 'center'});
+        $('.attributeRow .col').css({'margin-top': '5px'});
     }
 
     function getWindowWidth() {
@@ -445,62 +451,50 @@ var ProductResponsivePage = function () {
     }
 
     function addWindowResizeEvent() {
-        $(window).resize(function(){
+        $(window).resize(function () {
             apply()
         });
     }
 
     function applyModel(windowWidth) {
         if (windowWidth >= 1900) {
-            applyModel1((-101.0/10000), (43.79), windowWidth);
-        }
-        else if (windowWidth >= 1800) {
-            applyModel1((-13.0/1000), (49.3), windowWidth);
-        }
-        else if (windowWidth >= 1700) {
-            applyModel1((-13.0/1000), (49.3), windowWidth);
-        }
-        else if (windowWidth >= 1600) {
-            applyModel1((-3.0/200), (52.7), windowWidth);
-        }
-        else if (windowWidth >= 1500) {
-            applyModel1((-9.0/500), (115.0/2), windowWidth);
-        }
-        else if (windowWidth >= 1400) {
-            applyModel1((-87.0/2500), (82.7), windowWidth);
-        }
-        else if (windowWidth >= 1300) {
-            applyModel2((-2.0/125), (249/5), windowWidth);
-        }
-        else if (windowWidth >= 1200) {
-            applyModel2((-3.0/125), (301.0/5), windowWidth);
-        }
-        else if (windowWidth >= 1100) {
-            applyModel2((-1.0/40), (307.0/5), windowWidth);
-        }
-        else if (windowWidth >= 1000) {
-            applyModel2((-13.0/500), (125.0/2), windowWidth);
-        }
-        else if (windowWidth >= 768) {
-            applyModel3((9/2500), (-540/2500), windowWidth);
-        }
-        else if (windowWidth >= 500) {
-            applyModel4((9/2500), (-540/2500), windowWidth);
-        }
-        else if (windowWidth >= 0) {
-            applyModel5((9/2500), (-540/2500), windowWidth);
+            applyModel1((-101.0 / 10000), (43.79), windowWidth);
+        } else if (windowWidth >= 1800) {
+            applyModel1((-13.0 / 1000), (49.3), windowWidth);
+        } else if (windowWidth >= 1700) {
+            applyModel1((-13.0 / 1000), (49.3), windowWidth);
+        } else if (windowWidth >= 1600) {
+            applyModel1((-3.0 / 200), (52.7), windowWidth);
+        } else if (windowWidth >= 1500) {
+            applyModel1((-9.0 / 500), (115.0 / 2), windowWidth);
+        } else if (windowWidth >= 1400) {
+            applyModel1((-87.0 / 2500), (82.7), windowWidth);
+        } else if (windowWidth >= 1300) {
+            applyModel2((-2.0 / 125), (249 / 5), windowWidth);
+        } else if (windowWidth >= 1200) {
+            applyModel2((-3.0 / 125), (301.0 / 5), windowWidth);
+        } else if (windowWidth >= 1100) {
+            applyModel2((-1.0 / 40), (307.0 / 5), windowWidth);
+        } else if (windowWidth >= 1000) {
+            applyModel2((-13.0 / 500), (125.0 / 2), windowWidth);
+        } else if (windowWidth >= 768) {
+            applyModel3((9 / 2500), (-540 / 2500), windowWidth);
+        } else if (windowWidth >= 500) {
+            applyModel4((9 / 2500), (-540 / 2500), windowWidth);
+        } else if (windowWidth >= 0) {
+            applyModel5((9 / 2500), (-540 / 2500), windowWidth);
         }
     }
 
     return {
-        apply:function () {
+        apply: function () {
             apply();
             addWindowResizeEvent();
         },
     };
 }();
 
-var CustomPageFunction = function () {
+var InitProductPagePage = function () {
 
     function initGAEE() {
         GAEE.productDetailViews('product.show', parentProduct);
@@ -510,19 +504,19 @@ var CustomPageFunction = function () {
     }
 
     function initProductSwitchForSelectableProducts() {
-        let childLevel = ProductSwitch.init();
+        var childLevel = ProductSwitch.init();
 
-        let callBack = function () {
-            let productsState = ProductShowPage.getProductSelectValues();
+        var callBack = function () {
+            var productsState = ProductShowPage.getProductSelectValues();
             ProductShowPage.refreshPrice([], productsState, []);
         };
-        $(document).on('change', "input[name='products[]'].product", function() {
-            let thisValue = this.defaultValue;
-            let hasChildren = $(this).hasClass('hasChildren');
-            if(hasChildren) {
+        $(document).on('change', "input[name='products[]'].product", function () {
+            var thisValue = this.defaultValue;
+            var hasChildren = $(this).hasClass('hasChildren');
+            if (hasChildren) {
                 ProductSwitch.changeChildCheckStatus(thisValue, $(this).prop('checked'));
             }
-            ProductSwitch.updateSelectedProductsStatus(childLevel,callBack );
+            ProductSwitch.updateSelectedProductsStatus(childLevel, callBack);
         });
     }
 
@@ -579,7 +573,7 @@ var CustomPageFunction = function () {
 
         $(document).on('click', '.productInfoNav', function () {
             var targetId = $(this).data('tid');
-            $('#'+targetId).AnimateScrollTo();
+            $('#' + targetId).AnimateScrollTo();
             // $([document.documentElement, document.body]).animate({
             //     scrollTop: $('#'+targetId).offset().top - $('#m_header').height() + 5
             // }, 1000);
@@ -591,15 +585,11 @@ var CustomPageFunction = function () {
 
             ProductShowPage.disableBtnAddToCart();
             var product = $("input[name=product_id]").val();
-            let mainAttributeStates = ProductShowPage.getMainAttributeStates();
-            let extraAttributeStates = ProductShowPage.getExtraAttributeStates();
-            let productSelectValues = ProductShowPage.getProductSelectValues() ;
-            let selectedProductObject = ProductShowPage.getSelectedProductObject() ;
+            var mainAttributeStates = ProductShowPage.getMainAttributeStates();
+            var extraAttributeStates = ProductShowPage.getExtraAttributeStates();
+            var productSelectValues = ProductShowPage.getProductSelectValues();
+            var selectedProductObject = ProductShowPage.getSelectedProductObject();
 
-            // for (var index in selectedProductObject) {
-            //     selectedProductObject[index].category = parentProductTags;
-            //     selectedProductObject[index].variant = 'simple';
-            // }
             selectedProductObject.push(parentProduct);
             TotalQuantityAddedToCart = selectedProductObject.length;
             GAEE.productAddToCart('product.addToCart', selectedProductObject);
@@ -618,31 +608,32 @@ var CustomPageFunction = function () {
                         attribute: mainAttributeStates,
                         extraAttribute: extraAttributeStates
                     },
-                    statusCode: {
-                        200: function (response) {
-                            let successMessage = 'محصول مورد نظر به سبد خرید اضافه شد.';
+                    success: function (data) {
+                        var successMessage = 'محصول مورد نظر به سبد خرید اضافه شد.';
 
-                            toastr.success(successMessage);
+                        toastr.success(successMessage);
 
-                            window.location.replace('/checkout/review');
+                        window.location.replace('/checkout/review');
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        var message = '';
+                        // if (jqXHR.status === 403) {
+                        //     message = 'کد وارد شده اشتباه است.';
+                        // } else if (jqXHR.status === 422) {
+                        //     message = 'کد را وارد نکرده اید.';
+                        // } else {
+                        //     message = 'خطای سیستمی رخ داده است.';
+                        // }
 
-                        },
-                        500: function (response) {
+                        toastr.error('خطای سیستمی رخ داده است.');
 
-                            toastr.error('خطای سیستمی رخ داده است.');
-
-                            ProductShowPage.enableBtnAddToCart();
-                        },
-                        503: function (response) {
-                            toastr.error('خطای پایگاه داده!');
-                            ProductShowPage.enableBtnAddToCart();
-                        }
+                        ProductShowPage.enableBtnAddToCart();
                     }
                 });
 
             } else {
 
-                let data = {
+                var data = {
                     'product_id': $('input[name="product_id"][type="hidden"]').val(),
                     'attribute': mainAttributeStates,
                     'extraAttribute': extraAttributeStates,
@@ -651,7 +642,7 @@ var CustomPageFunction = function () {
 
                 UesrCart.addToCartInCookie(data);
 
-                let successMessage = 'محصول مورد نظر به سبد خرید اضافه شد.';
+                var successMessage = 'محصول مورد نظر به سبد خرید اضافه شد.';
 
 
                 toastr.success(successMessage);
@@ -667,17 +658,17 @@ var CustomPageFunction = function () {
     function initRefreshPriceEvents() {
         $(document).on("ifChanged change", ".attribute", function () {
             var attributeState = ProductShowPage.getMainAttributeStates();
-            ProductShowPage.refreshPrice(attributeState , [] ,[]);
+            ProductShowPage.refreshPrice(attributeState, [], []);
         });
 
         $(document).on("ifChanged change", ".extraAttribute", function () {
             var attributeState = ProductShowPage.getExtraAttributeStates();
-            ProductShowPage.refreshPrice([] , [] , attributeState);
+            ProductShowPage.refreshPrice([], [], attributeState);
         });
 
         $(document).on("ifChanged switchChange.bootstrapSwitch", ".product", function () {
-            var productsState = ProductShowPage.getProductSelectValues() ;
-            ProductShowPage.refreshPrice([] , productsState , []);
+            var productsState = ProductShowPage.getProductSelectValues();
+            ProductShowPage.refreshPrice([], productsState, []);
         });
     }
 
@@ -703,14 +694,14 @@ var CustomPageFunction = function () {
                         items: 5
                     }
                 },
-                btnSwfitchEvent: function() {
+                btnSwfitchEvent: function () {
                     imageObserver.observe();
                     gtmEecProductObserver.observe();
                 }
             },
             grid: {
                 columnClass: 'col-12 col-sm-6 col-md-3 gridItem',
-                btnSwfitchEvent: function() {
+                btnSwfitchEvent: function () {
                     imageObserver.observe();
                     gtmEecProductObserver.observe();
                 }
@@ -776,7 +767,7 @@ var CustomPageFunction = function () {
             player.pic2pic();
 
             // player.on('mode',function(event,mode) {
-            //     let width = '100%';
+            //     var width = '100%';
             //     if(mode=='large') {
             //         // $('.productDetailesColumns .column1').addClass('order-2');
             //         // $('.productDetailesColumns .column2').addClass('order-3');
@@ -853,6 +844,6 @@ var CustomPageFunction = function () {
     };
 }();
 
-jQuery(document).ready(function() {
-    CustomPageFunction.init();
+$(document).ready(function () {
+    InitProductPagePage.init();
 });

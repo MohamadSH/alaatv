@@ -17,8 +17,7 @@ use App\{Classes\Repository\ContentRepositoryInterface,
     Traits\UserCommon,
     UploadCenter,
     User,
-    Websitesetting
-};
+    Websitesetting};
 use App\Http\Controllers\Controller;
 use Carbon\Carbon;
 use Exception;
@@ -53,20 +52,20 @@ class HomeController extends Controller
 
         $authException = [
 //            'debug',
-                'newDownload',
-                'download',
-                'getImage',
-                'sendMail',
-                'siteMapXML',
-                'search',
-                'home',
+            'newDownload',
+            'download',
+            'getImage',
+            'sendMail',
+            'siteMapXML',
+            'search',
+            'home',
         ];
         $this->middleware('auth', ['except' => $authException]);
-        $this->middleware('role:admin', ['only' => ['debug'] ]);
-        $this->middleware('permission:'.config('constants.UPLOAD_CENTER_ACCESS'), ['only' => 'uploadCenter']);
-        $this->middleware('permission:'.config('constants.UPLOAD_CENTER_ACCESS'), ['only' => 'upload']);
-        $this->middleware('permission:'.config('constants.UPLOAD_CENTER_ACCESS'), ['only' => 'bigUpload']);
-        $this->middleware('permission:'.config('constants.SEND_SMS_TO_USER_ACCESS'), ['only' => 'smsLink']);
+        $this->middleware('role:admin', ['only' => ['debug']]);
+        $this->middleware('permission:' . config('constants.UPLOAD_CENTER_ACCESS'), ['only' => 'uploadCenter']);
+        $this->middleware('permission:' . config('constants.UPLOAD_CENTER_ACCESS'), ['only' => 'upload']);
+        $this->middleware('permission:' . config('constants.UPLOAD_CENTER_ACCESS'), ['only' => 'bigUpload']);
+        $this->middleware('permission:' . config('constants.SEND_SMS_TO_USER_ACCESS'), ['only' => 'smsLink']);
     }
 
     public function debug(Request $request, User $user = null)
@@ -126,10 +125,10 @@ class HomeController extends Controller
     }
 
     /**
-     * @param  Request                                             $request
+     * @param Request                                              $request
      * @param                                                      $data
      *
-     * @param  ContentRepositoryInterface                          $contentRepository
+     * @param ContentRepositoryInterface                           $contentRepository
      *
      * @return RedirectResponse|Redirector
      */
@@ -144,7 +143,7 @@ class HomeController extends Controller
             abort(Response::HTTP_FORBIDDEN, 'Invalid Link');
         }
         try {
-            $data = (array) decrypt($data);
+            $data = (array)decrypt($data);
         } catch (DecryptException $e) {
             abort(Response::HTTP_FORBIDDEN, 'invalid Data!');
         }
@@ -161,7 +160,34 @@ class HomeController extends Controller
         return redirect($finalLink);
     }
 
-    public function download(Request $request , ErrorPageController $errorPageController)
+    /**
+     * @param         $url
+     *
+     * @param Request $request
+     *
+     * @return string
+     */
+    private function getSecureUrl($url, Request $request): string
+    {
+        $download = $request->get('download', null);
+
+        $unixTime = Carbon::today()
+            ->addDays(2)->timestamp;
+        $userIP   = request()->ip();
+        //TODO: fix diffrent Ip
+        $ipArray    = explode('.', $userIP);
+        $ipArray[3] = 0;
+        $userIP     = implode('.', $ipArray);
+
+        $linkHash  = $this->generateSecurePathHash($unixTime, $userIP, 'TakhteKhak', $url);
+        $finalLink = $url . '?md5=' . $linkHash . '&expires=' . $unixTime;
+        if (isset($download)) {
+            $finalLink .= '&download=1';
+        }
+        return $finalLink;
+    }
+
+    public function download(Request $request, ErrorPageController $errorPageController)
     {
         $fileName    = $request->get('fileName');
         $contentType = $request->get('content');
@@ -209,12 +235,13 @@ class HomeController extends Controller
                 $diskName  = config('constants.DISK13');
 
                 if (isset($user) && !$user->can(config('constants.DOWNLOAD_PRODUCT_FILE'))) {
-                    $products    = ProductRepository::getProductsThatHaveValidProductFileByFileNameRecursively($fileName);
+                    $products    =
+                        ProductRepository::getProductsThatHaveValidProductFileByFileNameRecursively($fileName);
                     $validOrders = $user->getOrdersThatHaveSpecificProduct($products);
 
                     if (!$products->isEmpty()) {
                         if (!$validOrders->isEmpty()) {
-                            $productId = (array) $productId;
+                            $productId = (array)$productId;
                             if (isset($products)) {
                                 $productId = array_merge($productId, $products->pluck('id')
                                     ->toArray());
@@ -289,7 +316,7 @@ class HomeController extends Controller
                     }, Response::HTTP_OK, [
                         'Content-Type'        => $fs->getMimetype($fileName),
                         'Content-Length'      => $fs->getSize($fileName),
-                        'Content-disposition' => 'attachment; filename="'.basename($fileName).'"',
+                        'Content-disposition' => 'attachment; filename="' . basename($fileName) . '"',
                     ]);
                 }
 
@@ -302,10 +329,11 @@ class HomeController extends Controller
                         ->getRoot();
                     //TODO: verify "$fileRemotePath = "http://" . $fileHost . ":8090" . "/public" . explode("public", $fileRoot)[1];"
 
-                    $fileRemotePath = config('constants.DOWNLOAD_SERVER_PROTOCOL').config('constants.PAID_SERVER_NAME').'/public'.explode('public',
+                    $fileRemotePath =
+                        config('constants.DOWNLOAD_SERVER_PROTOCOL') . config('constants.PAID_SERVER_NAME') . '/public' . explode('public',
                             $fileRoot)[1];
 
-                    return response()->redirectTo($fileRemotePath.$fileName);
+                    return response()->redirectTo($fileRemotePath . $fileName);
                 }
 
                 $fs     = Storage::disk($diskName)
@@ -317,7 +345,7 @@ class HomeController extends Controller
                 }, Response::HTTP_OK, [
                     'Content-Type'        => $fs->getMimetype($fileName),
                     'Content-Length'      => $fs->getSize($fileName),
-                    'Content-disposition' => 'attachment; filename="'.basename($fileName).'"',
+                    'Content-disposition' => 'attachment; filename="' . basename($fileName) . '"',
                 ]);
                 //
             }
@@ -345,7 +373,7 @@ class HomeController extends Controller
                         }, Response::HTTP_OK, [
                             'Content-Type'        => $fs->getMimetype($fileName),
                             'Content-Length'      => $fs->getSize($fileName),
-                            'Content-disposition' => 'attachment; filename="'.basename($fileName).'"',
+                            'Content-disposition' => 'attachment; filename="' . basename($fileName) . '"',
                         ]);
                     }
 
@@ -360,7 +388,7 @@ class HomeController extends Controller
                     }, Response::HTTP_OK, [
                         'Content-Type'        => $fs->getMimetype($fileName),
                         'Content-Length'      => $fs->getSize($fileName),
-                        'Content-disposition' => 'attachment; filename="'.basename($fileName).'"',
+                        'Content-disposition' => 'attachment; filename="' . basename($fileName) . '"',
                     ]);
                     break;
                 default:
@@ -374,6 +402,37 @@ class HomeController extends Controller
         }
         abort(404);
 
+    }
+
+    /**
+     * @param $products
+     *
+     * @return string
+     */
+    private function getMessageThatShouldByWhichProducts($products): string
+    {
+        $message    =
+            'شما ابتدا باید یکی از این محصولات را سفارش دهید و یا اگر سفارش داده اید مبلغ را تسویه نمایید: ' . '<br>';
+        $productIds = [];
+        /** @var Product $product */
+        foreach ($products as $product) {
+            $myParents = $product->getAllParents();
+            if ($myParents->isNotEmpty()) {
+                $rootParent = $myParents->last();
+                if (!in_array($rootParent->id, $productIds)) {
+                    $message .= '<a href="' . action('ProductController@show',
+                            $rootParent->id) . '">' . $rootParent->name . '</a><br>';
+                    array_push($productIds, $rootParent->id);
+                }
+            } else {
+                if (!in_array($product->id, $productIds)) {
+                    $message .= '<a href="' . action('ProductController@show',
+                            $product->id) . '">' . $product->name . '</a><br>';
+                    array_push($productIds, $product->id);
+                }
+            }
+        }
+        return $message;
     }
 
     public function getImage($category, $w, $h, $fileName)
@@ -434,10 +493,11 @@ class HomeController extends Controller
      *
      * @param \app\Http\Requests\ContactUsFormRequest $request
      *
-     * @param ErrorPageController $errorPageController
+     * @param ErrorPageController                     $errorPageController
+     *
      * @return Response
      */
-    public function sendMail(ContactUsFormRequest $request , ErrorPageController $errorPageController)
+    public function sendMail(ContactUsFormRequest $request, ErrorPageController $errorPageController)
     {
         $wSetting = $this->setting;
 
@@ -491,32 +551,32 @@ class HomeController extends Controller
             $to = '';
         }
         // To send HTML mail, the Content-type header must be set
-        $headers = 'MIME-Version: 1.0'."\r\n";
-        $headers .= 'Content-Type: multipart/alternative; boundary="'.$boundary."\"\r\n";//';charset=UTF-8' .
-        $headers .= 'From: '.strip_tags(config('constants.MAIL_USERNAME'))."\r\n".'Reply-To: '.strip_tags($email)."\r\n".'X-Mailer: PHP/'.phpversion();
+        $headers = 'MIME-Version: 1.0' . "\r\n";
+        $headers .= 'Content-Type: multipart/alternative; boundary="' . $boundary . "\"\r\n";//';charset=UTF-8' .
+        $headers .= 'From: ' . strip_tags(config('constants.MAIL_USERNAME')) . "\r\n" . 'Reply-To: ' . strip_tags($email) . "\r\n" . 'X-Mailer: PHP/' . phpversion();
 
         $orginaltext = $request->get('message');
 
         $orginaltext = str_replace('\"', '"', $orginaltext);
         $orginaltext = str_replace('\\\\', '\\', $orginaltext);
 
-        $sender = '<p dir="rtl"> نام فرستنده: '.$name.'</p>';
+        $sender = '<p dir="rtl"> نام فرستنده: ' . $name . '</p>';
         if (strlen($email) > 0) {
-            $sender .= '<p dir="rtl"> ایمیل فرستنده: '.$email.'</p>';
+            $sender .= '<p dir="rtl"> ایمیل فرستنده: ' . $email . '</p>';
         }
         if (strlen($phone) > 0) {
-            $sender .= '<p dir="rtl">  شماره تماس فرستنده: '.$phone.'</p>';
+            $sender .= '<p dir="rtl">  شماره تماس فرستنده: ' . $phone . '</p>';
         }
 
         //plainText version
-        $text = "\r\n\r\n--".$boundary."\r\n"; //header
+        $text = "\r\n\r\n--" . $boundary . "\r\n"; //header
         $text .= "Content-type: text/plain; charset=utf-8 \r\n\r\n"; //header
 
-        $text .= strip_tags($orginaltext)."\r\n".strip_tags($sender);
+        $text .= strip_tags($orginaltext) . "\r\n" . strip_tags($sender);
 
         //htmlText version
 
-        $text .= "\r\n\r\n--".$boundary."\r\n"; //header
+        $text .= "\r\n\r\n--" . $boundary . "\r\n"; //header
         $text .= "Content-type: text/html; charset=utf-8 \r\n\r\n"; //header
 
         //            $text .= $sender.str_replace('\"','\'','<p dir="rtl" style="text-align: right">'.$orginaltext.'</p>') ;
@@ -534,7 +594,7 @@ class HomeController extends Controller
         </html>
             ';*/
 
-        $text .= "\r\n\r\n--".$boundary.'--';
+        $text .= "\r\n\r\n--" . $boundary . '--';
 
         $subject = 'آلاء - تماس با ما';
 
@@ -559,7 +619,7 @@ class HomeController extends Controller
     /**
      * Send a custom SMS to the user
      *
-     * @param  Request  $request
+     * @param Request $request
      *
      * @return Response
      */
@@ -576,7 +636,7 @@ class HomeController extends Controller
         $users     = User::whereIn('id', $usersId)
             ->get();
         if ($users->isEmpty()) {
-            return response()->json([] , Response::HTTP_UNAVAILABLE_FOR_LEGAL_REASONS);
+            return response()->json([], Response::HTTP_UNAVAILABLE_FOR_LEGAL_REASONS);
         }
 
         if (!isset($from) || strlen($from) == 0) {
@@ -625,7 +685,7 @@ class HomeController extends Controller
 
             return response()->json($smsCredit);
         } else {
-            return response()->json( [] , Response::HTTP_SERVICE_UNAVAILABLE);
+            return response()->json([], Response::HTTP_SERVICE_UNAVAILABLE);
         }
     }
 
@@ -633,27 +693,27 @@ class HomeController extends Controller
     {
         $user = $request->user();
 
-        $employees = User::whereHas('roles' , function ($q){
-           $q->where('name' , config('constants.ROLE_UPLOAD_CENTER'));
-        })->pluck('lastName' , 'id')->toArray();
+        $employees = User::whereHas('roles', function ($q) {
+            $q->where('name', config('constants.ROLE_UPLOAD_CENTER'));
+        })->pluck('lastName', 'id')->toArray();
 
-        $canSendSMS = ($user->can(config('constants.SEND_SMS_TO_USER_ACCESS')))?true:false;
+        $canSendSMS = ($user->can(config('constants.SEND_SMS_TO_USER_ACCESS'))) ? true : false;
 
-        $files = null;
+        $files           = null;
         $canSeeFileTable = false;
-        if($user->can(config('constants.LIST_UPLOAD_CENTER_FILES'))){
+        if ($user->can(config('constants.LIST_UPLOAD_CENTER_FILES'))) {
             $canSeeFileTable = true;
-            $uploaderId = $request->get('uploader_id');
-            $files = UploadCenter::orderByDesc('created_at');
-            if(isset($uploaderId)){
-                $files->where('user_id' , $uploaderId);
+            $uploaderId      = $request->get('uploader_id');
+            $files           = UploadCenter::orderByDesc('created_at');
+            if (isset($uploaderId)) {
+                $files->where('user_id', $uploaderId);
             }
             $files = $files->paginate(10, ['*'], 'page');
         }
 
         $linkParameters = request()->except('page');
 
-        return view('admin.uploadCenter' , compact('employees' , 'files' , 'canSendSMS' , 'canSeeFileTable' , 'linkParameters'));
+        return view('admin.uploadCenter', compact('employees', 'files', 'canSendSMS', 'canSeeFileTable', 'linkParameters'));
     }
 
     public function bigUpload(Request $request)
@@ -663,23 +723,23 @@ class HomeController extends Controller
         $filePath         = $request->header('X-File-Name');
         $originalFileName = $request->header('X-Dataname');
         $filePrefix       = '';
-        $link = null;
+        $link             = null;
 
         try {
-            $ext      = pathinfo($originalFileName, PATHINFO_EXTENSION);
+            $ext = pathinfo($originalFileName, PATHINFO_EXTENSION);
 
-            if(!in_array($ext, ['jpg','jpeg','JPG','png','pdf','rar','zip','psd','doc'])){
+            if (!in_array($ext, ['jpg', 'jpeg', 'JPG', 'png', 'pdf', 'rar', 'zip', 'psd', 'doc'])) {
                 File::delete($filePath);
                 return response()->json([
-                    'error'=>[
-                        'message' => 'File format is not permitted'
-                    ]
-                ] , Response::HTTP_UNPROCESSABLE_ENTITY);
+                    'error' => [
+                        'message' => 'File format is not permitted',
+                    ],
+                ], Response::HTTP_UNPROCESSABLE_ENTITY);
             }
 
-            $fileName = str_random(4).'.'.$ext;
+            $fileName = str_random(4) . '.' . $ext;
 
-            $newFileNameDir = '/alaa_media/cdn/upload/u/'.$fileName;
+            $newFileNameDir = '/alaa_media/cdn/upload/u/' . $fileName;
 
             if (File::exists($newFileNameDir)) {
                 File::delete($newFileNameDir);
@@ -687,22 +747,23 @@ class HomeController extends Controller
             File::move($filePath, $newFileNameDir);
 
             $userId = null;
-            if(isset($user)){
+            if (isset($user)) {
                 $userId = $user->id;
             }
-            $relativePath = 'upload/u/'.$fileName;
-            $link = config('constants.DOWNLOAD_SERVER_PROTOCOL').config('constants.CDN_SERVER_NAME').'/'.$relativePath;
+            $relativePath = 'upload/u/' . $fileName;
+            $link         =
+                config('constants.DOWNLOAD_SERVER_PROTOCOL') . config('constants.CDN_SERVER_NAME') . '/' . $relativePath;
 
             UploadCenter::create([
                 'user_id' => $userId,
-                'link' => $relativePath
+                'link'    => $relativePath,
             ]);
 
 
             return response()->json([
-                'fileName'  => $fileName,
-                'link'      => $link,
-                'prefix'    => $filePrefix,
+                'fileName' => $fileName,
+                'link'     => $link,
+                'prefix'   => $filePrefix,
             ]);
         } catch (Exception $e) {
             return response()->json([
@@ -710,91 +771,34 @@ class HomeController extends Controller
                 'error'   => $e->getMessage(),
                 'line'    => $e->getLine(),
                 'file'    => $e->getFile(),
-            ] , Response::HTTP_SERVICE_UNAVAILABLE);
+            ], Response::HTTP_SERVICE_UNAVAILABLE);
         }
     }
 
     public function smsLink(Request $request)
     {
         $user = User::Find($request->get('employee_id'));
-        if(is_null($user)){
+        if (is_null($user)) {
             return response()->json([
-                'error'=>[
-                    'message' => 'کاربر مورد نظر یافت نشد'
-                ]
-            ] , Response::HTTP_UNPROCESSABLE_ENTITY);
+                'error' => [
+                    'message' => 'کاربر مورد نظر یافت نشد',
+                ],
+            ], Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 
         $link = $request->get('link');
-        if(is_null($link)){
+        if (is_null($link)) {
             return response()->json([
-                'error'=>[
-                    'message' => 'ارسال لینک الزامی است'
-                ]
-            ] , Response::HTTP_UNPROCESSABLE_ENTITY);
+                'error' => [
+                    'message' => 'ارسال لینک الزامی است',
+                ],
+            ], Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 
         $user->notify(new sendLink($link));
 
         return response()->json([
-            'message' => 'پیامک با موفقیت ارسال شد'
-        ] );
-    }
-
-    /**
-     * @param $products
-     *
-     * @return string
-     */
-    private function getMessageThatShouldByWhichProducts($products): string
-    {
-        $message    = 'شما ابتدا باید یکی از این محصولات را سفارش دهید و یا اگر سفارش داده اید مبلغ را تسویه نمایید: '.'<br>';
-        $productIds = [];
-        /** @var Product $product */
-        foreach ($products as $product) {
-            $myParents = $product->getAllParents();
-            if ($myParents->isNotEmpty()) {
-                $rootParent = $myParents->last();
-                if (!in_array($rootParent->id, $productIds)) {
-                    $message .= '<a href="'.action('ProductController@show',
-                            $rootParent->id).'">'.$rootParent->name.'</a><br>';
-                    array_push($productIds, $rootParent->id);
-                }
-            } else {
-                if (!in_array($product->id, $productIds)) {
-                    $message .= '<a href="'.action('ProductController@show',
-                            $product->id).'">'.$product->name.'</a><br>';
-                    array_push($productIds, $product->id);
-                }
-            }
-        }
-        return $message;
-    }
-
-    /**
-     * @param         $url
-     *
-     * @param Request $request
-     *
-     * @return string
-     */
-    private function getSecureUrl($url, Request $request): string
-    {
-        $download = $request->get('download', null);
-
-        $unixTime = Carbon::today()
-            ->addDays(2)->timestamp;
-        $userIP = request()->ip();
-        //TODO: fix diffrent Ip
-        $ipArray = explode('.', $userIP);
-        $ipArray[3] = 0;
-        $userIP = implode('.', $ipArray);
-
-        $linkHash = $this->generateSecurePathHash($unixTime, $userIP, 'TakhteKhak', $url);
-        $finalLink = $url . '?md5=' . $linkHash . '&expires=' . $unixTime;
-        if (isset($download)) {
-            $finalLink .= '&download=1';
-        }
-        return $finalLink;
+            'message' => 'پیامک با موفقیت ارسال شد',
+        ]);
     }
 }

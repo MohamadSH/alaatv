@@ -39,20 +39,21 @@ class CheckEmployeeOvertime extends Command
      */
     public function handle()
     {
-        $workTimeSheets = Employeetimesheet::where('overtime_status_id' , config('constants.EMPLOYEE_OVERTIME_STATUS_UNCONFIRMED'))->get();
+        $workTimeSheets     =
+            Employeetimesheet::where('overtime_status_id', config('constants.EMPLOYEE_OVERTIME_STATUS_UNCONFIRMED'))->get();
         $workTimeSheetCount = $workTimeSheets->count();
-        if ($this->confirm('There are '. $workTimeSheetCount .' unconfirmed overtime sheets. Do you want to reject them?', true)) {
-            $now = Carbon::now();
-            $bar = $this->output->createProgressBar($workTimeSheetCount);
+        if ($this->confirm('There are ' . $workTimeSheetCount . ' unconfirmed overtime sheets. Do you want to reject them?', true)) {
+            $now                    = Carbon::now();
+            $bar                    = $this->output->createProgressBar($workTimeSheetCount);
             $rejectedTimeSheetCount = 0;
             foreach ($workTimeSheets as $workTimeSheet) {
-                $splitedDate = explode('-' , $workTimeSheet->getOriginal('date'));
-                $timePoint = Carbon::createMidnightDate( $splitedDate[0] , $splitedDate[1] , $splitedDate[2])->addDay();
-                if($now->diffInMinutes($timePoint) >= 1440){// = 24 hours
+                $splitedDate = explode('-', $workTimeSheet->getOriginal('date'));
+                $timePoint   = Carbon::createMidnightDate($splitedDate[0], $splitedDate[1], $splitedDate[2])->addDay();
+                if ($now->diffInMinutes($timePoint) >= 1440) {// = 24 hours
                     $updateResult = $workTimeSheet->update([
-                        'overtime_status_id' => config('constants.EMPLOYEE_OVERTIME_STATUS_REJECTED') ,
+                        'overtime_status_id' => config('constants.EMPLOYEE_OVERTIME_STATUS_REJECTED'),
                     ]);
-                    if($updateResult){
+                    if ($updateResult) {
                         $rejectedTimeSheetCount++;
                     }
                 }
@@ -60,7 +61,7 @@ class CheckEmployeeOvertime extends Command
             }
             $bar->finish();
             $this->info("\n");
-            $this->info('Rejected overtimes : '.$rejectedTimeSheetCount);
+            $this->info('Rejected overtimes : ' . $rejectedTimeSheetCount);
             $this->info("\n");
             $this->info('Process completed successfully!');
         }

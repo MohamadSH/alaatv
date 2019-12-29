@@ -13,11 +13,11 @@ use Illuminate\Support\Collection;
 trait CashierOrderproductUnit
 {
     protected $rawOrderproductsToCalculateFromBase; //orderproducts that should be recalculated based on new conditions
-    
+
     protected $rawOrderproductsToCalculateFromRecord; //orderproducts that should be calculated based recorded data
-    
+
     protected $calculatedOrderproducts;
-    
+
     /**
      * @return mixed
      */
@@ -25,19 +25,19 @@ trait CashierOrderproductUnit
     {
         return $this->rawOrderproductsToCalculateFromBase;
     }
-    
+
     /**
-     * @param  mixed  $rawOrderproductsToCalculateFromBase
+     * @param mixed $rawOrderproductsToCalculateFromBase
      *
      * @return mixed
      */
     public function setRawOrderproductsToCalculateFromBase($rawOrderproductsToCalculateFromBase)
     {
         $this->rawOrderproductsToCalculateFromBase = $rawOrderproductsToCalculateFromBase;
-        
+
         return $this;
     }
-    
+
     /**
      * @return mixed
      */
@@ -45,19 +45,19 @@ trait CashierOrderproductUnit
     {
         return $this->rawOrderproductsToCalculateFromRecord;
     }
-    
+
     /**
-     * @param  mixed  $rawOrderproductsToCalculateFromRecord
+     * @param mixed $rawOrderproductsToCalculateFromRecord
      *
      * @return mixed
      */
     public function setRawOrderproductsToCalculateFromRecord($rawOrderproductsToCalculateFromRecord)
     {
         $this->rawOrderproductsToCalculateFromRecord = $rawOrderproductsToCalculateFromRecord;
-        
+
         return $this;
     }
-    
+
     /**
      * @return Collection
      */
@@ -65,16 +65,16 @@ trait CashierOrderproductUnit
     {
         return $this->calculatedOrderproducts;
     }
-    
+
     /**
-     * @param  Collection  $calculatedOrderproducts
+     * @param Collection $calculatedOrderproducts
      *
      * @return mixed
      */
     public function setCalculatedOrderproducts(Collection $calculatedOrderproducts)
     {
         $this->calculatedOrderproducts = $calculatedOrderproducts;
-        
+
         return $this;
     }
 }

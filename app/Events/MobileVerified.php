@@ -8,18 +8,18 @@ use Illuminate\Queue\SerializesModels;
 class MobileVerified
 {
     use SerializesModels;
-    
+
     /**
      * The verified user.
      *
      * @var MustVerifyMobileNumber
      */
     public $user;
-    
+
     /**
      * Create a new event instance.
      *
-     * @param  MustVerifyMobileNumber  $user
+     * @param MustVerifyMobileNumber $user
      *
      * @return void
      */

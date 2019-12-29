@@ -113,6 +113,78 @@ class LoginController extends Controller
     }
 
     /**
+     * Send the response after the user was authenticated.
+     *
+     * @param Request $request
+     *
+     * @return Response
+     */
+    protected function sendLoginResponse(Request $request)
+    {
+        if ($request->hasSession()) {
+            $request->session()->regenerate();
+        }
+
+        $this->clearLoginAttempts($request);
+
+        return $this->authenticated($request, $this->guard()->user())
+            ?: redirect()->intended($this->redirectPath());
+    }
+
+    /**
+     * The user has been authenticated.
+     *
+     * @param Request $request
+     * @param mixed   $user
+     *
+     * @return mixed
+     */
+    protected function authenticated(Request $request, User $user)
+    {
+        event(new Authenticated($user));
+        if (!$request->expectsJson()) {
+            return redirect($this->redirectTo($request));
+        }
+        if ($user->userstatus_id == config('constants.USER_STATUS_INACTIVE')) {
+            return response()->json([
+                'message' => 'User account has been deactivated',
+            ], Response::HTTP_FORBIDDEN);
+        }
+
+        if (Str::contains($request->path(), 'v2')) {
+            return $this->authenticatedV2($request, $user);
+        }
+        return $this->authenticatedV1($request, $user);
+    }
+
+    protected function authenticatedV2(Request $request, User $user)
+    {
+        $token = $user->getAppToken();
+        $data  = array_merge([
+            'user'       => new UserResource($user),
+            'redirectTo' => $this->redirectTo($request),
+        ], $token);
+        return response()->json([
+            'data' => $data,
+        ], Response::HTTP_OK);
+    }
+
+    protected function authenticatedV1(Request $request, User $user)
+    {
+        $token = $user->getAppToken();
+        $data  = array_merge([
+            'user' => $user,  //Can't change this line because of current Android application
+//              'user' => new UserResource($user)
+        ], $token);
+        return response()->json([
+            'status'     => 1,
+            'msg'        => 'user sign in.',
+            'redirectTo' => $this->redirectTo($request),
+            'data'       => $data,
+        ], Response::HTTP_OK);
+    }
+
+    /**
      * Log the user out of the application.
      *
      * @param Request $request
@@ -155,59 +227,6 @@ class LoginController extends Controller
         }
     }
 
-    /**
-     * The user has been authenticated.
-     *
-     * @param Request $request
-     * @param mixed   $user
-     *
-     * @return mixed
-     */
-    protected function authenticated(Request $request, User $user)
-    {
-        event(new Authenticated($user));
-        if (!$request->expectsJson()) {
-            return redirect($this->redirectTo($request));
-        }
-        if ($user->userstatus_id == config('constants.USER_STATUS_INACTIVE')) {
-            return response()->json([
-                'message' => 'User account has been deactivated',
-            ], Response::HTTP_FORBIDDEN);
-        }
-
-        if (Str::contains($request->path(), 'v2')) {
-            return $this->authenticatedV2($request, $user);
-        }
-        return $this->authenticatedV1($request, $user);
-    }
-
-    protected function authenticatedV1(Request $request, User $user)
-    {
-        $token = $user->getAppToken();
-        $data = array_merge([
-            'user' => $user,  //Can't change this line because of current Android application
-//              'user' => new UserResource($user)
-        ], $token);
-        return response()->json([
-            'status'     => 1,
-            'msg'        => 'user sign in.',
-            'redirectTo' => $this->redirectTo($request),
-            'data'       => $data,
-        ], Response::HTTP_OK);
-    }
-
-    protected function authenticatedV2(Request $request, User $user)
-    {
-        $token = $user->getAppToken();
-        $data = array_merge([
-            'user'       => new UserResource($user),
-            'redirectTo' => $this->redirectTo($request),
-        ], $token);
-        return response()->json([
-            'data' => $data,
-        ], Response::HTTP_OK);
-    }
-
     protected function credentials(Request $request)
     {
         return $request->only($this->username(), 'nationalCode', 'password');
@@ -221,24 +240,5 @@ class LoginController extends Controller
     public function username()
     {
         return 'mobile';
-    }
-
-    /**
-     * Send the response after the user was authenticated.
-     *
-     * @param Request $request
-     *
-     * @return Response
-     */
-    protected function sendLoginResponse(Request $request)
-    {
-        if ($request->hasSession()) {
-            $request->session()->regenerate();
-        }
-
-        $this->clearLoginAttempts($request);
-
-        return $this->authenticated($request, $this->guard()->user())
-            ?: redirect()->intended($this->redirectPath());
     }
 }

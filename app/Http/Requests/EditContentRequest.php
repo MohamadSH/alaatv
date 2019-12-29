@@ -22,7 +22,7 @@ class EditContentRequest extends FormRequest
     {
         return [
             //            'order' => 'required|numeric',
-            'name'  => 'required',
+            'name' => 'required',
             //            'grades'=>'required|exists:grades,id',
             //            'majors'=>'required|exists:majors,id',
             //            'contenttypes'=>'required|exists:contenttypes,id',

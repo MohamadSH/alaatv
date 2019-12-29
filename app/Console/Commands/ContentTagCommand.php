@@ -16,29 +16,29 @@ class ContentTagCommand extends Command
      * @var string
      */
     protected $signature = 'alaaTv:seed:tag:content {content : The ID of the content}';
-    
+
     use TaggableTrait;
-    
+
     /**
      * The console command description.
      *
      * @var string
      */
     protected $description = 'add Tags for a Content';
-    
+
     private $tagging;
-    
+
     /**
      * ContentTagCommand constructor.
      *
-     * @param  TaggingInterface  $tagging
+     * @param TaggingInterface $tagging
      */
     public function __construct(TaggingInterface $tagging)
     {
         parent::__construct();
         $this->tagging = $tagging;
     }
-    
+
     /**
      * Execute the console command.
      *
@@ -46,29 +46,28 @@ class ContentTagCommand extends Command
      */
     public function handle()
     {
-        $contentId = (int) $this->argument('content');
+        $contentId = (int)$this->argument('content');
         if ($contentId > 0) {
             try {
                 $content = Content::findOrFail($contentId);
             } catch (ModelNotFoundException $exception) {
                 $this->error($exception->getMessage());
-                
+
                 return;
             }
-            if ($this->confirm('You have chosen\n\r '.$content->display_name.'. \n\rDo you wish to continue?', true)) {
+            if ($this->confirm('You have chosen\n\r ' . $content->display_name . '. \n\rDo you wish to continue?', true)) {
                 $this->performTaggingTaskForAContent($content);
             }
-        }
-        else {
+        } else {
             $this->performTaggingTaskForAllContents();
         }
     }
-    
+
     private function performTaggingTaskForAContent(Content $content)
     {
         $this->sendTagsOfTaggableToApi($content, $this->tagging);
     }
-    
+
     private function performTaggingTaskForAllContents(): void
     {
         $contents = Content::all();

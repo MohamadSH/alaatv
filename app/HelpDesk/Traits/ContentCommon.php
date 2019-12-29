@@ -11,7 +11,7 @@ trait ContentCommon
     /**
      * Cuts the content of a comment or a ticket content if it's too long.
      *
-     * @param  string  $attr
+     * @param string $attr
      *
      * @return string
      */
@@ -25,7 +25,7 @@ trait ContentCommon
         }
         return $content ?? '';
     }
-    
+
     /**
      * @param $content
      *

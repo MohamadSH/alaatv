@@ -13,7 +13,7 @@ use Illuminate\Database\Eloquent\Builder;
 class Major extends FilterAbstract
 {
     protected $attribute = 'major_id';
-    
+
     public function apply(Builder $builder, $value, FilterCallback $callback): Builder
     {
         return $builder->whereIn($this->attribute, $value);

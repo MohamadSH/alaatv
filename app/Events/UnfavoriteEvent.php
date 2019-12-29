@@ -4,9 +4,9 @@ namespace App\Events;
 
 use App\Classes\FavorableInterface;
 use App\User;
-use Illuminate\Queue\SerializesModels;
-use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
+use Illuminate\Foundation\Events\Dispatchable;
+use Illuminate\Queue\SerializesModels;
 
 class UnfavoriteEvent
 {
@@ -27,8 +27,8 @@ class UnfavoriteEvent
     /**
      * Create a new event instance.
      *
-     * @param  User                $user
-     * @param  FavorableInterface  $favorable
+     * @param User               $user
+     * @param FavorableInterface $favorable
      */
 
     public function __construct(User $user, FavorableInterface $favorable)

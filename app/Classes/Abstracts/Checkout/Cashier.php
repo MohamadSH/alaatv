@@ -23,7 +23,7 @@ abstract class Cashier
     use CashierOrderproductUnit;
     use CashierOrderproductSumUnit;
     use CashierWalletUnit;
-    
+
     /**
      * Presents Cashier's price data
      *

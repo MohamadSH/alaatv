@@ -1,5 +1,6 @@
 :root {
     --alaa-color-warning: #ffcc00;
+    --alaa-color-danger: #f66e84;
 }
 .nav-pills .nav-link.active,
 .nav-pills .show > .nav-link {

@@ -2,39 +2,44 @@
 
 namespace App;
 
+use Carbon\Carbon;
+use Eloquent;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
+
 /**
  * App\Websitepage
  *
- * @property int                                                            $id
- * @property string                                                         $url         آدرس مختص این صفحه
- * @property string|null                                                    $displayName نام قابل نمایش این صفحه
- * @property string|null                                                    $description توضیح درباره صفحه
- * @property \Carbon\Carbon|null                                            $created_at
- * @property \Carbon\Carbon|null                                            $updated_at
- * @property \Carbon\Carbon|null                                            $deleted_at
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Slideshow[] $slides
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\User[]      $userschecked
+ * @property int                         $id
+ * @property string                      $url         آدرس مختص این صفحه
+ * @property string|null                 $displayName نام قابل نمایش این صفحه
+ * @property string|null                 $description توضیح درباره صفحه
+ * @property Carbon|null         $created_at
+ * @property Carbon|null         $updated_at
+ * @property Carbon|null         $deleted_at
+ * @property-read Collection|Slideshow[] $slides
+ * @property-read Collection|User[]      $userschecked
  * @method static bool|null forceDelete()
- * @method static \Illuminate\Database\Query\Builder|\App\Websitepage onlyTrashed()
+ * @method static \Illuminate\Database\Query\Builder|Websitepage onlyTrashed()
  * @method static bool|null restore()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Websitepage whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Websitepage whereDeletedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Websitepage whereDescription($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Websitepage whereDisplayName($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Websitepage whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Websitepage whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Websitepage whereUrl($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Websitepage withTrashed()
- * @method static \Illuminate\Database\Query\Builder|\App\Websitepage withoutTrashed()
- * @mixin \Eloquent
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Websitepage newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Websitepage newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Websitepage query()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel disableCache()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel withCacheCooldownSeconds($seconds)
+ * @method static Builder|Websitepage whereCreatedAt($value)
+ * @method static Builder|Websitepage whereDeletedAt($value)
+ * @method static Builder|Websitepage whereDescription($value)
+ * @method static Builder|Websitepage whereDisplayName($value)
+ * @method static Builder|Websitepage whereId($value)
+ * @method static Builder|Websitepage whereUpdatedAt($value)
+ * @method static Builder|Websitepage whereUrl($value)
+ * @method static \Illuminate\Database\Query\Builder|Websitepage withTrashed()
+ * @method static \Illuminate\Database\Query\Builder|Websitepage withoutTrashed()
+ * @mixin Eloquent
+ * @method static Builder|Websitepage newModelQuery()
+ * @method static Builder|Websitepage newQuery()
+ * @method static Builder|Websitepage query()
+ * @method static Builder|BaseModel disableCache()
+ * @method static Builder|BaseModel withCacheCooldownSeconds($seconds)
  * @property-read mixed                                                     $cache_cooldown_seconds
- * @property-read int|null $slides_count
- * @property-read int|null $userschecked_count
+ * @property-read int|null                                                  $slides_count
+ * @property-read int|null                                                  $userschecked_count
  */
 class Websitepage extends BaseModel
 {
@@ -46,12 +51,12 @@ class Websitepage extends BaseModel
         'displayName',
         'description',
     ];
-    
+
     public function userschecked()
     {//Users that have seen this site page
         return $this->belongsToMany('\App\User', 'userseensitepages', 'websitepage_id', 'user_id');
     }
-    
+
     public function slides()
     {
         return $this->hasMany('\App\Slideshow');

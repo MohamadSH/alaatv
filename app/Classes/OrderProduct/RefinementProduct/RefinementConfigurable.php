@@ -17,20 +17,19 @@ use Illuminate\Support\Collection;
 class RefinementConfigurable implements RefinementInterface
 {
     private $attributes;
-    
+
     private $product;
-    
+
     public function __construct(Product $product, $data)
     {
         if (isset($data['attribute'])) {
             $this->attributes = $data["attribute"];
             $this->product    = $product;
-        }
-        else {
+        } else {
             throw new Exception('attribute not set!');
         }
     }
-    
+
     /**
      * @return ProductCollection|null
      */
@@ -45,10 +44,10 @@ class RefinementConfigurable implements RefinementInterface
                 break;
             }
         }
-        
+
         return $simpleProduct;
     }
-    
+
     private function checkAttributesOfChild($attributes, $child)
     {
         $flag = true;
@@ -62,8 +61,7 @@ class RefinementConfigurable implements RefinementInterface
         }
         if ($flag && $attributesOfChild->count() == count($this->attributes)) {
             return $child;
-        }
-        else {
+        } else {
             return false;
         }
     }

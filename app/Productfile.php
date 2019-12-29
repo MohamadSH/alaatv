@@ -3,65 +3,67 @@
 namespace App;
 
 use App\Traits\DateTrait;
-use Carbon\Carbon;
 use App\Traits\Helper;
+use Carbon\Carbon;
+use Eloquent;
+use Illuminate\Database\Eloquent\Builder;
 use Kalnoy\Nestedset\QueryBuilder;
 
 /**
  * App\Productfile
  *
- * @property int                            $id
- * @property int                            $product_id         آی دی مشخص کننده محصول این فایل
- * @property int|null                       $productfiletype_id توضیج درباره نوع رشته
- * @property string|null                    $file               اسم فایل
- * @property string|null                    $cloudFile          فایل آپلود شده در سرور خارجی
- * @property string|null                    $name               عنوان فایل
- * @property string|null                    $description        توضیح درباره فایل
- * @property int                            $order              ترتیب فایل
- * @property int                            $enable             فعال بودن یا غیرفعال بودن فایل
- * @property string|null                    $validSince         تاریخ شروع استفاده از فایل
- * @property \Carbon\Carbon|null            $created_at
- * @property \Carbon\Carbon|null            $updated_at
- * @property \Carbon\Carbon|null            $deleted_at
- * @property-read \App\Product              $product
- * @property-read \App\Productfiletype|null $productfiletype
+ * @property int                       $id
+ * @property int                       $product_id         آی دی مشخص کننده محصول این فایل
+ * @property int|null                  $productfiletype_id توضیج درباره نوع رشته
+ * @property string|null               $file               اسم فایل
+ * @property string|null               $cloudFile          فایل آپلود شده در سرور خارجی
+ * @property string|null               $name               عنوان فایل
+ * @property string|null               $description        توضیح درباره فایل
+ * @property int                       $order              ترتیب فایل
+ * @property int                       $enable             فعال بودن یا غیرفعال بودن فایل
+ * @property string|null               $validSince         تاریخ شروع استفاده از فایل
+ * @property Carbon|null               $created_at
+ * @property Carbon|null               $updated_at
+ * @property Carbon|null               $deleted_at
+ * @property-read Product              $product
+ * @property-read Productfiletype|null $productfiletype
  * @method static bool|null forceDelete()
  * @method static \Illuminate\Database\Query\Builder|Productfile onlyTrashed()
  * @method static bool|null restore()
- * @method static \Illuminate\Database\Eloquent\Builder|Productfile whereCloudFile($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Productfile whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Productfile whereDeletedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Productfile whereDescription($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Productfile whereEnable($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Productfile whereFile($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Productfile whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Productfile whereName($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Productfile whereOrder($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Productfile whereProductId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Productfile whereProductfiletypeId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Productfile whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Productfile whereValidSince($value)
+ * @method static Builder|Productfile whereCloudFile($value)
+ * @method static Builder|Productfile whereCreatedAt($value)
+ * @method static Builder|Productfile whereDeletedAt($value)
+ * @method static Builder|Productfile whereDescription($value)
+ * @method static Builder|Productfile whereEnable($value)
+ * @method static Builder|Productfile whereFile($value)
+ * @method static Builder|Productfile whereId($value)
+ * @method static Builder|Productfile whereName($value)
+ * @method static Builder|Productfile whereOrder($value)
+ * @method static Builder|Productfile whereProductId($value)
+ * @method static Builder|Productfile whereProductfiletypeId($value)
+ * @method static Builder|Productfile whereUpdatedAt($value)
+ * @method static Builder|Productfile whereValidSince($value)
  * @method static \Illuminate\Database\Query\Builder|Productfile withTrashed()
  * @method static \Illuminate\Database\Query\Builder|Productfile withoutTrashed()
- * @mixin \Eloquent
- * @method static \Illuminate\Database\Eloquent\Builder|Productfile enable()
- * @method static \Illuminate\Database\Eloquent\Builder|Productfile valid()
- * @method static \Illuminate\Database\Eloquent\Builder|Productfile newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Productfile newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Productfile query()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel disableCache()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel withCacheCooldownSeconds($seconds)
- * @property int|null                       $content_id
- * @property int|null                       $contentset_id
- * @property-read \App\Content|null         $content
- * @property-read mixed                     $cache_cooldown_seconds
- * @property-read \App\Contentset|null      $set
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Productfile whereContentId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Productfile whereContentsetId($value)
+ * @mixin Eloquent
+ * @method static Builder|Productfile enable()
+ * @method static Builder|Productfile valid()
+ * @method static Builder|Productfile newModelQuery()
+ * @method static Builder|Productfile newQuery()
+ * @method static Builder|Productfile query()
+ * @method static Builder|BaseModel disableCache()
+ * @method static Builder|BaseModel withCacheCooldownSeconds($seconds)
+ * @property int|null             $content_id
+ * @property int|null             $contentset_id
+ * @property-read Content|null    $content
+ * @property-read mixed           $cache_cooldown_seconds
+ * @property-read Contentset|null $set
+ * @method static Builder|Productfile whereContentId($value)
+ * @method static Builder|Productfile whereContentsetId($value)
  */
 class Productfile extends BaseModel
 {
-    use Helper,DateTrait;
+    use Helper, DateTrait;
     /**
      * @var array
      */
@@ -101,9 +103,9 @@ class Productfile extends BaseModel
     /**
      * Scope a query to only include enable(or disable) Products.
      *
-     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @param Builder $query
      *
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @return Builder
      */
     public function scopeEnable($query)
     {
@@ -135,7 +137,7 @@ class Productfile extends BaseModel
             ->first()->cloudFile;
         //TODO: verify "$productFileLink = "http://".env("SFTP_HOST" , "").":8090/". $cloudFile;"
         $productFileLink = config('constants.DOWNLOAD_SERVER_PROTOCOL',
-                'https://').config('constants.PAID_SERVER_NAME').$cloudFile;
+                'https://') . config('constants.PAID_SERVER_NAME') . $cloudFile;
         $unixTime        = Carbon::today()
             ->addDays(2)->timestamp;
         $userIP          = request()->ip();
@@ -145,7 +147,7 @@ class Productfile extends BaseModel
         $userIP     = implode('.', $ipArray);
 
         $linkHash     = $this->generateSecurePathHash($unixTime, $userIP, 'TakhteKhak', $cloudFile);
-        $externalLink = $productFileLink.'?md5='.$linkHash.'&expires='.$unixTime;
+        $externalLink = $productFileLink . '?md5=' . $linkHash . '&expires=' . $unixTime;
         return $externalLink;
     }
 }

@@ -12,20 +12,20 @@ use Illuminate\Http\Response;
 class AttributesetController extends Controller
 {
     protected $response;
-    
+
     function __construct()
     {
-        $this->middleware('permission:'.config('constants.LIST_ATTRIBUTESET_ACCESS'), ['only' => 'index']);
-        $this->middleware('permission:'.config('constants.INSERT_ATTRIBUTESET_ACCESS'), ['only' => 'create']);
-        $this->middleware('permission:'.config('constants.REMOVE_ATTRIBUTESET_ACCESS'), ['only' => 'destroy']);
-        $this->middleware('permission:'.config('constants.SHOW_ATTRIBUTESET_ACCESS'), ['only' => 'edit']);
+        $this->middleware('permission:' . config('constants.LIST_ATTRIBUTESET_ACCESS'), ['only' => 'index']);
+        $this->middleware('permission:' . config('constants.INSERT_ATTRIBUTESET_ACCESS'), ['only' => 'create']);
+        $this->middleware('permission:' . config('constants.REMOVE_ATTRIBUTESET_ACCESS'), ['only' => 'destroy']);
+        $this->middleware('permission:' . config('constants.SHOW_ATTRIBUTESET_ACCESS'), ['only' => 'edit']);
     }
 
     public function index()
     {
         $attributesets = Attributeset::all()
             ->sortByDesc('created_at');
-        
+
         return view('attributeset.index', compact('attributesets'));
     }
 
@@ -33,12 +33,11 @@ class AttributesetController extends Controller
     {
         $attributeset = new Attributeset();
         $attributeset->fill($request->all());
-        
+
         if ($attributeset->save()) {
             return response()->json();
-        }
-        else {
-            return response()->json([] , Response::HTTP_SERVICE_UNAVAILABLE);
+        } else {
+            return response()->json([], Response::HTTP_SERVICE_UNAVAILABLE);
         }
     }
 
@@ -47,21 +46,20 @@ class AttributesetController extends Controller
         //        $attributegroups = $attributeset->attributegroups;
         $attributes = Attribute::pluck('displayName', 'id')
             ->toArray();
-        
+
         return view('attributeset.edit', compact('attributeset', 'attributes'));
     }
 
     public function update(EditAttributesetRequest $request, Attributeset $attributeset)
     {
         $attributeset->fill($request->all());
-        
+
         if ($attributeset->update()) {
             session()->put("success", "اطلاعات دسته صفت با موفقیت اصلاح شد");
-        }
-        else {
+        } else {
             session()->put("error", "خطای پایگاه داده.");
         }
-        
+
         return redirect()->back();
     }
 
@@ -69,11 +67,10 @@ class AttributesetController extends Controller
     {
         if ($attributeset->delete()) {
             session()->put('success', ' دسته صفت با موفقیت اصلاح شد');
-        }
-        else {
+        } else {
             session()->put('error', 'خطای پایگاه داده');
         }
-        
+
         return redirect()->back();
     }
 }

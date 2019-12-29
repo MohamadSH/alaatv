@@ -21,14 +21,14 @@ class TicketRepo
 
     public function toggleOpenClose($id)
     {
-        $ticket = Ticket::find($id);
+        $ticket          = Ticket::find($id);
         $ticket->is_open = ($ticket->is_open == 1) ? 0 : 1;
         return $ticket->save();
     }
 
     public function assignToAgent($id, $uid)
     {
-        $ticket = Ticket::find($id);
+        $ticket           = Ticket::find($id);
         $ticket->agent_id = $uid;
         $ticket->save();
     }

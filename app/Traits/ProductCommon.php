@@ -1,24 +1,27 @@
 <?php namespace App\Traits;
 
+use App\Http\Requests\Request;
 use App\Product;
-use Illuminate\Support\Str;
+use Illuminate\Config\Repository;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Str;
 
 trait ProductCommon
 {
     /**
-     * @param  Product  $product
+     * @param Product   $product
      * @param           $extraAttributeValues
      *
      * @return int|float
      */
     public function productExtraCostFromAttributes(Product $product, $extraAttributeValues)
     {
-        $key = 'product:productExtraCostFromAttributes:'."\\".$product->cacheKey()."\\extraAttributeValues:".(isset($extraAttributeValues) ? implode('',
+        $key =
+            'product:productExtraCostFromAttributes:' . "\\" . $product->cacheKey() . "\\extraAttributeValues:" . (isset($extraAttributeValues) ? implode('',
                 $extraAttributeValues) : '-');
 
-        return (int)Cache::tags(['product' , 'product_'.$product->id])
+        return (int)Cache::tags(['product', 'product_' . $product->id])
             ->remember($key, config('constants.CACHE_60'), function () use ($product, $extraAttributeValues) {
                 $totalExtraCost = 0;
                 foreach ($extraAttributeValues as $attributevalueId) {
@@ -40,8 +43,8 @@ trait ProductCommon
     /**
      * Finds product intended child based on specified attribute values
      *
-     * @param  Product  $product
-     * @param  array    $mainAttributeValues
+     * @param Product $product
+     * @param array   $mainAttributeValues
      *
      * @return Product
      */
@@ -66,8 +69,7 @@ trait ProductCommon
         }
         if (isset($simpleProduct)) {
             return $simpleProduct;
-        }
-        else {
+        } else {
             return null;
         }
     }
@@ -75,8 +77,8 @@ trait ProductCommon
     /**
      * Copies a product files to another product
      *
-     * @param  Product  $sourceProduct
-     * @param  Product  $destinationProduct
+     * @param Product $sourceProduct
+     * @param Product $destinationProduct
      */
     public function copyProductFiles(Product $sourceProduct, Product $destinationProduct): void
     {
@@ -89,9 +91,9 @@ trait ProductCommon
     }
 
     /**
-     * @param  Product  $sourceProduct
-     * @param  Product  $destinationProduct
-     * @param  array    $newPhotoInfo
+     * @param Product $sourceProduct
+     * @param Product $destinationProduct
+     * @param array   $newPhotoInfo
      */
     public function copyProductPhotos(Product $sourceProduct, Product $destinationProduct, array $newPhotoInfo = []): void
     {
@@ -115,192 +117,192 @@ trait ProductCommon
     /**
      * Calculates costs of a product collection
      *
-     * @param  Collection  $products
+     * @param Collection $products
      *
      * @return mixed
      */
     protected function makeCostCollection(Collection $products)
     {
-        $key = null;
+        $key       = null;
         $cacheTags = ['product'];
         foreach ($products as $product) {
-            $key .= $product->cacheKey().'-';
-            $cacheTags[] = 'product_'.$product->id;
+            $key         .= $product->cacheKey() . '-';
+            $cacheTags[] = 'product_' . $product->id;
         }
-        $key = 'product:makeCostCollection:'.md5($key);
+        $key = 'product:makeCostCollection:' . md5($key);
 
         return Cache::tags($cacheTags)
             ->remember($key, config('constants.CACHE_60'), function () use ($products) {
-            $costCollection = collect();
-            foreach ($products as $product) {
-                if ($product->producttype_id == config('constants.PRODUCT_TYPE_CONFIGURABLE')) {
-                    /** @var Collection $enableChildren */
-                    $enableChildren = $product->children->where('enable',
-                        1); // It is not query efficient to use scopeEnable
-                    if ($enableChildren->count() == 1) {
-                        $costArray = $enableChildren->first()
-                            ->calculatePayablePrice();
-                    }
-                    else {
+                $costCollection = collect();
+                foreach ($products as $product) {
+                    if ($product->producttype_id == config('constants.PRODUCT_TYPE_CONFIGURABLE')) {
+                        /** @var Collection $enableChildren */
+                        $enableChildren = $product->children->where('enable',
+                            1); // It is not query efficient to use scopeEnable
+                        if ($enableChildren->count() == 1) {
+                            $costArray = $enableChildren->first()
+                                ->calculatePayablePrice();
+                        } else {
+                            $costArray = $product->calculatePayablePrice();
+                        }
+                    } else if ($product->producttype_id == config('constants.PRODUCT_TYPE_SELECTABLE')) {
+                        $allChildren                  = $product->getAllChildren()
+                            ->where('pivot.isDefault', 1);
+                        $costArray                    = [];
+                        $costArray['productDiscount'] = null;
+                        $costArray['bonDiscount']     = null;
+                        $costArray['costForCustomer'] = 0;
+                        $costArray['cost']            = 0;
+                        if (is_callable([$this, 'refreshPrice'])) {
+                            $request = new Request();
+                            $request->offsetSet('products', $allChildren->pluck('id')
+                                ->toArray());
+                            $request->offsetSet('type', 'productSelection');
+                            $costInfo                     = $this->refreshPrice($request, $product);
+                            $costInfo                     = json_decode($costInfo);
+                            $costArray['costForCustomer'] = $costInfo->costForCustomer;
+                            $costArray['cost']            = $costInfo->cost;
+                        }
+//                    $costArray = $product->calculatePayablePrice();
+                    } else {
                         $costArray = $product->calculatePayablePrice();
                     }
-                } elseif ($product->producttype_id == config('constants.PRODUCT_TYPE_SELECTABLE')) {
-                    $allChildren                  = $product->getAllChildren()
-                        ->where('pivot.isDefault', 1);
-                    $costArray                    = [];
-                    $costArray['productDiscount'] = null;
-                    $costArray['bonDiscount']     = null;
-                    $costArray['costForCustomer'] = 0;
-                    $costArray['cost']            = 0;
-                    if (is_callable([$this, 'refreshPrice'])) {
-                        $request = new \App\Http\Requests\Request();
-                        $request->offsetSet('products', $allChildren->pluck('id')
-                            ->toArray());
-                        $request->offsetSet('type', 'productSelection');
-                        $costInfo                     = $this->refreshPrice($request, $product);
-                        $costInfo                     = json_decode($costInfo);
-                        $costArray['costForCustomer'] = $costInfo->costForCustomer;
-                        $costArray['cost']            = $costInfo->cost;
-                    }
-//                    $costArray = $product->calculatePayablePrice();
-                }
-                else {
-                    $costArray = $product->calculatePayablePrice();
+
+                    $costCollection->put($product->id, [
+                        'cost'            => $costArray['cost'],
+                        'productDiscount' => $costArray['productDiscount'],
+                        'bonDiscount'     => $costArray['bonDiscount'],
+                        'costForCustomer' => isset($costArray['costForCustomer']) ? $costArray['costForCustomer'] : 0,
+                    ]);
                 }
 
-                $costCollection->put($product->id, [
-                    'cost'            => $costArray['cost'],
-                    'productDiscount' => $costArray['productDiscount'],
-                    'bonDiscount'     => $costArray['bonDiscount'],
-                    'costForCustomer' => isset($costArray['costForCustomer']) ? $costArray['costForCustomer'] : 0,
-                ]);
-            }
-
-            return $costCollection;
-        });
+                return $costCollection;
+            });
     }
 
     protected function makeProductCollection($productsId = null)
     {
-        $key = '';
-        $cacheTags = ['product' , 'productCollection'];
+        $key       = '';
+        $cacheTags = ['product', 'productCollection'];
         if (isset($productsId)) {
             foreach ($productsId as $product) {
-                $cacheTags[] = 'product_'.$product;
-                $key .= $product.'-';
+                $cacheTags[] = 'product_' . $product;
+                $key         .= $product . '-';
             }
         }
-        $key = 'product:makeProductCollection:'.$key;
+        $key = 'product:makeProductCollection:' . $key;
 
         return Cache::tags($cacheTags)
             ->remember($key, config('constants.CACHE_60'), function () use ($productsId) {
-            if (!isset($productsId)) {
-                $productsId = [];
-            }
+                if (!isset($productsId)) {
+                    $productsId = [];
+                }
 
-            $allProducts = Product::getProducts(0 , 0 , [] , 'created_at' , 'desc' , $productsId)->get();
+                $allProducts = Product::getProducts(0, 0, [], 'created_at', 'desc', $productsId)->get();
 
-            $products = collect();
-            foreach ($allProducts as $product) {
-                $products->push($product);
-            }
+                $products = collect();
+                foreach ($allProducts as $product) {
+                    $products->push($product);
+                }
 
-            return $products;
-        });
+                return $products;
+            });
     }
 
     protected function haveSameFamily($products)
     {
-        $key = null;
+        $key       = null;
         $cacheTags = ['product'];
         foreach ($products as $product) {
-            $key .= $product->cacheKey().'-';
-            $cacheTags[] = 'product_'.$product->id;
+            $key         .= $product->cacheKey() . '-';
+            $cacheTags[] = 'product_' . $product->id;
         }
-        $key = 'product:haveSameFamily:'.$key;
+        $key = 'product:haveSameFamily:' . $key;
 
         return Cache::tags($cacheTags)
             ->remember($key, config('constants.CACHE_60'), function () use ($products) {
-            $flag = true;
-            foreach ($products as $key => $product) {
-                if (isset($products[$key + 1])) {
-                    if ($product->grandParent != null && $products[$key + 1]->grandParent != null) {
-                        if ($product->grandParent->id != $products[$key + 1]->grandParent->id) {
+                $flag = true;
+                foreach ($products as $key => $product) {
+                    if (isset($products[$key + 1])) {
+                        if ($product->grandParent != null && $products[$key + 1]->grandParent != null) {
+                            if ($product->grandParent->id != $products[$key + 1]->grandParent->id) {
+                                $flag = false;
+                                break;
+                            }
+                        } else {
                             $flag = false;
                             break;
                         }
                     }
-                    else {
-                        $flag = false;
-                        break;
-                    }
                 }
-            }
 
-            return $flag;
-        });
+                return $flag;
+            });
     }
 
     /**
-     * @param \Illuminate\Config\Repository $videoDisk
-     * @param $videoUrl
-     * @param $videoPath
-     * @param $size
-     * @param string $caption
-     * @param string $res
-     * @param $videoExtension
+     * @param Repository $videoDisk
+     * @param                               $videoUrl
+     * @param                               $videoPath
+     * @param                               $size
+     * @param string                        $caption
+     * @param string                        $res
+     * @param                               $videoExtension
+     *
      * @return array
      */
-    protected function makeIntroVideoFileStdClass(string $videoDisk, string $videoUrl, string $videoPath, string $videoExtension=null, $size=null, string $caption=null, string $res=null): array
+    protected function makeIntroVideoFileStdClass(string $videoDisk, string $videoUrl, string $videoPath, string $videoExtension = null, $size = null, string $caption = null, string $res = null): array
     {
         $hqVideo = [
-            'uuid' => Str::uuid()->toString(),
-            'disk' => $videoDisk,
-            'url' => $videoUrl,
+            'uuid'     => Str::uuid()->toString(),
+            'disk'     => $videoDisk,
+            'url'      => $videoUrl,
             'fileName' => $videoPath,
-            'size' => $size,
-            'caption' => $caption,
-            'res' => $res,
-            'type' => 'video',
-            'ext' => $videoExtension,
+            'size'     => $size,
+            'caption'  => $caption,
+            'res'      => $res,
+            'type'     => 'video',
+            'ext'      => $videoExtension,
         ];
         return $hqVideo;
     }
 
     /**
-     * @param \Illuminate\Config\Repository $thumbnailDisk
-     * @param $thumbnailUrl
-     * @param $thumbnailPath
-     * @param $size
-     * @param $caption
-     * @param $res
-     * @param $thumbnailExtension
+     * @param Repository $thumbnailDisk
+     * @param                               $thumbnailUrl
+     * @param                               $thumbnailPath
+     * @param                               $size
+     * @param                               $caption
+     * @param                               $res
+     * @param                               $thumbnailExtension
+     *
      * @return array
      */
-    protected function makeVideoFileThumbnailStdClass(string $thumbnailDisk, string $thumbnailUrl, string $thumbnailPath, string $thumbnailExtension=null, $size=null, $caption=null, string $res=null): array
+    protected function makeVideoFileThumbnailStdClass(string $thumbnailDisk, string $thumbnailUrl, string $thumbnailPath, string $thumbnailExtension = null, $size = null, $caption = null, string $res = null): array
     {
         $thumbnail = [
-            'uuid' => Str::uuid()->toString(),
-            'disk' => $thumbnailDisk,
-            'url' => $thumbnailUrl,
+            'uuid'     => Str::uuid()->toString(),
+            'disk'     => $thumbnailDisk,
+            'url'      => $thumbnailUrl,
             'fileName' => $thumbnailPath,
-            'size' => $size,
-            'caption' => $caption,
-            'res' => $res,
-            'type' => 'thumbnail',
-            'ext' => $thumbnailExtension,
+            'size'     => $size,
+            'caption'  => $caption,
+            'res'      => $res,
+            'type'     => 'thumbnail',
+            'ext'      => $thumbnailExtension,
         ];
         return $thumbnail;
     }
 
     /**
      * @param array $hqVideo
+     *
      * @return array
      */
     protected function mekeIntroVideosArray(array $hqVideo): array
     {
         $video = [
-            $hqVideo
+            $hqVideo,
         ];
         return $video;
     }

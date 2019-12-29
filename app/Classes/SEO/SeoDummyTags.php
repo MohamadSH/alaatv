@@ -11,26 +11,26 @@ namespace App\Classes\SEO;
 class SeoDummyTags implements SeoInterface
 {
     private $title;
-    
+
     private $shortDescription;
-    
+
     private $url;
-    
+
     private $canonical;
-    
+
     private $image;
-    
+
     private $imageWidth;
-    
+
     private $imageHeight;
-    
+
     private $tags;
-    
+
     private $seoMod;
-    
+
     public function __construct($title, $shortDescription, $url, $canonical, $image, $imageWidth, $imageHeight, $tags)
     {
-        
+
         $this->title            = $title;
         $this->shortDescription = $shortDescription;
         $this->url              = $url;
@@ -40,7 +40,7 @@ class SeoDummyTags implements SeoInterface
         $this->imageHeight      = $imageHeight;
         $this->tags             = $tags;
     }
-    
+
     public function getMetaTags(): array
     {
         return [

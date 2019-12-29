@@ -3,7 +3,6 @@
 namespace App\Http\Requests;
 
 use App\Traits\CharacterCommon;
-use Illuminate\Support\Facades\Config;
 use Illuminate\Foundation\Http\FormRequest;
 
 class AttacheUserBonRequest extends FormRequest
@@ -17,7 +16,7 @@ class AttacheUserBonRequest extends FormRequest
             ->can(config('constants.ATTACHE_USER_BON_ACCESS'))) {
             return true;
         }
-    
+
         return false;
     }
 
@@ -27,13 +26,13 @@ class AttacheUserBonRequest extends FormRequest
             'totalNumber' => 'required|numeric',
         ];
     }
-    
+
     public function prepareForValidation()
     {
         $this->replaceNumbers();
         parent::prepareForValidation();
     }
-    
+
     protected function replaceNumbers()
     {
         $input = $this->request->all();

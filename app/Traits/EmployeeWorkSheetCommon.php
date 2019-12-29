@@ -33,26 +33,24 @@ trait EmployeeWorkSheetCommon
      */
     public function sumWorkAndShiftDiff($workTimeSheets)
     {
-        $totalConfirmedWorkAndShiftDiff = 0 ;   //In seconds
-        $totalUnConfirmedWorkAndShiftDiff = 0 ;   //In seconds
-        foreach ($workTimeSheets as $workTimeSheet)
-        {
+        $totalConfirmedWorkAndShiftDiff   = 0;   //In seconds
+        $totalUnConfirmedWorkAndShiftDiff = 0;   //In seconds
+        foreach ($workTimeSheets as $workTimeSheet) {
             $workTimeDif = $workTimeSheet->obtainWorkAndShiftDiff("IN_SECONDS");
-            if($workTimeDif < 0)
-            {
+            if ($workTimeDif < 0) {
                 $totalConfirmedWorkAndShiftDiff += $workTimeDif;
                 continue;
             }
-            if($workTimeSheet->overtime_status_id == config('constants.EMPLOYEE_OVERTIME_STATUS_CONFIRMED')) {
+            if ($workTimeSheet->overtime_status_id == config('constants.EMPLOYEE_OVERTIME_STATUS_CONFIRMED')) {
                 $totalConfirmedWorkAndShiftDiff += $workTimeDif;
             } else {
                 $totalUnConfirmedWorkAndShiftDiff += $workTimeDif;
             }
         }
         if ($totalConfirmedWorkAndShiftDiff < 0) {
-            return "- " .$this->convertSecToHour(abs($totalConfirmedWorkAndShiftDiff));
+            return "- " . $this->convertSecToHour(abs($totalConfirmedWorkAndShiftDiff));
         } else {
-            return "+ " .$this->convertSecToHour(abs($totalConfirmedWorkAndShiftDiff)) ;
+            return "+ " . $this->convertSecToHour(abs($totalConfirmedWorkAndShiftDiff));
         }
 
     }

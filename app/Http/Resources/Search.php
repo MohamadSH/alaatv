@@ -16,7 +16,7 @@ class Search extends AlaaJsonResource
      */
     public function toArray($request)
     {
-        $array  = (array) $this->resource;
+        $array  = (array)$this->resource;
         $result = Arr::get($array, 'result');
         return [
             'result' => [

@@ -3,7 +3,6 @@
 namespace App\Console\Commands;
 
 use App\Orderproduct;
-use App\Repositories\OrderproductRepo;
 use Illuminate\Console\Command;
 
 class UpdateOrderproductsTmpShareCommand extends Command
@@ -39,19 +38,19 @@ class UpdateOrderproductsTmpShareCommand extends Command
      */
     public function handle()
     {
-        $orderproducts = Orderproduct::whereHas('order' , function ($q){
-            $q->whereNotIn('orderstatus_id' , [config('constants.ORDER_STATUS_OPEN' , config('constants.ORDER_STATUS_OPEN_DONATE'))]);
+        $orderproducts = Orderproduct::whereHas('order', function ($q) {
+            $q->whereNotIn('orderstatus_id', [config('constants.ORDER_STATUS_OPEN', config('constants.ORDER_STATUS_OPEN_DONATE'))]);
         });
 
         if ($this->confirm('Do you want to process all of orderproducts or just new ones? type yes if you want all of them', true)) {
             // Process all of orderproducts
             $orderproducts = $orderproducts->get();
-        }else{
+        } else {
             // Process new orderproducts with no cache
-            $orderproducts = $orderproducts->whereNull('tmp_share_order')->orWhere('tmp_share_order' , 0)->get();
+            $orderproducts = $orderproducts->whereNull('tmp_share_order')->orWhere('tmp_share_order', 0)->get();
         }
 
-        if ($this->confirm('Found '.$orderproducts->count().' orderproducts , Do you want to proceed?', true)) {
+        if ($this->confirm('Found ' . $orderproducts->count() . ' orderproducts , Do you want to proceed?', true)) {
             $bar = $this->output->createProgressBar($orderproducts->count());
             foreach ($orderproducts as $orderproduct) {
                 /** @var Orderproduct $orderproduct */

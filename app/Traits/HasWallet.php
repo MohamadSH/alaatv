@@ -2,10 +2,7 @@
 
 namespace App\Traits;
 
-use App\Http\Controllers\Web\WalletController;
-use App\Http\Requests\Request;
 use App\Wallet;
-use Illuminate\Http\Response;
 
 trait HasWallet
 {
@@ -36,7 +33,7 @@ trait HasWallet
     /**
      * Determine if the user can withdraw the given amount
      *
-     * @param  integer  $amount
+     * @param integer $amount
      *
      * @return boolean
      */
@@ -48,7 +45,7 @@ trait HasWallet
     /**
      * Retrieve the balance of this user's wallet
      *
-     * @param  int  $type
+     * @param int $type
      *
      * @return int
      */
@@ -66,9 +63,9 @@ trait HasWallet
     /**
      * Fail to move credits to this account
      *
-     * @param  integer  $amount
-     * @param  string   $type
-     * @param  array    $meta
+     * @param integer $amount
+     * @param string  $type
+     * @param array   $meta
      */
     public function failDeposit($amount, $type = 'deposit', $meta = [])
     {
@@ -78,14 +75,14 @@ trait HasWallet
     /**
      * Move credits to this account
      *
-     * @param  integer  $amount
-     * @param  null     $walletType
+     * @param integer $amount
+     * @param null    $walletType
      *
      * @return array
      */
     public function deposit($amount = 0, $walletType = null)
     {
-        $done       = false;
+        $done = false;
         if (!isset($walletType)) {
             $walletType = config("constants.WALLET_TYPE_MAIN");
         }
@@ -95,30 +92,27 @@ trait HasWallet
             $result = $wallet->deposit($amount);
             if ($result["result"]) {
                 $responseText = "SUCCESSFUL";
-                $done = true;
-            }
-            else {
+                $done         = true;
+            } else {
                 $responseText = $result["responseText"];
             }
-        }
-        else {
+        } else {
             $wallet = Wallet::create([
-                'user_id'       => $this->id ,
-                'wallettype_id' => $walletType
+                'user_id'       => $this->id,
+                'wallettype_id' => $walletType,
             ]);
             if (isset($wallet)) {
                 $wallet->deposit($amount);
                 $responseText = "SUCCESSFUL";
-                $done = true;
-            }
-            else {
+                $done         = true;
+            } else {
                 $responseText = "CAN_NOT_CREATE_WALLET";
             }
         }
 
         return [
             "result"       => $done,
-            "responseText" => (isset($responseText))?$responseText:'',
+            "responseText" => (isset($responseText)) ? $responseText : '',
             "wallet"       => (isset($wallet)) ? $wallet->id : null,
         ];
     }
@@ -126,7 +120,7 @@ trait HasWallet
     /**
      * Move credits from this account
      *
-     * @param  integer  $amount
+     * @param integer   $amount
      * @param           $walletType
      *
      * @return array
@@ -143,9 +137,9 @@ trait HasWallet
     /**
      * Attempt to move credits from this account
      *
-     * @param  integer  $amount
-     * @param  null     $walletType
-     * @param  boolean  $shouldAccept
+     * @param integer $amount
+     * @param null    $walletType
+     * @param boolean $shouldAccept
      *
      * @return array
      */
@@ -164,20 +158,17 @@ trait HasWallet
             $result = $wallet->withdraw($amount);
             if ($result["result"]) {
                 $failed = false;
-            }
-            else {
+            } else {
                 $failed       = true;
                 $responseText = $result["responseText"];
             }
-        }
-        else {
+        } else {
             $wallet = Wallet::create([
-                    'user_id'   => $this->id,
-                    'wallettype_id' => $walletType
+                'user_id'       => $this->id,
+                'wallettype_id' => $walletType,
             ]);
             $failed = false;
-            if(!isset($wallet))
-            {
+            if (!isset($wallet)) {
                 $failed       = true;
                 $responseText = "CAN_NOT_CREATE_WALLET";
             }

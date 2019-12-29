@@ -16,7 +16,7 @@ abstract class CallControllerStoreFacade
     /**
      * Calls store method of intended controller class
      *
-     * @param  array  $data
+     * @param array $data
      *
      * @return mixed
      */
@@ -24,10 +24,10 @@ abstract class CallControllerStoreFacade
     {
         $controllerObject = $this->getControllerObject();
         $orderproducts    = $controllerObject->new($data);
-        
+
         return $orderproducts;
     }
-    
+
     /**
      * @return Controller
      */
@@ -35,7 +35,7 @@ abstract class CallControllerStoreFacade
     {
         return ControllerFactory::getControllerObject($this->getControllerName());
     }
-    
+
     /**
      * @return string
      */

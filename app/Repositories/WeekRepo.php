@@ -11,10 +11,11 @@ class WeekRepo
 {
     /**
      * @param string $today
+     *
      * @return mixed
      */
-    public static function getDayOfWeek(string $today):Builder
+    public static function getDayOfWeek(string $today): Builder
     {
-        return Dayofweek::where('display_name', $today );
+        return Dayofweek::where('display_name', $today);
     }
 }

@@ -2,15 +2,14 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Http\Controllers\Controller;
+use App\Traits\{CharacterCommon, Helper, RedirectTrait, RequestCommon, UserCommon};
 use App\User;
-use Illuminate\Support\Arr;
-use Validator;
+use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use App\Http\Controllers\Controller;
-use Illuminate\Auth\Events\Registered;
-use Illuminate\Foundation\Auth\RegistersUsers;
-use App\Traits\{Helper, UserCommon, RequestCommon, RedirectTrait, CharacterCommon};
+use Illuminate\Support\Arr;
+use Validator;
 
 class RegisterController extends Controller
 {
@@ -35,7 +34,7 @@ class RegisterController extends Controller
     /**
      * Create a new controller instance.
      *
-     * @param  Request  $request
+     * @param Request $request
      */
     public function __construct(Request $request)
     {
@@ -56,9 +55,35 @@ class RegisterController extends Controller
     }
 
     /**
+     * The user has been registered.
+     *
+     * @param Request $request
+     * @param mixed   $user
+     *
+     * @return mixed
+     */
+    protected function registered(Request $request, User $user)
+    {
+        if ($request->expectsJson()) {
+            $token = $user->getAppToken();
+            $data  = array_merge([
+                'user' => $user,
+            ], $token);
+
+            return response()->json([
+                'status'     => 1,
+                'msg'        => 'user registered',
+                'redirectTo' => $this->redirectTo($request),
+                'data'       => $data,
+            ], Response::HTTP_OK);
+        }
+        return null;
+    }
+
+    /**
      * Get a validator for an incoming registration request.
      *
-     * @param  array  $data
+     * @param array $data
      *
      * @return \Illuminate\Contracts\Validation\Validator
      */
@@ -82,36 +107,10 @@ class RegisterController extends Controller
             'email'         => Arr::get($data, 'email'),
             'nationalCode'  => Arr::get($data, 'nationalCode'),
             'userstatus_id' => 1,
-            'photo'         => Arr::get($data, 'photo', 'upload/images/profile/'.config('constants.PROFILE_DEFAULT_IMAGE')),
+            'photo'         => Arr::get($data, 'photo', 'upload/images/profile/' . config('constants.PROFILE_DEFAULT_IMAGE')),
             'password'      => bcrypt(Arr::get($data, 'password', Arr::get($data, 'nationalCode'))),
             'major_id'      => Arr::get($data, 'major_id'),
             'gender_id'     => Arr::get($data, 'gender_id'),
         ]);
-    }
-
-    /**
-     * The user has been registered.
-     *
-     * @param  Request  $request
-     * @param  mixed    $user
-     *
-     * @return mixed
-     */
-    protected function registered(Request $request, User $user)
-    {
-        if ($request->expectsJson()) {
-            $token = $user->getAppToken();
-            $data  = array_merge([
-                'user' => $user,
-            ], $token);
-
-            return response()->json([
-                'status'     => 1,
-                'msg'        => 'user registered',
-                'redirectTo' => $this->redirectTo($request),
-                'data'       => $data,
-            ], Response::HTTP_OK);
-        }
-        return null;
     }
 }

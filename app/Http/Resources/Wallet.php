@@ -27,8 +27,10 @@ class Wallet extends AlaaJsonResource
         $this->loadMissing('walletType');
 
         return [
-            'wallettype_id'     => $this->when(isset($this->wallettype_id) , function (){ return new Wallettype($this->walletType);}),
-            'balance'           => $this->balance,
+            'wallettype_id' => $this->when(isset($this->wallettype_id), function () {
+                return new Wallettype($this->walletType);
+            }),
+            'balance'       => $this->balance,
         ];
     }
 }

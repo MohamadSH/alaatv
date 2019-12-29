@@ -10,7 +10,7 @@ class SendMobileVerificationNotification
     /**
      * Handle the event.
      *
-     * @param  \Illuminate\Auth\Events\Registered  $event
+     * @param Registered $event
      *
      * @return void
      */

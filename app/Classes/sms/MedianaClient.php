@@ -19,30 +19,30 @@ class MedianaClient implements SmsSenderClient
      * @var int
      */
     protected $number;
-    
+
     /**
      * Username for SMS Gateway.
      *
      * @var string
      */
     protected $userName;
-    
+
     /**
      * Password for SMS Gateway.
      *
      * @var string
      */
     protected $password;
-    
+
     protected $url;
-    
+
     /**
      * The HTTP Client instance.
      *
-     * @var \GuzzleHttp\Client
+     * @var HttpClient
      */
     protected $http;
-    
+
     public function __construct(HttpClient $http, $userName, $password, $number, $url)
     {
         $this->number   = $number;
@@ -51,9 +51,9 @@ class MedianaClient implements SmsSenderClient
         $this->password = $password;
         $this->url      = $url;
     }
-    
+
     /**
-     * @param  array  $params
+     * @param array $params
      *
      * @return array
      * @throws GuzzleException
@@ -69,10 +69,10 @@ class MedianaClient implements SmsSenderClient
         if (isset($params['from'])) {
             unset($base["from"]);
         }
-        
+
         $params = array_merge($base, $params);
         //        dd($params);
-        
+
         try {
             $response = $this->http->request('POST', $url, [
                 'form_params' => $params,
@@ -80,7 +80,7 @@ class MedianaClient implements SmsSenderClient
         } catch (GuzzleException $e) {
             throw $e;
         }
-        
-        return json_decode((string) $response->getBody(), true);
+
+        return json_decode((string)$response->getBody(), true);
     }
 }

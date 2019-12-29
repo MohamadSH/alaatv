@@ -3,7 +3,6 @@
 namespace App\Http\Requests;
 
 use App\Traits\CharacterCommon;
-use Illuminate\Support\Facades\Config;
 use Illuminate\Foundation\Http\FormRequest;
 
 class InsertConsultationRequest extends FormRequest
@@ -28,13 +27,13 @@ class InsertConsultationRequest extends FormRequest
             'consultationstatus_id' => 'required|exists:consultationstatuses,id',
         ];
     }
-    
+
     public function prepareForValidation()
     {
         $this->replaceNumbers();
         parent::prepareForValidation();
     }
-    
+
     protected function replaceNumbers()
     {
         $input = $this->request->all();

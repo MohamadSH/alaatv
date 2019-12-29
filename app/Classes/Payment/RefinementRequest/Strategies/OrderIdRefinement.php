@@ -26,9 +26,9 @@ class OrderIdRefinement extends Refinement
         $orderId = $this->inputData['order_id'];
         $order   = $this->getOrder($orderId);
         if ($order !== false) {
-            $this->order = $order;
-            $this->orderUniqueId = $order->id.Carbon::now()->timestamp;
-            $this->user  = $this->order->user;
+            $this->order         = $order;
+            $this->orderUniqueId = $order->id . Carbon::now()->timestamp;
+            $this->user          = $this->order->user;
             $this->getOrderCost();
             $this->resetWalletPendingCredit();
             // ToDo: if sent open order_id user can't use wallet
@@ -37,22 +37,20 @@ class OrderIdRefinement extends Refinement
                 $this->payByWallet();
             }
 
-            if($this->cost > 0)
-            {
-                $result = $this->getNewTransaction();
+            if ($this->cost > 0) {
+                $result            = $this->getNewTransaction();
                 $this->statusCode  = $result['statusCode'];
                 $this->message     = $result['message'];
                 $this->transaction = $result['transaction'];
-            }elseif($this->cost == 0){
-                $this->statusCode = Response::HTTP_OK;
-                $this->message = 'Zero cost';
+            } else if ($this->cost == 0) {
+                $this->statusCode  = Response::HTTP_OK;
+                $this->message     = 'Zero cost';
                 $this->transaction = null;
-            }else{
+            } else {
                 $this->statusCode = Response::HTTP_BAD_REQUEST;
-                $this->message = 'Cost cant be minus';
+                $this->message    = 'Cost cant be minus';
             }
-        }
-        else {
+        } else {
             $this->statusCode = Response::HTTP_NOT_FOUND;
             $this->message    = 'سفارشی یافت نشد.';
         }
@@ -61,7 +59,7 @@ class OrderIdRefinement extends Refinement
     }
 
     /**
-     * @param  int  $orderId
+     * @param int $orderId
      *
      * @return bool|Order
      */
@@ -71,8 +69,7 @@ class OrderIdRefinement extends Refinement
             ->find($orderId);
         if (isset($order)) {
             return $order;
-        }
-        else {
+        } else {
             return false;
         }
     }

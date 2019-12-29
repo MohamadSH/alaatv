@@ -14,18 +14,17 @@ class AfterLoginFormController extends Controller
     {
         $afterLoginFormFields = Afterloginformcontrol::all()
             ->sortBy("order");
-        
+
         $sideBarMode = "closed";
         $section     = "afterLoginForm";
-        
+
         if ($request->expectsJson()) {
             return response([
                 'afterLoginFormFields' => $afterLoginFormFields,
             ], Response::HTTP_OK);
-        }
-        else {
+        } else {
             $availableFields = [];
-            
+
             return view("admin.siteConfiguration.afterLoginForm",
                 compact("afterLoginFormFields", "availableFields", "sideBarMode", "section"));
         }
@@ -35,14 +34,13 @@ class AfterLoginFormController extends Controller
     {
         $afterLoginFormField = new Afterloginformcontrol();
         $afterLoginFormField->fill($request->all());
-        
+
         if ($afterLoginFormField->save()) {
             session()->put("success", "فیلد با موفقیت اضافه شد");
-        }
-        else {
+        } else {
             session()->flash("error", "خطای پایگاه داده");
         }
-        
+
         return redirect()->back();
     }
 
@@ -50,8 +48,7 @@ class AfterLoginFormController extends Controller
     {
         if ($field->delete()) {
             session()->put("success", "فیلد با موفقیت حذف شد");
-        }
-        else {
+        } else {
             session()->put("error", "خطای پایگاه داده");
         }
 

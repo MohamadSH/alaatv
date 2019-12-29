@@ -45,7 +45,7 @@ class AlaaProductPriceCalculator extends ProductPriceCalculator
                 ],
             ],
         ];
-        
+
         return json_encode($priceInfo);
     }
 }

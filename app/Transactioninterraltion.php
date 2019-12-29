@@ -2,6 +2,10 @@
 
 namespace App;
 
+use Carbon\Carbon;
+use Eloquent;
+use Illuminate\Database\Eloquent\Builder;
+
 /**
  * App\Transactioninterraltion
  *
@@ -9,22 +13,22 @@ namespace App;
  * @property string|null         $name        نام
  * @property string|null         $displayName نام قابل نمایش
  * @property string|null         $description توضیح
- * @property \Carbon\Carbon|null $created_at
- * @property \Carbon\Carbon|null $updated_at
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
  * @property string|null         $deleted_at
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Transactioninterraltion whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Transactioninterraltion whereDeletedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Transactioninterraltion whereDescription($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Transactioninterraltion whereDisplayName($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Transactioninterraltion whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Transactioninterraltion whereName($value)
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Transactioninterraltion whereUpdatedAt($value)
- * @mixin \Eloquent
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Transactioninterraltion newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Transactioninterraltion newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\Transactioninterraltion query()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel disableCache()
- * @method static \Illuminate\Database\Eloquent\Builder|\App\BaseModel withCacheCooldownSeconds($seconds)
+ * @method static Builder|Transactioninterraltion whereCreatedAt($value)
+ * @method static Builder|Transactioninterraltion whereDeletedAt($value)
+ * @method static Builder|Transactioninterraltion whereDescription($value)
+ * @method static Builder|Transactioninterraltion whereDisplayName($value)
+ * @method static Builder|Transactioninterraltion whereId($value)
+ * @method static Builder|Transactioninterraltion whereName($value)
+ * @method static Builder|Transactioninterraltion whereUpdatedAt($value)
+ * @mixin Eloquent
+ * @method static Builder|Transactioninterraltion newModelQuery()
+ * @method static Builder|Transactioninterraltion newQuery()
+ * @method static Builder|Transactioninterraltion query()
+ * @method static Builder|BaseModel disableCache()
+ * @method static Builder|BaseModel withCacheCooldownSeconds($seconds)
  * @property-read mixed          $cache_cooldown_seconds
  */
 class Transactioninterraltion extends BaseModel

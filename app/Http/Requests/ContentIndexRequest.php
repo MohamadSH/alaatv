@@ -2,10 +2,10 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Http\Response;
-use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
+use Illuminate\Http\Response;
 
 class ContentIndexRequest extends FormRequest
 {
@@ -22,7 +22,7 @@ class ContentIndexRequest extends FormRequest
             'tags'          => 'array|min:1',
         ];
     }
-    
+
     protected function failedValidation(Validator $validator)
     {
         throw new HttpResponseException(response()->json($validator->errors(), Response::HTTP_UNPROCESSABLE_ENTITY));

@@ -2,13 +2,14 @@
 
 namespace App\HelpDesk\Controllers;
 
-use Illuminate\Http\Request;
-use App\HelpDesk\Models\Ticket;
-use App\HelpDesk\Models\Priority;
 use App\HelpDesk\Models\Category;
-use App\Http\Controllers\Controller;
-use App\HelpDesk\Repositories\TicketRepo;
+use App\HelpDesk\Models\Priority;
+use App\HelpDesk\Models\Ticket;
 use App\HelpDesk\Repositories\AgentRepository;
+use App\HelpDesk\Repositories\TicketRepo;
+use App\Http\Controllers\Controller;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Http\Request;
 
 class TicketController extends Controller
 {
@@ -16,19 +17,19 @@ class TicketController extends Controller
      * @var TicketRepo
      */
     private $ticketRepo;
-    
+
     /**
      * TicketController constructor.
      *
-     * @param  TicketRepo  $repository
+     * @param TicketRepo $repository
      */
     public function __construct(TicketRepo $repository)
     {
         $this->callMiddlewares();
         $this->ticketRepo = $repository;
     }
-    
-    
+
+
     /**
      * @param $authException
      */
@@ -49,7 +50,7 @@ class TicketController extends Controller
         ]);
         $this->middleware('permission:'.config('constants.REMOVE_EDUCATIONAL_CONTENT_ACCESS'),
             ['only' => 'destroy']);
-        
+
         $this->middleware('convert:order|title', [
             'only' => [
                 'store',
@@ -57,19 +58,19 @@ class TicketController extends Controller
             ],
         ]);*/
     }
-    
-    
+
+
     public function index()
     {
-        $userId = auth()->user()->id;
-        $tickets = $this->ticketRepo->getUserTickets($userId);
+        $userId     = auth()->user()->id;
+        $tickets    = $this->ticketRepo->getUserTickets($userId);
         $categories = Category::all();
         // User Tickets
         // Agent Tickets
         // All Tickets -> Admin
         return view('helpDesk::ticket.index', compact('tickets', 'categories'));
     }
-    
+
     public function createForm()
     {
         $categories = Category::all();
@@ -79,7 +80,8 @@ class TicketController extends Controller
 
     /**
      * @param Request $request
-     * @return Ticket|\Illuminate\Database\Eloquent\Model
+     *
+     * @return Ticket|Model
      */
     public function store(Request $request)
     {
@@ -87,8 +89,8 @@ class TicketController extends Controller
 
         $ticket = [
             'status_id' => config('helpDesk.STATUS_OPEN'),
-            'user_id' => $request->user()->id(),
-            'agent_id' => resolve(AgentRepository::class)->getActiveAgent($categoryId),
+            'user_id'   => $request->user()->id(),
+            'agent_id'  => resolve(AgentRepository::class)->getActiveAgent($categoryId),
         ];
 
         $data = $request->only(['subject', 'content', 'priority_id', 'category_id',]);

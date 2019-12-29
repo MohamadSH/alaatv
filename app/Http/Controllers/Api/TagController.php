@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Classes\TagsGroup;
 use App\Classes\RedisTagging;
+use App\Classes\TagsGroup;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Response;
-use App\Http\Requests\Request;
-use App\Http\Controllers\Controller;
 
 //https://github.com/smrchy/rest-tagging
 
@@ -17,7 +17,7 @@ class TagController extends Controller
 
     public function __construct()
     {
-        $this->redis       = app(RedisTagging::class);
+        $this->redis = app(RedisTagging::class);
     }
 
     /**
@@ -36,7 +36,7 @@ class TagController extends Controller
      *
      * true
      *
-     * @param Request|Request  $request
+     * @param Request|Request                      $request
      * @param                                      $bucket
      * @param                                      $id
      *
@@ -66,7 +66,7 @@ class TagController extends Controller
         return $response;
     }
 
-    private function callBack($err, $result, & $response)
+    private function callBack($err, $result, &$response)
     {
         if (isset($err)) {
             $response = response()->json([
@@ -86,7 +86,7 @@ class TagController extends Controller
      * GET /rt/id/:bucket/:id
      * Get all tags for an ID
      *
-     * @param  Request  $request
+     * @param Request   $request
      * @param           $bucket
      * @param           $id
      *
@@ -124,7 +124,7 @@ class TagController extends Controller
      *
      * true
      *
-     * @param  Request  $request
+     * @param Request   $request
      * @param           $bucket
      * @param           $id
      *
@@ -166,23 +166,23 @@ class TagController extends Controller
      * "limit":2,
      * "offset":4
      * }
-     * @param Request $request
+     * @param Request   $request
      * @param           $bucket
      *
      * @return null
      */
     public function index(Request $request, $bucket)
     {
-        $tags           = $request->tags;
-        $tags           = $this->normalizeTags($tags);
-        $tags           = str_replace('"', '', $tags);
-        $tags           = explode(',', mb_substr($tags, 1, -1));
+        $tags = $request->tags;
+        $tags = $this->normalizeTags($tags);
+        $tags = str_replace('"', '', $tags);
+        $tags = explode(',', mb_substr($tags, 1, -1));
 
-        $type           = $request->type ?? 'inter';
-        $limit          = $request->limit ?? 100;
-        $offset         = $request->offset ?? 0;
-        $withscores     = $request->withscores ?? 0;
-        $order          = $request->order ?? 'desc';
+        $type       = $request->type ?? 'inter';
+        $limit      = $request->limit ?? 100;
+        $offset     = $request->offset ?? 0;
+        $withscores = $request->withscores ?? 0;
+        $order      = $request->order ?? 'desc';
 
         $response = null;
         $error    = null;
@@ -211,12 +211,22 @@ class TagController extends Controller
         return response()->json($response, Response::HTTP_OK, $header, JSON_UNESCAPED_UNICODE);
     }
 
-    public function flush(Request $request)
+    /**
+     * @param $tags
+     *
+     * @return string
+     */
+    private function normalizeTags($tags): string
     {
-        abort(404);
-        $this->redis->flushDB(static function ($err, $result) {
-            return $result;
-        });
+        $lastCharacter  = mb_substr($tags, -1);
+        $firstCharacter = mb_substr($tags, 0, 1);
+        if ($firstCharacter !== '[') {
+            $tags = '[' . $tags;
+        }
+        if ($lastCharacter !== ']') {
+            $tags .= ']';
+        }
+        return $tags;
     }
 
     /**
@@ -229,21 +239,11 @@ class TagController extends Controller
         }
     }
 
-    /**
-     * @param $tags
-     *
-     * @return string
-     */
-    private function normalizeTags($tags): string
+    public function flush(Request $request)
     {
-        $lastCharacter  = mb_substr($tags, -1);
-        $firstCharacter = mb_substr($tags, 0, 1);
-        if ($firstCharacter !== '[') {
-            $tags = '['.$tags;
-        }
-        if ($lastCharacter !== ']') {
-            $tags .= ']';
-        }
-        return $tags;
+        abort(404);
+        $this->redis->flushDB(static function ($err, $result) {
+            return $result;
+        });
     }
 }
