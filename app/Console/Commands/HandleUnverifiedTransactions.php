@@ -24,7 +24,7 @@ class HandleUnverifiedTransactions extends Command
      *
      * @var string
      */
-    protected $description = 'Confirm Unverified Transactions';
+    protected $description = 'Confirms unverified transactions of  ZarinPal gateway';
 
     private $gateway;
 

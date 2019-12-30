@@ -26,7 +26,7 @@ class TagsCommand extends Command
      *
      * @var string
      */
-    protected $description = 'init tags';
+    protected $description = 'inits tags';
 
     /**
      * Create a new command instance.

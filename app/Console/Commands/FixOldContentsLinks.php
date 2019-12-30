@@ -20,7 +20,7 @@ class FixOldContentsLinks extends Command
      *
      * @var string
      */
-    protected $description = 'Command description';
+    protected $description = 'Fixes old contents links';
 
     /**
      * Create a new command instance.
