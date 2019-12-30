@@ -19,14 +19,13 @@ class CanAccessEmployeeTimeSheet
      */
     public function handle($request, Closure $next)
     {
-        return $next($request);
         /** @var User $user */
         $user = $request->user();
 
         if (!$user->can(config('constants.EDIT_EMPLOPYEE_WORK_SHEET'))) {
             if ($request->ip() != '79.127.123.246') {
                 return response()->json([
-                    'error' => 'FORBIDDEN',
+                    'error' => 'This request is forbidden from you IP',
                 ], Response::HTTP_FORBIDDEN);
             }
         }

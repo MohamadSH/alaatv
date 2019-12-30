@@ -19,7 +19,7 @@ class DetachOpenUserbonsCommand extends Command
      *
      * @var string
      */
-    protected $description = 'Detach userbons from open orders';
+    protected $description = 'Detaches user bons from open orders';
 
     /**
      * Create a new command instance.

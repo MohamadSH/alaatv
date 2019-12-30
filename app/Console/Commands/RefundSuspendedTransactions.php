@@ -22,7 +22,7 @@ class RefundSuspendedTransactions extends Command
      *
      * @var string
      */
-    protected $description = 'Command description';
+    protected $description = 'refunds suspended transactions';
 
     /**
      * Create a new command instance.

@@ -20,7 +20,7 @@ class ZeroWalletsCommand extends Command
      *
      * @var string
      */
-    protected $description = 'Command description';
+    protected $description = 'zeroes wallet credits';
 
     /**
      * Create a new command instance.
