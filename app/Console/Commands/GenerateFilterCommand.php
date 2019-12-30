@@ -18,7 +18,7 @@ class GenerateFilterCommand extends Command
      *
      * @var string
      */
-    protected $description = 'Generate a new Filter Class stub.';
+    protected $description = 'Generates a new filter class stub.';
 
     /**
      * Execute the console command.

@@ -19,7 +19,7 @@ class Eidi98 extends Command
      *
      * @var string
      */
-    protected $description = 'Give users Eidi';
+    protected $description = 'Gives gift credit to users - Norouz 98';
 
     /**
      * Create a new command instance.

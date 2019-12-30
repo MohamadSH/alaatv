@@ -21,7 +21,7 @@ class ConvertBonToWalletCommand extends Command
      *
      * @var string
      */
-    protected $description = 'Command description';
+    protected $description = 'Converts user bons to wallet credit';
 
     /**
      * Create a new command instance.

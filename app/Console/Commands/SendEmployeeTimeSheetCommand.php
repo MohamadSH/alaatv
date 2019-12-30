@@ -29,7 +29,7 @@ class SendEmployeeTimeSheetCommand extends Command
      *
      * @var string
      */
-    protected $description = 'send TimeSheet to employee';
+    protected $description = 'calculates time sheets of employees';
 
     /**
      * Create a new command instance.

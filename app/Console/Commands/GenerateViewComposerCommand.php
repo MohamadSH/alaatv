@@ -18,7 +18,7 @@ class GenerateViewComposerCommand extends Command
      *
      * @var string
      */
-    protected $description = 'Generate a new view composer Class stub.';
+    protected $description = 'Generates a new view composer class stub.';
 
     /**
      * Execute the console command.
