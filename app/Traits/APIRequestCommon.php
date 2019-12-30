@@ -18,7 +18,8 @@ trait APIRequestCommon
             }
         } catch (GuzzleException $e) {
             Log::error($e->getMessage());
-            throw new Exception($e->getMessage());
+            Log::error('APIRequestCommon:sendRequest:'.$path);
+//            throw new Exception($e->getMessage());
         }
 
         return [
