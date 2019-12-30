@@ -23,7 +23,7 @@ class LogoutAllUsersCommand extends Command
      *
      * @var string
      */
-    protected $description = 'Command description';
+    protected $description = 'signs out all users from their accounts';
 
     /**
      * Create a new command instance.

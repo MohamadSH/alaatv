@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Orderproduct;
+use Carbon\Carbon;
 use Illuminate\Console\Command;
 
 class UpdateOrderproductsTmpPriceCommand extends Command
@@ -12,14 +13,14 @@ class UpdateOrderproductsTmpPriceCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'alaaTv:update-orderproducts-tmpprice';
+    protected $signature = 'alaaTv:update-orderproducts-tmpprice {--date=}';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Command description';
+    protected $description = 'Calculating and updating orderproducts final cost';
 
     /**
      * Create a new command instance.
@@ -42,13 +43,15 @@ class UpdateOrderproductsTmpPriceCommand extends Command
             $q->whereNotIn('orderstatus_id', [config('constants.ORDER_STATUS_OPEN', config('constants.ORDER_STATUS_OPEN_DONATE'))]);
         });
 
-        if ($this->confirm('Do you want to process all of orderproducts or just new ones? type yes if you want all of them', true)) {
-            // Process all of orderproducts
-            $orderproducts = $orderproducts->get();
-        } else {
-            // Process new orderproducts with no cache
-            $orderproducts = $orderproducts->whereNull('tmp_final_cost')->get();
+        if ($this->confirm('Do you want to process only new orderproducts?', true)) {
+            $orderproducts = $orderproducts->whereNull('tmp_final_cost');
         }
+
+        if($this->hasArgument('date')){
+            $orderproducts->where('created_at' , '>' , Carbon::parse($this->argument('date')));
+        }
+
+        $orderproducts = $orderproducts->get();
 
         if ($this->confirm('Found ' . $orderproducts->count() . ' orderproducts , Do you want to proceed?', true)) {
             $bar = $this->output->createProgressBar($orderproducts->count());

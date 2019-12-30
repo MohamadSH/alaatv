@@ -22,7 +22,7 @@ class InitializeCategoryTreeCommand extends Command
      *
      * @var string
      */
-    protected $description = 'seed Category Table';
+    protected $description = 'seeds category table';
 
     /**
      * Execute the console command.
