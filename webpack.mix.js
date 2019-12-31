@@ -90,30 +90,30 @@ class Mix {
 
     mixAll() {
         this.mixBase();
-        // this.mixPages();
-        // this.mixUser();
-        // this.mixLanding();
+        this.mixPages();
+        this.mixUser();
+        this.mixLanding();
         this.mixProduct();
-        // this.mixPageContentShow();
-        // this.mixPageSetShow();
-        // this.mixCheckout();
-        // this.mixAdmin();
+        this.mixPageContentShow();
+        this.mixPageSetShow();
+        this.mixCheckout();
+        this.mixAdmin();
         this.mixCopyDirectory();
 
-        // if (this.mix.inProduction()) {
-        //     this.mix.then(() => {
-        //         this.purifyCss();
-        //
-        //         console.log('' +
-        //             '              ##       ##              ##             ##       ############## ##          ##          ####           ####      ##          ##\n' +
-        //             '             ####      ##             ####           ####            ##        ##        ##         ##    ##       ##    ##    ###        ###\n' +
-        //             '            ##  ##     ##            ##  ##         ##  ##           ##         ##      ##        ##             ##        ##  ####      ####\n' +
-        //             '           ##    ##    ##           ##    ##       ##    ##          ##          ##    ##        ##             ##          ## ## ##    ## ##\n' +
-        //             '          ##########   ##          ##########     ##########         ##           ##  ##          ##             ##        ##  ##  ##  ##  ##\n' +
-        //             '         ##        ##  ##         ##        ##   ##        ##        ##            ####      ###    ##    ##       ##    ##    ##   ####   ##\n' +
-        //             '        ##          ## ######### ##          ## ##          ##       ##             ##       ###      ####           ####      ##    ##    ##\n');
-        //     });
-        // }
+        if (this.mix.inProduction()) {
+            this.mix.then(() => {
+                this.purifyCss();
+
+                console.log('' +
+                    '              ##       ##              ##             ##       ############## ##          ##          ####           ####      ##          ##\n' +
+                    '             ####      ##             ####           ####            ##        ##        ##         ##    ##       ##    ##    ###        ###\n' +
+                    '            ##  ##     ##            ##  ##         ##  ##           ##         ##      ##        ##             ##        ##  ####      ####\n' +
+                    '           ##    ##    ##           ##    ##       ##    ##          ##          ##    ##        ##             ##          ## ## ##    ## ##\n' +
+                    '          ##########   ##          ##########     ##########         ##           ##  ##          ##             ##        ##  ##  ##  ##  ##\n' +
+                    '         ##        ##  ##         ##        ##   ##        ##        ##            ####      ###    ##    ##       ##    ##    ##   ####   ##\n' +
+                    '        ##          ## ######### ##          ## ##          ##       ##             ##       ###      ####           ####      ##    ##    ##\n');
+            });
+        }
 
         if (this.appEnv === 'development') {
 
