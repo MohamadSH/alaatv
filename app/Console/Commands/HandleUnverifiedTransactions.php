@@ -83,7 +83,7 @@ class HandleUnverifiedTransactions extends Command
             }
         }
 
-        $this->line('Verification process ended successfully');
+        $this->comment('Verification process ended successfully');
 
         return null;
     }
