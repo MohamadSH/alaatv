@@ -3847,8 +3847,13 @@ class SanatisharifmergeController extends Controller
             return redirect($newUri . $app, Response::HTTP_MOVED_PERMANENTLY);
         }
 
-        $setId = Sanatisharifmerge::where('lessonid', $lId)->where('depid', $dId)->first()->departmentlessonid;
-        return redirect(route('set.show', $setId), Response::HTTP_MOVED_PERMANENTLY);
+        $set = Sanatisharifmerge::where('lessonid', $lId)->where('depid', $dId)->first();
+        if(isset($set)){
+            $setId = Sanatisharifmerge::where('lessonid', $lId)->where('depid', $dId)->first()->departmentlessonid;
+            return redirect(route('set.show', $setId), Response::HTTP_MOVED_PERMANENTLY);
+        }
+
+        return abort(Response::HTTP_NOT_FOUND);
     }
 
     private function getDepLessonTags($lId = null, $dId = null)
