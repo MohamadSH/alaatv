@@ -52,6 +52,7 @@ class HandleUnverifiedTransactions extends Command
     {
         //ToDo : At this time this only works for Zarinpal
         $this->info('getting data from zarinpal ...');
+        $this->info("\n");
         $result = $this->getUnverifiedTransactions();
 
         if ($result['Status'] != 'success') {
@@ -61,12 +62,15 @@ class HandleUnverifiedTransactions extends Command
 
         $transactions = $result['Authorities'];
         $this->info(count($transactions) . ' unverified transactions were received');
+        $this->info("\n");
         $this->info('Verifying transactions started:');
+        $this->info("\n");
         [$notExistTransactions, $unverifiedTransactionsDueToError] = $this->handleTransactions($transactions);
         $this->info('Verifying transactions finished');
+        $this->info("\n");
 
         if (count($unverifiedTransactionsDueToError) > 0) {
-            $this->info('Gateway did not verify these transactions:');
+            $this->info('Gateway did not verify '.count($unverifiedTransactionsDueToError).' transactions:');
             $this->logError($unverifiedTransactionsDueToError);
         }
 
@@ -76,17 +80,6 @@ class HandleUnverifiedTransactions extends Command
 
         $this->info('These transactions were not found on Database');
         $this->logError($notExistTransactions);
-
-        if ($this->confirm('Do you wish to force-verify these transactions?', true)) {
-            $unverifiedTransactions = [];
-            foreach ($notExistTransactions as $item) {
-                $gateWayVerify = $this->verifyTransaction(Money::fromTomans($item['Amount']), $item['Authority']);
-                if (!$gateWayVerify->isSuccessfulPayment()) {
-                    array_push($unverifiedTransactions, $item);
-                }
-                $this->logError($unverifiedTransactions);
-            }
-        }
     }
 
     private function getUnverifiedTransactions()
@@ -108,7 +101,9 @@ class HandleUnverifiedTransactions extends Command
 
             $authority = $item['Authority'];
             $this->info($authority);
+            $this->info("\n");
 
+            /** @var \App\Transaction $transaction */
             $transaction = TransactionRepo::getTransactionByAuthority($authority)->getValue(null);
 
             if (is_null($transaction)) {
@@ -119,7 +114,26 @@ class HandleUnverifiedTransactions extends Command
             $gateWayVerify = $this->verifyTransaction($transaction->cost, $authority);
 
             if ($gateWayVerify->isSuccessfulPayment()) {
-                //ToDo : close order
+                $transactionUpdateResult = $transaction->update([
+                            'transactionstatus_id'  => config('constants.TRANSACTION_STATUS_SUCCESSFUL') ,
+                            'transactionID'         => $gateWayVerify['RefID'],
+                            'managerComment'        => 'به سایت برنگشته بود - ثبت با کامند',
+                ]);
+
+                if($transactionUpdateResult){
+                    $this->info('Transaction '.$transaction->id.' has been updated successfully');
+                    $this->info("\n");
+
+                    $order = $transaction->order;
+                    if(isset($order)){
+                        $order->update([
+                            'orderstatus_id' => config('constants.ORDER_STATUS_CLOSED'),
+                            'paymentstatus'  => config('constants.PAYMENT_STATUS_PAID')
+                        ]);
+                        $this->info('Order '.$order->id.' has been updated successfully');
+                        $this->info("\n");
+                    }
+                }
                 continue;
             }
 
@@ -137,9 +151,9 @@ class HandleUnverifiedTransactions extends Command
      */
     private function verifyTransaction($cost, $authority): OnlinePaymentVerificationResponseInterface
     {
-        //ToDo : Bug with Money::fromTomansx
-//        $result = $this->gateway->verify(Money::fromTomans($cost), $authority);
-        $result['Status'] = 'success';
+        //ToDo : Bug with Money::fromTomans
+        $result = $this->gateway->verify(Money::fromTomans($cost), $authority);
+//        $result['Status'] = 'success';
         return VerificationResponse::instance($result);
     }
 
@@ -157,6 +171,7 @@ class HandleUnverifiedTransactions extends Command
             $cellPhone = $item['CellPhone'];
             $date      = $item['Date'];
             $this->info('authority: {' . $authority . '} amount: {' . $amount . '} channel: {' . $channel . '} cellPhone: {' . $cellPhone . '} date: {' . $date . '}');
+            $this->info("\n");
         }
     }
 }
