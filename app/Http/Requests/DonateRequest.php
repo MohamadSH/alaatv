@@ -17,7 +17,7 @@ class DonateRequest extends FormRequest
     public function rules()
     {
         return [
-            "amount" => "required|integer|min:100",
+            "amount" => "required|integer|min:100|max:1000000000",
         ];
     }
 
