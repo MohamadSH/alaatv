@@ -54,8 +54,8 @@ class OrderproductController extends Controller
         $since = null;
         $till  = null;
         if ($timeFilterEnable) {
-            $since = Carbon::createFromFormat('Y-n-j H:i:s', explode(' ', $request->get('since'))[0] . ' 00:00:00');
-            $till  = Carbon::createFromFormat('Y-n-j H:i:s', explode(' ', $request->get('till'))[0] . ' 23:59:59');
+            $since = Carbon::parse($request->get('since'))->toDateTimeString();
+            $till  = Carbon::parse($request->get('till'))->toDateTimeString();
         }
 
         if ($checkoutStatus == 0) {
@@ -89,11 +89,13 @@ class OrderproductController extends Controller
 
         $checkoutResult = false;
         if ($checkoutEnable && $request->user()->can(config('constants.CHECKOUT_ORDERPRODUCT_ACCESS'))) {
-            $checkoutResult =
-                Orderproduct::whereIn('id', $orderproducts->pluck('id')->toArray())->update(['checkoutstatus_id' => config('constants.ORDERPRODUCT_CHECKOUT_STATUS_PAID')]);
+            $checkoutResult = Orderproduct::whereIn('id', $orderproducts->pluck('id')->toArray())->update(['checkoutstatus_id' => config('constants.ORDERPRODUCT_CHECKOUT_STATUS_PAID')]);
         }
 
-        $orderproducts = $orderproducts->chunk(20)[max($pageNumber, 0)];
+        $orderproducts = $orderproducts->chunk(20);
+        if($orderproducts->isNotEmpty()){
+            $orderproducts = $orderproducts[max($pageNumber, 0)];
+        }
         return response()->json([
             'orderproducts'  => $orderproducts,
             'totalNumber'    => $totalNubmer,

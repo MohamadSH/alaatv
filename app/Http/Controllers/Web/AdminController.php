@@ -951,7 +951,7 @@ class AdminController extends Controller
     {
         $pageName            = 'adminSalesReport';
         $products            = Product::orderBy('created_at', 'desc')->get();
-        $ajaxActionUrl       = action('Web\OrderproductController@index');
+        $ajaxActionUrl       = route('orderproduct.index');
         $checkoutStatuses    = Checkoutstatus::pluck('displayName', 'id')->toArray();
         $checkoutStatuses[0] = 'همه';
         $checkoutStatuses    = Arr::sortRecursive($checkoutStatuses);
