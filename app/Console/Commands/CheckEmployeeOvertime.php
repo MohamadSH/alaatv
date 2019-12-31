@@ -42,10 +42,12 @@ class CheckEmployeeOvertime extends Command
         $workTimeSheets     =
             Employeetimesheet::where('overtime_status_id', config('constants.EMPLOYEE_OVERTIME_STATUS_UNCONFIRMED'))->get();
         $workTimeSheetCount = $workTimeSheets->count();
-        if ($this->confirm('There are ' . $workTimeSheetCount . ' unconfirmed overtime sheets. Do you want to reject them?', true)) {
+        if ($this->confirm('There are ' . $workTimeSheetCount . ' unconfirmed overtime sheets. Do you want to proceed rejecting?', true)) {
+            $this->comment('Proceeding work time sheets...');
             $now                    = Carbon::now();
-            $bar                    = $this->output->createProgressBar($workTimeSheetCount);
             $rejectedTimeSheetCount = 0;
+
+            $bar                    = $this->output->createProgressBar($workTimeSheetCount);
             foreach ($workTimeSheets as $workTimeSheet) {
                 $splitedDate = explode('-', $workTimeSheet->getOriginal('date'));
                 $timePoint   = Carbon::createMidnightDate($splitedDate[0], $splitedDate[1], $splitedDate[2])->addDay();
@@ -58,12 +60,11 @@ class CheckEmployeeOvertime extends Command
                     }
                 }
                 $bar->advance();
+                $this->info("\n");
             }
             $bar->finish();
-            $this->info("\n");
-            $this->info('Rejected overtimes : ' . $rejectedTimeSheetCount);
-            $this->info("\n");
-            $this->info('Process completed successfully!');
+            $this->info($rejectedTimeSheetCount.' overtimes rejected out of total '.$workTimeSheetCount);
+            $this->comment('Process completed successfully!');
         }
     }
 }
