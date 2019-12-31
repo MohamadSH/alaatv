@@ -2,6 +2,7 @@
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Log;
 use PHPUnit\Framework\Exception;
 
@@ -21,10 +22,18 @@ trait APIRequestCommon
             Log::error('APIRequestCommon:sendRequest:'.$path);
 //            throw new Exception($e->getMessage());
         }
+        if(isset($res)){
+            return [
+                "statusCode" => $res->getStatusCode(),
+                "result"     => $res->getBody()->getContents(),
+            ];
+
+        }
 
         return [
-            "statusCode" => $res->getStatusCode(),
-            "result"     => $res->getBody()->getContents(),
+            "statusCode" => Response::HTTP_SERVICE_UNAVAILABLE,
+            "result"     => 'cURL error',
         ];
+
     }
 }
