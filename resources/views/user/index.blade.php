@@ -165,14 +165,6 @@
             <div class = "btn-group">
                 <button class = "btn btn-xs black dropdown-toggle" type = "button" data-toggle = "dropdown" aria-expanded = "false"> عملیات</button>
                 <ul class = "dropdown-menu" role = "menu" id = "{{$item->id}}">
-                    @role((config("constants.ROLE_ADMIN")))
-                    <li>
-                        <a target = "_blank" href = "{{route('web.admin.cacheclear' , ['user'=>1 , 'user_id'=>$item->id])}}">
-                            <i class = "fa fa-pencil"></i>
-                            خالی کردن کش کاربر
-                        </a>
-                    </li>
-                    @endrole
                     @permission((config('constants.SHOW_USER_ACCESS')))
                     <li>
                         <a target = "_blank" href = "{{route('user.edit' , $item)}}">
@@ -181,6 +173,14 @@
                         </a>
                     </li>
                     @endpermission
+                    @role((config("constants.ROLE_ADMIN")))
+                    <li>
+                        <a target = "_blank" href = "{{route('web.admin.cacheclear' , ['user'=>1 , 'id'=>$item->id])}}">
+                            <i class = "fa fa-battery-empty"></i>
+                            خالی کردن کش کاربر
+                        </a>
+                    </li>
+                    @endrole
                     {{--@permission((config('constants.REMOVE_USER_ACCESS')))--}}
                     <li>
                         <a class = "deleteUser" data-target = "#deleteUserConfirmationModal" data-toggle = "modal">
