@@ -971,66 +971,61 @@ class AdminController extends Controller
 
     public function adminCacheClear(Request $request)
     {
+        $id = $request->get('id');
+
         if ($request->has('product')) {
-            $productId = $request->get('product_id');
-            if (isset($productId)) {
-                Cache::tags('product_' . $productId)->flush();
-                dd("Cached data of product " . $productId . " successfully cleared");
+            if (isset($id)) {
+                Cache::tags('product_' . $id)->flush();
+                dd("Cached data of product " . $id . " successfully cleared");
             } else {
                 Cache::tags('product')->flush();
                 dd('Product cache successfully cleared');
             }
         } else if ($request->has('order')) {
-            $orderId = $request->get('order_id');
-            if (isset($orderId)) {
-                Cache::tags('order_' . $orderId)->flush();
-                dd("Cached data of order $orderId successfully cleared");
+            if (isset($id)) {
+                Cache::tags('order_' . $id)->flush();
+                dd("Cached data of order $id successfully cleared");
             } else {
                 Cache::tags('order')->flush();
                 dd('Order cache successfully cleared');
             }
         } else if ($request->has('orderproduct')) {
-            $orderproductId = $request->get('orderproduct_id');
-            if (isset($orderproductId)) {
-                Cache::tags('orderproduct_' . $orderproductId)->flush();
-                dd("Cached data of orderproduct $orderproductId successfully cleared");
+            if (isset($id)) {
+                Cache::tags('orderproduct_' . $id)->flush();
+                dd("Cached data of orderproduct $id successfully cleared");
             } else {
                 Cache::tags('orderproduct')->flush();
                 dd('Orderproduct cache successfully cleared');
             }
         } else if ($request->has('user')) {
-            $userId = $request->get('user_id');
-            if (isset($userId)) {
-                Cache::tags('user_' . $userId)->flush();
-                dd("Cached data of user $userId successfully cleared");
+            if (isset($id)) {
+                Cache::tags('user_' . $id)->flush();
+                dd("Cached data of user $id successfully cleared");
             } else {
                 Cache::tags('user')->flush();
                 dd('User Cache successfully cleared');
             }
 
         } else if ($request->has('transaction')) {
-            $transactionId = $request->get('transaction_id');
-            if (isset($transactionId)) {
-                Cache::tags('transaction_' . $transactionId)->flush();
-                dd("Cached data of transaction $transactionId successfully cleared");
+            if (isset($id)) {
+                Cache::tags('transaction_' . $id)->flush();
+                dd("Cached data of transaction $id successfully cleared");
             } else {
                 Cache::tags('transaction')->flush();
                 dd('Transaction cache successfully cleared');
             }
         } else if ($request->has('content')) {
-            $contentId = $request->get('content_id');
-            if (isset($contentId)) {
-                Cache::tags('content_' . $contentId)->flush();
-                dd("Cached data of content $contentId successfully cleared");
+            if (isset($id)) {
+                Cache::tags('content_' . $id)->flush();
+                dd("Cached data of content $id successfully cleared");
             } else {
                 Cache::tags('content')->flush();
                 dd('Content cache successfully cleared');
             }
         } else if ($request->has('set')) {
-            $setId = $request->get('set_id');
-            if (isset($setId)) {
-                Cache::tags('set_' . $setId)->flush();
-                dd("Cached data of set $setId successfully cleared");
+            if (isset($id)) {
+                Cache::tags('set_' . $id)->flush();
+                dd("Cached data of set $id successfully cleared");
             } else {
                 Cache::tags('set')->flush();
                 dd('Set cache successfully cleared');

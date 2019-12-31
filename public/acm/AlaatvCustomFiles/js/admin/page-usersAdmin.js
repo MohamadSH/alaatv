@@ -66,13 +66,13 @@ function makeDataTable_loadWithAjax_users() {
                     '                <button class="btn btn-xs black dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false"> عملیات</button>\n' +
                     '                <ul class="dropdown-menu" role="menu" id="' + row.id + '">\n' +
                     '                    <li>\n' +
-                    '                        <a target="_blank" href="/cacheclearAdmin?user=1&user_id="'+row.id+'>\n' +
-                    '                            <i class="fa fa-edit" aria-hidden="true"></i> خالی کردن کش کاربر\n' +
+                    '                        <a target="_blank" href="'+row.editLink+'">\n' +
+                    '                            <i class="fa fa-edit" aria-hidden="true"></i> ویرایش\n' +
                     '                        </a>\n' +
                     '                    </li>\n' +
                     '                    <li>\n' +
-                    '                        <a target="_blank" href="'+row.editLink+'">\n' +
-                    '                            <i class="fa fa-edit" aria-hidden="true"></i> ویرایش\n' +
+                    '                        <a target="_blank" href="/cacheclearAdmin?user=1&id=">\n' +
+                    '                            <i class="fa fa-battery-empty" aria-hidden="true"></i> خالی کردن کش کاربر\n' +
                     '                        </a>\n' +
                     '                    </li>\n' +
                     '                    <li>\n' +

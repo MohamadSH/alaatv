@@ -2,7 +2,6 @@ var MapSVG = function () {
 
     var farsaneSetIdArray = [],
         marker = true,
-        panzoom,
         delta,
         direction,
         interval = 1,
@@ -21,6 +20,21 @@ var MapSVG = function () {
         } else {
             return [];
         }
+    }
+
+    function getTotalMapSteps() {
+        return Object.assign({}, getMapStepLevel1(), getMapStepLevel2());
+    }
+
+    function getsetDataFromId(setId) {
+        var totalMapSteps = getTotalMapSteps();
+        for (let key in totalMapSteps){
+            if (parseInt(totalMapSteps[key].contentId) === parseInt(setId)) {
+                totalMapSteps[key].elementId = key;
+                return totalMapSteps[key];
+            }
+        }
+        return null;
     }
 
     function getMajorStep() {
@@ -414,6 +428,10 @@ var MapSVG = function () {
 
         if (zoomLevel === 1) {
             $(document).on('click', '.farsangStep, .MajorStep', function () {
+                const timeAfterPanzoomend = Date.now() - window.RaheAbrishamPanZoom.panzoomLastPanTime;
+                if (timeAfterPanzoomend < 500) {
+                    return false;
+                }
                 var itemId = $(this).attr('id'),
                     contentId = getSetIdFromElementId(itemId);
                 if (typeof contentId !== 'undefined' && contentId.trim().length>0) {
@@ -423,6 +441,10 @@ var MapSVG = function () {
                 }
             });
             $(document).on('touchend', '.farsangStep, .MajorStep', function () {
+                const timeAfterPanzoomend = Date.now() - window.RaheAbrishamPanZoom.panzoomLastPanTime;
+                if (timeAfterPanzoomend < 500) {
+                    return false;
+                }
                 var itemId = $(this).attr('id'),
                     contentId = getSetIdFromElementId(itemId);
                 if (typeof contentId !== 'undefined' && contentId.trim().length>0) {
@@ -433,6 +455,10 @@ var MapSVG = function () {
             });
         } else if (zoomLevel === 2) {
             $(document).on('click', '.farsangStep-cityItem, .MajorStep', function () {
+                const timeAfterPanzoomend = Date.now() - window.RaheAbrishamPanZoom.panzoomLastPanTime;
+                if (timeAfterPanzoomend < 500) {
+                    return false;
+                }
                 var itemId = $(this).attr('id'),
                     sectionId = $(this).attr('data-section-id'),
                     setId = getSetIdFromElementId(itemId);
@@ -443,6 +469,10 @@ var MapSVG = function () {
                 }
             });
             $(document).on('touchend', '.farsangStep-cityItem, .MajorStep', function () {
+                const timeAfterPanzoomend = Date.now() - window.RaheAbrishamPanZoom.panzoomLastPanTime;
+                if (timeAfterPanzoomend < 500) {
+                    return false;
+                }
                 var itemId = $(this).attr('id'),
                     sectionId = $(this).attr('data-section-id'),
                     setId = getSetIdFromElementId(itemId);
@@ -552,7 +582,7 @@ var MapSVG = function () {
     }
 
     function getZoomLevel() {
-        // if (panzoom.getScale() > 1.7) {
+        // if (window.RaheAbrishamPanZoom.getScale() > 1.7) {
         if ( $('#farsang-step-1')[0].getBoundingClientRect().width > 180) {
             return 2;
         } else {
@@ -589,13 +619,13 @@ var MapSVG = function () {
         return $('.productPicture').width();
     }
 
-    function getHeightOfMapOnInit() {
-        return $('#farsangMappSvg').height();
+    function getHeightOfMapSvg() {
+        return $('#farsangMapSvg').height();
     }
 
     function calculateMapZoomForInit() {
         var farsangMapHeight = getFarsangMapHeight(),
-            heightOfMapOnInit = getHeightOfMapOnInit(),
+            heightOfMapOnInit = getHeightOfMapSvg(),
             zoom = farsangMapHeight/heightOfMapOnInit;
         return zoom;
     }
@@ -625,18 +655,20 @@ var MapSVG = function () {
         setHeightOfMap();
         var svgMapElement = getSvgMapElement(),
             startScale = calculateMapZoomForInit();
-
+        var panY = (getMapContainerBoundingClientRect().height - $(getSvgMapElement()).height())/2;
         // https://github.com/timmywil/panzoom#documentation
-        panzoom = Panzoom(svgMapElement, {
-            contain: 'outside',
+        window.RaheAbrishamPanZoom = Panzoom(svgMapElement, {
+            // contain: 'outside',
             // panOnlyWhenZoomed: false,
-            step: 1.5, // The step affects zoom calculation when zooming with a mouse wheel, when pinch zooming, or when using zoomIn/zoomOut
-            startScale: startScale, // Scale used to set the beginning transform
+            startX: 0,
+            startY: panY,
+            step: 0.6, // The step affects zoom calculation when zooming with a mouse wheel, when pinch zooming, or when using zoomIn/zoomOut
+            startScale: 1, // Scale used to set the beginning transform
             maxScale: 15, // The maximum scale when zooming
-            minScale: startScale // The minimum scale when zooming
+            minScale: 1 // The minimum scale when zooming
         });
 
-        // panzoom.zoom(startScale, {
+        // window.RaheAbrishamPanZoom.zoom(startScale, {
         //     disableZoom: false,
         //     step: 1.5,
         //     focal: {
@@ -646,7 +678,7 @@ var MapSVG = function () {
         //     maxScale: 2000,
         //     minScale: 1,
         // });
-        // panzoom.pan(5, 5);
+        // window.RaheAbrishamPanZoom.pan(0, panY);
         addEventListener();
     }
 
@@ -655,15 +687,17 @@ var MapSVG = function () {
     }
 
     function getSvgMapElement() {
-        return document.getElementById('farsangMappSvg');
+        return document.getElementById('farsangMapSvg');
     }
 
     function addEventListener() {
         var svgMapElement = getSvgMapElement();
         const parent = svgMapElement.parentElement;
-        // parent.addEventListener('wheel', panzoom.zoomWithWheel)
         parent.addEventListener('wheel',wheelEvent);
 
+        document.addEventListener('scroll',function () {
+            hideAllTooltip();
+        });
         document.addEventListener('wheel',function () {
             hideAllTooltip();
         });
@@ -674,11 +708,14 @@ var MapSVG = function () {
             hideAllTooltip();
         });
         svgMapElement.addEventListener('panzoomend', (event) => {
-            // refreshMapEvents();
-            showAllTooltip();
+            // showAllTooltip();
         });
         svgMapElement.addEventListener('panzoompan', (event) => {
-            // refreshMapEvents();
+            window.RaheAbrishamPanZoom.panzoomLastPanTime = Date.now();
+            hideAllTooltip();
+            checkPanzoomEnd(function () {
+                showAllTooltip();
+            });
         });
 
         $(document).on('AnimateScrollTo.beforeScroll', function () {
@@ -687,9 +724,18 @@ var MapSVG = function () {
         setClickOnStepsEvent();
     }
 
+    function checkPanzoomEnd(callback) {
+        var checkPanzoomEndInterval = setInterval(function(){
+            if (Date.now() - window.RaheAbrishamPanZoom.panzoomLastPanTime > 200) {
+                clearInterval(checkPanzoomEndInterval)
+                callback();
+            }
+        },1);
+    }
+
     function wheelEvent(e){
         if (!e.shiftKey) {
-            panzoom.zoomWithWheel(e);
+            window.RaheAbrishamPanZoom.zoomWithWheel(e);
         }
         counter1 += 1;
         delta = e.deltaY;
@@ -734,17 +780,103 @@ var MapSVG = function () {
         setStepPointer();
     }
 
+    function panzoomPanErorrOnZoom(scale) {
+        // return 0;
+        const screenWidth = screen.width;
+        if (screenWidth > 1900) {
+            return 372.1671+((-101753.767)/(1+Math.pow((scale/0.0037076), 1.001775))); // 1900
+        } else if (screenWidth > 1700 && screenWidth <= 1900) {
+            return 339.1056 + (-3179.989 - 339.1056)/(1 + Math.pow((scale/0.1320686), 1.105657)); // 1800
+        } else if (screenWidth > 1600 && screenWidth <= 1700) {
+            return 317.7049 + (-3033.846 - 317.7049)/(1 + Math.pow((scale/0.1251884), 1.085904)); // 1700
+        } else if (screenWidth > 1500 && screenWidth <= 1600) {
+            return 359.1944 + (-6248.578 - 359.1944)/(1 + Math.pow((scale/0.06776716), 1.061137)); // 1600
+        } else if (screenWidth > 1400 && screenWidth <= 1500) {
+            return 339.2789 + (-69161210 - 339.2789)/(1 + Math.pow((scale/0.000004864994), 0.9993379)); // 1500
+        } else if (screenWidth > 1300 && screenWidth <= 1400) {
+            return 310.4541 + (-9540.703 - 310.4541)/(1 + Math.pow((scale/0.0370381), 1.039291)); // 1400
+        } else if (screenWidth > 1200 && screenWidth <= 1300) {
+            return 294.3495 + (-65479400 - 294.3495)/(1 + Math.pow((scale/0.000008558685), 1.0552)); // 1300
+        } else if (screenWidth > 1100 && screenWidth <= 1200) {
+            return 262.7934 + (-15562.99 - 262.7934)/(1 + Math.pow((scale/0.01820427), 1.018768)); // 1200
+        } else if (screenWidth > 1000 && screenWidth <= 1100) {
+            return 236.3133 + (-3230.551 - 236.3133)/(1 + Math.pow((scale/0.08768135), 1.074454)); // 1100
+        } else if (screenWidth > 991 && screenWidth <= 1000) {
+            return 213.6003 + (-28119400 - 213.6003)/(1 + Math.pow((scale/0.000007497526), 0.9989063)); // 1000
+        } else if (screenWidth <= 991) {
+            return 0;
+        }
+    }
+
+    function getLeftElementRelativeToMap(elementId) {
+        return $('#'+elementId)[0].getBoundingClientRect().left - $('#farsangMapSvg')[0].getBoundingClientRect().left;
+    }
+    function getTopElementRelativeToMap(elementId) {
+        return $('#'+elementId)[0].getBoundingClientRect().top - $('#farsangMapSvg')[0].getBoundingClientRect().top;
+    }
+
+    function getPanLeftToFocus(elementId) {
+        const halfElementWidth = ($('#' + elementId)[0].getBoundingClientRect().width / 2),
+            halfMapWidth = ($('#farsangMapSvg')[0].getBoundingClientRect().width / 2),
+            leftElementRelativeToMap = getLeftElementRelativeToMap(elementId);
+        return (leftElementRelativeToMap - halfMapWidth + halfElementWidth)*-1;
+    }
+
+    function getPanTopToFocus(elementId) {
+        const mapSvgHeight = $('#farsangMapSvg')[0].getBoundingClientRect().height,
+            halfElementHeight = ($('#' + elementId)[0].getBoundingClientRect().height / 2),
+            halfMapHeight = (mapSvgHeight / 2),
+            absTopMapContainerRelativeToSvgMap = Math.abs(getTopElementRelativeToMap('mapContainer')),
+            topMapContainerRelativeToSvgMapGap = (absTopMapContainerRelativeToSvgMap > 0) ? absTopMapContainerRelativeToSvgMap : 0,
+            topElementRelativeToMap = getTopElementRelativeToMap(elementId);
+
+        return (halfMapHeight - topElementRelativeToMap - halfElementHeight) - topMapContainerRelativeToSvgMapGap;
+    }
+
+    function panAndZoomTo(x, y, scale) {
+        window.RaheAbrishamPanZoom.zoom(scale, { animate: true });
+        window.RaheAbrishamPanZoom.pan(x, y);
+    }
+
+    function panToObject(elementId) {
+        if (elementId === null) {
+            return;
+        }
+        window.RaheAbrishamPanZoom.reset();
+        setTimeout(function () {
+            const scale = calculateDynamicScale(elementId);
+            var panErorrOnZoom = panzoomPanErorrOnZoom(scale),
+                panTopToFocus = getPanTopToFocus(elementId);
+            panAndZoomTo(getPanLeftToFocus(elementId), panTopToFocus + panErorrOnZoom, scale);
+            setTimeout(function () {
+                refreshAllTooltip();
+            }, 1000);
+        }, 500);
+    }
+
+    function calculateDynamicScale(elementId) {
+        return (0.6*$('#mapContainer')[0].getBoundingClientRect().height)/$('#'+elementId)[0].getBoundingClientRect().height;
+    }
+
     return {
         init: function () {
             setFarsangSetIdArray();
             initPanZoom();
             setStepsDataAttributes();
             setStepPointer();
-            setStepsTooltip();
+            // setStepsTooltip();
+            hideAllTooltip();
         },
         getFarsangSteps: function () {
             setFarsangSetIdArray();
             return farsaneSetIdArray;
+        },
+        getsetDataFromId: function (setId) {
+            setFarsangSetIdArray();
+            return getsetDataFromId(setId);
+        },
+        panToObject: function (elementId) {
+            panToObject(elementId)
         }
     }
 }();
@@ -775,6 +907,7 @@ var EntekhabeFarsang = function () {
             showSection(sectionId);
         }
         farsangStepUpdate(data.set.id);
+        MapSVG.panToObject(MapSVG.getsetDataFromId(data.set.id).elementId);
         hideLoading();
     }
 
@@ -1326,10 +1459,10 @@ var InitAbrishamPage = function () {
     return {
         init: function (lastSetData, allSetsOfRaheAbrisham) {
 
-            initRepurchaseRowAndHelpMessageRow();
-            EntekhabeFarsang.init(lastSetData);
             makePageBoxedForLargScreen();
             MapSVG.init(allSetsOfRaheAbrisham);
+            EntekhabeFarsang.init(lastSetData);
+            initRepurchaseRowAndHelpMessageRow();
             initCustomDropDown();
             initScrollCarousel();
             initLiveDescription();
@@ -1340,54 +1473,7 @@ var InitAbrishamPage = function () {
 }();
 
 jQuery(document).ready(function () {
-
     if (typeof lastSetData !== 'undefined') {
         InitAbrishamPage.init(lastSetData, allSetsOfRaheAbrisham);
     }
-
-    // function renderNested(template_string, translate) {
-    //     return function() {
-    //         return function(text, render) {
-    //             return Mustache.to_html(template_string, translate(render(text)));
-    //         };
-    //     };
-    // }
-    // var template = $("#ScrollCarousel_base").html();
-    // var nested_template = $("#ScrollCarousel_item").html();
-    // var model = {
-    //     data: {
-    //         names: [
-    //             { name: "Foo" },
-    //             { name: "Bar" }
-    //         ],
-    //         nested: renderNested(nested_template, function(text) {
-    //             return { name: text };
-    //         })
-    //     }
-    // };
-    // var result = Mustache.to_html(template, model);
-    // $("#mustacheTest").html( result );
-
-
-    // function MustacheLoadUser(template, renderedData) {
-    //     Mustache.parse(template);   // optional, speeds up future uses
-    //     return Mustache.render(template, renderedData);
-    // }
-    //
-    // $('#mustacheTest').html(MustacheLoadUser($('#ScrollCarousel_base').html(), {
-    //     items: [
-    //         {src:'https://cdn.alaatv.com/media/thumbnails/562/562000kfbv.jpg?w=210&h=118'},
-    //         {src:'https://cdn.alaatv.com/media/thumbnails/580/580000moza.jpg?w=210&h=118'},
-    //         {src:'https://cdn.alaatv.com/media/thumbnails/580/580001kmvz.jpg?w=210&h=118'},
-    //         {src:'https://cdn.alaatv.com/media/thumbnails/586/586000zero.jpg?w=210&h=118'}
-    //     ],
-    //     item : function(text, render) {
-    //         return Mustache.to_html($('#ScrollCarousel_item').html(), {
-    //             src: this.src
-    //         });
-    //     }
-    // }));
-
-    // imageObserver.observe();
-
 });
