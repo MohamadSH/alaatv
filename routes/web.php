@@ -237,7 +237,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::resource('assignment', 'Web\AssignmentController');
     Route::resource('consultation', 'Web\ConsultationController');
     Route::resource('transaction', 'Web\TransactionController');
-    Route::resource('order', 'Web\OrderController');
+    Route::resource('order', '\\'.OrderController::class);
     Route::resource('permission', 'Web\PermissionController');
     Route::resource('role', 'Web\RoleController');
     Route::resource('coupon', 'Web\CouponController');
