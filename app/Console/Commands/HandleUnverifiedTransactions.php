@@ -51,35 +51,41 @@ class HandleUnverifiedTransactions extends Command
     public function handle()
     {
         //ToDo : At this time this only works for Zarinpal
-        $this->info('getting data from zarinpal ...');
-        $this->info("\n");
+        $this->comment('Getting data from ZarinPal...');
         $result = $this->getUnverifiedTransactions();
-
         if ($result['Status'] != 'success') {
-            $this->info('Failed on receiving unverified transactions. Response status: ' . $result['Status']);
+            $this->error('Failed on receiving data from ZarinPal. Response status: ' . $result['Status']);
             return null;
         }
 
         $transactions = $result['Authorities'];
-        $this->info(count($transactions) . ' unverified transactions were received');
-        $this->info("\n");
-        $this->info('Verifying transactions started:');
-        $this->info("\n");
-        [$notExistTransactions, $unverifiedTransactionsDueToError] = $this->handleTransactions($transactions);
-        $this->info('Verifying transactions finished');
-        $this->info("\n");
 
-        if (count($unverifiedTransactionsDueToError) > 0) {
-            $this->info('Gateway did not verify '.count($unverifiedTransactionsDueToError).' transactions:');
-            $this->logError($unverifiedTransactionsDueToError);
-        }
-
-        if (count($notExistTransactions) == 0) {
+        if(is_null($transactions)){
+            $this->info('There are no unverified transactions');
             return null;
         }
 
-        $this->info('These transactions were not found on Database');
-        $this->logError($notExistTransactions);
+        if ($this->confirm('Found '.count($transactions) . ' unverified transactions. Do you want to proceed?', true)) {
+            $this->info('Verification process started:');
+            [$notExistTransactions, $unverifiedTransactionsDueToError] = $this->handleTransactions($transactions);
+
+
+            $unverifiedTransactionsCount = count($unverifiedTransactionsDueToError);
+            if ($unverifiedTransactionsCount > 0) {
+                $this->info('ZarinPal did not verify ' . $unverifiedTransactionsCount.' transactions:');
+                $this->logError($unverifiedTransactionsDueToError);
+            }
+
+            $notExistTransactionsCount = count($notExistTransactions);
+            if ($notExistTransactionsCount > 0) {
+                $this->info('There were ' . $notExistTransactionsCount.' unknown transactions:');
+                $this->logError($notExistTransactions);
+            }
+        }
+
+        $this->line('Verification process ended successfully');
+
+        return null;
     }
 
     private function getUnverifiedTransactions()
@@ -97,19 +103,25 @@ class HandleUnverifiedTransactions extends Command
     {
         $notExistTransactions             = [];
         $unverifiedTransactionsDueToError = [];
+        $bar = $this->output->createProgressBar(count($transactions));
         foreach ($transactions as $item) {
 
             $authority = $item['Authority'];
-            $this->info($authority);
-            $this->info("\n");
+            $this->info('Processing authority number '.$authority);
 
             /** @var \App\Transaction $transaction */
             $transaction = TransactionRepo::getTransactionByAuthority($authority)->getValue(null);
 
             if (is_null($transaction)) {
+                $this->error('No transaction found for this authority');
+
                 array_push($notExistTransactions, $item);
+                $bar->advance();
+                $this->info("\n");
                 continue;
             }
+
+            $this->info('Found transaction '.$transaction->id.' for this authority');
 
             $gateWayVerify = $this->verifyTransaction($transaction->cost, $authority);
 
@@ -122,7 +134,6 @@ class HandleUnverifiedTransactions extends Command
 
                 if($transactionUpdateResult){
                     $this->info('Transaction '.$transaction->id.' has been updated successfully');
-                    $this->info("\n");
 
                     $order = $transaction->order;
                     if(isset($order)){
@@ -130,15 +141,21 @@ class HandleUnverifiedTransactions extends Command
                             'orderstatus_id' => config('constants.ORDER_STATUS_CLOSED'),
                             'paymentstatus'  => config('constants.PAYMENT_STATUS_PAID')
                         ]);
-                        $this->info('Order '.$order->id.' has been updated successfully');
-                        $this->info("\n");
+                        $this->info('Order '.$order->id.' of transaction '.$transaction->id.' has been updated successfully');
                     }
                 }
+                $bar->advance();
                 continue;
             }
+            $this->error('ZarinPal did not verify transaction '.$transaction->id);
 
             array_push($unverifiedTransactionsDueToError, $item);
+
+            $bar->advance();
+            $this->info("\n");
         }
+
+        $bar->finish();
 
         return [$notExistTransactions, $unverifiedTransactionsDueToError];
     }
@@ -171,7 +188,6 @@ class HandleUnverifiedTransactions extends Command
             $cellPhone = $item['CellPhone'];
             $date      = $item['Date'];
             $this->info('authority: {' . $authority . '} amount: {' . $amount . '} channel: {' . $channel . '} cellPhone: {' . $cellPhone . '} date: {' . $date . '}');
-            $this->info("\n");
         }
     }
 }
