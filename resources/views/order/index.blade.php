@@ -30,13 +30,13 @@
                 <span class = "user_id hidden" id = "{{$order->user->id}}"></span>
                 @permission((config('constants.SHOW_ORDER_ACCESS')))
                 <a target = "_blank" class = "btn btn-success" href = "{{action("Web\OrderController@edit" , $order)}}">
-                    <i class = "fa fa-pencil"></i>
+                    <i class = "fa fa-pencil" aria-hidden = "true"></i>
                     اصلاح
                 </a>
                 @endpermission @permission((config('constants.REMOVE_ORDER_ACCESS')))
                 @role((config("constants.ROLE_ADMIN")))
                 <a target = "_blank" class = "btn btn-accent" href = "{{route('web.admin.cacheclear' , ['order'=>1 , 'id'=>$order->id])}}">
-                    <i class = "fa fa-battery-empty"></i>
+                    <i class = "fa fa-battery-empty" aria-hidden = "true"></i>
                     خالی کردن کش سفارش
                 </a>
                 @endrole

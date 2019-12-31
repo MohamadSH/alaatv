@@ -71,7 +71,7 @@ function makeDataTable_loadWithAjax_users() {
                     '                        </a>\n' +
                     '                    </li>\n' +
                     '                    <li>\n' +
-                    '                        <a target="_blank" href="/cacheclearAdmin?user=1&id="'+row.id+'>\n' +
+                    '                        <a target="_blank" href="/cacheclearAdmin?user=1&id=">\n' +
                     '                            <i class="fa fa-battery-empty" aria-hidden="true"></i> خالی کردن کش کاربر\n' +
                     '                        </a>\n' +
                     '                    </li>\n' +
