@@ -6,7 +6,6 @@
         .fa-ban:before {
             content:"\f05e"
         }
-
     </style>
 @endsection
 

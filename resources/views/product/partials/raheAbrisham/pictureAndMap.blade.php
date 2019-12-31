@@ -17,7 +17,7 @@
                         <div class="row no-gutters">
                             <div class="col-lg-3 pictureCol">
                                 <div>
-                                    <img src="{{$product->photo}}?w=400&h=400" alt="عکس محصول@if(isset($product->name)) {{$product->name}} @endif" class="img-fluid productPicture m--marginless a--full-width"/>
+                                    <img data-src="{{$product->photo}}" src="https://cdn.alaatv.com/loder.jpg?w=16&h=9" width="400" height="400" alt="عکس محصول@if(isset($product->name)) {{$product->name}} @endif" class="img-fluid productPicture lazy-image m--marginless a--full-width"/>
                                     <button type="button" class="btn m-btn--square btn-metal a--full-width m--margin-top-5 btnShowRepurchase">
                                         <p class="display-6 m--marginless">
                                             خرید مجدد این دوره

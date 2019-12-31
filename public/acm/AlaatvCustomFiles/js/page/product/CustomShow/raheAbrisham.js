@@ -2,7 +2,6 @@ var MapSVG = function () {
 
     var farsaneSetIdArray = [],
         marker = true,
-        panzoom,
         delta,
         direction,
         interval = 1,
@@ -414,6 +413,10 @@ var MapSVG = function () {
 
         if (zoomLevel === 1) {
             $(document).on('click', '.farsangStep, .MajorStep', function () {
+                const timeAfterPanzoomend = Date.now() - window.RaheAbrishamPanZoom.panzoomLastPanTime;
+                if (timeAfterPanzoomend < 500) {
+                    return false;
+                }
                 var itemId = $(this).attr('id'),
                     contentId = getSetIdFromElementId(itemId);
                 if (typeof contentId !== 'undefined' && contentId.trim().length>0) {
@@ -423,6 +426,10 @@ var MapSVG = function () {
                 }
             });
             $(document).on('touchend', '.farsangStep, .MajorStep', function () {
+                const timeAfterPanzoomend = Date.now() - window.RaheAbrishamPanZoom.panzoomLastPanTime;
+                if (timeAfterPanzoomend < 500) {
+                    return false;
+                }
                 var itemId = $(this).attr('id'),
                     contentId = getSetIdFromElementId(itemId);
                 if (typeof contentId !== 'undefined' && contentId.trim().length>0) {
@@ -433,6 +440,10 @@ var MapSVG = function () {
             });
         } else if (zoomLevel === 2) {
             $(document).on('click', '.farsangStep-cityItem, .MajorStep', function () {
+                const timeAfterPanzoomend = Date.now() - window.RaheAbrishamPanZoom.panzoomLastPanTime;
+                if (timeAfterPanzoomend < 500) {
+                    return false;
+                }
                 var itemId = $(this).attr('id'),
                     sectionId = $(this).attr('data-section-id'),
                     setId = getSetIdFromElementId(itemId);
@@ -443,6 +454,10 @@ var MapSVG = function () {
                 }
             });
             $(document).on('touchend', '.farsangStep-cityItem, .MajorStep', function () {
+                const timeAfterPanzoomend = Date.now() - window.RaheAbrishamPanZoom.panzoomLastPanTime;
+                if (timeAfterPanzoomend < 500) {
+                    return false;
+                }
                 var itemId = $(this).attr('id'),
                     sectionId = $(this).attr('data-section-id'),
                     setId = getSetIdFromElementId(itemId);
@@ -552,7 +567,7 @@ var MapSVG = function () {
     }
 
     function getZoomLevel() {
-        // if (panzoom.getScale() > 1.7) {
+        // if (window.RaheAbrishamPanZoom.getScale() > 1.7) {
         if ( $('#farsang-step-1')[0].getBoundingClientRect().width > 180) {
             return 2;
         } else {
@@ -589,13 +604,13 @@ var MapSVG = function () {
         return $('.productPicture').width();
     }
 
-    function getHeightOfMapOnInit() {
-        return $('#farsangMappSvg').height();
+    function getHeightOfMapSvg() {
+        return $('#farsangMapSvg').height();
     }
 
     function calculateMapZoomForInit() {
         var farsangMapHeight = getFarsangMapHeight(),
-            heightOfMapOnInit = getHeightOfMapOnInit(),
+            heightOfMapOnInit = getHeightOfMapSvg(),
             zoom = farsangMapHeight/heightOfMapOnInit;
         return zoom;
     }
@@ -625,18 +640,20 @@ var MapSVG = function () {
         setHeightOfMap();
         var svgMapElement = getSvgMapElement(),
             startScale = calculateMapZoomForInit();
-
+        var panY = (getMapContainerBoundingClientRect().height - $(getSvgMapElement()).height())/2;
         // https://github.com/timmywil/panzoom#documentation
-        panzoom = Panzoom(svgMapElement, {
-            contain: 'outside',
-            // panOnlyWhenZoomed: false,
-            step: 1.5, // The step affects zoom calculation when zooming with a mouse wheel, when pinch zooming, or when using zoomIn/zoomOut
-            startScale: startScale, // Scale used to set the beginning transform
+        window.RaheAbrishamPanZoom = Panzoom(svgMapElement, {
+            // contain: 'outside',
+            panOnlyWhenZoomed: false,
+            startX: 0,
+            startY: panY,
+            step: 0.3, // The step affects zoom calculation when zooming with a mouse wheel, when pinch zooming, or when using zoomIn/zoomOut
+            startScale: 1, // Scale used to set the beginning transform
             maxScale: 15, // The maximum scale when zooming
-            minScale: startScale // The minimum scale when zooming
+            minScale: 1 // The minimum scale when zooming
         });
 
-        // panzoom.zoom(startScale, {
+        // window.RaheAbrishamPanZoom.zoom(startScale, {
         //     disableZoom: false,
         //     step: 1.5,
         //     focal: {
@@ -646,7 +663,7 @@ var MapSVG = function () {
         //     maxScale: 2000,
         //     minScale: 1,
         // });
-        // panzoom.pan(5, 5);
+        // window.RaheAbrishamPanZoom.pan(0, panY);
         addEventListener();
     }
 
@@ -655,15 +672,17 @@ var MapSVG = function () {
     }
 
     function getSvgMapElement() {
-        return document.getElementById('farsangMappSvg');
+        return document.getElementById('farsangMapSvg');
     }
 
     function addEventListener() {
         var svgMapElement = getSvgMapElement();
         const parent = svgMapElement.parentElement;
-        // parent.addEventListener('wheel', panzoom.zoomWithWheel)
         parent.addEventListener('wheel',wheelEvent);
 
+        document.addEventListener('scroll',function () {
+            hideAllTooltip();
+        });
         document.addEventListener('wheel',function () {
             hideAllTooltip();
         });
@@ -674,11 +693,14 @@ var MapSVG = function () {
             hideAllTooltip();
         });
         svgMapElement.addEventListener('panzoomend', (event) => {
-            // refreshMapEvents();
-            showAllTooltip();
+            // showAllTooltip();
         });
         svgMapElement.addEventListener('panzoompan', (event) => {
-            // refreshMapEvents();
+            window.RaheAbrishamPanZoom.panzoomLastPanTime = Date.now();
+            hideAllTooltip();
+            checkPanzoomEnd(function () {
+                showAllTooltip();
+            });
         });
 
         $(document).on('AnimateScrollTo.beforeScroll', function () {
@@ -687,9 +709,18 @@ var MapSVG = function () {
         setClickOnStepsEvent();
     }
 
+    function checkPanzoomEnd(callback) {
+        var checkPanzoomEndInterval = setInterval(function(){
+            if (Date.now() - window.RaheAbrishamPanZoom.panzoomLastPanTime > 200) {
+                clearInterval(checkPanzoomEndInterval)
+                callback();
+            }
+        },1);
+    }
+
     function wheelEvent(e){
         if (!e.shiftKey) {
-            panzoom.zoomWithWheel(e);
+            window.RaheAbrishamPanZoom.zoomWithWheel(e);
         }
         counter1 += 1;
         delta = e.deltaY;
@@ -734,18 +765,82 @@ var MapSVG = function () {
         setStepPointer();
     }
 
+
+    function getLeftElementRelativeToMap(elementId) {
+        return $('#'+elementId)[0].getBoundingClientRect().left - $('#farsangMapSvg')[0].getBoundingClientRect().left;
+    }
+    function getTopElementRelativeToMap(elementId, scale) {
+        const mapSvgHeight = $('#farsangMapSvg')[0].getBoundingClientRect().height,
+            mapContainerHeight = $('#mapContainer')[0].getBoundingClientRect().height,
+            topElementRelativeToMap = $('#'+elementId)[0].getBoundingClientRect().top - $('#farsangMapSvg')[0].getBoundingClientRect().top;
+
+        // if (mapContainerHeight > mapSvgHeight) {
+        //     const containerGap = ( mapContainerHeight - mapSvgHeight ) / scale;
+        //     return topElementRelativeToMap - containerGap;
+        // }
+
+        return topElementRelativeToMap;
+    }
+
+    function getPanLeftToFocus(elementId) {
+        const halfElementWidth = ($('#' + elementId)[0].getBoundingClientRect().width / 2),
+            halfMapWidth = ($('#farsangMapSvg')[0].getBoundingClientRect().width / 2),
+            leftElementRelativeToMap = getLeftElementRelativeToMap(elementId);
+        return (leftElementRelativeToMap - halfMapWidth + halfElementWidth)*-1;
+    }
+
+    function getPanTopToFocus(elementId, scale) {
+        // mapContainer
+        const mapSvgHeight = $('#farsangMapSvg')[0].getBoundingClientRect().height,
+            halfElementHeight = ($('#' + elementId)[0].getBoundingClientRect().height / 2),
+            halfMapHeight = (mapSvgHeight / 2),
+            topElementRelativeToMap = getTopElementRelativeToMap(elementId, scale),
+            mapContainerHeight = $('#mapContainer')[0].getBoundingClientRect().height;
+        // if (mapContainerHeight > mapSvgHeight) {
+        //     const containerGap = ( (mapContainerHeight-mapSvgHeight)/2 );
+        //     // return (topElementRelativeToMap - halfMapHeight + halfElementHeight + containerGap )*-1;
+        // }
+        return (topElementRelativeToMap - halfMapHeight + halfElementHeight)*-1;
+    }
+
+    function panAndZoomTo(x, y, scale) {
+        window.RaheAbrishamPanZoom.pan(x, y);
+        window.RaheAbrishamPanZoom.zoom(scale, { animate: true });
+    }
+
+    function panToObject(elementId, scale) {
+        window.RaheAbrishamPanZoom.reset();
+        panAndZoomTo(getPanLeftToFocus(elementId), getPanTopToFocus(elementId, scale), scale);
+        setTimeout(function () {
+            refreshAllTooltip();
+        }, 1000);
+    }
+
     return {
         init: function () {
             setFarsangSetIdArray();
             initPanZoom();
             setStepsDataAttributes();
             setStepPointer();
-            setStepsTooltip();
+            // setStepsTooltip();
+            hideAllTooltip();
         },
         getFarsangSteps: function () {
             setFarsangSetIdArray();
             return farsaneSetIdArray;
-        }
+        },
+        panToObject: function (elementId, scale) {
+            panToObject(elementId, scale)
+        },
+        // getPanLeftToFocus: function (elementId) {
+        //     return getPanLeftToFocus(elementId)
+        // },
+        // getPanTopToFocus: function (elementId, scale) {
+        //     return getPanTopToFocus(elementId, scale)
+        // },
+        // panAndZoomTo: function (x, y, scale) {
+        //     panAndZoomTo(x, y, scale);
+        // }
     }
 }();
 
