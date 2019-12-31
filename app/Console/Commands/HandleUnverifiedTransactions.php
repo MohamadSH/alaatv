@@ -104,10 +104,19 @@ class HandleUnverifiedTransactions extends Command
         $notExistTransactions             = [];
         $unverifiedTransactionsDueToError = [];
         $bar = $this->output->createProgressBar(count($transactions));
-        foreach ($transactions as $item) {
+        foreach ($transactions as $key => $item) {
+
 
             $authority = $item['Authority'];
-            $this->info('Processing authority number '.$authority);
+            $amount    = $item['Amount'];
+            $skip = true;
+            if ($this->confirm('Transaction number '.($key+1).' => cost : '.$amount.' authority: '.$authority.'. Would you like to proceed? type No if you want to skip this transaction.' , true)) {
+                $skip = false;
+            }
+
+            if($skip){
+                continue;
+            }
 
             /** @var \App\Transaction $transaction */
             $transaction = TransactionRepo::getTransactionByAuthority($authority)->getValue(null);
