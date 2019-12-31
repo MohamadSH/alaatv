@@ -3842,7 +3842,7 @@ class SanatisharifmergeController extends Controller
         $isApp = (strlen(strstr($request->header('User-Agent'), "Alaa")) > 0) ? true : false;
         if ($isApp) {
             $tag    = $this->getDepLessonTags($lId, $dId);
-            $newUri = urldecode(route('c.index', ["tags" => $tag]));
+            $newUri = urldecode(action('Web\ContentController@index', ["tags" => $tag]));
             $app    = "&contentType[]=video";
             return redirect($newUri . $app, Response::HTTP_MOVED_PERMANENTLY);
         }
@@ -3856,7 +3856,7 @@ class SanatisharifmergeController extends Controller
         $set = Sanatisharifmerge::where('lessonid', $lId)->first();
         if(isset($set)){
             $tag    = [$this->make_slug($set->lessonname , '_')];
-            $newUri = urldecode(route('c.index', ["tags" => $tag]));
+            $newUri = urldecode(action('Web\ContentController@index', ["tags" => $tag]));
             $app    = "&contentType[]=video";
             return redirect($newUri . $app, Response::HTTP_MOVED_PERMANENTLY);
         }
