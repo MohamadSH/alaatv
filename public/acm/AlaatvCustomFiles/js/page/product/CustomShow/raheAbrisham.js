@@ -22,6 +22,21 @@ var MapSVG = function () {
         }
     }
 
+    function getTotalMapSteps() {
+        return Object.assign({}, getMapStepLevel1(), getMapStepLevel2());
+    }
+
+    function getsetDataFromId(setId) {
+        var totalMapSteps = getTotalMapSteps();
+        for (let key in totalMapSteps){
+            if (parseInt(totalMapSteps[key].contentId) === parseInt(setId)) {
+                totalMapSteps[key].elementId = key;
+                return totalMapSteps[key];
+            }
+        }
+        return null;
+    }
+
     function getMajorStep() {
         return {
             'pishAzmoon': {
@@ -644,10 +659,10 @@ var MapSVG = function () {
         // https://github.com/timmywil/panzoom#documentation
         window.RaheAbrishamPanZoom = Panzoom(svgMapElement, {
             // contain: 'outside',
-            panOnlyWhenZoomed: false,
+            // panOnlyWhenZoomed: false,
             startX: 0,
             startY: panY,
-            step: 0.3, // The step affects zoom calculation when zooming with a mouse wheel, when pinch zooming, or when using zoomIn/zoomOut
+            step: 0.6, // The step affects zoom calculation when zooming with a mouse wheel, when pinch zooming, or when using zoomIn/zoomOut
             startScale: 1, // Scale used to set the beginning transform
             maxScale: 15, // The maximum scale when zooming
             minScale: 1 // The minimum scale when zooming
@@ -765,21 +780,39 @@ var MapSVG = function () {
         setStepPointer();
     }
 
+    function panzoomPanErorrOnZoom(scale) {
+        // return 0;
+        const screenWidth = screen.width;
+        if (screenWidth > 1900) {
+            return 372.1671+((-101753.767)/(1+Math.pow((scale/0.0037076), 1.001775))); // 1900
+        } else if (screenWidth > 1700 && screenWidth <= 1900) {
+            return 339.1056 + (-3179.989 - 339.1056)/(1 + Math.pow((scale/0.1320686), 1.105657)); // 1800
+        } else if (screenWidth > 1600 && screenWidth <= 1700) {
+            return 317.7049 + (-3033.846 - 317.7049)/(1 + Math.pow((scale/0.1251884), 1.085904)); // 1700
+        } else if (screenWidth > 1500 && screenWidth <= 1600) {
+            return 359.1944 + (-6248.578 - 359.1944)/(1 + Math.pow((scale/0.06776716), 1.061137)); // 1600
+        } else if (screenWidth > 1400 && screenWidth <= 1500) {
+            return 339.2789 + (-69161210 - 339.2789)/(1 + Math.pow((scale/0.000004864994), 0.9993379)); // 1500
+        } else if (screenWidth > 1300 && screenWidth <= 1400) {
+            return 310.4541 + (-9540.703 - 310.4541)/(1 + Math.pow((scale/0.0370381), 1.039291)); // 1400
+        } else if (screenWidth > 1200 && screenWidth <= 1300) {
+            return 294.3495 + (-65479400 - 294.3495)/(1 + Math.pow((scale/0.000008558685), 1.0552)); // 1300
+        } else if (screenWidth > 1100 && screenWidth <= 1200) {
+            return 262.7934 + (-15562.99 - 262.7934)/(1 + Math.pow((scale/0.01820427), 1.018768)); // 1200
+        } else if (screenWidth > 1000 && screenWidth <= 1100) {
+            return 236.3133 + (-3230.551 - 236.3133)/(1 + Math.pow((scale/0.08768135), 1.074454)); // 1100
+        } else if (screenWidth > 991 && screenWidth <= 1000) {
+            return 213.6003 + (-28119400 - 213.6003)/(1 + Math.pow((scale/0.000007497526), 0.9989063)); // 1000
+        } else if (screenWidth <= 991) {
+            return 0;
+        }
+    }
 
     function getLeftElementRelativeToMap(elementId) {
         return $('#'+elementId)[0].getBoundingClientRect().left - $('#farsangMapSvg')[0].getBoundingClientRect().left;
     }
-    function getTopElementRelativeToMap(elementId, scale) {
-        const mapSvgHeight = $('#farsangMapSvg')[0].getBoundingClientRect().height,
-            mapContainerHeight = $('#mapContainer')[0].getBoundingClientRect().height,
-            topElementRelativeToMap = $('#'+elementId)[0].getBoundingClientRect().top - $('#farsangMapSvg')[0].getBoundingClientRect().top;
-
-        // if (mapContainerHeight > mapSvgHeight) {
-        //     const containerGap = ( mapContainerHeight - mapSvgHeight ) / scale;
-        //     return topElementRelativeToMap - containerGap;
-        // }
-
-        return topElementRelativeToMap;
+    function getTopElementRelativeToMap(elementId) {
+        return $('#'+elementId)[0].getBoundingClientRect().top - $('#farsangMapSvg')[0].getBoundingClientRect().top;
     }
 
     function getPanLeftToFocus(elementId) {
@@ -789,31 +822,40 @@ var MapSVG = function () {
         return (leftElementRelativeToMap - halfMapWidth + halfElementWidth)*-1;
     }
 
-    function getPanTopToFocus(elementId, scale) {
-        // mapContainer
+    function getPanTopToFocus(elementId) {
         const mapSvgHeight = $('#farsangMapSvg')[0].getBoundingClientRect().height,
             halfElementHeight = ($('#' + elementId)[0].getBoundingClientRect().height / 2),
             halfMapHeight = (mapSvgHeight / 2),
-            topElementRelativeToMap = getTopElementRelativeToMap(elementId, scale),
-            mapContainerHeight = $('#mapContainer')[0].getBoundingClientRect().height;
-        // if (mapContainerHeight > mapSvgHeight) {
-        //     const containerGap = ( (mapContainerHeight-mapSvgHeight)/2 );
-        //     // return (topElementRelativeToMap - halfMapHeight + halfElementHeight + containerGap )*-1;
-        // }
-        return (topElementRelativeToMap - halfMapHeight + halfElementHeight)*-1;
+            absTopMapContainerRelativeToSvgMap = Math.abs(getTopElementRelativeToMap('mapContainer')),
+            topMapContainerRelativeToSvgMapGap = (absTopMapContainerRelativeToSvgMap > 0) ? absTopMapContainerRelativeToSvgMap : 0,
+            topElementRelativeToMap = getTopElementRelativeToMap(elementId);
+
+        return (halfMapHeight - topElementRelativeToMap - halfElementHeight) - topMapContainerRelativeToSvgMapGap;
     }
 
     function panAndZoomTo(x, y, scale) {
-        window.RaheAbrishamPanZoom.pan(x, y);
         window.RaheAbrishamPanZoom.zoom(scale, { animate: true });
+        window.RaheAbrishamPanZoom.pan(x, y);
     }
 
-    function panToObject(elementId, scale) {
+    function panToObject(elementId) {
+        if (elementId === null) {
+            return;
+        }
         window.RaheAbrishamPanZoom.reset();
-        panAndZoomTo(getPanLeftToFocus(elementId), getPanTopToFocus(elementId, scale), scale);
         setTimeout(function () {
-            refreshAllTooltip();
-        }, 1000);
+            const scale = calculateDynamicScale(elementId);
+            var panErorrOnZoom = panzoomPanErorrOnZoom(scale),
+                panTopToFocus = getPanTopToFocus(elementId);
+            panAndZoomTo(getPanLeftToFocus(elementId), panTopToFocus + panErorrOnZoom, scale);
+            setTimeout(function () {
+                refreshAllTooltip();
+            }, 1000);
+        }, 500);
+    }
+
+    function calculateDynamicScale(elementId) {
+        return (0.6*$('#mapContainer')[0].getBoundingClientRect().height)/$('#'+elementId)[0].getBoundingClientRect().height;
     }
 
     return {
@@ -829,18 +871,13 @@ var MapSVG = function () {
             setFarsangSetIdArray();
             return farsaneSetIdArray;
         },
-        panToObject: function (elementId, scale) {
-            panToObject(elementId, scale)
+        getsetDataFromId: function (setId) {
+            setFarsangSetIdArray();
+            return getsetDataFromId(setId);
         },
-        // getPanLeftToFocus: function (elementId) {
-        //     return getPanLeftToFocus(elementId)
-        // },
-        // getPanTopToFocus: function (elementId, scale) {
-        //     return getPanTopToFocus(elementId, scale)
-        // },
-        // panAndZoomTo: function (x, y, scale) {
-        //     panAndZoomTo(x, y, scale);
-        // }
+        panToObject: function (elementId) {
+            panToObject(elementId)
+        }
     }
 }();
 
@@ -870,6 +907,7 @@ var EntekhabeFarsang = function () {
             showSection(sectionId);
         }
         farsangStepUpdate(data.set.id);
+        MapSVG.panToObject(MapSVG.getsetDataFromId(data.set.id).elementId);
         hideLoading();
     }
 
@@ -1421,10 +1459,10 @@ var InitAbrishamPage = function () {
     return {
         init: function (lastSetData, allSetsOfRaheAbrisham) {
 
-            initRepurchaseRowAndHelpMessageRow();
-            EntekhabeFarsang.init(lastSetData);
             makePageBoxedForLargScreen();
             MapSVG.init(allSetsOfRaheAbrisham);
+            EntekhabeFarsang.init(lastSetData);
+            initRepurchaseRowAndHelpMessageRow();
             initCustomDropDown();
             initScrollCarousel();
             initLiveDescription();
@@ -1435,54 +1473,7 @@ var InitAbrishamPage = function () {
 }();
 
 jQuery(document).ready(function () {
-
     if (typeof lastSetData !== 'undefined') {
         InitAbrishamPage.init(lastSetData, allSetsOfRaheAbrisham);
     }
-
-    // function renderNested(template_string, translate) {
-    //     return function() {
-    //         return function(text, render) {
-    //             return Mustache.to_html(template_string, translate(render(text)));
-    //         };
-    //     };
-    // }
-    // var template = $("#ScrollCarousel_base").html();
-    // var nested_template = $("#ScrollCarousel_item").html();
-    // var model = {
-    //     data: {
-    //         names: [
-    //             { name: "Foo" },
-    //             { name: "Bar" }
-    //         ],
-    //         nested: renderNested(nested_template, function(text) {
-    //             return { name: text };
-    //         })
-    //     }
-    // };
-    // var result = Mustache.to_html(template, model);
-    // $("#mustacheTest").html( result );
-
-
-    // function MustacheLoadUser(template, renderedData) {
-    //     Mustache.parse(template);   // optional, speeds up future uses
-    //     return Mustache.render(template, renderedData);
-    // }
-    //
-    // $('#mustacheTest').html(MustacheLoadUser($('#ScrollCarousel_base').html(), {
-    //     items: [
-    //         {src:'https://cdn.alaatv.com/media/thumbnails/562/562000kfbv.jpg?w=210&h=118'},
-    //         {src:'https://cdn.alaatv.com/media/thumbnails/580/580000moza.jpg?w=210&h=118'},
-    //         {src:'https://cdn.alaatv.com/media/thumbnails/580/580001kmvz.jpg?w=210&h=118'},
-    //         {src:'https://cdn.alaatv.com/media/thumbnails/586/586000zero.jpg?w=210&h=118'}
-    //     ],
-    //     item : function(text, render) {
-    //         return Mustache.to_html($('#ScrollCarousel_item').html(), {
-    //             src: this.src
-    //         });
-    //     }
-    // }));
-
-    // imageObserver.observe();
-
 });
