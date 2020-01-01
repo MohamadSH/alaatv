@@ -35,7 +35,7 @@ class MergeProductCommand extends Command
      *
      * @var string
      */
-    protected $description = 'Merging old products';
+    protected $description = 'merges old products';
 
     private $productArray;
 

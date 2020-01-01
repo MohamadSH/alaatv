@@ -66,17 +66,17 @@ function makeDataTable_loadWithAjax_users() {
                     '                <button class="btn btn-xs black dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false"> عملیات</button>\n' +
                     '                <ul class="dropdown-menu" role="menu" id="' + row.id + '">\n' +
                     '                    <li>\n' +
-                    '                        <a target="_blank" href="/cacheclearAdmin?user=1&user_id="'+row.id+'>\n' +
-                    '                            <i class="fa fa-edit" aria-hidden="true"></i> خالی کردن کش کاربر\n' +
-                    '                        </a>\n' +
-                    '                    </li>\n' +
-                    '                    <li>\n' +
-                    '                        <a target="_blank" href="'+row.editLink+'">\n' +
+                    '                        <a class="m--font-success" target="_blank" href="'+row.editLink+'">\n' +
                     '                            <i class="fa fa-edit" aria-hidden="true"></i> ویرایش\n' +
                     '                        </a>\n' +
                     '                    </li>\n' +
                     '                    <li>\n' +
-                    '                        <a class="deleteUser" data-target="#deleteUserConfirmationModal" data-toggle="modal" data-link="'+row.removeLink+'" data-fullname="'+row.firstName+' '+row.lastName+'">\n' +
+                    '                        <a class="m--font-focus" target="_blank" href="'+row.cacheClearUrl+'">\n' +
+                    '                            <i class="fa fa-trash" aria-hidden="true"></i> خالی کردن کش کاربر\n' +
+                    '                        </a>\n' +
+                    '                    </li>\n' +
+                    '                    <li>\n' +
+                    '                        <a class="deleteUser m--font-danger" data-target="#deleteUserConfirmationModal" data-toggle="modal" data-link="'+row.removeLink+'" data-fullname="'+row.firstName+' '+row.lastName+'">\n' +
                     '                            <i class="fa fa-trash-alt" aria-hidden="true"></i> حذف\n' +
                     '                        </a>\n' +
                     '                    </li>\n' +

@@ -81,6 +81,12 @@ class Block extends BaseModel
         '3' => null,
     ];
 
+    protected static $actionLookupTableV2 = [
+        '1' => 'Api\SearchController@index',
+        '2' => 'Web\ProductController@index',
+        '3' => null,
+    ];
+
     protected $isOfferBlock = false;
 
     protected $cascadeDeletes = [
@@ -332,6 +338,14 @@ class Block extends BaseModel
         if (isset($this->customUrl))
             return $this->customUrl;
         return isset(self::$actionLookupTable[$this->type]) ? $this->makeUrl(self::$actionLookupTable[$this->type],
+            $this->tags) : null;
+    }
+
+    public function getUrlV2Attribute($value): ?string
+    {
+        if (isset($this->customUrl))
+            return $this->customUrl;
+        return isset(self::$actionLookupTableV2[$this->type]) ? $this->makeUrl(self::$actionLookupTableV2[$this->type],
             $this->tags) : null;
     }
 

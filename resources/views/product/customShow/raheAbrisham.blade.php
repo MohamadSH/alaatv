@@ -116,6 +116,8 @@
         'content' => view('product.partials.raheAbrisham.soalateMotedavel', compact('faqs'))
     ])
 
+
+
     @include('product.partials.raheAbrisham.descriptionBox', [
         'title' => 'توضیحات لحظه ای و آخرین تغییرات',
         'class' => 'liveDescriptionRow',

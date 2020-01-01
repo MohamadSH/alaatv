@@ -333,7 +333,7 @@
                                         <td class="text-center">
                                             <a href="{{action("Web\OrderproductController@edit" , $orderproduct)}}"
                                                class="btn btn-primary btn-sm btn-outline sbold uppercase">
-                                                <i class="fa fa-pencil-square-o"></i>
+                                                <i class="fa fa-edit"></i>
                                                 اصلاح
                                             </a>
                                             <button class="btn btn-danger btn-sm btn-outline sbold removeOrderproduct"
@@ -344,6 +344,10 @@
                                                 <i class="fa fa-trash"></i>
                                                 حذف
                                             </button>
+                                            <a href="{{$orderproduct->cacheClearUrl}}" class="btn btn-focus btn-sm btn-outline sbold">
+                                                <i class="fa fa-trash"></i>
+                                                خالی کردن کش
+                                            </a>
                                         </td>
                                     </tr>
                                 @endforeach
@@ -738,8 +742,7 @@
                                         <th> شماره پیگیری</th>
                                         <th> شماره چک</th>
                                         <th> توضیح مدیریتی</th>
-                                        <th> اصلاح</th>
-                                        <th> حذف</th>
+                                        <th> عملیات</th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -814,15 +817,33 @@
                                                     <span class="m-badge m-badge--wide label-sm m-badge--info "> ندارد </span> @endif
                                             </td>
                                             <td style="text-align: center">
-                                                <a class="edit" href="javascript:">
-                                                    اصلاح
-                                                </a>
-                                            </td>
-                                            <td style="text-align: center">
-                                                <a class="deleteTransaction"
-                                                   data-target="#deleteTransactionConfirmationModal" data-toggle="modal">
-                                                    <i class="fa fa-trash fa-lg m--font-danger" aria-hidden="true"></i>
-                                                </a>
+                                                {{--inline edit--}}
+{{--                                                <a class="edit" href="javascript:">--}}
+{{--                                                    اصلاح--}}
+{{--                                                </a>--}}
+                                                <div class = "btn-group">
+                                                    <button class = "btn btn-xs btn-outline-dark  dropdown-toggle" type = "button" data-toggle = "dropdown" aria-expanded = "false"> <i class = "fa fa-cogs"></i></button>
+                                                    <ul class = "dropdown-menu" role = "menu" >
+                                                    <li>
+                                                        <a class="m--font-success" target = "_blank" href = "{{route('transaction.edit' , $transaction)}}">
+                                                            <i class = "fa fa-edit"></i>
+                                                            اصلاح
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a class="m--font-danger deleteTransaction" data-target="#deleteTransactionConfirmationModal" data-toggle="modal" href = "#">
+                                                            <i class="fa fa-trash" aria-hidden="true"></i>
+                                                            حذف
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a target="_blank" class="m--font-focus" href = "{{route('web.admin.cacheclear', ['transaction'=>1 , 'id'=>$transaction->id])}}">
+                                                            <i class="fa fa-trash" aria-hidden="true"></i>
+                                                            خالی کردن کش
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                                </div>
                                             </td>
                                         </tr>
                                     @endforeach
@@ -869,8 +890,7 @@
                                         <th> شماره پیگیری</th>
                                         <th> شماره چک</th>
                                         <th> توضیح مدیریتی</th>
-                                        <th> اصلاح</th>
-                                        <th> حذف</th>
+                                        <th> عملیات</th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -953,15 +973,27 @@
                                                 @endif
                                             </td>
                                             <td style="text-align: center">
-                                                <a href="{{ action('Web\TransactionController@edit', $transaction) }}" target="_blank">
-                                                    اصلاح
-                                                </a>
-                                            </td>
-                                            <td style="text-align: center">
-                                                <a class="deleteTransaction"
-                                                   data-target="#deleteTransactionConfirmationModal" data-toggle="modal">
-                                                    <i class="fa fa-trash fa-lg m--font-danger" aria-hidden="true"></i>
-                                                </a>
+                                                {{--inline edit--}}
+                                                {{--                                                <a class="edit" href="javascript:">--}}
+                                                {{--                                                    اصلاح--}}
+                                                {{--                                                </a>--}}
+                                                <div class = "btn-group">
+                                                    <button class = "btn btn-xs btn-outline-dark  dropdown-toggle" type = "button" data-toggle = "dropdown" aria-expanded = "false"> <i class = "fa fa-cogs"></i></button>
+                                                    <ul class = "dropdown-menu" role = "menu" >
+                                                        <li>
+                                                            <a class="m--font-success" target = "_blank" href = "{{route('transaction.edit' , $transaction)}}">
+                                                                <i class = "fa fa-edit"></i>
+                                                                اصلاح
+                                                            </a>
+                                                        </li>
+                                                        <li>
+                                                            <a class="m--font-danger deleteTransaction" data-target="#deleteTransactionConfirmationModal" data-toggle="modal" href = "#">
+                                                                <i class="fa fa-trash" aria-hidden="true"></i>
+                                                                حذف
+                                                            </a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
                                             </td>
                                         </tr>
                                     @endforeach

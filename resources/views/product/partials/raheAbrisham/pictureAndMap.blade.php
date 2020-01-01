@@ -4,13 +4,13 @@
         <div class="m-portlet m--margin-bottom-10">
             <div class="m-portlet__body">
 
-                @include('partials.favorite', [
-                    'favActionUrl' => route('web.mark.favorite.product', [ 'product' => $product->id ]),
-                    'unfavActionUrl' => route('web.mark.unfavorite.product', [ 'product' => $product->id ]),
-                    'isFavored' => $isFavored
-                ])
+            @include('partials.favorite', [
+                'favActionUrl' => route('web.mark.favorite.product', [ 'product' => $product->id ]),
+                'unfavActionUrl' => route('web.mark.unfavorite.product', [ 'product' => $product->id ]),
+                'isFavored' => $isFavored
+            ])
 
-                <!--begin::Section-->
+            <!--begin::Section-->
                 <div class="m-section m-section--last">
                     <div class="m-section__content">
                         <!--begin::Preview-->

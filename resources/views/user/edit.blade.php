@@ -74,6 +74,10 @@
                 </div>
                 <div class = "m-portlet__body">
 
+                    <ul>
+                       <li>تاریخ ثبت نام: {{$user->CreatedAt_Jalali()}}</li>
+                       <li>تاریخ آخرین اصلاح: {{$user->UpdatedAt_Jalali()}}</li>
+                    </ul>
                     <div class = "portlet-body form">
                         {!! Form::model($user,['files'=>true,'method' => 'PUT','action' => ['Web\UserController@update',$user], 'class'=>'form-horizontal']) !!}
                         {!! Form::hidden('updateType',"total") !!}

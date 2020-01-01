@@ -20,7 +20,7 @@ class InsertContentsToSatraCommand extends Command
      *
      * @var string
      */
-    protected $description = 'Command description';
+    protected $description = 'sends contents to Satra';
 
     /**
      * Create a new command instance.

@@ -26,7 +26,7 @@ class ConvertProductFileToContentCommand extends Command
      *
      * @var string
      */
-    protected $description = 'Convert productFiles to Content';
+    protected $description = 'Converts product files to content';
 
     protected $output;
 

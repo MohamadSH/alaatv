@@ -786,49 +786,49 @@
                                     </a>
                                 </li>
                                 <li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1">
-                                    <a target="_blank" href="{{ route('web.admin.cacheclear') }}?product" class="m-menu__link ">
+                                    <a target="_blank" href="{{ route('web.admin.cacheclear') }}?product=1" class="m-menu__link ">
                                         <span class="m-menu__item-here"></span>
                                         <i class="m-menu__link-icon flaticon-network"></i>
                                         <span class="m-menu__link-text m--font-bold ">خالی کردن کش محصول</span>
                                     </a>
                                 </li>
                                 <li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1">
-                                    <a target="_blank" href="{{ route('web.admin.cacheclear') }}?order" class="m-menu__link ">
+                                    <a target="_blank" href="{{ route('web.admin.cacheclear') }}?order=1" class="m-menu__link ">
                                         <span class="m-menu__item-here"></span>
                                         <i class="m-menu__link-icon flaticon-network"></i>
                                         <span class="m-menu__link-text m--font-bold ">خالی کردن کش سفارش</span>
                                     </a>
                                 </li>
                                 <li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1">
-                                    <a target="_blank" href="{{ route('web.admin.cacheclear') }}?orderproduct" class="m-menu__link ">
+                                    <a target="_blank" href="{{ route('web.admin.cacheclear') }}?orderproduct=1" class="m-menu__link ">
                                         <span class="m-menu__item-here"></span>
                                         <i class="m-menu__link-icon flaticon-network"></i>
                                         <span class="m-menu__link-text m--font-bold ">خالی کردن کش آیتم سبد</span>
                                     </a>
                                 </li>
                                 <li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1">
-                                    <a target="_blank" href="{{ route('web.admin.cacheclear') }}?user" class="m-menu__link ">
+                                    <a target="_blank" href="{{ route('web.admin.cacheclear') }}?user=1" class="m-menu__link ">
                                         <span class="m-menu__item-here"></span>
                                         <i class="m-menu__link-icon flaticon-network"></i>
                                         <span class="m-menu__link-text m--font-bold ">خالی کردن کش کاربر</span>
                                     </a>
                                 </li>
                                 <li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1">
-                                    <a target="_blank" href="{{ route('web.admin.cacheclear') }}?transaction" class="m-menu__link ">
+                                    <a target="_blank" href="{{ route('web.admin.cacheclear') }}?transaction=1" class="m-menu__link ">
                                         <span class="m-menu__item-here"></span>
                                         <i class="m-menu__link-icon flaticon-network"></i>
                                         <span class="m-menu__link-text m--font-bold ">خالی کردن کش تراکنش</span>
                                     </a>
                                 </li>
                                 <li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1">
-                                    <a target="_blank" href="{{ route('web.admin.cacheclear') }}?content" class="m-menu__link ">
+                                    <a target="_blank" href="{{ route('web.admin.cacheclear') }}?content=1" class="m-menu__link ">
                                         <span class="m-menu__item-here"></span>
                                         <i class="m-menu__link-icon flaticon-network"></i>
                                         <span class="m-menu__link-text m--font-bold ">خالی کردن کش کانتنت</span>
                                     </a>
                                 </li>
                                 <li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1">
-                                    <a target="_blank" href="{{ route('web.admin.cacheclear') }}?set" class="m-menu__link ">
+                                    <a target="_blank" href="{{ route('web.admin.cacheclear') }}?set=1" class="m-menu__link ">
                                         <span class="m-menu__item-here"></span>
                                         <i class="m-menu__link-icon flaticon-network"></i>
                                         <span class="m-menu__link-text m--font-bold ">خالی کردن کش ست</span>

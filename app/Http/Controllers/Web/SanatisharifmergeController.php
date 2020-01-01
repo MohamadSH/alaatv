@@ -3842,13 +3842,24 @@ class SanatisharifmergeController extends Controller
         $isApp = (strlen(strstr($request->header('User-Agent'), "Alaa")) > 0) ? true : false;
         if ($isApp) {
             $tag    = $this->getDepLessonTags($lId, $dId);
-            $newUri = urldecode(action("Web\ContentController@index", ["tags" => $tag]));
-            $app    = "&contentType[]=video";
-            return redirect($newUri . $app, Response::HTTP_MOVED_PERMANENTLY);
+            $newUri = urldecode(action('Web\ContentController@index', ["tags" => $tag]));
+            return redirect($newUri, Response::HTTP_MOVED_PERMANENTLY);
         }
 
-        $setId = Sanatisharifmerge::where('lessonid', $lId)->where('depid', $dId)->first()->departmentlessonid;
-        return redirect(route('set.show', $setId), Response::HTTP_MOVED_PERMANENTLY);
+        $set = Sanatisharifmerge::where('lessonid', $lId)->where('depid', $dId)->first();
+        if(isset($set)){
+            $setId = $set->departmentlessonid;
+            return redirect(route('set.show', $setId), Response::HTTP_MOVED_PERMANENTLY);
+        }
+
+        $set = Sanatisharifmerge::where('lessonid', $lId)->first();
+        if(isset($set)){
+            $tag    = [$this->make_slug($set->lessonname , '_')];
+            $newUri = urldecode(action('Web\ContentController@index', ["tags" => $tag]));
+            return redirect($newUri, Response::HTTP_MOVED_PERMANENTLY);
+        }
+
+        return abort(Response::HTTP_NOT_FOUND);
     }
 
     private function getDepLessonTags($lId = null, $dId = null)
