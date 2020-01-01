@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Classes\CouponSubmitter;
 use App\Classes\Pricing\Alaa\AlaaInvoiceGenerator;
 use App\Collection\OrderCollections;
 use App\Coupon;
@@ -169,7 +170,7 @@ class OrderController extends Controller
             ]);
         }
 
-        $result = $this->handleValidCoupon($invoiceGenerator, $coupon, $order);
+        $result = (new CouponSubmitter($order))->handleValidCoupon($invoiceGenerator, $coupon);
 
         Cache::tags([
             'order_' . $order->id . '_coupon',
@@ -236,7 +237,7 @@ class OrderController extends Controller
             ]);
         }
 
-        $result = $this->handleValidCoupon($invoiceGenerator, $coupon, $order);
+        $result = (new CouponSubmitter($order))->handleValidCoupon($invoiceGenerator, $coupon);
 
         Cache::tags([
             'order_' . $order->id . '_coupon',
@@ -256,79 +257,6 @@ class OrderController extends Controller
                 'message' => 'Error on attaching coupon to order',
             ],
         ]);
-    }
-
-    /**
-     * @param AlaaInvoiceGenerator                             $invoiceGenerator
-     * @param                                                  $coupon
-     * @param                                                  $order
-     *
-     * @return bool
-     * @throws Exception
-     */
-    private function handleValidCoupon(AlaaInvoiceGenerator $invoiceGenerator, Coupon $coupon, Order $order): bool
-    {
-        $oldCoupon = $order->coupon;
-        if (!isset($oldCoupon)) {
-            $coupon->usageNumber = $coupon->usageNumber + 1;
-            if (!$coupon->update()) {
-                return false;
-            }
-            $order->coupon_id = $coupon->id;
-            if ($coupon->discounttype_id == config('constants.DISCOUNT_TYPE_COST')) {
-                $order->couponDiscount       = 0;
-                $order->couponDiscountAmount = (int)$coupon->discount;
-            } else {
-                $order->couponDiscount       = $coupon->discount;
-                $order->couponDiscountAmount = 0;
-            }
-            if (!$order->updateWithoutTimestamp()) {
-                $coupon->usageNumber = $coupon->usageNumber - 1;
-                $coupon->update();
-
-                return false;
-            }
-
-            return true;
-        }
-        $flag = ($oldCoupon->usageNumber > 0);
-
-        if ($oldCoupon->id == $coupon->id) {
-            return true;
-        }
-
-        if ($flag) {
-            $oldCoupon->usageNumber = $oldCoupon->usageNumber - 1;
-        }
-        if (!$oldCoupon->update()) {
-            return false;
-        }
-        $coupon->usageNumber = $coupon->usageNumber + 1;
-        if (!$coupon->update()) {
-            $oldCoupon->usageNumber = $oldCoupon->usageNumber + 1;
-            $oldCoupon->update();
-
-            return false;
-        }
-        $order->coupon_id = $coupon->id;
-        if ($coupon->discounttype_id == config('constants.DISCOUNT_TYPE_COST')) {
-            $order->couponDiscount       = 0;
-            $order->couponDiscountAmount = (int)$coupon->discount;
-        } else {
-            $order->couponDiscount       = $coupon->discount;
-            $order->couponDiscountAmount = 0;
-        }
-        if (!$order->updateWithoutTimestamp()) {
-            $oldCoupon->usageNumber = $oldCoupon->usageNumber + 1;
-            $oldCoupon->update();
-            $coupon->usageNumber = $coupon->usageNumber - 1;
-            $coupon->update();
-
-            return false;
-        }
-        $invoiceGenerator->generateOrderInvoice($order);
-
-        return true;
     }
 
     /**
