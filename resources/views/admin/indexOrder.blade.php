@@ -745,18 +745,18 @@
                             '                <a target="_blank" class="btn btn-success" href="'+row.editLink+'">\n' +
                             '                    <i class="fa fa-edit" aria-hidden="true"></i> اصلاح \n' +
                             '                </a>\n' +
-                            '                <a target="_blank" class="btn btn-success" href="/cacheclearAdmin?order=1&id=">\n' +
-                            '                    <i class="fa fa-battery-empty" aria-hidden="true"></i> خالی کردن کش سفارش \n' +
+                            '                <a target="_blank" class="btn btn-focus" href="'+row.cacheClearUrl+'">\n' +
+                            '                    <i class="fa fa-trash" aria-hidden="true"></i> خالی کردن کش سفارش \n' +
                             '                </a>\n' +
-                            '                <a target="_blank" class="btn btn-success" href="/cacheclearAdmin?user=1&id='+row.user.id+'">\n' +
-                            '                    <i class="fa fa-battery-empty" aria-hidden="true"></i> خالی کردن کش کاربر \n' +
+                            '                <a target="_blank" class="btn btn-focus" href="'+row.user.cacheClearUrl+'">\n' +
+                            '                    <i class="fa fa-trash" aria-hidden="true"></i> خالی کردن کش کاربر \n' +
                             '                </a>\n' +
-                            '                <a class="btn btn-danger deleteOrder" data-target="#deleteOrderConfirmationModal" data-toggle="modal" remove-link="'+row.removeLink+'" fullname="'+row.user.firstName+row.user.lastName+'">\n' +
+                            '                <button class="btn btn-danger deleteOrder" data-target="#deleteOrderConfirmationModal" data-toggle="modal" remove-link="'+row.removeLink+'" fullname="'+row.user.firstName+row.user.lastName+'">\n' +
                             '                    <i class="fa fa-trash-alt" aria-hidden="true"></i> حذف \n' +
-                            '                </a>\n' +
-                            '                <a class="btn btn-info sendSms" data-target="#sendSmsModal" data-toggle="modal">\n' +
+                            '                </button>\n' +
+                            '                <button class="btn btn-info sendSms" data-target="#sendSmsModal" data-toggle="modal">\n' +
                             '                    <i class="fa fa-envelope" aria-hidden="true"></i> ارسال پیامک\n' +
-                            '                </a>\n' +
+                            '                </button>\n' +
                             '                <div id="ajax-modal" class="modal fade" tabindex="-1"></div>\n' +
                             '            </div>';
                     },

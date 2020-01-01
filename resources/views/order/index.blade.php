@@ -35,8 +35,8 @@
                 </a>
                 @endpermission @permission((config('constants.REMOVE_ORDER_ACCESS')))
                 @role((config("constants.ROLE_ADMIN")))
-                <a target = "_blank" class = "btn btn-accent" href = "{{route('web.admin.cacheclear' , ['order'=>1 , 'id'=>$order->id])}}">
-                    <i class = "fa fa-battery-empty" aria-hidden = "true"></i>
+                <a target = "_blank" class = "btn btn-focus" href = "{{route('web.admin.cacheclear' , ['order'=>1 , 'id'=>$order->id])}}">
+                    <i class = "fa fa-trash" aria-hidden = "true"></i>
                     خالی کردن کش سفارش
                 </a>
                 @endrole

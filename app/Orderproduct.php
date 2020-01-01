@@ -5,6 +5,7 @@ namespace App;
 use App\Classes\Checkout\Alaa\OrderproductCheckout;
 use App\Collection\OrderproductCollection;
 use App\Repositories\OrderproductRepo;
+use App\Traits\Helper;
 use App\Traits\ProductCommon;
 use Carbon\Carbon;
 use Eloquent;
@@ -92,6 +93,7 @@ use Illuminate\Support\Facades\Cache;
 class Orderproduct extends BaseModel
 {
     use ProductCommon;
+    use Helper;
 
     /**
      * @var array
