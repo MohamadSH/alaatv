@@ -28,7 +28,7 @@ var MapSVG = function () {
 
     function getsetDataFromId(setId) {
         var totalMapSteps = getTotalMapSteps();
-        for (let key in totalMapSteps){
+        for (var key in totalMapSteps){
             if (parseInt(totalMapSteps[key].contentId) === parseInt(setId)) {
                 totalMapSteps[key].elementId = key;
                 return totalMapSteps[key];
@@ -595,7 +595,7 @@ var MapSVG = function () {
         var mapSteps = getMapSteps(),
             selectorString = '';
 
-        for (let key in mapSteps){
+        for (var key in mapSteps){
             addTooltip($('#'+key), mapSteps[key].tooltipName);
         }
     }
@@ -604,7 +604,7 @@ var MapSVG = function () {
         var mapSteps =  Object.assign({}, getMapStepLevel1(), getMapStepLevel2()),
             selectorString = '';
 
-        for (let key in mapSteps){
+        for (var key in mapSteps){
             $('#'+key).attr('data-content-id', mapSteps[key].contentId);
             if (typeof mapSteps[key].sectionId !== 'undefined') {
                 $('#'+key).attr('data-section-id', mapSteps[key].sectionId);
@@ -989,7 +989,7 @@ var EntekhabeFarsang = function () {
             return '';
         }
         var htmlData = '';
-        for (let key in data){
+        for (var key in data){
             htmlData += createVideoItem({
                 section: (typeof data[key].section !== 'undefined' && data[key].section !== null) ? data[key].section : {id: '', name: ''},
                 photo: (typeof data[key].photo !== 'undefined') ? data[key].photo : data[key].thumbnail,
@@ -1016,7 +1016,7 @@ var EntekhabeFarsang = function () {
         }
 
         var htmlData = '';
-        for (let key in data){
+        for (var key in data){
             htmlData += createPamphletItem({
                 section: (typeof data[key].section !== 'undefined' && data[key].section !== null) ? data[key].section : {id: '', name: ''},
                 title: (typeof data[key].title !== 'undefined') ? data[key].title : data[key].name,
@@ -1228,7 +1228,7 @@ var EntekhabeFarsang = function () {
             return;
         }
 
-        for (let key in data){
+        for (var key in data){
             if (typeof data[key].section !== 'undefined' && data[key].section !== null) {
                 checkInTotalSectionList(data[key].section, totalSectionList);
             }
