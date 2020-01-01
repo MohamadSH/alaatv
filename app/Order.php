@@ -213,6 +213,7 @@ class Order extends BaseModel
         'managerComment',
         'editLink',
         'removeLink',
+        'cacheClearUrl'
     ];
     protected $hidden = [
         'id',
@@ -1264,6 +1265,7 @@ class Order extends BaseModel
                     'school',
                     'info',
                     'userstatus',
+                    'cacheClearUrl'
                 ];
 
                 if (hasAuthenticatedUserPermission(config('constants.SHOW_USER_MOBILE'))) {
