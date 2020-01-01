@@ -70,47 +70,8 @@ class HomeController extends Controller
 
     public function debug(Request $request, User $user = null)
     {
-//        $orders = \App\Order::where('orderstatus_id' , config('constants.ORDER_STATUS_CLOSED'))
-//                            ->whereIn('paymentstatus_id' , [ config('constants.PAYMENT_STATUS_VERIFIED_INDEBTED') , config('constants.PAYMENT_STATUS_PAID') , config('constants.PAYMENT_STATUS_INDEBTED') ])
-//                            ->whereHas('orderproducts' , function ($q2){
-//                                $q2->where('product_id' , Product::RAHE_ABRISHAM );
-//                            })->get();
-//
-//        foreach ($orders as $order){
-//            $orderproduct = \App\Orderproduct::create([
-//                'order_id' => $order->id ,
-//                'product_id' => 385 ,
-//                'orderproducttype_id' => config('constants.ORDER_PRODUCT_GIFT'),
-//                'cost' => 74000,
-//            ]);
-//        }
-//
-//        dd('DONE');
-
-
-//        $orders = \App\Order::where('orderstatus_id' , config('constants.ORDER_STATUS_CLOSED'))
-//            ->where('paymentstatus_id' , config('constants.PAYMENT_STATUS_VERIFIED_INDEBTED'))
-//            ->whereHas('orderproducts' , function ($q2){
-//                $q2->where('product_id' , Product::RAHE_ABRISHAM )
-//                    ->havingRaw('COUNT(*) = 1 ');
-//            })->whereHas('transactions' , function ($q3){
-//                $q3->where('transactionstatus_id' , config('constants.TRANSACTION_STATUS_UNPAID'))
-//                    ->where('deadline_at' , '<=' , '2019-12-18 00:00' )
-//                    ->havingRaw('COUNT(*) > 1 ');
-//            })->get();
-//
-//        dump($orders->pluck('id') , $orders->count());
-//
-//        /** @var \App\Order $order */
-//        foreach ($orders as $order){
-//            $result = $order->update(['paymentstatus_id' => config('constants.PAYMENT_STATUS_INDEBTED')]) ;
-//            if(!$result){
-//                dump('error on #'.$orders->id);
-//            }
-//        }
-//
-//        dd('DONE!');
-
+        $user = \App\User::Find(1);
+        return $user;
         return view('admin.topicsTree.manageNodes');
     }
 

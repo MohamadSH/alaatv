@@ -3,12 +3,9 @@
 namespace App\Traits;
 
 use Carbon\Carbon;
-use Illuminate\Support\Collection;
 
 trait Helper
 {
-    protected $response;
-
     public function medianaGetCredit()
     {
         $url     = config("services.medianaSMS.normal.url");
@@ -92,24 +89,6 @@ trait Helper
         }
     }
 
-
-    /**
-     * Generates a random password that does not belong to anyone
-     *
-     * @param int $length
-     *
-     * @return array
-     */
-    public function generateRandomPassword($length)
-    {
-        $generatedPassword = rand(1000, 9999);
-
-        return [
-            "rawPassword"  => $generatedPassword,
-            "hashPassword" => bcrypt($generatedPassword),
-        ];
-    }
-
     public function timeFilterQuery($list, $sinceDate, $tillDate, $by = 'created_at', $sinceTime = "00:00:00", $tillTime = "23:59:59", $timeZoneConvert = true)
     {
         $sinceDate = Carbon::parse($sinceDate)
@@ -142,12 +121,6 @@ trait Helper
         return $str;
     }
 
-    public function mergeCollections($firstCollection, $secondCollection): Collection
-    {
-        return $firstCollection->toBase()
-            ->merge($secondCollection);
-    }
-
     /**
      * Update model without touching it's updated_at
      *
@@ -160,5 +133,15 @@ trait Helper
         $this->timestamps = true;
 
         return $flag;
+    }
+
+    public function getCacheClearUrlAttribute():?string{
+        if(!auth()->check() || !auth()->user()->hasRole(config('constants.ROLE_ADMIN'))){
+            return null;
+        }
+
+        $className = (new \ReflectionClass($this))->getShortName();
+        $className = strtolower($className);
+        return route('web.admin.cacheclear' , ["$className" => 1 , 'id' => $this->id]);
     }
 }
