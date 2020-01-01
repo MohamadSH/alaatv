@@ -6,16 +6,6 @@ class Mix {
         this.outputCssFile = [];
         this.mix = require('laravel-mix');
         this.purify = require("purify-css");
-        this.mix.sass('public/acm/AlaatvCustomFiles/components/Favorite/style.scss', 'public/acm/AlaatvCustomFiles/components/Favorite');
-        this.mix.sass('public/acm/AlaatvCustomFiles/components/MegaMenu/style.scss', 'public/acm/AlaatvCustomFiles/components/MegaMenu');
-        this.mix.sass('public/acm/AlaatvCustomFiles/components/AjaxLogin/style.scss', 'public/acm/AlaatvCustomFiles/components/AjaxLogin');
-        this.mix.sass('public/acm/AlaatvCustomFiles/components/CustomDropDown/style.scss', 'public/acm/AlaatvCustomFiles/components/CustomDropDown');
-        this.mix.sass('public/acm/AlaatvCustomFiles/components/ScrollCarousel/style.scss', 'public/acm/AlaatvCustomFiles/components/ScrollCarousel');
-        this.mix.sass('public/acm/AlaatvCustomFiles/components/SearchBoxFilter/style.scss', 'public/acm/AlaatvCustomFiles/components/SearchBoxFilter');
-        this.mix.sass('public/acm/AlaatvCustomFiles/components/OwlCarouselType2/style.scss', 'public/acm/AlaatvCustomFiles/components/OwlCarouselType2');
-        this.mix.sass('public/acm/AlaatvCustomFiles/components/MultiLevelSearch/style.scss', 'public/acm/AlaatvCustomFiles/components/MultiLevelSearch');
-        this.mix.sass('public/acm/AlaatvCustomFiles/components/ScrollCarousel/itemStyle.scss', 'public/acm/AlaatvCustomFiles/components/ScrollCarousel');
-        this.mix.sass('public/acm/AlaatvCustomFiles/css/page/pages/content-search/searchResult.scss', 'public/acm/AlaatvCustomFiles/css/page/pages/content-search');
     }
 
     static getBaseCss() {
@@ -89,6 +79,8 @@ class Mix {
     }
 
     mixAll() {
+
+        this.compileScss();
         this.mixBase();
         this.mixPages();
         this.mixUser();
@@ -131,6 +123,20 @@ class Mix {
                     '        ##          ## ######### ##          ## ##          ##       ##             ##       ###      ####           ####      ##    ##    ##\n');
             });
         }
+    }
+
+    compileScss() {
+        this.mix.sass('public/acm/AlaatvCustomFiles/components/Favorite/style.scss', 'public/acm/AlaatvCustomFiles/components/Favorite');
+        this.mix.sass('public/acm/AlaatvCustomFiles/components/MegaMenu/style.scss', 'public/acm/AlaatvCustomFiles/components/MegaMenu');
+        this.mix.sass('public/acm/AlaatvCustomFiles/components/AjaxLogin/style.scss', 'public/acm/AlaatvCustomFiles/components/AjaxLogin');
+        this.mix.sass('public/acm/AlaatvCustomFiles/components/CustomDropDown/style.scss', 'public/acm/AlaatvCustomFiles/components/CustomDropDown');
+        this.mix.sass('public/acm/AlaatvCustomFiles/components/ScrollCarousel/style.scss', 'public/acm/AlaatvCustomFiles/components/ScrollCarousel');
+        this.mix.sass('public/acm/AlaatvCustomFiles/components/SearchBoxFilter/style.scss', 'public/acm/AlaatvCustomFiles/components/SearchBoxFilter');
+        this.mix.sass('public/acm/AlaatvCustomFiles/components/OwlCarouselType2/style.scss', 'public/acm/AlaatvCustomFiles/components/OwlCarouselType2');
+        this.mix.sass('public/acm/AlaatvCustomFiles/components/MultiLevelSearch/style.scss', 'public/acm/AlaatvCustomFiles/components/MultiLevelSearch');
+        this.mix.sass('public/acm/AlaatvCustomFiles/components/ScrollCarousel/itemStyle.scss', 'public/acm/AlaatvCustomFiles/components/ScrollCarousel');
+        this.mix.sass('public/acm/AlaatvCustomFiles/css/page/pages/content-search/searchResult.scss', 'public/acm/AlaatvCustomFiles/css/page/pages/content-search');
+        this.mix.sass('public/acm/AlaatvCustomFiles/components/FormGenerator/style.scss', 'public/acm/AlaatvCustomFiles/components/FormGenerator');
     }
 
     purifyCss() {
@@ -393,6 +399,7 @@ class Mix {
     }
     mixPageUserDashboard() {
         this.mixCssAndJs([
+                'node_modules/toastr/build/toastr.css',
                 'node_modules/animate.css/animate.css',
                 'public/acm/AlaatvCustomFiles/components/AlaaLoading/style.css',
                 'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/style.css',
@@ -401,13 +408,17 @@ class Mix {
                 'public/acm/AlaatvCustomFiles/components/CustomDropDown/style.css',
                 'public/acm/AlaatvCustomFiles/css/page/pages/content-search/searchResult.css',
                 'public/acm/AlaatvCustomFiles/css/page/user/dashboard.css',
+                'public/acm/AlaatvCustomFiles/components/FormGenerator/style.css',
             ],
             'public/css/user-dashboard.css',
             [
+                'node_modules/toastr/build/toastr.min.js',
                 'public/acm/AlaatvCustomFiles/components/AlaaLoading/script.js',
                 'public/acm/AlaatvCustomFiles/components/CustomDropDown/js.js',
                 'public/acm/AlaatvCustomFiles/components/ScrollCarousel/js.js',
                 'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/js.js',
+                'public/acm/AlaatvCustomFiles/components/AlaaLoading/script.js',
+                'public/acm/AlaatvCustomFiles/components/FormGenerator/script.js',
                 'public/acm/AlaatvCustomFiles/js/page/user/dashboard.js',
             ],
             'public/js/user-dashboard.js'
