@@ -163,7 +163,7 @@
 
         <td>
             <div class = "btn-group">
-                <button class = "btn btn-xs black dropdown-toggle" type = "button" data-toggle = "dropdown" aria-expanded = "false"> عملیات</button>
+                <button class = "btn btn-xs dropdown-toggle" type = "button" data-toggle = "dropdown" aria-expanded = "false"> عملیات</button>
                 <ul class = "dropdown-menu" role = "menu" id = "{{$item->id}}">
                     @permission((config('constants.SHOW_USER_ACCESS')))
                     <li>
