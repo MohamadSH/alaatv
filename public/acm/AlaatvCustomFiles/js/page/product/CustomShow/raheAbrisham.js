@@ -907,7 +907,7 @@ var EntekhabeFarsang = function () {
             showSection(sectionId);
         }
         farsangStepUpdate(data.set.id);
-        MapSVG.panToObject(MapSVG.getsetDataFromId(data.set.id).elementId);
+        // MapSVG.panToObject(MapSVG.getsetDataFromId(data.set.id).elementId);
         hideLoading();
     }
 
