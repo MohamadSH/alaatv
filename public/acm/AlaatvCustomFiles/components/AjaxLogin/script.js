@@ -252,9 +252,12 @@ var AjaxLogin = function () {
         $(document).off('click', '.AjaxLoginSubmit').on('click', '.AjaxLoginSubmit', function () {
             validateAndSendRequest(callbackOrRedirectLink);
         });
-        $(document).off('keypress', '#AlaaAjaxLoginModal input').on('keyup', '#AlaaAjaxLoginModal input', function () {
-            validateAndSendRequest(callbackOrRedirectLink);
-            // var code = e.keyCode || e.which;
+        $(document).off('keypress', '#AlaaAjaxLoginModal input').on('keyup', '#AlaaAjaxLoginModal input', function (e) {
+
+            var code = e.keyCode || e.which;
+            if (typeof code !== 'undefined') {
+                validateAndSendRequest(callbackOrRedirectLink);
+            }
             // if(code === 13) { //Enter keycode
             //     validateAndSendRequest(callbackOrRedirectLink);
             // } else {
