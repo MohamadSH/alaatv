@@ -333,7 +333,7 @@
                                         <td class="text-center">
                                             <a href="{{action("Web\OrderproductController@edit" , $orderproduct)}}"
                                                class="btn btn-primary btn-sm btn-outline sbold uppercase">
-                                                <i class="fa fa-pencil-square-o"></i>
+                                                <i class="fa fa-edit"></i>
                                                 اصلاح
                                             </a>
                                             <button class="btn btn-danger btn-sm btn-outline sbold removeOrderproduct"
@@ -344,6 +344,10 @@
                                                 <i class="fa fa-trash"></i>
                                                 حذف
                                             </button>
+                                            <a href="{{$orderproduct->cacheClearUrl}}" class="btn btn-focus btn-sm btn-outline sbold">
+                                                <i class="fa fa-trash"></i>
+                                                خالی کردن کش
+                                            </a>
                                         </td>
                                     </tr>
                                 @endforeach
