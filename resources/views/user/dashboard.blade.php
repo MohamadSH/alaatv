@@ -211,36 +211,41 @@
 
             <div class="row myFavoritesRow boxed">
             <div class="col">
-                @foreach($userAssetsCollection as $userFavoritesKey=>$block)
+                @if($userAssetsCollection->where('title', '!=', 'محصولات من')->pluck('products')->first()->count() > 0 ||
+                $userAssetsCollection->where('title', '!=', 'محصولات من')->pluck('contents')->first()->count() > 0 ||
+                $userAssetsCollection->where('title', '!=', 'محصولات من')->pluck('sets')->first()->count() > 0)
+                    @foreach($userAssetsCollection as $userFavoritesKey=>$block)
+                        @if($block->title!=="محصولات من")
+                            @include('block.partials.block', [
+                                'blockCustomClass'=>$block->class.' userFavorites',
+                                'blockCustomId'=>'owlCarouselMyFavoritProducts',
+                                'blockType'=>'product',
+                                'blockTitle'=>'محصولات مورد علاقه من',
+                                'blockUrlDisable'=>false,
+                            ])
 
-                    @if($block->title!=="محصولات من")
+                            @include('block.partials.block', [
+                                'blockCustomClass'=>$block->class.' userFavorites',
+                                'blockCustomId'=>'owlCarouselMyFavoritContent',
+                                'blockType'=>'content',
+                                'blockTitle'=>'فیلم های مورد علاقه من',
+                                'blockUrlDisable'=>false,
+                            ])
 
-                        @include('block.partials.block', [
-                            'blockCustomClass'=>$block->class.' userFavorites',
-                            'blockCustomId'=>'owlCarouselMyFavoritProducts',
-                            'blockType'=>'product',
-                            'blockTitle'=>'محصولات مورد علاقه من',
-                            'blockUrlDisable'=>false,
-                        ])
-
-                        @include('block.partials.block', [
-                            'blockCustomClass'=>$block->class.' userFavorites',
-                            'blockCustomId'=>'owlCarouselMyFavoritContent',
-                            'blockType'=>'content',
-                            'blockTitle'=>'فیلم های مورد علاقه من',
-                            'blockUrlDisable'=>false,
-                        ])
-
-                        @include('block.partials.block', [
-                            'blockCustomClass'=>$block->class.' userFavorites',
-                            'blockCustomId'=>'owlCarouselMyFavoritSet',
-                            'blockType'=>'set',
-                            'blockTitle'=>'مجموعه های مورد علاقه من',
-                            'blockUrlDisable'=>false,
-                        ])
-
-                    @endif
-                @endforeach
+                            @include('block.partials.block', [
+                                'blockCustomClass'=>$block->class.' userFavorites',
+                                'blockCustomId'=>'owlCarouselMyFavoritSet',
+                                'blockType'=>'set',
+                                'blockTitle'=>'مجموعه های مورد علاقه من',
+                                'blockUrlDisable'=>false,
+                            ])
+                        @endif
+                    @endforeach
+                @else
+                    <div class="alert alert-info" role="alert">
+                        <strong>تا کنون موردی را به علاقه مندی های خود اضافه نکرده اید</strong>
+                    </div>
+                @endif
             </div>
         </div>
 
