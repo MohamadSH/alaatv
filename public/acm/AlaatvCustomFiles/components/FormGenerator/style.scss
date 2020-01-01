@@ -18,6 +18,14 @@
                 text-align: center;
                 top: 0;
                 width: 3.2rem;
+                color: #a4a2bb;
+                span {
+                    display: flex;
+                    height: 100%;
+                    width: 100%;
+                    justify-content: center;
+                    align-items: center;
+                }
                 &.left {
                     left: 0;
                 }
