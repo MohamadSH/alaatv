@@ -30,6 +30,7 @@
 
     @include('systemMessage.flash')
 
+    <input type="hidden" value="{{$userInfoCompletion}}" id="js-var-userInfo-cmpletion">
 
     @if(isset($user) && $userInfoCompletion>=60)
         @if(optional($userAssetsCollection->where('title', 'محصولات من')->first->products)->count() > 0)
@@ -254,13 +255,40 @@
 
         @endif
     @elseif(isset($user))
-        <div class="alert alert-info" role="alert">
-            <strong>اطلاعات شما کامل نیست. با مراجعه به بخش</strong>
-            <a href="{{ action("Web\UserController@show",Auth::user()) }}" class="m-nav__link">
-                <button type="button" class="btn m-btn m-btn--gradient-from-warning m-btn--gradient-to-danger m--margin-5">پروفایل</button>
-            </a>
-            <strong>اطلاعات خود را کامل کنید.</strong>
+
+        <div class="m-portlet">
+            <div class="m-portlet__head">
+                <div class="m-portlet__head-caption">
+                    <div class="m-portlet__head-title">
+                        <h3 class="m-portlet__head-text">
+                            اطلاعات شما کامل نیست.
+                        </h3>
+                    </div>
+                </div>
+            </div>
+            <div class="m-portlet__body">
+
+                <div class="alert alert-info" role="alert">
+                    <strong>برای مشاهده فیلم ها و جزوات ابتدا اطلاعات خود را کامل کنید.</strong>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mx-auto">
+                        <div class="completeUserInfo"></div>
+                    </div>
+                </div>
+
+
+            </div>
         </div>
+
+        <input type="hidden" value="{{route('web.authenticatedUser.profile.update')}}" id="js-var-actionUrl-profile-update">
+
+        <input type="hidden" value="{{$user->firstName}}" id="js-var-userData-name">
+        <input type="hidden" value="{{$user->lastName}}" id="js-var-userData-lastName">
+        <input type="hidden" value="{{$user->province}}" id="js-var-userData-province">
+        <input type="hidden" value="{{$user->city}}" id="js-var-userData-city">
+        <input type="hidden" value="{{Session::token()}}" id="js-var-formData-token">
     @endif
 
 
