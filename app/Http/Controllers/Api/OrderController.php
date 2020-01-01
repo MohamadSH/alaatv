@@ -54,6 +54,14 @@ class OrderController extends Controller
         return response($invoiceInfo, Response::HTTP_OK);
     }
 
+    /**
+     * API Version 2
+     *
+     * @param Request $request
+     *
+     * @return \Illuminate\Http\JsonResponse
+     * @throws Exception
+     */
     public function checkoutReviewV2(Request $request)
     {
         $user  = $request->user('api');
@@ -119,68 +127,135 @@ class OrderController extends Controller
      *
      * @param AlaaInvoiceGenerator $invoiceGenerator
      *
-     * @return Response
+     * @return ResponseFactory|Response
      * @throws Exception
      */
     public function submitCoupon(SubmitCouponRequest $request, AlaaInvoiceGenerator $invoiceGenerator)
     {
+        /** @var \App\Coupon $coupon */
         $coupon = Coupon::code($request->get('code'))->first();
         if ($request->has('openOrder')) {
             $order = $request->get('openOrder');
         } else {
-            $order_id = $request->get('order_id');
-            $order    = Order::Find($order_id);
+            $order    = Order::Find($request->get('order_id'));
         }
 
-        [$resultCode, $resultText] = $this->processCoupon($invoiceGenerator, $coupon, $order);
-
-        if ($resultCode == Response::HTTP_OK) {
-            $response = [
-                $coupon,
-                'message' => 'Coupon attached successfully',
-            ];
-        } else {
-            $response = [
+        if(!isset($coupon)){
+            return response([
                 'error' => [
-                    'code'    => $resultCode ?? $resultCode,
-                    'message' => $resultText ?? $resultText,
+                    'code'    => Response::HTTP_BAD_REQUEST ,
+                    'message' => 'Invalid coupon'
                 ],
-            ];
+            ]);
         }
+
+        if(!isset($order)){
+            return response([
+                'error' => [
+                    'code'    => Response::HTTP_BAD_REQUEST ,
+                    'message' => 'Invalid order'
+                ],
+            ]);
+        }
+
+        $couponValidationStatus = $coupon->validateCoupon();
+        if ($couponValidationStatus != Coupon::COUPON_VALIDATION_STATUS_OK) {
+            return response([
+                'error' => [
+                    'code'    => Response::HTTP_BAD_REQUEST,
+//                    'code'    => $couponValidationStatus,
+                    'message' => Coupon::COUPON_VALIDATION_INTERPRETER[$couponValidationStatus] ?? 'Coupon validation status is undetermined',
+                ],
+            ]);
+        }
+
+        $result = $this->handleValidCoupon($invoiceGenerator, $coupon, $order);
 
         Cache::tags([
             'order_' . $order->id . '_coupon',
             'order_' . $order->id . '_cost',
         ])->flush();
 
-        return response($response, Response::HTTP_OK);
+        if ($result === true) {
+            return response( [
+                $coupon,
+                'message' => 'Coupon attached successfully',
+            ]);
+        }
+
+        return response([
+            'error' => [
+                'code'    => Response::HTTP_SERVICE_UNAVAILABLE,
+                'message' => 'Database error',
+            ],
+        ]);
     }
 
-    /**
-     * @param AlaaInvoiceGenerator                             $invoiceGenerator
-     * @param                                                  $coupon
-     * @param                                                  $order
+    /** API Version 2
      *
-     * @return array
+     * @param SubmitCouponRequest  $request
+     * @param AlaaInvoiceGenerator $invoiceGenerator
+     *
+     * @return \Illuminate\Http\JsonResponse
      * @throws Exception
      */
-    private function processCoupon(AlaaInvoiceGenerator $invoiceGenerator, $coupon, $order): array
+    public function submitCouponV2(SubmitCouponRequest $request, AlaaInvoiceGenerator $invoiceGenerator)
     {
-        if (!isset($coupon) || !isset($order)) {
-            $resultText = isset($coupon) ? 'Unknown order' : 'Coupon code is wrong';
-
-            return [Response::HTTP_BAD_REQUEST, $resultText];
-        }
-
-        /** @var Coupon $coupon */
-        $couponValidationStatus = $coupon->validateCoupon();
-        if ($couponValidationStatus == Coupon::COUPON_VALIDATION_STATUS_OK) {
-            [$resultCode, $resultText] = $this->handleValidCoupon($invoiceGenerator, $coupon, $order);
+        $coupon = Coupon::code($request->get('code'))->first();
+        if ($request->has('openOrder')) {
+            $order = $request->get('openOrder');
         } else {
-            [$resultText, $resultCode] = $this->handleInvalidCoupon($couponValidationStatus);
+            $order    = Order::Find($request->get('order_id'));
         }
 
-        return [$resultCode, $resultText];
+        if(!isset($coupon)){
+            return response()->json([
+                'error' => [
+                    'code'    => Response::HTTP_UNPROCESSABLE_ENTITY ,
+                    'message' => 'Invalid coupon'
+                ]
+            ]);
+        }
+
+        if(!isset($order)){
+            return response()->json([
+                'error' => [
+                    'code'    => Response::HTTP_UNPROCESSABLE_ENTITY ,
+                    'message' => 'Invalid order'
+                ]
+            ]);
+        }
+
+        $couponValidationStatus = $coupon->validateCoupon();
+        if ($couponValidationStatus != Coupon::COUPON_VALIDATION_STATUS_OK) {
+            return response()->json([
+                'error' => [
+                    'code'    => $couponValidationStatus,
+                    'message' => Coupon::COUPON_VALIDATION_INTERPRETER[$couponValidationStatus] ?? 'Coupon validation status is undetermined',
+                ],
+            ]);
+        }
+
+        $result = $this->handleValidCoupon($invoiceGenerator, $coupon, $order);
+
+        Cache::tags([
+            'order_' . $order->id . '_coupon',
+            'order_' . $order->id . '_cost',
+        ])->flush();
+
+        if ($result === true) {
+            return response()->json([
+                new CouponResource($coupon),
+                'message' => 'Coupon has been attached successfully',
+            ]);
+        }
+
+        return response()->json( [
+            'error' => [
+                'code'    => Response::HTTP_SERVICE_UNAVAILABLE,
+                'message' => 'Error on attaching coupon to order',
+            ],
+        ]);
     }
 
     /**
@@ -188,16 +263,16 @@ class OrderController extends Controller
      * @param                                                  $coupon
      * @param                                                  $order
      *
-     * @return array
+     * @return bool
      * @throws Exception
      */
-    private function handleValidCoupon(AlaaInvoiceGenerator $invoiceGenerator, $coupon, $order): array
+    private function handleValidCoupon(AlaaInvoiceGenerator $invoiceGenerator, Coupon $coupon, Order $order): bool
     {
         $oldCoupon = $order->coupon;
         if (!isset($oldCoupon)) {
             $coupon->usageNumber = $coupon->usageNumber + 1;
             if (!$coupon->update()) {
-                return $this->databaseError();
+                return false;
             }
             $order->coupon_id = $coupon->id;
             if ($coupon->discounttype_id == config('constants.DISCOUNT_TYPE_COST')) {
@@ -211,29 +286,29 @@ class OrderController extends Controller
                 $coupon->usageNumber = $coupon->usageNumber - 1;
                 $coupon->update();
 
-                return $this->databaseError();
+                return false;
             }
 
-            return [Response::HTTP_OK, 'Coupon attached successfully'];
+            return true;
         }
         $flag = ($oldCoupon->usageNumber > 0);
 
         if ($oldCoupon->id == $coupon->id) {
-            return [Response::HTTP_BAD_REQUEST, 'This coupon is already attached to the order'];
+            return true;
         }
 
         if ($flag) {
             $oldCoupon->usageNumber = $oldCoupon->usageNumber - 1;
         }
         if (!$oldCoupon->update()) {
-            return $this->databaseError();
+            return false;
         }
         $coupon->usageNumber = $coupon->usageNumber + 1;
         if (!$coupon->update()) {
             $oldCoupon->usageNumber = $oldCoupon->usageNumber + 1;
             $oldCoupon->update();
 
-            return $this->databaseError();
+            return false;
         }
         $order->coupon_id = $coupon->id;
         if ($coupon->discounttype_id == config('constants.DISCOUNT_TYPE_COST')) {
@@ -249,71 +324,11 @@ class OrderController extends Controller
             $coupon->usageNumber = $coupon->usageNumber - 1;
             $coupon->update();
 
-            return $this->databaseError();
+            return false;
         }
-        $invoiceInfo = $invoiceGenerator->generateOrderInvoice($order);
+        $invoiceGenerator->generateOrderInvoice($order);
 
-        return [Response::HTTP_OK, 'Coupon attached successfully'];
-    }
-
-    /**
-     * @return array
-     */
-    private function databaseError(): array
-    {
-        return [Response::HTTP_SERVICE_UNAVAILABLE, 'Database error'];
-    }
-
-    /**
-     * @param int $couponValidationStatus
-     *
-     * @return array
-     */
-    private function handleInvalidCoupon(int $couponValidationStatus): array
-    {
-        $mapper     = [
-            Coupon::COUPON_VALIDATION_STATUS_DISABLED             => 'Coupon is disabled',
-            Coupon::COUPON_VALIDATION_STATUS_USAGE_LIMIT_FINISHED => 'Coupon number is finished',
-            Coupon::COUPON_VALIDATION_STATUS_EXPIRED              => 'Coupon is expired',
-            Coupon::COUPON_VALIDATION_STATUS_USAGE_TIME_NOT_BEGUN => 'Coupon usage period has not started',
-        ];
-        $resultText = $mapper[$couponValidationStatus] ?? 'Coupon validation status is undetermined';
-
-        return [$resultText, Response::HTTP_BAD_REQUEST];
-    }
-
-    public function submitCouponV2(SubmitCouponRequest $request, AlaaInvoiceGenerator $invoiceGenerator)
-    {
-        $coupon = Coupon::code($request->get('code'))->first();
-        if ($request->has('openOrder')) {
-            $order = $request->get('openOrder');
-        } else {
-            $order_id = $request->get('order_id');
-            $order    = Order::Find($order_id);
-        }
-
-        [$resultCode, $resultText] = $this->processCoupon($invoiceGenerator, $coupon, $order);
-
-        if ($resultCode == Response::HTTP_OK) {
-            $response = [
-                new CouponResource($coupon),
-                'message' => 'Coupon attached successfully',
-            ];
-        } else {
-            $response = [
-                'error' => [
-                    'code'    => $resultCode ?? $resultCode,
-                    'message' => $resultText ?? $resultText,
-                ],
-            ];
-        }
-
-        Cache::tags([
-            'order_' . $order->id . '_coupon',
-            'order_' . $order->id . '_cost',
-        ])->flush();
-
-        return response($response, Response::HTTP_OK);
+        return true;
     }
 
     /**
@@ -423,6 +438,13 @@ class OrderController extends Controller
         return redirect()->route('api.v1.payment.getEncryptedLink', ['order_id' => $donateOrder->id]);
     }
 
+    /**
+     * API Version 2
+     *
+     * @param DonateRequest $request
+     *
+     * @return array
+     */
     public function donateOrderV2(DonateRequest $request)
     {
         $user = $request->user('alaatv');
@@ -473,4 +495,5 @@ class OrderController extends Controller
             ],
         ];
     }
+
 }
