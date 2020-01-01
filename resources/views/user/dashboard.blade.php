@@ -211,9 +211,9 @@
 
             <div class="row myFavoritesRow boxed">
             <div class="col">
-                @if($userAssetsCollection->where('title', '!=', 'محصولات من')->pluck('products')->first()->count() > 0 ||
-                $userAssetsCollection->where('title', '!=', 'محصولات من')->pluck('contents')->first()->count() > 0 ||
-                $userAssetsCollection->where('title', '!=', 'محصولات من')->pluck('sets')->first()->count() > 0)
+                @if((!is_null($userAssetsCollection->where('title', '!=', 'محصولات من')->pluck('products')->first()) && $userAssetsCollection->where('title', '!=', 'محصولات من')->pluck('products')->first()->count() > 0) ||
+                (!is_null($userAssetsCollection->where('title', '!=', 'محصولات من')->pluck('contents')->first()) &&  $userAssetsCollection->where('title', '!=', 'محصولات من')->pluck('contents')->first()->count()) > 0 ||
+                ( !is_null($userAssetsCollection->where('title', '!=', 'محصولات من')->pluck('sets')->first()) &&  $userAssetsCollection->where('title', '!=', 'محصولات من')->pluck('sets')->first()->count()) > 0)
                     @foreach($userAssetsCollection as $userFavoritesKey=>$block)
                         @if($block->title!=="محصولات من")
                             @include('block.partials.block', [
