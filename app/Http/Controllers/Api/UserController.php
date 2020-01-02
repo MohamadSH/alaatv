@@ -52,7 +52,6 @@ class UserController extends Controller
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
 
-        //ToDo : place in UserObserver
         if ($user->checkUserProfileForLocking()) {
             $user->lockHisProfile();
         }
@@ -115,13 +114,11 @@ class UserController extends Controller
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
 
-        //ToDo : place in UserObserver
         if ($user->checkUserProfileForLocking()) {
             $user->lockHisProfile();
         }
 
         if ($user->update()) {
-
             $message = 'User profile updated successfully';
             $status  = Response::HTTP_OK;
         } else {
