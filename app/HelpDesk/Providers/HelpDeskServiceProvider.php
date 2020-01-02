@@ -3,6 +3,7 @@
 namespace App\HelpDesk\Providers;
 
 use App\HelpDesk\Models\Ticket;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
@@ -43,7 +44,7 @@ class HelpDeskServiceProvider extends ServiceProvider
             $key = 'ticket:' . $value;
 
             return Cache::remember($key, config('constants.CACHE_60'), function () use ($value) {
-                return Ticket::where('id', $value)->first() ?: abort(404);
+                return Ticket::where('id', $value)->first() ?: abort(Response::HTTP_NOT_FOUND);
             });
         });
     }

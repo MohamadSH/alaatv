@@ -176,8 +176,7 @@ class Coupon extends BaseModel
      */
     public function scopeValid($query)
     {
-        $now = Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now())
-            ->timezone('Asia/Tehran');
+        $now = Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now('Asia/Tehran'));
 
         return $query->where(function ($q) use ($now) {
             $q->where('validSince', '<', $now)

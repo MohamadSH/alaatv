@@ -6,9 +6,11 @@ use App\{Adapter\AlaaSftpAdapter,
     Block,
     Content,
     Contentset,
+    Coupon,
     Employeetimesheet,
     Observers\BlockObserver,
     Observers\ContentObserver,
+    Observers\CouponObserver,
     Observers\EmployeetimesheetObserver,
     Observers\OrderproductObserver,
     Observers\ProductObserver,
@@ -71,6 +73,7 @@ class AppServiceProvider extends ServiceProvider
         User::observe(UserObserver::class);
         Slideshow::observe(SlideshowObserver::class);
         Block::observe(BlockObserver::class);
+        Coupon::observe(CouponObserver::class);
         $this->defineValidationRules();
 //        Resource::withoutWrapping();
     }

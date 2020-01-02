@@ -52,7 +52,7 @@ class Descriptionwithperiod extends BaseModel
         if ($withTime) {
             return ($explodedDate . ' ' . $explodedTime);
         } else {
-            return $explodedDate . '';
+            return $explodedDate;
         }
     }
 
@@ -73,7 +73,7 @@ class Descriptionwithperiod extends BaseModel
         if ($withTime) {
             return ($explodedDate . ' ' . $explodedTime);
         } else {
-            return $explodedDate . '';
+            return $explodedDate;
         }
     }
 }

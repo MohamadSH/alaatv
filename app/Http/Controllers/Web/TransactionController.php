@@ -335,10 +335,10 @@ class TransactionController extends Controller
     {
         $order = Order::FindOrFail($request->get('order_id'));
         if (!$this->checkOrderAuthority($order)) {
-            abort(404);
+            abort(Response::HTTP_NOT_FOUND);
         }
         if ($order->id != $transaction->order_id) {
-            abort(404);
+            abort(Response::HTTP_NOT_FOUND);
         }
 
         $editRequest = new EditTransactionRequest();

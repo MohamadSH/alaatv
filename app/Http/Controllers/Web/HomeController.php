@@ -254,7 +254,7 @@ class HomeController extends Controller
                         $externalLink = $file->name;
                     }
                 } else {
-                    abort('404');
+                    abort(Response::HTTP_NOT_FOUND);
                 }
         }
         if (isset($downloadPriority) && strcmp($downloadPriority, 'cloudFirst') == 0) {
@@ -310,7 +310,7 @@ class HomeController extends Controller
                 ]);
                 //
             }
-            abort(404);
+            abort(Response::HTTP_NOT_FOUND);
         }
         if (isset($diskName) && Storage::disk($diskName)
                 ->exists($fileName)) {
@@ -356,12 +356,12 @@ class HomeController extends Controller
                     break;
 
             }
-            abort(404);
+            abort(Response::HTTP_NOT_FOUND);
         }
         if (isset($externalLink)) {
             return redirect($externalLink);
         }
-        abort(404);
+        abort(Response::HTTP_NOT_FOUND);
 
     }
 
