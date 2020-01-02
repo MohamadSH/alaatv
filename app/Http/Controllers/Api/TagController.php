@@ -241,7 +241,7 @@ class TagController extends Controller
 
     public function flush(Request $request)
     {
-        abort(404);
+        abort(Response::HTTP_NOT_FOUND);
         $this->redis->flushDB(static function ($err, $result) {
             return $result;
         });

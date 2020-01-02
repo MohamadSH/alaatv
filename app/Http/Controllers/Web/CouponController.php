@@ -111,7 +111,7 @@ class CouponController extends Controller
         $validSince = Carbon::parse($request->get('validSince'))
             ->format('Y-m-d');
         $sinceTime  = $request->get('sinceTime');
-        $sinceTime  = $sinceTime != '' ? Carbon::parse($sinceTime)
+        $sinceTime  = strlen($sinceTime) > 0 ? Carbon::parse($sinceTime)
             ->format('H:i:s') : '00:00:00';
 
         return $validSince . ' ' . $sinceTime;
@@ -126,7 +126,7 @@ class CouponController extends Controller
         $validUntil = Carbon::parse($request->get('validUntil'))
             ->format('Y-m-d');
         $untilTime  = $request->get('untilTime');
-        $untilTime  = $untilTime != '' ? Carbon::parse($untilTime)
+        $untilTime  = strlen($untilTime) > 0 ? Carbon::parse($untilTime)
             ->format('H:i:s') : '00:00:00';
 
         return $validUntil . ' ' . $untilTime;

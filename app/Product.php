@@ -417,7 +417,7 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
      *
      * @return string
      */
-    public function validUntil_Jalali(): string
+    public function validUntil_Jalali($withTime=true): string
     {
         /*$explodedDateTime = explode(" ", $this->validUntil);*/
         //        $explodedTime = $explodedDateTime[1] ;
@@ -499,8 +499,7 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
      */
     public function scopeValid($query)
     {
-        $now = Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now())
-            ->timezone('Asia/Tehran');
+        $now = Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now('Asia/Tehran'));
 
         return $query->where(function ($q) use ($now) {
             /** @var QueryBuilder $q */

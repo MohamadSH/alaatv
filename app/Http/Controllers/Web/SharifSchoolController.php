@@ -105,7 +105,7 @@ class SharifSchoolController extends Controller
 
     public function schoolRegisterLanding(Request $request)
     {
-        abort(404);
+        abort(Response::HTTP_NOT_FOUND);
         $eventRegistered = false;
         if (Auth::check()) {
             $user  = Auth::user();
