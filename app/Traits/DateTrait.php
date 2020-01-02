@@ -192,10 +192,10 @@ trait DateTrait
      */
     public function ValidUntil_Jalali($withTime=true)
     {
-        $validSince       = $this->validSince;
-        $explodedDateTime = explode(' ', $validSince);
+        $validUntil       = $this->validUntil;
+        $explodedDateTime = explode(' ', $validUntil);
         $explodedTime     = $explodedDateTime[1];
-        $explodedDate     = $this->convertDate($validSince, 'toJalali');
+        $explodedDate     = $this->convertDate($validUntil, 'toJalali');
 
         if ($withTime) {
             return ($explodedDate . ' ' . $explodedTime);
