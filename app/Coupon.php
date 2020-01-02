@@ -90,6 +90,14 @@ class Coupon extends BaseModel
     public const COUPON_VALIDATION_STATUS_USAGE_TIME_NOT_BEGUN = 2;
     public const COUPON_VALIDATION_STATUS_EXPIRED = 3;
     public const COUPON_VALIDATION_STATUS_USAGE_LIMIT_FINISHED = 4;
+
+    const COUPON_VALIDATION_INTERPRETER     = [
+        self::COUPON_VALIDATION_STATUS_DISABLED             => 'Coupon is disabled',
+        self::COUPON_VALIDATION_STATUS_USAGE_LIMIT_FINISHED => 'Coupon number is finished',
+        self::COUPON_VALIDATION_STATUS_EXPIRED              => 'Coupon is expired',
+        self::COUPON_VALIDATION_STATUS_USAGE_TIME_NOT_BEGUN => 'Coupon usage period has not started',
+    ];
+
     /**
      * @var array
      */
@@ -214,6 +222,9 @@ class Coupon extends BaseModel
     public function validateCoupon()
     {
 
+        if ($this->hasTotalNumberFinished()) {
+            return self::COUPON_VALIDATION_STATUS_USAGE_LIMIT_FINISHED;
+        }
         if (!$this->isEnable()) {
             return self::COUPON_VALIDATION_STATUS_DISABLED;
         }
@@ -222,9 +233,6 @@ class Coupon extends BaseModel
         }
         if (!$this->hasTimeToUntilTime()) {
             return self::COUPON_VALIDATION_STATUS_EXPIRED;
-        }
-        if ($this->hasTotalNumberFinished()) {
-            return self::COUPON_VALIDATION_STATUS_USAGE_LIMIT_FINISHED;
         }
 
         return self::COUPON_VALIDATION_STATUS_OK;
@@ -315,9 +323,16 @@ class Coupon extends BaseModel
         return $flag;
     }
 
-    public function decreaseUseNumber()
+    public function decreaseUseNumber():self
     {
-        $this->usageNumber--;
+        $this->usageNumber = max($this->usageNumber - 1,0);
+        return $this;
+    }
+
+    public function increaseUseNumber():self
+    {
+        $this->usageNumber++;
+        return $this;
     }
 
     public function encreaseUserNumber()

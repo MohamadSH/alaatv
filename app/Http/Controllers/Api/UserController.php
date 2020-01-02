@@ -52,7 +52,6 @@ class UserController extends Controller
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
 
-        //ToDo : place in UserObserver
         if ($user->checkUserProfileForLocking()) {
             $user->lockHisProfile();
         }
@@ -85,6 +84,14 @@ class UserController extends Controller
         return response($response, Response::HTTP_OK);
     }
 
+    /**
+     * API Version 2
+     *
+     * @param EditUserRequest $request
+     * @param User|null       $user
+     *
+     * @return ResponseFactory|Response
+     */
     public function updateV2(EditUserRequest $request, User $user = null)
     {
         $authenticatedUser = $request->user('api');
@@ -107,13 +114,11 @@ class UserController extends Controller
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
 
-        //ToDo : place in UserObserver
         if ($user->checkUserProfileForLocking()) {
             $user->lockHisProfile();
         }
 
         if ($user->update()) {
-
             $message = 'User profile updated successfully';
             $status  = Response::HTTP_OK;
         } else {
@@ -156,6 +161,14 @@ class UserController extends Controller
         return response($user, Response::HTTP_OK);
     }
 
+    /**
+     * API Version 2
+     *
+     * @param Request $request
+     * @param User    $user
+     *
+     * @return ResponseFactory|JsonResponse|Response
+     */
     public function showV2(Request $request, User $user)
     {
         $authenticatedUser = $request->user('api');
@@ -200,6 +213,14 @@ class UserController extends Controller
         return response()->json($orders);
     }
 
+    /**
+     * API Version 2
+     *
+     * @param Request $request
+     * @param User    $user
+     *
+     * @return ResponseFactory|\Illuminate\Http\Resources\Json\AnonymousResourceCollection|Response
+     */
     public function userOrdersV2(Request $request, User $user)
     {
         /** @var User $user */

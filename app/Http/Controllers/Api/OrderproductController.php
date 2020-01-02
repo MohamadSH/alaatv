@@ -63,6 +63,13 @@ class OrderproductController extends Controller
         return response($responseContent, Response::HTTP_OK);
     }
 
+    /**
+     * API Version 2
+     *
+     * @param OrderProductStoreRequest $request
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function storeV2(OrderProductStoreRequest $request)
     {
         if ($request->has('extraAttribute')) {
@@ -131,6 +138,15 @@ class OrderproductController extends Controller
         }
     }
 
+    /**
+     * API Version 2
+     *
+     * @param Request      $request
+     * @param Orderproduct $orderproduct
+     *
+     * @return ResponseFactory|\Illuminate\Http\JsonResponse|Response
+     * @throws Exception
+     */
     public function destroyV2(Request $request, Orderproduct $orderproduct)
     {
         $authenticatedUser = $request->user('api');

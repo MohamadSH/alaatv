@@ -804,6 +804,20 @@ class Order extends BaseModel
         $this->couponDiscountAmount = 0;
     }
 
+    public function attachCoupon(Coupon $coupon):self
+    {
+        $this->coupon_id = $coupon->id;
+        if ($coupon->discounttype_id == config('constants.DISCOUNT_TYPE_COST')) {
+            $this->couponDiscount       = 0;
+            $this->couponDiscountAmount = (int)$coupon->discount;
+        } else {
+            $this->couponDiscount       = $coupon->discount;
+            $this->couponDiscountAmount = 0;
+        }
+
+        return $this;
+    }
+
     /**
      * @return int $totalWalletRefund
      */

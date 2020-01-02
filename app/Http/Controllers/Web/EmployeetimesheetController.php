@@ -195,7 +195,7 @@ class EmployeetimesheetController extends Controller
     {
         if ($request->user()->id == 8992) {// Agha majid
             if (!in_array($employeeTimeSheet->user_id, [397580, 285202])) {
-                abort(403);
+                abort(Response::HTTP_FORBIDDEN);
             }
         }
 
@@ -219,7 +219,7 @@ class EmployeetimesheetController extends Controller
     {
         if ($request->user()->id == 8992) {// Agha majid
             if (!in_array($employeeTimeSheet->user_id, [397580, 285202])) {
-                abort(403);
+                abort(Response::HTTP_FORBIDDEN);
             }
         }
 
