@@ -12,31 +12,31 @@ class ErrorPageController extends Controller
     /**
      * Show the not found page.
      *
-     * @return Response
+     * @return void
      */
     public function error404()
     {
-        return abort(404);
+        return abort(Response::HTTP_NOT_FOUND);
     }
 
     /**
      * Show forbidden page.
      *
-     * @return Response
+     * @return void
      */
     public function error403()
     {
-        return abort(403);
+        return abort(Response::HTTP_FORBIDDEN);
     }
 
     /**
      * Show general error page.
      *
-     * @return Response
+     * @return void
      */
     public function error500()
     {
-        return abort(500);
+        return abort(Response::HTTP_INTERNAL_SERVER_ERROR);
     }
 
     /**

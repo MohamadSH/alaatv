@@ -193,7 +193,7 @@ class MbtianswerController extends Controller
     public function store(Request $request)
     {
         if (!$this->isAuthorized() || $this->userHasTakenMBTI(Auth::user())) {
-            return $this->response->setStatusCode(403);
+            return $this->response->setStatusCode(Response::HTTP_FORBIDDEN);
         }
 
         $answers = [];

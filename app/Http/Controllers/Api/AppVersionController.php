@@ -36,7 +36,13 @@ class AppVersionController extends Controller
         ]);
     }
 
-
+    /**
+     * API Version 2
+     *
+     * @param Request $request
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function showV2(Request $request)
     {
         return response()->json([
