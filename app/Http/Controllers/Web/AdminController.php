@@ -578,10 +578,10 @@ class AdminController extends Controller
     {
         $users = User::whereHas('orders', function ($q) {
             $q->where('orderstatus_id', config('constants.ORDER_STATUS_CLOSED'))
-                ->whereIn('paymentstatus_id', [config('constants.PAYMENT_STATUS_UNPAID')])
+                ->where('paymentstatus_id', config('constants.PAYMENT_STATUS_UNPAID'))
                 ->whereHas('orderproducts', function ($q2) {
                     $q2->whereIn('product_id', [389, 375, 347]);
-                });
+                })->where('completed_at' , '>=' , '2019-12-24 00:00:00');
         })->whereDoesntHave('orders', function ($q3) {
             $q3->where('orderstatus_id', config('constants.ORDER_STATUS_CLOSED'))
                 ->whereIn('paymentstatus_id', [config('constants.PAYMENT_STATUS_PAID'), config('constants.PAYMENT_STATUS_INDEBTED'), config('constants.PAYMENT_STATUS_VERIFIED_INDEBTED')])

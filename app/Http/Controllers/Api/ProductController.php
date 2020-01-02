@@ -64,6 +64,14 @@ class ProductController extends Controller
         return response()->json($product);
     }
 
+    /**
+     * API Version 2
+     *
+     * @param Request $request
+     * @param Product $product
+     *
+     * @return ProductResource|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
     public function showV2(Request $request, Product $product)
     {
         if (!is_null($product->redirectUrl)) {
@@ -192,6 +200,14 @@ class ProductController extends Controller
             });
     }
 
+    /**
+     * API Version 2
+     *
+     * @param Request $request
+     * @param Product $grandProduct
+     *
+     * @return mixed
+     */
     public function refreshPriceV2(Request $request, Product $grandProduct)
     {
         $mainAttributeValues   = $request->get('mainAttributeValues');
