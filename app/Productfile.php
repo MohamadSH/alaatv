@@ -117,8 +117,7 @@ class Productfile extends BaseModel
         /** @var QueryBuilder $query */
         return $query->where(function ($q) {
             /** @var QueryBuilder $q */
-            $q->where('validSince', '<', Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now())
-                ->timezone('Asia/Tehran'))
+            $q->where('validSince', '<', Carbon::createFromFormat('Y-m-d H:i:s', Carbon::now('Asia/Tehran')))
                 ->orwhereNull('validSince');
         });
     }
