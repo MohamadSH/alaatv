@@ -15,6 +15,7 @@ use App\Http\Resources\Invoice as InvoiceResource;
 use App\Order;
 use App\Orderproduct;
 use App\Product;
+use App\Traits\User\ResponseFormatter;
 use Exception;
 use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\RedirectResponse;
@@ -24,6 +25,8 @@ use Illuminate\Support\Facades\Cache;
 
 class OrderController extends Controller
 {
+    use ResponseFormatter;
+
     /**
      * OrderController constructor.
      */
@@ -142,54 +145,32 @@ class OrderController extends Controller
         }
 
         if(!isset($coupon)){
-            return response([
-                'error' => [
-                    'code'    => Response::HTTP_BAD_REQUEST ,
-                    'message' => 'Invalid coupon'
-                ],
-            ]);
+            return response($this->makeErrorResponse(Response::HTTP_BAD_REQUEST, 'Invalid coupon'));
         }
 
         if(!isset($order)){
-            return response([
-                'error' => [
-                    'code'    => Response::HTTP_BAD_REQUEST ,
-                    'message' => 'Invalid order'
-                ],
-            ]);
+            return response($this->makeErrorResponse(Response::HTTP_BAD_REQUEST, 'Invalid order'));
         }
 
         $couponValidationStatus = $coupon->validateCoupon();
         if ($couponValidationStatus != Coupon::COUPON_VALIDATION_STATUS_OK) {
-            return response([
-                'error' => [
-                    'code'    => Response::HTTP_BAD_REQUEST,
-//                    'code'    => $couponValidationStatus,
-                    'message' => Coupon::COUPON_VALIDATION_INTERPRETER[$couponValidationStatus] ?? 'Coupon validation status is undetermined',
-                ],
-            ]);
+            return response($this->makeErrorResponse(Response::HTTP_BAD_REQUEST, Coupon::COUPON_VALIDATION_INTERPRETER[$couponValidationStatus] ?? 'Coupon validation status is undetermined'));
         }
 
-        $result = (new CouponSubmitter($order))->handleValidCoupon($invoiceGenerator, $coupon);
-
-        Cache::tags([
-            'order_' . $order->id . '_coupon',
-            'order_' . $order->id . '_cost',
-        ])->flush();
-
+        $result = (new CouponSubmitter($order))->submit($coupon);
         if ($result === true) {
+            Cache::tags([
+                'order_' . $order->id . '_coupon',
+                'order_' . $order->id . '_cost',
+            ])->flush();
+            $invoiceGenerator->generateOrderInvoice($order);
             return response( [
                 $coupon,
                 'message' => 'Coupon attached successfully',
             ]);
         }
 
-        return response([
-            'error' => [
-                'code'    => Response::HTTP_SERVICE_UNAVAILABLE,
-                'message' => 'Database error',
-            ],
-        ]);
+        return response($this->makeErrorResponse(Response::HTTP_SERVICE_UNAVAILABLE, 'Database error'));
     }
 
     /** API Version 2
@@ -210,53 +191,29 @@ class OrderController extends Controller
         }
 
         if(!isset($coupon)){
-            return response()->json([
-                'error' => [
-                    'code'    => Response::HTTP_UNPROCESSABLE_ENTITY ,
-                    'message' => 'Invalid coupon'
-                ]
-            ]);
+            return response()->json($this->makeErrorResponse(Response::HTTP_UNPROCESSABLE_ENTITY, 'Invalid coupon'));
         }
 
         if(!isset($order)){
-            return response()->json([
-                'error' => [
-                    'code'    => Response::HTTP_UNPROCESSABLE_ENTITY ,
-                    'message' => 'Invalid order'
-                ]
-            ]);
+            return response()->json($this->makeErrorResponse(Response::HTTP_UNPROCESSABLE_ENTITY, 'Invalid order'));
         }
 
         $couponValidationStatus = $coupon->validateCoupon();
         if ($couponValidationStatus != Coupon::COUPON_VALIDATION_STATUS_OK) {
-            return response()->json([
-                'error' => [
-                    'code'    => $couponValidationStatus,
-                    'message' => Coupon::COUPON_VALIDATION_INTERPRETER[$couponValidationStatus] ?? 'Coupon validation status is undetermined',
-                ],
-            ]);
+            return response()->json($this->makeErrorResponse($couponValidationStatus, Coupon::COUPON_VALIDATION_INTERPRETER[$couponValidationStatus] ?? 'Coupon validation status is undetermined'));
         }
 
-        $result = (new CouponSubmitter($order))->handleValidCoupon($invoiceGenerator, $coupon);
-
-        Cache::tags([
-            'order_' . $order->id . '_coupon',
-            'order_' . $order->id . '_cost',
-        ])->flush();
-
+        $result = (new CouponSubmitter($order))->submit($coupon);
         if ($result === true) {
-            return response()->json([
-                new CouponResource($coupon),
-                'message' => 'Coupon has been attached successfully',
-            ]);
+            Cache::tags([
+                'order_' . $order->id . '_coupon',
+                'order_' . $order->id . '_cost',
+            ])->flush();
+            $invoiceGenerator->generateOrderInvoice($order);
+            return (new CouponResource($coupon))->response();
         }
 
-        return response()->json( [
-            'error' => [
-                'code'    => Response::HTTP_SERVICE_UNAVAILABLE,
-                'message' => 'Error on attaching coupon to order',
-            ],
-        ]);
+        return response()->json($this->makeErrorResponse(Response::HTTP_SERVICE_UNAVAILABLE, 'Error on attaching coupon to order'));
     }
 
     /**
