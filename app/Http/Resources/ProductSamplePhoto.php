@@ -4,7 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Request;
 
-class ProductSamplePhoto extends AlaaJsonResourceWithPagination
+class ProductSamplePhoto extends AlaaJsonResourceWithoutPagination
 {
     /**
      * Transform the resource into an array.
