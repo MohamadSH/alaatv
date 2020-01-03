@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
  *
  * @mixin Transaction
  * */
-class SuccessfulTransaction extends AlaaJsonResource
+class SuccessfulTransaction extends AlaaJsonResourceWithPagination
 {
     function __construct(Transaction $model)
     {

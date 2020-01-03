@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
  *
  * @mixin \App\Product
  * */
-class Child extends AlaaJsonResource
+class Child extends AlaaJsonResourceWithPagination
 {
     use Resource;
 

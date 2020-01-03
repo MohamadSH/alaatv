@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
  *
  * @mixin \App\Transactiongateway
  * */
-class Transactiongateway extends AlaaJsonResource
+class Transactiongateway extends AlaaJsonResourceWithPagination
 {
     /**
      * Transform the resource into an array.

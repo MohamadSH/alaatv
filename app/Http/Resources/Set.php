@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
  *
  * @mixin Contentset
  * */
-class Set extends AlaaJsonResource
+class Set extends AlaaJsonResourceWithPagination
 {
     /**
      * Transform the resource into an array.

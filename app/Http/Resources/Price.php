@@ -5,7 +5,7 @@ namespace App\Http\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 
-class Price extends AlaaJsonResource
+class Price extends AlaaJsonResourceWithPagination
 {
     /**
      * Transform the resource into an array.

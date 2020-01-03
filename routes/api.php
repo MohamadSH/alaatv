@@ -125,7 +125,6 @@ Route::group(['prefix' => 'v2'], function () {
 
         Route::group(['prefix' => 'checkout'], function () {
             Route::get('review', [OrderController::class, 'checkoutReviewV2'])->name('api.v2.checkout.review');
-            Route::get('payment', [OrderController::class, 'checkoutPaymentV2'])->name('api.v2.checkout.payment');
         });
 
         Route::any('getPaymentRedirectEncryptedLink', '\\'.GetPaymentRedirectEncryptedLink::class)->name('api.v2.payment.getEncryptedLink');

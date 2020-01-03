@@ -5,7 +5,7 @@ namespace App\Http\Resources;
 use App\Contentset;
 use Illuminate\Http\Request;
 
-class SetInIndex extends AlaaJsonResource
+class SetInIndex extends AlaaJsonResourceWithPagination
 {
     /**
      * Transform the resource into an array.

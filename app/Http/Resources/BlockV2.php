@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
  *
  * @mixin \App\Block
  * */
-class BlockV2 extends AlaaJsonResource
+class BlockV2 extends AlaaJsonResourceWithPagination
 {
     function __construct(\App\Block $model)
     {

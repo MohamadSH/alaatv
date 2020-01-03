@@ -5,7 +5,7 @@ namespace App\Http\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 
-class VideoFile extends AlaaJsonResource
+class VideoFile extends AlaaJsonResourceWithPagination
 {
     /**
      * Transform the resource into an array.

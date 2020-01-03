@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
  *
  * @mixin \App\User
  * */
-class OrderOwner extends AlaaJsonResource
+class OrderOwner extends AlaaJsonResourceWithPagination
 {
     function __construct(\App\User $model)
     {

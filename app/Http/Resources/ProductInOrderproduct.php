@@ -2,16 +2,19 @@
 
 namespace App\Http\Resources;
 
+use App\Traits\Product\Resource;
 use Illuminate\Http\Request;
 
 /**
- * Class User
+ * Class Product
  *
- * @mixin \App\User
+ * @mixin \App\Product
  * */
-class Author extends AlaaJsonResourceWithPagination
+class ProductInOrderproduct extends AlaaJsonResourceWithoutPagination
 {
-    function __construct(\App\User $model)
+    use Resource;
+
+    function __construct(\App\Product $model)
     {
         parent::__construct($model);
     }
@@ -25,15 +28,15 @@ class Author extends AlaaJsonResourceWithPagination
      */
     public function toArray($request)
     {
-        if (!($this->resource instanceof \App\User)) {
+        if (!($this->resource instanceof \App\Product)) {
             return [];
         }
-
         return [
             'id'         => $this->id,
-            'first_name' => $this->when(isset($this->firstName), $this->firstName),
-            'last_name'  => $this->when(isset($this->lastName), $this->lastName),
+            'title'      => $this->when(isset($this->name), $this->name),
+            'url'        => $this->getUrl(),
             'photo'      => $this->when(isset($this->photo), $this->photo),
+            'attributes' => $this->getAttributes(),
         ];
     }
 }
