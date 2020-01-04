@@ -71,7 +71,7 @@
 .btnFavorite {
     position: absolute;
     left: 10px;
-    top: 10px;
+    top: -20px;
 }
 
 /*media query*/

@@ -1,4 +1,9 @@
-
+.btnFavorite {
+    position: absolute;
+    top: -18px;
+    left: 30px;
+    z-index: 10;
+}
 .m-widget5__desc{
     font-size:1.2rem !important;
     text-align: justify;
@@ -38,6 +43,7 @@
     flex-flow: row;
     align-items: center;
     justify-content: center;
+    margin-top: 10px;
 }
 
 .rightSideAdBanner {
