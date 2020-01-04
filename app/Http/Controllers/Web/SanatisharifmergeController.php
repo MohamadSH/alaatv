@@ -4816,7 +4816,7 @@ class SanatisharifmergeController extends Controller
                 break;
         }
 
-        return response()->json(json_decode($json, true), Response::HTTP_OK);
+        return response()->json(json_decode($json, true));
     }
     //    public function redirectVideo
 }

@@ -46,6 +46,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\File;
@@ -785,7 +786,7 @@ class OrderController extends Controller
                     'couponInfo'                  => $coupon,
                     'notIncludedProductsInCoupon' => $notIncludedProductsInCoupon,
                     'orderHasDonate'              => $orderHasDonate,
-                ], Response::HTTP_OK);
+                ]);
 
             } else {
                 $response = response(['message' => 'Order not found'], Response::HTTP_BAD_REQUEST);
@@ -797,7 +798,7 @@ class OrderController extends Controller
                 $invoiceInfo         = $invoiceGenerator->generateFakeOrderproductsInvoice($fakeOrderproducts);
             }
 
-            $response = response([], Response::HTTP_OK);
+            $response = response([]);
         }
 
         if ($request->expectsJson()) {
@@ -1047,7 +1048,7 @@ class OrderController extends Controller
             ];
         }
 
-        return response($response, Response::HTTP_OK);
+        return response($response);
     }
 
     public function removeOrderproduct(Request $request, Product $product, OrderproductController $orderproductController)
@@ -1108,7 +1109,7 @@ class OrderController extends Controller
             ];
         }
 
-        return response($response, Response::HTTP_OK);
+        return response($response);
     }
 
     /**
@@ -1479,7 +1480,7 @@ class OrderController extends Controller
                 ];
             }
 
-            return response($response, Response::HTTP_OK);
+            return response($response);
         } catch (Exception    $e) {
             return response()->json([
                 'error' => $e->getMessage(),
@@ -1493,11 +1494,11 @@ class OrderController extends Controller
      * @param                                     $resultText
      * @param Coupon                              $coupon
      * @param array                               $priceInfo
-     * @param \Illuminate\Support\Collection|null $notIncludedProductsInCoupon
+     * @param Collection|null                     $notIncludedProductsInCoupon
      *
      * @return array
      */
-    private function makeSubmitCouponSuccessfulResponse(string $resultText, Coupon $coupon, array $priceInfo, ?\Illuminate\Support\Collection $notIncludedProductsInCoupon): array
+    private function makeSubmitCouponSuccessfulResponse(string $resultText, Coupon $coupon, array $priceInfo, ?Collection $notIncludedProductsInCoupon): array
     {
         return [
             'message'                     => $resultText,
@@ -1505,5 +1506,5 @@ class OrderController extends Controller
             'price'                       => isset($priceInfo) ? $priceInfo : null,
             'notIncludedProductsInCoupon' => isset($notIncludedProductsInCoupon) ? $notIncludedProductsInCoupon : null,
         ];
-}
+    }
 }

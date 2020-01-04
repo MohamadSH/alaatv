@@ -70,7 +70,7 @@ class HomeController extends Controller
 
     public function debug(Request $request, User $user = null)
     {
-        $user = \App\User::Find(1);
+        $user = User::Find(1);
         return $user;
         return view('admin.topicsTree.manageNodes');
     }
@@ -431,7 +431,7 @@ class HomeController extends Controller
                 ->lastModified($fileName);
             $size         = strlen($file);
 
-            return response($file, Response::HTTP_OK)
+            return response($file)
                 ->header('Content-Type', $type)
                 ->header('Content-Length',
                     $size)

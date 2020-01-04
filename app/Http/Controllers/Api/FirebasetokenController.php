@@ -28,7 +28,7 @@ class FirebasetokenController extends Controller
             $responseContent = [
                 'message' => 'Token saved successfully',
             ];
-            return response($responseContent, Response::HTTP_OK);
+            return response($responseContent);
         }
 
 

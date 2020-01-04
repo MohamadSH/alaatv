@@ -12,6 +12,7 @@ use App\Traits\ProductCommon;
 use Cache;
 use Exception;
 use Illuminate\Contracts\Routing\ResponseFactory;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
@@ -60,7 +61,7 @@ class OrderproductController extends Controller
             ];
         }
 
-        return response($responseContent, Response::HTTP_OK);
+        return response($responseContent);
     }
 
     /**
@@ -68,7 +69,7 @@ class OrderproductController extends Controller
      *
      * @param OrderProductStoreRequest $request
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      */
     public function storeV2(OrderProductStoreRequest $request)
     {
@@ -130,7 +131,7 @@ class OrderproductController extends Controller
 
             return response([
                 'message' => 'Orderproduct removed successfully',
-            ], Response::HTTP_OK);
+            ]);
         } else {
             return response([
                 'message' => 'Database error on removing orderproduct',
@@ -144,7 +145,7 @@ class OrderproductController extends Controller
      * @param Request      $request
      * @param Orderproduct $orderproduct
      *
-     * @return ResponseFactory|\Illuminate\Http\JsonResponse|Response
+     * @return ResponseFactory|JsonResponse|Response
      * @throws Exception
      */
     public function destroyV2(Request $request, Orderproduct $orderproduct)
