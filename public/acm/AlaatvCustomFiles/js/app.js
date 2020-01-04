@@ -34,7 +34,20 @@ LazyLoad.carousel([imageObserver, gtmEecAdvertisementObserver]);
 
 // top menu in mobile view
 $(document).on('click', '#m_aside_header_topbar_mobile_toggle1', function () {
-    $('#m_header_topbar .m-topbar__nav .m-nav__item.m-topbar__user-profile').toggleClass('m-dropdown--open');
+    var element = $('.m-nav__item.m-topbar__user-profile')[0].closest('.m-dropdown');
+    var dropdown;
+
+    if (element) {
+        if (mUtil.data(element).has('dropdown')) {
+            dropdown = mUtil.data(element).get('dropdown');
+        } else {
+            dropdown = new mDropdown(element);
+        }
+
+        dropdown.toggle();
+
+        e.preventDefault();
+    }
 });
 
 // Impression Click
