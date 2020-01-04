@@ -793,6 +793,22 @@ class Order extends BaseModel
         }
     }
 
+    public function reviewCouponProducts2(): void
+    {
+        $orderproducts = $this->orderproducts->whereType([config("constants.ORDER_PRODUCT_TYPE_DEFAULT")]);
+
+        $coupon = $this->coupon;
+        foreach ($orderproducts as $orderproduct) {
+            $orderproduct->includedInCoupon = false;
+            if (isset($coupon)) {
+                if ($coupon->hasProduct($orderproduct->product)) {
+                    $orderproduct->includedInCoupon = true;
+                    continue;
+                }
+            }
+        }
+    }
+
     /**
      * Detaches coupon from this order
      *

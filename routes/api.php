@@ -7,6 +7,7 @@
 use App\Http\Controllers\Api\AppVersionController;
 use App\Http\Controllers\Api\ContentController;
 use App\Http\Controllers\Api\DashboardPageController;
+use App\Http\Controllers\Api\DashboardPageV2Controller;
 use App\Http\Controllers\Api\FirebasetokenController;
 use App\Http\Controllers\Api\GetPaymentRedirectEncryptedLink;
 use App\Http\Controllers\Api\HomeController;
@@ -119,7 +120,7 @@ Route::group(['prefix' => 'v2'], function () {
 
         Route::group(['prefix' => 'user'], function () {
             Route::get('{user}/orders', [UserController::class, 'userOrdersV2'])->name('api.v2.user.orders');
-            Route::get('{user}/dashboard', '\\' . DashboardPageController::class)->name('api.v2.user.dashboard');
+            Route::get('{user}/dashboard', '\\' . DashboardPageV2Controller::class)->name('api.v2.user.dashboard');
             Route::post('{user}/firebasetoken', [FirebasetokenController::class, 'store'])->name('api.v2.firebasetoken.store');
         });
 

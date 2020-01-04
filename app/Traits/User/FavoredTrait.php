@@ -26,6 +26,7 @@ trait FavoredTrait
             ->remember('user:favorite:contents:' . $this->cacheKey(), config('constants.CACHE_10'), function () {
                 return $this->favoredContents()
                     ->active()
+                    ->notRedirected()
                     ->get()
                     ->sortBy('pivot.created_at');
             });
@@ -58,6 +59,7 @@ trait FavoredTrait
             ->remember('user:favorite:sets:' . $this->cacheKey(), config('constants.CACHE_10'), function () {
                 return $this->favoredSets()
                     ->active()
+                    ->notRedirected()
                     ->get()
                     ->sortByDesc('pivot.created_at');
             });
