@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
  *
  * @mixin \App\Slideshow
  * */
-class Slideshow extends AlaaJsonResource
+class Slideshow extends AlaaJsonResourceWithPagination
 {
     /**
      * Transform the resource into an array.

@@ -5,7 +5,7 @@ namespace App\Http\Resources;
 use App\Traits\Content\Resource;
 use Illuminate\Http\Request;
 
-class ContentInSetWithFile extends AlaaJsonResource
+class ContentInSetWithFile extends AlaaJsonResourceWithPagination
 {
     use Resource;
 

@@ -53,8 +53,6 @@ class SearchController extends Controller
         return response()->json([
             'data' => [
                 'videos'    => $videos,
-                'pamphlets' => null,
-                'articles'  => null,
                 'products'  => $products,
                 'sets'      => $sets,
                 'tags'      => empty($tags) ? null : $tags,

@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
  *
  * @mixin \App\Wallet
  * */
-class Wallet extends AlaaJsonResource
+class Wallet extends AlaaJsonResourceWithPagination
 {
     /**
      * Transform the resource into an array.

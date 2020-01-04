@@ -3,14 +3,25 @@
 namespace App\Http\Resources;
 
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
- * Class Attributevalue
+ * Class User
  *
  * @mixin \App\Attributevalue
  * */
-class Attributevalue extends AlaaJsonResourceWithPagination
+class ExtraAttributeValue extends JsonResource
 {
+    /**
+     * Class User
+     *
+     * @mixin \App\User
+     * */
+    function __construct(\App\Attributevalue $model)
+    {
+        parent::__construct($model);
+    }
+
     /**
      * Transform the resource into an array.
      *
@@ -25,9 +36,8 @@ class Attributevalue extends AlaaJsonResourceWithPagination
         }
 
         return [
-            'attribute_id' => $this->attribute_id,
-            'name'         => $this->name,
-            'extra_cost'   => optional($this->pivot)->extraCost,
+            'title'      => $this->name,
+            'extra_cost' => $this->pivot->extraCost,
         ];
     }
 }

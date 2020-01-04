@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
  *
  * @mixin \App\User
  * */
-class User extends AlaaJsonResource
+class User extends AlaaJsonResourceWithPagination
 {
     /**
      * Transform the resource into an array.

@@ -30,7 +30,9 @@
 
     @include('systemMessage.flash')
 
-    <input type="hidden" value="{{$userInfoCompletion}}" id="js-var-userInfo-cmpletion">
+    @if(isset($userInfoCompletion))
+        <input type="hidden" value="{{$userInfoCompletion}}" id="js-var-userInfo-cmpletion">
+    @endif
 
     @if(isset($user) && $userInfoCompletion>=60)
         @if(optional($userAssetsCollection->where('title', 'محصولات من')->first->products)->count() > 0)

@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
  *
  * @mixin \App\Product
  * */
-class ProductInBlock extends AlaaJsonResource
+class ProductInBlock extends AlaaJsonResourceWithPagination
 {
     use Resource;
 

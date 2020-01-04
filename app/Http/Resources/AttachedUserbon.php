@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
  *
  * @mixin Userbon
  * */
-class AttachedUserbon extends AlaaJsonResource
+class AttachedUserbon extends AlaaJsonResourceWithPagination
 {
     function __construct(Userbon $model)
     {

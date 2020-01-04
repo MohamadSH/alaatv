@@ -13,6 +13,7 @@ use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Cache;
 
@@ -81,7 +82,7 @@ class UserController extends Controller
 
         Cache::tags('user_' . $user->id)->flush();
 
-        return response($response, Response::HTTP_OK);
+        return response($response);
     }
 
     /**
@@ -142,7 +143,7 @@ class UserController extends Controller
 
         Cache::tags('user_' . $user->id)->flush();
 
-        return response($response, Response::HTTP_OK);
+        return response($response);
     }
 
     public function show(Request $request, User $user)
@@ -158,7 +159,7 @@ class UserController extends Controller
             ], Response::HTTP_FORBIDDEN);
         }
 
-        return response($user, Response::HTTP_OK);
+        return response($user);
     }
 
     /**
@@ -205,7 +206,7 @@ class UserController extends Controller
                     'code'    => Response::HTTP_FORBIDDEN,
                     'message' => 'UnAuthorized',
                 ],
-            ], Response::HTTP_OK);
+            ]);
         }
 
         $orders = $user->getClosedOrders($request->get('orders', 1));
@@ -219,7 +220,7 @@ class UserController extends Controller
      * @param Request $request
      * @param User    $user
      *
-     * @return ResponseFactory|\Illuminate\Http\Resources\Json\AnonymousResourceCollection|Response
+     * @return ResponseFactory|AnonymousResourceCollection|Response
      */
     public function userOrdersV2(Request $request, User $user)
     {
@@ -232,7 +233,7 @@ class UserController extends Controller
                     'code'    => Response::HTTP_FORBIDDEN,
                     'message' => 'UnAuthorized',
                 ],
-            ], Response::HTTP_OK);
+            ]);
         }
 
         $orders = $user->getClosedOrders($request->get('orders', 1));

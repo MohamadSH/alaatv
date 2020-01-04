@@ -16,12 +16,16 @@ use App\Order;
 use App\Orderproduct;
 use App\Product;
 use App\Traits\User\ResponseFormatter;
+use App\User;
 use Exception;
 use Illuminate\Contracts\Routing\ResponseFactory;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\URL;
 
 class OrderController extends Controller
 {
@@ -55,7 +59,7 @@ class OrderController extends Controller
         $invoiceInfo = $invoiceGenerator->generateOrderInvoice($order);
         unset($invoiceInfo['price']['payableByWallet']);
 
-        return response($invoiceInfo, Response::HTTP_OK);
+        return response($invoiceInfo);
     }
 
     /**
@@ -63,15 +67,45 @@ class OrderController extends Controller
      *
      * @param Request $request
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return ResponseFactory|JsonResponse|Response
      * @throws Exception
      */
     public function checkoutReviewV2(Request $request)
     {
+        /** @var User $user */
         $user  = $request->user('api');
         $order = $user->getOpenOrder();
 
-        return (new InvoiceResource((new AlaaInvoiceGenerator())->generateOrderInvoice($order)))->response();
+        $orderHasDonate = $order->hasTheseProducts([
+            Product::CUSTOM_DONATE_PRODUCT,
+            Product::DONATE_PRODUCT_5_HEZAR,
+        ]);
+
+        $coupon                 = $order->coupon;
+        $couponValidationStatus = optional($coupon)->validateCoupon();
+        if (in_array($couponValidationStatus, [
+            Coupon::COUPON_VALIDATION_STATUS_DISABLED,
+            Coupon::COUPON_VALIDATION_STATUS_USAGE_TIME_NOT_BEGUN,
+            Coupon::COUPON_VALIDATION_STATUS_EXPIRED,
+        ])) {
+            $order->detachCoupon();
+            if ($order->updateWithoutTimestamp()) {
+                $coupon->decreaseUseNumber();
+                $coupon->update();
+            }
+
+            $order = $order->fresh();
+        }
+        $invoiceGenerator = new AlaaInvoiceGenerator();
+        $invoiceInfo      = $invoiceGenerator->generateOrderInvoice($order);
+        $order->reviewCouponProducts2();
+        $invoiceInfo = array_merge($invoiceInfo, [
+            'coupon'            => $coupon,
+            'orderHasDonate'    => $orderHasDonate,
+            'redirectToGateway' => $this->getEncryptedUrl('zarinpal', 'android', $this->getEncryptedPostfix($user, $order->id)),
+        ]);
+
+        return (new InvoiceResource($invoiceInfo))->response();
     }
 
     /**
@@ -116,12 +150,12 @@ class OrderController extends Controller
         $invoiceInfo      = $invoiceGenerator->generateOrderInvoice($order);
 
         return response([
-            "price"                       => $invoiceInfo['price'],
-            "wallet"                      => $wallets,
-            "couponInfo"                  => $coupon,
-            "notIncludedProductsInCoupon" => $notIncludedProductsInCoupon,
-            "orderHasDonate"              => $orderHasDonate,
-        ], Response::HTTP_OK);
+            'price'                       => $invoiceInfo['price'],
+            'wallet'                      => $wallets,
+            'couponInfo'                  => $coupon,
+            'notIncludedProductsInCoupon' => $notIncludedProductsInCoupon,
+            'orderHasDonate'              => $orderHasDonate,
+        ]);
     }
 
     /**
@@ -136,7 +170,7 @@ class OrderController extends Controller
      */
     public function submitCoupon(SubmitCouponRequest $request, AlaaInvoiceGenerator $invoiceGenerator)
     {
-        /** @var \App\Coupon $coupon */
+        /** @var Coupon $coupon */
         $coupon = Coupon::code($request->get('code'))->first();
         if ($request->has('openOrder')) {
             $order = $request->get('openOrder');
@@ -178,7 +212,7 @@ class OrderController extends Controller
      * @param SubmitCouponRequest  $request
      * @param AlaaInvoiceGenerator $invoiceGenerator
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return JsonResponse
      * @throws Exception
      */
     public function submitCouponV2(SubmitCouponRequest $request, AlaaInvoiceGenerator $invoiceGenerator)
@@ -238,18 +272,18 @@ class OrderController extends Controller
                     $coupon->decreaseUseNumber();
                     $coupon->update();
                     $resultCode = Response::HTTP_OK;
-                    $resultText = "Coupon detached successfully";
+                    $resultText = 'Coupon detached successfully';
                 } else {
                     $resultCode = Response::HTTP_SERVICE_UNAVAILABLE;
-                    $resultText = "Database error";
+                    $resultText = 'Database error';
                 }
             } else {
                 $resultCode = Response::HTTP_BAD_REQUEST;
-                $resultText = "No coupon found for this order";
+                $resultText = 'No coupon found for this order';
             }
         } else {
             $resultCode = Response::HTTP_BAD_REQUEST;
-            $resultText = "Unknown order";
+            $resultText = 'Unknown order';
         }
 
         if ($resultCode == Response::HTTP_OK) {
@@ -265,7 +299,7 @@ class OrderController extends Controller
             ];
         }
 
-        return response($response, Response::HTTP_OK);
+        return response($response);
     }
 
     /**
@@ -379,6 +413,46 @@ class OrderController extends Controller
                 'link' => route('api.v1.payment.getEncryptedLink', ['order_id' => $donateOrder->id]),
             ],
         ];
+    }
+
+    /**
+     * @param User     $user
+     *
+     * @param int|null $orderId
+     *
+     * @return string
+     */
+    private function getEncryptedPostfix(User $user, $orderId): string
+    {
+        $toEncrypt = ['user_id' => $user->id,];
+
+        if (isset($orderId)) {
+            $toEncrypt = Arr::add($toEncrypt, 'order_id', $orderId);
+        }
+
+        return encrypt($toEncrypt);
+    }
+
+    /**
+     * @param string $paymentMethod
+     * @param string $device
+     * @param string $encryptedPostfix
+     *
+     * @return string
+     */
+    private function getEncryptedUrl(string $paymentMethod, string $device, string $encryptedPostfix)
+    {
+        $parameters = [
+            'paymentMethod'  => $paymentMethod,
+            'device'         => $device,
+            'encryptionData' => $encryptedPostfix,
+        ];
+
+        return URL::temporarySignedRoute(
+            'redirectToPaymentRoute',
+            3600,
+            $parameters
+        );
     }
 
 }
