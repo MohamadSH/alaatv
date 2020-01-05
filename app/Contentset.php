@@ -16,6 +16,7 @@ use App\Traits\Set\TaggableSetTrait;
 use Carbon\Carbon;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
 use Laravel\Scout\Searchable;
 use Stevebauman\Purify\Facades\Purify;
@@ -74,9 +75,10 @@ use Stevebauman\Purify\Facades\Purify;
  * @property-read ContentCollection|Content[] $oldContents
  * @property-read int|null                    $old_contents_count
  * @property-read int|null                    $products_count
- * @property mixed                            redirectUrl
- * @property mixed                            activeContents
- * @property mixed                            shortName
+ * @property string                           redirectUrl
+ * @property ContentCollection                activeContents
+ * @property string                           shortName
+ * @property Collection                       sources
  * @method static Builder|Contentset display()
  */
 class Contentset extends BaseModel implements Taggable, SeoInterface, FavorableInterface
@@ -263,6 +265,14 @@ class Contentset extends BaseModel implements Taggable, SeoInterface, FavorableI
                 return $contents->get()
                     ->sortBy('order');
             });
+    }
+
+    /**
+     * Get all of the tags for the post.
+     */
+    public function sources()
+    {
+        return $this->morphToMany(Source::Class, 'sourceable')->withTimestamps();
     }
 
     /*
