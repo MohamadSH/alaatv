@@ -26,8 +26,9 @@
             </li>
 
 
-            <li class="m-menu__item m-menu__item--submenu megamenuForMobiveInSidebar" aria-haspopup="true" m-menu-submenu-toggle="hover">
-                <a href="javascript:;" class="m-menu__link m-menu__toggle">
+            <li class="m-menu__item m-menu__item--submenu megamenuForMobiveInSidebar" aria-haspopup="true"
+                m-menu-submenu-toggle="hover">
+                <a href="javascript:" class="m-menu__link m-menu__toggle">
                     <i class="m-menu__link-icon fa fa-film"></i>
                     <span class="m-menu__link-text">فیلم های آلاء</span>
                     <i class="m-menu__ver-arrow fa fa-angle-left"></i>
@@ -35,26 +36,28 @@
                 <div class="m-menu__submenu" m-hidden-height="80" style="display: none; overflow: hidden;">
                     <span class="m-menu__arrow"></span>
                     <ul class="m-menu__subnav">
-                        <li class="m-menu__item m-menu__item--submenu" aria-haspopup="true" m-menu-submenu-toggle="hover">
-                            <a href="javascript:;" class="m-menu__link m-menu__toggle">
+                        <li class="m-menu__item m-menu__item--submenu" aria-haspopup="true"
+                            m-menu-submenu-toggle="hover">
+                            <a href="javascript:" class="m-menu__link m-menu__toggle">
                                 <i class="m-menu__link-icon fa fa-chalkboard"><span></span></i>
                                 <span class="m-menu__link-text">
                                     دوازدهم و کنکور
                                 </span>
                                 <i class="m-menu__ver-arrow fa fa-angle-left"></i>
                             </a>
-                            <div class="m-menu__submenu " m-hidden-height="240" >
+                            <div class="m-menu__submenu " m-hidden-height="240">
                                 <span class="m-menu__arrow"></span>
                                 <ul class="m-menu__subnav">
-                                    <li class="m-menu__item m-menu__item--submenu" aria-haspopup="true" m-menu-submenu-toggle="hover">
-                                        <a href="javascript:;" class="m-menu__link m-menu__toggle">
+                                    <li class="m-menu__item m-menu__item--submenu" aria-haspopup="true"
+                                        m-menu-submenu-toggle="hover">
+                                        <a href="javascript:" class="m-menu__link m-menu__toggle">
                                             <i class="m-menu__link-icon fa fa-book"><span></span></i>
                                             <span class="m-menu__link-text">
                                                 دروس اختصاصی ریاضی و تجربی
                                             </span>
                                             <i class="m-menu__ver-arrow fa fa-angle-left"></i>
                                         </a>
-                                        <div class="m-menu__submenu " m-hidden-height="240" >
+                                        <div class="m-menu__submenu " m-hidden-height="240">
                                             <span class="m-menu__arrow"></span>
                                             <ul class="m-menu__subnav">
                                                 <li class="m-menu__item " aria-haspopup="true">
@@ -116,15 +119,16 @@
                                             </ul>
                                         </div>
                                     </li>
-                                    <li class="m-menu__item m-menu__item--submenu" aria-haspopup="true" m-menu-submenu-toggle="hover">
-                                        <a href="javascript:;" class="m-menu__link m-menu__toggle">
+                                    <li class="m-menu__item m-menu__item--submenu" aria-haspopup="true"
+                                        m-menu-submenu-toggle="hover">
+                                        <a href="javascript:" class="m-menu__link m-menu__toggle">
                                             <i class="m-menu__link-icon fa fa-book"><span></span></i>
                                             <span class="m-menu__link-text">
                                                 دروس اختصاصی انسانی
                                             </span>
                                             <i class="m-menu__ver-arrow fa fa-angle-left"></i>
                                         </a>
-                                        <div class="m-menu__submenu " m-hidden-height="240" >
+                                        <div class="m-menu__submenu " m-hidden-height="240">
                                             <span class="m-menu__arrow"></span>
                                             <ul class="m-menu__subnav">
                                                 <li class="m-menu__item " aria-haspopup="true">
@@ -146,15 +150,16 @@
                                             </ul>
                                         </div>
                                     </li>
-                                    <li class="m-menu__item m-menu__item--submenu" aria-haspopup="true" m-menu-submenu-toggle="hover">
-                                        <a href="javascript:;" class="m-menu__link m-menu__toggle">
+                                    <li class="m-menu__item m-menu__item--submenu" aria-haspopup="true"
+                                        m-menu-submenu-toggle="hover">
+                                        <a href="javascript:" class="m-menu__link m-menu__toggle">
                                             <i class="m-menu__link-icon fa fa-book"><span></span></i>
                                             <span class="m-menu__link-text">
                                                 دروس عمومی
                                             </span>
                                             <i class="m-menu__ver-arrow fa fa-angle-left"></i>
                                         </a>
-                                        <div class="m-menu__submenu " m-hidden-height="240" >
+                                        <div class="m-menu__submenu " m-hidden-height="240">
                                             <span class="m-menu__arrow"></span>
                                             <ul class="m-menu__subnav">
                                                 <li class="m-menu__item " aria-haspopup="true">
@@ -195,24 +200,26 @@
                                 </ul>
                             </div>
                         </li>
-                        <li class="m-menu__item m-menu__item--submenu" aria-haspopup="true" m-menu-submenu-toggle="hover">
-                            <a href="javascript:;" class="m-menu__link m-menu__toggle">
+                        <li class="m-menu__item m-menu__item--submenu" aria-haspopup="true"
+                            m-menu-submenu-toggle="hover">
+                            <a href="javascript:" class="m-menu__link m-menu__toggle">
                                 <i class="m-menu__link-icon fa fa-chalkboard"><span></span></i>
                                 <span class="m-menu__link-text">یازدهم</span>
                                 <i class="m-menu__ver-arrow fa fa-angle-left"></i>
                             </a>
-                            <div class="m-menu__submenu " m-hidden-height="240" >
+                            <div class="m-menu__submenu " m-hidden-height="240">
                                 <span class="m-menu__arrow"></span>
                                 <ul class="m-menu__subnav">
-                                    <li class="m-menu__item m-menu__item--submenu" aria-haspopup="true" m-menu-submenu-toggle="hover">
-                                        <a href="javascript:;" class="m-menu__link m-menu__toggle">
+                                    <li class="m-menu__item m-menu__item--submenu" aria-haspopup="true"
+                                        m-menu-submenu-toggle="hover">
+                                        <a href="javascript:" class="m-menu__link m-menu__toggle">
                                             <i class="m-menu__link-icon fa fa-book"><span></span></i>
                                             <span class="m-menu__link-text">
                                                 دروس اختصاصی ریاضی و تجربی
                                             </span>
                                             <i class="m-menu__ver-arrow fa fa-angle-left"></i>
                                         </a>
-                                        <div class="m-menu__submenu " m-hidden-height="240" >
+                                        <div class="m-menu__submenu " m-hidden-height="240">
                                             <span class="m-menu__arrow"></span>
                                             <ul class="m-menu__subnav">
                                                 <li class="m-menu__item " aria-haspopup="true">
@@ -274,15 +281,16 @@
                                             </ul>
                                         </div>
                                     </li>
-                                    <li class="m-menu__item m-menu__item--submenu" aria-haspopup="true" m-menu-submenu-toggle="hover">
-                                        <a href="javascript:;" class="m-menu__link m-menu__toggle">
+                                    <li class="m-menu__item m-menu__item--submenu" aria-haspopup="true"
+                                        m-menu-submenu-toggle="hover">
+                                        <a href="javascript:" class="m-menu__link m-menu__toggle">
                                             <i class="m-menu__link-icon fa fa-book"><span></span></i>
                                             <span class="m-menu__link-text">
                                                 دروس عمومی
                                             </span>
                                             <i class="m-menu__ver-arrow fa fa-angle-left"></i>
                                         </a>
-                                        <div class="m-menu__submenu " m-hidden-height="240" >
+                                        <div class="m-menu__submenu " m-hidden-height="240">
                                             <span class="m-menu__arrow"></span>
                                             <ul class="m-menu__subnav">
                                                 <li class="m-menu__item " aria-haspopup="true">
@@ -323,26 +331,28 @@
                                 </ul>
                             </div>
                         </li>
-                        <li class="m-menu__item m-menu__item--submenu" aria-haspopup="true" m-menu-submenu-toggle="hover">
-                            <a href="javascript:;" class="m-menu__link m-menu__toggle">
+                        <li class="m-menu__item m-menu__item--submenu" aria-haspopup="true"
+                            m-menu-submenu-toggle="hover">
+                            <a href="javascript:" class="m-menu__link m-menu__toggle">
                                 <i class="m-menu__link-icon fa fa-chalkboard"><span></span></i>
                                 <span class="m-menu__link-text">
                                     دهم
                                 </span>
                                 <i class="m-menu__ver-arrow fa fa-angle-left"></i>
                             </a>
-                            <div class="m-menu__submenu " m-hidden-height="240" >
+                            <div class="m-menu__submenu " m-hidden-height="240">
                                 <span class="m-menu__arrow"></span>
                                 <ul class="m-menu__subnav">
-                                    <li class="m-menu__item m-menu__item--submenu" aria-haspopup="true" m-menu-submenu-toggle="hover">
-                                        <a href="javascript:;" class="m-menu__link m-menu__toggle">
+                                    <li class="m-menu__item m-menu__item--submenu" aria-haspopup="true"
+                                        m-menu-submenu-toggle="hover">
+                                        <a href="javascript:" class="m-menu__link m-menu__toggle">
                                             <i class="m-menu__link-icon fa fa-book"><span></span></i>
                                             <span class="m-menu__link-text">
                                                 دروس اختصاصی ریاضی و تجربی
                                             </span>
                                             <i class="m-menu__ver-arrow fa fa-angle-left"></i>
                                         </a>
-                                        <div class="m-menu__submenu " m-hidden-height="240" >
+                                        <div class="m-menu__submenu " m-hidden-height="240">
                                             <span class="m-menu__arrow"></span>
                                             <ul class="m-menu__subnav">
                                                 <li class="m-menu__item " aria-haspopup="true">
@@ -388,15 +398,16 @@
                                             </ul>
                                         </div>
                                     </li>
-                                    <li class="m-menu__item m-menu__item--submenu" aria-haspopup="true" m-menu-submenu-toggle="hover">
-                                        <a href="javascript:;" class="m-menu__link m-menu__toggle">
+                                    <li class="m-menu__item m-menu__item--submenu" aria-haspopup="true"
+                                        m-menu-submenu-toggle="hover">
+                                        <a href="javascript:" class="m-menu__link m-menu__toggle">
                                             <i class="m-menu__link-icon fa fa-book"><span></span></i>
                                             <span class="m-menu__link-text">
                                                 دروس اختصاصی انسانی
                                             </span>
                                             <i class="m-menu__ver-arrow fa fa-angle-left"></i>
                                         </a>
-                                        <div class="m-menu__submenu " m-hidden-height="240" >
+                                        <div class="m-menu__submenu " m-hidden-height="240">
                                             <span class="m-menu__arrow"></span>
                                             <ul class="m-menu__subnav">
                                                 <li class="m-menu__item " aria-haspopup="true">
@@ -410,15 +421,16 @@
                                             </ul>
                                         </div>
                                     </li>
-                                    <li class="m-menu__item m-menu__item--submenu" aria-haspopup="true" m-menu-submenu-toggle="hover">
-                                        <a href="javascript:;" class="m-menu__link m-menu__toggle">
+                                    <li class="m-menu__item m-menu__item--submenu" aria-haspopup="true"
+                                        m-menu-submenu-toggle="hover">
+                                        <a href="javascript:" class="m-menu__link m-menu__toggle">
                                             <i class="m-menu__link-icon fa fa-book"><span></span></i>
                                             <span class="m-menu__link-text">
                                                 دروس عمومی
                                             </span>
                                             <i class="m-menu__ver-arrow fa fa-angle-left"></i>
                                         </a>
-                                        <div class="m-menu__submenu " m-hidden-height="240" >
+                                        <div class="m-menu__submenu " m-hidden-height="240">
                                             <span class="m-menu__arrow"></span>
                                             <ul class="m-menu__subnav">
                                                 <li class="m-menu__item " aria-haspopup="true">
@@ -459,26 +471,28 @@
                                 </ul>
                             </div>
                         </li>
-                        <li class="m-menu__item m-menu__item--submenu" aria-haspopup="true" m-menu-submenu-toggle="hover">
-                            <a href="javascript:;" class="m-menu__link m-menu__toggle">
+                        <li class="m-menu__item m-menu__item--submenu" aria-haspopup="true"
+                            m-menu-submenu-toggle="hover">
+                            <a href="javascript:" class="m-menu__link m-menu__toggle">
                                 <i class="m-menu__link-icon fa fa-chalkboard"><span></span></i>
                                 <span class="m-menu__link-text">
                                     کنکور نظام قدیم
                                 </span>
                                 <i class="m-menu__ver-arrow fa fa-angle-left"></i>
                             </a>
-                            <div class="m-menu__submenu " m-hidden-height="240" >
+                            <div class="m-menu__submenu " m-hidden-height="240">
                                 <span class="m-menu__arrow"></span>
                                 <ul class="m-menu__subnav">
-                                    <li class="m-menu__item m-menu__item--submenu" aria-haspopup="true" m-menu-submenu-toggle="hover">
-                                        <a href="javascript:;" class="m-menu__link m-menu__toggle">
+                                    <li class="m-menu__item m-menu__item--submenu" aria-haspopup="true"
+                                        m-menu-submenu-toggle="hover">
+                                        <a href="javascript:" class="m-menu__link m-menu__toggle">
                                             <i class="m-menu__link-icon fa fa-book"><span></span></i>
                                             <span class="m-menu__link-text">
                                                 دروس اختصاصی ریاضی و تجربی
                                             </span>
                                             <i class="m-menu__ver-arrow fa fa-angle-left"></i>
                                         </a>
-                                        <div class="m-menu__submenu " m-hidden-height="240" >
+                                        <div class="m-menu__submenu " m-hidden-height="240">
                                             <span class="m-menu__arrow"></span>
                                             <ul class="m-menu__subnav">
                                                 <li class="m-menu__item " aria-haspopup="true">
@@ -540,15 +554,16 @@
                                             </ul>
                                         </div>
                                     </li>
-                                    <li class="m-menu__item m-menu__item--submenu" aria-haspopup="true" m-menu-submenu-toggle="hover">
-                                        <a href="javascript:;" class="m-menu__link m-menu__toggle">
+                                    <li class="m-menu__item m-menu__item--submenu" aria-haspopup="true"
+                                        m-menu-submenu-toggle="hover">
+                                        <a href="javascript:" class="m-menu__link m-menu__toggle">
                                             <i class="m-menu__link-icon fa fa-book"><span></span></i>
                                             <span class="m-menu__link-text">
                                                 دروس اختصاصی انسانی
                                             </span>
                                             <i class="m-menu__ver-arrow fa fa-angle-left"></i>
                                         </a>
-                                        <div class="m-menu__submenu " m-hidden-height="240" >
+                                        <div class="m-menu__submenu " m-hidden-height="240">
                                             <span class="m-menu__arrow"></span>
                                             <ul class="m-menu__subnav">
                                                 <li class="m-menu__item " aria-haspopup="true">
@@ -570,15 +585,16 @@
                                             </ul>
                                         </div>
                                     </li>
-                                    <li class="m-menu__item m-menu__item--submenu" aria-haspopup="true" m-menu-submenu-toggle="hover">
-                                        <a href="javascript:;" class="m-menu__link m-menu__toggle">
+                                    <li class="m-menu__item m-menu__item--submenu" aria-haspopup="true"
+                                        m-menu-submenu-toggle="hover">
+                                        <a href="javascript:" class="m-menu__link m-menu__toggle">
                                             <i class="m-menu__link-icon fa fa-book"><span></span></i>
                                             <span class="m-menu__link-text">
                                                 دروس عمومی
                                             </span>
                                             <i class="m-menu__ver-arrow fa fa-angle-left"></i>
                                         </a>
-                                        <div class="m-menu__submenu " m-hidden-height="240" >
+                                        <div class="m-menu__submenu " m-hidden-height="240">
                                             <span class="m-menu__arrow"></span>
                                             <ul class="m-menu__subnav">
                                                 <li class="m-menu__item " aria-haspopup="true">
@@ -622,15 +638,16 @@
                     </ul>
                 </div>
             </li>
-            <li class="m-menu__item m-menu__item--submenu megamenuForMobiveInSidebar" aria-haspopup="true" m-menu-submenu-toggle="hover">
-                <a href="javascript:;" class="m-menu__link m-menu__toggle">
+            <li class="m-menu__item m-menu__item--submenu megamenuForMobiveInSidebar" aria-haspopup="true"
+                m-menu-submenu-toggle="hover">
+                <a href="javascript:" class="m-menu__link m-menu__toggle">
                     <i class="m-menu__link-icon fa fa-video"></i>
                     <span class="m-menu__link-text">
                         همایش های آلاء
                     </span>
                     <i class="m-menu__ver-arrow fa fa-angle-left"></i>
                 </a>
-                <div class="m-menu__submenu " m-hidden-height="240" >
+                <div class="m-menu__submenu " m-hidden-height="240">
                     <span class="m-menu__arrow"></span>
                     <ul class="m-menu__subnav">
                         <li class="m-menu__item " aria-haspopup="true">
@@ -921,7 +938,14 @@
                                 <span class="m-menu__arrow"></span>
                                 <ul class="m-menu__subnav">
                                     <li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1">
-                                        <a href="{{ action("Web\AdminController@adminContent") }}" class="m-menu__link ">
+                                        <a href="{{ route('web.admin.sources') }}" class="m-menu__link ">
+                                            <span class="m-menu__item-here"></span>
+                                            <i class="m-menu__link-icon flaticon-technology"></i>
+                                            <span class="m-menu__link-text">منبع</span>
+                                        </a>
+                                    </li>
+                                    <li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1">
+                                        <a href="{{ route('web.admin.content') }}" class="m-menu__link ">
                                             <span class="m-menu__item-here"></span>
                                             <i class="m-menu__link-icon flaticon-technology"></i>
                                             <span class="m-menu__link-text">محتوا</span>
@@ -930,7 +954,7 @@
 
                                     @permission((config('constants.LIST_CONTENT_SET_ACCESS')))
                                     <li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1">
-                                        <a href="{{ action("Web\SetController@index") }}" class="m-menu__link ">
+                                        <a href="{{ route('set.index') }}" class="m-menu__link ">
                                             <span class="m-menu__item-here"></span>
                                             <i class="m-menu__link-icon flaticon-technology"></i>
                                             <span class="m-menu__link-text">دسته محتوا</span>
@@ -940,7 +964,7 @@
                                 </ul>
                             </div>
                         </li>
-                    @endpermission
+                @endpermission
 
                     @permission((config('constants.LIST_EVENTRESULT_ACCESS')))
                     <li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1">

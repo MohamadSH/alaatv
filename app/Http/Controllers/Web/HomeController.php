@@ -70,8 +70,6 @@ class HomeController extends Controller
 
     public function debug(Request $request, User $user = null)
     {
-        $user = User::Find(1);
-        return $user;
         return view('admin.topicsTree.manageNodes');
     }
 

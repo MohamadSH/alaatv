@@ -207,10 +207,30 @@
             <div class="row">
                 <label class=" col-md-4 control-label" for="created_at">تاریخ درج</label>
                 <div class="col-md-3">
-                    <input type="text" name="created_at" class="form-control" value="@if(isset($content->created_at)){{$content->created_at}}@endif" dir="ltr">
+                    <input type="text" name="created_at" class="form-control"
+                           value="@if(isset($content->created_at)){{$content->created_at}}@endif" dir="ltr">
                 </div>
             </div>
         </div>
+        <div class="form-group">
+            <div class="row">
+                <label class="col-md-4 control-label" for="author_id">سورس</label>
+                <div class="col-md-8">
+                    {!! Form::select('sources_id[]', $sources, $contentSources ,
+                    [
+                        'multiple' => 'multiple',
+                        'class' => 'mt-multiselect btn btn-default a--full-width',
+                        "data-label" => "left",
+                        "data-width" => "100%",
+                        "data-filter" => "true",
+                        "data-height" => "200",
+                        "title" => "انتخاب منبع",
+                        'id'    => 'source_multi_select'
+                    ]) !!}
+                </div>
+            </div>
+        </div>
+
         <div class="form-group">
             <div class="row">
                 <label class="col-md-4 control-label" for="author_id">آیدی دبیر</label>
@@ -322,14 +342,15 @@
                     تگ ها :
                 </label>
                 <div class="col-md-9">
-                    <input name="tags" type="text" class="form-control input-large contentTags" value="{{$tags}}" data-role="tagsinput">
+                    <input name="tags" type="text" class="form-control input-large contentTags" value="{{$tags}}"
+                           data-role="tagsinput">
                 </div>
             </div>
         </div>
-    
-    
+
+
         <br>
-    
+
         <div class="form-group ">
             <div class="row">
                 <label class="col-md-2 control-label" for="tagsString">متن تگ ها: </label>
@@ -340,7 +361,7 @@
                 </div>
             </div>
         </div>
-        
+
         <div class="form-group">
             <div class="row">
                 <div class="col-md-12 text-center">

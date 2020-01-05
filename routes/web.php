@@ -1,7 +1,6 @@
 <?php
 
 
-use App\Http\Controllers\Web\FaqController;
 use App\Http\Controllers\Web\AdminController;
 use App\Http\Controllers\Web\BotsController;
 use App\Http\Controllers\Web\ConsultationController;
@@ -9,6 +8,7 @@ use App\Http\Controllers\Web\ContentController;
 use App\Http\Controllers\Web\DashboardPageController;
 use App\Http\Controllers\Web\EmployeetimesheetController;
 use App\Http\Controllers\Web\ErrorPageController;
+use App\Http\Controllers\Web\FaqController;
 use App\Http\Controllers\Web\FavorableController;
 use App\Http\Controllers\Web\HomeController;
 use App\Http\Controllers\Web\IndexPageController;
@@ -31,6 +31,7 @@ use App\Http\Controllers\Web\SetController;
 use App\Http\Controllers\Web\SharifSchoolController;
 use App\Http\Controllers\Web\ShopPageController;
 use App\Http\Controllers\Web\SitemapController;
+use App\Http\Controllers\Web\SourceController;
 use App\Http\Controllers\Web\SurveyController;
 use App\Http\Controllers\Web\TopicsTreeController;
 use App\Http\Controllers\Web\UserController;
@@ -140,6 +141,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('specialAddUser', [AdminController::class, 'specialAddUser'])->name('web.admin.specialAddUser');
     Route::get('adminGenerateRandomCoupon', [AdminController::class, 'adminGenerateRandomCoupon'])->name('web.admin.generateRandomCoupon');
     Route::get('adminBot', [AdminController::class, 'adminBot'])->name('web.admin.bots');
+    Route::get('adminSource', [AdminController::class, 'adminSource'])->name('web.admin.sources');
     Route::post('giveWalletCredit', [WalletController::class, 'giveCredit'])->name('web.admin.wallet.giveCredit');
     Route::post('registerUserAndGiveOrderproduct', [AdminController::class, 'registerUserAndGiveOrderproduct'])->name('web.admin.registerUserAndGiveOrderproduct');
     Route::post('adminSendSMS', [HomeController::class , 'sendSMS'])->name('web.sendSms');
@@ -265,7 +267,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::resource('livedescription', '\\'.LiveDescriptionController::class );
     Route::resource('section', '\\'.SectionController::class );
     Route::resource('periodDescription', '\\'. PeriodDescriptionController::class );
-    Route::resource('faq', '\\'. FaqController::class );
+    Route::resource('faq', '\\' . FaqController::class);
+    Route::resource('source', '\\' . SourceController::class);
 
     Route::get('copylessonfromremote', 'Web\RemoteDataCopyController@copyLesson');
     Route::get('copydepartmentfromremote', 'Web\RemoteDataCopyController@copyDepartment');
