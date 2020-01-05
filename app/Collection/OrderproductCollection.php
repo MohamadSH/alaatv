@@ -10,6 +10,7 @@ namespace App\Collection;
 
 use App\Classes\Abstracts\Pricing\OrderproductPriceCalculator;
 use App\Classes\Checkout\Alaa\GroupOrderproductCheckout;
+use App\Coupon;
 use App\Orderproduct;
 use App\Traits\JsonResponseFormat;
 use Exception;
@@ -209,5 +210,18 @@ class OrderproductCollection extends Collection
 
         return $products;
 
+    }
+
+
+    public function checkIncludedInCoupon(Coupon $coupon): void
+    {
+        $orderproducts = $this->whereType([config("constants.ORDER_PRODUCT_TYPE_DEFAULT")]);
+        foreach ($orderproducts as $orderproduct) {
+            $orderproduct->includedInCoupon = false;
+            if ($coupon->hasProduct($orderproduct->product)) {
+                $orderproduct->includedInCoupon = true;
+                continue;
+            }
+        }
     }
 }
