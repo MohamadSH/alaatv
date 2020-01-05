@@ -98,7 +98,9 @@ class OrderController extends Controller
         }
         $invoiceGenerator = new AlaaInvoiceGenerator();
         $invoiceInfo      = $invoiceGenerator->generateOrderInvoice($order);
-        $order->reviewCouponProducts2();
+        if (isset($coupon)) {
+            $order->orderproducts->checkIncludedInCoupon($coupon);
+        }
         $invoiceInfo = array_merge($invoiceInfo, [
             'coupon'            => $coupon,
             'orderHasDonate'    => $orderHasDonate,
