@@ -71,13 +71,13 @@
                                 @endif
                             </div>
 
-                            <input type="hidden" name="favoriteActionUrl" value="{{ route('web.mark.favorite.set', [ 'set' => $contentSet->id ]) }}">
-                            <input type="hidden" name="unFavoriteActionUrl" value="{{ route('web.mark.unfavorite.set', [ 'set' => $contentSet->id ]) }}">
+                            @include('partials.favorite', [
+                                'favActionUrl' => route('web.mark.favorite.set', [ 'set' => $contentSet->id ]),
+                                'unfavActionUrl' => route('web.mark.unfavorite.set', [ 'set' => $contentSet->id ]),
+                                'isFavored' => $isFavored
+                            ])
 
-                            <div class="btnFavorite">
-                                <img class="btnFavorite-on {{ ($isFavored) ? '' : 'a--d-none' }}" src="https://cdn.alaatv.com/upload/fav-on.svg" width="50">
-                                <img class="btnFavorite-off {{ ($isFavored) ? 'a--d-none' : '' }}" src="https://cdn.alaatv.com/upload/fav-off.svg" width="50">
-                            </div>
+
                         </div>
                         <div class="countOfItems">
 

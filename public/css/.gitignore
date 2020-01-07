@@ -1,0 +1,15 @@
+# Ignore everything
+*
+
+# But not these files...
+!.gitignore
+!vendors.bundle.js
+!vendors.bundle.rtl.css
+!vendors.bundle.edited.js
+!vendors.bundle.css
+
+# ...even if they are in subdirectories
+!font/
+!fonts/
+!images/
+!product-show/

@@ -1,3 +1,38 @@
+#m_aside_left_offcanvas_toggle {
+    width: 50px;
+    height: 50px;
+    margin-left: 5px;
+}
+#m_aside_left_offcanvas_toggle {
+    width: 50px;
+    height: 50px;
+}
+#m_aside_left_offcanvas_toggle span {
+    top: 25px;
+    width: 60%;
+    right: 10px;
+}
+#m_aside_left_offcanvas_toggle.m-brand__toggler--left span:before,
+#m_aside_left_offcanvas_toggle.m-brand__toggler--left span:after {
+    left: 0;
+    right: auto;
+}
+#m_aside_left_offcanvas_toggle.m-brand__toggler--left.m-brand__toggler--active span:before,
+#m_aside_left_offcanvas_toggle.m-brand__toggler--left.m-brand__toggler--active span:after {
+    right: 0;
+    left: auto;
+}
+.m-brand .m-brand__tools .m-brand__icon.m--visible-tablet-and-mobile-inline-block {
+    padding: 15px;
+    margin-left: 0;
+    position: relative;
+}
+.m-brand .m-brand__tools .m-brand__icon.m--visible-tablet-and-mobile-inline-block .shoppingBasketOfUserNumber {
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
 .m-stack.m-stack--general {
     display: flex;
     justify-content: space-between;

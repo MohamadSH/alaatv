@@ -684,6 +684,7 @@ var MapSVG = function () {
 
     function setHeightOfMap() {
         $('#mapContainer').css({'height': getFarsangMapHeight() + 'px'});
+        // $('#mapContainer').css({'height': $('#mapContainer').width() + 'px'});
     }
 
     function getSvgMapElement() {
@@ -834,8 +835,10 @@ var MapSVG = function () {
     }
 
     function panAndZoomTo(x, y, scale) {
-        window.RaheAbrishamPanZoom.zoom(scale, { animate: true });
+        hideAllTooltip();
         window.RaheAbrishamPanZoom.pan(x, y);
+        window.RaheAbrishamPanZoom.zoom(scale, { animate: true });
+        showAllTooltip();
     }
 
     function panToObject(elementId) {
@@ -845,9 +848,7 @@ var MapSVG = function () {
         window.RaheAbrishamPanZoom.reset();
         setTimeout(function () {
             const scale = calculateDynamicScale(elementId);
-            var panErorrOnZoom = panzoomPanErorrOnZoom(scale),
-                panTopToFocus = getPanTopToFocus(elementId);
-            panAndZoomTo(getPanLeftToFocus(elementId), panTopToFocus + panErorrOnZoom, scale);
+            panAndZoomTo(getPanLeftToFocus(elementId), getPanTopToFocus(elementId), scale);
             setTimeout(function () {
                 refreshAllTooltip();
             }, 1000);
@@ -907,7 +908,7 @@ var EntekhabeFarsang = function () {
             showSection(sectionId);
         }
         farsangStepUpdate(data.set.id);
-        // MapSVG.panToObject(MapSVG.getsetDataFromId(data.set.id).elementId);
+        MapSVG.panToObject(MapSVG.getsetDataFromId(data.set.id).elementId);
         hideLoading();
     }
 
