@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
  *
  * @mixin \App\Paymentstatus
  * */
-class Paymentstatus extends AlaaJsonResource
+class Paymentstatus extends AlaaJsonResourceWithPagination
 {
     /**
      * Transform the resource into an array.
@@ -25,8 +25,8 @@ class Paymentstatus extends AlaaJsonResource
         }
 
         return [
-            'name'         => $this->when(isset($this->name), $this->name),
-            'display_name' => $this->when(isset($this->displayName), $this->displayName),
+            'id'   => $this->id,
+            'name' => $this->when(isset($this->displayName), $this->displayName),
         ];
     }
 }

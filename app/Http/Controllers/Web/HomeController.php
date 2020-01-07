@@ -70,8 +70,6 @@ class HomeController extends Controller
 
     public function debug(Request $request, User $user = null)
     {
-        $user = \App\User::Find(1);
-        return $user;
         return view('admin.topicsTree.manageNodes');
     }
 
@@ -254,7 +252,7 @@ class HomeController extends Controller
                         $externalLink = $file->name;
                     }
                 } else {
-                    abort('404');
+                    abort(Response::HTTP_NOT_FOUND);
                 }
         }
         if (isset($downloadPriority) && strcmp($downloadPriority, 'cloudFirst') == 0) {
@@ -310,7 +308,7 @@ class HomeController extends Controller
                 ]);
                 //
             }
-            abort(404);
+            abort(Response::HTTP_NOT_FOUND);
         }
         if (isset($diskName) && Storage::disk($diskName)
                 ->exists($fileName)) {
@@ -356,12 +354,12 @@ class HomeController extends Controller
                     break;
 
             }
-            abort(404);
+            abort(Response::HTTP_NOT_FOUND);
         }
         if (isset($externalLink)) {
             return redirect($externalLink);
         }
-        abort(404);
+        abort(Response::HTTP_NOT_FOUND);
 
     }
 
@@ -431,7 +429,7 @@ class HomeController extends Controller
                 ->lastModified($fileName);
             $size         = strlen($file);
 
-            return response($file, Response::HTTP_OK)
+            return response($file)
                 ->header('Content-Type', $type)
                 ->header('Content-Length',
                     $size)

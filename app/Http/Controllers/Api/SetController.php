@@ -21,6 +21,14 @@ class SetController extends Controller
         return response()->json($set);
     }
 
+    /**
+     * API Version 2
+     *
+     * @param Request    $request
+     * @param Contentset $set
+     *
+     * @return SetResource|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
     public function showV2(Request $request, Contentset $set)
     {
         if (!is_null($set->redirectUrl)) {

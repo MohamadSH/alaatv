@@ -4,7 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Request;
 
-class UrlForSet extends AlaaJsonResource
+class UrlForSet extends AlaaJsonResourceWithPagination
 {
     /**
      * Transform the resource into an array.

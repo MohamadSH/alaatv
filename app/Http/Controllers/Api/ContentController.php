@@ -53,6 +53,14 @@ class ContentController extends Controller
         });
     }
 
+    /**
+     * API Version 2
+     *
+     * @param Request $request
+     * @param Content $content
+     *
+     * @return ContentResource|\Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
     public function showV2(Request $request, Content $content)
     {
         if (!is_null($content->redirectUrl)) {

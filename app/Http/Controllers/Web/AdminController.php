@@ -26,6 +26,7 @@ use App\{Attribute,
     Producttype,
     Repositories\WebsitePageRepo,
     Role,
+    Source,
     Traits\APIRequestCommon,
     Traits\CharacterCommon,
     Traits\Helper,
@@ -62,7 +63,7 @@ class AdminController extends Controller
 
     public function __construct()
     {
-        $this->middleware('ability:' . config('constants.ROLE_ADMIN') . ',' . config('constants.USER_ADMIN_PANEL_ACCESS'), ['only' => 'admin']);
+        $this->middleware('ability:' . config('constants.ROLE_ADMIN') . ',' . config('constants.USER_ADMIN_PANEL_ACCESS'), ['only' => 'admin', 'adminSource']);
         $this->middleware('permission:' . config('constants.CONSULTANT_PANEL_ACCESS'), ['only' => 'consultantAdmin']);
         $this->middleware('permission:' . config('constants.PRODUCT_ADMIN_PANEL_ACCESS'), ['only' => 'adminProduct']);
         $this->middleware('permission:' . config('constants.CONTENT_ADMIN_PANEL_ACCESS'), ['only' => 'adminContent']);
@@ -578,10 +579,10 @@ class AdminController extends Controller
     {
         $users = User::whereHas('orders', function ($q) {
             $q->where('orderstatus_id', config('constants.ORDER_STATUS_CLOSED'))
-                ->whereIn('paymentstatus_id', [config('constants.PAYMENT_STATUS_UNPAID')])
+                ->where('paymentstatus_id', config('constants.PAYMENT_STATUS_UNPAID'))
                 ->whereHas('orderproducts', function ($q2) {
                     $q2->whereIn('product_id', [389, 375, 347]);
-                });
+                })->where('completed_at' , '>=' , '2019-12-24 00:00:00');
         })->whereDoesntHave('orders', function ($q3) {
             $q3->where('orderstatus_id', config('constants.ORDER_STATUS_CLOSED'))
                 ->whereIn('paymentstatus_id', [config('constants.PAYMENT_STATUS_PAID'), config('constants.PAYMENT_STATUS_INDEBTED'), config('constants.PAYMENT_STATUS_VERIFIED_INDEBTED')])
@@ -1054,6 +1055,12 @@ class AdminController extends Controller
             'title' => 'فیلم جلسه 1 - فصل اول: نظریۀ اعداد (قسمت اول)، بخش پذیری، عاد کردن (قسمت اول)',
             'url'   => 'https://alaatv.com/c/16320',
         ]);
+    }
+
+    public function adminSource()
+    {
+        $sources = Source::all();
+        return view('admin.sourceIndex', compact('sources'));
     }
 }
 

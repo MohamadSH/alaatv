@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
  *
  * @mixin \App\Block
  * */
-class BlockV2 extends AlaaJsonResource
+class BlockV2 extends AlaaJsonResourceWithPagination
 {
     function __construct(\App\Block $model)
     {
@@ -31,8 +31,8 @@ class BlockV2 extends AlaaJsonResource
             ];
         }
 
-        $contents = $this->notRedirectedContents;
-        $sets     = $this->notRedirectedSets;
+        $contents = $this->contents->where('enable', 1)->where('redirectUrl', null);
+        $sets     = $this->sets->where('enable', 1)->where('redirectUrl', null);
         $products = $this->products;
         $banners  = $this->banners;
         return [

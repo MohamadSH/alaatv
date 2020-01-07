@@ -6,22 +6,27 @@ use App\{Adapter\AlaaSftpAdapter,
     Block,
     Content,
     Contentset,
+    Coupon,
     Employeetimesheet,
     Observers\BlockObserver,
     Observers\ContentObserver,
+    Observers\CouponObserver,
     Observers\EmployeetimesheetObserver,
     Observers\OrderproductObserver,
     Observers\ProductObserver,
     Observers\SetObserver,
     Observers\SlideshowObserver,
+    Observers\SourceObserver,
     Observers\TransactionObserver,
     Observers\UserObserver,
     Orderproduct,
     Product,
     Slideshow,
+    Source,
     Traits\UserCommon,
     Transaction,
-    User};
+    User
+};
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\{Auth, Schema, Storage, Validator};
 use Illuminate\Support\ServiceProvider;
@@ -71,6 +76,8 @@ class AppServiceProvider extends ServiceProvider
         User::observe(UserObserver::class);
         Slideshow::observe(SlideshowObserver::class);
         Block::observe(BlockObserver::class);
+        Coupon::observe(CouponObserver::class);
+        Source::observe(SourceObserver::class);
         $this->defineValidationRules();
 //        Resource::withoutWrapping();
     }

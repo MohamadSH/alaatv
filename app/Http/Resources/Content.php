@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
  *
  * @mixin \App\Content
  * */
-class Content extends AlaaJsonResource
+class Content extends AlaaJsonResourceWithPagination
 {
     use Resource;
 
@@ -63,6 +63,9 @@ class Content extends AlaaJsonResource
             'set'                  => $this->when(isset($this->contentset_id), $this->getSetInContent()),
             'related_products'     => $this->when($this->related_products->isNotEmpty(), $this->getRelatedProducts()),
             'recommended_products' => $this->when($this->recommended_products->isNotEmpty(), $this->getRecommendedProducts()),
+            'source' => $this->when($this->sources->isNotEmpty(), function () {
+                return $this->sources->isNotEmpty() ? Source::collection($this->sources) : null;
+            }),
         ];
     }
 

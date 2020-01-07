@@ -13,6 +13,7 @@ use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Cache;
 
@@ -52,7 +53,6 @@ class UserController extends Controller
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
 
-        //ToDo : place in UserObserver
         if ($user->checkUserProfileForLocking()) {
             $user->lockHisProfile();
         }
@@ -82,9 +82,17 @@ class UserController extends Controller
 
         Cache::tags('user_' . $user->id)->flush();
 
-        return response($response, Response::HTTP_OK);
+        return response($response);
     }
 
+    /**
+     * API Version 2
+     *
+     * @param EditUserRequest $request
+     * @param User|null       $user
+     *
+     * @return ResponseFactory|Response
+     */
     public function updateV2(EditUserRequest $request, User $user = null)
     {
         $authenticatedUser = $request->user('api');
@@ -107,13 +115,11 @@ class UserController extends Controller
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
 
-        //ToDo : place in UserObserver
         if ($user->checkUserProfileForLocking()) {
             $user->lockHisProfile();
         }
 
         if ($user->update()) {
-
             $message = 'User profile updated successfully';
             $status  = Response::HTTP_OK;
         } else {
@@ -137,7 +143,7 @@ class UserController extends Controller
 
         Cache::tags('user_' . $user->id)->flush();
 
-        return response($response, Response::HTTP_OK);
+        return response($response);
     }
 
     public function show(Request $request, User $user)
@@ -153,9 +159,17 @@ class UserController extends Controller
             ], Response::HTTP_FORBIDDEN);
         }
 
-        return response($user, Response::HTTP_OK);
+        return response($user);
     }
 
+    /**
+     * API Version 2
+     *
+     * @param Request $request
+     * @param User    $user
+     *
+     * @return ResponseFactory|JsonResponse|Response
+     */
     public function showV2(Request $request, User $user)
     {
         $authenticatedUser = $request->user('api');
@@ -192,7 +206,7 @@ class UserController extends Controller
                     'code'    => Response::HTTP_FORBIDDEN,
                     'message' => 'UnAuthorized',
                 ],
-            ], Response::HTTP_OK);
+            ]);
         }
 
         $orders = $user->getClosedOrders($request->get('orders', 1));
@@ -200,6 +214,14 @@ class UserController extends Controller
         return response()->json($orders);
     }
 
+    /**
+     * API Version 2
+     *
+     * @param Request $request
+     * @param User    $user
+     *
+     * @return ResponseFactory|AnonymousResourceCollection|Response
+     */
     public function userOrdersV2(Request $request, User $user)
     {
         /** @var User $user */
@@ -211,7 +233,7 @@ class UserController extends Controller
                     'code'    => Response::HTTP_FORBIDDEN,
                     'message' => 'UnAuthorized',
                 ],
-            ], Response::HTTP_OK);
+            ]);
         }
 
         $orders = $user->getClosedOrders($request->get('orders', 1));

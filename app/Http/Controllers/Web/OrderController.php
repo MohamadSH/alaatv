@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Web;
 
+use App\Classes\CouponSubmitter;
 use App\Classes\OrderProduct\RefinementProduct\RefinementFactory;
 use App\Classes\Pricing\Alaa\AlaaInvoiceGenerator;
 use App\Collection\OrderproductCollection;
@@ -30,6 +31,7 @@ use App\Traits\Helper;
 use App\Traits\MetaCommon;
 use App\Traits\ProductCommon;
 use App\Traits\RequestCommon;
+use App\Traits\User\ResponseFormatter;
 use App\Transaction;
 use App\Transactiongateway;
 use App\Transactionstatus;
@@ -44,10 +46,10 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 
@@ -62,6 +64,7 @@ class OrderController extends Controller
     use Helper;
     use ProductCommon;
     use RequestCommon;
+    use ResponseFormatter;
     use MetaCommon;
     use DateTrait;
 
@@ -72,7 +75,6 @@ class OrderController extends Controller
         $this->middleware('permission:' . config('constants.INSERT_ORDER_ACCESS'), ['only' => 'create']);
         $this->middleware('permission:' . config('constants.REMOVE_ORDER_ACCESS'), ['only' => 'destroy']);
         $this->middleware('permission:' . config('constants.SHOW_ORDER_ACCESS'), ['only' => 'edit', 'show']);
-        $this->middleware('permission:' . config('constants.INSERT_ORDER_ACCESS'), ['only' => 'exitAdminInsertOrder']);
         $this->middleware([
 //            'completeInfo',
             'OrderCheckoutReview',
@@ -784,7 +786,7 @@ class OrderController extends Controller
                     'couponInfo'                  => $coupon,
                     'notIncludedProductsInCoupon' => $notIncludedProductsInCoupon,
                     'orderHasDonate'              => $orderHasDonate,
-                ], Response::HTTP_OK);
+                ]);
 
             } else {
                 $response = response(['message' => 'Order not found'], Response::HTTP_BAD_REQUEST);
@@ -796,7 +798,7 @@ class OrderController extends Controller
                 $invoiceInfo         = $invoiceGenerator->generateFakeOrderproductsInvoice($fakeOrderproducts);
             }
 
-            $response = response([], Response::HTTP_OK);
+            $response = response([]);
         }
 
         if ($request->expectsJson()) {
@@ -940,141 +942,56 @@ class OrderController extends Controller
      */
     public function submitCoupon(SubmitCouponRequest $request, AlaaInvoiceGenerator $invoiceGenerator)
     {
-        $coupon = Coupon::code($request->get('code'))
-            ->first();
+        $coupon = Coupon::code($request->get('code'))->first();
 
-        if (isset($coupon)) {
-            $order_id = $request->order_id;
-            $order    = Order::Find($order_id);
-
-            /** @var Coupon $coupon */
-            $couponValidationStatus = $coupon->validateCoupon();
-            if ($couponValidationStatus == Coupon::COUPON_VALIDATION_STATUS_OK) {
-                $oldCoupon = $order->coupon;
-                if (isset($oldCoupon)) {
-                    $flag = ($oldCoupon->usageNumber > 0);
-                    if ($oldCoupon->id != $coupon->id) {
-                        if ($flag) {
-                            $oldCoupon->usageNumber = $oldCoupon->usageNumber - 1;
-                        }
-                        if ($oldCoupon->update()) {
-                            $coupon->usageNumber = $coupon->usageNumber + 1;
-                            if ($coupon->update()) {
-                                $order->coupon_id = $coupon->id;
-                                if ($coupon->discounttype_id == config('constants.DISCOUNT_TYPE_COST')) {
-                                    $order->couponDiscount       = 0;
-                                    $order->couponDiscountAmount = (int)$coupon->discount;
-                                } else {
-                                    $order->couponDiscount       = $coupon->discount;
-                                    $order->couponDiscountAmount = 0;
-                                }
-                                if ($order->updateWithoutTimestamp()) {
-                                    $resultCode = Response::HTTP_OK;
-                                    $resultText = 'Coupon attached successfully';
-                                } else {
-                                    $oldCoupon->usageNumber = $oldCoupon->usageNumber + 1;
-                                    $oldCoupon->update();
-                                    $coupon->usageNumber = $coupon->usageNumber - 1;
-                                    $coupon->update();
-                                    $resultCode = Response::HTTP_SERVICE_UNAVAILABLE;
-                                    $resultText = 'Database error';
-                                }
-                            } else {
-                                $oldCoupon->usageNumber = $oldCoupon->usageNumber + 1;
-                                $oldCoupon->update();
-                                $resultCode = Response::HTTP_SERVICE_UNAVAILABLE;
-                                $resultText = 'Database error';
-                            }
-                        } else {
-                            $resultCode = Response::HTTP_SERVICE_UNAVAILABLE;
-                            $resultText = 'Database error';
-                        }
-                    } else {
-                        $resultCode = Response::HTTP_BAD_REQUEST;
-                        $resultText = 'This coupon is already attached to the order';
-                    }
-                } else {
-                    $coupon->usageNumber = $coupon->usageNumber + 1;
-                    if ($coupon->update()) {
-                        $order->coupon_id = $coupon->id;
-                        if ($coupon->discounttype_id == config('constants.DISCOUNT_TYPE_COST')) {
-                            $order->couponDiscount       = 0;
-                            $order->couponDiscountAmount = (int)$coupon->discount;
-                        } else {
-                            $order->couponDiscount       = $coupon->discount;
-                            $order->couponDiscountAmount = 0;
-                        }
-                        if ($order->updateWithoutTimestamp()) {
-                            $resultText = 'Coupon attached successfully';
-                            $resultCode = Response::HTTP_OK;
-                        } else {
-                            $coupon->usageNumber = $coupon->usageNumber - 1;
-                            $coupon->update();
-                            $resultText = 'Database error';
-                            $resultCode = Response::HTTP_SERVICE_UNAVAILABLE;
-                        }
-                    } else {
-                        $resultText = 'Database error';
-                        $resultCode = Response::HTTP_SERVICE_UNAVAILABLE;
-                    }
-                }
-            } else {
-                switch ($couponValidationStatus) {
-                    case Coupon::COUPON_VALIDATION_STATUS_DISABLED:
-                        $resultText = 'Coupon is disabled';
-                        break;
-                    case Coupon::COUPON_VALIDATION_STATUS_USAGE_LIMIT_FINISHED:
-                        $resultText = 'Coupon number is finished';
-                        break;
-                    case Coupon::COUPON_VALIDATION_STATUS_EXPIRED:
-                        $resultText = 'Coupon is expired';
-                        break;
-                    case Coupon::COUPON_VALIDATION_STATUS_USAGE_TIME_NOT_BEGUN:
-                        $resultText = 'Coupon usage period has not started';
-                        break;
-                    default:
-                        $resultText = 'Coupon validation status is undetermined';
-                        break;
-                }
-                $resultCode = Response::HTTP_BAD_REQUEST;
-            }
-        } else {
-            $resultCode = Response::HTTP_BAD_REQUEST;
-            $resultText = 'The code is wrong';
-        }
-
-        if ($resultCode == Response::HTTP_OK) {
-            if (isset($order)) {
-                $invoiceInfo = $invoiceGenerator->generateOrderInvoice($order);
-                $priceInfo   = $invoiceInfo['price'];
-                $order       = $order->fresh(); //toDo
-
-                $notIncludedProductsInCoupon = $order->reviewCouponProducts();
-            }
-
-            $response = [
-                'message'                     => $resultText ?? $resultText,
-                'coupon'                      => $coupon,
-                'price'                       => isset($priceInfo) ? $priceInfo : null,
-                'notIncludedProductsInCoupon' => isset($notIncludedProductsInCoupon) ? $notIncludedProductsInCoupon : null,
-            ];
-        } else {
-            $response = [
+        if (!isset($coupon)) {
+            return response([
                 'error' => [
-                    'code'    => $resultCode ?? $resultCode,
-                    'message' => $resultText ?? $resultText,
+                    'code'    => Response::HTTP_BAD_REQUEST,
+                    'message' => 'The code is wrong',
                 ],
-            ];
+            ]);
         }
 
-        if (isset($order)) {
+        $order    = Order::Find($request->order_id);
+        if (!isset($order)) {
+            return response([
+                'error' => [
+                    'code'    => Response::HTTP_BAD_REQUEST,
+                    'message' => 'Order not found',
+                ],
+            ]);
+        }
+
+        /** @var Coupon $coupon */
+        $couponValidationStatus = $coupon->validateCoupon();
+        if ($couponValidationStatus != Coupon::COUPON_VALIDATION_STATUS_OK) {
+            return response([
+                'error' => [
+                    'code'    => Response::HTTP_BAD_REQUEST,
+                    'message' => Coupon::COUPON_VALIDATION_INTERPRETER[$couponValidationStatus] ?? 'Coupon validation status is undetermined',
+                ],
+            ]);
+        }
+
+        $result = (new CouponSubmitter($order))->submit($coupon);
+        if($result){
             Cache::tags([
                 'order_' . $order->id . '_coupon',
                 'order_' . $order->id . '_cost',
             ])->flush();
+
+            $invoiceInfo = $invoiceGenerator->generateOrderInvoice($order);
+            $priceInfo   = $invoiceInfo['price'];
+            $order       = $order->fresh();
+
+            $notIncludedProductsInCoupon = $order->reviewCouponProducts();
+
+            $responseBody = $this->makeSubmitCouponSuccessfulResponse('Coupon attached successfully', $coupon, $priceInfo, $notIncludedProductsInCoupon);
+            return response($responseBody);
         }
 
-        return response($response, Response::HTTP_OK);
+        return response($this->makeErrorResponse(Response::HTTP_SERVICE_UNAVAILABLE, 'Database error'));
     }
 
     /**
@@ -1131,17 +1048,7 @@ class OrderController extends Controller
             ];
         }
 
-        return response($response, Response::HTTP_OK);
-    }
-
-    public function exitAdminInsertOrder()
-    {
-        Session::forget('customer_id');
-        Session::forget('customer_firstName');
-        Session::forget('customer_lastName');
-        Session::forget('adminOrder_id');
-
-        return redirect(action("Web\ProductController@search"));
+        return response($response);
     }
 
     public function removeOrderproduct(Request $request, Product $product, OrderproductController $orderproductController)
@@ -1202,7 +1109,7 @@ class OrderController extends Controller
             ];
         }
 
-        return response($response, Response::HTTP_OK);
+        return response($response);
     }
 
     /**
@@ -1573,7 +1480,7 @@ class OrderController extends Controller
                 ];
             }
 
-            return response($response, Response::HTTP_OK);
+            return response($response);
         } catch (Exception    $e) {
             return response()->json([
                 'error' => $e->getMessage(),
@@ -1581,5 +1488,23 @@ class OrderController extends Controller
                 'file'  => $e->getFile(),
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
+    }
+
+    /**
+     * @param                                     $resultText
+     * @param Coupon                              $coupon
+     * @param array                               $priceInfo
+     * @param Collection|null                     $notIncludedProductsInCoupon
+     *
+     * @return array
+     */
+    private function makeSubmitCouponSuccessfulResponse(string $resultText, Coupon $coupon, array $priceInfo, ?Collection $notIncludedProductsInCoupon): array
+    {
+        return [
+            'message'                     => $resultText,
+            'coupon'                      => $coupon,
+            'price'                       => isset($priceInfo) ? $priceInfo : null,
+            'notIncludedProductsInCoupon' => isset($notIncludedProductsInCoupon) ? $notIncludedProductsInCoupon : null,
+        ];
     }
 }

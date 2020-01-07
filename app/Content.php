@@ -1223,6 +1223,14 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
             ->withDefault();
     }
 
+    /**
+     * Get all of the tags for the post.
+     */
+    public function sources()
+    {
+        return $this->morphToMany(Source::Class, 'sourceable')->withTimestamps();
+    }
+
     /*
     |--------------------------------------------------------------------------
     |  Checkers (boolean)
@@ -1470,5 +1478,15 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
                 }
                 return $products;
             });
+    }
+
+    public function attachSource($sourceId): bool
+    {
+        if ($this->sources->where('id', $sourceId)->isEmpty()) {
+            $this->sources()->attach($sourceId);
+            return true;
+        }
+
+        return false;
     }
 }

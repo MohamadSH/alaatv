@@ -11,8 +11,8 @@
                 <i class = "fa fa-home m--padding-right-5"></i>
                 <a class = "m-link" href = "{{route('web.index')}}">@lang('page.Home')</a>
             </li>
-            <li class = "breadcrumb-item active" aria-current = "page">
-                <a class = "m-link" href = "#">بات های چک کردن سفارش ها</a>
+            <li class="breadcrumb-item active" aria-current="page">
+                <a class="m-link" href="#">پنل بات ها</a>
             </li>
         </ol>
     </nav>

@@ -876,11 +876,11 @@ class UserController extends Controller
      *
      * @param Request $request
      *
-     * @return Response
+     * @return Factory|\Illuminate\View\View
      */
     public function userQuestions(Request $request)
     {
-        abort('403');
+        abort(Response::HTTP_FORBIDDEN);
         $questions = $request->user()->useruploads->where('isEnable', '1');
         $counter   = 1;
 
@@ -962,7 +962,7 @@ class UserController extends Controller
         }
 
         if (!isset($order)) {
-            abort(403);
+            abort(Response::HTTP_FORBIDDEN);
         }
 
         $orderproduct = $order->orderproducts(config('constants.ORDER_PRODUCT_TYPE_DEFAULT'))

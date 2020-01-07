@@ -74,12 +74,12 @@ class Handler extends ExceptionHandler
         if ($exception instanceof ModelNotFoundException && $request->wantsJson()) {
             return response()->json([
                 'error' => 'Resource not found',
-            ], 404);
+            ], Response::HTTP_NOT_FOUND);
         }
         if ($exception instanceof NotFoundHttpException && $request->wantsJson()) {
             return response()->json([
                 'error' => 'not found',
-            ], 404);
+            ], Response::HTTP_NOT_FOUND);
         }
 
         if ($exception instanceof HttpException && $request->wantsJson()) {
@@ -103,7 +103,7 @@ class Handler extends ExceptionHandler
     protected function unauthenticated($request, AuthenticationException $exception)
     {
         if ($request->expectsJson()) {
-            return response()->json(['error' => 'Unauthenticated.'], 401);
+            return response()->json(['error' => 'Unauthenticated.'], Response::HTTP_UNAUTHORIZED);
         }
 
         return redirect()->guest('login');

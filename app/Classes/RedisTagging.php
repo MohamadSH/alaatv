@@ -3,6 +3,7 @@
 namespace App\Classes;
 
 use Carbon\Carbon;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Redis;
 use Mockery\Exception;
 
@@ -298,7 +299,7 @@ class RedisTagging
 
     public function flushDB($cb)
     {
-        abort(403);
+        abort(Response::HTTP_FORBIDDEN);
         $this->redis->command('FLUSHDB');
 
         $cb(null, true);

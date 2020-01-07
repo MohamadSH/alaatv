@@ -179,7 +179,7 @@ trait DateTrait
         if ($withTime) {
             return ($explodedDate . ' ' . $explodedTime);
         } else {
-            return $explodedDate . '';
+            return $explodedDate;
         }
     }
 
@@ -190,14 +190,18 @@ trait DateTrait
      *
      * @return string
      */
-    public function ValidUntil_Jalali()
+    public function ValidUntil_Jalali($withTime=true)
     {
         $validUntil       = $this->validUntil;
         $explodedDateTime = explode(' ', $validUntil);
         $explodedTime     = $explodedDateTime[1];
         $explodedDate     = $this->convertDate($validUntil, 'toJalali');
 
-        return ($explodedDate . ' ' . $explodedTime);
+        if ($withTime) {
+            return ($explodedDate . ' ' . $explodedTime);
+        } else {
+            return $explodedDate;
+        }
     }
 
     /**

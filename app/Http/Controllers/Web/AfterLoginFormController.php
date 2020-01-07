@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Web;
 use App\Afterloginformcontrol;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 
 class AfterLoginFormController extends Controller
 {
@@ -21,7 +20,7 @@ class AfterLoginFormController extends Controller
         if ($request->expectsJson()) {
             return response([
                 'afterLoginFormFields' => $afterLoginFormFields,
-            ], Response::HTTP_OK);
+            ]);
         } else {
             $availableFields = [];
 

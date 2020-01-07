@@ -93,7 +93,7 @@ class EmployeetimesheetController extends Controller
             'employeeRealWorkTime' => $employeeSumRealWorkTime,
         ];
 
-        return response(json_encode($result, JSON_UNESCAPED_UNICODE), Response::HTTP_OK)->header('Content-Type', 'application/json');
+        return response(json_encode($result, JSON_UNESCAPED_UNICODE))->header('Content-Type', 'application/json');
     }
 
     public function create(Request $request)
@@ -195,7 +195,7 @@ class EmployeetimesheetController extends Controller
     {
         if ($request->user()->id == 8992) {// Agha majid
             if (!in_array($employeeTimeSheet->user_id, [397580, 285202])) {
-                abort(403);
+                abort(Response::HTTP_FORBIDDEN);
             }
         }
 
@@ -219,7 +219,7 @@ class EmployeetimesheetController extends Controller
     {
         if ($request->user()->id == 8992) {// Agha majid
             if (!in_array($employeeTimeSheet->user_id, [397580, 285202])) {
-                abort(403);
+                abort(Response::HTTP_FORBIDDEN);
             }
         }
 

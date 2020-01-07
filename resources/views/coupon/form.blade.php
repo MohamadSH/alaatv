@@ -161,10 +161,10 @@
                     </label>
                 </label>
                 <div class = "col-md-9">
-                    <input id = "couponValidSince" type = "text" class = "form-control" value = "@if(isset($validSinceDate)) {{$validSinceDate}} @endif" dir = "ltr" @if(!isset($validSinceDate)) disabled = "disabled" @endif>
+                    <input id = "couponValidSince" type = "text" class = "form-control" value = "" dir = "ltr" @if(!isset($validSinceDate)) disabled = "disabled" @endif>
                     <input name = "validSince" id = "couponValidSinceAlt" type = "text" class = "form-control d-none">
 
-                    <input class = "form-control" name = "sinceTime" id = "couponValidSinceTime" placeholder = "00:00" value = "@if(isset($validSinceTime)) {{$validSinceTime}} @endif" dir = "ltr" @if(!isset($validSinceDate)) disabled = "disabled" @endif>
+                    <input class = "form-control" name = "sinceTime" id = "couponValidSinceTime" placeholder = "00:00" value = "@if(isset($validSinceTime)){{$validSinceTime}}@endif" dir = "ltr" @if(!isset($validSinceDate)) disabled = "disabled" @endif>
 
                     @if ($errors->has('validSince'))
                         <span class="form-control-feedback">
@@ -183,10 +183,10 @@
                     </label>
                 </label>
                 <div class = "col-md-9">
-                    <input id = "couponValidUntil" type = "text" class = "form-control" value = "@if(isset($validUntilDate)) {{$validUntilDate}} @endif" dir = "ltr" @if(!isset($validUntilDate)) disabled = "disabled" @endif>
+                    <input id = "couponValidUntil" type = "text" class = "form-control" dir = "ltr" @if(!isset($validUntilDate)) disabled = "disabled" @endif>
                     <input name = "validUntil" id = "couponValidUntilAlt" type = "text" class = "form-control d-none">
 
-                    <input class = "form-control" name = "untilTime" id = "couponValidUntilTime" placeholder = "00:00" value = "@if(isset($validUntilTime)) {{$validUntilTime}} @endif" dir = "ltr" @if(!isset($validUntilDate)) disabled = "disabled" @endif>
+                    <input class = "form-control" name = "untilTime" id = "couponValidUntilTime" placeholder = "00:00" value = "@if(isset($validUntilTime)){{$validUntilTime}}@endif" dir = "ltr" @if(!isset($validUntilDate)) disabled = "disabled" @endif>
 
                     @if ($errors->has('validUntil'))
                         <span class="form-control-feedback">
@@ -297,9 +297,7 @@
                 <input id = "couponValidSince" type = "text" class = "form-control" dir = "ltr" disabled = "disabled">
                 <input name = "validSince" id = "couponValidSinceAlt" type = "text" class = "form-control d-none">
                 <input class = "form-control" name = "sinceTime" id = "couponValidSinceTime" placeholder = "00:00" dir = "ltr" disabled = "disabled">
-                <span class="form-control-feedback" id = "couponValidSinceAltAlert">
-                    <strong></strong>
-                </span>
+
             </div>
         </div>
         <div class = "col-md-6">
@@ -313,9 +311,6 @@
                 <input id = "couponValidUntil" type = "text" class = "form-control" dir = "ltr" disabled = "disabled">
                 <input name = "validUntil" id = "couponValidUntilAlt" type = "text" class = "form-control d-none">
                 <input class = "form-control" name = "untilTime" id = "couponValidUntilTime" placeholder = "00:00" dir = "ltr" disabled = "disabled">
-                <span class="form-control-feedback" id = "couponValidUntilAltAlert">
-                    <strong></strong>
-                </span>
             </div>
         </div>
     </div>

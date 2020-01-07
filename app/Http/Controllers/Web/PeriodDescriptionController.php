@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers\Web;
 
-use App\Adapter\AlaaSftpAdapter;
 use App\Descriptionwithperiod;
 use App\Http\Controllers\Controller;
 use App\Traits\FileCommon;
 use App\Traits\RequestCommon;
 use Exception;
+use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -16,8 +16,6 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 
 class PeriodDescriptionController extends Controller
@@ -84,28 +82,26 @@ class PeriodDescriptionController extends Controller
      * @param Request $request
      *
      * @return RedirectResponse
-     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
+     * @throws FileNotFoundException
      */
     public function store(Request $request)
     {
-        date_default_timezone_set('Asia/Tehran');
-        $request->offsetSet('staff_id', $request->user()->id);
-        $description = Descriptionwithperiod::create($request->all());
-        date_default_timezone_set('UTC');
-
-        $file       = $this->getRequestFile($request->all() , 'photo');
-        if(isset($file)){
-            $extension = $file->getClientOriginalExtension();
-            $fileName  = basename($file->getClientOriginalName(), '.' . $extension) . '_' . date('YmdHis') . '.' . $extension;
-            $disk      = Storage::disk(config('constants.DISK27'));
-            /** @var AlaaSftpAdapter $adaptor */
-            if ($disk->put($fileName, File::get($file))) {
-                $fullPath          = $disk->getAdapter()->getRoot();
-                $partialPath       = $this->getSubDirectoryInCDN($fullPath);
-                $description->photo = config('constants.DOWNLOAD_SERVER_PROTOCOL') . config('constants.CDN_SERVER_NAME') . '/' . $partialPath . $fileName;
-                $description->update();
-            }
+        $file = $this->getRequestFile($request->all(), 'photo');
+        if ($file !== false) {
+            $photo = $this->storePhoto($file, config('constants.DISK27'));
         }
+
+        date_default_timezone_set('Asia/Tehran');
+        $description = Descriptionwithperiod::create([
+            'staff_id'    => $request->user()->id,
+            'product_id'  => $request->get('product_id'),
+            'description' => $request->get('description'),
+            'since'       => $request->get('since'),
+            'till'        => $request->get('till'),
+            'photo'       => isset($photo) ? $photo : null,
+
+        ]);
+        date_default_timezone_set('UTC');
 
         if (isset($description)) {
             session()->flash('success', 'توضیح بازه ای با موفقیت درج شد');
@@ -152,7 +148,14 @@ class PeriodDescriptionController extends Controller
      */
     public function update(Request $request, Descriptionwithperiod $descriptionwithperiod)
     {
-        if ($descriptionwithperiod->update($request->all())) {
+        $descriptionwithperiod->fill($request->all());
+
+        $file = $this->getRequestFile($request->all(), 'photo');
+        if ($file !== false) {
+            $descriptionwithperiod->photo = $this->storePhoto($file, config('constants.DISK27'));
+        }
+
+        if ($descriptionwithperiod->update()) {
             Cache::tags('periodDescription_' . $descriptionwithperiod->id)->flush();
             session()->flash('success', 'توضیح لحظه ای با موفقیت اصلاح شد');
         } else {

@@ -12,6 +12,7 @@ use App\Traits\ProductCommon;
 use Cache;
 use Exception;
 use Illuminate\Contracts\Routing\ResponseFactory;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
@@ -60,9 +61,16 @@ class OrderproductController extends Controller
             ];
         }
 
-        return response($responseContent, Response::HTTP_OK);
+        return response($responseContent);
     }
 
+    /**
+     * API Version 2
+     *
+     * @param OrderProductStoreRequest $request
+     *
+     * @return JsonResponse
+     */
     public function storeV2(OrderProductStoreRequest $request)
     {
         if ($request->has('extraAttribute')) {
@@ -123,7 +131,7 @@ class OrderproductController extends Controller
 
             return response([
                 'message' => 'Orderproduct removed successfully',
-            ], Response::HTTP_OK);
+            ]);
         } else {
             return response([
                 'message' => 'Database error on removing orderproduct',
@@ -131,6 +139,15 @@ class OrderproductController extends Controller
         }
     }
 
+    /**
+     * API Version 2
+     *
+     * @param Request      $request
+     * @param Orderproduct $orderproduct
+     *
+     * @return ResponseFactory|JsonResponse|Response
+     * @throws Exception
+     */
     public function destroyV2(Request $request, Orderproduct $orderproduct)
     {
         $authenticatedUser = $request->user('api');
