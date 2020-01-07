@@ -68,4 +68,14 @@ class ContentCollection extends Collection
 
         return $result;
     }
+
+    public function attachSource(array $sourcesId)
+    {
+        foreach ($this as $content) {
+            foreach ($sourcesId as $sourceId) {
+                /** @var Content $content */
+                $content->attachSource($sourceId);
+            }
+        }
+    }
 }

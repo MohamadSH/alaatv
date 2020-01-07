@@ -1479,4 +1479,14 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
                 return $products;
             });
     }
+
+    public function attachSource($sourceId): bool
+    {
+        if ($this->sources->where('id', $sourceId)->isEmpty()) {
+            $this->sources()->attach($sourceId);
+            return true;
+        }
+
+        return false;
+    }
 }

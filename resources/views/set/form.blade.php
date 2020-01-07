@@ -72,6 +72,10 @@
                                    'id'    => 'source_multi_select'
                                ]) !!}
                         </div>
+                        <label>
+                            منبع را برای کانتنت های این ست هم اضافه کن
+                            {!! Form::checkbox('attachSourceToContents' , 1) !!}
+                        </label>
                     </div>
                 </div>
                 <div class="form-group">
