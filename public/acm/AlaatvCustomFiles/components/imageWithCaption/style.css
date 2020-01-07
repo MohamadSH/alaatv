@@ -6,6 +6,7 @@
 
 .a--imageWithCaption img {
     min-width: 100%;
+    display: block;
 }
 
 .a--imageWithCaption .a--imageCaptionWarper {

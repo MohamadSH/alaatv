@@ -92,24 +92,7 @@ class Mix {
         this.mixAdmin();
         this.mixCopyDirectory();
 
-        if (this.mix.inProduction()) {
-            this.mix.then(() => {
-                this.purifyCss();
-
-                console.log('' +
-                    '              ##       ##              ##             ##       ############## ##          ##          ####           ####      ##          ##\n' +
-                    '             ####      ##             ####           ####            ##        ##        ##         ##    ##       ##    ##    ###        ###\n' +
-                    '            ##  ##     ##            ##  ##         ##  ##           ##         ##      ##        ##             ##        ##  ####      ####\n' +
-                    '           ##    ##    ##           ##    ##       ##    ##          ##          ##    ##        ##             ##          ## ## ##    ## ##\n' +
-                    '          ##########   ##          ##########     ##########         ##           ##  ##          ##             ##        ##  ##  ##  ##  ##\n' +
-                    '         ##        ##  ##         ##        ##   ##        ##        ##            ####      ###    ##    ##       ##    ##    ##   ####   ##\n' +
-                    '        ##          ## ######### ##          ## ##          ##       ##             ##       ###      ####           ####      ##    ##    ##\n');
-            });
-        }
-
-        if (this.appEnv === 'development') {
-
-        } else {
+        if (this.appEnv === 'production') {
             this.mix.then(() => {
                 this.purifyCss();
 
@@ -458,6 +441,7 @@ class Mix {
                 'public/acm/AlaatvCustomFiles/components/ScrollCarousel/style.css',
 
                 'public/acm/AlaatvCustomFiles/components/Favorite/style.css',
+                'public/acm/AlaatvCustomFiles/components/imageWithCaption/style.css',
 
                 'public/acm/videojs/skins/alaa-theme/videojs.css',
                 'public/acm/videojs/skins/nuevo/videojs.rtl.css',
