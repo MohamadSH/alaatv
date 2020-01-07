@@ -66,7 +66,6 @@ use Stevebauman\Purify\Facades\Purify;
  * @property-read mixed                       $api_url
  * @property-read mixed                       $content_url
  * @property-read mixed                       $cache_cooldown_seconds
- * @property-read ContentCollection|Content[] $contents2
  * @property-read ProductCollection|Product[] $products
  * @property-read int|null                    $contents_count
  * @property-read int|null                    $favorite_by_count

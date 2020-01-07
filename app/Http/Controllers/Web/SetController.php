@@ -356,6 +356,10 @@ class SetController extends Controller
             $sources = Source::whereIn('id', Arr::get($inputData, 'sources_id'))->get();
             if ($sources->isNotEmpty()) {
                 $contentSet->sources()->sync($sources);
+                if (Arr::has($inputData, 'attachSourceToContents')) {
+                    $sourcesId = Arr::get($inputData, 'sources_id');
+                    $contentSet->contents->attachSource($sourcesId);
+                }
             }
         }
     }
