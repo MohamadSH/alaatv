@@ -33,7 +33,7 @@
 
 }
 .FavoriteAndOrder .Order {
-    margin-left: 10px;
+    margin-left: 50px;
 }
 .FavoriteAndOrder .Order a i {
     font-size: 25px;
@@ -51,4 +51,12 @@
 }
 .rightSideAdBanner a {
     display: block;
+}
+.setVideoPamphletTabs .nav {
+    background: #f2f3f8;
+    border-radius: 5px;
+}
+.setVideoPamphletTabs .nav-pills .nav-link.active,
+.setVideoPamphletTabs .nav-pills .show > .nav-link {
+    border-radius: 5px;
 }

@@ -77,6 +77,8 @@
                             <!-- BEGIN: Topbar Toggler -->
                             <a id="m_aside_header_topbar_mobile_toggle1" href="javascript:" class="m-brand__icon m--visible-tablet-and-mobile-inline-block">
                                 <i class="fa fa-user-alt" style="color: white;"></i>
+
+
                             </a>
                             <!-- BEGIN: Topbar Toggler -->
                         @else
@@ -731,7 +733,7 @@
                                             <img src="{{ $profileImage }}" class="m--img-rounded m--marginless m--img-centered" alt="عکس پروفایل" width="41" height="41"/>
                                         </span>
                                     </a>
-                                    <div class="m-dropdown__wrapper">
+                                    <div id="user-profile-small-panel" class="m-dropdown__wrapper">
                                         <span class="m-dropdown__arrow m-dropdown__arrow--right m-dropdown__arrow--adjust"></span>
                                         <div class="m-dropdown__inner">
                                             <div class="m-dropdown__header m--align-center">

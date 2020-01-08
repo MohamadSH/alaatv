@@ -33,11 +33,11 @@ let gtmEecAdvertisementObserver = LazyLoad.gtmEecAdvertisement();
 LazyLoad.carousel([imageObserver, gtmEecAdvertisementObserver]);
 
 // top menu in mobile view
-$(document).on('click', '#m_aside_header_topbar_mobile_toggle1', function () {
-    var element = $('.m-nav__item.m-topbar__user-profile')[0].closest('.m-dropdown');
-    var dropdown;
+if ($('#m_aside_header_topbar_mobile_toggle1').length > 0) {
+    $('#m_aside_header_topbar_mobile_toggle1')[0].addEventListener("click", function(e) {
+        var element = $('.m-nav__item.m-topbar__user-profile')[0].closest('.m-dropdown');
+        var dropdown;
 
-    if (element) {
         if (mUtil.data(element).has('dropdown')) {
             dropdown = mUtil.data(element).get('dropdown');
         } else {
@@ -46,9 +46,10 @@ $(document).on('click', '#m_aside_header_topbar_mobile_toggle1', function () {
 
         dropdown.toggle();
 
+        e.stopPropagation();
         e.preventDefault();
-    }
-});
+    });
+}
 
 // Impression Click
 $(document).on('click' ,'.a--gtm-eec-product-click', function(e){
