@@ -569,7 +569,7 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
 
     public function getPreviousContent()
     {
-        $key = 'content:previousContent' . $this->cacheKey();
+        $key = 'content:previousContent:' . $this->cacheKey();
 
         return Cache::tags(['content', 'previousContent', 'content_' . $this->id, 'content_previousContent_' . $this->id])
             ->remember($key, config('constants.CACHE_600'), function () {
