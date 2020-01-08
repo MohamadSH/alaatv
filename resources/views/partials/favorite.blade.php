@@ -3,7 +3,7 @@
     <input type="hidden" name="unFavoriteActionUrl" value="{{ $unfavActionUrl }}">
 
     <div class="btnFavorite">
-        <img class="btnFavorite-on {{ ($isFavored) ? '' : 'a--d-none' }}" src="https://cdn.alaatv.com/upload/bookmark-on.svg" width="50">
-        <img class="btnFavorite-off {{ ($isFavored) ? 'a--d-none' : '' }}" src="https://cdn.alaatv.com/upload/bookmark-off.svg" width="50">
+        <img class="btnFavorite-on  lazy-image {{ ($isFavored) ? '' : 'a--d-none' }}" data-src="https://cdn.alaatv.com/upload/bookmark-on.svg" width="50" height="50">
+        <img class="btnFavorite-off lazy-image {{ ($isFavored) ? 'a--d-none' : '' }}" data-src="https://cdn.alaatv.com/upload/bookmark-off.svg" width="50" height="50">
     </div>
 @endif
