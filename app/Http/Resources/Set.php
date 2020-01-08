@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
  *
  * @mixin Contentset
  * */
-class Set extends AlaaJsonResourceWithPagination
+class Set extends AlaaJsonResourceWithoutPagination
 {
     /**
      * Transform the resource into an array.
@@ -48,7 +48,7 @@ class Set extends AlaaJsonResourceWithPagination
                 return $this->getAuthor();
             }),
             'contents'       => $this->when($activeContents->isNotEmpty(), function () use ($activeContents) {
-                return $activeContents->isNotEmpty() ? $activeContents : null;
+                return $activeContents->isNotEmpty() ? ContentInSet::collection($activeContents) : null;
             }),
             'created_at'     => $this->when(isset($this->created_at), function () {
                 return isset($this->created_at) ? $this->created_at : null;

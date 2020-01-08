@@ -5,7 +5,8 @@ namespace App\Http\Controllers\Api;
 use App\Classes\Search\ContentsetSearch;
 use App\Contentset;
 use App\Http\Controllers\Controller;
-use App\Http\Resources\SetInIndex as SetResource;
+use App\Http\Resources\Set;
+use App\Http\Resources\SetInIndex;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
@@ -21,14 +22,6 @@ class SetController extends Controller
         return response()->json($set);
     }
 
-    /**
-     * API Version 2
-     *
-     * @param Request    $request
-     * @param Contentset $set
-     *
-     * @return SetResource|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
-     */
     public function showV2(Request $request, Contentset $set)
     {
         if (!is_null($set->redirectUrl)) {
@@ -36,7 +29,7 @@ class SetController extends Controller
                 Response::HTTP_FOUND, $request->headers->all());
         }
 
-        return (new SetResource($set));
+        return new Set($set);
     }
 
     public function index(Request $request, ContentsetSearch $contentSearch)
@@ -46,6 +39,6 @@ class SetController extends Controller
         $setFilters['display'] = 1;
         $setResult             = $contentSearch->get($setFilters);
 
-        return SetResource::collection($setResult);
+        return SetInIndex::collection($setResult);
     }
 }
