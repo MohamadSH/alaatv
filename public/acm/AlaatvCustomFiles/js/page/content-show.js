@@ -73,6 +73,7 @@ var SnippetContentShow = function(){
             container.scrollTop(scrollTo.offset().top - 400);
         }
     };
+
     return {
       init: function (related_videos) {
           handleVideoPlayListScroll();
@@ -80,7 +81,162 @@ var SnippetContentShow = function(){
       }
     };
 }();
+
+var RelatedItems = function() {
+
+    var alpha = 530/942;
+
+    function getProductItemObject() {
+        return $('.RelatedItems .ScrollCarousel-Items .item.a--block-type-product2 img');
+    }
+
+    function getOtherItemObject() {
+        return $('.RelatedItems .ScrollCarousel-Items .item.a--block-type-content img');
+    }
+
+    function getProductCount() {
+        return getProductItemObject().length;
+    }
+
+    function getOtherCount() {
+        return getOtherItemObject().length;
+    }
+
+    function getTotlalWidth() {
+        return $('.RelatedItems .ScrollCarousel-Items').width();
+    }
+
+    function getOuterSpace($object) {
+        return $object.outerWidth(true) - $object.width();
+    }
+
+    function responsiveConfig() {
+        var sw = screen.width,
+            minCountInPage = 0,
+            maxCountInPage = 0;
+        if (sw > 1701) {
+            maxCountInPage = 6;
+            minCountInPage = 5;
+        } else if (sw > 1281) {
+            maxCountInPage = 5;
+            minCountInPage = 4;
+        } else if (sw > 1025) {
+            maxCountInPage = 4;
+            minCountInPage = 3;
+        } else if (sw > 768) {
+            maxCountInPage = 3;
+            minCountInPage = 2;
+        } else if (sw > 481) {
+            maxCountInPage = 2;
+            minCountInPage = 1;
+        } else {
+            maxCountInPage = 1;
+            minCountInPage = 1;
+        }
+
+         return {
+             min: minCountInPage,
+             max: maxCountInPage
+         };
+    }
+
+    function getCountOfProductInScrollCarousel() {
+        var pc = getProductCount(),
+            rc = responsiveConfig();
+        if (pc > rc.max) {
+            pc = rc.max;
+        }
+        return pc;
+    }
+
+    function getCountOfOtherInScrollCarousel() {
+        var pc = getCountOfProductInScrollCarousel(),
+            noc = getOtherCount(),
+            rc = responsiveConfig(),
+            nocMax = rc.max - pc,
+            nocMin = rc.min - pc;
+
+        if (noc > nocMax) {
+            noc = nocMax + 0.3;
+        } else if (noc > nocMin) {
+            noc = nocMin + 0.3;
+        } else if (noc === nocMin) {
+
+        } else if (noc < nocMin) {
+            noc = nocMin;
+        }
+
+        return noc;
+    }
+
+    function setWidth($item, percent) {
+        $item.css({
+            'width': percent+'%',
+            '-ms-flex-basis': percent+'%',
+            'flex-basis': percent+'%'
+        });
+    }
+
+    function calcProductItemWidth() {
+        var w = getTotlalWidth(),
+            oc = getCountOfOtherInScrollCarousel(),
+            pc = getCountOfProductInScrollCarousel(),
+            os = getOuterSpace(getOtherItemObject().parents('.item')),
+            ps = getOuterSpace(getProductItemObject().parents('.item'));
+
+        console.log('pc', pc);
+        console.log('oc', oc);
+
+        return ((w-Math.floor(pc)*ps-Math.floor(oc)*os)/(pc+(oc/alpha)));
+    }
+
+    function calcOtherItemWidth(a) {
+        return a/alpha;
+    }
+
+    function testAction() {
+        $('.RelatedItems .ScrollCarousel-Items .item').removeClass('a--block-type-product2').addClass('a--block-type-content');
+        $('.RelatedItems .ScrollCarousel-Items .item:first-child').removeClass('a--block-type-content').addClass('a--block-type-product2');
+        $('.RelatedItems .ScrollCarousel-Items .item:first-child').find('.a--imageWithCaption img')
+            .attr('src', '')
+            .attr('data-src', 'https://cdn.alaatv.com/upload/images/product/fgggggggggg_20191128145442.jpg')
+            .attr('width', '960')
+            .attr('height', '960')
+    }
+
+    function refreshImages() {
+        $('.RelatedItems .ScrollCarousel-Items .item:first-child').css({'margin-right': '5px'});
+        getOtherItemObject().attr('src', '').attr('a-lazyload', '').attr('data-loaded', '').removeClass('lazy-done');
+        getProductItemObject().attr('src', '').attr('a-lazyload', '').attr('data-loaded', '').removeClass('lazy-done');
+        imageObserver.observe();
+    }
+
+    function setRelatedItemsWidth() {
+        testAction();
+
+        var w = getTotlalWidth(),
+            a = calcProductItemWidth(),
+            pw = (a/w)*100,
+            ow = (calcOtherItemWidth(a)/w)*100;
+
+        setWidth(getProductItemObject().parents('.item'), pw);
+        setWidth(getOtherItemObject().parents('.item'), ow);
+
+
+        setTimeout(function () {
+            refreshImages();
+        }, 500);
+    }
+
+    return {
+        setRelatedItemsWidth: setRelatedItemsWidth,
+    };
+}();
+
 jQuery(document).ready( function() {
+
+    // RelatedItems.setRelatedItemsWidth();
+
     SnippetContentShow.init(related_videos);
     $('#owlCarouselParentProducts').OwlCarouselType2({
         OwlCarousel: {

@@ -94,6 +94,8 @@
 @endsection
 
 @section('content')
+
+
     <div class="row">
 
         <div class="col-12 col-sm-12 col-md-12 col-lg-8 mx-auto">
@@ -264,6 +266,17 @@
                     </div>
 
                     @include('partials.ads.list', ['id'=>'contentShowPage-rightSide-0'])
+
+
+{{--                    @include('partials.widgets.ScollCarousel.body', [--}}
+{{--                        'title'=> 'پیشنهاد ما',--}}
+{{--                        'customClass'=> 'RelatedItems',--}}
+{{--                        'scrollCarouselItems'=> view('partials.widgets.ScollCarousel.items.product.type2', [--}}
+{{--                            'products'=>$recommendedProductsOfThisContent,--}}
+{{--                            'gtmEecList'=>'پیشنهاد ما',--}}
+{{--                            'responsiveClass'=>''--}}
+{{--                        ]),--}}
+{{--                    ])--}}
 
                     <div class="m-portlet m-portlet--mobile">
                         <div class="m-portlet__body contentDetailesWrapper a--nuevo-alaa-theme">
@@ -771,6 +784,9 @@
         'btnLoadMore'=>true
         ])
     @endforeach
+
+
+
     <div class="AlaaAdDom" alaa-ad-preloadimage="1"></div>
 
 
@@ -811,6 +827,6 @@
         })(window, document, '35b39d4b-517b-44bc-85c4-44f93242836f');
 
     </script>
-    <script src="{{ mix("/js/content-show.js") }}" type="text/javascript"></script>
+    <script src="{{ mix('/js/content-show.js') }}" type="text/javascript"></script>
 @endsection
 

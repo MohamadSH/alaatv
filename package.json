@@ -31,7 +31,7 @@
         "@fullcalendar/daygrid": "^4.2.0",
         "@fullcalendar/resource-timeline": "^4.2.0",
         "@fullcalendar/timegrid": "^4.2.0",
-        "@panzoom/panzoom": "^4.0.0",
+        "@panzoom/panzoom": "github:kerasus/panzoom",
         "acorn": "^6.2.1",
         "animate.css": "^3.7.2",
         "block-ui": "^2.70.1",
