@@ -207,6 +207,8 @@ class ContentController extends Controller
 
 //        $recommendedProductsOfThisContent = $content->recommended_products ;
 
+        $recommendedItems = $this->getRecommendedItems($content, $tags);
+
         $contentBlocks = Block::getContentBlocks();
 
         $isFavored =
@@ -218,7 +220,7 @@ class ContentController extends Controller
             compact('seenCount', 'author', 'content', 'contentsWithSameSet', 'videosWithSameSet',
                 'pamphletsWithSameSet', 'contentSetName', 'tags',
                 'userCanSeeCounter', 'adItems', 'videosWithSameSetL', 'videosWithSameSetR',
-                'productsThatHaveThisContent', 'user_can_see_content', 'message', 'productsHasThisContentThroughBlockCollection', 'contentBlocks', 'isFavored', 'sources'));
+                'productsThatHaveThisContent', 'user_can_see_content', 'message', 'productsHasThisContentThroughBlockCollection', 'contentBlocks', 'isFavored', 'sources', 'recommendedItems'));
 
         return httpResponse($apiResponse, $viewResponse);
     }
@@ -844,5 +846,50 @@ class ContentController extends Controller
                 'update',
             ],
         ]);
+    }
+
+    /**
+     * @param Content $content
+     * @param array   $tags
+     *
+     * @return array
+     */
+    private function getRecommendedItems(Content $content, array $tags): array
+    {
+        return Cache::tags(['content', 'content_' . $content->id, 'recommended_contents', 'recommended_contents_' . $content->id])
+            ->remember('content:recommendedItems:' . $content->cacheKey(), config('constants.CACHE_0'), function () use ($content, $tags) {
+//                $result = $this->sendRequest(route('api.v2.search'), 'GET', ['tags' => $tags], [
+                $result = $this->sendRequest('https://alaatv.com/api/v2/search', 'GET', ['tags' => $tags], [
+                    'headers' => [
+                        'Content-Type' => 'application/json',
+                        'Accept'       => 'application/json',
+                    ],
+                ]);
+
+                if ($result['statusCode'] != Response::HTTP_OK) {
+                    return [];
+                }
+
+                $result = json_decode($result['result'])->data;
+
+                $contents = $result->videos->data;
+                array_walk($contents, function (&$val) {
+                    $val->item_type = 'content';
+                });
+
+                $products = $result->products->data;
+                array_walk($products, function (&$val) {
+                    $val->item_type = 'product';
+                });
+
+                $sets = $result->sets->data;
+                array_walk($sets, function (&$val) {
+                    $val->item_type = 'set';
+                });
+
+                $merged = array_merge($contents, $products, $sets);
+                shuffle($merged);
+                return $merged;
+            });
     }
 }
