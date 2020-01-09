@@ -95,7 +95,6 @@
 
 @section('content')
 
-
     <div class="row boxed">
 
         <div class="col-12">
@@ -429,7 +428,7 @@
             @endforeach
         </div>
 
-        <div class="col-12">
+        <div class="col-12 m--margin-top-15">
 
             <div class="row">
 
@@ -458,6 +457,26 @@
                             </ul>
                             <div class="tab-content">
                                 <div class="tab-pane active" id="m_tabs_1_1" role="tabpanel">
+
+                                    <div class="sources">
+                                        @foreach($sources as $source)
+                                            <div class="sources-item">
+                                                <div class="sources-image">
+                                                    <a href="{{$source->link}}" class="m-link">
+                                                        <img class=""
+                                                             src="{{$source->photo}}"
+                                                             alt="{{ $source->title }}">
+                                                    </a>
+                                                </div>
+                                                <div class="sources-title">
+                                                    <a href="{{$source->link}}" class="m-link">
+                                                        منبع: {{$source->title}}
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        @endforeach
+                                    </div>
+
 
                                     @if(isset($content->template))
 
@@ -581,6 +600,7 @@
                     </div>
                     <!--end::Portlet-->
                 </div>
+
                 @if(isset($content->template) && optional($content->template)->name == "video1" && $user_can_see_content)
                     <div class="col-md-4 downloadLinkColumn">
                         <div class="m-portlet m--full-height m-portlet--success m-portlet--head-solid-bg m-portlet--bordered">
@@ -810,6 +830,5 @@
 
     </script>
     <script src="{{ mix('/js/content-show.js') }}" type="text/javascript"></script>
-    <script src="{{ asset('/acm/AlaatvCustomFiles/js/page/content-show.js') }}" type="text/javascript"></script>
 @endsection
 

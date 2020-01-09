@@ -246,7 +246,9 @@ var SameHeight = function() {
 
     function setPamphletMaxHeightList() {
         if ($('.downloadLinkColumn').length > 0) {
-            $('#m_tabs_1_2').css({'max-height':  $('.downloadLinkColumn .m-portlet .m-portlet__body > .row').height() + 'px', 'overflow': 'auto'})
+            var height = $('.downloadLinkColumn .m-portlet .m-portlet__body > .row').height() - 30;
+            $('#m_tabs_1_1').css({'max-height':  height + 'px', 'overflow': 'auto'});
+            $('#m_tabs_1_2').css({'max-height':  height + 'px', 'overflow': 'auto'});
         }
     }
 

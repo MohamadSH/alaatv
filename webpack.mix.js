@@ -84,13 +84,13 @@ class Mix {
         this.compileScss();
         this.mixBase();
         this.mixPages();
-        // this.mixUser();
-        // this.mixLanding();
-        // this.mixProduct();
+        this.mixUser();
+        this.mixLanding();
+        this.mixProduct();
         this.mixPageContentShow();
-        // this.mixPageSetShow();
-        // this.mixCheckout();
-        // this.mixAdmin();
+        this.mixPageSetShow();
+        this.mixCheckout();
+        this.mixAdmin();
         this.mixCopyDirectory();
 
         if (this.appEnv === 'production') {
@@ -471,7 +471,7 @@ class Mix {
                 'public/acm/AlaatvCustomFiles/components/aSticky/aSticky.js',
                 'public/acm/AlaatvCustomFiles/components/AnimateScrollTo/js.js',
                 'public/acm/AlaatvCustomFiles/js/UserCart.js',
-                // 'public/acm/AlaatvCustomFiles/js/page/content-show.js'
+                'public/acm/AlaatvCustomFiles/js/page/content-show.js'
             ],
             'public/js/content-show.js'
         );
