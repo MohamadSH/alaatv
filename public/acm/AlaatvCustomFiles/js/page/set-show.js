@@ -3,15 +3,17 @@ var InitPage = function() {
     function addEvents() {
         $(document).on('click', '.setVideoPamphletTabs .nav-item .nav-link', function () {
             var href = $(this).attr('data-state');
-            UrlParameter.setParam('tab', href, {tab:href});
+            // UrlParameter.setHash(href, {tab:href});
+            UrlParameter.setHash(href);
         });
 
         $(window).on('popstate', function(e){
-            if (e.originalEvent.state !== null && typeof e.originalEvent.state.tab !== 'undefined') {
-                showTabPage(e.originalEvent.state.tab);
-            }
-            // console.log('location', location);
-            // console.log('e.originalEvent.state', e.originalEvent.state);
+            // if (e.originalEvent.state !== null && typeof e.originalEvent.state.tab !== 'undefined') {
+            //     showTabPage(e.originalEvent.state.tab);
+            //     // UrlParameter.setHash(e.originalEvent.state.tab, {tab:e.originalEvent.state.tab});
+            // }
+            console.log('location', location);
+            console.log('e.originalEvent.state', e.originalEvent.state);
         });
     }
 
@@ -24,9 +26,11 @@ var InitPage = function() {
 
     function showTabpageOnInitPage() {
 
-        var dataState = UrlParameter.getParam('tab');
-        if (dataState !== null) {
+        var dataState = UrlParameter.getHash();
+        if (dataState !== '') {
             showTabPage(dataState);
+        } else {
+            showTabPage('video');
         }
     }
 
