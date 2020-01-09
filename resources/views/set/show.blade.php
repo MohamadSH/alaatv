@@ -250,4 +250,3 @@
 @section('page-js')
     <script src="{{ mix('/js/set-show.js') }}" type="text/javascript"></script>
 @endsection
-
