@@ -22,6 +22,7 @@ class Mix {
             'public/acm/AlaatvCustomFiles/css/customStyle/colors.css',
             'public/acm/AlaatvCustomFiles/css/customStyle/footer.css',
             'public/acm/AlaatvCustomFiles/css/customStyle/mobile-topMenu.css',
+            'public/acm/AlaatvCustomFiles/css/customStyle/font.css',
             'public/acm/AlaatvCustomFiles/css/fixThemeStyle.css',
             'public/acm/AlaatvCustomFiles/components/loading/loading.css',
         ];
@@ -83,13 +84,13 @@ class Mix {
         this.compileScss();
         this.mixBase();
         this.mixPages();
-        this.mixUser();
-        this.mixLanding();
-        this.mixProduct();
+        // this.mixUser();
+        // this.mixLanding();
+        // this.mixProduct();
         this.mixPageContentShow();
-        this.mixPageSetShow();
-        this.mixCheckout();
-        this.mixAdmin();
+        // this.mixPageSetShow();
+        // this.mixCheckout();
+        // this.mixAdmin();
         this.mixCopyDirectory();
 
         if (this.appEnv === 'production') {
@@ -308,11 +309,12 @@ class Mix {
                 'node_modules/persian-date/dist/persian-date.js',
                 'node_modules/truncatise/index.js',
                 'node_modules/persianjs/persian.min.js',
+                'public/acm/AlaatvCustomFiles/components/aSticky/aSticky.js',
                 'public/acm/AlaatvCustomFiles/components/ScrollCarousel/js.js',
                 'public/acm/AlaatvCustomFiles/components/AlaaLoading/script.js',
                 'public/acm/AlaatvCustomFiles/components/SearchBoxFilter/script.js',
-                'public/acm/AlaatvCustomFiles/components/aSticky/aSticky.js',
                 'public/acm/AlaatvCustomFiles/js/page-content-search-filter-data.js',
+                'public/acm/AlaatvCustomFiles/components/UrlParameter/UrlParameter.js',
                 'public/acm/AlaatvCustomFiles/js/page/pages/content-search.js'
             ],
             'public/js/content-search.js'
@@ -469,7 +471,7 @@ class Mix {
                 'public/acm/AlaatvCustomFiles/components/aSticky/aSticky.js',
                 'public/acm/AlaatvCustomFiles/components/AnimateScrollTo/js.js',
                 'public/acm/AlaatvCustomFiles/js/UserCart.js',
-                'public/acm/AlaatvCustomFiles/js/page/content-show.js'
+                // 'public/acm/AlaatvCustomFiles/js/page/content-show.js'
             ],
             'public/js/content-show.js'
         );
@@ -486,6 +488,7 @@ class Mix {
                 'node_modules/toastr/build/toastr.min.js',
                 'public/acm/AlaatvCustomFiles/components/aSticky/aSticky.js',
                 'public/acm/AlaatvCustomFiles/components/Favorite/script.js',
+                'public/acm/AlaatvCustomFiles/components/UrlParameter/UrlParameter.js',
                 'public/acm/AlaatvCustomFiles/js/page/set-show.js'
             ],
             'public/js/set-show.js'
