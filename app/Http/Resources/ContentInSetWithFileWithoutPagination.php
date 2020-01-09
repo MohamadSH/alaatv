@@ -3,14 +3,13 @@
 namespace App\Http\Resources;
 
 use App\Traits\Content\Resource;
-use Illuminate\Http\Request;
 
 /**
  * Class Content
  *
  * @mixin \App\Content
  * */
-class ContentInSet extends AlaaJsonResourceWithoutPagination
+class ContentInSetWithFileWithoutPagination extends AlaaJsonResourceWithoutPagination
 {
     use Resource;
 
@@ -22,7 +21,8 @@ class ContentInSet extends AlaaJsonResourceWithoutPagination
     /**
      * Transform the resource into an array.
      *
-     * @param Request $request
+     *
+     * @param $request
      *
      * @return array
      */
@@ -42,6 +42,7 @@ class ContentInSet extends AlaaJsonResourceWithoutPagination
                 return New Section($this->section);
             }),
             'title'        => $this->when(isset($this->name), $this->name),
+            'file'         => $this->when($this->hasFile(), $this->getContentFile()),
             'duration'     => $this->when(isset($this->duration), $this->duration),
             'photo'        => $this->when(isset($this->thumbnail), $this->thumbnail),
             'isFree'       => $this->isFree,
