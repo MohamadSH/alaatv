@@ -93,7 +93,7 @@ class EmployeetimesheetController extends Controller
             'employeeRealWorkTime' => $employeeSumRealWorkTime,
         ];
 
-        return response(json_encode($result, JSON_UNESCAPED_UNICODE), Response::HTTP_OK)->header('Content-Type', 'application/json');
+        return response(json_encode($result, JSON_UNESCAPED_UNICODE))->header('Content-Type', 'application/json');
     }
 
     public function create(Request $request)

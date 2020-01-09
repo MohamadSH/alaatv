@@ -258,7 +258,22 @@ return [
             'dProtocol'  => env('DOWNLOAD_SERVER_PROTOCOL', 'http://'),
         ],
 
-        'alaaCdnSFTP'     => [
+        'sourcePhotoSFTP' => [
+            'driver'     => 'sftp',
+            'host'       => env('SFTP_HOST2', ''),
+            'port'       => env('SFTP_PORT', '22'),
+            'username'   => env('SFTP_USERNAME', ''),
+            'password'   => env('SFTP_PASSWORD', ''),
+            'privateKey' => env('SFTP_PRIVATE_KEY_PATH', ''),
+            'root'       => env('SFTP_ROOT', ''),
+            'prefix'     => '/upload/images/source',
+            'timeout'    => env('SFTP_TIMEOUT', '10'),
+            'dHost'      => env('CDN_SERVER_NAME', ''),
+            'dProtocol'  => env('DOWNLOAD_SERVER_PROTOCOL', 'http://'),
+        ],
+
+
+        'alaaCdnSFTP' => [
             'driver'     => 'sftp',
             'host'       => env('SFTP_HOST2', ''),
             'port'       => env('SFTP_PORT', '22'),

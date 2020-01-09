@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
  *
  * @mixin Contentset
  * */
-class Set extends AlaaJsonResource
+class SetWithoutPagination extends AlaaJsonResourceWithoutPagination
 {
     /**
      * Transform the resource into an array.
@@ -31,6 +31,8 @@ class Set extends AlaaJsonResource
             ];
         }
 
+        $activeContents = $this->getActiveContents2();
+
         return [
             'id'             => $this->id,
             'redirect_url'   => $this->when(isset($this->redirectUrl), $this->redirectUrl),
@@ -39,11 +41,24 @@ class Set extends AlaaJsonResource
             'photo'          => $this->when(isset($this->photo), $this->photo),
 //            'tags'                  => $this->when(isset($this->tags), $this->getTags()),
             'contents_count' => $this->activeContents->count(),
-            'url'            => $this->when($this->hasUrl(), $this->hasUrl() ? new UrlForSet($this) : null),
-            'author'         => $this->when(isset($this->author), $this->getAuthor()),
-            'contents'       => ContentInSet::collection($this->getActiveContents2()),
-            'created_at'     => $this->when(isset($this->created_at), $this->created_at),
-            'updated_at'     => $this->when(isset($this->updated_at), $this->updated_at),
+            'url'            => $this->when($this->hasUrl(), function () {
+                return $this->hasUrl() ? new UrlForSet($this) : null;
+            }),
+            'author'         => $this->when(isset($this->author), function () {
+                return $this->getAuthor();
+            }),
+            'contents'       => $this->when($activeContents->isNotEmpty(), function () use ($activeContents) {
+                return $activeContents->isNotEmpty() ? ContentInSetWithoutPagination::collection($activeContents) : null;
+            }),
+            'created_at'     => $this->when(isset($this->created_at), function () {
+                return isset($this->created_at) ? $this->created_at : null;
+            }),
+            'updated_at'     => $this->when(isset($this->updated_at), function () {
+                return isset($this->updated_at) ? $this->updated_at : null;
+            }),
+            'source'         => $this->when($this->sources->isNotEmpty(), function () {
+                return $this->sources->isNotEmpty() ? Source::collection($this->sources) : null;
+            }),
         ];
     }
 

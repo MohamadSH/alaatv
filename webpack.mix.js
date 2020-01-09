@@ -22,6 +22,7 @@ class Mix {
             'public/acm/AlaatvCustomFiles/css/customStyle/colors.css',
             'public/acm/AlaatvCustomFiles/css/customStyle/footer.css',
             'public/acm/AlaatvCustomFiles/css/customStyle/mobile-topMenu.css',
+            'public/acm/AlaatvCustomFiles/css/customStyle/font.css',
             'public/acm/AlaatvCustomFiles/css/fixThemeStyle.css',
             'public/acm/AlaatvCustomFiles/components/loading/loading.css',
         ];
@@ -92,24 +93,7 @@ class Mix {
         this.mixAdmin();
         this.mixCopyDirectory();
 
-        if (this.mix.inProduction()) {
-            this.mix.then(() => {
-                this.purifyCss();
-
-                console.log('' +
-                    '              ##       ##              ##             ##       ############## ##          ##          ####           ####      ##          ##\n' +
-                    '             ####      ##             ####           ####            ##        ##        ##         ##    ##       ##    ##    ###        ###\n' +
-                    '            ##  ##     ##            ##  ##         ##  ##           ##         ##      ##        ##             ##        ##  ####      ####\n' +
-                    '           ##    ##    ##           ##    ##       ##    ##          ##          ##    ##        ##             ##          ## ## ##    ## ##\n' +
-                    '          ##########   ##          ##########     ##########         ##           ##  ##          ##             ##        ##  ##  ##  ##  ##\n' +
-                    '         ##        ##  ##         ##        ##   ##        ##        ##            ####      ###    ##    ##       ##    ##    ##   ####   ##\n' +
-                    '        ##          ## ######### ##          ## ##          ##       ##             ##       ###      ####           ####      ##    ##    ##\n');
-            });
-        }
-
-        if (this.appEnv === 'development') {
-
-        } else {
+        if (this.appEnv === 'production') {
             this.mix.then(() => {
                 this.purifyCss();
 
@@ -325,11 +309,12 @@ class Mix {
                 'node_modules/persian-date/dist/persian-date.js',
                 'node_modules/truncatise/index.js',
                 'node_modules/persianjs/persian.min.js',
+                'public/acm/AlaatvCustomFiles/components/aSticky/aSticky.js',
                 'public/acm/AlaatvCustomFiles/components/ScrollCarousel/js.js',
                 'public/acm/AlaatvCustomFiles/components/AlaaLoading/script.js',
                 'public/acm/AlaatvCustomFiles/components/SearchBoxFilter/script.js',
-                'public/acm/AlaatvCustomFiles/components/aSticky/aSticky.js',
                 'public/acm/AlaatvCustomFiles/js/page-content-search-filter-data.js',
+                'public/acm/AlaatvCustomFiles/components/UrlParameter/UrlParameter.js',
                 'public/acm/AlaatvCustomFiles/js/page/pages/content-search.js'
             ],
             'public/js/content-search.js'
@@ -458,6 +443,7 @@ class Mix {
                 'public/acm/AlaatvCustomFiles/components/ScrollCarousel/style.css',
 
                 'public/acm/AlaatvCustomFiles/components/Favorite/style.css',
+                'public/acm/AlaatvCustomFiles/components/imageWithCaption/style.css',
 
                 'public/acm/videojs/skins/alaa-theme/videojs.css',
                 'public/acm/videojs/skins/nuevo/videojs.rtl.css',
@@ -502,6 +488,7 @@ class Mix {
                 'node_modules/toastr/build/toastr.min.js',
                 'public/acm/AlaatvCustomFiles/components/aSticky/aSticky.js',
                 'public/acm/AlaatvCustomFiles/components/Favorite/script.js',
+                'public/acm/AlaatvCustomFiles/components/UrlParameter/UrlParameter.js',
                 'public/acm/AlaatvCustomFiles/js/page/set-show.js'
             ],
             'public/js/set-show.js'

@@ -1,7 +1,6 @@
 <?php
 
 
-use App\Http\Controllers\Web\FaqController;
 use App\Http\Controllers\Web\AdminController;
 use App\Http\Controllers\Web\BotsController;
 use App\Http\Controllers\Web\ConsultationController;
@@ -9,6 +8,7 @@ use App\Http\Controllers\Web\ContentController;
 use App\Http\Controllers\Web\DashboardPageController;
 use App\Http\Controllers\Web\EmployeetimesheetController;
 use App\Http\Controllers\Web\ErrorPageController;
+use App\Http\Controllers\Web\FaqController;
 use App\Http\Controllers\Web\FavorableController;
 use App\Http\Controllers\Web\HomeController;
 use App\Http\Controllers\Web\IndexPageController;
@@ -31,6 +31,7 @@ use App\Http\Controllers\Web\SetController;
 use App\Http\Controllers\Web\SharifSchoolController;
 use App\Http\Controllers\Web\ShopPageController;
 use App\Http\Controllers\Web\SitemapController;
+use App\Http\Controllers\Web\SourceController;
 use App\Http\Controllers\Web\SurveyController;
 use App\Http\Controllers\Web\TopicsTreeController;
 use App\Http\Controllers\Web\UserController;
@@ -117,7 +118,6 @@ Route::group(['prefix' => 'landing'], function () {
 });
 
 Route::group(['middleware' => 'auth'], function () {
-    Route::get('logout', '\App\Http\Controllers\Auth\LoginController@logout');
 
     /*** Admin routes */
     Route::get('usersAdmin', [AdminController::class, 'admin'])->name('web.admin.users');
@@ -140,6 +140,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('specialAddUser', [AdminController::class, 'specialAddUser'])->name('web.admin.specialAddUser');
     Route::get('adminGenerateRandomCoupon', [AdminController::class, 'adminGenerateRandomCoupon'])->name('web.admin.generateRandomCoupon');
     Route::get('adminBot', [AdminController::class, 'adminBot'])->name('web.admin.bots');
+    Route::get('adminSource', [AdminController::class, 'adminSource'])->name('web.admin.sources');
     Route::post('giveWalletCredit', [WalletController::class, 'giveCredit'])->name('web.admin.wallet.giveCredit');
     Route::post('registerUserAndGiveOrderproduct', [AdminController::class, 'registerUserAndGiveOrderproduct'])->name('web.admin.registerUserAndGiveOrderproduct');
     Route::post('adminSendSMS', [HomeController::class , 'sendSMS'])->name('web.sendSms');
@@ -262,18 +263,19 @@ Route::group(['middleware' => 'auth'], function () {
     Route::resource('file', 'Web\FileController');
     Route::resource('employeetimesheet', 'Web\EmployeetimesheetController');
     Route::resource('lottery', 'Web\LotteryController');
-    Route::resource('livedescription', '\\'.LiveDescriptionController::class );
-    Route::resource('section', '\\'.SectionController::class );
-    Route::resource('periodDescription', '\\'. PeriodDescriptionController::class );
-    Route::resource('faq', '\\'. FaqController::class );
+    Route::resource('livedescription', '\\' . LiveDescriptionController::class);
+    Route::resource('section', '\\' . SectionController::class);
+    Route::resource('periodDescription', '\\' . PeriodDescriptionController::class);
+    Route::resource('faq', '\\' . FaqController::class);
+    Route::resource('source', '\\' . SourceController::class);
 
-    Route::get('copylessonfromremote', 'Web\RemoteDataCopyController@copyLesson');
-    Route::get('copydepartmentfromremote', 'Web\RemoteDataCopyController@copyDepartment');
-    Route::get('copydepartmentlessonfromremote', [SanatisharifmergeController::class , 'copyDepartmentlesson']);
-    Route::get('copyvideofromremote', 'Web\RemoteDataCopyController@copyVideo');
-    Route::get('copypamphletfromremote', 'Web\RemoteDataCopyController@copyPamphlet');
+//    Route::get('copylessonfromremote', 'Web\RemoteDataCopyController@copyLesson');
+//    Route::get('copydepartmentfromremote', 'Web\RemoteDataCopyController@copyDepartment');
+    Route::get('copydepartmentlessonfromremote', [SanatisharifmergeController::class, 'copyDepartmentlesson']);
+//    Route::get('copyvideofromremote', 'Web\RemoteDataCopyController@copyVideo');
+//    Route::get('copypamphletfromremote', 'Web\RemoteDataCopyController@copyPamphlet');
     Route::get('copydepartmentlessontotakhtekhak', 'Web\SanatisharifmergeController@copyDepartmentlesson');
-    Route::get('copycontenttotakhtekhak', [SanatisharifmergeController::class , 'copyContent']);
+    Route::get('copycontenttotakhtekhak', [SanatisharifmergeController::class, 'copyContent']);
     Route::get('tagbot', 'Web\BotsController@tagbot');
 
     Route::get('donate', 'Web\DonateController');
@@ -281,7 +283,7 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::get('listPendingDescriptionContents', [ContentController::class, 'indexPendingDescriptionContent'])->name('web.c.list.pending.description.content');
 
-    Route::get('live' , '\\'.LiveController::class)->name('live');
+    Route::get('live', '\\' . LiveController::class)->name('live');
     Route::post('startlive' , [LiveController::class, 'startLive'])->name('web.start.live');
     Route::post('endlive'   , [LiveController::class, 'endLive'])->name('web.end.live');
 

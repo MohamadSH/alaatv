@@ -75,7 +75,7 @@ class RegisterController extends Controller
                 'msg'        => 'user registered',
                 'redirectTo' => $this->redirectTo($request),
                 'data'       => $data,
-            ], Response::HTTP_OK);
+            ]);
         }
         return null;
     }

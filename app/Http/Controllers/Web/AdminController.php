@@ -26,6 +26,7 @@ use App\{Attribute,
     Producttype,
     Repositories\WebsitePageRepo,
     Role,
+    Source,
     Traits\APIRequestCommon,
     Traits\CharacterCommon,
     Traits\Helper,
@@ -62,7 +63,7 @@ class AdminController extends Controller
 
     public function __construct()
     {
-        $this->middleware('ability:' . config('constants.ROLE_ADMIN') . ',' . config('constants.USER_ADMIN_PANEL_ACCESS'), ['only' => 'admin']);
+        $this->middleware('ability:' . config('constants.ROLE_ADMIN') . ',' . config('constants.USER_ADMIN_PANEL_ACCESS'), ['only' => 'admin', 'adminSource']);
         $this->middleware('permission:' . config('constants.CONSULTANT_PANEL_ACCESS'), ['only' => 'consultantAdmin']);
         $this->middleware('permission:' . config('constants.PRODUCT_ADMIN_PANEL_ACCESS'), ['only' => 'adminProduct']);
         $this->middleware('permission:' . config('constants.CONTENT_ADMIN_PANEL_ACCESS'), ['only' => 'adminContent']);
@@ -1054,6 +1055,12 @@ class AdminController extends Controller
             'title' => 'فیلم جلسه 1 - فصل اول: نظریۀ اعداد (قسمت اول)، بخش پذیری، عاد کردن (قسمت اول)',
             'url'   => 'https://alaatv.com/c/16320',
         ]);
+    }
+
+    public function adminSource()
+    {
+        $sources = Source::all();
+        return view('admin.sourceIndex', compact('sources'));
     }
 }
 

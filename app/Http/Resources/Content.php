@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
  *
  * @mixin \App\Content
  * */
-class Content extends AlaaJsonResource
+class Content extends AlaaJsonResourceWithPagination
 {
     use Resource;
 
@@ -42,27 +42,46 @@ class Content extends AlaaJsonResource
         }
 
         return [
-            'id'                   => $this->id,
-            'redirect_url'         => $this->when(isset($this->redirectUrl), $this->redirectUrl),
-            'type'                 => $this->when(isset($this->contenttype_id), $this->getType()),
-            'title'                => $this->when(isset($this->name), $this->name),
-            'body'                 => $body,
-            'tags'                 => $this->when(isset($this->tags), $this->getTag()),
-            'file'                 => $this->when($this->hasFile(), $this->getContentFile()),
-            'duration'             => $this->when(isset($this->duration), $this->duration),
-            'photo'                => $this->when(isset($this->thumbnail), $this->thumbnail),
-            'isFree'               => $this->isFree,
-            'order'                => $this->order,
-            'page_view'            => $this->when(isset($this->page_view), $this->page_view),
-            'created_at'           => $this->when(isset($this->created_at), $this->created_at),
-            'updated_at'           => $this->when(isset($this->updated_at), $this->updated_at),
-            'url'                  => new Url($this),
-            'previous_url'         => $this->when(!is_null($this->previous_content), $this->getUrl($this->previous_content)),
-            'next_url'             => $this->when(!is_null($this->next_content), $this->getUrl($this->next_content)),
-            'author'               => $this->when(isset($this->author_id), $this->getAuthor()),
-            'set'                  => $this->when(isset($this->contentset_id), $this->getSetInContent()),
-            'related_products'     => $this->when($this->related_products->isNotEmpty(), $this->getRelatedProducts()),
-            'recommended_products' => $this->when($this->recommended_products->isNotEmpty(), $this->getRecommendedProducts()),
+            'id'               => $this->id,
+            'redirect_url'     => $this->when(isset($this->redirectUrl), $this->redirectUrl),
+            'type'             => $this->when(isset($this->contenttype_id), function () {
+                return $this->getType();
+            }),
+            'title'            => $this->when(isset($this->name), $this->name),
+            'body'             => $body,
+            'tags'             => $this->when(isset($this->tags), function () {
+                return $this->getTag();
+            }),
+            'file'             => $this->when($this->hasFile(), $this->getContentFile()),
+            'duration'         => $this->when(isset($this->duration), $this->duration),
+            'photo'            => $this->when(isset($this->thumbnail), $this->thumbnail),
+            'isFree'           => $this->isFree,
+            'order'            => $this->order,
+            'page_view'        => $this->when(isset($this->page_view), $this->page_view),
+            'created_at'       => $this->when(isset($this->created_at), function () {
+                return $this->created_at;
+            }),
+            'updated_at'       => $this->when(isset($this->updated_at), function () {
+                return $this->updated_at;
+            }),
+            'url'              => $this->getUrl($this),
+            'previous_url'     => $this->when(!is_null($this->previous_content), function () {
+                $this->getUrl($this->previous_content);
+            }),
+            'next_url'         => $this->when(!is_null($this->next_content), function () {
+                $this->getUrl($this->next_content);
+            }),
+            'author'           => $this->when(isset($this->author_id), function () {
+                $this->getAuthor();
+            }),
+            'set'              => $this->when(isset($this->contentset_id), function () {
+                $this->getSetInContent();
+            }),
+            'related_products' => $this->when($this->related_products->isNotEmpty(), $this->getRelatedProducts()),
+//            'recommended_products' => $this->when($this->recommended_products->isNotEmpty(), $this->getRecommendedProducts()),
+            'source'           => $this->when($this->sources->isNotEmpty(), function () {
+                return $this->sources->isNotEmpty() ? Source::collection($this->sources) : null;
+            }),
         ];
     }
 
@@ -78,9 +97,9 @@ class Content extends AlaaJsonResource
         return new Tag($this->tags);
     }
 
-    private function getUrl($url)
+    private function getUrl($content)
     {
-        return new Url($url);
+        return new Url($content);
     }
 
     private function getAuthor()

@@ -33,11 +33,13 @@ use App\{Afterloginformcontrol,
     Role,
     Section,
     Slideshow,
+    Source,
     User,
     Userbon,
     Userupload,
     Wallet,
-    Websitesetting};
+    Websitesetting
+};
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\{Cache, Route};
@@ -518,6 +520,17 @@ class RouteServiceProvider extends ServiceProvider
                 'faq_' . $value,
             ])->remember($key, config('constants.CACHE_5'), function () use ($value) {
                 return Faq::where('id', $value)
+                        ->first() ?? abort(Response::HTTP_NOT_FOUND);
+            });
+        });
+
+        Route::bind('source', function ($value) {
+            $key = 'source:' . $value;
+            return Cache::tags([
+                'source',
+                'source_' . $value,
+            ])->remember($key, config('constants.CACHE_5'), function () use ($value) {
+                return Source::where('id', $value)
                         ->first() ?? abort(Response::HTTP_NOT_FOUND);
             });
         });

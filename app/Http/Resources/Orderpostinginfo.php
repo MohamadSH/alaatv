@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
  *
  * @mixin \App\Orderpostinginfo
  * */
-class Orderpostinginfo extends AlaaJsonResource
+class Orderpostinginfo extends AlaaJsonResourceWithPagination
 {
     /**
      * Transform the resource into an array.

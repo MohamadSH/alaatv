@@ -1,5 +1,8 @@
 <?php namespace App\Traits;
 
+use App\Adapter\AlaaSftpAdapter;
+use Illuminate\Contracts\Filesystem\FileNotFoundException;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 
 trait FileCommon
@@ -94,5 +97,28 @@ trait FileCommon
     {
         $baseRoot = Storage::Disk(config('constants.DISK_FREE_CONTENT'))->getAdapter()->getRoot();
         return explode($baseRoot, $fullPath)[1];
+    }
+
+    /**
+     * @param        $file
+     *
+     * @param string $disk
+     *
+     * @return string|null
+     * @throws FileNotFoundException
+     */
+    private function storePhoto($file, string $disk): ?string
+    {
+        $extension = $file->getClientOriginalExtension();
+        $fileName  =
+            basename($file->getClientOriginalName(), '.' . $extension) . '_' . date('YmdHis') . '.' . $extension;
+        $disk      = Storage::disk($disk);
+        /** @var AlaaSftpAdapter $adaptor */
+        if ($disk->put($fileName, File::get($file))) {
+            $fullPath    = $disk->getAdapter()->getRoot();
+            $partialPath = $this->getSubDirectoryInCDN($fullPath);
+            $photo       = $partialPath . $fileName;
+        }
+        return (isset($photo)) ? $photo : null;
     }
 }

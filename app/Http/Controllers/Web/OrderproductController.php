@@ -173,13 +173,6 @@ class OrderproductController extends Controller
             'data'    => [],
         ];
 
-        //ToDo : discuss getting order from request /** @var Order $order */
-        /*if(isset($data['order'])) {
-            $order = $data['order'];
-        } else {
-            $order = Order::FindorFail($orderId)->first();
-        }*/
-
         $data = array_merge([
             'product_id'     => null,
             'order_id'       => null,
@@ -212,12 +205,10 @@ class OrderproductController extends Controller
             $report['status']           = false;
             $report['message'][]        = 'This product has been added to order before';
             $report['data']['products'] = $simpleProducts;
-        } else {
-            if (count($simpleProducts) == 0) {
-                $report['status']           = false;
-                $report['message'][]        = 'No products has been selected';
-                $report['data']['products'] = $simpleProducts;
-            }
+        } else if (count($simpleProducts) == 0) {
+            $report['status']           = false;
+            $report['message'][]        = 'No products has been selected';
+            $report['data']['products'] = $simpleProducts;
         }
 
         $storedOrderproducts = new OrderproductCollection();

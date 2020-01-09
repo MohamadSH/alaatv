@@ -25,14 +25,6 @@ class RefinementFactory
 
     public function getRefinementClass()
     {
-        return $this->setupRefinementClass();
-    }
-
-    /**
-     * @return mixed
-     */
-    private function setupRefinementClass()
-    {
         $typeName  = $this->product->producttype->name;
         $className = __NAMESPACE__ . '\Refinement' . ucfirst($typeName);
         if (class_exists($className)) {
