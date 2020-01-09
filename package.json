@@ -27,21 +27,12 @@
         "vue": "^2.6.11"
     },
     "dependencies": {
-<<<<<<< HEAD
         "@fullcalendar/core": "^4.3.1",
         "@fullcalendar/daygrid": "^4.3.0",
         "@fullcalendar/resource-timeline": "^4.3.0",
         "@fullcalendar/timegrid": "^4.3.0",
         "@panzoom/panzoom": "^4.0.0",
         "acorn": "^6.4.0",
-=======
-        "@fullcalendar/core": "^4.2.0",
-        "@fullcalendar/daygrid": "^4.2.0",
-        "@fullcalendar/resource-timeline": "^4.2.0",
-        "@fullcalendar/timegrid": "^4.2.0",
-        "@panzoom/panzoom": "github:kerasus/panzoom",
-        "acorn": "^6.2.1",
->>>>>>> da41eb78a705cb34612471cfda56129b8ad30754
         "animate.css": "^3.7.2",
         "block-ui": "^2.70.1",
         "bootstrap-fileinput": "^5.0.8",
