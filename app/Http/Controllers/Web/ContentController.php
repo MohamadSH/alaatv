@@ -209,7 +209,7 @@ class ContentController extends Controller
 
         $recommendedItems = $this->getRecommendedItems($content, $tags);
 
-        $contentBlocks = Block::getContentBlocks();
+        $contentBlocks = $content->isFree ? Block::getContentBlocks() : collect();
 
         $isFavored =
             optional(optional(optional(optional($user)->favoredContents())->where('id', $content->id))->get())->isNotEmpty();
