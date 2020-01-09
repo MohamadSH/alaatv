@@ -67,7 +67,7 @@ class MobileVerificationController extends Controller
             return response([
                 'user'    => $user,
                 'message' => Lang::get('verification.Your mobile number is verified.'),
-            ], Response::HTTP_OK);
+            ]);
         } else {
             $request->expectsJson() ? abort(Response::HTTP_FORBIDDEN,
                 Lang::get('verification.Your code is wrong.')) : Redirect::route('verification.notice');
@@ -94,6 +94,6 @@ class MobileVerificationController extends Controller
 
         return response([
             'message' => Lang::get('verification.Verification code is sent.'),
-        ], Response::HTTP_OK);
+        ]);
     }
 }

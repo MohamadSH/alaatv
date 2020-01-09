@@ -8,7 +8,7 @@ use App\Classes\Search\ProductSearch;
 use App\Contenttype;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ContentIndexRequest;
-use App\Http\Resources\ContentInSet as ContentInSearch;
+use App\Http\Resources\ContentInSet;
 use App\Http\Resources\ProductInBlock;
 use App\Http\Resources\SetInIndex;
 use Illuminate\Http\JsonResponse;
@@ -33,7 +33,7 @@ class SearchController extends Controller
         $filters      = $request->all();
 
         $videos = $contentSearch->get(compact('filters', 'contentTypes'))->get('video');
-        $videos = isset($videos) && $videos->count() > 0 ? ContentInSearch::collection($videos) : null;
+        $videos = isset($videos) && $videos->count() > 0 ? ContentInSet::collection($videos) : null;
 
         $setFilters            = $filters;
         $setFilters['enable']  = 1;
@@ -53,8 +53,6 @@ class SearchController extends Controller
         return response()->json([
             'data' => [
                 'videos'    => $videos,
-                'pamphlets' => null,
-                'articles'  => null,
                 'products'  => $products,
                 'sets'      => $sets,
                 'tags'      => empty($tags) ? null : $tags,

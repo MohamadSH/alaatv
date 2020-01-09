@@ -48,11 +48,34 @@
                             <div class="mt-checkbox-list">
                                 <label class="mt-checkbox mt-checkbox-outline">
                                     قابل نمایش برای کاربران
-                                    <input type="checkbox" value="1" name="display" @if($editForm && $set->display) checked @endif />
+                                    <input type="checkbox" value="1" name="display"
+                                           @if($editForm && $set->display) checked @endif />
                                     <span></span>
                                 </label>
                             </div>
                         </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <label class="col-md-4 control-label" for="author_id">سورس</label>
+                        <div class="col-md-8">
+                            {!! Form::select('sources_id[]', $sources, $setSources ,
+                               [
+                                   'multiple' => 'multiple',
+                                   'class' => 'mt-multiselect btn btn-default a--full-width',
+                                   "data-label" => "left",
+                                   "data-width" => "100%",
+                                   "data-filter" => "true",
+                                   "data-height" => "200",
+                                   "title" => "اننتخاب منبع",
+                                   'id'    => 'source_multi_select'
+                               ]) !!}
+                        </div>
+                        <label>
+                            منبع را برای کانتنت های این ست هم اضافه کن
+                            {!! Form::checkbox('attachSourceToContents' , 1) !!}
+                        </label>
                     </div>
                 </div>
                 <div class="form-group">

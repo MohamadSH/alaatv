@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
  *
  * @mixin Contentset
  * */
-class SetInContent extends AlaaJsonResource
+class SetInContent extends AlaaJsonResourceWithPagination
 {
     function __construct(Contentset $model)
     {

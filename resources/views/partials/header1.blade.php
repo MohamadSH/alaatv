@@ -77,6 +77,8 @@
                             <!-- BEGIN: Topbar Toggler -->
                             <a id="m_aside_header_topbar_mobile_toggle1" href="javascript:" class="m-brand__icon m--visible-tablet-and-mobile-inline-block">
                                 <i class="fa fa-user-alt" style="color: white;"></i>
+
+
                             </a>
                             <!-- BEGIN: Topbar Toggler -->
                         @else
@@ -223,7 +225,6 @@
                                                         <div class="a--MegaMenu-categorySubItems-background-title">دوازدهم و کنکور</div>
                                                         <div class="a--MegaMenu-categorySubItems-background-image">
                                                             <svg xmlns="http://www.w3.org/2000/svg"
-                                                                 xmlns:xlink="http://www.w3.org/1999/xlink"
                                                                  version="1.1" id="Capa_1" x="0px" y="0px"
                                                                  viewBox="0 0 455.431 455.431"
                                                                  xml:space="preserve" width="100" height="100">
@@ -319,7 +320,6 @@
                                                         <div class="a--MegaMenu-categorySubItems-background-title">یازدهم</div>
                                                         <div class="a--MegaMenu-categorySubItems-background-image">
                                                             <svg xmlns="http://www.w3.org/2000/svg"
-                                                                 xmlns:xlink="http://www.w3.org/1999/xlink"
                                                                  version="1.1" id="Capa_1" x="0px" y="0px"
                                                                  viewBox="0 0 455.431 455.431"
                                                                  xml:space="preserve" width="100" height="100">
@@ -415,7 +415,6 @@
                                                         <div class="a--MegaMenu-categorySubItems-background-title">دهم</div>
                                                         <div class="a--MegaMenu-categorySubItems-background-image">
                                                             <svg xmlns="http://www.w3.org/2000/svg"
-                                                                 xmlns:xlink="http://www.w3.org/1999/xlink"
                                                                  version="1.1" id="Capa_1" x="0px" y="0px"
                                                                  viewBox="0 0 455.431 455.431"
                                                                  xml:space="preserve" width="100" height="100">
@@ -519,18 +518,29 @@
                                                             </a>
                                                         </div>
                                                         <div class="subCategoryItem">
-                                                            <a class="m-link" href="{{ urldecode(route('content.index', 'tags[]=نظام_آموزشی_قدیم&tags[]=کنکور&tags[]=دین_و_زندگی')) }}" >
+                                                            <a class="m-link" href="{{ urldecode(route('content.index', 'tags[]=نظام_آموزشی_قدیم&tags[]=کنکور&tags[]=دین_و_زندگی')) }}">
                                                                 دین و زندگی
                                                             </a>
                                                         </div>
                                                     </div>
                                                     <div class="a--MegaMenu-categorySubItems-background">
-                                                        <div class="a--MegaMenu-categorySubItems-background-title">کنکور نظام قدیم</div>
+                                                        <div class="a--MegaMenu-categorySubItems-background-title">کنکور
+                                                            نظام قدیم
+                                                        </div>
                                                         <div class="a--MegaMenu-categorySubItems-background-image">
-                                                            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Capa_1" x="0px" y="0px" viewBox="0 0 455.431 455.431" xml:space="preserve" width="100" height="100" class="">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" version="1.1"
+                                                                 id="Capa_1" x="0px" y="0px"
+                                                                 viewBox="0 0 455.431 455.431" xml:space="preserve"
+                                                                 width="100" height="100" class="">
                                                                 <g>
-                                                                    <path style="fill:#FF9000" d="M405.39,412.764c-69.689,56.889-287.289,56.889-355.556,0s-62.578-300.089,0-364.089  s292.978-64,355.556,0S475.079,355.876,405.39,412.764z" data-original="#5CA4DA" class="" data-old_color="#5CA4DA"></path>
-                                                                    <path style="fill:#FFA229" d="M229.034,313.209c-62.578,49.778-132.267,75.378-197.689,76.8  C-17.01,307.52-7.055,106.987,49.834,48.676c51.2-52.622,211.911-62.578,304.356-29.867  C376.945,112.676,330.012,232.142,229.034,313.209z" data-original="#6DAFE0" class="active-path" data-old_color="#6DAFE0"></path>
+                                                                    <path style="fill:#FF9000"
+                                                                          d="M405.39,412.764c-69.689,56.889-287.289,56.889-355.556,0s-62.578-300.089,0-364.089  s292.978-64,355.556,0S475.079,355.876,405.39,412.764z"
+                                                                          data-original="#5CA4DA" class=""
+                                                                          data-old_color="#5CA4DA"></path>
+                                                                    <path style="fill:#FFA229"
+                                                                          d="M229.034,313.209c-62.578,49.778-132.267,75.378-197.689,76.8  C-17.01,307.52-7.055,106.987,49.834,48.676c51.2-52.622,211.911-62.578,304.356-29.867  C376.945,112.676,330.012,232.142,229.034,313.209z"
+                                                                          data-original="#6DAFE0" class="active-path"
+                                                                          data-old_color="#6DAFE0"></path>
                                                                 </g>
                                                             </svg>
                                                         </div>
@@ -731,7 +741,7 @@
                                             <img src="{{ $profileImage }}" class="m--img-rounded m--marginless m--img-centered" alt="عکس پروفایل" width="41" height="41"/>
                                         </span>
                                     </a>
-                                    <div class="m-dropdown__wrapper">
+                                    <div id="user-profile-small-panel" class="m-dropdown__wrapper">
                                         <span class="m-dropdown__arrow m-dropdown__arrow--right m-dropdown__arrow--adjust"></span>
                                         <div class="m-dropdown__inner">
                                             <div class="m-dropdown__header m--align-center">
@@ -785,17 +795,24 @@
                                                             </a>
                                                         </li>
                                                         <li class="m-nav__item">
-                                                            <a href="{{ action("Web\UserController@userOrders")  }}" class="m-nav__link">
+                                                            <a href="{{ action("Web\UserController@userOrders")  }}"
+                                                               class="m-nav__link">
                                                                 <i class="m-nav__link-icon fa fa-receipt"></i>
                                                                 <span class="m-nav__link-text">سفارشهای من</span>
                                                             </a>
                                                         </li>
                                                         <li class="m-nav__separator m-nav__separator--fit"></li>
                                                         <li class="m-nav__item">
-                                                            <a href="{{ url('/logout') }}" class="btn m-btn--pill btn-secondary m-btn m-btn--custom m-btn--label-brand m-btn--bolder">
+                                                            <a href="{{ url('/logout') }}"
+                                                               onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
+                                                               class="btn m-btn--pill btn-secondary m-btn m-btn--custom m-btn--label-brand m-btn--bolder">
                                                                 <i class="fa fa-sign-out-alt"></i>
                                                                 خروج
                                                             </a>
+                                                            <form id="logout-form" action="{{ url('/logout') }}"
+                                                                  method="POST" style="display: none;">
+                                                                {{ csrf_field() }}
+                                                            </form>
                                                         </li>
                                                     </ul>
                                                 </div>

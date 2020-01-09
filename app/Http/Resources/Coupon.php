@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
  *
  * @mixin \App\Coupon
  * */
-class Coupon extends AlaaJsonResource
+class Coupon extends AlaaJsonResourceWithPagination
 {
     /**
      * Transform the resource into an array.

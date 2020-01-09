@@ -73,7 +73,7 @@ class ProductphotoController extends Controller
     public function destroy(Productphoto $productphoto)
     {
         if ($productphoto->delete()) {
-            return response()->json([], Response::HTTP_OK);
+            return response()->json([]);
         } else {
             return response()->json([], Response::HTTP_SERVICE_UNAVAILABLE);
         }

@@ -91,7 +91,7 @@ class ZarinpalTransactionController extends Controller
             ];
         }
 
-        return response($responseContent, Response::HTTP_OK);
+        return response($responseContent);
     }
 
     /**

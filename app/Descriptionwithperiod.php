@@ -2,10 +2,13 @@
 
 namespace App;
 
+use Illuminate\Support\Facades\Storage;
+
 /**
- * @property mixed id
- * @property mixed till
- * @property mixed since
+ * @property mixed       id
+ * @property mixed       till
+ * @property mixed       since
+ * @property string|null photo
  */
 class Descriptionwithperiod extends BaseModel
 {
@@ -15,6 +18,7 @@ class Descriptionwithperiod extends BaseModel
         'description',
         'since',
         'till',
+        'photo',
     ];
 
     protected $dates = [
@@ -24,6 +28,28 @@ class Descriptionwithperiod extends BaseModel
         'period_start',
         'period_end',
     ];
+
+    /*
+    |--------------------------------------------------------------------------
+    | mutators
+    |--------------------------------------------------------------------------
+    */
+
+    public function getPhotoAttribute($value)
+    {
+        if (is_null($value))
+            return $value;
+
+        $diskAdapter = Storage::disk('alaaCdnSFTP')->getAdapter();
+        $imageUrl    = $diskAdapter->getUrl($value);
+        return isset($imageUrl) ? $imageUrl : null;
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | relations
+    |--------------------------------------------------------------------------
+    */
 
     public function product()
     {
@@ -35,6 +61,11 @@ class Descriptionwithperiod extends BaseModel
         return $this->belongsTo(User::Class);
     }
 
+    /*
+    |--------------------------------------------------------------------------
+    |
+    |--------------------------------------------------------------------------
+    */
     /**
      * Converting since field to Jalali
      *

@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
  *
  * @mixin Orderproduct
  * */
-class PurchasedOrderproduct extends AlaaJsonResource
+class PurchasedOrderproduct extends AlaaJsonResourceWithPagination
 {
     function __construct(Orderproduct $model)
     {

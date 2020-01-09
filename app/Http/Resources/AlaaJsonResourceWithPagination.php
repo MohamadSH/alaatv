@@ -4,10 +4,8 @@
 namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
-use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Http\Resources\MissingValue;
 
-class AlaaJsonResource extends AlaaJsonResourceWithoutPagination
+class AlaaJsonResourceWithPagination extends AlaaJsonResourceWithoutPagination
 {
     /**
      * Create new anonymous resource collection.
