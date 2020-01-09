@@ -573,12 +573,15 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
 
         return Cache::tags(['content', 'previousContent', 'content_' . $this->id, 'content_previousContent_' . $this->id])
             ->remember($key, config('constants.CACHE_600'), function () {
-                $previousContentOrder = $this->order - 1;
                 $set                  = $this->set;
                 if (isset($set)) {
-                    $previousContent = $set->oldContents()
-                        ->where('educationalcontents.order', $previousContentOrder)
-                        ->get()
+//                    $previousContent = $set->contents()
+//                        ->where('order', $this->order - 1)
+//                        ->get()
+//                        ->first();
+                    $previousContent = $set->activeContents()
+                        ->where('order', '<=', $this->order - 1)
+                        ->orderByDesc('order')
                         ->first();
                 }
 
@@ -602,12 +605,15 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
 
         return Cache::tags(['content', 'nextContent', 'content_' . $this->id, 'content_' . $this->id . '_nextContent'])
             ->remember($key, config('constants.CACHE_600'), function () {
-                $nextContentOrder = $this->order + 1;
                 $set              = $this->set;
                 if (isset($set)) {
-                    $nextContent = $set->oldContents()
-                        ->where('educationalcontents.order', $nextContentOrder)
-                        ->get()
+//                    $nextContent = $set->contents()
+//                        ->where('order', $this->order + 1)
+//                        ->get()
+//                        ->first();
+                    $nextContent = $set->activeContents()
+                        ->where('order', '>=', $this->order + 1)
+                        ->orderBy('order')
                         ->first();
                 }
 
@@ -615,7 +621,7 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
             });
     }
 
-    public function getNextContentAtttibute()
+    public function getNextContentAttribute()
     {
         return $this->getNextContent();
     }

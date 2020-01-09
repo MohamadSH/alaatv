@@ -5,8 +5,8 @@ namespace App\Http\Controllers\Api;
 use App\Classes\Search\ContentsetSearch;
 use App\Contentset;
 use App\Http\Controllers\Controller;
-use App\Http\Resources\Set;
 use App\Http\Resources\SetInIndex;
+use App\Http\Resources\SetWithoutPagination;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
@@ -29,7 +29,7 @@ class SetController extends Controller
                 Response::HTTP_FOUND, $request->headers->all());
         }
 
-        return new Set($set);
+        return new SetWithoutPagination($set);
     }
 
     public function index(Request $request, ContentsetSearch $contentSearch)
