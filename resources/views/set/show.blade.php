@@ -46,9 +46,7 @@
         <div class="col-lg-2 a--desktop-show rightSideAdBanner">
             @include('partials.ads.list', ['id'=>'setShow-TopOfList-desktopShow'])
         </div>
-
         <div class="col-lg-8 mx-auto">
-
             <div class="m-portlet m-portlet--full-height ">
                 <div class="m-portlet__head contentsetListHead">
                     <div class="m-portlet__head-caption">
@@ -100,10 +98,24 @@
 
                     <ul class="nav nav-pills nav-fill" role="tablist">
                         <li class="nav-item">
-                            <a class="nav-link active" data-toggle="tab" href="#searchResult_video" data-state="video">فیلم ها</a>
+                            <a class="nav-link active" data-toggle="tab" href="#searchResult_video" data-state="video">
+                                @if($videos->count() > 0)
+                                    فیلم ها
+                                    ({{$videos->count()}})
+                                @else
+                                    فیلم ندارد
+                                @endif
+                            </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" data-toggle="tab" href="#searchResult_pamphlet" data-state="pamphlet">جزوات</a>
+                            <a class="nav-link {{($pamphlets->count() === 0) ? 'disabled' : ''}}" data-toggle="tab" href="#searchResult_pamphlet" data-state="pamphlet">
+                                @if($pamphlets->count() > 0)
+                                    جزوات
+                                    ({{$pamphlets->count()}})
+                                @else
+                                    جزوه ندارد
+                                @endif
+                            </a>
                         </li>
                     </ul>
 
