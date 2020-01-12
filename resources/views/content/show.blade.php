@@ -345,7 +345,7 @@
                             </div>
                             <div class="m-portlet__body m--padding-10">
                                 <div id="playListScroller"
-                                     class="m-scrollable11"
+                                     class="m-scrollable11 AlaaScroll"
                                      data-scrollable="true"
                                      {{--                             data-height="{{ min($videosWithSameSet->count(),(optional($content->template)->name == "video1" ?  11 : 4)) * 103 }}"--}}
                                      data-height="360"
@@ -456,7 +456,7 @@
                                 @endif
                             </ul>
                             <div class="tab-content">
-                                <div class="tab-pane active" id="m_tabs_1_1" role="tabpanel">
+                                <div class="tab-pane active AlaaScroll" id="m_tabs_1_1" role="tabpanel">
 
                                     <div class="sources">
                                         @foreach($sources as $source)
@@ -564,7 +564,7 @@
                                     @endif
 
                                 </div>
-                                <div class="tab-pane" id="m_tabs_1_2" role="tabpanel">
+                                <div class="tab-pane AlaaScroll" id="m_tabs_1_2" role="tabpanel">
                                     @if($pamphletsWithSameSet->count() > 0 and $pamphletsWithSameSet->where("content.id" , "<>",$content->id)->isNotEmpty())
                                         @foreach($pamphletsWithSameSet as  $item)
                                             <!--begin::m-widget4-->

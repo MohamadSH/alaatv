@@ -120,30 +120,30 @@
 
 /*scrollbar*/
 /* width */
-#m_tabs_1_1 {
+.AlaaScroll {
 
     scrollbar-color: #ff9000 #ffe0b8;
     scrollbar-width: thin;
 }
 
-#m_tabs_1_1::-webkit-scrollbar {
+.AlaaScroll::-webkit-scrollbar {
     width: 9px;
     height: 9px;
 }
 
 /* Track */
-#m_tabs_1_1::-webkit-scrollbar-track {
+.AlaaScroll::-webkit-scrollbar-track {
     background: #ffefdb;
 }
 
 /* Handle */
-#m_tabs_1_1::-webkit-scrollbar-thumb {
+.AlaaScroll::-webkit-scrollbar-thumb {
     background: #ff9000;
     border-radius: 10px;
 }
 
 /* Handle on hover */
-#m_tabs_1_1::-webkit-scrollbar-thumb:hover {
+.AlaaScroll::-webkit-scrollbar-thumb:hover {
     background: #ff6c00;
 }
 /*media query*/
