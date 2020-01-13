@@ -1,5 +1,6 @@
 # Ignore everything
 *
+product-show-RaheAbrisham.css
 
 # But not these files...
 !.gitignore
