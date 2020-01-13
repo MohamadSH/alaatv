@@ -237,7 +237,7 @@ var SameHeight = function() {
 
     function calcSetContentsList() {
         $('#playListScroller').css({'height': 0});
-        return $('.top-right-section .m-portlet').outerHeight(true) - $('.top-left-section .m-portlet').outerHeight(true) - $('.top-left-section .top-left-section-ad').outerHeight(true);
+        return $('.top-right-section').outerHeight(true) - $('.top-left-section .m-portlet').outerHeight(true) - $('.top-left-section .top-left-section-ad').outerHeight(true);
     }
 
     function setContentsList() {
@@ -320,10 +320,8 @@ jQuery(document).ready( function() {
         childCountHideOwlCarousel: 4
     });
     $(document).on('click', '.scrollToOwlCarouselParentProducts', function(){
-        $("#owlCarouselParentProducts").AnimateScrollTo();
-        // $([document.documentElement, document.body]).animate({
-        //     scrollTop: ($("#owlCarouselParentProducts").offset().top - 80)
-        // }, 500);
+        // $("#owlCarouselParentProducts").AnimateScrollTo();
+        $('.downloadLinkColumn').AnimateScrollTo();
     });
 
     $(document).on('click', '.btnAddToCart', function () {
