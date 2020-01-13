@@ -207,7 +207,7 @@ class ContentController extends Controller
 
 //        $recommendedProductsOfThisContent = $content->recommended_products ;
 
-        $recommendedItems = $this->getRecommendedItems($content, $tags);
+//        $recommendedItems = $this->getRecommendedItems($content, $tags);
 
         $contentBlocks = $content->isFree ? Block::getContentBlocks() : collect();
 
@@ -220,7 +220,7 @@ class ContentController extends Controller
             compact('seenCount', 'author', 'content', 'contentsWithSameSet', 'videosWithSameSet',
                 'pamphletsWithSameSet', 'contentSetName', 'tags',
                 'userCanSeeCounter', 'adItems', 'videosWithSameSetL', 'videosWithSameSetR',
-                'productsThatHaveThisContent', 'user_can_see_content', 'message', 'productsHasThisContentThroughBlockCollection', 'contentBlocks', 'isFavored', 'sources', 'recommendedItems'));
+                'productsThatHaveThisContent', 'user_can_see_content', 'message', 'productsHasThisContentThroughBlockCollection', 'contentBlocks', 'isFavored', 'sources'));
 
         return httpResponse($apiResponse, $viewResponse);
     }
@@ -857,9 +857,8 @@ class ContentController extends Controller
     private function getRecommendedItems(Content $content, array $tags): array
     {
         return Cache::tags(['content', 'content_' . $content->id, 'recommended_contents', 'recommended_contents_' . $content->id])
-            ->remember('content:recommendedItems:' . $content->cacheKey(), config('constants.CACHE_0'), function () use ($content, $tags) {
-//                $result = $this->sendRequest(route('api.v2.search'), 'GET', ['tags' => $tags], [
-                $result = $this->sendRequest('https://alaatv.com/api/v2/search', 'GET', ['tags' => $tags], [
+            ->remember('content:recommendedItems:' . $content->cacheKey(), config('constants.CACHE_10'), function () use ($content, $tags) {
+                $result = $this->sendRequest(route('api.v2.search'), 'GET', ['tags' => $tags], [
                     'headers' => [
                         'Content-Type' => 'application/json',
                         'Accept'       => 'application/json',

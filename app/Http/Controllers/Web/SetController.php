@@ -9,7 +9,7 @@ use App\Contentset;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ContentsetIndexRequest;
 use App\Http\Requests\InsertContentsetRequest;
-use App\Http\Resources\ContentInSetWithFile as ContentResource;
+use App\Http\Resources\ContentInSetWithFileWithoutPagination as ContentResource;
 use App\Http\Resources\SetWithoutPagination as SetResource;
 use App\Source;
 use App\Traits\FileCommon;
