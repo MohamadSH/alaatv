@@ -86,7 +86,7 @@ class Mix {
         this.mixPages();
         // this.mixUser();
         // this.mixLanding();
-        // this.mixProduct();
+        this.mixProduct();
         this.mixPageContentShow();
         this.mixPageSetShow();
         // this.mixCheckout();
@@ -437,12 +437,12 @@ class Mix {
     mixPageContentShow() {
         this.mixCssAndJs([
                 'node_modules/toastr/build/toastr.css',
+
                 'public/acm/AlaatvCustomFiles/components/ribbon/style.css',
-
-                'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/style.css',
-                'public/acm/AlaatvCustomFiles/components/ScrollCarousel/style.css',
-
                 'public/acm/AlaatvCustomFiles/components/Favorite/style.css',
+                'public/acm/AlaatvCustomFiles/components/AlaaScroll/style.css',
+                'public/acm/AlaatvCustomFiles/components/ScrollCarousel/style.css',
+                'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/style.css',
                 'public/acm/AlaatvCustomFiles/components/imageWithCaption/style.css',
 
                 'public/acm/videojs/skins/alaa-theme/videojs.css',
@@ -610,7 +610,7 @@ class Mix {
                 'public/acm/AlaatvCustomFiles/components/AlaaLoading/script.js',
                 'public/acm/AlaatvCustomFiles/components/CustomDropDown/js.js',
 
-                'public/acm/AlaatvCustomFiles/js/page/product/CustomShow/raheAbrisham.js',
+                // 'public/acm/AlaatvCustomFiles/js/page/product/CustomShow/raheAbrisham.js',
             ]),
             'public/js/product-show-RaheAbrisham.js'
         );
