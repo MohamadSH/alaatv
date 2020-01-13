@@ -60,7 +60,7 @@
 
 @section('content')
 
-    <div class="row">
+    <div class="row m--margin-top-25">
         <div class="col">
             @include('systemMessage.flash')
         </div>
@@ -194,4 +194,5 @@
         };
     </script>
     <script src="{{ mix('/js/product-show-RaheAbrisham.js') }}"></script>
+    <script src="{{ asset('/acm/AlaatvCustomFiles/js/page/product/CustomShow/raheAbrisham.js') }}"></script>
 @endsection

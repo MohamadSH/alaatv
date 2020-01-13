@@ -61,7 +61,7 @@
     border-top: solid 10px white;
     border-left: solid 10px transparent;
     border-right: solid 10px transparent;
-    top: 24px;
+    top: 30px;
     left: calc( 50% - 10px);
 }
 .MapStepLabel.bottom:before {

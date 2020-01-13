@@ -88,7 +88,7 @@
 
 @section('content')
 
-    <div class="row">
+    <div class="row m--margin-top-25">
         <div class="col">
             @include('systemMessage.flash')
         </div>
