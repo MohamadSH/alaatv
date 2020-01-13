@@ -692,8 +692,8 @@
         </div>
 
         <div class="col-12">
-            @if($productsThatHaveThisContent->isNotEmpty())
-                <div class="row a--owl-carousel-row blockWraper-hasProduct">
+            @if($productsThatHaveThisContent->isNotEmpty() && (!$user_can_see_content || ($content->isFree && false)) )
+                <div class="row a--owl-carousel-row blockWraper-hasProduct m--margin-top-10">
                     <div class="col">
                         <div class="m-portlet a--owl-carousel-Wraper" id="owlCarouselParentProducts">
                             <div class="m-portlet__head a--owl-carousel-head">
@@ -788,8 +788,13 @@
                     </div>
                 </div>
             @endif
-            <div class="AlaaAdDom" alaa-ad-preloadimage="1"></div>
+
         </div>
+        @if($content->isFree)
+            <div class="col-12">
+                <div class="AlaaAdDom" alaa-ad-preloadimage="1"></div>
+            </div>
+        @endif
     </div>
 
 @endsection

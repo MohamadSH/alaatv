@@ -23,7 +23,7 @@ use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\ZarinpalTransactionController;
 use App\Http\Controllers\Auth\LoginController;
 
-Auth::routes(['verify' => true]);
+Auth::routes(['verify' => true, 'api' => true]);
 /*
 |--------------------------------------------------------------------------
 | V1

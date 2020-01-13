@@ -42,6 +42,7 @@ class LoginController extends Controller
     {
 
         $this->middleware('guest', ['except' => 'logout']);
+        $this->middleware('auth:web', ['only' => 'logout']);
 
         $this->middleware('convert:mobile|password|nationalCode');
     }
@@ -195,15 +196,10 @@ class LoginController extends Controller
         $this->guard()
             ->logout();
 
-        if ($request->expectsJson()) {
-            //TODO:// revoke all apps!!!
-            $request->user()
-                ->token()
-                ->revoke();
-        } else {
-            $request->session()
-                ->invalidate();
-        }
+        $request->session()
+            ->invalidate();
+
+        $request->session()->regenerateToken();
 
         return $this->loggedOut($request) ?: redirect('/');
     }
