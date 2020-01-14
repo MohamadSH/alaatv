@@ -60,7 +60,7 @@
 
 @section('content')
 
-    <div class="row">
+    <div class="row m--margin-top-25">
         <div class="col">
             @include('systemMessage.flash')
         </div>
@@ -159,37 +159,33 @@
                 }
             },
             files: {
-                pamphlets: {
-                    data: {
-                        @foreach($lastSetPamphlets as $item)
-                        '{{$item}}': {
-                            name: '{{$item->name}}',
+                pamphlets: [
+
+                    @foreach($lastSetPamphlets as $item)
+                    {
+                        name: '{{$item->name}}',
                             file: {
-                                pamphlet: {
-                                    data: [
-                                        {
-                                            link: '$item->file->first()->first()->link'
-                                        }
-                                    ]
+                            pamphlet: [
+                                {
+                                    link: '$item->file->first()->first()->link'
                                 }
-                            }
-                        },
-                        @endforeach
-                    }
-                },
-                videos: {
-                    data: {
-                        @foreach($lastSetVideos as $item)
-                            '{{$item}}': {
-                                title: '{{$item->name}}',
-                                thumbnail: '{{$item->thumbnail}}',
-                                url: {
-                                    web: '{{$item->url}}'
-                                }
-                            },
-                        @endforeach
-                    }
-                }
+                            ]
+                        }
+                    },
+                    @endforeach
+                ],
+                videos: [
+
+                    @foreach($lastSetVideos as $item)
+                    {
+                        title: '{{$item->name}}',
+                            thumbnail: '{{$item->thumbnail}}',
+                            url: {
+                            web: '{{$item->url}}'
+                        }
+                    },
+                    @endforeach
+                ]
             }
         };
     </script>

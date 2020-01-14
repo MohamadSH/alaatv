@@ -437,12 +437,12 @@ class Mix {
     mixPageContentShow() {
         this.mixCssAndJs([
                 'node_modules/toastr/build/toastr.css',
+
                 'public/acm/AlaatvCustomFiles/components/ribbon/style.css',
-
-                'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/style.css',
-                'public/acm/AlaatvCustomFiles/components/ScrollCarousel/style.css',
-
                 'public/acm/AlaatvCustomFiles/components/Favorite/style.css',
+                'public/acm/AlaatvCustomFiles/components/AlaaScroll/style.css',
+                'public/acm/AlaatvCustomFiles/components/ScrollCarousel/style.css',
+                'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/style.css',
                 'public/acm/AlaatvCustomFiles/components/imageWithCaption/style.css',
 
                 'public/acm/videojs/skins/alaa-theme/videojs.css',
@@ -457,9 +457,6 @@ class Mix {
             [
                 'node_modules/tooltip/dist/Tooltip.js',
                 'node_modules/toastr/build/toastr.min.js',
-                'public/acm/AlaatvCustomFiles/components/ScrollCarousel/js.js',
-                'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/js.js',
-                'public/acm/AlaatvCustomFiles/components/Favorite/script.js',
                 'public/acm/videojs/video.min.js',
                 'public/acm/videojs/plugins/pip/videojs.pip.min.js',
                 'public/acm/videojs/nuevo.min.js',
@@ -467,10 +464,14 @@ class Mix {
                 'public/acm/videojs/plugins/videojs.hotkeys.min.js',
                 'public/acm/videojs/plugins/seek-to-point.js',
                 'public/acm/videojs/lang/fa.js',
-                'public/acm/AlaatvCustomFiles/components/summarizeText/js.js',
-                'public/acm/AlaatvCustomFiles/components/aSticky/aSticky.js',
-                'public/acm/AlaatvCustomFiles/components/AnimateScrollTo/js.js',
                 'public/acm/AlaatvCustomFiles/js/UserCart.js',
+                'public/acm/AlaatvCustomFiles/components/Favorite/script.js',
+                'public/acm/AlaatvCustomFiles/components/aSticky/aSticky.js',
+                'public/acm/AlaatvCustomFiles/components/summarizeText/js.js',
+                'public/acm/AlaatvCustomFiles/components/ScrollCarousel/js.js',
+                'public/acm/AlaatvCustomFiles/components/AnimateScrollTo/js.js',
+                'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/js.js',
+                'public/acm/AlaatvCustomFiles/components/SortElements/script.js',
                 'public/acm/AlaatvCustomFiles/js/page/content-show.js'
             ],
             'public/js/content-show.js'

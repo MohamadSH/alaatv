@@ -1021,7 +1021,7 @@ var EntekhabeFarsang = function () {
             htmlData += createPamphletItem({
                 section: (typeof data[key].section !== 'undefined' && data[key].section !== null) ? data[key].section : {id: '', name: ''},
                 title: (typeof data[key].title !== 'undefined') ? data[key].title : data[key].name,
-                link: (typeof data[key].file !== 'undefined' && data[key].file !== null) ? data[key].file.pamphlet.data[0].link : '#'
+                link: (typeof data[key].file !== 'undefined' && data[key].file !== null) ? data[key].file.pamphlet[0].link : '#'
             });
 
         }
@@ -1088,14 +1088,6 @@ var EntekhabeFarsang = function () {
         getBtnMoreContents().parents('a').attr('href', link);
     }
 
-    function setBtnMoreVideoLink(link) {
-        getBtnMoreVideo().parents('a').attr('href', link);
-    }
-
-    function setBtnMorePamphletLink(link) {
-        getBtnMorePamphlet().parents('a').attr('href', link);
-    }
-
     function setVideoTooltip() {
         ScrollCarousel.addTooltip($('#m_tabs_video .ScrollCarousel'));
 
@@ -1125,9 +1117,9 @@ var EntekhabeFarsang = function () {
     }
 
     function setLists(data) {
-        setVideoList(createVideoList(data.videos.data));
+        setVideoList(createVideoList(data.videos));
         setVideoTooltip();
-        setPamphletList(createPamphletList(data.pamphlets.data));
+        setPamphletList(createPamphletList(data.pamphlets));
     }
 
     function setVideoList(html) {
