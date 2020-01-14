@@ -280,33 +280,13 @@ var ProductShowPage = function () {
     }
 
     return {
-        disableBtnAddToCart: function () {
-            disableBtnAddToCart();
-        },
-
-        enableBtnAddToCart: function () {
-            enableBtnAddToCart();
-        },
-
-        refreshPrice: function (mainAttributeState, productState, extraAttributeState) {
-            refreshPrice(mainAttributeState, productState, extraAttributeState);
-        },
-
-        getMainAttributeStates: function () {
-            return getMainAttributeStates();
-        },
-
-        getExtraAttributeStates: function () {
-            return getExtraAttributeStates();
-        },
-
-        getProductSelectValues: function () {
-            return getProductSelectValues();
-        },
-
-        getSelectedProductObject: function () {
-            return getSelectedProductObject();
-        },
+        disableBtnAddToCart: disableBtnAddToCart,
+        enableBtnAddToCart: enableBtnAddToCart,
+        refreshPrice: refreshPrice,
+        getMainAttributeStates: getMainAttributeStates,
+        getExtraAttributeStates: getExtraAttributeStates,
+        getProductSelectValues: getProductSelectValues,
+        getSelectedProductObject: getSelectedProductObject
     };
 }();
 
@@ -315,6 +295,10 @@ var ProductResponsivePage = function () {
 
     function fx(a, b, x) {
         return (a * x) + b;
+    }
+
+    function fxModel1(windowWidth) {
+        return 15.423 + (50.13612 - 15.423)/(1 + Math.pow(windowWidth/1416.28, 3.255731));
     }
 
     function setColuimnWidth($column, width) {
@@ -338,7 +322,7 @@ var ProductResponsivePage = function () {
         setColuimnWidth($('.productIntroVideoColumn'), PicAttributesIntroVideoRowWidth);
     }
 
-    function applyModel1(a, b, windowWidth) {
+    function applyModel1(windowWidth) {
 
         //reset
         $('.servicesRows .servicesRow').css({'max-height': '', 'min-height': ''});
@@ -351,7 +335,8 @@ var ProductResponsivePage = function () {
         $('.priceAndAddToCartRow .btnAddToCart').fadeIn(0);
 
 
-        var picColumnWidth = fx(a, b, windowWidth);
+        // var picColumnWidth = fx(a, b, windowWidth);
+        var picColumnWidth = fxModel1(windowWidth);
         setColuimnWidth($('.productPicColumn'), picColumnWidth);
         setVideoColumnWidthModel1();
         $('.productAttributesRows .videoInformation').fadeOut(0);
@@ -368,6 +353,8 @@ var ProductResponsivePage = function () {
     }
 
     function applyModel2(a, b, windowWidth) {
+
+        // console.log('applyModel2');
 
         $('.servicesRows .servicesRow').css({'max-height': '', 'min-height': ''});
         $('.productAttributesColumn').css({'margin-top': '', 'order': ''});
@@ -392,6 +379,9 @@ var ProductResponsivePage = function () {
 
     // model 3
     function applyModel3() {
+
+        // console.log('applyModel3');
+
         $('.productIntroVideoColumn').css({'margin-top': ''});
         setColuimnWidth($('.productPicColumn'), 37.1);
         setColuimnWidth($('.productIntroVideoColumn'), 62.9);
@@ -410,6 +400,9 @@ var ProductResponsivePage = function () {
 
     // model 4
     function applyModel4() {
+
+        // console.log('applyModel4');
+
         $('.productIntroVideoColumn').css({'margin-top': ''});
         setColuimnWidth($('.productPicColumn'), 36.5);
         setColuimnWidth($('.productIntroVideoColumn'), 63.5);
@@ -427,6 +420,9 @@ var ProductResponsivePage = function () {
 
     // model 5
     function applyModel5() {
+
+        // console.log('applyModel5');
+
         $('.productIntroVideoColumn').css({'margin-top': ''});
         setColuimnWidth($('.productPicColumn'), 100);
         setColuimnWidth($('.productIntroVideoColumn'), 100);
@@ -457,18 +453,23 @@ var ProductResponsivePage = function () {
     }
 
     function applyModel(windowWidth) {
-        if (windowWidth >= 1900) {
-            applyModel1((-101.0 / 10000), (43.79), windowWidth);
-        } else if (windowWidth >= 1800) {
-            applyModel1((-13.0 / 1000), (49.3), windowWidth);
-        } else if (windowWidth >= 1700) {
-            applyModel1((-13.0 / 1000), (49.3), windowWidth);
-        } else if (windowWidth >= 1600) {
-            applyModel1((-3.0 / 200), (52.7), windowWidth);
-        } else if (windowWidth >= 1500) {
-            applyModel1((-9.0 / 500), (115.0 / 2), windowWidth);
-        } else if (windowWidth >= 1400) {
-            applyModel1((-87.0 / 2500), (82.7), windowWidth);
+
+        // if (windowWidth >= 1900) {
+        //     applyModel1((-101.0 / 10000), (43.79), windowWidth);
+        // } else if (windowWidth >= 1800) {
+        //     applyModel1((-13.0 / 1000), (49.3), windowWidth);
+        // } else if (windowWidth >= 1700) {
+        //     applyModel1((-13.0 / 1000), (49.3), windowWidth);
+        // } else if (windowWidth >= 1600) {
+        //     applyModel1((-3.0 / 200), (52.7), windowWidth);
+        // } else if (windowWidth >= 1500) {
+        //     applyModel1((-9.0 / 500), (115.0 / 2), windowWidth);
+        // } else if (windowWidth >= 1400) {
+        //     applyModel1((-87.0 / 2500), (82.7), windowWidth);
+        // }
+
+        if (windowWidth >= 1400) {
+            applyModel1(windowWidth);
         } else if (windowWidth >= 1300) {
             applyModel2((-2.0 / 125), (249 / 5), windowWidth);
         } else if (windowWidth >= 1200) {
