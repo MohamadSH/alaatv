@@ -84,12 +84,12 @@ class Mix {
         this.compileScss();
         this.mixBase();
         this.mixPages();
-        // this.mixUser();
-        // this.mixLanding();
+        this.mixUser();
+        this.mixLanding();
         this.mixProduct();
         this.mixPageContentShow();
         this.mixPageSetShow();
-        // this.mixCheckout();
+        this.mixCheckout();
         this.mixAdmin();
         this.mixCopyDirectory();
 
@@ -457,9 +457,6 @@ class Mix {
             [
                 'node_modules/tooltip/dist/Tooltip.js',
                 'node_modules/toastr/build/toastr.min.js',
-                'public/acm/AlaatvCustomFiles/components/ScrollCarousel/js.js',
-                'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/js.js',
-                'public/acm/AlaatvCustomFiles/components/Favorite/script.js',
                 'public/acm/videojs/video.min.js',
                 'public/acm/videojs/plugins/pip/videojs.pip.min.js',
                 'public/acm/videojs/nuevo.min.js',
@@ -467,10 +464,14 @@ class Mix {
                 'public/acm/videojs/plugins/videojs.hotkeys.min.js',
                 'public/acm/videojs/plugins/seek-to-point.js',
                 'public/acm/videojs/lang/fa.js',
-                'public/acm/AlaatvCustomFiles/components/summarizeText/js.js',
-                'public/acm/AlaatvCustomFiles/components/aSticky/aSticky.js',
-                'public/acm/AlaatvCustomFiles/components/AnimateScrollTo/js.js',
                 'public/acm/AlaatvCustomFiles/js/UserCart.js',
+                'public/acm/AlaatvCustomFiles/components/Favorite/script.js',
+                'public/acm/AlaatvCustomFiles/components/aSticky/aSticky.js',
+                'public/acm/AlaatvCustomFiles/components/summarizeText/js.js',
+                'public/acm/AlaatvCustomFiles/components/ScrollCarousel/js.js',
+                'public/acm/AlaatvCustomFiles/components/AnimateScrollTo/js.js',
+                'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/js.js',
+                'public/acm/AlaatvCustomFiles/components/SortElements/script.js',
                 'public/acm/AlaatvCustomFiles/js/page/content-show.js'
             ],
             'public/js/content-show.js'
@@ -610,7 +611,7 @@ class Mix {
                 'public/acm/AlaatvCustomFiles/components/AlaaLoading/script.js',
                 'public/acm/AlaatvCustomFiles/components/CustomDropDown/js.js',
 
-                // 'public/acm/AlaatvCustomFiles/js/page/product/CustomShow/raheAbrisham.js',
+                'public/acm/AlaatvCustomFiles/js/page/product/CustomShow/raheAbrisham.js',
             ]),
             'public/js/product-show-RaheAbrisham.js'
         );

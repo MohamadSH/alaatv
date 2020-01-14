@@ -95,6 +95,7 @@
 
 @section('content')
 
+
     <div class="row boxed">
 
         {{-- content video and other content of set --}}
@@ -191,17 +192,6 @@
                                                 @if($product->type['type'] === 'simple')
                                                     <button
                                                         @include('partials.gtm-eec.product', ['position'=>$productKey, 'list'=>'نمونه فیلم-دکمه افزودن به سبد', 'quantity'=>'1'])
-
-                                                        {{--                                                data-gtm-eec-product-id="{{$product->id}}"--}}
-                                                        {{--                                                data-gtm-eec-product-name="{{$product->name}}"--}}
-                                                        {{--                                                data-gtm-eec-product-price="@if($product->price){{$product->price['final']}}@endif"--}}
-                                                        {{--                                                data-gtm-eec-product-brand="آلاء"--}}
-                                                        {{--                                                data-gtm-eec-product-category="-"--}}
-                                                        {{--                                                data-gtm-eec-product-variant="-"--}}
-                                                        {{--                                                data-gtm-eec-product-quantity="1"--}}
-                                                        {{--                                                data-gtm-eec-product-position="{{ $productKey }}"--}}
-                                                        {{--                                                data-gtm-eec-product-list="نمونه فیلم-دکمه افزودن به سبد"--}}
-
                                                         class="btn m-btn--air btn-success m-btn--icon m--margin-bottom-5 a--gtm-eec-product btnAddToCart"
                                                         data-pid="{{ $product->id }}">
                                                 <span>
@@ -226,17 +216,6 @@
                                                 @if($product->type['type'] === 'simple')
                                                     <button
                                                         @include('partials.gtm-eec.product', ['position'=>$productKey, 'list'=>'محصولاتی که شامل این محتوا هستند-دکمه افزودن به سبد', 'quantity'=>'1'])
-
-                                                        {{--                                                data-gtm-eec-product-id="{{$product->id}}"--}}
-                                                        {{--                                                data-gtm-eec-product-name="{{$product->name}}"--}}
-                                                        {{--                                                data-gtm-eec-product-price="@if($product->price){{ number_format($product->price['final'], 2, '.', '') }}@endif"--}}
-                                                        {{--                                                data-gtm-eec-product-brand="آلاء"--}}
-                                                        {{--                                                data-gtm-eec-product-category="-"--}}
-                                                        {{--                                                data-gtm-eec-product-variant="-"--}}
-                                                        {{--                                                data-gtm-eec-product-quantity="1"--}}
-                                                        {{--                                                data-gtm-eec-product-position="{{ $productKey }}"--}}
-                                                        {{--                                                data-gtm-eec-product-list="محصولاتی که شامل این محتوا هستند-دکمه افزودن به سبد"--}}
-
                                                         class="btn m-btn--air btn-success m-btn--icon m--margin-bottom-5 a--gtm-eec-product btnAddToCart"
                                                         data-pid="{{ $product->id }}">
                                             <span>
@@ -404,34 +383,29 @@
             </div>
         </div>
 
-        {{-- ad banner and related items and godar block --}}
+        {{-- ad banner and related items --}}
         <div class="col-12">
 
             @include('partials.ads.list', ['id'=>'contentShowPage-rightSide-0'])
 
-            {{--            @include('partials.widgets.ScollCarousel.body', [--}}
-            {{--                'title'=> 'پیشنهاد ما',--}}
-            {{--                'customClass'=> 'RelatedItems',--}}
-            {{--                'scrollCarouselItems'=> view('partials.widgets.ScollCarousel.items.product.type2', [--}}
-            {{--                    'products'=>$recommendedProductsOfThisContent,--}}
-            {{--                    'gtmEecList'=>'پیشنهاد ما',--}}
-            {{--                    'responsiveClass'=>''--}}
-            {{--                ]),--}}
-            {{--            ])--}}
+            @include('partials.widgets.ScollCarousel.body', [
+                'title'=> 'پیشنهاد ما',
+                'customClass'=> 'RelatedItems',
+                'squareSing'=> 'recomender',
+                'puls'=> true,
+                'sort'=> true,
+                'scrollCarouselItems'=> view('content.partials.recommendedItemRecognizer', [
+                    'recommendedItems'=>$recommendedItems,
+                    'gtmEecList'=>'پیشنهاد ما',
+                    'sort'=> true,
+                    'responsiveClass'=>''
+                ]),
+            ])
 
-            @foreach($contentBlocks as $block)
-                @include('block.partials.block', [
-                'blockCustomClass'=> 'contentBlock',
-                'blockCustomId'=>'sectionId-'.$block->class,
-                'blockType'=>(isset($block->sets) && $block->sets->count()>0)?'set':(isset($block->products) && $block->products->count()>0?'product':'content'),
-                'blockUrlDisable'=>false,
-                'btnLoadMore'=>true
-                ])
-            @endforeach
         </div>
 
         {{-- description and pamphlets and video download link and sources --}}
-        <div class="col-12 m--margin-top-15">
+        <div class="col-12 m--margin-top-15 m--margin-bottom-15">
             <div class="row">
 
                 {{-- description and pamphlets and sources --}}
@@ -515,21 +489,21 @@
                                                         <div class="m-widget3__body">
                                                             <div class="m-widget3__text">
 
-                                                                @if(strlen($content->description) > 2000)
-                                                                    <div class="a--summarize-text">
-                                                                        <div class="a--summarize-text-toggleBtn">
-                                                                            <button
-                                                                                class="btn btn-accent m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill">
-                                                                                <i class="fa fa-angle-double-down"></i>
-                                                                            </button>
-                                                                        </div>
-                                                                        <div class="a--summarize-text-content">
-                                                                            {!! $content->description !!}
-                                                                        </div>
-                                                                    </div>
-                                                                @else
+{{--                                                                @if(strlen($content->description) > 2000)--}}
+{{--                                                                    <div class="a--summarize-text">--}}
+{{--                                                                        <div class="a--summarize-text-toggleBtn">--}}
+{{--                                                                            <button--}}
+{{--                                                                                class="btn btn-accent m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill">--}}
+{{--                                                                                <i class="fa fa-angle-double-down"></i>--}}
+{{--                                                                            </button>--}}
+{{--                                                                        </div>--}}
+{{--                                                                        <div class="a--summarize-text-content">--}}
+{{--                                                                            {!! $content->description !!}--}}
+{{--                                                                        </div>--}}
+{{--                                                                    </div>--}}
+{{--                                                                @else--}}
                                                                     {!! $content->description !!}
-                                                                @endif
+{{--                                                                @endif--}}
 
                                                             </div>
                                                         </div>
@@ -543,21 +517,21 @@
                                             @endif
                                         @elseif(optional($content->template)->name == "pamphlet1" )
                                             @if(isset($content->description[0]))
-                                                @if(strlen($content->description) > 2000)
-                                                    <div class="a--summarize-text">
-                                                        <div class="a--summarize-text-toggleBtn">
-                                                            <button
-                                                                class="btn btn-accent m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill">
-                                                                <i class="fa fa-angle-double-down"></i>
-                                                            </button>
-                                                        </div>
-                                                        <div class="a--summarize-text-content">
-                                                            {!! $content->description !!}
-                                                        </div>
-                                                    </div>
-                                                @else
+{{--                                                @if(strlen($content->description) > 2000)--}}
+{{--                                                    <div class="a--summarize-text">--}}
+{{--                                                        <div class="a--summarize-text-toggleBtn">--}}
+{{--                                                            <button--}}
+{{--                                                                class="btn btn-accent m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill">--}}
+{{--                                                                <i class="fa fa-angle-double-down"></i>--}}
+{{--                                                            </button>--}}
+{{--                                                        </div>--}}
+{{--                                                        <div class="a--summarize-text-content">--}}
+{{--                                                            {!! $content->description !!}--}}
+{{--                                                        </div>--}}
+{{--                                                    </div>--}}
+{{--                                                @else--}}
                                                     {!! $content->description !!}
-                                                @endif
+{{--                                                @endif--}}
                                             @endif
                                         @elseif(optional($content->template)->name == "article1")
 
@@ -717,94 +691,16 @@
             </div>
         </div>
 
-        {{-- products That Have This Content --}}
-{{--        @if($productsThatHaveThisContent->isNotEmpty() && (!$user_can_see_content || ($content->isFree && false)) )--}}
-{{--            <div class="col-12">--}}
-{{--                <div class="row a--owl-carousel-row blockWraper-hasProduct m--margin-top-10">--}}
-{{--                    <div class="col">--}}
-{{--                        <div class="m-portlet a--owl-carousel-Wraper" id="owlCarouselParentProducts">--}}
-{{--                            <div class="m-portlet__head a--owl-carousel-head">--}}
-{{--                                <div class="m-portlet__head-caption">--}}
-{{--                                    <div class="m-portlet__head-title">--}}
-{{--                                        <h3 class="m-portlet__head-text">--}}
-{{--                                            <span class="redSquare"></span>--}}
-{{--                                            محصولاتی که شامل این محتوا هستند--}}
-{{--                                        </h3>--}}
-{{--                                    </div>--}}
-{{--                                </div>--}}
-{{--                                <div class="m-portlet__head-tools">--}}
-{{--                                    <a href="#"--}}
-{{--                                       class="btn btn-outline-metal m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill m-btn--air btn-viewGrid"--}}
-{{--                                       title="نمایش شبکه ای">--}}
-{{--                                        <i class="fa fa-th"></i>--}}
-{{--                                    </a>--}}
-{{--                                    <a href="#"--}}
-{{--                                       class="btn btn-outline-metal m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill m-btn--air btn-viewOwlCarousel"--}}
-{{--                                       title="نمایش افقی">--}}
-{{--                                        <i class="fa fa-exchange-alt"></i>--}}
-{{--                                    </a>--}}
-{{--                                </div>--}}
-{{--                            </div>--}}
-{{--                            <div class="m-portlet__body m-portlet__body--no-padding a--owl-carousel-body ScrollCarousel">--}}
-
-{{--                                <div class="m-widget_head-owlcarousel-items ScrollCarousel-Items owl-carousel a--owl-carousel-type-2 carousel_block_owlCarouselParentProducts">--}}
-{{--                                    @foreach($productsThatHaveThisContent as $productKey=>$product)--}}
-{{--                                        <div class="item carousel a--block-item a--block-type-product w-55443211"--}}
-{{--                                             data-position="{{ $productKey }}"--}}
-{{--                                            @include('partials.gtm-eec.product', ['position'=>$productKey, 'list'=>'محصولاتی که شامل این محتوا هستند']) >--}}
-
-{{--                                            <div class="a--block-imageWrapper">--}}
-{{--                                                <a href="{{ $product->url }}"--}}
-{{--                                                   class="a--block-imageWrapper-image a--gtm-eec-product a--gtm-eec-product-click d-block"--}}
-
-{{--                                                    @include('partials.gtm-eec.product', ['position'=>$productKey, 'list'=>'محصولاتی که شامل این محتوا هستند'])--}}
-
-
-{{--                                                    --}}{{--                                           data-gtm-eec-product-id="{{ $product->id }}"--}}
-{{--                                                    --}}{{--                                           data-gtm-eec-product-name="{{ $product->name }}"--}}
-{{--                                                    --}}{{--                                           data-gtm-eec-product-price="{{ number_format($product->price['final'], 2, '.', '') }}"--}}
-{{--                                                    --}}{{--                                           data-gtm-eec-product-brand="آلاء"--}}
-{{--                                                    --}}{{--                                           data-gtm-eec-product-category="-"--}}
-{{--                                                    --}}{{--                                           data-gtm-eec-product-variant="-"--}}
-{{--                                                    --}}{{--                                           data-gtm-eec-product-position="{{ $productKey }}"--}}
-{{--                                                    --}}{{--                                           data-gtm-eec-product-list="محصولاتی که شامل این محتوا هستند"--}}
-{{--                                                >--}}
-{{--                                                    <img src="https://cdn.alaatv.com/loder.jpg?w=1&h=1"--}}
-{{--                                                         data-src="{{ $product->photo }}" alt="{{ $product->name }}"--}}
-{{--                                                         class="a--block-image lazy-image" width="400" height="400"/>--}}
-{{--                                                </a>--}}
-{{--                                            </div>--}}
-{{--                                            <div class="a--block-infoWrapper">--}}
-{{--                                                <div class="a--block-titleWrapper">--}}
-{{--                                                    <a href="{{ $product->url }}"--}}
-{{--                                                       class="m-link a--owl-carousel-type-2-item-subtitle a--gtm-eec-product-click"--}}
-
-{{--                                                        @include('partials.gtm-eec.product', ['position'=>$productKey, 'list'=>'محصولاتی که شامل این محتوا هستند'])--}}
-
-{{--                                                        --}}{{--                                               data-gtm-eec-product-id="{{ $product->id }}"--}}
-{{--                                                        --}}{{--                                               data-gtm-eec-product-name="{{ $product->name }}"--}}
-{{--                                                        --}}{{--                                               data-gtm-eec-product-price="{{ number_format($product->price['final'], 2, '.', '') }}"--}}
-{{--                                                        --}}{{--                                               data-gtm-eec-product-brand="آلاء"--}}
-{{--                                                        --}}{{--                                               data-gtm-eec-product-category="-"--}}
-{{--                                                        --}}{{--                                               data-gtm-eec-product-variant="-"--}}
-{{--                                                        --}}{{--                                               data-gtm-eec-product-position="{{ $productKey }}"--}}
-{{--                                                        --}}{{--                                               data-gtm-eec-product-list="محصولاتی که شامل این محتوا هستند"--}}
-{{--                                                    >--}}
-{{--                                                        <span class="m-badge m-badge--danger m-badge--dot"></span>--}}
-{{--                                                        {{ $product->name }}--}}
-{{--                                                    </a>--}}
-{{--                                                </div>--}}
-{{--                                            </div>--}}
-{{--                                        </div>--}}
-{{--                                    @endforeach--}}
-{{--                                </div>--}}
-
-{{--                            </div>--}}
-{{--                        </div>--}}
-{{--                    </div>--}}
-{{--                </div>--}}
-{{--            </div>--}}
-{{--        @endif--}}
+        {{-- godar block--}}
+        @foreach($contentBlocks as $block)
+            @include('block.partials.block', [
+            'blockCustomClass'=> 'contentBlock',
+            'blockCustomId'=>'sectionId-'.$block->class,
+            'blockType'=>(isset($block->sets) && $block->sets->count()>0)?'set':(isset($block->products) && $block->products->count()>0?'product':'content'),
+            'blockUrlDisable'=>false,
+            'btnLoadMore'=>true
+            ])
+        @endforeach
 
         {{-- chibekhoonam --}}
         @if($content->isFree)
