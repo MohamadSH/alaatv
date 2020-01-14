@@ -9,7 +9,6 @@ use App\Traits\CharacterCommon;
 use App\Traits\RedirectTrait;
 use App\User;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -63,7 +62,7 @@ class LoginController extends Controller
      * @param Request            $request
      * @param RegisterController $registerController
      *
-     * @return RedirectResponse|Response|JsonResponse
+     * @return RedirectResponse|Response|void
      *
      * @throws ValidationException
      */
