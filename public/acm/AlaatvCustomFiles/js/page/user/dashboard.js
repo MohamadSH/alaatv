@@ -483,9 +483,6 @@ var FilterAndSort = function () {
         sortList(function ( a, b ) {
 
             // Cache inner content from the first element (a) and the next sibling (b)
-            // var aText = a.innerHTML;
-            // var bText = b.innerHTML;
-
             var sorta = parseInt(a.getAttribute(sortType));
             var sortb = parseInt(b.getAttribute(sortType));
 
@@ -513,7 +510,6 @@ var FilterAndSort = function () {
 
     function getProducts($productList) {
         return $productList.children('.productItem');
-
     }
 
     function reorganizeCustomDropDown() {

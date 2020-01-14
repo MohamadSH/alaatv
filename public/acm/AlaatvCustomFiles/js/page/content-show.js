@@ -91,7 +91,7 @@ var RelatedItems = function() {
     }
 
     function getOtherItemObject() {
-        return $('.RelatedItems .ScrollCarousel-Items .item.a--block-type-content img');
+        return $('.RelatedItems .ScrollCarousel-Items .item:not(.a--block-type-product2) .a--block-imageWrapper .a--block-imageWrapper-image img');
     }
 
     function getProductCount() {
@@ -107,7 +107,11 @@ var RelatedItems = function() {
     }
 
     function getOuterSpace($object) {
-        return $object.outerWidth(true) - $object.width();
+        if ($object.length > 0) {
+            return $object.outerWidth(true) - $object.width();
+        } else {
+            return 0;
+        }
     }
 
     function responsiveConfig() {
@@ -184,24 +188,14 @@ var RelatedItems = function() {
             os = getOuterSpace(getOtherItemObject().parents('.item')),
             ps = getOuterSpace(getProductItemObject().parents('.item'));
 
-        console.log('pc', pc);
         console.log('oc', oc);
+        console.log('pc', pc);
 
-        return ((w-Math.floor(pc)*ps-Math.floor(oc)*os)/(pc+(oc/alpha)));
+        return (( w - (Math.floor(pc)*ps) - (Math.floor(oc)*os) ) / (pc+(oc/alpha)));
     }
 
     function calcOtherItemWidth(a) {
         return a/alpha;
-    }
-
-    function testAction() {
-        $('.RelatedItems .ScrollCarousel-Items .item').removeClass('a--block-type-product2').addClass('a--block-type-content');
-        $('.RelatedItems .ScrollCarousel-Items .item:first-child').removeClass('a--block-type-content').addClass('a--block-type-product2');
-        $('.RelatedItems .ScrollCarousel-Items .item:first-child').find('.a--imageWithCaption img')
-            .attr('src', '')
-            .attr('data-src', 'https://cdn.alaatv.com/upload/images/product/fgggggggggg_20191128145442.jpg')
-            .attr('width', '960')
-            .attr('height', '960')
     }
 
     function refreshImages() {
@@ -212,8 +206,6 @@ var RelatedItems = function() {
     }
 
     function setRelatedItemsWidth() {
-        testAction();
-
         var w = getTotlalWidth(),
             a = calcProductItemWidth(),
             pw = (a/w)*100,
@@ -228,8 +220,13 @@ var RelatedItems = function() {
         }, 500);
     }
 
+    function init() {
+        setRelatedItemsWidth();
+        $('.RelatedItems .SortItemsList').Sort({order:'shu'});
+    }
+
     return {
-        setRelatedItemsWidth: setRelatedItemsWidth,
+        init: init,
     };
 }();
 
@@ -237,7 +234,7 @@ var SameHeight = function() {
 
     function calcSetContentsList() {
         $('#playListScroller').css({'height': 0});
-        return $('.top-right-section .m-portlet').outerHeight(true) - $('.top-left-section .m-portlet').outerHeight(true) - $('.top-left-section .top-left-section-ad').outerHeight(true);
+        return $('.top-right-section').outerHeight(true) - $('.top-left-section .m-portlet').outerHeight(true) - $('.top-left-section .top-left-section-ad').outerHeight(true);
     }
 
     function setContentsList() {
@@ -264,9 +261,10 @@ var SameHeight = function() {
 
 jQuery(document).ready( function() {
 
-    // RelatedItems.setRelatedItemsWidth();
+    RelatedItems.init();
 
     SnippetContentShow.init(related_videos);
+
     $('#owlCarouselParentProducts').OwlCarouselType2({
         OwlCarousel: {
             center: false,
@@ -283,6 +281,7 @@ jQuery(document).ready( function() {
             }
         },
     });
+
     $('.contentBlock').OwlCarouselType2({
         OwlCarousel: {
             center: false,
@@ -319,11 +318,10 @@ jQuery(document).ready( function() {
         defaultView: 'OwlCarousel', // OwlCarousel or grid
         childCountHideOwlCarousel: 4
     });
+
     $(document).on('click', '.scrollToOwlCarouselParentProducts', function(){
-        $("#owlCarouselParentProducts").AnimateScrollTo();
-        // $([document.documentElement, document.body]).animate({
-        //     scrollTop: ($("#owlCarouselParentProducts").offset().top - 80)
-        // }, 500);
+        // $("#owlCarouselParentProducts").AnimateScrollTo();
+        $('.downloadLinkColumn').AnimateScrollTo();
     });
 
     $(document).on('click', '.btnAddToCart', function () {

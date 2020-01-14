@@ -89,7 +89,6 @@
 .alert.m-alert--icon .m-alert__text {
     vertical-align: middle;
     width: auto;
-    padding: 0 1.25rem;
 }
 .m-portlet.m-portlet--success.m-portlet--head-solid-bg {
     background: white;
@@ -118,33 +117,80 @@
     text-align: center;
 }
 
-/*scrollbar*/
-/* width */
-#m_tabs_1_1 {
-
-    scrollbar-color: #ff9000 #ffe0b8;
-    scrollbar-width: thin;
+.m-portlet {
+    position: relative;
+}
+.blockedContent {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: #0000004a;
+    z-index: 2;
+    cursor: not-allowed;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    flex-wrap: wrap;
+}
+.blockedContent .ParentProductsItem {
+    background-color: white;
+    -webkit-box-shadow: 5px 5px 5px -3px rgba(0,0,0,0.75);
+    -moz-box-shadow: 5px 5px 5px -3px rgba(0,0,0,0.75);
+    box-shadow: 5px 5px 5px -3px rgba(0,0,0,0.75);
+    -webkit-box-flex: 0;
+    -ms-flex: 0 0 26%;
+    flex: 0 0 26%;
+    max-width: 26%;
+}
+.blockedContent .ParentProductsItem .image img {
+    width: 100%;
+}
+.blockedContent .ParentProductsItem .title {
+    padding: 3px 5px;
+    font-size: 0.9rem;
+    line-height: 0.9rem;
+}
+.a--block-item.a--block-type-content .a--block-infoWrapper {
+    margin-bottom: 5px;
+}
+.a--block-item.a--block-type-product2 button,
+.a--block-item.a--block-type-content .a--block-infoWrapper .a--block-titleWrapper
+.a--block-item.a--block-type-set .a--block-infoWrapper .a--block-titleWrapper {
+    height: 50px;
 }
 
-#m_tabs_1_1::-webkit-scrollbar {
-    width: 9px;
-    height: 9px;
+/*@-webkit-keyframes carouselHeadPuls {*/
+/*    0% { left:0px;opacity: 0;}*/
+/*    50% {left:20px;opacity: 0.3;}*/
+/*    100%{ left:100px;opacity: 0;}*/
+/*}*/
+@keyframes carouselHeadPuls {
+    0% { right:-2%;opacity: 1;}
+    50% {right:40%;opacity: 0.4;}
+    100%{ right:100%;opacity: 0;}
 }
 
-/* Track */
-#m_tabs_1_1::-webkit-scrollbar-track {
-    background: #ffefdb;
+.a--owl-carousel-Wraper .a--owl-carousel-head.puls * {
+    z-index: 0;
 }
-
-/* Handle */
-#m_tabs_1_1::-webkit-scrollbar-thumb {
-    background: #ff9000;
-    border-radius: 10px;
+.a--owl-carousel-Wraper .a--owl-carousel-head.puls .puls1,
+.a--owl-carousel-Wraper .a--owl-carousel-head.puls .puls2 {
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 100%;
+    width: 250px;
+    animation-name: carouselHeadPuls;
+    animation-duration: 3s;
+    animation-iteration-count: infinite;
+    transform: skew(-65deg);
+    background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255, 144, 0, 0.38) 100%);
+    z-index: 0;
 }
-
-/* Handle on hover */
-#m_tabs_1_1::-webkit-scrollbar-thumb:hover {
-    background: #ff6c00;
+.a--owl-carousel-Wraper .a--owl-carousel-head.puls .puls2 {
+    animation-delay: 0.2s;
 }
 /*media query*/
 @media only screen and (max-width: 1100px) and (min-width: 992px) {
