@@ -69,7 +69,7 @@ class LoginController extends Controller
     public function login(Request $request, RegisterController $registerController)
     {
         $request->offsetSet('nationalCode', substr($request->get('password'), 0, 10));
-        $request->offsetSet('userstatus_id', 1);
+        $request->offsetSet('userstatus_id', config('constants.USER_STATUS_ACTIVE'));
         /**
          * Validating mobile and password strings
          */

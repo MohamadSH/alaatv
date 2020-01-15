@@ -106,7 +106,7 @@ class RegisterController extends Controller
             'mobile'        => Arr::get($data, 'mobile'),
             'email'         => Arr::get($data, 'email'),
             'nationalCode'  => Arr::get($data, 'nationalCode'),
-            'userstatus_id' => 1,
+            'userstatus_id' => config('constants.USER_STATUS_ACTIVE'),
             'photo'         => Arr::get($data, 'photo', 'upload/images/profile/' . config('constants.PROFILE_DEFAULT_IMAGE')),
             'password'      => bcrypt(Arr::get($data, 'password', Arr::get($data, 'nationalCode'))),
             'major_id'      => Arr::get($data, 'major_id'),
