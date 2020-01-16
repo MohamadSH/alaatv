@@ -60,3 +60,13 @@
 .setVideoPamphletTabs .nav-pills .show > .nav-link {
     border-radius: 5px;
 }
+
+#btnShowListView,
+#btnShowSectionView,
+.sectionView {
+    display: none;
+}
+
+.listView {
+    display: block;
+}
