@@ -415,13 +415,14 @@ return [
     'CACHE_0'                            => env('CACHE_0', 0),
 
     //
-    'TAG_API_URL'                        => env('TAG_API_URL', null),
+    'TAG_API_URL'                        => env('TAG_API_URL'),
     'SERVER'                             => env('SERVER'),
-    'CDN_SERVER_NAME'                    => env('CDN_SERVER_NAME', null),
-    'PAID_SERVER_NAME'                   => env('PAID_SERVER_NAME', null),
-    'DOWNLOAD_SERVER_ROOT'               => env('DOWNLOAD_SERVER_ROOT', null),
-    'DOWNLOAD_SERVER_PROTOCOL'           => env('DOWNLOAD_SERVER_PROTOCOL', null),
-    'DOWNLOAD_SERVER_MEDIA_PARTIAL_PATH' => env('DOWNLOAD_SERVER_MEDIA_PARTIAL_PATH', null),
+    'CDN_SERVER_NAME'                    => env('CDN_SERVER_NAME'),
+    'PAID_SERVER_NAME'                   => env('PAID_SERVER_NAME'),
+    'DOWNLOAD_SERVER_ROOT'               => env('DOWNLOAD_SERVER_ROOT'),
+    'DOWNLOAD_SERVER_PROTOCOL'           => env('DOWNLOAD_SERVER_PROTOCOL'),
+    'DOWNLOAD_SERVER_MEDIA_PARTIAL_PATH' => env('DOWNLOAD_SERVER_MEDIA_PARTIAL_PATH'),
+    'PROFILE_IMAGE_PATH'                 => env('PROFILE_IMAGE_PATH'),
 
     //OrderStatus
     'ORDER_STATUS_OPEN'                  => 1,

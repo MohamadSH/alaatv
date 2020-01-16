@@ -107,7 +107,7 @@ class RegisterController extends Controller
             'email'         => Arr::get($data, 'email'),
             'nationalCode'  => Arr::get($data, 'nationalCode'),
             'userstatus_id' => config('constants.USER_STATUS_ACTIVE'),
-            'photo'         => Arr::get($data, 'photo', 'upload/images/profile/' . config('constants.PROFILE_DEFAULT_IMAGE')),
+            'photo'         => Arr::get($data, config('constants.PROFILE_IMAGE_PATH') . config('constants.PROFILE_DEFAULT_IMAGE')),
             'password'      => bcrypt(Arr::get($data, 'password', Arr::get($data, 'nationalCode'))),
             'major_id'      => Arr::get($data, 'major_id'),
             'gender_id'     => Arr::get($data, 'gender_id'),

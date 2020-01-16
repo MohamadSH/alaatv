@@ -174,7 +174,7 @@ trait UserCommon
         $fileName  =
             basename($file->getClientOriginalName(), '.' . $extension) . '_' . date('YmdHis') . '.' . $extension;
         if (Storage::disk(config('constants.DISK24'))->put($fileName, File::get($file))) {
-            $path = 'upload/images/profile/' . $fileName;
+            $path = config('constants.PROFILE_IMAGE_PATH') . $fileName;
             event(new UserAvatarUploaded($user, $path));
             return $path;
         }
