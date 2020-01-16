@@ -48,14 +48,14 @@ class ComposerServiceProvider extends ServiceProvider
             $view->with(compact('closedSideBar'));
         });
 
-        View::composer('partials.header1', 'App\Http\ViewComposers\HeaderComposer');
+        View::composer('partials.app.header1', 'App\Http\ViewComposers\HeaderComposer');
 
         /**
          *  lessons
          */
         View::composer([
 //            'pages.dashboard1',
-            'partials.sidebar',
+            'partials.appsidebar',
         ], function ($view) {
             $sections =
                 (new webBlockCollectionFormatter(new webSetCollectionFormatter()))->format(Block::getMainBlocks());
