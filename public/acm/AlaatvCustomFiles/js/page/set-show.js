@@ -1,10 +1,38 @@
 var InitPage = function() {
 
+    function checkShowSectionViewBtn() {
+        if ($('.sectionView').length > 0) {
+            $('#btnShowSectionView').css('display', 'inline-block');
+        }
+    }
+
+    function showSectionView() {
+        $('#btnShowSectionView, .listView').fadeOut(0, function () {
+            $('.sectionView').fadeIn();
+            $('#btnShowListView').css('display', 'inline-block');
+        });
+    }
+
+    function showListView() {
+        $('#btnShowListView, .sectionView').fadeOut(0, function () {
+            $('.listView').fadeIn();
+            $('#btnShowSectionView').css('display', 'inline-block');
+        });
+    }
+
     function addEvents() {
         $(document).on('click', '.setVideoPamphletTabs .nav-item .nav-link', function () {
             var href = $(this).attr('data-state');
             // UrlParameter.setHash(href, {tab:href});
             UrlParameter.setHash(href);
+        });
+
+        $(document).on('click', '#btnShowSectionView', function () {
+            showSectionView();
+        });
+
+        $(document).on('click', '#btnShowListView', function () {
+            showListView();
         });
 
         $(window).on('popstate', function(e){
@@ -45,6 +73,7 @@ var InitPage = function() {
         showTabpageOnInitPage();
         addEvents();
         initSticky();
+        checkShowSectionViewBtn();
     }
 
     return {
