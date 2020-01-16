@@ -10,7 +10,8 @@
         // private variables
         var defaultOptions = {
                 order: 'asc', // asc - des
-                sortAttribute: 'data-sort'
+                sortAttribute: 'data-sort',
+                itemSelector: '.SortItemsList-item'
             },
             options = null;
 
@@ -20,7 +21,7 @@
         };
 
         var getItems = function($itemsList) {
-            return $itemsList.children('.SortItemsList-item');
+            return $itemsList.children(options.itemSelector);
         };
 
         var sortListAscending = function ( a, b ) {
