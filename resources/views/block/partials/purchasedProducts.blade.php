@@ -3,10 +3,8 @@
 background-gradient
 @endif" data-position="{{ $productKey }}">
 
-
-
     <div class="a--block-imageWrapper">
-        <img src="https://cdn.alaatv.com/loder.jpg?w=1&h=1" data-src="{{ $product->photo }}" alt="{{ $product->name }}" class="a--block-image lazy-image" width="400" height="400" onclick="moveUpBtns(this)" />
+        <img src="https://cdn.alaatv.com/loder.jpg?w=1&h=1" data-src="{{ $product->photo }}" alt="{{ $product->name }}" class="a--block-image lazy-image" width="400" height="400" />
     </div>
 
     <div class="a--block-infoWrapper">

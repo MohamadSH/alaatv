@@ -476,40 +476,13 @@ var FilterAndSort = function () {
 
     function sortList(sortType) {
 
-        var $productList = getProductsList(),
-            $products = getProducts($productList);
-        var sortList = Array.prototype.sort.bind($products);
-
-        sortList(function ( a, b ) {
-
-            // Cache inner content from the first element (a) and the next sibling (b)
-            var sorta = parseInt(a.getAttribute(sortType));
-            var sortb = parseInt(b.getAttribute(sortType));
-
-            // Returning -1 will place element `a` before element `b`
-            if ( sorta < sortb ) {
-                return -1;
-            }
-
-            // Returning 1 will do the opposite
-            if ( sorta > sortb ) {
-                return 1;
-            }
-
-            // Returning 0 leaves them as-is
-            return 0;
+        $('.produtItems').Sort({
+            order: 'asc', // asc - des
+            sortAttribute: sortType,
+            itemSelector: '.productItem'
         });
 
-        $productList.append($products);
         reorganizeCustomDropDown();
-    }
-
-    function getProductsList() {
-        return $('.produtItems');
-    }
-
-    function getProducts($productList) {
-        return $productList.children('.productItem');
     }
 
     function reorganizeCustomDropDown() {
@@ -582,243 +555,264 @@ var PurchaseAndFavoriteTabPage = function () {
     };
 }();
 
-function moveUpBtns(dom) {
-    $('.a--block-item .a--block-detailesWrapper').css({'position': 'relative', 'top': 'auto', 'left': 'auto', 'width': '100%', 'transform': 'scale(1)'});
-    $('.a--block-item .a--block-detailesWrapper .btn-group-sm').css({'transform': 'scale(1)'});
-    $('.a--block-item .a--block-imageWrapper img').css({'filter': 'none'});
+// var completeUserInfoForm = null;
 
-    if ($(dom).parents('.a--block-item').find('.a--owl-carousel-show-detailes').length > 0) {
-        $(dom).parents('.a--block-item').find('.a--owl-carousel-show-detailes').trigger('click');
-    } else {
-        $(dom).css({'filter': 'blur(3px)'});
-        $(dom).parents('.a--block-item').find('.a--block-detailesWrapper').css({'position': 'absolute', 'top': 'calc( 50% - 16px)', 'left': '0'});
-        $(dom).parents('.a--block-item').find('.a--block-detailesWrapper .btn-group-sm').css({'transform': 'scale(1.5)'});
+var InitPage = function() {
+
+    function userIsLogin() {
+        var userId = GlobalJsVar.userId();
+        return (userId.trim().length > 0);
     }
-}
-var completeUserInfoForm = null;
-$(document).ready(function () {
 
-    var userId = GlobalJsVar.userId();
+    function checkUserInfoIsComplete() {
+        return (parseInt($('#js-var-userInfo-cmpletion').val())>=60);
+    }
 
-    if (userId.trim().length > 0) {
-        if (parseInt($('#js-var-userInfo-cmpletion').val())>=60) {
-            var OwlCarouselType2Option = {
-                OwlCarousel: {
-                    btnSwfitchEvent: function () {
-                        imageObserver.observe();
-                        gtmEecProductObserver.observe();
-                    }
-                },
-                grid: {
-                    btnSwfitchEvent: function () {
-                        imageObserver.observe();
-                        gtmEecProductObserver.observe();
-                    }
-                },
-                defaultView: 'grid',
-            };
-            $('#owlCarouselMyProduct').OwlCarouselType2(OwlCarouselType2Option);
-            $('#owlCarouselMyFavoritSet').OwlCarouselType2(OwlCarouselType2Option);
-            $('#owlCarouselMyFavoritContent').OwlCarouselType2(OwlCarouselType2Option);
-            $('#owlCarouselMyFavoritProducts').OwlCarouselType2(OwlCarouselType2Option);
-
-            PurchaseAndFavoriteTabPage.init();
-
-            $('.CustomDropDown').CustomDropDown({
-                onChange: function (data) {
-                    if (!data.target.hasClass('btnViewVideo') && !data.target.hasClass('btnViewContentSet')) {
-                        return false;
-                    }
-                    // { index: 2, totalCount: 5, value: "3", text: "فرسنگ سوم" }
-                },
-                onChanged: function (data) {
-                    // { index: 2, totalCount: 5, value: "3", text: "فرسنگ سوم" }
-                },
-                onRendered: function (data) {
-                    $('[data-toggle="m-tooltip"]').tooltip();
-                },
-                parentOptions: function ($this) {
-                    var parentId = $this.attr('data-parent-id');
-                    return '#' + parentId;
-                },
-                renderOption: function (optionObject) {
-
-                    var label = optionObject.innerHTML,
-                        value = optionObject.getAttribute('value'),
-                        productKey = optionObject.getAttribute('data-product-key'),
-                        hasVideo = optionObject.getAttribute('data-has-video'),
-                        hasPamphlet = optionObject.getAttribute('data-has-pamphlet'),
-                        btnVideo =
-                            '    <button type="button"\n' +
-                            '            class="btn btn-warning btnViewContentSet btnViewVideo"\n' +
-                            '            data-product-key="' + productKey + '"\n' +
-                            '            data-content-type="video"\n' +
-                            '            data-content-url="' + value + '">\n' +
-                            '        فیلم ها\n' +
-                            '    </button>\n',
-                        btnPamphlet =
-                            '    <button type="button"\n' +
-                            '            class="btn btn-secondary btnViewContentSet btnViewPamphlet"\n' +
-                            '            data-product-key="' + productKey + '"\n' +
-                            '            data-content-type="pamphlet"\n' +
-                            '            data-content-url="' + value + '">\n' +
-                            '        جزوات\n' +
-                            '    </button>',
-                        actionBtn = '';
-
-                    if (hasVideo === '1') {
-                        actionBtn += btnVideo;
-                    }
-                    if (hasPamphlet === '1') {
-                        actionBtn += btnPamphlet;
-                    }
-                    return '' +
-                        '<div class="setRow">' +
-                        '  <div class="setRow-label" data-toggle="m-tooltip" data-placement="top" data-original-title="' + label + '">' +
-                        label +
-                        '  </div>' +
-                        '  <div class="setRow-action">' +
-                        actionBtn +
-                        '  </div>' +
-                        '</div>';
+    function initCompleteInfoState() {
+        var OwlCarouselType2Option = {
+            OwlCarousel: {
+                btnSwfitchEvent: function () {
+                    imageObserver.observe();
+                    gtmEecProductObserver.observe();
                 }
-            });
+            },
+            grid: {
+                btnSwfitchEvent: function () {
+                    imageObserver.observe();
+                    gtmEecProductObserver.observe();
+                }
+            },
+            defaultView: 'grid',
+        };
+        $('#owlCarouselMyProduct').OwlCarouselType2(OwlCarouselType2Option);
+        $('#owlCarouselMyFavoritSet').OwlCarouselType2(OwlCarouselType2Option);
+        $('#owlCarouselMyFavoritContent').OwlCarouselType2(OwlCarouselType2Option);
+        $('#owlCarouselMyFavoritProducts').OwlCarouselType2(OwlCarouselType2Option);
 
-            FilterAndSort.init();
-            LoadContentSet.init();
+        PurchaseAndFavoriteTabPage.init();
+
+        $('.CustomDropDown').CustomDropDown({
+            onChange: function (data) {
+                if (!data.target.hasClass('btnViewVideo') && !data.target.hasClass('btnViewContentSet')) {
+                    return false;
+                }
+                // { index: 2, totalCount: 5, value: "3", text: "فرسنگ سوم" }
+            },
+            onChanged: function (data) {
+                // { index: 2, totalCount: 5, value: "3", text: "فرسنگ سوم" }
+            },
+            onRendered: function (data) {
+                $('[data-toggle="m-tooltip"]').tooltip();
+            },
+            parentOptions: function ($this) {
+                var parentId = $this.attr('data-parent-id');
+                return '#' + parentId;
+            },
+            renderOption: function (optionObject) {
+
+                var label = optionObject.innerHTML,
+                    value = optionObject.getAttribute('value'),
+                    productKey = optionObject.getAttribute('data-product-key'),
+                    hasVideo = optionObject.getAttribute('data-has-video'),
+                    hasPamphlet = optionObject.getAttribute('data-has-pamphlet'),
+                    btnVideo =
+                        '    <button type="button"\n' +
+                        '            class="btn btn-warning btnViewContentSet btnViewVideo"\n' +
+                        '            data-product-key="' + productKey + '"\n' +
+                        '            data-content-type="video"\n' +
+                        '            data-content-url="' + value + '">\n' +
+                        '        فیلم ها\n' +
+                        '    </button>\n',
+                    btnPamphlet =
+                        '    <button type="button"\n' +
+                        '            class="btn btn-secondary btnViewContentSet btnViewPamphlet"\n' +
+                        '            data-product-key="' + productKey + '"\n' +
+                        '            data-content-type="pamphlet"\n' +
+                        '            data-content-url="' + value + '">\n' +
+                        '        جزوات\n' +
+                        '    </button>',
+                    actionBtn = '';
+
+                if (hasVideo === '1') {
+                    actionBtn += btnVideo;
+                }
+                if (hasPamphlet === '1') {
+                    actionBtn += btnPamphlet;
+                }
+                return '' +
+                    '<div class="setRow">' +
+                    '  <div class="setRow-label" data-toggle="m-tooltip" data-placement="top" data-original-title="' + label + '">' +
+                    label +
+                    '  </div>' +
+                    '  <div class="setRow-action">' +
+                    actionBtn +
+                    '  </div>' +
+                    '</div>';
+            }
+        });
+
+        FilterAndSort.init();
+        LoadContentSet.init();
+    }
+
+    function initIncompleteInfoState() {
+
+        var validateForm = function(completeUserInfoForm) {
+
+            var formData = completeUserInfoForm.getFormData(),
+                status = true;
+
+            if (formData.firstName.trim().length > 0) {
+                completeUserInfoForm.inputFeedback('firstName', '', 'success');
+            } else {
+                status = false;
+                completeUserInfoForm.inputFeedback('firstName', 'نام را مشخص کنید.', 'danger');
+            }
+
+            if (formData.lastName.trim().length > 0) {
+                completeUserInfoForm.inputFeedback('lastName', '', 'success');
+            } else {
+                status = false;
+                completeUserInfoForm.inputFeedback('lastName', 'نام خانوادگی را مشخص کنید.', 'danger');
+            }
+
+            if (formData.province.trim().length > 0) {
+                completeUserInfoForm.inputFeedback('province', '', 'success');
+            } else {
+                status = false;
+                completeUserInfoForm.inputFeedback('province', 'استان را مشخص کنید.', 'danger');
+            }
+
+            if (formData.city.trim().length > 0) {
+                completeUserInfoForm.inputFeedback('city', '', 'success');
+            } else {
+                status = false;
+                completeUserInfoForm.inputFeedback('city', 'شهر را مشخص کنید.', 'danger');
+            }
+
+            completeUserInfoForm.setAjaxData(formData);
+
+            return status;
+        };
+
+        var completeUserInfoForm = $('.completeUserInfo').FormGenerator({
+            ajax: {
+                type: 'POST',
+                url: $('#js-var-actionUrl-profile-update').val(),
+                data: {},
+                accept: 'application/json; charset=utf-8',
+                dataType: 'json',
+                contentType: 'application/json; charset=utf-8',
+                beforeSend: function () {
+                    var status = validateForm(completeUserInfoForm);
+
+                    if (status) {
+                        AlaaLoading.show();
+                    }
+
+                    return status;
+                },
+                success: function (data) {
+                    console.log(data);
+                    window.location.reload();
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    AlaaLoading.hide();
+                    toastr.warning('خطایی رخ داده است.');
+                },
+                cache: false,
+                headers: {
+                    'X-CSRF-TOKEN': window.Laravel.csrfToken,
+                }
+            },
+            inputData: [
+                {
+                    type: 'hidden',
+                    name: 'updateType',
+                    value: 'profile'
+                },
+                {
+                    type: 'hidden',
+                    name: '_token',
+                    value: $('#js-var-formData-token').val(),
+                },
+                {
+                    type: 'text',
+                    name: 'firstName',
+                    value: $('#js-var-userData-name').val(),
+                    placeholder: 'نام',
+                    label: 'نام',
+                    iconsRight: '<i class="fa fa-id-card"></i>',
+                    id: 'name'
+                },
+                {
+                    type: 'text',
+                    name: 'lastName',
+                    value: $('#js-var-userData-lastName').val(),
+                    placeholder: 'نام خانوادگی',
+                    label: 'نام خانوادگی',
+                    iconsRight: '<i class="fa fa-id-card"></i>',
+                    id: 'lastName'
+                },
+                {
+                    type: 'text',
+                    name: 'city',
+                    value: $('#js-var-userData-city').val(),
+                    placeholder: 'شهر',
+                    label: 'شهر',
+                    iconsRight: '<i class="fa fa-map-marker-alt"></i>',
+                    id: 'city'
+                },
+                {
+                    type: 'text',
+                    name: 'province',
+                    value: $('#js-var-userData-province').val(),
+                    placeholder: 'استان',
+                    label: 'استان',
+                    iconsRight: '<i class="fa fa-map-marker-alt"></i>',
+                    id: 'ostan'
+                },
+                {
+                    type: 'sendAjax',
+                    text: 'بروزرسانی اطلاعات',
+                    class: 'btn btn-primary',
+                    id: null
+                }
+            ]
+        });
+
+        validateForm(completeUserInfoForm);
+    }
+
+    function initLoginState() {
+        if (checkUserInfoIsComplete()) {
+            initCompleteInfoState();
         } else {
-
-            var validateForm = function() {
-
-                var formData = completeUserInfoForm.getFormData(),
-                    status = true;
-
-                if (formData.firstName.trim().length > 0) {
-                    completeUserInfoForm.inputFeedback('firstName', '', 'success');
-                } else {
-                    status = false;
-                    completeUserInfoForm.inputFeedback('firstName', 'نام را مشخص کنید.', 'danger');
-                }
-
-                if (formData.lastName.trim().length > 0) {
-                    completeUserInfoForm.inputFeedback('lastName', '', 'success');
-                } else {
-                    status = false;
-                    completeUserInfoForm.inputFeedback('lastName', 'نام خانوادگی را مشخص کنید.', 'danger');
-                }
-
-                if (formData.province.trim().length > 0) {
-                    completeUserInfoForm.inputFeedback('province', '', 'success');
-                } else {
-                    status = false;
-                    completeUserInfoForm.inputFeedback('province', 'استان را مشخص کنید.', 'danger');
-                }
-
-                if (formData.city.trim().length > 0) {
-                    completeUserInfoForm.inputFeedback('city', '', 'success');
-                } else {
-                    status = false;
-                    completeUserInfoForm.inputFeedback('city', 'شهر را مشخص کنید.', 'danger');
-                }
-
-                completeUserInfoForm.setAjaxData(formData);
-
-                return status;
-            };
-
-            completeUserInfoForm = $('.completeUserInfo').FormGenerator({
-                ajax: {
-                    type: 'POST',
-                    url: $('#js-var-actionUrl-profile-update').val(),
-                    data: {},
-                    accept: 'application/json; charset=utf-8',
-                    dataType: 'json',
-                    contentType: 'application/json; charset=utf-8',
-                    beforeSend: function () {
-                        var status = validateForm();
-
-                        if (status) {
-                            AlaaLoading.show();
-                        }
-
-                        return status;
-                    },
-                    success: function (data) {
-                        console.log(data);
-                        window.location.reload();
-                    },
-                    error: function (jqXHR, textStatus, errorThrown) {
-                        AlaaLoading.hide();
-                        toastr.warning('خطایی رخ داده است.');
-                    },
-                    cache: false,
-                    headers: {
-                        'X-CSRF-TOKEN': window.Laravel.csrfToken,
-                    }
-                },
-                inputData: [
-                    {
-                        type: 'hidden',
-                        name: 'updateType',
-                        value: 'profile'
-                    },
-                    {
-                        type: 'hidden',
-                        name: '_token',
-                        value: $('#js-var-formData-token').val(),
-                    },
-                    {
-                        type: 'text',
-                        name: 'firstName',
-                        value: $('#js-var-userData-name').val(),
-                        placeholder: 'نام',
-                        label: 'نام',
-                        iconsRight: '<i class="fa fa-id-card"></i>',
-                        id: 'name'
-                    },
-                    {
-                        type: 'text',
-                        name: 'lastName',
-                        value: $('#js-var-userData-lastName').val(),
-                        placeholder: 'نام خانوادگی',
-                        label: 'نام خانوادگی',
-                        iconsRight: '<i class="fa fa-id-card"></i>',
-                        id: 'lastName'
-                    },
-                    {
-                        type: 'text',
-                        name: 'city',
-                        value: $('#js-var-userData-city').val(),
-                        placeholder: 'شهر',
-                        label: 'شهر',
-                        iconsRight: '<i class="fa fa-map-marker-alt"></i>',
-                        id: 'city'
-                    },
-                    {
-                        type: 'text',
-                        name: 'province',
-                        value: $('#js-var-userData-province').val(),
-                        placeholder: 'استان',
-                        label: 'استان',
-                        iconsRight: '<i class="fa fa-map-marker-alt"></i>',
-                        id: 'ostan'
-                    },
-                    {
-                        type: 'sendAjax',
-                        text: 'بروزرسانی اطلاعات',
-                        class: 'btn btn-primary',
-                        id: null
-                    }
-                ]
-            });
-
-            validateForm();
+            initIncompleteInfoState();
         }
+    }
 
-    } else {
+    function initLogoutState() {
         AjaxLogin.showLogin(GlobalJsVar.loginActionUrl(), function () {
             window.location.reload();
         });
     }
 
+    function init() {
+        if (userIsLogin()) {
+            initLoginState();
+        } else {
+            initLogoutState();
+        }
+    }
+
+    return {
+        init: init
+    };
+
+}();
+
+
+$(document).ready(function () {
+    InitPage.init();
 });
