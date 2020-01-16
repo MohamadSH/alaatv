@@ -7,6 +7,7 @@ use AlaaTV\Gateways\Contracts\OnlinePaymentVerificationResponseInterface;
 use AlaaTV\Gateways\Money;
 use AlaaTV\ZarinpalGatewayDriver\VerificationResponse;
 use App\Repositories\TransactionRepo;
+use App\Transaction;
 use Illuminate\Console\Command;
 use Zarinpal\Zarinpal;
 
@@ -118,7 +119,7 @@ class HandleUnverifiedTransactions extends Command
                 continue;
             }
 
-            /** @var \App\Transaction $transaction */
+            /** @var Transaction $transaction */
             $transaction = TransactionRepo::getTransactionByAuthority($authority)->getValue(null);
 
             if (is_null($transaction)) {
@@ -126,7 +127,6 @@ class HandleUnverifiedTransactions extends Command
 
                 array_push($notExistTransactions, $item);
                 $bar->advance();
-                $this->info("\n");
                 continue;
             }
 
@@ -161,7 +161,6 @@ class HandleUnverifiedTransactions extends Command
             array_push($unverifiedTransactionsDueToError, $item);
 
             $bar->advance();
-            $this->info("\n");
         }
 
         $bar->finish();

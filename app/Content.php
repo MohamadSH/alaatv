@@ -1469,6 +1469,9 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
      */
     public function getRecommendedProductsAttribute(): ProductCollection
     {
+        // Another approach has been used for recommended items in content page
+        // This method currently is not being used
+
         $content                  = $this;
         $key                      = 'content:recommendedProduct:' . $content->cacheKey();
         $recommendedProductSearch = new RecommendedProductSearch ();
