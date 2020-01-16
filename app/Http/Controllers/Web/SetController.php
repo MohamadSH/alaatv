@@ -9,7 +9,7 @@ use App\Contentset;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ContentsetIndexRequest;
 use App\Http\Requests\InsertContentsetRequest;
-use App\Http\Resources\ContentInSetWithFile as ContentResource;
+use App\Http\Resources\ContentInSetWithFileWithoutPagination as ContentResource;
 use App\Http\Resources\SetWithoutPagination as SetResource;
 use App\Source;
 use App\Traits\FileCommon;
@@ -192,7 +192,12 @@ class SetController extends Controller
 
         $sources = $contentSet->sources;
 
-        return view('set.show', compact('contentSet', 'videos', 'pamphlets', 'articles', 'jsonLdArray', 'order', 'isFavored', 'sources'));
+        $videosCount = $videos->count();
+        $pamphletsCount = $pamphlets->count();
+        $videos    = $videos->groupBy('section_id');
+        $pamphlets = $pamphlets->groupBy('section_id');
+
+        return view('set.show', compact('contentSet', 'videos', 'pamphlets', 'articles', 'jsonLdArray', 'order', 'isFavored', 'sources', 'videosCount', 'pamphletsCount'));
     }
 
     public function edit(Contentset $set)

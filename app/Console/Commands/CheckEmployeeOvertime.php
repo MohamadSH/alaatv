@@ -60,7 +60,6 @@ class CheckEmployeeOvertime extends Command
                     }
                 }
                 $bar->advance();
-                $this->info("\n");
             }
             $bar->finish();
             $this->info($rejectedTimeSheetCount.' overtimes rejected out of total '.$workTimeSheetCount);

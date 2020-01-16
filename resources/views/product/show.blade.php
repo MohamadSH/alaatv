@@ -4,8 +4,8 @@
     <link href="{{ mix('/css/product-show.css') }}" rel="stylesheet" type="text/css"/>
     <style>
         @if(
-            (!isset($block) || !isset($block->contents) || $block->contents->count() === 0) &&
-            (!isset($block) || !isset($block->sets) || $block->sets->count() === 0)
+            optional(optional(optional($block->sets)->first())->getActiveContents2())->count() === 0 ||
+            optional(optional(optional($block->sets)->first())->getActiveContents2())->count() === null
         )
             .productInfoNav-sampleVideo {
             display: none !important;
@@ -88,7 +88,7 @@
 
 @section('content')
 
-    <div class="row">
+    <div class="row m--margin-top-25">
         <div class="col">
             @include('systemMessage.flash')
         </div>
@@ -665,17 +665,20 @@
     @endif
 </div>
 
+
     {{--نمونه فیلم--}}
-    @include('block.partials.block', [
-        'blockTitle'=>view('product.partials.productInfoNav', ['targetId'=>'sampleVideo' , 'product'=>$product , 'isForcedGift'=>$isForcedGift]),
-        'blockUrlDisable'=>true,
-        'blockType'=>'productSampleVideo',
-        'imageDimension'=>'?w=300&h=169',
-        'squareSing'=>false,
-        'blockCustomClass'=>'a--owl-carousel-type-2 productShowBlock sampleVideo a--block-widget-1',
-        'blockCustomId'=>'Block-sampleVideo',
-        'btnLoadMore'=>true
-        ])
+    @if(optional(optional(optional($block->sets)->first())->getActiveContents2())->count() > 0)
+        @include('block.partials.block', [
+            'blockTitle'=>view('product.partials.productInfoNav', ['targetId'=>'sampleVideo' , 'product'=>$product , 'isForcedGift'=>$isForcedGift]),
+            'blockUrlDisable'=>true,
+            'blockType'=>'productSampleVideo',
+            'imageDimension'=>'?w=300&h=169',
+            'squareSing'=>false,
+            'blockCustomClass'=>'a--owl-carousel-type-2 productShowBlock sampleVideo a--block-widget-1',
+            'blockCustomId'=>'Block-sampleVideo',
+            'btnLoadMore'=>true
+            ])
+    @endif
 
     {{--نمونه جزوه--}}
     @include('product.partials.pamphlet')

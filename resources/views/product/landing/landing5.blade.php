@@ -22,7 +22,9 @@
                     <div class="m-widget27 m-portlet-fit--sides">
 
                         <div class="m-widget27__pic">
-                            <img src="/assets/extra/landing5/images/gold-fest.png" alt="">
+                            <img src="https://cdn.alaatv.com/loder.jpg?w=1&h=1"
+                                 data-src="https://cdn.alaatv.com/upload/landingNezameGhadim-gold-fest.png"
+                                 class="lazy-image" alt="" width="944" height="407">
                             <h3 class="m-widget27__title m--font-light">
 
                             </h3>
@@ -105,11 +107,15 @@
                                 <div class="row mt-5 d-flex justify-content-center">
                                     <div class="col-md-10 text-center heading-section ftco-animate">
                                         <h2 class="h2">دانلود نمونه فیلم همایش</h2>
-                                        <p>
-                                            <a href="{{action("Web\ContentController@show",7884)}}" class="btn btn-primary mt-3 py-1 px-2">
-                                                <img src="{{ asset('assets\extra\landing5\images\دانلود-نمونه-فیلم-همایش.png') }}" class="downloadVideoImage a--full-width"/>
+                                        <div>
+                                            <a href="{{action("Web\ContentController@show",7884)}}">
+                                                <img src="https://cdn.alaatv.com/loder.jpg?w=1&h=1"
+                                                     data-src="https://cdn.alaatv.com/upload/landingNezameGhadim-sampleVideo.png"
+                                                     class="downloadVideoImage a--full-width lazy-image"
+                                                     width="563"
+                                                     height="342" />
                                             </a>
-                                        </p>
+                                        </div>
                                     </div>
                                 </div>
 
@@ -146,7 +152,7 @@
                                     </div>
                                     <div class="col-12 col-sm-6 col-md-3 col-lg-3 lastSectionItem">
                                         <div class="icon">
-                                            <i class="fa fa-edit-1"></i>
+                                            <i class="fa fa-edit"></i>
                                         </div>
                                         <div class="text">
                                             <h3>جزوه</h3>
@@ -154,7 +160,7 @@
                                     </div>
                                     <div class="col-12 col-sm-6 col-md-3 col-lg-3 lastSectionItem">
                                         <div class="icon">
-                                            <i class="flaticon-presentation-1"></i>
+                                            <i class="fa fa-lightbulb"></i>
                                         </div>
                                         <div class="text">
                                             <h3>تحلیل</h3>
