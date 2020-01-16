@@ -89,7 +89,6 @@
 .alert.m-alert--icon .m-alert__text {
     vertical-align: middle;
     width: auto;
-    padding: 0 1.25rem;
 }
 .m-portlet.m-portlet--success.m-portlet--head-solid-bg {
     background: white;
@@ -118,34 +117,55 @@
     text-align: center;
 }
 
-/*scrollbar*/
-/* width */
-#m_tabs_1_1 {
-
-    scrollbar-color: #ff9000 #ffe0b8;
-    scrollbar-width: thin;
+.m-portlet {
+    position: relative;
+}
+.blockedContent {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: #0000004a;
+    z-index: 2;
+    cursor: not-allowed;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    flex-wrap: wrap;
+}
+.blockedContent .ParentProductsItem {
+    background-color: white;
+    -webkit-box-shadow: 5px 5px 5px -3px rgba(0,0,0,0.75);
+    -moz-box-shadow: 5px 5px 5px -3px rgba(0,0,0,0.75);
+    box-shadow: 5px 5px 5px -3px rgba(0,0,0,0.75);
+    -webkit-box-flex: 0;
+    -ms-flex: 0 0 26%;
+    flex: 0 0 26%;
+    max-width: 26%;
+}
+.blockedContent .ParentProductsItem .image img {
+    width: 100%;
+}
+.blockedContent .ParentProductsItem .title {
+    padding: 3px 5px;
+    font-size: 0.9rem;
+    line-height: 0.9rem;
+}
+.a--block-item.a--block-type-content .a--block-infoWrapper {
+    margin-bottom: 5px;
+}
+.a--block-item.a--block-type-product2 button,
+.a--block-item.a--block-type-content .a--block-infoWrapper .a--block-titleWrapper
+.a--block-item.a--block-type-set .a--block-infoWrapper .a--block-titleWrapper {
+    height: 50px;
 }
 
-#m_tabs_1_1::-webkit-scrollbar {
-    width: 9px;
-    height: 9px;
+#playListScroller .a-widget5__item .a-widget5__content .a-widget5__section .a-widget5__info .content-description {
+    font-size: 1rem;
+    line-height: 1.5rem;
 }
 
-/* Track */
-#m_tabs_1_1::-webkit-scrollbar-track {
-    background: #ffefdb;
-}
-
-/* Handle */
-#m_tabs_1_1::-webkit-scrollbar-thumb {
-    background: #ff9000;
-    border-radius: 10px;
-}
-
-/* Handle on hover */
-#m_tabs_1_1::-webkit-scrollbar-thumb:hover {
-    background: #ff6c00;
-}
 /*media query*/
 @media only screen and (max-width: 1100px) and (min-width: 992px) {
     .a-widget5 .a-widget5__item .a-widget5__content .a-widget5__pic,

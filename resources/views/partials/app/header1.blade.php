@@ -495,6 +495,11 @@
                                                                 ریاضی
                                                             </a>
                                                         </div>
+                                                        <div class="subCategoryItem">
+                                                            <a class="m-link" href="{{ urldecode(route('content.index', 'tags[]=نظام_آموزشی_قدیم&tags[]=کنکور&tags[]=رشته_انسانی&tags[]=زبان_و_ادبیات_فارسی_انسانی')) }}" >
+                                                                ادبیات و زبان فارسی
+                                                            </a>
+                                                        </div>
                                                     </div>
                                                     <div class="col-md-4">
                                                         <div class="subCategoryItem subCategoryItem-title">
@@ -514,7 +519,7 @@
                                                         </div>
                                                         <div class="subCategoryItem">
                                                             <a class="m-link" href="{{ urldecode(route('content.index', 'tags[]=نظام_آموزشی_قدیم&tags[]=کنکور&tags[]=زبان_و_ادبیات_فارسی')) }}" >
-                                                                زبان و ادبیات فارسی
+                                                                ادبیات و زبان فارسی
                                                             </a>
                                                         </div>
                                                         <div class="subCategoryItem">

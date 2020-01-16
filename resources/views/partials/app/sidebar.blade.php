@@ -61,7 +61,7 @@
                                             <span class="m-menu__arrow"></span>
                                             <ul class="m-menu__subnav">
                                                 <li class="m-menu__item " aria-haspopup="true">
-                                                    <a target="_blank" class="m-menu__link" href="{{ urldecode(route('content.index', 'tags[]=نظام_آموزشی_جدید&tags[]=دوازدهم&tags[]=کنکور&tags[]=رشته_ریاضی&tags[]=رشته_تجربی&tags[]=شیمی')) }}">
+                                                    <a class="m-menu__link" href="{{ urldecode(route('content.index', 'tags[]=نظام_آموزشی_جدید&tags[]=دوازدهم&tags[]=کنکور&tags[]=رشته_ریاضی&tags[]=رشته_تجربی&tags[]=شیمی')) }}">
                                                         <i class="m-menu__link-icon fa fa-book-open"><span></span></i>
                                                         <span class="m-menu__link-text">
                                                             شیمی
@@ -69,7 +69,7 @@
                                                     </a>
                                                 </li>
                                                 <li class="m-menu__item " aria-haspopup="true">
-                                                    <a target="_blank" class="m-menu__link" href="{{ urldecode(route('content.index', 'tags[]=نظام_آموزشی_جدید&tags[]=دوازدهم&tags[]=کنکور&tags[]=رشته_ریاضی&tags[]=رشته_تجربی&tags[]=فیزیک')) }}">
+                                                    <a class="m-menu__link" href="{{ urldecode(route('content.index', 'tags[]=نظام_آموزشی_جدید&tags[]=دوازدهم&tags[]=کنکور&tags[]=رشته_ریاضی&tags[]=رشته_تجربی&tags[]=فیزیک')) }}">
                                                         <i class="m-menu__link-icon fa fa-book-open"><span></span></i>
                                                         <span class="m-menu__link-text">
                                                             فیزیک
@@ -77,7 +77,7 @@
                                                     </a>
                                                 </li>
                                                 <li class="m-menu__item " aria-haspopup="true">
-                                                    <a target="_blank" class="m-menu__link" href="{{ urldecode(route('content.index', 'tags[]=نظام_آموزشی_جدید&tags[]=دوازدهم&tags[]=کنکور&tags[]=رشته_تجربی&tags[]=ریاضی_تجربی&tags[]=ریاضی_پایه')) }}">
+                                                    <a class="m-menu__link" href="{{ urldecode(route('content.index', 'tags[]=نظام_آموزشی_جدید&tags[]=دوازدهم&tags[]=کنکور&tags[]=رشته_تجربی&tags[]=ریاضی_تجربی&tags[]=ریاضی_پایه')) }}">
                                                         <i class="m-menu__link-icon fa fa-book-open"><span></span></i>
                                                         <span class="m-menu__link-text">
                                                             ریاضی تجربی
@@ -85,7 +85,7 @@
                                                     </a>
                                                 </li>
                                                 <li class="m-menu__item " aria-haspopup="true">
-                                                    <a target="_blank" class="m-menu__link" href="{{ urldecode(route('content.index', 'tags[]=نظام_آموزشی_جدید&tags[]=دوازدهم&tags[]=کنکور&tags[]=رشته_ریاضی&tags[]=رشته_تجربی&tags[]=زیست_شناسی')) }}">
+                                                    <a class="m-menu__link" href="{{ urldecode(route('content.index', 'tags[]=نظام_آموزشی_جدید&tags[]=دوازدهم&tags[]=کنکور&tags[]=رشته_ریاضی&tags[]=رشته_تجربی&tags[]=زیست_شناسی')) }}">
                                                         <i class="m-menu__link-icon fa fa-book-open"><span></span></i>
                                                         <span class="m-menu__link-text">
                                                             زیست شناسی
@@ -93,7 +93,7 @@
                                                     </a>
                                                 </li>
                                                 <li class="m-menu__item " aria-haspopup="true">
-                                                    <a target="_blank" class="m-menu__link" href="{{ urldecode(route('content.index', 'tags[]=نظام_آموزشی_جدید&tags[]=دوازدهم&tags[]=کنکور&tags[]=رشته_ریاضی&tags[]=هندسه&tags[]=هندسه_کنکور')) }}">
+                                                    <a class="m-menu__link" href="{{ urldecode(route('content.index', 'tags[]=نظام_آموزشی_جدید&tags[]=دوازدهم&tags[]=کنکور&tags[]=رشته_ریاضی&tags[]=هندسه&tags[]=هندسه_کنکور')) }}">
                                                         <i class="m-menu__link-icon fa fa-book-open"><span></span></i>
                                                         <span class="m-menu__link-text">
                                                             هندسه
@@ -101,7 +101,7 @@
                                                     </a>
                                                 </li>
                                                 <li class="m-menu__item " aria-haspopup="true">
-                                                    <a target="_blank" class="m-menu__link" href="{{ urldecode(route('content.index', 'tags[]=نظام_آموزشی_جدید&tags[]=دوازدهم&tags[]=کنکور&tags[]=رشته_ریاضی&tags[]=گسسته&tags[]=آمار_و_احتمال')) }}">
+                                                    <a class="m-menu__link" href="{{ urldecode(route('content.index', 'tags[]=نظام_آموزشی_جدید&tags[]=دوازدهم&tags[]=کنکور&tags[]=رشته_ریاضی&tags[]=گسسته&tags[]=آمار_و_احتمال')) }}">
                                                         <i class="m-menu__link-icon fa fa-book-open"><span></span></i>
                                                         <span class="m-menu__link-text">
                                                             ریاضیات گسسته و آمار و احتمال
@@ -109,7 +109,7 @@
                                                     </a>
                                                 </li>
                                                 <li class="m-menu__item " aria-haspopup="true">
-                                                    <a target="_blank" class="m-menu__link" href="{{ urldecode(route('content.index', 'tags[]=نظام_آموزشی_جدید&tags[]=دوازدهم&tags[]=کنکور&tags[]=رشته_ریاضی&tags[]=حسابان&tags[]=ریاضی_پایه')) }}">
+                                                    <a class="m-menu__link" href="{{ urldecode(route('content.index', 'tags[]=نظام_آموزشی_جدید&tags[]=دوازدهم&tags[]=کنکور&tags[]=رشته_ریاضی&tags[]=حسابان&tags[]=ریاضی_پایه')) }}">
                                                         <i class="m-menu__link-icon fa fa-book-open"><span></span></i>
                                                         <span class="m-menu__link-text">
                                                             حسابان و ریاضی پایه
@@ -132,7 +132,7 @@
                                             <span class="m-menu__arrow"></span>
                                             <ul class="m-menu__subnav">
                                                 <li class="m-menu__item " aria-haspopup="true">
-                                                    <a target="_blank" class="m-menu__link" href="{{ urldecode(route('content.index', 'tags[]=نظام_آموزشی_جدید&tags[]=دوازدهم&tags[]=کنکور&tags[]=رشته_انسانی&tags[]=عربی')) }}">
+                                                    <a class="m-menu__link" href="{{ urldecode(route('content.index', 'tags[]=نظام_آموزشی_جدید&tags[]=دوازدهم&tags[]=کنکور&tags[]=رشته_انسانی&tags[]=عربی')) }}">
                                                         <i class="m-menu__link-icon fa fa-book-open"><span></span></i>
                                                         <span class="m-menu__link-text">
                                                             عربی
@@ -140,7 +140,7 @@
                                                     </a>
                                                 </li>
                                                 <li class="m-menu__item " aria-haspopup="true">
-                                                    <a target="_blank" class="m-menu__link" href="{{ urldecode(route('content.index', 'tags[]=نظام_آموزشی_جدید&tags[]=دوازدهم&tags[]=کنکور&tags[]=رشته_انسانی&tags[]=ریاضی_انسانی&tags[]=ریاضی_و_آمار')) }}">
+                                                    <a class="m-menu__link" href="{{ urldecode(route('content.index', 'tags[]=نظام_آموزشی_جدید&tags[]=دوازدهم&tags[]=کنکور&tags[]=رشته_انسانی&tags[]=ریاضی_انسانی&tags[]=ریاضی_و_آمار')) }}">
                                                         <i class="m-menu__link-icon fa fa-book-open"><span></span></i>
                                                         <span class="m-menu__link-text">
                                                             ریاضی
@@ -163,7 +163,7 @@
                                             <span class="m-menu__arrow"></span>
                                             <ul class="m-menu__subnav">
                                                 <li class="m-menu__item " aria-haspopup="true">
-                                                    <a target="_blank" class="m-menu__link" href="{{ urldecode(route('content.index', 'tags[]=نظام_آموزشی_جدید&tags[]=دوازدهم&tags[]=کنکور&tags[]=زبان_انگلیسی')) }}">
+                                                    <a class="m-menu__link" href="{{ urldecode(route('content.index', 'tags[]=نظام_آموزشی_جدید&tags[]=دوازدهم&tags[]=کنکور&tags[]=زبان_انگلیسی')) }}">
                                                         <i class="m-menu__link-icon fa fa-book-open"><span></span></i>
                                                         <span class="m-menu__link-text">
                                                             انگلیسی
@@ -171,7 +171,7 @@
                                                     </a>
                                                 </li>
                                                 <li class="m-menu__item " aria-haspopup="true">
-                                                    <a target="_blank" class="m-menu__link" href="{{ urldecode(route('content.index', 'tags[]=نظام_آموزشی_جدید&tags[]=دوازدهم&tags[]=کنکور&tags[]=عربی')) }}">
+                                                    <a class="m-menu__link" href="{{ urldecode(route('content.index', 'tags[]=نظام_آموزشی_جدید&tags[]=دوازدهم&tags[]=کنکور&tags[]=عربی')) }}">
                                                         <i class="m-menu__link-icon fa fa-book-open"><span></span></i>
                                                         <span class="m-menu__link-text">
                                                             عربی عمومی
@@ -179,7 +179,7 @@
                                                     </a>
                                                 </li>
                                                 <li class="m-menu__item " aria-haspopup="true">
-                                                    <a target="_blank" class="m-menu__link" href="{{ urldecode(route('content.index', 'tags[]=نظام_آموزشی_جدید&tags[]=دوازدهم&tags[]=کنکور&tags[]=زبان_و_ادبیات_فارسی')) }}">
+                                                    <a class="m-menu__link" href="{{ urldecode(route('content.index', 'tags[]=نظام_آموزشی_جدید&tags[]=دوازدهم&tags[]=کنکور&tags[]=زبان_و_ادبیات_فارسی')) }}">
                                                         <i class="m-menu__link-icon fa fa-book-open"><span></span></i>
                                                         <span class="m-menu__link-text">
                                                             فارسی
@@ -187,7 +187,7 @@
                                                     </a>
                                                 </li>
                                                 <li class="m-menu__item " aria-haspopup="true">
-                                                    <a target="_blank" class="m-menu__link" href="{{ urldecode(route('content.index', 'tags[]=نظام_آموزشی_جدید&tags[]=دوازدهم&tags[]=کنکور&tags[]=دین_و_زندگی')) }}">
+                                                    <a class="m-menu__link" href="{{ urldecode(route('content.index', 'tags[]=نظام_آموزشی_جدید&tags[]=دوازدهم&tags[]=کنکور&tags[]=دین_و_زندگی')) }}">
                                                         <i class="m-menu__link-icon fa fa-book-open"><span></span></i>
                                                         <span class="m-menu__link-text">
                                                             دین و زندگی
@@ -223,7 +223,7 @@
                                             <span class="m-menu__arrow"></span>
                                             <ul class="m-menu__subnav">
                                                 <li class="m-menu__item " aria-haspopup="true">
-                                                    <a target="_blank" href="{{ urldecode(route('content.index', 'tags[]=نظام_آموزشی_جدید&tags[]=یازدهم&tags[]=رشته_ریاضی&tags[]=رشته_تجربی&tags[]=شیمی')) }}" class="m-menu__link ">
+                                                    <a href="{{ urldecode(route('content.index', 'tags[]=نظام_آموزشی_جدید&tags[]=یازدهم&tags[]=رشته_ریاضی&tags[]=رشته_تجربی&tags[]=شیمی')) }}" class="m-menu__link ">
                                                         <i class="m-menu__link-icon fa fa-book-open"><span></span></i>
                                                         <span class="m-menu__link-text">
                                                             شیمی
@@ -231,7 +231,7 @@
                                                     </a>
                                                 </li>
                                                 <li class="m-menu__item " aria-haspopup="true">
-                                                    <a target="_blank" href="{{ urldecode(route('content.index', 'tags[]=نظام_آموزشی_جدید&tags[]=یازدهم&tags[]=رشته_ریاضی&tags[]=رشته_تجربی&tags[]=فیزیک')) }}" class="m-menu__link ">
+                                                    <a href="{{ urldecode(route('content.index', 'tags[]=نظام_آموزشی_جدید&tags[]=یازدهم&tags[]=رشته_ریاضی&tags[]=رشته_تجربی&tags[]=فیزیک')) }}" class="m-menu__link ">
                                                         <i class="m-menu__link-icon fa fa-book-open"><span></span></i>
                                                         <span class="m-menu__link-text">
                                                             فیزیک
@@ -239,7 +239,7 @@
                                                     </a>
                                                 </li>
                                                 <li class="m-menu__item " aria-haspopup="true">
-                                                    <a target="_blank" class="m-menu__link" href="{{ urldecode(route('content.index', 'tags[]=نظام_آموزشی_جدید&tags[]=یازدهم&tags[]=رشته_تجربی&tags[]=ریاضی_تجربی')) }}">
+                                                    <a class="m-menu__link" href="{{ urldecode(route('content.index', 'tags[]=نظام_آموزشی_جدید&tags[]=یازدهم&tags[]=رشته_تجربی&tags[]=ریاضی_تجربی')) }}">
                                                         <i class="m-menu__link-icon fa fa-book-open"><span></span></i>
                                                         <span class="m-menu__link-text">
                                                             ریاضی تجربی
@@ -247,7 +247,7 @@
                                                     </a>
                                                 </li>
                                                 <li class="m-menu__item " aria-haspopup="true">
-                                                    <a target="_blank" class="m-menu__link" href="{{ urldecode(route('content.index', 'tags[]=نظام_آموزشی_جدید&tags[]=یازدهم&tags[]=رشته_تجربی&tags[]=زیست_شناسی')) }}">
+                                                    <a class="m-menu__link" href="{{ urldecode(route('content.index', 'tags[]=نظام_آموزشی_جدید&tags[]=یازدهم&tags[]=رشته_تجربی&tags[]=زیست_شناسی')) }}">
                                                         <i class="m-menu__link-icon fa fa-book-open"><span></span></i>
                                                         <span class="m-menu__link-text">
                                                             زیست شناسی
@@ -255,7 +255,7 @@
                                                     </a>
                                                 </li>
                                                 <li class="m-menu__item " aria-haspopup="true">
-                                                    <a target="_blank" class="m-menu__link" href="{{ urldecode(route('content.index', 'tags[]=نظام_آموزشی_جدید&tags[]=یازدهم&tags[]=رشته_ریاضی&tags[]=هندسه&tags[]=هندسه_پایه')) }}">
+                                                    <a class="m-menu__link" href="{{ urldecode(route('content.index', 'tags[]=نظام_آموزشی_جدید&tags[]=یازدهم&tags[]=رشته_ریاضی&tags[]=هندسه&tags[]=هندسه_پایه')) }}">
                                                         <i class="m-menu__link-icon fa fa-book-open"><span></span></i>
                                                         <span class="m-menu__link-text">
                                                             هندسه
@@ -263,7 +263,7 @@
                                                     </a>
                                                 </li>
                                                 <li class="m-menu__item " aria-haspopup="true">
-                                                    <a target="_blank" class="m-menu__link" href="{{ urldecode(route('content.index', 'tags[]=نظام_آموزشی_جدید&tags[]=یازدهم&tags[]=رشته_ریاضی&tags[]=آمار_و_احتمال')) }}">
+                                                    <a class="m-menu__link" href="{{ urldecode(route('content.index', 'tags[]=نظام_آموزشی_جدید&tags[]=یازدهم&tags[]=رشته_ریاضی&tags[]=آمار_و_احتمال')) }}">
                                                         <i class="m-menu__link-icon fa fa-book-open"><span></span></i>
                                                         <span class="m-menu__link-text">
                                                             آمار و احتمال
@@ -271,7 +271,7 @@
                                                     </a>
                                                 </li>
                                                 <li class="m-menu__item " aria-haspopup="true">
-                                                    <a target="_blank" class="m-menu__link" href="{{ urldecode(route('content.index', 'tags[]=نظام_آموزشی_جدید&tags[]=یازدهم&tags[]=رشته_ریاضی&tags[]=حسابان')) }}">
+                                                    <a class="m-menu__link" href="{{ urldecode(route('content.index', 'tags[]=نظام_آموزشی_جدید&tags[]=یازدهم&tags[]=رشته_ریاضی&tags[]=حسابان')) }}">
                                                         <i class="m-menu__link-icon fa fa-book-open"><span></span></i>
                                                         <span class="m-menu__link-text">
                                                             حسابان
@@ -294,7 +294,7 @@
                                             <span class="m-menu__arrow"></span>
                                             <ul class="m-menu__subnav">
                                                 <li class="m-menu__item " aria-haspopup="true">
-                                                    <a target="_blank" class="m-menu__link" href="{{ urldecode(route('content.index', 'tags[]=نظام_آموزشی_جدید&tags[]=یازدهم&tags[]=زبان_انگلیسی')) }}">
+                                                    <a class="m-menu__link" href="{{ urldecode(route('content.index', 'tags[]=نظام_آموزشی_جدید&tags[]=یازدهم&tags[]=زبان_انگلیسی')) }}">
                                                         <i class="m-menu__link-icon fa fa-book-open"><span></span></i>
                                                         <span class="m-menu__link-text">
                                                             انگلیسی
@@ -302,7 +302,7 @@
                                                     </a>
                                                 </li>
                                                 <li class="m-menu__item " aria-haspopup="true">
-                                                    <a target="_blank" class="m-menu__link" href="{{ urldecode(route('content.index', 'tags[]=نظام_آموزشی_جدید&tags[]=یازدهم&tags[]=عربی')) }}">
+                                                    <a class="m-menu__link" href="{{ urldecode(route('content.index', 'tags[]=نظام_آموزشی_جدید&tags[]=یازدهم&tags[]=عربی')) }}">
                                                         <i class="m-menu__link-icon fa fa-book-open"><span></span></i>
                                                         <span class="m-menu__link-text">
                                                             عربی عمومی
@@ -310,7 +310,7 @@
                                                     </a>
                                                 </li>
                                                 <li class="m-menu__item " aria-haspopup="true">
-                                                    <a target="_blank" class="m-menu__link" href="{{ urldecode(route('content.index', 'tags[]=نظام_آموزشی_جدید&tags[]=یازدهم&tags[]=زبان_و_ادبیات_فارسی')) }}">
+                                                    <a class="m-menu__link" href="{{ urldecode(route('content.index', 'tags[]=نظام_آموزشی_جدید&tags[]=یازدهم&tags[]=زبان_و_ادبیات_فارسی')) }}">
                                                         <i class="m-menu__link-icon fa fa-book-open"><span></span></i>
                                                         <span class="m-menu__link-text">
                                                             فارسی
@@ -318,7 +318,7 @@
                                                     </a>
                                                 </li>
                                                 <li class="m-menu__item " aria-haspopup="true">
-                                                    <a target="_blank" class="m-menu__link" href="{{ urldecode(route('content.index', 'tags[]=نظام_آموزشی_جدید&tags[]=یازدهم&tags[]=دین_و_زندگی')) }}">
+                                                    <a class="m-menu__link" href="{{ urldecode(route('content.index', 'tags[]=نظام_آموزشی_جدید&tags[]=یازدهم&tags[]=دین_و_زندگی')) }}">
                                                         <i class="m-menu__link-icon fa fa-book-open"><span></span></i>
                                                         <span class="m-menu__link-text">
                                                             دین و زندگی
@@ -356,7 +356,7 @@
                                             <span class="m-menu__arrow"></span>
                                             <ul class="m-menu__subnav">
                                                 <li class="m-menu__item " aria-haspopup="true">
-                                                    <a target="_blank" class="m-menu__link" href="{{ urldecode(route('content.index', 'tags[]=نظام_آموزشی_جدید&tags[]=دهم&tags[]=رشته_ریاضی&tags[]=رشته_تجربی&tags[]=شیمی')) }}">
+                                                    <a class="m-menu__link" href="{{ urldecode(route('content.index', 'tags[]=نظام_آموزشی_جدید&tags[]=دهم&tags[]=رشته_ریاضی&tags[]=رشته_تجربی&tags[]=شیمی')) }}">
                                                         <i class="m-menu__link-icon fa fa-book-open"><span></span></i>
                                                         <span class="m-menu__link-text">
                                                             شیمی
@@ -364,7 +364,7 @@
                                                     </a>
                                                 </li>
                                                 <li class="m-menu__item " aria-haspopup="true">
-                                                    <a target="_blank" class="m-menu__link" href="{{ urldecode(route('content.index', 'tags[]=نظام_آموزشی_جدید&tags[]=دهم&tags[]=رشته_ریاضی&tags[]=رشته_تجربی&tags[]=فیزیک')) }}">
+                                                    <a class="m-menu__link" href="{{ urldecode(route('content.index', 'tags[]=نظام_آموزشی_جدید&tags[]=دهم&tags[]=رشته_ریاضی&tags[]=رشته_تجربی&tags[]=فیزیک')) }}">
                                                         <i class="m-menu__link-icon fa fa-book-open"><span></span></i>
                                                         <span class="m-menu__link-text">
                                                             فیزیک
@@ -372,7 +372,7 @@
                                                     </a>
                                                 </li>
                                                 <li class="m-menu__item " aria-haspopup="true">
-                                                    <a target="_blank" class="m-menu__link" href="{{ urldecode(route('content.index', 'tags[]=نظام_آموزشی_جدید&tags[]=دهم&tags[]=رشته_تجربی&tags[]=زیست_شناسی')) }}">
+                                                    <a class="m-menu__link" href="{{ urldecode(route('content.index', 'tags[]=نظام_آموزشی_جدید&tags[]=دهم&tags[]=رشته_تجربی&tags[]=زیست_شناسی')) }}">
                                                         <i class="m-menu__link-icon fa fa-book-open"><span></span></i>
                                                         <span class="m-menu__link-text">
                                                             زیست شناسی
@@ -380,7 +380,7 @@
                                                     </a>
                                                 </li>
                                                 <li class="m-menu__item " aria-haspopup="true">
-                                                    <a target="_blank" class="m-menu__link" href="{{ urldecode(route('content.index', 'tags[]=نظام_آموزشی_جدید&tags[]=دهم&tags[]=رشته_تجربی&tags[]=رشته_ریاضی&tags[]=هندسه&tags[]=هندسه_پایه')) }}">
+                                                    <a class="m-menu__link" href="{{ urldecode(route('content.index', 'tags[]=نظام_آموزشی_جدید&tags[]=دهم&tags[]=رشته_تجربی&tags[]=رشته_ریاضی&tags[]=هندسه&tags[]=هندسه_پایه')) }}">
                                                         <i class="m-menu__link-icon fa fa-book-open"><span></span></i>
                                                         <span class="m-menu__link-text">
                                                             هندسه
@@ -388,7 +388,7 @@
                                                     </a>
                                                 </li>
                                                 <li class="m-menu__item " aria-haspopup="true">
-                                                    <a target="_blank" class="m-menu__link" href="{{ urldecode(route('content.index', 'tags[]=نظام_آموزشی_جدید&tags[]=دهم&tags[]=رشته_ریاضی&tags[]=رشته_تجربی&tags[]=ریاضی_پایه')) }}">
+                                                    <a class="m-menu__link" href="{{ urldecode(route('content.index', 'tags[]=نظام_آموزشی_جدید&tags[]=دهم&tags[]=رشته_ریاضی&tags[]=رشته_تجربی&tags[]=ریاضی_پایه')) }}">
                                                         <i class="m-menu__link-icon fa fa-book-open"><span></span></i>
                                                         <span class="m-menu__link-text">
                                                             ریاضی
@@ -411,7 +411,7 @@
                                             <span class="m-menu__arrow"></span>
                                             <ul class="m-menu__subnav">
                                                 <li class="m-menu__item " aria-haspopup="true">
-                                                    <a target="_blank" class="m-menu__link" href="{{ urldecode(route('content.index', 'tags[]=نظام_آموزشی_جدید&tags[]=دهم&tags[]=رشته_انسانی&tags[]=ریاضی_و_آمار')) }}">
+                                                    <a class="m-menu__link" href="{{ urldecode(route('content.index', 'tags[]=نظام_آموزشی_جدید&tags[]=دهم&tags[]=رشته_انسانی&tags[]=ریاضی_و_آمار')) }}">
                                                         <i class="m-menu__link-icon fa fa-book-open"><span></span></i>
                                                         <span class="m-menu__link-text">
                                                             ریاضی و آمار
@@ -434,7 +434,7 @@
                                             <span class="m-menu__arrow"></span>
                                             <ul class="m-menu__subnav">
                                                 <li class="m-menu__item " aria-haspopup="true">
-                                                    <a target="_blank" class="m-menu__link" href="{{ urldecode(route('content.index', 'tags[]=نظام_آموزشی_جدید&tags[]=دهم&tags[]=زبان_انگلیسی')) }}">
+                                                    <a class="m-menu__link" href="{{ urldecode(route('content.index', 'tags[]=نظام_آموزشی_جدید&tags[]=دهم&tags[]=زبان_انگلیسی')) }}">
                                                         <i class="m-menu__link-icon fa fa-book-open"><span></span></i>
                                                         <span class="m-menu__link-text">
                                                             انگلیسی
@@ -442,7 +442,7 @@
                                                     </a>
                                                 </li>
                                                 <li class="m-menu__item " aria-haspopup="true">
-                                                    <a target="_blank" class="m-menu__link" href="{{ urldecode(route('content.index', 'tags[]=نظام_آموزشی_جدید&tags[]=دهم&tags[]=عربی')) }}">
+                                                    <a class="m-menu__link" href="{{ urldecode(route('content.index', 'tags[]=نظام_آموزشی_جدید&tags[]=دهم&tags[]=عربی')) }}">
                                                         <i class="m-menu__link-icon fa fa-book-open"><span></span></i>
                                                         <span class="m-menu__link-text">
                                                             عربی عمومی
@@ -450,7 +450,7 @@
                                                     </a>
                                                 </li>
                                                 <li class="m-menu__item " aria-haspopup="true">
-                                                    <a target="_blank" class="m-menu__link" href="{{ urldecode(route('content.index', 'tags[]=نظام_آموزشی_جدید&tags[]=دهم&tags[]=زبان_و_ادبیات_فارسی')) }}">
+                                                    <a class="m-menu__link" href="{{ urldecode(route('content.index', 'tags[]=نظام_آموزشی_جدید&tags[]=دهم&tags[]=زبان_و_ادبیات_فارسی')) }}">
                                                         <i class="m-menu__link-icon fa fa-book-open"><span></span></i>
                                                         <span class="m-menu__link-text">
                                                             فارسی
@@ -458,7 +458,7 @@
                                                     </a>
                                                 </li>
                                                 <li class="m-menu__item " aria-haspopup="true">
-                                                    <a target="_blank" class="m-menu__link" href="{{ urldecode(route('content.index', 'tags[]=نظام_آموزشی_جدید&tags[]=دهم&tags[]=دین_و_زندگی')) }}">
+                                                    <a class="m-menu__link" href="{{ urldecode(route('content.index', 'tags[]=نظام_آموزشی_جدید&tags[]=دهم&tags[]=دین_و_زندگی')) }}">
                                                         <i class="m-menu__link-icon fa fa-book-open"><span></span></i>
                                                         <span class="m-menu__link-text">
                                                             دین و زندگی
@@ -496,7 +496,7 @@
                                             <span class="m-menu__arrow"></span>
                                             <ul class="m-menu__subnav">
                                                 <li class="m-menu__item " aria-haspopup="true">
-                                                    <a target="_blank" class="m-menu__link" href="{{ urldecode(route('content.index', 'tags[]=نظام_آموزشی_قدیم&tags[]=کنکور&tags[]=رشته_ریاضی&tags[]=رشته_تجربی&tags[]=شیمی')) }}">
+                                                    <a class="m-menu__link" href="{{ urldecode(route('content.index', 'tags[]=نظام_آموزشی_قدیم&tags[]=کنکور&tags[]=رشته_ریاضی&tags[]=رشته_تجربی&tags[]=شیمی')) }}">
                                                         <i class="m-menu__link-icon fa fa-book-open"><span></span></i>
                                                         <span class="m-menu__link-text">
                                                             شیمی
@@ -504,7 +504,7 @@
                                                     </a>
                                                 </li>
                                                 <li class="m-menu__item " aria-haspopup="true">
-                                                    <a target="_blank" class="m-menu__link" href="{{ urldecode(route('content.index', 'tags[]=نظام_آموزشی_قدیم&tags[]=کنکور&tags[]=رشته_ریاضی&tags[]=رشته_تجربی&tags[]=فیزیک')) }}">
+                                                    <a class="m-menu__link" href="{{ urldecode(route('content.index', 'tags[]=نظام_آموزشی_قدیم&tags[]=کنکور&tags[]=رشته_ریاضی&tags[]=رشته_تجربی&tags[]=فیزیک')) }}">
                                                         <i class="m-menu__link-icon fa fa-book-open"><span></span></i>
                                                         <span class="m-menu__link-text">
                                                             فیزیک
@@ -512,7 +512,7 @@
                                                     </a>
                                                 </li>
                                                 <li class="m-menu__item " aria-haspopup="true">
-                                                    <a target="_blank" class="m-menu__link" href="{{ urldecode(route('content.index', 'tags[]=نظام_آموزشی_قدیم&tags[]=کنکور&tags[]=رشته_تجربی&tags[]=ریاضی_تجربی&tags[]=ریاضی_پایه')) }}">
+                                                    <a class="m-menu__link" href="{{ urldecode(route('content.index', 'tags[]=نظام_آموزشی_قدیم&tags[]=کنکور&tags[]=رشته_تجربی&tags[]=ریاضی_تجربی&tags[]=ریاضی_پایه')) }}">
                                                         <i class="m-menu__link-icon fa fa-book-open"><span></span></i>
                                                         <span class="m-menu__link-text">
                                                             ریاضیات تجربی
@@ -520,7 +520,7 @@
                                                     </a>
                                                 </li>
                                                 <li class="m-menu__item " aria-haspopup="true">
-                                                    <a target="_blank" class="m-menu__link" href="{{ urldecode(route('content.index', 'tags[]=نظام_آموزشی_قدیم&tags[]=کنکور&tags[]=رشته_تجربی&tags[]=زیست_شناسی')) }}">
+                                                    <a class="m-menu__link" href="{{ urldecode(route('content.index', 'tags[]=نظام_آموزشی_قدیم&tags[]=کنکور&tags[]=رشته_تجربی&tags[]=زیست_شناسی')) }}">
                                                         <i class="m-menu__link-icon fa fa-book-open"><span></span></i>
                                                         <span class="m-menu__link-text">
                                                             زیست شناسی
@@ -528,7 +528,7 @@
                                                     </a>
                                                 </li>
                                                 <li class="m-menu__item " aria-haspopup="true">
-                                                    <a target="_blank" class="m-menu__link" href="{{ urldecode(route('content.index', 'tags[]=نظام_آموزشی_قدیم&tags[]=کنکور&tags[]=رشته_ریاضی&tags[]=رشته_تجربی&tags[]=هندسه_پایه&tags[]=هندسه&tags[]=تحلیلی')) }}">
+                                                    <a class="m-menu__link" href="{{ urldecode(route('content.index', 'tags[]=نظام_آموزشی_قدیم&tags[]=کنکور&tags[]=رشته_ریاضی&tags[]=رشته_تجربی&tags[]=هندسه_پایه&tags[]=هندسه&tags[]=تحلیلی')) }}">
                                                         <i class="m-menu__link-icon fa fa-book-open"><span></span></i>
                                                         <span class="m-menu__link-text">
                                                             هندسه تحلیلی و هندسه پایه
@@ -536,7 +536,7 @@
                                                     </a>
                                                 </li>
                                                 <li class="m-menu__item " aria-haspopup="true">
-                                                    <a target="_blank" class="m-menu__link" href="{{ urldecode(route('content.index', 'tags[]=نظام_آموزشی_قدیم&tags[]=کنکور&tags[]=رشته_ریاضی&tags[]=رشته_تجربی&tags[]=گسسته&tags[]=آمار_و_مدلسازی&tags[]=جبر_و_احتمال')) }}">
+                                                    <a class="m-menu__link" href="{{ urldecode(route('content.index', 'tags[]=نظام_آموزشی_قدیم&tags[]=کنکور&tags[]=رشته_ریاضی&tags[]=رشته_تجربی&tags[]=گسسته&tags[]=آمار_و_مدلسازی&tags[]=جبر_و_احتمال')) }}">
                                                         <i class="m-menu__link-icon fa fa-book-open"><span></span></i>
                                                         <span class="m-menu__link-text">
                                                             ریاضیات گسسته و آمار و احتمال
@@ -544,7 +544,7 @@
                                                     </a>
                                                 </li>
                                                 <li class="m-menu__item " aria-haspopup="true">
-                                                    <a target="_blank" class="m-menu__link" href="{{ urldecode(route('content.index', 'tags[]=نظام_آموزشی_قدیم&tags[]=کنکور&tags[]=رشته_ریاضی&tags[]=رشته_تجربی&tags[]=حسابان&tags[]=دیفرانسیل&tags[]=ریاضی_پایه')) }}">
+                                                    <a class="m-menu__link" href="{{ urldecode(route('content.index', 'tags[]=نظام_آموزشی_قدیم&tags[]=کنکور&tags[]=رشته_ریاضی&tags[]=رشته_تجربی&tags[]=حسابان&tags[]=دیفرانسیل&tags[]=ریاضی_پایه')) }}">
                                                         <i class="m-menu__link-icon fa fa-book-open"><span></span></i>
                                                         <span class="m-menu__link-text">
                                                             دیفرانسیل، حسابان و ریاضی پایه
@@ -567,7 +567,7 @@
                                             <span class="m-menu__arrow"></span>
                                             <ul class="m-menu__subnav">
                                                 <li class="m-menu__item " aria-haspopup="true">
-                                                    <a target="_blank" class="m-menu__link" href="{{ urldecode(route('content.index', 'tags[]=نظام_آموزشی_قدیم&tags[]=کنکور&tags[]=رشته_انسانی&tags[]=منطق')) }}">
+                                                    <a class="m-menu__link" href="{{ urldecode(route('content.index', 'tags[]=نظام_آموزشی_قدیم&tags[]=کنکور&tags[]=رشته_انسانی&tags[]=منطق')) }}">
                                                         <i class="m-menu__link-icon fa fa-book-open"><span></span></i>
                                                         <span class="m-menu__link-text">
                                                             فلسفه و منطق
@@ -575,7 +575,7 @@
                                                     </a>
                                                 </li>
                                                 <li class="m-menu__item " aria-haspopup="true">
-                                                    <a target="_blank" class="m-menu__link" href="{{ urldecode(route('content.index', 'tags[]=نظام_آموزشی_قدیم&tags[]=کنکور&tags[]=رشته_انسانی&tags[]=ریاضی_انسانی')) }}">
+                                                    <a class="m-menu__link" href="{{ urldecode(route('content.index', 'tags[]=نظام_آموزشی_قدیم&tags[]=کنکور&tags[]=رشته_انسانی&tags[]=ریاضی_انسانی')) }}">
                                                         <i class="m-menu__link-icon fa fa-book-open"><span></span></i>
                                                         <span class="m-menu__link-text">
                                                             ریاضی
@@ -598,7 +598,7 @@
                                             <span class="m-menu__arrow"></span>
                                             <ul class="m-menu__subnav">
                                                 <li class="m-menu__item " aria-haspopup="true">
-                                                    <a target="_blank" class="m-menu__link" href="{{ urldecode(route('content.index', 'tags[]=نظام_آموزشی_قدیم&tags[]=کنکور&tags[]=زبان_انگلیسی')) }}">
+                                                    <a class="m-menu__link" href="{{ urldecode(route('content.index', 'tags[]=نظام_آموزشی_قدیم&tags[]=کنکور&tags[]=زبان_انگلیسی')) }}">
                                                         <i class="m-menu__link-icon fa fa-book-open"><span></span></i>
                                                         <span class="m-menu__link-text">
                                                             انگلیسی
@@ -606,7 +606,7 @@
                                                     </a>
                                                 </li>
                                                 <li class="m-menu__item " aria-haspopup="true">
-                                                    <a target="_blank" class="m-menu__link" href="{{ urldecode(route('content.index', 'tags[]=نظام_آموزشی_قدیم&tags[]=کنکور&tags[]=عربی')) }}">
+                                                    <a class="m-menu__link" href="{{ urldecode(route('content.index', 'tags[]=نظام_آموزشی_قدیم&tags[]=کنکور&tags[]=عربی')) }}">
                                                         <i class="m-menu__link-icon fa fa-book-open"><span></span></i>
                                                         <span class="m-menu__link-text">
                                                             عربی عمومی
@@ -614,7 +614,7 @@
                                                     </a>
                                                 </li>
                                                 <li class="m-menu__item " aria-haspopup="true">
-                                                    <a target="_blank" class="m-menu__link" href="{{ urldecode(route('content.index', 'tags[]=نظام_آموزشی_قدیم&tags[]=کنکور&tags[]=زبان_و_ادبیات_فارسی')) }}">
+                                                    <a class="m-menu__link" href="{{ urldecode(route('content.index', 'tags[]=نظام_آموزشی_قدیم&tags[]=کنکور&tags[]=زبان_و_ادبیات_فارسی')) }}">
                                                         <i class="m-menu__link-icon fa fa-book-open"><span></span></i>
                                                         <span class="m-menu__link-text">
                                                             زبان و ادبیات فارسی
@@ -622,7 +622,7 @@
                                                     </a>
                                                 </li>
                                                 <li class="m-menu__item " aria-haspopup="true">
-                                                    <a target="_blank" class="m-menu__link" href="{{ urldecode(route('content.index', 'tags[]=نظام_آموزشی_قدیم&tags[]=کنکور&tags[]=دین_و_زندگی')) }}">
+                                                    <a class="m-menu__link" href="{{ urldecode(route('content.index', 'tags[]=نظام_آموزشی_قدیم&tags[]=کنکور&tags[]=دین_و_زندگی')) }}">
                                                         <i class="m-menu__link-icon fa fa-book-open"><span></span></i>
                                                         <span class="m-menu__link-text">
                                                             دین و زندگی
@@ -651,7 +651,7 @@
                     <span class="m-menu__arrow"></span>
                     <ul class="m-menu__subnav">
                         <li class="m-menu__item " aria-haspopup="true">
-                            <a target="_blank" class="m-menu__link" href="{{ route('web.landing.10') }}">
+                            <a class="m-menu__link" href="{{ route('web.landing.10') }}">
                                 <i class="m-menu__link-icon fa fa-file-video"><span></span></i>
                                 <span class="m-menu__link-text">
                                     گدار
@@ -659,7 +659,7 @@
                             </a>
                         </li>
                         <li class="m-menu__item " aria-haspopup="true">
-                            <a target="_blank" class="m-menu__link" href="{{route('product.show' , 347)}}">
+                            <a class="m-menu__link" href="{{route('product.show' , 347)}}">
                                 <i class="m-menu__link-icon fa fa-file-video"><span></span></i>
                                 <span class="m-menu__link-text">
                                     راه ابریشم
@@ -667,7 +667,7 @@
                             </a>
                         </li>
                         <li class="m-menu__item " aria-haspopup="true">
-                            <a target="_blank" class="m-menu__link" href="{{ route('web.landing.8') }}">
+                            <a class="m-menu__link" href="{{ route('web.landing.8') }}">
                                 <i class="m-menu__link-icon fa fa-file-video"><span></span></i>
                                 <span class="m-menu__link-text">
                                     طلایی
@@ -675,7 +675,7 @@
                             </a>
                         </li>
                         <li class="m-menu__item " aria-haspopup="true">
-                            <a target="_blank" class="m-menu__link" href="{{ route('web.landing.9') }}">
+                            <a class="m-menu__link" href="{{ route('web.landing.9') }}">
                                 <i class="m-menu__link-icon fa fa-file-video"><span></span></i>
                                 <span class="m-menu__link-text">
                                     تفتان
@@ -683,7 +683,7 @@
                             </a>
                         </li>
                         <li class="m-menu__item " aria-haspopup="true">
-                            <a target="_blank" class="m-menu__link" href="{{ route('web.landing.10') }}">
+                            <a class="m-menu__link" href="{{ route('web.landing.5') }}">
                                 <i class="m-menu__link-icon fa fa-file-video"><span></span></i>
                                 <span class="m-menu__link-text">
                                     همایش های نظام قدیم

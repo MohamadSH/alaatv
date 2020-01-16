@@ -1,11 +1,11 @@
 
 @-webkit-keyframes flow {
-    0% { left:0px;opacity: 0;}
+    0% { left:0;opacity: 0;}
     50% {left:20px;opacity: 0.3;}
     100%{ left:100px;opacity: 0;}
 }
 @keyframes flow {
-    0% { left:0px;opacity: 0;}
+    0% { left:0;opacity: 0;}
     50% {left:20px;opacity: 0.3;}
     100%{ left:100px;opacity: 0;}
 }
@@ -16,8 +16,7 @@
     height:100%;
     z-index:999;
     position:absolute;
-    -webkit-animation:
-            flow 1.5s linear infinite;
+    -webkit-animation: flow 1.5s linear infinite;
     -moz-animation: flow 1.5s linear infinite;
     -webkit-transform: skew(-65deg);
     -moz-transform: skew(-65deg);
@@ -67,7 +66,7 @@
 }
 .ribbon > span::before {
     content: "";
-    position: absolute; left: 0px; top: 100%;
+    position: absolute; left: 0; top: 100%;
     z-index: -1;
     border-left: 3px solid #ac0001;
     border-right: 3px solid transparent;
@@ -76,7 +75,7 @@
 }
 .ribbon > span::after {
     content: "";
-    position: absolute; right: 0px; top: 100%;
+    position: absolute; right: 0; top: 100%;
     z-index: -1;
     border-left: 3px solid transparent;
     border-right: 3px solid #ac0001;

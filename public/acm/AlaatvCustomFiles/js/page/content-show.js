@@ -91,7 +91,7 @@ var RelatedItems = function() {
     }
 
     function getOtherItemObject() {
-        return $('.RelatedItems .ScrollCarousel-Items .item.a--block-type-content img');
+        return $('.RelatedItems .ScrollCarousel-Items .item:not(.a--block-type-product2) .a--block-imageWrapper .a--block-imageWrapper-image img');
     }
 
     function getProductCount() {
@@ -107,7 +107,11 @@ var RelatedItems = function() {
     }
 
     function getOuterSpace($object) {
-        return $object.outerWidth(true) - $object.width();
+        if ($object.length > 0) {
+            return $object.outerWidth(true) - $object.width();
+        } else {
+            return 0;
+        }
     }
 
     function responsiveConfig() {
@@ -184,24 +188,11 @@ var RelatedItems = function() {
             os = getOuterSpace(getOtherItemObject().parents('.item')),
             ps = getOuterSpace(getProductItemObject().parents('.item'));
 
-        console.log('pc', pc);
-        console.log('oc', oc);
-
-        return ((w-Math.floor(pc)*ps-Math.floor(oc)*os)/(pc+(oc/alpha)));
+        return (( w - (Math.floor(pc)*ps) - (Math.floor(oc)*os) ) / (pc+(oc/alpha)));
     }
 
     function calcOtherItemWidth(a) {
         return a/alpha;
-    }
-
-    function testAction() {
-        $('.RelatedItems .ScrollCarousel-Items .item').removeClass('a--block-type-product2').addClass('a--block-type-content');
-        $('.RelatedItems .ScrollCarousel-Items .item:first-child').removeClass('a--block-type-content').addClass('a--block-type-product2');
-        $('.RelatedItems .ScrollCarousel-Items .item:first-child').find('.a--imageWithCaption img')
-            .attr('src', '')
-            .attr('data-src', 'https://cdn.alaatv.com/upload/images/product/fgggggggggg_20191128145442.jpg')
-            .attr('width', '960')
-            .attr('height', '960')
     }
 
     function refreshImages() {
@@ -212,8 +203,6 @@ var RelatedItems = function() {
     }
 
     function setRelatedItemsWidth() {
-        testAction();
-
         var w = getTotlalWidth(),
             a = calcProductItemWidth(),
             pw = (a/w)*100,
@@ -228,8 +217,13 @@ var RelatedItems = function() {
         }, 500);
     }
 
+    function init() {
+        setRelatedItemsWidth();
+        $('.RelatedItems .SortItemsList').Sort({order:'shu'});
+    }
+
     return {
-        setRelatedItemsWidth: setRelatedItemsWidth,
+        init: init,
     };
 }();
 
@@ -237,7 +231,7 @@ var SameHeight = function() {
 
     function calcSetContentsList() {
         $('#playListScroller').css({'height': 0});
-        return $('.top-right-section .m-portlet').outerHeight(true) - $('.top-left-section .m-portlet').outerHeight(true) - $('.top-left-section .top-left-section-ad').outerHeight(true);
+        return $('.top-right-section').outerHeight(true) - $('.top-left-section .m-portlet').outerHeight(true) - $('.top-left-section .top-left-section-ad').outerHeight(true);
     }
 
     function setContentsList() {
@@ -262,150 +256,163 @@ var SameHeight = function() {
     }
 }();
 
-jQuery(document).ready( function() {
+var InitPage = function() {
 
-    // RelatedItems.setRelatedItemsWidth();
-
-    SnippetContentShow.init(related_videos);
-    $('#owlCarouselParentProducts').OwlCarouselType2({
-        OwlCarousel: {
-            center: false,
-            loop: false,
-            btnSwfitchEvent: function() {
-                imageObserver.observe();
-                gtmEecProductObserver.observe();
-            }
-        },
-        grid: {
-            btnSwfitchEvent: function() {
-                imageObserver.observe();
-                gtmEecProductObserver.observe();
-            }
-        },
-    });
-    $('.contentBlock').OwlCarouselType2({
-        OwlCarousel: {
-            center: false,
-            loop: false,
-            responsive: {
-                0: {
-                    items: 1
-                },
-                400: {
-                    items: 2
-                },
-                600: {
-                    items: 3
-                },
-                800: {
-                    items: 4
-                },
-                1000: {
-                    items: 5
+    function initOwlCarouselType2() {
+        $('#owlCarouselParentProducts').OwlCarouselType2({
+            OwlCarousel: {
+                center: false,
+                loop: false,
+                btnSwfitchEvent: function() {
+                    imageObserver.observe();
+                    gtmEecProductObserver.observe();
                 }
             },
-            btnSwfitchEvent: function() {
-                imageObserver.observe();
-                gtmEecProductObserver.observe();
-            }
-        },
-        grid: {
-            columnClass: 'col-12 col-sm-6 col-md-3 gridItem',
-            btnSwfitchEvent: function() {
-                imageObserver.observe();
-                gtmEecProductObserver.observe();
-            }
-        },
-        defaultView: 'OwlCarousel', // OwlCarousel or grid
-        childCountHideOwlCarousel: 4
-    });
-    $(document).on('click', '.scrollToOwlCarouselParentProducts', function(){
-        $("#owlCarouselParentProducts").AnimateScrollTo();
-        // $([document.documentElement, document.body]).animate({
-        //     scrollTop: ($("#owlCarouselParentProducts").offset().top - 80)
-        // }, 500);
-    });
-
-    $(document).on('click', '.btnAddToCart', function () {
-        mApp.block('.btnAddToCart', {
-            type: "loader",
-            state: "info",
+            grid: {
+                btnSwfitchEvent: function() {
+                    imageObserver.observe();
+                    gtmEecProductObserver.observe();
+                }
+            },
         });
 
-        let productId = $(this).data('pid');
-
-        let selectedProductObject = {
-            id:       $(this).data('gtm-eec-product-id').toString(),      // (String) The SKU of the product. Example: 'P12345'
-            name:     $(this).data('gtm-eec-product-name').toString(),    // (String) The name of the product. Example: 'T-Shirt'
-            price:    $(this).data('gtm-eec-product-price').toString(),
-            brand:    $(this).data('gtm-eec-product-brand').toString(),   // (String) The brand name of the product. Example: 'NIKE'
-            category: $(this).data('gtm-eec-product-category').toString(),// (String) Product category of the item. Can have maximum five levels of hierarchy. Example: 'clothes/shirts/t-shirts'
-            variant:  $(this).data('gtm-eec-product-variant').toString(), // (String) What variant of the main product this is. Example: 'Large'
-            quantity: $(this).data('gtm-eec-product-quantity')
-        };
-        GAEE.productAddToCart('sampleVideo.addToCart', selectedProductObject);
-        if (GAEE.reportGtmEecOnConsole()) {
-            console.log('product.addToCart', selectedProductObject);
-        }
-
-        if ($('#js-var-userId').val()) {
-
-            $.ajax({
-                type: 'POST',
-                url: '/orderproduct',
-                data: {
-                    product_id: productId,
-                    products: [],
-                    attribute: [],
-                    extraAttribute: []
-                },
-                statusCode: {
-                    200: function (response) {
-
-                        let successMessage = 'محصول مورد نظر به سبد خرید اضافه شد.';
-
-                        toastr.success(successMessage);
-
-                        window.location.replace('/checkout/review');
-
+        $('.contentBlock').OwlCarouselType2({
+            OwlCarousel: {
+                center: false,
+                loop: false,
+                responsive: {
+                    0: {
+                        items: 1
                     },
-                    500: function (response) {
-
-                        toastr.error('خطای سیستمی رخ داده است.');
-
-                        ProductShowPage.enableBtnAddToCart();
+                    400: {
+                        items: 2
                     },
-                    503: function (response) {
-                        toastr.error('خطای پایگاه داده!');
-                        ProductShowPage.enableBtnAddToCart();
+                    600: {
+                        items: 3
+                    },
+                    800: {
+                        items: 4
+                    },
+                    1000: {
+                        items: 5
                     }
+                },
+                btnSwfitchEvent: function() {
+                    imageObserver.observe();
+                    gtmEecProductObserver.observe();
                 }
+            },
+            grid: {
+                columnClass: 'col-12 col-sm-6 col-md-3 gridItem',
+                btnSwfitchEvent: function() {
+                    imageObserver.observe();
+                    gtmEecProductObserver.observe();
+                }
+            },
+            defaultView: 'OwlCarousel', // OwlCarousel or grid
+            childCountHideOwlCarousel: 4
+        });
+    }
+
+    function addEvents() {
+        $(document).on('click', '.scrollToOwlCarouselParentProducts', function(){
+            // $("#owlCarouselParentProducts").AnimateScrollTo();
+            $('.downloadLinkColumn').AnimateScrollTo();
+        });
+        $(document).on('click', '.btnAddToCart', function () {
+            mApp.block('.btnAddToCart', {
+                type: "loader",
+                state: "info",
             });
 
-        } else {
+            let productId = $(this).data('pid');
 
-            let data = {
-                'product_id': productId,
-                'attribute': [],
-                'extraAttribute': [],
-                'products': [],
+            let selectedProductObject = {
+                id:       $(this).data('gtm-eec-product-id').toString(),      // (String) The SKU of the product. Example: 'P12345'
+                name:     $(this).data('gtm-eec-product-name').toString(),    // (String) The name of the product. Example: 'T-Shirt'
+                price:    $(this).data('gtm-eec-product-price').toString(),
+                brand:    $(this).data('gtm-eec-product-brand').toString(),   // (String) The brand name of the product. Example: 'NIKE'
+                category: $(this).data('gtm-eec-product-category').toString(),// (String) Product category of the item. Can have maximum five levels of hierarchy. Example: 'clothes/shirts/t-shirts'
+                variant:  $(this).data('gtm-eec-product-variant').toString(), // (String) What variant of the main product this is. Example: 'Large'
+                quantity: $(this).data('gtm-eec-product-quantity')
             };
+            GAEE.productAddToCart('sampleVideo.addToCart', selectedProductObject);
+            if (GAEE.reportGtmEecOnConsole()) {
+                console.log('product.addToCart', selectedProductObject);
+            }
 
-            UesrCart.addToCartInCookie(data);
+            if ($('#js-var-userId').val()) {
 
-            let successMessage = 'محصول مورد نظر به سبد خرید اضافه شد.';
+                $.ajax({
+                    type: 'POST',
+                    url: '/orderproduct',
+                    data: {
+                        product_id: productId,
+                        products: [],
+                        attribute: [],
+                        extraAttribute: []
+                    },
+                    statusCode: {
+                        200: function (response) {
+
+                            let successMessage = 'محصول مورد نظر به سبد خرید اضافه شد.';
+
+                            toastr.success(successMessage);
+
+                            window.location.replace('/checkout/review');
+
+                        },
+                        500: function (response) {
+
+                            toastr.error('خطای سیستمی رخ داده است.');
+
+                            ProductShowPage.enableBtnAddToCart();
+                        },
+                        503: function (response) {
+                            toastr.error('خطای پایگاه داده!');
+                            ProductShowPage.enableBtnAddToCart();
+                        }
+                    }
+                });
+
+            } else {
+
+                let data = {
+                    'product_id': productId,
+                    'attribute': [],
+                    'extraAttribute': [],
+                    'products': [],
+                };
+
+                UesrCart.addToCartInCookie(data);
+
+                let successMessage = 'محصول مورد نظر به سبد خرید اضافه شد.';
 
 
-            toastr.success(successMessage);
+                toastr.success(successMessage);
 
-            setTimeout(function () {
-                window.location.replace('/checkout/review');
-            }, 2000);
-        }
+                setTimeout(function () {
+                    window.location.replace('/checkout/review');
+                }, 2000);
+            }
 
-    });
+        });
+    }
 
+    function init() {
+        RelatedItems.init();
+        SnippetContentShow.init(related_videos);
+        SameHeight.init();
+        initOwlCarouselType2();
+        addEvents();
+    }
 
-    SameHeight.init();
+    return {
+        init: init
+    };
 
+}();
+
+jQuery(document).ready( function() {
+    InitPage.init();
 });

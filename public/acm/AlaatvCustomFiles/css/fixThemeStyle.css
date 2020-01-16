@@ -47,6 +47,16 @@ select.form-control {
     max-width: 100%;
 }
 
+.m-alert .m-alert__icon,
+.m-alert .m-alert__text {
+    display: inline-block;
+    margin-left: 5px;
+}
+
+.m-alert .m-alert__actions {
+    float: left;
+}
+
 .alert.m-alert--icon.m-alert--outline.m-alert--icon-solid .m-alert__icon span {
     border: 0;
     border-right: 6px solid #000;
