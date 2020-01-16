@@ -388,19 +388,21 @@
 
             @include('partials.ads.list', ['id'=>'contentShowPage-rightSide-0'])
 
-            @include('partials.widgets.ScollCarousel.body', [
-                'title'=> 'پیشنهاد ما',
-                'customClass'=> 'RelatedItems',
-                'squareSing'=> 'recomender',
-                'puls'=> true,
-                'sort'=> true,
-                'scrollCarouselItems'=> view('content.partials.recommendedItemRecognizer', [
-                    'recommendedItems'=>$recommendedItems,
-                    'gtmEecList'=>'پیشنهاد ما',
+            @if(count($recommendedItems) > 0)
+                @include('partials.widgets.ScollCarousel.body', [
+                    'title'=> 'پیشنهاد ما',
+                    'customClass'=> 'RelatedItems',
+                    'squareSing'=> 'recomender',
+                    'puls'=> true,
                     'sort'=> true,
-                    'responsiveClass'=>''
-                ]),
-            ])
+                    'scrollCarouselItems'=> view('content.partials.recommendedItemRecognizer', [
+                        'recommendedItems'=>$recommendedItems,
+                        'gtmEecList'=>'پیشنهاد ما',
+                        'sort'=> true,
+                        'responsiveClass'=>''
+                    ]),
+                ])
+            @endif
 
         </div>
 
