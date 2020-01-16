@@ -10,9 +10,13 @@ class Mix {
 
     static getBaseCss() {
         return [
+
             'public/acm/webFonts/IRANSans/css/fontiran.css',
             'public/assets/vendors/base/vendors.bundle.rtl.css',
             'public/assets/demo/demo12/base/style.bundle.rtl.css',
+
+            'node_modules/toastr/build/toastr.css',
+
             'public/acm/custom-css-app.css',
 
             'public/acm/AlaatvCustomFiles/components/AjaxLogin/style.css',
@@ -32,16 +36,17 @@ class Mix {
         return [
             'node_modules/intersection-observer/intersection-observer.js',
             'node_modules/lozad/dist/lozad.js',
+
             'public/assets/vendors/base/vendors.bundle.js',
             'public/assets/demo/demo12/base/scripts.bundle.js',
+
+            'node_modules/toastr/build/toastr.min.js',
             'node_modules/block-ui/jquery.blockUI.js',
             'node_modules/persianjs/persian.min.js',
 
             // 'node_modules/firebase/firebase.js',
-            // 'node_modules/firebase/firebase-analytics.js',
-            // 'node_modules/firebase/firebase-auth.js',
-            // 'node_modules/firebase/firebase-firestore.js',
             // 'node_modules/firebase/firebase-messaging.js',
+            // 'public/acm/AlaatvCustomFiles/js/GoogleFirebase.js',
 
 
             'public/acm/AlaatvCustomFiles/js/mLayout.js',// quick search (ajax) in header
@@ -50,7 +55,6 @@ class Mix {
             'public/acm/AlaatvCustomFiles/js/Cookie.js',
             'public/acm/AlaatvCustomFiles/js/LoginBeforeClick.js',
             'public/acm/AlaatvCustomFiles/js/GoogleAnalyticsEnhancedEcommerce.js',
-            // 'public/acm/AlaatvCustomFiles/js/GoogleFirebase.js',
             'public/acm/AlaatvCustomFiles/components/MegaMenu/script.js',
             'public/acm/AlaatvCustomFiles/js/lazyLoad.js',
             'public/acm/AlaatvCustomFiles/js/app.js'
@@ -346,7 +350,6 @@ class Mix {
     mixPageUserProfile() {
         this.mixCssAndJs(
             [
-                'node_modules/toastr/build/toastr.css',
                 'node_modules/animate.css/animate.css',
                 'node_modules/persian-datepicker/dist/css/persian-datepicker.css',
                 'node_modules/bootstrap-fileinput/css/fileinput.css',
@@ -355,7 +358,6 @@ class Mix {
             ],
             'public/css/user-profile.css',
             [
-                'node_modules/toastr/build/toastr.min.js',
                 'node_modules/bootstrap-fileinput/js/fileinput.js',
                 'node_modules/persian-date/dist/persian-date.js',
                 'node_modules/persian-datepicker/dist/js/persian-datepicker.js',
@@ -367,14 +369,12 @@ class Mix {
     mixPageCompleteUserProfile() {
         this.mixCssAndJs(
             [
-                'node_modules/toastr/build/toastr.css',
                 'node_modules/animate.css/animate.css',
                 'node_modules/persian-datepicker/dist/css/persian-datepicker.css',
                 'public/acm/AlaatvCustomFiles/css/page/user-profile.css',
             ],
             'public/css/user-completeInfo.css',
             [
-                'node_modules/toastr/build/toastr.min.js',
                 'node_modules/persian-date/dist/persian-date.js',
                 'node_modules/persian-datepicker/dist/js/persian-datepicker.js',
                 'public/acm/AlaatvCustomFiles/js/page/user-profile.js'
@@ -384,7 +384,6 @@ class Mix {
     }
     mixPageUserDashboard() {
         this.mixCssAndJs([
-                'node_modules/toastr/build/toastr.css',
                 'node_modules/animate.css/animate.css',
                 'public/acm/AlaatvCustomFiles/components/AlaaLoading/style.css',
                 'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/style.css',
@@ -397,7 +396,6 @@ class Mix {
             ],
             'public/css/user-dashboard.css',
             [
-                'node_modules/toastr/build/toastr.min.js',
                 'public/acm/AlaatvCustomFiles/components/CustomDropDown/js.js',
                 'public/acm/AlaatvCustomFiles/components/ScrollCarousel/js.js',
                 'public/acm/AlaatvCustomFiles/components/AlaaLoading/script.js',
@@ -437,8 +435,6 @@ class Mix {
 
     mixPageContentShow() {
         this.mixCssAndJs([
-                'node_modules/toastr/build/toastr.css',
-
                 'public/acm/AlaatvCustomFiles/components/ribbon/style.css',
                 'public/acm/AlaatvCustomFiles/components/Favorite/style.css',
                 'public/acm/AlaatvCustomFiles/components/AlaaScroll/style.css',
@@ -457,7 +453,6 @@ class Mix {
             'public/css/content-show.css',
             [
                 'node_modules/tooltip/dist/Tooltip.js',
-                'node_modules/toastr/build/toastr.min.js',
                 'public/acm/videojs/video.min.js',
                 'public/acm/videojs/plugins/pip/videojs.pip.min.js',
                 'public/acm/videojs/nuevo.min.js',
@@ -481,13 +476,11 @@ class Mix {
 
     mixPageSetShow() {
         this.mixCssAndJs([
-                'node_modules/toastr/build/toastr.css',
                 'public/acm/AlaatvCustomFiles/components/Favorite/style.css',
                 'public/acm/AlaatvCustomFiles/css/page/set-show.css'
             ],
             'public/css/set-show.css',
             [
-                'node_modules/toastr/build/toastr.min.js',
                 'public/acm/AlaatvCustomFiles/components/aSticky/aSticky.js',
                 'public/acm/AlaatvCustomFiles/components/Favorite/script.js',
                 'public/acm/AlaatvCustomFiles/components/UrlParameter/UrlParameter.js',
@@ -642,7 +635,6 @@ class Mix {
     mixProduct() {
         var baseProductShow = {
             css: [
-                'node_modules/toastr/build/toastr.css',
                 'node_modules/bootstrap-switch/dist/css/bootstrap3/bootstrap-switch.css',
                 'node_modules/lightgallery/src/css/lightgallery.css',
                 'public/acm/videojs/skins/alaa-theme/videojs.css',
@@ -657,7 +649,6 @@ class Mix {
                 'public/acm/AlaatvCustomFiles/css/page/product/show.css',
             ],
             js: [
-                'node_modules/toastr/build/toastr.min.js',
                 'node_modules/bootstrap-switch/dist/js/bootstrap-switch.js',
                 'node_modules/lightgallery/src/js/lightgallery.js',
                 'node_modules/lightgallery/modules/lg-thumbnail.min.js',
@@ -696,7 +687,6 @@ class Mix {
 
     mixPageCheckoutReview() {
         this.mixCssAndJs([
-                'node_modules/toastr/build/toastr.css',
                 'node_modules/bootstrap-switch/dist/css/bootstrap3/bootstrap-switch.css',
                 'node_modules/animate.css/animate.css',
                 'public/acm/AlaatvCustomFiles/components/step/step.css',
@@ -704,7 +694,6 @@ class Mix {
             ],
             'public/css/checkout-review.css',
             [
-                'node_modules/toastr/build/toastr.min.js',
                 'node_modules/bootstrap-switch/dist/js/bootstrap-switch.js',
                 'node_modules/jquery-sticky/jquery.sticky.js',
                 'public/acm/AlaatvCustomFiles/components/AnimateScrollTo/js.js',
