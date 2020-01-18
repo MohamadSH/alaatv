@@ -4,8 +4,8 @@
     <link href="{{ mix('/css/product-show.css') }}" rel="stylesheet" type="text/css"/>
     <style>
         @if(
-            optional(optional(optional($block->sets)->first())->getActiveContents2())->count() === 0 ||
-            optional(optional(optional($block->sets)->first())->getActiveContents2())->count() === null
+            optional(optional(optional(optional($block)->sets)->first())->getActiveContents2())->count() === 0 ||
+            optional(optional(optional(optional($block)->sets)->first())->getActiveContents2())->count() === null
         )
             .productInfoNav-sampleVideo {
             display: none !important;
@@ -667,7 +667,7 @@
 
 
     {{--نمونه فیلم--}}
-    @if(optional(optional(optional($block->sets)->first())->getActiveContents2())->count() > 0)
+    @if(optional(optional(optional(optional($block)->sets)->first())->getActiveContents2())->count() > 0)
         @include('block.partials.block', [
             'blockTitle'=>view('product.partials.productInfoNav', ['targetId'=>'sampleVideo' , 'product'=>$product , 'isForcedGift'=>$isForcedGift]),
             'blockUrlDisable'=>true,
