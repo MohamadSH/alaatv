@@ -867,21 +867,27 @@ class ContentController extends Controller
 
         $result = json_decode($result['result'])->data;
 
-        $contents = $result->videos->data;
-        array_walk($contents, function (&$val) {
-            $val->item_type = 'content';
-        });
+        $contents = optional($result->videos)->data;
+        if (isset($contents)) {
+            array_walk($contents, function (&$val) {
+                $val->item_type = 'content';
+            });
+        }
 
-        $products = $result->products->data;
-        array_walk($products, function (&$val) {
-            $val->item_type = 'product';
-        });
+        $products = optional($result->products)->data;
+        if (isset($products)) {
+            array_walk($products, function (&$val) {
+                $val->item_type = 'product';
+            });
+        }
 
-        $sets = $result->sets->data;
-        array_walk($sets, function (&$val) {
-            $val->item_type = 'set';
-        });
+        $sets = optional($result->sets)->data;
+        if (isset($sets)) {
+            array_walk($sets, function (&$val) {
+                $val->item_type = 'set';
+            });
+        }
 
-        return array_merge($contents, $products, $sets);
+        return array_merge($contents ?? [], $products ?? [], $sets ?? []);
     }
 }
