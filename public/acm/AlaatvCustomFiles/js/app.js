@@ -57,21 +57,17 @@ var AppGlobalInitInit = function() {
     }
 
     function initFirebase() {
-        var firebaseConfig = GlobalJsVar.getVar('firebaseConfig'),
-            VapidKey = GlobalJsVar.getVar('firebaseVapidKey');
+        var fc = GlobalJsVar.getVar('firebaseConfig');
 
-        if (
-            Firebase === null ||
-            typeof firebaseConfig === 'undefined' || firebaseConfig === null || firebaseConfig === '' ||
-            typeof VapidKey === 'undefined' || VapidKey === null || VapidKey === ''
-        ) {
+        if (Firebase === null || typeof fc === 'undefined' || fc === null || fc === '') {
             return;
         }
 
-        firebaseConfig = JSON.parse(firebaseConfig);
+        fc = JSON.parse(fc);
         Firebase.init({
-            firebaseConfig: firebaseConfig,
-            VapidKey: VapidKey,
+            firebaseConfig: fc.firebaseConfig,
+            VapidKey: fc.VapidKey,
+            ConsoleReport: fc.ConsoleReport,
             showMessage: function (payload) {
                 if (typeof payload.data.script !== 'undefined') {
                     var payloadScript = payload.data.script,

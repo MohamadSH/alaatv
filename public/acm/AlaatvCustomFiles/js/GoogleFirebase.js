@@ -171,6 +171,9 @@ var Firebase = function () {
         initFirebaseConfigAndVapidKey(data);
         initCallbacks(data);
         initFirebaseObjects(data);
+        if (typeof data.ConsoleReport !== 'undefined') {
+            ConsoleReport = data.ConsoleReport;
+        }
     }
 
     function init(data) {
