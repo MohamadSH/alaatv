@@ -8,7 +8,7 @@ var Firebase = function () {
         sendTokenToServerCallback,
         updateUIForPushEnabledCallback,
         updateUIForPushPermissionRequiredCallback,
-        ConsoleReport = false;
+        ConsoleReport = true;
 
     function setPublicVapidKey(VapidKey) {
         // Add the public key generated from the console here.

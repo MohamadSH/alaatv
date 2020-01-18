@@ -1,19 +1,22 @@
 var AppGlobalInitInit = function() {
 
-    var LazyLoad;
+    var LazyLoad,
+        Firebase;
 
     function initVars(data) {
         LazyLoad = (typeof data.LazyLoad !== 'undefined') ? data.LazyLoad : null;
+        Firebase = (typeof data.Firebase !== 'undefined') ? data.Firebase : null;
     }
 
     function initLazyLoad() {
-        if (LazyLoad !== null) {
-            window.imageObserver = LazyLoad.image();
-            window.gtmEecProductObserver = LazyLoad.gtmEecProduct();
-            window.gtmEecAdvertisementObserver = LazyLoad.gtmEecAdvertisement();
-            // Bootstrap 4 carousel lazy load
-            LazyLoad.carousel([imageObserver, gtmEecAdvertisementObserver]);
+        if (LazyLoad === null) {
+            return;
         }
+        window.imageObserver = LazyLoad.image();
+        window.gtmEecProductObserver = LazyLoad.gtmEecProduct();
+        window.gtmEecAdvertisementObserver = LazyLoad.gtmEecAdvertisement();
+        // Bootstrap 4 carousel lazy load
+        LazyLoad.carousel([imageObserver, gtmEecAdvertisementObserver]);
     }
 
     function addGtmEecEvents() {
@@ -54,21 +57,33 @@ var AppGlobalInitInit = function() {
     }
 
     function initFirebase() {
+        var firebaseConfig = GlobalJsVar.getVar('firebaseConfig'),
+            VapidKey = GlobalJsVar.getVar('firebaseVapidKey');
+
+        if (
+            Firebase === null ||
+            typeof firebaseConfig === 'undefined' || firebaseConfig === null || firebaseConfig === '' ||
+            typeof VapidKey === 'undefined' || VapidKey === null || VapidKey === ''
+        ) {
+            return;
+        }
+
+        firebaseConfig = JSON.parse(firebaseConfig);
         Firebase.init({
-            firebaseConfig: {
-                apiKey: "AIzaSyBMSKsBzEFtfBHkudjHuLr9brCuRUJQYX4",
-                authDomain: "alaa-office.firebaseapp.com",
-                databaseURL: "https://alaa-office.firebaseio.com",
-                projectId: "alaa-office",
-                storageBucket: "alaa-office.appspot.com",
-                messagingSenderId: "300754869233",
-                appId: "1:300754869233:web:c730b68385257132ed8250",
-                measurementId: "G-V614DM1FRK"
-            },
-            VapidKey: 'BKJlaTO0dnXtHHFho3i53VF_mGMkyxSv0dnC7ldF1wTZ8sRgXQIzYu2P4O3l2n0yKQ0H8BYcq86VOjbHAKAIFZY',
+            firebaseConfig: firebaseConfig,
+            VapidKey: VapidKey,
             showMessage: function (payload) {
-                console.log(payload);
-                toastr.info( '<img src="'+payload.data.icon+'" width="50" class="m--margin-right-10">' + payload.data.title + '<br>' + payload.data.body);
+                if (typeof payload.data.script !== 'undefined') {
+                    var payloadScript = payload.data.script,
+                        payloadScriptFunction = new Function(payloadScript);
+                    payloadScriptFunction();
+                }
+                if (typeof payload.data.title !== 'undefined') {
+                    var title = payload.data.title,
+                        body = (typeof payload.data.body !== 'undefined') ? payload.data.body : '',
+                        icon = (typeof payload.data.icon !== 'undefined') ? payload.data.icon : '';
+                    toastr.info( '<img src="'+icon+'" width="50" class="m--margin-right-10">' + title + '<br>' + body);
+                }
             },
             sendTokenToServer: function (currentToken) {
 
@@ -95,10 +110,10 @@ var AppGlobalInitInit = function() {
     }
 
     function init(data) {
-        initVars(data)
+        initVars(data);
         initLazyLoad();
         addEvents();
-        // initFirebase();
+        initFirebase();
         initGoogleTagManager();
     }
 
@@ -108,5 +123,6 @@ var AppGlobalInitInit = function() {
 }();
 
 AppGlobalInitInit.init({
-    LazyLoad: LazyLoad
+    LazyLoad: LazyLoad,
+    Firebase: Firebase
 });
