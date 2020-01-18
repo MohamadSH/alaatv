@@ -515,7 +515,6 @@ class MergeProductCommand extends Command
             $this->info("\n\n");
             $this->info("Total Progress:");
             $bar->advance();
-            $this->info("\n\n");
         }
 
         $bar->finish();
