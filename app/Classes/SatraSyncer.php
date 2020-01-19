@@ -46,7 +46,6 @@ class SatraSyncer
         ];
 
         $res = $this->sendRequest(self::SAVE_API_URL, 'POST', $parameters, self::REQUEST_HEADERS);
-//        $result = json_decode( $res['result'] , true);
         if ($res['statusCode'] == Response::HTTP_OK) {
             Log::info('SatraSyncer:insertContentInfo:successful:contentId:' . $content->id);
             return true;
