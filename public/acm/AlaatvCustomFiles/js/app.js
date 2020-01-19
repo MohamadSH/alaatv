@@ -58,12 +58,12 @@ var AppGlobalInitInit = function() {
 
     function initFirebase() {
         var fc = GlobalJsVar.getVar('firebaseConfig');
+        fc = JSON.parse(fc);
 
-        if (Firebase === null || typeof fc === 'undefined' || fc === null || fc === '') {
+        if (Firebase === null || typeof fc.firebaseConfig === 'undefined' || fc.firebaseConfig === null || fc.firebaseConfig === '') {
             return;
         }
 
-        fc = JSON.parse(fc);
         Firebase.init({
             firebaseConfig: fc.firebaseConfig,
             VapidKey: fc.VapidKey,
