@@ -351,13 +351,6 @@ var LoadContentSet = function () {
         }
     }
 
-    function showModalForSmallScreen() {
-        var ww = $(window).width();
-        if (ww <= 1024) {
-            $('#smallScreenModal').modal('show');
-        }
-    }
-
     function addEvents() {
         $(document).on('click', '.btnViewVideo, .btnViewPamphlet', function () {
             let contentType = $(this).data('content-type'),
