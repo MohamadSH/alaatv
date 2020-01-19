@@ -170,10 +170,6 @@ class SetController extends Controller
 //        Note : can't add sortBy to this
 //        $contents = $contentSet->active_contents_by_section;
 
-        if ($contents->isEmpty()) {
-            return redirect(route('web.home'));
-        }
-
         $pamphlets = $contents->where('contenttype_id', Content::CONTENT_TYPE_PAMPHLET);
         $videos    = $contents->where('contenttype_id', Content::CONTENT_TYPE_VIDEO);
         $articles  = $contents->where('contenttype_id', Content::CONTENT_TYPE_ARTICLE);
