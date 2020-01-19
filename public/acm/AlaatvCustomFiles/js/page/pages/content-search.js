@@ -25,23 +25,11 @@ var Alaasearch = function () {
                 accept: "application/json; charset=utf-8",
                 dataType: "json",
                 contentType: "application/json; charset=utf-8",
-                statusCode: {
-                    200: function (response) {
-                        callback(response);
-                    },
-                    403: function (response) {
-                        // responseMessage = response.responseJSON.message;
-                    },
-                    404: function (response) {
-                    },
-                    422: function (response) {
-                    },
-                    429: function (response) {
-                    },
-                    //The status for when there is error php code
-                    500: function () {
-                        removeLoadingItem(owl, type);
-                    }
+                success: function (data) {
+                    callback(data);
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    getAjaxContent(action, callback);
                 }
             }
         );
