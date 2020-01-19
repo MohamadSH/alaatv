@@ -60,7 +60,7 @@
                     <div class="row">
                         <label class="col-md-4 control-label" for="author_id">سورس</label>
                         <div class="col-md-8">
-                            {!! Form::select('sources_id[]', $sources, $setSources ,
+                            {!! Form::select('sources_id[]', $sources, (isset($setSources))?$setSources:null ,
                                [
                                    'multiple' => 'multiple',
                                    'class' => 'mt-multiselect btn btn-default a--full-width',
