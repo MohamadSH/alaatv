@@ -70,3 +70,10 @@
 .listView {
     display: block;
 }
+
+.itemSensor {
+    height: 50px;
+    display: flex;
+    align-content: center;
+    justify-content: center;
+}
