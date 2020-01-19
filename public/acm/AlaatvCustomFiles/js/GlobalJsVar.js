@@ -1,20 +1,25 @@
 var GlobalJsVar = function () {
 
     function userIp() {
-        return $('#js-var-userIp').val().trim();
+        return getVar('userIp');
     }
 
     function userId() {
-        return $('#js-var-userId').val().trim();
+        return getVar('userId');
     }
 
     function loginActionUrl() {
-        return $('#js-var-loginActionUrl').val().trim();
+        return getVar('loginActionUrl');
+    }
+
+    function getVar(key) {
+        return $('input[type="hidden"][name="js-var-'+key+'"]').val().trim();
     }
 
     function favoriteActionUrl() {
         return getUrl('input[type="hidden"][name="favoriteActionUrl"]');
     }
+
     function unFavoriteActionUrl() {
         return getUrl('input[type="hidden"][name="unFavoriteActionUrl"]');
     }
@@ -28,21 +33,13 @@ var GlobalJsVar = function () {
         }
     }
 
+
     return {
-        userIp: function () {
-            return userIp();
-        },
-        userId: function () {
-            return userId();
-        },
-        loginActionUrl: function () {
-            return loginActionUrl();
-        },
-        favoriteActionUrl: function () {
-            return favoriteActionUrl();
-        },
-        unFavoriteActionUrl: function () {
-            return unFavoriteActionUrl();
-        },
+        userIp: userIp,
+        userId: userId,
+        loginActionUrl: loginActionUrl,
+        favoriteActionUrl: favoriteActionUrl,
+        unFavoriteActionUrl: unFavoriteActionUrl,
+        getVar: getVar,
     };
 }();

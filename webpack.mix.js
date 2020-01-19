@@ -44,9 +44,9 @@ class Mix {
             'node_modules/block-ui/jquery.blockUI.js',
             'node_modules/persianjs/persian.min.js',
 
-            // 'node_modules/firebase/firebase.js',
-            // 'node_modules/firebase/firebase-messaging.js',
-            // 'public/acm/AlaatvCustomFiles/js/GoogleFirebase.js',
+            'node_modules/firebase/firebase.js',
+            'node_modules/firebase/firebase-messaging.js',
+            'public/acm/AlaatvCustomFiles/js/GoogleFirebase.js',
 
 
             'public/acm/AlaatvCustomFiles/js/mLayout.js',// quick search (ajax) in header
