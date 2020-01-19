@@ -162,6 +162,7 @@ class ContentController extends Controller
 
     public function show(Request $request, Content $content)
     {
+        /** @var User $user */
         $user = $request->user();
         if (isset($content->redirectUrl)) {
             return redirect($content->redirectUrl, Response::HTTP_FOUND, $request->headers->all());
@@ -206,13 +207,12 @@ class ContentController extends Controller
 
         $productsHasThisContentThroughBlockCollection = $content->related_products;
 
-        $recommendedItems = (new RecommendedItemsFetcher($tags))->fetch();
-        $recommendedItems = $this->addProductsToRecommendedItems($productsThatHaveThisContent, $recommendedItems);
+        $recommendedItems =
+            $this->addProductsToRecommendedItems($productsThatHaveThisContent, (new RecommendedItemsFetcher($tags))->fetch());
 
         $contentBlocks = $content->isFree ? Block::getContentBlocks() : collect();
 
-        $isFavored =
-            optional(optional(optional(optional($user)->favoredContents())->where('id', $content->id))->get())->isNotEmpty();
+        $isFavored = (isset($user)) ? $user->hasFavoredContent($content) : false;
 
         $sources = $content->sources;
 
