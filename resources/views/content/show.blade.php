@@ -390,14 +390,14 @@
 
             @if(count($recommendedItems) > 0)
                 @include('partials.widgets.ScollCarousel.body', [
-                    'title'=> 'پیشنهاد ما',
+                    'title'=> 'موارد مرتبط',
                     'customClass'=> 'RelatedItems',
                     'squareSing'=> 'recomender',
                     'puls'=> true,
                     'sort'=> true,
                     'scrollCarouselItems'=> view('content.partials.recommendedItemRecognizer', [
                         'recommendedItems'=>$recommendedItems,
-                        'gtmEecList'=>'پیشنهاد ما',
+                        'gtmEecList'=>'موارد مرتبط',
                         'sort'=> true,
                         'responsiveClass'=>''
                     ]),

@@ -34,7 +34,6 @@ use App\Traits\User\{BonTrait,
     VouchersTrait};
 use Carbon\Carbon;
 use Eloquent;
-use Hash;
 use Iatstuti\Database\Support\CascadeSoftDeletes;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Builder;
@@ -332,13 +331,13 @@ use Laravel\Passport\Token;
  * @property-read int|null                              $lotteries_count
  * @property-read int|null                              $mbtianswers_count
  * @property-read int|null                              $notifications_count
- * @property-read int|null                              $open_orders_count
- * @property-read int|null                              $order_transactions_count
- * @property-read int|null                              $ordermanagercomments_count
- * @property-read int|null                              $orderproducts_count
- * @property-read int|null                              $orders_count
- * @property-read int|null                              $permissions_count
- * @property-read int|null                              $productvouchers_count
+ * @property-read int|null                  $open_orders_count
+ * @property-read int|null                  $order_transactions_count
+ * @property-read int|null                  $ordermanagercomments_count
+ * @property-read int|null                  $orderproducts_count
+ * @property-read int|null                  $orders_count
+ * @property-read int|null                  $permissions_count
+ * @property-read int|null                  $productvouchers_count
  * @property-read int|null                  $roles_count
  * @property-read int|null                  $seensitepages_count
  * @property-read TicketCollection|Ticket[] $tickets
@@ -352,6 +351,7 @@ use Laravel\Passport\Token;
  * @property-read int|null                  $wallets_count
  * @property ProductCollection              favoredProducts
  * @property SetCollection                  favoredSets
+ * @property ContentCollection              favoredContents
  * @method static Builder|User helpAdmins()
  * @method static Builder|User helpAgents()
  * @method static Builder|User permissionName($permissionName)
@@ -592,14 +592,19 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber, 
         return new UserCollection($models);
     }
 
-    public function hasFavoredProduct(Product $product):bool
+    public function hasFavoredProduct(Product $product): bool
     {
         return $this->favoredProducts->where('id', $product->id)->isNotEmpty();
     }
 
-    public function hasFavoredSet(Contentset $contentSet):bool
+    public function hasFavoredSet(Contentset $contentSet): bool
     {
         return $this->favoredSets->where('id', $contentSet->id)->isNotEmpty();
+    }
+
+    public function hasFavoredContent(Content $content): bool
+    {
+        return $this->favoredContents->where('id', $content->id)->isNotEmpty();
     }
 
     /*

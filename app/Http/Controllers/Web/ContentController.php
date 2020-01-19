@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Web;
 
 use App\Block;
+use App\Classes\RecommendedItemsFetcher;
 use App\Classes\Search\ContentSearch;
 use App\Classes\Search\ContentsetSearch;
 use App\Classes\Search\ProductSearch;
@@ -161,6 +162,7 @@ class ContentController extends Controller
 
     public function show(Request $request, Content $content)
     {
+        /** @var User $user */
         $user = $request->user();
         if (isset($content->redirectUrl)) {
             return redirect($content->redirectUrl, Response::HTTP_FOUND, $request->headers->all());
@@ -205,12 +207,13 @@ class ContentController extends Controller
 
         $productsHasThisContentThroughBlockCollection = $content->related_products;
 
-        $recommendedItems = $this->getRecommendedItems($content, $tags);
+        $recommendedItems = (new RecommendedItemsFetcher($tags))->fetch();
+        $recommendedItems =
+            $this->addProductsToRecommendedItems($productsThatHaveThisContent, $recommendedItems);
 
         $contentBlocks = $content->isFree ? Block::getContentBlocks() : collect();
 
-        $isFavored =
-            optional(optional(optional(optional($user)->favoredContents())->where('id', $content->id))->get())->isNotEmpty();
+        $isFavored = (isset($user)) ? $user->hasFavoredContent($content) : false;
 
         $sources = $content->sources;
 
@@ -847,47 +850,20 @@ class ContentController extends Controller
     }
 
     /**
-     * @param Content $content
-     * @param array   $tags
+     * @param ProductCollection $productsThatHaveThisContent
+     * @param array             $recommendedItems
      *
      * @return array
      */
-    private function getRecommendedItems(Content $content, array $tags): array
+    private function addProductsToRecommendedItems(ProductCollection $productsThatHaveThisContent, array $recommendedItems): array
     {
-        $result = $this->sendRequest(route('api.v2.search'), 'GET', ['tags' => $tags], [
-            'headers' => [
-                'Content-Type' => 'application/json',
-                'Accept'       => 'application/json',
-            ],
-        ]);
+        $productsThatHaveThisContent = $productsThatHaveThisContent->toArray();
+        $productsThatHaveThisContent = json_encode($productsThatHaveThisContent);
+        $productsThatHaveThisContent = json_decode($productsThatHaveThisContent);
+        array_walk($productsThatHaveThisContent, function (&$val) {
+            $val->item_type = RecommendedItemsFetcher::ITEM_TYPE_PRODUCT;
+        });
 
-        if ($result['statusCode'] != Response::HTTP_OK) {
-            return [];
-        }
-
-        $result = json_decode($result['result'])->data;
-
-        $contents = optional($result->videos)->data;
-        if (isset($contents)) {
-            array_walk($contents, function (&$val) {
-                $val->item_type = 'content';
-            });
-        }
-
-        $products = optional($result->products)->data;
-        if (isset($products)) {
-            array_walk($products, function (&$val) {
-                $val->item_type = 'product';
-            });
-        }
-
-        $sets = optional($result->sets)->data;
-        if (isset($sets)) {
-            array_walk($sets, function (&$val) {
-                $val->item_type = 'set';
-            });
-        }
-
-        return array_merge($contents ?? [], $products ?? [], $sets ?? []);
+        return array_merge($recommendedItems, $productsThatHaveThisContent);
     }
 }
