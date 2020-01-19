@@ -8,7 +8,7 @@ var Firebase = function () {
         sendTokenToServerCallback,
         updateUIForPushEnabledCallback,
         updateUIForPushPermissionRequiredCallback,
-        ConsoleReport = false;
+        ConsoleReport = true;
 
     function setPublicVapidKey(VapidKey) {
         // Add the public key generated from the console here.
@@ -171,6 +171,9 @@ var Firebase = function () {
         initFirebaseConfigAndVapidKey(data);
         initCallbacks(data);
         initFirebaseObjects(data);
+        if (typeof data.ConsoleReport !== 'undefined') {
+            ConsoleReport = data.ConsoleReport;
+        }
     }
 
     function init(data) {

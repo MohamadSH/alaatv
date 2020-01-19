@@ -192,12 +192,7 @@ class SetController extends Controller
 
         $sources = $contentSet->sources;
 
-        $videosCount = $videos->count();
-        $pamphletsCount = $pamphlets->count();
-        $videos    = $videos->groupBy('section_id');
-        $pamphlets = $pamphlets->groupBy('section_id');
-
-        return view('set.show', compact('contentSet', 'videos', 'pamphlets', 'articles', 'jsonLdArray', 'order', 'isFavored', 'sources', 'videosCount', 'pamphletsCount'));
+        return view('set.show', compact('contentSet', 'videos', 'pamphlets', 'articles', 'jsonLdArray', 'order', 'isFavored', 'sources'));
     }
 
     public function edit(Contentset $set)
