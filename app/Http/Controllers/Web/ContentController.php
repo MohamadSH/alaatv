@@ -860,7 +860,7 @@ class ContentController extends Controller
         $productsThatHaveThisContent = json_encode($productsThatHaveThisContent);
         $productsThatHaveThisContent = json_decode($productsThatHaveThisContent);
         array_walk($productsThatHaveThisContent, function (&$val) {
-            $val->item_type = 'product';
+            $val->item_type = RecommendedItemsFetcher::ITEM_TYPE_PRODUCT;
         });
 
         return array_merge($recommendedItems, $productsThatHaveThisContent);
