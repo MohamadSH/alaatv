@@ -151,6 +151,11 @@ class SetController extends Controller
             return redirect($contentSet->redirectUrl, Response::HTTP_FOUND, $request->headers->all());
         }
 
+        if (!$contentSet->isActive()) {
+            //Should implement a page for de-activated stuffs
+            return redirect(route('web.home'));
+        }
+
         if ($request->expectsJson() && !$request->has('raheAbrisham')) {
             return response()->json($contentSet);
         }
