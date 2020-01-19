@@ -64,7 +64,7 @@ var AppGlobalInitInit = function() {
         }
 
         fc = JSON.parse(fc);
-        Firebase.init({
+        window.FirebaseObject = Firebase.init({
             firebaseConfig: fc.firebaseConfig,
             VapidKey: fc.VapidKey,
             ConsoleReport: fc.ConsoleReport,
