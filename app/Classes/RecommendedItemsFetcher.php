@@ -12,6 +12,10 @@ class RecommendedItemsFetcher
 {
     use APIRequestCommon;
 
+    const ITEM_TYPE_CONTENT = 'content';
+    const ITEM_TYPE_PRODUCT = 'product';
+    const ITEM_TYPE_SET = 'set';
+
     protected $tags;
 
     /**
@@ -74,14 +78,14 @@ class RecommendedItemsFetcher
     private function prepareRecommendedProducts(array &$products): void
     {
         array_walk($products, function (&$val) {
-            $val->item_type = 'product';
+            $val->item_type = self::ITEM_TYPE_PRODUCT;
         });
     }
 
     private function prepareRecommendedSets(array &$sets): void
     {
         array_walk($sets, function (&$val) {
-            $val->item_type = 'set';
+            $val->item_type = self::ITEM_TYPE_SET;
         });
         if (count($sets) >= 2) {
             $sets = array_slice($sets, 0, 2);
@@ -91,7 +95,7 @@ class RecommendedItemsFetcher
     private function prepareRecommendedVideos(array &$videos): void
     {
         array_walk($videos, function (&$val) {
-            $val->item_type = 'content';
+            $val->item_type = self::ITEM_TYPE_CONTENT;
         });
         if (count($videos) >= 2) {
             $videos = array_slice($videos, 0, 2);
