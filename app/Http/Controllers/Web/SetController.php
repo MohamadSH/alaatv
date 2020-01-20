@@ -151,6 +151,11 @@ class SetController extends Controller
             return redirect($contentSet->redirectUrl, Response::HTTP_FOUND, $request->headers->all());
         }
 
+        if (!$contentSet->isActive()) {
+            //Should implement a page for de-activated stuffs
+            return redirect(route('web.home'));
+        }
+
         if ($request->expectsJson() && !$request->has('raheAbrisham')) {
             return response()->json($contentSet);
         }
@@ -164,10 +169,6 @@ class SetController extends Controller
         // ToDo : To get sorted contents grouped by section
 //        Note : can't add sortBy to this
 //        $contents = $contentSet->active_contents_by_section;
-
-        if ($contents->isEmpty()) {
-            return redirect(route('web.home'));
-        }
 
         $pamphlets = $contents->where('contenttype_id', Content::CONTENT_TYPE_PAMPHLET);
         $videos    = $contents->where('contenttype_id', Content::CONTENT_TYPE_VIDEO);
