@@ -5,7 +5,8 @@ var Alaasearch = function () {
         videoRepositoryCounter = 4,
         productRepositoryCounter = 1,
         carouselHasItem = true,
-        listTypeHasItem = true;
+        listTypeHasItem = true,
+        getAjaxContentErrorCounter = 0;
 
     function ajaxSetup() {
         $.ajaxSetup({
@@ -27,9 +28,15 @@ var Alaasearch = function () {
                 contentType: "application/json; charset=utf-8",
                 success: function (data) {
                     callback(data);
+                    getAjaxContentErrorCounter = 0;
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
-                    getAjaxContent(action, callback);
+                    if (getAjaxContentErrorCounter < 5) {
+                        getAjaxContentErrorCounter++;
+                        getAjaxContent(action, callback);
+                    } else {
+                        toastr.error('خطای سیستمی رخ داده است.');
+                    }
                 }
             }
         );
