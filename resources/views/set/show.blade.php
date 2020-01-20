@@ -204,7 +204,7 @@
                         name: '{{$video->displayName}}',
                         isFree: {{$video->isFree}},
                         updatedAtJalali: '{{$video->UpdatedAt_Jalali()}}',
-                        metaDescription: '{!! $video->metaDescription !!}',
+                        metaDescription: '{{$video->metaDescription}}',
                     },
                 @endforeach
             ],
