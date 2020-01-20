@@ -50,6 +50,9 @@ var Firebase = function () {
     }
 
     function getToken() {
+        if (Notification.permission === 'denied') {
+            return false;
+        }
         // Get Instance ID token. Initially this makes a network call, once retrieved
         // subsequent calls to getToken will return from cache.
         messaging.getToken().then(function(currentToken) {
@@ -177,6 +180,9 @@ var Firebase = function () {
     }
 
     function init(data) {
+        if (!("Notification" in window)) {
+            return {};
+        }
         initVars(data);
         // Initialize Firebase
         firebase.initializeApp(firebaseConfig);

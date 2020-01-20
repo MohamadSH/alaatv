@@ -5,7 +5,8 @@ var Alaasearch = function () {
         videoRepositoryCounter = 4,
         productRepositoryCounter = 1,
         carouselHasItem = true,
-        listTypeHasItem = true;
+        listTypeHasItem = true,
+        getAjaxContentErrorCounter = 0;
 
     function ajaxSetup() {
         $.ajaxSetup({
@@ -25,22 +26,16 @@ var Alaasearch = function () {
                 accept: "application/json; charset=utf-8",
                 dataType: "json",
                 contentType: "application/json; charset=utf-8",
-                statusCode: {
-                    200: function (response) {
-                        callback(response);
-                    },
-                    403: function (response) {
-                        // responseMessage = response.responseJSON.message;
-                    },
-                    404: function (response) {
-                    },
-                    422: function (response) {
-                    },
-                    429: function (response) {
-                    },
-                    //The status for when there is error php code
-                    500: function () {
-                        removeLoadingItem(owl, type);
+                success: function (data) {
+                    callback(data);
+                    getAjaxContentErrorCounter = 0;
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    if (getAjaxContentErrorCounter < 5) {
+                        getAjaxContentErrorCounter++;
+                        getAjaxContent(action, callback);
+                    } else {
+                        toastr.error('خطای سیستمی رخ داده است.');
                     }
                 }
             }
