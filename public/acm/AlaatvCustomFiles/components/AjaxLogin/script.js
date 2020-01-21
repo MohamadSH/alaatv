@@ -89,10 +89,13 @@ var AjaxLogin = function () {
         return $('#AlaaAjaxLoginModal input[name="password"]');
     }
 
-    function changeInputFeedback($input, message) {
-        if (message === '') {
+    function changeInputFeedback($input, message, status) {
+        if (typeof status !== 'undefined' && message === '') {
             $input.parents('.form-group').removeClass('has-danger');
             $input.parents('.form-group').addClass('has-success');
+        } else if (typeof status !== 'undefined') {
+            $input.parents('.form-group').removeClass('has-success');
+            $input.parents('.form-group').addClass('has-danger');
         } else {
             $input.parents('.form-group').removeClass('has-success');
             $input.parents('.form-group').addClass('has-danger');
@@ -281,5 +284,8 @@ var AjaxLogin = function () {
             showLoading();
             showMessage(status, message);
         },
+        getUsernameObject: getUsernameObject,
+        getPasswordObject: getPasswordObject,
+        changeInputFeedback: changeInputFeedback
     };
 }();
