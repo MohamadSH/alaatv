@@ -90,15 +90,26 @@ var AjaxLogin = function () {
     }
 
     function changeInputFeedback($input, message, status) {
-        if (typeof status !== 'undefined' && message === '') {
+        if ((typeof status === 'undefined' && message === '') || status === 'success') {
             $input.parents('.form-group').removeClass('has-danger');
+            $input.parents('.form-group').removeClass('has-warning');
+            $input.parents('.form-group').removeClass('has-info');
             $input.parents('.form-group').addClass('has-success');
-        } else if (typeof status !== 'undefined') {
+        } else if ((typeof status === 'undefined' && message !== '') || status === 'danger') {
             $input.parents('.form-group').removeClass('has-success');
+            $input.parents('.form-group').removeClass('has-warning');
+            $input.parents('.form-group').removeClass('has-info');
             $input.parents('.form-group').addClass('has-danger');
-        } else {
+        } else if (status === 'warning') {
             $input.parents('.form-group').removeClass('has-success');
-            $input.parents('.form-group').addClass('has-danger');
+            $input.parents('.form-group').removeClass('has-danger');
+            $input.parents('.form-group').removeClass('has-info');
+            $input.parents('.form-group').addClass('has-warning');
+        } else if (status === 'info') {
+            $input.parents('.form-group').removeClass('has-success');
+            $input.parents('.form-group').removeClass('has-danger');
+            $input.parents('.form-group').removeClass('has-warning');
+            $input.parents('.form-group').addClass('has-info');
         }
         $input.parents('.form-group').find('.form-control-feedback').html(message);
     }

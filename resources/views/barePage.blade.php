@@ -22,6 +22,8 @@
 
         <!--begin::Global Theme Bundle -->
         <script src="{{ mix('/js/all.js') }}" type="text/javascript"></script>
+        <script src="{{ asset('/acm/AlaatvCustomFiles/components/AjaxLogin/script.js') }}" type="text/javascript"></script>
+        <script src="{{ asset('/acm/AlaatvCustomFiles/js/app.js') }}" type="text/javascript"></script>
         <script>
             $(function () {
                 /**
