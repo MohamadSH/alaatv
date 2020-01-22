@@ -39,7 +39,7 @@ function loadCarousels() {
     });
 }
 function loadStickeHeader() {
-    for (let carousel in carousels) {
+    for (var carousel in carousels) {
         $('.'+carousels[carousel]+' .OwlCarouselType2-shopPage .m-portlet__head').sticky({
             container: '.'+carousels[carousel]+' .OwlCarouselType2-shopPage > .col > .m-portlet',
             topSpacing: $('#m_header').height(),

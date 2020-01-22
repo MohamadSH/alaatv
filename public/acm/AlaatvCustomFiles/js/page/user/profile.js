@@ -1,4 +1,6 @@
-$(document).ready(function () {
+var InitPage = function() {
+
+    var $form;
 
     function getFormData($form) {
         var unindexed_array = $form.serializeArray();
@@ -41,139 +43,10 @@ $(document).ready(function () {
         return inputString;
     }
 
-    $(document).on('click', '#btnEditUserPhoto', function () {
-        $('#UserProfilePhoto').trigger('click');
-    });
-    $(document).on('click', '#uploadProfilePhotoAjaxSubmit', function () {
-        // $('.fileinput-previewClass .kv-file-upload').trigger('click');
-        $('.profilePhotoUploadProgressBar').fadeIn();
-        mApp.block('.userProfilePicWraper', {
-            type: "loader",
-            state: "success",
-        });
-
-        let $form = $('#profilePhotoAjaxForm');
-        let formData = new FormData($form[0]);
-
-        $.ajax({
-            // Your server script to process the upload
-            url: $form.attr('action'),
-            type: 'POST',
-
-            // Form data
-            data: formData,
-            dataType: 'json',
-
-            mimeType:"multipart/form-data",
-
-            // Tell jQuery not to process data or worry about content-type
-            // You *must* include these options!
-            cache: false,
-            contentType: false,
-            processData: false,
-
-            success: function (data) {
-                if (data.error) {
-
-                    // let message = 'مشکلی رخ داده است. لطفا مجدد سعی کنید';
-                    let message = data.error.message;
-
-                    toastr.error('خطای سیستمی رخ داده است.' + '<br>' + message);
-
-                } else {
-                    updateUserCompletionProgress(data.user.info.completion);
-                    toastr.success('تصویر شما ویرایش شد.');
-                    if (data.user.lockProfile === 1) {
-                        window.location.reload();
-                    }
-                }
-                mApp.unblock('.userProfilePicWraper');
-            },
-
-            // Custom XMLHttpRequest
-            xhr: function () {
-                let myXhr = $.ajaxSettings.xhr();
-                if (myXhr.upload) {
-                    // For handling the progress of the upload
-                    myXhr.upload.addEventListener('progress', function (e) {
-                        if (e.lengthComputable) {
-                            let valuePercent = (e.loaded / e.total) * 100;
-                            $('.profilePhotoUploadProgressBar .progress-bar').css('width', valuePercent + '%');
-                        }
-                    }, false);
-                }
-                return myXhr;
-            }
-        });
-
-    });
-
-    let $form = $('#profilePhotoAjaxForm');
-    $('#UserProfilePhoto').fileinput({
-        theme: 'fas',
-        showUpload: false,
-        showCaption: false,
-
-        uploadAsync: false,
-        uploadUrl: $form.attr('action'), // your upload server url
-        uploadExtraData: function () {
-            return {
-                updateType: 'photo',
-                // username: $("#username").val()
-            };
-        },
-
-        browseClass: "fileinput-btnBrowseUserImage",
-        removeClass: "fileinput-btnRemoveUserImage",
-        captionClass: "fileinput-captionClass",
-        previewClass: "fileinput-previewClass",
-        frameClass: "fileinput-frameClass",
-        mainClass: "fileinput-mainClass",
-        fileType: "any",
-        // previewFileIcon: "<i class='glyphicon glyphicon-king'></i>",
-        overwriteInitial: true,
-        initialPreviewAsData: true,
-        // initialPreview: [
-        //     "http://lorempixel.com/1920/1080/transport/1",
-        //     "http://lorempixel.com/1920/1080/transport/2",
-        //     "http://lorempixel.com/1920/1080/transport/3"
-        // ],
-        // initialPreviewConfig: [
-        //     {caption: "transport-1.jpg", size: 329892, width: "120px", url: "{$url}", key: 1},
-        //     {caption: "transport-2.jpg", size: 872378, width: "120px", url: "{$url}", key: 2},
-        //     {caption: "transport-3.jpg", size: 632762, width: "120px", url: "{$url}", key: 3}
-        // ]
-    });
-
-    $(document).on('change', '#UserProfilePhoto', function (event) {
-
-        let files = $(this)[0].files; // puts all files into an array
-
-        let filesize = ((files[0].size / 1024)).toFixed(4); // KB
-
-        if (filesize < 500) {
-
-            $('.imgUserProfileImage').fadeOut(0);
-            $('.file-input.theme-fas').fadeIn();
-            $('.submitProfilePic').fadeIn();
-        } else {
-
-            toastr.warning('حجم عکس حداکثر 500 کیلوبایت باشد');
-
-            mUtil.scrollTop();
-        }
-    });
-
-    $('#birthdate').persianDatepicker({
-        observer: true,
-        format: 'YYYY/MM/DD',
-        altField: '#birthdateAlt'
-    });
-
     function getErrorMessage(errors) {
-        let message = '';
-        for (let index in errors) {
-            for (let errorIndex in errors[index]) {
+        var message = '';
+        for (var index in errors) {
+            for (var errorIndex in errors[index]) {
                 if(!isNaN(errorIndex)) {
                     message += errors[index][errorIndex]+'<br>';
                 }
@@ -183,11 +56,11 @@ $(document).ready(function () {
     }
 
     function settingFormValidation() {
-        let status = true;
-        let message = '';
+        var status = true;
+        var message = '';
 
-        let $postalCode = $('#profileForm-setting input[name="postalCode"]');
-        let $email = $('#profileForm-setting input[name="email"]');
+        var $postalCode = $('#profileForm-setting input[name="postalCode"]');
+        var $email = $('#profileForm-setting input[name="email"]');
         var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
         $postalCode.val(arabicToPersianWithEnNumber($postalCode.val()));
@@ -218,11 +91,11 @@ $(document).ready(function () {
     }
 
     function sabteRotbeFormValidation() {
-        let status = true;
-        let message = '';
+        var status = true;
+        var message = '';
 
-        let $rank = $('#frmSabteRotbe input[name="rank"]');
-        let $reportFile = $('#frmSabteRotbe input[name="reportFile"]');
+        var $rank = $('#frmSabteRotbe input[name="rank"]');
+        var $reportFile = $('#frmSabteRotbe input[name="reportFile"]');
 
         if ($rank.val().trim().length === 0) {
             status = false;
@@ -248,241 +121,386 @@ $(document).ready(function () {
         }
     }
 
-    $(document).on('click', '#btnUpdateProfileInfoForm', function () {
-
-        let validation = settingFormValidation();
-
-        if (!validation.status) {
-
-            toastr.warning(validation.message);
-
-            return false;
-        }
-
-        var $form = $("#profileForm-setting");
-        var data = getFormData($form);
-
-        mApp.block('.profileMenuPage.profileMenuPage-setting', {
-            overlayColor: "#000000",
-            type: "loader",
-            state: "success",
-            message: "کمی صبر کنید..."
+    function addEvents() {
+        $(document).on('click', '#btnEditUserPhoto', function () {
+            $('#UserProfilePhoto').trigger('click');
         });
 
-        $.ajax({
-            type: $form.attr('method'),
-            url : $form.attr('action'),
-            data: data,
-            dataType: 'json',
+        $(document).on('click', '#uploadProfilePhotoAjaxSubmit', function () {
+            // $('.fileinput-previewClass .kv-file-upload').trigger('click');
+            $('.profilePhotoUploadProgressBar').fadeIn();
+            mApp.block('.userProfilePicWraper', {
+                type: "loader",
+                state: "success",
+            });
 
-            success: function (data) {
-                if (data.error) {
+            var $form = $('#profilePhotoAjaxForm');
+            var formData = new FormData($form[0]);
 
-                    // let message = 'مشکلی رخ داده است. لطفا مجدد سعی کنید';
-                    let message = data.error.message;
+            $.ajax({
+                // Your server script to process the upload
+                url: $form.attr('action'),
+                type: 'POST',
 
-                    toastr.warning('خطای سیستمی رخ داده است.' + '<br>' + message);
+                // Form data
+                data: formData,
+                dataType: 'json',
 
-                } else {
-                    updateUserCompletionProgress(data.user.info.completion);
-                    toastr.success('اطلاعات شما ثبت شد.');
-                    if (data.user.lockProfile === 1) {
-                        window.location.reload();
+                mimeType:"multipart/form-data",
+
+                // Tell jQuery not to process data or worry about content-type
+                // You *must* include these options!
+                cache: false,
+                contentType: false,
+                processData: false,
+
+                success: function (data) {
+                    if (data.error) {
+
+                        // var message = 'مشکلی رخ داده است. لطفا مجدد سعی کنید';
+                        var message = data.error.message;
+
+                        toastr.error('خطای سیستمی رخ داده است.' + '<br>' + message);
+
+                    } else {
+                        updateUserCompletionProgress(data.user.info.completion);
+                        toastr.success('تصویر شما ویرایش شد.');
+                        if (data.user.lockProfile === 1) {
+                            window.location.reload();
+                        }
                     }
-                }
-                mApp.unblock('.profileMenuPage.profileMenuPage-setting');
-            },
-            error: function (jqXHR, textStatus, errorThrown) {
+                    mApp.unblock('.userProfilePicWraper');
+                },
 
-                let message = '';
-                if (jqXHR.responseJSON.message === 'The given data was invalid.') {
-                    message = getErrorMessage(jqXHR.responseJSON.errors);
-                } else {
-                    message = 'خطای سیستمی رخ داده است.';
-                }
-
-                toastr.warning(message);
-
-                mApp.unblock('.profileMenuPage.profileMenuPage-setting');
-            }
-
-        });
-
-
-    });
-
-    $(document).on('click', '#btnSabteRotbe1', function () {
-
-        var $form = $("#frmSabteRotbe");
-        var data = getFormData($form);
-
-        mApp.block('.profileMenuPage.profileMenuPage-sabteRotbe', {
-            overlayColor: "#000000",
-            type: "loader",
-            state: "success",
-            message: "کمی صبر کنید..."
-        });
-
-        $.ajax({
-            type: $form.attr('method'),
-            url: $form.attr('action'),
-            data: data,
-
-            success: function (data) {
-                if (data.error) {
-
-                    // let message = 'مشکلی رخ داده است. لطفا مجدد سعی کنید';
-                    let message = data.error.message;
-
-                    toastr.error('خطای سیستمی رخ داده است.' + '<br>' + message);
-
-                } else {
-                    toastr.success('اطلاعات شما ثبت شد.');
-                }
-                mApp.unblock('.profileMenuPage.profileMenuPage-sabteRotbe');
-            },
-            error: function (jqXHR, textStatus, errorThrown) {
-
-                toastr.error('خطای سیستمی رخ داده است.');
-
-                mApp.unblock('.SendMobileVerificationCodeWarper');
-            }
-
-        });
-
-
-    });
-
-    $(document).on('click', '#btnSendMobileVerificationCode', function () {
-
-        mApp.block('.SendMobileVerificationCodeWarper', {
-            overlayColor: "#000000",
-            type: "loader",
-            state: "success",
-            message: "کمی صبر کنید..."
-        });
-
-        $.ajax({
-            type: 'GET',
-            url: $('#SendMobileVerificationCodeActionUrl').val(),
-            // dataType: 'text',
-            dataType: 'json',
-            data: {},
-            success: function (data) {
-                if (data.error) {
-
-                    // let message = 'مشکلی رخ داده است. لطفا مجدد سعی کنید';
-                    let message = data.error.message;
-
-                    toastr.error('خطای سیستمی رخ داده است.' + '<br>' + message);
-
-                } else {
-
-                    $('#btnSendMobileVerificationCode').fadeOut();
-                    $('.inputVerificationWarper').fadeIn();
-
-                    toastr.info('کد تایید برای شماره همراه شما پیامک شد.');
-
-                    $('.inputVerificationWarper').removeClass('d-none');
-
-                }
-                mUtil.scrollTo('.SendMobileVerificationCodeWarper', 300);
-                mApp.unblock('.SendMobileVerificationCodeWarper');
-            },
-            error: function (jqXHR, textStatus, errorThrown) {
-
-                let message = '';
-                if (jqXHR.status === 429) {
-                    message = 'پیش از این کد فعال سازی برای شما ارسال شده است. یک دقیقه تا درخواست بعدی صبر کنید.';
-                } else {
-                    message = 'خطای سیستمی رخ داده است.';
-                }
-
-                toastr.warning(message);
-
-                mApp.unblock('.SendMobileVerificationCodeWarper');
-            }
-        });
-    });
-
-    $(document).on('click', '#btnVerifyMobileVerificationCode', function () {
-
-        let verificationCode = $('#txtMobileVerificationCode').val();
-        if (verificationCode.trim().length === 0) {
-
-            toastr.warning('کد را وارد نکرده اید.');
-
-            return false;
-        }
-
-        mApp.block('.SendMobileVerificationCodeWarper', {
-            overlayColor: "#000000",
-            type: "loader",
-            state: "success",
-            message: "کمی صبر کنید..."
-        });
-
-        $.ajax({
-            type: 'POST',
-            url: $('#VerifyMobileVerificationCodeActionUrl').val(),
-            data: {
-                code: verificationCode
-            },
-            // dataType: 'text',
-            dataType: 'json',
-            success: function (data) {
-                if (data.error) {
-
-                    // let message = 'مشکلی رخ داده است. لطفا مجدد سعی کنید';
-                    let message = data.error.message;
-
-                    toastr.error('خطای سیستمی رخ داده است.' + '<br>' + message);
-
-
-                } else {
-                    $('.inputVerificationWarper').fadeOut();
-                    $('.SendMobileVerificationCodeWarper').fadeOut();
-                    $('.mobileUnVerifyMessage').removeClass('d-block');
-                    $('.mobileUnVerifyMessage').addClass('d-none');
-                    $('.mobileVerifyMessage').removeClass('d-none');
-                    $('.mobileVerifyMessage').addClass('d-block');
-                    updateUserCompletionProgress(data.user.info.completion);
-                    toastr.success('شماره موبایل شما تایید شد.');
-
-                    if (data.user.lockProfile === 1) {
-                        window.location.reload();
+                // Custom XMLHttpRequest
+                xhr: function () {
+                    var myXhr = $.ajaxSettings.xhr();
+                    if (myXhr.upload) {
+                        // For handling the progress of the upload
+                        myXhr.upload.addEventListener('progress', function (e) {
+                            if (e.lengthComputable) {
+                                var valuePercent = (e.loaded / e.total) * 100;
+                                $('.profilePhotoUploadProgressBar .progress-bar').css('width', valuePercent + '%');
+                            }
+                        }, false);
                     }
+                    return myXhr;
                 }
+            });
 
-                mApp.unblock('.SendMobileVerificationCodeWarper');
-                mUtil.scrollTo('.SendMobileVerificationCodeWarper', 300);
-            },
-            error: function (jqXHR, textStatus, errorThrown) {
-                let message = '';
-                if (jqXHR.status === 403) {
-                    message = 'کد وارد شده اشتباه است.';
-                } else if (jqXHR.status === 422) {
-                    message = 'کد را وارد نکرده اید.';
-                } else {
-                    message = 'خطای سیستمی رخ داده است.';
-                }
+        });
 
-                toastr.error(message);
+        $(document).on('change', '#UserProfilePhoto', function (event) {
 
-                mApp.unblock('.SendMobileVerificationCodeWarper');
+            var files = $(this)[0].files; // puts all files into an array
+
+            var filesize = ((files[0].size / 1024)).toFixed(4); // KB
+
+            if (filesize < 500) {
+
+                $('.imgUserProfileImage').fadeOut(0);
+                $('.file-input.theme-fas').fadeIn();
+                $('.submitProfilePic').fadeIn();
+            } else {
+
+                toastr.warning('حجم عکس حداکثر 500 کیلوبایت باشد');
+
+                mUtil.scrollTop();
             }
         });
-    });
 
-    $(document).on('submit', '#frmSabteRotbe', function(e){
-        let validation = sabteRotbeFormValidation();
+        $(document).on('click', '#btnUpdateProfileInfoForm', function () {
 
-        if (!validation.status) {
+            var validation = settingFormValidation();
 
-            toastr.warning(validation.message);
+            if (!validation.status) {
 
-            e.preventDefault();
-            return false;
-        }
-    });
+                toastr.warning(validation.message);
+
+                return false;
+            }
+
+            var $form = $("#profileForm-setting");
+            var data = getFormData($form);
+
+            mApp.block('.profileMenuPage.profileMenuPage-setting', {
+                overlayColor: "#000000",
+                type: "loader",
+                state: "success",
+                message: "کمی صبر کنید..."
+            });
+
+            $.ajax({
+                type: $form.attr('method'),
+                url : $form.attr('action'),
+                data: data,
+                dataType: 'json',
+
+                success: function (data) {
+                    if (data.error) {
+
+                        // var message = 'مشکلی رخ داده است. لطفا مجدد سعی کنید';
+                        var message = data.error.message;
+
+                        toastr.warning('خطای سیستمی رخ داده است.' + '<br>' + message);
+
+                    } else {
+                        updateUserCompletionProgress(data.user.info.completion);
+                        toastr.success('اطلاعات شما ثبت شد.');
+                        if (data.user.lockProfile === 1) {
+                            window.location.reload();
+                        }
+                    }
+                    mApp.unblock('.profileMenuPage.profileMenuPage-setting');
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+
+                    var message = '';
+                    if (jqXHR.responseJSON.message === 'The given data was invalid.') {
+                        message = getErrorMessage(jqXHR.responseJSON.errors);
+                    } else {
+                        message = 'خطای سیستمی رخ داده است.';
+                    }
+
+                    toastr.warning(message);
+
+                    mApp.unblock('.profileMenuPage.profileMenuPage-setting');
+                }
+
+            });
+
+
+        });
+
+        $(document).on('click', '#btnSabteRotbe1', function () {
+
+            var $form = $("#frmSabteRotbe");
+            var data = getFormData($form);
+
+            mApp.block('.profileMenuPage.profileMenuPage-sabteRotbe', {
+                overlayColor: "#000000",
+                type: "loader",
+                state: "success",
+                message: "کمی صبر کنید..."
+            });
+
+            $.ajax({
+                type: $form.attr('method'),
+                url: $form.attr('action'),
+                data: data,
+
+                success: function (data) {
+                    if (data.error) {
+
+                        // var message = 'مشکلی رخ داده است. لطفا مجدد سعی کنید';
+                        var message = data.error.message;
+
+                        toastr.error('خطای سیستمی رخ داده است.' + '<br>' + message);
+
+                    } else {
+                        toastr.success('اطلاعات شما ثبت شد.');
+                    }
+                    mApp.unblock('.profileMenuPage.profileMenuPage-sabteRotbe');
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+
+                    toastr.error('خطای سیستمی رخ داده است.');
+
+                    mApp.unblock('.SendMobileVerificationCodeWarper');
+                }
+
+            });
+
+
+        });
+
+        $(document).on('click', '#btnSendMobileVerificationCode', function () {
+
+            mApp.block('.SendMobileVerificationCodeWarper', {
+                overlayColor: "#000000",
+                type: "loader",
+                state: "success",
+                message: "کمی صبر کنید..."
+            });
+
+            $.ajax({
+                type: 'GET',
+                url: $('#SendMobileVerificationCodeActionUrl').val(),
+                // dataType: 'text',
+                dataType: 'json',
+                data: {},
+                success: function (data) {
+                    if (data.error) {
+
+                        // var message = 'مشکلی رخ داده است. لطفا مجدد سعی کنید';
+                        var message = data.error.message;
+
+                        toastr.error('خطای سیستمی رخ داده است.' + '<br>' + message);
+
+                    } else {
+
+                        $('#btnSendMobileVerificationCode').fadeOut();
+                        $('.inputVerificationWarper').fadeIn();
+
+                        toastr.info('کد تایید برای شماره همراه شما پیامک شد.');
+
+                        $('.inputVerificationWarper').removeClass('d-none');
+
+                    }
+                    mUtil.scrollTo('.SendMobileVerificationCodeWarper', 300);
+                    mApp.unblock('.SendMobileVerificationCodeWarper');
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+
+                    var message = '';
+                    if (jqXHR.status === 429) {
+                        message = 'پیش از این کد فعال سازی برای شما ارسال شده است. یک دقیقه تا درخواست بعدی صبر کنید.';
+                    } else {
+                        message = 'خطای سیستمی رخ داده است.';
+                    }
+
+                    toastr.warning(message);
+
+                    mApp.unblock('.SendMobileVerificationCodeWarper');
+                }
+            });
+        });
+
+        $(document).on('click', '#btnVerifyMobileVerificationCode', function () {
+
+            var verificationCode = $('#txtMobileVerificationCode').val();
+            if (verificationCode.trim().length === 0) {
+
+                toastr.warning('کد را وارد نکرده اید.');
+
+                return false;
+            }
+
+            mApp.block('.SendMobileVerificationCodeWarper', {
+                overlayColor: "#000000",
+                type: "loader",
+                state: "success",
+                message: "کمی صبر کنید..."
+            });
+
+            $.ajax({
+                type: 'POST',
+                url: $('#VerifyMobileVerificationCodeActionUrl').val(),
+                data: {
+                    code: verificationCode
+                },
+                // dataType: 'text',
+                dataType: 'json',
+                success: function (data) {
+                    if (data.error) {
+
+                        // var message = 'مشکلی رخ داده است. لطفا مجدد سعی کنید';
+                        var message = data.error.message;
+
+                        toastr.error('خطای سیستمی رخ داده است.' + '<br>' + message);
+
+
+                    } else {
+                        $('.inputVerificationWarper').fadeOut();
+                        $('.SendMobileVerificationCodeWarper').fadeOut();
+                        $('.mobileUnVerifyMessage').removeClass('d-block');
+                        $('.mobileUnVerifyMessage').addClass('d-none');
+                        $('.mobileVerifyMessage').removeClass('d-none');
+                        $('.mobileVerifyMessage').addClass('d-block');
+                        updateUserCompletionProgress(data.user.info.completion);
+                        toastr.success('شماره موبایل شما تایید شد.');
+
+                        if (data.user.lockProfile === 1) {
+                            window.location.reload();
+                        }
+                    }
+
+                    mApp.unblock('.SendMobileVerificationCodeWarper');
+                    mUtil.scrollTo('.SendMobileVerificationCodeWarper', 300);
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    var message = '';
+                    if (jqXHR.status === 403) {
+                        message = 'کد وارد شده اشتباه است.';
+                    } else if (jqXHR.status === 422) {
+                        message = 'کد را وارد نکرده اید.';
+                    } else {
+                        message = 'خطای سیستمی رخ داده است.';
+                    }
+
+                    toastr.error(message);
+
+                    mApp.unblock('.SendMobileVerificationCodeWarper');
+                }
+            });
+        });
+
+        $(document).on('submit', '#frmSabteRotbe', function(e){
+            var validation = sabteRotbeFormValidation();
+
+            if (!validation.status) {
+
+                toastr.warning(validation.message);
+
+                e.preventDefault();
+                return false;
+            }
+        });
+    }
+
+    function init() {
+        $form = $('#profilePhotoAjaxForm');
+
+        $('#UserProfilePhoto').fileinput({
+            theme: 'fas',
+            showUpload: false,
+            showCaption: false,
+
+            uploadAsync: false,
+            uploadUrl: $form.attr('action'), // your upload server url
+            uploadExtraData: function () {
+                return {
+                    updateType: 'photo',
+                    // username: $("#username").val()
+                };
+            },
+
+            browseClass: "fileinput-btnBrowseUserImage",
+            removeClass: "fileinput-btnRemoveUserImage",
+            captionClass: "fileinput-captionClass",
+            previewClass: "fileinput-previewClass",
+            frameClass: "fileinput-frameClass",
+            mainClass: "fileinput-mainClass",
+            fileType: "any",
+            // previewFileIcon: "<i class='glyphicon glyphicon-king'></i>",
+            overwriteInitial: true,
+            initialPreviewAsData: true,
+            // initialPreview: [
+            //     "http://lorempixel.com/1920/1080/transport/1",
+            //     "http://lorempixel.com/1920/1080/transport/2",
+            //     "http://lorempixel.com/1920/1080/transport/3"
+            // ],
+            // initialPreviewConfig: [
+            //     {caption: "transport-1.jpg", size: 329892, width: "120px", url: "{$url}", key: 1},
+            //     {caption: "transport-2.jpg", size: 872378, width: "120px", url: "{$url}", key: 2},
+            //     {caption: "transport-3.jpg", size: 632762, width: "120px", url: "{$url}", key: 3}
+            // ]
+        });
+
+        $('#birthdate').persianDatepicker({
+            observer: true,
+            format: 'YYYY/MM/DD',
+            altField: '#birthdateAlt'
+        });
+
+        addEvents();
+    }
+
+    return {
+        init: init
+    }
+}();
+
+$(document).ready(function () {
+    InitPage.init();
 });

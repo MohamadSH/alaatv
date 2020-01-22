@@ -1,4 +1,15 @@
 
+.m-input-icon > .m-input-icon__icon {
+    height: 39px;
+}
+
+.has-info label.col-form-label,
+.has-info label.form-control-label,
+.has-info label:not([class]),
+.has-info .form-control-feedback {
+    color: #00c5dc;
+}
+
 /*fix them style*/
 .m-portlet.m-portlet--head-overlay .m-portlet__body {
     margin-top: auto;
