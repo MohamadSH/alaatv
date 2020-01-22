@@ -35,6 +35,8 @@ use App\Http\Controllers\Web\SourceController;
 use App\Http\Controllers\Web\SurveyController;
 use App\Http\Controllers\Web\TopicsTreeController;
 use App\Http\Controllers\Web\UserController;
+use App\Http\Controllers\Web\VoucherController;
+use App\Http\Controllers\Web\VoucherPageController;
 use App\Http\Controllers\Web\WalletController;
 use App\PaymentModule\Controllers\PaymentVerifierController;
 use App\PaymentModule\Controllers\RedirectAPIUserToPaymentRoute;
@@ -43,8 +45,8 @@ use App\PaymentModule\Controllers\RedirectUserToPaymentPage;
 
 Route::get('embed/c/{content}', [ContentController::class, 'embed'])->name('web.c.embed');
 Route::get('/', '\\' . IndexPageController::class)->name('web.index');
-Route::get('shop', '\\'.ShopPageController::class)->name('web.shop');
-Route::get('home', [HomeController::class , 'home'])->name('web.home');
+Route::get('shop', '\\' . ShopPageController::class)->name('web.shop');
+Route::get('home', [HomeController::class, 'home'])->name('web.home');
 Route::get('404',  [ErrorPageController::class , 'error404']);
 Route::get('403',  [ErrorPageController::class , 'error403']);
 Route::get('500',  [ErrorPageController::class , 'error500']);
@@ -352,4 +354,6 @@ Route::post('cd3b472d9ba631a73cb7b66ba513df53', 'Web\CouponController@generateRa
 Route::get('tree', [TopicsTreeController::class, 'lernitoTree']);
 Route::get('tree/getArrayString/{lnid}', [TopicsTreeController::class, 'getTreeInPHPArrayString']);
 Route::get('tree/ignoreUpdateItem/{iuid}', [TopicsTreeController::class, 'ignoreUpdateItem']);
-Route::any('goToPaymentRoute/{paymentMethod}/{device}/', '\\'.RedirectAPIUserToPaymentRoute::class)->name('redirectToPaymentRoute');
+Route::any('goToPaymentRoute/{paymentMethod}/{device}/', '\\' . RedirectAPIUserToPaymentRoute::class)->name('redirectToPaymentRoute');
+Route::get('h', '\\' . VoucherPageController::class)->name('web.voucher.submit.form');
+Route::any('voucher/submit', [VoucherController::class, 'submit'])->name('web.voucher.submit');
