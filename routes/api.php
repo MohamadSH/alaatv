@@ -20,6 +20,7 @@ use App\Http\Controllers\Api\SetController;
 use App\Http\Controllers\Api\ShopPageController;
 use App\Http\Controllers\Api\TagController;
 use App\Http\Controllers\Api\UserController;
+use App\Http\Controllers\Api\VoucherController;
 use App\Http\Controllers\Api\ZarinpalTransactionController;
 use App\Http\Controllers\Auth\LoginController;
 
@@ -128,6 +129,8 @@ Route::group(['prefix' => 'v2'], function () {
             Route::get('review', [OrderController::class, 'checkoutReviewV2'])->name('api.v2.checkout.review');
         });
 
-        Route::any('getPaymentRedirectEncryptedLink', '\\'.GetPaymentRedirectEncryptedLink::class)->name('api.v2.payment.getEncryptedLink');
+        Route::any('getPaymentRedirectEncryptedLink', '\\' . GetPaymentRedirectEncryptedLink::class)->name('api.v2.payment.getEncryptedLink');
+        Route::post('voucher/{voucher}/verify', [VoucherController::class, 'verify'])->name('api.v2.verify.voucher');
+        Route::delete('voucher/{voucher}/disable', [VoucherController::class, 'disable'])->name('api.v2.disable.voucher');
     });
 });
