@@ -57,6 +57,11 @@
                 class: '',
                 id: null
             },
+            defaultOptions_btn = {
+                text: '',
+                class: '',
+                id: null
+            },
             options = null;
 
         if (this.length > 1) {
@@ -78,20 +83,35 @@
 
             if (formData.ajax !== null) {
                 formData.ajax = $.extend(true, {}, defaultOptions_ajax, formData.ajax);
+                formData.form = null;
             } else {
                 formData.form = $.extend(true, {}, defaultOptions_form, formData.form);
             }
 
-            var inputDataLength = formData.inputData.length;
+            var inputDataLength = formData.inputData.length,
+                defaultOptionsMap = {
+                    text: defaultOptions_inputText,
+                    hidden: defaultOptions_inputHidden,
+                    submit: defaultOptions_inputSubmit,
+                    sendAjax: defaultOptions_inputSendAjax,
+                    btn: defaultOptions_btn,
+                };
             for (var i = 0; i < inputDataLength; i++) {
-                if (typeof formData.inputData[i].type === 'undefined' || formData.inputData[i].type === 'text') {
-                    formData.inputData[i] = $.extend(true, {}, defaultOptions_inputText, formData.inputData[i]);
-                } else if (formData.inputData[i].type === 'hidden') {
-                    formData.inputData[i] = $.extend(true, {}, defaultOptions_inputHidden, formData.inputData[i]);
-                } else if (formData.inputData[i].type === 'submit') {
-                    formData.inputData[i] = $.extend(true, {}, defaultOptions_inputSubmit, formData.inputData[i]);
-                } else if (formData.inputData[i].type === 'sendAjax') {
-                    formData.inputData[i] = $.extend(true, {}, defaultOptions_inputSendAjax, formData.inputData[i]);
+                var defaultOptions = null,
+                    type = null;
+
+                if (typeof formData.inputData[i].type === 'undefined') {
+                    type = 'text';
+                } else {
+                    type = formData.inputData[i].type;
+                }
+
+                if (typeof defaultOptionsMap[type] !== 'undefined') {
+                    defaultOptions = defaultOptionsMap[type];
+                }
+
+                if (defaultOptions !== null) {
+                    formData.inputData[i] = $.extend(true, {}, defaultOptions, formData.inputData[i]);
                 } else {
                     formData.inputData.splice(i,1);
                 }
@@ -124,7 +144,7 @@
 
         var createFormGroup = function(inputItemData) {
 
-            if (inputItemData.type === 'submit' || inputItemData.type === 'sendAjax' || inputItemData.type === 'hidden') {
+            if (inputItemData.type === 'submit' || inputItemData.type === 'sendAjax' || inputItemData.type === 'hidden' || inputItemData.type === 'btn') {
                 return createInput(inputItemData);
             }
 
@@ -176,6 +196,8 @@
                 return createInput_submit(inputItemData);
             } else if (inputItemData.type === 'sendAjax') {
                 return createInput_sendAjax(inputItemData);
+            } else if (inputItemData.type === 'btn') {
+                return createInput_btn(inputItemData);
             } else if (inputItemData.type === 'hidden') {
                 return createInput_hidden(inputItemData);
             } else {
@@ -197,6 +219,10 @@
 
         var createInput_sendAjax = function(inputItemData) {
             return '    <button '+normilizeItemId(inputItemData.id)+' class="btnSendAjax_FormGenerator '+inputItemData.class+'">'+inputItemData.text+'</button>';
+        };
+
+        var createInput_btn = function(inputItemData) {
+            return '    <button '+normilizeItemId(inputItemData.id)+' class="'+inputItemData.class+'">'+inputItemData.text+'</button>';
         };
 
         var createInput_hidden = function(inputItemData) {

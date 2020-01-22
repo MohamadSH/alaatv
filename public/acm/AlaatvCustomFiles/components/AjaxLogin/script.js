@@ -89,13 +89,27 @@ var AjaxLogin = function () {
         return $('#AlaaAjaxLoginModal input[name="password"]');
     }
 
-    function changeInputFeedback($input, message) {
-        if (message === '') {
+    function changeInputFeedback($input, message, status) {
+        if ((typeof status === 'undefined' && message === '') || status === 'success') {
             $input.parents('.form-group').removeClass('has-danger');
+            $input.parents('.form-group').removeClass('has-warning');
+            $input.parents('.form-group').removeClass('has-info');
             $input.parents('.form-group').addClass('has-success');
-        } else {
+        } else if ((typeof status === 'undefined' && message !== '') || status === 'danger') {
             $input.parents('.form-group').removeClass('has-success');
+            $input.parents('.form-group').removeClass('has-warning');
+            $input.parents('.form-group').removeClass('has-info');
             $input.parents('.form-group').addClass('has-danger');
+        } else if (status === 'warning') {
+            $input.parents('.form-group').removeClass('has-success');
+            $input.parents('.form-group').removeClass('has-danger');
+            $input.parents('.form-group').removeClass('has-info');
+            $input.parents('.form-group').addClass('has-warning');
+        } else if (status === 'info') {
+            $input.parents('.form-group').removeClass('has-success');
+            $input.parents('.form-group').removeClass('has-danger');
+            $input.parents('.form-group').removeClass('has-warning');
+            $input.parents('.form-group').addClass('has-info');
         }
         $input.parents('.form-group').find('.form-control-feedback').html(message);
     }
@@ -281,5 +295,8 @@ var AjaxLogin = function () {
             showLoading();
             showMessage(status, message);
         },
+        getUsernameObject: getUsernameObject,
+        getPasswordObject: getPasswordObject,
+        changeInputFeedback: changeInputFeedback
     };
 }();
