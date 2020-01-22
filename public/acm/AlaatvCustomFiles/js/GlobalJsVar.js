@@ -33,6 +33,10 @@ var GlobalJsVar = function () {
         }
     }
 
+    function setVar(key, value) {
+        return $('input[type="hidden"][name="js-var-'+key+'"]').val(value);
+    }
+
 
     return {
         userIp: userIp,
@@ -41,5 +45,6 @@ var GlobalJsVar = function () {
         favoriteActionUrl: favoriteActionUrl,
         unFavoriteActionUrl: unFavoriteActionUrl,
         getVar: getVar,
+        setVar: setVar,
     };
 }();
