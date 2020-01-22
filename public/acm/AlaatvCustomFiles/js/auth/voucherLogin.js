@@ -2,7 +2,10 @@ var InitPage = function() {
 
     var isVerified,
         voucherCode,
+        voucherIsChecked,
+        voucherIsValid,
         productData,
+        mobile,
         loginActionUrl,
         verifyActionUrl,
         verifyFormToken,
@@ -11,23 +14,28 @@ var InitPage = function() {
         afterVerifyActionUrl;
 
     function showProperForm() {
-        if (detectUserLogin()) {
-            hideLoginForm();
-            if (isVerified) {
-                if (voucherCode.length > 0) {
-                    initGAEE();
-                    addToCartForGAEE();
-                    window.location.href = userProductFilesUrl;
-                } else {
-                    showVoucherForm();
-                }
-            } else {
-                showVerifyForm();
-            }
 
-        } else {
+        hideLoginForm();
+        hideVoucherPageForm();
+
+        if (!detectUserLogin()) {
             showLoginForm();
+            return;
         }
+
+        if (!isVerified) {
+            showVerifyForm();
+            return;
+        }
+
+        if (!voucherIsChecked || !voucherIsValid) {
+            showVoucherForm();
+            return;
+        }
+
+        initGAEE();
+        addToCartForGAEE();
+        window.location.href = userProductFilesUrl;
     }
 
     function detectUserLogin() {
@@ -36,8 +44,12 @@ var InitPage = function() {
 
     function showVoucherForm() {
 
-        cleanVoucherPageForm();
+        if (voucherIsChecked && !voucherIsValid) {
+            toastr.warning('کد تخفیف معتبر نیست.');
+        }
+
         $('.voucherPageFormWrapper').removeClass('d-none');
+        $('.voucherPageFormWrapper .m-portlet__head-text').html('کد تخفیف خود را وارد کنید: ');
 
         var validateForm = function(verifyVoucherForm) {
 
@@ -75,7 +87,9 @@ var InitPage = function() {
                 },
                 success: function (data) {
                     // ToDo: check response
+                    voucherIsChecked = true;
                     voucherCode = data.voucherCode;
+                    voucherIsValid = data.voucherIsValid;
                     showProperForm();
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
@@ -96,10 +110,10 @@ var InitPage = function() {
                 {
                     type: 'text',
                     name: 'voucherNumber',
-                    value: $('#js-var-userData-name').val(),
-                    placeholder: 'کد تایید شماره همراه',
-                    label: 'کد تایید شماره همراه',
-                    iconsRight: '<i class="fa fa-check-circle"></i>',
+                    value: voucherCode,
+                    placeholder: 'کد تخفیف خود را وارد کنید',
+                    label: 'کد تخفیف',
+                    iconsRight: '<i class="fa fa-ticket-alt"></i>',
                     id: 'voucherNumber'
                 },
                 {
@@ -116,8 +130,9 @@ var InitPage = function() {
 
     function showVerifyForm() {
 
-        cleanVoucherPageForm();
         $('.voucherPageFormWrapper').removeClass('d-none');
+        $('.voucherPageFormWrapper .m-portlet__head-text').html('تایید شماره همراه: ' + mobile);
+        toastr.info('کد تایید برای شماره همراه شما پیامک شد.');
 
         var validateForm = function(verifyMobileForm) {
 
@@ -146,7 +161,6 @@ var InitPage = function() {
                 contentType: 'application/json; charset=utf-8',
                 beforeSend: function () {
                     var status = validateForm(verifyMobileForm);
-
                     if (status) {
                         AlaaLoading.show();
                     }
@@ -187,11 +201,17 @@ var InitPage = function() {
                     text: 'تایید شماره همراه',
                     class: 'btn btn-primary',
                     id: null
+                },
+                {
+                    type: 'btn',
+                    text: 'ویرایش شماره همراه',
+                    class: 'btn btn-info editPhoneNumber',
+                    id: null
                 }
             ]
         });
 
-        validateForm(verifyMobileForm);
+        // validateForm(verifyMobileForm);
     }
 
     function showLoginForm() {
@@ -200,13 +220,18 @@ var InitPage = function() {
         showInitMessage();
     }
 
-    function cleanVoucherPageForm() {
-        $('.voucherPageForm').html('');
+    function hideVoucherPageForm() {
+        $('.voucherPageFormWrapper').addClass('d-none');
+        cleanVoucherPageForm();
     }
 
     function hideLoginForm() {
         $('#AlaaAjaxLoginModal').off('hide.bs.modal');
         $('#AlaaAjaxLoginModal').modal('hide');
+    }
+
+    function cleanVoucherPageForm() {
+        $('.voucherPageForm').html('');
     }
 
     function showLoginModal() {
@@ -218,6 +243,7 @@ var InitPage = function() {
     function afterLogin(response) {
         // ToDo: check response
         GlobalJsVar.setVar('userId', response.data.user.id);
+        mobile = response.data.user.mobile;
         showProperForm();
     }
 
@@ -239,6 +265,7 @@ var InitPage = function() {
     }
 
     function initData(padeData) {
+        mobile = padeData.mobile;
         isVerified = padeData.isVerified;
         productData = padeData.productData;
         voucherCode = padeData.voucherCode;
@@ -256,6 +283,15 @@ var InitPage = function() {
         if (GAEE.reportGtmEecOnConsole()) {
             console.log('product.show', productData.parentProduct);
         }
+    }
+
+    function addEvents() {
+        $(document).on('click', '.editPhoneNumber', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+            GlobalJsVar.setVar('userId', '');
+            showProperForm();
+        });
     }
 
     function getSelectedProductObject() {
@@ -290,6 +326,7 @@ var InitPage = function() {
     function init(padeData) {
         initData(padeData);
         showProperForm();
+        addEvents();
     }
 
     return {
