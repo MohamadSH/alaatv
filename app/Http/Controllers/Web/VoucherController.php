@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Web;
 
+use App\Classes\Pricing\Alaa\AlaaInvoiceGenerator;
 use App\Gender;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\EditUserRequest;
@@ -10,10 +11,12 @@ use App\Major;
 use App\Order;
 use App\Orderproduct;
 use App\Product;
+use App\Productvoucher;
 use App\Traits\RequestCommon;
 use App\User;
 use App\Websitesetting;
 use Carbon\Carbon;
+use Exception;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
@@ -21,6 +24,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Redirector;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Log;
 use Illuminate\View\View;
 use Jenssegers\Agent\Agent;
 use SEO;
@@ -217,15 +221,16 @@ class VoucherController extends Controller
 
     public function submit(Request $request)
     {
-        $code    = $request->get('code');
-        $user    = $request->user();
+        $code = $request->get('code');
+        $user = $request->user();
+        /** @var Productvoucher $voucher */
         $voucher = $request->get('voucher');
 
         $products = $voucher->products()->get();
         $result   = $this->addVoucherProductsToUser($user, $products);
 
         if ($result) {
-            $voucher->markVoucherAsUsed();
+            $voucher->markVoucherAsUsed($user->id);
 
             if ($request->expectsJson()) {
                 return response()->json([
@@ -241,7 +246,7 @@ class VoucherController extends Controller
         if ($request->expectsJson()) {
             return response()->json([
                 'message' => 'Unexpected error',
-            ], Response::HTTP_SERVICE_UNAVAILABLE);
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
 
         session()->put('error', 'خطای غیر منتظره در ثبت کد');
@@ -287,24 +292,32 @@ class VoucherController extends Controller
 
     private function addVoucherProductsToUser(User $user, Collection $products): bool
     {
-        return true;
         $order = Order::create([
             'user_id'          => $user->id,
             'orderstatus_id'   => config('constants.ORDER_STATUS_CLOSED'),
             'paymentstatus_id' => config('constants.PAYMENT_STATUS_ORGANIZATIONAL_PAID'),
-//            'cost'               => ,
-//            'costwithoutcoupon'  =>
         ]);
 
         foreach ($products as $product) {
-            $donateOrderproduct = Orderproduct::Create([
+            $price = $product->price;
+            Orderproduct::Create([
                 'order_id'            => $order->id,
                 'product_id'          => $product->id,
-                'cost'                => $product->price->final,
+                'cost'                => $price['final'],
                 'orderproducttype_id' => config('constants.ORDER_PRODUCT_TYPE_DEFAULT'),
             ]);
         }
-        return true;
+
+        try {
+            $done = true;
+            (new AlaaInvoiceGenerator)->generateOrderInvoice($order);
+        } catch (Exception $e) {
+            $done = false;
+            $order->delete();
+            Log::error('submitVoucher:addVoucherProductsToUser:generateOrderInvoice');
+        }
+
+        return $done;
     }
 
 }
