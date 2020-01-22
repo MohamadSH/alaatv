@@ -36,12 +36,13 @@
         var padeData = {
             mobile: '{{$mobile}}',
             loginActionUrl: GlobalJsVar.loginActionUrl(),
-            verifyActionUrl: '{{ action('Web\MobileVerificationController@resend') }}',
+            sendVerificationCodeActionUrl: '{{ action('Web\MobileVerificationController@resend') }}',
+            verifyActionUrl: '{{ action('Web\MobileVerificationController@verify') }}',
             verifyFormToken: '{{Session::token()}}',
             userProductFilesUrl: '{{ action("Web\UserController@userProductFiles")  }}',
             voucherActionUrl: '{{route('web.voucher.submit')}}',
             voucherCode: '{{$code}}',
-            isVerified: '{{$isUserVerify}}',
+            isVerified: '{{$isUserVerified}}',
         };
     </script>
 {{--    <script src = "{{ mix('/js/contactUs.js') }}"></script>--}}
