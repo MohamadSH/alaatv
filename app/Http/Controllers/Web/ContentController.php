@@ -376,9 +376,7 @@ class ContentController extends Controller
     /**
      * Search for an educational content
      *
-     * @param
-     *
-     * @return Response
+     * @return RedirectResponse|Redirector
      */
     public function search()
     {
