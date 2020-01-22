@@ -10,8 +10,7 @@ var InitPage = function() {
         verifyActionUrl,
         verifyFormToken,
         voucherActionUrl,
-        userProductFilesUrl,
-        afterVerifyActionUrl;
+        userProductFilesUrl;
 
     function showProperForm() {
 
@@ -28,7 +27,7 @@ var InitPage = function() {
             return;
         }
 
-        if (!voucherIsChecked || !voucherIsValid) {
+        if (voucherCode.length.trim() === 0) {
             showVoucherForm();
             return;
         }
@@ -274,7 +273,6 @@ var InitPage = function() {
         verifyFormToken = padeData.verifyFormToken;
         voucherActionUrl = padeData.voucherActionUrl;
         userProductFilesUrl = padeData.userProductFilesUrl;
-        afterVerifyActionUrl = padeData.afterVerifyActionUrl;
     }
 
     function initGAEE() {

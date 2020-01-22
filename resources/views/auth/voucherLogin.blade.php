@@ -34,18 +34,14 @@
 @section('page-js')
     <script>
         var padeData = {
-            productData: '#',
-            mobile: '09358745928',
+            mobile: '{{$mobile}}',
             loginActionUrl: GlobalJsVar.loginActionUrl(),
-            verifyActionUrl: '#',
-            afterVerifyActionUrl: '#',
+            verifyActionUrl: '{{ action('Web\MobileVerificationController@resend') }}',
             verifyFormToken: '{{Session::token()}}',
             userProductFilesUrl: '{{ action("Web\UserController@userProductFiles")  }}',
-            voucherActionUrl: '#',
-            voucherCode: '',
-            isVerified: true,
-            voucherIsChecked: false,
-            voucherIsValid: false,
+            voucherActionUrl: '{{route('web.voucher.submit')}}',
+            voucherCode: '{{$code}}',
+            isVerified: '{{$isUserVerify}}',
         };
     </script>
 {{--    <script src = "{{ mix('/js/contactUs.js') }}"></script>--}}
