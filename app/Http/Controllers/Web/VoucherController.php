@@ -10,7 +10,6 @@ use App\Major;
 use App\Order;
 use App\Orderproduct;
 use App\Product;
-use App\Productvoucher;
 use App\Traits\RequestCommon;
 use App\User;
 use App\Websitesetting;
@@ -218,69 +217,9 @@ class VoucherController extends Controller
 
     public function submit(Request $request)
     {
-        $code = $request->get('code');
-        $user = $request->user();
-
-        if (!isset($user)) {
-            if ($request->expectsJson()) {
-                return response()->json([], Response::HTTP_UNAUTHORIZED);
-            }
-
-            return redirect(route('web.voucher.submit', ['code' => $code]));
-        }
-
-        if (!$user->hasVerifiedMobile()) {
-            if ($request->expectsJson()) {
-                return response()->json([
-                    'message' => 'User is not verified',
-                ], Response::HTTP_UNAUTHORIZED);
-            }
-
-            return redirect(route('web.voucher.submit', ['code' => $code]));
-        }
-
-        /** @var Productvoucher $voucher */
-        $voucher = Productvoucher::where('code', $code)->first();
-        if (!isset($voucher)) {
-            if ($request->expectsJson()) {
-                return response()->json([
-                    'message' => 'Voucher not found',
-                ], Response::HTTP_UNPROCESSABLE_ENTITY);
-            }
-
-            session()->put('error', 'کد وارد شده یافت نشد');
-            return redirect(route('web.voucher.submit', ['code' => $code]));
-        }
-
-        if (!$voucher->isValid()) {
-            if ($request->expectsJson()) {
-                return response()->json([
-                    'message' => 'Voucher is not valid',
-                ], Response::HTTP_UNPROCESSABLE_ENTITY);
-            }
-
-            session()->put('error', 'کد وارد شده معتبر نمی باشد');
-            return redirect(route('web.voucher.submit', ['code' => $code]));
-        }
-
-        if ($voucher->hasBeenUsed()) {
-            if ($voucher->user_id == $user->id) {
-                //ToDo: log
-            } else {
-                //ToDo: log
-            }
-
-            if ($request->expectsJson()) {
-                return response()->json([
-                    'message' => 'Voucher has been used before',
-                ], Response::HTTP_UNPROCESSABLE_ENTITY);
-            }
-
-
-            session()->put('error', 'کد قبلا استفاده شده است');
-            return redirect(route('web.voucher.submit', ['code' => $code]));
-        }
-
+        $code    = $request->get('code');
+        $user    = $request->user();
+        $voucher = $request->get('voucher');
 
         $products = $voucher->products()->get();
         $result   = $this->addVoucherProductsToUser($user, $products);
@@ -332,6 +271,7 @@ class VoucherController extends Controller
         $this->middleware('permission:' . config('constants.INSERT_USER_ACCESS'), ['only' => 'create']);
         $this->middleware('permission:' . config('constants.REMOVE_USER_ACCESS'), ['only' => 'destroy']);
         $this->middleware('permission:' . config('constants.SHOW_USER_ACCESS'), ['only' => 'edit']);
+        $this->middleware('SubmitVoucher', ['only' => ['submit'],]);
     }
 
     /**

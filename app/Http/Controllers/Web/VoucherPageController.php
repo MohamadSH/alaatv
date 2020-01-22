@@ -21,16 +21,19 @@ class VoucherPageController extends Controller
         $user = $request->user();
         $code = $request->get('code');
 
-        $mobile = null;
+        $mobile         = null;
+        $isUserVerified = false;
         if (isset($user)) {
             $mobile = $user->mobile;
+
+            $hasVerifiedMobile = $user->hasVerifiedMobile();
+            if ($hasVerifiedMobile) {
+                $isUserVerified = true;
+            } else {
+                $user->sendMobileVerificationNotification();
+            }
         }
 
-        $hasVerifiedMobile = $user->hasVerifiedMobile();
-        $isUserVerified    = false;
-        if ($hasVerifiedMobile) {
-            $isUserVerified = true;
-        }
 
         return view('auth.voucherLogin', compact('mobile', 'isUserVerified', 'code'));
     }
