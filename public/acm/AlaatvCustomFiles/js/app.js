@@ -39,6 +39,8 @@ var AppGlobalInitInit = function() {
 
         if (isJson(flashMessage)) {
             flashMessage = JSON.parse(flashMessage);
+            flashMessage.title = flashMessage.title.split('+').join(' ');
+            flashMessage.body = flashMessage.body.split('+').join(' ');
             showAlaaAppModal(flashMessage.title, flashMessage.body);
         } else {
             showAlaaAppModal('', flashMessage);

@@ -327,6 +327,9 @@ var InitPage = function() {
                 window.location.href = userProductFilesUrl;
             },
             error: function (jqXHR, textStatus, errorThrown) {
+                hideLoginForm();
+                hideVoucherPageForm();
+                showVoucherForm();
                 AlaaLoading.hide();
                 toastr.warning('کد معتبر نیست.');
             },
