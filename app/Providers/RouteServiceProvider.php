@@ -30,6 +30,7 @@ use App\{Afterloginformcontrol,
     Product,
     Productfile,
     Productphoto,
+    Productvoucher,
     Role,
     Section,
     Slideshow,
@@ -531,6 +532,17 @@ class RouteServiceProvider extends ServiceProvider
                 'source_' . $value,
             ])->remember($key, config('constants.CACHE_5'), function () use ($value) {
                 return Source::where('id', $value)
+                        ->first() ?? abort(Response::HTTP_NOT_FOUND);
+            });
+        });
+
+        Route::bind('voucher', function ($value) {
+            $key = 'voucher:' . $value;
+            return Cache::tags([
+                'voucher',
+                'voucher_' . $value,
+            ])->remember($key, config('constants.CACHE_5'), function () use ($value) {
+                return Productvoucher::where('id', $value)
                         ->first() ?? abort(Response::HTTP_NOT_FOUND);
             });
         });

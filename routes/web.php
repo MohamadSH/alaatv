@@ -165,7 +165,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('givePrize', 'Web\LotteryController@givePrizes');
     Route::get('bot', [BotsController::class, 'bot'])->name('web.bots');
     Route::get('pointBot', [BotsController::class, 'pointBot'])->name('web.bot.point');
-    Route::post('walletBot',[BotsController::class, 'walletBot'])->name('web.bot.wallet');
+    Route::post('walletBot', [BotsController::class, 'walletBot'])->name('web.bot.wallet');
     Route::post('excelBot', [BotsController::class, 'excelBot'])->name('web.bot.excel');
     Route::post('zarinpalbot', [BotsController::class, 'ZarinpalVerifyPaymentBot'])->name('web.bot.verifyZarinpal');
     Route::post('thumbnailbot', [BotsController::class, 'fixthumbnail'])->name('web.bot.fixthumbnails');
@@ -173,8 +173,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('tagbot', [BotsController::class, 'fixtag'])->name('web.bot.fixtag');
     Route::post('close-orders-bot', [BotsController::class, 'closeOrders'])->name('web.bot.closeOrders');
     Route::post('generateMassiveRandomCoupon', [BotsController::class, 'generateMassiveRandomCoupon'])->name('web.bot.massive.random.coupon');
-    Route::get('v/asiatech', 'Web\VoucherController@voucherRequest');
-    Route::put('v', 'Web\VoucherController@submitVoucherRequest');
+    Route::get('v/asiatech', [VoucherController::class, 'voucherRequest']);
+    Route::put('v', [VoucherController::class, 'submitVoucherRequest']);
 
     Route::group(['prefix' => 'orderproduct'], function () {
         Route::post('restore', [OrderproductController::class, 'restore'])->name('web.orderproduct.restore');
