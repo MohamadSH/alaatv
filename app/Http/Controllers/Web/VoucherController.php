@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Web;
 
 use App\Classes\Pricing\Alaa\AlaaInvoiceGenerator;
+use App\Events\UserRedirectedToPayment;
 use App\Gender;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\EditUserRequest;
@@ -13,11 +14,11 @@ use App\Orderproduct;
 use App\Product;
 use App\Productvoucher;
 use App\Traits\RequestCommon;
+use App\Transaction;
 use App\User;
 use App\Websitesetting;
 use Carbon\Carbon;
 use Exception;
-use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -125,10 +126,9 @@ class VoucherController extends Controller
     /**
      * Submit user request for voucher request
      *
-     * @param InsertVoucherRequest InsertVoucherRequest
+     * @param InsertVoucherRequest $request
      *
      * @return Response
-     * @throws FileNotFoundException
      */
     public function submitVoucherRequest(InsertVoucherRequest $request)
     {
@@ -226,11 +226,19 @@ class VoucherController extends Controller
         /** @var Productvoucher $voucher */
         $voucher = $request->get('voucher');
 
-        $products = $voucher->products()->get();
-        $result   = $this->addVoucherProductsToUser($user, $products);
+        $products = $voucher->products;
+        [$done, $order] = $this->addVoucherProductsToUser($user, $products);
 
-        if ($result) {
-            $voucher->markVoucherAsUsed($user->id);
+        if ($done) {
+            $voucher->markVoucherAsUsed($user->id, Productvoucher::CONTRANCTOR_HEKMAT);
+            $gtmEec = $this->makeGtmEecArray($order);
+            $flash  = [
+                'title' => 'تبریک',
+                'body'  => 'محصولات شما با موفقیت ثبت شد',
+            ];
+            setcookie('flashMessage', json_encode($flash), time() + (86400 * 30), '/');
+            setcookie('gaee', json_encode($gtmEec), time() + (86400 * 30), '/');
+
 
             if ($request->expectsJson()) {
                 return response()->json([
@@ -239,9 +247,14 @@ class VoucherController extends Controller
                 ]);
             }
 
-            session()->put('voucher_success', 'کد ووچر ثبت شد');
             return redirect(route('web.user.asset'));
         }
+
+        $flash = [
+            'title' => 'خطا',
+            'body'  => 'خطای سرور',
+        ];
+        setcookie('flashMessage', json_encode($flash), time() + (86400 * 30), '/');
 
         if ($request->expectsJson()) {
             return response()->json([
@@ -249,7 +262,6 @@ class VoucherController extends Controller
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
 
-        session()->put('error', 'خطای غیر منتظره در ثبت کد');
         return redirect(route('web.voucher.submit', ['code' => $code]));
     }
 
@@ -260,7 +272,7 @@ class VoucherController extends Controller
      */
     private function getAuthExceptionArray(Agent $agent): array
     {
-        $authException = ['show'];
+        $authException = ['show', 'submit'];
 
         return $authException;
     }
@@ -290,13 +302,13 @@ class VoucherController extends Controller
         return redirect()->back();
     }
 
-    private function addVoucherProductsToUser(User $user, Collection $products): bool
+    private function addVoucherProductsToUser(User $user, Collection $products): array
     {
-        return true;
         $order = Order::create([
             'user_id'          => $user->id,
             'orderstatus_id'   => config('constants.ORDER_STATUS_CLOSED'),
             'paymentstatus_id' => config('constants.PAYMENT_STATUS_ORGANIZATIONAL_PAID'),
+            'completed_at'     => Carbon::now('Asia/Tehran'),
         ]);
 
         foreach ($products as $product) {
@@ -305,20 +317,68 @@ class VoucherController extends Controller
                 'order_id'            => $order->id,
                 'product_id'          => $product->id,
                 'cost'                => $price['final'],
+                'tmp_final_cost'      => $price['final'],
                 'orderproducttype_id' => config('constants.ORDER_PRODUCT_TYPE_DEFAULT'),
             ]);
         }
 
         try {
-            $done = true;
-            (new AlaaInvoiceGenerator)->generateOrderInvoice($order);
+            $invoiceInfo = (new AlaaInvoiceGenerator)->generateOrderInvoice($order);
+            $finalPrice  = $invoiceInfo['price']['final'];
+            $order->update([
+                'costwithoutcoupon' => $finalPrice,
+            ]);
+
+            $eachInstalment = floor($finalPrice / 12);
+            $lastInstalment = $finalPrice % 12;
+            for ($i = 1; $i <= 12; $i++) {
+                if ($i == 12) {
+                    $eachInstalment += $lastInstalment;
+                }
+
+                Transaction::create([
+                    'order_id'             => $order->id,
+                    'cost'                 => $eachInstalment,
+                    'transactionstatus_id' => config('constants.TRANSACTION_STATUS_UNPAID'),
+                    'managerComment'       => 'قسط حکمت',
+                ]);
+            }
+
+            event(new UserRedirectedToPayment($user));
+            $result = [true, $order];
+
         } catch (Exception $e) {
-            $done = false;
             $order->delete();
             Log::error('submitVoucher:addVoucherProductsToUser:generateOrderInvoice');
+            Log::error('file:' . $e->getFile() . ':' . $e->getLine());
+            $result = [false, null];
         }
 
-        return $done;
+        return $result;
+    }
+
+    private function makeGtmEecArray(Order $order): array
+    {
+        $orderproducts = $order->orderproducts;
+        $orderproducts->loadMissing('product');
+
+        $gtmEecProducts = [];
+        foreach ($orderproducts as $orderproduct) {
+            $gtmEecProducts[] = [
+                'id'       => (string)$orderproduct->product->id,
+                'name'     => $orderproduct->product->name,
+                'category' => (isset($orderproduct->product->category)) ? $orderproduct->product->category : '-',
+                'variant'  => '-',
+                'brand'    => 'آلاء',
+                'quantity' => 1,
+                'price'    => (string)number_format($orderproduct->getSharedCostOfTransaction() ?? 0, 2, '.', ''),
+            ];
+        }
+
+        return [
+            'actionField' => 'product.addToCart',
+            'products'    => $gtmEecProducts,
+        ];
     }
 
 }
