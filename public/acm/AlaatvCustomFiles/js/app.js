@@ -3,7 +3,7 @@ var AppGlobalInitInit = function() {
     var LazyLoad,
         Firebase;
 
-    function initVars(data) {
+    function initData(data) {
         LazyLoad = (typeof data.LazyLoad !== 'undefined') ? data.LazyLoad : null;
         Firebase = (typeof data.Firebase !== 'undefined') ? data.Firebase : null;
     }
@@ -31,7 +31,7 @@ var AppGlobalInitInit = function() {
         });
     }
 
-    function addClickEventofBtnProfileInMobileView() {
+    function addClickEventOfBtnProfileInMobileView() {
         if ($('#m_aside_header_topbar_mobile_toggle1').length > 0) {
             $('#m_aside_header_topbar_mobile_toggle1')[0].addEventListener('click', function(e) {
                 var element = $('.m-nav__item.m-topbar__user-profile')[0].closest('.m-dropdown');
@@ -51,9 +51,22 @@ var AppGlobalInitInit = function() {
         }
     }
 
+    function addLoginBeforeClickEvent() {
+        $(document).on('click', '.LoginBeforeClick', function () {
+            var userId = GlobalJsVar.userId(),
+                link = $(this).attr('data-href');
+            if (userId.length > 0) {
+                window.location.href = link;
+            } else {
+                AjaxLogin.showLogin(GlobalJsVar.loginActionUrl(), link);
+            }
+        });
+    }
+
     function addEvents() {
-        addClickEventofBtnProfileInMobileView();
+        addClickEventOfBtnProfileInMobileView();
         addGtmEecEvents();
+        addLoginBeforeClickEvent();
     }
 
     function initFirebase() {
@@ -106,7 +119,7 @@ var AppGlobalInitInit = function() {
     }
 
     function init(data) {
-        initVars(data);
+        initData(data);
         initLazyLoad();
         addEvents();
         initFirebase();

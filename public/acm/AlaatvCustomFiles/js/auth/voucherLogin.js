@@ -26,18 +26,11 @@ var InitPage = function() {
             return;
         }
 
-        if (voucherCode.length.trim() === 0) {
+        if (voucherCode.trim().length === 0) {
             showVoucherForm();
-            return;
         } else {
             submitVoucherCode();
         }
-
-        // ToDo: use GAEE in user dashboard page when coming user is loged in and verified and has voucher code,
-        // in this case user never com in this page and redirect to dashboard page directly
-        initGAEE();
-        addToCartForGAEE();
-        window.location.href = userProductFilesUrl;
     }
 
     function detectUserLogin() {
@@ -47,7 +40,7 @@ var InitPage = function() {
     function showVoucherForm() {
 
         $('.voucherPageFormWrapper').removeClass('d-none');
-        $('.voucherPageFormWrapper .m-portlet__head-text').html('کد تخفیف خود را وارد کنید: ');
+        $('.voucherPageFormWrapper .m-portlet__head-text').html('کد خود را وارد کنید: ');
 
         var validateForm = function(verifyVoucherForm) {
 
@@ -86,13 +79,13 @@ var InitPage = function() {
                     return status;
                 },
                 success: function (data) {
-                    voucherCode = $('#voucherNumber').val().trim();
-                    AlaaLoading.hide();
+                    toastr.success('کد وارد شده معتبر است.');
+                    applyGAEE(data.products);
                     window.location.href = userProductFilesUrl;
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
                     AlaaLoading.hide();
-                    toastr.warning('کد تخفیف معتبر نیست.');
+                    toastr.warning('کد معتبر نیست.');
                 },
                 cache: false,
                 headers: {
@@ -109,8 +102,8 @@ var InitPage = function() {
                     type: 'text',
                     name: 'code',
                     value: voucherCode,
-                    placeholder: 'کد تخفیف خود را وارد کنید',
-                    label: 'کد تخفیف',
+                    placeholder: 'کد خود را وارد کنید',
+                    label: 'کد',
                     iconsRight: '<i class="fa fa-ticket-alt"></i>',
                     id: 'voucherNumber'
                 },
@@ -122,8 +115,6 @@ var InitPage = function() {
                 }
             ]
         });
-
-        // validateForm(verifyMobileForm);
     }
 
     function showVerifyForm() {
@@ -134,26 +125,26 @@ var InitPage = function() {
 
         var validateForm = function(verifyMobileForm) {
 
-            var formData = verifyMobileForm.getFormData(),
-                status = true;
+                var formData = verifyMobileForm.getFormData(),
+                    status = true;
 
-            if (formData.verifyNumber.trim().length > 0) {
-                verifyMobileForm.inputFeedback('verifyNumber', '', 'success');
-            } else {
-                status = false;
-                verifyMobileForm.inputFeedback('verifyNumber', 'کد تایید را وارد کنید', 'danger');
-            }
+                if (formData.code.trim().length > 0) {
+                    verifyMobileForm.inputFeedback('code', '', 'success');
+                } else {
+                    status = false;
+                    verifyMobileForm.inputFeedback('code', 'کد تایید را وارد کنید', 'danger');
+                }
 
-            verifyMobileForm.setAjaxData(formData);
+                verifyMobileForm.setAjaxData(formData);
 
-            return status;
-        },
+                return status;
+            },
             verificationCode = function () {
-              if ($('#verifyNumber').length === 1) {
-                  return $('#verifyNumber').val().trim();
-              } else {
-                  return '';
-              }
+                if ($('#verifyNumber').length === 1) {
+                    return $('#verifyNumber').val().trim();
+                } else {
+                    return '';
+                }
             };
 
         var verifyMobileForm = $('.voucherPageForm').FormGenerator({
@@ -175,10 +166,16 @@ var InitPage = function() {
                     return status;
                 },
                 success: function (data) {
-                    // ToDo: check response
-                    isVerified = data.isVerified;
-                    showProperForm();
-                    AlaaLoading.hide();
+                    if (data.error) {
+                        var message = data.error.message;
+                        toastr.error('خطای سیستمی رخ داده است.' + '<br>' + message);
+                    } else {
+                        isVerified = true;
+                        AlaaLoading.hide();
+                        toastr.success('شماره موبایل شما تایید شد.');
+                        showProperForm();
+                    }
+
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
                     AlaaLoading.hide();
@@ -324,26 +321,14 @@ var InitPage = function() {
                 code: voucherCode
             },
             success: function (data) {
-                if (data.error) {
-                    var message = data.error.message;
-                    toastr.error('خطای سیستمی رخ داده است.' + '<br>' + message);
-                } else {
-                    toastr.info('کد تایید برای شماره همراه شما پیامک شد.');
-                }
-                AlaaLoading.hide();
+                toastr.success('کد وارد شده معتبر است.');
+                applyGAEE(data.products);
+                window.location.href = userProductFilesUrl;
             },
             error: function (jqXHR, textStatus, errorThrown) {
-
-                var message = '';
-                if (jqXHR.status === 429) {
-                    message = 'پیش از این کد فعال سازی برای شما ارسال شده است. یک دقیقه تا درخواست بعدی صبر کنید.';
-                } else {
-                    message = 'خطای سیستمی رخ داده است.';
-                }
-
-                toastr.warning(message);
                 AlaaLoading.hide();
-            }
+                toastr.warning('کد معتبر نیست.');
+            },
         });
     }
 
@@ -360,12 +345,10 @@ var InitPage = function() {
         sendVerificationCodeActionUrl = padeData.sendVerificationCodeActionUrl;
     }
 
-    function initGAEE() {
-        // ToDo: check products data structure
-        GAEE.productDetailViews('product.show', productData.parentProduct);
-        if (GAEE.reportGtmEecOnConsole()) {
-            console.log('product.show', productData.parentProduct);
-        }
+    function applyGAEE(products) {
+        var impressions = getProducts(products);
+        GAEE.impressionView(impressions);
+        GAEE.productAddToCart('product.addToCart', impressions);
     }
 
     function addEvents() {
@@ -376,33 +359,28 @@ var InitPage = function() {
         });
     }
 
-    function getSelectedProductObject() {
-        return $('input[type=checkbox][name="products[]"]:checked').map(function () {
-            if ($(this).val()) {
-                return {
-                    id: $(this).data('gtm-eec-product-id').toString(),      // (String) The SKU of the product. Example: 'P12345'
-                    name: $(this).data('gtm-eec-product-name').toString(),    // (String) The name of the product. Example: 'T-Shirt'
-                    price: $(this).data('gtm-eec-product-price').toString(),
-                    brand: $(this).data('gtm-eec-product-brand').toString(),   // (String) The brand name of the product. Example: 'NIKE'
-                    category: $(this).data('gtm-eec-product-category').toString(),// (String) Product category of the item. Can have maximum five levels of hierarchy. Example: 'clothes/shirts/t-shirts'
-                    variant: $(this).data('gtm-eec-product-variant').toString(), // (String) What variant of the main product this is. Example: 'Large'
-                    quantity: $(this).data('gtm-eec-product-quantity'),
-                };
-            }
-        }).get();
+    function priceToStringWithTwoDecimal(price) {
+        return parseFloat((Math.round(price * 100) / 100).toString()).toFixed(2);
     }
 
-    function addToCartForGAEE() {
-        // ToDo: check products data structure
-        var product = productData.productId;
-        var selectedProductObject = getSelectedProductObject();
-
-        selectedProductObject.push(productData.parentProduct);
-        TotalQuantityAddedToCart = selectedProductObject.length;
-        GAEE.productAddToCart('product.addToCart', selectedProductObject);
-        if (GAEE.reportGtmEecOnConsole()) {
-            console.log('product.addToCart', selectedProductObject);
+    function getProducts(products) {
+        var productsArray = [];
+        for (var i = 0; (typeof products[i] !== 'undefined'); i++) {
+            productsArray.push({
+                id: products[i].id.toString(),      // (String) The SKU of the product. Example: 'P12345'
+                name: products[i].name.toString(),    // (String) The name of the product. Example: 'T-Shirt'
+                price: priceToStringWithTwoDecimal(products[i].price.final).toString(),
+                brand: 'آلاء',   // (String) The brand name of the product. Example: 'NIKE'
+                category: products[i].category.toString(),// (String) Product category of the item. Can have maximum five levels of hierarchy. Example: 'clothes/shirts/t-shirts'
+                variant: (typeof products[i].variant !== 'undefined') ? products[i].variant.toString() : '-', // (String) What variant of the main product this is. Example: 'Large'
+                quantity: 1,
+            });
         }
+        return productsArray;
+    }
+
+    function addToCartForGAEE(products) {
+
     }
 
     function init(padeData) {

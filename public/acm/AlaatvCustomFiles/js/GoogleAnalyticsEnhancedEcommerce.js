@@ -1,6 +1,6 @@
 var GAEE = function () {
 
-    let reportGtmEecOnConsole = false;
+    var reportGtmEecOnConsole = false;
 
     function getDataLayer() {
         window.dataLayer = window.dataLayer || [];
@@ -158,7 +158,7 @@ var GAEE = function () {
     }
 
     function getElementData(element, data) {
-        let elementData = element.data(data);
+        var elementData = element.data(data);
         if (typeof elementData !== 'undefined') {
             return elementData;
         }
@@ -166,7 +166,7 @@ var GAEE = function () {
     }
 
     function getElementData_product(element) {
-        let gtmEecImpressionView = [];
+        var gtmEecImpressionView = [];
         gtmEecImpressionView.push({
             id:       getElementData(element, 'gtm-eec-product-id').toString(),
             name:     getElementData(element, 'gtm-eec-product-name').toString(),
@@ -181,7 +181,7 @@ var GAEE = function () {
     }
 
     function getElementData_advertisement(element) {
-        let gtmEecPromotionView = [];
+        var gtmEecPromotionView = [];
         gtmEecPromotionView.push({
             id: getElementData(element, 'gtm-eec-promotion-id').toString(),
             name: getElementData(element, 'gtm-eec-promotion-name').toString(),
@@ -225,10 +225,13 @@ var GAEE = function () {
         impressionView: function (impressions) {
             getDataLayer();
             impression_view(impressions);
+            if (reportGtmEecOnConsole) {
+                console.log('gtmEecImpressionView: ', impressions);
+            }
         },
         impressionViewSingleItem: function (element) {
             getDataLayer();
-            let impressions = getElementData_product(element);
+            var impressions = getElementData_product(element);
             impression_view(impressions);
             if (reportGtmEecOnConsole) {
                 console.log('gtmEecImpressionView: ', impressions);
@@ -236,7 +239,7 @@ var GAEE = function () {
         },
         impressionClick: function (element) {
             getDataLayer();
-            let impressions = getElementData_product(element),
+            var impressions = getElementData_product(element),
                 actionFieldList = impressions[0].list;
             impression_click(actionFieldList, impressions);
             if (reportGtmEecOnConsole) {
@@ -250,7 +253,7 @@ var GAEE = function () {
         },
         promotionViewSingleItem: function (element) {
             getDataLayer();
-            let promotions = getElementData_advertisement(element);
+            var promotions = getElementData_advertisement(element);
             promotion_view(promotions);
             if (reportGtmEecOnConsole) {
                 console.log('gtmEecPromotionView: ', promotions);
@@ -258,7 +261,7 @@ var GAEE = function () {
         },
         promotionClick: function (element) {
             getDataLayer();
-            let promotion = getElementData_advertisement(element);
+            var promotion = getElementData_advertisement(element);
             promotion_click(promotion);
             if (reportGtmEecOnConsole) {
                 console.log('gtmEecPromotionClick: ', promotion);

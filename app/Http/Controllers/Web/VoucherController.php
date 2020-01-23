@@ -290,6 +290,7 @@ class VoucherController extends Controller
 
     private function addVoucherProductsToUser(User $user, Collection $products): bool
     {
+        return true;
         $order = Order::create([
             'user_id'          => $user->id,
             'orderstatus_id'   => config('constants.ORDER_STATUS_CLOSED'),
