@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Collection\ProductCollection;
 use Carbon\Carbon;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
@@ -9,17 +10,16 @@ use Illuminate\Database\Eloquent\Builder;
 /**
  * App\Productvoucher
  *
- * @property int                 $id
- * @property int|null            $product_id         آی دی محصول صاحب وچر
- * @property int|null            $user_id            آی دی مشخص کننده کاربر که کد به اون تخصیص داده شده است
- * @property string|null         $code               پین کد وچر
+ * @property int               $id
+ * @property int|null          $product_id         آی دی محصول صاحب وچر
+ * @property int|null          $user_id            آی دی مشخص کننده کاربر که کد به اون تخصیص داده شده است
+ * @property string|null       $code               پین کد وچر
  * @property string|null         $expirationdatetime زمان انقضای این پین کد
  * @property int                 $enable             فعال یا غیرفعال بودن پین
  * @property string|null         $description        توضیح این پین کد
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property Carbon|null $deleted_at
- * @property-read Product        $products
  * @method static bool|null forceDelete()
  * @method static \Illuminate\Database\Query\Builder|Productvoucher onlyTrashed()
  * @method static bool|null restore()
@@ -41,7 +41,8 @@ use Illuminate\Database\Eloquent\Builder;
  * @method static Builder|Productvoucher query()
  * @method static Builder|BaseModel disableCache()
  * @method static Builder|BaseModel withCacheCooldownSeconds($seconds)
- * @property-read mixed          $cache_cooldown_seconds
+ * @property-read mixed        $cache_cooldown_seconds
+ * @property ProductCollection products
  */
 class Productvoucher extends BaseModel
 {
@@ -63,9 +64,17 @@ class Productvoucher extends BaseModel
         'description',
     ];
 
-    public function products()
+    public function getProductsAttribute($value)
     {
-        return Product::whereIn('id', [294, 387, 379, 357]);
+        if (is_null($value)) {
+            return [];
+        }
+
+        return Product::whereIn('id', json_decode($value))->get();
+    }
+
+    public function product()
+    {
         return $this->belongsTo('App\Product');
     }
 
