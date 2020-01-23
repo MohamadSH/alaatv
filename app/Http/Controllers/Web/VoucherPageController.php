@@ -18,13 +18,6 @@ class VoucherPageController extends Controller
      */
     public function __invoke(Request $request)
     {
-        $flash  = [
-            'title' => 'تبریک',
-            'body'  => 'محصولات شما با موفقیت ثبت شد',
-        ];
-
-        setcookie('flashMessage', json_encode($flash), time() + (86400 * 30), '/');
-
         $user = $request->user();
         $code = $request->get('code');
 
