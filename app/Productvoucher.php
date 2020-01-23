@@ -45,12 +45,18 @@ use Illuminate\Database\Eloquent\Builder;
  */
 class Productvoucher extends BaseModel
 {
+    const CONTRANCTOR_ASIATECH = 1;
+    const CONTRANCTOR_HEKMAT = 2;
+
     /**
      * @var array
      */
     protected $fillable = [
+        'contractor_id',
         'product_id',
+        'products',
         'user_id',
+        'used_at',
         'code',
         'expirationdatetime',
         'enable',
@@ -78,10 +84,12 @@ class Productvoucher extends BaseModel
         return !is_null($this->user_id);
     }
 
-    public function markVoucherAsUsed(int $userId)
+    public function markVoucherAsUsed(int $userId, int $contractor_id)
     {
         return $this->update([
-            'user_id' => $userId,
+            'user_id'        => $userId,
+            'used_at'        => Carbon::now('Asia/Tehran'),
+            'contrancotr_id' => $contractor_id,
         ]);
     }
 
