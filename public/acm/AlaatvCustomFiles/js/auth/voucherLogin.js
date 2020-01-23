@@ -246,8 +246,9 @@ var InitPage = function() {
 
     function afterLogin(response) {
         // ToDo: check response
-        GlobalJsVar.setVar('userId', response.data.user.id);
-        mobile = response.data.user.mobile;
+        GlobalJsVar.setVar('userId', response.data.data.user.id);
+        mobile = response.data.data.user.mobile;
+        isVerified = (response.data.data.user.mobile_verified_at !== null && response.data.data.user.mobile_verified_at !== '');
         showProperForm();
     }
 
