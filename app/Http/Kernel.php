@@ -10,6 +10,7 @@ use App\Http\Middleware\CompleteInfo;
 use App\Http\Middleware\ModifyRequestInputMiddleware;
 use App\Http\Middleware\RedirectIfAuthenticated;
 use App\Http\Middleware\RemoveOrderCoupon;
+use App\Http\Middleware\SubmitVoucher;
 use Illuminate\Auth\Middleware\AuthenticateWithBasicAuth;
 use Illuminate\Auth\Middleware\Authorize;
 use Illuminate\Auth\Middleware\EnsureEmailIsVerified;
@@ -102,6 +103,7 @@ class Kernel extends HttpKernel
         'RemoveOrderCoupon'                         => RemoveOrderCoupon::class,
         'signed'                                    => ValidateSignature::class,
         'CanAccessEmployeeTimeSheet'                => CanAccessEmployeeTimeSheet::class,
+        'SubmitVoucher'                             => SubmitVoucher::class,
 
     ];
 

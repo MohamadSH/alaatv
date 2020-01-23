@@ -279,7 +279,7 @@ var Alaasearch = function () {
             StripHTML : true,
             Suffix : '...'
         };
-        let widgetPic = (typeof (data.photo) === 'undefined' || data.photo == null) ? data.thumbnail + '?w=444&h=250' : data.photo + '?w=444&h=250',
+        var widgetPic = (typeof (data.photo) === 'undefined' || data.photo == null) ? data.thumbnail + '?w=444&h=250' : data.photo + '?w=444&h=250',
             widgetTitle = data.name,
             widgetAuthor = {
                 photo: (typeof (data.author.photo) === 'undefined' || data.author.photo == null) ? null : data.author.photo,
@@ -1026,7 +1026,7 @@ var initPage = function() {
 
         var owl = jQuery('.a--owl-carousel-type-1');
         owl.each(function () {
-            let itemId = $(this).attr('id');
+            var itemId = $(this).attr('id');
             if (itemId === 'product-carousel') {
                 config.responsive = productResponsive;
                 config.onTranslated = slideChanged1;

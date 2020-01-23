@@ -236,6 +236,7 @@
         };
 
         var addEventListenerForAjax = function (formDataAjax) {
+            $('.btnSendAjax_FormGenerator').off('click');
             $(document).on('click', '.btnSendAjax_FormGenerator', function (e) {
                 e.preventDefault();
                 var canSendAjax = formDataAjax.beforeSend();
