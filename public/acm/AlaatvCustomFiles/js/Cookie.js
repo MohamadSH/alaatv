@@ -8,7 +8,8 @@ var Cookie = function () {
     }
 
     function remove(cname) {
-        document.cookie = cname + "''= ; expires = Thu, 01 Jan 1970 00:00:00 GMT;path=/";
+        set(cname, '', 1);
+        document.cookie = cname + "= ; expires = Thu, 01 Jan 1970 00:00:00 GMT;path=/";
     }
 
     function get(cname) {
