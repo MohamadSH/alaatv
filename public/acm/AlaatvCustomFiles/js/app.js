@@ -13,12 +13,10 @@ var AppGlobalInitInit = function() {
         if (gaee.trim().length === 0 || !isJson(gaee)) {
             return;
         }
-
         gaee = JSON.parse(gaee);
         for (var i = 0; (typeof gaee[i] !== 'undefined'); i++) {
             applyGAEE(gaee[i]);
         }
-
         Cookie.remove('gaee');
     }
 
@@ -27,11 +25,9 @@ var AppGlobalInitInit = function() {
         if (actionFieldList === 'product.addToCart') {
             var products = gaeeItem.products;
             GAEE.productAddToCart('product.addToCart', products);
-            console.log('product.addToCart', products);
         } else if (actionFieldList === 'impressionView') {
             var impressions = gaeeItem.impressions;
             GAEE.productAddToCart(impressions);
-            console.log('impressionView', impressions);
         }
     }
 
