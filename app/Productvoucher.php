@@ -65,16 +65,28 @@ class Productvoucher extends BaseModel
 
     public function isValid()
     {
-        return true;
+        return $this->isEnable() && !$this->hasExpired();
+    }
+
+    public function isEnable()
+    {
+        return $this->enable;
     }
 
     public function hasBeenUsed()
     {
-        return true;
+        return !is_null($this->user_id);
     }
 
-    public function markVoucherAsUsed()
+    public function markVoucherAsUsed(int $userId)
     {
-        return true;
+        return $this->update([
+            'user_id' => $userId,
+        ]);
+    }
+
+    private function hasExpired()
+    {
+        return $this->expirationdatetime < Carbon::now('Asia/Tehran');
     }
 }

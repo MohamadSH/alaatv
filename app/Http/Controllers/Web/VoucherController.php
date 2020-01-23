@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Web;
 
+use App\Classes\Pricing\Alaa\AlaaInvoiceGenerator;
 use App\Gender;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\EditUserRequest;
@@ -15,6 +16,7 @@ use App\Traits\RequestCommon;
 use App\User;
 use App\Websitesetting;
 use Carbon\Carbon;
+use Exception;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
@@ -22,6 +24,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Redirector;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Log;
 use Illuminate\View\View;
 use Jenssegers\Agent\Agent;
 use SEO;
@@ -220,73 +223,14 @@ class VoucherController extends Controller
     {
         $code = $request->get('code');
         $user = $request->user();
-
-        if (!isset($user)) {
-            if ($request->expectsJson()) {
-                return response()->json([], Response::HTTP_UNAUTHORIZED);
-            }
-
-            return redirect(route('web.voucher.submit', ['code' => $code]));
-        }
-
-        if (!$user->hasVerifiedMobile()) {
-            if ($request->expectsJson()) {
-                return response()->json([
-                    'message' => 'User is not verified',
-                ], Response::HTTP_UNAUTHORIZED);
-            }
-
-            return redirect(route('web.voucher.submit', ['code' => $code]));
-        }
-
         /** @var Productvoucher $voucher */
-        $voucher = Productvoucher::where('code', $code)->first();
-        if (!isset($voucher)) {
-            if ($request->expectsJson()) {
-                return response()->json([
-                    'message' => 'Voucher not found',
-                ], Response::HTTP_UNPROCESSABLE_ENTITY);
-            }
-
-            session()->put('error', 'کد وارد شده یافت نشد');
-            return redirect(route('web.voucher.submit', ['code' => $code]));
-        }
-
-        if (!$voucher->isValid()) {
-            if ($request->expectsJson()) {
-                return response()->json([
-                    'message' => 'Voucher is not valid',
-                ], Response::HTTP_UNPROCESSABLE_ENTITY);
-            }
-
-            session()->put('error', 'کد وارد شده معتبر نمی باشد');
-            return redirect(route('web.voucher.submit', ['code' => $code]));
-        }
-
-        if ($voucher->hasBeenUsed()) {
-            if ($voucher->user_id == $user->id) {
-                //ToDo: log
-            } else {
-                //ToDo: log
-            }
-
-            if ($request->expectsJson()) {
-                return response()->json([
-                    'message' => 'Voucher has been used before',
-                ], Response::HTTP_UNPROCESSABLE_ENTITY);
-            }
-
-
-            session()->put('error', 'کد قبلا استفاده شده است');
-            return redirect(route('web.voucher.submit', ['code' => $code]));
-        }
-
+        $voucher = $request->get('voucher');
 
         $products = $voucher->products()->get();
         $result   = $this->addVoucherProductsToUser($user, $products);
 
         if ($result) {
-            $voucher->markVoucherAsUsed();
+            $voucher->markVoucherAsUsed($user->id);
 
             if ($request->expectsJson()) {
                 return response()->json([
@@ -302,7 +246,7 @@ class VoucherController extends Controller
         if ($request->expectsJson()) {
             return response()->json([
                 'message' => 'Unexpected error',
-            ], Response::HTTP_SERVICE_UNAVAILABLE);
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
 
         session()->put('error', 'خطای غیر منتظره در ثبت کد');
@@ -332,6 +276,7 @@ class VoucherController extends Controller
         $this->middleware('permission:' . config('constants.INSERT_USER_ACCESS'), ['only' => 'create']);
         $this->middleware('permission:' . config('constants.REMOVE_USER_ACCESS'), ['only' => 'destroy']);
         $this->middleware('permission:' . config('constants.SHOW_USER_ACCESS'), ['only' => 'edit']);
+        $this->middleware('SubmitVoucher', ['only' => ['submit'],]);
     }
 
     /**
@@ -347,24 +292,32 @@ class VoucherController extends Controller
 
     private function addVoucherProductsToUser(User $user, Collection $products): bool
     {
-        return true;
         $order = Order::create([
             'user_id'          => $user->id,
             'orderstatus_id'   => config('constants.ORDER_STATUS_CLOSED'),
             'paymentstatus_id' => config('constants.PAYMENT_STATUS_ORGANIZATIONAL_PAID'),
-//            'cost'               => ,
-//            'costwithoutcoupon'  =>
         ]);
 
         foreach ($products as $product) {
-            $donateOrderproduct = Orderproduct::Create([
+            $price = $product->price;
+            Orderproduct::Create([
                 'order_id'            => $order->id,
                 'product_id'          => $product->id,
-                'cost'                => $product->price->final,
+                'cost'                => $price['final'],
                 'orderproducttype_id' => config('constants.ORDER_PRODUCT_TYPE_DEFAULT'),
             ]);
         }
-        return true;
+
+        try {
+            $done = true;
+            (new AlaaInvoiceGenerator)->generateOrderInvoice($order);
+        } catch (Exception $e) {
+            $done = false;
+            $order->delete();
+            Log::error('submitVoucher:addVoucherProductsToUser:generateOrderInvoice');
+        }
+
+        return $done;
     }
 
 }
