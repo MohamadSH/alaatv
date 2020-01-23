@@ -7,6 +7,10 @@ var Cookie = function () {
         document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
     }
 
+    function remove(cname) {
+        document.cookie = cname + "''= ; expires = Thu, 01 Jan 1970 00:00:00 GMT;path=/";
+    }
+
     function get(cname) {
         var name = cname + "=";
         var decodedCookie = decodeURIComponent(document.cookie);
@@ -24,11 +28,8 @@ var Cookie = function () {
     }
 
     return {
-        set: function (cname, cvalue, exdays) {
-            set(cname, cvalue, exdays);
-        },
-        get: function (cname) {
-            set(cname);
-        }
+        set: set,
+        remove: remove,
+        get: get
     };
 }();
