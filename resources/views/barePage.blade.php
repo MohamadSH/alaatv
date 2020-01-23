@@ -8,7 +8,7 @@
     <!-- end::Head -->
 
     <!-- begin::Body -->
-    <body>
+    <body {{$bodyClass}}>
 
         @if(config('gtm.GTM'))
             @include('partials.gtm-body')

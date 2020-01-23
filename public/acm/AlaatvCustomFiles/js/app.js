@@ -3,6 +3,106 @@ var AppGlobalInitInit = function() {
     var LazyLoad,
         Firebase;
 
+    function initFlash() {
+        flashGAEE();
+        showFlashMessage();
+    }
+
+    function flashGAEE() {
+        var gaee  = Cookie.get('gaee');
+        if (gaee.trim().length === 0 || !isJson(gaee)) {
+            return;
+        }
+
+        gaee = JSON.parse(gaee);
+        for (var i = 0; (typeof gaee[i] !== 'undefined'); i++) {
+            applyGAEE(gaee[i]);
+        }
+
+        Cookie.remove('gaee');
+    }
+
+    function applyGAEE(gaeeItem) {
+        var actionFieldList = gaeeItem.actionFieldList;
+        if (actionFieldList === 'product.addToCart') {
+            var products = gaeeItem.products;
+            GAEE.productAddToCart('product.addToCart', products);
+            console.log('product.addToCart', products);
+        } else if (actionFieldList === 'impressionView') {
+            var impressions = gaeeItem.impressions;
+            GAEE.productAddToCart(impressions);
+            console.log('impressionView', impressions);
+        }
+    }
+
+    function showFlashMessage() {
+        var flashMessage  = Cookie.get('flashMessage');
+        if (flashMessage.trim().length === 0) {
+            return;
+        }
+
+        if (isJson(flashMessage)) {
+            flashMessage = JSON.parse(flashMessage);
+            showAlaaAppModal(flashMessage.title, flashMessage.body);
+        } else {
+            showAlaaAppModal('', flashMessage);
+        }
+        Cookie.remove('flashMessage');
+    }
+
+    function isJson(str) {
+        try {
+            JSON.parse(str);
+        } catch (e) {
+            return false;
+        }
+        return true;
+    }
+
+    function getModalTemplate(title, content) {
+        return '' +
+            '<div class="modal" tabindex="-1" role="dialog" id="AlaaAppModal">\n' +
+            '  <div class="modal-dialog modal-dialog-centered" role="document">\n' +
+            '    <div class="modal-content">\n' +
+            '      <div class="modal-header">\n' +
+            '        <h5 class="modal-title">'+title+'</h5>\n' +
+            '        <button type="button" class="close" data-dismiss="modal" aria-label="Close">\n' +
+            '          <span aria-hidden="true">&times;</span>\n' +
+            '        </button>\n' +
+            '      </div>\n' +
+            '      <div class="modal-body">\n' +
+            '         \n' + content +
+            '      </div>\n' +
+            '      <div class="modal-footer">\n' +
+            '        <button type="button" class="btn btn-secondary d-none" data-dismiss="modal">بستن</button>\n' +
+            '      </div>\n' +
+            '    </div>\n' +
+            '  </div>\n' +
+            '</div>';
+    }
+
+    function checkExistLoginModal() {
+        return ($('#AlaaAppModal').length !== 0);
+    }
+
+    function appendLoginModalToBody(title, content) {
+        $('body').append(getModalTemplate(title, content));
+    }
+
+    function setAlaaAppModalData(title, content) {
+        $('#AlaaAppModal .modal-body').html(content);
+        $('#AlaaAppModal .modal-title').html(title);
+    }
+
+    function showAlaaAppModal(title, content) {
+        if (!checkExistLoginModal()) {
+            appendLoginModalToBody(title, content);
+        } else {
+            setAlaaAppModalData(title, content)
+        }
+        $('#AlaaAppModal').modal('show');
+    }
+
     function initData(data) {
         LazyLoad = (typeof data.LazyLoad !== 'undefined') ? data.LazyLoad : null;
         Firebase = (typeof data.Firebase !== 'undefined') ? data.Firebase : null;
@@ -124,6 +224,7 @@ var AppGlobalInitInit = function() {
         addEvents();
         initFirebase();
         initGoogleTagManager();
+        initFlash();
     }
 
     return {
@@ -131,7 +232,9 @@ var AppGlobalInitInit = function() {
     };
 }();
 
-AppGlobalInitInit.init({
-    LazyLoad: LazyLoad,
-    Firebase: Firebase
+jQuery(document).ready( function() {
+    AppGlobalInitInit.init({
+        LazyLoad: LazyLoad,
+        Firebase: Firebase
+    });
 });
