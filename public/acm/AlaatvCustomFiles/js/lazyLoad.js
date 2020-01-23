@@ -2,11 +2,11 @@ var LazyLoad = function () {
 
     function carousel_loadHeightOfImageAndLoading() {
         $('#carouselMainSlideShow img').each(function () {
-            let dataWidth = $(this).data('width');
-            let dataHeight = $(this).data('height');
+            var dataWidth = $(this).data('width');
+            var dataHeight = $(this).data('height');
             if (typeof dataWidth !== 'undefined' && typeof dataHeight !== 'undefined') {
-                let carouselMainSlideShowWidth = $('#carouselMainSlideShow').width();
-                let minHeight = (carouselMainSlideShowWidth * dataHeight) / dataWidth;
+                var carouselMainSlideShowWidth = $('#carouselMainSlideShow').width();
+                var minHeight = (carouselMainSlideShowWidth * dataHeight) / dataWidth;
                 $(this).parents('.carousel-item').css({'min-height':minHeight+'px', 'max-height':minHeight+'px'});
                 $(this).parents('.carousel-inner').css({'min-height':minHeight+'px', 'max-height':minHeight+'px'});
             }
@@ -23,7 +23,7 @@ var LazyLoad = function () {
     }
 
     function loadImage(element) {
-        let w = Math.floor($(element).width()),
+        var w = Math.floor($(element).width()),
             h = Math.floor($(element).height()),
             attrW = $(element).attr('width'),
             attrH = $(element).attr('height'),
@@ -43,7 +43,7 @@ var LazyLoad = function () {
     }
 
     function canChangeLazyLoad(element) {
-        let lazyLoadStatus = parseInt($(element).attr('a-lazyload'));
+        var lazyLoadStatus = parseInt($(element).attr('a-lazyload'));
         return lazyLoadStatus !== 1;
     }
 
@@ -53,7 +53,7 @@ var LazyLoad = function () {
     }
 
     function loadElementByQuerySelector(querySelector, callback) {
-        let elementObserver = lozad(querySelector, {
+        var elementObserver = lozad(querySelector, {
             rootMargin: '0px',
             threshold: 0.1,
             load: function(element) {
