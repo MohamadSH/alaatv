@@ -42,6 +42,12 @@ class CreateSourceableTable extends Migration
      */
     public function down()
     {
+        Schema::table('sourceables', function (Blueprint $table) {
+            if (Schema::hasColumn('sourceables', 'source_id')) {
+                $table->dropForeign('sourceables_source_id_foreign');
+            }
+        });
+
         Schema::dropIfExists('sourceable');
     }
 }
