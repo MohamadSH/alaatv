@@ -17,7 +17,6 @@ use App\User;
 use App\Websitesetting;
 use Carbon\Carbon;
 use Exception;
-use Illuminate\Contracts\Filesystem\FileNotFoundException;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -125,10 +124,9 @@ class VoucherController extends Controller
     /**
      * Submit user request for voucher request
      *
-     * @param InsertVoucherRequest InsertVoucherRequest
+     * @param InsertVoucherRequest $request
      *
      * @return Response
-     * @throws FileNotFoundException
      */
     public function submitVoucherRequest(InsertVoucherRequest $request)
     {
@@ -230,7 +228,7 @@ class VoucherController extends Controller
         $result   = $this->addVoucherProductsToUser($user, $products);
 
         if ($result) {
-            $voucher->markVoucherAsUsed($user->id);
+            $voucher->markVoucherAsUsed($user->id, Productvoucher::CONTRANCTOR_HEKMAT);
 
             if ($request->expectsJson()) {
                 return response()->json([
@@ -311,6 +309,8 @@ class VoucherController extends Controller
         try {
             $done = true;
             (new AlaaInvoiceGenerator)->generateOrderInvoice($order);
+
+            //ToDo : Inserting installments
         } catch (Exception $e) {
             $done = false;
             $order->delete();
