@@ -65,7 +65,7 @@ class Productvoucher extends BaseModel
 
     public function products()
     {
-        return Product::whereIn('id', [294, 387, 379]);
+        return Product::whereIn('id', [294, 387, 379, 357]);
         return $this->belongsTo('App\Product');
     }
 
@@ -87,9 +87,9 @@ class Productvoucher extends BaseModel
     public function markVoucherAsUsed(int $userId, int $contractor_id)
     {
         return $this->update([
-            'user_id'        => $userId,
-            'used_at'        => Carbon::now('Asia/Tehran'),
-            'contrancotr_id' => $contractor_id,
+            'user_id'       => $userId,
+            'used_at'       => Carbon::now('Asia/Tehran'),
+            'contractor_id' => $contractor_id,
         ]);
     }
 

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Web;
 
 use App\Classes\Pricing\Alaa\AlaaInvoiceGenerator;
+use App\Events\UserRedirectedToPayment;
 use App\Gender;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\EditUserRequest;
@@ -13,6 +14,7 @@ use App\Orderproduct;
 use App\Product;
 use App\Productvoucher;
 use App\Traits\RequestCommon;
+use App\Transaction;
 use App\User;
 use App\Websitesetting;
 use Carbon\Carbon;
@@ -237,7 +239,12 @@ class VoucherController extends Controller
                 ]);
             }
 
-            session()->put('voucher_success', 'کد ووچر ثبت شد');
+            //ToDo : put data and message in cookie
+            $flash = [
+                'title' => '',
+                'body'  => '',
+            ];
+            setcookie('flashMessage', json_encode($flash), time() + (86400 * 30), '/');
             return redirect(route('web.user.asset'));
         }
 
@@ -247,7 +254,12 @@ class VoucherController extends Controller
             ], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
 
-        session()->put('error', 'خطای غیر منتظره در ثبت کد');
+        //ToDo : put data and message in cookie
+        $flash = [
+            'title' => '',
+            'body'  => '',
+        ];
+        setcookie('flashMessage', json_encode($flash), time() + (86400 * 30), '/');
         return redirect(route('web.voucher.submit', ['code' => $code]));
     }
 
@@ -290,11 +302,11 @@ class VoucherController extends Controller
 
     private function addVoucherProductsToUser(User $user, Collection $products): bool
     {
-        return true;
         $order = Order::create([
             'user_id'          => $user->id,
             'orderstatus_id'   => config('constants.ORDER_STATUS_CLOSED'),
             'paymentstatus_id' => config('constants.PAYMENT_STATUS_ORGANIZATIONAL_PAID'),
+            'completed_at'     => Carbon::now('Asia/Tehran'),
         ]);
 
         foreach ($products as $product) {
@@ -303,19 +315,41 @@ class VoucherController extends Controller
                 'order_id'            => $order->id,
                 'product_id'          => $product->id,
                 'cost'                => $price['final'],
+                'tmp_final_cost'      => $price['final'],
                 'orderproducttype_id' => config('constants.ORDER_PRODUCT_TYPE_DEFAULT'),
             ]);
         }
 
         try {
-            $done = true;
-            (new AlaaInvoiceGenerator)->generateOrderInvoice($order);
+            $done        = true;
+            $invoiceInfo = (new AlaaInvoiceGenerator)->generateOrderInvoice($order);
+            $finalPrice  = $invoiceInfo['price']['final'];
+            $order->update([
+                'costwithoutcoupon' => $finalPrice,
+            ]);
 
-            //ToDo : Inserting installments
+            $eachInstalment = floor($finalPrice / 12);
+            $lastInstalment = $finalPrice % 12;
+            for ($i = 1; $i <= 12; $i++) {
+                if ($i == 12) {
+                    $eachInstalment += $lastInstalment;
+                }
+
+                Transaction::create([
+                    'order_id'             => $order->id,
+                    'cost'                 => $eachInstalment,
+                    'transactionstatus_id' => config('constants.TRANSACTION_STATUS_UNPAID'),
+                    'managerComment'       => 'قسط حکمت',
+                ]);
+            }
+
+            event(new UserRedirectedToPayment($user));
+
         } catch (Exception $e) {
             $done = false;
             $order->delete();
             Log::error('submitVoucher:addVoucherProductsToUser:generateOrderInvoice');
+            Log::error('file:' . $e->getFile() . ':' . $e->getLine());
         }
 
         return $done;
