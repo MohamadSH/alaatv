@@ -4,7 +4,6 @@ namespace App\Console\Commands;
 
 use AlaaTV\Gateways\Contracts\OnlineGateway;
 use AlaaTV\Gateways\Contracts\OnlinePaymentVerificationResponseInterface;
-use AlaaTV\Gateways\Money;
 use AlaaTV\ZarinpalGatewayDriver\VerificationResponse;
 use App\Repositories\TransactionRepo;
 use App\Transaction;
@@ -73,13 +72,15 @@ class HandleUnverifiedTransactions extends Command
 
             $unverifiedTransactionsCount = count($unverifiedTransactionsDueToError);
             if ($unverifiedTransactionsCount > 0) {
-                $this->info('ZarinPal did not verify ' . $unverifiedTransactionsCount.' transactions:');
+                $this->info("\n");
+                $this->info('ZarinPal did not verify ' . $unverifiedTransactionsCount . ' transaction(s):');
                 $this->logError($unverifiedTransactionsDueToError);
             }
 
             $notExistTransactionsCount = count($notExistTransactions);
             if ($notExistTransactionsCount > 0) {
-                $this->info('There were ' . $notExistTransactionsCount.' unknown transactions:');
+                $this->info("\n");
+                $this->info('There were ' . $notExistTransactionsCount . ' unknown transaction(s):');
                 $this->logError($notExistTransactions);
             }
         }
@@ -136,9 +137,9 @@ class HandleUnverifiedTransactions extends Command
 
             if ($gateWayVerify->isSuccessfulPayment()) {
                 $transactionUpdateResult = $transaction->update([
-                            'transactionstatus_id'  => config('constants.TRANSACTION_STATUS_SUCCESSFUL') ,
-                            'transactionID'         => $gateWayVerify['RefID'],
-                            'managerComment'        => 'به سایت برنگشته بود - ثبت با کامند',
+                    'transactionstatus_id' => config('constants.TRANSACTION_STATUS_SUCCESSFUL'),
+                    'transactionID'        => $gateWayVerify->getRefId(),
+                    'managerComment'       => 'به سایت برنگشته بود - ثبت با کامند',
                 ]);
 
                 if($transactionUpdateResult){
@@ -174,11 +175,9 @@ class HandleUnverifiedTransactions extends Command
      *
      * @return OnlinePaymentVerificationResponseInterface
      */
-    private function verifyTransaction($cost, $authority): OnlinePaymentVerificationResponseInterface
+    private function verifyTransaction(int $cost, string $authority): OnlinePaymentVerificationResponseInterface
     {
-        //ToDo : Bug with Money::fromTomans
-        $result = $this->gateway->verify(Money::fromTomans($cost), $authority);
-//        $result['Status'] = 'success';
+        $result = $this->gateway->verify($cost, $authority);
         return VerificationResponse::instance($result);
     }
 
@@ -195,7 +194,7 @@ class HandleUnverifiedTransactions extends Command
             $channel   = $item['Channel'];
             $cellPhone = $item['CellPhone'];
             $date      = $item['Date'];
-            $this->info('authority: {' . $authority . '} amount: {' . $amount . '} channel: {' . $channel . '} cellPhone: {' . $cellPhone . '} date: {' . $date . '}');
+            $this->error('authority: {' . $authority . '} amount: {' . $amount . '} channel: {' . $channel . '} cellPhone: {' . $cellPhone . '} date: {' . $date . '}');
         }
     }
 }
