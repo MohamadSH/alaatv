@@ -95,7 +95,6 @@
 
 @section('content')
 
-
     <div class="row boxed">
 
         {{-- content video and other content of set --}}
@@ -682,15 +681,17 @@
         </div>
 
         {{-- godar block--}}
-        @foreach($contentBlocks as $block)
-            @include('block.partials.block', [
-            'blockCustomClass'=> 'contentBlock',
-            'blockCustomId'=>'sectionId-'.$block->class,
-            'blockType'=>(isset($block->sets) && $block->sets->count()>0)?'set':(isset($block->products) && $block->products->count()>0?'product':'content'),
-            'blockUrlDisable'=>false,
-            'btnLoadMore'=>true
-            ])
-        @endforeach
+        <div class="col">
+            @foreach($contentBlocks as $block)
+                @include('block.partials.block', [
+                'blockCustomClass'=> 'contentBlock',
+                'blockCustomId'=>'sectionId-'.$block->class,
+                'blockType'=>(isset($block->sets) && $block->sets->count()>0)?'set':(isset($block->products) && $block->products->count()>0?'product':'content'),
+                'blockUrlDisable'=>false,
+                'btnLoadMore'=>true
+                ])
+            @endforeach
+        </div>
 
         {{-- chibekhoonam --}}
         @if($content->isFree)
