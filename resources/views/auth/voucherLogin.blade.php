@@ -42,7 +42,7 @@
             userProductFilesUrl: '{{ action("Web\UserController@userProductFiles")  }}',
             voucherActionUrl: '{{route('web.voucher.submit')}}',
             voucherCode: '{{$code}}',
-            isVerified: '{{$isUserVerified}}',
+            isVerified: {{($isUserVerified) ? 'true' : 'false'}}
         };
     </script>
 {{--    <script src = "{{ mix('/js/contactUs.js') }}"></script>--}}
