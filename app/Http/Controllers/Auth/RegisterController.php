@@ -65,6 +65,9 @@ class RegisterController extends Controller
     protected function registered(Request $request, User $user)
     {
         if ($request->expectsJson()) {
+            //ToDo : fix this
+            if (!isset($user->mobile_verified_at))
+                $user->mobile_verified_at = null;
             $token = $user->getAppToken();
             $data  = array_merge([
                 'user' => $user,
