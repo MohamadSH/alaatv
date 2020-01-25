@@ -122,7 +122,6 @@ var InitPage = function() {
 
         $('.voucherPageFormWrapper').removeClass('d-none');
         $('.voucherPageFormWrapper .m-portlet__head-text').html('تایید شماره همراه: ' + mobile);
-        toastr.info('کد تایید برای شماره همراه شما پیامک شد.');
 
         var validateForm = function(verifyMobileForm) {
 

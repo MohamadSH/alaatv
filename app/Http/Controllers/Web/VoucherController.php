@@ -339,7 +339,7 @@ class VoucherController extends Controller
                 Transaction::create([
                     'order_id'             => $order->id,
                     'cost'                 => $eachInstalment,
-                    'transactionstatus_id' => config('constants.TRANSACTION_STATUS_UNPAID'),
+                    'transactionstatus_id' => config('constants.TRANSACTION_STATUS_ORGANIZATIONAL_UNPAID'),
                     'managerComment'       => 'قسط حکمت',
                 ]);
             }
