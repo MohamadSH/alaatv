@@ -67,7 +67,7 @@ class Productvoucher extends BaseModel
     public function getProductsAttribute($value)
     {
         if (is_null($value)) {
-            return [];
+            return collect();
         }
 
         return Product::whereIn('id', json_decode($value))->get();

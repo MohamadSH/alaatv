@@ -3,12 +3,15 @@
 namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
+use App\Traits\APIRequestCommon;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class VoucherPageController extends Controller
 {
+    use APIRequestCommon;
+
     /**
      * Handle the incoming request.
      *
@@ -29,11 +32,8 @@ class VoucherPageController extends Controller
             $hasVerifiedMobile = $user->hasVerifiedMobile();
             if ($hasVerifiedMobile) {
                 $isUserVerified = true;
-            } else {
-                $user->sendMobileVerificationNotification();
             }
         }
-
 
         return view('auth.voucherLogin', compact('mobile', 'isUserVerified', 'code'));
     }

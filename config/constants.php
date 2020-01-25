@@ -435,26 +435,27 @@ return [
     'ORDER_STATUS_OPEN_DONATE'           => 8,
     'ORDER_STATUS_PENDING'               => 9,
 
-    'OPEN_ORDER_STATUSES'                    => [1, 4, 8],
+    'OPEN_ORDER_STATUSES'                      => [1, 4, 8],
 
     //TRANSACTION STATUSES CONSTANTS
-    'TRANSACTION_STATUS_TRANSFERRED_TO_PAY'  => 1,
-    'TRANSACTION_STATUS_UNSUCCESSFUL'        => 2,
-    'TRANSACTION_STATUS_SUCCESSFUL'          => 3,
-    'TRANSACTION_STATUS_PENDING'             => 4,
-    'TRANSACTION_STATUS_ARCHIVED_SUCCESSFUL' => 5,
-    'TRANSACTION_STATUS_UNPAID'              => 6,
-    'TRANSACTION_STATUS_SUSPENDED'           => 7,
+    'TRANSACTION_STATUS_TRANSFERRED_TO_PAY'    => 1,
+    'TRANSACTION_STATUS_UNSUCCESSFUL'          => 2,
+    'TRANSACTION_STATUS_SUCCESSFUL'            => 3,
+    'TRANSACTION_STATUS_PENDING'               => 4,
+    'TRANSACTION_STATUS_ARCHIVED_SUCCESSFUL'   => 5,
+    'TRANSACTION_STATUS_UNPAID'                => 6,
+    'TRANSACTION_STATUS_SUSPENDED'             => 7,
+    'TRANSACTION_STATUS_ORGANIZATIONAL_UNPAID' => 8,
 
     //PAYMENT METHODS CONSTANTS
-    'PAYMENT_METHOD_ONLINE'                  => 1,
-    'PAYMENT_METHOD_ATM'                     => 2,
-    'PAYMENT_METHOD_POS'                     => 3,
-    'PAYMENT_METHOD_PAYCHECK'                => 4,
-    'PAYMENT_METHOD_WALLET'                  => 5,
+    'PAYMENT_METHOD_ONLINE'                    => 1,
+    'PAYMENT_METHOD_ATM'                       => 2,
+    'PAYMENT_METHOD_POS'                       => 3,
+    'PAYMENT_METHOD_PAYCHECK'                  => 4,
+    'PAYMENT_METHOD_WALLET'                    => 5,
 
     //PAYMENT STATUSES CONSTANTS
-    'PAYMENT_STATUS_UNPAID'                  => 1,
+    'PAYMENT_STATUS_UNPAID'                    => 1,
     'PAYMENT_STATUS_INDEBTED'                => 2,
     'PAYMENT_STATUS_PAID'                    => 3,
     'PAYMENT_STATUS_VERIFIED_INDEBTED'       => 4,
