@@ -22,6 +22,7 @@ var InitPage = function() {
         }
 
         if (!isVerified) {
+            sendVerificationCode('.btnResendVerificationCode');
             showVerifyForm();
             return;
         }
