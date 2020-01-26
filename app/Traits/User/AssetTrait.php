@@ -68,6 +68,7 @@ trait AssetTrait
                     ->whereIn('orders.paymentstatus_id', [
                         config("constants.PAYMENT_STATUS_PAID"),
                         config("constants.PAYMENT_STATUS_VERIFIED_INDEBTED"),
+                        config("constants.PAYMENT_STATUS_ORGANIZATIONAL_PAID"),
                     ])
                     ->whereNull('orders.deleted_at');
             })

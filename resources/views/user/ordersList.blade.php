@@ -161,6 +161,10 @@
                                                                         data-cost="{{$order->debt}}">
                                                                     پرداخت
                                                                 </button>
+                                                            @elseif(isset($order->paymentstatus->id) && $order->paymentstatus->id == config("constants.PAYMENT_STATUS_ORGANIZATIONAL_PAID"))
+                                                                <span class="m-badge m-badge--wide m-badge--warning">
+                                                                        {{$order->paymentstatus->displayName}}
+                                                                    </span>
                                                             @else
                                                                 <span class="m-badge m-badge--wide m-badge--info">
                                                                     ندارد

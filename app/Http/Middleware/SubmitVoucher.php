@@ -28,8 +28,7 @@ class SubmitVoucher
                     'message' => 'Unauthorized',
                 ], Response::HTTP_UNAUTHORIZED);
             }
-
-            return redirect(route('web.voucher.submit', ['code' => $code]));
+            return redirect(route('web.voucher.submit.form', ['code' => $code]));
         }
 
         if (!$user->hasVerifiedMobile()) {
@@ -39,7 +38,7 @@ class SubmitVoucher
                 ], Response::HTTP_UNAUTHORIZED);
             }
 
-            return redirect(route('web.voucher.submit', ['code' => $code]));
+            return redirect(route('web.voucher.submit.form', ['code' => $code]));
         }
 
         /** @var Productvoucher $voucher */
@@ -51,8 +50,12 @@ class SubmitVoucher
                 ], Response::HTTP_UNPROCESSABLE_ENTITY);
             }
 
-            session()->put('error', 'کد وارد شده یافت نشد');
-            return redirect(route('web.voucher.submit', ['code' => $code]));
+            $flash = [
+                'title' => 'خطا',
+                'body'  => 'کد شما یافت نشد',
+            ];
+            setcookie('flashMessage', json_encode($flash), time() + (86400 * 30), '/');
+            return redirect(route('web.voucher.submit.form', ['code' => $code]));
         }
 
         if (!$voucher->isValid()) {
@@ -62,8 +65,12 @@ class SubmitVoucher
                 ], Response::HTTP_UNPROCESSABLE_ENTITY);
             }
 
-            session()->put('error', 'کد وارد شده معتبر نمی باشد');
-            return redirect(route('web.voucher.submit', ['code' => $code]));
+            $flash = [
+                'title' => 'خطا',
+                'body'  => 'کد شما یافت نشد',
+            ];
+            setcookie('flashMessage', json_encode($flash), time() + (86400 * 30), '/');
+            return redirect(route('web.voucher.submit.form', ['code' => $code]));
         }
 
         if ($voucher->hasBeenUsed()) {
@@ -80,8 +87,12 @@ class SubmitVoucher
             }
 
 
-            session()->put('error', 'کد قبلا استفاده شده است');
-            return redirect(route('web.voucher.submit', ['code' => $code]));
+            $flash = [
+                'title' => 'خطا',
+                'body'  => 'کد قبلا استفاده شده است',
+            ];
+            setcookie('flashMessage', json_encode($flash), time() + (86400 * 30), '/');
+            return redirect(route('web.voucher.submit.form', ['code' => $code]));
         }
 
         $request->offsetSet('voucher', $voucher);
