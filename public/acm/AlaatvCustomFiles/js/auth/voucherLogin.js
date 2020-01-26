@@ -1,15 +1,24 @@
 var InitPage = function() {
 
-    var isVerified,
-        voucherCode,
-        productData,
-        mobile,
-        loginActionUrl,
-        sendVerificationCodeActionUrl,
-        verifyActionUrl,
-        verifyFormToken,
-        voucherActionUrl,
-        userProductFilesUrl;
+    var data = {
+            loginActionUrl: '',
+            redirectUrl: '',
+            user: {
+                mobile: ''
+            },
+            verifyMobile: {
+                enable: false,
+                sendVerificationCodeActionUrl: '',
+                verifyActionUrl: '',
+                verifyFormToken: '',
+                isVerified: false
+            },
+            voucher: {
+                enable: true,
+                voucherActionUrl: '',
+                voucherCode: ''
+            }
+        };
 
     function showProperForm() {
 
@@ -21,13 +30,13 @@ var InitPage = function() {
             return;
         }
 
-        if (!isVerified) {
+        if (!data.verifyMobile.isVerified) {
             sendVerificationCode('.btnResendVerificationCode');
             showVerifyForm();
             return;
         }
 
-        if (voucherCode.trim().length === 0) {
+        if (data.voucher.voucherCode.trim().length === 0) {
             showVoucherForm();
         } else {
             submitVoucherCode();
@@ -63,7 +72,7 @@ var InitPage = function() {
         var verifyVoucherForm = $('.voucherPageForm').FormGenerator({
             ajax: {
                 type: 'POST',
-                url: voucherActionUrl,
+                url: data.voucher.voucherActionUrl,
                 data: {
                     code: ''
                 },
@@ -79,10 +88,10 @@ var InitPage = function() {
 
                     return status;
                 },
-                success: function (data) {
+                success: function (response) {
                     toastr.success('کد وارد شده معتبر است.');
-                    applyGAEE(data.products);
-                    window.location.href = userProductFilesUrl;
+                    applyGAEE(response.products);
+                    window.location.href = data.redirectUrl;
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
                     AlaaLoading.hide();
@@ -97,12 +106,12 @@ var InitPage = function() {
                 {
                     type: 'hidden',
                     name: '_token',
-                    value: verifyFormToken,
+                    value: data.verifyMobile.verifyFormToken,
                 },
                 {
                     type: 'text',
                     name: 'code',
-                    value: voucherCode,
+                    value: data.voucher.voucherCode,
                     placeholder: 'کد خود را وارد کنید',
                     label: 'کد',
                     iconsRight: '<i class="fa fa-ticket-alt"></i>',
@@ -121,7 +130,7 @@ var InitPage = function() {
     function showVerifyForm() {
 
         $('.voucherPageFormWrapper').removeClass('d-none');
-        $('.voucherPageFormWrapper .m-portlet__head-text').html('تایید شماره همراه: ' + mobile);
+        $('.voucherPageFormWrapper .m-portlet__head-text').html('تایید شماره همراه: ' + data.user.mobile);
 
         var validateForm = function(verifyMobileForm) {
 
@@ -150,7 +159,7 @@ var InitPage = function() {
         var verifyMobileForm = $('.voucherPageForm').FormGenerator({
             ajax: {
                 type: 'POST',
-                url: verifyActionUrl,
+                url: data.verifyMobile.verifyActionUrl,
                 data: {
                     code: verificationCode
                 },
@@ -165,17 +174,16 @@ var InitPage = function() {
 
                     return status;
                 },
-                success: function (data) {
-                    if (data.error) {
-                        var message = data.error.message;
+                success: function (response) {
+                    if (response.error) {
+                        var message = response.error.message;
                         toastr.error('خطای سیستمی رخ داده است.' + '<br>' + message);
                     } else {
-                        isVerified = true;
+                        data.verifyMobile.isVerified = true;
                         AlaaLoading.hide();
                         toastr.success('شماره موبایل شما تایید شد.');
                         showProperForm();
                     }
-
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
                     AlaaLoading.hide();
@@ -190,7 +198,7 @@ var InitPage = function() {
                 {
                     type: 'hidden',
                     name: '_token',
-                    value: verifyFormToken,
+                    value: data.verifyMobile.verifyFormToken,
                 },
                 {
                     type: 'text',
@@ -239,7 +247,7 @@ var InitPage = function() {
     }
 
     function showLoginModal() {
-        AjaxLogin.showLogin(loginActionUrl, function (response) {
+        AjaxLogin.showLogin(data.loginActionUrl, function (response) {
             afterLogin(response);
         });
     }
@@ -247,8 +255,8 @@ var InitPage = function() {
     function afterLogin(response) {
         // ToDo: check response
         GlobalJsVar.setVar('userId', response.data.data.user.id);
-        mobile = response.data.data.user.mobile;
-        isVerified = (typeof response.data.data.user.mobile_verified_at !== 'undefined' && response.data.data.user.mobile_verified_at !== null && response.data.data.user.mobile_verified_at !== '');
+        data.user.mobile = response.data.data.user.mobile;
+        data.verifyMobile.isVerified = (typeof response.data.data.user.mobile_verified_at !== 'undefined' && response.data.data.user.mobile_verified_at !== null && response.data.data.user.mobile_verified_at !== '');
         showProperForm();
     }
 
@@ -280,13 +288,13 @@ var InitPage = function() {
 
         $.ajax({
             type: 'GET',
-            url: sendVerificationCodeActionUrl,
+            url: data.verifyMobile.sendVerificationCodeActionUrl,
             // dataType: 'text',
             dataType: 'json',
             data: {},
-            success: function (data) {
-                if (data.error) {
-                    var message = data.error.message;
+            success: function (response) {
+                if (response.error) {
+                    var message = response.error.message;
                     toastr.error('خطای سیستمی رخ داده است.' + '<br>' + message);
                 } else {
                     toastr.info('کد تایید برای شماره همراه شما پیامک شد.');
@@ -315,16 +323,16 @@ var InitPage = function() {
 
         $.ajax({
             type: 'POST',
-            url: voucherActionUrl,
+            url: data.voucher.voucherActionUrl,
             // dataType: 'text',
             dataType: 'json',
             data: {
-                code: voucherCode
+                code: data.voucher.voucherCode
             },
-            success: function (data) {
+            success: function (response) {
                 toastr.success('کد وارد شده معتبر است.');
-                applyGAEE(data.products);
-                window.location.href = userProductFilesUrl;
+                applyGAEE(response.products);
+                window.location.href = data.redirectUrl;
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 hideLoginForm();
@@ -337,16 +345,19 @@ var InitPage = function() {
     }
 
     function initData(padeData) {
-        mobile = padeData.mobile;
-        isVerified = padeData.isVerified;
-        productData = padeData.productData;
-        voucherCode = padeData.voucherCode;
-        loginActionUrl = padeData.loginActionUrl;
-        verifyActionUrl = padeData.verifyActionUrl;
-        verifyFormToken = padeData.verifyFormToken;
-        voucherActionUrl = padeData.voucherActionUrl;
-        userProductFilesUrl = padeData.userProductFilesUrl;
-        sendVerificationCodeActionUrl = padeData.sendVerificationCodeActionUrl;
+
+        data = $.extend(true, {}, data, padeData);
+
+        // mobile = padeData.mobile;
+        // isVerified = padeData.isVerified;
+        // productData = padeData.productData;
+        // voucherCode = padeData.voucherCode;
+        // loginActionUrl = padeData.loginActionUrl;
+        // verifyActionUrl = padeData.verifyActionUrl;
+        // verifyFormToken = padeData.verifyFormToken;
+        // voucherActionUrl = padeData.voucherActionUrl;
+        // userProductFilesUrl = padeData.userProductFilesUrl;
+        // sendVerificationCodeActionUrl = padeData.sendVerificationCodeActionUrl;
     }
 
     function applyGAEE(products) {

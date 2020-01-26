@@ -35,6 +35,10 @@ class VoucherPageController extends Controller
             }
         }
 
-        return view('auth.voucherLogin', compact('mobile', 'isUserVerified', 'code'));
+        $verifyMobile = true;
+        $voucher = true;
+        $redirectUrl = action("Web\UserController@userProductFiles");
+
+        return view('auth.voucherLogin', compact('mobile', 'isUserVerified', 'code', 'redirectUrl', 'verifyMobile', 'voucher'));
     }
 }
