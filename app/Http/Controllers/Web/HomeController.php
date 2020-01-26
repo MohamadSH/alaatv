@@ -51,7 +51,7 @@ class HomeController extends Controller
         $this->setting = $setting->setting;
 
         $authException = [
-            'debug',
+//            'debug',
             'newDownload',
             'download',
             'getImage',
@@ -61,7 +61,7 @@ class HomeController extends Controller
             'home',
         ];
         $this->middleware('auth', ['except' => $authException]);
-//        $this->middleware('role:admin', ['only' => ['debug']]);
+        $this->middleware('role:admin', ['only' => ['debug']]);
         $this->middleware('permission:' . config('constants.UPLOAD_CENTER_ACCESS'), ['only' => 'uploadCenter']);
         $this->middleware('permission:' . config('constants.UPLOAD_CENTER_ACCESS'), ['only' => 'upload']);
         $this->middleware('permission:' . config('constants.UPLOAD_CENTER_ACCESS'), ['only' => 'bigUpload']);
