@@ -69,7 +69,7 @@
                 }
             });
 
-            $("#date").persianDatepicker({
+            $('#date').persianDatepicker({
                 altField: '#dateAlt',
                 altFormat: "YYYY MM DD",
                 observer: true,
@@ -80,41 +80,41 @@
                 }
             });
 
-            $("#clockIn").inputmask("hh:mm", {
-                placeholder: "",
+            $('#clockIn').inputmask('hh:mm', {
+                placeholder: '',
                 clearMaskOnLostFocus: true
             });
-            $("#beginLunchBreak").inputmask("hh:mm", {
-                placeholder: "",
+            $('#beginLunchBreak').inputmask('hh:mm', {
+                placeholder: '',
                 clearMaskOnLostFocus: true
             });
-            $("#finishLunchBreak").inputmask("hh:mm", {
-                placeholder: "",
+            $('#finishLunchBreak').inputmask('hh:mm', {
+                placeholder: '',
                 clearMaskOnLostFocus: true
             });
-            $("#clockOut").inputmask("hh:mm", {
-                placeholder: "",
+            $('#clockOut').inputmask('hh:mm', {
+                placeholder: '',
                 clearMaskOnLostFocus: true
             });
-            $("#breakDurationInSeconds").inputmask("hh:mm", {
-                placeholder: "",
+            $('#breakDurationInSeconds').inputmask('hh:mm', {
+                placeholder: '',
                 clearMaskOnLostFocus: true
             });
-            $("#userBeginTime").inputmask("hh:mm", {
-                placeholder: "",
+            $('#userBeginTime').inputmask('hh:mm', {
+                placeholder: '',
                 clearMaskOnLostFocus: true
             });
-            $("#userFinishTime").inputmask("hh:mm", {
-                placeholder: "",
+            $('#userFinishTime').inputmask('hh:mm', {
+                placeholder: '',
                 clearMaskOnLostFocus: true
             });
-            $("#allowedLunchBreakInSec").inputmask("hh:mm", {
-                placeholder: "",
+            $('#allowedLunchBreakInSec').inputmask('hh:mm', {
+                placeholder: '',
                 clearMaskOnLostFocus: true
             });
 
 
-            $("#filterButton").trigger("click");
+            $('#filterButton').trigger('click');
         });
 
     </script>
