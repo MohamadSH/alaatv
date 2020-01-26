@@ -1,38 +1,46 @@
-var InitPage = function() {
+var InitPage = function () {
 
     var data = {
+        login: {
+            enable: false,
             loginActionUrl: '',
-            redirectUrl: '',
-            user: {
-                mobile: ''
-            },
-            verifyMobile: {
-                enable: false,
-                sendVerificationCodeActionUrl: '',
-                verifyActionUrl: '',
-                verifyFormToken: '',
-                isVerified: false
-            },
-            voucher: {
-                enable: true,
-                voucherActionUrl: '',
-                voucherCode: ''
-            }
-        };
+        },
+        verifyMobile: {
+            enable: false,
+            sendVerificationCodeActionUrl: '',
+            verifyActionUrl: '',
+            verifyFormToken: '',
+            isVerified: false
+        },
+        voucher: {
+            enable: true,
+            voucherActionUrl: '',
+            voucherCode: ''
+        },
+        redirectUrl: '',
+        user: {
+            mobile: ''
+        }
+    };
 
     function showProperForm() {
 
         hideLoginForm();
         hideVoucherPageForm();
 
-        if (!detectUserLogin()) {
+        if (!detectUserLogin() && data.login.enable) {
             showLoginForm();
             return;
         }
 
-        if (!data.verifyMobile.isVerified) {
+        if (!data.verifyMobile.isVerified && data.login.enable && data.verifyMobile.enable) {
             sendVerificationCode('.btnResendVerificationCode');
             showVerifyForm();
+            return;
+        }
+
+        if (!data.voucher.enable) {
+            window.location.href = (data.redirectUrl.trim().length > 0) ? data.redirectUrl : '/';
             return;
         }
 
@@ -247,7 +255,7 @@ var InitPage = function() {
     }
 
     function showLoginModal() {
-        AjaxLogin.showLogin(data.loginActionUrl, function (response) {
+        AjaxLogin.showLogin(data.login.loginActionUrl, function (response) {
             afterLogin(response);
         });
     }
@@ -345,19 +353,7 @@ var InitPage = function() {
     }
 
     function initData(padeData) {
-
         data = $.extend(true, {}, data, padeData);
-
-        // mobile = padeData.mobile;
-        // isVerified = padeData.isVerified;
-        // productData = padeData.productData;
-        // voucherCode = padeData.voucherCode;
-        // loginActionUrl = padeData.loginActionUrl;
-        // verifyActionUrl = padeData.verifyActionUrl;
-        // verifyFormToken = padeData.verifyFormToken;
-        // voucherActionUrl = padeData.voucherActionUrl;
-        // userProductFilesUrl = padeData.userProductFilesUrl;
-        // sendVerificationCodeActionUrl = padeData.sendVerificationCodeActionUrl;
     }
 
     function applyGAEE(products) {

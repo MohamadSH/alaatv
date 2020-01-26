@@ -34,8 +34,10 @@
 @section('page-js')
     <script>
         var padeData = {
-            loginActionUrl: GlobalJsVar.loginActionUrl(),
-            redirectUrl: '{{ $redirectUrl  }}',
+            login: {
+                enable: {{($login) ? 'true' : 'false'}},
+                loginActionUrl: GlobalJsVar.loginActionUrl(),
+            },
             user: {
                 mobile: '{{$mobile}}'
             },
@@ -50,7 +52,8 @@
                 enable: {{($voucher) ? 'true' : 'false'}},
                 voucherActionUrl: '{{route('web.voucher.submit')}}',
                 voucherCode: '{{$code}}'
-            }
+            },
+            redirectUrl: '{{ $redirectUrl  }}'
         };
     </script>
 {{--    <script src = "{{ mix('/js/contactUs.js') }}"></script>--}}
