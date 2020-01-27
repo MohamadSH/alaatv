@@ -145,7 +145,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('adminSource', [AdminController::class, 'adminSource'])->name('web.admin.sources');
     Route::post('giveWalletCredit', [WalletController::class, 'giveCredit'])->name('web.admin.wallet.giveCredit');
     Route::post('registerUserAndGiveOrderproduct', [AdminController::class, 'registerUserAndGiveOrderproduct'])->name('web.admin.registerUserAndGiveOrderproduct');
-    Route::post('adminSendSMS', [HomeController::class , 'sendSMS'])->name('web.sendSms');
+    Route::post('adminSendSMS', [HomeController::class, 'sendSMS'])->name('web.sendSms');
+    Route::get('adminLogoutUser', [AdminController::class, 'adminLogoutUser'])->name('web.admin.logout.user');
     /*** Admin routes */
 
 
