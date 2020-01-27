@@ -83,7 +83,7 @@ function makeDataTable(id) {
 function makeDataTable_loadWithAjax(id, url, columns, dataFilter, ajaxData, dataSrc) {
     var table = $('#'+id);
 
-    let dataTableOptions = {
+    var dataTableOptions = {
         // Internationalisation. For more info refer to http://datatables.net/manual/i18n
         "language": {
             "aria": {
@@ -164,18 +164,18 @@ function makeDataTable_loadWithAjax(id, url, columns, dataFilter, ajaxData, data
 }
 
 function getNextPageParam(start, length) {
-    let page = (start / length) + 1;
+    var page = (start / length) + 1;
     return page;
 }
 function getFormData($form){
     var unindexed_array = $form.serializeArray();
     var indexed_array = {};
 
-    for (let index in unindexed_array) {
+    for (var index in unindexed_array) {
         if (isNaN(index)) {
             continue;
         }
-        let item = unindexed_array[index];
+        var item = unindexed_array[index];
         if (item.name.indexOf("[]") !== -1) {
             if (typeof indexed_array[item.name] === 'undefined') {
                 indexed_array[item.name] = [];
@@ -185,7 +185,7 @@ function getFormData($form){
             indexed_array[item.name] = item.value;
         }
     }
-    
+
     // $.map(unindexed_array, function(n, i){
     //     indexed_array[n['name']] = n['value'];
     // });

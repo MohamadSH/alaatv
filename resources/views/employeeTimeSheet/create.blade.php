@@ -178,48 +178,51 @@
                     </div>
                     <!--end::Modal-->
 
-                    <table class="table table-striped table-bordered table-hover dt-responsive" width="100%" id="employeeTimeSheet_table">
-                        <thead>
-                        <tr>
-                            <th></th>
-                            @permission((config('constants.LIST_EMPLOPYEE_WORK_SHEET')))
-                            <th class="all"> نام</th>
-                            @endpermission
-                            <th class="all"> تاریخ</th>
-                            <th class="desktop"> روز</th>
-                            @permission((config('constants.LIST_EMPLOPYEE_WORK_SHEET')))
-                            <th class="none"> عملیات</th>
-                            @endpermission
-                            <th class="none"> مدت شیفت کاری</th>
-                            <th class="desktop"> کل ساعت کار</th>
-                            <th class="none"> زمان ناهار</th>
-                            <th class="desktop"> زمان استراحت اضافه</th>
-                            <th class="desktop"> اضافه یا کم کاری</th>
-                            <th class="none"> شروع شیفت</th>
-                            <th class="none"> پایان شیفت</th>
-                            <th class="desktop"> ورود</th>
-                            <th class="desktop"> خروج ناهار</th>
-                            <th class="desktop"> ورود بعد ناهار</th>
-                            <th class="desktop"> خروج نهایی</th>
-                            <th class="none"> استراحت(کسری)</th>
-                            <th class="none"> قفل شده</th>
-                            @permission((config('constants.LIST_EMPLOPYEE_WORK_SHEET')))
-                            <th class="none"> تسویه شده</th>
-                            @endpermission
-                            <th class="none"> نوع ساعت کاری</th>
-                            <th class="none"> توضیحات کامند</th>
-                            <th class="none"> توضیحات مدیر</th>
-                            @permission((config('constants.LIST_EMPLOPYEE_WORK_SHEET')))
-                            <th class="none"> زمان اصلاح</th>
-                            <th class="none"> نام اصلاح کننده</th>
-                            <th class="none"> زمان درج</th>
-                            @endpermission
-                        </tr>
-                        </thead>
-                        <tbody align="center">
-                        {{--Loading by Ajax--}}
-                        </tbody>
-                    </table>
+                    <div style="overflow: auto;">
+                        <table class="table table-striped table-bordered table-hover dt-responsive" width="100%" id="employeeTimeSheet_table">
+                            <thead>
+                            <tr>
+                                <th></th>
+                                @permission((config('constants.LIST_EMPLOPYEE_WORK_SHEET')))
+                                <th class="all"> نام</th>
+                                @endpermission
+                                <th class="all"> تاریخ</th>
+                                <th class="desktop"> روز</th>
+                                @permission((config('constants.LIST_EMPLOPYEE_WORK_SHEET')))
+                                <th class="none"> عملیات</th>
+                                @endpermission
+                                <th class="none"> مدت شیفت کاری</th>
+                                <th class="desktop"> کل ساعت کار</th>
+                                <th class="none"> زمان ناهار</th>
+                                <th class="desktop"> زمان استراحت اضافه</th>
+                                <th class="desktop"> اضافه یا کم کاری</th>
+                                <th class="none"> شروع شیفت</th>
+                                <th class="none"> پایان شیفت</th>
+                                <th class="desktop"> ورود</th>
+                                <th class="desktop"> خروج ناهار</th>
+                                <th class="desktop"> ورود بعد ناهار</th>
+                                <th class="desktop"> خروج نهایی</th>
+                                <th class="none"> استراحت(کسری)</th>
+                                <th class="none"> قفل شده</th>
+                                @permission((config('constants.LIST_EMPLOPYEE_WORK_SHEET')))
+                                <th class="none"> تسویه شده</th>
+                                @endpermission
+                                <th class="none"> نوع ساعت کاری</th>
+                                <th class="none"> توضیحات کامند</th>
+                                <th class="none"> توضیحات مدیر</th>
+                                @permission((config('constants.LIST_EMPLOPYEE_WORK_SHEET')))
+                                <th class="none"> زمان اصلاح</th>
+                                <th class="none"> نام اصلاح کننده</th>
+                                <th class="none"> زمان درج</th>
+                                @endpermission
+                            </tr>
+                            </thead>
+                            <tbody align="center">
+                            {{--Loading by Ajax--}}
+                            </tbody>
+                        </table>
+                    </div>
+
                 </div>
             </div>
         </div>
@@ -229,288 +232,256 @@
 
 @section('page-js')
     <script src="{{ mix('/js/admin-all.js') }}" type="text/javascript"></script>
-
-
-
-
-{{--    <script src="/acm/AlaatvCustomFiles/components/alaa_old/scripts/datatable.min.js" type="text/javascript"></script>--}}
-{{--    <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/datatables/datatables.min.js" type="text/javascript"></script>--}}
-{{--    <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js" type="text/javascript"></script>--}}
-{{--    <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-fileinput/bootstrap-fileinput.js" type="text/javascript"></script>--}}
-{{--    <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-summernote/summernote.min.js" type="text/javascript"></script>--}}
-{{--    <script src="/acm/extra/persian-datepicker/lib/persian-date.js" type="text/javascript"></script>--}}
-{{--    <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/jquery-inputmask/jquery.inputmask.bundle.min.js" type="text/javascript"></script>--}}
-{{--    <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/jquery.input-ip-address-control-1.0.min.js" type="text/javascript"></script>--}}
-{{--    <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/icheck/icheck.min.js" type="text/javascript"></script>--}}
-{{--    <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-toastr/toastr.min.js" type="text/javascript"></script>--}}
-{{--    <script src="/acm/AlaatvCustomFiles/components/alaa_old/scripts/components-editors.js" type="text/javascript"></script>--}}
-{{--    <script src="/acm/AlaatvCustomFiles/components/alaa_old/scripts/ui-toastr.min.js" type="text/javascript"></script>--}}
-{{--    <script src="/acm/extra/persian-datepicker/dist/js/persian-datepicker-0.4.5.min.js" type="text/javascript"></script>--}}
-{{--    <script src="/acm/AlaatvCustomFiles/components/alaa_old/scripts/app.js" type="text/javascript"></script>--}}
-{{--    <script src="/acm/AlaatvCustomFiles/components/alaa_old/scripts/form-input-mask.js" type="text/javascript"></script>--}}
-{{--    <script src="/acm/AlaatvCustomFiles/components/alaa_old/scripts/form-icheck.js" type="text/javascript"></script>--}}
-{{--    <script src="/acm/AlaatvCustomFiles/components/alaa_old/scripts/components-bootstrap-multiselect.min.js" type="text/javascript"></script>--}}
-{{--    <script src="/acm/AlaatvCustomFiles/js/admin/makeDataTable.js" type="text/javascript"></script>--}}
-{{--    <script src="/acm/AlaatvCustomFiles/js/admin-makeMultiSelect.js" type="text/javascript"></script>--}}
-
-
-
-
-
-
-{{--    <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/datatables/datatables.min.js" type="text/javascript"></script>--}}
-{{--    <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js" type="text/javascript"></script>--}}
-{{--    <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js" type="text/javascript"></script>--}}
-{{--    <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-fileinput/bootstrap-fileinput.js" type="text/javascript"></script>--}}
-{{--    <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/jquery-inputmask/jquery.inputmask.bundle.min.js" type="text/javascript"></script>--}}
-{{--    <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/jquery.sparkline.min.js" type="text/javascript"></script>--}}
-{{--    <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-toastr/toastr.min.js" type="text/javascript"></script>--}}
-{{--    <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-select/js/bootstrap-select.min.js" type="text/javascript"></script>--}}
-{{--    <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/jquery-multi-select/js/jquery.multi-select.js" type="text/javascript"></script>--}}
-{{--    <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/jquery-repeater/jquery.repeater.min.js" type="text/javascript"></script>--}}
-{{--    <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-tagsinput/bootstrap-tagsinput.min.js" type="text/javascript"></script>--}}
-{{--    <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/jplayer/dist/jplayer/jquery.jplayer.js" type="text/javascript"></script>--}}
-{{--    <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/jQueryNumberFormat/jquery.number.min.js" type="text/javascript"></script>--}}
-{{--    <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-sweetalert/sweetalert.min.js" type="text/javascript"></script>--}}
-{{--    <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/jquery.input-ip-address-control-1.0.min.js" type="text/javascript"></script>--}}
-{{--    <script src="/acm/AlaatvCustomFiles/components/alaa_old/plugins/icheck/icheck.min.js" type="text/javascript"></script>--}}
-
-{{--    <script src="/acm/AlaatvCustomFiles/components/alaa_old/scripts/datatable.min.js" type="text/javascript"></script>--}}
-{{--    <script src="/acm/AlaatvCustomFiles/components/alaa_old/scripts/form-repeater.js" type="text/javascript"></script>--}}
-{{--    <script src="/acm/AlaatvCustomFiles/components/alaa_old/scripts/ui-toastr.min.js" type="text/javascript"></script>--}}
-{{--    <script src="/acm/AlaatvCustomFiles/components/alaa_old/scripts/components-editors.js" type="text/javascript"></script>--}}
-{{--    <script src="/acm/AlaatvCustomFiles/components/alaa_old/scripts/components-multi-select.min.js" type="text/javascript"></script>--}}
-{{--    <script src="/acm/AlaatvCustomFiles/components/alaa_old/scripts/components-bootstrap-multiselect.min.js" type="text/javascript"></script>--}}
-{{--    <script src="/acm/AlaatvCustomFiles/components/alaa_old/scripts/ui-confirmations.min.js" type="text/javascript"></script>--}}
-{{--    <script src="/acm/AlaatvCustomFiles/components/alaa_old/scripts/makeSelect2Single.js" type="text/javascript"></script>--}}
-{{--    <script src="/acm/AlaatvCustomFiles/components/alaa_old/scripts/form-input-mask.js" type="text/javascript"></script>--}}
-{{--    <script src="/acm/AlaatvCustomFiles/components/alaa_old/scripts/form-icheck.js" type="text/javascript"></script>--}}
-{{--    --}}
-{{--    <script src="/acm/extra/persian-datepicker/lib/persian-date.js" type="text/javascript"></script>--}}
-{{--    <script src="/acm/extra/persian-datepicker/dist/js/persian-datepicker-0.4.5.min.js" type="text/javascript"></script>--}}
-{{--    <script src="/acm/AlaatvCustomFiles/js/admin/makeDataTable.js" type="text/javascript"></script>--}}
-{{--    <script src="/acm/AlaatvCustomFiles/js/admin-makeMultiSelect.js" type="text/javascript"></script>--}}
-{{--    <script src="/acm/AlaatvCustomFiles/js/admin-customInitComponent.js" type="text/javascript"></script>--}}
     <script type="text/javascript">
+        var InitPage = function() {
+            function initSummernote() {
+                $('#employeeCommentSummerNote').summernote({
+                    lang: 'fa-IR',
+                    height: 300,
+                    popover: {
+                        image: [],
+                        link: [],
+                        air: []
+                    },
+                    placeholder: "توضیحات کارمند"});
+
+                $('#managerCommentSummerNote').summernote({
+                    lang: 'fa-IR',
+                    height: 300,
+                    popover: {
+                        image: [],
+                        link: [],
+                        air: []
+                    },
+                    placeholder: "توضیحات مدیر"});
+            }
+
+            function initPersianDatepicker() {
+
+                $('#date').persianDatepicker({
+                    altField: '#dateAlt',
+                    altFormat: 'YYYY MM DD',
+                    observer: true,
+                    format: 'YYYY/MM/DD',
+                    altFieldFormatter: function (unixDate) {
+                        var d = new Date(unixDate).toISOString();
+                        return d;
+                    }
+                });
+
+                $('#sinceDate').persianDatepicker({
+                    altField: '#sinceDateAlt',
+                    altFormat: 'YYYY MM DD',
+                    observer: true,
+                    format: 'YYYY/MM/DD',
+                    altFieldFormatter: function (unixDate) {
+                        var d = new Date(unixDate).toISOString();
+                        return d;
+                    }
+                });
+
+                $('#tillDate').persianDatepicker({
+                    altField: '#tillDateAlt',
+                    altFormat: 'YYYY MM DD',
+                    observer: true,
+                    format: 'YYYY/MM/DD',
+                    altFieldFormatter: function (unixDate) {
+                        var d = new Date(unixDate).toISOString();
+                        return d;
+                    }
+                });
+            }
+
+            function initInputmask() {
+                $('#clockIn').inputmask('hh:mm', {
+                    placeholder: '',
+                    clearMaskOnLostFocus: true
+                });
+                $('#beginLunchBreak').inputmask('hh:mm', {
+                    placeholder: '',
+                    clearMaskOnLostFocus: true
+                });
+                $('#finishLunchBreak').inputmask('hh:mm', {
+                    placeholder: '',
+                    clearMaskOnLostFocus: true
+                });
+                $('#clockOut').inputmask('hh:mm', {
+                    placeholder: '',
+                    clearMaskOnLostFocus: true
+                });
+                $('#breakDurationInSeconds').inputmask('hh:mm', {
+                    placeholder: '',
+                    clearMaskOnLostFocus: true
+                });
+                $('#userBeginTime').inputmask('hh:mm', {
+                    placeholder: '',
+                    clearMaskOnLostFocus: true
+                });
+                $('#userFinishTime').inputmask('hh:mm', {
+                    placeholder: '',
+                    clearMaskOnLostFocus: true
+                });
+                $('#allowedLunchBreakInSec').inputmask('hh:mm', {
+                    placeholder: '',
+                    clearMaskOnLostFocus: true
+                });
+            }
+
+            @permission((config('constants.REMOVE_EMPLOPYEE_WORK_SHEET')))
+            function removeEmployeetimesheet() {
+                toastr.options = {
+                    "closeButton": true,
+                    "debug": false,
+                    "positionClass": "toast-top-center",
+                    "onclick": null,
+                    "showDuration": "1000",
+                    "hideDuration": "1000",
+                    "timeOut": "5000",
+                    "extendedTimeOut": "1000",
+                    "showEasing": "swing",
+                    "hideEasing": "linear",
+                    "showMethod": "fadeIn",
+                    "hideMethod": "fadeOut"
+                };
+                var employeeTimeSheet_id = $('input[name=employeetimesheet_id]').val();
+                $.ajax({
+                    type: 'POST',
+                    url: '/employeetimesheet/' + employeeTimeSheet_id,
+                    data: {_method: 'delete'},
+                    statusCode: {
+                        200: function (response) {
+                            toastr["success"]("ساعت کاری با موفقیت حذف شد!", "پیام سیستم");
+                            $('#filterButton').trigger('click');
+                        },
+                        401: function (ressponse) {
+                            location.reload();
+                        },
+                        403: function (response) {
+                            window.location.replace("/403");
+                        },
+                        404: function (response) {
+                            window.location.replace("/404");
+                        }
+                    }
+                });
+            }
+            @endpermission
+
+            function addEvents() {
+
+                @permission(config('constants.REMOVE_EMPLOPYEE_WORK_SHEET'))
+
+                    $(document).on('click', ".deleteEmplpyeetimesheet", function () {
+                        var employeeTimeSheet_id = $(this).data('id');
+                        $('input[name=employeetimesheet_id]').val(employeeTimeSheet_id);
+                    });
+
+                @endpermission
+
+                @ability(config("constants.EMPLOYEE_ROLE"), config("constants.LIST_EMPLOPYEE_WORK_SHEET"))
+                    var userAjax;
+                    $(document).on('click', "#filterButton", function () {
+                        $('#employeeTimeSheet-portlet-loading').removeClass("d-none");
+                        $('#employeeTimeSheet_table > tbody').html('');
+
+                        var formData = $('#filterEmployeeTimeSheetForm').serialize();
+
+                        // if($('#employeeTimeSheetTableColumnFilter').val() !== null) {
+                        //    var columns = $('#employeeTimeSheetTableColumnFilter').val();
+                        //    $('#employeeTimeSheet_table thead tr th').each(function() {
+                        //        if(columns.includes($(this).text().trim())){
+                        //            $(this).removeClass().addClass("all");
+                        //        }
+                        //        else if($(this).text() !== '') {
+                        //            $(this).removeClass().addClass("none");
+                        //        }
+                        //    });
+                        // }
+                        // else {
+                        //    $('#employeeTimeSheet_table thead tr th').each(function() {
+                        //        $(this).removeClass().addClass("none");
+                        //    });
+                        // }
+
+                        if (userAjax) {
+                            userAjax.abort();
+                        }
+                        userAjax = $.ajax({
+                            type: "GET",
+                            url: $('#filterEmployeeTimeSheetForm').attr("action"),
+                            data: formData,
+                            contentType: "application/json",
+                            dataType: "json",
+                            statusCode: {
+                                200: function (response) {
+                                    var newDataTable = $('#employeeTimeSheet_table').DataTable();
+                                    newDataTable.destroy();
+                                    $('#employeeTimeSheet_table > tbody').html(response.index);
+                                    $('#sumWorkSheet').html(response.employeeWorkSheetSum);
+                                    $('#sumRealWorkTime').html(response.employeeRealWorkTime);
+                                    makeDataTable("employeeTimeSheet_table");
+                                    $('#employeeTimeSheet-portlet-loading').addClass("d-none");
+                                },
+                                401: function (ressponse) {
+                                    location.reload();
+                                },
+                                403: function (response) {
+                                    window.location.replace("/403");
+                                },
+                                404: function (response) {
+                                    window.location.replace("/404");
+                                },
+                                500: function (response) {
+                                    console.log(response.responseText);
+                                    toastr["error"]("خطای برنامه!", "پیام سیستم");
+                                },
+                                503: function (response) {
+                                    toastr["error"]("خطای پایگاه داده!", "پیام سیستم");
+                                }
+                            }
+                        });
+
+                        return false;
+                    });
+                @endability;
+
+                $('#dateEnable').click(function () {
+                    if ($('#dateEnable').prop('checked') == true) {
+                        $('#sinceDate').attr('disabled', false);
+                        $('#tillDate').attr('disabled', false);
+                    } else {
+                        $('#sinceDate').attr('disabled', true);
+                        $('#tillDate').attr('disabled', true);
+                    }
+                });
+            }
+
+            function init() {
+                initSummernote();
+                initPersianDatepicker();
+                initInputmask();
+                addEvents();
+
+                @ability(config("constants.EMPLOYEE_ROLE"), config("constants.LIST_EMPLOPYEE_WORK_SHEET"))
+                    $('#filterButton').trigger('click');
+                @endability
+            }
+
+            return {
+                init: init
+            };
+
+        }();
         jQuery(document).ready(function () {
 
-            // $('.icheck').iCheck({
-            //     checkboxClass: 'icheckbox_line',
-            //     radioClass: 'iradio_line',
-            // });
-            //
+            /* $('.icheck').iCheck({
+                 checkboxClass: 'icheckbox_line',
+                 radioClass: 'iradio_line',
+             });
+            */
 
-            // Ajax of Modal forms
-            var $modal = $('#ajax-modal');
-
-            $('#employeeCommentSummerNote').summernote({
-                lang: 'fa-IR',
-                height: 300,
-                popover: {
-                    image: [],
-                    link: [],
-                    air: []
-                },
-                placeholder: "توضیحات کارمند"});
-            $('#managerCommentSummerNote').summernote({
-                lang: 'fa-IR',
-                height: 300,
-                popover: {
-                    image: [],
-                    link: [],
-                    air: []
-                },
-                placeholder: "توضیحات مدیر"});
-
-            $("#date").persianDatepicker({
-                altField: '#dateAlt',
-                altFormat: "YYYY MM DD",
-                observer: true,
-                format: 'YYYY/MM/DD',
-                altFieldFormatter: function (unixDate) {
-                    var d = new Date(unixDate).toISOString();
-                    return d;
-                }
-            });
-            $("#sinceDate").persianDatepicker({
-                altField: '#sinceDateAlt',
-                altFormat: "YYYY MM DD",
-                observer: true,
-                format: 'YYYY/MM/DD',
-                altFieldFormatter: function (unixDate) {
-                    var d = new Date(unixDate).toISOString();
-                    return d;
-                }
-            });
-            $("#tillDate").persianDatepicker({
-                altField: '#tillDateAlt',
-                altFormat: "YYYY MM DD",
-                observer: true,
-                format: 'YYYY/MM/DD',
-                altFieldFormatter: function (unixDate) {
-                    var d = new Date(unixDate).toISOString();
-                    return d;
-                }
-            });
-
-            $('#dateEnable').click(function () {
-                if ($('#dateEnable').prop('checked') == true) {
-                    $('#sinceDate').attr('disabled', false);
-                    $('#tillDate').attr('disabled', false);
-                } else {
-                    $('#sinceDate').attr('disabled', true);
-                    $('#tillDate').attr('disabled', true);
-                }
-            });
-
-            $("#clockIn").inputmask("hh:mm", {
-                placeholder: "",
-                clearMaskOnLostFocus: true
-            });
-            $("#beginLunchBreak").inputmask("hh:mm", {
-                placeholder: "",
-                clearMaskOnLostFocus: true
-            });
-            $("#finishLunchBreak").inputmask("hh:mm", {
-                placeholder: "",
-                clearMaskOnLostFocus: true
-            });
-            $("#clockOut").inputmask("hh:mm", {
-                placeholder: "",
-                clearMaskOnLostFocus: true
-            });
-            $("#breakDurationInSeconds").inputmask("hh:mm", {
-                placeholder: "",
-                clearMaskOnLostFocus: true
-            });
-            $("#userBeginTime").inputmask("hh:mm", {
-                placeholder: "",
-                clearMaskOnLostFocus: true
-            });
-            $("#userFinishTime").inputmask("hh:mm", {
-                placeholder: "",
-                clearMaskOnLostFocus: true
-            });
-            $("#allowedLunchBreakInSec").inputmask("hh:mm", {
-                placeholder: "",
-                clearMaskOnLostFocus: true
-            });
-
-        @ability(Config::get("constants.EMPLOYEE_ROLE"), Config::get("constants.LIST_EMPLOPYEE_WORK_SHEET"));
-            $("#filterButton").trigger("click");
-        @endability
+            InitPage.init();
         });
 
-        @ability(Config::get("constants.EMPLOYEE_ROLE"), Config::get("constants.LIST_EMPLOPYEE_WORK_SHEET"));
-        var userAjax;
-        $(document).on("click", "#filterButton", function () {
-            $("#employeeTimeSheet-portlet-loading").removeClass("d-none");
-            $('#employeeTimeSheet_table > tbody').html("");
-
-            var formData = $("#filterEmployeeTimeSheetForm").serialize();
-
-//            if($("#employeeTimeSheetTableColumnFilter").val() !== null) {
-//                var columns = $("#employeeTimeSheetTableColumnFilter").val();
-//                $("#employeeTimeSheet_table thead tr th").each(function() {
-//                    if(columns.includes($(this).text().trim())){
-//                        $(this).removeClass().addClass("all");
-//                    }
-//                    else if($(this).text() !== "") {
-//                        $(this).removeClass().addClass("none");
-//                    }
-//                });
-//            }
-//            else {
-//                $("#employeeTimeSheet_table thead tr th").each(function() {
-//                    $(this).removeClass().addClass("none");
-//                });
-//            }
-            if (userAjax) {
-                userAjax.abort();
-            }
-            userAjax = $.ajax({
-                type: "GET",
-                url: $("#filterEmployeeTimeSheetForm").attr("action"),
-                data: formData,
-                contentType: "application/json",
-                dataType: "json",
-                statusCode: {
-                    200: function (response) {
-                        var newDataTable = $("#employeeTimeSheet_table").DataTable();
-                        newDataTable.destroy();
-                        $('#employeeTimeSheet_table > tbody').html(response.index);
-                        $("#sumWorkSheet").html(response.employeeWorkSheetSum);
-                        $("#sumRealWorkTime").html(response.employeeRealWorkTime);
-                        makeDataTable("employeeTimeSheet_table");
-                        $("#employeeTimeSheet-portlet-loading").addClass("d-none");
-                    },
-                    401: function (ressponse) {
-                        location.reload();
-                    },
-                    403: function (response) {
-                        window.location.replace("/403");
-                    },
-                    404: function (response) {
-                        window.location.replace("/404");
-                    },
-                    500: function (response) {
-                        console.log(response.responseText);
-                        toastr["error"]("خطای برنامه!", "پیام سیستم");
-                    },
-                    503: function (response) {
-                        toastr["error"]("خطای پایگاه داده!", "پیام سیستم");
-                    }
-                }
-            });
-
-            return false;
-        });
-        @endability;
-
-        @permission((Config::get('constants.REMOVE_EMPLOPYEE_WORK_SHEET')));
-        $(document).on("click", ".deleteEmplpyeetimesheet", function () {
-            var employeeTimeSheet_id = $(this).data('id');
-            $("input[name=employeetimesheet_id]").val(employeeTimeSheet_id);
-        });
-
-        function removeEmployeetimesheet() {
-            toastr.options = {
-                "closeButton": true,
-                "debug": false,
-                "positionClass": "toast-top-center",
-                "onclick": null,
-                "showDuration": "1000",
-                "hideDuration": "1000",
-                "timeOut": "5000",
-                "extendedTimeOut": "1000",
-                "showEasing": "swing",
-                "hideEasing": "linear",
-                "showMethod": "fadeIn",
-                "hideMethod": "fadeOut"
-            };
-            var employeeTimeSheet_id = $("input[name=employeetimesheet_id]").val();
-            $.ajax({
-                type: 'POST',
-                url: '/employeetimesheet/' + employeeTimeSheet_id,
-                data: {_method: 'delete'},
-                statusCode: {
-                    200: function (response) {
-                        toastr["success"]("ساعت کاری با موفقیت حذف شد!", "پیام سیستم");
-                        $("#filterButton").trigger("click");
-                    },
-                    401: function (ressponse) {
-                        location.reload();
-                    },
-                    403: function (response) {
-                        window.location.replace("/403");
-                    },
-                    404: function (response) {
-                        window.location.replace("/404");
-                    }
-                }
-            });
-        }
-
-        @endpermission
     </script>
 @endsection
