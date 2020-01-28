@@ -20,13 +20,13 @@ trait ContentControllerResponseTrait
      * @param Request $request
      * @param Content $content
      *
-     * @param string  $gard
+     * @param string  $guard
      *
      * @return bool
      */
-    protected function userCanSeeContent(Request $request, Content $content, string $gard): bool
+    protected function userCanSeeContent(Request $request, Content $content, string $guard): bool
     {
-        return $content->isFree || optional($request->user($gard))->hasContent($content);
+        return $content->isFree || optional($request->user($guard))->hasContent($content);
     }
 
     protected function getUserCanNotSeeContentJsonResponse(Content $content, ProductCollection $productsThatHaveThisContent, callable $callback): JsonResponse

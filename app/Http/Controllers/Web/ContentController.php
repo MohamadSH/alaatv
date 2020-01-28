@@ -202,7 +202,6 @@ class ContentController extends Controller
 
         $seenCount = $content->pageView;
 
-        $userCanSeeCounter = optional($user)->CanSeeCounter();
         $apiResponse       = response()->json($content, Response::HTTP_OK);
 
         $productsHasThisContentThroughBlockCollection = $content->related_products;
@@ -217,7 +216,8 @@ class ContentController extends Controller
 
         $sources = $content->sources;
 
-        $viewResponse = view('content.show',
+        $userCanSeeCounter = false;
+        $viewResponse      = view('content.show',
             compact('seenCount', 'author', 'content', 'contentsWithSameSet', 'videosWithSameSet',
                 'pamphletsWithSameSet', 'contentSetName', 'tags',
                 'userCanSeeCounter', 'adItems', 'videosWithSameSetL', 'videosWithSameSetR',
