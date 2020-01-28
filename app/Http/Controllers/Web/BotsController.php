@@ -299,7 +299,8 @@ class BotsController extends Controller
             }
 
             if ($response->has('hekmat_voucher')) {
-                for ($i = 1; $i <= 500; $i++) {
+                $count = $request->get('count', 500);
+                for ($i = 1; $i <= $count; $i++) {
                     do {
                         $voucher = rand(1000, 9999);
                     } while (!is_null(Productvoucher::where('code', $voucher)->first()));
