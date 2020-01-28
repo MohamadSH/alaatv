@@ -297,6 +297,30 @@ class BotsController extends Controller
 
                 dd($orderproducts);
             }
+
+            if ($response->has('hekmat_voucher')) {
+                for ($i = 1; $i <= 500; $i++) {
+                    do {
+                        $voucher = rand(1000, 9999);
+                    } while (!is_null(Productvoucher::where('code', $voucher)->first()));
+
+                    $voucherLink = route('web.voucher.submit', ['code' => $voucher]);
+                    $result      = $this->sendRequest('http://shortLink.test/s?link=' . $voucherLink, 'GET');
+                    if ($result['statusCode'] == Response::HTTP_OK) {
+                        $data      = json_decode($result['result']);
+                        $shortLink = $data->data->shortLink;
+                    }
+
+                    if (isset($shortLink)) {
+                        $productVoucher = Productvoucher::create([
+                            'contractor_id'      => Productvoucher::CONTRANCTOR_HEKMAT,
+                            'code'               => $voucher,
+                            'products'           => '[]',
+                            'expirationdatetime' => '',
+                        ]);
+                    }
+                }
+            }
         } catch (Exception    $e) {
             $message = "unexpected error";
 
