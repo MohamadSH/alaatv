@@ -88,6 +88,7 @@ class AdminController extends Controller
                 'adminSalesReport',
                 'adminCacheClear',
                 'adminCheckOrder',
+                'adminLogoutUser',
             ],
         ]);
 
@@ -1070,6 +1071,7 @@ class AdminController extends Controller
 
     public function adminLogoutUser(Request $request)
     {
+        $adminUser = $request->user();
         $validator = Validator::make($request->all(), [
             'user_id' => 'required',
         ]);
@@ -1113,6 +1115,8 @@ class AdminController extends Controller
         $rememberMeCookie = Auth::getRecallerName();
         // Tell Laravel to forget this cookie
         $cookie = Cookie::forget($rememberMeCookie);
+
+        auth()->loginUsingId($adminUser->id);
 
         return response()->json([
             'message' => 'User logged out successfully',

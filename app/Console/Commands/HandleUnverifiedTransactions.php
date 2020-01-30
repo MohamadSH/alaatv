@@ -3,8 +3,6 @@
 namespace App\Console\Commands;
 
 use AlaaTV\Gateways\Contracts\OnlineGateway;
-use AlaaTV\Gateways\Contracts\OnlinePaymentVerificationResponseInterface;
-use AlaaTV\ZarinpalGatewayDriver\VerificationResponse;
 use App\Repositories\TransactionRepo;
 use App\Transaction;
 use Illuminate\Console\Command;
@@ -135,21 +133,21 @@ class HandleUnverifiedTransactions extends Command
 
             $gateWayVerify = $this->verifyTransaction($transaction->cost, $authority);
 
-            if ($gateWayVerify->isSuccessfulPayment()) {
+            if ($gateWayVerify['Status'] == 'success') {
                 $transactionUpdateResult = $transaction->update([
                     'transactionstatus_id' => config('constants.TRANSACTION_STATUS_SUCCESSFUL'),
-                    'transactionID'        => $gateWayVerify->getRefId(),
+                    'transactionID'        => $gateWayVerify['RefID'],
                     'managerComment'       => 'به سایت برنگشته بود - ثبت با کامند',
                 ]);
 
-                if($transactionUpdateResult){
-                    $this->info('Transaction '.$transaction->id.' has been updated successfully');
+                if ($transactionUpdateResult) {
+                    $this->info('Transaction ' . $transaction->id . ' has been updated successfully');
 
                     $order = $transaction->order;
                     if(isset($order)){
                         $order->update([
-                            'orderstatus_id' => config('constants.ORDER_STATUS_CLOSED'),
-                            'paymentstatus'  => config('constants.PAYMENT_STATUS_PAID')
+                            'orderstatus_id'   => config('constants.ORDER_STATUS_CLOSED'),
+                            'paymentstatus_id' => config('constants.PAYMENT_STATUS_PAID'),
                         ]);
                         $this->info('Order '.$order->id.' of transaction '.$transaction->id.' has been updated successfully');
                     }
@@ -170,15 +168,14 @@ class HandleUnverifiedTransactions extends Command
     }
 
     /**
-     * @param $cost
-     * @param $authority
+     * @param int    $cost
+     * @param string $authority
      *
-     * @return OnlinePaymentVerificationResponseInterface
+     * @return array
      */
-    private function verifyTransaction(int $cost, string $authority): OnlinePaymentVerificationResponseInterface
+    private function verifyTransaction(int $cost, string $authority): array
     {
-        $result = $this->gateway->verify($cost, $authority);
-        return VerificationResponse::instance($result);
+        return $this->gateway->verify($cost, $authority);
     }
 
     /**

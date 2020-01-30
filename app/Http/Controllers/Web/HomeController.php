@@ -70,24 +70,7 @@ class HomeController extends Controller
 
     public function debug(Request $request, User $user = null)
     {
-
-        $user = $request->user();
-        $code = '';
-
-        $mobile         = null;
-        $isUserVerified = false;
-        if (isset($user)) {
-            $mobile = $user->mobile;
-            $isUserVerified = $user->hasVerifiedMobile();
-        }
-
-        $login = true;
-        $voucher = false;
-        $verifyMobile = true;
-        $redirectUrl = action("Web\OrderController@checkoutReview");
-
-        return view('auth.voucherLogin', compact('mobile', 'isUserVerified', 'code', 'redirectUrl', 'verifyMobile', 'voucher', 'login'));
-//        return view('auth.voucherLogin');
+        //
     }
 
     public function search(Request $request)
