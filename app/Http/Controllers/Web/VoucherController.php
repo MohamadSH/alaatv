@@ -2,22 +2,30 @@
 
 namespace App\Http\Controllers\Web;
 
+use App\Classes\Pricing\Alaa\AlaaInvoiceGenerator;
+use App\Events\UserRedirectedToPayment;
 use App\Gender;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\EditUserRequest;
 use App\Http\Requests\InsertVoucherRequest;
 use App\Major;
 use App\Order;
+use App\Orderproduct;
 use App\Product;
+use App\Productvoucher;
 use App\Traits\RequestCommon;
+use App\Transaction;
+use App\User;
 use App\Websitesetting;
 use Carbon\Carbon;
-use Illuminate\Contracts\Filesystem\FileNotFoundException;
+use Exception;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Redirector;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Log;
 use Illuminate\View\View;
 use Jenssegers\Agent\Agent;
 use SEO;
@@ -31,31 +39,6 @@ class VoucherController extends Controller
         $this->setting = $setting->setting;
         $authException = $this->getAuthExceptionArray($agent);
         $this->callMiddlewares($authException);
-    }
-
-    /**
-     * @param Agent $agent
-     *
-     * @return array
-     */
-    private function getAuthExceptionArray(Agent $agent): array
-    {
-        $authException = ['show'];
-
-        return $authException;
-    }
-
-    /**
-     * @param array $authException
-     */
-    private function callMiddlewares(array $authException): void
-    {
-        $this->middleware('auth', ['except' => $authException]);
-        $this->middleware('permission:' . config('constants.LIST_USER_ACCESS') . "|" . config('constants.GET_BOOK_SELL_REPORT') . "|" . config('constants.GET_USER_REPORT'),
-            ['only' => 'index']);
-        $this->middleware('permission:' . config('constants.INSERT_USER_ACCESS'), ['only' => 'create']);
-        $this->middleware('permission:' . config('constants.REMOVE_USER_ACCESS'), ['only' => 'destroy']);
-        $this->middleware('permission:' . config('constants.SHOW_USER_ACCESS'), ['only' => 'edit']);
     }
 
     /**
@@ -143,10 +126,9 @@ class VoucherController extends Controller
     /**
      * Submit user request for voucher request
      *
-     * @param InsertVoucherRequest InsertVoucherRequest
+     * @param InsertVoucherRequest $request
      *
      * @return Response
-     * @throws FileNotFoundException
      */
     public function submitVoucherRequest(InsertVoucherRequest $request)
     {
@@ -237,6 +219,78 @@ class VoucherController extends Controller
         return redirect()->back();
     }
 
+    public function submit(Request $request)
+    {
+        $code = $request->get('code');
+        $user = $request->user();
+        /** @var Productvoucher $voucher */
+        $voucher = $request->get('voucher');
+
+        $products = $voucher->products;
+        [$done, $order] = $this->addVoucherProductsToUser($user, $products);
+
+        if ($done) {
+            $voucher->markVoucherAsUsed($user->id, Productvoucher::CONTRANCTOR_HEKMAT);
+            $gtmEec = $this->makeGtmEecArray($order);
+            $flash  = [
+                'title' => 'تبریک',
+                'body'  => 'محصولات شما با موفقیت ثبت شد',
+            ];
+            setcookie('flashMessage', json_encode($flash), time() + (86400 * 30), '/');
+            setcookie('gaee', json_encode($gtmEec), time() + (86400 * 30), '/');
+
+
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'message'  => 'Voucher has been used successfully',
+                    'products' => $products,
+                ]);
+            }
+
+            return redirect(route('web.user.asset'));
+        }
+
+        $flash = [
+            'title' => 'خطا',
+            'body'  => 'خطای سرور',
+        ];
+        setcookie('flashMessage', json_encode($flash), time() + (86400 * 30), '/');
+
+        if ($request->expectsJson()) {
+            return response()->json([
+                'message' => 'Unexpected error',
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+
+        return redirect(route('web.voucher.submit', ['code' => $code]));
+    }
+
+    /**
+     * @param Agent $agent
+     *
+     * @return array
+     */
+    private function getAuthExceptionArray(Agent $agent): array
+    {
+        $authException = ['show', 'submit'];
+
+        return $authException;
+    }
+
+    /**
+     * @param array $authException
+     */
+    private function callMiddlewares(array $authException): void
+    {
+        $this->middleware('auth', ['except' => $authException]);
+        $this->middleware('permission:' . config('constants.LIST_USER_ACCESS') . "|" . config('constants.GET_BOOK_SELL_REPORT') . "|" . config('constants.GET_USER_REPORT'),
+            ['only' => 'index']);
+        $this->middleware('permission:' . config('constants.INSERT_USER_ACCESS'), ['only' => 'create']);
+        $this->middleware('permission:' . config('constants.REMOVE_USER_ACCESS'), ['only' => 'destroy']);
+        $this->middleware('permission:' . config('constants.SHOW_USER_ACCESS'), ['only' => 'edit']);
+        $this->middleware('SubmitVoucher', ['only' => ['submit'],]);
+    }
+
     /**
      * @param $message
      *
@@ -246,6 +300,85 @@ class VoucherController extends Controller
     {
         session()->put("error", $message);
         return redirect()->back();
+    }
+
+    private function addVoucherProductsToUser(User $user, Collection $products): array
+    {
+        $order = Order::create([
+            'user_id'          => $user->id,
+            'orderstatus_id'   => config('constants.ORDER_STATUS_CLOSED'),
+            'paymentstatus_id' => config('constants.PAYMENT_STATUS_ORGANIZATIONAL_PAID'),
+            'completed_at'     => Carbon::now('Asia/Tehran'),
+        ]);
+
+        foreach ($products as $product) {
+            $price = $product->price;
+            Orderproduct::Create([
+                'order_id'            => $order->id,
+                'product_id'          => $product->id,
+                'cost'                => $price['final'],
+                'tmp_final_cost'      => $price['final'],
+                'orderproducttype_id' => config('constants.ORDER_PRODUCT_TYPE_DEFAULT'),
+            ]);
+        }
+
+        try {
+            $invoiceInfo = (new AlaaInvoiceGenerator)->generateOrderInvoice($order);
+            $finalPrice  = $invoiceInfo['price']['final'];
+            $order->update([
+                'costwithoutcoupon' => $finalPrice,
+            ]);
+
+            $eachInstalment = floor($finalPrice / 12);
+            $lastInstalment = $finalPrice % 12;
+            for ($i = 1; $i <= 12; $i++) {
+                if ($i == 12) {
+                    $eachInstalment += $lastInstalment;
+                }
+
+                Transaction::create([
+                    'order_id'             => $order->id,
+                    'cost'                 => $eachInstalment,
+                    'transactionstatus_id' => config('constants.TRANSACTION_STATUS_ORGANIZATIONAL_UNPAID'),
+                    'managerComment'       => 'قسط حکمت',
+                ]);
+            }
+
+            event(new UserRedirectedToPayment($user));
+            $result = [true, $order];
+
+        } catch (Exception $e) {
+            $order->delete();
+            Log::error('submitVoucher:addVoucherProductsToUser:generateOrderInvoice');
+            Log::error('file:' . $e->getFile() . ':' . $e->getLine());
+            $result = [false, null];
+        }
+
+        return $result;
+    }
+
+    private function makeGtmEecArray(Order $order): array
+    {
+        $orderproducts = $order->orderproducts;
+        $orderproducts->loadMissing('product');
+
+        $gtmEecProducts = [];
+        foreach ($orderproducts as $orderproduct) {
+            $gtmEecProducts[] = [
+                'id'       => (string)$orderproduct->product->id,
+                'name'     => $orderproduct->product->name,
+                'category' => (isset($orderproduct->product->category)) ? $orderproduct->product->category : '-',
+                'variant'  => '-',
+                'brand'    => 'آلاء',
+                'quantity' => 1,
+                'price'    => (string)number_format($orderproduct->getSharedCostOfTransaction() ?? 0, 2, '.', ''),
+            ];
+        }
+
+        return [
+            'actionField' => 'product.addToCart',
+            'products'    => $gtmEecProducts,
+        ];
     }
 
 }

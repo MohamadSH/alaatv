@@ -399,8 +399,8 @@ class ProductController extends Controller
 
 
         if ($this->canSeeRaheAbrishamSpecialPage($product , $user)) {
-                $sets              = $product->sets->sortByDesc('created_at');
-                $lastSet           = $sets->first();
+                $sets              = $product->sets->sortByDesc('pivot.order');
+            $lastSet               = $sets->first();
                 $lastSetPamphlets  = $lastSet->getActiveContents2(Content::CONTENT_TYPE_PAMPHLET);
                 $lastSetVideos     = $lastSet->getActiveContents2(Content::CONTENT_TYPE_VIDEO);
                 $periodDescription = $product->descriptionWithPeriod;

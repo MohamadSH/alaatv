@@ -3,7 +3,105 @@ var AppGlobalInitInit = function() {
     var LazyLoad,
         Firebase;
 
-    function initVars(data) {
+    function initFlash() {
+        flashGAEE();
+        showFlashMessage();
+    }
+
+    function flashGAEE() {
+        var gaee  = Cookie.get('gaee');
+        if (gaee.trim().length === 0 || !isJson(gaee)) {
+            return;
+        }
+        gaee = JSON.parse(gaee);
+        for (var i = 0; (typeof gaee[i] !== 'undefined'); i++) {
+            applyGAEE(gaee[i]);
+        }
+        Cookie.remove('gaee');
+    }
+
+    function applyGAEE(gaeeItem) {
+        var actionFieldList = gaeeItem.actionFieldList;
+        if (actionFieldList === 'product.addToCart') {
+            var products = gaeeItem.products;
+            GAEE.productAddToCart('product.addToCart', products);
+        } else if (actionFieldList === 'impressionView') {
+            var impressions = gaeeItem.impressions;
+            GAEE.productAddToCart(impressions);
+        }
+    }
+
+    function showFlashMessage() {
+        var flashMessage  = Cookie.get('flashMessage');
+        if (flashMessage.trim().length === 0) {
+            return;
+        }
+
+        if (isJson(flashMessage)) {
+            flashMessage = JSON.parse(flashMessage);
+            flashMessage.title = flashMessage.title.split('+').join(' ');
+            flashMessage.body = flashMessage.body.split('+').join(' ');
+            showAlaaAppModal(flashMessage.title, flashMessage.body);
+        } else {
+            showAlaaAppModal('', flashMessage);
+        }
+        Cookie.remove('flashMessage');
+    }
+
+    function isJson(str) {
+        try {
+            JSON.parse(str);
+        } catch (e) {
+            return false;
+        }
+        return true;
+    }
+
+    function getModalTemplate(title, content) {
+        return '' +
+            '<div class="modal" tabindex="-1" role="dialog" id="AlaaAppModal">\n' +
+            '  <div class="modal-dialog modal-dialog-centered" role="document">\n' +
+            '    <div class="modal-content">\n' +
+            '      <div class="modal-header">\n' +
+            '        <h5 class="modal-title">'+title+'</h5>\n' +
+            '        <button type="button" class="close" data-dismiss="modal" aria-label="Close">\n' +
+            '          <span aria-hidden="true">&times;</span>\n' +
+            '        </button>\n' +
+            '      </div>\n' +
+            '      <div class="modal-body">\n' +
+            '         \n' + content +
+            '      </div>\n' +
+            '      <div class="modal-footer">\n' +
+            '        <button type="button" class="btn btn-secondary d-none" data-dismiss="modal">بستن</button>\n' +
+            '      </div>\n' +
+            '    </div>\n' +
+            '  </div>\n' +
+            '</div>';
+    }
+
+    function checkExistLoginModal() {
+        return ($('#AlaaAppModal').length !== 0);
+    }
+
+    function appendLoginModalToBody(title, content) {
+        $('body').append(getModalTemplate(title, content));
+    }
+
+    function setAlaaAppModalData(title, content) {
+        $('#AlaaAppModal .modal-body').html(content);
+        $('#AlaaAppModal .modal-title').html(title);
+    }
+
+    function showAlaaAppModal(title, content) {
+        if (!checkExistLoginModal()) {
+            appendLoginModalToBody(title, content);
+        } else {
+            setAlaaAppModalData(title, content)
+        }
+        $('#AlaaAppModal').modal('show');
+    }
+
+    function initData(data) {
         LazyLoad = (typeof data.LazyLoad !== 'undefined') ? data.LazyLoad : null;
         Firebase = (typeof data.Firebase !== 'undefined') ? data.Firebase : null;
     }
@@ -31,7 +129,7 @@ var AppGlobalInitInit = function() {
         });
     }
 
-    function addClickEventofBtnProfileInMobileView() {
+    function addClickEventOfBtnProfileInMobileView() {
         if ($('#m_aside_header_topbar_mobile_toggle1').length > 0) {
             $('#m_aside_header_topbar_mobile_toggle1')[0].addEventListener('click', function(e) {
                 var element = $('.m-nav__item.m-topbar__user-profile')[0].closest('.m-dropdown');
@@ -51,9 +149,22 @@ var AppGlobalInitInit = function() {
         }
     }
 
+    function addLoginBeforeClickEvent() {
+        $(document).on('click', '.LoginBeforeClick', function () {
+            var userId = GlobalJsVar.userId(),
+                link = $(this).attr('data-href');
+            if (userId.length > 0) {
+                window.location.href = link;
+            } else {
+                AjaxLogin.showLogin(GlobalJsVar.loginActionUrl(), link);
+            }
+        });
+    }
+
     function addEvents() {
-        addClickEventofBtnProfileInMobileView();
+        addClickEventOfBtnProfileInMobileView();
         addGtmEecEvents();
+        addLoginBeforeClickEvent();
     }
 
     function initFirebase() {
@@ -106,11 +217,12 @@ var AppGlobalInitInit = function() {
     }
 
     function init(data) {
-        initVars(data);
+        initData(data);
         initLazyLoad();
         addEvents();
         initFirebase();
         initGoogleTagManager();
+        initFlash();
     }
 
     return {
@@ -118,7 +230,9 @@ var AppGlobalInitInit = function() {
     };
 }();
 
-AppGlobalInitInit.init({
-    LazyLoad: LazyLoad,
-    Firebase: Firebase
+jQuery(document).ready( function() {
+    AppGlobalInitInit.init({
+        LazyLoad: LazyLoad,
+        Firebase: Firebase
+    });
 });

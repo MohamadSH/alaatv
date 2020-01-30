@@ -35,6 +35,8 @@ use App\Http\Controllers\Web\SourceController;
 use App\Http\Controllers\Web\SurveyController;
 use App\Http\Controllers\Web\TopicsTreeController;
 use App\Http\Controllers\Web\UserController;
+use App\Http\Controllers\Web\VoucherController;
+use App\Http\Controllers\Web\VoucherPageController;
 use App\Http\Controllers\Web\WalletController;
 use App\PaymentModule\Controllers\PaymentVerifierController;
 use App\PaymentModule\Controllers\RedirectAPIUserToPaymentRoute;
@@ -43,8 +45,8 @@ use App\PaymentModule\Controllers\RedirectUserToPaymentPage;
 
 Route::get('embed/c/{content}', [ContentController::class, 'embed'])->name('web.c.embed');
 Route::get('/', '\\' . IndexPageController::class)->name('web.index');
-Route::get('shop', '\\'.ShopPageController::class)->name('web.shop');
-Route::get('home', [HomeController::class , 'home'])->name('web.home');
+Route::get('shop', '\\' . ShopPageController::class)->name('web.shop');
+Route::get('home', [HomeController::class, 'home'])->name('web.home');
 Route::get('404',  [ErrorPageController::class , 'error404']);
 Route::get('403',  [ErrorPageController::class , 'error403']);
 Route::get('500',  [ErrorPageController::class , 'error500']);
@@ -143,7 +145,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('adminSource', [AdminController::class, 'adminSource'])->name('web.admin.sources');
     Route::post('giveWalletCredit', [WalletController::class, 'giveCredit'])->name('web.admin.wallet.giveCredit');
     Route::post('registerUserAndGiveOrderproduct', [AdminController::class, 'registerUserAndGiveOrderproduct'])->name('web.admin.registerUserAndGiveOrderproduct');
-    Route::post('adminSendSMS', [HomeController::class , 'sendSMS'])->name('web.sendSms');
+    Route::post('adminSendSMS', [HomeController::class, 'sendSMS'])->name('web.sendSms');
+    Route::get('adminLogoutUser', [AdminController::class, 'adminLogoutUser'])->name('web.admin.logout.user');
     /*** Admin routes */
 
 
@@ -163,7 +166,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('givePrize', 'Web\LotteryController@givePrizes');
     Route::get('bot', [BotsController::class, 'bot'])->name('web.bots');
     Route::get('pointBot', [BotsController::class, 'pointBot'])->name('web.bot.point');
-    Route::post('walletBot',[BotsController::class, 'walletBot'])->name('web.bot.wallet');
+    Route::post('walletBot', [BotsController::class, 'walletBot'])->name('web.bot.wallet');
     Route::post('excelBot', [BotsController::class, 'excelBot'])->name('web.bot.excel');
     Route::post('zarinpalbot', [BotsController::class, 'ZarinpalVerifyPaymentBot'])->name('web.bot.verifyZarinpal');
     Route::post('thumbnailbot', [BotsController::class, 'fixthumbnail'])->name('web.bot.fixthumbnails');
@@ -171,8 +174,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('tagbot', [BotsController::class, 'fixtag'])->name('web.bot.fixtag');
     Route::post('close-orders-bot', [BotsController::class, 'closeOrders'])->name('web.bot.closeOrders');
     Route::post('generateMassiveRandomCoupon', [BotsController::class, 'generateMassiveRandomCoupon'])->name('web.bot.massive.random.coupon');
-    Route::get('v/asiatech', 'Web\VoucherController@voucherRequest');
-    Route::put('v', 'Web\VoucherController@submitVoucherRequest');
+    Route::get('v/asiatech', [VoucherController::class, 'voucherRequest']);
+    Route::put('v', [VoucherController::class, 'submitVoucherRequest']);
 
     Route::group(['prefix' => 'orderproduct'], function () {
         Route::post('restore', [OrderproductController::class, 'restore'])->name('web.orderproduct.restore');
@@ -352,4 +355,6 @@ Route::post('cd3b472d9ba631a73cb7b66ba513df53', 'Web\CouponController@generateRa
 Route::get('tree', [TopicsTreeController::class, 'lernitoTree']);
 Route::get('tree/getArrayString/{lnid}', [TopicsTreeController::class, 'getTreeInPHPArrayString']);
 Route::get('tree/ignoreUpdateItem/{iuid}', [TopicsTreeController::class, 'ignoreUpdateItem']);
-Route::any('goToPaymentRoute/{paymentMethod}/{device}/', '\\'.RedirectAPIUserToPaymentRoute::class)->name('redirectToPaymentRoute');
+Route::any('goToPaymentRoute/{paymentMethod}/{device}/', '\\' . RedirectAPIUserToPaymentRoute::class)->name('redirectToPaymentRoute');
+Route::get('h', '\\' . VoucherPageController::class)->name('web.voucher.submit.form');
+Route::any('voucher/submit', [VoucherController::class, 'submit'])->name('web.voucher.submit');

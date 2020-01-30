@@ -95,7 +95,6 @@
 
 @section('content')
 
-
     <div class="row boxed">
 
         {{-- content video and other content of set --}}
@@ -388,7 +387,7 @@
 
             @include('partials.ads.list', ['id'=>'contentShowPage-rightSide-0'])
 
-            @if(count($recommendedItems) > 0)
+            @if(count($recommendedItems) > 0 && $productsHasThisContentThroughBlockCollection->count() === 0 && $productsThatHaveThisContent->isEmpty())
                 @include('partials.widgets.ScollCarousel.body', [
                     'title'=> 'موارد مرتبط',
                     'customClass'=> 'RelatedItems',
@@ -596,19 +595,7 @@
                                                 <div class="image">
                                                     <a href="{{ $product->url }}"
                                                        class="a--block-imageWrapper-image a--gtm-eec-product a--gtm-eec-product-click d-block"
-
-                                                        @include('partials.gtm-eec.product', ['position'=>$productKey, 'list'=>'محصولاتی که شامل این محتوا هستند'])
-
-
-                                                        {{--                                           data-gtm-eec-product-id="{{ $product->id }}"--}}
-                                                        {{--                                           data-gtm-eec-product-name="{{ $product->name }}"--}}
-                                                        {{--                                           data-gtm-eec-product-price="{{ number_format($product->price['final'], 2, '.', '') }}"--}}
-                                                        {{--                                           data-gtm-eec-product-brand="آلاء"--}}
-                                                        {{--                                           data-gtm-eec-product-category="-"--}}
-                                                        {{--                                           data-gtm-eec-product-variant="-"--}}
-                                                        {{--                                           data-gtm-eec-product-position="{{ $productKey }}"--}}
-                                                        {{--                                           data-gtm-eec-product-list="محصولاتی که شامل این محتوا هستند"--}}
-                                                    >
+                                                        @include('partials.gtm-eec.product', ['position'=>$productKey, 'list'=>'محصولاتی که شامل این محتوا هستند'])>
                                                         <img src="https://cdn.alaatv.com/loder.jpg?w=1&h=1"
                                                              data-src="{{ $product->photo }}" alt="{{ $product->name }}"
                                                              class="a--block-image lazy-image" width="400" height="400"/>
@@ -652,7 +639,7 @@
                                         @foreach($content->file->get('video') as $file)
 
                                                 <div class="m-alert m-alert--icon m-alert--outline alert alert-success" role="alert">
-                                                    <div class="m-alert__text">
+                                                    <div class="m-alert__text text-left">
                                                         <strong>
                                                             <a href="{{ ($user_can_see_content) ? $file->link . '?download=1' : '#' }}" class="m-link">
                                                                 دانلود فایل {{$file->caption}}
@@ -694,15 +681,17 @@
         </div>
 
         {{-- godar block--}}
-        @foreach($contentBlocks as $block)
-            @include('block.partials.block', [
-            'blockCustomClass'=> 'contentBlock',
-            'blockCustomId'=>'sectionId-'.$block->class,
-            'blockType'=>(isset($block->sets) && $block->sets->count()>0)?'set':(isset($block->products) && $block->products->count()>0?'product':'content'),
-            'blockUrlDisable'=>false,
-            'btnLoadMore'=>true
-            ])
-        @endforeach
+        <div class="col">
+            @foreach($contentBlocks as $block)
+                @include('block.partials.block', [
+                'blockCustomClass'=> 'contentBlock',
+                'blockCustomId'=>'sectionId-'.$block->class,
+                'blockType'=>(isset($block->sets) && $block->sets->count()>0)?'set':(isset($block->products) && $block->products->count()>0?'product':'content'),
+                'blockUrlDisable'=>false,
+                'btnLoadMore'=>true
+                ])
+            @endforeach
+        </div>
 
         {{-- chibekhoonam --}}
         @if($content->isFree)

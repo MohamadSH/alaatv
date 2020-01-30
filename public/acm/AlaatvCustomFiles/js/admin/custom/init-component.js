@@ -14,7 +14,7 @@ var CustomInit = function () {
                 }
             },
             altFieldFormatter: function (unixDate) {
-                let targetDatetime = new Date(unixDate);
+                var targetDatetime = new Date(unixDate);
                 if (timePicker) {
                     return targetDatetime.getFullYear() + "-" + (targetDatetime.getMonth() + 1) + "-" + targetDatetime.getDate() + ' ' + targetDatetime.getHours() + ':' + targetDatetime.getMinutes() + ':' + targetDatetime.getSeconds();
                 } else {

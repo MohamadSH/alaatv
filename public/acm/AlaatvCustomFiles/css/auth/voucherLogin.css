@@ -1,0 +1,9 @@
+body {
+    background-color: #f2f3f8;
+}
+.modal-backdrop {
+    background-color: transparent;
+}
+#AlaaAjaxLoginModal .close {
+    display: none;
+}

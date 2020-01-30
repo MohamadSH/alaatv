@@ -2,7 +2,7 @@
 
 namespace App\Http\Middleware;
 
-use App\Http\Controllers\Web\OrderproductController;
+use App\Traits\OrderproductTrait;
 use App\User;
 use Closure;
 use Cookie;
@@ -12,17 +12,7 @@ use Illuminate\Support\Facades\Auth;
 
 class OrderCheckoutReview
 {
-    private $orderproductController;
-
-    /**
-     * StoreOrderproductCookieInOpenOrder constructor.
-     *
-     * @param OrderproductController $orderproductController
-     */
-    public function __construct(OrderproductController $orderproductController)
-    {
-        $this->orderproductController = $orderproductController;
-    }
+    use OrderproductTrait;
 
     /**
      * Handle an incoming request.
@@ -58,7 +48,7 @@ class OrderCheckoutReview
             if ($this->validateCookieOrderproducts($cookieOrderproducts)) {
                 foreach ($cookieOrderproducts as $cookieOrderproduct) {
                     $data = ['order_id' => $openOrder->id];
-                    $this->orderproductController->storeOrderproductJsonObject($cookieOrderproduct, $data);
+                    $this->storeOrderproductJsonObject($cookieOrderproduct, $data);
                 }
             }
         }

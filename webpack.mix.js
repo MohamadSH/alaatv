@@ -50,12 +50,11 @@ class Mix {
 
 
             'public/acm/AlaatvCustomFiles/js/mLayout.js',// quick search (ajax) in header
+            'public/acm/AlaatvCustomFiles/components/MegaMenu/script.js',
             'public/acm/AlaatvCustomFiles/components/AjaxLogin/script.js',
             'public/acm/AlaatvCustomFiles/js/GlobalJsVar.js',
             'public/acm/AlaatvCustomFiles/js/Cookie.js',
-            'public/acm/AlaatvCustomFiles/js/LoginBeforeClick.js',
             'public/acm/AlaatvCustomFiles/js/GoogleAnalyticsEnhancedEcommerce.js',
-            'public/acm/AlaatvCustomFiles/components/MegaMenu/script.js',
             'public/acm/AlaatvCustomFiles/js/lazyLoad.js',
             'public/acm/AlaatvCustomFiles/js/app.js'
         ];

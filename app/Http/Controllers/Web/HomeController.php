@@ -70,7 +70,7 @@ class HomeController extends Controller
 
     public function debug(Request $request, User $user = null)
     {
-        return view('admin.topicsTree.manageNodes');
+        //
     }
 
     public function search(Request $request)
