@@ -19,8 +19,11 @@ use App\Traits\RequestCommon;
 use App\User;
 use App\Websitesetting;
 use Illuminate\Contracts\View\Factory;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Routing\Redirector;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\File;
@@ -61,7 +64,7 @@ class SetController extends Controller
      * @param ContentsetIndexRequest $request
      * @param ContentsetSearch       $setSearch
      *
-     * @return Response
+     * @return Factory|JsonResponse|RedirectResponse|Redirector|View
      */
     public function index(ContentsetIndexRequest $request, ContentsetSearch $setSearch)
     {
@@ -79,6 +82,15 @@ class SetController extends Controller
                 'tags'   => $tags,
             ]);
         }
+
+        if (is_null($request->user())) {
+            return redirect(route('login'));
+        }
+
+        if (!$request->user()->can(config('constants.LIST_CONTENT_SET_ACCESS'))) {
+            abort(Response::HTTP_FORBIDDEN);
+        }
+
         return view('set.index', compact('sets', 'tags'));
     }
 
@@ -228,12 +240,10 @@ class SetController extends Controller
      */
     private function getAuthExceptionArray(): array
     {
-        $authException = [
+        return [
             'index',
             'show',
         ];
-
-        return $authException;
     }
 
     /**
