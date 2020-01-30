@@ -29,6 +29,7 @@ use App\Traits\APIRequestCommon;
 use App\Traits\DateTrait;
 use App\Traits\Helper;
 use App\Traits\MetaCommon;
+use App\Traits\OrderproductTrait;
 use App\Traits\ProductCommon;
 use App\Traits\RequestCommon;
 use App\Traits\User\ResponseFormatter;
@@ -67,6 +68,7 @@ class OrderController extends Controller
     use ResponseFormatter;
     use MetaCommon;
     use DateTrait;
+    use OrderproductTrait;
 
     public function __construct(Websitesetting $setting)
     {
@@ -1419,7 +1421,7 @@ class OrderController extends Controller
      *
      * @return ResponseFactory|Response
      */
-    public function addOrderproduct(Request $request, Product $product, OrderproductController $orderproductController)
+    public function addOrderproduct(Request $request, Product $product)
     {
         try {
             /** @var User $user */
@@ -1449,7 +1451,7 @@ class OrderController extends Controller
                 $data['product_id'] = $product->id;
                 $data['order_id']   = $openOrder->id;
                 $data['withoutBon'] = true;
-                $result             = $orderproductController->new($data);
+                $result             = $this->new($data);
                 if (!$result['status']) {
                     dd('Could not add donate to order.');
                 }
