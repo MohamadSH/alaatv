@@ -428,7 +428,7 @@ $(document).ready(function () {
         console.log('reviewAndPayment: ', checkoutReviewProducts);
     }
 
-    if ($('#js-var-userId').val()) {
+    if (GlobalJsVar.userId().length > 0) {
         $('.Step-warper').fadeIn();
     }
 
@@ -462,7 +462,7 @@ $(document).ready(function () {
 
         GAEE.productRemoveFromCart('order.checkoutReview', product);
 
-        if ($('#js-var-userId').val()) {
+        if (GlobalJsVar.userId().length > 0) {
             $.ajax({
                 type: 'DELETE',
                 url: $(this).data('action'),
