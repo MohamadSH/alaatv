@@ -81,7 +81,7 @@ trait OrderproductTrait
      * @param Request    $request
      * @param Collection $attributesValues
      */
-    private function syncExtraAttributesCost(Request $request, Collection $attributesValues)
+    private function syncExtraAttributesCost(Request $request, Collection $attributesValues): void
     {
         $extraAttributes = $request->get('extraAttribute');
         foreach ($attributesValues as $key => $attributesValue) {
@@ -103,7 +103,7 @@ trait OrderproductTrait
      *
      * @return mixed
      */
-    private function storeOrderproductJsonObject($orderproductJsonObject, array $data)
+    private function storeOrderproductJsonObject($orderproductJsonObject, array $data): array
     {
         $grandParentProductId = optional($orderproductJsonObject)->product_id;
         $productIds           = optional($orderproductJsonObject)->products;
@@ -297,22 +297,19 @@ trait OrderproductTrait
         Collection $extraSelectCollection,
         Attribute $attribute,
         Collection $extraCheckboxCollection
-    )
+    ): void
     {
-        if ($attributevalues->isEmpty()) {
-            return;
+        if ($attributevalues->isNotEmpty()) {
+            switch ($controlName) {
+                case 'select':
+                    $this->processSelect($attributevalues, $orderproductAttributevalues, $extraSelectCollection, $attribute);
+                    break;
+                case 'groupedCheckbox':
+                    $this->processGroupedCheckbox($attributevalues, $orderproductAttributevalues, $attribute, $extraCheckboxCollection);
+                    break;
+                default:
+                    break;
+            }
         }
-        switch ($controlName) {
-            case 'select':
-                $this->processSelect($attributevalues, $orderproductAttributevalues, $extraSelectCollection, $attribute);
-                break;
-            case 'groupedCheckbox':
-                $this->processGroupedCheckbox($attributevalues, $orderproductAttributevalues, $attribute, $extraCheckboxCollection);
-                break;
-            default:
-                break;
-        }
-
     }
-
 }
