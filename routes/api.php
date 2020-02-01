@@ -101,7 +101,7 @@ Route::group(['prefix' => 'v2'], function () {
     Route::get('product/{product}', [ProductController::class, 'showV2'])->name('api.v2.product.show');
     Route::get('product', [ProductController::class, 'index'])->name('api.v2.product.index');
     Route::get('set/{set}', [SetController::class, 'showV2'])->name('api.v2.set.show');
-    Route::get('set', [SetController::class, 'index'])->name('api.v2.set.show');
+    Route::get('set', [SetController::class, 'index'])->name('api.v2.set.index');
     Route::post('getPrice/{product}', [ProductController::class, 'refreshPriceV2'])->name('api.v2.refreshPrice');
     Route::post('donate', [OrderController::class, 'donateOrderV2'])->name('api.v2.make.donate');
 //    Route::any('fetchContents', [ContentController::class, 'fetchContents'])->name('api.v2.fetch.content');
