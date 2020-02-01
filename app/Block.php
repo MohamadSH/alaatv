@@ -117,6 +117,10 @@ class Block extends BaseModel
         //        'type',
     ];
     
+    public static function getHomeBannerBlock()
+    {
+        return self::getDummyBlock(false, '', null, null, null, Slideshow::getMainBanner());
+    }
     public static function getShopBlocks(): ?BlockCollection
     {
         $blocks = Cache::tags(['block', 'shop'])
@@ -153,7 +157,8 @@ class Block extends BaseModel
         string $title,
         ProductCollection $products = null,
         SetCollection $sets = null,
-        ContentCollection $contents = null
+        ContentCollection $contents = null,
+        \Illuminate\Support\Collection $banners = null
     )
     {
         //TODO:// add Cache Layer!
@@ -166,7 +171,8 @@ class Block extends BaseModel
         
         return $block->addProducts($products)
             ->addContents($contents)
-            ->addSets($sets);
+            ->addSets($sets)
+            ->addBanners($banners);
     }
     
     protected function addSets($sets)
@@ -174,6 +180,17 @@ class Block extends BaseModel
         if ($sets != null) {
             foreach ($sets as $set) {
                 $this->sets->add($set);
+            }
+        }
+        
+        return $this;
+    }
+    
+    protected function addBanners($banners)
+    {
+        if ($banners != null) {
+            foreach ($banners as $banner) {
+                $this->banners->add($banner);
             }
         }
         
