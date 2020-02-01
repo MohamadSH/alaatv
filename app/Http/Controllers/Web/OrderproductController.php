@@ -123,7 +123,7 @@ class OrderproductController extends Controller
         ]);
     }
 
-    public function edit($orderproduct)
+    public function edit(Orderproduct $orderproduct)
     {
         $products                = $this->makeProductCollection();
         $extraSelectCollection   = collect();
