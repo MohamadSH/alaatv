@@ -408,7 +408,7 @@ class RouteServiceProvider extends ServiceProvider
         });
 
         Route::bind('set', function ($value) {
-            $key = 'Set:' . $value;
+            $key = 'set:' . $value;
 
             return Cache::tags([
                 'set',
