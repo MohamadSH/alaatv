@@ -1052,7 +1052,7 @@ class ProductController extends Controller
      *
      * @return Collection
      */
-    private function setIntroVideos($introVideo, $introVideoThumbnail)
+    private function setIntroVideos(string $introVideo, string $introVideoThumbnail): Collection
     {
         $videos = null;
         if (isset($introVideo)) {
@@ -1187,7 +1187,7 @@ class ProductController extends Controller
      * @param $bonDiscount
      * @param $bonPlus
      */
-    private function attachBonToProduct(Product $product, $bonId, $bonDiscount, $bonPlus): void
+    private function attachBonToProduct(Product $product, int $bonId, int $bonDiscount, int $bonPlus): void
     {
         $bonQueryBuilder = $product->bons();
 
