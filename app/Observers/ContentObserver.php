@@ -123,6 +123,7 @@ class ContentObserver
             'set_' . $content->contentset_id . '_contents',
             'set_' . $content->contentset_id . '_setMates',
             'content_search',
+            'set_search',
         ])->flush();
     }
 }
