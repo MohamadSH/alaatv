@@ -83,6 +83,7 @@ class SetController extends Controller
             ]);
         }
 
+        //I couldn't put this route behind auth middleware because I am not sure if app is using it or not
         if (is_null($request->user())) {
             return redirect(route('login'));
         }
