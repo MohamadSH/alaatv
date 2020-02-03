@@ -4,25 +4,25 @@
     These routes are loaded by the RouteServiceProvider within a group which is assigned the "api" middleware group.
 */
 
-use App\Http\Controllers\Api\AppVersionController;
-use App\Http\Controllers\Api\ContentController;
-use App\Http\Controllers\Api\DashboardPageController;
-use App\Http\Controllers\Api\DashboardPageV2Controller;
-use App\Http\Controllers\Api\FirebasetokenController;
-use App\Http\Controllers\Api\GetPaymentRedirectEncryptedLink;
-use App\Http\Controllers\Api\HomeController;
-use App\Http\Controllers\Api\IndexPageController;
-use App\Http\Controllers\Api\OrderController;
-use App\Http\Controllers\Api\OrderproductController;
-use App\Http\Controllers\Api\ProductController;
-use App\Http\Controllers\Api\SearchController;
 use App\Http\Controllers\Api\SetController;
-use App\Http\Controllers\Api\ShopPageController;
 use App\Http\Controllers\Api\TagController;
+use App\Http\Controllers\Api\HomeController;
 use App\Http\Controllers\Api\UserController;
-use App\Http\Controllers\Api\VoucherController;
-use App\Http\Controllers\Api\ZarinpalTransactionController;
+use App\Http\Controllers\Api\OrderController;
+use App\Http\Controllers\Api\SearchController;
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Api\ContentController;
+use App\Http\Controllers\Api\ProductController;
+use App\Http\Controllers\Api\VoucherController;
+use App\Http\Controllers\Api\ShopPageController;
+use App\Http\Controllers\Api\IndexPageController;
+use App\Http\Controllers\Api\AppVersionController;
+use App\Http\Controllers\Api\OrderproductController;
+use App\Http\Controllers\Api\DashboardPageController;
+use App\Http\Controllers\Api\FirebasetokenController;
+use App\Http\Controllers\Api\DashboardPageV2Controller;
+use App\Http\Controllers\Api\ZarinpalTransactionController;
+use App\Http\Controllers\Api\GetPaymentRedirectEncryptedLink;
 
 Auth::routes(['verify' => true, 'api' => true]);
 /*
@@ -106,7 +106,8 @@ Route::group(['prefix' => 'v2'], function () {
     Route::post('donate', [OrderController::class, 'donateOrderV2'])->name('api.v2.make.donate');
 //    Route::any('fetchContents', [ContentController::class, 'fetchContents'])->name('api.v2.fetch.content');
     Route::get('shop', '\\' . ShopPageController::class)->name('api.v2.shop');
-    Route::get('/home', '\\' . IndexPageController::class)->name('api.v2.home');
+    Route::get('home', '\\'.IndexPageController::class)
+        ->name('api.v2.home');
 
     Route::group(['middleware' => 'auth:api'], function () {
 //        Route::any('user/auth2/profile', [UserController::class, 'getAuth2Profile']);
