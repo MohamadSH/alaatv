@@ -297,7 +297,8 @@ class Contentset extends BaseModel implements Taggable, SeoInterface, FavorableI
 
     public function getProducts($onlyActiveProduct = true): ProductCollection
     {
-        $key = 'set:getProducts:onlyActive_' . ($onlyActiveProduct) ? '1' : '0' . ':' . $this->cacheKey();
+        $onlyActiveString = ($onlyActiveProduct) ? '1' : '0';
+        $key              = 'set:getProducts:onlyActive_' . $onlyActiveString . ':' . $this->cacheKey();
         return Cache::tags(['set', 'product', 'set_' . $this->id, 'set_' . $this->id . '_products'])
             ->remember($key, config('constants.CACHE_60'), function () use ($onlyActiveProduct) {
                 return self::getProductOfSet($onlyActiveProduct, $this);
