@@ -4,6 +4,7 @@
 namespace App\Traits;
 
 
+use App\Attribute;
 use App\Classes\OrderProduct\RefinementProduct\RefinementFactory;
 use App\Collection\OrderproductCollection;
 use App\Order;
@@ -12,6 +13,7 @@ use App\Product;
 use App\User;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 
 trait OrderproductTrait
@@ -79,7 +81,7 @@ trait OrderproductTrait
      * @param Request    $request
      * @param Collection $attributesValues
      */
-    private function syncExtraAttributesCost(Request $request, Collection $attributesValues)
+    private function syncExtraAttributesCost(Request $request, Collection $attributesValues): void
     {
         $extraAttributes = $request->get('extraAttribute');
         foreach ($attributesValues as $key => $attributesValue) {
@@ -101,7 +103,7 @@ trait OrderproductTrait
      *
      * @return mixed
      */
-    private function storeOrderproductJsonObject($orderproductJsonObject, array $data)
+    private function storeOrderproductJsonObject($orderproductJsonObject, array $data): array
     {
         $grandParentProductId = optional($orderproductJsonObject)->product_id;
         $productIds           = optional($orderproductJsonObject)->products;
@@ -217,4 +219,97 @@ trait OrderproductTrait
         }
     }
 
+
+    /**
+     * @param Collection $attributevalues
+     * @param Collection $orderproductAttributevalues
+     * @param Collection $extraSelectCollection
+     * @param            $attribute
+     */
+    private function processSelect(Collection $attributevalues, Collection $orderproductAttributevalues, Collection $extraSelectCollection, $attribute): void
+    {
+        $select         = [];
+        $extraCostArray = [];
+        foreach ($attributevalues as $attributevalue) {
+            if ($orderproductAttributevalues->contains($attributevalue->id)) {
+                $extraCost = $orderproductAttributevalues->where('id', $attributevalue->id)
+                    ->first()->pivot->extraCost;
+            } else {
+                $extraCost = null;
+            }
+            $attributevalueIndex = $attributevalue->name;
+            $select              = Arr::add($select, $attributevalue->id, $attributevalueIndex);
+            $extraCostArray      = Arr::add($extraCostArray, $attributevalue->id, $extraCost);
+        }
+        $select[0] = 'هیچکدام';
+        $select    = Arr::sortRecursive($select);
+        if (!empty($select)) {
+            $extraSelectCollection->put($attribute->id, [
+                'attributeDescription' => $attribute->displayName,
+                'attributevalues'      => $select,
+                'extraCost'            => $extraCostArray,
+            ]);
+        }
+    }
+
+
+    /**
+     * @param Collection $attributevalues
+     * @param Collection $orderproductAttributevalues
+     * @param            $attribute
+     * @param Collection $extraCheckboxCollection
+     */
+    private function processGroupedCheckbox(Collection $attributevalues, Collection $orderproductAttributevalues, $attribute, Collection $extraCheckboxCollection): void
+    {
+        $groupedCheckbox = collect();
+        foreach ($attributevalues as $attributevalue) {
+            $attributevalueIndex = $attributevalue->name;
+            if ($orderproductAttributevalues->contains($attributevalue->id)) {
+                $extraCost = $orderproductAttributevalues->where('id', $attributevalue->id)
+                    ->first()->pivot->extraCost;
+            } else {
+                $extraCost = null;
+            }
+
+            $groupedCheckbox->put($attributevalue->id, [
+                'index'     => $attributevalueIndex,
+                'extraCost' => $extraCost,
+            ]);
+        }
+        if (!empty($groupedCheckbox)) {
+            $extraCheckboxCollection->put($attribute->displayName, $groupedCheckbox);
+        }
+    }
+
+
+    /**
+     * @param Collection $attributevalues
+     * @param string     $controlName
+     * @param Collection $orderproductAttributevalues
+     * @param Collection $extraSelectCollection
+     * @param Attribute  $attribute
+     * @param Collection $extraCheckboxCollection
+     */
+    private function processAttrValues(
+        Collection $attributevalues,
+        string $controlName,
+        Collection $orderproductAttributevalues,
+        Collection $extraSelectCollection,
+        Attribute $attribute,
+        Collection $extraCheckboxCollection
+    ): void
+    {
+        if ($attributevalues->isNotEmpty()) {
+            switch ($controlName) {
+                case 'select':
+                    $this->processSelect($attributevalues, $orderproductAttributevalues, $extraSelectCollection, $attribute);
+                    break;
+                case 'groupedCheckbox':
+                    $this->processGroupedCheckbox($attributevalues, $orderproductAttributevalues, $attribute, $extraCheckboxCollection);
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
 }
