@@ -2,26 +2,26 @@
 
 namespace App;
 
-use Eloquent;
-use Illuminate\Support\Carbon;
-use App\Collection\SetCollection;
 use App\Collection\BlockCollection;
 use App\Collection\ContentCollection;
 use App\Collection\ProductCollection;
-use Illuminate\Support\Facades\Cache;
+use App\Collection\SetCollection;
+use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Cache;
 
 /**
  * App\Block
  *
- * @property int         $id
- * @property string|null $title
- * @property string|null $tags
- * @property int         $order
- * @property int         $enable
- * @property Carbon|null $created_at
+ * @property int                              $id
+ * @property string|null                      $title
+ * @property string|null                      $tags
+ * @property int                              $order
+ * @property int                              $enable
+ * @property Carbon|null                      $created_at
  * @property Carbon|null $updated_at
  * @property-read ContentCollection|Content[] $contents
  * @property-read ProductCollection|Product[] $products
@@ -70,29 +70,33 @@ use Illuminate\Pagination\LengthAwarePaginator;
 class Block extends BaseModel
 {
     public static $BLOCK_TYPE_MAIN = 1;
-    
+
     public static $BLOCK_TYPE_SHOP = 2;
-    
+
     public static $BLOCK_TYPE_OFFER = 3;
-    
+
+    public static $BLOCK_TYPE_APP_HOME_BANNER = 4;
+
+    public static $BLOCK_TYPE_APP_SHOP_BANNER = 5;
+
     protected static $actionLookupTable = [
         '1' => 'Web\ContentController@index',
         '2' => 'Web\ProductController@index',
         '3' => null,
     ];
-    
+
     protected static $actionLookupTableV2 = [
         '1' => 'Api\SearchController@index',
         '2' => 'Web\ProductController@index',
         '3' => null,
     ];
-    
+
     protected $isOfferBlock = false;
-    
+
     protected $cascadeDeletes = [
         'blockables',
     ];
-    
+
     protected $fillable = [
         'title',
         'tags',
@@ -102,12 +106,12 @@ class Block extends BaseModel
         'type',
         'customUrl',
     ];
-    
+
     protected $appends = [
         'url',
         'offer',
     ];
-    
+
     protected $hidden = [
         'enable',
         'tags',
@@ -116,7 +120,7 @@ class Block extends BaseModel
         'deleted_at',
         //        'type',
     ];
-    
+
     public static function getShopBlocks(): ?BlockCollection
     {
         $blocks = Cache::tags(['block', 'shop'])
@@ -133,13 +137,13 @@ class Block extends BaseModel
                         'products',
                         'banners',
                     ]);
-                
+
                 return $blocks->prepend($offerBlock);
             });
-        
+
         return $blocks;
     }
-    
+
     /**
      * @return Block
      */
@@ -147,7 +151,7 @@ class Block extends BaseModel
     {
         return self::getDummyBlock(true, 'الماس و جزوات', Product::getProductsHaveBestOffer());
     }
-    
+
     public static function getDummyBlock(
         bool $offer,
         string $title,
@@ -163,12 +167,12 @@ class Block extends BaseModel
 //        $block->type  = 3;
         $block->order = 0;
         $block->title = $title;
-        
+
         return $block->addProducts($products)
             ->addContents($contents)
             ->addSets($sets);
     }
-    
+
     protected function addSets($sets)
     {
         if ($sets != null) {
@@ -176,10 +180,10 @@ class Block extends BaseModel
                 $this->sets->add($set);
             }
         }
-        
+
         return $this;
     }
-    
+
     protected function addContents($contents)
     {
         if ($contents != null) {
@@ -187,10 +191,10 @@ class Block extends BaseModel
                 $this->contents->add($content);
             }
         }
-        
+
         return $this;
     }
-    
+
     protected function addProducts($products)
     {
         if ($products != null) {
@@ -198,10 +202,10 @@ class Block extends BaseModel
                 $this->products->add($product);
             }
         }
-        
+
         return $this;
     }
-    
+
     /**
      * For API V1
      *
@@ -223,11 +227,11 @@ class Block extends BaseModel
                         'products',
                         'banners',
                     ]);
-                
+
                 return $blocks->prepend($offerBlock);
             });
     }
-    
+
     /**
      * For API V2
      *
@@ -237,26 +241,25 @@ class Block extends BaseModel
     {
         return Cache::tags(['block', 'shop'])
             ->remember('block:getShopBlocksForAppV2', config('constants.CACHE_600'), function () {
-                //ToDo: Adding offer block
-                return self::shop()
+                return self::appShop()
                     ->enable()
                     ->where('id', '<>', 113)
                     ->orderBy('order')
                     ->paginate(5);
             });
     }
-    
-    public static function getMainBlocksForApp(): ?LengthAwarePaginator
+
+    public static function getMainBlocksForAppV2(): ?LengthAwarePaginator
     {
         return Cache::tags(['block', 'home'])
             ->remember('block:getMainBlocksForApp', config('constants.CACHE_600'), function () {
-                return self::main()
+                return self::appMain()
                     ->enable()
                     ->orderBy('order')
                     ->paginate(5);
             });
     }
-    
+
     public static function getMainBlocks(): ?BlockCollection
     {
         $blocks = Cache::tags(['block', 'home'])
@@ -271,12 +274,12 @@ class Block extends BaseModel
                         'products',
                         'banners',
                     ]);
-                
+
                 return $blocks;
             });
         return $blocks;
     }
-    
+
     public static function getContentBlocks(): ?BlockCollection
     {
         $blocks = Cache::tags(['block', 'content'])
@@ -288,12 +291,12 @@ class Block extends BaseModel
                         'products',
                         'banners',
                     ]);
-                
+
                 return $blocks;
             });
         return $blocks;
     }
-    
+
     /**
      * Scope a query to only blocks for shop.
      *
@@ -303,9 +306,21 @@ class Block extends BaseModel
      */
     public function scopeShop($query)
     {
-        return $query->where('type', '=', 2);
+        return $query->where('type', 2);
     }
-    
+
+    /**
+     * Scope a query to only blocks for shop.
+     *
+     * @param Builder $query
+     *
+     * @return Builder
+     */
+    public function scopeAppShop($query)
+    {
+        return $query->where('type', 5)->orWhere('type', 2);
+    }
+
     /**
      * Scope a query to only blocks for HomePage.
      *
@@ -315,19 +330,31 @@ class Block extends BaseModel
      */
     public function scopeMain($query)
     {
-        return $query->where('type', '=', 1);
+        return $query->where('type', 1);
     }
-    
+
+    /**
+     * Scope a query to only blocks for HomePage.
+     *
+     * @param Builder $query
+     *
+     * @return Builder
+     */
+    public function scopeAppMain($query)
+    {
+        return $query->where('type', 4)->orWhere('type', 1);
+    }
+
     public function getOfferAttribute($value)
     {
         return $this->isOfferBlock;
     }
-    
+
     public function setOfferAttribute($value)
     {
         return $this->isOfferBlock = (boolean)$value;
     }
-    
+
     /**
      * @param $value
      *
@@ -340,7 +367,7 @@ class Block extends BaseModel
         return isset(self::$actionLookupTable[$this->type]) ? $this->makeUrl(self::$actionLookupTable[$this->type],
             $this->tags) : null;
     }
-    
+
     public function getUrlV2Attribute($value): ?string
     {
         if (isset($this->customUrl))
@@ -348,7 +375,7 @@ class Block extends BaseModel
         return isset(self::$actionLookupTableV2[$this->type]) ? $this->makeUrl(self::$actionLookupTableV2[$this->type],
             $this->tags) : null;
     }
-    
+
     private function makeUrl($action, $input = null)
     {
         if ($input) {
@@ -357,7 +384,7 @@ class Block extends BaseModel
             return urldecode(action($action));
         }
     }
-    
+
     /**
      * Create a new Eloquent Collection instance.
      *
@@ -369,12 +396,12 @@ class Block extends BaseModel
     {
         return new BlockCollection($models);
     }
-    
+
     public function getTagsAttribute($value)
     {
         return json_decode($value);
     }
-    
+
     /**
      * Scope a query to only include enable Blocks.
      *
@@ -386,7 +413,7 @@ class Block extends BaseModel
     {
         return $query->where('enable', 1);
     }
-    
+
     /**
      * Scope a query to only include active Contents.
      *
@@ -398,12 +425,12 @@ class Block extends BaseModel
     {
         return $query->enable();
     }
-    
+
     public function notRedirectedContents()
     {
         return $this->contents()->active()->notRedirected();
     }
-    
+
     public function contents()
     {
         return $this->morphedByMany(Content::class, 'blockable')
@@ -411,12 +438,12 @@ class Block extends BaseModel
             ->withPivot(['order'])
             ->orderBy('blockables.order');
     }
-    
+
     public function notRedirectedSets()
     {
         return $this->sets()->active()->notRedirected();
     }
-    
+
     public function sets()
     {
         return $this->morphedByMany(Contentset::class, 'blockable')
@@ -424,32 +451,32 @@ class Block extends BaseModel
             ->withPivot(['order'])
             ->orderBy('blockables.order');
     }
-    
+
     public function banners()
     {
         return $this->morphedByMany(Slideshow::class, 'blockable')
             ->withTimestamps()
             ->withPivot(['order'])
             ->orderBy('blockables.order');
-        
+
     }
-    
+
     public function getEditLinkAttribute()
     {
 //        if (hasAuthenticatedUserPermission(config('constants.EDIT_BLOCK_ACCESS')))
         return action('Web\BlockController@edit', $this->id);
-        
+
         return null;
     }
-    
+
     public function getRemoveLinkAttribute()
     {
 //        if (hasAuthenticatedUserPermission(config('constants.REMOVE_BLOCK_ACCESS')))
         return action('Web\BlockController@destroy', $this->id);
-        
+
         return null;
     }
-    
+
     public function getActiveContent(): ContentCollection
     {
         return Cache::tags(['block', 'block_' . $this->id, 'block_' . $this->id . '_activeContents'])->remember('block:activeContent:' . $this->cacheKey(), config('constants.CACHE_60'), function () {
@@ -458,7 +485,7 @@ class Block extends BaseModel
                 ->get()->sortBy('pivot.order');
         });
     }
-    
+
     public function getActiveSets(): SetCollection
     {
         return Cache::tags(['block', 'block_' . $this->id, 'block_' . $this->id . '_activeSets'])->remember('block:activeSets:' . $this->cacheKey(), config('constants.CACHE_60'), function () {
@@ -467,7 +494,7 @@ class Block extends BaseModel
                 ->get()->sortBy('pivot.order');
         });
     }
-    
+
     public function getActiveProducts(): ProductCollection
     {
         return Cache::tags(['block', 'block_' . $this->id, 'block_' . $this->id . '_activeProducts'])->remember('block:activeProducts:' . $this->cacheKey(), config('constants.CACHE_60'), function () {
@@ -476,13 +503,13 @@ class Block extends BaseModel
                 ->get()->sortBy('pivot.order');
         });
     }
-    
+
     public function products()
     {
         return $this->morphedByMany(Product::class, 'blockable')
             ->withTimestamps()
             ->withPivot(['order'])
             ->orderBy('blockables.order');
-        
+
     }
 }

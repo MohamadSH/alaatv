@@ -12,6 +12,6 @@ class IndexPageController extends Controller
 {
     public function __invoke(Request $request, BlockCollectionFormatter $blockCollectionFormatter)
     {
-        return  BlockV2::collection(Block::getMainBlocksForApp());
+        return BlockV2::collection(Block::getMainBlocksForAppV2());
     }
 }
