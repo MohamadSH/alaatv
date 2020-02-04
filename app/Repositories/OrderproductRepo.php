@@ -56,4 +56,15 @@ class OrderproductRepo
 
         return $orderproducts;
     }
+
+    public static function createGiftOrderproduct(int $orderId, int $giftId, $giftCost): ?Orderproduct
+    {
+        return Orderproduct::create([
+            'orderproducttype_id' => config("constants.ORDER_PRODUCT_GIFT"),
+            'order_id'            => $orderId,
+            'product_id'          => $giftId,
+            'cost'                => $giftCost,
+            'discountPercentage'  => 100,
+        ]);
+    }
 }

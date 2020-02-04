@@ -232,36 +232,6 @@ class Order extends BaseModel
         'deleted_at',
     ];
 
-    public static function orderStatusFilter($orders, $orderStatusesId)
-    {
-        /** @var Order $orders */
-        return $orders->whereIn('orderstatus_id', $orderStatusesId);
-    }
-
-    public static function UserMajorFilter($orders, $majorsId)
-    {
-        /** @var Order $orders */
-        if (in_array(0, $majorsId)) {
-            $orders = $orders->whereHas('user', function ($q) use ($majorsId) {
-                /** @var QueryBuilder $q */
-                $q->whereDoesntHave("major");
-            });
-        } else {
-            $orders = $orders->whereHas('user', function ($q) use ($majorsId) {
-                /** @var QueryBuilder $q */
-                $q->whereIn("major_id", $majorsId);
-            });
-        }
-
-        return $orders;
-    }
-
-    public static function paymentStatusFilter($orders, $paymentStatusesId)
-    {
-        /** @var QueryBuilder $orders */
-        return $orders->whereIn('paymentstatus_id', $paymentStatusesId);
-    }
-
     /**
      * Create a new Eloquent Collection instance.
      *

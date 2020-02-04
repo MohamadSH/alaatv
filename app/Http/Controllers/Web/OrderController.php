@@ -24,6 +24,7 @@ use App\Paymentmethod;
 use App\Paymentstatus;
 use App\Product;
 use App\Productvoucher;
+use App\Repositories\OrderRepo;
 use App\Repositories\TransactionGatewayRepo;
 use App\Traits\APIRequestCommon;
 use App\Traits\DateTrait;
@@ -155,13 +156,13 @@ class OrderController extends Controller
         $orderStatusesId = $request->get('orderStatuses');
         //        if(isset($orderStatusesId) && !in_array(0, $orderStatusesId))
         if (isset($orderStatusesId)) {
-            $orders = Order::orderStatusFilter($orders, $orderStatusesId);
+            $orders = OrderRepo::orderStatusFilter($orders, $orderStatusesId);
         }
 
         $paymentStatusesId = $request->get('paymentStatuses');
         //        if(isset($paymentStatusesId) && !in_array(0, $paymentStatusesId))
         if (isset($paymentStatusesId)) {
-            $orders = Order::paymentStatusFilter($orders, $paymentStatusesId);
+            $orders = OrderRepo::paymentStatusFilter($orders, $paymentStatusesId);
         }
 
         $productsId = $request->get('products');
@@ -207,7 +208,7 @@ class OrderController extends Controller
         $majorEnable = $request->get('majorEnable');
         $majorsId    = $request->get('majors');
         if (isset($majorEnable) && isset($majorsId)) {
-            $orders = Order::UserMajorFilter($orders, $majorsId);
+            $orders = OrderRepo::UserMajorFilter($orders, $majorsId);
         }
 
         $couponEnable = $request->get('couponEnable');
