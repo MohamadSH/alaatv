@@ -8,6 +8,7 @@ use App\Collection\OrderCollections;
 use App\Collection\OrderproductCollection;
 use App\Collection\ProductCollection;
 use App\Collection\TransactionCollection;
+use App\Repositories\OrderproductRepo;
 use App\Repositories\ProductRepository;
 use App\Traits\Helper;
 use App\Traits\ProductCommon;
@@ -909,6 +910,45 @@ class Order extends BaseModel
     public function totalCost()
     {
         return (int)$this->obtainOrderCost()["totalCost"];
+    }
+
+    /**
+     * @param Orderproduct $orderProduct
+     * @param Product      $product
+     */
+    public function applyOrderGifts(Orderproduct $orderProduct, Product $product)
+    {
+        $giftsOfProduct = $product->getGifts();
+        $orderGifts     = $this->giftOrderproducts;
+        foreach ($giftsOfProduct as $giftItem) {
+            if (!$orderGifts->contains($giftItem)) {
+                $this->attachGift($giftItem, $orderProduct);
+                $this->giftOrderproducts->push($giftItem);
+            }
+        }
+    }
+
+    /** Attaches a gift to the order of this orderproduct
+     *
+     * @param Product      $gift
+     * @param Orderproduct $orderproduct
+     *
+     * @return Orderproduct|null
+     */
+    public function attachGift(Product $gift, Orderproduct $orderproduct): ?Orderproduct
+    {
+        $giftOrderproduct =
+            OrderproductRepo::createGiftOrderproduct($this->id, $gift->id, $gift->calculatePayablePrice()["cost"]);
+
+        if (!isset($giftOrderproduct)) {
+            return null;
+        }
+
+        $giftOrderproduct->parents()
+            ->attach($orderproduct,
+                ["relationtype_id" => config("constants.ORDER_PRODUCT_INTERRELATION_PARENT_CHILD")]);
+
+        return $giftOrderproduct;
     }
 
     /**

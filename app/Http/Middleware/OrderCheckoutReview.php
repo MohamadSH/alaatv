@@ -2,7 +2,6 @@
 
 namespace App\Http\Middleware;
 
-use App\Traits\OrderCommon;
 use App\Traits\OrderproductTrait;
 use App\User;
 use Closure;
@@ -14,7 +13,6 @@ use Illuminate\Support\Facades\Auth;
 class OrderCheckoutReview
 {
     use OrderproductTrait;
-    use OrderCommon;
 
     /**
      * Handle an incoming request.

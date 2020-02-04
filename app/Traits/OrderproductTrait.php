@@ -195,7 +195,7 @@ trait OrderproductTrait
 
 //            $this->applyOrderProductBon($data, $user, $orderProduct, $productItem);
 
-            $this->applyOrderGifts($order, $orderProduct, $productItem);
+            $order->applyOrderGifts($orderProduct, $productItem);
 
             $storedOrderproducts->push($orderProduct);
         }
