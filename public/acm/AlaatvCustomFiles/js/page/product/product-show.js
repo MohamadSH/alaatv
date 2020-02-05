@@ -654,6 +654,87 @@ var InitProductPagePage = function () {
             }
 
         });
+
+
+
+        $(document).on('click', '.btnAddSingleProductToCart', function () {
+            mApp.block('.btnAddSingleProductToCart', {
+                type: "loader",
+                state: "info",
+            });
+
+            var productId = $(this).data('pid');
+
+            var selectedProductObject = {
+                id:       $(this).data('gtm-eec-product-id').toString(),      // (String) The SKU of the product. Example: 'P12345'
+                name:     $(this).data('gtm-eec-product-name').toString(),    // (String) The name of the product. Example: 'T-Shirt'
+                price:    $(this).data('gtm-eec-product-price').toString(),
+                brand:    $(this).data('gtm-eec-product-brand').toString(),   // (String) The brand name of the product. Example: 'NIKE'
+                category: $(this).data('gtm-eec-product-category').toString(),// (String) Product category of the item. Can have maximum five levels of hierarchy. Example: 'clothes/shirts/t-shirts'
+                variant:  $(this).data('gtm-eec-product-variant').toString(), // (String) What variant of the main product this is. Example: 'Large'
+                quantity: $(this).data('gtm-eec-product-quantity')
+            };
+            GAEE.productAddToCart('PurchasedEssentialProduct.addToCart', selectedProductObject);
+            if (GAEE.reportGtmEecOnConsole()) {
+                console.log('PurchasedEssentialProduct.addToCart', selectedProductObject);
+            }
+
+            if ($('#js-var-userId').val()) {
+
+                $.ajax({
+                    type: 'POST',
+                    url: '/orderproduct',
+                    data: {
+                        product_id: productId,
+                        products: [],
+                        attribute: [],
+                        extraAttribute: []
+                    },
+                    statusCode: {
+                        200: function (response) {
+
+                            var successMessage = 'محصول مورد نظر به سبد خرید اضافه شد.';
+
+                            toastr.success(successMessage);
+
+                            window.location.replace('/checkout/review');
+
+                        },
+                        500: function (response) {
+
+                            toastr.error('خطای سیستمی رخ داده است.');
+
+                            ProductShowPage.enableBtnAddToCart();
+                        },
+                        503: function (response) {
+                            toastr.error('خطای پایگاه داده!');
+                            ProductShowPage.enableBtnAddToCart();
+                        }
+                    }
+                });
+
+            } else {
+
+                var data = {
+                    'product_id': productId,
+                    'attribute': [],
+                    'extraAttribute': [],
+                    'products': [],
+                };
+
+                UesrCart.addToCartInCookie(data);
+
+                var successMessage = 'محصول مورد نظر به سبد خرید اضافه شد.';
+
+
+                toastr.success(successMessage);
+
+                setTimeout(function () {
+                    window.location.replace('/checkout/review');
+                }, 2000);
+            }
+
+        });
     }
 
     function initRefreshPriceEvents() {

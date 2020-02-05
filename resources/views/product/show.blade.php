@@ -146,9 +146,9 @@
                                         <div class="row">
                                             @if(optional(optional(optional($product->attributes)->get('information'))->where('control', 'simple'))->count()>0 ||  optional(optional( optional($product->attributes)->get('main'))->where('control', 'simple'))->count()>0)
                                                 <div class="col-12
-                                            @if(optional(optional(optional($product->attributes)->get('information'))->where('control', 'checkBox'))->count())
-                                                        col-md-6
-@endif">
+                                                            @if(optional(optional(optional($product->attributes)->get('information'))->where('control', 'checkBox'))->count())
+                                                                col-md-6
+                                                            @endif">
 
                                                     <div class="m-portlet m-portlet--bordered m-portlet--full-height productAttributes">
                                                         <div class="m-portlet__head">
@@ -654,12 +654,23 @@
                         </span>
                     </button>
                 @else
-                    <a class="btn btn-focus btn-lg m-btn  m-btn m-btn--icon" href="{{ route('product.show' , $shouldBuyProductId ) }}">
-                            <span>
-                                <i class="flaticon-arrows"></i>
-                                <span>این محصول بخشی از {{$shouldBuyProductName}} است برای خرید کلیک کنید </span>
-                            </span>
-                    </a>
+                    <button
+                        @include('partials.gtm-eec.product', ['position'=>0, 'list'=>'صفحه نمایش محصول-دکمه افزودن به سبد محصولات اجباری', 'quantity'=>'1'])
+                        class="btn m-btn--air btn-success m-btn--icon m--margin-bottom-5 a--gtm-eec-product btnAddSingleProductToCart"
+                        data-pid="{{ $shouldBuyProductId }}">
+                        <span>
+                            <i class="fa fa-cart-arrow-down"></i>
+                            <i class="fas fa-sync-alt fa-spin m--hide"></i>
+                            <span>این محصول بخشی از {{$shouldBuyProductName}} است برای خرید کلیک کنید </span>
+                        </span>
+                    </button>
+
+{{--                    <a class="btn btn-focus btn-lg m-btn  m-btn m-btn--icon" href="{{ route('product.show' , $shouldBuyProductId ) }}">--}}
+{{--                            <span>--}}
+{{--                                <i class="flaticon-arrows"></i>--}}
+{{--                                <span>این محصول بخشی از {{$shouldBuyProductName}} است برای خرید کلیک کنید </span>--}}
+{{--                            </span>--}}
+{{--                    </a>--}}
                 @endif
         @endif
     @endif

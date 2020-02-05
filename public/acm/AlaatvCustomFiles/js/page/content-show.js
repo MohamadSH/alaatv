@@ -325,9 +325,9 @@ var InitPage = function() {
                 state: "info",
             });
 
-            let productId = $(this).data('pid');
+            var productId = $(this).data('pid');
 
-            let selectedProductObject = {
+            var selectedProductObject = {
                 id:       $(this).data('gtm-eec-product-id').toString(),      // (String) The SKU of the product. Example: 'P12345'
                 name:     $(this).data('gtm-eec-product-name').toString(),    // (String) The name of the product. Example: 'T-Shirt'
                 price:    $(this).data('gtm-eec-product-price').toString(),
@@ -338,7 +338,7 @@ var InitPage = function() {
             };
             GAEE.productAddToCart('sampleVideo.addToCart', selectedProductObject);
             if (GAEE.reportGtmEecOnConsole()) {
-                console.log('product.addToCart', selectedProductObject);
+                console.log('sampleVideo.addToCart', selectedProductObject);
             }
 
             if ($('#js-var-userId').val()) {
@@ -355,7 +355,7 @@ var InitPage = function() {
                     statusCode: {
                         200: function (response) {
 
-                            let successMessage = 'محصول مورد نظر به سبد خرید اضافه شد.';
+                            var successMessage = 'محصول مورد نظر به سبد خرید اضافه شد.';
 
                             toastr.success(successMessage);
 
@@ -377,7 +377,7 @@ var InitPage = function() {
 
             } else {
 
-                let data = {
+                var data = {
                     'product_id': productId,
                     'attribute': [],
                     'extraAttribute': [],
@@ -386,7 +386,7 @@ var InitPage = function() {
 
                 UesrCart.addToCartInCookie(data);
 
-                let successMessage = 'محصول مورد نظر به سبد خرید اضافه شد.';
+                var successMessage = 'محصول مورد نظر به سبد خرید اضافه شد.';
 
 
                 toastr.success(successMessage);
