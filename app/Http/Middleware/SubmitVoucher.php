@@ -22,6 +22,12 @@ class SubmitVoucher
         $user = $request->user();
         $code = $request->get('code');
 
+        if (!isset($code)) {
+            return response()->json([
+                'Code is required',
+            ], Response::HTTP_UNPROCESSABLE_ENTITY);
+        }
+
         if (!isset($user)) {
             if ($request->expectsJson()) {
                 return response()->json([

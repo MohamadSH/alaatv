@@ -17,8 +17,10 @@ class SubmitCouponRequest extends FormRequest
     public function rules()
     {
         return [
-            'code'     => 'required|string',
-            'order_id' => 'required',
+            'code'      => 'required_without:coupon|string',
+            'coupon'    => 'required_without:code',
+            'order_id'  => 'required_without:openOrder',
+            'openOrder' => 'required_without:order_id',
         ];
     }
 
@@ -31,9 +33,9 @@ class SubmitCouponRequest extends FormRequest
     protected function replaceNumbers()
     {
         $input = $this->request->all();
-        if (isset($input["coupon"])) {
-            $input["coupon"] = preg_replace('/\s+/', '', $input["coupon"]);
-            $input["coupon"] = $this->convertToEnglish($input["coupon"]);
+        if (isset($input['code'])) {
+            $input['code'] = preg_replace('/\s+/', '', $input['code']);
+            $input['code'] = $this->convertToEnglish($input['code']);
         }
         $this->replace($input);
     }

@@ -4,7 +4,6 @@
 namespace App\Classes;
 
 
-use App\Classes\Pricing\Alaa\AlaaInvoiceGenerator;
 use App\Coupon;
 use App\Order;
 
@@ -24,11 +23,9 @@ class CouponSubmitter
     }
 
     /**
-     * @param AlaaInvoiceGenerator $invoiceGenerator
-     * @param Coupon               $coupon
+     * @param Coupon $coupon
      *
      * @return bool
-     * @throws \Exception
      */
     public function submit(Coupon $coupon): bool
     {
