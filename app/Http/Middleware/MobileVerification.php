@@ -8,14 +8,13 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 
-class SubmitVoucher
+class MobileVerification
 {
     /**
      * Handle an incoming request.
      *
      * @param Request $request
      * @param Closure $next
-     *
      * @param null    $guard
      *
      * @return mixed
@@ -24,15 +23,15 @@ class SubmitVoucher
     {
         /** @var User $user */
         $user = Auth::guard($guard)->user();
-        $code = $request->get('code');
 
-        if (!isset($user)) {
+        if (isset($user) && !$user->hasVerifiedMobile()) {
             if ($request->expectsJson()) {
                 return response()->json([
-                    'message' => 'Unauthorized',
+                    'message' => 'User is not verified',
                 ], Response::HTTP_UNAUTHORIZED);
             }
-            return redirect(route('web.voucher.submit.form', ['code' => $code]));
+
+            return redirect(route('web.voucher.submit.form', ['code' => $request->get('code')]));
         }
 
         return $next($request);

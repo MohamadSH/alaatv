@@ -317,7 +317,7 @@ class VoucherController extends Controller
         $this->middleware('permission:' . config('constants.INSERT_USER_ACCESS'), ['only' => 'create']);
         $this->middleware('permission:' . config('constants.REMOVE_USER_ACCESS'), ['only' => 'destroy']);
         $this->middleware('permission:' . config('constants.SHOW_USER_ACCESS'), ['only' => 'edit']);
-        $this->middleware(['submitVoucher'], ['only' => ['submit'],]);
+        $this->middleware(['submitVoucher', 'mobileVerification', 'findVoucher', 'validateVoucher'], ['only' => ['submit'],]);
         $this->middleware(['findCoupon', 'openOrder'], ['only' => ['submitCouponVoucher'],]);
     }
 
