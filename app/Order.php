@@ -935,14 +935,10 @@ class Order extends BaseModel
      *
      * @return Orderproduct|null
      */
-    public function attachGift(Product $gift, Orderproduct $orderproduct): ?Orderproduct
+    public function attachGift(Product $gift, Orderproduct $orderproduct): Orderproduct
     {
         $giftOrderproduct =
             OrderproductRepo::createGiftOrderproduct($this->id, $gift->id, $gift->calculatePayablePrice()["cost"]);
-
-        if (!isset($giftOrderproduct)) {
-            return null;
-        }
 
         $giftOrderproduct->parents()
             ->attach($orderproduct,

@@ -115,4 +115,14 @@ class TransactionRepo
             'transactionstatus_id'      => config('constants.TRANSACTION_STATUS_SUCCESSFUL'),
         ], (int)$id);
     }
+
+    public static function createBasicTransaction(int $orderId, $cost, $comment): ?Transaction
+    {
+        return Transaction::create([
+            'order_id'             => $orderId,
+            'cost'                 => $cost,
+            'transactionstatus_id' => config('constants.TRANSACTION_STATUS_ORGANIZATIONAL_UNPAID'),
+            'managerComment'       => $comment,
+        ]);
+    }
 }

@@ -57,7 +57,7 @@ class OrderproductRepo
         return $orderproducts;
     }
 
-    public static function createGiftOrderproduct(int $orderId, int $giftId, $giftCost): ?Orderproduct
+    public static function createGiftOrderproduct(int $orderId, int $giftId, $giftCost): Orderproduct
     {
         return Orderproduct::create([
             'orderproducttype_id' => config("constants.ORDER_PRODUCT_GIFT"),
@@ -65,6 +65,17 @@ class OrderproductRepo
             'product_id'          => $giftId,
             'cost'                => $giftCost,
             'discountPercentage'  => 100,
+        ]);
+    }
+
+    public static function createBasicOrderproduct(int $orderId, int $productId, $finalPrice, $tempFinalPrice = null): Orderproduct
+    {
+        return Orderproduct::Create([
+            'order_id'            => $orderId,
+            'product_id'          => $productId,
+            'cost'                => $finalPrice,
+            'tmp_final_cost'      => $tempFinalPrice,
+            'orderproducttype_id' => config('constants.ORDER_PRODUCT_TYPE_DEFAULT'),
         ]);
     }
 }
