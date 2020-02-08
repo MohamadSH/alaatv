@@ -5,6 +5,8 @@ use App\Http\Controllers\Web\AdminController;
 use App\Http\Controllers\Web\BotsController;
 use App\Http\Controllers\Web\ConsultationController;
 use App\Http\Controllers\Web\ContentController;
+use App\Http\Controllers\Web\CouponController;
+use App\Http\Controllers\Web\CouponVoucherPageController;
 use App\Http\Controllers\Web\DashboardPageController;
 use App\Http\Controllers\Web\EmployeetimesheetController;
 use App\Http\Controllers\Web\ErrorPageController;
@@ -91,8 +93,7 @@ Route::group(['prefix' => 'sitemap'], function () {
 });
 
 Route::group(['prefix' => 'checkout'], function () {
-    Route::get('review', 'Web\OrderController@checkoutReview')
-        ->name('checkoutReview');
+    Route::get('review', [OrderController::class, 'checkoutReview'])->name('checkoutReview');
 
     Route::any('verifyPayment/online/{paymentMethod}/{device}', [PaymentVerifierController::class, 'verify'])
         ->name('verifyOnlinePayment');
@@ -350,7 +351,7 @@ Route::group(['prefix' => 'mobile'], function () {
     Route::post('verify', [MobileVerificationController::class, 'verify'])->name('mobile.verification.verify');
     Route::get('resend', [MobileVerificationController::class, 'resend'])->name('mobile.verification.resend');
 });
-Route::post('cd3b472d9ba631a73cb7b66ba513df53', 'Web\CouponController@generateRandomCoupon');
+Route::post('cd3b472d9ba631a73cb7b66ba513df53', [CouponController::class, 'generateRandomCoupon']);
 
 Route::get('tree', [TopicsTreeController::class, 'lernitoTree']);
 Route::get('tree/getArrayString/{lnid}', [TopicsTreeController::class, 'getTreeInPHPArrayString']);
@@ -358,3 +359,5 @@ Route::get('tree/ignoreUpdateItem/{iuid}', [TopicsTreeController::class, 'ignore
 Route::any('goToPaymentRoute/{paymentMethod}/{device}/', '\\' . RedirectAPIUserToPaymentRoute::class)->name('redirectToPaymentRoute');
 Route::get('h', '\\' . VoucherPageController::class)->name('web.voucher.submit.form');
 Route::any('voucher/submit', [VoucherController::class, 'submit'])->name('web.voucher.submit');
+Route::any('coupon', '\\' . CouponVoucherPageController::class)->name('web.couponVoucher.submit.form');
+Route::any('coupon/submit', [VoucherController::class, 'submitCouponVoucher'])->name('web.couponVoucher.submit');
