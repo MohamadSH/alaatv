@@ -620,7 +620,7 @@ var Alaasearch = function () {
 var TagManager = function () {
 
     function refreshUrlBasedOnSelectedTags() {
-        var selectedItems = FilterOptions.getselectedItemsInArray(),
+        var selectedItems = FilterOptions.getSelectedItemsInArray(),
             pageTagsListBadge = '.pageTags .m-list-badge__items',
             paramsString = '';
         $(pageTagsListBadge).find('.m-list-badge__item').remove();
@@ -640,7 +640,7 @@ var TagManager = function () {
     }
 
     function refreshPageTagsBadge() {
-        var tags = FilterOptions.getselectedItemsInArray();
+        var tags = FilterOptions.getSelectedItemsInArray();
         var tagsLength = tags.length;
         $('.pageTags .m-badge').remove();
         if(tagsLength === 0) {
@@ -709,31 +709,11 @@ var FilterOptions = function () {
             optionsHtml = '';
         for (var i = 0; i < dataLength; i++) {
             optionsHtml += getFilterOption({
-                name: data[i].value.split('_').join(' '),
-                value: data[i].value
+                name: (typeof data[i].name !== 'undefined') ? data[i].name.split('_').join(' ') : data[i].value.split('_').join(' '),
+                value: data[i].value.split(' ').join('_')
             });
         }
         return optionsHtml;
-    }
-
-    function initNezam() {
-        return createFieldsOfGroupOptions(contentSearchFilterData["nezam"]);
-    }
-
-    function initMaghta() {
-        return createFieldsOfGroupOptions(contentSearchFilterData["allMaghta"]);
-    }
-
-    function initMajor() {
-        return createFieldsOfGroupOptions(contentSearchFilterData["major"]);
-    }
-
-    function initLessons() {
-        return createFieldsOfGroupOptions(contentSearchFilterData["allLessons"]);
-    }
-
-    function initTeacher() {
-        return createFieldsOfGroupOptions(contentSearchFilterData["lessonTeacher"]["همه_دروس"]);
     }
 
     function getGroupFilters(data) {
@@ -795,32 +775,32 @@ var FilterOptions = function () {
         optionsHtml += getGroupFilters({
             title:'نظام آموزشی',
             openStatus:true,
-            checkboxList: initNezam()
+            checkboxList: createFieldsOfGroupOptions(contentSearchFilterData["nezam"])
         });
         optionsHtml += getGroupFilters({
             title:'مقطع',
             openStatus:true,
             searchTool:false,
-            checkboxList: initMaghta()
+            checkboxList: createFieldsOfGroupOptions(contentSearchFilterData["allMaghta"])
         });
         optionsHtml += getGroupFilters({
             title:'رشته',
             openStatus:true,
-            checkboxList: initMajor()
+            checkboxList: createFieldsOfGroupOptions(contentSearchFilterData["major"])
         });
         optionsHtml += getGroupFilters({
             title:'درس',
             openStatus:true,
             searchTool:true,
             moreCounter:6,
-            checkboxList: initLessons()
+            checkboxList: createFieldsOfGroupOptions(contentSearchFilterData["allLessons"])
         });
         optionsHtml += getGroupFilters({
             title:'دبیر',
             openStatus:true,
             searchTool:true,
             moreCounter:19,
-            checkboxList: initTeacher()
+            checkboxList: createFieldsOfGroupOptions(contentSearchFilterData["lessonTeacher"]["همه_دروس"])
         });
 
         return optionsHtml;
@@ -856,13 +836,29 @@ var FilterOptions = function () {
         return $('.GroupFilters-item input[type="checkbox"]:checked');
     }
 
-    function getselectedItemsInArray() {
+    function editSelectedItemsBeforeReport(reportArray) {
+        // if (
+        //     (reportArray.includes('نظام_آموزشی_قدیم') || reportArray.includes('نظام_آموزشی_جدید')) &&
+        //     !reportArray.includes('کنکور')
+        // ) {
+        //     reportArray.push('کنکور');
+        // } else if (
+        //     (reportArray.includes('دهم') || reportArray.includes('یازدهم') || reportArray.includes('دوازدهم') || reportArray.includes('المپیاد')) &&
+        //     !reportArray.includes('نظام_آموزشی_جدید')
+        // ) {
+        //     reportArray.push('نظام_آموزشی_جدید');
+        // }
+    }
+
+    function getSelectedItemsInArray() {
         var checkedItems = getCheckedItems(),
             checkedItemsLength = checkedItems.length,
             tagsArray = [];
         for (var i = 0; i < checkedItemsLength; i++) {
             tagsArray.push($(checkedItems[i]).val());
         }
+        editSelectedItemsBeforeReport(tagsArray);
+
         return tagsArray;
     }
 
@@ -880,78 +876,82 @@ var FilterOptions = function () {
         $('.SearchBoxFilterColumn').removeClass('filterStatus-close');
         $('.SearchBoxFilterColumn').addClass('filterStatus-open');
     }
+
     function hideFilterMenuForMobile() {
         $('.SearchBoxFilterColumn').addClass('filterStatus-close');
         $('.SearchBoxFilterColumn').removeClass('filterStatus-open');
     }
 
+    function createFields(data) {
+        AlaaLoading.show();
+        contentSearchFilterData = data.contentSearchFilterData;
+        $(data.containerSelector).html(initGroupsField());
+        AlaaLoading.hide();
+    }
+
+    function addEvents() {
+        $(document).on('click',  '.btnShowSearchBoxInMobileView', function () {
+            showFilterMenuForMobile();
+        });
+        $(document).on('click',  '.btnHideSearchBoxInMobileView', function () {
+            hideFilterMenuForMobile();
+        });
+        $(document).on('change', '.GroupFilters-item input[type="checkbox"]', function () {
+            // var thisCheckedStatus = $(this).is(':checked');
+            // $(this).parents('.GroupFilters').find('input[type="checkbox"]').prop('checked', false);
+            // if (thisCheckedStatus) {
+            //     $(this).prop('checked', true);
+            // } else {
+            //     $(this).prop('checked', false);
+            // }
+            if ($(this).parents('.filterStatus-open').length === 0) {
+                filterItemChangeEvent();
+            }
+        });
+        $(document).on('click', '.btnApplyFilterInMobileView', function () {
+            filterItemChangeEvent();
+            hideFilterMenuForMobile();
+        });
+        $(document).on('click', '#m_aside_left_hide_toggle', function () {
+            if ($('body').hasClass('m-aside-left--hide')) {
+                $('.SearchColumnsWrapper').removeClass('maxWidth');
+            } else {
+                $('.SearchColumnsWrapper').addClass('maxWidth');
+            }
+            $('.SearchBoxFilter').update();
+        });
+    }
+
+    function sticky() {
+        $('.SearchBoxFilter').sticky({
+            topSpacing: $('#m_header').height(),
+            bottomSpacing: 200,
+            scrollDirectionSensitive: true,
+            unstickUnder: 1025,
+            zIndex: 98
+        });
+        $('.showSearchBoxBtnWrapperColumn').sticky({
+            topSpacing: $('#m_header').height(),
+            unstickUnder: false,
+            zIndex: 98
+        });
+    }
+
+    function init(data) {
+        createFields(data);
+        addEvents();
+        sticky();
+        checkFilterBasedOnUrlTags(data.tags);
+        sortSelectedItems();
+        TagManager.addTagBadgeEvents(function () {
+            filterItemChangeEvent();
+        });
+    }
+
     return {
-        init: function (data) {
-            AlaaLoading.show();
-            contentSearchFilterData = data.contentSearchFilterData;
-            $(data.containerSelector).html(initGroupsField());
-            AlaaLoading.hide();
-
-
-            $(document).on('click',  '.btnShowSearchBoxInMobileView', function () {
-                showFilterMenuForMobile();
-            });
-            $(document).on('click',  '.btnHideSearchBoxInMobileView', function () {
-                hideFilterMenuForMobile();
-            });
-            $(document).on('change', '.GroupFilters-item input[type="checkbox"]', function () {
-                // var thisCheckedStatus = $(this).is(':checked');
-                // $(this).parents('.GroupFilters').find('input[type="checkbox"]').prop('checked', false);
-                // if (thisCheckedStatus) {
-                //     $(this).prop('checked', true);
-                // } else {
-                //     $(this).prop('checked', false);
-                // }
-                if ($(this).parents('.filterStatus-open').length === 0) {
-                    filterItemChangeEvent();
-                }
-            });
-            $(document).on('click', '.btnApplyFilterInMobileView', function () {
-                filterItemChangeEvent();
-                hideFilterMenuForMobile();
-            });
-
-            $('.SearchBoxFilter').sticky({
-                topSpacing: $('#m_header').height(),
-                bottomSpacing: 200,
-                scrollDirectionSensitive: true,
-                unstickUnder: 1025,
-                zIndex: 98
-            });
-
-            $('.showSearchBoxBtnWrapperColumn').sticky({
-                topSpacing: $('#m_header').height(),
-                unstickUnder: false,
-                zIndex: 98
-            });
-
-            $(document).on('click', '#m_aside_left_hide_toggle', function () {
-                if ($('body').hasClass('m-aside-left--hide')) {
-                    $('.SearchColumnsWrapper').removeClass('maxWidth');
-                } else {
-                    $('.SearchColumnsWrapper').addClass('maxWidth');
-                }
-                $('.SearchBoxFilter').update();
-            });
-
-            checkFilterBasedOnUrlTags(data.tags);
-            sortSelectedItems();
-
-            TagManager.addTagBadgeEvents(function () {
-                filterItemChangeEvent();
-            });
-        },
-        getselectedItemsInArray: function () {
-            return getselectedItemsInArray();
-        },
-        uncheckItem: function (itemValue) {
-            uncheckItem(itemValue);
-        },
+        init: init,
+        getSelectedItemsInArray: getSelectedItemsInArray,
+        uncheckItem: uncheckItem,
         checkFilterBasedOnUrlTags: checkFilterBasedOnUrlTags,
         sortSelectedItems: sortSelectedItems
     }

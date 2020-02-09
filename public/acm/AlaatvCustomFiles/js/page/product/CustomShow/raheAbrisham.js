@@ -906,6 +906,8 @@ var EntekhabeFarsang = function () {
         imageObserver.observe();
         if (typeof sectionId !== 'undefined') {
             showSection(sectionId);
+        } else {
+            showSection('all');
         }
         farsangStepUpdate(data.set.id);
         MapSVG.panToObject(MapSVG.getsetDataFromId(data.set.id).elementId);
@@ -1210,8 +1212,8 @@ var EntekhabeFarsang = function () {
             sections = [],
             totalSectionList = getTotalSectionList();
 
-        checkSections(data.pamphlets.data, totalSectionList);
-        checkSections(data.videos.data, totalSectionList);
+        checkSections(data.pamphlets, totalSectionList);
+        checkSections(data.videos, totalSectionList);
 
         return totalSectionList;
     }
@@ -1220,7 +1222,6 @@ var EntekhabeFarsang = function () {
         if (typeof data === 'undefined') {
             return;
         }
-
         for (var key in data){
             if (typeof data[key].section !== 'undefined' && data[key].section !== null) {
                 checkInTotalSectionList(data[key].section, totalSectionList);
@@ -1247,10 +1248,9 @@ var EntekhabeFarsang = function () {
     function initSectionList(data) {
         var listHtml = '',
             sectionList = getSectionListFromContent(data),
-            sectionListLength = sectionList.length,
             activrSectionCount = 0;
 
-        for (var i = 0; i < sectionListLength; i++) {
+        for (var i = 0; (typeof sectionList[i] !== 'undefined'); i++) {
             if (sectionList[i].enable) {
                 activrSectionCount++;
                 listHtml += createSectionItem(sectionList[i]);
@@ -1313,7 +1313,7 @@ var EntekhabeFarsang = function () {
                 orginalSetId = (typeof farsangSteps[i] !== 'undefined') ? farsangSteps[i].setId : null,
                 dataContentId = 'data-content-id="'+orginalSetId+'"';
 
-            if (orginalSetId !== null && orginalSetId === setId) {
+            if (orginalSetId !== null && orginalSetId.toString() === setId.toString()) {
                 tooltipName += ' (انتخاب شما)';
                 itemIcon = '<i class="fa fa-check-circle"></i>';
             } else if (orginalSetId !== null) {
@@ -1449,19 +1449,20 @@ var InitAbrishamPage = function () {
         $('.RepurchaseRow').fadeOut();
     }
 
-    return {
-        init: function (lastSetData, allSetsOfRaheAbrisham) {
+    function init(lastSetData, allSetsOfRaheAbrisham) {
+        makePageBoxedForLargScreen();
+        MapSVG.init(allSetsOfRaheAbrisham);
+        EntekhabeFarsang.init(lastSetData);
+        initRepurchaseRowAndHelpMessageRow();
+        initCustomDropDown();
+        initScrollCarousel();
+        initLiveDescription();
+        initEvents();
+        imageObserver.observe();
+    }
 
-            makePageBoxedForLargScreen();
-            MapSVG.init(allSetsOfRaheAbrisham);
-            EntekhabeFarsang.init(lastSetData);
-            initRepurchaseRowAndHelpMessageRow();
-            initCustomDropDown();
-            initScrollCarousel();
-            initLiveDescription();
-            initEvents();
-            imageObserver.observe();
-        },
+    return {
+        init: init,
     };
 }();
 
