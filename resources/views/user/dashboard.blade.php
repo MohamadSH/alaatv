@@ -256,7 +256,10 @@
             <div class="alert alert-info" role="alert">
                 <strong>هنوز از آلاء خرید نکرده اید.</strong>
                 <a href="{{ action("Web\ShopPageController") }}" class="m-nav__link">
-                    <button type="button" class="btn m-btn m-btn--gradient-from-warning m-btn--gradient-to-danger m--margin-5">محصولت آلاء</button>
+                    <button type="button"
+                            class="btn m-btn m-btn--gradient-from-warning m-btn--gradient-to-danger m--margin-5">محصولات
+                        آلاء
+                    </button>
                 </a>
             </div>
 
