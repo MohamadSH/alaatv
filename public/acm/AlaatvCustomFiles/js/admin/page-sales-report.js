@@ -1,13 +1,13 @@
 $(document).ready(function () {
 
-    CustomInit.persianDatepicker('#dateFilterCreatedSince', '#dateFilterCreatedSinceAlt', true);
-    CustomInit.persianDatepicker('#dateFilterCreatedTill', '#dateFilterCreatedTillAlt', true);
+    CustomInit.persianDatepicker('#dateFilterCreatedSince', '#dateFilterCreatedSinceAlt', false);
+    CustomInit.persianDatepicker('#dateFilterCreatedTill', '#dateFilterCreatedTillAlt', false);
 
     $('.reportOfFilter').fadeOut();
     $('.report1').html('');
     $('.report2').html('');
 
-    $(document).on('click', '.btnFilter', function(){
+    $(document).on('click', '.btnFilter', function () {
 
 
         $('.reportOfFilter').fadeOut();
