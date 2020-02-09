@@ -173,6 +173,7 @@
         var ajaxActionUrl = '{{ $ajaxActionUrl }}';
     </script>
     <script src="{{ mix('/js/admin-all.js') }}" type="text/javascript"></script>
-    <script src="{{ asset('/acm/AlaatvCustomFiles/js/admin/page-sales-report.js') }}" type="text/javascript"></script>
-    @endsection
+    <script src="{{ asset('/acm/AlaatvCustomFiles/js/admin/page-sales-report-v2.js') }}"
+            type="text/javascript"></script>
+@endsection
 @endability
