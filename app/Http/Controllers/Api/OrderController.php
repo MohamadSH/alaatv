@@ -15,6 +15,7 @@ use App\Http\Resources\Invoice as InvoiceResource;
 use App\Order;
 use App\Orderproduct;
 use App\Product;
+use App\Repositories\CouponRepo;
 use App\Traits\User\ResponseFormatter;
 use App\User;
 use Exception;
@@ -36,8 +37,8 @@ class OrderController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('SubmitOrderCoupon', ['only' => ['submitCoupon', 'submitCouponV2'],]);
-        $this->middleware('RemoveOrderCoupon', ['only' => ['removeCoupon'],]);
+        $this->middleware(['submitOrderCoupon', 'openOrder'], ['only' => ['submitCoupon', 'submitCouponV2'],]);
+        $this->middleware('removeOrderCoupon', ['only' => ['removeCoupon'],]);
     }
 
     /**
@@ -172,20 +173,18 @@ class OrderController extends Controller
      */
     public function submitCoupon(SubmitCouponRequest $request, AlaaInvoiceGenerator $invoiceGenerator)
     {
-        /** @var Coupon $coupon */
-        $coupon = Coupon::code($request->get('code'))->first();
+        $coupon = CouponRepo::findCouponByCode($request->get('code'));
         if ($request->has('openOrder')) {
             $order = $request->get('openOrder');
         } else {
-            $order    = Order::Find($request->get('order_id'));
+            $order = Order::Find($request->get('order_id'));
+            if (!isset($order)) {
+                return response($this->makeErrorResponse(Response::HTTP_BAD_REQUEST, 'Invalid order'));
+            }
         }
 
-        if(!isset($coupon)){
+        if (!isset($coupon)) {
             return response($this->makeErrorResponse(Response::HTTP_BAD_REQUEST, 'Invalid coupon'));
-        }
-
-        if(!isset($order)){
-            return response($this->makeErrorResponse(Response::HTTP_BAD_REQUEST, 'Invalid order'));
         }
 
         $couponValidationStatus = $coupon->validateCoupon();
@@ -219,19 +218,18 @@ class OrderController extends Controller
      */
     public function submitCouponV2(SubmitCouponRequest $request, AlaaInvoiceGenerator $invoiceGenerator)
     {
-        $coupon = Coupon::code($request->get('code'))->first();
+        $coupon = CouponRepo::findCouponByCode($request->get('code'));
         if ($request->has('openOrder')) {
             $order = $request->get('openOrder');
         } else {
-            $order    = Order::Find($request->get('order_id'));
+            $order = Order::Find($request->get('order_id'));
+            if (!isset($order)) {
+                return response()->json($this->makeErrorResponse(Response::HTTP_UNPROCESSABLE_ENTITY, 'Invalid order'));
+            }
         }
 
-        if(!isset($coupon)){
+        if (!isset($coupon)) {
             return response()->json($this->makeErrorResponse(Response::HTTP_UNPROCESSABLE_ENTITY, 'Invalid coupon'));
-        }
-
-        if(!isset($order)){
-            return response()->json($this->makeErrorResponse(Response::HTTP_UNPROCESSABLE_ENTITY, 'Invalid order'));
         }
 
         $couponValidationStatus = $coupon->validateCoupon();

@@ -2,19 +2,18 @@
 
 namespace App\Http\Middleware;
 
+use App\User;
 use Closure;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 
-class SubmitOrderCoupon
+class OpenOrder
 {
     /**
      * Handle an incoming request.
      *
      * @param Request $request
      * @param Closure $next
-     *
      * @param null    $guard
      *
      * @return mixed
@@ -27,10 +26,11 @@ class SubmitOrderCoupon
 
         $user = Auth::guard($guard)->user();
 
-        if ($request->has('order_id')) {
-            if (!$user->can('constants.ADD_COUPON_TO_ORDER')) {
-                return response([], Response::HTTP_FORBIDDEN);
-            }
+        if (!$request->has('order_id')) {
+            /** @var User $user */
+            $openOrder = $user->getOpenOrder();
+            $request->offsetSet('order_id', $openOrder->id);
+            $request->offsetSet('openOrder', $openOrder);
         }
 
         return $next($request);
