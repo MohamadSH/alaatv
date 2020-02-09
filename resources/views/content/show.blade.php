@@ -193,11 +193,11 @@
                                                         @include('partials.gtm-eec.product', ['position'=>$productKey, 'list'=>'نمونه فیلم-دکمه افزودن به سبد', 'quantity'=>'1'])
                                                         class="btn m-btn--air btn-success m-btn--icon m--margin-bottom-5 a--gtm-eec-product btnAddToCart"
                                                         data-pid="{{ $product->id }}">
-                                                <span>
-                                                    <i class="fa fa-cart-arrow-down"></i>
-                                                    <i class="fas fa-sync-alt fa-spin m--hide"></i>
-                                                    <span>افزودن {{ $product->name }} به سبد خرید</span>
-                                                </span>
+                                                        <span>
+                                                            <i class="fa fa-cart-arrow-down"></i>
+                                                            <i class="fas fa-sync-alt fa-spin m--hide"></i>
+                                                            <span>افزودن {{ $product->name }} به سبد خرید</span>
+                                                        </span>
                                                     </button>
                                                 @else
 
@@ -217,11 +217,11 @@
                                                         @include('partials.gtm-eec.product', ['position'=>$productKey, 'list'=>'محصولاتی که شامل این محتوا هستند-دکمه افزودن به سبد', 'quantity'=>'1'])
                                                         class="btn m-btn--air btn-success m-btn--icon m--margin-bottom-5 a--gtm-eec-product btnAddToCart"
                                                         data-pid="{{ $product->id }}">
-                                            <span>
-                                                <i class="fa fa-cart-arrow-down"></i>
-                                                <i class="fas fa-sync-alt fa-spin m--hide"></i>
-                                                <span>افزودن {{ $product->name }} به سبد خرید</span>
-                                            </span>
+                                                        <span>
+                                                            <i class="fa fa-cart-arrow-down"></i>
+                                                            <i class="fas fa-sync-alt fa-spin m--hide"></i>
+                                                            <span>افزودن {{ $product->name }} به سبد خرید</span>
+                                                        </span>
                                                     </button>
                                                 @else
 

@@ -1,6 +1,55 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-115256947-1"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'UA-115256947-1');
+    </script>
+    <!-- Repixel Code -->
+    <script>
+        (function(w, d, s, id, src){
+            w.Repixel = r = {
+                init: function(id) {
+                    w.repixelId = id;
+                }
+            };
+            var js, fjs = d.getElementsByTagName(s)[0];
+            if (d.getElementById(id)){ return; }
+            js = d.createElement(s);
+            js.id = id;
+            js.async = true;
+            js.onload = function(){
+                Repixel.init(w.repixelId);
+            };
+            js.src = src;
+            fjs.parentNode.insertBefore(js, fjs);
+        }(window, document, 'script', 'repixel',
+            'https://sdk.repixel.co/r.js'));
+        Repixel.init('5d8bb4bad04fe20008d533a8');
+    </script>
+    <!-- Repixel Code -->
+    <!-- Facebook Pixel Code -->
+    <script>
+        !function(f,b,e,v,n,t,s)
+        {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+            n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+            if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+            n.queue=[];t=b.createElement(e);t.async=!0;
+            t.src=v;s=b.getElementsByTagName(e)[0];
+            s.parentNode.insertBefore(t,s)}(window, document,'script',
+            'https://connect.facebook.net/en_US/fbevents.js');
+        fbq('init', '2010091775960303');
+        fbq('track', 'PageView');
+    </script>
+    <noscript><img height="1" width="1" style="display:none"
+                   src="https://www.facebook.com/tr?id=2010091775960303&ev=PageView&noscript=1"
+        /></noscript>
+    <!-- End Facebook Pixel Code -->
     <title>SERP Simulator - SEO Title & Meta Description Tool 2019 | SERPsim</title>
     <meta charset="UTF-8">
     <meta name="description" content="Tired of inaccurate and outdated SERP snippet generators? SERPsim is based on the very latest google pixel limits and is a full fledged SERP simulator. Try it!" />
@@ -8,15 +57,38 @@
     <script src="https://serpsim.com/js/jquery-3.3.1.min.js"></script>
     <script defer src="https://serpsim.com/js/material.min.js"></script>
     <script defer src="https://serpsim.com/js/html2canvas.min.js"></script>
-{{--    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en" type="text/css">--}}
+    <!--    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en" type="text/css"> -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" href="https://serpsim.com/css/serpsim.css">
 
     <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.5.18/webfont.js"></script>
-
+    <script>
+        WebFont.load({
+            google: {
+                families: ['Roboto:400,500']
+            }
+        });
+    </script>
 </head>
 
 <body>
+<div id="logo_div">
+    <div id="logo_box">
+        <span class="helper"></span>
+        <a href="/"><img id="serpsim_logo" src="https://serpsim.com/img/serpsim_logo_new.svg" alt="SERPsim - The most accurate SERP snippet generator & SERP simulator!" /></a>
+    </div>
+    <div id="banner_box">
+        <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+        <!-- serpsimulator top 728x90 -->
+        <ins class="adsbygoogle"
+             style="display:inline-block;width:728px;height:90px"
+             data-ad-client="ca-pub-5643559973451550"
+             data-ad-slot="4996233742"></ins>
+        <script>
+            (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
+    </div>
+</div>
 
 <div id="p1" class="mdl-progress mdl-js-progress"></div>
 <div id="input_div">
@@ -452,6 +524,9 @@
             $("#url").val(snippet.attr('data-serp-url')).trigger('keyup');
             $("#meta_desc").val(snippet.attr('data-serp-meta')).trigger('keyup');
             $("#snippet_id").val(snippet.attr('data-snippet-id'));
+            document.querySelector('#logo_div').scrollIntoView({
+                behavior: 'smooth'
+            });
         }
 
         function calcNumbers() {
