@@ -772,11 +772,11 @@ var FilterOptions = function () {
     function initGroupsField() {
         var optionsHtml = '';
 
-        // optionsHtml += getGroupFilters({
-        //     title:'نظام آموزشی',
-        //     openStatus:true,
-        //     checkboxList: createFieldsOfGroupOptions(contentSearchFilterData["nezam"])
-        // });
+        optionsHtml += getGroupFilters({
+            title:'نظام آموزشی',
+            openStatus:true,
+            checkboxList: createFieldsOfGroupOptions(contentSearchFilterData["nezam"])
+        });
         optionsHtml += getGroupFilters({
             title:'مقطع',
             openStatus:true,
@@ -837,17 +837,17 @@ var FilterOptions = function () {
     }
 
     function editSelectedItemsBeforeReport(reportArray) {
-        if (
-            (reportArray.includes('نظام_آموزشی_قدیم') || reportArray.includes('نظام_آموزشی_جدید')) &&
-            !reportArray.includes('کنکور')
-        ) {
-            reportArray.push('کنکور');
-        } else if (
-            (reportArray.includes('دهم') || reportArray.includes('یازدهم') || reportArray.includes('دوازدهم') || reportArray.includes('المپیاد')) &&
-            !reportArray.includes('نظام_آموزشی_جدید')
-        ) {
-            reportArray.push('نظام_آموزشی_جدید');
-        }
+        // if (
+        //     (reportArray.includes('نظام_آموزشی_قدیم') || reportArray.includes('نظام_آموزشی_جدید')) &&
+        //     !reportArray.includes('کنکور')
+        // ) {
+        //     reportArray.push('کنکور');
+        // } else if (
+        //     (reportArray.includes('دهم') || reportArray.includes('یازدهم') || reportArray.includes('دوازدهم') || reportArray.includes('المپیاد')) &&
+        //     !reportArray.includes('نظام_آموزشی_جدید')
+        // ) {
+        //     reportArray.push('نظام_آموزشی_جدید');
+        // }
     }
 
     function getSelectedItemsInArray() {

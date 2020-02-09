@@ -1303,12 +1303,8 @@ var contentSearchFilterData = {
     ],
     "allMaghta": [
         {
-            name: 'کنکور نظام قدیم',
-            value: 'نظام_آموزشی_قدیم'
-        },
-        {
-            name: 'کنکور نظام جدید',
-            value: 'نظام_آموزشی_جدید'
+            name: 'کنکور',
+            value: 'کنکور'
         },
         {
             name: 'دهم',
