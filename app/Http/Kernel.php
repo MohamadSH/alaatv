@@ -15,6 +15,7 @@ use App\Http\Middleware\OpenOrder;
 use App\Http\Middleware\RedirectIfAuthenticated;
 use App\Http\Middleware\RemoveOrderCoupon;
 use App\Http\Middleware\SubmitVoucher;
+use App\Http\Middleware\ValidateCoupon;
 use App\Http\Middleware\ValidateVoucher;
 use Illuminate\Auth\Middleware\AuthenticateWithBasicAuth;
 use Illuminate\Auth\Middleware\Authorize;
@@ -110,11 +111,11 @@ class Kernel extends HttpKernel
         'CanAccessEmployeeTimeSheet'                => CanAccessEmployeeTimeSheet::class,
         'submitVoucher'                             => SubmitVoucher::class,
         'findCoupon'                                => FindCoupon::class,
+        'validateCoupon'                            => ValidateCoupon::class,
         'openOrder'                                 => OpenOrder::class,
         'mobileVerification'                        => MobileVerification::class,
         'findVoucher'                               => FindVoucher::class,
         'validateVoucher'                           => ValidateVoucher::class,
-
     ];
 
     /**
