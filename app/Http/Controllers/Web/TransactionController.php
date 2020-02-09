@@ -140,7 +140,7 @@ class TransactionController extends Controller
 
             if ($request->has('orderStatuses')) {
                 $orderStatusesId = $request->get('orderStatuses');
-                //            $orders = Order::orderStatusFilter($orders, $orderStatusesId);
+                //            $orders = OrderRepo::orderStatusFilter($orders, $orderStatusesId);
                 $transactions = $transactions->whereHas('order', function ($q) use ($orderStatusesId) {
                     $q->whereIn('orderstatus_id', $orderStatusesId);
                 });

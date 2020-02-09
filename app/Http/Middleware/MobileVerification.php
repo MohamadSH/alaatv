@@ -2,35 +2,36 @@
 
 namespace App\Http\Middleware;
 
+use App\User;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 
-class SubmitOrderCoupon
+class MobileVerification
 {
     /**
      * Handle an incoming request.
      *
      * @param Request $request
      * @param Closure $next
-     *
      * @param null    $guard
      *
      * @return mixed
      */
     public function handle($request, Closure $next, $guard = null)
     {
-        if (!Auth::guard($guard)->check()) {
-            return $next($request);
-        }
-
+        /** @var User $user */
         $user = Auth::guard($guard)->user();
 
-        if ($request->has('order_id')) {
-            if (!$user->can('constants.ADD_COUPON_TO_ORDER')) {
-                return response([], Response::HTTP_FORBIDDEN);
+        if (isset($user) && !$user->hasVerifiedMobile()) {
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'message' => 'User is not verified',
+                ], Response::HTTP_UNAUTHORIZED);
             }
+
+            return redirect(route('web.voucher.submit.form', ['code' => $request->get('code')]));
         }
 
         return $next($request);

@@ -23,6 +23,7 @@ use App\{Afterloginformcontrol,
     Phonetype,
     Product,
     Relative,
+    Repositories\OrderRepo,
     Role,
     Traits\CharacterCommon,
     Traits\DateTrait,
@@ -297,7 +298,7 @@ class UserController extends Controller
             if (!isset($orders)) {
                 $orders = Order::all();
             } else {
-                $orders = Order::paymentStatusFilter($orders, $paymentStatusesId);
+                $orders = OrderRepo::paymentStatusFilter($orders, $paymentStatusesId);
             }
             $users = $users->whereIn('id', $orders->pluck('user_id')
                 ->toArray());
@@ -312,7 +313,7 @@ class UserController extends Controller
             if (!isset($orders)) {
                 $orders = Order::all();
             } else {
-                $orders = Order::orderStatusFilter($orders, $orderStatusesId);
+                $orders = OrderRepo::orderStatusFilter($orders, $orderStatusesId);
             }
             $users = $users->whereIn('id', $orders->pluck('user_id')
                 ->toArray());

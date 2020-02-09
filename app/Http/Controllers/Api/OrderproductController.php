@@ -7,7 +7,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\OrderProduct\OrderProductStoreRequest;
 use App\Orderproduct;
 use App\Product;
-use App\Traits\OrderCommon;
 use App\Traits\OrderproductTrait;
 use App\Traits\ProductCommon;
 use Cache;
@@ -19,7 +18,6 @@ use Illuminate\Http\Response;
 
 class OrderproductController extends Controller
 {
-    use OrderCommon;
     use ProductCommon;
     use OrderproductTrait;
 

@@ -14,21 +14,22 @@ use App\Order;
 use App\Orderproduct;
 use App\Product;
 use App\Repositories\OrderproductRepo;
-use App\Traits\OrderCommon;
 use App\Traits\OrderproductTrait;
 use App\Traits\ProductCommon;
 use Carbon\Carbon;
+use Exception;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\URL;
 use Kalnoy\Nestedset\QueryBuilder;
 
 class OrderproductController extends Controller
 {
-    use OrderCommon;
     use ProductCommon;
     use OrderproductTrait;
 
@@ -168,7 +169,7 @@ class OrderproductController extends Controller
      * @param Orderproduct      $orderproduct
      * @param UserbonController $userbonController
      *
-     * @return Response
+     * @return RedirectResponse
      */
     public function update(Request $request, $orderproduct, UserbonController $userbonController)
     {
@@ -289,7 +290,11 @@ class OrderproductController extends Controller
                 $orderproduct_userbon->update();
             }
         }
-        $deleteFlag = $orderproduct->delete() ? true : false;
+        try {
+            $deleteFlag = $orderproduct->delete() ? true : false;
+        } catch (Exception $e) {
+            Log::error('OrderproductController:destroy:294:deleting orderproduct');
+        }
 
         $previousRoute = app('router')
             ->getRoutes()

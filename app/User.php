@@ -714,13 +714,6 @@ class User extends Authenticatable implements Taggable, MustVerifyMobileNumber, 
             ->withPivot("rank", "prizes");
     }
 
-    public function getOpenOrder(): Order
-    {
-        $openOrder = $this->firstOrCreateOpenOrder($this);
-
-        return $openOrder;
-    }
-
     /**
      * @param $products
      *

@@ -152,10 +152,10 @@
         ];
         var lastSetData = {
             set: {
-                id: '{{$sets->first()->id}}',
-                name: '{{$sets->first()->name}}',
+                id: '{{$lastSet->id}}',
+                name: '{{$lastSet->name}}',
                 url: {
-                    web: '{{$sets->first()->show_url}}'
+                    web: '{{$lastSet->show_url}}'
                 }
             },
             files: {
@@ -164,13 +164,19 @@
                     @foreach($lastSetPamphlets as $item)
                     {
                         name: '{{$item->name}}',
-                            file: {
+                        file: {
                             pamphlet: [
                                 {
-                                    link: '$item->file->first()->first()->link'
+                                    link: '{{$item->file->first()->first()->link}}'
                                 }
                             ]
+                        },
+                        @if(isset($item->section))
+                        section: {
+                            id: '{{$item->section_id}}',
+                            name: '{{$item->section->name}}'
                         }
+                        @endif
                     },
                     @endforeach
                 ],
@@ -182,7 +188,13 @@
                             thumbnail: '{{$item->thumbnail}}',
                             url: {
                             web: '{{$item->url}}'
+                        },
+                        @if(isset($item->section))
+                        section: {
+                            id: '{{$item->section_id}}',
+                            name: '{{$item->section->name}}'
                         }
+                        @endif
                     },
                     @endforeach
                 ]

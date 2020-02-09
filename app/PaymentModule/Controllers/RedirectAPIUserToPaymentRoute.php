@@ -18,7 +18,6 @@ class RedirectAPIUserToPaymentRoute extends Controller
     public function __construct()
     {
         $this->middleware('signed');
-
     }
 
     /**
@@ -32,7 +31,7 @@ class RedirectAPIUserToPaymentRoute extends Controller
      */
     public function __invoke(string $paymentMethod, string $device, Request $request)
     {
-        $decryptedData = $this->getDecryptedData($request->encryptionData);
+        $decryptedData = (array)decrypt($request->get('encryptionData'));
 
         $userId  = Arr::get($decryptedData, 'user_id');
         $orderId = Arr::get($decryptedData, 'order_id');
@@ -49,11 +48,6 @@ class RedirectAPIUserToPaymentRoute extends Controller
         }
 
         return redirect(route('redirectToBank', $parameters));
-    }
-
-    private function getDecryptedData(string $encryptedData)
-    {
-        return (array)decrypt($encryptedData);
     }
 
     private function getUser(int $userId)

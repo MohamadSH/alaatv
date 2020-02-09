@@ -201,19 +201,6 @@ class Coupon extends BaseModel
     */
 
     /**
-     * Scope a query by coupon code
-     *
-     * @param          $query
-     * @param string   $code
-     *
-     * @return mixed
-     */
-    public function scopeCode($query, string $code)
-    {
-        return $query->where('code', $code);
-    }
-
-    /**
      * Validates a coupon
      *
      * @return int
