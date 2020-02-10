@@ -630,7 +630,7 @@
         </div>
     @endif
 
-    <div class="m-portlet btnGotoCheckoutPayment_mobile">
+    <div class="m-portlet btnGotoCheckoutPayment_mobile {{(!isset($invoiceInfo['orderproductCount']) || $invoiceInfo['orderproductCount']===0) ? 'd-none' : ''}}">
         <div class="m-portlet__body">
             <div class="row">
                 <div class="col-6">
