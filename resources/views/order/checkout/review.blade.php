@@ -607,24 +607,25 @@
     @else
         <div class="row">
             <div class="col">
-                <div class="m-alert m-alert--icon alert alert-warning empteCartAlert" role="alert">
-                    <div class="m-alert__icon">
-                        <i class="fa fa-exclamation-triangle"></i>
-                    </div>
-                    <div class="m-alert__text text-center">
-                        <strong>سبد خرید شما خالیست!</strong>
-                        <br>
-                        <button onclick="window.location.href='{{action('Web\ShopPageController')}}';mApp.block('.empteCartAlert', {type: 'loader',state: 'info',});"
-                                type="button"
-                                class="btn m-btn--pill m-btn--air m-btn m-btn--gradient-from-primary m-btn--gradient-to-info">
-                            <i class="flaticon-bag"></i>
-                            افزودن محصول به سبد
-                        </button>
-                    </div>
-                    <div class="m-alert__close pull-left">
-                        <button type="button" class="close" data-close="alert" aria-label="Hide"></button>
+
+
+                <div class="row">
+                    <div class="col-md-4 mx-auto">
+                        <div class="text-center">
+                            <img src="https://cdn.alaatv.com/upload/empty-cart.png" class="a--full-width" alt="empty-cart">
+                            <strong>سبد خرید شما خالیست!</strong>
+                            <br>
+                            <button onclick="window.location.href='{{action('Web\ShopPageController')}}';mApp.block('.empteCartAlert', {type: 'loader',state: 'info',});"
+                                    type="button"
+                                    class="btn m-btn--pill m-btn--air m-btn m-btn--gradient-from-primary m-btn--gradient-to-info">
+                                <i class="flaticon-bag"></i>
+                                افزودن محصول به سبد
+                            </button>
+                        </div>
                     </div>
                 </div>
+
+
             </div>
         </div>
     @endif
