@@ -35,7 +35,9 @@ class WebsiteSettingController extends Controller
                 'update',
             ],
         ]);
-        $this->middleware('permission:' . config('constants.SHOW_SITE_CONFIG_ACCESS'), ['only' => 'show', 'showFaq']);
+        $this->middleware('permission:' . config('constants.SHOW_SITE_CONFIG_ACCESS'), ['only' => 'show']);
+        $this->middleware('permission:' . config('constants.SHOW_SITE_FAQ_ACCESS'), ['only' => 'showFaq']);
+        $this->middleware('permission:' . config('constants.EDIT_SITE_FAQ_ACCESS'), ['only' => 'editFaq', 'updateFaq']);
     }
 
     public function show(Websitesetting $setting)

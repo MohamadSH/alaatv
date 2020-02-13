@@ -25,6 +25,8 @@
                     </span>
                 </a>
             </li>
+            @endpermission
+            @permission((config('constants.SHOW_SITE_FAQ_ACCESS')))
             <li class="m-nav__item @if(strcmp($section , "faq") == 0) m-nav__item--active @endif">
                 <a href="{{route('web.setting.faq.show' , $setting)}}" class="m-nav__link">
                     <i class="m-nav__link-icon fa fa-question"></i>
@@ -40,8 +42,8 @@
             <li class="m-nav__item
                         {{--m-nav__item--disabled--}}@if(strcmp($section , "slideShow") == 0) m-nav__item--active @endif">
                 <a href="{{action("Web\AdminController@adminSlideShow")}}" class="m-nav__link">
-                    <i class = "m-nav__link-icon fa fa-image"></i>
-                    <span class = "m-nav__link-text">
+                    <i class="m-nav__link-icon fa fa-image"></i>
+                    <span class="m-nav__link-text">
                         اسلاید شو صفحه اصلی
                     </span>
                 </a>
