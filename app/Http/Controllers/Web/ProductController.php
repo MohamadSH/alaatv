@@ -170,13 +170,15 @@ class ProductController extends Controller
 
 //        if ($product->id == Product::RAHE_ABRISHAM && $this->canSeeRaheAbrishamSpecialPage($user)) {
         if ($product->id == Product::RAHE_ABRISHAM) {
-            $sets              = $product->sets->sortByDesc('pivot.order');
-            $lastSet           = $sets->first();
-            $lastSetPamphlets  = $lastSet->getActiveContents2(Content::CONTENT_TYPE_PAMPHLET);
-            $lastSetVideos     = $lastSet->getActiveContents2(Content::CONTENT_TYPE_VIDEO);
-            $periodDescription = $product->descriptionWithPeriod;
-            $faqs              = $product->faqs;
-            return view('product.customShow.raheAbrisham', compact('product', 'block', 'liveDescriptions', 'isFavored', 'lastSet', 'lastSetPamphlets', 'lastSetVideos', 'periodDescription', 'sets', 'faqs'));
+            $hasUserPurchasedRaheAbrisham = $this->hasUserPurchasedRaheAbrisham($user);
+            $sets                         = $product->sets->sortByDesc('pivot.order');
+            $lastSet                      = $sets->first();
+            $lastSetPamphlets             = $lastSet->getActiveContents2(Content::CONTENT_TYPE_PAMPHLET);
+            $lastSetVideos                = $lastSet->getActiveContents2(Content::CONTENT_TYPE_VIDEO);
+            $periodDescription            = $product->descriptionWithPeriod;
+            $faqs                         = $product->faqs;
+            $isForcedGift                 = false;
+            return view('product.customShow.raheAbrisham', compact('product', 'block', 'liveDescriptions', 'isFavored', 'lastSet', 'lastSetPamphlets', 'lastSetVideos', 'periodDescription', 'sets', 'faqs', 'hasUserPurchasedRaheAbrisham', 'block', 'isForcedGift'));
         }
 
         $isForcedGift                 = false;
@@ -966,8 +968,12 @@ class ProductController extends Controller
      *
      * @return bool
      */
-    private function hasUserPurchasedRaheAbrisham(User $user): bool
+    private function hasUserPurchasedRaheAbrisham(User $user = null): bool
     {
+        if (is_null($user)) {
+            return false;
+        }
+
         $key = 'user:hasPurchasedRaheAbrisham:' . $user->cacheKey();
         return Cache::tags(['user', 'user_' . $user->id, 'user_' . $user->id . '_closedOrders'])
             ->remember($key, config('constants.CACHE_600'), function () use ($user) {
@@ -990,16 +996,6 @@ class ProductController extends Controller
             });
 }
 
-    /**
-     * @param Product $product
-     * @param User    $user
-     *
-     * @return bool
-     */
-    private function canSeeRaheAbrishamSpecialPage($user): bool
-    {
-        return isset($user) && $this->hasUserPurchasedRaheAbrisham($user);
-    }
 
     /**
      * @param array   $inputData

@@ -82,6 +82,27 @@
         'content' => view('product.partials.raheAbrisham.helpMessage', ['periodDescription'=>$periodDescription]),
     ])
 
+    @if(!$hasUserPurchasedRaheAbrisham)
+
+        {{--نمونه فیلم--}}
+        @if(optional(optional(optional(optional($block)->sets)->first())->getActiveContents2())->count() > 0)
+            @include('block.partials.block', [
+                'blockTitle'=>view('product.partials.productInfoNav', ['targetId'=>'sampleVideo' , 'product'=>$product , 'isForcedGift'=>$isForcedGift]),
+                'blockUrlDisable'=>true,
+                'blockType'=>'productSampleVideo',
+                'imageDimension'=>'?w=300&h=169',
+                'squareSing'=>false,
+                'blockCustomClass'=>'a--owl-carousel-type-2 productShowBlock sampleVideo a--block-widget-1',
+                'blockCustomId'=>'Block-sampleVideo',
+                'btnLoadMore'=>true
+                ])
+        @endif
+
+        {{--نمونه جزوه--}}
+        @include('product.partials.pamphlet')
+
+    @endif
+
     @include('product.partials.raheAbrisham.entekhabeFarsang')
 
     <div class="row justify-content-center">
@@ -200,6 +221,7 @@
                 ]
             }
         };
+        var hasUserPurchasedRaheAbrisham = {{($hasUserPurchasedRaheAbrisham)?1:0}};
     </script>
     <script src="{{ mix('/js/product-show-RaheAbrisham.js') }}"></script>
 @endsection
