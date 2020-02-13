@@ -1,4 +1,4 @@
-@permission((Config::get('constants.SHOW_SITE_CONFIG_ACCESS')))@extends('app' , ['pageName'=> 'admin'])
+@extends('app')
 
 @section('page-css')
     <link href="{{ mix('/css/admin-all.css') }}" rel="stylesheet" type="text/css"/>
@@ -32,7 +32,7 @@
         @include("systemMessage.flash")
 
         <!-- BEGIN PORTLET -->
-            {!! Form::open(['files' => true , 'method' => 'PUT' , 'action' => ['Web\WebsiteSettingController@update', $setting] , 'class'=>'form-horizontal']) !!}
+            {!! Form::open(['files' => true , 'method' => 'PUT' , 'url' => ['websiteSetting.update', $setting] , 'class'=>'form-horizontal']) !!}
             <div class = "m-portlet m-portlet--tabs">
                 <div class = "m-portlet__head">
                     <div class = "m-portlet__head-tools a--full-width">
@@ -441,5 +441,3 @@
         }
     </script>
 @endsection
-
-@endpermission

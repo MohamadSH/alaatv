@@ -728,7 +728,7 @@ var MapSVG = function () {
     function checkPanzoomEnd(callback) {
         var checkPanzoomEndInterval = setInterval(function(){
             if (Date.now() - window.RaheAbrishamPanZoom.panzoomLastPanTime > 200) {
-                clearInterval(checkPanzoomEndInterval)
+                clearInterval(checkPanzoomEndInterval);
                 callback();
             }
         },1);
@@ -1449,7 +1449,7 @@ var InitAbrishamPage = function () {
         $('.RepurchaseRow').fadeOut();
     }
 
-    function init(lastSetData, allSetsOfRaheAbrisham) {
+    function init(lastSetData, allSetsOfRaheAbrisham, hasUserPurchasedRaheAbrisham) {
         makePageBoxedForLargScreen();
         MapSVG.init(allSetsOfRaheAbrisham);
         EntekhabeFarsang.init(lastSetData);
@@ -1459,6 +1459,12 @@ var InitAbrishamPage = function () {
         initLiveDescription();
         initEvents();
         imageObserver.observe();
+        console.log(hasUserPurchasedRaheAbrisham);
+        if (!hasUserPurchasedRaheAbrisham) {
+            $('.helpMessageRow').fadeOut(0);
+            $('.RepurchaseRow').fadeIn();
+            $('.RepurchaseRow').AnimateScrollTo();
+        }
     }
 
     return {
@@ -1468,6 +1474,6 @@ var InitAbrishamPage = function () {
 
 jQuery(document).ready(function () {
     if (typeof lastSetData !== 'undefined') {
-        InitAbrishamPage.init(lastSetData, allSetsOfRaheAbrisham);
+        InitAbrishamPage.init(lastSetData, allSetsOfRaheAbrisham, hasUserPurchasedRaheAbrisham);
     }
 });

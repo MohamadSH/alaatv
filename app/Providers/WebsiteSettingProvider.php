@@ -27,7 +27,8 @@ class WebsiteSettingProvider extends ServiceProvider implements DeferrableProvid
     private function getSetting()
     {
         $key = 'AppServiceProvider:websitesettings';
-        return Cache::remember($key, config('constants.CACHE_600'), function () {
+
+        return Cache::tags(['websiteSetting', 'websiteSetting_version_1'])->remember($key, config('constants.CACHE_600'), function () {
             return Websitesetting::where('version', 1)
                 ->first();
         });
