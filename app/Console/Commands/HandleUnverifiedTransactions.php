@@ -138,6 +138,7 @@ class HandleUnverifiedTransactions extends Command
                     'transactionstatus_id' => config('constants.TRANSACTION_STATUS_SUCCESSFUL'),
                     'transactionID'        => $gateWayVerify['RefID'],
                     'managerComment'       => 'به سایت برنگشته بود - ثبت با کامند',
+                    'completed_at'         => $transaction->created_at,
                 ]);
 
                 if ($transactionUpdateResult) {
