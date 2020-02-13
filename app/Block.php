@@ -120,7 +120,7 @@ class Block extends BaseModel
         'deleted_at',
         //        'type',
     ];
-    
+
     public static function getHomeBannerBlock()
     {
         return self::getDummyBlock(false, '', null, null, null, Slideshow::getMainBanner());
@@ -190,7 +190,7 @@ class Block extends BaseModel
 
         return $this;
     }
-    
+
     protected function addBanners($banners)
     {
         if ($banners != null) {
@@ -198,10 +198,10 @@ class Block extends BaseModel
                 $this->banners->add($banner);
             }
         }
-        
+
         return $this;
     }
-    
+
     protected function addContents($contents)
     {
         if ($contents != null) {
@@ -270,11 +270,11 @@ class Block extends BaseModel
     public static function getMainBlocksForAppV2(): ?LengthAwarePaginator
     {
         return Cache::tags(['block', 'home'])
-            ->remember('block:getMainBlocksForApp', config('constants.CACHE_600'), function () {
+            ->remember('block:getMainBlocksForAppV2', config('constants.CACHE_600'), function () {
                 return self::appMain()
                     ->enable()
                     ->orderBy('order')
-                    ->paginate(5);
+                    ->paginate(10);
             });
     }
 
