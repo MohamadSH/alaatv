@@ -40,8 +40,7 @@ use App\{Attribute,
     Userbonstatus,
     Userstatus,
     Userupload,
-    Useruploadstatus,
-    Websitesetting
+    Useruploadstatus
 };
 use Auth;
 use Carbon\Carbon;
@@ -539,18 +538,6 @@ class AdminController extends Controller
 
         return view('admin.siteConfiguration.slideShow',
             compact('slides', 'section', 'slideDisk', 'websitePages'));
-    }
-
-    /**
-     * Admin panel for adjusting site configuration
-     */
-    public function adminSiteConfig()
-    {
-        $this->setting = Websitesetting::where('version', 1)
-            ->get()
-            ->first();
-
-        return redirect(action('Web\WebsiteSettingController@show', $this->setting));
     }
 
     /**
