@@ -254,6 +254,7 @@ return [
     'DISK26'       => 'uploadCenterSftp',
     'DISK27'       => 'periodDescriptionPhotoSFTP',
     'DISK28'       => 'sourcePhotoSFTP',
+    'DISK29'       => 'faqPhotoSFTP',
 
     'DISK_FREE_CONTENT'              => 'alaaCdnSFTP',
     'DISK_PRODUCT_CONTENT'           => 'productFileSFTP',

@@ -1085,11 +1085,19 @@
                                 </li>
                                 @permission((config('constants.SHOW_SITE_CONFIG_ACCESS')))
                                 <li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1">
-                                    <a href="{{ action("Web\AdminController@adminSiteConfig") }}" class="m-menu__link ">
+                                    <a href="{{ route('websiteSetting.show' , $setting) }}" class="m-menu__link ">
                                         <i class="m-menu__link-bullet m-menu__link-bullet--dot">
                                             <span></span>
                                         </i>
                                         <span class="m-menu__link-text">تنظیمات سایت</span>
+                                    </a>
+                                </li>
+                                <li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1">
+                                    <a href="{{route('web.setting.faq.show' , $setting)}}" class="m-menu__link ">
+                                        <i class="m-menu__link-bullet m-menu__link-bullet--dot">
+                                            <span></span>
+                                        </i>
+                                        <span class="m-menu__link-text">سؤالات متداول</span>
                                     </a>
                                 </li>
                                 @endpermission @permission((config('constants.LIST_SLIDESHOW_ACCESS')))
