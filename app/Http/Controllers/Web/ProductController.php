@@ -165,17 +165,18 @@ class ProductController extends Controller
             $children = $product->children()->enable()->get();
         }
 
-        $isFavored = (isset($user))?$user->hasFavoredProduct($product):false;
+        $isFavored = (isset($user)) ? $user->hasFavoredProduct($product) : false;
 
 
-        if ($this->canSeeRaheAbrishamSpecialPage($product , $user)) {
-                $sets              = $product->sets->sortByDesc('pivot.order');
-            $lastSet               = $sets->first();
-                $lastSetPamphlets  = $lastSet->getActiveContents2(Content::CONTENT_TYPE_PAMPHLET);
-                $lastSetVideos     = $lastSet->getActiveContents2(Content::CONTENT_TYPE_VIDEO);
-                $periodDescription = $product->descriptionWithPeriod;
-                $faqs              = $product->faqs ;
-                return view('product.customShow.raheAbrisham', compact('product', 'block', 'liveDescriptions', 'isFavored', 'lastSet', 'lastSetPamphlets', 'lastSetVideos', 'periodDescription', 'sets' , 'faqs'));
+//        if ($product->id == Product::RAHE_ABRISHAM && $this->canSeeRaheAbrishamSpecialPage($user)) {
+        if ($product->id == Product::RAHE_ABRISHAM) {
+            $sets              = $product->sets->sortByDesc('pivot.order');
+            $lastSet           = $sets->first();
+            $lastSetPamphlets  = $lastSet->getActiveContents2(Content::CONTENT_TYPE_PAMPHLET);
+            $lastSetVideos     = $lastSet->getActiveContents2(Content::CONTENT_TYPE_VIDEO);
+            $periodDescription = $product->descriptionWithPeriod;
+            $faqs              = $product->faqs;
+            return view('product.customShow.raheAbrisham', compact('product', 'block', 'liveDescriptions', 'isFavored', 'lastSet', 'lastSetPamphlets', 'lastSetVideos', 'periodDescription', 'sets', 'faqs'));
         }
 
         $isForcedGift                 = false;
@@ -995,9 +996,9 @@ class ProductController extends Controller
      *
      * @return bool
      */
-    private function canSeeRaheAbrishamSpecialPage(Product $product, $user): bool
+    private function canSeeRaheAbrishamSpecialPage($user): bool
     {
-        return $product->id == Product::RAHE_ABRISHAM && isset($user) && $this->hasUserPurchasedRaheAbrisham($user);
+        return isset($user) && $this->hasUserPurchasedRaheAbrisham($user);
     }
 
     /**
