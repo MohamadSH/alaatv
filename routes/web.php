@@ -234,6 +234,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('{Websitesetting}/showFaq', [WebsiteSettingController::class, 'showFaq'])->name('web.setting.faq.show');
         Route::post('{Websitesetting}/updateFaq', [WebsiteSettingController::class, 'updateFaq'])->name('web.setting.faq.update');
         Route::get('{Websitesetting}/editFaq/{faqId}', [WebsiteSettingController::class, 'editFaq'])->name('web.setting.faq.edit');
+        Route::delete('{Websitesetting}/deleteFaq/{faqId}', [WebsiteSettingController::class, 'destroyFaq'])->name('web.setting.faq.delete');
     });
 
     Route::get('consultantEntekhabReshtePanel', [ConsultationController::class, 'consultantEntekhabReshte']);

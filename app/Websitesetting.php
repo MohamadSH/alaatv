@@ -45,6 +45,15 @@ class Websitesetting extends BaseModel
         'faq',
     ];
 
+
+    public static function getFaqPhoto($faq)
+    {
+        $photo       = $faq->photo;
+        $diskAdapter = Storage::disk('alaaCdnSFTP')->getAdapter();
+        $imageUrl    = $diskAdapter->getUrl($photo);
+        return isset($imageUrl) ? $imageUrl : null;
+    }
+
     public function getLastFaqId(): int
     {
         $faqs = $this->faq;
@@ -88,13 +97,5 @@ class Websitesetting extends BaseModel
         } else {
             $this->attributes['faq'] = json_encode($input, JSON_UNESCAPED_UNICODE);
         }
-    }
-
-    public static function getFaqPhoto($faq)
-    {
-        $photo       = $faq->photo;
-        $diskAdapter = Storage::disk('alaaCdnSFTP')->getAdapter();
-        $imageUrl    = $diskAdapter->getUrl($photo);
-        return isset($imageUrl) ? $imageUrl : null;
     }
 }
