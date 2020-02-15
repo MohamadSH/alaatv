@@ -14,6 +14,9 @@ use App\Contentset;
 use App\Contenttype;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\{ContentIndexRequest, EditContentRequest, InsertContentRequest, Request, UpdateContentSetRequest};
+use App\Http\Resources\ContentInSet;
+use App\Http\Resources\ProductInBlock;
+use App\Http\Resources\SetInIndex;
 use App\Section;
 use App\Source;
 use App\Traits\{APIRequestCommon,
@@ -88,16 +91,24 @@ class ContentController extends Controller
         }
 
         $result = $contentSearch->get(compact('filters', 'contentTypes'));
+        $videos = $result->get('video');
+        $videos = isset($videos) && $videos->count() > 0 ? ContentInSet::collection($videos) : null;
 
         $setFilters            = $filters;
         $setFilters['enable']  = 1;
         $setFilters['display'] = 1;
-        $result->offsetSet('set', !$contentOnly ? $setSearch->get($setFilters) : null);
+        $sets                  = $setSearch->get($setFilters);
+        $result->offsetSet('set', !$contentOnly ? $sets : null);
+        $sets = !$contentOnly && isset($sets) && $sets->count() > 0 ? SetInIndex::collection($sets) : null;
 
         $productFilters                    = $filters;
         $productFilters['active']          = 1;
         $productFilters['doesntHaveGrand'] = 1;
-        $result->offsetSet('product', !$contentOnly ? $productSearch->get($productFilters) : null);
+        $products                          = $productSearch->get($productFilters);
+        $result->offsetSet('product', !$contentOnly ? $products : null);
+        $products =
+            !$contentOnly && isset($products) && $products->count() > 0 ? ProductInBlock::collection($products) : null;
+
 
         $pageName = 'content-search';
 
@@ -106,11 +117,21 @@ class ContentController extends Controller
             return response()->json($this->makeJsonForAndroidApp(optional($result->get('video'))
                 ->items()));
         }
-        $api  = response()->json([
+
+        $api = response()->json([
             'result' => $result,
             'tags'   => empty($tags) ? null : $tags,
         ]);
-        $view = view('pages.content-search', compact('result', 'contentTypes', 'tags', 'pageName'));
+
+        $viewData = [
+            'data' => [
+                'videos'   => $videos,
+                'products' => $products,
+                'sets'     => $sets,
+                'tags'     => empty($tags) ? null : $tags,
+            ],
+        ];
+        $view     = view('pages.content-search', compact('result', 'contentTypes', 'tags', 'pageName', 'viewData'));
         return httpResponse($api, $view);
     }
 
