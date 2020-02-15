@@ -67,7 +67,7 @@
                             <th>عنوان</th>
                             <th>متن</th>
                             <th>فیلم</th>
-                            <th>تامبنیل</th>
+                            <th>عکس</th>
                             <th>عملیات</th>
                         </tr>
                         </thead>
@@ -99,6 +99,9 @@
                                             <li><a target="_blank"
                                                    href="{{route('web.setting.faq.edit' , ['Websitesetting'=>$setting , 'faqId'=>$faq->id])}}">اصلاح</a>
                                             </li>
+                                            <li><a href="#"
+                                                   onclick="deleteFaq('{{route('web.setting.faq.delete' , ['Websitesetting'=>$setting , 'faqId'=>$faq->id])}}');">حذف</a>
+                                            </li>
                                         </ul>
                                     </td>
                                 </tr>
@@ -113,4 +116,23 @@
 @endsection
 
 @section('page-js')
+    <script>
+        function deleteFaq(url) {
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data: {_method: 'delete'},
+                statusCode: {
+                    //The status for when action was successful
+                    200: function (response) {
+                        toastr["success"]("سؤال با موفقیت حذف شد!", "پیام سیستم");
+                        window.location.reload();
+                    },
+                    500: function (response) {
+                        toastr["error"]("سؤال با موفقیت حذف شد!", "پیام سیستم");
+                    },
+                },
+            });
+        }
+    </script>
 @endsection

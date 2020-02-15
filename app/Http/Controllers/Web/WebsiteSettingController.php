@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\Web;
 
-use App\Adapter\AlaaSftpAdapter;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\EditWebsiteFaqRequest;
 use App\Traits\RequestCommon;
 use App\Websitesetting;
 use Illuminate\Contracts\Filesystem\FileNotFoundException;
@@ -37,7 +37,7 @@ class WebsiteSettingController extends Controller
         ]);
         $this->middleware('permission:' . config('constants.SHOW_SITE_CONFIG_ACCESS'), ['only' => 'show']);
         $this->middleware('permission:' . config('constants.SHOW_SITE_FAQ_ACCESS'), ['only' => 'showFaq']);
-        $this->middleware('permission:' . config('constants.EDIT_SITE_FAQ_ACCESS'), ['only' => 'editFaq', 'updateFaq']);
+        $this->middleware('permission:' . config('constants.EDIT_SITE_FAQ_ACCESS'), ['only' => 'editFaq', 'updateFaq', 'destroyFaq']);
     }
 
     public function show(Websitesetting $setting)
@@ -150,16 +150,14 @@ class WebsiteSettingController extends Controller
         return view('admin.siteConfiguration.FAQ.edit', compact('faq'));
     }
 
-    public function updateFaq(Request $request, Websitesetting $setting)
+    public function updateFaq(EditWebsiteFaqRequest $request, Websitesetting $setting)
     {
         $file = $this->getRequestFile($request->all(), 'photo');
-        if (isset($file)) {
+        if ($file !== false) {
             $extension = $file->getClientOriginalExtension();
             $fileName  =
                 basename($file->getClientOriginalName(), '.' . $extension) . '_' . date('YmdHis') . '.' . $extension;
             $disk      = Storage::disk(config('constants.DISK29'));
-            /** @var AlaaSftpAdapter $adaptor */
-            $adaptor = $disk->getAdapter();
             if ($disk->put($fileName, File::get($file))) {
                 $photo = 'upload/images/faq/' . $fileName;
             }
@@ -169,13 +167,15 @@ class WebsiteSettingController extends Controller
 
         $faqId = $request->get('faq_id');
         if (isset($faqId)) {
-            $faqKey     = array_search($faqId, array_column($faqs, 'id'));
-            $faq        = $faqs[$faqKey];
-            $faq->title = $request->get('title');
-            $faq->body  = $request->get('body');
-            $faq->photo = isset($photo) ? $photo : null;
-            $faq->video = $request->get('video');
-            $faq->order = $request->get('order', 0);
+            $faqs          = $setting->faq;
+            $faqKey        = array_search($faqId, array_column($faqs, 'id'));
+            $faq           = $faqs[$faqKey];
+            $faq->title    = $request->get('title');
+            $faq->body     = $request->get('body');
+            $faq->photo    = isset($photo) ? $photo : null;
+            $faq->video    = $request->get('video');
+            $faq->order    = $request->get('order', 0);
+            $faqs[$faqKey] = $faq;
         } else {
             $obj        = new stdClass();
             $obj->id    = $setting->getLastFaqId() + 1;
@@ -187,7 +187,6 @@ class WebsiteSettingController extends Controller
 
             $faqs[] = $obj;
         }
-
         $updateFaq = $setting->update(['faq' => $faqs]);
 
         if ($updateFaq) {
@@ -199,5 +198,34 @@ class WebsiteSettingController extends Controller
         }
 
         return redirect()->back();
+    }
+
+    public function destroyFaq(Request $request, Websitesetting $setting, $settingId, $faqId)
+    {
+        $faqs   = $setting->faq;
+        $faqKey = array_search($faqId, array_column($faqs, 'id'));
+        if ($faqKey === false) {
+            return response()->json([
+                'message' => 'No FAQ found',
+            ], Response::HTTP_UNPROCESSABLE_ENTITY);
+        }
+
+        unset($faqs[$faqKey]);
+        $faqs = array_values($faqs);
+
+        $updateFaq = $setting->update(['faq' => $faqs]);
+
+        if ($updateFaq) {
+            Cache::tags(['websiteSetting', 'websiteSetting_' . $setting->id])->flush();
+            $responseStatus = Response::HTTP_OK;
+            $responseText   = 'سؤال متداول با موفقیت حذف شد';
+        } else {
+            $responseStatus = Response::HTTP_INTERNAL_SERVER_ERROR;
+            $responseText   = 'خطای پایگاه داده';
+        }
+
+        return response()->json([
+            'message' => $responseText,
+        ], $responseStatus);
     }
 }
