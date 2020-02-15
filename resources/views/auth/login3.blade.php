@@ -5,11 +5,15 @@
 @endsection
 
 @section('body')
-    <div class="m-grid__item m-grid__item--fluid m-grid m-grid--ver-desktop m-grid--desktop m-grid--tablet-and-mobile m-grid--hor-tablet-and-mobile m-login m-login--1 m-login--signin" id="m_login">
+
+
+
+
+    <div class="m-grid__item m-grid__item--fluid m-grid m-grid--ver-desktop m-grid--desktop m-grid--tablet-and-mobile m-grid--hor-tablet-and-mobile m-login m-login--1 m-login--signin d-none" id="m_login">
         <div class="m-grid__item m-grid__item--order-tablet-and-mobile-1 m-login__aside">
-            
+
             <div class="loginFormBackgroundForMobileAndTablet">
-    
+
                 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" style="margin:auto;background:rgba(255, 255, 255, 0);display:block;z-index:1;position:relative" preserveAspectRatio="xMidYMid" viewBox="0 0 1920 900">
                     <g transform=""><linearGradient id="lg-0.6590519274487807" x1="0" x2="1" y1="0" y2="0">
                             <stop stop-color="#ff6f00" offset="0"></stop>
@@ -26,7 +30,7 @@
                             <animate attributeName="d" dur="10s" repeatCount="indefinite" keyTimes="0;0.333;0.667;1" calcmod="spline" keySplines="0.2 0 0.2 1;0.2 0 0.2 1;0.2 0 0.2 1" begin="-8s" values="M0 0L 0 675.068973495964Q 192 725.9732618418908  384 686.3397918304262T 768 575.1660118118252T 1152 557.4339722539198T 1536 624.7337634379641T 1920 619.7169536804358L 1920 0 Z;M0 0L 0 609.8908999302556Q 192 638.943277782745  384 622.8641455495701T 768 680.9824332256469T 1152 604.3151676000973T 1536 554.2848086644095T 1920 672.6674592722616L 1920 0 Z;M0 0L 0 655.4410999110182Q 192 657.1049819899372  384 620.8556200433279T 768 572.5931056983565T 1152 626.498651528957T 1536 658.1933233621113T 1920 699.374357564823L 1920 0 Z;M0 0L 0 675.068973495964Q 192 725.9732618418908  384 686.3397918304262T 768 575.1660118118252T 1152 557.4339722539198T 1536 624.7337634379641T 1920 619.7169536804358L 1920 0 Z"></animate>
                         </path></g>
                 </svg>
-                
+
             </div>
             <div class="m-stack m-stack--hor m-stack--desktop loginFormInputsAndLogos">
                 <div class="m-stack__item m-stack__item--fluid">

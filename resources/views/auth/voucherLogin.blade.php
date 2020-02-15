@@ -39,19 +39,19 @@
                 loginActionUrl: GlobalJsVar.loginActionUrl(),
             },
             user: {
-                mobile: '{{$mobile}}'
+                mobile: '{{(isset($mobile) ? $mobile : '')}}'
             },
             verifyMobile: {
                 enable: {{($verifyMobile) ? 'true' : 'false'}},
                 sendVerificationCodeActionUrl: '{{ action('Web\MobileVerificationController@resend') }}',
                 verifyActionUrl: '{{ action('Web\MobileVerificationController@verify') }}',
                 verifyFormToken: '{{Session::token()}}',
-                isVerified: {{($isUserVerified) ? 'true' : 'false'}}
+                isVerified: {{((isset($isUserVerified) && $isUserVerified)) ? 'true' : 'false'}}
             },
             voucher: {
                 enable: {{($voucher) ? 'true' : 'false'}},
                 voucherActionUrl: '{{route('web.voucher.submit')}}',
-                voucherCode: '{{$code}}'
+                voucherCode: '{{(isset($code) ? $code : '')}}'
             },
             redirectUrl: '{{ $redirectUrl  }}'
         };

@@ -1,4 +1,4 @@
-var AppGlobalInitInit = function() {
+var AppGlobalInit = function() {
 
     var LazyLoad,
         Firebase;
@@ -113,8 +113,6 @@ var AppGlobalInitInit = function() {
         window.imageObserver = LazyLoad.image();
         window.gtmEecProductObserver = LazyLoad.gtmEecProduct();
         window.gtmEecAdvertisementObserver = LazyLoad.gtmEecAdvertisement();
-        // Bootstrap 4 carousel lazy load
-        LazyLoad.carousel([imageObserver, gtmEecAdvertisementObserver]);
     }
 
     function addGtmEecEvents() {
@@ -239,7 +237,7 @@ var AppGlobalInitInit = function() {
 }();
 
 jQuery(document).ready( function() {
-    AppGlobalInitInit.init({
+    AppGlobalInit.init({
         LazyLoad: LazyLoad,
         Firebase: Firebase
     });

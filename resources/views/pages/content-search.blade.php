@@ -71,7 +71,7 @@
 
 @section('page-js')
     <script>
-        var contentData = {!! json_encode($result) !!};
+        var contentData = {!! json_encode($viewData) !!};
         var tags = {!! json_encode($tags) !!};
         var contentSearchApi = window.location.origin + '/api/v2/search';
     </script>

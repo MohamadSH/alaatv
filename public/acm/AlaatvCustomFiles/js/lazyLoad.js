@@ -111,6 +111,8 @@ var LazyLoad = function () {
                 // });
             }
         },
+        bootstrap4CarouselLoadHeight: carousel_loadHeightOfImageAndLoading
+
 
     };
 }();

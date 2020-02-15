@@ -1,6 +1,8 @@
 var initPage = function() {
 
-    function loadCarousels() {
+    function lazyLoad() {
+        // Bootstrap 4 carousel lazy load
+        window.LazyLoad.carousel([window.imageObserver, window.gtmEecAdvertisementObserver]);
         window.LazyLoad.loadElementByQuerySelector('.dasboardLessons', function (element) {
             $(element).OwlCarouselType2({
                 OwlCarousel: {
@@ -80,10 +82,13 @@ var initPage = function() {
             // $('html,body').animate({scrollTop: $(scrollTo).offset().top - $('#m_header').height()},'slow');
 
         });
+        $(document).on('click', '#m_aside_left_hide_toggle', function () {
+            window.LazyLoad.bootstrap4CarouselLoadHeight();
+        });
     }
 
     function init(sections) {
-        loadCarousels();
+        lazyLoad();
         loadStickeHeader(sections);
         addEvents();
     }

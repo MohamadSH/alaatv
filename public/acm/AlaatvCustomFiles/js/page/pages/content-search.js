@@ -31,7 +31,6 @@ var Alaasearch = function () {
                     getAjaxContentErrorCounter = 0;
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
-                    console.log('getAjaxContent error getAjaxContentErrorCounter: ', getAjaxContentErrorCounter);
                     if (getAjaxContentErrorCounter < 5) {
                         getAjaxContentErrorCounter++;
                         getAjaxContent(action, callback);
@@ -49,9 +48,9 @@ var Alaasearch = function () {
             UrlParameter.setParams(paramsString, {searchResult: initContentData, url: window.location.href, paramsString: paramsString});
         }
         TagManager.refreshPageTagsBadge();
-        fillVideoRepositoryAndSetNextPage(initContentData.video);
-        fillProductRepositoryAndSetNextPage(initContentData.product);
-        appendToCarouselTypeAndSetNextPage(initContentData.set);
+        fillVideoRepositoryAndSetNextPage(initContentData.videos);
+        fillProductRepositoryAndSetNextPage(initContentData.products);
+        appendToCarouselTypeAndSetNextPage(initContentData.sets);
         appendToListType();
         checkToShowNotFoundMessage();
     }
@@ -116,7 +115,6 @@ var Alaasearch = function () {
             },
             // shortDescription: (data.shortDescription !== null) ? data.shortDescription : (data.longDescription !== null) ? data.longDescription : '', // *******
             shortDescription: 'shortDescription',
-            discount: Math.round((1 - (price.final / price.base)) * 100)
         };
     }
     function contentItemAdapter(data) {
@@ -451,7 +449,7 @@ var Alaasearch = function () {
         if (nextPageUrl !== null && nextPageUrl.length > 0) {
             addLoadingItem('carouselType');
             getAjaxContent(nextPageUrl, function (response) {
-                appendToCarouselTypeAndSetNextPage(response.result.set);
+                appendToCarouselTypeAndSetNextPage(response.result.sets);
             });
         }
         removeSensorItem('carouselType');
@@ -461,7 +459,7 @@ var Alaasearch = function () {
         if (nextPageUrlVideo !== null && nextPageUrlVideo.length > 0) {
             addLoadingItem('listType');
             getAjaxContent(nextPageUrlVideo, function (response) {
-                fillVideoRepositoryAndSetNextPage(response.result.video);
+                fillVideoRepositoryAndSetNextPage(response.result.videos);
                 callback();
             });
         }
@@ -470,7 +468,7 @@ var Alaasearch = function () {
         var nextPageUrlProduct = getNextPageUrl('product');
         if (nextPageUrlProduct !== null && nextPageUrlProduct.length > 0) {
             getAjaxContent(nextPageUrlProduct, function (response) {
-                fillProductRepositoryAndSetNextPage(response.result.product);
+                fillProductRepositoryAndSetNextPage(response.result.products);
                 callback();
             });
         }
@@ -1132,5 +1130,5 @@ var initPage = function() {
 }();
 
 jQuery(document).ready(function () {
-    initPage.init(contentSearchFilterData, tags, contentData, contentSearchApi);
+    initPage.init(contentSearchFilterData, tags, contentData.data, contentSearchApi);
 });
