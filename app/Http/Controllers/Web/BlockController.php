@@ -55,7 +55,6 @@ class BlockController extends Controller
         $this->middleware('permission:' . config('constants.EDIT_BLOCK_ACCESS'), ['only' => 'update']);
     }
 
-
     public function index(Request $request)
     {
         $perPage = ($request->has('length')) ? $request->get('length') : 10;
@@ -94,7 +93,7 @@ class BlockController extends Controller
             ],
         ];
         $products        = $this->makeProductCollection();
-        $sets            = Contentset::all();
+        $sets            = Contentset::orderByDesc('created_at')->get();
         $blockSets       = $block->sets;
         $blockContents   = $block->contents;
         $blockProductsId = $block->products->pluck('id');

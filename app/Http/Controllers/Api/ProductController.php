@@ -7,12 +7,14 @@ use App\Collection\ProductCollection;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Price as PriceResource;
 use App\Http\Resources\Product as ProductResource;
-use App\Http\Resources\ProductInBlock as ProductInSearch;
+use App\Http\Resources\ProductIndex;
 use App\Product;
 use App\Traits\ProductCommon;
 use Carbon\Carbon;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Routing\Redirector;
 use Illuminate\Support\Facades\Cache;
 
 class ProductController extends Controller
@@ -33,7 +35,7 @@ class ProductController extends Controller
 
         $productResult = $productSearch->get($filters);
 
-        return ProductInSearch::collection($productResult);
+        return ProductIndex::collection($productResult);
     }
 
     /**
@@ -70,7 +72,7 @@ class ProductController extends Controller
      * @param Request $request
      * @param Product $product
      *
-     * @return ProductResource|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     * @return ProductResource|RedirectResponse|Redirector
      */
     public function showV2(Request $request, Product $product)
     {
