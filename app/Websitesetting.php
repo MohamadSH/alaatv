@@ -87,7 +87,12 @@ class Websitesetting extends BaseModel
             return [];
         }
 
-        return json_decode($value);
+        $faqs = json_decode($value);
+        usort($faqs, function ($one, $two) {
+            return ($one->order > $two->order);
+        });
+
+        return $faqs;
     }
 
     public function setFaqAttribute($input)
