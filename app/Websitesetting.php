@@ -33,15 +33,41 @@ use Storage;
  * @method static Builder|Websitesetting query()
  * @method static Builder|BaseModel disableCache()
  * @method static Builder|BaseModel withCacheCooldownSeconds($seconds)
- * @property-read mixed          $cache_cooldown_seconds
- * @property-read mixed          $site_logo_url
+ * @property-read mixed  $cache_cooldown_seconds
+ * @property-read mixed  $site_logo_url
+ * @property mixed       faq
  */
 class Websitesetting extends BaseModel
 {
     protected $fillable = [
         'setting',
         'version',
+        'faq',
     ];
+
+
+    public static function getFaqPhoto($faq)
+    {
+        $photo       = $faq->photo;
+        $diskAdapter = Storage::disk('alaaCdnSFTP')->getAdapter();
+        $imageUrl    = $diskAdapter->getUrl($photo);
+        return isset($imageUrl) ? $imageUrl : null;
+    }
+
+    public function getLastFaqId(): int
+    {
+        $faqs = $this->faq;
+        if (empty($faqs)) {
+            return 0;
+        }
+
+        usort($faqs, function ($one, $two) {
+            return ($one->id < $two->id);
+        });
+
+        return $faqs[0]->id;
+
+    }
 
     public function getSettingAttribute($value)
     {
@@ -53,5 +79,23 @@ class Websitesetting extends BaseModel
         $setting     = $this->setting;
         $diskAdapter = Storage::disk('alaaCdnSFTP')->getAdapter();
         return $diskAdapter->getUrl(optional($setting->site)->siteLogo);
+    }
+
+    public function getFaqAttribute($value)
+    {
+        if (is_null($value)) {
+            return [];
+        }
+
+        return json_decode($value);
+    }
+
+    public function setFaqAttribute($input)
+    {
+        if (is_null($input)) {
+            $this->attributes['faq'] = null;
+        } else {
+            $this->attributes['faq'] = json_encode($input, JSON_UNESCAPED_UNICODE);
+        }
     }
 }

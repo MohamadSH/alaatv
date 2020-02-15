@@ -59,32 +59,6 @@ class ProductController extends Controller
         $this->callMiddlewares();
     }
 
-    private function callMiddlewares(): void
-    {
-        //        $this->middleware('permission:' . config('constants.LIST_PRODUCT_ACCESS'), ['only' => 'index']);
-        $this->middleware('permission:' . config('constants.INSERT_PRODUCT_ACCESS'), ['only' => 'create']);
-        $this->middleware('permission:' . config('constants.REMOVE_PRODUCT_ACCESS'), ['only' => 'destroy']);
-        $this->middleware('permission:' . config('constants.SHOW_PRODUCT_ACCESS'), ['only' => 'edit']);
-        $this->middleware('permission:' . config('constants.EDIT_PRODUCT_ACCESS'), ['only' => 'update']);
-        $this->middleware('permission:' . config('constants.EDIT_CONFIGURE_PRODUCT_ACCESS'), [
-            'only' => [
-                'childProductEnable',
-                'completeEachChildPivot',
-            ],
-        ]);
-        $this->middleware('permission:' . config('constants.INSERT_CONFIGURE_PRODUCT_ACCESS'), [
-            'only' => 'makeConfiguration',
-            'createConfiguration',
-        ]);
-        $this->middleware('auth', [
-            'except' => [
-                'index',
-                'show',
-                'search',
-            ],
-        ]);
-    }
-
     public function index(ProductIndexRequest $request, ProductSearch $productSearch)
     {
         $tags                       = $request->get('tags');
@@ -161,210 +135,6 @@ class ProductController extends Controller
         return response()->json([], Response::HTTP_SERVICE_UNAVAILABLE);
     }
 
-    /**
-     * @param array   $inputData
-     * @param Product $product
-     *
-     * @return void
-     * @throws FileNotFoundException
-     */
-    private function fillProductFromRequest(array $inputData, Product $product): void
-    {
-        $files                    = Arr::has($inputData, 'files') ? [Arr::get($inputData, 'files')] : [];
-        $images                   = Arr::has($inputData, 'image') ? [Arr::get($inputData, 'image')] : [];
-        $isFree                   = Arr::has($inputData, 'isFree');
-        $tagString                = Arr::get($inputData, 'tags');
-        $sampleContentString      = Arr::get($inputData, 'sampleContents');
-        $recommenderContentString = Arr::get($inputData, 'recommenderContents');
-
-        $product->fill($inputData);
-
-        if (strlen($tagString) > 0) {
-            $product->tags = convertTagStringToArray($tagString);
-        }
-
-        $sampleContentsArray      = convertTagStringToArray($sampleContentString);
-        $product->sample_contents = $sampleContentsArray;
-
-        $recommenderContentsArray      = convertTagStringToArray($recommenderContentString);
-        $product->recommender_contents = $recommenderContentsArray;
-
-        if ($this->strIsEmpty($product->discount)) {
-            $product->discount = 0;
-        }
-
-        $product->isFree = $isFree;
-
-        $product->intro_videos = $this->setIntroVideos(Arr::get($inputData, 'introVideo'),
-            Arr::get($inputData, 'introVideoThumbnail'));
-
-        //Storing product's catalog
-        $storeFileResult = $this->storeCatalogOfProduct($product, $files);
-        //ToDo : delete the file if it is an update
-
-        //Storing product's image
-        $storeImageResult = $this->storeImageOfProduct($product, $images);
-        //ToDo : delete the file if it is an update
-    }
-
-    /**
-     * @param $introVideo
-     * @param $introVideoThumbnail
-     *
-     * @return Collection
-     */
-    private function setIntroVideos($introVideo, $introVideoThumbnail)
-    {
-        $videos = null;
-        if (isset($introVideo)) {
-            $videos = $this->makeIntroVideos($introVideo);
-        }
-
-        $thumbnail = null;
-        if (isset($introVideoThumbnail)) {
-            $thumbnail = $this->makeIntroVideoThumbnail($introVideoThumbnail);
-        }
-
-        return $this->makeIntroVideoCollection($videos, $thumbnail);
-    }
-
-    /**
-     * @param string $videoLink
-     *
-     * @return array
-     */
-    private function makeIntroVideos(string $videoLink): array
-    {
-        $videoUrl       = $videoLink;
-        $videoPath      = parse_url($videoUrl)['path'];
-        $videoExtension = pathinfo($videoPath, PATHINFO_EXTENSION);
-        $hqVideo        = $this->makeIntroVideoFileStdClass(config('constants.DISK_FREE_CONTENT'), $videoUrl,
-            $videoPath, $videoExtension, null, 'کیفیت بالا', '480p');
-        $videos         = $this->mekeIntroVideosArray($hqVideo);
-        return $videos;
-    }
-
-    /**
-     * @param string $thumbnailLink
-     *
-     * @return array
-     */
-    private function makeIntroVideoThumbnail(string $thumbnailLink): array
-    {
-        $thumbnailUrl       = $thumbnailLink;
-        $thumbnailPath      = parse_url($thumbnailUrl)['path'];
-        $thumbnailExtension = pathinfo($thumbnailPath, PATHINFO_EXTENSION);
-        $thumbnail          = $this->makeVideoFileThumbnailStdClass(config('constants.DISK_FREE_CONTENT'),
-            $thumbnailUrl, $thumbnailPath, $thumbnailExtension);
-        return $thumbnail;
-    }
-
-    /**
-     * @param array $videos
-     * @param array $thumbnail
-     *
-     * @return Collection
-     */
-    private function makeIntroVideoCollection(array $videos = null, array $thumbnail = null): Collection
-    {
-        $introVideos = collect();
-        $introVideos->push([
-            'video'     => $videos,
-            'thumbnail' => $thumbnail,
-        ]);
-
-        return $introVideos;
-    }
-
-    /** Stores catalog file of the product
-     *
-     * @param Product $product
-     *
-     * @param array   $files
-     *
-     * @return array
-     * @throws FileNotFoundException
-     */
-    private function storeCatalogOfProduct(Product $product, array $files): array
-    {
-        $done = [];
-        foreach ($files as $key => $file) {
-            $extension  = $file->getClientOriginalExtension();
-            $fileName   =
-                basename($file->getClientOriginalName(), '.' . $extension) . '_' . date('YmdHis') . '.' . $extension;
-            $done[$key] = false;
-            if (Storage::disk(config('constants.DISK5'))
-                ->put($fileName, File::get($file))) {
-                $product->file = $fileName;
-                $done[$key]    = true;
-            }
-        }
-
-        return $done;
-    }
-
-    /** Stores image file of the product
-     *
-     * @param Product $product
-     *
-     * @param array   $files
-     *
-     * @return array
-     * @throws FileNotFoundException
-     */
-    private function storeImageOfProduct(Product $product, array $files): array
-    {
-        $done = [];
-        foreach ($files as $key => $file) {
-            $extension = $file->getClientOriginalExtension();
-            $fileName  =
-                basename($file->getClientOriginalName(), '.' . $extension) . '_' . date('YmdHis') . '.' . $extension;
-            $disk      = Storage::disk(config('constants.DISK21'));
-            /** @var AlaaSftpAdapter $adaptor */
-            $adaptor    = $disk->getAdapter();
-            $done[$key] = false;
-            if ($disk->put($fileName, File::get($file))) {
-                $fullPath    = $adaptor->getRoot();
-                $partialPath = $this->getSubDirectoryInCDN($fullPath);
-
-                $done[$key]     = true;
-                $product->image = $partialPath . $fileName;
-                /**
-                 *  Snippet code : resizing the image using the ........ package
-                 *
-                 * $img = Image::make(Storage::disk(config('constants.DISK4'))->getAdapter()->getPathPrefix().$fileName);
-                 * $img->resize(256, 256);
-                 * $img->save(Storage::disk(config('constants.DISK4'))->getAdapter()->getPathPrefix().$fileName);
-                 * */
-            }
-        }
-
-        return $done;
-    }
-
-    /**
-     * @param $product
-     * @param $bonId
-     * @param $bonDiscount
-     * @param $bonPlus
-     */
-    private function attachBonToProduct(Product $product, $bonId, $bonDiscount, $bonPlus): void
-    {
-        $bonQueryBuilder = $product->bons();
-
-        if ($product->hasBon($bonId)) {
-            $bonQueryBuilder->updateExistingPivot($bonId, [
-                'discount' => $bonDiscount,
-                'bonPlus'  => $bonPlus,
-            ]);
-        } else {
-            $bonQueryBuilder->attach($bonId, [
-                'discount' => $bonDiscount,
-                'bonPlus'  => $bonPlus,
-            ]);
-        }
-    }
-
     public function show(Request $request, Product $product)
     {
         /** @var User $user */
@@ -395,18 +165,7 @@ class ProductController extends Controller
             $children = $product->children()->enable()->get();
         }
 
-        $isFavored = (isset($user))?$user->hasFavoredProduct($product):false;
-
-
-        if ($this->canSeeRaheAbrishamSpecialPage($product , $user)) {
-                $sets              = $product->sets->sortByDesc('created_at');
-                $lastSet           = $sets->first();
-                $lastSetPamphlets  = $lastSet->getActiveContents2(Content::CONTENT_TYPE_PAMPHLET);
-                $lastSetVideos     = $lastSet->getActiveContents2(Content::CONTENT_TYPE_VIDEO);
-                $periodDescription = $product->descriptionWithPeriod;
-                $faqs              = $product->faqs ;
-                return view('product.customShow.raheAbrisham', compact('product', 'block', 'liveDescriptions', 'isFavored', 'lastSet', 'lastSetPamphlets', 'lastSetVideos', 'periodDescription', 'sets' , 'faqs'));
-        }
+        $isFavored = (isset($user)) ? $user->hasFavoredProduct($product) : false;
 
         $isForcedGift                 = false;
         $shouldBuyProductId           = null;
@@ -421,6 +180,17 @@ class ProductController extends Controller
             }
         }
 
+        //        if ($product->id == Product::RAHE_ABRISHAM && $this->canSeeRaheAbrishamSpecialPage($user)) {
+        if ($product->id == Product::RAHE_ABRISHAM) {
+            $hasUserPurchasedRaheAbrisham = $this->hasUserPurchasedRaheAbrisham($user);
+            $sets                         = $product->sets->sortByDesc('pivot.order');
+            $lastSet                      = $sets->first();
+            $lastSetPamphlets             = $lastSet->getActiveContents2(Content::CONTENT_TYPE_PAMPHLET);
+            $lastSetVideos                = $lastSet->getActiveContents2(Content::CONTENT_TYPE_VIDEO);
+            $periodDescription            = $product->descriptionWithPeriod;
+            $faqs                         = $product->faqs;
+            return view('product.customShow.raheAbrisham', compact('product', 'block', 'liveDescriptions', 'isFavored', 'lastSet', 'lastSetPamphlets', 'lastSetVideos', 'periodDescription', 'sets', 'faqs', 'hasUserPurchasedRaheAbrisham', 'block', 'isForcedGift', 'allChildIsPurchased', 'hasPurchasedEssentialProduct', 'shouldBuyProductId', 'shouldBuyProductName'));
+        }
 
         return view('product.show', compact('product', 'block', 'purchasedProductIdArray', 'allChildIsPurchased', 'liveDescriptions', 'children', 'isFavored', 'isForcedGift', 'shouldBuyProductId', 'shouldBuyProductName', 'hasPurchasedEssentialProduct'));
     }
@@ -1126,19 +896,6 @@ class ProductController extends Controller
         return redirect()->back();
     }
 
-    /**
-     * @param Block $block
-     *
-     * @return array
-     */
-    private function getProductsSampleContentsFromBlock(Block $block): array
-    {
-        $blockContents         = optional(optional(optional($block)->contents)->pluck('id'))->toArray();
-        $blockFirstSetContents =
-            optional(optional(optional(optional($block->sets)->first())->contents)->pluck('id'))->toArray();
-        return array_unique(array_merge(!is_null($blockContents) ? $blockContents : [], !is_null($blockFirstSetContents) ? $blockFirstSetContents : []), SORT_REGULAR);
-    }
-
     public function detachBlock(Request $request, Product $product)
     {
         $block = Block::Find($request->get('block_id'));
@@ -1162,15 +919,60 @@ class ProductController extends Controller
 
         session()->put('success', 'بلاک با موفقیت اضافه شد');
         return redirect()->back();
-    }/**
- * @param User $user
- *
- * @return bool
- */
-    private function hasUserPurchasedRaheAbrisham(User $user): bool
+    }
+
+    private function callMiddlewares(): void
     {
-        $key                      = 'user:hasPurchasedRaheAbrisham:' . $user->cacheKey();
-        return Cache::tags(['user_' . $user->id . '_closedOrders'])
+        //        $this->middleware('permission:' . config('constants.LIST_PRODUCT_ACCESS'), ['only' => 'index']);
+        $this->middleware('permission:' . config('constants.INSERT_PRODUCT_ACCESS'), ['only' => 'create']);
+        $this->middleware('permission:' . config('constants.REMOVE_PRODUCT_ACCESS'), ['only' => 'destroy']);
+        $this->middleware('permission:' . config('constants.SHOW_PRODUCT_ACCESS'), ['only' => 'edit']);
+        $this->middleware('permission:' . config('constants.EDIT_PRODUCT_ACCESS'), ['only' => 'update']);
+        $this->middleware('permission:' . config('constants.EDIT_CONFIGURE_PRODUCT_ACCESS'), [
+            'only' => [
+                'childProductEnable',
+                'completeEachChildPivot',
+            ],
+        ]);
+        $this->middleware('permission:' . config('constants.INSERT_CONFIGURE_PRODUCT_ACCESS'), [
+            'only' => 'makeConfiguration',
+            'createConfiguration',
+        ]);
+        $this->middleware('auth', [
+            'except' => [
+                'index',
+                'show',
+                'search',
+            ],
+        ]);
+    }
+
+    /**
+     * @param Block $block
+     *
+     * @return array
+     */
+    private function getProductsSampleContentsFromBlock(Block $block): array
+    {
+        $blockContents         = optional(optional(optional($block)->contents)->pluck('id'))->toArray();
+        $blockFirstSetContents =
+            optional(optional(optional(optional($block->sets)->first())->contents)->pluck('id'))->toArray();
+        return array_unique(array_merge(!is_null($blockContents) ? $blockContents : [], !is_null($blockFirstSetContents) ? $blockFirstSetContents : []), SORT_REGULAR);
+    }
+
+    /**
+     * @param User $user
+     *
+     * @return bool
+     */
+    private function hasUserPurchasedRaheAbrisham(User $user = null): bool
+    {
+        if (is_null($user)) {
+            return false;
+        }
+
+        $key = 'user:hasPurchasedRaheAbrisham:' . $user->cacheKey();
+        return Cache::tags(['user', 'user_' . $user->id, 'user_' . $user->id . '_closedOrders'])
             ->remember($key, config('constants.CACHE_600'), function () use ($user) {
                 return $user->products()->contains(Product::RAHE_ABRISHAM);
             });
@@ -1191,14 +993,209 @@ class ProductController extends Controller
             });
 }
 
+
     /**
+     * @param array   $inputData
      * @param Product $product
-     * @param User    $user
      *
-     * @return bool
+     * @return void
+     * @throws FileNotFoundException
      */
-    private function canSeeRaheAbrishamSpecialPage(Product $product ,  $user):bool
+    private function fillProductFromRequest(array $inputData, Product $product): void
     {
-        return $product->id == Product::RAHE_ABRISHAM && isset($user) && $this->hasUserPurchasedRaheAbrisham($user);
+        $files                    = Arr::has($inputData, 'files') ? [Arr::get($inputData, 'files')] : [];
+        $images                   = Arr::has($inputData, 'image') ? [Arr::get($inputData, 'image')] : [];
+        $isFree                   = Arr::has($inputData, 'isFree');
+        $tagString                = Arr::get($inputData, 'tags');
+        $sampleContentString      = Arr::get($inputData, 'sampleContents');
+        $recommenderContentString = Arr::get($inputData, 'recommenderContents');
+
+        $product->fill($inputData);
+
+        if (strlen($tagString) > 0) {
+            $product->tags = convertTagStringToArray($tagString);
+        }
+
+        $sampleContentsArray      = convertTagStringToArray($sampleContentString);
+        $product->sample_contents = $sampleContentsArray;
+
+        $recommenderContentsArray      = convertTagStringToArray($recommenderContentString);
+        $product->recommender_contents = $recommenderContentsArray;
+
+        if ($this->strIsEmpty($product->discount)) {
+            $product->discount = 0;
+        }
+
+        $product->isFree = $isFree;
+
+        $product->intro_videos = $this->setIntroVideos(Arr::get($inputData, 'introVideo'),
+            Arr::get($inputData, 'introVideoThumbnail'));
+
+        //Storing product's catalog
+        $storeFileResult = $this->storeCatalogOfProduct($product, $files);
+        //ToDo : delete the file if it is an update
+
+        //Storing product's image
+        $storeImageResult = $this->storeImageOfProduct($product, $images);
+        //ToDo : delete the file if it is an update
     }
+
+    /**
+     * @param $introVideo
+     * @param $introVideoThumbnail
+     *
+     * @return Collection
+     */
+    private function setIntroVideos(string $introVideo, string $introVideoThumbnail): Collection
+    {
+        $videos = null;
+        if (isset($introVideo)) {
+            $videos = $this->makeIntroVideos($introVideo);
+        }
+
+        $thumbnail = null;
+        if (isset($introVideoThumbnail)) {
+            $thumbnail = $this->makeIntroVideoThumbnail($introVideoThumbnail);
+        }
+
+        return $this->makeIntroVideoCollection($videos, $thumbnail);
+    }
+
+    /**
+     * @param string $videoLink
+     *
+     * @return array
+     */
+    private function makeIntroVideos(string $videoLink): array
+    {
+        $videoUrl       = $videoLink;
+        $videoPath      = parse_url($videoUrl)['path'];
+        $videoExtension = pathinfo($videoPath, PATHINFO_EXTENSION);
+        $hqVideo        = $this->makeIntroVideoFileStdClass(config('constants.DISK_FREE_CONTENT'), $videoUrl,
+            $videoPath, $videoExtension, null, 'کیفیت بالا', '480p');
+        $videos         = $this->mekeIntroVideosArray($hqVideo);
+        return $videos;
+    }
+
+    /**
+     * @param string $thumbnailLink
+     *
+     * @return array
+     */
+    private function makeIntroVideoThumbnail(string $thumbnailLink): array
+    {
+        $thumbnailUrl       = $thumbnailLink;
+        $thumbnailPath      = parse_url($thumbnailUrl)['path'];
+        $thumbnailExtension = pathinfo($thumbnailPath, PATHINFO_EXTENSION);
+        $thumbnail          = $this->makeVideoFileThumbnailStdClass(config('constants.DISK_FREE_CONTENT'),
+            $thumbnailUrl, $thumbnailPath, $thumbnailExtension);
+        return $thumbnail;
+    }
+
+    /**
+     * @param array $videos
+     * @param array $thumbnail
+     *
+     * @return Collection
+     */
+    private function makeIntroVideoCollection(array $videos = null, array $thumbnail = null): Collection
+    {
+        $introVideos = collect();
+        $introVideos->push([
+            'video'     => $videos,
+            'thumbnail' => $thumbnail,
+        ]);
+
+        return $introVideos;
+    }
+
+    /** Stores catalog file of the product
+     *
+     * @param Product $product
+     *
+     * @param array   $files
+     *
+     * @return array
+     * @throws FileNotFoundException
+     */
+    private function storeCatalogOfProduct(Product $product, array $files): array
+    {
+        $done = [];
+        foreach ($files as $key => $file) {
+            $extension  = $file->getClientOriginalExtension();
+            $fileName   =
+                basename($file->getClientOriginalName(), '.' . $extension) . '_' . date('YmdHis') . '.' . $extension;
+            $done[$key] = false;
+            if (Storage::disk(config('constants.DISK5'))
+                ->put($fileName, File::get($file))) {
+                $product->file = $fileName;
+                $done[$key]    = true;
+            }
+        }
+
+        return $done;
+    }
+
+    /** Stores image file of the product
+     *
+     * @param Product $product
+     *
+     * @param array   $files
+     *
+     * @return array
+     * @throws FileNotFoundException
+     */
+    private function storeImageOfProduct(Product $product, array $files): array
+    {
+        $done = [];
+        foreach ($files as $key => $file) {
+            $extension = $file->getClientOriginalExtension();
+            $fileName  =
+                basename($file->getClientOriginalName(), '.' . $extension) . '_' . date('YmdHis') . '.' . $extension;
+            $disk      = Storage::disk(config('constants.DISK21'));
+            /** @var AlaaSftpAdapter $adaptor */
+            $adaptor    = $disk->getAdapter();
+            $done[$key] = false;
+            if ($disk->put($fileName, File::get($file))) {
+                $fullPath    = $adaptor->getRoot();
+                $partialPath = $this->getSubDirectoryInCDN($fullPath);
+
+                $done[$key]     = true;
+                $product->image = $partialPath . $fileName;
+                /**
+                 *  Snippet code : resizing the image using the ........ package
+                 *
+                 * $img = Image::make(Storage::disk(config('constants.DISK4'))->getAdapter()->getPathPrefix().$fileName);
+                 * $img->resize(256, 256);
+                 * $img->save(Storage::disk(config('constants.DISK4'))->getAdapter()->getPathPrefix().$fileName);
+                 * */
+            }
+        }
+
+        return $done;
+    }
+
+    /**
+     * @param $product
+     * @param $bonId
+     * @param $bonDiscount
+     * @param $bonPlus
+     */
+    private function attachBonToProduct(Product $product, int $bonId, int $bonDiscount, int $bonPlus): void
+    {
+        $bonQueryBuilder = $product->bons();
+
+        if ($product->hasBon($bonId)) {
+            $bonQueryBuilder->updateExistingPivot($bonId, [
+                'discount' => $bonDiscount,
+                'bonPlus'  => $bonPlus,
+            ]);
+        } else {
+            $bonQueryBuilder->attach($bonId, [
+                'discount' => $bonDiscount,
+                'bonPlus'  => $bonPlus,
+            ]);
+        }
+    }
+
 }

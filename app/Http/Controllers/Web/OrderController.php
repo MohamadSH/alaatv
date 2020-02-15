@@ -24,11 +24,13 @@ use App\Paymentmethod;
 use App\Paymentstatus;
 use App\Product;
 use App\Productvoucher;
+use App\Repositories\OrderRepo;
 use App\Repositories\TransactionGatewayRepo;
 use App\Traits\APIRequestCommon;
 use App\Traits\DateTrait;
 use App\Traits\Helper;
 use App\Traits\MetaCommon;
+use App\Traits\OrderproductTrait;
 use App\Traits\ProductCommon;
 use App\Traits\RequestCommon;
 use App\Traits\User\ResponseFormatter;
@@ -67,6 +69,7 @@ class OrderController extends Controller
     use ResponseFormatter;
     use MetaCommon;
     use DateTrait;
+    use OrderproductTrait;
 
     public function __construct(Websitesetting $setting)
     {
@@ -83,8 +86,8 @@ class OrderController extends Controller
 //            'completeInfo',
 //            'OrderCheckoutPayment',
 //        ], ['only' => ['checkoutPayment'],]);
-        $this->middleware('SubmitOrderCoupon', ['only' => ['submitCoupon'],]);
-        $this->middleware('RemoveOrderCoupon', ['only' => ['removeCoupon'],]);
+        $this->middleware(['submitOrderCoupon', 'openOrder', 'findCoupon', 'validateCoupon'], ['only' => ['submitCoupon'],]);
+        $this->middleware('removeOrderCoupon', ['only' => ['removeCoupon'],]);
         $this->setting = $setting->setting;
     }
 
@@ -153,13 +156,13 @@ class OrderController extends Controller
         $orderStatusesId = $request->get('orderStatuses');
         //        if(isset($orderStatusesId) && !in_array(0, $orderStatusesId))
         if (isset($orderStatusesId)) {
-            $orders = Order::orderStatusFilter($orders, $orderStatusesId);
+            $orders = OrderRepo::orderStatusFilter($orders, $orderStatusesId);
         }
 
         $paymentStatusesId = $request->get('paymentStatuses');
         //        if(isset($paymentStatusesId) && !in_array(0, $paymentStatusesId))
         if (isset($paymentStatusesId)) {
-            $orders = Order::paymentStatusFilter($orders, $paymentStatusesId);
+            $orders = OrderRepo::paymentStatusFilter($orders, $paymentStatusesId);
         }
 
         $productsId = $request->get('products');
@@ -205,7 +208,7 @@ class OrderController extends Controller
         $majorEnable = $request->get('majorEnable');
         $majorsId    = $request->get('majors');
         if (isset($majorEnable) && isset($majorsId)) {
-            $orders = Order::UserMajorFilter($orders, $majorsId);
+            $orders = OrderRepo::UserMajorFilter($orders, $majorsId);
         }
 
         $couponEnable = $request->get('couponEnable');
@@ -942,40 +945,26 @@ class OrderController extends Controller
      */
     public function submitCoupon(SubmitCouponRequest $request, AlaaInvoiceGenerator $invoiceGenerator)
     {
-        $coupon = Coupon::code($request->get('code'))->first();
+        $coupon = $request->get('coupon');
 
-        if (!isset($coupon)) {
-            return response([
-                'error' => [
-                    'code'    => Response::HTTP_BAD_REQUEST,
-                    'message' => 'The code is wrong',
-                ],
-            ]);
+        if ($request->has('openOrder')) {
+            $order = $request->get('openOrder');
+        } else {
+            $order = Order::Find($request->get('order_id'));
+            if (!isset($order)) {
+                return response([
+                    'error' => [
+                        'code'    => Response::HTTP_BAD_REQUEST,
+                        'message' => 'Order not found',
+                    ],
+                ]);
+            }
         }
 
-        $order    = Order::Find($request->order_id);
-        if (!isset($order)) {
-            return response([
-                'error' => [
-                    'code'    => Response::HTTP_BAD_REQUEST,
-                    'message' => 'Order not found',
-                ],
-            ]);
-        }
-
-        /** @var Coupon $coupon */
-        $couponValidationStatus = $coupon->validateCoupon();
-        if ($couponValidationStatus != Coupon::COUPON_VALIDATION_STATUS_OK) {
-            return response([
-                'error' => [
-                    'code'    => Response::HTTP_BAD_REQUEST,
-                    'message' => Coupon::COUPON_VALIDATION_INTERPRETER[$couponValidationStatus] ?? 'Coupon validation status is undetermined',
-                ],
-            ]);
-        }
 
         $result = (new CouponSubmitter($order))->submit($coupon);
-        if($result){
+
+        if ($result) {
             Cache::tags([
                 'order_' . $order->id . '_coupon',
                 'order_' . $order->id . '_cost',
@@ -1419,7 +1408,7 @@ class OrderController extends Controller
      *
      * @return ResponseFactory|Response
      */
-    public function addOrderproduct(Request $request, Product $product, OrderproductController $orderproductController)
+    public function addOrderproduct(Request $request, Product $product)
     {
         try {
             /** @var User $user */
@@ -1449,7 +1438,7 @@ class OrderController extends Controller
                 $data['product_id'] = $product->id;
                 $data['order_id']   = $openOrder->id;
                 $data['withoutBon'] = true;
-                $result             = $orderproductController->new($data);
+                $result             = $this->new($data);
                 if (!$result['status']) {
                     dd('Could not add donate to order.');
                 }

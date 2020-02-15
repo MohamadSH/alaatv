@@ -9,6 +9,7 @@
 namespace App\Traits\User;
 
 use App\Order;
+use App\Repositories\OrderRepo;
 use Cache;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
@@ -18,7 +19,10 @@ trait PaymentTrait
 {
     public function getOpenOrder(): Order
     {
-        $openOrder = $this->firstOrCreateOpenOrder($this);
+        $openOrder = $this->openOrders->first();
+        if (!isset($openOrder)) {
+            $openOrder = OrderRepo::createOpenOrder($this->id);
+        }
 
         return $openOrder;
     }

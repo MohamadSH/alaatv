@@ -22,7 +22,7 @@ use Illuminate\Support\Facades\Cache;
  * @property int                              $order
  * @property int                              $enable
  * @property Carbon|null                      $created_at
- * @property Carbon|null                      $updated_at
+ * @property Carbon|null $updated_at
  * @property-read ContentCollection|Content[] $contents
  * @property-read ProductCollection|Product[] $products
  * @property-read SetCollection|Contentset[]  $sets
@@ -75,6 +75,10 @@ class Block extends BaseModel
 
     public static $BLOCK_TYPE_OFFER = 3;
 
+    public static $BLOCK_TYPE_APP_HOME_BANNER = 4;
+
+    public static $BLOCK_TYPE_APP_SHOP_BANNER = 5;
+
     protected static $actionLookupTable = [
         '1' => 'Web\ContentController@index',
         '2' => 'Web\ProductController@index',
@@ -114,10 +118,15 @@ class Block extends BaseModel
         'created_at',
         'class',
         'deleted_at',
-//        'type',
+        //        'type',
     ];
 
-    public static function getShopBlocks(): ?BlockCollection
+    public static function getHomeBannerBlock()
+    {
+        return self::getDummyBlock(false, '', null, null, null, Slideshow::getMainBanner());
+    }
+
+   public static function getShopBlocks(): ?BlockCollection
     {
         $blocks = Cache::tags(['block', 'shop'])
             ->remember('block:getShopBlocks', config('constants.CACHE_600'), function () {
@@ -153,7 +162,8 @@ class Block extends BaseModel
         string $title,
         ProductCollection $products = null,
         SetCollection $sets = null,
-        ContentCollection $contents = null
+        ContentCollection $contents = null,
+        \Illuminate\Support\Collection $banners = null
     )
     {
         //TODO:// add Cache Layer!
@@ -166,7 +176,8 @@ class Block extends BaseModel
 
         return $block->addProducts($products)
             ->addContents($contents)
-            ->addSets($sets);
+            ->addSets($sets)
+            ->addBanners($banners);
     }
 
     protected function addSets($sets)
@@ -174,6 +185,17 @@ class Block extends BaseModel
         if ($sets != null) {
             foreach ($sets as $set) {
                 $this->sets->add($set);
+            }
+        }
+
+        return $this;
+    }
+
+    protected function addBanners($banners)
+    {
+        if ($banners != null) {
+            foreach ($banners as $banner) {
+                $this->banners->add($banner);
             }
         }
 
@@ -237,8 +259,7 @@ class Block extends BaseModel
     {
         return Cache::tags(['block', 'shop'])
             ->remember('block:getShopBlocksForAppV2', config('constants.CACHE_600'), function () {
-                //ToDo: Adding offer block
-                return self::whereIn('type', [1, 4])
+                return self::appShop()
                     ->enable()
                     ->where('id', '<>', 113)
                     ->orderBy('order')
@@ -246,14 +267,14 @@ class Block extends BaseModel
             });
     }
 
-    public static function getMainBlocksForApp(): ?LengthAwarePaginator
+    public static function getMainBlocksForAppV2(): ?LengthAwarePaginator
     {
         return Cache::tags(['block', 'home'])
-            ->remember('block:getMainBlocksForApp', config('constants.CACHE_600'), function () {
-                return self::main()
+            ->remember('block:getMainBlocksForAppV2', config('constants.CACHE_600'), function () {
+                return self::appMain()
                     ->enable()
                     ->orderBy('order')
-                    ->paginate(5);
+                    ->paginate(10);
             });
     }
 
@@ -303,7 +324,19 @@ class Block extends BaseModel
      */
     public function scopeShop($query)
     {
-        return $query->where('type', '=', 2);
+        return $query->where('type', 2);
+    }
+
+    /**
+     * Scope a query to only blocks for shop.
+     *
+     * @param Builder $query
+     *
+     * @return Builder
+     */
+    public function scopeAppShop($query)
+    {
+        return $query->where('type', 5)->orWhere('type', 2);
     }
 
     /**
@@ -315,7 +348,19 @@ class Block extends BaseModel
      */
     public function scopeMain($query)
     {
-        return $query->where('type', '=', 1);
+        return $query->where('type', 1);
+    }
+
+    /**
+     * Scope a query to only blocks for HomePage.
+     *
+     * @param Builder $query
+     *
+     * @return Builder
+     */
+    public function scopeAppMain($query)
+    {
+        return $query->where('type', 4)->orWhere('type', 1);
     }
 
     public function getOfferAttribute($value)

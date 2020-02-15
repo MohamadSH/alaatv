@@ -2,19 +2,22 @@
 
 namespace App\Http\Controllers\Web;
 
+use App\Classes\CouponSubmitter;
 use App\Classes\Pricing\Alaa\AlaaInvoiceGenerator;
 use App\Events\UserRedirectedToPayment;
 use App\Gender;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\EditUserRequest;
 use App\Http\Requests\InsertVoucherRequest;
+use App\Http\Requests\SubmitCouponVoucherRequest;
 use App\Major;
 use App\Order;
-use App\Orderproduct;
 use App\Product;
 use App\Productvoucher;
+use App\Repositories\OrderproductRepo;
+use App\Repositories\OrderRepo;
+use App\Repositories\TransactionRepo;
 use App\Traits\RequestCommon;
-use App\Transaction;
 use App\User;
 use App\Websitesetting;
 use Carbon\Carbon;
@@ -128,7 +131,7 @@ class VoucherController extends Controller
      *
      * @param InsertVoucherRequest $request
      *
-     * @return Response
+     * @return RedirectResponse
      */
     public function submitVoucherRequest(InsertVoucherRequest $request)
     {
@@ -221,10 +224,10 @@ class VoucherController extends Controller
 
     public function submit(Request $request)
     {
-        $code = $request->get('code');
         $user = $request->user();
         /** @var Productvoucher $voucher */
         $voucher = $request->get('voucher');
+        $code    = $voucher->code;
 
         $products = $voucher->products;
         [$done, $order] = $this->addVoucherProductsToUser($user, $products);
@@ -265,6 +268,32 @@ class VoucherController extends Controller
         return redirect(route('web.voucher.submit', ['code' => $code]));
     }
 
+    public function submitCouponVoucher(SubmitCouponVoucherRequest $request)
+    {
+        $coupon = $request->get('coupon');
+        $order  = $request->get('openOrder');
+
+        $submitCouponResult = (new CouponSubmitter($order))->submit($coupon);
+        if (!$submitCouponResult) {
+            return response()->json([
+                'message' => 'Database error on submitting coupon',
+            ], Response::HTTP_UNPROCESSABLE_ENTITY);
+        }
+
+        //ToDo:
+        $orderproduct = OrderproductRepo::createBasicOrderproduct($order->id, Product::ARASH, Product::ARASH_PRICE);
+
+        if (!isset($orderproduct)) {
+            return response()->json([
+                'message' => 'Database error on inserting orderproduct',
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+
+        return response()->json([
+            'message' => 'Coupon attached successfully',
+        ]);
+    }
+
     /**
      * @param Agent $agent
      *
@@ -288,7 +317,8 @@ class VoucherController extends Controller
         $this->middleware('permission:' . config('constants.INSERT_USER_ACCESS'), ['only' => 'create']);
         $this->middleware('permission:' . config('constants.REMOVE_USER_ACCESS'), ['only' => 'destroy']);
         $this->middleware('permission:' . config('constants.SHOW_USER_ACCESS'), ['only' => 'edit']);
-        $this->middleware('SubmitVoucher', ['only' => ['submit'],]);
+        $this->middleware(['submitVoucher', 'mobileVerification', 'findVoucher', 'validateVoucher'], ['only' => ['submit'],]);
+        $this->middleware(['findCoupon', 'openOrder'], ['only' => ['submitCouponVoucher'],]);
     }
 
     /**
@@ -304,22 +334,11 @@ class VoucherController extends Controller
 
     private function addVoucherProductsToUser(User $user, Collection $products): array
     {
-        $order = Order::create([
-            'user_id'          => $user->id,
-            'orderstatus_id'   => config('constants.ORDER_STATUS_CLOSED'),
-            'paymentstatus_id' => config('constants.PAYMENT_STATUS_ORGANIZATIONAL_PAID'),
-            'completed_at'     => Carbon::now('Asia/Tehran'),
-        ]);
+        $order = OrderRepo::createBasicOrder($user->id);
 
         foreach ($products as $product) {
             $price = $product->price;
-            Orderproduct::Create([
-                'order_id'            => $order->id,
-                'product_id'          => $product->id,
-                'cost'                => $price['final'],
-                'tmp_final_cost'      => $price['final'],
-                'orderproducttype_id' => config('constants.ORDER_PRODUCT_TYPE_DEFAULT'),
-            ]);
+            OrderproductRepo::createBasicOrderproduct($order->id, $product->id, $price['final'], $price['final']);
         }
 
         try {
@@ -336,12 +355,7 @@ class VoucherController extends Controller
                     $eachInstalment += $lastInstalment;
                 }
 
-                Transaction::create([
-                    'order_id'             => $order->id,
-                    'cost'                 => $eachInstalment,
-                    'transactionstatus_id' => config('constants.TRANSACTION_STATUS_ORGANIZATIONAL_UNPAID'),
-                    'managerComment'       => 'قسط حکمت',
-                ]);
+                TransactionRepo::createBasicTransaction($order->id, $eachInstalment, 'قسط حکمت');
             }
 
             event(new UserRedirectedToPayment($user));

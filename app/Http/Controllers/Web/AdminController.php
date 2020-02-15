@@ -40,8 +40,8 @@ use App\{Attribute,
     Userbonstatus,
     Userstatus,
     Userupload,
-    Useruploadstatus,
-    Websitesetting};
+    Useruploadstatus
+};
 use Auth;
 use Carbon\Carbon;
 use Exception;
@@ -50,7 +50,11 @@ use Illuminate\Http\{Request, Response};
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Cookie;
+use Illuminate\Support\Facades\Redis;
+use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
+use Validator;
 
 class AdminController extends Controller
 {
@@ -83,6 +87,7 @@ class AdminController extends Controller
                 'adminSalesReport',
                 'adminCacheClear',
                 'adminCheckOrder',
+                'adminLogoutUser',
             ],
         ]);
 
@@ -533,18 +538,6 @@ class AdminController extends Controller
 
         return view('admin.siteConfiguration.slideShow',
             compact('slides', 'section', 'slideDisk', 'websitePages'));
-    }
-
-    /**
-     * Admin panel for adjusting site configuration
-     */
-    public function adminSiteConfig()
-    {
-        $this->setting = Websitesetting::where('version', 1)
-            ->get()
-            ->first();
-
-        return redirect(action('Web\WebsiteSettingController@show', $this->setting));
     }
 
     /**
@@ -1061,6 +1054,60 @@ class AdminController extends Controller
     {
         $sources = Source::all();
         return view('admin.sourceIndex', compact('sources'));
+    }
+
+    public function adminLogoutUser(Request $request)
+    {
+        $adminUser = $request->user();
+        $validator = Validator::make($request->all(), [
+            'user_id' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'error' => $validator->errors(),
+            ]);
+        }
+
+        $user = User::Find($request->get('user_id'));
+
+        if (!isset($user)) {
+            return response()->json([
+                'error' => 'No user found',
+            ]);
+        }
+
+        auth()->loginUsingId($user->id);
+        auth()->logoutOtherDevices($user->nationalCode);
+
+
+        //Removing redis sessions:
+        $redis = Redis::connection('session');
+        //get all session IDs for user
+        $userSessions   = $redis->smembers('users:sessions:' . $user->id);
+        $currentSession = Session::getId();
+        //for logout from all devices use loop
+        foreach ($userSessions as $sessionId) {
+            if ($currentSession == $sessionId) {
+                continue;
+            }
+            //for remove sessions ID from array of user sessions (if user logout or manually logout )
+            $redis->srem('users:sessions:' . $user->id, $sessionId);
+            //remove Laravel session (logout user from other device)
+            $redis->unlink('laravel:' . $sessionId);
+
+        }
+        auth()->logout();
+        // Get remember_me cookie name
+        $rememberMeCookie = Auth::getRecallerName();
+        // Tell Laravel to forget this cookie
+        $cookie = Cookie::forget($rememberMeCookie);
+
+        auth()->loginUsingId($adminUser->id);
+
+        return response()->json([
+            'message' => 'User logged out successfully',
+        ]);
     }
 }
 

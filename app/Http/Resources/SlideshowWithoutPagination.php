@@ -24,7 +24,7 @@ class SlideshowWithoutPagination extends AlaaJsonResourceWithoutPagination
             'id'    => $this->id,
             'title' => $this->when(isset($this->title), $this->title),
             'body'  => $this->when(isset($this->shortDescription), $this->shortDescription),
-            'photo' => $this->when(isset($this->photo), $this->photo),
+            'photo' => $this->when(isset($this->url), $this->url),
             'link'  => $this->when(isset($this->link), $this->link),
             'order' => $this->when(isset($this->order), $this->order),
         ];

@@ -66,16 +66,16 @@ class Content extends AlaaJsonResourceWithPagination
             }),
             'url'              => $this->getUrl($this),
             'previous_url'     => $this->when(!is_null($this->previous_content), function () {
-                $this->getUrl($this->previous_content);
+                return $this->getUrl($this->previous_content);
             }),
             'next_url'         => $this->when(!is_null($this->next_content), function () {
-                $this->getUrl($this->next_content);
+                return $this->getUrl($this->next_content);
             }),
             'author'           => $this->when(isset($this->author_id), function () {
-                $this->getAuthor();
+                return $this->getAuthor();
             }),
             'set'              => $this->when(isset($this->contentset_id), function () {
-                $this->getSetInContent();
+                return $this->getSetInContent();
             }),
             'related_products' => $this->when($this->related_products->isNotEmpty(), $this->getRelatedProducts()),
 //            'recommended_products' => $this->when($this->recommended_products->isNotEmpty(), $this->getRecommendedProducts()),

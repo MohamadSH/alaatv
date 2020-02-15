@@ -7,7 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\OrderProduct\OrderProductStoreRequest;
 use App\Orderproduct;
 use App\Product;
-use App\Traits\OrderCommon;
+use App\Traits\OrderproductTrait;
 use App\Traits\ProductCommon;
 use Cache;
 use Exception;
@@ -18,15 +18,12 @@ use Illuminate\Http\Response;
 
 class OrderproductController extends Controller
 {
-    use OrderCommon;
     use ProductCommon;
+    use OrderproductTrait;
 
-    private $orderproductController;
-
-    function __construct(\App\Http\Controllers\Web\OrderproductController $orderproductController)
+    function __construct()
     {
         $this->middleware(['CheckPermissionForSendOrderId',], ['only' => ['store', 'storeV2'],]);
-        $this->orderproductController = $orderproductController;
     }
 
     public function store(OrderProductStoreRequest $request)
@@ -36,13 +33,13 @@ class OrderproductController extends Controller
                 ->can(config("constants.ATTACH_EXTRA_ATTRIBUTE_ACCESS"))) {
                 $productId        = $request->get('product_id');
                 $product          = Product::findOrFail($productId);
-                $attributesValues = $this->orderproductController->getAttributesValuesFromProduct($request, $product);
-                $this->orderproductController->syncExtraAttributesCost($request, $attributesValues);
+                $attributesValues = $this->getAttributesValuesFromProduct($request, $product);
+                $this->syncExtraAttributesCost($request, $attributesValues);
                 $request->offsetSet('parentProduct', $product);
             }
         }
 
-        $result        = $this->orderproductController->new($request->all());
+        $result        = $this->new($request->all());
         $orderproducts = new OrderproductCollection();
         if (isset($result['data']['storedOrderproducts'])) {
             $orderproducts = $result['data']['storedOrderproducts'];
@@ -78,13 +75,13 @@ class OrderproductController extends Controller
                 ->can(config("constants.ATTACH_EXTRA_ATTRIBUTE_ACCESS"))) {
                 $productId        = $request->get('product_id');
                 $product          = Product::findOrFail($productId);
-                $attributesValues = $this->orderproductController->getAttributesValuesFromProduct($request, $product);
-                $this->orderproductController->syncExtraAttributesCost($request, $attributesValues);
+                $attributesValues = $this->getAttributesValuesFromProduct($request, $product);
+                $this->syncExtraAttributesCost($request, $attributesValues);
                 $request->offsetSet('parentProduct', $product);
             }
         }
 
-        $this->orderproductController->new($request->all());
+        $this->new($request->all());
 
         return response()->json(null);
     }
