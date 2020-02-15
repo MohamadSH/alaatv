@@ -83,20 +83,31 @@
                             </div>
                         </div>
                     </div>
-                    <table class="table table-striped table-bordered table-hover dt-responsive" width="100%" id="konkurResult96_table">
+                    <table class="table table-striped table-bordered table-hover dt-responsive" width="100%"
+                           id="konkurResult96_table">
                         <thead>
                         <tr>
                             <th></th>
                             <th class="all"> دانش آموز</th>
                             <th class="min-tablet">رشته</th>
+                            @permission((config('constants.SHOW_USER_MOBILE')))
                             <th class="min-tablet"> شماره تماس</th>
+                            @endpermission
+                            @permission((config('constants.SHOW_USER_CITY')))
                             <th class="min-tablet"> شهر</th>
+                            @endpermission
+                            @permission((config('constants.SHOW_KONKOOT_RESULT_INFO')))
                             <th class="min-tablet"> فایل کارنامه</th>
+                            @endpermission
                             <th class="all"> رتبه</th>
+                            @permission((config('constants.SHOW_KONKOOT_RESULT_INFO')))
                             <th class="all">اجازه انتشار</th>
                             <th class="min-tablet"> وضعیت</th>
+                            @endpermission
                             <th class="min-tablet"> نظر</th>
+                            @permission((config('constants.SHOW_KONKOOT_RESULT_INFO')))
                             <th class="min-tablet"> تاریخ درج</th>
+                            @endpermission
                         </tr>
                         </thead>
                         <tbody>
@@ -168,20 +179,31 @@
                             </div>
                         </div>
                     </div>
-                    <table class="table table-striped table-bordered table-hover dt-responsive" width="100%" id="konkurResult97_table">
+                    <table class="table table-striped table-bordered table-hover dt-responsive" width="100%"
+                           id="konkurResult97_table">
                         <thead>
                         <tr>
                             <th></th>
                             <th class="all"> دانش آموز</th>
                             <th class="min-tablet">رشته</th>
+                            @permission((config('constants.SHOW_USER_MOBILE')))
                             <th class="min-tablet"> شماره تماس</th>
+                            @endpermission
+                            @permission((config('constants.SHOW_USER_CITY')))
                             <th class="min-tablet"> شهر</th>
+                            @endpermission
+                            @permission((config('constants.SHOW_KONKOOT_RESULT_INFO')))
                             <th class="min-tablet"> فایل کارنامه</th>
+                            @endpermission
                             <th class="all"> رتبه</th>
+                            @permission((config('constants.SHOW_KONKOOT_RESULT_INFO')))
                             <th class="all">اجازه انتشار</th>
                             <th class="min-tablet"> وضعیت</th>
+                            @endpermission
                             <th class="min-tablet"> نظر</th>
+                            @permission((config('constants.SHOW_KONKOOT_RESULT_INFO')))
                             <th class="min-tablet"> تاریخ درج</th>
+                            @endpermission
                         </tr>
                         </thead>
                         <tbody>
@@ -253,20 +275,31 @@
                             </div>
                         </div>
                     </div>
-                    <table class="table table-striped table-bordered table-hover dt-responsive" width="100%" id="konkurResult98_table">
+                    <table class="table table-striped table-bordered table-hover dt-responsive" width="100%"
+                           id="konkurResult98_table">
                         <thead>
                         <tr>
                             <th></th>
                             <th class="all"> دانش آموز</th>
                             <th class="min-tablet">رشته</th>
+                            @permission((config('constants.SHOW_USER_MOBILE')))
                             <th class="min-tablet"> شماره تماس</th>
+                            @endpermission
+                            @permission((config('constants.SHOW_USER_CITY')))
                             <th class="min-tablet"> شهر</th>
+                            @endpermission
+                            @permission((config('constants.SHOW_KONKOOT_RESULT_INFO')))
                             <th class="min-tablet"> فایل کارنامه</th>
+                            @endpermission
                             <th class="all"> رتبه</th>
+                            @permission((config('constants.SHOW_KONKOOT_RESULT_INFO')))
                             <th class="all">اجازه انتشار</th>
                             <th class="min-tablet"> وضعیت</th>
+                            @endpermission
                             <th class="min-tablet"> نظر</th>
+                            @permission((config('constants.SHOW_KONKOOT_RESULT_INFO')))
                             <th class="min-tablet"> تاریخ درج</th>
+                            @endpermission
                         </tr>
                         </thead>
                         <tbody>
@@ -371,8 +404,88 @@
 
 @section('page-js')
     <script src="{{ mix('/js/admin-all.js') }}" type="text/javascript"></script>
-    <script src="{{ asset('/acm/AlaatvCustomFiles/js/admin/page-contentAdmin.js') }}" type="text/javascript"></script>
     <script type="text/javascript">
+        /**
+         * Event Result Admin Ajax
+         */
+        $(document).on("click", ".eventResult-portlet .reload", function () {
+            var identifier = $(this).data("role");
+            var formData = $("#filter" + identifier + "Form").serialize();
+            $("#" + identifier + "-portlet-loading").removeClass("d-none");
+            $('#' + identifier + '_table > tbody').html("");
+            $.ajax({
+                type: "GET",
+                url: "/eventresult",
+                data: formData,
+                success: function (result) {
+                    var newDataTable = $("#" + identifier + "_table").DataTable();
+                    newDataTable.destroy();
+                    $('#' + identifier + '_table > tbody').html(result);
+                    makeDataTable(identifier + "_table");
+                    $("#" + identifier + "-portlet-loading").addClass("d-none");
+                },
+                error: function (result) {
+                }
+            });
+
+            return false;
+        });
+        $(document).on("click", ".eventResultUpdate", function (e) {
+            e.preventDefault();
+            var eventresult_id = $(this).data('role');
+            var form = $("#eventResultForm_" + eventresult_id);
+            formData = form.serialize();
+            url = form.attr("action");
+            toastr.options = {
+                "closeButton": true,
+                "debug": false,
+                "positionClass": "toast-top-center",
+                "onclick": null,
+                "showDuration": "1000",
+                "hideDuration": "1000",
+                "timeOut": "5000",
+                "extendedTimeOut": "1000",
+                "showEasing": "swing",
+                "hideEasing": "linear",
+                "showMethod": "fadeIn",
+                "hideMethod": "fadeOut"
+            };
+            $.ajax({
+                type: 'PUT',
+                url: url,
+                data: formData,
+                statusCode: {
+                    200: function (response) {
+                        $("#eventresult_id .reload").trigger("click");
+                        toastr["success"]("اصلاح وضعیت با موفقیت انجام شد!", "پیام سیستم");
+
+                    },
+                    403: function (response) {
+                        window.location.replace("/403");
+                    },
+                    404: function (response) {
+                        window.location.replace("/404");
+                    },
+                    422: function (response) {
+                        var errors = $.parseJSON(response.responseText);
+                        $.each(errors, function (index, value) {
+                            switch (index) {
+                            }
+                        });
+                    },
+                    500: function (response) {
+                        toastr["error"]("خطای برنامه!", "پیام سیستم");
+                    },
+                    503: function (response) {
+                        toastr["error"]("خطای پایگاه داده!", "پیام سیستم");
+                    }
+                },
+                cache: false,
+                processData: false
+            });
+        });
+
+
         /**
          * Start up jquery
          */
