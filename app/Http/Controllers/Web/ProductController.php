@@ -167,20 +167,6 @@ class ProductController extends Controller
 
         $isFavored = (isset($user)) ? $user->hasFavoredProduct($product) : false;
 
-
-//        if ($product->id == Product::RAHE_ABRISHAM && $this->canSeeRaheAbrishamSpecialPage($user)) {
-        if ($product->id == Product::RAHE_ABRISHAM) {
-            $hasUserPurchasedRaheAbrisham = $this->hasUserPurchasedRaheAbrisham($user);
-            $sets                         = $product->sets->sortByDesc('pivot.order');
-            $lastSet                      = $sets->first();
-            $lastSetPamphlets             = $lastSet->getActiveContents2(Content::CONTENT_TYPE_PAMPHLET);
-            $lastSetVideos                = $lastSet->getActiveContents2(Content::CONTENT_TYPE_VIDEO);
-            $periodDescription            = $product->descriptionWithPeriod;
-            $faqs                         = $product->faqs;
-            $isForcedGift                 = false;
-            return view('product.customShow.raheAbrisham', compact('product', 'block', 'liveDescriptions', 'isFavored', 'lastSet', 'lastSetPamphlets', 'lastSetVideos', 'periodDescription', 'sets', 'faqs', 'hasUserPurchasedRaheAbrisham', 'block', 'isForcedGift'));
-        }
-
         $isForcedGift                 = false;
         $shouldBuyProductId           = null;
         $shouldBuyProductName         = '';
@@ -194,6 +180,17 @@ class ProductController extends Controller
             }
         }
 
+        //        if ($product->id == Product::RAHE_ABRISHAM && $this->canSeeRaheAbrishamSpecialPage($user)) {
+        if ($product->id == Product::RAHE_ABRISHAM) {
+            $hasUserPurchasedRaheAbrisham = $this->hasUserPurchasedRaheAbrisham($user);
+            $sets                         = $product->sets->sortByDesc('pivot.order');
+            $lastSet                      = $sets->first();
+            $lastSetPamphlets             = $lastSet->getActiveContents2(Content::CONTENT_TYPE_PAMPHLET);
+            $lastSetVideos                = $lastSet->getActiveContents2(Content::CONTENT_TYPE_VIDEO);
+            $periodDescription            = $product->descriptionWithPeriod;
+            $faqs                         = $product->faqs;
+            return view('product.customShow.raheAbrisham', compact('product', 'block', 'liveDescriptions', 'isFavored', 'lastSet', 'lastSetPamphlets', 'lastSetVideos', 'periodDescription', 'sets', 'faqs', 'hasUserPurchasedRaheAbrisham', 'block', 'isForcedGift', 'allChildIsPurchased', 'hasPurchasedEssentialProduct', 'shouldBuyProductId', 'shouldBuyProductName'));
+        }
 
         return view('product.show', compact('product', 'block', 'purchasedProductIdArray', 'allChildIsPurchased', 'liveDescriptions', 'children', 'isFavored', 'isForcedGift', 'shouldBuyProductId', 'shouldBuyProductName', 'hasPurchasedEssentialProduct'));
     }
