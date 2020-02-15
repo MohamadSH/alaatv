@@ -12,19 +12,19 @@
 
 //== 2: Framework Components Config
 @import "../../framework/components/base/config";
-@import "../../framework/components/general/config";
+@import "../../framework/components/general/config"; // 1 KB
 
 //== 3: Bootstrap Include
-@import "../../framework/vendors/bootstrap/bootstrap.scss"; // 271kb
+@import "../../framework/vendors/bootstrap/bootstrap.scss"; // 236 KB
 
 //== 4: Framework Components
-@import "../../framework/include"; // 743kb
+@import "../../framework/include"; // 554 KB
 
-//== 5: Snippets
-@import "../../snippets/include";
-////////////////////////////////////////////////////////////////
-///////////// DO NOT MODIFY ABOVE INCLUDE ORDER ////////////////
-////////////////////////////////////////////////////////////////
+////== 5: Snippets
+//@import "../../snippets/include";// 560 KB
+//////////////////////////////////////////////////////////////////
+/////////////// DO NOT MODIFY ABOVE INCLUDE ORDER ////////////////
+//////////////////////////////////////////////////////////////////
 
 //== 6: Demo Config
 @import "demo-config";
@@ -37,20 +37,20 @@
 
 //== 7: Demo Layout
 @import "base/page";
-@import "base/body";
+@import "base/body"; // 561 KB
 
 @import "header/brand"; // (need)
 @import "header/header"; // (need)
 @import "header/topbar"; // (need)
-@import "header/search"; // (need)
+@import "header/search"; // (need) // 579 KB
 
 @import "aside/aside-left"; // (need)
 //@import "aside/aside-right";
-@import "aside/aside-header-menu-mobile";
+@import "aside/aside-header-menu-mobile"; // 587 KB
 
-@import "menu-header/menu";
-@import "menu-aside/menu";
+@import "menu-header/menu"; // 637 KB
+@import "menu-aside/menu"; // 688 KB
 
 //@import "subheader/default";
 
-@import "footer/default";
+@import "footer/default"; // 691 KB

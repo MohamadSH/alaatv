@@ -60,15 +60,14 @@
                     <div class="m-portlet__head-tools">
                         <ul class="nav nav-tabs m-tabs-line m-tabs-line--success m-tabs-line--2x" role="tablist">
                             <li class="nav-item m-tabs__item">
-                                <a class="nav-link m-tabs__link active" data-toggle="tab" href="#user-orderList"
-                                   role="tab">
-                                    <i class="fa fa-receipt"></i>
+                                <a class="nav-link m-tabs__link active" data-toggle="tab" href="#user-orderList" role="tab">
+                                    <i class="fa fa-receipt m--margin-right-5"></i>
                                     لیست سفارشات
                                 </a>
                             </li>
                             <li class="nav-item m-tabs__item">
                                 <a class="nav-link m-tabs__link" data-toggle="tab" href="#user-paymentsList" role="tab">
-                                    <i class="fa fa-money-bill-wave"></i>
+                                    <i class="fa fa-money-bill-wave m--margin-right-5"></i>
                                     لیست پرداخت ها
                                 </a>
                             </li>
@@ -218,7 +217,6 @@
                                                             </h5>
                                                             <button type="button" class="close" data-dismiss="modal"
                                                                     aria-label="Close">
-                                                                <span aria-hidden="true">&times;</span>
                                                             </button>
                                                         </div>
                                                         <div class="modal-body">
@@ -314,7 +312,7 @@
                                                                     </div>
                                                                 </div>
                                                                 <div class="m-portlet__body">
-                                                                    <div class="m-widget3 orderDetailes-orderprouctList">
+                                                                    <div class="a--list2 orderDetailes-orderprouctList">
 
                                                                     </div>
                                                                 </div>

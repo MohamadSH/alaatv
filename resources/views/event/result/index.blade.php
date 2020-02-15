@@ -96,7 +96,7 @@
                         {!! Form::select('eventresultstatus_id', $eventResultStatuses, null, ['class' => 'form-control']) !!}
                     </div>
                     <span class = "input-group-btn">
-                        <button type = "submit" class = "btn m-btn--pill m-btn--air m-btn m-btn--gradient-from-primary m-btn--gradient-to-info eventResultUpdate" data-role = "{{$eventresult->id}}">تغییر</button>
+                        <button type = "submit" class = "btn m-btn--pill m-btn--air m-btn btn-info eventResultUpdate" data-role = "{{$eventresult->id}}">تغییر</button>
                     </span>
                 </div>
                 {!! Form::close() !!}

@@ -31,11 +31,13 @@ var Alaasearch = function () {
                     getAjaxContentErrorCounter = 0;
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
+                    console.log('getAjaxContent error getAjaxContentErrorCounter: ', getAjaxContentErrorCounter);
                     if (getAjaxContentErrorCounter < 5) {
                         getAjaxContentErrorCounter++;
                         getAjaxContent(action, callback);
                     } else {
                         toastr.error('خطای سیستمی رخ داده است.');
+                        window.location.reload();
                     }
                 }
             }
@@ -72,9 +74,8 @@ var Alaasearch = function () {
         }
     }
     function appendToVideo() {
-        var videoRepositoryLength = videoRepository.length,
-            counter = 0;
-        for(var i = 0; i < videoRepositoryLength; i++) {
+        var counter = 0;
+        for(var i = 0; i < (typeof videoRepository[i] !== 'undefined'); i++) {
             if (videoRepository[i] === null) {
                 continue;
             }
@@ -89,7 +90,7 @@ var Alaasearch = function () {
         }
     }
     function appendToSet(data, loadType) {
-        $.each(data.data, function (index, value) {
+        $.each(data, function (index, value) {
             if (loadType === 'carouselType') {
                 carouselHasItem = true;
                 $('.searchResult .carouselType .ScrollCarousel .ScrollCarousel-Items').append(getSetCarouselItem(value));
@@ -99,38 +100,71 @@ var Alaasearch = function () {
         });
     }
 
-    function getSetCarouselItem(data) {
-        let inputData = {
+    function productItemAdapter(data) {
+        return {
+            gtmEecProductId: data.id,
+            gtmEecProductName: data.title,
+            // gtmEecProductCategory: ((data.category===null || data.category.trim().length===0)?'-':data.category), // *******************************************
+            gtmEecProductCategory: 'gtmEecProductCategory',
+            widgetActionLink: data.url.web,
+            widgetPic: data.photo,
+            widgetTitle: data.title,
+            price: {
+                base: data.price.base,
+                discount: data.price.discount,
+                final: data.price.final
+            },
+            // shortDescription: (data.shortDescription !== null) ? data.shortDescription : (data.longDescription !== null) ? data.longDescription : '', // *******
+            shortDescription: 'shortDescription',
+            discount: Math.round((1 - (price.final / price.base)) * 100)
+        };
+    }
+    function contentItemAdapter(data) {
+        return {
+            widgetPic: (typeof (data.photo) === 'undefined' || data.photo == null) ? data.thumbnail + '?w=444&h=250' : data.photo + '?w=444&h=250',
+            widgetTitle: data.title,
+            widgetLink: data.url.web,
+            // description: data.description, // ******************************************************************************************************************
+            description: 'description',
+            videoOrder: data.order,
+            // updatedAt: data.updated_at, // *********************************************************************************************************************
+            updatedAt: '2020-01-02 10:23:14',
+            // setName: (typeof data.set !== 'undefined') ? data.set.name : '-', // *******************************************************************************
+            setName: 'setName',
+            setUrl: 'setUrl'
+        };
+    }
+    function setItemAdapter(data) {
+        return {
             widgetPic: (typeof (data.photo) === 'undefined' || data.photo == null) ? data.thumbnail + '?w=253&h=142' : data.photo + '?w=253&h=142',
-            widgetTitle: data.name,
+            widgetTitle: data.title,
             widgetAuthor: {
                 photo : data.author.photo,
-                name: data.author.firstName,
-                full_name: data.author.full_name
+                name: data.author.first_name,
+                full_name: data.author.first_name+ ' ' +data.author.last_name
             },
-            widgetCount: data.active_contents_count,
-            widgetLink: data.setUrl
+            widgetCount: data.contents_count,
+            widgetLink: data.url.web
         };
+    }
 
-        let widgetPic = inputData.widgetPic,
-            widgetTitle = inputData.widgetTitle,
-            widgetAuthor = inputData.widgetAuthor,
-            widgetCount = inputData.widgetCount,
-            widgetLink = inputData.widgetLink,
+    function getSetCarouselItem(data) {
+
+        var setItemData = setItemAdapter(data),
             loadingClass = (typeof data.loadingHtml !== 'undefined') ? 'loadingItem' : '';
 
         var htmlItemSet = '' +
-            '<div class="item carousel a--block-item a--block-type-set '+loadingClass+' w-44333211">\n' +
+            '<div class="item carousel a--block-item a--block-type-set ' + loadingClass + ' w-44333211">\n' +
             '    <div class="a--block-imageWrapper">\n' +
             '        \n' +
             '        <div class="a--block-detailesWrapper">\n' +
             '    \n' +
             '            <div class="a--block-set-count">\n' +
-            '                <span class="a--block-set-count-number">'+widgetCount+'</span>\n' +
+            '                <span class="a--block-set-count-number">' + setItemData.widgetCount + '</span>\n' +
             '                <br>\n' +
             '                <span class="a--block-set-count-title">محتوا</span>\n' +
             '                <br>\n' +
-            '                <a href="'+widgetLink+'" class="a--block-set-count-icon">\n' +
+            '                <a href="' + setItemData.widgetLink + '" class="a--block-set-count-icon">\n' +
             '                    <svg viewBox="0 0 24 24" preserveAspectRatio="xMidYMid meet" focusable="false" class="style-scope yt-icon">\n' +
             '                        <path d="M3.67 8.67h14V11h-14V8.67zm0-4.67h14v2.33h-14V4zm0 9.33H13v2.34H3.67v-2.34zm11.66 0v7l5.84-3.5-5.84-3.5z" class="style-scope yt-icon"></path>\n' +
             '                    </svg>\n' +
@@ -138,22 +172,19 @@ var Alaasearch = function () {
             '            </div>\n' +
             '            \n' +
             '            <div class="a--block-set-author-pic">\n' +
-            '                <img src="https://cdn.alaatv.com/loder.jpg?w=1&h=1" class="m-widget19__img lazy-image" data-src="'+widgetAuthor.photo+'" alt="'+widgetAuthor.full_name+'" width="40" height="40">\n' +
+            '                <img src="https://cdn.alaatv.com/loder.jpg?w=1&h=1" class="lazy-image" data-src="' + setItemData.widgetAuthor.photo + '" alt="' + setItemData.widgetAuthor.full_name + '" width="40" height="40">\n' +
             '            </div>\n' +
             '            \n' +
             '    \n' +
             '        </div>\n' +
             '        \n' +
-            '        <a href="'+widgetLink+'" class="a--block-imageWrapper-image">\n' +
-        (
-
-            (typeof data.loadingHtml !== 'undefined') ?
-                data.loadingHtml
-                :
-                '            <img src="https://cdn.alaatv.com/loder.jpg?w=16&h=9" data-src="'+widgetPic+'" alt="'+widgetTitle+'" class="a--block-image lazy-image" width="453" height="254" />\n'
-
-
-        )
+            '        <a href="' + setItemData.widgetLink + '" class="a--block-imageWrapper-image">\n' +
+            (
+                (typeof data.loadingHtml !== 'undefined') ?
+                    data.loadingHtml
+                    :
+                    '            <img src="https://cdn.alaatv.com/loder.jpg?w=16&h=9" data-src="' + setItemData.widgetPic + '" alt="' + setItemData.widgetTitle + '" class="a--block-image lazy-image" width="453" height="254" />\n'
+            )
             +
             '        </a>\n' +
             '    </div>\n' +
@@ -161,9 +192,9 @@ var Alaasearch = function () {
             '    <div class="a--block-infoWrapper">\n' +
             '        \n' +
             '        <div class="a--block-titleWrapper">\n' +
-            '            <a href="'+widgetLink+'" class="m-link">\n' +
+            '            <a href="' + setItemData.widgetLink + '" class="m-link">\n' +
             '                <span class="m-badge m-badge--info m-badge--dot"></span>\n' +
-            '                '+widgetTitle+'\n' +
+            '                ' + setItemData.widgetTitle + '\n' +
             '            </a>\n' +
             '        </div>\n' +
             '        \n' +
@@ -200,21 +231,14 @@ var Alaasearch = function () {
             Suffix : '...'
         };
 
-        var widgetActionLink = data.url;
-        // var widgetActionName = '<i class="fa fa-cart-arrow-down"></i>' + ' / ' + '<i class="fa fa-eye"></i>';
-        var widgetPic = data.photo;
-        var widgetTitle = data.name;
-        var price = data.price;
-        var shortDescription = (data.shortDescription!==null) ? data.shortDescription : (data.longDescription!==null) ? data.longDescription : '';
-        var discount = Math.round((1 - (price.final / price.base)) * 100);
-        var discountRibbon = '';
-        // var countOfExistingProductInCarousel = $('#product-carousel.owl-carousel').find('.item').length;
-        var gtmEecProductId = data.id;
-        var gtmEecProductName = data.name;
-        var gtmEecProductCategory = data.category;
-        var gtmEecProductVariant = '-';
-        var gtmEecProductPosition = itemKey;
-        var priceHtml = '<span class="m-badge m-badge--danger m-badge--wide m-badge--rounded a--productPrice">';
+        var productItemData = productItemAdapter(data);
+
+        var price = productItemData.price,
+            discount = Math.round((1 - (price.final / price.base)) * 100),
+            discountRibbon = '',
+            gtmEecProductVariant = '-',
+            gtmEecProductPosition = itemKey,
+            priceHtml = '<span class="m-badge m-badge--danger m-badge--wide m-badge--rounded a--productPrice">';
         if (discount > 100) {
             discount = 100;
             price.final = 0;
@@ -237,35 +261,35 @@ var Alaasearch = function () {
         priceHtml += '</span>';
 
         var gtmEec =
-            '   data-gtm-eec-product-id="'+gtmEecProductId+'"\n' +
-            '   data-gtm-eec-product-name="'+gtmEecProductName+'"\n' +
+            '   data-gtm-eec-product-id="'+productItemData.gtmEecProductId+'"\n' +
+            '   data-gtm-eec-product-name="'+productItemData.gtmEecProductName+'"\n' +
             '   data-gtm-eec-product-price="'+priceToStringWithTwoDecimal(price.final)+'"\n' +
             '   data-gtm-eec-product-brand="آلاء"\n' +
-            '   data-gtm-eec-product-category="'+((gtmEecProductCategory===null || gtmEecProductCategory.trim().length===0)?'-':gtmEecProductCategory)+'"\n' +
+            '   data-gtm-eec-product-category="'+productItemData.gtmEecProductCategory+'"\n' +
             '   data-gtm-eec-product-variant="'+gtmEecProductVariant+'"\n' +
             '   data-gtm-eec-product-position="'+gtmEecProductPosition+'"\n' +
             '   data-gtm-eec-product-list="محصولات صفحه سرچ"\n';
 
         var itemData = {
             class: 'a--gtm-eec-product',
-            widgetLink: widgetActionLink,
+            widgetLink: productItemData.widgetActionLink,
             itemGtm:
                 '     data-position="'+itemKey+'"\n ' + gtmEec,
-            widgetPic: '<a href="' + widgetActionLink + '"\n' +
+            widgetPic: '<a href="' + productItemData.widgetActionLink + '"\n' +
                 '   class="d-block a--gtm-eec-product-click"\n ' + gtmEec + ' >\n' +
-                '    <img src="https://cdn.alaatv.com/loder.jpg?w=1&h=1" data-src="'+widgetPic+'" alt="'+gtmEecProductName+'" class="a--full-width lazy-image productImage" width="400" height="400" />\n' +
+                '    <img src="https://cdn.alaatv.com/loder.jpg?w=1&h=1" data-src="'+productItemData.widgetPic+'" alt="'+productItemData.gtmEecProductName+'" class="a--full-width lazy-image productImage" width="400" height="400" />\n' +
                 '</a>\n',
             widgetTitle:
-                '<a href="' + widgetActionLink + '"\n ' +
+                '<a href="' + productItemData.widgetActionLink + '"\n ' +
                 '   class="m-link a--owl-carousel-type-2-item-subtitle a--gtm-eec-product-click"\n ' + gtmEec + ' >\n' +
-                '    '+widgetTitle+'\n' +
+                '    '+productItemData.widgetTitle+'\n' +
                 '</a>\n',
             widgetDetailes: '' +
                 '<div class="productPriceWrapper">' +
                 priceHtml+
                 '</div>'+
                 '<div class="m--margin-top-40">' +
-                truncatise(shortDescription.replace(/<a .*>.*<\/a>/i, ''), options) +
+                truncatise(productItemData.shortDescription.replace(/<a .*>.*<\/a>/i, ''), options) +
                 '</div>',
             ribbon: discountRibbon
         };
@@ -273,55 +297,44 @@ var Alaasearch = function () {
     }
     function getContentItem(data) {
         var options = {
-            TruncateLength: 40,
-            TruncateBy : "words",
-            Strict : false,
-            StripHTML : true,
-            Suffix : '...'
-        };
-        var widgetPic = (typeof (data.photo) === 'undefined' || data.photo == null) ? data.thumbnail + '?w=444&h=250' : data.photo + '?w=444&h=250',
-            widgetTitle = data.name,
-            widgetAuthor = {
-                photo: (typeof (data.author.photo) === 'undefined' || data.author.photo == null) ? null : data.author.photo,
-                name: data.author.firstName,
-                full_name: data.author.full_name
+                TruncateLength: 40,
+                TruncateBy: "words",
+                Strict: false,
+                StripHTML: true,
+                Suffix: '...'
             },
-            widgetLink = data.url,
-            description = data.description,
-            videoOrder = data.order,
-            setName = (typeof data.set !== 'undefined') ? data.set.name : '-',
-            setUrl = (typeof data.set !== 'undefined') ? data.set.contentUrl : '-',
-            videoOrderHtml = '<div class="videoOrder"><div class="videoOrder-title">جلسه</div><div class="videoOrder-number">'+videoOrder+'</div><div class="videoOrder-om"> اُم </div></div>',
+            contentItemData = contentItemAdapter(data),
+            videoOrderHtml = '<div class="videoOrder"><div class="videoOrder-title">جلسه</div><div class="videoOrder-number">' + contentItemData.videoOrder + '</div><div class="videoOrder-om"> اُم </div></div>',
             widgetDetailes = '' +
                 '<div class="videoDetaileWrapper">' +
                 '   <span><svg viewBox="0 0 24 24" preserveAspectRatio="xMidYMid meet" focusable="false" class="style-scope yt-icon" <g class="style-scope yt-icon">\n' +
                 '        <path d="M3.67 8.67h14V11h-14V8.67zm0-4.67h14v2.33h-14V4zm0 9.33H13v2.34H3.67v-2.34zm11.66 0v7l5.84-3.5-5.84-3.5z" class="style-scope yt-icon"></path>\n' +
                 '      </g></svg></span>' +
                 '   <span> از دوره </span>' +
-                '   <span>'+setName+'</span>' +
+                '   <span>' + contentItemData.setName + '</span>' +
                 '   <br>' +
                 '   <i class="fa fa-calendar-alt m--margin-right-5"></i>' +
                 '   <span>تاریخ بروزرسانی: </span>' +
-                '   <span>'+new persianDate(new Date(data.updated_at)).format('YYYY/MM/DD HH:mm:ss')+'</span>' +
-                    videoOrderHtml +
-                '</div>'+
-                '<div class="videoDescription">'+truncatise(description.replace(/<a .*>.*<\/a>/i, ''), options)+'</div>';
+                '   <span>' + new persianDate(new Date(contentItemData.updatedAt)).format('YYYY/MM/DD HH:mm:ss') + '</span>' +
+                videoOrderHtml +
+                '</div>' +
+                '<div class="videoDescription">' + truncatise(contentItemData.description.replace(/<a .*>.*<\/a>/i, ''), options) + '</div>',
+            itemData = {
+                class: '',
+                itemGtm: '',
+                widgetLink: contentItemData.widgetLink,
+                widgetPic:
+                    '        <a href="' + contentItemData.widgetLink + '" class="d-block">\n' +
+                    '            <img src="https://cdn.alaatv.com/loder.jpg?w=16&h=9" data-src="' + contentItemData.widgetPic + '" alt="' + contentItemData.widgetTitle + '" class="a--full-width lazy-image videoImage" width="253" height="142" />\n' +
+                    '        </a>\n',
+                widgetTitle:
+                    '<a href="' + contentItemData.widgetLink + '" class="m-link">\n' +
+                    '    ' + contentItemData.widgetTitle + '\n' +
+                    '</a>\n',
+                widgetDetailes: widgetDetailes,
+                ribbon: ''
+            };
 
-        var itemData = {
-            class: '',
-            itemGtm:'',
-            widgetLink: widgetLink,
-            widgetPic:
-                '        <a href="'+widgetLink+'" class="d-block">\n' +
-                '            <img src="https://cdn.alaatv.com/loder.jpg?w=16&h=9" data-src="'+widgetPic+'" alt="'+widgetTitle+'" class="a--full-width lazy-image videoImage" width="253" height="142" />\n' +
-                '        </a>\n',
-            widgetTitle:
-                '<a href="' + widgetLink + '" class="m-link">\n' +
-                '    '+widgetTitle+'\n' +
-                '</a>\n',
-            widgetDetailes: widgetDetailes,
-            ribbon: ''
-        };
         return getListTypeItem(itemData);
     }
 
@@ -405,7 +418,7 @@ var Alaasearch = function () {
         return $('.searchResult .InputOfAllNextPageUrl .nextPageUrl-'+type).val();
     }
 
-    function loadDataBasedOnNewFilter(paramsString) {
+    function loadDataBasedOnNewFilter(contentSearchApi, paramsString) {
         cleatAllItems();
         addLoadingItem('carouselType');
         addLoadingItem('listType');
@@ -414,10 +427,11 @@ var Alaasearch = function () {
         //     state: "success",
         // });
 
-        var urlAction = window.location.origin + window.location.pathname + '?' + paramsString;
+        var urlAction = contentSearchApi + '?' + paramsString;
         AlaaLoading.show();
         getAjaxContent(urlAction, function (response) {
-            loadAjaxContent(response.result, paramsString);
+            // loadAjaxContent(response.result, paramsString);
+            loadAjaxContent(response.data, paramsString);
             // mApp.unblock('.SearchBoxFilter .GroupFilters .body');
             AlaaLoading.hide();
         });
@@ -473,10 +487,10 @@ var Alaasearch = function () {
     }
     function appendToCarouselTypeAndSetNextPage(data) {
         removeLoadingItem('carouselType');
-        if (typeof data !== 'undefined' && data !== null && data.total>0) {
-            appendToSet(data, 'carouselType');
+        if (typeof data !== 'undefined' && data !== null && data.meta.total>0) {
+            appendToSet(data.data, 'carouselType');
             addSensorItem('carouselType');
-            setNextPageUrl('set', data.next_page_url);
+            setNextPageUrl('set', data.links.next);
         } else {
             setNextPageUrl('set', '');
         }
@@ -531,17 +545,17 @@ var Alaasearch = function () {
     }
 
     function fillProductRepositoryAndSetNextPage(data) {
-        if (typeof data !== 'undefined' && data !== null && data.total>0) {
+        if (typeof data !== 'undefined' && data !== null && data.meta.total>0) {
             fillProductRepository(data.data);
-            setNextPageUrl('product', data.next_page_url);
+            setNextPageUrl('product', data.links.next);
         } else {
             setNextPageUrl('product', '');
         }
     }
     function fillVideoRepositoryAndSetNextPage(data) {
-        if (typeof data !== 'undefined' && data !== null && data.total > 0) {
+        if (typeof data !== 'undefined' && data !== null && data.meta.total > 0) {
             fillVideoRepository(data.data);
-            setNextPageUrl('video', data.next_page_url);
+            setNextPageUrl('video', data.links.next);
         } else {
             setNextPageUrl('video', '');
         }
@@ -697,11 +711,63 @@ var FilterOptions = function () {
     var contentSearchFilterData = {};
 
     function getFilterOption(data) {
-        return '\n' +
-            '<label class="m-checkbox m-checkbox--bold m-checkbox--state-warning GroupFilters-item">\n' +
-            '    <input type="checkbox" value="'+data.value+'"> '+data.name+'\n' +
-            '    <span></span>\n' +
-            '</label>';
+
+        return '' +
+            '<div class="GroupFilters-item">\n' +
+            '    <div class="pretty p-icon p-plain p-toggle">\n' +
+            '        <input type="checkbox" value="'+data.value+'" />\n' +
+            '        <div class="state p-on">\n' +
+            '            <svg version="1.1" width="25" height="25" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns:svg="http://www.w3.org/2000/svg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 341.1 341.8" style="enable-background:new 0 0 341.1 341.8;" xml:space="preserve">\n' +
+            '<style type="text/css">\n' +
+            '\t.st0{fill:#FF9000;}\n' +
+            '\t.st1{opacity:0.2;}\n' +
+            '\t.st2{fill:#FFFFFF;}\n' +
+            '</style>\n' +
+            '<sodipodi:namedview bordercolor="#666666" borderopacity="1.0" id="base" inkscape:current-layer="layer1" inkscape:cx="100" inkscape:cy="560" inkscape:document-units="mm" inkscape:pageopacity="0.0" inkscape:pageshadow="2" inkscape:window-height="1017" inkscape:window-maximized="1" inkscape:window-width="1920" inkscape:window-x="-8" inkscape:window-y="-8" inkscape:zoom="0.35" pagecolor="#ffffff" showgrid="false">\n' +
+            '\t</sodipodi:namedview>\n' +
+            '<g id="layer1" inkscape:groupmode="layer" inkscape:label="Layer 1">\n' +
+            '\t<g id="g74" transform="matrix(0.26458333,0,0,0.26458333,7.7861212,7.6966924)">\n' +
+            '\t\t<path id="path10" inkscape:connector-curvature="0" class="st0" d="M1119.1,1141.9c-197.5,161.3-814.4,161.3-1007.9,0    c-197.5-161.3-177.4-850.6,0-1032.1s830.5-181.4,1007.9,0S1316.7,980.6,1119.1,1141.9z"/>\n' +
+            '\t\t<g id="g14" class="st1">\n' +
+            '\t\t\t<path id="path12" inkscape:connector-curvature="0" class="st2" d="M619.2,859.7c-177.4,141.1-374.9,213.7-560.4,217.7     C-78.2,843.6-50,275.1,111.3,109.8C256.4-39.3,712-67.5,974,25.2C1038.5,291.3,905.5,629.9,619.2,859.7L619.2,859.7z"/>\n' +
+            '\t\t</g>\n' +
+            '\t\t<path id="path16" inkscape:connector-curvature="0" class="st2" d="M441.7,1157.1c-39.2,0-78.4-16.8-100.8-50.4L27.2,703.3    c-44.8-56-33.6-134.4,22.4-179.3s134.4-33.6,179.3,22.4l212.9,274.5l470.6-610.6c44.8-56,123.2-67.2,179.3-22.4    s67.2,123.2,22.4,179.3l-571.4,739.5C514.6,1134.7,481,1157.1,441.7,1157.1z"/>\n' +
+            '\t</g>\n' +
+            '</g>\n' +
+            '</svg>\n' +
+            '            <label>'+data.name+'</label>\n' +
+            '        </div>\n' +
+            '        <div class="state p-off">\n' +
+            '            <svg version="1.1" width="25" height="25" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns:svg="http://www.w3.org/2000/svg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 341.1 341.6" style="enable-background:new 0 0 341.1 341.6;" xml:space="preserve">\n' +
+            '<style type="text/css">\n' +
+            '\t.st0{fill:#FF9000;}\n' +
+            '\t.st1{opacity:0.2;}\n' +
+            '\t.st2{fill:#FFFFFF;}\n' +
+            '</style>\n' +
+            '<sodipodi:namedview bordercolor="#666666" borderopacity="1.0" id="base" inkscape:current-layer="g26" inkscape:cx="784.15556" inkscape:cy="394.26437" inkscape:document-units="mm" inkscape:pageopacity="0.0" inkscape:pageshadow="2" inkscape:window-height="1017" inkscape:window-maximized="1" inkscape:window-width="1920" inkscape:window-x="-8" inkscape:window-y="-8" inkscape:zoom="0.7" pagecolor="#ffffff" scale-x="0.9" showgrid="false">\n' +
+            '\t</sodipodi:namedview>\n' +
+            '<g id="layer1" inkscape:groupmode="layer" inkscape:label="Layer 1">\n' +
+            '\t<g id="g26" transform="matrix(0.26458333,0,0,0.26458333,51.253383,19.413955)">\n' +
+            '\t\t<path id="path10" inkscape:connector-curvature="0" class="st0" d="M954.9,1096.7c-197.5,161.3-814.4,161.3-1007.9,0    C-250.6,935.4-230.4,246-53,64.6s830.5-181.4,1007.9,0S1152.4,935.4,954.9,1096.7z"/>\n' +
+            '\t\t<g id="g14" transform="translate(-192.85715,594.28572)" class="st1">\n' +
+            '\t\t\t<path id="path12" inkscape:connector-curvature="0" class="st2" d="M647.8,220.2C470.4,361.3,272.9,433.8,87.4,437.9     C-49.6,204-21.4-364.4,139.8-529.7c145.1-149.2,600.7-177.4,862.7-84.7C1067.1-348.3,934.1-9.6,647.8,220.2L647.8,220.2z"/>\n' +
+            '\t\t</g>\n' +
+            '\t\t<path id="path10-0" inkscape:connector-curvature="0" class="st2" d="M840.1,963.3C690.7,1085,224.3,1085,78,963.3    c-149.4-121.7-134.1-642.1,0-779s628-136.9,762.1,0S989.4,841.6,840.1,963.3z"/>\n' +
+            '\t</g>\n' +
+            '</g>\n' +
+            '</svg>\n' +
+            '            <label>'+data.name+'</label>\n' +
+            '        </div>\n' +
+            '    </div>\n'+
+            '</div>\n';
+
+        // return '\n' +
+        //     '<div class="GroupFilters-item">\n' +
+        //     '    <label class="m-checkbox m-checkbox--bold m-checkbox--state-warning">\n' +
+        //     '        <input type="checkbox" value="'+data.value+'"> '+data.name+'\n' +
+        //     '        <span></span>\n' +
+        //     '    </label>\n'+
+        //     '</div>\n';
     }
 
     function createFieldsOfGroupOptions(data) {
@@ -758,7 +824,7 @@ var FilterOptions = function () {
             '        </div>\n' +
             '        <div class="m-form">\n' +
             '            <div class="m-form__group form-group">\n' +
-            '                <div class="m-checkbox-list" '+sytleForMoreBtnHtml+'>\n' +
+            '                <div class="GroupFilters-list" '+sytleForMoreBtnHtml+'>\n' +
                                 data.checkboxList +
                                 moreBtnHtml +
             '                </div>\n' +
@@ -821,13 +887,13 @@ var FilterOptions = function () {
             var $groupFilter = $(this),
                 $checkBoxWrapperArray = [];
             $groupFilter.find('input[type="checkbox"]:checked').each(function () {
-                var mCheckbox = $(this).parents('.m-checkbox');
+                var mCheckbox = $(this).parents('.GroupFilters-item');
                 $checkBoxWrapperArray.push(mCheckbox);
                 mCheckbox.remove();
             });
             var checkBoxWrapperArrayLength = $checkBoxWrapperArray.length;
             for (var i = 0; i < checkBoxWrapperArrayLength; i++) {
-                $groupFilter.find('.body .m-checkbox-list').prepend($checkBoxWrapperArray[i]);
+                $groupFilter.find('.body .GroupFilters-list').prepend($checkBoxWrapperArray[i]);
             }
         });
     }
@@ -866,10 +932,10 @@ var FilterOptions = function () {
         $('.GroupFilters-item input[type="checkbox"][value="'+itemValue+'"]').prop('checked', false);
     }
 
-    function filterItemChangeEvent() {
+    function filterItemChangeEvent(contentSearchApi) {
         var paramsString = TagManager.refreshUrlBasedOnSelectedTags();
         sortSelectedItems();
-        Alaasearch.loadDataBasedOnNewFilter(paramsString);
+        Alaasearch.loadDataBasedOnNewFilter(contentSearchApi, paramsString);
     }
 
     function showFilterMenuForMobile() {
@@ -889,7 +955,7 @@ var FilterOptions = function () {
         AlaaLoading.hide();
     }
 
-    function addEvents() {
+    function addEvents(contentSearchApi) {
         $(document).on('click',  '.btnShowSearchBoxInMobileView', function () {
             showFilterMenuForMobile();
         });
@@ -905,11 +971,11 @@ var FilterOptions = function () {
             //     $(this).prop('checked', false);
             // }
             if ($(this).parents('.filterStatus-open').length === 0) {
-                filterItemChangeEvent();
+                filterItemChangeEvent(contentSearchApi);
             }
         });
         $(document).on('click', '.btnApplyFilterInMobileView', function () {
-            filterItemChangeEvent();
+            filterItemChangeEvent(contentSearchApi);
             hideFilterMenuForMobile();
         });
         $(document).on('click', '#m_aside_left_hide_toggle', function () {
@@ -939,12 +1005,12 @@ var FilterOptions = function () {
 
     function init(data) {
         createFields(data);
-        addEvents();
+        addEvents(data.contentSearchApi);
         sticky();
         checkFilterBasedOnUrlTags(data.tags);
         sortSelectedItems();
         TagManager.addTagBadgeEvents(function () {
-            filterItemChangeEvent();
+            filterItemChangeEvent(data.contentSearchApi);
         });
     }
 
@@ -1039,11 +1105,12 @@ var initPage = function() {
         });
     }
 
-    function initFilterOptions(contentSearchFilterData, tags) {
+    function initFilterOptions(contentSearchFilterData, tags, contentSearchApi) {
         FilterOptions.init({
             contentSearchFilterData: contentSearchFilterData,
             containerSelector: '.SearchBoxFilter',
-            tags: tags
+            tags: tags,
+            contentSearchApi: contentSearchApi
         });
     }
 
@@ -1051,9 +1118,9 @@ var initPage = function() {
         Alaasearch.init(contentData);
     }
 
-    function init(contentSearchFilterData, tags, contentData) {
+    function init(contentSearchFilterData, tags, contentData, contentSearchApi) {
         $('.m-body .m-content').addClass('boxed');
-        initFilterOptions(contentSearchFilterData, tags);
+        initFilterOptions(contentSearchFilterData, tags, contentSearchApi);
         initScrollCarousel();
         initAlaasearch(contentData);
     }
@@ -1065,5 +1132,5 @@ var initPage = function() {
 }();
 
 jQuery(document).ready(function () {
-    initPage.init(contentSearchFilterData, tags, contentData);
+    initPage.init(contentSearchFilterData, tags, contentData, contentSearchApi);
 });

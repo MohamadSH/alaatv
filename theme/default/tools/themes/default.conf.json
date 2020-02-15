@@ -33,7 +33,7 @@
             "demo_api_url": ""
         },
         "dist": [
-            "./../../../../public/assets2120"
+            "./../../../public/assets2120"
         ]
     },
     "build": {

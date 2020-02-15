@@ -22,7 +22,7 @@
                         <div class="col-6 col-md-3 m--bg-warning shopNavItem">
                             <a target="_self" class="btnScrollTo" data-scroll-to=".konkoor1" href="#konkoor1">
                                 <!--begin::Total Profit-->
-                                <div class="m-widget24 m--align-center">
+                                <div class="m-widget24 text-center">
                                     <div class="m-widget24__item">
                                         <h2 class="m-widget24__title">
                                             کنکور نظام قدیم
@@ -35,7 +35,7 @@
                         <div class="col-6 col-md-3 m--bg-accent shopNavItem">
                             <a target="_self" class="btnScrollTo" data-scroll-to=".konkoor2" href="#konkoor2">
                                 <!--begin::Total Profit-->
-                                <div class="m-widget24 m--align-center">
+                                <div class="m-widget24 text-center">
                                     <div class="m-widget24__item">
                                         <h2 class="m-widget24__title">
                                             کنکور نظام جدید
@@ -48,7 +48,7 @@
                         <div class="col-6 col-md-3 m--bg-success shopNavItem">
                             <a target="_self" class="btnScrollTo" data-scroll-to=".yazdahom" href="#yazdahom">
                                 <!--begin::Total Profit-->
-                                <div class="m-widget24 m--align-center">
+                                <div class="m-widget24 text-center">
                                     <div class="m-widget24__item">
                                         <h2 class="m-widget24__title">
                                             پایه یازدهم
@@ -61,7 +61,7 @@
                         <div class="col-6 col-md-3 m--bg-info shopNavItem">
                             <a target="_self" class="btnScrollTo" data-scroll-to=".dahom" href="#dahom">
                                 <!--begin::Total Profit-->
-                                <div class="m-widget24 m--align-center">
+                                <div class="m-widget24 text-center">
                                     <div class="m-widget24__item">
                                         <h2 class="m-widget24__title">
                                             پایه دهم
@@ -78,7 +78,7 @@
                         <div class="col-12 col-md-6 m--bg-info shopNavItem">
                             <a target="_self" href="{{ route('web.landing.5') }}">
                                 <!--begin::Total Profit-->
-                                <div class="m-widget24 m--align-center">
+                                <div class="m-widget24 text-center">
                                     <div class="m-widget24__item">
                                         <h2 class="m-widget24__title">
                                             همایش های دانلودی نظام قدیم
@@ -91,7 +91,7 @@
                         <div class="col-12 col-md-6 m--bg-accent shopNavItem">
                             <a target="_self" href="{{ route('web.landing.8') }}">
                                 <!--begin::Total Profit-->
-                                <div class="m-widget24 m--align-center">
+                                <div class="m-widget24 text-center">
                                     <div class="m-widget24__item">
                                         <h2 class="m-widget24__title">
                                             همایش های دانلودی نظام جدید

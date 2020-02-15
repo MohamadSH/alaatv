@@ -37,7 +37,7 @@
         @endif
     </div>
     <div class="row">
-        <div class="col-xl-12 m--align-center">
+        <div class="col-xl-12 text-center">
             <div class="m--block-inline">
                 {{ $products->appends($linkParameters)->links() }}
             </div>

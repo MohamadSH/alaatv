@@ -35,26 +35,18 @@
     @endif
 
     @if(isset($user) && $userInfoCompletion>=60)
-        @if(optional($userAssetsCollection->where('title', 'محصولات من')->first->products)->count() > 0)
 
-            <div class="row m--margin-bottom-10">
-                <div class="col text-center">
-                    <div class="btn-group m-btn-group btn-group-rounded" role="group" aria-label="...">
-                        <button type="button" class="btn btn-secondary btnShowFavorites">علاقه مندی ها</button>
-                        <button type="button" class="btn btn-warning btnShowPurchase">محصولات من</button>
-                    </div>
+        <div class="row m--margin-bottom-10">
+            <div class="col text-center">
+                <div class="btn-group m-btn-group btn-group-rounded" role="group" aria-label="...">
+                    <button type="button" class="btn btn-secondary btnShowFavorites">علاقه مندی ها</button>
+                    <button type="button" class="btn btn-warning btnShowPurchase">محصولات من</button>
                 </div>
             </div>
-            <style>
-                .sortingFilterCol::-webkit-scrollbar {
-                    display: none;
-                }
-                .sortingFilterCol {
-                    overflow-y: auto;
-                    -ms-overflow-style: none;
-                }
-            </style>
-            <div class="row myProductsRow justify-content-center boxed">
+        </div>
+
+        <div class="row myProductsRow justify-content-center boxed">
+            @if(optional($userAssetsCollection->where('title', 'محصولات من')->first->products)->count() > 0)
                 <div class="col-12">
                     <div class="row">
                         <div class="col text-center sortingFilterCol">
@@ -154,7 +146,7 @@
                                         <strong>فیلمی وجود ندارد</strong>
                                     </div>
                                     <button type="button"
-                                            class="btn m-btn m-btn--pill m-btn--air m-btn--gradient-from-info m-btn--gradient-to-warning btnLoadMore animated infinite heartBeat"
+                                            class="btn m-btn m-btn--pill m-btn--air btn-info btnLoadMore animated infinite heartBeat"
                                             data-content-type="video">
                                         بیشتر ...
                                     </button>
@@ -174,7 +166,7 @@
                                         <strong>جزوه ای وجود ندارد</strong>
                                     </div>
                                     <button type="button"
-                                            class="btn m-btn m-btn--pill m-btn--air m-btn--gradient-from-info m-btn--gradient-to-warning btnLoadMore animated infinite heartBeat"
+                                            class="btn m-btn m-btn--pill m-btn--air btn-info btnLoadMore animated infinite heartBeat"
                                             data-content-type="pamphlet">
                                         بیشتر ...
                                     </button>
@@ -187,31 +179,20 @@
                     </div>
 
                 </div>
-            </div>
+            @else
 
-            <div class="modal fade contentModal" id="smallScreenModal" tabindex="-1" role="dialog" aria-labelledby="videoModalLabel"
-                 aria-hidden="true">
-                <div class="modal-dialog modal-lg" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="videoModalLabel">
-
-                            </h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">بستن</button>
-                        </div>
-                    </div>
+                <div class="alert alert-info a--full-width text-center" role="alert">
+                    <strong>هنوز از آلاء خرید نکرده اید.</strong>
+                    <br>
+                    <a href="{{ action("Web\ShopPageController") }}" class="m-nav__link">
+                        <button type="button" class="btn m-btn btn-warning m--margin-5">محصولات آلاء</button>
+                    </a>
                 </div>
-            </div>
 
-            <div class="row myFavoritesRow boxed">
+            @endif
+        </div>
+
+        <div class="row myFavoritesRow boxed">
             <div class="col">
                 @if((!is_null($userAssetsCollection->where('title', '!=', 'محصولات من')->pluck('products')->first()) && $userAssetsCollection->where('title', '!=', 'محصولات من')->pluck('products')->first()->count() > 0) ||
                 (!is_null($userAssetsCollection->where('title', '!=', 'محصولات من')->pluck('contents')->first()) &&  $userAssetsCollection->where('title', '!=', 'محصولات من')->pluck('contents')->first()->count()) > 0 ||
@@ -244,26 +225,32 @@
                         @endif
                     @endforeach
                 @else
-                    <div class="alert alert-info" role="alert">
+                    <div class="alert alert-info text-center" role="alert">
                         <strong>تا کنون موردی را به علاقه مندی های خود اضافه نکرده اید</strong>
                     </div>
                 @endif
             </div>
         </div>
 
-        @else
+        <div class="modal fade contentModal" id="smallScreenModal" tabindex="-1" role="dialog" aria-labelledby="videoModalLabel"
+             aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="videoModalLabel"></h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
 
-            <div class="alert alert-info" role="alert">
-                <strong>هنوز از آلاء خرید نکرده اید.</strong>
-                <a href="{{ action("Web\ShopPageController") }}" class="m-nav__link">
-                    <button type="button"
-                            class="btn m-btn m-btn--gradient-from-warning m-btn--gradient-to-danger m--margin-5">محصولات
-                        آلاء
-                    </button>
-                </a>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">بستن</button>
+                    </div>
+                </div>
             </div>
+        </div>
 
-        @endif
+
     @elseif(isset($user))
 
         <div class="m-portlet">

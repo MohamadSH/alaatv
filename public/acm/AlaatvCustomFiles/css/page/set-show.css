@@ -77,3 +77,8 @@
     align-content: center;
     justify-content: center;
 }
+
+.setPamphlet.a--list2 .a--list2-item .a--list2-action i {
+    font-size: 2rem;
+    color: #5867dd;
+}

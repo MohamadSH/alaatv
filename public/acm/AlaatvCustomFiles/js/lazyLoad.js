@@ -40,6 +40,7 @@ var LazyLoad = function () {
         }
 
         changeLazyLoadStatus(element);
+        $(document).trigger('LazyLoad-loadImage', [ element, w, h] );
     }
 
     function canChangeLazyLoad(element) {

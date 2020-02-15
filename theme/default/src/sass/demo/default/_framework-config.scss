@@ -10,10 +10,10 @@ $m--root-font: (
         desktop: 13px,
         tablet: 13px,
         mobile: 13px
-    ), 
-    weight: 300, 
+    ),
+    weight: 300,
     color: (
-        light: #333333, 
+        light: #333333,
         dark: #efefef
     )
 );
@@ -26,25 +26,25 @@ $m--brand-inverse-color: #ffffff;
 //== Other state colors
 $m--state-colors: (
     // metronic states
-    brand: (
-        base: $m--brand-color,
-        inverse: $m--brand-inverse-color
-    ),
-    metal: (
-        base: #c4c5d6,
-        inverse: #ffffff
-    ),  
-    light: (
-        base: #ffffff,
-        inverse: #282a3c 
-    ),
+    //brand: (
+    //    base: $m--brand-color,
+    //    inverse: $m--brand-inverse-color
+    //),
+    //metal: (
+    //    base: #c4c5d6,
+    //    inverse: #ffffff
+    //),
+    //light: (
+    //    base: #ffffff,
+    //    inverse: #282a3c
+    //),
     accent: (
         base: #00c5dc,
-        inverse: #ffffff 
+        inverse: #ffffff
     ),
     focus: (
         base: #9816f4,
-        inverse: #ffffff 
+        inverse: #ffffff
     ),
 
     // bootstrap states
@@ -67,5 +67,5 @@ $m--state-colors: (
     danger: (
         base: #f4516c,
         inverse: #ffffff
-    )    
+    )
 );

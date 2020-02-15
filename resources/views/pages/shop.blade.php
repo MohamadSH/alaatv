@@ -30,7 +30,7 @@
                         <div class="col m--bg-danger shopNavItem">
                             <a target="_self" onclick="$('html,body').animate({scrollTop: $('.konkoor98').offset().top - 100},'slow');" href="#konkoor98">
                                 <!--begin::Total Profit-->
-                                <div class="m-widget24 m--align-center">
+                                <div class="m-widget24 text-center">
                                     <div class="m-widget24__item">
                                         <button class="btn m-btn m-btn--pill m-btn--air" type="button">
                                             <h2 class="m-widget24__title">
@@ -51,7 +51,7 @@
                         <div class="col m--bg-warning shopNavItem">
                             <a target="_self" onclick="$('html,body').animate({scrollTop: $('.taftan').offset().top - 100},'slow');" href="#taftan">
                                 <!--begin::Total Profit-->
-                                <div class="m-widget24 m--align-center">
+                                <div class="m-widget24 text-center">
                                     <div class="m-widget24__item">
                                         <button class="btn m-btn m-btn--pill m-btn--air" type="button">
                                             <h2 class="m-widget24__title">
@@ -72,7 +72,7 @@
                         <div class="col m--bg-success shopNavItem">
                             <a target="_self" onclick="$('html,body').animate({scrollTop: $('.godar98').offset().top - 100},'slow');" href="#godar98">
                                 <!--begin::Total Profit-->
-                                <div class="m-widget24 m--align-center">
+                                <div class="m-widget24 text-center">
                                     <div class="m-widget24__item">
                                         <button class="btn m-btn m-btn--pill m-btn--air" type="button">
                                             <h2 class="m-widget24__title">
@@ -93,7 +93,7 @@
                         <div class="col m--bg-accent shopNavItem">
                             <a target="_self" onclick="$('html,body').animate({scrollTop: $('.jozavat').offset().top - 100},'slow');" href="#jozavat">
                                 <!--begin::Total Profit-->
-                                <div class="m-widget24 m--align-center">
+                                <div class="m-widget24 text-center">
                                     <div class="m-widget24__item">
                                         <button class="btn m-btn m-btn--pill m-btn--air" type="button">
                                             <h2 class="m-widget24__title">
@@ -114,7 +114,7 @@
                         <div class="col m--bg-info shopNavItem">
                             <a target="_self" onclick="$('html,body').animate({scrollTop: $('.konkoor1').offset().top - 100},'slow');" href="#konkoor1">
                                 <!--begin::Total Profit-->
-                                <div class="m-widget24 m--align-center">
+                                <div class="m-widget24 text-center">
                                     <div class="m-widget24__item">
                                         <button class="btn m-btn m-btn--pill m-btn--air" type="button">
                                             <h2 class="m-widget24__title">

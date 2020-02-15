@@ -11,12 +11,12 @@ jQuery(document).ready(function() {
 
     $(document).on('click', '.SearchBoxFilter .GroupFilters .body .showMoreItems', function () {
         if ($(this).data('moretype') === 'more') {
-            $(this).parents('.m-checkbox-list').css({"max-height": "", "height": "auto", "padding-bottom":"20px"});
+            $(this).parents('.GroupFilters-list').css({"max-height": "", "height": "auto", "padding-bottom":$('.showMoreItems').outerHeight(true)+5+"px"});
             $(this).data('more', $(this).data('more'));
             $(this).data('moretype', 'less');
             $(this).html('نمایش کمتر...');
         } else {
-            $(this).parents('.m-checkbox-list').css({"max-height": (($(this).data('more')*29.5)+20)+"px", "padding-bottom":"20px"});
+            $(this).parents('.GroupFilters-list').css({"max-height": (($(this).data('more')*$('.GroupFilters-item').outerHeight(true))+$('.showMoreItems').outerHeight(true))+"px", "padding-bottom":$('.showMoreItems').outerHeight(true)+5+"px"});
             $(this).data('moretype', 'more');
             $(this).html('نمایش بیشتر...');
         }

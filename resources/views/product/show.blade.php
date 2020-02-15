@@ -441,7 +441,7 @@
 
 
                                             @if($allChildIsPurchased)
-                                                <a class="btn m-btn m-btn--pill m-btn--air m-btn--gradient-from-focus m-btn--gradient-to-danger  animated infinite pulse" role="button" href="{{ action("Web\UserController@userProductFiles") }}">
+                                                <a class="btn m-btn m-btn--pill m-btn--air btn-info animated infinite pulse" role="button" href="{{ action("Web\UserController@userProductFiles") }}">
                                                     <i class="fa fa-play-circle"></i>
                                                     مشاهده در صفحه فیلم ها و جزوه های من
                                                 </a>
@@ -496,13 +496,8 @@
                                                                        value="{{ $product->introVideo }}">
                                                             @endif
 
-                                                            <video
-                                                                    id="videoPlayer"
-                                                                    class="
-                                                           video-js
-                                                           vjs-fluid
-                                                           vjs-default-skin
-                                                           vjs-big-play-centered"
+                                                            <video id="videoPlayer"
+                                                                    class="video-js vjs-fluid vjs-default-skin vjs-big-play-centered"
                                                                     controls
                                                                     {{-- preload="auto"--}}
                                                                     preload="none"
@@ -567,7 +562,7 @@
                                                                                 <img src="{{ $gift->photo }}" class="rounded-circle">
                                                                             </div>
                                                                             <div>
-                                                                                <button type="button" class="btn m-btn--pill m-btn--air m-btn m-btn--gradient-from-info m-btn--gradient-to-accent">
+                                                                                <button type="button" class="btn m-btn--pill m-btn--air m-btn btn-info">
                                                                                     {{ $gift->name }}
                                                                                 </button>
                                                                             </div>
@@ -577,7 +572,7 @@
                                                                             <img src="{{ $gift->photo }}" class="rounded-circle">
                                                                         </div>
                                                                         <div>
-                                                                            <button type="button" class="btn m-btn--pill m-btn--air m-btn m-btn--gradient-from-info m-btn--gradient-to-accent">
+                                                                            <button type="button" class="btn m-btn--pill m-btn--air m-btn btn-info">
                                                                                 {{ $gift->name }}
                                                                             </button>
                                                                         </div>
@@ -604,9 +599,9 @@
 
     {{--دکمه افزودن به سبد خرید--}}
     <div class="addToCartForMobileDeviceWrapper" >
-    @if($product->enable && !$isForcedGift)
+        @if($product->enable && !$isForcedGift)
             @if($allChildIsPurchased)
-                <a class="btn m-btn m-btn--pill m-btn--air m-btn--gradient-from-focus m-btn--gradient-to-danger  animated infinite pulse" role="button" href="{{ action("Web\UserController@userProductFiles") }}">
+                <a class="btn m-btn m-btn--pill m-btn--air btn-info animated infinite pulse" role="button" href="{{ action("Web\UserController@userProductFiles") }}">
                     <i class="fa fa-play-circle"></i>
                     مشاهده در صفحه فیلم ها و جزوه های من
                 </a>
@@ -628,35 +623,23 @@
                 <div class="m--font-brand a_product-price_mobile-wrapper">
                     <span id="a_product-price_mobile">
                         @include('product.partials.price', ['price'=>$product->price])
-
-{{--                        @if($product->priceText['discount'] == 0 )--}}
-{{--                            <span>{{ $product->priceText['finalPriceText'] }} </span>--}}
-
-{{--                        @else--}}
-{{--                            <strike>{{ $product->priceText['basePriceText'] }} </strike>--}}
-{{--                            <span class="m-badge m-badge--danger m-badge--wide m-badge--rounded">{{ $product->priceText['finalPriceText'] }}</span>--}}
-{{--                        @endif--}}
-
-
-
                     </span>
                 </div>
             @endif
-
-    @else
-        @if(!$product->enable)
-            <button class="btn btn-danger btn-lg m-btn  m-btn m-btn--icon">
-                    <span>
-                        <i class="flaticon-shopping-basket"></i>
-                        <span>این محصول غیر فعال است.</span>
-                    </span>
-            </button>
-        @elseif($isForcedGift)
+        @else
+            @if(!$product->enable)
+                <button class="btn btn-danger btn-lg m-btn  m-btn m-btn--icon">
+                        <span>
+                            <i class="flaticon-shopping-basket"></i>
+                            <span>این محصول غیر فعال است.</span>
+                        </span>
+                </button>
+            @elseif($isForcedGift)
                 @if($hasPurchasedEssentialProduct)
                     <button class="btn btn-danger btn-lg m-btn  m-btn m-btn--icon">
                         <span>
-                                <i class="flaticon-arrows"></i>
-                                <span>شما محصول راه ابریشم را خریده اید و این محصول به عنوان هدیه به شما تعلق می گیرد</span>
+                            <i class="flaticon-arrows"></i>
+                            <span>شما محصول راه ابریشم را خریده اید و این محصول به عنوان هدیه به شما تعلق می گیرد</span>
                         </span>
                     </button>
                 @else
@@ -670,17 +653,10 @@
                             <span>این محصول بخشی از {{$shouldBuyProductName}} است برای خرید کلیک کنید </span>
                         </span>
                     </button>
-
-{{--                    <a class="btn btn-focus btn-lg m-btn  m-btn m-btn--icon" href="{{ route('product.show' , $shouldBuyProductId ) }}">--}}
-{{--                            <span>--}}
-{{--                                <i class="flaticon-arrows"></i>--}}
-{{--                                <span>این محصول بخشی از {{$shouldBuyProductName}} است برای خرید کلیک کنید </span>--}}
-{{--                            </span>--}}
-{{--                    </a>--}}
                 @endif
+            @endif
         @endif
-    @endif
-</div>
+    </div>
 
 
     {{--نمونه فیلم--}}
@@ -720,7 +696,7 @@
 
 
                                         @if($allChildIsPurchased)
-                                            <a class="btn m-btn m-btn--pill m-btn--air m-btn--gradient-from-focus m-btn--gradient-to-danger  animated infinite pulse" role="button" href="{{ action("Web\UserController@userProductFiles") }}">
+                                            <a class="btn m-btn m-btn--pill m-btn--air btn-info animated infinite pulse" role="button" href="{{ action("Web\UserController@userProductFiles") }}">
                                                 <i class="fa fa-play-circle"></i>
                                                 <span class="d-none d-sm-none d-md-inline-block d-lg-inline-block">
                                                     مشاهده در صفحه فیلم ها و جزوه های من

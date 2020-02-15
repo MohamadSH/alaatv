@@ -9,7 +9,7 @@
                         ویرایش
                     </button>
 
-                    <button type="button" id="uploadProfilePhotoAjaxSubmit" class="btn btn-sm m-btn--pill m-btn--gradient-from-info m-btn--gradient-to-warning submitProfilePic" style="display: none;">
+                    <button type="button" id="uploadProfilePhotoAjaxSubmit" class="btn btn-sm m-btn--pill btn-info submitProfilePic" style="display: none;">
                         ثبت
                     </button>
                 @endif
@@ -114,7 +114,7 @@
                             <div class="row SendMobileVerificationCodeWarper">
                                 <div class="col-12 text-center">
                                     <input type="hidden" id="SendMobileVerificationCodeActionUrl" value="{{ action('Web\MobileVerificationController@resend') }}">
-                                    <button type="button" id="btnSendMobileVerificationCode" class="btn m-btn--pill m-btn--air m-btn m-btn--gradient-from-info m-btn--gradient-to-accent m--margin-top-10">تایید شماره موبایل</button>
+                                    <button type="button" id="btnSendMobileVerificationCode" class="btn m-btn--pill m-btn--air m-btn btn-info m--margin-top-10">تایید شماره موبایل</button>
                                 </div>
                                 <div class="col-12 text-center inputVerificationWarper d-none">
                                     <div class="form-group m-form__group">
@@ -129,7 +129,7 @@
                                         </div>
                                     </div>
                                     <input type="hidden" id="VerifyMobileVerificationCodeActionUrl" value="{{ action('Web\MobileVerificationController@verify') }}">
-                                    <button type="button" id="btnVerifyMobileVerificationCode" class="btn m-btn--pill m-btn--air m-btn m-btn--gradient-from-info m-btn--gradient-to-accent">تایید کد</button>
+                                    <button type="button" id="btnVerifyMobileVerificationCode" class="btn m-btn--pill m-btn--air m-btn btn-info">تایید کد</button>
                                 </div>
                             </div>
 

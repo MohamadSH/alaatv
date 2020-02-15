@@ -127,6 +127,14 @@ var AppGlobalInitInit = function() {
         $(document).on('click' ,'.a--gtm-eec-advertisement-click', function(e){
             GAEE.promotionClick($(this));
         });
+
+
+        $("#carouselMainSlideShow").on('slid.bs.carousel', function (e) {
+            var lazyObserversLength = lazyObservers.length;
+            for(var i = 0; i < lazyObserversLength; i++) {
+                lazyObservers[i].observe();
+            }
+        });
     }
 
     function addClickEventOfBtnProfileInMobileView() {

@@ -23,7 +23,7 @@
                 <button class="btn btn-outline-danger m-btn m-btn--icon btn-lg m-btn--icon-only m-btn--pill m-btn--air m-btn--outline-2x btnHideSearchBoxInMobileView">
                     <i class="fa fa-times" aria-hidden="true"></i>
                 </button>
-                <button class="btn btn-outline-accent m-btn m-btn--air m-btn--outline-2x m--pull-left btnApplyFilterInMobileView"> اعمال فیلتر </button>
+                <button class="btn btn-outline-accent m-btn m-btn--air m-btn--outline-2x float-left btnApplyFilterInMobileView"> اعمال فیلتر </button>
             </div>
             <div class="SearchBoxFilter">
 
@@ -73,6 +73,8 @@
     <script>
         var contentData = {!! json_encode($result) !!};
         var tags = {!! json_encode($tags) !!};
+        var contentSearchApi = window.location.origin + '/api/v2/search';
     </script>
     <script src="{{ mix('/js/content-search.js') }}"></script>
+    <script src="{{ asset('/acm/AlaatvCustomFiles/js/page/pages/content-search.js') }}"></script>
 @endsection

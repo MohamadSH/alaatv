@@ -1,84 +1,99 @@
-function loadCarousels() {
-    LazyLoad.loadElementByQuerySelector('.dasboardLessons', function (element) {
-        $(element).OwlCarouselType2({
-            OwlCarousel: {
+var initPage = function() {
 
-                // autoplay:true,
-                // autoplayTimeout:1000,
-                // autoplayHoverPause:true,
+    function loadCarousels() {
+        window.LazyLoad.loadElementByQuerySelector('.dasboardLessons', function (element) {
+            $(element).OwlCarouselType2({
+                OwlCarousel: {
 
-
-                // animateOut: 'slideOutDown',
-                // animateIn: 'flipInX',
-
-                // transitionStyle : 'backSlide',
+                    // autoplay:true,
+                    // autoplayTimeout:1000,
+                    // autoplayHoverPause:true,
 
 
-                // loop: true,
-                // autoplay: true,
-                // slideTransition: 'linear',
-                // autoplayTimeout: 0,
-                // autoplaySpeed: 4000,
-                // autoplayHoverPause: true,
+                    // animateOut: 'slideOutDown',
+                    // animateIn: 'flipInX',
+
+                    // transitionStyle : 'backSlide',
 
 
-                stagePadding: 30,
-                center: false,
-                loop: false,
-                lazyLoad:false,
-                responsive: {
-                    0: {
-                        items: 1
+                    // loop: true,
+                    // autoplay: true,
+                    // slideTransition: 'linear',
+                    // autoplayTimeout: 0,
+                    // autoplaySpeed: 4000,
+                    // autoplayHoverPause: true,
+
+
+                    stagePadding: 30,
+                    center: false,
+                    loop: false,
+                    lazyLoad:false,
+                    responsive: {
+                        0: {
+                            items: 1
+                        },
+                        400: {
+                            items: 2
+                        },
+                        600: {
+                            items: 3
+                        },
+                        800: {
+                            items: 4
+                        },
+                        1000: {
+                            items: 6
+                        }
                     },
-                    400: {
-                        items: 2
-                    },
-                    600: {
-                        items: 3
-                    },
-                    800: {
-                        items: 4
-                    },
-                    1000: {
-                        items: 6
+                    btnSwfitchEvent: function() {
+                        window.imageObserver.observe();
+                        window.gtmEecProductObserver.observe();
                     }
                 },
-                btnSwfitchEvent: function() {
-                    imageObserver.observe();
-                    gtmEecProductObserver.observe();
-                }
-            },
-            grid: {
-                columnClass: 'col-12 col-sm-6 col-md-4 col-lg-4 col-xl-3 gridItem',
-                btnSwfitchEvent: function() {
-                    imageObserver.observe();
-                    gtmEecProductObserver.observe();
-                }
-            },
-            defaultView: 'OwlCarousel', // OwlCarousel or grid
-            childCountHideOwlCarousel: 4
-        });
-    });
-}
-
-function loadStickeHeader() {
-    for (let section in sections) {
-        $('.'+sections[section]+'.dasboardLessons .m-portlet__head').sticky({
-            container: '.'+sections[section]+'.dasboardLessons > .col > .m-portlet',
-            topSpacing: $('#m_header').height(),
-            zIndex: 98
+                grid: {
+                    columnClass: 'col-12 col-sm-6 col-md-4 col-lg-4 col-xl-3 gridItem',
+                    btnSwfitchEvent: function() {
+                        window.imageObserver.observe();
+                        window.gtmEecProductObserver.observe();
+                    }
+                },
+                defaultView: 'OwlCarousel', // OwlCarousel or grid
+                childCountHideOwlCarousel: 4
+            });
         });
     }
-}
 
-loadCarousels();
-loadStickeHeader();
+    function loadStickeHeader(sections) {
+        for (var section in sections) {
+            $('.'+sections[section]+'.dasboardLessons .m-portlet__head').sticky({
+                container: '.'+sections[section]+'.dasboardLessons > .col > .m-portlet',
+                topSpacing: $('#m_header').height(),
+                zIndex: 98
+            });
+        }
+    }
+
+    function addEvents() {
+        $(document).on('click', '.btnScrollTo', function () {
+            var scrollTo = $(this).attr('data-scroll-to');
+            $(scrollTo).AnimateScrollTo();
+            // $('html,body').animate({scrollTop: $(scrollTo).offset().top - $('#m_header').height()},'slow');
+
+        });
+    }
+
+    function init(sections) {
+        loadCarousels();
+        loadStickeHeader(sections);
+        addEvents();
+    }
+
+    return {
+        init: init
+    };
+}();
+
 
 $(document).ready(function () {
-    $(document).on('click', '.btnScrollTo', function () {
-        var scrollTo = $(this).attr('data-scroll-to');
-        $(scrollTo).AnimateScrollTo();
-        // $('html,body').animate({scrollTop: $(scrollTo).offset().top - $('#m_header').height()},'slow');
-
-    });
+    initPage.init(sections);
 });

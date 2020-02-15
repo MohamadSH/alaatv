@@ -1,4 +1,4 @@
-
+/*Background*/
 .a--MegaMenu-categorySubItems-background {
     position: absolute;
     left: 20px;
@@ -28,4 +28,15 @@
 .a--MegaMenu-categorySubItems-background-image svg {
     max-width: 100%;
     max-height: 100%;
+}
+
+/*megamenuForMobiveInSidebar*/
+.megamenuForMobiveInSidebar {
+    display: none !important;
+}
+
+@media only screen and (max-width: 1024px) {
+    .megamenuForMobiveInSidebar {
+        display: block !important;
+    }
 }
