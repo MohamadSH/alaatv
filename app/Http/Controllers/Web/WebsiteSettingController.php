@@ -13,7 +13,6 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
-use stdClass;
 
 class WebsiteSettingController extends Controller
 {
@@ -149,40 +148,31 @@ class WebsiteSettingController extends Controller
 
     public function updateFaq(EditWebsiteFaqRequest $request, Websitesetting $setting)
     {
-        $file = $this->getRequestFile($request->all(), 'photo');
-        if ($file !== false) {
-            $extension = $file->getClientOriginalExtension();
-            $fileName  =
-                basename($file->getClientOriginalName(), '.' . $extension) . '_' . date('YmdHis') . '.' . $extension;
-            $disk      = Storage::disk(config('constants.DISK29'));
-            if ($disk->put($fileName, File::get($file))) {
-                $photo = 'upload/images/faq/' . $fileName;
-            }
-        }
+        $photo = $this->storeFAQPhoto($request);
 
         $faqs = $setting->faq;
-
         $faqId = $request->get('faq_id');
         if (isset($faqId)) {
-            $faqs          = $setting->faq;
-            $faqKey        = array_search($faqId, array_column($faqs, 'id'));
-            $faq           = $faqs[$faqKey];
-            $faq->title    = $request->get('title');
-            $faq->body     = $request->get('body');
-            $faq->photo    = isset($photo) ? $photo : null;
-            $faq->video    = $request->get('video');
-            $faq->order    = $request->get('order', 0);
+            [$faqKey, $faq] = $setting->findFAQ($faqId);
+            $faq           = Websitesetting::fillFAQ($faq, [
+                'title' => $request->get('title'),
+                'body'  => $request->get('body'),
+                'photo' => isset($photo) ? $photo : $faq->photo,
+                'video' => $request->get('video'),
+                'order' => $request->get('order', 0),
+            ]);
             $faqs[$faqKey] = $faq;
         } else {
-            $obj        = new stdClass();
-            $obj->id    = $setting->getLastFaqId() + 1;
-            $obj->title = $request->get('title');
-            $obj->body  = $request->get('body');
-            $obj->photo = isset($photo) ? $photo : null;
-            $obj->video = $request->get('video');
-            $obj->order = $request->get('order', 0);
+            $faq = Websitesetting::createFAQ([
+                'id'    => $setting->getLastFaqId() + 1,
+                'title' => $request->get('title'),
+                'body'  => $request->get('body'),
+                'photo' => $photo,
+                'video' => $request->get('video'),
+                'order' => $request->get('order', 0),
+            ]);
 
-            $faqs[] = $obj;
+            $faqs[] = $faq;
         }
         $updateFaq = $setting->update(['faq' => $faqs]);
 
@@ -224,5 +214,26 @@ class WebsiteSettingController extends Controller
         return response()->json([
             'message' => $responseText,
         ], $responseStatus);
+    }
+
+    /**
+     * @param EditWebsiteFaqRequest $request
+     *
+     * @return string
+     * @throws FileNotFoundException
+     */
+    private function storeFAQPhoto(EditWebsiteFaqRequest $request): ?string
+    {
+        $file = $this->getRequestFile($request->all(), 'photo');
+        if ($file !== false) {
+            $extension = $file->getClientOriginalExtension();
+            $fileName  =
+                basename($file->getClientOriginalName(), '.' . $extension) . '_' . date('YmdHis') . '.' . $extension;
+            $disk      = Storage::disk(config('constants.DISK29'));
+            if ($disk->put($fileName, File::get($file))) {
+                $photo = 'upload/images/faq/' . $fileName;
+            }
+        }
+        return isset($photo) ? $photo : null;
     }
 }
