@@ -49,9 +49,6 @@ class WebsiteSettingController extends Controller
     {
         $faqs = $setting->faq;
 
-        usort($faqs, function ($one, $two) {
-            return ($one->order > $two->order);
-        });
         return view('admin.siteConfiguration.FAQ.faq', compact('faqs'));
     }
 
