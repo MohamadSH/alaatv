@@ -278,6 +278,21 @@ class Mix {
             ],
             'public/js/page-donate.js');
     }
+    mixVoucherLogin() {
+        this.mixCssAndJs([
+                'public/acm/AlaatvCustomFiles/components/AlaaLoading/style.css',
+                'public/acm/AlaatvCustomFiles/components/FormGenerator/style.css',
+                'public/acm/AlaatvCustomFiles/css/auth/voucherLogin.css',
+            ],
+            'public/css/voucher-login.css',
+            [
+                'public/acm/AlaatvCustomFiles/components/AlaaLoading/script.js',
+                'public/acm/AlaatvCustomFiles/components/FormGenerator/script.js',
+                'public/acm/AlaatvCustomFiles/js/auth/voucherLogin.js',
+            ],
+            'public/js/voucher-login.js'
+        );
+    }
     mixPageHomePage() {
         this.mixCssAndJs([
                 'public/acm/AlaatvCustomFiles/css/customStyle/carouselMainSlideShow.css',
@@ -349,6 +364,7 @@ class Mix {
         this.mixPageError();
         this.mixAuthLogin();
         this.mixPageDonate();
+        this.mixVoucherLogin();
         this.mixPageHomePage();
         this.mixPageContactUs();
         this.mixPageContentSearch();

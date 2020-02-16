@@ -1,10 +1,10 @@
 @extends('barePage' , ['pageName' => 'voucherLogin'])
 
 @section('page-css')
-{{--    <link href="{{ mix('/css/page-contactUs.css') }}" rel="stylesheet" type="text/css"/>--}}
-    <link href="{{ asset('/acm/AlaatvCustomFiles/components/AlaaLoading/style.css') }}" rel="stylesheet" type="text/css"/>
-    <link href="{{ asset('/acm/AlaatvCustomFiles/components/FormGenerator/style.css') }}" rel="stylesheet" type="text/css"/>
-    <link href="{{ asset('/acm/AlaatvCustomFiles/css/auth/voucherLogin.css') }}" rel="stylesheet" type="text/css"/>
+    <link href="{{ mix('/css/voucher-login.css') }}" rel="stylesheet" type="text/css"/>
+{{--    <link href="{{ asset('/acm/AlaatvCustomFiles/components/AlaaLoading/style.css') }}" rel="stylesheet" type="text/css"/>--}}
+{{--    <link href="{{ asset('/acm/AlaatvCustomFiles/components/FormGenerator/style.css') }}" rel="stylesheet" type="text/css"/>--}}
+{{--    <link href="{{ asset('/acm/AlaatvCustomFiles/css/auth/voucherLogin.css') }}" rel="stylesheet" type="text/css"/>--}}
 @endsection
 
 @section('content')
@@ -56,8 +56,8 @@
             redirectUrl: '{{ $redirectUrl  }}'
         };
     </script>
-{{--    <script src = "{{ mix('/js/contactUs.js') }}"></script>--}}
-    <script src = "{{ asset('/acm/AlaatvCustomFiles/components/AlaaLoading/script.js') }}"></script>
-    <script src = "{{ asset('/acm/AlaatvCustomFiles/components/FormGenerator/script.js') }}"></script>
-    <script src = "{{ asset('/acm/AlaatvCustomFiles/js/auth/voucherLogin.js') }}"></script>
+    <script src = "{{ mix('/js/voucher-login.js') }}"></script>
+{{--    <script src = "{{ asset('/acm/AlaatvCustomFiles/components/AlaaLoading/script.js') }}"></script>--}}
+{{--    <script src = "{{ asset('/acm/AlaatvCustomFiles/components/FormGenerator/script.js') }}"></script>--}}
+{{--    <script src = "{{ asset('/acm/AlaatvCustomFiles/js/auth/voucherLogin.js') }}"></script>--}}
 @endsection
