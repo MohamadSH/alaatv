@@ -1477,14 +1477,24 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
         $recommendedProductSearch = new RecommendedProductSearch ();
         return Cache::tags(['content', 'recommendedProduct', 'content_' . $content->id, 'content_' . $content->id . '_recommendedProduct'])
             ->remember($key, config('constants.CACHE_600'), function () use ($content, $recommendedProductSearch) {
-                $filters  = [
-                    'tags' => ['c-' . $content->id],
-                ];
-                $result   = $recommendedProductSearch->get($filters);
                 $products = new ProductCollection();
-                foreach ($result as $product) {
+
+                $filters       = [
+                    'tags' => ['Content-' . $content->id],
+                ];
+                $contentResult = $recommendedProductSearch->get($filters);
+                foreach ($contentResult as $product) {
                     $products->push($product);
                 }
+
+                $filters   = [
+                    'tags' => ['Contentset-' . $content->contentset_id],
+                ];
+                $setResult = $recommendedProductSearch->get($filters);
+                foreach ($setResult as $product) {
+                    $products->push($product);
+                }
+
                 return $products;
             });
     }
@@ -1497,5 +1507,10 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
         }
 
         return false;
+    }
+
+    public function getShortDescription()
+    {
+        return mb_substr($this->getCleanTextForMetaTags($this->description), 0, config('constants.UI_META_DESCRIPTION_LIMIT'), 'utf-8');
     }
 }
