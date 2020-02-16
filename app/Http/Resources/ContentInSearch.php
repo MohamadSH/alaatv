@@ -4,14 +4,13 @@ namespace App\Http\Resources;
 
 use App\Traits\Content\Resource;
 use Illuminate\Http\Request;
-use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
  * Class Content
  *
  * @mixin \App\Content
  * */
-class ContentInSearch extends JsonResource
+class ContentInSearch extends AlaaJsonResourceWithPagination
 {
     use Resource;
 
