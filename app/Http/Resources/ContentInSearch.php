@@ -49,6 +49,7 @@ class ContentInSearch extends JsonResource
             'order'        => $this->order,
             'url'          => new Url($this),
             'set'          => (isset($this->contentset_id)) ? new SetInContentSearch($this->set) : null,
+            'updated_at'   => $this->when(isset($this->updated_at), $this->updated_at),
         ];
     }
 

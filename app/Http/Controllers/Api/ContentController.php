@@ -7,11 +7,14 @@ use App\Content;
 use App\Contenttype;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Content as ContentResource;
-use App\Http\Resources\ContentInSet as ContentInSearch;
+use App\Http\Resources\ContentInSet;
 use App\Traits\Content\ContentControllerResponseTrait;
 use Carbon\Carbon;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Routing\Redirector;
 
 class ContentController extends Controller
 {
@@ -24,7 +27,7 @@ class ContentController extends Controller
         $filters      = $request->all();
 
         $result = $contentSearch->get(compact('filters', 'contentTypes'));
-        return ContentInSearch::collection($result->get($contentTypes[0]));
+        return ContentInSet::collection($result->get($contentTypes[0]));
     }
 
 
@@ -59,7 +62,7 @@ class ContentController extends Controller
      * @param Request $request
      * @param Content $content
      *
-     * @return ContentResource|\Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     * @return ContentResource|JsonResponse|RedirectResponse|Redirector
      */
     public function showV2(Request $request, Content $content)
     {
