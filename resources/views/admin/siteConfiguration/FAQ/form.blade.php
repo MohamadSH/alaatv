@@ -34,8 +34,9 @@
             <strong>{{ $errors->first('photo') }}</strong>
             </span>
         @endif
-        @if(isset($faq) && isset($faq->thumbnail))
-            <a target="_blank" href="{{$faq->thumbnails}}"><img src="{{$faq->thumbnail}}" width="250" height="100"></a>
+        @if(isset($faq) && isset($faq->photo))
+            <a target="_blank" href="{{\App\Websitesetting::getFaqPhoto($faq)}}"><img
+                    src="{{\App\Websitesetting::getFaqPhoto($faq)}}" width="250" height="100"></a>
         @endif
     </div>
 </div>

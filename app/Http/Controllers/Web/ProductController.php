@@ -11,6 +11,7 @@ use App\{Adapter\AlaaSftpAdapter,
     Classes\Search\ProductSearch,
     Classes\SEO\SeoDummyTags,
     Content,
+    Contentset,
     Http\Requests\AddComplimentaryProductRequest,
     Http\Requests\EditProductRequest,
     Http\Requests\InsertProductRequest,
@@ -260,12 +261,12 @@ class ProductController extends Controller
 
         $descriptionsWithPeriod = $product->descriptionWithPeriod;
         $faqs                   = $product->faqs;
-
+        $recommenderContentsets = Contentset::orderByDesc('created_at')->get();
         return view('product.edit',
             compact('product', 'amountLimit', 'defaultAmountLimit', 'enableStatus', 'defaultEnableStatus',
                 'attributesets', 'bons', 'productFiles', 'blocks', 'allBlocks', 'sets',
                 'productFileTypes', 'defaultProductFileOrders', 'products', 'producttype', 'productPhotos',
-                'defaultProductPhotoOrder', 'tags', 'sampleContents', 'recommenderContents', 'liveDescriptions', 'descriptionsWithPeriod' , 'faqs'));
+                'defaultProductPhotoOrder', 'tags', 'sampleContents', 'recommenderContents', 'liveDescriptions', 'descriptionsWithPeriod', 'faqs', 'recommenderContentsets'));
     }
 
     public function update(EditProductRequest $request, Product $product)
@@ -1009,6 +1010,7 @@ class ProductController extends Controller
         $tagString                = Arr::get($inputData, 'tags');
         $sampleContentString      = Arr::get($inputData, 'sampleContents');
         $recommenderContentString = Arr::get($inputData, 'recommenderContents');
+        $recommenderContentSets   = Arr::get($inputData, 'recommenderContentsets');
 
         $product->fill($inputData);
 
@@ -1019,7 +1021,15 @@ class ProductController extends Controller
         $sampleContentsArray      = convertTagStringToArray($sampleContentString);
         $product->sample_contents = $sampleContentsArray;
 
-        $recommenderContentsArray      = convertTagStringToArray($recommenderContentString);
+        $recommenderContents = collect();
+        foreach (Contentset::whereIn('id', $recommenderContentSets)->get() as $set) {
+            $recommenderContents = $recommenderContents->merge($set->contents);
+        }
+
+        $recommenderContentsArray      =
+            (isset($recommenderContentSets)) ? $recommenderContents->pluck('id')->toArray() : [];
+        $recommenderContentsArray      =
+            array_merge($recommenderContentsArray, convertTagStringToArray($recommenderContentString));
         $product->recommender_contents = $recommenderContentsArray;
 
         if ($this->strIsEmpty($product->discount)) {

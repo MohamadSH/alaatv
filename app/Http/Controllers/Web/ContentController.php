@@ -223,13 +223,15 @@ class ContentController extends Controller
 
         $seenCount = $content->pageView;
 
-        $apiResponse       = response()->json($content, Response::HTTP_OK);
+        $apiResponse = response()->json($content, Response::HTTP_OK);
 
         $productsHasThisContentThroughBlockCollection = $content->related_products;
 
+
         $recommendedItems = (new RecommendedItemsFetcher($tags))->fetch();
-        $recommendedItems =
-            $this->addProductsToRecommendedItems($productsThatHaveThisContent, $recommendedItems);
+        $recommendedItems = $this->addProductsToRecommendedItems($productsThatHaveThisContent, $recommendedItems);
+//        $recommendedProductsOfThisContent = $content->recommended_products;
+//        $recommendedItems = $this->addProductsToRecommendedItems($recommendedProductsOfThisContent, $recommendedItems);
 
         $contentBlocks = $content->isFree ? Block::getContentBlocks() : collect();
 

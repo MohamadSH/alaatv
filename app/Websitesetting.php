@@ -5,14 +5,16 @@ namespace App;
 use Carbon\Carbon;
 use Eloquent;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Arr;
+use stdClass;
 use Storage;
 
 /**
  * App\Websitesetting
  *
- * @property int                 $id
- * @property string              $setting ستون شامل تنظیمات سایت
- * @property int|null            $version ستون مشخص ککنده ورژن تنظیمات
+ * @property int         $id
+ * @property string      $setting ستون شامل تنظیمات سایت
+ * @property int|null    $version ستون مشخص ککنده ورژن تنظیمات
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property Carbon|null $deleted_at
@@ -54,6 +56,36 @@ class Websitesetting extends BaseModel
         return isset($imageUrl) ? $imageUrl : null;
     }
 
+    public static function fillFAQ(stdClass $faq, array $input): stdClass
+    {
+        $faq->id    = Arr::get($input, 'id', (isset($faq->id)) ? $faq->id : null);
+        $faq->title = Arr::get($input, 'title');
+        $faq->body  = Arr::get($input, 'body');
+        $faq->photo = Arr::get($input, 'photo');
+        $faq->video = Arr::get($input, 'video');
+        $faq->order = Arr::get($input, 'order', 0);
+
+        return $faq;
+    }
+
+    /**
+     * @param                $faqId
+     *
+     * @return array
+     */
+    public function findFAQ($faqId): array
+    {
+        $faqs   = $this->faq;
+        $faqKey = array_search($faqId, array_column($faqs, 'id'));
+        return [$faqKey, $faqs[$faqKey]];
+    }
+
+    public static function createFAQ(array $input): stdClass
+    {
+        $faq = new stdClass();
+        return self::fillFAQ($faq, $input);
+    }
+
     public function getLastFaqId(): int
     {
         $faqs = $this->faq;
@@ -87,7 +119,12 @@ class Websitesetting extends BaseModel
             return [];
         }
 
-        return json_decode($value);
+        $faqs = json_decode($value);
+        usort($faqs, function ($one, $two) {
+            return ($one->order > $two->order);
+        });
+
+        return $faqs;
     }
 
     public function setFaqAttribute($input)
