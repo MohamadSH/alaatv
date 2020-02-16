@@ -132,8 +132,7 @@ var Alaasearch = function () {
             // description: data.description, // ******************************************************************************************************************
             description: 'description',
             videoOrder: data.order,
-            // updatedAt: data.updated_at, // *********************************************************************************************************************
-            updatedAt: '2020-01-02 10:23:14',
+            updatedAt: data.updated_at,
             setName: (typeof data.set !== 'undefined') ? data.set.short_title : '-'
         };
     }
@@ -677,7 +676,7 @@ var Alaasearch = function () {
         }
     }
     function fillVideoRepositoryAndSetNextPage(data) {
-        if (typeof data !== 'undefined' && typeof data.meta !== 'undefined' && data.meta.total > 0) {
+        if (typeof data !== 'undefined' && data !== null && typeof data.meta !== 'undefined' && data.meta.total > 0) {
             fillVideoRepository(data.data);
             setNextPageUrl('video', data.links.next);
         } else {
