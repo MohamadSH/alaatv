@@ -1,4 +1,4 @@
-@extends("app")
+@extends('partials.templatePage')
 
 @section("metadata")
     <meta name = "_token" content = "{{ csrf_token() }}">

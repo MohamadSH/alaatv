@@ -72,7 +72,7 @@
 .btnFavorite {
     position: absolute;
     left: 10px;
-    top: -20px;
+    top: -10px;
 }
 
 .alert.m-alert--outline.alert-success {

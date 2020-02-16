@@ -1,4 +1,4 @@
-@extends('app')
+@extends('partials.templatePage')
 
 @section('page-css')
     <link href="{{ asset('/acm/AlaatvCustomFiles/components/OwlCarouselType2/style.css') }}?v=1" rel="stylesheet" type="text/css"/>

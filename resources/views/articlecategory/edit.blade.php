@@ -1,4 +1,5 @@
-@permission((Config::get('constants.SHOW_ARTICLECATEGORY_ACCESS')))@extends("app",["pageName"=>"admin"])
+@permission((Config::get('constants.SHOW_ARTICLECATEGORY_ACCESS')))
+@extends('partials.templatePage',["pageName"=>"admin"])
 
 @section("headPageLevelPlugin")
     <link href = "/assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.css" rel = "stylesheet" type = "text/css"/>

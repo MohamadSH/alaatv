@@ -1,4 +1,4 @@
-@extends("app",["pageName"=>"certificates"])
+@extends('partials.templatePage',["pageName"=>"certificates"])
 
 @section('right-aside')
 @endsection

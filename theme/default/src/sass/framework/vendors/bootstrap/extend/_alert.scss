@@ -1,13 +1,13 @@
 //
 //** Alert Customization
-// 
+//
 
 //==== Component Mixins ====//
 
 //== Component Base
 @mixin m-build-component--alert-base() {
     //== Base
-    .alert {	
+    .alert {
         padding: 0.85rem 1.5rem;
         @include border-radius(0);
 
@@ -25,9 +25,9 @@
             cursor: pointer;
 
             span {
-                display: none;    
+                display: none;
             }
-        }   
+        }
 
         &.m-alert--square {
             @include border-radius(0);
@@ -95,10 +95,10 @@
 
                     span {
                         top: 50%;
-                        margin-top: -6px;  
+                        margin-top: -6px;
                         right: -6px;
-                        @include m--build-classic-arrow(left, 6px); 
-                    }       
+                        @include m--build-classic-arrow(left, 6px);
+                    }
                 }
 
                 .m-alert__close {
@@ -120,9 +120,9 @@
 
 //== Component Skin
 @mixin m-build-component--alert-skin($skin) {
-    @include component-skin(alert, $skin) { 
+    @include component-skin(alert, $skin) {
         background: get-color($skin, box);
-                
+
         .close  {
             color: get-color($skin, icon);
         }
@@ -136,14 +136,14 @@
                     color: get-color($skin, regular, '-');
                 }
             }
-                
+
             .close  {
                 color: get-color($skin, regular, '-');
             }
         }
 
         &.m-alert--air {
-            @include shadow(get-shadow($skin, '--')); 
+            @include shadow(get-shadow($skin, '--'));
 
             &:not(.m-alert--outline) {
                 border: 0;
@@ -209,8 +209,8 @@
 //== Component Base
 @include m-build-component--alert-base();
 
-//== Component Skin - Light
-@include m-build-component--alert-skin(light);
+////== Component Skin - Light
+//@include m-build-component--alert-skin(light);
 
 //== Component State
 @include m-build-component--alert-states();

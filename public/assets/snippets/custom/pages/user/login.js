@@ -14,7 +14,7 @@ var SnippetLogin = function() {
         //alert.animateClass('fadeIn animated');
         mUtil.animateClass(alert[0], 'fadeIn animated');
         alert.find('span').html(msg);
-    }
+    };
 
     //== Private Functions
 
@@ -24,7 +24,7 @@ var SnippetLogin = function() {
 
         login.addClass('m-login--signup');
         mUtil.animateClass(login.find('.m-login__signup')[0], 'flipInX animated');
-    }
+    };
 
     var displaySignInForm = function() {
         login.removeClass('m-login--forget-password');
@@ -33,7 +33,7 @@ var SnippetLogin = function() {
         login.addClass('m-login--signin');
         mUtil.animateClass(login.find('.m-login__signin')[0], 'flipInX animated');
         //login.find('.m-login__signin').animateClass('flipInX animated');
-    }
+    };
 
     var displayForgetPasswordForm = function() {
         login.removeClass('m-login--signin');
@@ -43,7 +43,7 @@ var SnippetLogin = function() {
         //login.find('.m-login__forget-password').animateClass('flipInX animated');
         mUtil.animateClass(login.find('.m-login__forget-password')[0], 'flipInX animated');
 
-    }
+    };
 
     var handleFormSwitch = function() {
         $('#m_login_forget_password').click(function(e) {
@@ -65,7 +65,7 @@ var SnippetLogin = function() {
             e.preventDefault();
             displaySignInForm();
         });
-    }
+    };
 
     var handleSignInFormSubmit = function() {
         $('#m_login_signin_submit').click(function(e) {
@@ -102,7 +102,7 @@ var SnippetLogin = function() {
                 }
             });
         });
-    }
+    };
 
     var handleSignUpFormSubmit = function() {
         $('#m_login_signup_submit').click(function(e) {
@@ -158,7 +158,7 @@ var SnippetLogin = function() {
                 }
             });
         });
-    }
+    };
 
     var handleForgetPasswordFormSubmit = function() {
         $('#m_login_forget_password_submit').click(function(e) {
@@ -202,7 +202,7 @@ var SnippetLogin = function() {
                 }
             });
         });
-    }
+    };
 
     //== Public Functions
     return {

@@ -5,13 +5,13 @@
             @if ($box-shadow != null) {
                 box-shadow: $box-shadow;
             }
-        }        
+        }
     }
 
     @if smooth-arrow() {
         &.m-dropdown--arrow {
             .m-dropdown__arrow {
-                color: $bg-color; 
+                color: $bg-color;
             }
         }
     } @else {
@@ -20,7 +20,7 @@
                 @include m--set-classic-arrow-bg(top, $bg-color);
             }
 
-            &.m-dropdown--up { 
+            &.m-dropdown--up {
                 .m-dropdown__arrow {
                     @include m--set-classic-arrow-bg(bottom, $bg-color);
                 }
@@ -33,7 +33,7 @@
     @if smooth-arrow() {
         &.m-dropdown--arrow {
             .m-dropdown__arrow {
-                color: $arrow-color; 
+                color: $arrow-color;
             }
         }
     } @else {
@@ -43,7 +43,7 @@
                     @include m--set-classic-arrow-bg(top, $arrow-color);
                 }
 
-                &.m-dropdown--up { 
+                &.m-dropdown--up {
                     .m-dropdown__arrow {
                         @include m--set-classic-arrow-bg(bottom, $arrow-color);
                     }

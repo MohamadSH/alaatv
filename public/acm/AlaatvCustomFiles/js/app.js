@@ -1,7 +1,20 @@
-var AppGlobalInitInit = function() {
+var AppGlobalInit = function() {
 
     var LazyLoad,
         Firebase;
+
+    function ajaxSetup() {
+        $(function () {
+            /**
+             * Set token for ajax request
+             */
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': window.Laravel.csrfToken,
+                }
+            });
+        });
+    }
 
     function initFlash() {
         flashGAEE();
@@ -113,8 +126,6 @@ var AppGlobalInitInit = function() {
         window.imageObserver = LazyLoad.image();
         window.gtmEecProductObserver = LazyLoad.gtmEecProduct();
         window.gtmEecAdvertisementObserver = LazyLoad.gtmEecAdvertisement();
-        // Bootstrap 4 carousel lazy load
-        LazyLoad.carousel([imageObserver, gtmEecAdvertisementObserver]);
     }
 
     function addGtmEecEvents() {
@@ -126,6 +137,14 @@ var AppGlobalInitInit = function() {
         // Promotion Click
         $(document).on('click' ,'.a--gtm-eec-advertisement-click', function(e){
             GAEE.promotionClick($(this));
+        });
+
+
+        $("#carouselMainSlideShow").on('slid.bs.carousel', function (e) {
+            var lazyObserversLength = lazyObservers.length;
+            for(var i = 0; i < lazyObserversLength; i++) {
+                lazyObservers[i].observe();
+            }
         });
     }
 
@@ -217,6 +236,7 @@ var AppGlobalInitInit = function() {
     }
 
     function init(data) {
+        ajaxSetup();
         initData(data);
         initLazyLoad();
         addEvents();
@@ -231,7 +251,7 @@ var AppGlobalInitInit = function() {
 }();
 
 jQuery(document).ready( function() {
-    AppGlobalInitInit.init({
+    AppGlobalInit.init({
         LazyLoad: LazyLoad,
         Firebase: Firebase
     });

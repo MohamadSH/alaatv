@@ -1,9 +1,6 @@
 var gulp = require('gulp');
 var yargs = require('yargs');
-var sequence = function (arr, cb) {
-    gulp.series(gulp.parallel(arr));
-    cb();
-};
+var sequence = require('run-sequence');
 var build = require('./build');
 var func = require('./helpers');
 var rename = require('gulp-rename');
@@ -96,15 +93,14 @@ if ((/true/i).test(build.config.compile.rtl.enabled)) {
   tasks.push('rtl');
 }
 
-
 // entry point
-gulp.task('default', gulp.series(gulp.parallel(tasks), function(cb) {
-    // clean first and then start bundling
-    return sequence(['build-bundle'], cb);
-}));
+gulp.task('default', tasks, function(cb) {
+  // clean first and then start bundling
+  return sequence(['build-bundle'], cb);
+});
 
 // html formatter
-gulp.task('html-formatter', gulp.series([],function(cb) {
+gulp.task('html-formatter', [], function(cb) {
   var theme = 'metronic';
   if (args.keen !== false) {
     theme = 'keen';
@@ -128,4 +124,4 @@ gulp.task('html-formatter', gulp.series([],function(cb) {
   format('../themes/themes/' + theme + '/dist/default');
   format('../themes/themes/' + theme + '/dist/classic');
   cb();
-}));
+});

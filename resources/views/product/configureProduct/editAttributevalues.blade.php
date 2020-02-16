@@ -1,4 +1,5 @@
-@permission((Config::get('constants.EDIT_CONFIGURE_PRODUCT_ACCESS')))@extends("app",["pageName"=>"admin"])
+@permission((Config::get('constants.EDIT_CONFIGURE_PRODUCT_ACCESS')))
+@extends('partials.templatePage',["pageName"=>"admin"])
 @section("pageBar")
     <div class = "page-bar">
         <ul class = "page-breadcrumb">

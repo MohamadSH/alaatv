@@ -1,4 +1,4 @@
-@extends("app" , ["pageName" => $pageName])
+@extends('partials.templatePage' , ["pageName" => $pageName])
 
 @section("headPageLevelPlugin")
     <link href = "/assets/global/plugins/bootstrap-toastr/toastr-rtl.min.css" rel = "stylesheet" type = "text/css"/>

@@ -121,7 +121,7 @@ License: You must have a valid license purchased only from themeforest(the above
 </html>
 
 
-{{--@extends('app')--}}
+{{--@extends('partials.templatePage')--}}
 
 {{--@section("headPageLevelStyle")--}}{{--<link href="/assets/pages/css/login-4-rtl.min.css" rel="stylesheet" type="text/css"/>--}}{{--@endsection--}}
 

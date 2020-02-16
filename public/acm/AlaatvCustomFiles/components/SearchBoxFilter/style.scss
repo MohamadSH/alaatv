@@ -1,79 +1,95 @@
 .SearchBoxFilter {
-  .GroupFilters {
-    background: white;
-    margin-bottom: 10px;
-    .head {
-      border-bottom: 1px solid #f2f2f2;
-      display: flex;
-      justify-content: space-between;
-      padding: 5px 10px;
-      cursor: pointer;
-      .title {
-
-      }
-      .tools {
-        .openMode {
-
-        }
-        .closeMode {
-
-        }
-      }
-    }
-    .body {
-      padding: 5px 10px;
-      .tools {
+    .GroupFilters {
+        background: white;
         margin-bottom: 10px;
-      }
 
-      .GroupFilters-Search {
+        .head {
+            border-bottom: 1px solid #f2f2f2;
+            display: flex;
+            justify-content: space-between;
+            padding: 5px 10px;
+            cursor: pointer;
 
-      }
+            .title {
 
-      .GroupFilters-item {
-        transition: background-color 0.5s;
-      }
-      .GroupFilters-item:hover {
-        background-color: #f2f3f8;
-      }
+            }
 
-    }
-  }
+            .tools {
+                .openMode {
 
-  .GroupFilters.status-open {
-    .head {
-      .title {
+                }
 
-      }
-      .tools {
-        .openMode {
-          display: block;
+                .closeMode {
+
+                }
+            }
         }
-        .closeMode {
-          display: none;
-        }
-      }
-    }
-    .body {
-      display: block;
-    }
-  }
-  .GroupFilters.status-close {
-    .head {
-      .title {
 
-      }
-      .tools {
-        .openMode {
-          display: none;
+        .body {
+            padding: 5px 10px;
+
+            .tools {
+                margin-bottom: 10px;
+            }
+
+            .GroupFilters-Search {
+
+            }
+
+            .GroupFilters-item {
+                position: relative;
+                z-index: 1;
+                transition: background-color 0.5s;
+            }
+
+            .GroupFilters-item:hover {
+                background-color: #f2f3f8;
+            }
+
         }
-        .closeMode {
-          display: block;
+    }
+
+    .GroupFilters.status-open {
+        .head {
+            .title {
+
+            }
+
+            .tools {
+                .openMode {
+                    display: block;
+                }
+
+                .closeMode {
+                    display: none;
+                }
+            }
         }
-      }
+
+        .body {
+            display: block;
+        }
     }
-    .body {
-      display: none;
+
+    .GroupFilters.status-close {
+        .head {
+            .title {
+
+            }
+
+            .tools {
+                .openMode {
+                    display: none;
+                }
+
+                .closeMode {
+                    display: block;
+                }
+            }
+        }
+
+        .body {
+            display: none;
+        }
     }
-  }
 }

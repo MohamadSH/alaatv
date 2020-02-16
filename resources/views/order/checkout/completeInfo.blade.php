@@ -1,4 +1,4 @@
-@extends("app")
+@extends('partials.templatePage')
 
 @section('page-css')
     <link href="{{ asset('/acm/AlaatvCustomFiles/components/step/step.css') }}" rel="stylesheet" type="text/css"/>
@@ -9,11 +9,11 @@
 @endsection
 
 @section("content")
-    
+
     @include("partials.checkoutSteps" , ["step"=>1])
-    
+
     @include('systemMessage.flash')
-    
+
     <div class="row">
         <div class="col-md-12">
             <div class="portlet light bordered ">
@@ -43,7 +43,7 @@
                     <br/>
                     <br/>
                     <br/>
-                
+
                 </div>
             </div>
         </div>

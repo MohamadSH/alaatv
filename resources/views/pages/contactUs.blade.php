@@ -1,4 +1,4 @@
-@extends('app' , ["pageName"=>"contactUs"])
+@extends('partials.templatePage' , ["pageName"=>"contactUs"])
 
 @section('page-css')
     <link href="{{ mix('/css/page-contactUs.css') }}" rel="stylesheet" type="text/css"/>

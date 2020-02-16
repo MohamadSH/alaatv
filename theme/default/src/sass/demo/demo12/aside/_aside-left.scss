@@ -6,21 +6,21 @@
 	//== Base markup
 	.m-aside-left {
 		@include transition(array-get($layout, self, minimize, transition));
-		width: array-get($layout, self, default, width);	
+		width: array-get($layout, self, default, width);
 
 		&.m-aside-left--skin-dark {
-			background-color: array-get($layout, self, default, bg-color, dark); 		
+			background-color: array-get($layout, self, default, bg-color, dark);
 		}
-		
+
 		&.m-aside-left--skin-light {
-			background-color: array-get($layout, self, default, bg-color, light); 		
+			background-color: array-get($layout, self, default, bg-color, light);
 		}
 	}
 
 	//== Default Offcanvas Mode
 	.m-aside-left.m-aside-left-offcanvas-default {
 		.m-aside-left {
-			top: array-get($m-config-header, header, layout, self, default, height, desktop) !important;		
+			top: array-get($m-config-header, header, layout, self, default, height, desktop) !important;
 		}
 
 		.m-body {
@@ -32,7 +32,7 @@
 	.m-aside-left--hide {
 		.m-aside-left {
 			width: 0;
-			overflow: hidden; 
+			overflow: hidden;
 		}
 
 		.m-body {
@@ -40,14 +40,14 @@
 		}
 	}
 
-	@include desktop {		
+	@include desktop {
 		.m-aside-left--minimize {
 			.m-aside-left {
 				width: array-get($layout, self, minimize, width);
 				@include transition(array-get($layout, self, minimize, transition));
 			}
 		}
-		
+
 		.m-aside-left--fixed {
 			// aside left
 			.m-aside-left {
@@ -57,7 +57,7 @@
 				height: auto !important;
 				left: 0;
 				z-index: array-get($layout, self, fixed, zindex);
-				@include fix-fixed-position-lags();		
+				@include fix-fixed-position-lags();
 
 				//== Fixed aside custom scroller
 				&.m-aside-left--skin-dark {
@@ -83,7 +83,7 @@
 			&.m-header--static,
 			&.m-header--fixed {
 				.m-aside-left {
-					top: array-get($m-config-header, header, default, height, desktop); 
+					top: array-get($m-config-header, header, default, height, desktop);
 				}
 			}
 
@@ -120,7 +120,7 @@
 				.m-body {
 					@include transition(array-get($layout, self, minimize, transition));
 					padding-left: array-get($layout, self, minimize, width);
-				} 
+				}
 			}
 
 			// boxed layout
@@ -136,7 +136,7 @@
 					}
 				}
 			}
-		}	
+		}
 
 		//== Fixed and minimized aside hover
 		.m-aside-left--fixed.m-aside-left--minimize-hover {
@@ -158,7 +158,7 @@
 		.m-aside-left.m-aside-left-offcanvas-default {
 			.m-aside-left {
 				top: 0 !important;
-			}		
+			}
 		}
 
 		.m-aside-left {
@@ -171,5 +171,5 @@
 @include m-build-aside-left-base( array-get($m-config-aside, aside-left) );
 
 //== Build Aside Left Offcanvas
-@include m-generate-component--offcanvas(m-aside-left, tablet-and-mobile, array-get($m-config-aside, aside-left, self, offcanvas, tablet-and-mobile) ); 
+@include m-generate-component--offcanvas(m-aside-left, tablet-and-mobile, array-get($m-config-aside, aside-left, self, offcanvas, tablet-and-mobile) );
 //@include m-generate-component--offcanvas(m-aside-left--offcanvas-default, default, array-get($m-config-aside, aside-left, self, offcanvas, default) );

@@ -1,4 +1,4 @@
-@extends("app")
+@extends('partials.templatePage')
 
 @section("headPageLevelPlugin")
     <link href = "/assets/pages/css/blog-rtl.min.css" rel = "stylesheet" type = "text/css"/>

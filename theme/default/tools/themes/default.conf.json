@@ -33,7 +33,7 @@
             "demo_api_url": ""
         },
         "dist": [
-            "./../../../../public/assets2120"
+            "./../../../public/assets"
         ]
     },
     "build": {
@@ -68,7 +68,6 @@
                         },
                         "block-ui": {
                             "scripts": [
-                                "{$config.path.node_modules}/block-ui/jquery.blockUI.js"
                             ]
                         }
                     }

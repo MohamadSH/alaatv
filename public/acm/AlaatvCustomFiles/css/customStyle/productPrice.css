@@ -1,0 +1,21 @@
+.a--productPrice {
+    position: relative;
+    margin-top: 7px;
+    margin-right: 12px;
+    font-size: 1rem;
+}
+
+.a--productPrice .a--productRealPrice {
+    text-decoration: line-through;
+    position: absolute;
+    top: -8px;
+    right: -13px;
+    line-height: 12px;
+    min-height: 12px;
+}
+
+.a--productPrice .a--productDiscount {
+    position: absolute;
+    top: -10px;
+    left: -12px;
+}

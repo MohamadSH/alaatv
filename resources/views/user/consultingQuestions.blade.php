@@ -1,4 +1,4 @@
-@extends("app" , ["pageName"=>"ConsultingQuestion"])
+@extends('partials.templatePage' , ["pageName"=>"ConsultingQuestion"])
 
 @section("headPageLevelPlugin")
     <link href = "/acm/extra/jplayer/dist/skin/blue.monday/css/jplayer.blue.monday.min.css" rel = "stylesheet" type = "text/css"/>

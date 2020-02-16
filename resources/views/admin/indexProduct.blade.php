@@ -1,4 +1,5 @@
-@permission(config('constants.PRODUCT_ADMIN_PANEL_ACCESS'))@extends('app',['pageName'=>$pageName])
+@permission(config('constants.PRODUCT_ADMIN_PANEL_ACCESS'))
+@extends('partials.templatePage',['pageName'=>$pageName])
 
 @section('page-css')
     <link href="{{ mix('/css/admin-all.css') }}" rel="stylesheet" type="text/css"/>
