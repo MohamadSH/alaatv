@@ -249,6 +249,8 @@ class ProductController extends Controller
         $recommenderContents = optional($product->recommender_contents)->tags;
         $recommenderContents = implode(',', isset($recommenderContents) ? $recommenderContents : []);
 
+//        $hasTheseRecommenderSets = optional($product->recommender_sets)->tags;
+        $hasTheseRecommenderSets = isset($hasTheseRecommenderSets) ? $hasTheseRecommenderSets : [];
 
         $liveDescriptions = $product->livedescriptions->sortByDesc('created_at');
         $blocks           = optional($product)->blocks;
@@ -261,12 +263,12 @@ class ProductController extends Controller
 
         $descriptionsWithPeriod = $product->descriptionWithPeriod;
         $faqs                   = $product->faqs;
-        $recommenderContentsets = Contentset::orderByDesc('created_at')->get();
+        $recommenderSets        = Contentset::orderByDesc('created_at')->get();
         return view('product.edit',
             compact('product', 'amountLimit', 'defaultAmountLimit', 'enableStatus', 'defaultEnableStatus',
                 'attributesets', 'bons', 'productFiles', 'blocks', 'allBlocks', 'sets',
                 'productFileTypes', 'defaultProductFileOrders', 'products', 'producttype', 'productPhotos',
-                'defaultProductPhotoOrder', 'tags', 'sampleContents', 'recommenderContents', 'liveDescriptions', 'descriptionsWithPeriod', 'faqs', 'recommenderContentsets'));
+                'defaultProductPhotoOrder', 'tags', 'sampleContents', 'recommenderContents', 'recommenderSets', 'hasTheseRecommenderSets', 'liveDescriptions', 'descriptionsWithPeriod', 'faqs'));
     }
 
     public function update(EditProductRequest $request, Product $product)
@@ -1010,7 +1012,7 @@ class ProductController extends Controller
         $tagString                = Arr::get($inputData, 'tags');
         $sampleContentString      = Arr::get($inputData, 'sampleContents');
         $recommenderContentString = Arr::get($inputData, 'recommenderContents');
-        $recommenderContentSets   = Arr::get($inputData, 'recommenderContentsets');
+        $recommenderSets          = Arr::get($inputData, 'recommenderSets');
 
         $product->fill($inputData);
 
@@ -1021,16 +1023,9 @@ class ProductController extends Controller
         $sampleContentsArray      = convertTagStringToArray($sampleContentString);
         $product->sample_contents = $sampleContentsArray;
 
-        $recommenderContents = collect();
-        foreach (Contentset::whereIn('id', $recommenderContentSets)->get() as $set) {
-            $recommenderContents = $recommenderContents->merge($set->contents);
-        }
 
-        $recommenderContentsArray      =
-            (isset($recommenderContentSets)) ? $recommenderContents->pluck('id')->toArray() : [];
-        $recommenderContentsArray      =
-            array_merge($recommenderContentsArray, convertTagStringToArray($recommenderContentString));
-        $product->recommender_contents = $recommenderContentsArray;
+        $product->recommender_contents = convertTagStringToArray($recommenderContentString);
+//        $product->recommender_sets        = $recommenderSets;
 
         if ($this->strIsEmpty($product->discount)) {
             $product->discount = 0;

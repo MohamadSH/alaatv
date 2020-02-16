@@ -332,11 +332,15 @@
                             data-width="100%"
                             data-filter="true"
                             data-height="200"
-                            id="recommenderContentsets"
-                            name="recommenderContentsets[]"
+                            id="recommenderSets"
+                            name="recommenderSets[]"
                             title="انتخاب ست">
-                        @foreach($recommenderContentsets as $set)
-                            <option value="{{$set->id}}">
+                        @foreach($recommenderSets as $set)
+                            <option value="{{$set->id}}"
+                                    @if(in_array($set->id , $hasTheseRecommenderSets))
+                                    class="bold"
+                                    selected="selected"
+                                @endif>
                                 #{{$set->id}}-{{$set->name}}
                             </option>
                         @endforeach
