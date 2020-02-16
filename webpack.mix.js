@@ -14,8 +14,8 @@ class Mix {
             'public/acm/webFonts/IRANSans/css/fontiran.css', // 800B
             // 'public/assets/vendors/base/vendors.bundle.rtl.css',
             // 'public/assets/demo/demo12/base/style.bundle.rtl.css',// 1006 KB
-            'public/assets2120/vendors/base/vendors.bundle.rtl.css',
-            'public/assets2120/demo/demo12/base/style.bundle.rtl.css',// 475 KB
+            'public/assets/vendors/base/vendors.bundle.rtl.css',
+            'public/assets/demo/demo12/base/style.bundle.rtl.css',// 475 KB
 
             'node_modules/toastr/build/toastr.css',// 481 KB
 
@@ -338,7 +338,7 @@ class Mix {
                 'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/style.css',
                 'public/acm/AlaatvCustomFiles/components/ScrollCarousel/style.css',
                 'public/acm/AlaatvCustomFiles/components/ScrollCarousel/itemStyle.css',
-                // 'public/acm/AlaatvCustomFiles/css/page/pages/content-search/content-search.css'
+                'public/acm/AlaatvCustomFiles/css/page/pages/content-search/content-search.css'
             ],
             'public/css/content-search.css',
             [
@@ -353,7 +353,7 @@ class Mix {
                 'public/acm/AlaatvCustomFiles/components/UrlParameter/UrlParameter.js',
 
                 'public/acm/AlaatvCustomFiles/js/page-content-search-filter-data.js',
-                // 'public/acm/AlaatvCustomFiles/js/page/pages/content-search.js'
+                'public/acm/AlaatvCustomFiles/js/page/pages/content-search.js'
             ],
             'public/js/content-search.js'
         );

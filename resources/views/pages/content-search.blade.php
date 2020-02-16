@@ -2,7 +2,6 @@
 
 @section('page-css')
     <link href="{{ mix('/css/content-search.css') }}" rel="stylesheet" type="text/css"/>
-    <link href="{{ asset('/acm/AlaatvCustomFiles/css/page/pages/content-search/content-search.css') }}" rel="stylesheet" type="text/css"/>
 @endsection
 
 @section('content')
@@ -77,5 +76,4 @@
         var contentSearchApi = window.location.origin + '/api/v2/search';
     </script>
     <script src="{{ mix('/js/content-search.js') }}"></script>
-    <script src="{{ asset('/acm/AlaatvCustomFiles/js/page/pages/content-search.js') }}"></script>
 @endsection

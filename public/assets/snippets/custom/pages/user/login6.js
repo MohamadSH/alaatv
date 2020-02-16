@@ -14,7 +14,7 @@ var SnippetLogin = function () {
 		//alert.animateClass('fadeIn animated');
 		mUtil.animateClass(alert[0], 'fadeIn animated');
 		alert.find('span').html(msg);
-	}
+	};
 
 	//== Private Functions
 
@@ -52,7 +52,7 @@ var SnippetLogin = function () {
 				}
 			});
 		});
-	}
+	};
 
 	//== Public Functions
 	return {
