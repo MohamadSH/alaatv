@@ -42,6 +42,7 @@ class ContentInSearch extends AlaaJsonResourceWithPagination
                 return New Section($this->section);
             }),
             'title'        => $this->when(isset($this->name), $this->name),
+            'body'         => $this->getShortDescription(),
             'duration'     => $this->when(isset($this->duration), $this->duration),
             'photo'        => $this->when(isset($this->thumbnail), $this->thumbnail),
             'isFree'       => $this->isFree,
