@@ -1,4 +1,4 @@
-@extends('app')
+@extends('partials.templatePage')
 
 @section('page-css')
     <link href="{{ mix('/css/page-live.css') }}" rel="stylesheet" type="text/css"/>
@@ -57,7 +57,7 @@
         @permission((config('constants.LIVE_STOP_ACCESS')))
         <div class="row">
             <div class="col text-center">
-                <button type="button" class="btn m-btn--pill m-btn--air m-btn m-btn--gradient-from-danger m-btn--gradient-to-warning" id="btnStopLive">
+                <button type="button" class="btn m-btn--pill m-btn--air m-btn btn-info" id="btnStopLive">
                     <i class="fa fa-stop"></i>
                     توقف
                 </button>
@@ -72,7 +72,7 @@
         <div class="row">
             <div class="col text-center">
                 <input type="text" name="title" placeholder="عنوان" id="startLiveTitle">
-                <button type="button" class="btn m-btn--pill m-btn--air m-btn m-btn--gradient-from-primary m-btn--gradient-to-info mx-auto" id="btnPlayLive">
+                <button type="button" class="btn m-btn--pill m-btn--air m-btn btn-info mx-auto" id="btnPlayLive">
                     <i class="fa fa-play"></i>
                     پخش
                 </button>

@@ -15,10 +15,10 @@
 //@import "container/container";
 
 //== Stack Layout
-@import "stack/stack"; // (need)
+@import "stack/stack"; // (need) // 20 KB
 
-//== Grid Layout
-@import "grid/grid"; // (just used in login page)
+////== Grid Layout
+//@import "grid/grid"; // (just used in login page) // 54 KB
 
 // Vertical Menu
 @import "menu/ver/helpers"; // (need)

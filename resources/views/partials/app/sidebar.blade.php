@@ -18,7 +18,7 @@
                 </a>
             </li>
             <li class="m-menu__item  @if(isset($pageName) && strcmp($pageName , "productsPortfolio")==0) m-menu__item--active @endif" aria-haspopup="true">
-                <a href="{{ action("Web\ShopPageController") }}" class="m-menu__link ">
+                <a href="{{ action("Web\ShopPageController") }}" class="m-menu__link" title="دانلود جزوه، جمع بندی و همایش کنکور">
                     <span class="m-menu__item-here"></span>
                     <i class="m-menu__link-icon fa fa-chalkboard-teacher"></i>
                     <span class="m-menu__link-text">محصولات آموزشی</span>
@@ -28,9 +28,9 @@
 
             <li class="m-menu__item m-menu__item--submenu megamenuForMobiveInSidebar" aria-haspopup="true"
                 m-menu-submenu-toggle="hover">
-                <a href="javascript:" class="m-menu__link m-menu__toggle">
+                <a href="javascript:" class="m-menu__link m-menu__toggle" title="فیلم های دهم، یازدهم، دوازدهم و کنکور نظام جدید و نظام قدیم آلاء">
                     <i class="m-menu__link-icon fa fa-film"></i>
-                    <span class="m-menu__link-text">فیلم های آلاء</span>
+                    <span class="m-menu__link-text">فیلم های پایه و کنکور آلاء</span>
                     <i class="m-menu__ver-arrow fa fa-angle-left"></i>
                 </a>
                 <div class="m-menu__submenu" m-hidden-height="80" style="display: none; overflow: hidden;">
@@ -640,10 +640,10 @@
             </li>
             <li class="m-menu__item m-menu__item--submenu megamenuForMobiveInSidebar" aria-haspopup="true"
                 m-menu-submenu-toggle="hover">
-                <a href="javascript:" class="m-menu__link m-menu__toggle">
+                <a href="javascript:" class="m-menu__link m-menu__toggle" title="همایش کنکوری آلاء">
                     <i class="m-menu__link-icon fa fa-video"></i>
                     <span class="m-menu__link-text">
-                        همایش های آلاء
+                        همایش کنکوری آلاء
                     </span>
                     <i class="m-menu__ver-arrow fa fa-angle-left"></i>
                 </a>
@@ -756,10 +756,10 @@
 {{--                </a>--}}
 {{--            </li>--}}
             <li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1">
-                <a target="_blank" href="https://forum.alaatv.com" rel="noreferrer" class="m-menu__link ">
+                <a target="_blank" href="https://forum.alaatv.com" rel="noreferrer" class="m-menu__link " title="انجمن کنکور و دانش آموزی آلاء">
                     <span class="m-menu__item-here"></span>
                     <i class="m-menu__link-icon fab fa-hornbill"></i>
-                    <span class="m-menu__link-text">انجمن آلاء</span>
+                    <span class="m-menu__link-text">انجمن کنکور و دانش آموزی آلاء</span>
                 </a>
             </li>
 {{--            <li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1">--}}

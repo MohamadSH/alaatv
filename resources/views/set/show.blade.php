@@ -1,4 +1,4 @@
-@extends('app')
+@extends('partials.templatePage')
 
 @section('page-css')
     <link href="{{ mix('/css/set-show.css') }}" rel="stylesheet">
@@ -58,7 +58,7 @@
                     </div>
                     <div class="m-portlet__head-tools">
                         <div class="FavoriteAndOrder">
-                            <div class="Order">
+                            <div class="Order text-center">
                                 @if($order == 'desc')
                                     <a href="?order=asc" id="sort-ascending">
                                         <i class="fa fa-sort-amount-down"></i>
@@ -130,53 +130,12 @@
 
                     <div class="tab-content">
                         <div class="tab-pane active" id="searchResult_video" role="tabpanel">
-                            <div class="m-widget5">
-                                <div class="setVideo">
-                                    <div class="m-accordion m-accordion--default m-accordion--toggle-arrow" id="m_accordion_video" role="tablist"></div>
-                                </div>
-                                @foreach($articles as $article)
-                                    <div class="m-widget5__item">
-                                        <div class="m-widget5__content">
-                                            <a href="{{ route('c.show' , $article) }}" style="display: inherit">
-                                                <div class="m-widget5__pic  a--full-width" style="display: contents" >
-                                                    <img class="img-fluid a--full-width lazy-image" width="453" height="254"  src="https://cdn.alaatv.com/loder.jpg?w=1&h=1" data-src="{{$article->thumbnail}}" alt="{{$article->name}}" data-container="body" data-toggle="m-tooltip" data-placement="top" title="خواندن مقاله">
-                                                </div>
-                                            </a>
-                                            <div class="m-widget5__section">
-                                                <h2 class="m-widget5__title m--margin-top-10-mobile">
-                                                    <a href="{{ route('c.show' , $article) }}">{{$article->name}}</a>
-                                                </h2>
-                                                <div class="m-widget5__info font-weight-bold">
-                                                    @if($article->isFree)
-                                                        <span class="m-badge m-badge--accent m-badge--wide">رایگان</span>
-                                                    @else
-                                                        <span class="m-badge m-badge--warning m-badge--wide">ویژه شما</span>
-                                                    @endif
-                                                    <span>|</span>
-                                                    <span class="m-widget5__info-date m--font-info">آخرین به روز رسانی: {{$article->UpdatedAt_Jalali()}}</span>
-                                                    <span>| آلاء</span>
-                                                </div>
-                                                <span class="m-widget5__desc">
-                                                         {!! $article->metaDescription !!}...
-                                                    </span>
-                                                <div class="m--clearfix"></div>
-                                            </div>
-                                        </div>
-                                        <div class="m-widget5__content">
-                                            <div>
-                                                <button type="button" class="btn m-btn--pill  btn-primary btn-block"
-                                                        onclick="window.location = '{{route('c.show' , $article)}}';"
-                                                        data-container="body" data-toggle="m-tooltip"
-                                                        data-placement="top" title="خواندن مقاله">خواندن
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                @endforeach
+                            <div class="a--list1 setVideo">
+                                <div class="m-accordion m-accordion--default m-accordion--toggle-arrow" id="m_accordion_video" role="tablist"></div>
                             </div>
                         </div>
                         <div class="tab-pane text-center" id="searchResult_pamphlet" role="tabpanel">
-                            <div class="setPamphlet m-widget4 text-left">
+                            <div class="a--list2 setPamphlet">
                                 <div class="m-accordion m-accordion--default m-accordion--toggle-arrow" id="m_accordion_pamphlet" role="tablist"></div>
                             </div>
                         </div>

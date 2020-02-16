@@ -1,4 +1,4 @@
-@extends("app" , ["pageName" => "submitRequest"])
+@extends('partials.templatePage' , ["pageName" => "submitRequest"])
 
 @section("headPageLevelPlugin")
     <link href = "/assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.css" rel = "stylesheet" type = "text/css"/>

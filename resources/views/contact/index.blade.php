@@ -1,4 +1,4 @@
-@extends('app',['pageName'=>'admin'])
+@extends('partials.templatePage',['pageName'=>'admin'])
 
 @section('page-css')
     {{--<link href="/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-modal/css/bootstrap-modal-bs3patch.css" rel="stylesheet" type="text/css"/>--}}

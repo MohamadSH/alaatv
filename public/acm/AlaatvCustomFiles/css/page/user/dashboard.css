@@ -228,6 +228,13 @@
 }
 
 
+.sortingFilterCol::-webkit-scrollbar {
+    display: none;
+}
+.sortingFilterCol {
+    overflow-y: auto;
+    -ms-overflow-style: none;
+}
 
 
 

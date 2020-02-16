@@ -1,4 +1,5 @@
-@role((Config::get("constants.ROLE_ADMIN")))@extends('app',['pageName'=>$pageName])
+@role((Config::get("constants.ROLE_ADMIN")))
+@extends('partials.templatePage',['pageName'=>$pageName])
 
 @section('pageBar')
     <nav aria-label = "breadcrumb">

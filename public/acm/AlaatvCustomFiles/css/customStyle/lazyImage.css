@@ -1,0 +1,13 @@
+.lazy-image:not(.lazy-done) {
+    -webkit-filter: blur(5px); /* Safari 6.0 - 9.0 */
+    filter: blur(5px);
+    transition: all 1.5s;
+}
+.lazy-image.lazy-done {
+    -webkit-filter: blur(0px); /* Safari 6.0 - 9.0 */
+    filter: blur(0px);
+    transition: all 1.5s;
+}
+.lazy-image {
+    height: auto;
+}

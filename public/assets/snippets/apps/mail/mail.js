@@ -14,7 +14,7 @@ var mMail = function() {
                 state: 'm-mail-aside-toggle--active'
             }               
         });        
-    }
+    };
 
     //== Aside Menu
     var initAsideMenu = function() {
@@ -30,7 +30,7 @@ var mMail = function() {
                 expandAll: false   // allow having multiple expanded accordions in the menu
             }
         });
-    }
+    };
 
     return {
         init: function() {  

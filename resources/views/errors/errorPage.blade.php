@@ -1,4 +1,4 @@
-@extends("app")
+@extends('partials.templatePage')
 
 @section("headPageLevelStyle")
     <link href = "/assets/pages/css/error-rtl.min.css" rel = "stylesheet" type = "text/css"/>

@@ -1,0 +1,67 @@
+#carouselMainSlideShow .carousel-item {
+    position: relative;
+}
+#carouselMainSlideShow .imageSlideOfSlideshow {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1;
+    height: auto;
+}
+#carouselMainSlideShow .loadingSlideshow {
+    width: 70px;
+    position: absolute;
+    top: calc( 50% - 35px);
+    left: calc( 50% - 35px);
+    z-index: 0;
+}
+.carousel-indicators {
+    bottom: -30px;
+}
+.carousel-indicators li.active {
+    background-color: #ff9000;
+}
+.carousel-indicators li {
+    background-color: #ffd295;
+}
+
+@media only screen and (max-width: 1800px) {
+    #carouselMainSlideShow .carousel-inner {
+        min-height: 719.922px;
+    }
+}
+@media only screen and (max-width: 1500px) {
+    #carouselMainSlideShow .carousel-inner {
+        min-height: 561.719px;
+    }
+}
+@media only screen and (max-width: 1140px) {
+    #carouselMainSlideShow .carousel-inner {
+        min-height: 421.875px;
+    }
+}
+@media only screen and (max-width: 960px) {
+    #carouselMainSlideShow .carousel-inner {
+        min-height: 351.563px;
+    }
+}
+@media only screen and (max-width: 720px) {
+    #carouselMainSlideShow .carousel-inner {
+        min-height: 277.344px;
+    }
+}
+@media only screen and (max-width: 540px) {
+    #carouselMainSlideShow .carousel-inner {
+        min-height: 207.031px;
+    }
+}
+@media only screen and (max-width: 414px) {
+    #carouselMainSlideShow .carousel-inner {
+        min-height: 157.813px;
+    }
+}
+@media only screen and (max-width: 375px) {
+    #carouselMainSlideShow .carousel-inner {
+        min-height: 142.578px;
+    }
+}

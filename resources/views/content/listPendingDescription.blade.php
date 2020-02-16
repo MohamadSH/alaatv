@@ -1,4 +1,4 @@
-@extends("app")
+@extends('partials.templatePage')
 
 @section("content")
     <div class="m-portlet m-portlet--tabs productDetailes">

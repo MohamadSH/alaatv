@@ -40,6 +40,7 @@ var LazyLoad = function () {
         }
 
         changeLazyLoadStatus(element);
+        $(document).trigger('LazyLoad-loadImage', [ element, w, h] );
     }
 
     function canChangeLazyLoad(element) {
@@ -110,6 +111,8 @@ var LazyLoad = function () {
                 // });
             }
         },
+        bootstrap4CarouselLoadHeight: carousel_loadHeightOfImageAndLoading
+
 
     };
 }();

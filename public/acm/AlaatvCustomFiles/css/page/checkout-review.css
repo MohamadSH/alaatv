@@ -6,9 +6,9 @@
 
 .CheckoutReviewTotalPriceWarper .btnGotoCheckoutPayment {
     position: absolute;
-    bottom: 0px;
-    left: 0px;
-    right: 0px;
+    bottom: 0;
+    left: 0;
+    right: 0;
     width: 100%;
 }
 
@@ -22,6 +22,51 @@
     bottom: auto;
 }
 
+
+.Step-warper {
+    display: none;
+}
+
+
+.discountCodeWraper {
+    margin-bottom: 0.5rem;
+}
+.bankLogo {
+    max-width: 60px;
+    border-radius: 4px;
+}
+.costReportWraper .costReportWraper-item:first-child {
+    padding: 0;
+}
+.costReportWraper .costReportWraper-item {
+    padding: 0.5rem 0;
+    position: relative;
+}
+.bootstrap-switch {
+    border-color: #9f9f9f;
+}
+.baseCostWraper .m-widget1__title {
+    font-weight: 900 !important;
+}
+.yourProfitWraper .m-widget1__title span {
+    color: gray;
+    font-size: 1rem;
+}
+.costReportWraper .costReportWraper-item .m-widget1__title,
+.costReportWraper .costReportWraper-item .m-widget1__number {
+    font-weight: normal;
+}
+.useWalletReportWraper {
+    border-bottom: .07rem dashed #848484;
+}
+
+
+
+
+
+
+
+
 .orderproductWithChildWarper .childOfParent .childIcon {
     display: table-cell;
     vertical-align: middle;
@@ -29,9 +74,9 @@
 
 .orderproductWithChildWarper {
     border-bottom: .07rem dashed #ebedf2;
-    border-radius: 7px;
-    padding-top: 20px;
-    margin: -20px 0px 15px 0px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    margin: -20px 0 15px 0;
     position: relative;
 }
 
@@ -42,16 +87,13 @@
     padding-right: 15px;
 }
 
-.orderproductWithChildWarper .hasChild .m-widget5__stats2 {
-    left: -10px;
-}
-
 .orderproductWithChildWarper .childOfParent {
+    margin-top: 20px;
+    border-radius: 7px;
+    position: relative;
     border: solid 3px #ff9000;
     padding: 5px 40px 5px 45px;
-    border-radius: 7px;
     border-bottom: solid 3px #ff9000 !important;
-    position: relative;
 }
 
 .orderproductWithChildWarper .childOfParent:before {
@@ -74,8 +116,8 @@
 .orderproductWithChildWarper .childOfParent .childItem {
     position: relative;
     border-bottom: .07rem dashed #ebedf2;
-    margin: 5px 0px;
-    padding: 0px 0px 5px 0px;
+    margin: 5px 0;
+    padding: 0 0 5px 0;
 }
 
 .orderproductWithChildWarper .childOfParent .childItem .childTitle,
@@ -97,54 +139,31 @@
     position: relative;
 }
 
-.orderproductWithChildWarper .m-widget5__pic .m-widget7__img,
-.orderproductWithoutChildWarper .m-widget5__pic .m-widget7__img {
-    max-width: 100%;
+.orderproductWithChildWarper ,
+.a--list3 .a--list3-item {
+    border-bottom: dotted 3px #cacaca;
 }
-
-.a--userCartList .orderproductWithoutChildWarper .btnRemoveOrderproduct-desktop-warper.m-widget5__pic {
-    padding: 0px;
-    width: auto;
-}
-
-.a--userCartList .orderproductWithChildWarper .m-widget5__item.hasChild .m-widget5__content .m-widget5__pic {
-    padding: 0px;
-}
-
-.Step-warper {
-    display: none;
+.orderproductWithChildWarper:last-child ,
+.a--list3 .a--list3-item:last-child,
+.orderproductWithChildWarper .a--list3-item.hasChild {
+    border-bottom: none;
 }
 
 
-.discountCodeWraper {
-    margin-bottom: 0.5rem;
+.selectPaymentMethod .pretty .state {
+    display: flex;
+    flex-flow: column;
+    justify-content: center;
+    align-items: center;
 }
-.bankLogo {
-    max-width: 60px;
-    border-radius: 4px;
-}
-.m-widget1 .m-widget1__item:first-child {
-    padding: 0;
-}
-.m-widget1 .m-widget1__item {
-    padding: 0.5rem 0;
+.selectPaymentMethod .pretty .state label {
     position: relative;
+    width: calc(1em + 2px);
+    height: calc(1em + 2px);
 }
-.bootstrap-switch {
-    border-color: #9f9f9f;
-}
-.baseCostWraper .m-widget1__title {
-    font-weight: 900 !important;
-}
-.yourProfitWraper .m-widget1__title span {
-    color: gray;font-size: 1rem;
-}
-.costReportWraper.m-widget1 .m-widget1__item .m-widget1__title,
-.costReportWraper.m-widget1 .m-widget1__item .m-widget1__number {
-    font-weight: normal;
-}
-.useWalletReportWraper {
-    border-bottom: .07rem dashed #848484;
+.selectPaymentMethod .pretty .state label::after,
+.selectPaymentMethod .pretty .state label::before {
+    top: calc((0% - (100% - 1.3em)) - 8%);
 }
 
 /*media query*/
@@ -168,10 +187,6 @@
     .btnRemoveOrderproduct-child {
         display: none !important;
     }
-
-    .a--userCartList .m-widget5__stats2 {
-        display: none !important;
-    }
 }
 
 @media (max-width: 767.98px) {
@@ -180,19 +195,6 @@
     }
     .a--userCartList .m-widget5__item {
         position: relative;
-    }
-
-    .a--userCartList .m-widget5__stats1 {
-        position: absolute;
-        left: 0px;
-        top: 30px;
-    }
-
-    .a--userCartList .m-widget5__stats2 {
-        position: absolute;
-        top: -30px;
-        left: 0;
-        display: block;
     }
 
     .btnAddMoreProductToCart-desktop {
@@ -210,18 +212,18 @@
     .btnGotoCheckoutPayment_mobile {
         display: block;
         position: fixed;
-        right: 0px;
+        right: 0;
         width: 100%;
-        bottom: 0px;
+        bottom: 0;
         z-index: 99999;
-        margin: 0px;
-        -webkit-box-shadow: 0px 5px 25px 0px rgba(0, 0, 0, 0.75);
-        -moz-box-shadow: 0px 5px 25px 0px rgba(0, 0, 0, 0.75);
-        box-shadow: 0px 5px 25px 0px rgba(0, 0, 0, 0.75);
+        margin: 0;
+        -webkit-box-shadow: 0 5px 25px 0 rgba(0, 0, 0, 0.75);
+        -moz-box-shadow: 0 5px 25px 0 rgba(0, 0, 0, 0.75);
+        box-shadow: 0 5px 25px 0 rgba(0, 0, 0, 0.75);
     }
 
     .btnGotoCheckoutPayment_mobile .m-portlet__body {
-        padding: 0px;
+        padding: 0;
     }
 
     .btnGotoCheckoutPayment_mobile .btnGotoCheckoutPayment {
@@ -248,11 +250,7 @@
     }
 
     .orderproductWithChildWarper {
-        margin-left: 0px;
-    }
-
-    .orderproductWithChildWarper .hasChild .m-widget5__stats2 {
-        left: -10px;
+        margin-left: 0;
     }
 
     .orderproductWithChildWarper .childOfParent .btnRemoveOrderproduct-child {

@@ -1,4 +1,4 @@
-@extends('app' , ["pageName"=>$pageName])
+@extends('partials.templatePage' , ["pageName"=>$pageName])
 
 @section('page-css')
     <link href="{{ mix('/css/checkout-review.css') }}" rel="stylesheet" type="text/css"/>
@@ -26,13 +26,13 @@
                         <div class="m-portlet__head-tools btnAddMoreProductToCartWraper">
                             <button onclick="window.location.href='{{action('Web\ShopPageController')}}';mApp.block('.btnAddMoreProductToCartWraper', {type: 'loader',state: 'info',});"
                                     type="button"
-                                    class="btn m-btn--pill m-btn--air m-btn m-btn--gradient-from-primary m-btn--gradient-to-info btnAddMoreProductToCart-desktop">
+                                    class="btn m-btn--pill m-btn--air btn-warning btnAddMoreProductToCart-desktop">
                                 <i class="flaticon-bag"></i>
                                 افزودن محصول جدید به سبد
                             </button>
                             <button onclick="window.location.href='{{action('Web\ShopPageController')}}';mApp.block('.btnAddMoreProductToCartWraper', {type: 'loader',state: 'info',});"
                                     type="button"
-                                    class="btn m-btn--pill m-btn--air m-btn m-btn--gradient-from-primary m-btn--gradient-to-info btnAddMoreProductToCart-mobile">
+                                    class="btn m-btn--pill m-btn--air btn-warning btnAddMoreProductToCart-mobile">
                                 <i class="flaticon-bag"></i>
                                 افزودن محصول جدید
                             </button>
@@ -43,224 +43,134 @@
                         <!--begin::Content-->
                         <div class="tab-content">
                             <!--begin::m-widget5-->
-                            <div class="m-widget5 a--userCartList-items">
+                            <style>
+                                .productAttributes {
+                                    display: flex;
+                                    flex-flow: column;
+                                    flex-wrap: wrap;
+                                    max-height: 150px;
+                                }
+                                .productAttributes .productAttributes-item {
+
+                                }
+                            </style>
+                            <div class="m-widget5 a--list3 a--userCartList-items">
                                 @if(isset($invoiceInfo['items']))
                                     @foreach($invoiceInfo['items'] as $key=>$orderProductItem)
                                         @if($orderProductItem['grand']===null)
                                             @foreach($orderProductItem['orderproducts'] as $key=>$simpleOrderProductItem)
-                                                <div class="m-widget5__item orderproductWithoutChildWarper">
-                                                    <div class="m-widget5__content">
-                                                        <div class="m-widget5__pic btnRemoveOrderproduct-desktop-warper">
-                                                            <button type="button"
-                                                                    data-action="{{ action("Web\OrderproductController@destroy",$simpleOrderProductItem->id) }}"
-                                                                    data-name="{{ $simpleOrderProductItem->product->name  }}"
-                                                                    data-category="-"
-                                                                    data-variant="-"
-                                                                    data-productid="{{ $simpleOrderProductItem->product->id }}"
-
-                                                                    @include('partials.gtm-eec.product', ['position'=>$key, 'list'=>'سبد خرید', 'product'=>$simpleOrderProductItem->product, 'quantity'=>'1'])
-
-{{--                                                                    data-gtm-eec-product-id="{{ $simpleOrderProductItem->product->id }}"--}}
-{{--                                                                    data-gtm-eec-product-name="{{ $simpleOrderProductItem->product->name }}"--}}
-{{--                                                                    data-gtm-eec-product-price="{{ number_format($simpleOrderProductItem->product->price['final'], 2, '.', '') }}"--}}
-{{--                                                                    data-gtm-eec-product-brand="آلاء"--}}
-{{--                                                                    data-gtm-eec-product-category="-"--}}
-{{--                                                                    data-gtm-eec-product-variant="-"--}}
-{{--                                                                    data-gtm-eec-product-quantity="1"--}}
-
-                                                                    class="btn btn-sm m-btn--pill m-btn--air btn-danger d-none d-md-block d-lg-block d-xl-block m--margin-right-5 btnRemoveOrderproduct">
+                                                <div class="a--list3-item orderproductWithoutChildWarper">
+                                                    <div class="a--list3-action-right">
+                                                        <button type="button"
+                                                                data-action="{{ action("Web\OrderproductController@destroy",$simpleOrderProductItem->id) }}"
+                                                                data-name="{{ $simpleOrderProductItem->product->name  }}"
+                                                                data-category="-"
+                                                                data-variant="-"
+                                                                data-productid="{{ $simpleOrderProductItem->product->id }}"
+                                                                @include('partials.gtm-eec.product', ['position'=>$key, 'list'=>'سبد خرید', 'product'=>$simpleOrderProductItem->product, 'quantity'=>'1'])
+                                                                class="btn btn-sm m-btn--pill m-btn--air btn-danger m--margin-right-5 btnRemoveOrderproduct">
                                                                     <span>
                                                                         <i class="flaticon-circle"></i>
                                                                         <span>حذف</span>
                                                                     </span>
-                                                            </button>
-                                                        </div>
-                                                        <div class="m-widget5__pic">
-                                                            <a class="m-link" target="_blank"
-                                                               href="{{ $simpleOrderProductItem->product->url }}">
-                                                                <img class="m-widget7__img"
-                                                                     src="{{ $simpleOrderProductItem->product->photo }}"
-                                                                     alt="">
-                                                            </a>
-                                                        </div>
-                                                        <div class="m-widget5__section">
-                                                            <div class="d-none d-sm-block d-md-block d-lg-block d-xl-block">
-                                                                <h4 class="m-widget5__title">
-                                                                    <a class="m-link" target="_blank"
-                                                                       href="{{ $simpleOrderProductItem->product->url }}">
-                                                                        {{ $simpleOrderProductItem->product->name }}
-                                                                    </a>
-                                                                </h4>
-                                                                <span class="m-widget5__desc">
-                                                                    @if(isset($simpleOrderProductItem->product->attributes))
-                                                                        @foreach($simpleOrderProductItem->product->attributes as $productAttributeGroupKey=>$productAttributeGroup)
-                                                                            @foreach($productAttributeGroup as $attributeItem)
-                                                                                @if(($productAttributeGroupKey=='main' || $productAttributeGroupKey=='information') && $attributeItem->control=='simple')
-                                                                                    {{ $attributeItem->title }}
-                                                                                    : {{ $attributeItem->data[0]->name }}
-                                                                                    <br>
-                                                                                @endif
-                                                                            @endforeach
-                                                                        @endforeach
-                                                                    @endif
-                                                                    @if(isset($simpleOrderProductItem->attributevalues))
-                                                                        @foreach($simpleOrderProductItem->attributevalues as $attributeGroupKey=>$attributeItem)
-                                                                            <span class="m-badge m-badge--info m-badge--wide m-badge--rounded m--margin-bottom-5">{{ $attributeItem->name }}</span>
-                                                                        @endforeach
-                                                                    @endif
-                                                                </span>
-                                                            </div>
-                                                        </div>
-                                                        <div class="d-sm-none d-md-none d-lg-none m--margin-top-10">
-                                                            <h4 class="m-widget5__title">
+                                                        </button>
+                                                    </div>
+                                                    <div class="a--list3-thumbnail">
+                                                        <a target="_blank"
+                                                           href="{{ $simpleOrderProductItem->product->url }}">
+                                                            <img src="https://cdn.alaatv.com/loder.jpg?w=1&h=1" class="lazy-image a--full-width" data-src="{{ $simpleOrderProductItem->product->photo }}" alt="{{ $simpleOrderProductItem->product->name }}" width="40" height="40">
+                                                        </a>
+                                                    </div>
+                                                    <div class="a--list3-content">
+                                                        <a href="{{ $simpleOrderProductItem->product->url }}" target="_blank">
+                                                            <h2 class="a--list3-title">
                                                                 {{ $simpleOrderProductItem->product->name }}
-                                                            </h4>
-                                                            <span class="m-widget5__desc">
-                                                                @if(isset($simpleOrderProductItem->product->attributes))
-                                                                    @foreach($simpleOrderProductItem->product->attributes as $attributeGroupKey=>$attributeGroup)
-                                                                        @foreach($attributeGroup as $attributeItem)
-                                                                            @if(($attributeGroupKey=='main' || $attributeGroupKey=='information') && $attributeItem->control=='simple')
+                                                            </h2>
+                                                        </a>
+                                                        <div class="a--list3-info"></div>
+                                                        <div class="a--list3-desc">
+
+                                                            @if(isset($simpleOrderProductItem->product->attributes))
+                                                                <div class="productAttributes">
+                                                                    @foreach($simpleOrderProductItem->product->attributes->filter(function ($value, $key) {return (($key==='main' || $key==='information'));}) as $productAttributeGroupKey=>$productAttributeGroup)
+                                                                        @foreach($productAttributeGroup->filter(function ($value, $key) {return ($value->control==='simple');}) as $attributeItem)
+                                                                            <div class="productAttributes-item">
                                                                                 {{ $attributeItem->title }}
                                                                                 : {{ $attributeItem->data[0]->name }}
-                                                                                <br>
-                                                                            @endif
+                                                                            </div>
                                                                         @endforeach
                                                                     @endforeach
-                                                                @endif
-                                                                @if(isset($simpleOrderProductItem->attributevalues))
+                                                                </div>
+                                                            @endif
+
+                                                            @if(isset($simpleOrderProductItem->attributevalues))
+                                                                <div class="orderProductAttributeValues">
                                                                     @foreach($simpleOrderProductItem->attributevalues as $attributeGroupKey=>$attributeItem)
                                                                         <span class="m-badge m-badge--info m-badge--wide m-badge--rounded m--margin-bottom-5">{{ $attributeItem->name }}</span>
                                                                     @endforeach
-                                                                @endif
-                                                            </span>
-                                                        </div>
-                                                        @if($simpleOrderProductItem->attached_bons_number > 0)
-                                                            <span class="m-badge m-badge--info m-badge--wide m-badge--rounded">
-                                                                <i class="flaticon-interface-9"></i>
-                                                                تعداد بن مصرفی:
-                                                                {{ $simpleOrderProductItem->attached_bons_number }}
-                                                            </span>
-                                                        @endif
-                                                    </div>
-                                                    <div class="m-widget5__content">
+                                                                </div>
+                                                            @endif
 
-
-                                                        <span class="m-badge m-badge--primary m-badge--wide m-badge--rounded notIncludedProductsInCoupon notIncludedProductsInCoupon-{{ $simpleOrderProductItem->product->id }} a--d-none">شامل کد تخفیف نمی شود</span>
-                                                        <div class="m-widget5__stats1">
-                                                            <span class="m-nav__link-badge">
-                                                                <span class="m-badge m-badge--danger m-badge--wide m-badge--rounded a--productPrice">
-                                                                    @if($simpleOrderProductItem['price']['final']!=$simpleOrderProductItem['price']['base'])
-                                                                        <span class="m-badge m-badge--warning a--productRealPrice">{{ number_format($simpleOrderProductItem['price']['base']+$simpleOrderProductItem['price']['extraCost']) }}</span>
-                                                                    @endif
-                                                                    {{ number_format($simpleOrderProductItem['price']['final']+$simpleOrderProductItem['price']['extraCost']) }} تومان
-                                                                    @if($simpleOrderProductItem['price']['final']!==$simpleOrderProductItem['price']['base'])
-                                                                        <span class="m-badge m-badge--info a--productDiscount">{{ round((1-($simpleOrderProductItem['price']['final']/$simpleOrderProductItem['price']['base']))*100) }}%</span>
-                                                                    @endif
+                                                            @if($simpleOrderProductItem->attached_bons_number > 0)
+                                                                <span class="m-badge m-badge--info m-badge--wide m-badge--rounded">
+                                                                    <i class="flaticon-interface-9"></i>
+                                                                    تعداد بن مصرفی:
+                                                                    {{ $simpleOrderProductItem->attached_bons_number }}
                                                                 </span>
-                                                            </span>
+                                                            @endif
                                                         </div>
-                                                        <div class="m-widget5__stats2">
-                                                            <a href="#"
-                                                               data-action="{{action("Web\OrderproductController@destroy",$simpleOrderProductItem->id)}}"
-                                                               data-name="{{ $simpleOrderProductItem->product->name  }}"
-                                                               data-category="-"
-                                                               data-variant="-"
-                                                               data-productid="{{ $simpleOrderProductItem->product->id }}"
-                                                               class="btn btn-default m-btn m-btn--icon btn-sm m-btn--icon-only m-btn--pill btnRemoveOrderproduct">
-                                                                <i class="fa fa-times"></i>
-                                                            </a>
-                                                        </div>
+                                                    </div>
+                                                    <div class="a--list3-action-left">
+                                                        @include('product.partials.price', ['price' => $simpleOrderProductItem['price'], 'extraCost' => $simpleOrderProductItem['price']['extraCost']])
                                                     </div>
                                                 </div>
                                             @endforeach
                                         @else
+
                                             <div class="orderproductWithChildWarper">
 
-                                                <div class="m-widget5__item hasChild">
-                                                    <div class="m-widget5__content">
-                                                        <div class="m-widget5__pic">
-                                                            <button class="btn btn-sm m-btn--pill m-btn--air btn-danger d-none d-md-block d-lg-block d-xl-block m--margin-right-5 a--visibility-hidden"
-                                                                    type="button">
-                                                            <span>
-                                                                <i class="flaticon-circle"></i>
-                                                                <span>حذف</span>
-                                                            </span>
-                                                            </button>
-                                                        </div>
-                                                        <div class="m-widget5__pic">
-                                                            <a class="m-link" target="_blank"
-                                                               href="{{ $orderProductItem['grand']->url }}">
-                                                                <img class="m-widget7__img"
-                                                                     src="{{ $orderProductItem['grand']->photo }}"
-                                                                     alt="">
-                                                            </a>
-                                                        </div>
-
-                                                        {{--attribute value in desktop--}}
-                                                        <div class="m-widget5__section">
-                                                            <div class=" d-none d-md-block d-lg-block d-xl-block">
-                                                                <h4 class="m-widget5__title">
-                                                                    <a class="m-link" target="_blank"
-                                                                       href="{{ $orderProductItem['grand']->url }}">
-                                                                        {{ $orderProductItem['grand']->name }}
-                                                                    </a>
-                                                                </h4>
-                                                                <span class="m-widget5__desc">
-                                                                    @if(isset($orderProductItem['grand']->attributes))
-                                                                        @foreach($orderProductItem['grand']->attributes as $productAttributeGroupKey=>$productAttributeGroup)
-                                                                            @foreach($productAttributeGroup as $attributeItem)
-                                                                                @if(($productAttributeGroupKey=='main' || $productAttributeGroupKey=='information') && $attributeItem->control=='simple')
-                                                                                    {{ $attributeItem->title }}
-                                                                                    : {{ $attributeItem->data[0]->name }}
-                                                                                    <br>
-                                                                                @endif
-                                                                            @endforeach
-                                                                        @endforeach
-                                                                    @endif
-
-                                                                    @if(optional($orderProductItem['grand']->attributes)->get('information'))
-                                                                        @foreach($orderProductItem['grand']->attributes->get('information') as $attributeGroupKey=>$attributeItem)
-                                                                            <span class="m-badge m-badge--info m-badge--wide m-badge--rounded m--margin-bottom-5">{{ $attributeItem->title }} : {{ $attributeItem->data[0]->name }}</span>
-                                                                        @endforeach
-                                                                    @endif
-                                                                </span>
-                                                            </div>
-                                                        </div>
-
-                                                        {{--attribute value in mobile--}}
-                                                        <div class="d-sm-none d-md-none d-lg-none m--margin-top-10">
-                                                            <h4 class="m-widget5__title">
+                                                <div class="a--list3-item hasChild">
+                                                    <div class="a--list3-action-right"></div>
+                                                    <div class="a--list3-thumbnail">
+                                                        <a target="_blank"
+                                                           href="{{ $orderProductItem['grand']->url }}">
+                                                            <img src="https://cdn.alaatv.com/loder.jpg?w=1&h=1" class="lazy-image a--full-width" data-src="{{ $orderProductItem['grand']->photo }}" alt="{{ $orderProductItem['grand']->name }}" width="40" height="40">
+                                                        </a>
+                                                    </div>
+                                                    <div class="a--list3-content">
+                                                        <a href="{{ $orderProductItem['grand']->url }}" target="_blank">
+                                                            <h2 class="a--list3-title">
                                                                 {{ $orderProductItem['grand']->name }}
-                                                            </h4>
-                                                            <span class="m-widget5__desc">
-                                                                @if(isset($orderProductItem['grand']->attributes))
-                                                                    @foreach($orderProductItem['grand']->attributes as $productAttributeGroupKey=>$productAttributeGroup)
-                                                                        @foreach($productAttributeGroup as $attributeItem)
-                                                                            @if(($productAttributeGroupKey=='main' || $productAttributeGroupKey=='information') && $attributeItem->control=='simple')
+                                                            </h2>
+                                                        </a>
+                                                        <div class="a--list3-info"></div>
+                                                        <div class="a--list3-desc">
+
+
+                                                            @if(isset($orderProductItem['grand']->attributes))
+                                                                <div class="productAttributes">
+                                                                    @foreach($orderProductItem['grand']->attributes->filter(function ($value, $key) {return (($key==='main' || $key==='information'));}) as $productAttributeGroupKey=>$productAttributeGroup)
+                                                                        @foreach($productAttributeGroup->filter(function ($value, $key) {return ($value->control==='simple');}) as $attributeItem)
+                                                                            <div class="productAttributes-item">
                                                                                 {{ $attributeItem->title }}
                                                                                 : {{ $attributeItem->data[0]->name }}
-                                                                            @endif
+                                                                            </div>
                                                                         @endforeach
                                                                     @endforeach
-                                                                @endif
-                                                                @if(isset($orderProductItem['grand']->attributevalues))
-                                                                    @foreach($orderProductItem['grand']->attributevalues as $attributeGroupKey=>$attributeItem)
-                                                                        <span class="m-badge m-badge--info m-badge--wide m-badge--rounded m--margin-bottom-5">{{ $attributeItem->name }}</span>
+                                                                </div>
+                                                            @endif
+
+                                                            @if(optional($orderProductItem['grand']->attributes)->get('information'))
+                                                                <div class="orderProductAttributeValues">
+                                                                    @foreach($orderProductItem['grand']->attributes->get('information') as $attributeGroupKey=>$attributeItem)
+                                                                        <span class="m-badge m-badge--info m-badge--wide m-badge--rounded m--margin-bottom-5">{{ $attributeItem->title }} : {{ $attributeItem->data[0]->name }}</span>
                                                                     @endforeach
-                                                                @endif
-                                                            </span>
-                                                        </div>
-
-                                                    </div>
-                                                    <div class="m-widget5__content">
-
-                                                        <div class="m-widget5__stats1">
-
-                                                        </div>
-                                                        <div class="m-widget5__stats2">
+                                                                </div>
+                                                            @endif
 
                                                         </div>
                                                     </div>
+                                                    <div class="a--list3-action-left"></div>
                                                 </div>
 
                                                 <div class="m-widget5__item childOfParent">
@@ -296,15 +206,7 @@
                                                                 {{ $orderProductItemChild->product->name }}
                                                             </div>
                                                             <div class="childPrice">
-                                                                <span class="m-badge m-badge--danger m-badge--wide m-badge--rounded a--productPrice">
-                                                                    @if($orderProductItemChild['price']['final']!=$orderProductItemChild['price']['base'])
-                                                                        <span class="m-badge m-badge--warning a--productRealPrice">{{ number_format($orderProductItemChild['price']['base']+$orderProductItemChild['price']['extraCost']) }}</span>
-                                                                    @endif
-                                                                    {{ number_format($orderProductItemChild['price']['final']+$orderProductItemChild['price']['extraCost']) }} تومان
-                                                                    @if(($orderProductItemChild->discountDetail['price']['bonDiscount']+$orderProductItemChild['price']['discountDetail']['productDiscount'])>0)
-                                                                        <span class="m-badge m-badge--info a--productDiscount">{{ $orderProductItemChild->discountDetail['price']['bonDiscount']+$orderProductItemChild['price']['discountDetail']['productDiscount'] }}%</span>
-                                                                    @endif
-                                                                </span>
+                                                                @include('product.partials.price', ['price' => $orderProductItemChild['price'], 'extraCost' => $orderProductItemChild['price']['extraCost']])
                                                             </div>
 
                                                             <div class="clearfix"></div>
@@ -340,10 +242,10 @@
                     <!--begin:: Widgets/Authors Profit-->
                     <div class="m-portlet m-portlet--bordered-semi CheckoutReviewTotalPriceWarper">
                         <div class="m-portlet__body" @if(optional(Auth::user())->id === null) style="padding-bottom: 0px !important;" @endif>
-                            <div class="m-widget1 m--padding-5 costReportWraper">
+                            <div class="m--padding-5 costReportWraper">
 
                                 @if(optional(Auth::user())->id !== null)
-                                <div class="m-widget1__item">
+                                <div class="costReportWraper-item">
                                     <div class="form-group m-form__group discountCodeWraper">
                                         <div class="input-group">
                                             <input type="text" class="form-control" placeholder="مثال: codetakhfif" id="discountCodeValue"
@@ -382,7 +284,7 @@
                                     </div>
 
                                 </div>
-                                <div class="m-widget1__item">
+                                <div class="costReportWraper-item">
                                     <div class="row align-items-center">
                                         <div class="col text-center addDonateWarper">
                                             <span>
@@ -411,7 +313,7 @@
                                     </div>
                                 </div>
                                 @endif
-                                <div class="m-widget1__item baseCostWraper">
+                                <div class="costReportWraper-item baseCostWraper">
                                     <div class="row m-row--no-padding align-items-center">
                                         <div class="col">
                                             <h3 class="m-widget1__title">
@@ -432,7 +334,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="m-widget1__item yourProfitWraper">
+                                <div class="costReportWraper-item yourProfitWraper">
                                     <div class="row m-row--no-padding align-items-center">
                                         <div class="col">
                                             <h3 class="m-widget1__title">
@@ -453,7 +355,7 @@
                                 </div>
                                 @if(optional(Auth::user())->id !== null)
                                     @if(isset($fromWallet))
-                                        <div class="m-widget1__item useWalletReportWraper">
+                                        <div class="costReportWraper-item useWalletReportWraper">
                                             <div class="row m-row--no-padding align-items-center">
                                                 <div class="col">
                                                     <h3 class="m-widget1__title">
@@ -469,7 +371,7 @@
                                             </div>
                                         </div>
                                     @endif
-                                    <div class="m-widget1__item">
+                                    <div class="costReportWraper-item">
                                         <div class="row m-row--no-padding align-items-center">
                                             <div class="col">
                                                 <h3 class="m-widget1__title">
@@ -485,31 +387,40 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="m-widget1__item
+                                    <div class="costReportWraper-item selectPaymentMethod @if( ($invoiceInfo['price']['final'] - $fromWallet) <= 0) d-none @endif">
+                                        <div class="text-center m--margin-top-10">
 
-                                    @if( ($invoiceInfo['price']['final'] - $fromWallet) <= 0) d-none @endif">
-                                        <div class="m-form__group form-group text-center m--margin-top-10">
-                                            <div class="m-radio-inline">
-                                                <label class="m-radio m-radio--check-bold m-radio--state-info">
-                                                    <input type="radio" name="radioBankType" value="{{route('redirectToBank', ['paymentMethod'=>'zarinpal', 'device'=>'web'])}}" data-bank-type="zarinpal" >
+                                            <div class="pretty p-default p-curve p-pulse">
+                                                <input type="radio" name="radioBankType" value="{{route('redirectToBank', ['paymentMethod'=>'zarinpal', 'device'=>'web'])}}" data-bank-type="zarinpal" >
+                                                <div class="state p-warning">
                                                     <img src="/acm/extra/payment/gateway/zarinpal-logo.png" class="img-thumbnail bankLogo" alt="bank-logo" width="60">
-                                                    <span></span>
-                                                </label>
-                                                <label class="m-radio m-radio--check-bold m-radio--state-info">
-                                                    <input type="radio" name="radioBankType" value="{{route('redirectToBank', ['paymentMethod'=>'mellat', 'device'=>'web'])}}" data-bank-type="mellat" checked>
-                                                    <img src="/acm/extra/payment/gateway/mellat-logo.png" class="img-thumbnail bankLogo" alt="bank-logo" width="60">
-                                                    <span></span>
-                                                </label>
-                                                {{--                                            <label class="m-radio m-radio--check-bold m-radio--state-info">--}}
-                                                {{--                                                <input type="radio" name="radioBankType" value="3">--}}
-                                                {{--                                                <img src="/acm/extra/payment/gateway/pasargad-logo.jpg" class="img-thumbnail bankLogo" alt="bank-logo" width="60">--}}
-                                                {{--                                                <span></span>--}}
-                                                {{--                                            </label>--}}
+                                                    <label>
+                                                    </label>
+                                                </div>
                                             </div>
+
+                                            <div class="pretty p-default p-curve p-pulse">
+                                                <input type="radio" name="radioBankType" value="{{route('redirectToBank', ['paymentMethod'=>'mellat', 'device'=>'web'])}}" data-bank-type="mellat" checked>
+                                                <div class="state p-warning">
+                                                    <img src="/acm/extra/payment/gateway/mellat-logo.png" class="img-thumbnail bankLogo" alt="bank-logo" width="60">
+                                                    <label>
+                                                    </label>
+                                                </div>
+                                            </div>
+
+{{--                                            <div class="pretty p-default p-curve p-pulse">--}}
+{{--                                                <input type="radio" name="radioBankType" value="3" data-bank-type="pasargad">--}}
+{{--                                                <div class="state p-warning">--}}
+{{--                                                    <img src="/acm/extra/payment/gateway/pasargad-logo.jpg" class="img-thumbnail bankLogo" alt="bank-logo" width="60">--}}
+{{--                                                    <label>--}}
+{{--                                                    </label>--}}
+{{--                                                </div>--}}
+{{--                                            </div>--}}
+
+
                                         </div>
                                     </div>
-
-                                    <div class="m-widget1__item">
+                                    <div class="costReportWraper-item">
                                         <div class="form-group m-form__group">
                                             <label for="customerDescription">
                                                 اگر توضیحی در مورد سفارش خود دارید اینجا بنویسید:
@@ -522,7 +433,7 @@
                                         </div>
                                     </div>
                                 @else
-                                    <div class="m-widget1__item">
+                                    <div class="costReportWraper-item">
                                         <div class="row m-row--no-padding align-items-center">
                                             <div class="col">
                                                 <h3 class="m-widget1__title">
@@ -546,7 +457,7 @@
                             @if(optional(Auth::user())->id !== null)
                             <button type="submit"
                                     onclick="mApp.block('.CheckoutReviewTotalPriceWarper, .a--userCartList', {type: 'loader',state: 'info',});"
-                                    class="btn btn-lg m-btn--square m-btn m-btn--gradient-from-success m-btn--gradient-to-accent btnGotoCheckoutPayment-desktop btnGotoCheckoutPayment">
+                                    class="btn btn-lg m-btn--square m-btn btn-info btnGotoCheckoutPayment-desktop btnGotoCheckoutPayment">
                                 ادامه و ثبت سفارش
                             </button>
                             @endif
@@ -607,29 +518,30 @@
     @else
         <div class="row">
             <div class="col">
-                <div class="m-alert m-alert--icon alert alert-warning empteCartAlert" role="alert">
-                    <div class="m-alert__icon">
-                        <i class="fa fa-exclamation-triangle"></i>
-                    </div>
-                    <div class="m-alert__text text-center">
-                        <strong>سبد خرید شما خالیست!</strong>
-                        <br>
-                        <button onclick="window.location.href='{{action('Web\ShopPageController')}}';mApp.block('.empteCartAlert', {type: 'loader',state: 'info',});"
-                                type="button"
-                                class="btn m-btn--pill m-btn--air m-btn m-btn--gradient-from-primary m-btn--gradient-to-info">
-                            <i class="flaticon-bag"></i>
-                            افزودن محصول به سبد
-                        </button>
-                    </div>
-                    <div class="m-alert__close pull-left">
-                        <button type="button" class="close" data-close="alert" aria-label="Hide"></button>
+
+
+                <div class="row">
+                    <div class="col-md-4 mx-auto">
+                        <div class="text-center">
+                            <img src="https://cdn.alaatv.com/upload/empty-cart.png" class="a--full-width" alt="empty-cart">
+                            <strong>سبد خرید شما خالیست!</strong>
+                            <br>
+                            <button onclick="window.location.href='{{action('Web\ShopPageController')}}';mApp.block('.empteCartAlert', {type: 'loader',state: 'info',});"
+                                    type="button"
+                                    class="btn m-btn--pill m-btn--air btn-warning">
+                                <i class="flaticon-bag"></i>
+                                افزودن محصول به سبد
+                            </button>
+                        </div>
                     </div>
                 </div>
+
+
             </div>
         </div>
     @endif
 
-    <div class="m-portlet btnGotoCheckoutPayment_mobile">
+    <div class="m-portlet btnGotoCheckoutPayment_mobile {{(!isset($invoiceInfo['orderproductCount']) || $invoiceInfo['orderproductCount']===0) ? 'd-none' : ''}}">
         <div class="m-portlet__body">
             <div class="row">
                 <div class="col-6">
@@ -637,13 +549,13 @@
                     @if(optional(Auth::user())->id === null)
                         <button type="button"
                                 onclick="$('.loginFormBeforeBuy').AnimateScrollTo();"
-                                class="btn btn-lg m-btn--square m-btn m-btn--gradient-from-success m-btn--gradient-to-accent">
+                                class="btn btn-lg m-btn--square m-btn btn-info">
                             ورود و خرید
                         </button>
                     @else
                         <button type="button"
                                 onclick="$('#frmGotoGateway').submit();mApp.block('.btnGotoCheckoutPayment_mobile, .a--userCartList', {type: 'loader',state: 'info',});"
-                                class="btn btn-lg m-btn--square m-btn m-btn--gradient-from-success m-btn--gradient-to-accent btnGotoCheckoutPayment">
+                                class="btn btn-lg m-btn--square m-btn btn-info btnGotoCheckoutPayment">
                             ثبت سفارش
                         </button>
                     @endif
