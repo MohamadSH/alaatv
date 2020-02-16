@@ -46,6 +46,9 @@ class ContentInSetWithoutPagination extends AlaaJsonResourceWithoutPagination
             'photo'        => $this->when(isset($this->thumbnail), $this->thumbnail),
             'isFree'       => $this->isFree,
             'order'        => $this->order,
+            'updated_at'       => $this->when(isset($this->updated_at), function () {
+                return $this->updated_at;
+            }),
             'url'          => new Url($this),
         ];
     }
