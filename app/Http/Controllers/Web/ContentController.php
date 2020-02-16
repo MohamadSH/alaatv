@@ -14,7 +14,7 @@ use App\Contentset;
 use App\Contenttype;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\{ContentIndexRequest, EditContentRequest, InsertContentRequest, Request, UpdateContentSetRequest};
-use App\Http\Resources\ContentInSet;
+use App\Http\Resources\ContentInSearch;
 use App\Http\Resources\ProductInBlock;
 use App\Http\Resources\SetInIndex;
 use App\Section;
@@ -92,7 +92,7 @@ class ContentController extends Controller
 
         $result = $contentSearch->get(compact('filters', 'contentTypes'));
         $videos = $result->get('video');
-        $videos = isset($videos) && $videos->count() > 0 ? ContentInSet::collection($videos) : null;
+        $videos = isset($videos) && $videos->count() > 0 ? ContentInSearch::collection($videos) : null;
 
         $setFilters            = $filters;
         $setFilters['enable']  = 1;
