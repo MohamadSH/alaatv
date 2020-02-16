@@ -1,4 +1,4 @@
-@extends("app" , ["pageName" => $pageName])
+@extends('partials.templatePage' , ["pageName" => $pageName])
 
 @section("headPageLevelStyle")
     <link href = "/assets/pages/css/about-rtl.min.css" rel = "stylesheet" type = "text/css"/>

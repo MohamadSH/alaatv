@@ -1,4 +1,4 @@
-@extends('app' , ['pageName'=>'login'])
+@extends('partials.templatePage' , ['pageName'=>'login'])
 
 @section('page-css')
     <link href="{{ mix('/css/auth-login.css') }}" rel="stylesheet" type="text/css"/>

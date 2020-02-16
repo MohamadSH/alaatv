@@ -1,13 +1,10 @@
-@extends('barePage' , ['pageName' => 'voucherLogin'])
+@extends('partials.barePage' , ['pageName' => 'voucherLogin'])
 
-@section('page-css')
+@section('bare-page-head')
     <link href="{{ mix('/css/voucher-login.css') }}" rel="stylesheet" type="text/css"/>
-{{--    <link href="{{ asset('/acm/AlaatvCustomFiles/components/AlaaLoading/style.css') }}" rel="stylesheet" type="text/css"/>--}}
-{{--    <link href="{{ asset('/acm/AlaatvCustomFiles/components/FormGenerator/style.css') }}" rel="stylesheet" type="text/css"/>--}}
-{{--    <link href="{{ asset('/acm/AlaatvCustomFiles/css/auth/voucherLogin.css') }}" rel="stylesheet" type="text/css"/>--}}
 @endsection
 
-@section('content')
+@section('bare-page-body')
     <div class="row m--full-height align-items-center voucherPageFormWrapper d-none">
         <div class="col-md-6 mx-auto">
             <div class="m-portlet m-portlet--mobile m-portlet--body-progress-">
@@ -30,8 +27,7 @@
     </div>
 @endsection
 
-
-@section('page-js')
+@section('bare-page-js')
     <script>
         var padeData = {
             login: {
@@ -57,7 +53,4 @@
         };
     </script>
     <script src = "{{ mix('/js/voucher-login.js') }}"></script>
-{{--    <script src = "{{ asset('/acm/AlaatvCustomFiles/components/AlaaLoading/script.js') }}"></script>--}}
-{{--    <script src = "{{ asset('/acm/AlaatvCustomFiles/components/FormGenerator/script.js') }}"></script>--}}
-{{--    <script src = "{{ asset('/acm/AlaatvCustomFiles/js/auth/voucherLogin.js') }}"></script>--}}
 @endsection

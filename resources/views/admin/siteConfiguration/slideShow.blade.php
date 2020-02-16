@@ -1,4 +1,5 @@
-@permission((Config::get('constants.LIST_SLIDESHOW_ACCESS')))@extends('app' , ['pageName'=> 'admin'])
+@permission((Config::get('constants.LIST_SLIDESHOW_ACCESS')))
+@extends('partials.templatePage' , ['pageName'=> 'admin'])
 
 @section('page-css')
     <link href="{{ mix('/css/admin-all.css') }}" rel="stylesheet" type="text/css"/>

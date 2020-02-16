@@ -1,4 +1,4 @@
-@extends('app' , ['pageName'=>$pageName])
+@extends('partials.templatePage' , ['pageName'=>$pageName])
 
 @section('page-preload-css')
     <link rel="preload" href="{{ mix('/css/page-homePage.css') }}" as="style" />

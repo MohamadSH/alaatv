@@ -1,4 +1,4 @@
-@extends('app')
+@extends('partials.templatePage')
 
 @section('page-css')
     <link href = "{{ asset('/acm/AlaatvCustomFiles/components/imageWithCaption/style.css') }}" rel = "stylesheet" type = "text/css"/>
@@ -44,7 +44,7 @@
             height: 135px;
             line-height: 135px;
         }
-        
+
     </style>
 @endsection
 @section('content')

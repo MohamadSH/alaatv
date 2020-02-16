@@ -3,6 +3,19 @@ var AppGlobalInit = function() {
     var LazyLoad,
         Firebase;
 
+    function ajaxSetup() {
+        $(function () {
+            /**
+             * Set token for ajax request
+             */
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': window.Laravel.csrfToken,
+                }
+            });
+        });
+    }
+
     function initFlash() {
         flashGAEE();
         showFlashMessage();
@@ -223,6 +236,7 @@ var AppGlobalInit = function() {
     }
 
     function init(data) {
+        ajaxSetup();
         initData(data);
         initLazyLoad();
         addEvents();

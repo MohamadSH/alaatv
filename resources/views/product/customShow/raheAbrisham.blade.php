@@ -1,4 +1,4 @@
-@extends('app')
+@extends('partials.templatePage')
 
 @section('page-css')
     <link href="{{ mix('/css/product-show-RaheAbrisham.css') }}" rel="stylesheet" type="text/css"/>

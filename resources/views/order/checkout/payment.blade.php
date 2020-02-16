@@ -1,4 +1,4 @@
-@extends('app' , ["pageName"=>$pageName])
+@extends('partials.templatePage' , ["pageName"=>$pageName])
 
 @section('page-css')
     <link href="{{ mix('/css/checkout-payment.css') }}" rel="stylesheet" type="text/css"/>

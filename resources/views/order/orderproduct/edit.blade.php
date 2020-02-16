@@ -1,4 +1,5 @@
-@permission((Config::get('constants.SHOW_ORDER_ACCESS')))@extends('app',['pageName'=>'admin'])
+@permission((Config::get('constants.SHOW_ORDER_ACCESS')))
+@extends('partials.templatePage',['pageName'=>'admin'])
 
 @section('page-css')
     <link href = "/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-fileinput/bootstrap-fileinput.css" rel = "stylesheet" type = "text/css"/>

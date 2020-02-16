@@ -1,4 +1,4 @@
-@extends("app" , ["pageName"=> "admin"])
+@extends('partials.templatePage' , ["pageName"=> "admin"])
 
 @section("headPageLevelPlugin")
     <link href = "/assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.css" rel = "stylesheet" type = "text/css"/>
