@@ -387,7 +387,7 @@
 
             @include('partials.ads.list', ['id'=>'contentShowPage-rightSide-0'])
 
-            @if(count($recommendedItems) > 0 && $productsHasThisContentThroughBlockCollection->count() === 0 && $productsThatHaveThisContent->isEmpty())
+            @if(count($recommendedItems) > 0 && $productsHasThisContentThroughBlockCollection->count() === 0 && $content->isFree)
                 @include('partials.widgets.ScollCarousel.body', [
                     'title'=> 'موارد مرتبط',
                     'customClass'=> 'RelatedItems',

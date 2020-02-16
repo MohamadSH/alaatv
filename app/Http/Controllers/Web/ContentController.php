@@ -228,12 +228,10 @@ class ContentController extends Controller
         $productsHasThisContentThroughBlockCollection = $content->related_products;
 
 
-        $recommendedProductsOfThisContent = $content->recommended_products;
-        $recommendedItems                 = (new RecommendedItemsFetcher($tags))->fetch();
-        $recommendedItems                 =
-            $this->addProductsToRecommendedItems($productsThatHaveThisContent, $recommendedItems);
-//        $recommendedItems =
-        $this->addProductsToRecommendedItems($recommendedProductsOfThisContent, $recommendedItems);
+        $recommendedItems = (new RecommendedItemsFetcher($tags))->fetch();
+        $recommendedItems = $this->addProductsToRecommendedItems($productsThatHaveThisContent, $recommendedItems);
+//        $recommendedProductsOfThisContent = $content->recommended_products;
+//        $recommendedItems = $this->addProductsToRecommendedItems($recommendedProductsOfThisContent, $recommendedItems);
 
         $contentBlocks = $content->isFree ? Block::getContentBlocks() : collect();
 
