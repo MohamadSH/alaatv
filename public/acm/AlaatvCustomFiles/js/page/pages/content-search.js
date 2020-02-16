@@ -56,9 +56,8 @@ var Alaasearch = function () {
     }
 
     function appendToProduct() {
-        var productRepositoryLength = productRepository.length,
-            counter = 0;
-        for(var i = 0; i < productRepositoryLength; i++) {
+        var counter = 0;
+        for(var i = 0; (typeof productRepository[i] !== 'undefined'); i++) {
             if (productRepository[i] === null) {
                 continue;
             }
@@ -74,7 +73,7 @@ var Alaasearch = function () {
     }
     function appendToVideo() {
         var counter = 0;
-        for(var i = 0; i < (typeof videoRepository[i] !== 'undefined'); i++) {
+        for(var i = 0; (typeof videoRepository[i] !== 'undefined'); i++) {
             if (videoRepository[i] === null) {
                 continue;
             }
@@ -83,6 +82,30 @@ var Alaasearch = function () {
             videoRepository[i] = null;
             counter++;
             if (counter === videoRepositoryCounter) {
+                counter = 0;
+                break;
+            }
+        }
+    }
+    function appendVideoOrProduct(type) {
+        var counter = 0;
+        for(var i = 0; ((type === 'product' && typeof productRepository[i] !== 'undefined') || (type === 'video' && typeof videoRepository[i] !== 'undefined')); i++) {
+            if ((type === 'product' && productRepository[i] === null) || (type === 'video' && videoRepository[i] === null)) {
+                continue;
+            }
+            listTypeHasItem = true;
+            var listItem;
+            if (type === 'product') {
+                listItem = getProductItem(productRepository[i], i);
+                productRepository[i] = null;
+            } else if (type === 'video') {
+                listItem = getContentItem(videoRepository[i]);
+                videoRepository[i] = null;
+            }
+            $('.searchResult .listType').append(listItem);
+
+            counter++;
+            if ((type === 'product' && counter === productRepositoryCounter) || (type === 'video' && counter === videoRepositoryCounter)) {
                 counter = 0;
                 break;
             }
@@ -119,9 +142,7 @@ var Alaasearch = function () {
                 shippingMethod: data.attributes.info.shippingMethod,
                 teacher: data.attributes.info.teacher,
                 services: data.attributes.info.services.join(', '),
-            },
-            // shortDescription: (data.shortDescription !== null) ? data.shortDescription : (data.longDescription !== null) ? data.longDescription : '', // *******
-            shortDescription: 'shortDescription',
+            }
         };
     }
     function contentItemAdapter(data) {
@@ -129,8 +150,7 @@ var Alaasearch = function () {
             widgetPic: data.photo + '?w=444&h=250',
             widgetTitle: data.title,
             widgetLink: data.url.web,
-            // description: data.description, // ******************************************************************************************************************
-            description: 'description',
+            description: data.body,
             videoOrder: data.order,
             updatedAt: data.updated_at,
             setName: (typeof data.set !== 'undefined') ? data.set.short_title : '-'
@@ -138,7 +158,7 @@ var Alaasearch = function () {
     }
     function setItemAdapter(data) {
         return {
-            widgetPic: (typeof (data.photo) === 'undefined' || data.photo == null) ? data.thumbnail + '?w=253&h=142' : data.photo + '?w=253&h=142',
+            widgetPic: (typeof (data.photo) === 'undefined' || data.photo === null) ? 'https://cdn.alaatv.com/loder.jpg?w=253&h=142' : data.photo + '?w=253&h=142',
             widgetTitle: data.title,
             widgetAuthor: {
                 photo : data.author.photo,
@@ -426,7 +446,7 @@ var Alaasearch = function () {
                 StripHTML: true,
                 Suffix: '...'
             },
-            contentItemData = contentItemAdapter(data),
+        contentItemData = contentItemAdapter(data),
             videoOrderHtml = '<div class="videoOrder"><div class="videoOrder-title">جلسه</div><div class="videoOrder-number">' + contentItemData.videoOrder + '</div><div class="videoOrder-om"> اُم </div></div>',
             widgetDetailes = '' +
                 '<div class="videoDetaileWrapper">' +
@@ -436,8 +456,7 @@ var Alaasearch = function () {
                 '   <span> از دوره </span>' +
                 '   <span>' + contentItemData.setName + '</span>' +
                 '   <br>' +
-                '   <i class="fa fa-calendar-alt m--margin-right-5"></i>' +
-                '   <span>تاریخ بروزرسانی: </span>' +
+                '   <i class="fa fa-calendar-alt m--margin-right-5" data-toggle="m-tooltip" data-placement="top" data-original-title="تاریخ بروزرسانی"></i>' +
                 '   <span>' + new persianDate(new Date(contentItemData.updatedAt)).format('YYYY/MM/DD HH:mm:ss') + '</span>' +
                 videoOrderHtml +
                 '</div>' +
@@ -574,7 +593,7 @@ var Alaasearch = function () {
         if (nextPageUrl !== null && nextPageUrl.length > 0) {
             addLoadingItem('carouselType');
             getAjaxContent(nextPageUrl, function (response) {
-                appendToCarouselTypeAndSetNextPage(response.result.sets);
+                appendToCarouselTypeAndSetNextPage(response.data.sets);
             });
         }
         removeSensorItem('carouselType');
@@ -584,7 +603,7 @@ var Alaasearch = function () {
         if (nextPageUrlVideo !== null && nextPageUrlVideo.length > 0) {
             addLoadingItem('listType');
             getAjaxContent(nextPageUrlVideo, function (response) {
-                fillVideoRepositoryAndSetNextPage(response.result.videos);
+                fillVideoRepositoryAndSetNextPage(response.data.videos);
                 callback();
             });
         }
@@ -593,7 +612,7 @@ var Alaasearch = function () {
         var nextPageUrlProduct = getNextPageUrl('product');
         if (nextPageUrlProduct !== null && nextPageUrlProduct.length > 0) {
             getAjaxContent(nextPageUrlProduct, function (response) {
-                fillProductRepositoryAndSetNextPage(response.result.products);
+                fillProductRepositoryAndSetNextPage(response.data.products);
                 callback();
             });
         }
@@ -602,8 +621,9 @@ var Alaasearch = function () {
     function appendToListType() {
         removeSensorItem('listType');
         removeLoadingItem('listType');
-        appendToVideo();
-        appendToProduct();
+        appendVideoOrProduct('video');
+        appendVideoOrProduct('product');
+        $('[data-toggle="m-tooltip"]').tooltip();
         addSensorItem('listType');
         imageObserver.observe();
         gtmEecProductObserver.observe();
