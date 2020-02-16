@@ -1,4 +1,4 @@
-@extends("app",["pageName"=>"admin"])
+@extends('partials.templatePage',["pageName"=>"admin"])
 
 @section('page-css')
     <link href="{{ mix('/css/admin-all.css') }}" rel="stylesheet" type="text/css"/>
@@ -206,7 +206,7 @@
                             </div>
                         </div>
                         <div class = "col-md-12 text-center m--margin-top-10">
-                            <input type = "submit" class = "btn btn-lg m-btn--pill m-btn--air m-btn m-btn--gradient-from-success m-btn--gradient-to-accent" value = "درج">
+                            <input type = "submit" class = "btn btn-lg m-btn--pill m-btn--air m-btn btn-info" value = "درج">
                         </div>
                     {!! Form::close() !!}
                 </div>

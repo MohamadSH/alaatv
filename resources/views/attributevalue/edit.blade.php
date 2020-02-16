@@ -1,4 +1,5 @@
-@permission((Config::get('constants.SHOW_ATTRIBUTEVALUE_ACCESS')))@extends('app',['pageName'=>'admin'])
+@permission((Config::get('constants.SHOW_ATTRIBUTEVALUE_ACCESS')))
+@extends('partials.templatePage',['pageName'=>'admin'])
 
 @section('pageBar')
     <nav aria-label = "breadcrumb">

@@ -1,4 +1,4 @@
-@extends("app" , ["pageName"=>"contactUs"])
+@extends('partials.templatePage' , ["pageName"=>"contactUs"])
 
 @section("content")
     @include("systemMessage.flash")

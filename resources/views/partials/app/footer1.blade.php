@@ -73,7 +73,7 @@
 
 
                 <li class="m-nav__item">
-                    <a href="{{ action("Web\RulesPageController") }}" class="m-nav__link" data-toggle="m-tooltip" title="قوانین" data-placement="top">
+                    <a href="{{ action("Web\RulesPageController") }}" class="m-nav__link" data-toggle="m-tooltip" title="قوانین سایت آلاء" data-placement="top">
                         <i class="m-menu__link-icon fa fa-gavel"></i>
                     </a>
                 </li>
@@ -83,17 +83,17 @@
                     </a>
                 </li>
                 <li class="m-nav__item m-nav__item">
-                    <a href="https://forum.alaatv.com" class="m-nav__link" data-toggle="m-tooltip" title="انجمن آلاء" data-placement="top">
+                    <a href="https://forum.alaatv.com" class="m-nav__link" data-toggle="m-tooltip" title="انجمن کنکور و دانش آموزی آلاء" data-placement="top">
                         <i class="m-menu__link-icon fab fa-hornbill"></i>
                     </a>
                 </li>
                 <li class="m-nav__item">
-                    <a target="_blank" href="https://telegram.me/alaa_sanatisharif" class="m-nav__link" data-toggle="m-tooltip" title="تلگرام" data-placement="top">
+                    <a target="_blank" href="https://telegram.me/alaa_sanatisharif" class="m-nav__link" data-toggle="m-tooltip" title="تلگرام آلاء" data-placement="top">
                         <i class="m-menu__link-icon fab fa-telegram"></i>
                     </a>
                 </li>
                 <li class="m-nav__item">
-                    <a target="_blank" href="https://www.instagram.com/alaa_sanatisharif" class="m-nav__link" data-toggle="m-tooltip" title="اینستاگرام" data-placement="top">
+                    <a target="_blank" href="https://www.instagram.com/alaa_sanatisharif" class="m-nav__link" data-toggle="m-tooltip" title="اینستاگرام آلاء" data-placement="top">
                         <i class="m-menu__link-icon fab fa-instagram"></i>
                     </a>
                 </li>

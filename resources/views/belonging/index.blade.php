@@ -1,4 +1,5 @@
-@permission((Config::get('constants.LIST_BELONGING_ACCESS')))@extends("app",["pageName"=>$pageName])
+@permission((Config::get('constants.LIST_BELONGING_ACCESS')))
+@extends('partials.templatePage',["pageName"=>$pageName])
 
 @section("headPageLevelPlugin")
     {{--<link href="/acm/extra/persian-datepicker/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css"/>--}}

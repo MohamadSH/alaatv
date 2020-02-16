@@ -1,5 +1,5 @@
 @permission((Config::get('constants.INSERT_EDUCATIONAL_CONTENT_ACCESS')))
-@extends("app",["pageName"=>"admin"])
+@extends('partials.templatePage',["pageName"=>"admin"])
 
 @section('page-css')
     <link href = "{{ mix('/css/admin-content-create.css') }}" rel = "stylesheet" type = "text/css"/>

@@ -100,9 +100,9 @@
                     <ul class="m-menu__nav ">
 
                         <li class="m-menu__item  m-menu__item--submenu m-menu__item--rel a--MegaMenu-title">
-                            <a href="javascript:" class="m-menu__link m-menu__toggle" title="فیلم های آلاء">
+                            <a href="javascript:" class="m-menu__link m-menu__toggle" title="فیلم های دهم، یازدهم، دوازدهم و کنکور نظام جدید و نظام قدیم آلاء">
                                 <i class="m-menu__link-icon flaticon-layers"></i>
-                                <span class="m-menu__link-text">فیلم های آلاء</span>
+                                <span class="m-menu__link-text">فیلم های پایه و کنکور آلاء</span>
                                 <i class="m-menu__hor-arrow fa fa-angle-down"></i>
                                 <i class="m-menu__ver-arrow fa fa-angle-left"></i>
                             </a>
@@ -558,9 +558,9 @@
                             </div>
                         </li>
                         <li class="m-menu__item  m-menu__item--submenu m-menu__item--rel a--MegaMenu-title">
-                            <a href="javascript:" class="m-menu__link m-menu__toggle" title="همایش های آلاء">
+                            <a href="javascript:" class="m-menu__link m-menu__toggle" title="همایش کنکوری آلاء">
                                 <i class="m-menu__link-icon flaticon-layers"></i>
-                                <span class="m-menu__link-text">همایش های آلاء</span>
+                                <span class="m-menu__link-text">همایش کنکوری آلاء</span>
                                 <i class="m-menu__hor-arrow fa fa-angle-down"></i>
                                 <i class="m-menu__ver-arrow fa fa-angle-left"></i>
                             </a>
@@ -749,7 +749,7 @@
                                     <div id="user-profile-small-panel" class="m-dropdown__wrapper">
                                         <span class="m-dropdown__arrow m-dropdown__arrow--right m-dropdown__arrow--adjust"></span>
                                         <div class="m-dropdown__inner">
-                                            <div class="m-dropdown__header m--align-center">
+                                            <div class="m-dropdown__header text-center">
                                                 <div class="m-card-user m-card-user--skin-light">
                                                     <div class="m-card-user__pic">
                                                         <img src="{{ $profileImage }}" class="m--img-rounded m--marginless" alt="عکس پروفایل"/>
@@ -857,7 +857,7 @@
                             {{--<span class="m-dropdown__arrow m-dropdown__arrow--right m-dropdown__arrow--adjust"--}}
                             {{--style="right: auto; left: 199.047px; margin-left: auto; margin-right: auto;"></span>--}}
                             {{--<div class="m-dropdown__inner">--}}
-                            {{--<div class="m-dropdown__header m--align-center"--}}
+                            {{--<div class="m-dropdown__header text-center"--}}
                             {{--style="background: url(/assets/app/media/img/misc/quick_actions_bg.jpg); background-size: cover;">--}}
                             {{--<div class="m-card-user m-card-user--skin-dark">--}}
                             {{--<div class="m-card-user__pic">--}}

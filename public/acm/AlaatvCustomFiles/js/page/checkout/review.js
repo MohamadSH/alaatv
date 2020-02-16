@@ -1,18 +1,20 @@
 var CheckoutPaymentUi = function () {
 
-    var isInternalSwitch = false;
-    var lockDonateAjax = false;
-    var lockCouponAjax = false;
+    var isInternalSwitch = false,
+        lockDonateAjax = false,
+        lockCouponAjax = false;
 
     function getFinalCost() {
         return parseInt($('#invoiceInfo-totalCost').html());
     }
+
     function setFinalCost(finalCost) {
         if (!isNaN(finalCost)) {
             $('.finalPriceValue').html(finalCost.toLocaleString('fa'));
             $('#invoiceInfo-totalCost').html(parseInt(finalCost));
         }
     }
+
     function refreshPrice(cost) {
         var userCredit = parseInt(window.userCredit);
         var useWalletValue = Math.min(cost.payableByWallet, userCredit);
@@ -22,10 +24,6 @@ var CheckoutPaymentUi = function () {
         $('#finalPriceValue').html((parseInt(cost.final) - useWalletValue).toLocaleString('fa') + 'تومان');
 
         $('#useWalletValue').html(useWalletValue.toLocaleString('fa') + 'تومان');
-    }
-
-    function getCouponCode() {
-        return $('#invoiceInfo-couponCode').val();
     }
 
     function setCouponCode(code) {
@@ -205,35 +203,11 @@ var CheckoutPaymentUi = function () {
             });
         }
     }
-    function setUiHasDiscountCode() {
-        $("#hasntDiscountCode").bootstrapSwitch('state', false);
-        // $('.discountCodeWraper').fadeIn();
-        $('.discountCodeValueWarperCover').fadeOut();
-        let discountCodeValue = $('#discountCodeValue');
-        let btnSaveDiscountCodeValue = $('#btnSaveDiscountCodeValue');
-        discountCodeValue.prop('disabled', false);
-        btnSaveDiscountCodeValue.prop('disabled', false);
-        discountCodeValue.prop('readonly', false);
-        btnSaveDiscountCodeValue.prop('readonly', false);
-        GAEE.checkoutOption(1, 'checkout-payment-HasDiscountCode-'+$('#discountCodeValue').val());
-    }
-    function setUiHasntDiscountCode() {
-        $("#hasntDiscountCode").bootstrapSwitch('state', true);
-        // $('.discountCodeWraper').fadeOut();
-        $('.discountCodeValueWarperCover').fadeIn();
-        let discountCodeValue = $('#discountCodeValue');
-        let btnSaveDiscountCodeValue = $('#btnSaveDiscountCodeValue');
-        discountCodeValue.prop('disabled', true);
-        btnSaveDiscountCodeValue.prop('disabled', true);
-        discountCodeValue.prop('readonly', true);
-        btnSaveDiscountCodeValue.prop('readonly', true);
-        discountCodeValue.val('');
-        GAEE.checkoutOption(1, 'checkout-payment-HasntDiscountCode');
-    }
+
     function initUiBasedOnHasntDiscountCodeStatus(notIncludedProductsInCoupon) {
-        if ($('#discountCodeValue').length !== 0) {
-            return;
-        }
+        // if ($('#discountCodeValue').length === 0) {
+        //     return;
+        // }
         var strLen = (typeof $('#discountCodeValue').val() !== 'undefined') ? $('#discountCodeValue').val().length : 0;
         if (strLen > 0) {
             $('#btnSaveDiscountCodeValue').prop('disabled', false);
@@ -241,7 +215,8 @@ var CheckoutPaymentUi = function () {
             $('#btnSaveDiscountCodeValue').prop('disabled', true);
         }
         if (orderHasCoupon()) {
-            PrintnotIncludedProductsInCoupon(notIncludedProductsInCoupon);
+
+            PrintNotIncludedProductsInCoupon(notIncludedProductsInCoupon);
             $('#discountCodeValue').prop('disabled', true);
         }
 
@@ -300,7 +275,7 @@ var CheckoutPaymentUi = function () {
 
                     // setFinalCost(data.price.final);
                     refreshPrice(data.price);
-                    PrintnotIncludedProductsInCoupon(data.notIncludedProductsInCoupon);
+                    PrintNotIncludedProductsInCoupon(data.notIncludedProductsInCoupon);
 
                     toastr.success('کد تخفیف شما ثبت شد.');
                     GAEE.checkoutOption(1, 'checkout-payment-SaveDiscountCode-'+discountCodeValue);
@@ -358,14 +333,14 @@ var CheckoutPaymentUi = function () {
 
                     // setFinalCost(data.price.final);
                     refreshPrice(data.price);
-                    PrintnotIncludedProductsInCoupon([]);
+                    PrintNotIncludedProductsInCoupon([]);
                     setCouponCode('');
                     if (showMessage === true) {
                         toastr.success('کد تخفیف شما حذف شد.');
                     }
                     $('#discountCodeValue').prop('disabled', false);
                     $('#btnSaveDiscountCodeValue').prop('disabled', true);
-                    PrintnotIncludedProductsInCoupon([]);
+                    PrintNotIncludedProductsInCoupon([]);
                 }
                 mApp.unblock('.discountCodeWraper, .hasntDiscountCodeWraper');
             },
@@ -375,7 +350,7 @@ var CheckoutPaymentUi = function () {
         });
     }
 
-    function PrintnotIncludedProductsInCoupon(notIncludedProductsInCoupon) {
+    function PrintNotIncludedProductsInCoupon(notIncludedProductsInCoupon) {
         if (typeof notIncludedProductsInCoupon !== 'undefined' && notIncludedProductsInCoupon !== null && notIncludedProductsInCoupon !== '' && notIncludedProductsInCoupon.length>0) {
             for (let index in notIncludedProductsInCoupon) {
                 $('.notIncludedProductsInCoupon-'+notIncludedProductsInCoupon[index].id).fadeIn();
@@ -415,7 +390,7 @@ var CheckoutPaymentUi = function () {
             detachCoupon(showMessage);
         },
         PrintnotIncludedProductsInCoupon:function (notIncludedProductsInCoupon) {
-            PrintnotIncludedProductsInCoupon(notIncludedProductsInCoupon);
+            PrintNotIncludedProductsInCoupon(notIncludedProductsInCoupon);
         },
     };
 }();

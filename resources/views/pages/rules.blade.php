@@ -1,4 +1,4 @@
-@extends("app",["pageName"=>"rules"])
+@extends('partials.templatePage',["pageName"=>"rules"])
 
 @section("pageBar")
     <nav aria-label = "breadcrumb">

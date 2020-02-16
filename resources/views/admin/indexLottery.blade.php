@@ -1,6 +1,6 @@
 @role((Config::get("constants.ROLE_ADMIN")))
 
-@extends('app',['pageName'=>$pageName])
+@extends('partials.templatePage',['pageName'=>$pageName])
 
 @section('page-css')
     <link href="{{ mix('/css/admin-all.css') }}" rel="stylesheet" type="text/css"/>

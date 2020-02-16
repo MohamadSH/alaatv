@@ -1,4 +1,4 @@
-@extends('app')
+@extends('partials.templatePage')
 
 @section('page-css')
     <link href="{{ mix('/css/page-landing10.css') }}" rel="stylesheet" type="text/css"/>
@@ -8,7 +8,7 @@
     <div class="row">
         <div class="col">
             <div class="m-portlet m-portlet--head-overlay m-portlet--full-height  m-portlet--rounded-force">
-    
+
                 <div>
                     <img src="/acm/extra/talai_landing1.jpg" class="a--full-width">
                 </div>
@@ -58,8 +58,8 @@
 {{--                                </div>--}}
 {{--                                --}}
 {{--                            </div>--}}
-                            
-    
+
+
                             @foreach($blocks as $blockKey=>$block)
                                 @if($block->products->count() > 0)
                                     @include('block.partials.block', [
@@ -68,7 +68,7 @@
                                         ])
                                 @endif
                             @endforeach
-                            
+
                         </div>
                     </div>
                 </div>

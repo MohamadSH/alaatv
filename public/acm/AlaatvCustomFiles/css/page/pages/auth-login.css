@@ -4,6 +4,18 @@
 .loginFormUsername, .loginFormPassword {
     padding-right: 10px !important;
 }
+
+#AlaaAjaxLoginModal .modal-header {
+    background: #f7f7f7;
+    box-shadow: 0 1px 5px -1px rgba(202, 202, 202, 0.75);
+}
+#AlaaAjaxLoginModal .modal-header .modal-title {
+    color: gray;
+}
+.modal-content {
+    border: 1px solid rgba(0, 0, 0, 0.07);
+}
+
 /*media query*/
 @media only screen and (max-width: 1024px) {
     .loginFormInputsAndLogos {

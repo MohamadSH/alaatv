@@ -1,4 +1,4 @@
-@extends('app' , ['pageName' => 'profile'])
+@extends('partials.templatePage' , ['pageName' => 'profile'])
 
 @section('page-css')
     <link href="{{ mix('/css/user-completeInfo.css') }}" rel="stylesheet" type="text/css"/>

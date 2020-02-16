@@ -1,4 +1,4 @@
-@extends('app' , ["pageName"=>$pageName])
+@extends('partials.templatePage' , ["pageName"=>$pageName])
 
 @section('page-css')
     <link href="{{ mix('/css/checkout-payment.css') }}" rel="stylesheet" type="text/css"/>
@@ -10,11 +10,11 @@
 @endsection
 
 @section('content')
-    
+
     @include('systemMessage.flash')
-    
+
     @include("partials.checkoutSteps" , ["step"=>3])
-    
+
     <div class="row">
         {{--روش پرداخت--}}
         <div class="col-12 col-md-8 order-2 order-sm-2 order-md-1 order-lg-1">
@@ -35,13 +35,13 @@
                             <div class="m-portlet__head-tools"></div>
                         </div>
                         <div class="m-portlet__body m--padding-bottom-10">
-    
+
                             <form method="GET" action="" id="frmGotoGateway">
-                                
+
                                 <div class="row">
                                     <div class="col-12 col-md-6">
-                                        
-                                        
+
+
                                         {{--tab title--}}
                                         <div class="row">
                                             <div class="col">
@@ -70,11 +70,11 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        
+
                                         {{--tab content--}}
                                         <div class="row">
                                             <div class="col">
-                                                
+
                                                 <div class="m-portlet PaymentType" id="PaymentType-online">
                                                     <div class="m-portlet__body">
                                                         <span>
@@ -107,7 +107,7 @@
                                                 {{--بعد از ثبت سفارش مبلغ 12،470 تومان را به صورت حضوری پرداخت کنید.--}}
                                                 {{--</div>--}}
                                                 {{--</div>--}}
-                                                
+
                                                 <div class="m-portlet PaymentType" id="PaymentType-card2card">
                                                     <div class="m-portlet__body">
                                                         <div class="row text-center">
@@ -131,13 +131,13 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                            
+
                                             </div>
                                         </div>
-                                    
+
                                     </div>
                                     <div class="col-12 col-md-6">
-                                        
+
                                         {{--dicount code--}}
                                         <div class="row justify-content-center">
                                             <div class="col-12 col-sm-8 col-md-6 col-lg-6 m--margin-top-20 text-center hasntDiscountCodeWraper">
@@ -146,7 +146,7 @@
                                                         کد تخفیف:
                                                     </label>
                                                 </span>
-    
+
                                                 <span class="m-bootstrap-switch m-bootstrap-switch--pill m-bootstrap-switch--air">
                                                     <input type="checkbox" data-switch="true"
                                                            @if(!isset($coupon))checked="checked" @endif data-on-text="ندارم"
@@ -172,7 +172,7 @@
                                                 </div>
                                             </div>
                                             <div class="col-12">
-                                                
+
                                                 <div class="alert alert-success alert-dismissible fade show couponReportWarper @if (!isset($coupon)) a--d-none @endif"
                                                      role="alert">
                                                     {{--<button type="button" class="close" data-dismiss="alert" aria-label="Close"></button>--}}
@@ -193,10 +193,10 @@
                                                         @endif
                                                     </div>
                                                 </div>
-                                            
+
                                             </div>
                                         </div>
-                                        
+
                                         {{--user description--}}
                                         <div class="row justify-content-center">
                                             <div class="col-12">
@@ -214,34 +214,33 @@
                                                 </div>
                                             </div>
                                         </div>
-                                    
+
                                     </div>
                                 </div>
-                                
+
                                 <div class="row">
                                     <div class="col notIncludedProductsInCouponReportArea">
-                                    
+
                                     </div>
                                 </div>
-                                
-                                
+
+
                                 {{--btn submit order--}}
                                 <div class="row justify-content-center">
                                     <div class="col text-center btnSubmitOrderWraper">
                                         <hr>
-    
+
                                         <button type = "submit"
                                                 onclick="mApp.block('.btnSubmitOrderWraper', {type: 'loader',state: 'info'});"
-                                                class="btn btn-lg m-btn--pill m-btn--air m-btn m-btn--gradient-from-info
-                                                m-btn--gradient-to-accent m--padding-top-20 m--padding-bottom-20
+                                                class="btn btn-lg m-btn--pill m-btn--air m-btn btn-info m--padding-top-20 m--padding-bottom-20
                                                  m--padding-right-50 m--padding-left-50 btnSubmitOrder"></button>
                                     </div>
                                 </div>
-        
-    
+
+
                             </form>
-                            
-                        
+
+
                         </div>
                     </div>
                 </div>
@@ -278,10 +277,10 @@
                             </h3>
                         </div>
                         <div class="m-widget27__container m--margin-top-5">
-                            
+
                             <div class="container-fluid">
                                 <div class="row">
-                                    
+
                                     <div class="col-12">
                                         <div class="m-portlet m-portlet--creative noHeadText m-portlet--bordered m-portlet--full-height">
                                             <div class="m-portlet__head">
@@ -353,23 +352,23 @@
                                             </div>
                                         </div>
                                     </div>
-                                
+
                                 </div>
                             </div>
-                        
+
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    
+
     <div id="invoiceInfo-totalCost" class="d-none">
         {{ $invoiceInfo['price']['final'] }}
     </div>
 
     <input type="hidden" id="invoiceInfo-couponCode" value="@if(isset($coupon)){{ $coupon['code'] }}@endif">
-    
+
     <input type="hidden" id="OrderController-submitCoupon" value="{{ action('Web\OrderController@submitCoupon') }}">
     <input type="hidden" id="OrderController-removeCoupon" value="{{ action('Web\OrderController@removeCoupon') }}">
 

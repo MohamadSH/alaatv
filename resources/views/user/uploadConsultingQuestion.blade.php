@@ -1,4 +1,4 @@
-@extends("app" , ["pageName"=>"ConsultingQuestion"])
+@extends('partials.templatePage' , ["pageName"=>"ConsultingQuestion"])
 
 @section("css")
     <link rel = "stylesheet" href = "{{ mix('/css/all.css') }}">

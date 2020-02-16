@@ -1,4 +1,4 @@
-@extends('app')
+@extends('partials.templatePage')
 
 @section('page-css')
     <link href="{{ mix('/css/page-landing7.css') }}" rel="stylesheet" type="text/css"/>
@@ -13,7 +13,7 @@
     <div class="row">
         <div class="col">
             <div class="m-portlet m-portlet--head-overlay m-portlet--full-height  m-portlet--rounded-force">
-    
+
                 <div>
                     <img src="https://cdn.alaatv.com/upload/landing/sslide-5.jpg" class="a--full-width">
                 </div>
@@ -21,7 +21,7 @@
                     <div class="m-widget27 m-portlet-fit--sides">
                         <div class="m-widget27__container">
                             <div class="container-fluid m--padding-right-40 m--padding-left-40">
-                                
+
                                 <div class="row">
                                     <div class="col text-center">
                                         <h3 class="text-center">
@@ -42,29 +42,29 @@
                                             </span>
                                             <span></span>
                                         </div>
-                                        
+
                                         <p class="text-center">
                                             <br>
                                             در هر رشته ای و در هر سهمیه ای
                                             <br>
                                             هر هزینه ای که از 26 اردیبهشت تا 18 خرداد 98 در سایت آلاء برای خرید محصولات یا همایش ها پرداخت کرده اید به عنوان بورس و هدیه آلاء به شما برگردد.
                                         </p>
-                                        
+
                                         <div class="m--font-boldest text-center">با استعداد و تلاش خودتون، اولین مزد زحماتتون رو از ما بگیرید.</div>
-                                        
+
                                         <h5 class="m--margin-top-35 text-center d-none">با آلاء مستحکم در مسیر موفقیت خواهید بود.</h5>
-                                        
+
                                         <div class="alert alert-warning text-center m--margin-top-20" role="alert">
                                             <strong>
                                                 آلاء با تمام بضاعت خودش، مخاطبین وفادارش رو با بهترین توانایی هاشون به میدان کنکور میفرسته.
                                             </strong>
                                         </div>
-                                        
+
                                     </div>
                                 </div>
-                                
+
                             </div>
-                            
+
                             <style>
                                 .titleSvg {
                                     position: relative;
@@ -88,15 +88,15 @@
                                     height: auto;
                                 }
                             </style>
-    
+
                             <div class="titleSvg">
-        
+
                                 <div class="titleSvg-title">
                                     همایش های آلاء
                                 </div>
-        
+
                                 <div class="titleSvg-svg">
-    
+
                                     <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" preserveAspectRatio="xMidYMid" viewBox="0 0 1006 175">
                                         <g transform=""><linearGradient id="lg-0.6590519274487807" x1="0" x2="1" y1="0" y2="0">
                                                 <stop stop-color="#c200ff" offset="0"></stop>
@@ -111,7 +111,7 @@
                                                 <animate attributeName="d" dur="3.125s" repeatCount="indefinite" keyTimes="0;0.333;0.667;1" calcmod="spline" keySplines="0.2 0 0.2 1;0.2 0 0.2 1;0.2 0 0.2 1" begin="-2.34375s" values="M0 0M 0 157.93274512887098Q 125.75 166.13756075263984 251.5 161.70875989283064T 503 166.61495339952302T 754.5 161.08428044232T 1006 150.87862185874437L 1006 24.014845249451227Q 880.25 25.502257146363043 754.5 18.86592390003358T 503 16.929778312313772T 251.5 7.889061280907285T 0 25.563468544820346Z;M0 0M 0 158.91811886079523Q 125.75 161.87239923854872 251.5 153.81491922824193T 503 154.1527837045062T 754.5 156.8654227514579T 1006 160.01717304574214L 1006 14.478916561092134Q 880.25 27.52994186724675 754.5 24.96053110572636T 503 9.560388609827783T 251.5 12.78364569184157T 0 21.61590034104256Z;M0 0M 0 162.61717723759298Q 125.75 164.08243832682638 251.5 163.32402106353774T 503 162.619726075305T 754.5 148.96028158443212T 1006 153.22600047856108L 1006 22.40863123252069Q 880.25 15.236185523772171 754.5 12.825559619879456T 503 23.974089291380302T 251.5 26.456957628007643T 0 20.710285050292327Z;M0 0M 0 157.93274512887098Q 125.75 166.13756075263984 251.5 161.70875989283064T 503 166.61495339952302T 754.5 161.08428044232T 1006 150.87862185874437L 1006 24.014845249451227Q 880.25 25.502257146363043 754.5 18.86592390003358T 503 16.929778312313772T 251.5 7.889061280907285T 0 25.563468544820346Z"></animate>
                                             </path></g>
                                     </svg>
-                                    
+
 {{--                                    --}}
 {{--                                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" preserveAspectRatio="xMidYMid" viewBox="0 0 1006 285">--}}
 {{--                                        <g transform=""><linearGradient id="lg-0.6590519274487807" x1="0" x2="1" y1="0" y2="0">--}}
@@ -128,9 +128,9 @@
 {{--                                            </path></g>--}}
 {{--                                    </svg>--}}
                                 </div>
-    
+
                             </div>
-                            
+
                             <div class="row alaaMaghtaLogoWraper">
                                 <div class="col-12 col-md-4">
                                     <a href="konkoor98" class="btnScroll">
@@ -148,7 +148,7 @@
                                     </a>
                                 </div>
                             </div>
-    
+
                             @foreach($blocks as $blockKey=>$block)
                                 @if($block->products->count() > 0)
                                     @include('block.partials.block', [
@@ -157,7 +157,7 @@
                                         ])
                                 @endif
                             @endforeach
-                            
+
                         </div>
                     </div>
                 </div>
@@ -180,7 +180,7 @@
             @endif
         @endforeach
         ];
-        
+
         $(document).on('click', '.btnScroll', function (e) {
             e.preventDefault();
             let blockId = $(this).attr('href');

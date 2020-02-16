@@ -1,4 +1,5 @@
-@permission((Config::get('constants.INSERT_EDUCATIONAL_CONTENT_ACCESS')))@extends("app",["pageName"=>"admin"])
+@permission((Config::get('constants.INSERT_EDUCATIONAL_CONTENT_ACCESS')))
+@extends('partials.templatePage',["pageName"=>"admin"])
 
 @section('page-css')
 

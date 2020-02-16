@@ -23,8 +23,8 @@
             margin-bottom: 0;
         }
 
-        .m-portlet__head  {            
-            display: flex; 
+        .m-portlet__head  {
+            display: flex;
             flex-direction: row;
             align-items: stretch;
             justify-content: space-between;
@@ -34,16 +34,16 @@
             position:relative;
 
             .m-portlet__head-progress {
-                position: absolute; 
-                left: 0; 
-                right: 0; 
+                position: absolute;
+                left: 0;
+                right: 0;
             }
 
             .m-portlet__head-wrapper {
-                display: flex; 
+                display: flex;
                 flex-direction: row;
                 align-items: stretch;
-                justify-content: space-between; 
+                justify-content: space-between;
                 flex-grow: 1;
             }
 
@@ -67,8 +67,8 @@
                         i {
                             vertical-align: middle;
                             line-height: 0;
-                            display: inline-block;  
-                        }  
+                            display: inline-block;
+                        }
                     }
 
                     .m-portlet__head-text  {
@@ -94,8 +94,8 @@
                             font-size: get-font-size(regular, '-');
                             font-weight: get-font-weight(normal);
                             font-family: #{get-heading-font-family()};
-                        } 
-                    }                    
+                        }
+                    }
                 }
             }
 
@@ -141,9 +141,9 @@
                                 }
 
                                 i {
-                                    display: inline-block;  
-                                }  
-                            }  
+                                    display: inline-block;
+                                }
+                            }
 
                             &:hover {
                                 text-decoration: none;
@@ -168,7 +168,7 @@
                         float: right;
                     }
                 }
-            }   
+            }
 
             &.m-portlet__head--fit {
                 position: relative;
@@ -195,14 +195,14 @@
             &.m-portlet__body--no-right-padding {
                 padding-right: 0;
             }
-        }   
+        }
 
         .m-portlet__foot  {
             padding: $footer-padding;
 
             &.m-portlet__foot--fit {
-                padding: 0 !important; 
-            } 
+                padding: 0 !important;
+            }
         }
 
         //== Body loding
@@ -219,7 +219,7 @@
 
                 .m-portlet__body-progress {
                     background-color: #fff;
-                    position: absolute; 
+                    position: absolute;
                     top: 0;
                     left: 0;
                     right: 0;
@@ -244,7 +244,7 @@
         //== collapse portlet
         &.m-portlet--collapsed,
         &.m-portlet--collapse {
-            .m-portlet__head  { 
+            .m-portlet__head  {
                 .m-portlet__head-tools  {
                     // portlet nac
                     .m-portlet__nav {
@@ -260,7 +260,7 @@
                                     &:before {
                                         content: "\f28e";
                                     }
-                                }  
+                                }
                             }
                         }
                     }
@@ -272,7 +272,7 @@
         &.m-portlet--collapsed {
             > .m-form,
             > .m-portlet__body {
-                display: none; 
+                display: none;
             }
         }
 
@@ -284,9 +284,9 @@
             left: 0;
             right: 0;
             z-index: 1;
-            margin: 0; 
+            margin: 0;
 
-            > .m-portlet__head  { 
+            > .m-portlet__head  {
                 .m-portlet__head-tools  {
                     // portlet nac
                     .m-portlet__nav {
@@ -302,7 +302,7 @@
                                     &:before {
                                         content: "\f1a4";
                                     }
-                                }  
+                                }
                             }
                         }
                     }
@@ -316,8 +316,8 @@
                 top: $height;
                 bottom: 0;
                 position: fixed;
-                overflow: auto; 
-            } 
+                overflow: auto;
+            }
 
             > .m-portlet__foot  {
                 position: relative;
@@ -326,13 +326,13 @@
 
             &.m-portlet--head-sm {
                 > .m-portlet__body  {
-                    top: $height-sm;   
+                    top: $height-sm;
                 }
             }
 
             &.m-portlet--head-lg {
                 > .m-portlet__body  {
-                    top: $height-lg;   
+                    top: $height-lg;
                 }
             }
         }
@@ -359,13 +359,13 @@
         &.m-portlet--space {
             padding: 0 $space;
 
-            .m-portlet__head  {  
+            .m-portlet__head  {
                 padding: $space 0;
             }
 
             .m-portlet__body  {
                 padding: $space 0;
-            }   
+            }
 
             .m-portlet__foot  {
                 > .m-form__actions {
@@ -375,7 +375,7 @@
         }
 
         //== Apply portlet padding to inner element.
-        .m-portlet__padding-x  {  
+        .m-portlet__padding-x  {
             padding: 0 $space;
         }
 
@@ -395,7 +395,7 @@
                     // portlet tabs
                     .m-tabs-line {
                         position: relative;
-                        margin: 0; 
+                        margin: 0;
                         border-bottom-color: transparent;
                         bottom: -1px;
                         display:flex;
@@ -432,7 +432,7 @@
             .m-portlet__foot,
             .m-portlet__body  {
                 padding-top: $space - 0.5rem;
-                padding-bottom: $space - 0.5rem;  
+                padding-bottom: $space - 0.5rem;
             }
         }
 
@@ -474,7 +474,7 @@
         //== Responsive mode
         &.m-portlet--responsive-mobile {
             @include mobile {
-                .m-portlet__head  { 
+                .m-portlet__head  {
                     height: auto;
                     flex-direction: column;
                     flex-wrap: wrap;
@@ -503,7 +503,7 @@
 
         &.m-portlet--responsive-tablet-and-mobile {
             @include tablet-and-mobile {
-                .m-portlet__head  { 
+                .m-portlet__head  {
                     height: auto;
                     flex-direction: column;
                     flex-wrap: wrap;
@@ -530,7 +530,7 @@
             }
         }
 
-        //== Form layout integrtion        
+        //== Form layout integrtion
         .m-form.m-form--fit > .m-portlet__body {
             padding-left: 0px;
             padding-right: 0px;
@@ -540,14 +540,14 @@
         //== jQuery UI Draggable Portlets
         &.m-portlet--sortable {
             .m-portlet__head {
-                cursor: move;   
-            }  
+                cursor: move;
+            }
         }
-            
+
         &.m-portlet--sortable-empty {
             visibility: hidden;
-            height: 45px;  
-            min-height: 125px; 
+            height: 45px;
+            min-height: 125px;
         }
 
         .m-portlet-fit--sides {
@@ -573,7 +573,7 @@
         .m-portlet__body-separator {
             height: 0;
             overflow: hidden;
-            margin: 30px (- $space); 
+            margin: 30px (- $space);
         }
 
         //== Creative Portlet
@@ -581,7 +581,7 @@
             $m-portlet-head-height: 2.75rem;
             $m-portlet-head-padding: 0 1.75rem;
             $m-portlet-label-height: 3.5rem;
-            $m-portlet-top-padding: 3.5rem; 
+            $m-portlet-top-padding: 3.5rem;
             $m-portlet-top-margin: 3.5rem;
 
             padding-top: $m-portlet-top-padding;
@@ -591,7 +591,7 @@
                 margin-top: $m-portlet-head-height / 2;
             }
 
-            .m-portlet__head  {     
+            .m-portlet__head  {
                 height: $m-portlet-head-height;
 
                 .m-portlet__head-caption  {
@@ -611,8 +611,8 @@
                             .m-portlet__head-desc {
                                 font-size: get-font-size(regular, '--');
                                 font-weight: get-font-weight(normal);
-                            } 
-                        }                    
+                            }
+                        }
                     }
 
                     .m-portlet__head-label  {
@@ -630,16 +630,16 @@
                             display: table-cell;
                         }
                     }
-                } 
+                }
             }
 
-            .m-portlet__body  { 
+            .m-portlet__body  {
                 padding-top: 1rem;
             }
-        } 
+        }
 
         //== Head overlay
-        &.m-portlet--head-overlay {  
+        &.m-portlet--head-overlay {
             overlay: hidden;
 
             .m-portlet__head  {
@@ -648,7 +648,7 @@
                 z-index: 2;
             }
 
-            .m-portlet__body  {  
+            .m-portlet__body  {
                 position: relative;
                 z-index: 1;
                 margin-top: -($height);
@@ -658,13 +658,13 @@
 
         //== Sticky portlet head
         &.m-portlet--sticky {
-            .m-portlet__head  { 
+            .m-portlet__head  {
                 position: fixed;
                 box-shadow: 0px 1px 15px 1px rgba(69, 65, 78, 0.1);
                 z-index: 101;
                 background: #fff;
             }
-        }        
+        }
     }
 
     @include desktop() {
@@ -699,13 +699,13 @@
             .m-aside-left {
                 display: none;
             }
-        }        
+        }
     }
 
     // tablet and mobile mode
     @include tablet-and-mobile {
         .m-portlet  {
-           .m-portlet__head  {       
+           .m-portlet__head  {
                 .m-portlet__head-caption  {
                     .m-portlet__head-title  {
                         .m-portlet__head-text  {
@@ -717,8 +717,8 @@
 
                             .m-portlet__head-desc {
                                 font-size: get-font-size(regular, '-');
-                            } 
-                        }                    
+                            }
+                        }
                     }
                 }
             }
@@ -742,7 +742,7 @@
                     }
 
                     .m-portlet__head-tools  {
-                        display: block; 
+                        display: block;
                         float: none;
                         margin-top: 1rem;
 
@@ -756,7 +756,7 @@
                                     padding: 0.5rem 0;
                                 }
                             }
-                        } 
+                        }
                     }
                 }
 
@@ -769,7 +769,7 @@
                                         padding: 0.5rem 1rem;
                                     }
                                 }
-                            } 
+                            }
                         }
                     }
                 }
@@ -781,7 +781,7 @@
 //== Component Skin
 @mixin m-build-component--portlets-skin($skin) {
     @include component-skin(m-portlet, $skin) {
-        @include shadow(get-shadow($skin, '--'));  
+        @include shadow(get-shadow($skin, '--'));
         background-color: get-color($skin, box);
 
         .m-portlet__head  {
@@ -816,7 +816,7 @@
                         }
                     }
                 }
-            }    
+            }
 
             border-bottom: 1px solid get-color($skin, panel);
 
@@ -840,7 +840,7 @@
             &.m-portlet__foot-no-border {
                 border: 0;
             }
-        }    
+        }
 
         //== Portlet styles
         // bordered style
@@ -858,7 +858,7 @@
         //== Sortable mode
         //== jQuery UI Draggable Portlets
         &.ui-sortable-helper {
-            border: 1px dashed get-color($skin, panel);   
+            border: 1px dashed get-color($skin, panel);
         }
 
         //== Portlet seperator
@@ -868,21 +868,21 @@
 
         //== Creative Portlet
         &.m-portlet--creative {
-            .m-portlet__head  {     
+            .m-portlet__head  {
                 .m-portlet__head-caption  {
                     .m-portlet__head-label  {
-                        @include shadow(get-shadow($skin, '+'));  
+                        @include shadow(get-shadow($skin, '+'));
 
                         @each $name, $color in $m--state-colors {
                             &.m-portlet__head-label--#{$name} {
                                 background: array-get($color, base);
                                 color: array-get($color, inverse);
-                            } 
+                            }
                         }
                     }
-                } 
+                }
             }
-        } 
+        }
 
 
         //== Angular source code viewer
@@ -917,7 +917,7 @@
                     }
 
                     border-color: array-get($color, base);
-                }                
+                }
 
                 .m-portlet__head-tools  {
                     // portlet navs
@@ -941,7 +941,7 @@
 
                     // portlet outline light button style
                     .btn-outline-light {
-                        border-color: rgba(#fff, 0.1); 
+                        border-color: rgba(#fff, 0.1);
                     }
 
                     // portlet tabs
@@ -985,13 +985,13 @@
                             color: array-get($color, inverse);
                             border: 0;
                             background: rgba(array-get($color, inverse), 0.08);
-                            
+
                             > i {
                                 color: lighten(array-get($color, inverse), 5%);
                             }
-                        } 
+                        }
                     }
-                } 
+                }
 
                 .m-portlet__body {
                     background: white;
@@ -1004,12 +1004,12 @@
 
                 background: array-get($color, base);
                 border-color: array-get($color, base);
-            }            
+            }
         }
 
         //== State colors
-       .m-portlet.m-portlet--border-bottom-#{$name} {      
-            border-bottom: 3px solid array-get($color, base); 
+       .m-portlet.m-portlet--border-bottom-#{$name} {
+            border-bottom: 3px solid array-get($color, base);
         }
     }
 }
@@ -1022,8 +1022,8 @@
 //== Component Skin - Light
 @include m-build-component--portlets-skin(light);
 
-//== Component Skin - Dark
-@include m-build-component--portlets-skin(dark);
-
-//== Component Skin - Light
-@include m-build-component--portlets-states();
+////== Component Skin - Dark
+//@include m-build-component--portlets-skin(dark);
+//
+////== Component Skin - Light
+//@include m-build-component--portlets-states();
