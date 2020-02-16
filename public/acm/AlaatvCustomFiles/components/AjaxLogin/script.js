@@ -28,8 +28,8 @@ var AjaxLogin = function () {
             '        <a href="'+window.location.origin+'">\n' +
             '          <img class="modal-alaaLogo lazy-image" src="https://cdn.alaatv.com/loder.jpg?w=1&h=1" data-src="https://cdn.alaatv.com/upload/footer-alaaLogo.png" width="30" height="40" data-toggle="m-tooltip" title="آلاء" data-placement="top">\n' +
             '          <h5 class="modal-title">ورود به آلاء</h5>\n' +
-            '          <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>\n' +
             '        </a>\n' +
+            '        <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>\n' +
             '      </div>\n' +
             '      <div class="modal-body">\n' +
             'با کد ملی ایران نیازی به ثبت نام نیست.' +

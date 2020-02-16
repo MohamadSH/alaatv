@@ -101,47 +101,16 @@ a.a--gtm-eec-advertisement-click {
     font-weight: 900;
 }
 
-/*.alert-dismissible .close {*/
-/*    font-family: "Font Awesome 5 Free";*/
-/*    font-weight: 900;*/
-/*}*/
-/*.alert-dismissible .close:before {*/
-/*    content: "\f00d";*/
-/*}*/
-/*.alert.m-alert--default {*/
-/*    background: #f7f8fa;*/
-/*    color: #575962;*/
-/*}*/
-/*.alert-success:not(.m-alert--outline) {*/
-/*    color: #f6fcfb;*/
-/*    background-color: #45ccb1;*/
-/*    border-color: #39c9ac;*/
-/*}*/
-/*.alert-info:not(.m-alert--outline) {*/
-/*    color: #fff;*/
-/*    background-color: #53b0f8;*/
-/*    border-color: #45aaf8;*/
-/*}*/
-/*.alert-warning:not(.m-alert--outline) {*/
-/*    color: #fff;*/
-/*    background-color: #ffc241;*/
-/*    border-color: #ffbd31;*/
-/*}*/
-/*.alert-danger:not(.m-alert--outline) {*/
-/*    color: #fff;*/
-/*    background-color: #f66e84;*/
-/*    border-color: #f55f78;*/
-/*}*/
-/*.alert-brand:not(.m-alert--outline) {*/
-/*    color: #fff;*/
-/*    background-color: #8781d2;*/
-/*    border-color: #7c75ce;*/
-/*}*/
-/*.alert-primary:not(.m-alert--outline) {*/
-/*    color: #fff;*/
-/*    background-color: #717ee2;*/
-/*    border-color: #6573e0;*/
-/*}*/
+.breadcrumb {
+    flex-wrap: nowrap;
+    overflow: auto;
+}
+.breadcrumb .breadcrumb-item {
+    white-space: nowrap;
+}
+.breadcrumb .breadcrumb-item:last-child {
+    padding-left: 20px;
+}
 
 a:hover {
     text-decoration: none;

@@ -2,6 +2,7 @@
 
 @section('page-css')
     <link href="{{ mix('/css/content-search.css') }}" rel="stylesheet" type="text/css"/>
+    <link href="{{ asset('/acm/AlaatvCustomFiles/css/page/pages/content-search/content-search.css') }}" rel="stylesheet" type="text/css"/>
 @endsection
 
 @section('content')

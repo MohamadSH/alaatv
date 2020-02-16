@@ -338,7 +338,7 @@ class Mix {
                 'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/style.css',
                 'public/acm/AlaatvCustomFiles/components/ScrollCarousel/style.css',
                 'public/acm/AlaatvCustomFiles/components/ScrollCarousel/itemStyle.css',
-                'public/acm/AlaatvCustomFiles/css/page/pages/content-search/content-search.css'
+                // 'public/acm/AlaatvCustomFiles/css/page/pages/content-search/content-search.css'
             ],
             'public/css/content-search.css',
             [
