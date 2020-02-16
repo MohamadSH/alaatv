@@ -1,4 +1,4 @@
-@extends('app')
+@extends('partials.templatePage')
 
 @section('page-css')
     <link href="{{ asset('/acm/AlaatvCustomFiles/components/imageWithCaption/style.css') }}" rel="stylesheet" type="text/css"/>
@@ -140,8 +140,8 @@
                                                         @if(isset($product["product"]->image[0]))
                                                             <img src="{{$product["product"]->photo}}" alt="عکس محصول@if(isset($product["product"]->name[0])) {{$product["product"]->name}} @endif" class="img-thumbnail lazy-image">
                                                         @endif
-        
-                                                        
+
+
                                                         <a href="{{$product["product"]->url ?? '#'}}">
                                                             <div class="a--imageCaptionWarper">
                                                                 <div class="a--imageCaptionContent">
@@ -164,7 +164,7 @@
                                                             </div>
                                                         </a>
                                                     </div>
-                                                    
+
                                                     <div class="text-center">
                                                         <a href="{{$product["product"]->url ?? '#'}}">
                                                             <button type="button" class="btn btn-sm m-btn--air btn-accent a--full-width m--margin-bottom-10">

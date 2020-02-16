@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Content;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\FAQ;
 use App\Http\Resources\User as UserResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
@@ -13,7 +14,7 @@ class HomeController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth:api', ['except' => ['satra', 'bigUpload']]);
+        $this->middleware('auth:api', ['except' => ['satra', 'bigUpload', 'faq']]);
     }
 
     public function debug(Request $request)
@@ -61,5 +62,10 @@ class HomeController extends Controller
         }
 
         return response()->json($contentArray);
+    }
+
+    public function faq()
+    {
+        return FAQ::collection(collect(alaaSetting()->faq));
     }
 }

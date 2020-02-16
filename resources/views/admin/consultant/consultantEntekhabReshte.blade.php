@@ -1,4 +1,4 @@
-@extends("app")
+@extends('partials.templatePage')
 
 @section("headPageLevelPlugin")
     <link href = "/assets/global/plugins/jquery-nestable/jquery.nestable.css" rel = "stylesheet" type = "text/css"/>

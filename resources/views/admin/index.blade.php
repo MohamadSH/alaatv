@@ -1,4 +1,5 @@
-@ability(config('constants.ROLE_ADMIN'),config('constants.ADMIN_PANEL_ACCESS'))@extends("app",["pageName"=>$pageName])
+@ability(config('constants.ROLE_ADMIN'),config('constants.ADMIN_PANEL_ACCESS'))
+@extends('partials.templatePage',["pageName"=>$pageName])
 
 @section('page-css')
     <link href="{{ mix('/css/admin-all.css') }}" rel="stylesheet" type="text/css"/>

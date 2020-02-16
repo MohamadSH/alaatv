@@ -1,4 +1,4 @@
-@extends("app")
+@extends('partials.templatePage')
 @section("pageBar")
 @endsection
 

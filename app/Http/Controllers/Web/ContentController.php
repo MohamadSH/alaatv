@@ -14,6 +14,9 @@ use App\Contentset;
 use App\Contenttype;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\{ContentIndexRequest, EditContentRequest, InsertContentRequest, Request, UpdateContentSetRequest};
+use App\Http\Resources\ContentInSearch;
+use App\Http\Resources\ProductInBlock;
+use App\Http\Resources\SetInIndex;
 use App\Section;
 use App\Source;
 use App\Traits\{APIRequestCommon,
@@ -92,12 +95,16 @@ class ContentController extends Controller
         $setFilters            = $filters;
         $setFilters['enable']  = 1;
         $setFilters['display'] = 1;
-        $result->offsetSet('set', !$contentOnly ? $setSearch->get($setFilters) : null);
+        $sets                  = $setSearch->get($setFilters);
+        $result->offsetSet('set', !$contentOnly ? $sets : null);
+
 
         $productFilters                    = $filters;
         $productFilters['active']          = 1;
         $productFilters['doesntHaveGrand'] = 1;
-        $result->offsetSet('product', !$contentOnly ? $productSearch->get($productFilters) : null);
+        $products                          = $productSearch->get($productFilters);
+        $result->offsetSet('product', !$contentOnly ? $products : null);
+
 
         $pageName = 'content-search';
 
@@ -106,11 +113,26 @@ class ContentController extends Controller
             return response()->json($this->makeJsonForAndroidApp(optional($result->get('video'))
                 ->items()));
         }
-        $api  = response()->json([
+
+        $api = response()->json([
             'result' => $result,
             'tags'   => empty($tags) ? null : $tags,
         ]);
-        $view = view('pages.content-search', compact('result', 'contentTypes', 'tags', 'pageName'));
+
+        $videos   = $result->get('video');
+        $videos   = isset($videos) && $videos->count() > 0 ? ContentInSearch::collection($videos) : null;
+        $products =
+            !$contentOnly && isset($products) && $products->count() > 0 ? ProductInBlock::collection($products) : null;
+        $sets     = !$contentOnly && isset($sets) && $sets->count() > 0 ? SetInIndex::collection($sets) : null;
+        $viewData = [
+            'data' => [
+                'videos'   => $videos,
+                'products' => $products,
+                'sets'     => $sets,
+                'tags'     => empty($tags) ? null : $tags,
+            ],
+        ];
+        $view     = view('pages.content-search', compact('result', 'contentTypes', 'tags', 'pageName', 'viewData'));
         return httpResponse($api, $view);
     }
 
@@ -202,13 +224,15 @@ class ContentController extends Controller
 
         $seenCount = $content->pageView;
 
-        $apiResponse       = response()->json($content, Response::HTTP_OK);
+        $apiResponse = response()->json($content, Response::HTTP_OK);
 
         $productsHasThisContentThroughBlockCollection = $content->related_products;
 
+
         $recommendedItems = (new RecommendedItemsFetcher($tags))->fetch();
-        $recommendedItems =
-            $this->addProductsToRecommendedItems($productsThatHaveThisContent, $recommendedItems);
+        $recommendedItems = $this->addProductsToRecommendedItems($productsThatHaveThisContent, $recommendedItems);
+//        $recommendedProductsOfThisContent = $content->recommended_products;
+//        $recommendedItems = $this->addProductsToRecommendedItems($recommendedProductsOfThisContent, $recommendedItems);
 
         $contentBlocks = $content->isFree ? Block::getContentBlocks() : collect();
 

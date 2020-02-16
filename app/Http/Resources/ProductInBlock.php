@@ -46,6 +46,8 @@ class ProductInBlock extends AlaaJsonResourceWithPagination
             'price'        => $this->getPrice(),
             'url'          => $this->getUrl(),
             'photo'        => $this->when(isset($this->photo), $this->photo),
+            'category'     => $this->when(isset($this->category), $this->category),
+            'attributes'   => $this->getAttributes(),
         ];
     }
 }

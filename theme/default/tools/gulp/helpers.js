@@ -267,7 +267,7 @@ module.exports = {
 	},
 
 	baseName: function(str) {
-		var base = String(str).substring(str.lastIndexOf('/') + 1);
+		var base = new String(str).substring(str.lastIndexOf('/') + 1);
 		if (base.lastIndexOf('.') != -1) {
 			base = base.substring(0, base.lastIndexOf('.'));
 		}

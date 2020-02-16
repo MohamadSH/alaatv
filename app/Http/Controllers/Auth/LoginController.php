@@ -53,6 +53,12 @@ class LoginController extends Controller
      */
     public function showLoginForm()
     {
+        $login        = true;
+        $voucher      = false;
+        $verifyMobile = false;
+        $redirectUrl  = route('web.index');
+
+        return view('auth.voucherLogin', compact('redirectUrl', 'verifyMobile', 'voucher', 'login'));
         return view('auth.login3');
     }
 

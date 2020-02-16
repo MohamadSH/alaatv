@@ -103,7 +103,7 @@
                                 @if(!$product->children->where('enable',1)->count()>0 && (array_search($product->id, $purchasedProductIdArray) !== false) || $childIsPurchased)
                                     <span class="m-badge m-badge--info m-badge--wide m-badge--rounded">
                                         خریده اید
-                                        <a class="btn btn-sm m-btn m-btn--pill m-btn--air m-btn--gradient-from-focus m-btn--gradient-to-danger  animated infinite pulse" role="button" href="{{ action("Web\UserController@userProductFiles") }}">
+                                        <a class="btn btn-sm m-btn m-btn--pill m-btn--air btn-info animated infinite pulse" role="button" href="{{ action("Web\UserController@userProductFiles") }}">
                                             <i class="fa fa-play-circle"></i>
                                         </a>
                                     </span>
@@ -127,7 +127,7 @@
                         <div class="m--clearfix"></div>
 
                         @if(isset($product->introVideo))
-                            <button type="button" class="btn btn-sm m-btn m-btn--pill m-btn--air m-btn--gradient-from-focus m-btn--gradient-to-danger btnShowVideoLink" data-videosrc="{{ $product->introVideo }}" data-videotitle="{{ $product->name }}" data-videodes="{{ $product->shortDescription }}">
+                            <button type="button" class="btn btn-sm m-btn m-btn--pill m-btn--air btn-info btnShowVideoLink" data-videosrc="{{ $product->introVideo }}" data-videotitle="{{ $product->name }}" data-videodes="{{ $product->shortDescription }}">
                                 <span>
                                     <i class="fa fa-play-circle"></i>
                                     <span>نمایش کلیپ معرفی</span>

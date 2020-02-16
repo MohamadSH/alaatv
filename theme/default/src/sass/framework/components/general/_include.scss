@@ -11,50 +11,50 @@
 
 //== Navigation menu
 @import "nav/nav";
-@import "nav/grid";
-@import "nav/sticky";
-@import "nav/scroll-top"; 
- 
-//== Dropdown (need)
+//@import "nav/grid";
+//@import "nav/sticky";
+@import "nav/scroll-top";
+
+//== Dropdown (need) usage: user profile or search box
 @import "dropdown/mixins";
 @import "dropdown/dropdown";
 
 //== Tabs
 @import "tabs/base";
-@import "tabs/line";
+//@import "tabs/line";// has 20 KB
 
 //== Typography
 @import "typography/badge";
 @import "typography/link";
 @import "typography/section";
 @import "typography/separator";
-@import "typography/code";
-@import "typography/type";
-@import "typography/divider";
+//@import "typography/code";
+//@import "typography/type";
+//@import "typography/divider";
 
-//== Buttons
-@import "buttons/buttons";
+//== Buttons // has 133 KB
+@import "buttons/buttons"; // (71 KB)
 
-//== Spinners
+//== Spinners // has 4 KB
 @import "spinners/spinner";
 @import "spinners/loader";
 
-//== Lists
+//== Lists // has 19 KB
 @import "lists/search";
-@import "lists/timeline";
-@import "lists/settings";
+//@import "lists/timeline";
+//@import "lists/settings";
 @import "lists/badge";
-@import "lists/pics";
+//@import "lists/pics";
 
 //== Cards
-@import "cards/user";
+@import "cards/user";// has 3 KB
 //@import "cards/profile";
 
 //== Messenger
 //@import "messenger/messenger";
 
 //== Portlets
-@import "portlets/portlets";
+@import "portlets/portlets"; // has 65 KB
 
 ////== Timeline
 //@import "timeline/timeline-1";
@@ -80,7 +80,7 @@
 //@import "widgets/widget16";
 //@import "widgets/widget17";
 //@import "widgets/widget18";
-@import "widgets/widget19";
+@import "widgets/widget19";// has 3 KB
 //@import "widgets/widget20";
 //@import "widgets/widget20";
 //@import "widgets/widget21";
@@ -89,7 +89,7 @@
 //@import "widgets/widget24";
 //@import "widgets/widget25";
 //@import "widgets/widget26";
-@import "widgets/widget27";
+@import "widgets/widget27";// has 4 KB
 //@import "widgets/widget28";
 //@import "widgets/widget29";
 //@import "widgets/widget30";
@@ -98,14 +98,14 @@
 //@import "demo/icon";
 //@import "demo/demo";
 //== Forms
-@import "forms/checkbox-radio";
-@import "forms/input";
-@import "forms/switch";
+//@import "forms/checkbox-radio";
+@import "forms/input";// has 10 KB
+@import "forms/switch";// has 14 KB
 @import "forms/layout";
-@import "forms/option";
+//@import "forms/option";// new
 
-//== Table
-@import "table/table";
+////== Table
+//@import "table/table"; // has 5 KB
 
 //== Wizard
 //@import "wizard/wizard-base";
@@ -116,4 +116,4 @@
 //@import "wizard/wizard-5";
 
 //== Accordion
-@import "accordion/accordion";
+@import "accordion/accordion"; // has 16 KB

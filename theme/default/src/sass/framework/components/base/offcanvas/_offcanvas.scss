@@ -13,7 +13,7 @@
 		-webkit-overflow-scrolling: touch;
 		top: 0;
 		bottom: 0;
-		overflow-y: auto; 				
+		overflow-y: auto;
 		-webkit-transform: translate3d(0, 0, 0);
 		backface-visibility: hidden;
 		-webkit-backface-visibility: hidden;
@@ -26,9 +26,9 @@
 
 		@if (array-get($layout, direction) == left) {
 			left: -($width + 10px);
-		} 
+		}
 
-		&.#{$class}--on {	
+		&.#{$class}--on {
 			transition: array-get($layout, transition);
 
 			@if (array-get($layout, direction) == right) {
@@ -37,7 +37,7 @@
 
 			@if (array-get($layout, direction) == left) {
 				left: 0;
-			} 
+			}
 		}
 	}
 
@@ -65,7 +65,7 @@
 			}
 
 			width:  array-get($layout, close, layout, size);
-			height: array-get($layout, close, layout, size);	
+			height: array-get($layout, close, layout, size);
 			top: 1px;
 			z-index: array-get($layout, zindex) + 1;
 			transition: array-get($layout, transition);
@@ -74,8 +74,8 @@
 			border: 0;
 			box-shadow: none;
 			@include rounded {
-				border-radius: 3px; 
-			}			
+				border-radius: 3px;
+			}
 			cursor: pointer;
 			outline: none !important;
 			text-align: center;
@@ -86,13 +86,13 @@
 				text-decoration: none;
 			}
 
-			> i {					
+			> i {
 				line-height: 0;
 				font-size: array-get($layout, close, layout, font-size);
 				@include vertical-horizontal-center();
 			}
 
-			.#{$class}--on & {			
+			.#{$class}--on & {
 				transition: array-get($layout, transition);
 
 				@if (array-get($layout, direction) == left) {
@@ -138,7 +138,7 @@
 	}
 }
 
-//== Component Generate 
+//== Component Generate
 @mixin m-generate-component--offcanvas($class, $mode, $layout) {
 	// close icon
 	.#{$class}-close {

@@ -67,18 +67,25 @@
                     <span class = "m-badge m-badge--wide label-sm m-badge--danger"> ثبت نشده </span>
                 @endif
             </td>
+            @permission((config('constants.SHOW_USER_MOBILE')))
             <td>@if(isset($eventresult->user->mobile))  {{$eventresult->user->mobile}} @else
                     <span class = "m-badge m-badge--wide label-sm m-badge--danger">درج نشده </span> @endif</td>
+            @endpermission
+            @permission((config('constants.SHOW_USER_CITY')))
             <td>@if(isset($eventresult->user->city) && strlen($eventresult->user->city)>0) {{$eventresult->user->city}} @else
                     <span class = "m-badge m-badge--wide label-sm m-badge--warning"> درج نشده </span> @endif </td>
+            @endpermission
+            @permission((config('constants.SHOW_KONKOOT_RESULT_INFO')))
             <td>@if(isset($eventresult->reportFile[0]))
                     <a target = "_blank" href = "{{action("Web\HomeController@download" , ["content"=>"فایل کارنامه","fileName"=>$eventresult->reportFile ])}}" class = "btn btn-icon-only green">
                         <i class = "fa fa-download"></i>
                     </a> @else
                     <span class = "m-badge m-badge--wide label-sm m-badge--warning"> درج نشده </span> @endif </td>
+            @endpermission
             <td>@if(isset($eventresult->rank)) <span style="font-weight:bold ; color:{{($eventresult->rank<=1000)?'#18e018':'red'}}"> {{$eventresult->rank}} </span> @else
                     <span class = "m-badge m-badge--wide label-sm m-badge--danger">درج نشده </span> @endif
             </td>
+            @permission((config('constants.SHOW_KONKOOT_RESULT_INFO')))
             <td>@if(isset($eventresult->enableReportPublish)) <span style="font-weight:bold ; color:{{($eventresult->enableReportPublish)?'#18e018':'red'}}">{{($eventresult->enableReportPublish)?'بله':'خیر'}}</span> @else
                     <span class = "m-badge m-badge--wide label-sm m-badge--danger">درج نشده </span> @endif
             </td>
@@ -89,13 +96,15 @@
                         {!! Form::select('eventresultstatus_id', $eventResultStatuses, null, ['class' => 'form-control']) !!}
                     </div>
                     <span class = "input-group-btn">
-                        <button type = "submit" class = "btn m-btn--pill m-btn--air m-btn m-btn--gradient-from-primary m-btn--gradient-to-info eventResultUpdate" data-role = "{{$eventresult->id}}">تغییر</button>
+                        <button type = "submit" class = "btn m-btn--pill m-btn--air m-btn btn-info eventResultUpdate" data-role = "{{$eventresult->id}}">تغییر</button>
                     </span>
                 </div>
                 {!! Form::close() !!}
             </td>
+            @endpermission
             <td>@if(isset($eventresult->comment) && strlen($eventresult->comment)>0) {{$eventresult->comment}} @else
                     <span class = "m-badge m-badge--wide label-sm m-badge--info">بدون نظر </span> @endif</td>
+            @permission((config('constants.SHOW_KONKOOT_RESULT_INFO')))
             <td>
                 @if(isset($eventresult->created_at))
                     {{$eventresult->CreatedAt_Jalali()}}
@@ -103,6 +112,7 @@
                     <span class = "m-badge m-badge--wide label-sm m-badge--danger">درج نشده </span>
                 @endif
             </td>
+            @endpermission
         </tr>
     @endforeach
 @endif

@@ -1,4 +1,5 @@
-@permission((Config::get('constants.INSERT_PRODUCT_FILE_ACCESS')))@extends("app",["pageName"=>"admin"])
+@permission((Config::get('constants.INSERT_PRODUCT_FILE_ACCESS')))
+@extends('partials.templatePage',["pageName"=>"admin"])
 @section("pageBar")
     <div class = "page-bar">
         <ul class = "page-breadcrumb">

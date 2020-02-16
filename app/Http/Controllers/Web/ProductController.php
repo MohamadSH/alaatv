@@ -11,6 +11,7 @@ use App\{Adapter\AlaaSftpAdapter,
     Classes\Search\ProductSearch,
     Classes\SEO\SeoDummyTags,
     Content,
+    Contentset,
     Http\Requests\AddComplimentaryProductRequest,
     Http\Requests\EditProductRequest,
     Http\Requests\InsertProductRequest,
@@ -167,20 +168,6 @@ class ProductController extends Controller
 
         $isFavored = (isset($user)) ? $user->hasFavoredProduct($product) : false;
 
-
-//        if ($product->id == Product::RAHE_ABRISHAM && $this->canSeeRaheAbrishamSpecialPage($user)) {
-        if ($product->id == Product::RAHE_ABRISHAM) {
-            $hasUserPurchasedRaheAbrisham = $this->hasUserPurchasedRaheAbrisham($user);
-            $sets                         = $product->sets->sortByDesc('pivot.order');
-            $lastSet                      = $sets->first();
-            $lastSetPamphlets             = $lastSet->getActiveContents2(Content::CONTENT_TYPE_PAMPHLET);
-            $lastSetVideos                = $lastSet->getActiveContents2(Content::CONTENT_TYPE_VIDEO);
-            $periodDescription            = $product->descriptionWithPeriod;
-            $faqs                         = $product->faqs;
-            $isForcedGift                 = false;
-            return view('product.customShow.raheAbrisham', compact('product', 'block', 'liveDescriptions', 'isFavored', 'lastSet', 'lastSetPamphlets', 'lastSetVideos', 'periodDescription', 'sets', 'faqs', 'hasUserPurchasedRaheAbrisham', 'block', 'isForcedGift'));
-        }
-
         $isForcedGift                 = false;
         $shouldBuyProductId           = null;
         $shouldBuyProductName         = '';
@@ -194,6 +181,17 @@ class ProductController extends Controller
             }
         }
 
+        //        if ($product->id == Product::RAHE_ABRISHAM && $this->canSeeRaheAbrishamSpecialPage($user)) {
+        if ($product->id == Product::RAHE_ABRISHAM) {
+            $hasUserPurchasedRaheAbrisham = $this->hasUserPurchasedRaheAbrisham($user);
+            $sets                         = $product->sets->sortByDesc('pivot.order');
+            $lastSet                      = $sets->first();
+            $lastSetPamphlets             = $lastSet->getActiveContents2(Content::CONTENT_TYPE_PAMPHLET);
+            $lastSetVideos                = $lastSet->getActiveContents2(Content::CONTENT_TYPE_VIDEO);
+            $periodDescription            = $product->descriptionWithPeriod;
+            $faqs                         = $product->faqs;
+            return view('product.customShow.raheAbrisham', compact('product', 'block', 'liveDescriptions', 'isFavored', 'lastSet', 'lastSetPamphlets', 'lastSetVideos', 'periodDescription', 'sets', 'faqs', 'hasUserPurchasedRaheAbrisham', 'block', 'isForcedGift', 'allChildIsPurchased', 'hasPurchasedEssentialProduct', 'shouldBuyProductId', 'shouldBuyProductName'));
+        }
 
         return view('product.show', compact('product', 'block', 'purchasedProductIdArray', 'allChildIsPurchased', 'liveDescriptions', 'children', 'isFavored', 'isForcedGift', 'shouldBuyProductId', 'shouldBuyProductName', 'hasPurchasedEssentialProduct'));
     }
@@ -251,6 +249,8 @@ class ProductController extends Controller
         $recommenderContents = optional($product->recommender_contents)->tags;
         $recommenderContents = implode(',', isset($recommenderContents) ? $recommenderContents : []);
 
+//        $hasTheseRecommenderSets = optional($product->recommender_sets)->tags;
+        $hasTheseRecommenderSets = isset($hasTheseRecommenderSets) ? $hasTheseRecommenderSets : [];
 
         $liveDescriptions = $product->livedescriptions->sortByDesc('created_at');
         $blocks           = optional($product)->blocks;
@@ -263,12 +263,12 @@ class ProductController extends Controller
 
         $descriptionsWithPeriod = $product->descriptionWithPeriod;
         $faqs                   = $product->faqs;
-
+        $recommenderSets        = Contentset::orderByDesc('created_at')->get();
         return view('product.edit',
             compact('product', 'amountLimit', 'defaultAmountLimit', 'enableStatus', 'defaultEnableStatus',
                 'attributesets', 'bons', 'productFiles', 'blocks', 'allBlocks', 'sets',
                 'productFileTypes', 'defaultProductFileOrders', 'products', 'producttype', 'productPhotos',
-                'defaultProductPhotoOrder', 'tags', 'sampleContents', 'recommenderContents', 'liveDescriptions', 'descriptionsWithPeriod' , 'faqs'));
+                'defaultProductPhotoOrder', 'tags', 'sampleContents', 'recommenderContents', 'recommenderSets', 'hasTheseRecommenderSets', 'liveDescriptions', 'descriptionsWithPeriod', 'faqs'));
     }
 
     public function update(EditProductRequest $request, Product $product)
@@ -1012,6 +1012,7 @@ class ProductController extends Controller
         $tagString                = Arr::get($inputData, 'tags');
         $sampleContentString      = Arr::get($inputData, 'sampleContents');
         $recommenderContentString = Arr::get($inputData, 'recommenderContents');
+        $recommenderSets          = Arr::get($inputData, 'recommenderSets');
 
         $product->fill($inputData);
 
@@ -1022,8 +1023,9 @@ class ProductController extends Controller
         $sampleContentsArray      = convertTagStringToArray($sampleContentString);
         $product->sample_contents = $sampleContentsArray;
 
-        $recommenderContentsArray      = convertTagStringToArray($recommenderContentString);
-        $product->recommender_contents = $recommenderContentsArray;
+
+        $product->recommender_contents = convertTagStringToArray($recommenderContentString);
+//        $product->recommender_sets        = $recommenderSets;
 
         if ($this->strIsEmpty($product->discount)) {
             $product->discount = 0;

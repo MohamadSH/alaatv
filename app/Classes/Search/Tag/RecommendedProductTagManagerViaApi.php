@@ -8,7 +8,7 @@ use App\Classes\Search\RedisTagManagerViaApi;
 
 class RecommendedProductTagManagerViaApi extends RedisTagManagerViaApi
 {
-    protected $bucket = "recommendercontent";
+    protected $bucket = "rp";
 
     /**
      * RedisTagViaApi constructor.

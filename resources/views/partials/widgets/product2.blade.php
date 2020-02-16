@@ -19,7 +19,7 @@
             </div>
         </div>
         <div class = "m-portlet__body">
-            <div class = "m-widget19 m--align-center">
+            <div class = "m-widget19 text-center">
                 <div class = "m-widget19__pic m-portlet-fit--top m-portlet-fit--sides">
                     <img src = "{{ $widgetPic }}" alt = " {{ $widgetTitle }}"/>
                     <div class = "m-widget19__shadow"></div>

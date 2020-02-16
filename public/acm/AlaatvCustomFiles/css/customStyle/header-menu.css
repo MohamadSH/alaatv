@@ -1,0 +1,63 @@
+.m-header-menu .m-menu__nav > .m-menu__item.m-menu__item--rel .m-menu__link-icon {
+    display: none;
+}
+.m-header-menu .m-menu__nav > .m-menu__item {
+    padding-left: 10px;
+    padding-right: 10px;
+}
+.m-header-menu.m-header-menu--submenu-skin-light .m-menu__nav > .m-menu__item .m-menu__submenu > .m-menu__subnav {
+    background-color: transparent;
+}
+.m-header-menu.m-header-menu--submenu-skin-light .m-menu__nav > .m-menu__item .m-menu__submenu > .m-menu__subnav > .m-menu__item.m-menu__item--hover, .m-header-menu.m-header-menu--submenu-skin-light .m-menu__nav > .m-menu__item .m-menu__submenu > .m-menu__subnav > .m-menu__item:hover {
+    background-color: #ffc67c;
+}
+.m-header-menu .m-menu__nav > .m-menu__item .m-menu__submenu > .m-menu__subnav > .m-menu__item {
+    background: white;
+    margin: 1px 0;
+}
+.m-header-menu .m-menu__nav > .m-menu__item .m-menu__submenu.m-menu__submenu--classic > .m-menu__subnav {
+    padding: 0;
+}
+.m-header-menu .m-menu__nav > .m-menu__item:active,
+.m-header-menu .m-menu__nav > .m-menu__item:focus,
+.m-header-menu .m-menu__nav > .m-menu__item:hover {
+    background-color: #ff970f;
+}
+
+.m-header-menu .m-menu__nav > .m-menu__item:active,
+.m-header-menu .m-menu__nav > .m-menu__item:focus,
+.m-header-menu .m-menu__nav > .m-menu__item:hover {
+    background-color: #ff970f;
+}
+.m-header-menu.m-header-menu--skin-dark .m-menu__nav > .m-menu__item.m-menu__item--hover > .m-menu__link > .m-menu__hor-arrow, .m-header-menu.m-header-menu--skin-dark .m-menu__nav > .m-menu__item:hover > .m-menu__link > .m-menu__hor-arrow {
+    color: #ff4e0b;
+}
+.m-header-menu.m-header-menu--skin-dark .m-menu__nav > .m-menu__item > .m-menu__link .m-menu__link-text {
+    color: #fff;
+}
+.m-header-menu.m-header-menu--skin-dark .m-menu__nav > .m-menu__item > .m-menu__link .m-menu__hor-arrow {
+    color: #fff;
+}
+
+.a--login-item .a--login-title {
+    line-height: 0;
+    vertical-align: middle;
+    padding: 0;
+    color: #333;
+    display: table-cell;
+    height: 100%;
+    text-align: right;
+    font-size: 1.1rem;
+}
+
+
+@media only screen and (max-width: 1024px) {
+    .m-header-menu .m-menu__nav > .m-menu__item .m-menu__submenu > .m-menu__subnav > .m-menu__item {
+        background: transparent;
+    }
+}
+@media only screen and (max-width: 320px) {
+    .m-brand .m-brand__tools .m-brand__icon {
+        margin-right: 5px;
+    }
+}

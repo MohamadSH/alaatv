@@ -10,11 +10,11 @@
 --------------------------------------------------------------------------------------
 فونت های ایران سن سریف یک نرم افزار مالکیتی محسوب می شود. جهت آگاهی از قوانین استفاده از این فونت ها لطفا به وب سایت (فونت ایران دات کام) مراجعه نمایید
 --------------------------------------------------------------------------------------
-IRAN Sans-serif fonts are considered a proprietary software. To gain information about the laws regarding the use of these fonts, please visit www.fontiran.com 
+IRAN Sans-serif fonts are considered a proprietary software. To gain information about the laws regarding the use of these fonts, please visit www.fontiran.com
 --------------------------------------------------------------------------------------
 This set of fonts are used in this project under the license: (.....)
 --------------------------------------------------------------------------------------
-*	
+*
 **/
 /*@font-face {*/
 /*	font-family: IRANSans;*/
@@ -94,6 +94,7 @@ This set of fonts are used in this project under the license: (.....)
 /*	font-display: swap;*/
 /*}*/
 @font-face {
+    font-display: swap;
 	font-family: IRANSans;
 	font-style: normal;
 	font-weight: 300;
@@ -102,7 +103,6 @@ This set of fonts are used in this project under the license: (.....)
 	url('/acm/webFonts/IRANSans/farsi_numeral/woff2/IRANSansWeb(FaNum)_Light.woff2') format('woff2'),  /* FF39+,Chrome36+, Opera24+*/
 	url('/acm/webFonts/IRANSans/farsi_numeral/woff/IRANSansWeb(FaNum)_Light.woff') format('woff'),  /* FF3.6+, IE9, Chrome6+, Saf5.1+*/
 	url('/acm/webFonts/IRANSans/farsi_numeral/ttf/IRANSansWeb(FaNum)_Light.ttf') format('truetype');
-	font-display: swap;
 }
 /*@font-face {*/
 /*	font-family: IRANSans;*/
