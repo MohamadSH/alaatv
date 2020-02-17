@@ -25,7 +25,7 @@ class SetController extends Controller
     public function showV2(Request $request, Contentset $set)
     {
         if (!is_null($set->redirectUrl)) {
-            return redirect(convertRedirectUrlToApiVersion($set->redirectUrl),
+            return redirect(convertRedirectUrlToApiVersion($set->redirectUrl, '2'),
                 Response::HTTP_FOUND, $request->headers->all());
         }
 

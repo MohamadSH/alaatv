@@ -69,7 +69,7 @@
     @include('product.partials.raheAbrisham.pictureAndMap')
 
     @include('product.partials.raheAbrisham.descriptionBox', [
-        'title' => 'خرید مجدد دوره راه ابریشم',
+        'title' => 'خرید دوره راه ابریشم',
         'closeIcon' => true,
         'class' => 'RepurchaseRow',
         'content' => view('product.partials.raheAbrisham.repurchase', compact('product'))
