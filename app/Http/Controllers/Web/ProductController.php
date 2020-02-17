@@ -11,7 +11,6 @@ use App\{Adapter\AlaaSftpAdapter,
     Classes\Search\ProductSearch,
     Classes\SEO\SeoDummyTags,
     Content,
-    Contentset,
     Http\Requests\AddComplimentaryProductRequest,
     Http\Requests\EditProductRequest,
     Http\Requests\InsertProductRequest,
@@ -251,7 +250,7 @@ class ProductController extends Controller
         $recommenderContents = implode(',', isset($recommenderContents) ? $recommenderContents : []);
 
         $recommenderSets = optional($recommenders)->sets;
-        $recommenderSets = isset($recommenderSets) ? $recommenderSets : [];
+        $recommenderSets = implode(',', isset($recommenderSets) ? $recommenderSets : []);
 
         $liveDescriptions = $product->livedescriptions->sortByDesc('created_at');
         $blocks           = optional($product)->blocks;
@@ -264,12 +263,12 @@ class ProductController extends Controller
 
         $descriptionsWithPeriod = $product->descriptionWithPeriod;
         $faqs                   = $product->faqs;
-        $setsToBeRecommender    = Contentset::orderByDesc('created_at')->get();
+
         return view('product.edit',
             compact('product', 'amountLimit', 'defaultAmountLimit', 'enableStatus', 'defaultEnableStatus',
                 'attributesets', 'bons', 'productFiles', 'blocks', 'allBlocks', 'sets',
                 'productFileTypes', 'defaultProductFileOrders', 'products', 'producttype', 'productPhotos',
-                'defaultProductPhotoOrder', 'tags', 'sampleContents', 'setsToBeRecommender', 'recommenderContents', 'recommenderSets', 'liveDescriptions', 'descriptionsWithPeriod', 'faqs'));
+                'defaultProductPhotoOrder', 'tags', 'sampleContents', 'recommenderContents', 'recommenderSets', 'liveDescriptions', 'descriptionsWithPeriod', 'faqs'));
     }
 
     public function update(EditProductRequest $request, Product $product)
@@ -1013,7 +1012,7 @@ class ProductController extends Controller
         $tagString                = Arr::get($inputData, 'tags');
         $sampleContentString      = Arr::get($inputData, 'sampleContents');
         $recommenderContentString = Arr::get($inputData, 'recommenderContents');
-        $recommenderSets          = Arr::get($inputData, 'recommenderSets');
+        $recommenderSetString     = Arr::get($inputData, 'recommenderSets');
 
         $product->fill($inputData);
 
@@ -1027,7 +1026,7 @@ class ProductController extends Controller
 
         $product->recommender_contents = [
             'contents' => convertTagStringToArray($recommenderContentString),
-            'sets'     => $recommenderSets,
+            'sets'     => convertTagStringToArray($recommenderSetString),
         ];
 
         if ($this->strIsEmpty($product->discount)) {
