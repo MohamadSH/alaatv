@@ -74,6 +74,9 @@
         var contentData = {!! json_encode($viewData) !!};
         var tags = {!! json_encode($tags) !!};
         var contentSearchApi = window.location.origin + '/api/v2/search';
+        contentData.data.products.links.next = (contentData.data.products.links.next !== null) ? contentData.data.products.links.next.replace('https://alaatv.com/c?', 'https://alaatv.com/api/v2/search?') : contentData.data.products.links.next;
+        contentData.data.videos.links.next = (contentData.data.videos.links.next !== null) ? contentData.data.videos.links.next.replace('https://alaatv.com/c?', 'https://alaatv.com/api/v2/search?') : contentData.data.videos.links.next;
+        contentData.data.sets.links.next = (contentData.data.sets.links.next !== null) ? contentData.data.sets.links.next.replace('https://alaatv.com/c?', 'https://alaatv.com/api/v2/search?') : contentData.data.sets.links.next;
     </script>
     <script src="{{ mix('/js/content-search.js') }}"></script>
 @endsection
