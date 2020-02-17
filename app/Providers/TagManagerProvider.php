@@ -11,6 +11,8 @@ use App\Classes\Search\TaggingInterface;
 use App\Classes\TagSplitter;
 use App\Console\Commands\AuthorTagCommand;
 use App\Console\Commands\ContentTagCommand;
+use App\Console\Commands\ProductTagCommand;
+use App\Console\Commands\SetTagCommand;
 use App\Observers\ContentObserver;
 use App\Observers\ProductObserver;
 use App\Observers\SetObserver;
@@ -48,6 +50,18 @@ class TagManagerProvider extends ServiceProvider
             ->needs(TaggingInterface::class)
             ->give(function () {
                 return (new ContentTagManagerViaApi());
+            });
+
+        $this->app->when(ProductTagCommand::class)
+            ->needs(TaggingInterface::class)
+            ->give(function () {
+                return (new ProductTagManagerViaApi());
+            });
+
+        $this->app->when(SetTagCommand::class)
+            ->needs(TaggingInterface::class)
+            ->give(function () {
+                return (new ContentsetTagManagerViaApi());
             });
 
         $this->app->when(AuthorTagCommand::class)
