@@ -1035,8 +1035,8 @@ class ProductController extends Controller
 
         $product->isFree = $isFree;
 
-        $product->intro_videos = $this->setIntroVideos(Arr::get($inputData, 'introVideo'),
-            Arr::get($inputData, 'introVideoThumbnail'));
+        $product->intro_videos =
+            $this->setIntroVideos(Arr::get($inputData, 'introVideo'), Arr::get($inputData, 'introVideoThumbnail'));
 
         //Storing product's catalog
         $storeFileResult = $this->storeCatalogOfProduct($product, $files);
@@ -1053,7 +1053,7 @@ class ProductController extends Controller
      *
      * @return Collection
      */
-    private function setIntroVideos(string $introVideo, string $introVideoThumbnail): Collection
+    private function setIntroVideos(?string $introVideo, ?string $introVideoThumbnail): Collection
     {
         $videos = null;
         if (isset($introVideo)) {
