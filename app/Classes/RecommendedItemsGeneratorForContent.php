@@ -4,30 +4,33 @@
 namespace App\Classes;
 
 
+use App\Content;
 use App\Traits\APIRequestCommon;
 use Illuminate\Http\Response;
 use stdClass;
 
-class RecommendedItemsFetcher
+class RecommendedItemsGeneratorForContent
 {
     use APIRequestCommon;
 
     const ITEM_TYPE_CONTENT = 'content';
     const ITEM_TYPE_PRODUCT = 'product';
     const ITEM_TYPE_SET = 'set';
+    const NUMBER_OF_RECOMMENDED_PRODUCTS = 3;
 
+    protected $content;
     protected $tags;
 
     /**
      * RecommendedItemsGenerator constructor.
      *
-     * @param $tags
+     * @param Content $content
      */
-    public function __construct($tags)
+    public function __construct(Content $content)
     {
-        $this->tags = $tags;
+        $this->content = $content;
+        $this->tags    = $content->retrievingTags();
     }
-
 
     public function fetch(): array
     {
@@ -36,13 +39,12 @@ class RecommendedItemsFetcher
         $sets                    = $this->getRecommendedSets($fetchedRecommendedItems);
         $videos                  = $this->getRecommendedVideos($fetchedRecommendedItems);
 
-        $this->prepareRecommendedProducts($products);
-        $this->prepareRecommendedSets($sets);
-        $this->prepareRecommendedVideos($videos);
+        $products = $this->prepareRecommendedProducts($products);
+        $sets     = $this->prepareRecommendedSets($sets);
+        $videos   = $this->prepareRecommendedVideos($videos);
 
         return array_merge($products, $videos, $sets);
     }
-
 
     private function getRecommendedItems(array $tags): stdClass
     {
@@ -75,30 +77,49 @@ class RecommendedItemsFetcher
         return optional(optional($result)->videos)->data ?? [];
     }
 
-    private function prepareRecommendedProducts(array &$products): void
+    private function prepareRecommendedProducts(array $products): array
     {
-        array_walk($products, function (&$val) {
+        $productsOfThisContent = $this->content->activeProducts();
+        $productsOfThisContent = $productsOfThisContent->toArray();
+        $productsOfThisContent = json_encode($productsOfThisContent);
+        $totalProducts         = json_decode($productsOfThisContent);
+
+        $totalProductsCount = count($totalProducts);
+        if ($totalProductsCount < self::NUMBER_OF_RECOMMENDED_PRODUCTS) {
+            $recommendedProducts = $this->content->recommended_products;
+            $recommendedProducts = $recommendedProducts->toArray();
+            $recommendedProducts = json_encode($recommendedProducts);
+            $recommendedProducts = json_decode($recommendedProducts);
+            $recommendedProducts =
+                array_slice($recommendedProducts, 0, (self::NUMBER_OF_RECOMMENDED_PRODUCTS - $totalProductsCount)); //ToDo :get 3 random
+            $totalProducts       = array_merge($totalProducts, $recommendedProducts);
+        }
+
+        if (count($totalProducts) == 0) {
+            $totalProducts = array_slice($products, 0, 3);
+        }
+
+        array_walk($totalProducts, function (&$val) {
             $val->item_type = self::ITEM_TYPE_PRODUCT;
         });
+
+        return $totalProducts;
     }
 
-    private function prepareRecommendedSets(array &$sets): void
+    private function prepareRecommendedSets(array $sets): array
     {
         array_walk($sets, function (&$val) {
             $val->item_type = self::ITEM_TYPE_SET;
         });
-        if (count($sets) >= 2) {
-            $sets = array_slice($sets, 0, 2);
-        }
+        return array_slice($sets, 0, 1);
     }
 
-    private function prepareRecommendedVideos(array &$videos): void
+    private function prepareRecommendedVideos(array $videos): array
     {
         array_walk($videos, function (&$val) {
             $val->item_type = self::ITEM_TYPE_CONTENT;
         });
-        if (count($videos) >= 2) {
-            $videos = array_slice($videos, 0, 2);
-        }
+
+        return array_slice($videos, 0, 2);
     }
 }
