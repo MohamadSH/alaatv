@@ -363,7 +363,14 @@ trait ProductAttributeTrait
 
         return Cache::tags(['product', 'attribute', 'infoAttributes', 'product_' . $this->id, 'product_' . $this->id . '_attributes', 'product_' . $this->id . '_infoAttributes'])
             ->remember($key, config('constants.CACHE_600'), function () use ($product) {
-                $attributes = [];
+                $attributes = [
+                    'productionYear'    => [],
+                    'major'             => [],
+                    'educationalSystem' => [],
+                    'shippingMethod'    => [],
+                    'teacher'           => [],
+                    'services'          => [],
+                ];
                 /** @var Attributevalue $attributevalue */
                 foreach ($product->attributevalues as $attributevalue) {
                     /** @var Attribute $attribute */
