@@ -141,10 +141,7 @@ var AppGlobalInit = function() {
 
 
         $("#carouselMainSlideShow").on('slid.bs.carousel', function (e) {
-            var lazyObserversLength = lazyObservers.length;
-            for(var i = 0; i < lazyObserversLength; i++) {
-                lazyObservers[i].observe();
-            }
+            window.imageObserver.observe();
         });
     }
 

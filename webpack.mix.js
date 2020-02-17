@@ -59,7 +59,6 @@ class Mix {
             // 'node_modules/firebase/firebase-messaging.js',
             // 'public/acm/AlaatvCustomFiles/js/GoogleFirebase.js',// 290 KB
 
-
             'public/acm/AlaatvCustomFiles/components/MegaMenu/script.js',
             'public/acm/AlaatvCustomFiles/components/AjaxLogin/script.js',// 297 KB
             'public/acm/AlaatvCustomFiles/js/GlobalJsVar.js',
@@ -168,6 +167,30 @@ class Mix {
             'public/js/all.js', 'all');
     }
 
+    mixPageFaq() {
+        this.mixCssAndJs([
+                'public/acm/videojs/skins/alaa-theme/videojs.css',
+                'public/acm/videojs/skins/nuevo/videojs.rtl.css',
+                'public/acm/videojs/plugins/pip/videojs.pip.min.css',
+                'public/acm/videojs/plugins/pip/videojs.pip.rtl.css',
+                'public/acm/videojs/plugins/seek-to-point.css',
+                'public/acm/AlaatvCustomFiles/components/Alist/type1/style.css',
+                'public/acm/AlaatvCustomFiles/css/page/pages/faq.css'
+            ],
+            'public/css/faq.css',
+            [
+                'public/acm/videojs/video.min.js',
+                'public/acm/videojs/plugins/pip/videojs.pip.min.js',
+                'public/acm/videojs/nuevo.min.js',
+                'public/acm/videojs/plugins/videojs.p2p.min.js',
+                'public/acm/videojs/plugins/videojs.hotkeys.min.js',
+                'public/acm/videojs/plugins/seek-to-point.js',
+                'public/acm/videojs/lang/fa.js',
+                'public/acm/AlaatvCustomFiles/js/page/pages/faq.js'
+            ],
+            'public/js/faq.js'
+        );
+    }
     mixPageLive() {
         this.mixCssAndJs([
                 'node_modules/@fullcalendar/core/main.css',
@@ -358,6 +381,7 @@ class Mix {
         );
     }
     mixPages() {
+        this.mixPageFaq();
         this.mixPageLive();
         this.mixPageShop();
         this.mixPageError();
