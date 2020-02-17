@@ -5,7 +5,7 @@
     <style>
         @if(
             optional(optional(optional(optional($block)->sets)->first())->getActiveContents2())->count() === 0 ||
-            optional(optional(optional(optional($block)->sets)->first())->getActiveContents2())->count() === null
+            is_null($block->getActiveContent()) || $block->getActiveContent()->count() == 0
         )
             .productInfoNav-sampleVideo {
             display: none !important;
