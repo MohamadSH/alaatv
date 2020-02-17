@@ -55,7 +55,7 @@ class SetTagCommand extends Command
 
                 return;
             }
-            if ($this->confirm('You have chosen\n\r ' . $set->display_name . '. \n\rDo you wish to continue?', true)) {
+            if ($this->confirm('You have chosen\n\r ' . $set->name . '. \n\rDo you wish to continue?', true)) {
                 $this->performTaggingTaskForASet($set);
             }
         } else {
