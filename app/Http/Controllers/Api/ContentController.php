@@ -67,7 +67,7 @@ class ContentController extends Controller
     public function showV2(Request $request, Content $content)
     {
         if (!is_null($content->redirectUrl)) {
-            return redirect(convertRedirectUrlToApiVersion($content->redirectUrl),
+            return redirect(convertRedirectUrlToApiVersion($content->redirectUrl, '2'),
                 Response::HTTP_FOUND, $request->headers->all());
         }
 
