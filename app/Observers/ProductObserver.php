@@ -8,7 +8,6 @@ use App\Product;
 use App\Traits\APIRequestCommon;
 use App\Traits\TaggableTrait;
 use Illuminate\Support\Facades\Cache;
-use stdClass;
 
 class ProductObserver
 {
@@ -122,8 +121,10 @@ class ProductObserver
         $introducerContents = optional($product->sample_contents)->tags;
         $this->setRelatedContentsTags($product, isset($introducerContents) ? $introducerContents : [], Product::SAMPLE_CONTENTS_BUCKET);
 
-        $recommenderItems = optional($product->recommender_contents)->recommenders;
-        $this->setRecommenderContentsTags($product, isset($recommenderItems) ? $recommenderItems : [], Product::RECOMMENDER_CONTENTS_BUCKET);
+        $recommenderItems    = optional($product->recommender_contents)->recommenders;
+        $recommenderContents = optional($recommenderItems)->contents;
+        $recommenderSets     = optional($recommenderItems)->sets;
+        $this->setRecommenderContentsTags($product, !is_null($recommenderContents) ? $recommenderContents : [], !is_null($recommenderSets) ? $recommenderSets : [], Product::RECOMMENDER_CONTENTS_BUCKET);
 
         Cache::tags([
             'product_' . $product->id,
@@ -151,12 +152,9 @@ class ProductObserver
         return true;
     }
 
-    private function setRecommenderContentsTags(Product $product, stdClass $recommenders, string $bucket): bool
+    private function setRecommenderContentsTags(Product $product, array $contentIds, array $setIds, string $bucket): bool
     {
         $itemTagsArray = [];
-        $contentIds    = $recommenders->contents;
-        $setIds        = $recommenders->sets;
-
         $itemTagsArray = array_merge($itemTagsArray, $contentIds);
 
         foreach ($setIds as $id) {
