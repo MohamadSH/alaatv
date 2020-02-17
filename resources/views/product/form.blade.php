@@ -335,9 +335,9 @@
                             id="recommenderSets"
                             name="recommenderSets[]"
                             title="انتخاب ست">
-                        @foreach($recommenderSets as $set)
+                        @foreach($setsToBeRecommender as $set)
                             <option value="{{$set->id}}"
-                                    @if(in_array($set->id , $hasTheseRecommenderSets))
+                                    @if(in_array($set->id , $recommenderSets))
                                     class="bold"
                                     selected="selected"
                                 @endif>
