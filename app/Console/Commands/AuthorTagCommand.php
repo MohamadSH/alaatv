@@ -24,7 +24,7 @@ class AuthorTagCommand extends Command
      *
      * @var string
      */
-    protected $description = 'Addd tags for an author';
+    protected $description = 'Adds tags for an author';
 
     private $tagging;
 
