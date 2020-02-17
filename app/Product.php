@@ -222,7 +222,7 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
         'غیرفعال',
         'فعال',
     ];
-    public const RECOMMENDER_CONTENTS_BUCKET = 'recommendercontent';
+    public const RECOMMENDER_CONTENTS_BUCKET = 'rp';
     public const SAMPLE_CONTENTS_BUCKET = 'relatedproduct';
     protected static $purifyNullConfig = ['HTML.Allowed' => ''];
     protected $fillable = [
@@ -245,6 +245,7 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
         'specialDescription',
         'redirectUrl',
         'category',
+        'recommender_contents',
     ];
     protected $appends = [
         'gift',
@@ -853,7 +854,7 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
     }
 
     /**
-     * Set the content's tag.
+     *
      *
      * @param array $value
      *
@@ -864,8 +865,8 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
         $tags = null;
         if (!empty($value)) {
             $tags = json_encode([
-                'bucket' => 'recommendercontent',
-                'tags'   => $value,
+                'bucket'       => self::RECOMMENDER_CONTENTS_BUCKET,
+                'recommenders' => $value,
             ], JSON_UNESCAPED_UNICODE);
         }
 

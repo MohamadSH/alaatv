@@ -326,21 +326,7 @@
                     @include('product.partials.tagsInput' , ['value'=>(isset($sampleContents))?$sampleContents:null ,'id' => 'sampleContents' , 'name' => 'sampleContents' , 'label' => 'کانتنت های معرفی کننده محصول'] )
                     <hr>
                     @include('product.partials.tagsInput' , ['value'=>(isset($recommenderContents))?$recommenderContents:null ,'id' => 'recommenderContents' , 'name' => 'recommenderContents' , 'label' => 'کانتنت های پیشنهاد دهنده محصول'] )
-                    <select class="mt-multiselect btn btn-default a--full-width"
-                            multiple="multiple"
-                            data-label="left"
-                            data-width="100%"
-                            data-filter="true"
-                            data-height="200"
-                            id="recommenderContentsets"
-                            name="recommenderContentsets[]"
-                            title="انتخاب ست">
-                        @foreach($recommenderContentsets as $set)
-                            <option value="{{$set->id}}">
-                                #{{$set->id}}-{{$set->name}}
-                            </option>
-                        @endforeach
-                    </select>
+                    @include('product.partials.tagsInput' , ['value'=>(isset($recommenderSets))?$recommenderSets:null ,'id' => 'recommenderSets' , 'name' => 'recommenderSets' , 'label' => 'ست های دارای کانتنتهای پیشنهاد دهنده محصول'] )
 
                     <div class="form-actions">
                         <div class="row">

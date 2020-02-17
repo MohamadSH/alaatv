@@ -11,6 +11,7 @@ use App\Http\Controllers\Web\DashboardPageController;
 use App\Http\Controllers\Web\EmployeetimesheetController;
 use App\Http\Controllers\Web\ErrorPageController;
 use App\Http\Controllers\Web\FaqController;
+use App\Http\Controllers\Web\FAQPageController;
 use App\Http\Controllers\Web\FavorableController;
 use App\Http\Controllers\Web\HomeController;
 use App\Http\Controllers\Web\IndexPageController;
@@ -50,7 +51,8 @@ Route::get('embed/c/{content}', [ContentController::class, 'embed'])->name('web.
 Route::get('/', '\\' . IndexPageController::class)->name('web.index');
 Route::get('shop', '\\' . ShopPageController::class)->name('web.shop');
 Route::get('home', [HomeController::class, 'home'])->name('web.home');
-Route::get('404',  [ErrorPageController::class , 'error404']);
+Route::get('faq', '\\' . FAQPageController::class)->name('web.faq');
+Route::get('404', [ErrorPageController::class, 'error404']);
 Route::get('403',  [ErrorPageController::class , 'error403']);
 Route::get('500',  [ErrorPageController::class , 'error500']);
 Route::get('error', [ErrorPageController::class , 'errorPage']);
@@ -276,7 +278,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::resource('livedescription', '\\' . LiveDescriptionController::class);
     Route::resource('section', '\\' . SectionController::class);
     Route::resource('periodDescription', '\\' . PeriodDescriptionController::class);
-    Route::resource('faq', '\\' . FaqController::class);
+    Route::resource('faq', '\\' . FaqController::class, ['except' => ['index']]);
     Route::resource('source', '\\' . SourceController::class);
 
 //    Route::get('copylessonfromremote', 'Web\RemoteDataCopyController@copyLesson');

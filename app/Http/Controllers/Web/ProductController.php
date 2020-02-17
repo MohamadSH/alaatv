@@ -11,7 +11,6 @@ use App\{Adapter\AlaaSftpAdapter,
     Classes\Search\ProductSearch,
     Classes\SEO\SeoDummyTags,
     Content,
-    Contentset,
     Http\Requests\AddComplimentaryProductRequest,
     Http\Requests\EditProductRequest,
     Http\Requests\InsertProductRequest,
@@ -246,9 +245,12 @@ class ProductController extends Controller
         $sampleContents = optional($product->sample_contents)->tags;
         $sampleContents = implode(',', isset($sampleContents) ? $sampleContents : []);
 
-        $recommenderContents = optional($product->recommender_contents)->tags;
+        $recommenders        = optional($product->recommender_contents)->recommenders;
+        $recommenderContents = optional($recommenders)->contents;
         $recommenderContents = implode(',', isset($recommenderContents) ? $recommenderContents : []);
 
+        $recommenderSets = optional($recommenders)->sets;
+        $recommenderSets = implode(',', isset($recommenderSets) ? $recommenderSets : []);
 
         $liveDescriptions = $product->livedescriptions->sortByDesc('created_at');
         $blocks           = optional($product)->blocks;
@@ -261,12 +263,12 @@ class ProductController extends Controller
 
         $descriptionsWithPeriod = $product->descriptionWithPeriod;
         $faqs                   = $product->faqs;
-        $recommenderContentsets = Contentset::orderByDesc('created_at')->get();
+
         return view('product.edit',
             compact('product', 'amountLimit', 'defaultAmountLimit', 'enableStatus', 'defaultEnableStatus',
                 'attributesets', 'bons', 'productFiles', 'blocks', 'allBlocks', 'sets',
                 'productFileTypes', 'defaultProductFileOrders', 'products', 'producttype', 'productPhotos',
-                'defaultProductPhotoOrder', 'tags', 'sampleContents', 'recommenderContents', 'liveDescriptions', 'descriptionsWithPeriod', 'faqs', 'recommenderContentsets'));
+                'defaultProductPhotoOrder', 'tags', 'sampleContents', 'recommenderContents', 'recommenderSets', 'liveDescriptions', 'descriptionsWithPeriod', 'faqs'));
     }
 
     public function update(EditProductRequest $request, Product $product)
@@ -1010,7 +1012,7 @@ class ProductController extends Controller
         $tagString                = Arr::get($inputData, 'tags');
         $sampleContentString      = Arr::get($inputData, 'sampleContents');
         $recommenderContentString = Arr::get($inputData, 'recommenderContents');
-        $recommenderContentSets   = Arr::get($inputData, 'recommenderContentsets');
+        $recommenderSetString     = Arr::get($inputData, 'recommenderSets');
 
         $product->fill($inputData);
 
@@ -1021,16 +1023,11 @@ class ProductController extends Controller
         $sampleContentsArray      = convertTagStringToArray($sampleContentString);
         $product->sample_contents = $sampleContentsArray;
 
-        $recommenderContents = collect();
-        foreach (Contentset::whereIn('id', $recommenderContentSets)->get() as $set) {
-            $recommenderContents = $recommenderContents->merge($set->contents);
-        }
 
-        $recommenderContentsArray      =
-            (isset($recommenderContentSets)) ? $recommenderContents->pluck('id')->toArray() : [];
-        $recommenderContentsArray      =
-            array_merge($recommenderContentsArray, convertTagStringToArray($recommenderContentString));
-        $product->recommender_contents = $recommenderContentsArray;
+        $product->recommender_contents = [
+            'contents' => convertTagStringToArray($recommenderContentString),
+            'sets'     => convertTagStringToArray($recommenderSetString),
+        ];
 
         if ($this->strIsEmpty($product->discount)) {
             $product->discount = 0;
@@ -1038,8 +1035,8 @@ class ProductController extends Controller
 
         $product->isFree = $isFree;
 
-        $product->intro_videos = $this->setIntroVideos(Arr::get($inputData, 'introVideo'),
-            Arr::get($inputData, 'introVideoThumbnail'));
+        $product->intro_videos =
+            $this->setIntroVideos(Arr::get($inputData, 'introVideo'), Arr::get($inputData, 'introVideoThumbnail'));
 
         //Storing product's catalog
         $storeFileResult = $this->storeCatalogOfProduct($product, $files);
@@ -1056,7 +1053,7 @@ class ProductController extends Controller
      *
      * @return Collection
      */
-    private function setIntroVideos(string $introVideo, string $introVideoThumbnail): Collection
+    private function setIntroVideos(?string $introVideo, ?string $introVideoThumbnail): Collection
     {
         $videos = null;
         if (isset($introVideo)) {

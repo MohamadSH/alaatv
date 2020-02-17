@@ -3,6 +3,7 @@
 namespace App\Observers;
 
 use App\Classes\Search\TaggingInterface;
+use App\Contentset;
 use App\Product;
 use App\Traits\APIRequestCommon;
 use App\Traits\TaggableTrait;
@@ -116,6 +117,15 @@ class ProductObserver
 //        self::shiftProductOrders($product->order);
 
         $this->sendTagsOfTaggableToApi($product, $this->tagging);
+
+        $introducerContents = optional($product->sample_contents)->tags;
+        $this->setRelatedContentsTags($product, isset($introducerContents) ? $introducerContents : [], Product::SAMPLE_CONTENTS_BUCKET);
+
+        $recommenderItems    = optional($product->recommender_contents)->recommenders;
+        $recommenderContents = optional($recommenderItems)->contents;
+        $recommenderSets     = optional($recommenderItems)->sets;
+        $this->setRecommenderContentsTags($product, !is_null($recommenderContents) ? $recommenderContents : [], !is_null($recommenderSets) ? $recommenderSets : [], Product::RECOMMENDER_CONTENTS_BUCKET);
+
         Cache::tags([
             'product_' . $product->id,
             'product_search',
@@ -123,18 +133,39 @@ class ProductObserver
             'productCollection',
             'shop',
             'home',
+            'recommendedProduct',
         ])->flush();
-
-        $this->setRelatedContentsTags($product, isset(optional($product->sample_contents)->tags) ? optional($product->sample_contents)->tags : [], Product::SAMPLE_CONTENTS_BUCKET);
-        $this->setRelatedContentsTags($product, isset(optional($product->recommender_contents)->tags) ? optional($product->recommender_contents)->tags : [], Product::RECOMMENDER_CONTENTS_BUCKET);
     }
 
     private function setRelatedContentsTags(Product $product, array $contentIds, string $bucket): bool
     {
         $itemTagsArray = [];
         foreach ($contentIds as $id) {
-            $itemTagsArray[] = 'c-' . $id;
+            $itemTagsArray[] = 'Content-' . $id;
         }
+
+        $params = [
+            'tags' => json_encode($itemTagsArray, JSON_UNESCAPED_UNICODE),
+        ];
+
+        $response = $this->sendRequest(config('constants.TAG_API_URL') . "id/$bucket/" . $product->id, 'PUT', $params);
+        return true;
+    }
+
+    private function setRecommenderContentsTags(Product $product, array $contentIds, array $setIds, string $bucket): bool
+    {
+        $itemTagsArray = [];
+        $itemTagsArray = array_merge($itemTagsArray, $contentIds);
+
+        foreach ($setIds as $id) {
+            $set = Contentset::Find($id);
+            if (!isset($set)) {
+                continue;
+            }
+
+            $itemTagsArray = array_merge($itemTagsArray, $set->contents->pluck('id')->toArray());
+        }
+
         $params = [
             'tags' => json_encode($itemTagsArray, JSON_UNESCAPED_UNICODE),
         ];
