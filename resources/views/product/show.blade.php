@@ -660,7 +660,6 @@
 
 
     {{--نمونه فیلم--}}
-    @if(optional(optional(optional(optional($block)->sets)->first())->getActiveContents2())->count() > 0)
         @include('block.partials.block', [
             'blockTitle'=>view('product.partials.productInfoNav', ['targetId'=>'sampleVideo' , 'product'=>$product , 'isForcedGift'=>$isForcedGift]),
             'blockUrlDisable'=>true,
@@ -671,7 +670,6 @@
             'blockCustomId'=>'Block-sampleVideo',
             'btnLoadMore'=>true
             ])
-    @endif
 
     {{--نمونه جزوه--}}
     @include('product.partials.pamphlet')
