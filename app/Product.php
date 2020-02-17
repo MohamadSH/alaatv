@@ -865,8 +865,8 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
         $tags = null;
         if (!empty($value)) {
             $tags = json_encode([
-                'bucket' => 'rp',
-                'tags'   => $value,
+                'bucket'       => self::RECOMMENDER_CONTENTS_BUCKET,
+                'recommenders' => $value,
             ], JSON_UNESCAPED_UNICODE);
         }
 
