@@ -70,13 +70,16 @@ class ProductTagCommand extends Command
 
     private function performTaggingTaskForAllProducts(): void
     {
-        $products = Product::all();
-        $bar      = $this->output->createProgressBar($products->count());
-        foreach ($products as $product) {
-            $this->performTaggingTaskForAProduct($product);
-            $bar->advance();
+        $products     = Product::all();
+        $productCount = $products->count();
+        if ($this->confirm("$productCount products found. Do you wish to continue?", true)) {
+            $bar = $this->output->createProgressBar($productCount);
+            foreach ($products as $product) {
+                $this->performTaggingTaskForAProduct($product);
+                $bar->advance();
+            }
+            $bar->finish();
         }
-        $bar->finish();
-        $this->info("");
+        $this->info("DONE!");
     }
 }

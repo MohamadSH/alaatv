@@ -70,13 +70,16 @@ class SetTagCommand extends Command
 
     private function performTaggingTaskForAllSets(): void
     {
-        $sets = Contentset::all();
-        $bar  = $this->output->createProgressBar($sets->count());
-        foreach ($sets as $set) {
-            $this->performTaggingTaskForASet($set);
-            $bar->advance();
+        $sets     = Contentset::all();
+        $setCount = $sets->count();
+        if ($this->confirm("$setCount sets found. Do you wish to continue?", true)) {
+            $bar = $this->output->createProgressBar($setCount);
+            foreach ($sets as $set) {
+                $this->performTaggingTaskForASet($set);
+                $bar->advance();
+            }
+            $bar->finish();
         }
-        $bar->finish();
-        $this->info("");
+        $this->info("DONE!");
     }
 }
