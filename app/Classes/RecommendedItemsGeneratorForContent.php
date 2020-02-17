@@ -90,8 +90,9 @@ class RecommendedItemsGeneratorForContent
             $recommendedProducts = $recommendedProducts->toArray();
             $recommendedProducts = json_encode($recommendedProducts);
             $recommendedProducts = json_decode($recommendedProducts);
+            shuffle($recommendedProducts);
             $recommendedProducts =
-                array_slice($recommendedProducts, 0, (self::NUMBER_OF_RECOMMENDED_PRODUCTS - $totalProductsCount)); //ToDo :get 3 random
+                array_slice($recommendedProducts, 0, (self::NUMBER_OF_RECOMMENDED_PRODUCTS - $totalProductsCount));
             $totalProducts       = array_merge($totalProducts, $recommendedProducts);
         }
 
