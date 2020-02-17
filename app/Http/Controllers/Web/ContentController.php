@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Web;
 
 use App\Block;
-use App\Classes\RecommendedItemsFetcher;
+use App\Classes\RecommendedItemsGeneratorForContent;
 use App\Classes\Search\ContentSearch;
 use App\Classes\Search\ContentsetSearch;
 use App\Classes\Search\ProductSearch;
@@ -228,11 +228,7 @@ class ContentController extends Controller
 
         $productsHasThisContentThroughBlockCollection = $content->related_products;
 
-
-        $recommendedItems = (new RecommendedItemsFetcher($tags))->fetch();
-        $recommendedItems = $this->addProductsToRecommendedItems($productsThatHaveThisContent, $recommendedItems);
-//        $recommendedProductsOfThisContent = $content->recommended_products;
-//        $recommendedItems = $this->addProductsToRecommendedItems($recommendedProductsOfThisContent, $recommendedItems);
+        $recommendedItems = (new RecommendedItemsGeneratorForContent($content))->fetch();
 
         $contentBlocks = $content->isFree ? Block::getContentBlocks() : collect();
 
@@ -869,23 +865,5 @@ class ContentController extends Controller
                 'update',
             ],
         ]);
-    }
-
-    /**
-     * @param ProductCollection $productsThatHaveThisContent
-     * @param array             $recommendedItems
-     *
-     * @return array
-     */
-    private function addProductsToRecommendedItems(ProductCollection $productsThatHaveThisContent, array $recommendedItems): array
-    {
-        $productsThatHaveThisContent = $productsThatHaveThisContent->toArray();
-        $productsThatHaveThisContent = json_encode($productsThatHaveThisContent);
-        $productsThatHaveThisContent = json_decode($productsThatHaveThisContent);
-        array_walk($productsThatHaveThisContent, function (&$val) {
-            $val->item_type = RecommendedItemsFetcher::ITEM_TYPE_PRODUCT;
-        });
-
-        return array_merge($recommendedItems, $productsThatHaveThisContent);
     }
 }
