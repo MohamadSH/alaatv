@@ -79,21 +79,21 @@ class RecommendedItemsGeneratorForContent
 
     private function prepareRecommendedProducts(array $products): array
     {
-        $productsOfThisContent = $this->content->activeProducts();
-        $productsOfThisContent = $productsOfThisContent->toArray();
-        $productsOfThisContent = json_encode($productsOfThisContent);
-        $totalProducts         = json_decode($productsOfThisContent);
+        $recommendedProducts = $this->content->recommended_products;
+        $recommendedProducts = $recommendedProducts->toArray();
+        $recommendedProducts = json_encode($recommendedProducts);
+        $totalProducts       = json_decode($recommendedProducts);
+        shuffle($totalProducts);
 
         $totalProductsCount = count($totalProducts);
         if ($totalProductsCount < self::NUMBER_OF_RECOMMENDED_PRODUCTS) {
-            $recommendedProducts = $this->content->recommended_products;
-            $recommendedProducts = $recommendedProducts->toArray();
-            $recommendedProducts = json_encode($recommendedProducts);
-            $recommendedProducts = json_decode($recommendedProducts);
-            shuffle($recommendedProducts);
-            $recommendedProducts =
-                array_slice($recommendedProducts, 0, (self::NUMBER_OF_RECOMMENDED_PRODUCTS - $totalProductsCount));
-            $totalProducts       = array_merge($totalProducts, $recommendedProducts);
+            $productsOfThisContent = $this->content->activeProducts();
+            $productsOfThisContent = $productsOfThisContent->toArray();
+            $productsOfThisContent = json_encode($productsOfThisContent);
+            $productsOfThisContent = json_decode($productsOfThisContent);
+            $productsOfThisContent =
+                array_slice($productsOfThisContent, 0, (self::NUMBER_OF_RECOMMENDED_PRODUCTS - $totalProductsCount));
+            $totalProducts         = array_merge($totalProducts, $productsOfThisContent);
         }
 
         if (count($totalProducts) == 0) {
