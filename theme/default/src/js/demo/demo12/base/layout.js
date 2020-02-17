@@ -1,74 +1,22 @@
 var mLayout = function() {
-    var header;
-    var horMenu;
     var asideMenu;
     var asideMenuOffcanvas;
     var horMenuOffcanvas;
     var asideLeftToggle;
-    var asideLeftHide;
-    var scrollTop;
     var quicksearch;
     var mainPortlet;
 
-    //== Header
-    var initStickyHeader = function() {
-        var tmp;
-        var headerEl = mUtil.get('m_header');
-        var options = {
-            offset: {},
-            minimize:{}       
-        };
-
-        if (mUtil.attr(headerEl, 'm-minimize-mobile') == 'hide') {
-            options.minimize.mobile = {};
-            options.minimize.mobile.on = 'm-header--hide';
-            options.minimize.mobile.off = 'm-header--show';
-        } else {
-            options.minimize.mobile = false;
-        }
-
-        if (mUtil.attr(headerEl, 'm-minimize') == 'hide') {
-            options.minimize.desktop = {};
-            options.minimize.desktop.on = 'm-header--hide';
-            options.minimize.desktop.off = 'm-header--show';
-        } else {
-            options.minimize.desktop = false;
-        }
-
-        if (tmp = mUtil.attr(headerEl, 'm-minimize-offset')) {
-            options.offset.desktop = tmp;
-        }
-
-        if (tmp = mUtil.attr(headerEl, 'm-minimize-mobile-offset')) {
-            options.offset.mobile = tmp;
-        }        
-
-        header = new mHeader('m_header', options);
-    };
-
     //== Hor menu
-    var initHorMenu = function() { 
-        // init aside left offcanvas
-        horMenuOffcanvas = new mOffcanvas('m_header_menu', {
-            overlay: true,
-            baseClass: 'm-aside-header-menu-mobile',
-            closeBy: 'm_aside_header_menu_mobile_close_btn',
-            toggleBy: {
-                target: 'm_aside_header_menu_mobile_toggle',
-                state: 'm-brand__toggler--active'
-            }            
-        });
-        
-        horMenu = new mMenu('m_header_menu', {
-            submenu: {
-                desktop: 'dropdown',
-                tablet: 'accordion',
-                mobile: 'accordion'
-            },
-            accordion: {   
-                slideSpeed: 200,  // accordion toggle slide speed in milliseconds
-                expandAll: false   // allow having multiple expanded accordions in the menu
+    var initHorMenu = function() {
+        $(document).on('click', '.m-aside-menu .m-menu__item.m-menu__item--submenu', function (e) {
+            if ($(this).hasClass('m-menu__item--open')) {
+                $(this).removeClass('m-menu__item--open');
+                $(this).find('.m-menu__submenu').fadeOut();
+            } else {
+                $(this).addClass('m-menu__item--open');
+                $(this).find('>.m-menu__submenu').fadeIn();
             }
+            e.stopPropagation();
         });
     };
 
@@ -88,32 +36,6 @@ var mLayout = function() {
                 }
             };
         }
-
-        asideMenu = new mMenu('m_ver_menu', {
-            // vertical scroll
-            scroll: scroll,
-
-            // submenu setup
-            submenu: {
-                desktop: {
-                    // by default the menu mode set to accordion in desktop mode
-                    default: menuDesktopMode,
-                    // whenever body has this class switch the menu mode to dropdown
-                    state: {
-                        body: 'm-aside-left--minimize',  
-                        mode: 'dropdown'
-                    }
-                },
-                tablet: 'accordion', // menu set to accordion in tablet mode
-                mobile: 'accordion'  // menu set to accordion in mobile mode
-            },
-
-            //accordion setup
-            accordion: {
-                autoScroll: false, // enable auto scrolling(focus) to the clicked menu item
-                expandAll: false   // allow having multiple expanded accordions in the menu
-            }            
-        });
     };
 
     //== Aside
@@ -121,17 +43,6 @@ var mLayout = function() {
         // init aside left offcanvas
         var body = mUtil.get('body');
         var asideLeft = mUtil.get('m_aside_left');
-        var asideOffcanvasClass = mUtil.hasClass(asideLeft, 'm-aside-left--offcanvas-default') ? 'm-aside-left--offcanvas-default' : 'm-aside-left';
-
-        asideMenuOffcanvas = new mOffcanvas('m_aside_left', {
-            baseClass: asideOffcanvasClass,
-            overlay: true,
-            closeBy: 'm_aside_left_close_btn',
-            toggleBy: {
-                target: 'm_aside_left_offcanvas_toggle',
-                state: 'm-brand__toggler--active'                
-            }            
-        });     
 
         //== Handle minimzied aside hover
         if (mUtil.hasClass(body, 'm-aside-left--fixed')) {
@@ -142,7 +53,7 @@ var mLayout = function() {
                 if (outsideTm) {
                     clearTimeout(outsideTm);
                     outsideTm = null;
-                }                    
+                }
 
                 insideTm = setTimeout(function() {
                     if (mUtil.hasClass(body, 'm-aside-left--minimize') && mUtil.isInResponsiveRange('desktop')) {
@@ -159,7 +70,7 @@ var mLayout = function() {
                     clearTimeout(insideTm);
                     insideTm = null;
                 }
-                    
+
                 outsideTm = setTimeout(function() {
                     if (mUtil.hasClass(body, 'm-aside-left--minimize-hover') && mUtil.isInResponsiveRange('desktop')) {
                         mUtil.removeClass(body, 'm-aside-left--minimize-hover');
@@ -168,67 +79,54 @@ var mLayout = function() {
                         asideMenu.scrollerTop();
                     }
                 }, 500);
-            }); 
-        } 
+            });
+        }
     };
 
     //== Sidebar toggle
     var initLeftAsideToggle = function() {
-        if ($('#m_aside_left_minimize_toggle').length === 0 ) {
-            return;
-        }
-
-        asideLeftToggle = new mToggle('m_aside_left_minimize_toggle', {
-            target: 'body',
-            targetState: 'm-brand--minimize m-aside-left--minimize',
-            togglerState: 'm-brand__toggler--active'
-        });
-
-        asideLeftToggle.on('toggle', function(toggle) {
-            if (mUtil.get('main_portlet')) {
-                mainPortlet.updateSticky();
+        $(document).on('click', '#m_aside_left_hide_toggle', function () {
+            if ($('body').hasClass('m-aside-left--hide') && !mUtil.isMobileDevice()) {
+                $(this).removeClass('m-brand__toggler--active');
+                $('body').removeClass('m-aside-left--hide');
+            } else {
+                $(this).addClass('m-brand__toggler--active');
+                $('body').addClass('m-aside-left--hide');
             }
+        });
+        $(document).on('click', '#m_aside_left_offcanvas_toggle', function () {
+            if ($('body').hasClass('m-aside-left--on')) {
+                $(this).removeClass('m-brand__toggler--active');
+                $('body').removeClass('m-aside-left--on');
+                $('#m_aside_left').css({'right': '-300px'});
+            } else {
+                $(this).addClass('m-brand__toggler--active');
+                $('body').addClass('m-aside-left--on');
+                $('#m_aside_left').css({'right': '0'});
+            }
+        });
+        $(document).click(function(event) {
+            var $target = $(event.target);
 
-            horMenu.pauseDropdownHover(800);
-            asideMenu.pauseDropdownHover(800);
-
-            //== Remember state in cookie
-            // Cookies.set('sidebar_toggle_state', toggle.getState());
-            // to set default minimized left aside use this cookie value in your 
-            // server side code and add "m-brand--minimize m-aside-left--minimize" classes to 
-            // the body tag in order to initialize the minimized left aside mode during page loading.
+            if($target.closest('#m_aside_left').length === 0 && $target[0].id !== 'm_aside_left_offcanvas_toggle' && mUtil.isMobileDevice()) {
+                $(this).removeClass('m-brand__toggler--active');
+                $('body').removeClass('m-aside-left--on');
+                $('#m_aside_left').css({'right': '-300px'});
+            }
         });
     };
 
     //== Sidebar hide
     var initLeftAsideHide = function() {
-        if ($('#m_aside_left_hide_toggle').length === 0 ) {
-            return;
-        }
-
-        initLeftAsideHide = new mToggle('m_aside_left_hide_toggle', {
-            target: 'body',
-            targetState: 'm-aside-left--hide',
-            togglerState: 'm-brand__toggler--active'
-        });
-
-        initLeftAsideHide.on('toggle', function(toggle) {
-            horMenu.pauseDropdownHover(800);
-            asideMenu.pauseDropdownHover(800);
-
-            //== Remember state in cookie
-            // Cookies.set('sidebar_hide_state', toggle.getState());
-            // to set default minimized left aside use this cookie value in your 
-            // server side code and add "m-brand--minimize m-aside-left--minimize" classes to 
-            // the body tag in order to initialize the minimized left aside mode during page loading.
-        });
+        $(this).addClass('m-brand__toggler--active');
+        $('body').removeClass('m-aside-left--on');
     };
 
     //== Topbar
     var initTopbar = function() {
         $('#m_aside_header_topbar_mobile_toggle').click(function() {
             $('body').toggleClass('m-topbar--on');
-        });           
+        });
     };
 
     //== Quicksearch
@@ -240,43 +138,179 @@ var mLayout = function() {
         quicksearch = new mQuicksearch('m_quicksearch', {
             mode: mUtil.attr( 'm_quicksearch', 'm-quicksearch-mode' ), // quick search type
             minLength: 1
-        });    
-
-        //<div class="m-search-results m-search-results--skin-light"><span class="m-search-result__message">Something went wrong</div></div>
+        });
 
         quicksearch.on('search', function(the) {
-            the.showResult = function(res) {
+            if ($('#m_quicksearch_input').val().trim().length < 3) {
+                showDataOnQuickSearchResultPannel('');
+                return false;
+            }
+            showDataOnQuickSearchResultPannel('کمی صبر کنید ...');
+            the.showProgress();
 
-                the.dropdown.setContent(res);
-                Plugin.showDropdown();
-
-                return the;
-            };
-
-            the.showProgress();  
-                      
             $.ajax({
-                url: '/c',
-                data: {q: the.query, contentOnly:1},
+                url: '/c?q=' + $('#m_quicksearch_input').val(),
+                data: {},
                 dataType: 'json',
                 success: function(res) {
                     the.hideProgress();
-                    the.showResult(res);                     
+                    the.showResult(res);
+
+                    showResultForQuickSearch(res);
                 },
                 error: function(res) {
                     the.hideProgress();
-                    the.showError('ارتباط با سرور برقرار نشد، لطفا بعدا امتحان کنید.');
+                    the.showError('مشکلی پیش آمده است. لطفا بعدا امتحان کنید.');
                 }
             });
-        });  
+        });
+
+        $(document).on('click', '#m_quicksearch_close', function () {
+            showDataOnQuickSearchResultPannel('');
+        });
     };
+
+    function showDataOnQuickSearchResultPannel(html) {
+        $('.a-quick-search .m-dropdown__content').html('');
+        $('.a-quick-search .m-dropdown__content').append('<dvi class="a-dropdown__search-result">'+html+'</dvi>');
+    }
+
+    function showResultForQuickSearch(res) {
+        var maxRecordOfEachCategory = 3;
+        var article = res.result.article;
+        var pamphlet = res.result.pamphlet;
+        var product = res.result.product;
+        var set = res.result.set;
+        var video = res.result.video;
+
+        var html = '';
+
+        html += gteQuickSearchResultCategory('article', 'مقالات', article, maxRecordOfEachCategory);
+        html += gteQuickSearchResultCategory('pamphlet', 'جزوات', pamphlet, maxRecordOfEachCategory);
+        html += gteQuickSearchResultCategory('product', 'محصولات', product, maxRecordOfEachCategory);
+        html += gteQuickSearchResultCategory('set', 'دسته ها', set, maxRecordOfEachCategory);
+        html += gteQuickSearchResultCategory('video', 'ویدیوها', video, maxRecordOfEachCategory);
+        showDataOnQuickSearchResultPannel(html);
+    }
+
+    function getQuickSearchResultItem(data) {
+        return '    <!--begin::Widget 14 Item-->\n' +
+            '    <div class="m-widget4__item">\n' +
+            '        <div class="m-widget4__img m-widget4__img--pic">\n' +
+            '            <img src="'+data.photo+'" alt="">\n' +
+            '        </div>\n' +
+            '        <div class="m-widget4__info">\n' +
+            '            <span class="m-widget4__title">\n' +
+            '                '+data.title+'\n' +
+            '            </span>' +
+            '            <br>\n' +
+            '            <span class="m-widget4__sub">\n' +
+            '                '+data.subtitle+'\n' +
+            '            </span>\n' +
+            '        </div>\n' +
+            '        <div class="m-widget4__ext">\n' +
+            '            <a href="'+data.link+'" class="m-btn m-btn--pill m-btn--hover-brand btn btn-sm btn-secondary">مشاهده</a>\n' +
+            '        </div>\n' +
+            '    </div>\n' +
+            '    <!--end::Widget 14 Item-->\n';
+    }
+
+    function gteQuickSearchResultCategory(categoryType, categoryName, data, maxRecordOfCategory) {
+        var html = '';
+        if (data !== null && data.total > 0) {
+            html += '<div class="kt-quick-search__category">'+categoryName+'</div>';
+            html += '<div class="m-widget4">';
+            for (var index in data.data) {
+                if(isNaN(index)) {
+                    continue;
+                }
+                if(index > maxRecordOfCategory) {
+                    break;
+                }
+                var dataItem = data.data[index];
+                var inputData = getInputDataForQuickSearchShowResult(categoryType, dataItem);
+                html += getQuickSearchResultItem(inputData);
+            }
+            html += '</div>';
+        }
+        return html;
+    }
+
+    function getInputDataForQuickSearchShowResult(categoryType, data) {
+        if (categoryType === 'video') {
+            return {
+                title: data.author.full_name,
+                subtitle: data.name,
+                photo: data.thumbnail,
+                link: data.url,
+            };
+        } else if (categoryType === 'set') {
+            return {
+                title: data.shortName,
+                subtitle: data.name,
+                photo: data.photo,
+                link: data.url,
+            };
+        } else if (categoryType === 'product') {
+            return {
+                title: data.name,
+                subtitle: '',
+                photo: data.photo,
+                link: data.url,
+            };
+        } else if (categoryType === 'pamphlet') {
+            return {
+                title: data.author.full_name,
+                subtitle: data.name,
+                photo: data.thumbnail,
+                link: data.url,
+            };
+        } else if (categoryType === 'article') {
+            return {
+                title: data.author.full_name,
+                subtitle: data.name,
+                photo: data.thumbnail,
+                link: data.url,
+            };
+        }
+    }
 
     //== Scrolltop
     var initScrollTop = function() {
-        var scrollTop = new mScrollTop('m_scroll_top', {
-            offset: 300,
-            speed: 600
+
+        var handleShownTopScroll = function() {
+            if (window.pageYOffset > window.screen.height) {
+                $('body').addClass('m-scroll-top--shown');
+            } else {
+                $('body').removeClass('m-scroll-top--shown');
+            }
+        };
+
+        $(document).on('click', '#m_scroll_top', function () {
+            $([document.documentElement, document.body]).animate({
+                scrollTop: $('body').offset().top
+            }, 300);
         });
+
+
+        // handle window scroll
+        if (navigator.userAgent.match(/iPhone|iPad|iPod/i)) {
+            window.addEventListener('touchend', function() {
+                handleShownTopScroll();
+            });
+
+            window.addEventListener('touchcancel', function() {
+                handleShownTopScroll();
+            });
+
+            window.addEventListener('touchleave', function() {
+                handleShownTopScroll();
+            });
+        } else {
+            window.addEventListener('scroll', function() {
+                handleShownTopScroll();
+            });
+        }
     };
 
     //== Main portlet(sticky portlet)
@@ -312,22 +346,16 @@ var mLayout = function() {
     };
 
     return {
-        init: function() {  
+
+        init: function() {
             this.initHeader();
             this.initAside();
-            this.initMainPortlet();
         },
+
         initMainPortlet: function() {
             if (!mUtil.get('main_portlet')) {
                 return;
             }
-
-            mainPortlet = createMainPortlet();
-            mainPortlet.initSticky();
-
-            mUtil.addResizeHandler(function(){
-                mainPortlet.updateSticky();
-            });
         },
 
         resetMainPortlet: function() {
@@ -337,7 +365,6 @@ var mLayout = function() {
         },
 
         initHeader: function() {
-            initStickyHeader();
             initHorMenu();
             initTopbar();
             initQuicksearch();
@@ -346,22 +373,9 @@ var mLayout = function() {
 
         initAside: function() {
             initLeftAside();
-            initLeftAsideMenu();            
+            initLeftAsideMenu();
             initLeftAsideToggle();
             initLeftAsideHide();
-
-            this.onLeftSidebarToggle(function(e) {
-                //== Update sticky portlet
-                if (mainPortlet) {
-                    mainPortlet.updateSticky();
-                }
-
-                var datatables = $('.m-datatable');
-
-                $(datatables).each(function() {
-                    $(this).mDatatable('redraw');
-                });
-            });
         },
 
         getAsideMenu: function() {
@@ -371,7 +385,7 @@ var mLayout = function() {
         onLeftSidebarToggle: function(handler) {
             if (asideLeftToggle) {
                 asideLeftToggle.on('toggle', handler);
-            }            
+            }
         },
 
         closeMobileAsideMenuOffcanvas: function() {
@@ -389,7 +403,5 @@ var mLayout = function() {
 }();
 
 $(document).ready(function() {
-    if (mUtil.isAngularVersion() === false) {
-        mLayout.init();
-    }
+    mLayout.init();
 });

@@ -1,109 +1,4 @@
-/**
- * @class mUtil  Metronic base utilize class that privides helper functions
- */
-//== Polyfill
-// matches polyfill
-this.Element && function(ElementPrototype) {
-    ElementPrototype.matches = ElementPrototype.matches ||
-        ElementPrototype.matchesSelector ||
-        ElementPrototype.webkitMatchesSelector ||
-        ElementPrototype.msMatchesSelector ||
-        function(selector) {
-            var node = this,
-                nodes = (node.parentNode || node.document).querySelectorAll(selector),
-                i = -1;
-            while (nodes[++i] && nodes[i] != node);
-            return !!nodes[i];
-        }
-}(Element.prototype);
-
-// closest polyfill
-this.Element && function(ElementPrototype) {
-    ElementPrototype.closest = ElementPrototype.closest ||
-        function(selector) {
-            var el = this;
-            while (el.matches && !el.matches(selector)) el = el.parentNode;
-            return el.matches ? el : null;
-        }
-}(Element.prototype);
-
-
-// matches polyfill
-this.Element && function(ElementPrototype) {
-    ElementPrototype.matches = ElementPrototype.matches ||
-        ElementPrototype.matchesSelector ||
-        ElementPrototype.webkitMatchesSelector ||
-        ElementPrototype.msMatchesSelector ||
-        function(selector) {
-            var node = this,
-                nodes = (node.parentNode || node.document).querySelectorAll(selector),
-                i = -1;
-            while (nodes[++i] && nodes[i] != node);
-            return !!nodes[i];
-        }
-}(Element.prototype);
-
-//
-// requestAnimationFrame polyfill by Erik Möller.
-//  With fixes from Paul Irish and Tino Zijdel
-//
-//  http://paulirish.com/2011/requestanimationframe-for-smart-animating/
-//  http://my.opera.com/emoller/blog/2011/12/20/requestanimationframe-for-smart-er-animating
-//
-//  MIT license
-//
-(function() {
-    var lastTime = 0;
-    var vendors = ['webkit', 'moz'];
-    for (var x = 0; x < vendors.length && !window.requestAnimationFrame; ++x) {
-        window.requestAnimationFrame = window[vendors[x] + 'RequestAnimationFrame'];
-        window.cancelAnimationFrame =
-            window[vendors[x] + 'CancelAnimationFrame'] || window[vendors[x] + 'CancelRequestAnimationFrame'];
-    }
-
-    if (!window.requestAnimationFrame)
-        window.requestAnimationFrame = function(callback) {
-            var currTime = new Date().getTime();
-            var timeToCall = Math.max(0, 16 - (currTime - lastTime));
-            var id = window.setTimeout(function() {
-                callback(currTime + timeToCall);
-            }, timeToCall);
-            lastTime = currTime + timeToCall;
-            return id;
-        };
-
-    if (!window.cancelAnimationFrame)
-        window.cancelAnimationFrame = function(id) {
-            clearTimeout(id);
-        };
-}());
-
-// Source: https://github.com/jserz/js_piece/blob/master/DOM/ParentNode/prepend()/prepend().md
-(function(arr) {
-    arr.forEach(function(item) {
-        if (item.hasOwnProperty('prepend')) {
-            return;
-        }
-        Object.defineProperty(item, 'prepend', {
-            configurable: true,
-            enumerable: true,
-            writable: true,
-            value: function prepend() {
-                var argArr = Array.prototype.slice.call(arguments),
-                    docFrag = document.createDocumentFragment();
-
-                argArr.forEach(function(argItem) {
-                    var isNode = argItem instanceof Node;
-                    docFrag.appendChild(isNode ? argItem : document.createTextNode(String(argItem)));
-                });
-
-                this.insertBefore(docFrag, this.firstChild);
-            }
-        });
-    });
-})([Element.prototype, Document.prototype, DocumentFragment.prototype]);
-
-//== Global variables 
+//== Global variables
 window.mUtilElementDataStore = {};
 window.mUtilElementDataStoreID = 0;
 window.mUtilDelegatedEventHandlers = {};
@@ -114,15 +9,15 @@ var mUtil = function() {
 
     /** @type {object} breakpoints The device width breakpoints **/
     var breakpoints = {
-        sm: 544, // Small screen / phone           
-        md: 768, // Medium screen / tablet            
-        lg: 1024, // Large screen / desktop        
+        sm: 544, // Small screen / phone
+        md: 768, // Medium screen / tablet
+        lg: 1024, // Large screen / desktop
         xl: 1200 // Extra large screen / wide desktop
     };
 
     /**
-     * Handle window resize event with some 
-     * delay to attach event handlers upon resize complete 
+     * Handle window resize event with some
+     * delay to attach event handlers upon resize complete
      */
     var _windowResizeHandler = function() {
         var _runResizeHandlers = function() {
@@ -193,8 +88,8 @@ var mUtil = function() {
             } else {
                 // for IE and other old browsers
                 // causes deprecation warning on modern browsers
-                var evt = window.document.createEvent('UIEvents'); 
-                evt.initUIEvent('resize', true, false, window, 0); 
+                var evt = window.document.createEvent('UIEvents');
+                evt.initUIEvent('resize', true, false, window, 0);
                 window.dispatchEvent(evt);
             }
         },
@@ -202,7 +97,7 @@ var mUtil = function() {
         /**
          * Get GET parameter value from URL.
          * @param {string} paramName Parameter name.
-         * @returns {string}  
+         * @returns {string}
          */
         getURLParam: function(paramName) {
             var searchString = window.location.search.substring(1),
@@ -220,7 +115,7 @@ var mUtil = function() {
 
         /**
          * Checks whether current device is mobile touch.
-         * @returns {boolean}  
+         * @returns {boolean}
          */
         isMobileDevice: function() {
             return (this.getViewPort().width < this.getBreakpoint('lg') ? true : false);
@@ -228,7 +123,7 @@ var mUtil = function() {
 
         /**
          * Checks whether current device is desktop.
-         * @returns {boolean}  
+         * @returns {boolean}
          */
         isDesktopDevice: function() {
             return mUtil.isMobileDevice() ? false : true;
@@ -237,7 +132,7 @@ var mUtil = function() {
         /**
          * Gets browser window viewport size. Ref:
          * http://andylangton.co.uk/articles/javascript/get-viewport-size-javascript/
-         * @returns {object}  
+         * @returns {object}
          */
         getViewPort: function() {
             var e = window,
@@ -257,7 +152,7 @@ var mUtil = function() {
          * Checks whether given device mode is currently activated.
          * @param {string} mode Responsive mode name(e.g: desktop,
          *     desktop-and-tablet, tablet, tablet-and-mobile, mobile)
-         * @returns {boolean}  
+         * @returns {boolean}
          */
         isInResponsiveRange: function(mode) {
             var breakpoint = this.getViewPort().width;
@@ -284,7 +179,7 @@ var mUtil = function() {
         /**
          * Generates unique ID for give prefix.
          * @param {string} prefix Prefix for generated ID
-         * @returns {boolean}  
+         * @returns {boolean}
          */
         getUniqueID: function(prefix) {
             return prefix + Math.floor(Math.random() * (new Date()).getTime());
@@ -293,7 +188,7 @@ var mUtil = function() {
         /**
          * Gets window width for give breakpoint mode.
          * @param {string} mode Responsive mode name(e.g: xl, lg, md, sm)
-         * @returns {number}  
+         * @returns {number}
          */
         getBreakpoint: function(mode) {
             return breakpoints[mode];
@@ -303,7 +198,7 @@ var mUtil = function() {
          * Checks whether object has property matchs given key path.
          * @param {object} obj Object contains values paired with given key path
          * @param {string} keys Keys path seperated with dots
-         * @returns {object}  
+         * @returns {object}
          */
         isset: function(obj, keys) {
             var stone;
@@ -337,7 +232,7 @@ var mUtil = function() {
         /**
          * Gets highest z-index of the given element parents
          * @param {object} el jQuery element object
-         * @returns {number}  
+         * @returns {number}
          */
         getHighestZindex: function(el) {
             var elem = mUtil.get(el),
@@ -370,7 +265,7 @@ var mUtil = function() {
         /**
          * Checks whether the element has any parent with fixed positionfreg
          * @param {object} el jQuery element object
-         * @returns {boolean}  
+         * @returns {boolean}
          */
         hasFixedPositionedParent: function(el) {
             while (el && el !== document) {
@@ -402,7 +297,7 @@ var mUtil = function() {
          * Gets randomly generated integer value within given min and max range
          * @param {number} min Range start value
          * @param {number} min Range end value
-         * @returns {number}  
+         * @returns {number}
          */
         getRandomInt: function(min, max) {
             return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -410,7 +305,7 @@ var mUtil = function() {
 
         /**
          * Checks whether Angular library is included
-         * @returns {boolean}  
+         * @returns {boolean}
          */
         isAngularVersion: function() {
             return window.Zone !== undefined ? true : false;
@@ -441,7 +336,7 @@ var mUtil = function() {
             return out;
         },
 
-        //== extend:  $.extend({}, objA, objB); 
+        //== extend:  $.extend({}, objA, objB);
         extend: function(out) {
             out = out || {};
 
@@ -482,7 +377,7 @@ var mUtil = function() {
 
         getByClass: function(query) {
             var el;
-            
+
             if (el = document.getElementsByClassName(query)) {
                 return el[0];
             } else {
@@ -494,7 +389,7 @@ var mUtil = function() {
          * Checks whether the element has given classes
          * @param {object} el jQuery element object
          * @param {string} Classes string
-         * @returns {boolean}  
+         * @returns {boolean}
          */
         hasClasses: function(el, classes) {
             if (!el) {
@@ -595,14 +490,14 @@ var mUtil = function() {
             parent = mUtil.get(parent);
             if (parent) {
                 return parent.querySelector(query);
-            }            
+            }
         },
 
         findAll: function(parent, query) {
             parent = mUtil.get(parent);
             if (parent) {
                 return parent.querySelectorAll(query);
-            } 
+            }
         },
 
         insertAfter: function(el, referenceNode) {
@@ -959,7 +854,7 @@ var mUtil = function() {
                 calcPaddingBottom = parseInt(mUtil.data(el).get('slide-padding-bottom'));
             }
 
-            if (dir == 'up') { // up          
+            if (dir == 'up') { // up
                 el.style.cssText = 'display: block; overflow: hidden;';
 
                 if (calcPaddingTop) {
@@ -1343,6 +1238,7 @@ var mUtil = function() {
 mUtil.ready(function() {
     mUtil.init();
 });
+
 /**
  * @class mApp  Metronic App class
  */
@@ -1368,10 +1264,10 @@ var mApp = function() {
     */
     var initTooltip = function(el) {
         var skin = el.data('skin') ? 'm-tooltip--skin-' + el.data('skin') : '';
-        var width = el.data('width') == 'auto' ? 'm-tooltop--auto-width' : '';
+        var width = el.data('width') === 'auto' ? 'm-tooltop--auto-width' : '';
         var triggerValue = el.data('trigger') ? el.data('trigger') : 'hover';
         var placement = el.data('placement') ? el.data('placement') : 'left';
-                    
+
         el.tooltip({
             trigger: triggerValue,
             template: '<div class="m-tooltip ' + skin + ' ' + width + ' tooltip" role="tooltip">\
@@ -1380,7 +1276,7 @@ var mApp = function() {
             </div>'
         });
     };
-    
+
     /**
     * Initializes bootstrap tooltips
     */
@@ -1392,85 +1288,6 @@ var mApp = function() {
     };
 
     /**
-    * Initializes bootstrap popover
-    */
-    var initPopover = function(el) {
-        var skin = el.data('skin') ? 'm-popover--skin-' + el.data('skin') : '';
-        var triggerValue = el.data('trigger') ? el.data('trigger') : 'hover';
-            
-        el.popover({
-            trigger: triggerValue,
-            template: '\
-            <div class="m-popover ' + skin + ' popover" role="tooltip">\
-                <div class="arrow"></div>\
-                <h3 class="popover-header"></h3>\
-                <div class="popover-body"></div>\
-            </div>'
-        });
-    };
-
-    /**
-    * Initializes bootstrap popovers
-    */
-    var initPopovers = function() {
-        // init bootstrap popover
-        $('[data-toggle="m-popover"]').each(function() {
-            initPopover($(this));
-        });
-    };
-
-    /**
-    * Initializes bootstrap file input
-    */
-    var initFileInput = function() {
-        // init bootstrap popover
-        $('.custom-file-input').on('change',function(){
-            var fileName = $(this).val();
-            $(this).next('.custom-file-label').addClass("selected").html(fileName);
-        });
-    };
-
-    /**
-    * Initializes metronic portlet
-    */
-    var initPortlet = function(el, options) {
-        // init portlet tools
-        var el = $(el);
-        var portlet = new mPortlet(el[0], options);
-    };
-
-    /**
-    * Initializes metronic portlets
-    */
-    var initPortlets = function() {
-        // init portlet tools
-        $('[m-portlet="true"]').each(function() {
-            var el = $(this);
-
-            if ( el.data('portlet-initialized') !== true ) {
-                initPortlet(el, {});
-                el.data('portlet-initialized', true);
-            }
-        });
-    };
-
-    // /**
-    // * Initializes scrollable contents
-    // */
-    // var initScrollers = function() {
-    //     $('[data-scrollable="true"]').each(function(){
-    //         var el = $(this);
-    //         mUtil.scrollerInit(this, {disableForMobile: true, handleWindowResize: true, height: function() {
-    //             if (mUtil.isInResponsiveRange('tablet-and-mobile') && el.data('mobile-height')) {
-    //                 return el.data('mobile-height');
-    //             } else {
-    //                 return el.data('height');
-    //             }
-    //         }});
-    //     });
-    // };
-
-    /**
     * Initializes bootstrap alerts
     */
     var initAlerts = function() {
@@ -1479,68 +1296,6 @@ var mApp = function() {
             $(this).closest('.alert').hide();
         });
     };
-
-    /**
-    * Initializes Metronic custom tabs
-    */
-    var initCustomTabs = function() {
-        // init bootstrap popover
-        $('[data-tab-target]').each(function() {
-            if ($(this).data('tabs-initialized') == true ) {
-                return;
-            }
-
-            $(this).click(function(e) {
-                e.preventDefault();
-                
-                var tab = $(this);
-                var tabs = tab.closest('[data-tabs="true"]');
-                var contents = $( tabs.data('tabs-contents') );
-                var content = $( tab.data('tab-target') );
-
-                tabs.find('.m-tabs__item.m-tabs__item--active').removeClass('m-tabs__item--active');
-                tab.addClass('m-tabs__item--active');
-
-                contents.find('.m-tabs-content__item.m-tabs-content__item--active').removeClass('m-tabs-content__item--active');
-                content.addClass('m-tabs-content__item--active');         
-            });
-
-            $(this).data('tabs-initialized', true);
-        });
-    };
-
-	var hideTouchWarning = function() {
-		jQuery.event.special.touchstart = {
-			setup: function(_, ns, handle) {
-				if (typeof this === 'function')
-					if (ns.includes('noPreventDefault')) {
-						this.addEventListener('touchstart', handle, {passive: false});
-					} else {
-						this.addEventListener('touchstart', handle, {passive: true});
-					}
-			},
-		};
-		jQuery.event.special.touchmove = {
-			setup: function(_, ns, handle) {
-				if (typeof this === 'function')
-					if (ns.includes('noPreventDefault')) {
-						this.addEventListener('touchmove', handle, {passive: false});
-					} else {
-						this.addEventListener('touchmove', handle, {passive: true});
-					}
-			},
-		};
-		jQuery.event.special.wheel = {
-			setup: function(_, ns, handle) {
-				if (typeof this === 'function')
-					if (ns.includes('noPreventDefault')) {
-						this.addEventListener('wheel', handle, {passive: false});
-					} else {
-						this.addEventListener('wheel', handle, {passive: true});
-					}
-			},
-		};
-	};
 
     return {
         /**
@@ -1557,26 +1312,12 @@ var mApp = function() {
         * Initializes components
         */
         initComponents: function() {
-            // hideTouchWarning();
-            // initScrollers();
             initTooltips();
-            initPopovers();
             initAlerts();
-            initPortlets();
-            initFileInput();
-            initCustomTabs();
-        },
-
-
-        /**
-        * Init custom tabs
-        */
-        initCustomTabs: function() {
-            initCustomTabs();
         },
 
         /**
-        * 
+        *
         * @param {object} el jQuery element object
         */
         // wrJangoer function to scroll(focus) to an element
@@ -1585,7 +1326,7 @@ var mApp = function() {
         },
 
         /**
-        * 
+        *
         * @param {object} el jQuery element object
         */
         // wrJangoer function to scroll(focus) to an element
@@ -1594,45 +1335,9 @@ var mApp = function() {
         },
 
         /**
-        * 
-        * @param {object} el jQuery element object
-        */
-        // wrJangoer function to scroll(focus) to an element
-        initPopovers: function() {
-            initPopovers();
-        },
-
-        /**
-        * 
-        * @param {object} el jQuery element object
-        */
-        // wrJangoer function to scroll(focus) to an element
-        initPopover: function(el) {
-            initPopover(el);
-        },
-
-        /**
-        * 
-        * @param {object} el jQuery element object
-        */
-        // function to init portlet
-        initPortlet: function(el, options) {
-            initPortlet(el, options);
-        },
-
-        /**
-        * 
-        * @param {object} el jQuery element object
-        */
-        // function to init portlets
-        initPortlets: function() {
-            initPortlets();
-        },
-
-        /**
         * Blocks element with loading indiciator using http://malsup.com/jquery/block/
         * @param {object} target jQuery element object
-        * @param {object} options 
+        * @param {object} options
         */
         block: function(target, options) {
             var el = $(target);
@@ -1706,7 +1411,7 @@ var mApp = function() {
                     if (el && el[0]) {
                         mUtil.css(el[0], 'position', '');
                         mUtil.css(el[0], 'zoom', '');
-                    }                    
+                    }
                 }
             };
 
@@ -1720,7 +1425,7 @@ var mApp = function() {
         },
 
         /**
-        * Un-blocks the blocked element 
+        * Un-blocks the blocked element
         * @param {object} target jQuery element object
         */
         unblock: function(target) {
@@ -1732,49 +1437,9 @@ var mApp = function() {
         },
 
         /**
-        * Blocks the page body element with loading indicator
-        * @param {object} options 
-        */
-        blockPage: function(options) {
-            return mApp.block('body', options);
-        },
-
-        /**
-        * Un-blocks the blocked page body element
-        */
-        unblockPage: function() {
-            return mApp.unblock('body');
-        },
-
-        /**
-        * Enable loader progress for button and other elements
-        * @param {object} target jQuery element object
-        * @param {object} options
-        */
-        progress: function(target, options) {
-            var skin = (options && options.skin) ? options.skin : 'light';
-            var alignment = (options && options.alignment) ? options.alignment : 'right'; 
-            var size = (options && options.size) ? 'm-spinner--' + options.size : ''; 
-            var classes = 'm-loader ' + 'm-loader--' + skin + ' m-loader--' + alignment + ' m-loader--' + size;
-
-            mApp.unprogress(target);
-            
-            $(target).addClass(classes);
-            $(target).data('progress-classes', classes);
-        },
-
-        /**
-        * Disable loader progress for button and other elements
-        * @param {object} target jQuery element object
-        */
-        unprogress: function(target) {
-            $(target).removeClass($(target).data('progress-classes'));
-        },
-
-        /**
         * Gets state color's hex code by color name
         * @param {string} name Color name
-        * @returns {string}  
+        * @returns {string}
         */
         getColor: function(name) {
             return colors[name];
@@ -1786,503 +1451,7 @@ var mApp = function() {
 $(document).ready(function() {
     mApp.init({});
 });
-// plugin setup
-var mWizard = function(elementId, options) {
-    //== Main object
-    var the = this;
-    var init = false;
 
-    //== Get element object
-    var element = mUtil.get(elementId);
-    var body = mUtil.get('body');
-
-    if (!element) {
-        return; 
-    }
-
-    //== Default options
-    var defaultOptions = {
-        startStep: 1,
-        manualStepForward: false
-    };
-
-    ////////////////////////////
-    // ** Private Methods  ** //
-    ////////////////////////////
-
-    var Plugin = {
-        /**
-         * Construct
-         */
-
-        construct: function(options) {
-            if (mUtil.data(element).has('wizard')) {
-                the = mUtil.data(element).get('wizard');
-            } else {
-                // reset menu
-                Plugin.init(options);
-
-                // build menu
-                Plugin.build();
-
-                mUtil.data(element).set('wizard', the);
-            }
-
-            return the;
-        },
-
-        /**
-         * Init wizard
-         */
-        init: function(options) {
-            the.element = element;
-            the.events = [];
-
-            // merge default and user defined options
-            the.options = mUtil.deepExtend({}, defaultOptions, options);
-
-            //== Elements
-            the.steps = mUtil.findAll(element, '.m-wizard__step');
-
-            the.progress = mUtil.find(element, '.m-wizard__progress .progress-bar');
-            the.btnSubmit = mUtil.find(element, '[data-wizard-action="submit"]');
-            the.btnNext = mUtil.find(element, '[data-wizard-action="next"]');
-            the.btnPrev = mUtil.find(element, '[data-wizard-action="prev"]');
-            the.btnLast = mUtil.find(element, '[data-wizard-action="last"]');
-            the.btnFirst = mUtil.find(element, '[data-wizard-action="first"]');
-
-            //== Variables
-            the.events = [];
-            the.currentStep = 1;
-            the.stopped = false;
-            the.totalSteps = the.steps.length;
-
-            //== Init current step
-            if (the.options.startStep > 1) {
-                Plugin.goTo(the.options.startStep);
-            }
-
-            //== Init UI
-            Plugin.updateUI();
-        },
-
-        /**
-         * Build Form Wizard
-         */
-        build: function() {
-            //== Next button event handler
-            mUtil.addEvent(the.btnNext, 'click', function(e) {
-                e.preventDefault();
-                Plugin.goNext();
-            });
-
-            //== Prev button event handler
-            mUtil.addEvent(the.btnPrev, 'click', function(e) {
-                e.preventDefault();
-                Plugin.goPrev();
-            });
-
-            //== First button event handler
-            mUtil.addEvent(the.btnFirst, 'click', function(e) {
-                e.preventDefault();
-                Plugin.goFirst();
-            });
-
-            //== Last button event handler
-            mUtil.addEvent(the.btnLast, 'click', function(e) {
-                e.preventDefault();
-                Plugin.goLast();
-            });
-
-            mUtil.on(element, '.m-wizard__step a.m-wizard__step-number', 'click', function() {
-                var step = this.closest('.m-wizard__step');
-                var steps = mUtil.parents(this, '.m-wizard__steps');
-                var find = mUtil.findAll(steps, '.m-wizard__step');
-                var num;
-
-                for (var i = 0, j = find.length; i < j; i++) {
-                    if (step === find[i]) {
-                        num = (i + 1);
-                        break;
-                    }
-                }
-
-                if (num) {
-                    if (the.options.manualStepForward === false) {
-                        if (num < the.currentStep) {
-                            Plugin.goTo(num);
-                        }
-                    } else {
-                        Plugin.goTo(num);
-                    }                    
-                }
-            });
-        },
-
-        /**
-         * Handles wizard click wizard
-         */
-        goTo: function(number) {
-            //== Skip if this step is already shown
-            if (number === the.currentStep || number > the.totalSteps || number < 0) {
-                return;
-            }
-
-            //== Validate step number
-            if (number) {
-                number = parseInt(number);
-            } else {
-                number = Plugin.getNextStep();
-            }
-
-            //== Before next and prev events
-            var callback;
-
-            if (number > the.currentStep) {
-                callback = Plugin.eventTrigger('beforeNext');
-            } else {
-                callback = Plugin.eventTrigger('beforePrev');
-            }
-            
-            //== Skip if stopped
-            if (the.stopped === true) {
-                the.stopped = false;
-                return;
-            }
-
-            //== Continue if no exit
-            if (callback !== false) {
-                //== Before change
-                Plugin.eventTrigger('beforeChange');
-
-                //== Set current step 
-                the.currentStep = number;
-
-                //== Update UI
-                Plugin.updateUI();
-
-                //== Trigger change event
-                Plugin.eventTrigger('change');
-            }
-
-            //== After next and prev events
-            if (number > the.startStep) {
-                Plugin.eventTrigger('afterNext');
-            } else {
-                Plugin.eventTrigger('afterPrev');
-            }
-
-            return the;
-        },
-
-        /**
-         * Set step class
-         */
-        setStepClass: function() {
-            if (Plugin.isLastStep()) {
-                mUtil.addClass(element, 'm-wizard--step-last');
-            } else {
-                mUtil.removeClass(element, 'm-wizard--step-last');
-            }
-
-            if (Plugin.isFirstStep()) {
-                mUtil.addClass(element, 'm-wizard--step-first');
-            } else {
-                mUtil.removeClass(element, 'm-wizard--step-first');
-            }
-
-            if (Plugin.isBetweenStep()) {
-                mUtil.addClass(element, 'm-wizard--step-between');
-            } else {
-                mUtil.removeClass(element, 'm-wizard--step-between');
-            }
-        },
-
-        updateUI: function(argument) {
-            //== Update progress bar
-            Plugin.updateProgress();
-
-            //== Show current target content
-            Plugin.handleTarget();
-
-            //== Set classes
-            Plugin.setStepClass();
-
-            //== Apply nav step classes
-            for (var i = 0, j = the.steps.length; i < j; i++) {
-                mUtil.removeClass(the.steps[i], 'm-wizard__step--current m-wizard__step--done');
-            }
-
-            for (var i = 1; i < the.currentStep; i++) {
-                mUtil.addClass(the.steps[i - 1], 'm-wizard__step--done');
-            }
-            
-            mUtil.addClass(the.steps[the.currentStep - 1], 'm-wizard__step--current');
-        },
-
-        /**
-         * Cancel
-         */
-        stop: function() {
-            the.stopped = true;
-        },
-
-        /**
-         * Resume
-         */
-        start: function() {
-            the.stopped = false;
-        },
-
-        /**
-         * Check last step
-         */
-        isLastStep: function() {
-            return the.currentStep === the.totalSteps;
-        },
-
-        /**
-         * Check first step
-         */
-        isFirstStep: function() {
-            return the.currentStep === 1;
-        },
-
-        /**
-         * Check between step
-         */
-        isBetweenStep: function() {
-            return Plugin.isLastStep() === false && Plugin.isFirstStep() === false;
-        },
-
-        /**
-         * Go to the next step
-         */
-        goNext: function() {
-            return Plugin.goTo(Plugin.getNextStep());
-        },
-
-        /**
-         * Go to the prev step
-         */
-        goPrev: function() {
-            return Plugin.goTo(Plugin.getPrevStep());
-        },
-
-        /**
-         * Go to the last step
-         */
-        goLast: function() {
-            return Plugin.goTo(the.totalSteps);
-        },
-
-        /**
-         * Go to the first step
-         */
-        goFirst: function() {
-            return Plugin.goTo(1);
-        },
-
-        /**
-         * Set progress
-         */
-        updateProgress: function() {
-            //== Calculate progress position
-            if (!the.progress) {
-                return;
-            }
-
-            //== Update progress
-            if (mUtil.hasClass(element, 'm-wizard--1')) {
-                var width = 100 * ((the.currentStep - 1) / (the.totalSteps));
-                var number = mUtil.find(element, '.m-wizard__step-number');
-                var offset = parseInt(mUtil.css(number, 'width'));
-                mUtil.css(the.progress, 'width', 'calc(' + width + '% + ' + (offset / 2) + 'px)');
-            } else if (mUtil.hasClass(element, 'm-wizard--2')) {
-                if (the.currentStep === 1) {
-                    //return;
-                }
-
-                var progress = (the.currentStep - 1) * (100 * (1 / (the.totalSteps - 1)));
-
-                if (mUtil.isInResponsiveRange('minimal-desktop-and-below')) {
-                    mUtil.css(the.progress, 'height', progress + '%');
-                } else {
-                    mUtil.css(the.progress, 'width', progress + '%');
-                }
-            } else {
-                var width = 100 * ((the.currentStep) / (the.totalSteps));
-                mUtil.css(the.progress, 'width', width + '%');
-            }
-        },
-
-        /**
-         * Show/hide target content
-         */
-        handleTarget: function() {
-            var step = the.steps[the.currentStep - 1];
-            var target = mUtil.get(mUtil.attr(step, 'm-wizard-target'));
-            var current = mUtil.find(element, '.m-wizard__form-step--current');
-            
-            mUtil.removeClass(current, 'm-wizard__form-step--current');
-            mUtil.addClass(target, 'm-wizard__form-step--current');
-        },
-
-        /**
-         * Get next step
-         */
-        getNextStep: function() {
-            if (the.totalSteps >= (the.currentStep + 1)) {
-                return the.currentStep + 1;
-            } else {
-                return the.totalSteps;
-            }
-        },
-
-        /**
-         * Get prev step
-         */
-        getPrevStep: function() {
-            if ((the.currentStep - 1) >= 1) {
-                return the.currentStep - 1;
-            } else {
-                return 1;
-            }
-        },
-
-        /**
-         * Trigger events
-         */
-        eventTrigger: function(name) {
-            //mUtil.triggerCustomEvent(name);
-            for (i = 0; i < the.events.length; i++) {
-                var event = the.events[i];
-                if (event.name == name) {
-                    if (event.one == true) {
-                        if (event.fired == false) {
-                            the.events[i].fired = true;
-                            event.handler.call(this, the);
-                        }
-                    } else {
-                        event.handler.call(this, the);
-                    }
-                }
-            }
-        },
-
-        addEvent: function(name, handler, one) {
-            the.events.push({
-                name: name,
-                handler: handler,
-                one: one,
-                fired: false
-            });
-
-            return the;
-        }
-    };
-
-    //////////////////////////
-    // ** Public Methods ** //
-    //////////////////////////
-
-    /**
-     * Set default options 
-     */
-
-    the.setDefaults = function(options) {
-        defaultOptions = options;
-    };
-
-    /**
-     * Go to the next step 
-     */
-    the.goNext = function() {
-        return Plugin.goNext();
-    };
-
-    /**
-     * Go to the prev step 
-     */
-    the.goPrev = function() {
-        return Plugin.goPrev();
-    };
-
-    /**
-     * Go to the last step 
-     */
-    the.goLast = function() {
-        return Plugin.goLast();
-    };
-
-    /**
-     * Cancel step 
-     */
-    the.stop = function() {
-        return Plugin.stop();
-    };
-
-    /**
-     * Resume step 
-     */
-    the.start = function() {
-        return Plugin.start();
-    };
-
-    /**
-     * Go to the first step 
-     */
-    the.goFirst = function() {
-        return Plugin.goFirst();
-    };
-
-    /**
-     * Go to a step
-     */
-    the.goTo = function(number) {
-        return Plugin.goTo(number);
-    };
-
-    /**
-     * Get current step number 
-     */
-    the.getStep = function() {
-        return the.currentStep;
-    };
-
-    /**
-     * Check last step 
-     */
-    the.isLastStep = function() {
-        return Plugin.isLastStep();
-    };
-
-    /**
-     * Check first step 
-     */
-    the.isFirstStep = function() {
-        return Plugin.isFirstStep();
-    };
-    
-    /**
-     * Attach event
-     */
-    the.on = function(name, handler) {
-        return Plugin.addEvent(name, handler);
-    };
-
-    /**
-     * Attach event that will be fired once
-     */
-    the.one = function(name, handler) {
-        return Plugin.addEvent(name, handler, true);
-    };
-
-    //== Construct plugin
-    Plugin.construct.apply(the, [options]);
-
-    return the;
-};
 var mDropdown = function(elementId, options) {
     //== Main object
     var the = this;
@@ -2843,1964 +2012,6 @@ document.addEventListener("click", function(e) {
         }
     }
 });
-var mHeader = function(elementId, options) {
-    //== Main object
-    var the = this;
-    var init = false;
-
-    //== Get element object
-    var element = mUtil.get(elementId);
-    var body = mUtil.get('body');
-
-    if (element === undefined) {
-        return;
-    }
-
-    //== Default options
-    var defaultOptions = {
-        classic: false,
-        offset: {
-            mobile: 150,
-            desktop: 200
-        },
-        minimize: {
-            mobile: false,
-            desktop: false
-        }
-    };
-
-    ////////////////////////////
-    // ** Private Methods  ** //
-    ////////////////////////////
-
-    var Plugin = {
-        /**
-         * Run plugin
-         * @returns {mHeader}
-         */
-        construct: function(options) {
-            if (mUtil.data(element).has('header')) {
-                the = mUtil.data(element).get('header');
-            } else {
-                // reset header
-                Plugin.init(options);
-
-                // build header
-                Plugin.build();
-
-                mUtil.data(element).set('header', the);
-            }
-
-            return the;
-        },
-
-        /**
-         * Handles subheader click toggle
-         * @returns {mHeader}
-         */
-        init: function(options) {
-            the.events = [];
-
-            // merge default and user defined options
-            the.options = mUtil.deepExtend({}, defaultOptions, options);
-        },
-
-        /**
-         * Reset header
-         * @returns {mHeader}
-         */
-        build: function() {
-            var lastScrollTop = 0;
-
-            if (the.options.minimize.mobile === false && the.options.minimize.desktop === false) {
-                return;
-            }
-
-            window.addEventListener('scroll', function() {
-                var offset = 0, on, off, st;
-
-                if (mUtil.isInResponsiveRange('desktop')) {
-                    offset = the.options.offset.desktop;
-                    on = the.options.minimize.desktop.on;
-                    off = the.options.minimize.desktop.off;
-                } else if (mUtil.isInResponsiveRange('tablet-and-mobile')) {
-                    offset = the.options.offset.mobile;
-                    on = the.options.minimize.mobile.on;
-                    off = the.options.minimize.mobile.off;
-                }
-
-                st = window.pageYOffset;
-
-                if (
-                    (mUtil.isInResponsiveRange('tablet-and-mobile') && the.options.classic && the.options.classic.mobile) ||
-                    (mUtil.isInResponsiveRange('desktop') && the.options.classic && the.options.classic.desktop)
-
-                ) {
-                    if (st > offset) { // down scroll mode
-                        mUtil.addClass(body, on);
-                        mUtil.removeClass(body, off);
-                    } else { // back scroll mode
-                        mUtil.addClass(body, off);
-                        mUtil.removeClass(body, on);
-                    }
-                } else {
-                    if (st > offset && lastScrollTop < st) { // down scroll mode
-                        mUtil.addClass(body, on);
-                        mUtil.removeClass(body, off);
-                    } else { // back scroll mode
-                        mUtil.addClass(body, off);
-                        mUtil.removeClass(body, on);
-                    }
-
-                    lastScrollTop = st;
-                }
-            });
-        },
-
-        /**
-         * Trigger events
-         */
-        eventTrigger: function(name, args) {
-            for (var i = 0; i < the.events.length; i++) {
-                var event = the.events[i];
-                if (event.name == name) {
-                    if (event.one == true) {
-                        if (event.fired == false) {
-                            the.events[i].fired = true;
-                            event.handler.call(this, the, args);
-                        }
-                    } else {
-                        event.handler.call(this, the, args);
-                    }
-                }
-            }
-        },
-
-        addEvent: function(name, handler, one) {
-            the.events.push({
-                name: name,
-                handler: handler,
-                one: one,
-                fired: false
-            });
-        }
-    };
-
-    //////////////////////////
-    // ** Public Methods ** //
-    //////////////////////////
-
-    /**
-     * Set default options 
-     */
-
-    the.setDefaults = function(options) {
-        defaultOptions = options;
-    };
-
-    /**
-     * Register event
-     */
-    the.on = function(name, handler) {
-        return Plugin.addEvent(name, handler);
-    };
-
-    ///////////////////////////////
-    // ** Plugin Construction ** //
-    ///////////////////////////////
-
-    //== Run plugin
-    Plugin.construct.apply(the, [options]);
-
-    //== Init done
-    init = true;
-
-    // Return plugin instance
-    return the;
-};
-var mMenu = function(elementId, options) {
-    //== Main object
-    var the = this;
-    var init = false;
-
-    //== Get element object
-    var element = mUtil.get(elementId);
-    var body = mUtil.get('body');  
-
-    if (!element) {
-        return;
-    }
-
-    //== Default options
-    var defaultOptions = {       
-        // accordion submenu mode
-        accordion: {
-            slideSpeed: 200, // accordion toggle slide speed in milliseconds
-            autoScroll: false, // enable auto scrolling(focus) to the clicked menu item
-            autoScrollSpeed: 1200,
-            expandAll: true // allow having multiple expanded accordions in the menu
-        },
-
-        // dropdown submenu mode
-        dropdown: {
-            timeout: 500 // timeout in milliseconds to show and hide the hoverable submenu dropdown
-        }
-    };
-
-    ////////////////////////////
-    // ** Private Methods  ** //
-    ////////////////////////////
-
-    var Plugin = {
-        /**
-         * Run plugin
-         * @returns {mMenu}
-         */
-        construct: function(options) {
-            if (mUtil.data(element).has('menu')) {
-                the = mUtil.data(element).get('menu');
-            } else {
-                // reset menu
-                Plugin.init(options);
-
-                // reset menu
-                Plugin.reset();
-
-                // build menu
-                Plugin.build();
-
-                mUtil.data(element).set('menu', the);
-            }
-
-            return the;
-        },
-
-        /**
-         * Handles submenu click toggle
-         * @returns {mMenu}
-         */
-        init: function(options) {
-            the.events = [];
-
-            the.eventHandlers = {};
-
-            // merge default and user defined options
-            the.options = mUtil.deepExtend({}, defaultOptions, options);
-
-            // pause menu
-            the.pauseDropdownHoverTime = 0;
-
-            the.uid = mUtil.getUniqueID();
-        },
-
-        update: function(options) {
-            // merge default and user defined options
-            the.options = mUtil.deepExtend({}, defaultOptions, options);
-
-            // pause menu
-            the.pauseDropdownHoverTime = 0;
-
-             // reset menu
-            Plugin.reset();
-
-            the.eventHandlers = {};
-
-            // build menu
-            Plugin.build();
-
-            mUtil.data(element).set('menu', the);
-        },
-
-        reload: function() {
-             // reset menu
-            Plugin.reset();
-
-            // build menu
-            Plugin.build();
-        },
-
-        /**
-         * Reset menu
-         * @returns {mMenu}
-         */
-        build: function() {
-            //== General accordion submenu toggle
-            the.eventHandlers['event_1'] = mUtil.on( element, '.m-menu__toggle', 'click', Plugin.handleSubmenuAccordion);
-
-            //== Dropdown mode(hoverable)
-            if (Plugin.getSubmenuMode() === 'dropdown' || Plugin.isConditionalSubmenuDropdown()) {
-                // dropdown submenu - hover toggle
-                the.eventHandlers['event_2'] = mUtil.on( element, '[m-menu-submenu-toggle="hover"]', 'mouseover', Plugin.handleSubmenuDrodownHoverEnter);
-                the.eventHandlers['event_3'] = mUtil.on( element, '[m-menu-submenu-toggle="hover"]', 'mouseout', Plugin.handleSubmenuDrodownHoverExit);
-
-                // dropdown submenu - click toggle
-                the.eventHandlers['event_4'] = mUtil.on( element, '[m-menu-submenu-toggle="click"] > .m-menu__toggle, [m-menu-submenu-toggle="click"] > .m-menu__link .m-menu__toggle', 'click', Plugin.handleSubmenuDropdownClick);
-                the.eventHandlers['event_5'] = mUtil.on( element, '[m-menu-submenu-toggle="tab"] > .m-menu__toggle, [m-menu-submenu-toggle="tab"] > .m-menu__link .m-menu__toggle', 'click', Plugin.handleSubmenuDropdownTabClick);
-            }
-
-            //== General link click
-            the.eventHandlers['event_6'] = mUtil.on(element, '.m-menu__item:not(.m-menu__item--submenu) > .m-menu__link:not(.m-menu__toggle):not(.m-menu__link--toggle-skip)', 'click', Plugin.handleLinkClick);
-
-            // //== Init scrollable menu
-            // if (the.options.scroll && the.options.scroll.height) {
-            //     Plugin.scrollerInit();
-            // }
-        },
-
-        /**
-         * Reset menu
-         * @returns {mMenu}
-         */
-        reset: function() { 
-            mUtil.off( element, 'click', the.eventHandlers['event_1']);
-
-            // dropdown submenu - hover toggle
-            mUtil.off( element, 'mouseover', the.eventHandlers['event_2']);
-            mUtil.off( element, 'mouseout', the.eventHandlers['event_3']);
-
-            // dropdown submenu - click toggle
-            mUtil.off( element, 'click', the.eventHandlers['event_4']);
-            mUtil.off( element, 'click', the.eventHandlers['event_5']);
-            
-            mUtil.off(element, 'click', the.eventHandlers['event_6']);
-        },
-
-        // /**
-        //  * Init scroll menu
-        //  *
-        // */
-        // scrollerInit: function() {
-        //     if ( the.options.scroll && the.options.scroll.height ) {
-        //         mUtil.scrollerDestroy(element);
-        //         mUtil.scrollerInit(element, {disableForMobile: true, resetHeightOnDestroy: true, handleWindowResize: true, height: the.options.scroll.height});
-        //     }
-        // },
-
-        /**
-         * Update scroll menu
-        */
-        scrollerUpdate: function() {
-            if ( the.options.scroll && the.options.scroll.height ) {
-                mUtil.scrollerUpdate(element);
-            } else {
-                mUtil.scrollerDestroy(element);
-            }
-        },
-
-        /**
-         * Scroll top
-        */
-        scrollerTop: function() {
-            if ( the.options.scroll && the.options.scroll.height ) {
-                mUtil.scrollerTop(element);
-            }
-        },
-
-        /**
-         * Get submenu mode for current breakpoint and menu state
-         * @returns {mMenu}
-         */
-        getSubmenuMode: function(el) {
-            if ( mUtil.isInResponsiveRange('desktop') ) {
-                if (el && mUtil.hasAttr(el, 'm-menu-submenu-toggle')) {
-                    return mUtil.attr(el, 'm-menu-submenu-toggle');
-                }
-
-                if ( mUtil.isset(the.options.submenu, 'desktop.state.body') ) {
-                    if ( mUtil.hasClass(body, the.options.submenu.desktop.state.body) ) {
-                        return the.options.submenu.desktop.state.mode;
-                    } else {
-                        return the.options.submenu.desktop.default;
-                    }
-                } else if ( mUtil.isset(the.options.submenu, 'desktop') ) {
-                    return the.options.submenu.desktop;
-                }
-            } else if ( mUtil.isInResponsiveRange('tablet') && mUtil.isset(the.options.submenu, 'tablet') ) {
-                return the.options.submenu.tablet;
-            } else if ( mUtil.isInResponsiveRange('mobile') && mUtil.isset(the.options.submenu, 'mobile') ) {
-                return the.options.submenu.mobile;
-            } else {
-                return false;
-            }
-        },
-
-        /**
-         * Get submenu mode for current breakpoint and menu state
-         * @returns {mMenu}
-         */
-        isConditionalSubmenuDropdown: function() {
-            if ( mUtil.isInResponsiveRange('desktop') && mUtil.isset(the.options.submenu, 'desktop.state.body') ) {
-                return true;
-            } else {
-                return false;
-            }
-        },
-
-        /**
-         * Handles menu link click
-         * @returns {mMenu}
-         */
-        handleLinkClick: function(e) {
-            if ( Plugin.eventTrigger('linkClick', this) === false ) {
-                e.preventDefault();
-            }
-            if ( Plugin.getSubmenuMode(this) === 'dropdown' || Plugin.isConditionalSubmenuDropdown() ) {
-                Plugin.handleSubmenuDropdownClose(e, this);
-            }
-        },
-
-        /**
-         * Handles submenu hover toggle
-         * @returns {mMenu}
-         */
-        handleSubmenuDrodownHoverEnter: function(e) {
-            if ( Plugin.getSubmenuMode(this) === 'accordion' ) {
-                return;
-            }
-
-            if ( the.resumeDropdownHover() === false ) {
-                return;
-            }
-
-            var item = this;
-
-            if ( item.getAttribute('data-hover') == '1' ) {
-                item.removeAttribute('data-hover');
-                clearTimeout( item.getAttribute('data-timeout') );
-                item.removeAttribute('data-timeout');
-                //Plugin.hideSubmenuDropdown(item, false);
-            }
-
-            Plugin.showSubmenuDropdown(item);
-        },
-
-        /**
-         * Handles submenu hover toggle
-         * @returns {mMenu}
-         */
-        handleSubmenuDrodownHoverExit: function(e) {
-            if ( the.resumeDropdownHover() === false ) {
-                return;
-            }
-
-            if ( Plugin.getSubmenuMode(this) === 'accordion' ) {
-                return;
-            }
-
-            var item = this;
-            var time = the.options.dropdown.timeout;
-
-            var timeout = setTimeout(function() {
-                if ( item.getAttribute('data-hover') == '1' ) {
-                    Plugin.hideSubmenuDropdown(item, true);
-                } 
-            }, time);
-
-            item.setAttribute('data-hover', '1');
-            item.setAttribute('data-timeout', timeout);  
-        },
-
-        /**
-         * Handles submenu click toggle
-         * @returns {mMenu}
-         */
-        handleSubmenuDropdownClick: function(e) {
-            if ( Plugin.getSubmenuMode(this) === 'accordion' ) {
-                return;
-            }
- 
-            var item = this.closest('.m-menu__item'); 
-
-            if ( item.getAttribute('m-menu-submenu-mode') == 'accordion' ) {
-                return;
-            }
-
-            if ( mUtil.hasClass(item, 'm-menu__item--hover') === false ) {
-                mUtil.addClass(item, 'm-menu__item--open-dropdown');
-                Plugin.showSubmenuDropdown(item);
-            } else {
-                mUtil.removeClass(item, 'm-menu__item--open-dropdown' );
-                Plugin.hideSubmenuDropdown(item, true);
-            }
-
-            e.preventDefault();
-        },
-
-        /**
-         * Handles tab click toggle
-         * @returns {mMenu}
-         */
-        handleSubmenuDropdownTabClick: function(e) {
-            if (Plugin.getSubmenuMode(this) === 'accordion') {
-                return;
-            }
-
-            var item = this.closest('.m-menu__item');
-
-            if (item.getAttribute('m-menu-submenu-mode') == 'accordion') {
-                return;
-            }
-
-            if (mUtil.hasClass(item, 'm-menu__item--hover') == false) {
-                mUtil.addClass(item, 'm-menu__item--open-dropdown');
-                Plugin.showSubmenuDropdown(item);
-            }
-
-            e.preventDefault();
-        },
-
-        /**
-         * Handles submenu dropdown close on link click
-         * @returns {mMenu}
-         */
-        handleSubmenuDropdownClose: function(e, el) {
-            // exit if its not submenu dropdown mode
-            if (Plugin.getSubmenuMode(el) === 'accordion') {
-                return;
-            }
-
-            var shown = element.querySelectorAll('.m-menu__item.m-menu__item--submenu.m-menu__item--hover:not(.m-menu__item--tabs)');
-
-            // check if currently clicked link's parent item ha
-            if (shown.length > 0 && mUtil.hasClass(el, 'm-menu__toggle') === false && el.querySelectorAll('.m-menu__toggle').length === 0) {
-                // close opened dropdown menus
-                for (var i = 0, len = shown.length; i < len; i++) {
-                    Plugin.hideSubmenuDropdown(shown[0], true);
-                }
-            }
-        },
-
-        /**
-         * helper functions
-         * @returns {mMenu}
-         */
-        handleSubmenuAccordion: function(e, el) {
-            var query;
-            var item = el ? el : this;
-
-            if ( Plugin.getSubmenuMode(el) === 'dropdown' && (query = item.closest('.m-menu__item') ) ) {
-                if (query.getAttribute('m-menu-submenu-mode') != 'accordion' ) {
-                    e.preventDefault();
-                    return;
-                }
-            }
-
-            var li = item.closest('.m-menu__item');
-            var submenu = mUtil.child(li, '.m-menu__submenu, .m-menu__inner');
-
-            if (mUtil.hasClass(item.closest('.m-menu__item'), 'm-menu__item--open-always')) {
-                return;
-            }
-
-            if ( li && submenu ) {
-                e.preventDefault();
-                var speed = the.options.accordion.slideSpeed;
-                var hasClosables = false;
-
-                if ( mUtil.hasClass(li, 'm-menu__item--open') === false ) {
-                    // hide other accordions                    
-                    if ( the.options.accordion.expandAll === false ) {
-                        var subnav = item.closest('.m-menu__nav, .m-menu__subnav');
-                        var closables = mUtil.children(subnav, '.m-menu__item.m-menu__item--open.m-menu__item--submenu:not(.m-menu__item--expanded):not(.m-menu__item--open-always)');
-
-                        if ( subnav && closables ) {
-                            for (var i = 0, len = closables.length; i < len; i++) {
-                                var el_ = closables[0];
-                                var submenu_ = mUtil.child(el_, '.m-menu__submenu');
-                                if ( submenu_ ) {
-                                    mUtil.slideUp(submenu_, speed, function() {
-                                        Plugin.scrollerUpdate();
-                                        mUtil.removeClass(el_, 'm-menu__item--open');
-                                    });                    
-                                }
-                            }
-                        }
-                    }
-
-                    mUtil.slideDown(submenu, speed, function() {
-                        Plugin.scrollToItem(item);
-                        Plugin.scrollerUpdate();
-                        
-                        Plugin.eventTrigger('submenuToggle', submenu);
-                    });
-                
-                    mUtil.addClass(li, 'm-menu__item--open');
-
-                } else {
-                    mUtil.slideUp(submenu, speed, function() {
-                        Plugin.scrollToItem(item);
-                        Plugin.eventTrigger('submenuToggle', submenu);
-                    });
-
-                    mUtil.removeClass(li, 'm-menu__item--open');       
-                }
-            }
-        },
-
-        /**
-         * scroll to item function
-         * @returns {mMenu}
-         */
-        scrollToItem: function(item) {
-            // handle auto scroll for accordion submenus
-            if ( mUtil.isInResponsiveRange('desktop') && the.options.accordion.autoScroll && element.getAttribute('m-menu-scrollable') !== '1' ) {
-                mUtil.scrollTo(item, the.options.accordion.autoScrollSpeed);
-            }
-        },
-
-        /**
-         * helper functions
-         * @returns {mMenu}
-         */
-        hideSubmenuDropdown: function(item, classAlso) {
-            // remove submenu activation class
-            if ( classAlso ) {
-                mUtil.removeClass(item, 'm-menu__item--hover');
-                mUtil.removeClass(item, 'm-menu__item--active-tab');
-            }
-
-            // clear timeout
-            item.removeAttribute('data-hover');
-
-            if ( item.getAttribute('m-menu-dropdown-toggle-class') ) {
-                mUtil.removeClass(body, item.getAttribute('m-menu-dropdown-toggle-class'));
-            }
-
-            var timeout = item.getAttribute('data-timeout');
-            item.removeAttribute('data-timeout');
-            clearTimeout(timeout);
-        },
-
-        /**
-         * helper functions
-         * @returns {mMenu}
-         */
-        showSubmenuDropdown: function(item) {
-            // close active submenus
-            var list = element.querySelectorAll('.m-menu__item--submenu.m-menu__item--hover, .m-menu__item--submenu.m-menu__item--active-tab');
-
-            if ( list ) {
-                for (var i = 0, len = list.length; i < len; i++) {
-                    var el = list[i];
-                    if ( item !== el && el.contains(item) === false && item.contains(el) === false ) {
-                        Plugin.hideSubmenuDropdown(el, true);
-                    }
-                }
-            } 
-
-            // adjust submenu position
-            Plugin.adjustSubmenuDropdownArrowPos(item);
-
-            // add submenu activation class
-            mUtil.addClass(item, 'm-menu__item--hover');
-            
-            if ( item.getAttribute('m-menu-dropdown-toggle-class') ) {
-                mUtil.addClass(body, item.getAttribute('m-menu-dropdown-toggle-class'));
-            }
-        },
-
-        /**
-         * Handles submenu slide toggle
-         * @returns {mMenu}
-         */
-        createSubmenuDropdownClickDropoff: function(el) {
-            var query;
-            var zIndex = (query = mUtil.child(el, '.m-menu__submenu') ? mUtil.css(query, 'z-index') : 0) - 1;
-
-            var dropoff = document.createElement('<div class="m-menu__dropoff" style="background: transparent; position: fixed; top: 0; bottom: 0; left: 0; right: 0; z-index: ' + zIndex + '"></div>');
-
-            body.appendChild(dropoff);
-
-            mUtil.addEvent(dropoff, 'click', function(e) {
-                e.stopPropagation();
-                e.preventDefault();
-                mUtil.remove(this);
-                Plugin.hideSubmenuDropdown(el, true);
-            });
-        },
-
-        /**
-         * Handles submenu click toggle
-         * @returns {mMenu}
-         */
-        adjustSubmenuDropdownArrowPos: function(item) {
-            var submenu = mUtil.child(item, '.m-menu__submenu');
-            var arrow = mUtil.child( submenu, '.m-menu__arrow.m-menu__arrow--adjust');
-            var subnav = mUtil.child( submenu, '.m-menu__subnav');
-
-            if ( arrow ) { 
-                var pos = 0; 
-                var link = mUtil.child(item, '.m-menu__link');
-
-                if ( mUtil.hasClass(submenu, 'm-menu__submenu--classic') || mUtil.hasClass(submenu, 'm-menu__submenu--fixed') ) {
-                    if ( mUtil.hasClass(submenu, 'm-menu__submenu--right')) {
-                        pos = mUtil.outerWidth(item) / 2;
-                        if (mUtil.hasClass(submenu, 'm-menu__submenu--pull')) {
-                            if (mUtil.isRTL()) {
-                                pos = pos + Math.abs( parseFloat(mUtil.css(submenu, 'margin-left')) );
-                            } else {
-                                pos = pos + Math.abs( parseFloat(mUtil.css(submenu, 'margin-right')) );
-                            }
-                        }
-                        pos = parseInt(mUtil.css(submenu, 'width')) - pos;
-                    } else if ( mUtil.hasClass(submenu, 'm-menu__submenu--left') ) {
-                        pos = mUtil.outerWidth(item) / 2;
-                        if ( mUtil.hasClass(submenu, 'm-menu__submenu--pull')) {
-                            if (mUtil.isRTL()) {
-                                pos = pos + Math.abs( parseFloat(mUtil.css(submenu, 'margin-right')) );
-                            } else {
-                                pos = pos + Math.abs( parseFloat(mUtil.css(submenu, 'margin-left')) );
-                            }
-                        }
-                    }
-
-                    if (mUtil.isRTL()) {
-                        mUtil.css(arrow, 'right', pos + 'px');  
-                    } else {
-                        mUtil.css(arrow, 'left', pos + 'px');  
-                    }
-                } else {
-                    if ( mUtil.hasClass(submenu, 'm-menu__submenu--center') || mUtil.hasClass(submenu, 'm-menu__submenu--full') ) {
-                        pos = mUtil.offset(item).left - ((mUtil.getViewPort().width - parseInt(mUtil.css(submenu, 'width'))) / 2);
-                        pos = pos + (mUtil.outerWidth(item) / 2);
-
-                        mUtil.css(arrow, 'left', pos + 'px');
-                        if (mUtil.isRTL()) {
-                            mUtil.css(arrow, 'right', 'auto');
-                        }                        
-                    }
-                }
-            }
-        },
-
-        /**
-         * Handles submenu hover toggle
-         * @returns {mMenu}
-         */
-        pauseDropdownHover: function(time) {
-            var date = new Date();
-
-            the.pauseDropdownHoverTime = date.getTime() + time;
-        },
-
-        /**
-         * Handles submenu hover toggle
-         * @returns {mMenu}
-         */
-        resumeDropdownHover: function() {
-            var date = new Date();
-
-            return (date.getTime() > the.pauseDropdownHoverTime ? true : false);
-        },
-
-        /**
-         * Reset menu's current active item
-         * @returns {mMenu}
-         */
-        resetActiveItem: function(item) {
-            var list;
-            var parents;
-
-            list = element.querySelectorAll('.m-menu__item--active');
-            
-            for (var i = 0, len = list.length; i < len; i++) {
-                var el = list[0];
-                mUtil.removeClass(el, 'm-menu__item--active');
-                mUtil.hide( mUtil.child(el, '.m-menu__submenu') );
-                parents = mUtil.parents(el, '.m-menu__item--submenu');
-
-                for (var i_ = 0, len_ = parents.length; i_ < len_; i_++) {
-                    var el_ = parents[i];
-                    mUtil.removeClass(el_, 'm-menu__item--open');
-                    mUtil.hide( mUtil.child(el_, '.m-menu__submenu') );
-                }
-            }
-
-            // close open submenus
-            if ( the.options.accordion.expandAll === false ) {
-                if ( list = element.querySelectorAll('.m-menu__item--open') ) {
-                    for (var i = 0, len = list.length; i < len; i++) {
-                        mUtil.removeClass(parents[0], 'm-menu__item--open');
-                    }
-                }
-            }
-        },
-
-        /**
-         * Sets menu's active item
-         * @returns {mMenu}
-         */
-        setActiveItem: function(item) {
-            // reset current active item
-            Plugin.resetActiveItem();
-
-            mUtil.addClass(item, 'm-menu__item--active');
-            
-            var parents = mUtil.parents(item, '.m-menu__item--submenu');
-            for (var i = 0, len = parents.length; i < len; i++) {
-                mUtil.addClass(parents[i], 'm-menu__item--open');
-            }
-        },
-
-        /**
-         * Returns page breadcrumbs for the menu's active item
-         * @returns {mMenu}
-         */
-        getBreadcrumbs: function(item) {
-            var query;
-            var breadcrumbs = [];
-            var link = mUtil.child(item, '.m-menu__link');
-
-            breadcrumbs.push({
-                text: (query = mUtil.child(link, '.m-menu__link-text') ? query.innerHTML : ''),
-                title: link.getAttribute('title'),
-                href: link.getAttribute('href')
-            });
-
-            var parents = mUtil.parents(item, '.m-menu__item--submenu');
-            for (var i = 0, len = parents.length; i < len; i++) {
-                var submenuLink = mUtil.child(parents[i], '.m-menu__link');
-
-                breadcrumbs.push({
-                    text: (query = mUtil.child(submenuLink, '.m-menu__link-text') ? query.innerHTML : ''),
-                    title: submenuLink.getAttribute('title'),
-                    href: submenuLink.getAttribute('href')
-                });
-            }
-
-            return  breadcrumbs.reverse();
-        },
-
-        /**
-         * Returns page title for the menu's active item
-         * @returns {mMenu}
-         */
-        getPageTitle: function(item) {
-            var query;
-
-            return (query = mUtil.child(item, '.m-menu__link-text') ? query.innerHTML : '');
-        },
-
-        /**
-         * Trigger events
-         */
-        eventTrigger: function(name, args) {
-            for (var i = 0; i < the.events.length; i++ ) {
-                var event = the.events[i];
-                if ( event.name == name ) {
-                    if ( event.one == true ) {
-                        if ( event.fired == false ) {
-                            the.events[i].fired = true;
-                            event.handler.call(this, the, args);
-                        }
-                    } else {
-                        event.handler.call(this, the, args);
-                    }
-                }
-            }
-        },
-
-        addEvent: function(name, handler, one) {
-            the.events.push({
-                name: name,
-                handler: handler,
-                one: one,
-                fired: false
-            });
-        },
-
-        removeEvent: function(name) {
-            if (the.events[name]) {
-                delete the.events[name];
-            }
-        }
-    };
-
-    //////////////////////////
-    // ** Public Methods ** //
-    //////////////////////////
-
-    /**
-     * Set default options 
-     */
-
-    the.setDefaults = function(options) {
-        defaultOptions = options;
-    };
-
-    /**
-     * Set active menu item
-     */
-    the.scrollerUpdate = function() {
-        return Plugin.scrollerUpdate();
-    };
-
-    /**
-     * Set active menu item
-     */
-    the.scrollerTop = function() {
-        return Plugin.scrollerTop();
-    };
-
-    /**
-     * Set active menu item
-     */
-    the.setActiveItem = function(item) {
-        return Plugin.setActiveItem(item);
-    };
-
-    the.reload = function() {
-        return Plugin.reload();
-    };
-
-    the.update = function(options) {
-        return Plugin.update(options);
-    };
-
-    /**
-     * Set breadcrumb for menu item
-     */
-    the.getBreadcrumbs = function(item) {
-        return Plugin.getBreadcrumbs(item);
-    };
-
-    /**
-     * Set page title for menu item
-     */
-    the.getPageTitle = function(item) {
-        return Plugin.getPageTitle(item);
-    };
-
-    /**
-     * Get submenu mode
-     */
-    the.getSubmenuMode = function(el) {
-        return Plugin.getSubmenuMode(el);
-    };
-
-    /**
-     * Hide dropdown submenu
-     * @returns {jQuery}
-     */
-    the.hideDropdown = function(item) {
-        Plugin.hideSubmenuDropdown(item, true);
-    };
-
-    /**
-     * Disable menu for given time
-     * @returns {jQuery}
-     */
-    the.pauseDropdownHover = function(time) {
-        Plugin.pauseDropdownHover(time);
-    };
-
-    /**
-     * Disable menu for given time
-     * @returns {jQuery}
-     */
-    the.resumeDropdownHover = function() {
-        return Plugin.resumeDropdownHover();
-    };
-
-    /**
-     * Register event
-     */
-    the.on = function(name, handler) {
-        return Plugin.addEvent(name, handler);
-    };
-
-    the.off = function(name) {
-        return Plugin.removeEvent(name);
-    };
-
-    the.one = function(name, handler) {
-        return Plugin.addEvent(name, handler, true);
-    };
-
-    ///////////////////////////////
-    // ** Plugin Construction ** //
-    ///////////////////////////////
-
-    //== Run plugin
-    Plugin.construct.apply(the, [options]);
-
-    //== Handle plugin on window resize
-    mUtil.addResizeHandler(function() {
-        if (init) {
-            the.reload();
-        }  
-    });
-
-    //== Init done
-    init = true;
-
-    // Return plugin instance
-    return the;
-};
-
-// Plugin global lazy initialization
-document.addEventListener("click", function (e) {
-    var body = mUtil.get('body');
-    var query;
-    if ( query = body.querySelectorAll('.m-menu__nav .m-menu__item.m-menu__item--submenu.m-menu__item--hover:not(.m-menu__item--tabs)[m-menu-submenu-toggle="click"]') ) {
-        for (var i = 0, len = query.length; i < len; i++) {
-            var element = query[i].closest('.m-menu__nav').parentNode;
-
-            if ( element ) {
-                var the = mUtil.data(element).get('menu');
-
-                if ( !the ) {
-                    break;
-                }
-
-                if ( !the || the.getSubmenuMode() !== 'dropdown' ) {
-                    break;
-                }
-
-                if ( e.target !== element && element.contains(e.target) === false ) {
-                    var items;
-                    if ( items = element.querySelectorAll('.m-menu__item--submenu.m-menu__item--hover:not(.m-menu__item--tabs)[m-menu-submenu-toggle="click"]') ) {
-                        for (var j = 0, cnt = items.length; j < cnt; j++) {
-                            the.hideDropdown(items[j]);
-                        }
-                    }
-                }
-            }            
-        }
-    } 
-});
-var mOffcanvas = function(elementId, options) {
-    //== Main object
-    var the = this;
-    var init = false;
-
-    //== Get element object
-    var element = mUtil.get(elementId);
-    var body = mUtil.get('body');
-
-    if (!element) {
-        return;
-    }
-
-    //== Default options
-    var defaultOptions = {};
-
-    ////////////////////////////
-    // ** Private Methods  ** //
-    ////////////////////////////
-
-    var Plugin = {
-        /**
-         * Run plugin
-         * @returns {moffcanvas}
-         */
-        construct: function(options) {
-            if (mUtil.data(element).has('offcanvas')) {
-                the = mUtil.data(element).get('offcanvas');
-            } else {
-                // reset offcanvas
-                Plugin.init(options);
-                
-                // build offcanvas
-                Plugin.build();
-
-                mUtil.data(element).set('offcanvas', the);
-            }
-
-            return the;
-        },
-
-        /**
-         * Handles suboffcanvas click toggle
-         * @returns {moffcanvas}
-         */
-        init: function(options) {
-            the.events = [];
-
-            // merge default and user defined options
-            the.options = mUtil.deepExtend({}, defaultOptions, options);
-            the.overlay;
-
-            the.classBase = the.options.baseClass;
-            the.classShown = the.classBase + '--on';
-            the.classOverlay = the.classBase + '-overlay';
-
-            the.state = mUtil.hasClass(element, the.classShown) ? 'shown' : 'hidden';
-        },
-
-        build: function() {
-            //== offcanvas toggle
-            if (the.options.toggleBy) {
-                if (typeof the.options.toggleBy === 'string') { 
-                    mUtil.addEvent( the.options.toggleBy, 'click', Plugin.toggle); 
-                } else if (the.options.toggleBy && the.options.toggleBy[0] && the.options.toggleBy[0].target) {
-                    for (var i in the.options.toggleBy) { 
-                        mUtil.addEvent( the.options.toggleBy[i].target, 'click', Plugin.toggle); 
-                    }
-                } else if (the.options.toggleBy && the.options.toggleBy.target) {
-                    mUtil.addEvent( the.options.toggleBy.target, 'click', Plugin.toggle); 
-                } 
-            }
-
-            //== offcanvas close
-            var closeBy = mUtil.get(the.options.closeBy);
-            if (closeBy) {
-                mUtil.addEvent(closeBy, 'click', Plugin.hide);
-            }
-        },
-
-
-        /**
-         * Handles offcanvas toggle
-         */
-        toggle: function () {
-            Plugin.eventTrigger('toggle'); 
-
-            if (the.state == 'shown') {
-                Plugin.hide(this);
-            } else {
-                Plugin.show(this);
-            }
-        },
-
-        /**
-         * Handles offcanvas show
-         */
-        show: function(target) {
-            if (the.state == 'shown') {
-                return;
-            }
-
-            Plugin.eventTrigger('beforeShow');
-
-            Plugin.togglerClass(target, 'show');
-
-            //== Offcanvas panel
-            mUtil.addClass(body, the.classShown);
-            mUtil.addClass(element, the.classShown);
-
-            the.state = 'shown';
-
-            if (the.options.overlay) {
-                the.overlay = mUtil.insertAfter(document.createElement('DIV') , element );
-                mUtil.addClass(the.overlay, the.classOverlay);
-                mUtil.addEvent(the.overlay, 'click', function(e) {
-                    e.stopPropagation();
-                    e.preventDefault();
-                    Plugin.hide(target);       
-                });
-            }
-
-            Plugin.eventTrigger('afterShow');
-        },
-
-        /**
-         * Handles offcanvas hide
-         */
-        hide: function(target) {
-            if (the.state == 'hidden') {
-                return;
-            }
-
-            Plugin.eventTrigger('beforeHide');
-
-            Plugin.togglerClass(target, 'hide');
-
-            mUtil.removeClass(body, the.classShown);
-            mUtil.removeClass(element, the.classShown);
-
-            the.state = 'hidden';
-
-            if (the.options.overlay && the.overlay) {
-                mUtil.remove(the.overlay);
-            }
-
-            Plugin.eventTrigger('afterHide');
-        },
-
-        /**
-         * Handles toggler class
-         */
-        togglerClass: function(target, mode) {
-            //== Toggler
-            var id = mUtil.attr(target, 'id');
-            var toggleBy;
-
-            if (the.options.toggleBy && the.options.toggleBy[0] && the.options.toggleBy[0].target) {
-                for (var i in the.options.toggleBy) {
-                    if (the.options.toggleBy[i].target === id) {
-                        toggleBy = the.options.toggleBy[i];
-                    }        
-                }
-            } else if (the.options.toggleBy && the.options.toggleBy.target) {
-                toggleBy = the.options.toggleBy;
-            }
-
-            if (toggleBy) {                
-                var el = mUtil.get(toggleBy.target);
-                
-                if (mode === 'show') {
-                    mUtil.addClass(el, toggleBy.state);
-                }
-
-                if (mode === 'hide') {
-                    mUtil.removeClass(el, toggleBy.state);
-                }
-            }
-        },
-
-        /**
-         * Trigger events
-         */
-        eventTrigger: function(name, args) {
-            for (var i = 0; i < the.events.length; i++) {
-                var event = the.events[i];
-                if (event.name == name) {
-                    if (event.one == true) {
-                        if (event.fired == false) {
-                            the.events[i].fired = true;
-                            event.handler.call(this, the, args);
-                        }
-                    } else {
-                        event.handler.call(this, the, args);
-                    }
-                }
-            }
-        },
-
-        addEvent: function(name, handler, one) {
-            the.events.push({
-                name: name,
-                handler: handler,
-                one: one,
-                fired: false
-            });
-        }
-    };
-
-    //////////////////////////
-    // ** Public Methods ** //
-    //////////////////////////
-
-    /**
-     * Set default options 
-     */
-
-    the.setDefaults = function(options) {
-        defaultOptions = options;
-    };
-
-    /**
-     * Hide 
-     */
-    the.hide = function() {
-        return Plugin.hide();
-    };
-
-    /**
-     * Show 
-     */
-    the.show = function() {
-        return Plugin.show();
-    };
-
-    /**
-     * Get suboffcanvas mode
-     */
-    the.on = function(name, handler) {
-        return Plugin.addEvent(name, handler);
-    };
-
-    /**
-     * Set offcanvas content
-     * @returns {mOffcanvas}
-     */
-    the.one = function(name, handler) {
-        return Plugin.addEvent(name, handler, true);
-    };
-
-    ///////////////////////////////
-    // ** Plugin Construction ** //
-    ///////////////////////////////
-
-    //== Run plugin
-    Plugin.construct.apply(the, [options]);
-
-    //== Init done
-    init = true;
-
-    // Return plugin instance
-    return the;
-};
-// plugin setup
-var mPortlet = function(elementId, options) {
-    //== Main object
-    var the = this;
-    var init = false;
-
-    //== Get element object
-    var element = mUtil.get(elementId);
-    var body = mUtil.get('body');
-
-    if (!element) {
-        return;
-    }
-
-    //== Default options
-    var defaultOptions = {
-        bodyToggleSpeed: 400,
-        tooltips: true,
-        tools: {
-            toggle: {
-                collapse: 'Collapse',
-                expand: 'Expand'
-            },
-            reload: 'Reload',
-            remove: 'Remove',
-            fullscreen: {
-                on: 'Fullscreen',
-                off: 'Exit Fullscreen'
-            }
-        },
-        sticky: {
-            offset: 300,
-            zIndex: 98
-        }
-    };
-
-    ////////////////////////////
-    // ** Private Methods  ** //
-    ////////////////////////////
-
-    var Plugin = {
-        /**
-         * Construct
-         */
-
-        construct: function(options) {
-            if (mUtil.data(element).has('portlet')) {
-                the = mUtil.data(element).get('portlet');
-            } else {
-                // reset menu
-                Plugin.init(options);
-
-                // build menu
-                Plugin.build();
-
-                mUtil.data(element).set('portlet', the);
-            }
-
-            return the;
-        },
-
-        /**
-         * Init portlet
-         */
-        init: function(options) {
-            the.element = element;
-            the.events = [];
-
-            // merge default and user defined options
-            the.options = mUtil.deepExtend({}, defaultOptions, options);
-            the.head = mUtil.child(element, '.m-portlet__head');
-            the.foot = mUtil.child(element, '.m-portlet__foot');
-
-            if (mUtil.child(element, '.m-portlet__body')) {
-                the.body = mUtil.child(element, '.m-portlet__body');
-            } else if (mUtil.child(element, '.m-form').length !== 0) {
-                the.body = mUtil.child(element, '.m-form');
-            }
-        },
-
-        /**
-         * Build Form Wizard
-         */
-        build: function() {
-            //== Remove
-            var remove = mUtil.find(the.head, '[m-portlet-tool=remove]');
-            if (remove) {
-                mUtil.addEvent(remove, 'click', function(e) {
-                    e.preventDefault();
-                    Plugin.remove();
-                });
-            }
-
-            //== Reload
-            var reload = mUtil.find(the.head, '[m-portlet-tool=reload]');
-            if (reload) {
-                mUtil.addEvent(reload, 'click', function(e) {
-                    e.preventDefault();
-                    Plugin.reload();
-                });
-            }
-
-            //== Toggle
-            var toggle = mUtil.find(the.head, '[m-portlet-tool=toggle]');
-            if (toggle) {
-                mUtil.addEvent(toggle, 'click', function(e) {
-                    e.preventDefault();
-                    Plugin.toggle();
-                });
-            }
-
-            //== Fullscreen
-            var fullscreen = mUtil.find(the.head, '[m-portlet-tool=fullscreen]');
-            if (fullscreen) {
-                mUtil.addEvent(fullscreen, 'click', function(e) {
-                    e.preventDefault();
-                    Plugin.fullscreen();
-                });
-            }
-
-            Plugin.setupTooltips();
-        },
-
-        /**
-         * Window scroll handle event for sticky portlet
-         */
-        onScrollSticky: function() {
-            var st = window.pageYOffset;
-            var offset = the.options.sticky.offset;
-
-
-            if (st > offset) {
-                if (mUtil.hasClass(body, 'm-portlet--sticky') === false) {
-                    Plugin.eventTrigger('stickyOn');
-
-                    mUtil.addClass(body, 'm-portlet--sticky');
-                    mUtil.addClass(element, 'm-portlet--sticky');
-
-                    Plugin.updateSticky();
-                }
-            } else { // back scroll mode
-                if (mUtil.hasClass(body, 'm-portlet--sticky')) {
-                    Plugin.eventTrigger('stickyOff');
-
-                    mUtil.removeClass(body, 'm-portlet--sticky');
-                    mUtil.removeClass(element, 'm-portlet--sticky');
-
-                    Plugin.resetSticky();
-                }
-            }
-        },
-
-        /**
-         * Init sticky portlet
-         */
-        initSticky: function() {
-            if (!the.head) {
-                return;
-            }
-
-            window.addEventListener('scroll', Plugin.onScrollSticky);
-        },
-
-        /**
-         * Update sticky portlet positions
-         */
-        updateSticky: function() {
-            if (!the.head) {
-                return;
-            }
-
-            var top;
-
-            if (mUtil.hasClass(body, 'm-portlet--sticky')) {
-                if (the.options.sticky.position.top instanceof Function) {
-                    top = parseInt(the.options.sticky.position.top.call());
-                } else {
-                    top = parseInt(the.options.sticky.position.top);
-                }
-
-                var left;
-                if (the.options.sticky.position.left instanceof Function) {
-                    left = parseInt(the.options.sticky.position.left.call());
-                } else {
-                    left = parseInt(the.options.sticky.position.left);
-                }
-
-                var right;
-                if (the.options.sticky.position.right instanceof Function) {
-                    right = parseInt(the.options.sticky.position.right.call());
-                } else {
-                    right = parseInt(the.options.sticky.position.right);
-                }
-
-                mUtil.css(the.head, 'z-index', the.options.sticky.zIndex);
-                mUtil.css(the.head, 'top', top + 'px');
-
-                if (mUtil.isRTL()) {
-                    mUtil.css(the.head, 'left', right + 'px');
-                    mUtil.css(the.head, 'right',left  + 'px');
-                } else {
-                    mUtil.css(the.head, 'left', left + 'px');
-                    mUtil.css(the.head, 'right', right + 'px');
-                }
-                
-            }
-        },
-
-        /**
-         * Reset sticky portlet positions
-         */
-        resetSticky: function() {
-            if (!the.head) {
-                return;
-            }
-
-            if (mUtil.hasClass(body, 'm-portlet--sticky') === false) {
-                mUtil.css(the.head, 'z-index', '');
-                mUtil.css(the.head, 'top', '');
-                mUtil.css(the.head, 'left', '');
-                mUtil.css(the.head, 'right', '');
-            }
-        },
-
-        /**
-         * Destroy sticky portlet
-         */
-        destroySticky: function() {
-            if (!the.head) {
-                return;
-            }
-
-            Plugin.resetSticky();
-
-            window.removeEventListener('scroll', Plugin.onScrollSticky);
-        },
-
-        /**
-         * Remove portlet
-         */
-        remove: function() {
-            if (Plugin.eventTrigger('beforeRemove') === false) {
-                return;
-            }
-
-            if (mUtil.hasClass(body, 'm-portlet--fullscreen') && mUtil.hasClass(element, 'm-portlet--fullscreen')) {
-                Plugin.fullscreen('off');
-            }
-
-            Plugin.removeTooltips();
-
-            mUtil.remove(element);
-
-            Plugin.eventTrigger('afterRemove');
-        },
-
-        /**
-         * Set content
-         */
-        setContent: function(html) {
-            if (html) {
-                the.body.innerHTML = html;
-            }
-        },
-
-        /**
-         * Get body
-         */
-        getBody: function() {
-            return the.body;
-        },
-
-        /**
-         * Get self
-         */
-        getSelf: function() {
-            return element;
-        },
-
-        /**
-         * Setup tooltips
-         */
-        setupTooltips: function() {
-            if (the.options.tooltips) {
-                var collapsed = mUtil.hasClass(element, 'm-portlet--collapse') || mUtil.hasClass(element, 'm-portlet--collapsed');
-                var fullscreenOn = mUtil.hasClass(body, 'm-portlet--fullscreen') && mUtil.hasClass(element, 'm-portlet--fullscreen');
-
-                //== Remove
-                var remove = mUtil.find(the.head, '[m-portlet-tool=remove]');
-                if (remove) {
-                    var placement = (fullscreenOn ? 'bottom' : 'top');
-                    var tip = new Tooltip(remove, {
-                        title: the.options.tools.remove,
-                        placement: placement,
-                        offset: (fullscreenOn ? '0,10px,0,0' : '0,5px'),
-                        trigger: 'hover',
-                        template: '<div class="m-tooltip m-tooltip--portlet tooltip bs-tooltip-' + placement + '" role="tooltip">\
-                            <div class="tooltip-arrow arrow"></div>\
-                            <div class="tooltip-inner"></div>\
-                        </div>'
-                    });
-
-                    mUtil.data(remove).set('tooltip', tip);
-                }
-
-                //== Reload
-                var reload = mUtil.find(the.head, '[m-portlet-tool=reload]');
-                if (reload) {
-                    var placement = (fullscreenOn ? 'bottom' : 'top');
-                    var tip = new Tooltip(reload, {
-                        title: the.options.tools.reload,
-                        placement: placement,
-                        offset: (fullscreenOn ? '0,10px,0,0' : '0,5px'),
-                        trigger: 'hover',
-                        template: '<div class="m-tooltip m-tooltip--portlet tooltip bs-tooltip-' + placement + '" role="tooltip">\
-                            <div class="tooltip-arrow arrow"></div>\
-                            <div class="tooltip-inner"></div>\
-                        </div>'
-                    });
-
-                    mUtil.data(reload).set('tooltip', tip);
-                }
-
-                //== Toggle
-                var toggle = mUtil.find(the.head, '[m-portlet-tool=toggle]');
-                if (toggle) {
-                    var placement = (fullscreenOn ? 'bottom' : 'top');
-                    var tip = new Tooltip(toggle, {
-                        title: (collapsed ? the.options.tools.toggle.expand : the.options.tools.toggle.collapse),
-                        placement: placement,
-                        offset: (fullscreenOn ? '0,10px,0,0' : '0,5px'),
-                        trigger: 'hover',
-                        template: '<div class="m-tooltip m-tooltip--portlet tooltip bs-tooltip-' + placement + '" role="tooltip">\
-                            <div class="tooltip-arrow arrow"></div>\
-                            <div class="tooltip-inner"></div>\
-                        </div>'
-                    });
-
-                    mUtil.data(toggle).set('tooltip', tip);
-                }
-
-                //== Fullscreen
-                var fullscreen = mUtil.find(the.head, '[m-portlet-tool=fullscreen]');
-                if (fullscreen) {
-                    var placement = (fullscreenOn ? 'bottom' : 'top');
-                    var tip = new Tooltip(fullscreen, {
-                        title: (fullscreenOn ? the.options.tools.fullscreen.off : the.options.tools.fullscreen.on),
-                        placement: placement,
-                        offset: (fullscreenOn ? '0,10px,0,0' : '0,5px'),
-                        trigger: 'hover',
-                        template: '<div class="m-tooltip m-tooltip--portlet tooltip bs-tooltip-' + placement + '" role="tooltip">\
-                            <div class="tooltip-arrow arrow"></div>\
-                            <div class="tooltip-inner"></div>\
-                        </div>'
-                    });
-
-                    mUtil.data(fullscreen).set('tooltip', tip);
-                }
-            }
-        },
-
-        /**
-         * Setup tooltips
-         */
-        removeTooltips: function() {
-            if (the.options.tooltips) {
-                //== Remove
-                var remove = mUtil.find(the.head, '[m-portlet-tool=remove]');
-                if (remove && mUtil.data(remove).has('tooltip')) {
-                    mUtil.data(remove).get('tooltip').dispose();
-                }
-
-                //== Reload
-                var reload = mUtil.find(the.head, '[m-portlet-tool=reload]');
-                if (reload && mUtil.data(reload).has('tooltip')) {
-                    mUtil.data(reload).get('tooltip').dispose();
-                }
-
-                //== Toggle
-                var toggle = mUtil.find(the.head, '[m-portlet-tool=toggle]');
-                if (toggle && mUtil.data(toggle).has('tooltip')) {
-                    mUtil.data(toggle).get('tooltip').dispose();
-                }
-
-                //== Fullscreen
-                var fullscreen = mUtil.find(the.head, '[m-portlet-tool=fullscreen]');
-                if (fullscreen && mUtil.data(fullscreen).has('tooltip')) {
-                    mUtil.data(fullscreen).get('tooltip').dispose();
-                }
-            }
-        },
-
-        /**
-         * Reload
-         */
-        reload: function() {
-            Plugin.eventTrigger('reload');
-        },
-
-        /**
-         * Toggle
-         */
-        toggle: function() {
-            if (mUtil.hasClass(element, 'm-portlet--collapse') || mUtil.hasClass(element, 'm-portlet--collapsed')) {
-                Plugin.expand();
-            } else {
-                Plugin.collapse();
-            }
-        },
-
-        /**
-         * Collapse
-         */
-        collapse: function() {
-            if (Plugin.eventTrigger('beforeCollapse') === false) {
-                return;
-            }
-
-            mUtil.slideUp(the.body, the.options.bodyToggleSpeed, function() {
-                Plugin.eventTrigger('afterCollapse');
-            });
-
-            mUtil.addClass(element, 'm-portlet--collapse');
-
-            var toggle = mUtil.find(the.head, '[m-portlet-tool=toggle]');
-            if (toggle && mUtil.data(toggle).has('tooltip')) {
-                // mUtil.data(toggle).get('tooltip').updateTitleContent(the.options.tools.toggle.expand);
-            }
-        },
-
-        /**
-         * Expand
-         */
-        expand: function() {
-            if (Plugin.eventTrigger('beforeExpand') === false) {
-                return;
-            }
-
-            mUtil.slideDown(the.body, the.options.bodyToggleSpeed, function() {
-                Plugin.eventTrigger('afterExpand');
-            });
-
-            mUtil.removeClass(element, 'm-portlet--collapse');
-            mUtil.removeClass(element, 'm-portlet--collapsed');
-
-            var toggle = mUtil.find(the.head, '[m-portlet-tool=toggle]');
-            if (toggle && mUtil.data(toggle).has('tooltip')) {
-                // mUtil.data(toggle).get('tooltip').updateTitleContent(the.options.tools.toggle.collapse);
-            }
-        },
-
-        /**
-         * Toggle
-         */
-        fullscreen: function(mode) {
-            var d = {};
-            var speed = 300;
-
-            if (mode === 'off' || (mUtil.hasClass(body, 'm-portlet--fullscreen') && mUtil.hasClass(element, 'm-portlet--fullscreen'))) {
-                Plugin.eventTrigger('beforeFullscreenOff');
-
-                mUtil.removeClass(body, 'm-portlet--fullscreen');
-                mUtil.removeClass(element, 'm-portlet--fullscreen');
-
-                Plugin.removeTooltips();
-                Plugin.setupTooltips();
-
-                if (the.foot) {
-                    mUtil.css(the.body, 'margin-bottom', '');
-                    mUtil.css(the.foot, 'margin-top', '');
-                }
-
-                Plugin.eventTrigger('afterFullscreenOff');
-            } else {
-                Plugin.eventTrigger('beforeFullscreenOn');
-
-                mUtil.addClass(element, 'm-portlet--fullscreen');
-                mUtil.addClass(body, 'm-portlet--fullscreen');
-
-                Plugin.removeTooltips();
-                Plugin.setupTooltips();
-
-
-                if (the.foot) {
-                    var height1 = parseInt(mUtil.css(the.foot, 'height'));
-                    var height2 = parseInt(mUtil.css(the.foot, 'height')) + parseInt(mUtil.css(the.head, 'height'));
-                    mUtil.css(the.body, 'margin-bottom', height1 + 'px');
-                    mUtil.css(the.foot, 'margin-top', '-' + height2 + 'px');
-                }
-
-                Plugin.eventTrigger('afterFullscreenOn');
-            }
-        },
-
-        /**
-         * Trigger events
-         */
-        eventTrigger: function(name) {
-            //mUtil.triggerCustomEvent(name);
-            for (i = 0; i < the.events.length; i++) {
-                var event = the.events[i];
-                if (event.name == name) {
-                    if (event.one == true) {
-                        if (event.fired == false) {
-                            the.events[i].fired = true;
-                            event.handler.call(this, the);
-                        }
-                    } else {
-                        event.handler.call(this, the);
-                    }
-                }
-            }
-        },
-
-        addEvent: function(name, handler, one) {
-            the.events.push({
-                name: name,
-                handler: handler,
-                one: one,
-                fired: false
-            });
-
-            return the;
-        }
-    };
-
-    //////////////////////////
-    // ** Public Methods ** //
-    //////////////////////////
-
-    /**
-     * Set default options 
-     */
-
-    the.setDefaults = function(options) {
-        defaultOptions = options;
-    };
-
-    /**
-     * Remove portlet
-     * @returns {mPortlet}
-     */
-    the.remove = function() {
-        return Plugin.remove(html);
-    };
-
-    /**
-     * Init sticky portlet
-     * @returns {mPortlet}
-     */
-    the.initSticky = function() {
-        return Plugin.initSticky();
-    };
-
-    /**
-     * Update sticky portlet scroll event
-     * @returns {mPortlet}
-     */
-    the.updateSticky = function() {
-        return Plugin.updateSticky();
-    };
-
-    /**
-     * Reset sticky portlet positions
-     * @returns {mPortlet}
-     */
-    the.resetSticky = function() {
-        return Plugin.resetSticky();
-    };
-
-    /**
-     * Destroy sticky portlet scroll event
-     * @returns {mPortlet}
-     */
-    the.destroySticky = function() {
-        return Plugin.destroySticky();
-    };
-
-    /**
-     * Reload portlet
-     * @returns {mPortlet}
-     */
-    the.reload = function() {
-        return Plugin.reload();
-    };
-
-    /**
-     * Set portlet content
-     * @returns {mPortlet}
-     */
-    the.setContent = function(html) {
-        return Plugin.setContent(html);
-    };
-
-    /**
-     * Toggle portlet
-     * @returns {mPortlet}
-     */
-    the.toggle = function() {
-        return Plugin.toggle();
-    };
-
-    /**
-     * Collapse portlet
-     * @returns {mPortlet}
-     */
-    the.collapse = function() {
-        return Plugin.collapse();
-    };
-
-    /**
-     * Expand portlet
-     * @returns {mPortlet}
-     */
-    the.expand = function() {
-        return Plugin.expand();
-    };
-
-    /**
-     * Fullscreen portlet
-     * @returns {mPortlet}
-     */
-    the.fullscreen = function() {
-        return Plugin.fullscreen('on');
-    };
-
-    /**
-     * Fullscreen portlet
-     * @returns {mPortlet}
-     */
-    the.unFullscreen = function() {
-        return Plugin.fullscreen('off');
-    };
-
-    /**
-     * Get portletbody 
-     * @returns {jQuery}
-     */
-    the.getBody = function() {
-        return Plugin.getBody();
-    };
-
-    /**
-     * Get portletbody 
-     * @returns {jQuery}
-     */
-    the.getSelf = function() {
-        return Plugin.getSelf();
-    };
-
-    /**
-     * Attach event
-     */
-    the.on = function(name, handler) {
-        return Plugin.addEvent(name, handler);
-    };
-
-    /**
-     * Attach event that will be fired once
-     */
-    the.one = function(name, handler) {
-        return Plugin.addEvent(name, handler, true);
-    };
-
-    //== Construct plugin
-    Plugin.construct.apply(the, [options]);
-
-    return the;
-};
 // plugin setup
 var mQuicksearch = function(elementId, options) {
     //== Main object
@@ -5146,466 +2357,25 @@ var mQuicksearch = function(elementId, options) {
 
     return the;
 };
-var mScrollTop = function(elementId, options) {
-    //== Main object
-    var the = this;
-    var init = false;
-
-    //== Get element object
-    var element = mUtil.get(elementId);
-    var body = mUtil.get('body');
-
-    if (!element) {
-        return;
-    }
-
-    //== Default options
-    var defaultOptions = {
-        offset: 300,
-        speed: 600
-    };
-
-    ////////////////////////////
-    // ** Private Methods  ** //
-    ////////////////////////////
-
-    var Plugin = {
-        /**
-         * Run plugin
-         * @returns {mscrolltop}
-         */
-        construct: function(options) {
-            if (mUtil.data(element).has('scrolltop')) {
-                the = mUtil.data(element).get('scrolltop');
-            } else {
-                // reset scrolltop
-                Plugin.init(options);
-
-                // build scrolltop
-                Plugin.build();
-
-                mUtil.data(element).set('scrolltop', the);
-            }
-
-            return the;
-        },
-
-        /**
-         * Handles subscrolltop click toggle
-         * @returns {mscrolltop}
-         */
-        init: function(options) {
-            the.events = [];
-
-            // merge default and user defined options
-            the.options = mUtil.deepExtend({}, defaultOptions, options);
-        },
-
-        build: function() {
-            // handle window scroll
-            if (navigator.userAgent.match(/iPhone|iPad|iPod/i)) {
-                window.addEventListener('touchend', function() {
-                    Plugin.handle();
-                });
-
-                window.addEventListener('touchcancel', function() {
-                    Plugin.handle();
-                });
-
-                window.addEventListener('touchleave', function() {
-                    Plugin.handle();
-                });
-            } else {
-                window.addEventListener('scroll', function() { 
-                    Plugin.handle();
-                });
-            }
-
-            // handle button click 
-            mUtil.addEvent(element, 'click', Plugin.scroll);
-        },
-
-        /**
-         * Handles scrolltop click scrollTop
-         */
-        handle: function() {
-            var pos = window.pageYOffset; // current vertical position
-            if (pos > the.options.offset) {
-                mUtil.addClass(body, 'm-scroll-top--shown');
-            } else {
-                mUtil.removeClass(body, 'm-scroll-top--shown');
-            }
-        },
-
-        /**
-         * Handles scrolltop click scrollTop
-         */
-        scroll: function(e) {
-            e.preventDefault();
-
-            mUtil.scrollTop(0, the.options.speed);
-        },
-
-
-        /**
-         * Trigger events
-         */
-        eventTrigger: function(name, args) {
-            for (var i = 0; i < the.events.length; i++) {
-                var event = the.events[i];
-                if (event.name == name) {
-                    if (event.one == true) {
-                        if (event.fired == false) {
-                            the.events[i].fired = true;
-                            event.handler.call(this, the, args);
-                        }
-                    } else {
-                        event.handler.call(this, the, args);
-                    }
-                }
-            }
-        },
-
-        addEvent: function(name, handler, one) {
-            the.events.push({
-                name: name,
-                handler: handler,
-                one: one,
-                fired: false
-            });
-        }
-    };
-
-    //////////////////////////
-    // ** Public Methods ** //
-    //////////////////////////
-
-    /**
-     * Set default options 
-     */
-
-    the.setDefaults = function(options) {
-        defaultOptions = options;
-    };
-
-    /**
-     * Get subscrolltop mode
-     */
-    the.on = function(name, handler) {
-        return Plugin.addEvent(name, handler);
-    };
-
-    /**
-     * Set scrolltop content
-     * @returns {mscrolltop}
-     */
-    the.one = function(name, handler) {
-        return Plugin.addEvent(name, handler, true);
-    };
-
-    ///////////////////////////////
-    // ** Plugin Construction ** //
-    ///////////////////////////////
-
-    //== Run plugin
-    Plugin.construct.apply(the, [options]);
-
-    //== Init done
-    init = true;
-
-    // Return plugin instance
-    return the;
-};
-// plugin setup
-var mToggle = function(elementId, options) {
-    //== Main object
-    var the = this;
-    var init = false;
-
-    //== Get element object
-    var element = mUtil.get(elementId);
-    var body = mUtil.get('body');  
-
-    if (!element) {
-        return;
-    }
-
-    //== Default options
-    var defaultOptions = {
-        togglerState: '',
-        targetState: ''
-    };    
-
-    ////////////////////////////
-    // ** Private Methods  ** //
-    ////////////////////////////
-
-    var Plugin = {
-        /**
-         * Construct
-         */
-
-        construct: function(options) {
-            if (mUtil.data(element).has('toggle')) {
-                the = mUtil.data(element).get('toggle');
-            } else {
-                // reset menu
-                Plugin.init(options);
-
-                // build menu
-                Plugin.build();
-
-                mUtil.data(element).set('toggle', the);
-            }
-
-            return the;
-        },
-
-        /**
-         * Handles subtoggle click toggle
-         */
-        init: function(options) {
-            the.element = element;
-            the.events = [];
-
-            // merge default and user defined options
-            the.options = mUtil.deepExtend({}, defaultOptions, options);
-
-            the.target = mUtil.get(the.options.target);
-            the.targetState = the.options.targetState;
-            the.togglerState = the.options.togglerState;
-
-            the.state = mUtil.hasClasses(the.target, the.targetState) ? 'on' : 'off';
-        },
-
-        /**
-         * Setup toggle
-         */
-        build: function() {
-            mUtil.addEvent(element, 'mouseup', Plugin.toggle);
-        },
-        
-        /**
-         * Handles offcanvas click toggle
-         */
-        toggle: function() {
-            Plugin.eventTrigger('beforeToggle');
-            
-            if (the.state == 'off') {
-                Plugin.toggleOn();
-            } else {
-                Plugin.toggleOff();
-            }
-
-            return the;
-        },
-
-        /**
-         * Handles toggle click toggle
-         */
-        toggleOn: function() {
-            Plugin.eventTrigger('beforeOn');
-
-            mUtil.addClass(the.target, the.targetState);
-
-            if (the.togglerState) {
-                mUtil.addClass(element, the.togglerState);
-            }
-
-            the.state = 'on';
-
-            Plugin.eventTrigger('afterOn');
-
-            Plugin.eventTrigger('toggle');
-
-            return the;
-        },
-
-        /**
-         * Handles toggle click toggle
-         */
-        toggleOff: function() {
-            Plugin.eventTrigger('beforeOff');
-
-            mUtil.removeClass(the.target, the.targetState);
-
-            if (the.togglerState) {
-                mUtil.removeClass(element, the.togglerState);
-            }
-
-            the.state = 'off';
-
-            Plugin.eventTrigger('afterOff');
-
-            Plugin.eventTrigger('toggle');
-
-            return the;
-        },
-
-        /**
-         * Trigger events
-         */
-        eventTrigger: function(name) {
-            for (i = 0; i < the.events.length; i++) {
-                var event = the.events[i];
-
-                if (event.name == name) {
-                    if (event.one == true) {
-                        if (event.fired == false) {
-                            the.events[i].fired = true;                            
-                            event.handler.call(this, the);
-                        }
-                    } else {
-                        event.handler.call(this, the);
-                    }
-                }
-            }
-        },
-
-        addEvent: function(name, handler, one) {
-            the.events.push({
-                name: name,
-                handler: handler,
-                one: one,
-                fired: false
-            });
-
-            return the;
-        }
-    };
-
-    //////////////////////////
-    // ** Public Methods ** //
-    //////////////////////////
-
-    /**
-     * Set default options 
-     */
-
-    the.setDefaults = function(options) {
-        defaultOptions = options;
-    };
-
-    /**
-     * Get toggle state 
-     */
-    the.getState = function() {
-        return the.state;
-    };
-
-    /**
-     * Toggle 
-     */
-    the.toggle = function() {
-        return Plugin.toggle();
-    };
-
-    /**
-     * Toggle on 
-     */
-    the.toggleOn = function() {
-        return Plugin.toggleOn();
-    };
-
-    /**
-     * Toggle off 
-     */
-    the.toggle = function() {
-        return Plugin.toggleOff();
-    };
-
-    /**
-     * Attach event
-     * @returns {mToggle}
-     */
-    the.on = function(name, handler) {
-        return Plugin.addEvent(name, handler);
-    };
-
-    /**
-     * Attach event that will be fired once
-     * @returns {mToggle}
-     */
-    the.one = function(name, handler) {
-        return Plugin.addEvent(name, handler, true);
-    };
-
-    //== Construct plugin
-    Plugin.construct.apply(the, [options]);
-
-    return the;
-};
 var mLayout = function() {
-    var header;
-    var horMenu;
     var asideMenu;
     var asideMenuOffcanvas;
     var horMenuOffcanvas;
     var asideLeftToggle;
-    var asideLeftHide;
-    var scrollTop;
     var quicksearch;
     var mainPortlet;
 
-    //== Header
-    var initStickyHeader = function() {
-        var tmp;
-        var headerEl = mUtil.get('m_header');
-        var options = {
-            offset: {},
-            minimize:{}       
-        };
-
-        if (mUtil.attr(headerEl, 'm-minimize-mobile') == 'hide') {
-            options.minimize.mobile = {};
-            options.minimize.mobile.on = 'm-header--hide';
-            options.minimize.mobile.off = 'm-header--show';
-        } else {
-            options.minimize.mobile = false;
-        }
-
-        if (mUtil.attr(headerEl, 'm-minimize') == 'hide') {
-            options.minimize.desktop = {};
-            options.minimize.desktop.on = 'm-header--hide';
-            options.minimize.desktop.off = 'm-header--show';
-        } else {
-            options.minimize.desktop = false;
-        }
-
-        if (tmp = mUtil.attr(headerEl, 'm-minimize-offset')) {
-            options.offset.desktop = tmp;
-        }
-
-        if (tmp = mUtil.attr(headerEl, 'm-minimize-mobile-offset')) {
-            options.offset.mobile = tmp;
-        }        
-
-        header = new mHeader('m_header', options);
-    };
-
     //== Hor menu
-    var initHorMenu = function() { 
-        // init aside left offcanvas
-        horMenuOffcanvas = new mOffcanvas('m_header_menu', {
-            overlay: true,
-            baseClass: 'm-aside-header-menu-mobile',
-            closeBy: 'm_aside_header_menu_mobile_close_btn',
-            toggleBy: {
-                target: 'm_aside_header_menu_mobile_toggle',
-                state: 'm-brand__toggler--active'
-            }            
-        });
-        
-        horMenu = new mMenu('m_header_menu', {
-            submenu: {
-                desktop: 'dropdown',
-                tablet: 'accordion',
-                mobile: 'accordion'
-            },
-            accordion: {   
-                slideSpeed: 200,  // accordion toggle slide speed in milliseconds
-                expandAll: false   // allow having multiple expanded accordions in the menu
+    var initHorMenu = function() {
+        $(document).on('click', '.m-aside-menu .m-menu__item.m-menu__item--submenu', function (e) {
+            if ($(this).hasClass('m-menu__item--open')) {
+                $(this).removeClass('m-menu__item--open');
+                $(this).find('.m-menu__submenu').fadeOut();
+            } else {
+                $(this).addClass('m-menu__item--open');
+                $(this).find('>.m-menu__submenu').fadeIn();
             }
+            e.stopPropagation();
         });
     };
 
@@ -5625,32 +2395,6 @@ var mLayout = function() {
                 }
             };
         }
-
-        asideMenu = new mMenu('m_ver_menu', {
-            // vertical scroll
-            scroll: scroll,
-
-            // submenu setup
-            submenu: {
-                desktop: {
-                    // by default the menu mode set to accordion in desktop mode
-                    default: menuDesktopMode,
-                    // whenever body has this class switch the menu mode to dropdown
-                    state: {
-                        body: 'm-aside-left--minimize',  
-                        mode: 'dropdown'
-                    }
-                },
-                tablet: 'accordion', // menu set to accordion in tablet mode
-                mobile: 'accordion'  // menu set to accordion in mobile mode
-            },
-
-            //accordion setup
-            accordion: {
-                autoScroll: false, // enable auto scrolling(focus) to the clicked menu item
-                expandAll: false   // allow having multiple expanded accordions in the menu
-            }            
-        });
     };
 
     //== Aside
@@ -5658,17 +2402,6 @@ var mLayout = function() {
         // init aside left offcanvas
         var body = mUtil.get('body');
         var asideLeft = mUtil.get('m_aside_left');
-        var asideOffcanvasClass = mUtil.hasClass(asideLeft, 'm-aside-left--offcanvas-default') ? 'm-aside-left--offcanvas-default' : 'm-aside-left';
-
-        asideMenuOffcanvas = new mOffcanvas('m_aside_left', {
-            baseClass: asideOffcanvasClass,
-            overlay: true,
-            closeBy: 'm_aside_left_close_btn',
-            toggleBy: {
-                target: 'm_aside_left_offcanvas_toggle',
-                state: 'm-brand__toggler--active'                
-            }            
-        });     
 
         //== Handle minimzied aside hover
         if (mUtil.hasClass(body, 'm-aside-left--fixed')) {
@@ -5679,7 +2412,7 @@ var mLayout = function() {
                 if (outsideTm) {
                     clearTimeout(outsideTm);
                     outsideTm = null;
-                }                    
+                }
 
                 insideTm = setTimeout(function() {
                     if (mUtil.hasClass(body, 'm-aside-left--minimize') && mUtil.isInResponsiveRange('desktop')) {
@@ -5696,7 +2429,7 @@ var mLayout = function() {
                     clearTimeout(insideTm);
                     insideTm = null;
                 }
-                    
+
                 outsideTm = setTimeout(function() {
                     if (mUtil.hasClass(body, 'm-aside-left--minimize-hover') && mUtil.isInResponsiveRange('desktop')) {
                         mUtil.removeClass(body, 'm-aside-left--minimize-hover');
@@ -5705,67 +2438,54 @@ var mLayout = function() {
                         asideMenu.scrollerTop();
                     }
                 }, 500);
-            }); 
-        } 
+            });
+        }
     };
 
     //== Sidebar toggle
     var initLeftAsideToggle = function() {
-        if ($('#m_aside_left_minimize_toggle').length === 0 ) {
-            return;
-        }
-
-        asideLeftToggle = new mToggle('m_aside_left_minimize_toggle', {
-            target: 'body',
-            targetState: 'm-brand--minimize m-aside-left--minimize',
-            togglerState: 'm-brand__toggler--active'
-        });
-
-        asideLeftToggle.on('toggle', function(toggle) {
-            if (mUtil.get('main_portlet')) {
-                mainPortlet.updateSticky();
+        $(document).on('click', '#m_aside_left_hide_toggle', function () {
+            if ($('body').hasClass('m-aside-left--hide') && !mUtil.isMobileDevice()) {
+                $(this).removeClass('m-brand__toggler--active');
+                $('body').removeClass('m-aside-left--hide');
+            } else {
+                $(this).addClass('m-brand__toggler--active');
+                $('body').addClass('m-aside-left--hide');
             }
+        });
+        $(document).on('click', '#m_aside_left_offcanvas_toggle', function () {
+            if ($('body').hasClass('m-aside-left--on')) {
+                $(this).removeClass('m-brand__toggler--active');
+                $('body').removeClass('m-aside-left--on');
+                $('#m_aside_left').css({'right': '-300px'});
+            } else {
+                $(this).addClass('m-brand__toggler--active');
+                $('body').addClass('m-aside-left--on');
+                $('#m_aside_left').css({'right': '0'});
+            }
+        });
+        $(document).click(function(event) {
+            var $target = $(event.target);
 
-            horMenu.pauseDropdownHover(800);
-            asideMenu.pauseDropdownHover(800);
-
-            //== Remember state in cookie
-            // Cookies.set('sidebar_toggle_state', toggle.getState());
-            // to set default minimized left aside use this cookie value in your 
-            // server side code and add "m-brand--minimize m-aside-left--minimize" classes to 
-            // the body tag in order to initialize the minimized left aside mode during page loading.
+            if($target.closest('#m_aside_left').length === 0 && $target[0].id !== 'm_aside_left_offcanvas_toggle' && mUtil.isMobileDevice()) {
+                $(this).removeClass('m-brand__toggler--active');
+                $('body').removeClass('m-aside-left--on');
+                $('#m_aside_left').css({'right': '-300px'});
+            }
         });
     };
 
     //== Sidebar hide
     var initLeftAsideHide = function() {
-        if ($('#m_aside_left_hide_toggle').length === 0 ) {
-            return;
-        }
-
-        initLeftAsideHide = new mToggle('m_aside_left_hide_toggle', {
-            target: 'body',
-            targetState: 'm-aside-left--hide',
-            togglerState: 'm-brand__toggler--active'
-        });
-
-        initLeftAsideHide.on('toggle', function(toggle) {
-            horMenu.pauseDropdownHover(800);
-            asideMenu.pauseDropdownHover(800);
-
-            //== Remember state in cookie
-            // Cookies.set('sidebar_hide_state', toggle.getState());
-            // to set default minimized left aside use this cookie value in your 
-            // server side code and add "m-brand--minimize m-aside-left--minimize" classes to 
-            // the body tag in order to initialize the minimized left aside mode during page loading.
-        });
+        $(this).addClass('m-brand__toggler--active');
+        $('body').removeClass('m-aside-left--on');
     };
 
     //== Topbar
     var initTopbar = function() {
         $('#m_aside_header_topbar_mobile_toggle').click(function() {
             $('body').toggleClass('m-topbar--on');
-        });           
+        });
     };
 
     //== Quicksearch
@@ -5777,43 +2497,179 @@ var mLayout = function() {
         quicksearch = new mQuicksearch('m_quicksearch', {
             mode: mUtil.attr( 'm_quicksearch', 'm-quicksearch-mode' ), // quick search type
             minLength: 1
-        });    
-
-        //<div class="m-search-results m-search-results--skin-light"><span class="m-search-result__message">Something went wrong</div></div>
+        });
 
         quicksearch.on('search', function(the) {
-            the.showResult = function(res) {
+            if ($('#m_quicksearch_input').val().trim().length < 3) {
+                showDataOnQuickSearchResultPannel('');
+                return false;
+            }
+            showDataOnQuickSearchResultPannel('کمی صبر کنید ...');
+            the.showProgress();
 
-                the.dropdown.setContent(res);
-                Plugin.showDropdown();
-
-                return the;
-            };
-
-            the.showProgress();  
-                      
             $.ajax({
-                url: '/c',
-                data: {q: the.query, contentOnly:1},
+                url: '/c?q=' + $('#m_quicksearch_input').val(),
+                data: {},
                 dataType: 'json',
                 success: function(res) {
                     the.hideProgress();
-                    the.showResult(res);                     
+                    the.showResult(res);
+
+                    showResultForQuickSearch(res);
                 },
                 error: function(res) {
                     the.hideProgress();
-                    the.showError('ارتباط با سرور برقرار نشد، لطفا بعدا امتحان کنید.');
+                    the.showError('مشکلی پیش آمده است. لطفا بعدا امتحان کنید.');
                 }
             });
-        });  
+        });
+
+        $(document).on('click', '#m_quicksearch_close', function () {
+            showDataOnQuickSearchResultPannel('');
+        });
     };
+
+    function showDataOnQuickSearchResultPannel(html) {
+        $('.a-quick-search .m-dropdown__content').html('');
+        $('.a-quick-search .m-dropdown__content').append('<dvi class="a-dropdown__search-result">'+html+'</dvi>');
+    }
+
+    function showResultForQuickSearch(res) {
+        var maxRecordOfEachCategory = 3;
+        var article = res.result.article;
+        var pamphlet = res.result.pamphlet;
+        var product = res.result.product;
+        var set = res.result.set;
+        var video = res.result.video;
+
+        var html = '';
+
+        html += gteQuickSearchResultCategory('article', 'مقالات', article, maxRecordOfEachCategory);
+        html += gteQuickSearchResultCategory('pamphlet', 'جزوات', pamphlet, maxRecordOfEachCategory);
+        html += gteQuickSearchResultCategory('product', 'محصولات', product, maxRecordOfEachCategory);
+        html += gteQuickSearchResultCategory('set', 'دسته ها', set, maxRecordOfEachCategory);
+        html += gteQuickSearchResultCategory('video', 'ویدیوها', video, maxRecordOfEachCategory);
+        showDataOnQuickSearchResultPannel(html);
+    }
+
+    function getQuickSearchResultItem(data) {
+        return '    <!--begin::Widget 14 Item-->\n' +
+            '    <div class="m-widget4__item">\n' +
+            '        <div class="m-widget4__img m-widget4__img--pic">\n' +
+            '            <img src="'+data.photo+'" alt="">\n' +
+            '        </div>\n' +
+            '        <div class="m-widget4__info">\n' +
+            '            <span class="m-widget4__title">\n' +
+            '                '+data.title+'\n' +
+            '            </span>' +
+            '            <br>\n' +
+            '            <span class="m-widget4__sub">\n' +
+            '                '+data.subtitle+'\n' +
+            '            </span>\n' +
+            '        </div>\n' +
+            '        <div class="m-widget4__ext">\n' +
+            '            <a href="'+data.link+'" class="m-btn m-btn--pill m-btn--hover-brand btn btn-sm btn-secondary">مشاهده</a>\n' +
+            '        </div>\n' +
+            '    </div>\n' +
+            '    <!--end::Widget 14 Item-->\n';
+    }
+
+    function gteQuickSearchResultCategory(categoryType, categoryName, data, maxRecordOfCategory) {
+        var html = '';
+        if (data !== null && data.total > 0) {
+            html += '<div class="kt-quick-search__category">'+categoryName+'</div>';
+            html += '<div class="m-widget4">';
+            for (var index in data.data) {
+                if(isNaN(index)) {
+                    continue;
+                }
+                if(index > maxRecordOfCategory) {
+                    break;
+                }
+                var dataItem = data.data[index];
+                var inputData = getInputDataForQuickSearchShowResult(categoryType, dataItem);
+                html += getQuickSearchResultItem(inputData);
+            }
+            html += '</div>';
+        }
+        return html;
+    }
+
+    function getInputDataForQuickSearchShowResult(categoryType, data) {
+        if (categoryType === 'video') {
+            return {
+                title: data.author.full_name,
+                subtitle: data.name,
+                photo: data.thumbnail,
+                link: data.url,
+            };
+        } else if (categoryType === 'set') {
+            return {
+                title: data.shortName,
+                subtitle: data.name,
+                photo: data.photo,
+                link: data.url,
+            };
+        } else if (categoryType === 'product') {
+            return {
+                title: data.name,
+                subtitle: '',
+                photo: data.photo,
+                link: data.url,
+            };
+        } else if (categoryType === 'pamphlet') {
+            return {
+                title: data.author.full_name,
+                subtitle: data.name,
+                photo: data.thumbnail,
+                link: data.url,
+            };
+        } else if (categoryType === 'article') {
+            return {
+                title: data.author.full_name,
+                subtitle: data.name,
+                photo: data.thumbnail,
+                link: data.url,
+            };
+        }
+    }
 
     //== Scrolltop
     var initScrollTop = function() {
-        var scrollTop = new mScrollTop('m_scroll_top', {
-            offset: 300,
-            speed: 600
+
+        var handleShownTopScroll = function() {
+            if (window.pageYOffset > window.screen.height) {
+                $('body').addClass('m-scroll-top--shown');
+            } else {
+                $('body').removeClass('m-scroll-top--shown');
+            }
+        };
+
+        $(document).on('click', '#m_scroll_top', function () {
+            $([document.documentElement, document.body]).animate({
+                scrollTop: $('body').offset().top
+            }, 300);
         });
+
+
+        // handle window scroll
+        if (navigator.userAgent.match(/iPhone|iPad|iPod/i)) {
+            window.addEventListener('touchend', function() {
+                handleShownTopScroll();
+            });
+
+            window.addEventListener('touchcancel', function() {
+                handleShownTopScroll();
+            });
+
+            window.addEventListener('touchleave', function() {
+                handleShownTopScroll();
+            });
+        } else {
+            window.addEventListener('scroll', function() {
+                handleShownTopScroll();
+            });
+        }
     };
 
     //== Main portlet(sticky portlet)
@@ -5849,22 +2705,16 @@ var mLayout = function() {
     };
 
     return {
-        init: function() {  
+
+        init: function() {
             this.initHeader();
             this.initAside();
-            this.initMainPortlet();
         },
+
         initMainPortlet: function() {
             if (!mUtil.get('main_portlet')) {
                 return;
             }
-
-            mainPortlet = createMainPortlet();
-            mainPortlet.initSticky();
-
-            mUtil.addResizeHandler(function(){
-                mainPortlet.updateSticky();
-            });
         },
 
         resetMainPortlet: function() {
@@ -5874,7 +2724,6 @@ var mLayout = function() {
         },
 
         initHeader: function() {
-            initStickyHeader();
             initHorMenu();
             initTopbar();
             initQuicksearch();
@@ -5883,22 +2732,9 @@ var mLayout = function() {
 
         initAside: function() {
             initLeftAside();
-            initLeftAsideMenu();            
+            initLeftAsideMenu();
             initLeftAsideToggle();
             initLeftAsideHide();
-
-            this.onLeftSidebarToggle(function(e) {
-                //== Update sticky portlet
-                if (mainPortlet) {
-                    mainPortlet.updateSticky();
-                }
-
-                var datatables = $('.m-datatable');
-
-                $(datatables).each(function() {
-                    $(this).mDatatable('redraw');
-                });
-            });
         },
 
         getAsideMenu: function() {
@@ -5908,7 +2744,7 @@ var mLayout = function() {
         onLeftSidebarToggle: function(handler) {
             if (asideLeftToggle) {
                 asideLeftToggle.on('toggle', handler);
-            }            
+            }
         },
 
         closeMobileAsideMenuOffcanvas: function() {
@@ -5926,7 +2762,5 @@ var mLayout = function() {
 }();
 
 $(document).ready(function() {
-    if (mUtil.isAngularVersion() === false) {
-        mLayout.init();
-    }
+    mLayout.init();
 });

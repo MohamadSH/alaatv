@@ -46,28 +46,27 @@ class Mix {
     static getBaseJs() {
         return [
             'node_modules/intersection-observer/intersection-observer.js',
-            'node_modules/lozad/dist/lozad.js',
+            'node_modules/lozad/dist/lozad.js', // 9 KB
 
-            'public/assets/vendors/base/vendors.bundle.js',
-            'public/assets/demo/demo12/base/scripts.bundle.js',
+            'public/assets/vendors/base/vendors.bundle.js',// 173 KB
+            'public/assets/demo/demo12/base/scripts.bundle.js',// 205 KB
 
             'node_modules/toastr/build/toastr.min.js',
             'node_modules/block-ui/jquery.blockUI.js',
-            'node_modules/persianjs/persian.min.js',
+            'node_modules/persianjs/persian.min.js',// 223 KB
 
-            'node_modules/firebase/firebase-app.js',
-            'node_modules/firebase/firebase-messaging.js',
-            'public/acm/AlaatvCustomFiles/js/GoogleFirebase.js',
+            // 'node_modules/firebase/firebase-app.js',
+            // 'node_modules/firebase/firebase-messaging.js',
+            // 'public/acm/AlaatvCustomFiles/js/GoogleFirebase.js',// 290 KB
 
 
-            'public/acm/AlaatvCustomFiles/js/mLayout.js',// quick search (ajax) in header
             'public/acm/AlaatvCustomFiles/components/MegaMenu/script.js',
-            'public/acm/AlaatvCustomFiles/components/AjaxLogin/script.js',
+            'public/acm/AlaatvCustomFiles/components/AjaxLogin/script.js',// 297 KB
             'public/acm/AlaatvCustomFiles/js/GlobalJsVar.js',
             'public/acm/AlaatvCustomFiles/js/Cookie.js',
             'public/acm/AlaatvCustomFiles/js/GoogleAnalyticsEnhancedEcommerce.js',
-            'public/acm/AlaatvCustomFiles/js/lazyLoad.js',
-            'public/acm/AlaatvCustomFiles/js/app.js'
+            'public/acm/AlaatvCustomFiles/js/lazyLoad.js',// 302 KB
+            'public/acm/AlaatvCustomFiles/js/app.js'// 306 KB
         ];
     }
 
@@ -791,6 +790,7 @@ class Mix {
                 'node_modules/select2/dist/js/select2.full.js',
                 'node_modules/icheck/icheck.js',
 
+                'public/acm/AlaatvCustomFiles/components/portlet/portlet.js',
                 'public/acm/AlaatvCustomFiles/components/alaa_old/plugins/datatables/datatables.min.js',
                 'public/acm/AlaatvCustomFiles/components/alaa_old/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
                 'public/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js',

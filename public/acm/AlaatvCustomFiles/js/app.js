@@ -252,7 +252,7 @@ var AppGlobalInit = function() {
 
 jQuery(document).ready( function() {
     AppGlobalInit.init({
-        LazyLoad: LazyLoad,
-        Firebase: Firebase
+        LazyLoad: (typeof LazyLoad !== 'undefined') ? LazyLoad : null,
+        Firebase: (typeof Firebase !== 'undefined') ? Firebase : null
     });
 });
