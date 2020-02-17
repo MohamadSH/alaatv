@@ -84,6 +84,7 @@ class RecommendedItemsGeneratorForContent
         $recommendedProducts = json_encode($recommendedProducts);
         $totalProducts       = json_decode($recommendedProducts);
         shuffle($totalProducts);
+        $totalProducts = array_slice($totalProducts, 0, self::NUMBER_OF_RECOMMENDED_PRODUCTS);
 
         $totalProductsCount = count($totalProducts);
         if ($totalProductsCount < self::NUMBER_OF_RECOMMENDED_PRODUCTS) {
