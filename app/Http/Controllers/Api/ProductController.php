@@ -77,7 +77,7 @@ class ProductController extends Controller
     public function showV2(Request $request, Product $product)
     {
         if (!is_null($product->redirectUrl)) {
-            return redirect(convertRedirectUrlToApiVersion($product->redirectUrl),
+            return redirect(convertRedirectUrlToApiVersion($product->redirectUrl, '2'),
                 Response::HTTP_FOUND, $request->headers->all());
         }
 

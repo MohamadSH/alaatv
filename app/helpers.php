@@ -111,10 +111,10 @@ if (!function_exists('alaaSetting')) {
 }
 
 if (!function_exists('convertRedirectUrlToApiVersion')) {
-    function convertRedirectUrlToApiVersion($url)
+    function convertRedirectUrlToApiVersion(string $url, string $apiVersion = '1')
     {
         $url = parse_url($url);
 
-        return url('/api/v1' . $url['path']);
+        return url('/api/v' . $apiVersion . $url['path']);
     }
 }
