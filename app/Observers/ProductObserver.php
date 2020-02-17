@@ -3,10 +3,12 @@
 namespace App\Observers;
 
 use App\Classes\Search\TaggingInterface;
+use App\Contentset;
 use App\Product;
 use App\Traits\APIRequestCommon;
 use App\Traits\TaggableTrait;
 use Illuminate\Support\Facades\Cache;
+use stdClass;
 
 class ProductObserver
 {
@@ -117,9 +119,11 @@ class ProductObserver
 
         $this->sendTagsOfTaggableToApi($product, $this->tagging);
 
-        $this->setRelatedContentsTags($product, isset(optional($product->sample_contents)->tags) ? optional($product->sample_contents)->tags : [], Product::SAMPLE_CONTENTS_BUCKET);
-        $this->setRelatedContentsTags($product, isset(optional($product->recommender_contents)->tags) ? optional($product->recommender_contents)->tags : [], Product::RECOMMENDER_CONTENTS_BUCKET);
-//        $this->setRecommenderSetsTags($product, isset(optional($product->recommender_sets)->tags) ? optional($product->recommender_sets)->tags : [], Product::RECOMMENDER_CONTENTS_BUCKET);
+        $introducerContents = optional($product->sample_contents)->tags;
+        $this->setRelatedContentsTags($product, isset($introducerContents) ? $introducerContents : [], Product::SAMPLE_CONTENTS_BUCKET);
+
+        $recommenderItems = optional($product->recommender_contents)->recommenders;
+        $this->setRecommenderContentsTags($product, isset($recommenderItems) ? $recommenderItems : [], Product::RECOMMENDER_CONTENTS_BUCKET);
 
         Cache::tags([
             'product_' . $product->id,
@@ -147,11 +151,21 @@ class ProductObserver
         return true;
     }
 
-    private function setRecommenderSetsTags(Product $product, array $setIds, string $bucket): bool
+    private function setRecommenderContentsTags(Product $product, stdClass $recommenders, string $bucket): bool
     {
         $itemTagsArray = [];
+        $contentIds    = $recommenders->contents;
+        $setIds        = $recommenders->sets;
+
+        $itemTagsArray = array_merge($itemTagsArray, $contentIds);
+
         foreach ($setIds as $id) {
-            $itemTagsArray[] = 'Contentset-' . $id;
+            $set = Contentset::Find($id);
+            if (!isset($set)) {
+                continue;
+            }
+
+            $itemTagsArray = array_merge($itemTagsArray, $set->contents->pluck('id')->toArray());
         }
 
         $params = [
