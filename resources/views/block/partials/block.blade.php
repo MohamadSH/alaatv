@@ -113,21 +113,25 @@
                                 @foreach($block->sets as $setsKey=>$set)
                                     @include('block.partials.set')
                                 @endforeach
-                            @elseif((isset($blockType) && $blockType === 'productSampleVideo') &&
-                                  (
-                                  (!is_null($block->getActiveContent()) && $block->getActiveContent()->count() > 0 && !is_null($block->sets->first()))
-                                  ||
-                                  (optional(optional(optional($block->sets)->first())->getActiveContents2())->count() > 0)
-                                  ) )
-                                @foreach($block->sets->first()->getActiveContents2() as $contentKey=>$content)
-                                    @include('block.partials.content')
-                                @endforeach
+                            @elseif((isset($blockType) && $blockType === 'productSampleVideo'))
+                                @if(!is_null($block->sets->first()) && optional(optional(optional($block->sets)->first())->getActiveContents2())->count() > 0)
+                                    @foreach($block->sets->first()->getActiveContents2() as $contentKey=>$content)
+                                        @include('block.partials.content')
+                                    @endforeach
+                                @endif
+
+                                @if( !is_null($block->getActiveContent()) && $block->getActiveContent()->count() > 0)
+                                    @foreach($block->getActiveContent() as $contentKey=>$content)
+                                        @include('block.partials.content')
+                                    @endforeach
+                                @endif
                             @endif
 
                             @if(strlen(trim($block->url))>0 && isset($btnLoadMore) && $btnLoadMore)
                                 <div class="item carousel a--block-item a--block-item-showMoreItem w-44333211">
                                     <a href="{{ $block->url }}">
-                                        <button type="button" class="btn m-btn--air btn-outline-accent m-btn m-btn--custom m-btn--outline-2x">
+                                        <button type="button"
+                                                class="btn m-btn--air btn-outline-accent m-btn m-btn--custom m-btn--outline-2x">
                                             نمایش بیشتر از
                                             @if(isset($blockTitle))
                                                 {{ $blockTitle }}
