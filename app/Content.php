@@ -109,36 +109,37 @@ use Stevebauman\Purify\Facades\Purify;
  * @property-read Contentset|null                                        $set
  * @method static Builder|Content whereContentsetId($value)
  * @method static Builder|Content whereSlug($value)
- * @property mixed                                                       $page_view
+ * @property mixed             $page_view
  * @method static Builder|Content wherePageView($value)
  * @method static Builder|Content newModelQuery()
  * @method static Builder|Content newQuery()
  * @method static Builder|Content query()
- * @property-read mixed                                                  $author_name
- * @property-read mixed                                                  $url
+ * @property-read mixed        $author_name
+ * @property-read mixed        $url
  * @method static Builder|BaseModel disableCache()
  * @method static Builder|BaseModel withCacheCooldownSeconds($seconds)
- * @property-read mixed                                                  $api_url
- * @property mixed                                                       next_content
- * @property mixed                                                       previous_content
- * @property-read mixed                                                  $next_api_url
- * @property-read mixed                                                  $next_url
- * @property-read mixed                                                  $previous_api_url
- * @property-read mixed                                                  $previous_url
- * @property-read mixed                                                  $cache_cooldown_seconds
- * @property-read int|null                                               $contentsets_count
- * @property-read int|null                                               $favorite_by_count
- * @property-read int|null                                               $files_count
- * @property-read mixed                                                  $edit_link
- * @property-read Collection                                             $file_for_admin
- * @property-read mixed                                                  $remove_link
- * @property-read int|null                                               $grades_count
- * @property-read int|null                                               $majors_count
- * @property mixed                                                       redirectUrl
- * @property mixed                                                       section_id
- * @property mixed                                                       section
- * @property mixed                                                       tmp_description
- * @property mixed                                                       authorName
+ * @property-read mixed        $api_url
+ * @property mixed             next_content
+ * @property mixed             previous_content
+ * @property-read mixed        $next_api_url
+ * @property-read mixed        $next_url
+ * @property-read mixed        $previous_api_url
+ * @property-read mixed        $previous_url
+ * @property-read mixed        $cache_cooldown_seconds
+ * @property-read int|null     $contentsets_count
+ * @property-read int|null     $favorite_by_count
+ * @property-read int|null     $files_count
+ * @property-read mixed        $edit_link
+ * @property-read Collection   $file_for_admin
+ * @property-read mixed        $remove_link
+ * @property-read int|null     $grades_count
+ * @property-read int|null     $majors_count
+ * @property mixed             redirectUrl
+ * @property mixed             section_id
+ * @property mixed             section
+ * @property mixed             tmp_description
+ * @property mixed             authorName
+ * @property ProductCollection recommended_products
  * @method static Builder|Content free()
  * @method static Builder|Content type($type)
  */
@@ -1469,29 +1470,18 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
      */
     public function getRecommendedProductsAttribute(): ProductCollection
     {
-        // Another approach has been used for recommended items in content page
-        // This method currently is not being used
-
         $content                  = $this;
         $key                      = 'content:recommendedProduct:' . $content->cacheKey();
         $recommendedProductSearch = new RecommendedProductSearch ();
         return Cache::tags(['content', 'recommendedProduct', 'content_' . $content->id, 'content_' . $content->id . '_recommendedProduct'])
             ->remember($key, config('constants.CACHE_600'), function () use ($content, $recommendedProductSearch) {
+                $filters = [
+                    'tags' => [$content->id],
+                ];
+
+                $result   = $recommendedProductSearch->get($filters);
                 $products = new ProductCollection();
-
-                $filters       = [
-                    'tags' => ['Content-' . $content->id],
-                ];
-                $contentResult = $recommendedProductSearch->get($filters);
-                foreach ($contentResult as $product) {
-                    $products->push($product);
-                }
-
-                $filters   = [
-                    'tags' => ['Contentset-' . $content->contentset_id],
-                ];
-                $setResult = $recommendedProductSearch->get($filters);
-                foreach ($setResult as $product) {
+                foreach ($result as $product) {
                     $products->push($product);
                 }
 
