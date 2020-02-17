@@ -114,13 +114,13 @@
                                     @include('block.partials.set')
                                 @endforeach
                             @elseif((isset($blockType) && $blockType === 'productSampleVideo'))
-                                @if(!is_null($block->sets->first()) && optional(optional(optional($block->sets)->first())->getActiveContents2())->count() > 0)
+                                @if(!is_null(optional(optional($block)->sets)->first()) && $block->sets->first()->getActiveContents2()->count() > 0)
                                     @foreach($block->sets->first()->getActiveContents2() as $contentKey=>$content)
                                         @include('block.partials.content')
                                     @endforeach
                                 @endif
 
-                                @if( !is_null($block->getActiveContent()) && $block->getActiveContent()->count() > 0)
+                                @if( !is_null(optional($block)->getActiveContent()) && $block->getActiveContent()->count() > 0)
                                     @foreach($block->getActiveContent() as $contentKey=>$content)
                                         @include('block.partials.content')
                                     @endforeach
