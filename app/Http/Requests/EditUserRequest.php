@@ -39,7 +39,7 @@ class EditUserRequest extends FormRequest
         $authenticatedUser = $request->user();
         $userId            = $this->getUserIdFromRequestBody($request)->getValue(false);
 
-        if (!in_array($this->request->get('updateType'), [self::USER_UPDATE_TYPE_TOTAL, self::USER_UPDATE_TYPE_PROFILE, self::USER_UPDATE_TYPE_ATLOGIN, self::USER_UPDATE_TYPE_PASSWORD, self::USER_UPDATE_TYPE_PASSWORD])) {
+        if (!in_array($this->request->get('updateType'), [self::USER_UPDATE_TYPE_TOTAL, self::USER_UPDATE_TYPE_PROFILE, self::USER_UPDATE_TYPE_ATLOGIN, self::USER_UPDATE_TYPE_PASSWORD, self::USER_UPDATE_TYPE_PHOTO])) {
             return false;
         }
 
