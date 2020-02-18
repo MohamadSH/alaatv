@@ -65,7 +65,8 @@ class AuthorTagCommand extends Command
     {
         $userContents = $user->contents;
         if (count($userContents) == 0) {
-            $this->error("user " . $user->full_name . " has no content.");
+            $this->error("user " . $user->id . ' : ' . $user->full_name . " has no content.");
+            $this->info("\n");
         } else {
             $this->sendTagsOfTaggableToApi($user, $this->tagging);
         }
@@ -73,13 +74,17 @@ class AuthorTagCommand extends Command
 
     private function performTaggingTaskForAllAuthors(): void
     {
-        $users = User::getTeachers();
-        $bar   = $this->output->createProgressBar($users->count());
-        foreach ($users as $user) {
-            $this->performTaggingTaskForAnAuthor($user);
-            $bar->advance();
+        $users         = User::getTeachers();
+        $teachersCount = $users->count();
+        if ($this->confirm("$teachersCount teachers found. Do you wish to continue?", true)) {
+            $bar = $this->output->createProgressBar($teachersCount);
+            foreach ($users as $user) {
+                $this->performTaggingTaskForAnAuthor($user);
+                $bar->advance();
+            }
+            $bar->finish();
         }
-        $bar->finish();
-        $this->info("");
+
+        $this->info("DONE");
     }
 }
