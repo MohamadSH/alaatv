@@ -26,7 +26,6 @@ class Mix {
             'public/acm/AlaatvCustomFiles/components/loading/loading.css',// 488 KB
 
             'public/acm/AlaatvCustomFiles/css/customStyle.css',
-            'public/acm/AlaatvCustomFiles/css/customStyle/fontSize.css',
             'public/acm/AlaatvCustomFiles/css/customStyle/m-accordion.css',
             'public/acm/AlaatvCustomFiles/css/customStyle/header-menu.css',
             'public/acm/AlaatvCustomFiles/css/customStyle/productPrice.css',
@@ -56,10 +55,11 @@ class Mix {
             'node_modules/block-ui/jquery.blockUI.js',
             'node_modules/persianjs/persian.min.js',// 223 KB
 
-            // 'node_modules/firebase/firebase-app.js',
-            // 'node_modules/firebase/firebase-messaging.js',
-            // 'public/acm/AlaatvCustomFiles/js/GoogleFirebase.js',// 290 KB
+            'node_modules/firebase/firebase-app.js',
+            'node_modules/firebase/firebase-messaging.js',
+            'public/acm/AlaatvCustomFiles/js/GoogleFirebase.js',// 290 KB
 
+            'public/acm/AlaatvCustomFiles/js/AlaaAdBanner.js',
             'public/acm/AlaatvCustomFiles/components/MegaMenu/script.js',
             'public/acm/AlaatvCustomFiles/components/AjaxLogin/script.js',// 297 KB
             'public/acm/AlaatvCustomFiles/js/GlobalJsVar.js',

@@ -1,8 +1,5 @@
 var AppGlobalInit = function() {
 
-    var LazyLoad,
-        Firebase;
-
     function ajaxSetup() {
         $(function () {
             /**
@@ -114,18 +111,13 @@ var AppGlobalInit = function() {
         $('#AlaaAppModal').modal('show');
     }
 
-    function initData(data) {
-        LazyLoad = (typeof data.LazyLoad !== 'undefined') ? data.LazyLoad : null;
-        Firebase = (typeof data.Firebase !== 'undefined') ? data.Firebase : null;
-    }
-
     function initLazyLoad() {
-        if (LazyLoad === null) {
+        if (!isDefined('LazyLoad')) {
             return;
         }
-        window.imageObserver = LazyLoad.image();
-        window.gtmEecProductObserver = LazyLoad.gtmEecProduct();
-        window.gtmEecAdvertisementObserver = LazyLoad.gtmEecAdvertisement();
+        window.imageObserver = window.LazyLoad.image();
+        window.gtmEecProductObserver = window.LazyLoad.gtmEecProduct();
+        window.gtmEecAdvertisementObserver = window.LazyLoad.gtmEecAdvertisement();
     }
 
     function addGtmEecEvents() {
@@ -166,13 +158,16 @@ var AppGlobalInit = function() {
     }
 
     function addLoginBeforeClickEvent() {
+        if (!isDefined('GlobalJsVar')) {
+            return;
+        }
         $(document).on('click', '.LoginBeforeClick', function () {
-            var userId = GlobalJsVar.userId(),
+            var userId = window.GlobalJsVar.userId(),
                 link = $(this).attr('data-href');
             if (userId.length > 0) {
                 window.location.href = link;
             } else {
-                AjaxLogin.showLogin(GlobalJsVar.loginActionUrl(), link);
+                AjaxLogin.showLogin(window.GlobalJsVar.loginActionUrl(), link);
             }
         });
     }
@@ -184,14 +179,18 @@ var AppGlobalInit = function() {
     }
 
     function initFirebase() {
-        var fc = GlobalJsVar.getVar('firebaseConfig');
-        fc = JSON.parse(fc);
-
-        if (Firebase === null || typeof fc.firebaseConfig === 'undefined' || fc.firebaseConfig === null || fc.firebaseConfig === '') {
+        if (!isDefined('Firebase') || !isDefined('GlobalJsVar')) {
             return;
         }
 
-        window.FirebaseObject = Firebase.init({
+        var fc = window.GlobalJsVar.getVar('firebaseConfig');
+        fc = JSON.parse(fc);
+
+        if (typeof fc.firebaseConfig === 'undefined' || fc.firebaseConfig === null || fc.firebaseConfig === '') {
+            return;
+        }
+
+        window.FirebaseObject = window.Firebase.init({
             firebaseConfig: fc.firebaseConfig,
             VapidKey: fc.VapidKey,
             ConsoleReport: fc.ConsoleReport,
@@ -221,9 +220,12 @@ var AppGlobalInit = function() {
     }
 
     function initGoogleTagManager() {
+        if (!isDefined('GlobalJsVar')) {
+            return;
+        }
         window.dataLayer = window.dataLayer || [];
-        var userIpDimensionValue = GlobalJsVar.userIp();
-        var userIdDimensionValue = GlobalJsVar.userId();
+        var userIpDimensionValue = window.GlobalJsVar.userIp();
+        var userIdDimensionValue = window.GlobalJsVar.userId();
         dataLayer.push({
             'userIp': userIpDimensionValue,
             'dimension2': userIpDimensionValue,
@@ -232,14 +234,25 @@ var AppGlobalInit = function() {
         });
     }
 
-    function init(data) {
+    function initAlaaAdBanner() {
+        if (!isDefined('AlaaAdBanner') || !isDefined('GlobalJsVar')) {
+            return;
+        }
+        window.AlaaAdBanner.promote(JSON.parse(window.GlobalJsVar.getVar('AlaaAdBanner')));
+    }
+
+    function isDefined(object) {
+        return (typeof window[object] !== 'undefined' && window[object] !== null)
+    }
+
+    function init() {
         ajaxSetup();
-        initData(data);
         initLazyLoad();
         addEvents();
         initFirebase();
         initGoogleTagManager();
         initFlash();
+        initAlaaAdBanner();
     }
 
     return {
@@ -248,8 +261,5 @@ var AppGlobalInit = function() {
 }();
 
 jQuery(document).ready( function() {
-    AppGlobalInit.init({
-        LazyLoad: (typeof LazyLoad !== 'undefined') ? LazyLoad : null,
-        Firebase: (typeof Firebase !== 'undefined') ? Firebase : null
-    });
+    AppGlobalInit.init();
 });
