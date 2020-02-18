@@ -21,19 +21,19 @@ class TotalTree
             [
                 'id'       => '6321',
                 'text'     => 'ریاضی و فیزیک',
-                'tags'     => json_encode(['ریاضی_و_فیزیک'], JSON_UNESCAPED_UNICODE),
+                'tags'     => ['ریاضی_و_فیزیک'],
                 'children' => $Riazi->getLernitoStyle(),
             ],
             [
                 'id'       => '11552',
                 'text'     => 'علوم تجربی',
-                'tags'     => json_encode(['علوم_تجربی'], JSON_UNESCAPED_UNICODE),
+                'tags'     => ['علوم_تجربی'],
                 'children' => $Tajrobi->getLernitoStyle(),
             ],
             [
                 'id'       => '15896',
                 'text'     => 'علوم انسانی',
-                'tags'     => json_encode(['علوم_انسانی'], JSON_UNESCAPED_UNICODE),
+                'tags'     => ['علوم_انسانی'],
                 'children' => $Ensani->getLernitoStyle(),
             ],
         ];
@@ -111,7 +111,7 @@ class TotalTree
                 'alaaNode' => [
                     'id'   => '6321',
                     'text' => 'ریاضی و فیزیک',
-                    'tags' => json_encode(['ریاضی_و_فیزیک'], JSON_UNESCAPED_UNICODE),
+                    'tags' => ['ریاضی_و_فیزیک'],
                 ],
             ],
             'tajrobiUpdate' => [
@@ -119,7 +119,7 @@ class TotalTree
                 'alaaNode' => [
                     'id'   => '11552',
                     'text' => 'علوم تجربی',
-                    'tags' => json_encode(['علوم_تجربی'], JSON_UNESCAPED_UNICODE),
+                    'tags' => ['علوم_تجربی'],
                 ],
             ],
             'ensaniUpdate'  => [
@@ -127,7 +127,7 @@ class TotalTree
                 'alaaNode' => [
                     'id'   => '15896',
                     'text' => 'علوم انسانی',
-                    'tags' => json_encode(['علوم_انسانی'], JSON_UNESCAPED_UNICODE),
+                    'tags' => ['علوم_انسانی'],
                 ],
             ],
         ];
@@ -172,8 +172,7 @@ class TotalTree
         $lernitoNodeChildren['id']        = time() . '-' . $lernitoNodeChildren['_id'];
         $lernitoNodeChildren['orginalId'] = $lernitoNodeChildren['_id'];
         $lernitoNodeChildren['name']      = $lernitoNodeChildren['label'];
-        $lernitoNodeChildren['tags']      = json_encode([str_replace(' ', '_', $lernitoNodeChildren['label'])],
-            JSON_UNESCAPED_UNICODE);
+        $lernitoNodeChildren['tags']      = [str_replace(' ', '_', $lernitoNodeChildren['label'])];
         unset($lernitoNodeChildren['_id']);
         unset($lernitoNodeChildren['label']);
         if (isset($lernitoNodeChildren['children'])) {
@@ -378,7 +377,7 @@ class TotalTree
                     <div class='objectBody'>
                         <div>'id' => '$nodeId',</div>
                         <div>'name' => '" . $alaaNode['name'] . "',</div>
-                        <div>'tags' => json_encode(['" . str_replace(' ', '_', $alaaNode['name']) . "'], JSON_UNESCAPED_UNICODE),</div>
+                        <div>'tags' => ['" . str_replace(' ', '_', $alaaNode['name']) . "'],</div>
                         <div>'children' => " . $this->convertAlaaNodeArrayToStringFormat((isset($alaaNode['children'])) ? $alaaNode['children'] : [],
                     $nodeId) . "</div>
                     </div>";
@@ -396,8 +395,7 @@ class TotalTree
                             <div class='objectBody'>
                                 <div>'id' => '$nodeId',</div>
                                 <div>'name' => '" . $value['name'] . "',</div>
-                                <div>'tags' => " . json_encode([str_replace(' ', '_', $value['name'])],
-                        JSON_UNESCAPED_UNICODE) . ",</div>
+                                <div>'tags' => " . [str_replace(' ', '_', $value['name'])] . ",</div>
                                 <div>'children' => " . $this->convertAlaaNodeArrayToStringFormat((isset($value['children'])) ? $value['children'] : [],
                         $nodeId) . "</div>
                             </div>";
@@ -419,6 +417,6 @@ class TotalTree
     {
         $ignoredIdsArray   = $this->getIgnoredUpdateItems();
         $ignoredIdsArray[] = $iuid;
-        Storage::put($this->ignoredUpdateItemPath, json_encode($ignoredIdsArray));
+        Storage::put($this->ignoredUpdateItemPath, $ignoredIdsArray);
     }
 }
