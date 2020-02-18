@@ -23,6 +23,7 @@ class Mix {
 
             'public/acm/AlaatvCustomFiles/components/AjaxLogin/style.css',
             'public/acm/AlaatvCustomFiles/components/MegaMenu/style.css',
+            'public/acm/AlaatvCustomFiles/components/Alist/type2/style.css',// 488 KB
             'public/acm/AlaatvCustomFiles/components/loading/loading.css',// 488 KB
 
             'public/acm/AlaatvCustomFiles/css/customStyle.css',
@@ -59,14 +60,17 @@ class Mix {
             'node_modules/firebase/firebase-messaging.js',
             'public/acm/AlaatvCustomFiles/js/GoogleFirebase.js',// 290 KB
 
-            'public/acm/AlaatvCustomFiles/js/AlaaAdBanner.js',
-            'public/acm/AlaatvCustomFiles/components/MegaMenu/script.js',
+            'public/acm/AlaatvCustomFiles/components/Alist/type2/script.js',
             'public/acm/AlaatvCustomFiles/components/AjaxLogin/script.js',// 297 KB
+            'public/acm/AlaatvCustomFiles/components/MegaMenu/script.js',
+
+            'public/acm/AlaatvCustomFiles/js/AlaaAdBanner.js',
             'public/acm/AlaatvCustomFiles/js/GlobalJsVar.js',
             'public/acm/AlaatvCustomFiles/js/Cookie.js',
             'public/acm/AlaatvCustomFiles/js/GoogleAnalyticsEnhancedEcommerce.js',
             'public/acm/AlaatvCustomFiles/js/lazyLoad.js',// 302 KB
-            'public/acm/AlaatvCustomFiles/js/app.js'// 306 KB
+            'public/acm/AlaatvCustomFiles/js/QuickSearch.js',
+            'public/acm/AlaatvCustomFiles/js/app.js'
         ];
     }
 
@@ -97,13 +101,13 @@ class Mix {
         this.compileScss();
         this.mixBase();
         this.mixPages();
-        this.mixUser();
-        this.mixLanding();
-        this.mixProduct();
-        this.mixPageContentShow();
-        this.mixPageSetShow();
-        this.mixCheckout();
-        this.mixAdmin();
+        // this.mixUser();
+        // this.mixLanding();
+        // this.mixProduct();
+        // this.mixPageContentShow();
+        // this.mixPageSetShow();
+        // this.mixCheckout();
+        // this.mixAdmin();
         this.mixCopyDirectory();
 
         if (this.appEnv === 'production') {
@@ -382,15 +386,15 @@ class Mix {
         );
     }
     mixPages() {
-        this.mixPageFaq();
-        this.mixPageLive();
-        this.mixPageShop();
-        this.mixPageError();
-        this.mixAuthLogin();
-        this.mixPageDonate();
-        this.mixVoucherLogin();
+        // this.mixPageFaq();
+        // this.mixPageLive();
+        // this.mixPageShop();
+        // this.mixPageError();
+        // this.mixAuthLogin();
+        // this.mixPageDonate();
+        // this.mixVoucherLogin();
         this.mixPageHomePage();
-        this.mixPageContactUs();
+        // this.mixPageContactUs();
         this.mixPageContentSearch();
     }
 
@@ -402,7 +406,6 @@ class Mix {
             'public/css/user-orders.css',
             [
                 'node_modules/persian-date/dist/persian-date.js',
-                'public/acm/AlaatvCustomFiles/components/Alist/type2/script.js',
                 'public/acm/AlaatvCustomFiles/js/page/user/orders.js'
             ],
             'public/js/user-orders.js'
@@ -431,7 +434,6 @@ class Mix {
         this.mixCssAndJs([
                 'node_modules/animate.css/animate.css',
                 'public/acm/AlaatvCustomFiles/components/ribbon/style.css',
-                'public/acm/AlaatvCustomFiles/components/Alist/type2/style.css',
                 'public/acm/AlaatvCustomFiles/components/AlaaLoading/style.css',
                 'public/acm/AlaatvCustomFiles/components/ScrollCarousel/style.css',
                 'public/acm/AlaatvCustomFiles/components/CustomDropDown/style.css',
@@ -445,7 +447,6 @@ class Mix {
                 'public/acm/AlaatvCustomFiles/components/CustomDropDown/js.js',
                 'public/acm/AlaatvCustomFiles/components/ScrollCarousel/js.js',
                 'public/acm/AlaatvCustomFiles/components/AlaaLoading/script.js',
-                'public/acm/AlaatvCustomFiles/components/Alist/type2/script.js',
                 'public/acm/AlaatvCustomFiles/components/AlaaLoading/script.js',
                 'public/acm/AlaatvCustomFiles/components/SortElements/script.js',
                 'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/js.js',
@@ -541,7 +542,6 @@ class Mix {
         this.mixCssAndJs([
                 'public/acm/AlaatvCustomFiles/components/Favorite/style.css',
                 'public/acm/AlaatvCustomFiles/components/Alist/type1/style.css',
-                'public/acm/AlaatvCustomFiles/components/Alist/type2/style.css',
                 'public/acm/AlaatvCustomFiles/css/page/set-show.css'
             ],
             'public/css/set-show.css',
@@ -550,7 +550,6 @@ class Mix {
                 'public/acm/AlaatvCustomFiles/components/Favorite/script.js',
                 'public/acm/AlaatvCustomFiles/components/UrlParameter/UrlParameter.js',
                 'public/acm/AlaatvCustomFiles/components/Alist/type1/script.js',
-                'public/acm/AlaatvCustomFiles/components/Alist/type2/script.js',
                 'public/acm/AlaatvCustomFiles/js/page/set-show.js'
             ],
             'public/js/set-show.js'

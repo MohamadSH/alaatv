@@ -130,7 +130,7 @@ var mLayout = function() {
     };
 
     //== Quicksearch
-    var initQuicksearch = function() {
+    var initQuicksearch = function(quickSearchEvents) {
         if ($('#m_quicksearch').length === 0 ) {
             return;
         }
@@ -140,140 +140,12 @@ var mLayout = function() {
             minLength: 1
         });
 
-        quicksearch.on('search', function(the) {
-            if ($('#m_quicksearch_input').val().trim().length < 3) {
-                showDataOnQuickSearchResultPannel('');
-                return false;
-            }
-            showDataOnQuickSearchResultPannel('کمی صبر کنید ...');
-            the.showProgress();
-
-            $.ajax({
-                url: '/c?q=' + $('#m_quicksearch_input').val(),
-                data: {},
-                dataType: 'json',
-                success: function(res) {
-                    the.hideProgress();
-                    the.showResult(res);
-
-                    showResultForQuickSearch(res);
-                },
-                error: function(res) {
-                    the.hideProgress();
-                    the.showError('مشکلی پیش آمده است. لطفا بعدا امتحان کنید.');
-                }
-            });
-        });
+        quicksearch.on('search', quickSearchEvents.onKeyUp);
 
         $(document).on('click', '#m_quicksearch_close', function () {
-            showDataOnQuickSearchResultPannel('');
+            quickSearchEvents.onClose();
         });
     };
-
-    function showDataOnQuickSearchResultPannel(html) {
-        $('.a-quick-search .m-dropdown__content').html('');
-        $('.a-quick-search .m-dropdown__content').append('<dvi class="a-dropdown__search-result">'+html+'</dvi>');
-    }
-
-    function showResultForQuickSearch(res) {
-        var maxRecordOfEachCategory = 3;
-        var article = res.result.article;
-        var pamphlet = res.result.pamphlet;
-        var product = res.result.product;
-        var set = res.result.set;
-        var video = res.result.video;
-
-        var html = '';
-
-        html += gteQuickSearchResultCategory('article', 'مقالات', article, maxRecordOfEachCategory);
-        html += gteQuickSearchResultCategory('pamphlet', 'جزوات', pamphlet, maxRecordOfEachCategory);
-        html += gteQuickSearchResultCategory('product', 'محصولات', product, maxRecordOfEachCategory);
-        html += gteQuickSearchResultCategory('set', 'دسته ها', set, maxRecordOfEachCategory);
-        html += gteQuickSearchResultCategory('video', 'ویدیوها', video, maxRecordOfEachCategory);
-        showDataOnQuickSearchResultPannel(html);
-    }
-
-    function getQuickSearchResultItem(data) {
-        return '    <!--begin::Widget 14 Item-->\n' +
-            '    <div class="m-widget4__item">\n' +
-            '        <div class="m-widget4__img m-widget4__img--pic">\n' +
-            '            <img src="'+data.photo+'" alt="">\n' +
-            '        </div>\n' +
-            '        <div class="m-widget4__info">\n' +
-            '            <span class="m-widget4__title">\n' +
-            '                '+data.title+'\n' +
-            '            </span>' +
-            '            <br>\n' +
-            '            <span class="m-widget4__sub">\n' +
-            '                '+data.subtitle+'\n' +
-            '            </span>\n' +
-            '        </div>\n' +
-            '        <div class="m-widget4__ext">\n' +
-            '            <a href="'+data.link+'" class="m-btn m-btn--pill m-btn--hover-brand btn btn-sm btn-secondary">مشاهده</a>\n' +
-            '        </div>\n' +
-            '    </div>\n' +
-            '    <!--end::Widget 14 Item-->\n';
-    }
-
-    function gteQuickSearchResultCategory(categoryType, categoryName, data, maxRecordOfCategory) {
-        var html = '';
-        if (data !== null && data.total > 0) {
-            html += '<div class="kt-quick-search__category">'+categoryName+'</div>';
-            html += '<div class="m-widget4">';
-            for (var index in data.data) {
-                if(isNaN(index)) {
-                    continue;
-                }
-                if(index > maxRecordOfCategory) {
-                    break;
-                }
-                var dataItem = data.data[index];
-                var inputData = getInputDataForQuickSearchShowResult(categoryType, dataItem);
-                html += getQuickSearchResultItem(inputData);
-            }
-            html += '</div>';
-        }
-        return html;
-    }
-
-    function getInputDataForQuickSearchShowResult(categoryType, data) {
-        if (categoryType === 'video') {
-            return {
-                title: data.author.full_name,
-                subtitle: data.name,
-                photo: data.thumbnail,
-                link: data.url,
-            };
-        } else if (categoryType === 'set') {
-            return {
-                title: data.shortName,
-                subtitle: data.name,
-                photo: data.photo,
-                link: data.url,
-            };
-        } else if (categoryType === 'product') {
-            return {
-                title: data.name,
-                subtitle: '',
-                photo: data.photo,
-                link: data.url,
-            };
-        } else if (categoryType === 'pamphlet') {
-            return {
-                title: data.author.full_name,
-                subtitle: data.name,
-                photo: data.thumbnail,
-                link: data.url,
-            };
-        } else if (categoryType === 'article') {
-            return {
-                title: data.author.full_name,
-                subtitle: data.name,
-                photo: data.thumbnail,
-                link: data.url,
-            };
-        }
-    }
 
     //== Scrolltop
     var initScrollTop = function() {
@@ -367,7 +239,6 @@ var mLayout = function() {
         initHeader: function() {
             initHorMenu();
             initTopbar();
-            initQuicksearch();
             initScrollTop();
         },
 
@@ -398,7 +269,9 @@ var mLayout = function() {
             if (mUtil.isMobileDevice()) {
                 horMenuOffcanvas.hide();
             }
-        }
+        },
+
+        initQuicksearch: initQuicksearch
     };
 }();
 

@@ -245,6 +245,13 @@ var AppGlobalInit = function() {
         return (typeof window[object] !== 'undefined' && window[object] !== null)
     }
 
+    function initQuicksearch() {
+        if (!isDefined('QuickSearch')) {
+            return;
+        }
+        window.QuickSearch.init();
+    }
+
     function init() {
         ajaxSetup();
         initLazyLoad();
@@ -252,6 +259,7 @@ var AppGlobalInit = function() {
         initFirebase();
         initGoogleTagManager();
         initFlash();
+        initQuicksearch();
         initAlaaAdBanner();
     }
 
