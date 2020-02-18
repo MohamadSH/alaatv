@@ -155,7 +155,7 @@
                                 <div class="tab-pane text-center" id="searchResult_pamphlet" role="tabpanel">
 
 
-                                    <div class="m-widget4 text-left">
+                                    <div class="a--list2 text-left">
 
 
                                     </div>
@@ -293,5 +293,4 @@
 
 @section('page-js')
     <script src="{{ mix('/js/user-dashboard.js') }}"></script>
-    <script src="{{ asset('/acm/AlaatvCustomFiles/js/page/user/dashboard.js') }}"></script>
 @endsection

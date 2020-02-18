@@ -427,6 +427,34 @@ class Mix {
             'public/js/user-profile.js'
         );
     }
+    mixPageUserDashboard() {
+        this.mixCssAndJs([
+                'node_modules/animate.css/animate.css',
+                'public/acm/AlaatvCustomFiles/components/ribbon/style.css',
+                'public/acm/AlaatvCustomFiles/components/Alist/type2/style.css',
+                'public/acm/AlaatvCustomFiles/components/AlaaLoading/style.css',
+                'public/acm/AlaatvCustomFiles/components/ScrollCarousel/style.css',
+                'public/acm/AlaatvCustomFiles/components/CustomDropDown/style.css',
+                'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/style.css',
+                'public/acm/AlaatvCustomFiles/components/FormGenerator/style.css',
+                'public/acm/AlaatvCustomFiles/css/page/pages/content-search/searchResult.css',
+                'public/acm/AlaatvCustomFiles/css/page/user/dashboard.css',
+            ],
+            'public/css/user-dashboard.css',
+            [
+                'public/acm/AlaatvCustomFiles/components/CustomDropDown/js.js',
+                'public/acm/AlaatvCustomFiles/components/ScrollCarousel/js.js',
+                'public/acm/AlaatvCustomFiles/components/AlaaLoading/script.js',
+                'public/acm/AlaatvCustomFiles/components/Alist/type2/script.js',
+                'public/acm/AlaatvCustomFiles/components/AlaaLoading/script.js',
+                'public/acm/AlaatvCustomFiles/components/SortElements/script.js',
+                'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/js.js',
+                'public/acm/AlaatvCustomFiles/components/FormGenerator/script.js',
+                'public/acm/AlaatvCustomFiles/js/page/user/dashboard.js',
+            ],
+            'public/js/user-dashboard.js'
+        );
+    }
     mixPageCompleteUserProfile() {
         this.mixCssAndJs(
             [
@@ -441,32 +469,6 @@ class Mix {
                 'public/acm/AlaatvCustomFiles/js/page/user-profile.js'
             ],
             'public/js/user-completeInfo.js'
-        );
-    }
-    mixPageUserDashboard() {
-        this.mixCssAndJs([
-                'node_modules/animate.css/animate.css',
-                'public/acm/AlaatvCustomFiles/components/AlaaLoading/style.css',
-                'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/style.css',
-                'public/acm/AlaatvCustomFiles/components/ScrollCarousel/style.css',
-                'public/acm/AlaatvCustomFiles/components/ribbon/style.css',
-                'public/acm/AlaatvCustomFiles/components/CustomDropDown/style.css',
-                'public/acm/AlaatvCustomFiles/css/page/pages/content-search/searchResult.css',
-                'public/acm/AlaatvCustomFiles/components/FormGenerator/style.css',
-                'public/acm/AlaatvCustomFiles/css/page/user/dashboard.css',
-            ],
-            'public/css/user-dashboard.css',
-            [
-                'public/acm/AlaatvCustomFiles/components/CustomDropDown/js.js',
-                'public/acm/AlaatvCustomFiles/components/ScrollCarousel/js.js',
-                'public/acm/AlaatvCustomFiles/components/AlaaLoading/script.js',
-                'public/acm/AlaatvCustomFiles/components/AlaaLoading/script.js',
-                'public/acm/AlaatvCustomFiles/components/SortElements/script.js',
-                'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/js.js',
-                'public/acm/AlaatvCustomFiles/components/FormGenerator/script.js',
-                'public/acm/AlaatvCustomFiles/js/page/user/dashboard.js',
-            ],
-            'public/js/user-dashboard.js'
         );
     }
     mixPageUserProfileSalesReport() {
@@ -489,8 +491,8 @@ class Mix {
     mixUser() {
         this.mixPageUserOrders();
         this.mixPageUserProfile();
-        this.mixPageCompleteUserProfile();
         this.mixPageUserDashboard();
+        this.mixPageCompleteUserProfile();
         this.mixPageUserProfileSalesReport();
     }
 

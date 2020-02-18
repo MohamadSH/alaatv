@@ -235,7 +235,9 @@
     overflow-y: auto;
     -ms-overflow-style: none;
 }
-
+.downloadPamphletIcon i {
+    font-size: 2.5rem;
+}
 
 
 
