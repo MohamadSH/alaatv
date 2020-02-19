@@ -72,8 +72,7 @@ class SlideShowController extends Controller
             $adaptor = $disk->getAdapter();
             if ($disk->put($fileName, File::get($file))) {
                 $fullPath     = $adaptor->getRoot();
-                $partialPath  = $this->getSubDirectoryInCDN($fullPath);
-                $slide->photo = $partialPath . $fileName;
+                $slide->photo = substr($fullPath, 1). $fileName;;
             } else {
                 session()->put('error', 'بارگذاری عکس بسته با مشکل مواجه شد!');
             }
@@ -135,8 +134,7 @@ class SlideShowController extends Controller
                 $disk->delete($oldPhoto);
 
                 $fullPath     = $adaptor->getRoot();
-                $partialPath  = $this->getSubDirectoryInCDN($fullPath);
-                $slide->photo = $partialPath . $fileName;
+                $slide->photo = substr($fullPath, 1). $fileName;;
             } else {
                 session()->put('error', 'بارگذاری عکس بسته با مشکل مواجه شد!');
             }
