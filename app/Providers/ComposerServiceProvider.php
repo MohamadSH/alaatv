@@ -29,6 +29,7 @@ class ComposerServiceProvider extends ServiceProvider
             'product.customShow.raheAbrisham',
             'pages.content-search',
             'pages.shop',
+            'pages.faq',
             'order.checkout.review',
             'order.checkout.payment',
             'user.dashboard',
