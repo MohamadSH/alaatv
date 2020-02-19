@@ -38,8 +38,8 @@ class ProductphotoController extends Controller
             $adaptor = $disk->getAdapter();
             if ($disk->put($fileName, File::get($file))) {
                 $fullPath    = $adaptor->getRoot();
-                $partialPath = $this->getSubDirectoryInCDN($fullPath);
-                $photo->file = $partialPath . $fileName;
+//                $partialPath = $this->getSubDirectoryInCDN($fullPath);
+                $photo->file = substr($fullPath, 1). $fileName;
             }
         }
 
