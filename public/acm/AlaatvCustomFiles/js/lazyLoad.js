@@ -15,10 +15,11 @@ var LazyLoad = function () {
 
     function carousel_slidEvent(lazyObservers) {
         $("#carouselMainSlideShow").on('slid.bs.carousel', function (e) {
-            var lazyObserversLength = lazyObservers.length;
-            for(var i = 0; i < lazyObserversLength; i++) {
-                lazyObservers[i].observe();
-            }
+            // var lazyObserversLength = lazyObservers.length;
+            // for(var i = 0; i < lazyObserversLength; i++) {
+            //     lazyObservers[i].observe();
+            // }
+            window.imageObserver.observe();
         });
     }
 
