@@ -502,6 +502,7 @@ class Mix {
                 'public/acm/AlaatvCustomFiles/components/ribbon/style.css',
                 'public/acm/AlaatvCustomFiles/components/Favorite/style.css',
                 'public/acm/AlaatvCustomFiles/components/AlaaScroll/style.css',
+                'public/acm/AlaatvCustomFiles/components/Alist/type2/style.css',
                 'public/acm/AlaatvCustomFiles/components/ScrollCarousel/style.css',
                 'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/style.css',
                 'public/acm/AlaatvCustomFiles/components/imageWithCaption/style.css',
