@@ -70,6 +70,7 @@
 
     </script>
 @endsection
+
 @section('pageBar')
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
@@ -90,11 +91,7 @@
 
 @section('content')
 
-    <div class="row m--margin-top-25">
-        <div class="col">
-            @include('systemMessage.flash')
-        </div>
-    </div>
+    @include('systemMessage.flash')
 
     @if(in_array($product->type['id'] ,[config("constants.PRODUCT_TYPE_SIMPLE")]))
         @include('product.partials.showPage-topSection-simple')

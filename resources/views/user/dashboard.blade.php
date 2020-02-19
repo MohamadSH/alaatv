@@ -155,7 +155,7 @@
                                 <div class="tab-pane text-center" id="searchResult_pamphlet" role="tabpanel">
 
 
-                                    <div class="m-widget4 text-left">
+                                    <div class="a--list2 text-left">
 
 
                                     </div>

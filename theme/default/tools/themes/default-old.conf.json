@@ -106,8 +106,15 @@
                         "scripts": [
                             "{$config.path.src}/js/framework/base/util.js",
                             "{$config.path.src}/js/framework/base/app.js",
+                            "{$config.path.src}/js/framework/components/general/wizard.js",
                             "{$config.path.src}/js/framework/components/general/dropdown.js",
+                            "{$config.path.src}/js/framework/components/general/header.js",
+                            "{$config.path.src}/js/framework/components/general/menu.js",
+                            "{$config.path.src}/js/framework/components/general/offcanvas.js",
+                            "{$config.path.src}/js/framework/components/general/portlet.js",
                             "{$config.path.src}/js/framework/components/general/quicksearch.js",
+                            "{$config.path.src}/js/framework/components/general/scroll-top.js",
+                            "{$config.path.src}/js/framework/components/general/toggle.js",
                             "{$config.path.src}/js/demo/demo12/base/**/*.js"
                         ]
                     },
