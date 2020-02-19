@@ -114,10 +114,12 @@ class ContentController extends Controller
                 ->items()));
         }
 
-        $api = response()->json([
-            'result' => $result,
-            'tags'   => empty($tags) ? null : $tags,
-        ]);
+        if (request()->expectsJson()) {
+            return response()->json([
+                'result' => $result,
+                'tags'   => empty($tags) ? null : $tags,
+            ]);
+        }
 
         $videos   = $result->get('video');
         $videos   = isset($videos) && $videos->count() > 0 ? ContentInSearch::collection($videos) : null;
@@ -132,8 +134,7 @@ class ContentController extends Controller
                 'tags'     => empty($tags) ? null : $tags,
             ],
         ];
-        $view     = view('pages.content-search', compact('result', 'contentTypes', 'tags', 'pageName', 'viewData'));
-        return httpResponse($api, $view);
+        return  view('pages.content-search', compact('result', 'contentTypes', 'tags', 'pageName', 'viewData'));
     }
 
     public function create(Request $request)
