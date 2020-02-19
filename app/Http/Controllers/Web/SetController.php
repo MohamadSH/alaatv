@@ -386,9 +386,9 @@ class SetController extends Controller
         if ($disk->put($fileName, File::get($file))) {
             $fullPath          = $disk->getAdapter()
                 ->getRoot();
-            $partialPath       = $this->getSubDirectoryInCDN($fullPath);
             $contentSet->photo =
-                config('constants.DOWNLOAD_SERVER_PROTOCOL') . config('constants.CDN_SERVER_NAME') . '/' . $partialPath . $fileName;
+                config('constants.DOWNLOAD_SERVER_PROTOCOL') . config('constants.CDN_SERVER_NAME') . '/' . $fullPath . $fileName;
+
         }
     }
 
