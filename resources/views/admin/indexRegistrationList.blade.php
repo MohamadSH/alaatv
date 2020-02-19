@@ -100,8 +100,8 @@
                             <th class="min-tablet"> فایل کارنامه</th>
                             @endpermission
                             <th class="all"> رتبه</th>
-                            @permission((config('constants.SHOW_KONKOOT_RESULT_INFO')))
                             <th class="all">اجازه انتشار</th>
+                            @permission((config('constants.SHOW_KONKOOT_RESULT_INFO')))
                             <th class="min-tablet"> وضعیت</th>
                             @endpermission
                             <th class="min-tablet"> نظر</th>
@@ -196,8 +196,8 @@
                             <th class="min-tablet"> فایل کارنامه</th>
                             @endpermission
                             <th class="all"> رتبه</th>
-                            @permission((config('constants.SHOW_KONKOOT_RESULT_INFO')))
                             <th class="all">اجازه انتشار</th>
+                            @permission((config('constants.SHOW_KONKOOT_RESULT_INFO')))
                             <th class="min-tablet"> وضعیت</th>
                             @endpermission
                             <th class="min-tablet"> نظر</th>
@@ -292,8 +292,8 @@
                             <th class="min-tablet"> فایل کارنامه</th>
                             @endpermission
                             <th class="all"> رتبه</th>
-                            @permission((config('constants.SHOW_KONKOOT_RESULT_INFO')))
                             <th class="all">اجازه انتشار</th>
+                            @permission((config('constants.SHOW_KONKOOT_RESULT_INFO')))
                             <th class="min-tablet"> وضعیت</th>
                             @endpermission
                             <th class="min-tablet"> نظر</th>

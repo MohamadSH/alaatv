@@ -1,3 +1,107 @@
+/**
+ * @class mUtil  Metronic base utilize class that privides helper functions
+ */
+//== Polyfill
+// matches polyfill
+this.Element && function(ElementPrototype) {
+    ElementPrototype.matches = ElementPrototype.matches ||
+        ElementPrototype.matchesSelector ||
+        ElementPrototype.webkitMatchesSelector ||
+        ElementPrototype.msMatchesSelector ||
+        function(selector) {
+            var node = this,
+                nodes = (node.parentNode || node.document).querySelectorAll(selector),
+                i = -1;
+            while (nodes[++i] && nodes[i] != node);
+            return !!nodes[i];
+        }
+}(Element.prototype);
+
+// closest polyfill
+this.Element && function(ElementPrototype) {
+    ElementPrototype.closest = ElementPrototype.closest ||
+        function(selector) {
+            var el = this;
+            while (el.matches && !el.matches(selector)) el = el.parentNode;
+            return el.matches ? el : null;
+        }
+}(Element.prototype);
+
+// matches polyfill
+this.Element && function(ElementPrototype) {
+    ElementPrototype.matches = ElementPrototype.matches ||
+        ElementPrototype.matchesSelector ||
+        ElementPrototype.webkitMatchesSelector ||
+        ElementPrototype.msMatchesSelector ||
+        function(selector) {
+            var node = this,
+                nodes = (node.parentNode || node.document).querySelectorAll(selector),
+                i = -1;
+            while (nodes[++i] && nodes[i] != node);
+            return !!nodes[i];
+        }
+}(Element.prototype);
+
+//
+// requestAnimationFrame polyfill by Erik Möller.
+//  With fixes from Paul Irish and Tino Zijdel
+//
+//  http://paulirish.com/2011/requestanimationframe-for-smart-animating/
+//  http://my.opera.com/emoller/blog/2011/12/20/requestanimationframe-for-smart-er-animating
+//
+//  MIT license
+//
+(function() {
+    var lastTime = 0;
+    var vendors = ['webkit', 'moz'];
+    for (var x = 0; x < vendors.length && !window.requestAnimationFrame; ++x) {
+        window.requestAnimationFrame = window[vendors[x] + 'RequestAnimationFrame'];
+        window.cancelAnimationFrame =
+            window[vendors[x] + 'CancelAnimationFrame'] || window[vendors[x] + 'CancelRequestAnimationFrame'];
+    }
+
+    if (!window.requestAnimationFrame)
+        window.requestAnimationFrame = function(callback) {
+            var currTime = new Date().getTime();
+            var timeToCall = Math.max(0, 16 - (currTime - lastTime));
+            var id = window.setTimeout(function() {
+                callback(currTime + timeToCall);
+            }, timeToCall);
+            lastTime = currTime + timeToCall;
+            return id;
+        };
+
+    if (!window.cancelAnimationFrame)
+        window.cancelAnimationFrame = function(id) {
+            clearTimeout(id);
+        };
+}());
+
+// Source: https://github.com/jserz/js_piece/blob/master/DOM/ParentNode/prepend()/prepend().md
+(function(arr) {
+    arr.forEach(function(item) {
+        if (item.hasOwnProperty('prepend')) {
+            return;
+        }
+        Object.defineProperty(item, 'prepend', {
+            configurable: true,
+            enumerable: true,
+            writable: true,
+            value: function prepend() {
+                var argArr = Array.prototype.slice.call(arguments),
+                    docFrag = document.createDocumentFragment();
+
+                argArr.forEach(function(argItem) {
+                    var isNode = argItem instanceof Node;
+                    docFrag.appendChild(isNode ? argItem : document.createTextNode(String(argItem)));
+                });
+
+                this.insertBefore(docFrag, this.firstChild);
+            }
+        });
+    });
+})([Element.prototype, Document.prototype, DocumentFragment.prototype]);
+
 //== Global variables
 window.mUtilElementDataStore = {};
 window.mUtilElementDataStoreID = 0;

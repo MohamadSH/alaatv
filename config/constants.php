@@ -264,7 +264,7 @@ return [
     'DISK_PRODUCT_CONTENT'           => 'productFileSFTP',
 
     //Profile default image
-    'PROFILE_DEFAULT_IMAGE'          => 'default_avatar.png',
+    'PROFILE_DEFAULT_IMAGE'          => 'default_avatar.jpg',
     'CONSULTATION_DEFAULT_IMAGE'     => 'default_consultant_thumbnail.jpg',
     'ARTICLE_DEFAULT_IMAGE'          => 'default_article_image.png',
 

@@ -123,3 +123,7 @@ a:hover {
 .m-nav .m-nav__item > .m-nav__link .m-nav__link-icon.nav__link-icon-livePage {
     width: 25px;
 }
+
+.a-quick-search .a--list2 .a--list2-item .a--list2-content .a--list2-title {
+    font-size: 1rem;
+}

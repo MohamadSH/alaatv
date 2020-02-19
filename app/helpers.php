@@ -118,3 +118,10 @@ if (!function_exists('convertRedirectUrlToApiVersion')) {
         return url('/api/v' . $apiVersion . $url['path']);
     }
 }
+
+if (!function_exists('pureHTML')) {
+    function pureHTML(string $text)
+    {
+        return Purify::clean($text, ['HTML.Allowed' => 'div,b,a[href]']);
+    }
+}

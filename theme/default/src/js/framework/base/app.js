@@ -23,10 +23,10 @@ var mApp = function() {
     */
     var initTooltip = function(el) {
         var skin = el.data('skin') ? 'm-tooltip--skin-' + el.data('skin') : '';
-        var width = el.data('width') == 'auto' ? 'm-tooltop--auto-width' : '';
+        var width = el.data('width') === 'auto' ? 'm-tooltop--auto-width' : '';
         var triggerValue = el.data('trigger') ? el.data('trigger') : 'hover';
         var placement = el.data('placement') ? el.data('placement') : 'left';
-                    
+
         el.tooltip({
             trigger: triggerValue,
             template: '<div class="m-tooltip ' + skin + ' ' + width + ' tooltip" role="tooltip">\
@@ -35,7 +35,7 @@ var mApp = function() {
             </div>'
         });
     };
-    
+
     /**
     * Initializes bootstrap tooltips
     */
@@ -47,85 +47,6 @@ var mApp = function() {
     };
 
     /**
-    * Initializes bootstrap popover
-    */
-    var initPopover = function(el) {
-        var skin = el.data('skin') ? 'm-popover--skin-' + el.data('skin') : '';
-        var triggerValue = el.data('trigger') ? el.data('trigger') : 'hover';
-            
-        el.popover({
-            trigger: triggerValue,
-            template: '\
-            <div class="m-popover ' + skin + ' popover" role="tooltip">\
-                <div class="arrow"></div>\
-                <h3 class="popover-header"></h3>\
-                <div class="popover-body"></div>\
-            </div>'
-        });
-    };
-
-    /**
-    * Initializes bootstrap popovers
-    */
-    var initPopovers = function() {
-        // init bootstrap popover
-        $('[data-toggle="m-popover"]').each(function() {
-            initPopover($(this));
-        });
-    };
-
-    /**
-    * Initializes bootstrap file input
-    */
-    var initFileInput = function() {
-        // init bootstrap popover
-        $('.custom-file-input').on('change',function(){
-            var fileName = $(this).val();
-            $(this).next('.custom-file-label').addClass("selected").html(fileName);
-        });
-    };
-
-    /**
-    * Initializes metronic portlet
-    */
-    var initPortlet = function(el, options) {
-        // init portlet tools
-        var el = $(el);
-        var portlet = new mPortlet(el[0], options);
-    };
-
-    /**
-    * Initializes metronic portlets
-    */
-    var initPortlets = function() {
-        // init portlet tools
-        $('[m-portlet="true"]').each(function() {
-            var el = $(this);
-
-            if ( el.data('portlet-initialized') !== true ) {
-                initPortlet(el, {});
-                el.data('portlet-initialized', true);
-            }
-        });
-    };
-
-    // /**
-    // * Initializes scrollable contents
-    // */
-    // var initScrollers = function() {
-    //     $('[data-scrollable="true"]').each(function(){
-    //         var el = $(this);
-    //         mUtil.scrollerInit(this, {disableForMobile: true, handleWindowResize: true, height: function() {
-    //             if (mUtil.isInResponsiveRange('tablet-and-mobile') && el.data('mobile-height')) {
-    //                 return el.data('mobile-height');
-    //             } else {
-    //                 return el.data('height');
-    //             }
-    //         }});
-    //     });
-    // };
-
-    /**
     * Initializes bootstrap alerts
     */
     var initAlerts = function() {
@@ -134,68 +55,6 @@ var mApp = function() {
             $(this).closest('.alert').hide();
         });
     };
-
-    /**
-    * Initializes Metronic custom tabs
-    */
-    var initCustomTabs = function() {
-        // init bootstrap popover
-        $('[data-tab-target]').each(function() {
-            if ($(this).data('tabs-initialized') == true ) {
-                return;
-            }
-
-            $(this).click(function(e) {
-                e.preventDefault();
-                
-                var tab = $(this);
-                var tabs = tab.closest('[data-tabs="true"]');
-                var contents = $( tabs.data('tabs-contents') );
-                var content = $( tab.data('tab-target') );
-
-                tabs.find('.m-tabs__item.m-tabs__item--active').removeClass('m-tabs__item--active');
-                tab.addClass('m-tabs__item--active');
-
-                contents.find('.m-tabs-content__item.m-tabs-content__item--active').removeClass('m-tabs-content__item--active');
-                content.addClass('m-tabs-content__item--active');         
-            });
-
-            $(this).data('tabs-initialized', true);
-        });
-    };
-
-	var hideTouchWarning = function() {
-		jQuery.event.special.touchstart = {
-			setup: function(_, ns, handle) {
-				if (typeof this === 'function')
-					if (ns.includes('noPreventDefault')) {
-						this.addEventListener('touchstart', handle, {passive: false});
-					} else {
-						this.addEventListener('touchstart', handle, {passive: true});
-					}
-			},
-		};
-		jQuery.event.special.touchmove = {
-			setup: function(_, ns, handle) {
-				if (typeof this === 'function')
-					if (ns.includes('noPreventDefault')) {
-						this.addEventListener('touchmove', handle, {passive: false});
-					} else {
-						this.addEventListener('touchmove', handle, {passive: true});
-					}
-			},
-		};
-		jQuery.event.special.wheel = {
-			setup: function(_, ns, handle) {
-				if (typeof this === 'function')
-					if (ns.includes('noPreventDefault')) {
-						this.addEventListener('wheel', handle, {passive: false});
-					} else {
-						this.addEventListener('wheel', handle, {passive: true});
-					}
-			},
-		};
-	};
 
     return {
         /**
@@ -212,26 +71,12 @@ var mApp = function() {
         * Initializes components
         */
         initComponents: function() {
-            // hideTouchWarning();
-            // initScrollers();
             initTooltips();
-            initPopovers();
             initAlerts();
-            initPortlets();
-            initFileInput();
-            initCustomTabs();
-        },
-
-
-        /**
-        * Init custom tabs
-        */
-        initCustomTabs: function() {
-            initCustomTabs();
         },
 
         /**
-        * 
+        *
         * @param {object} el jQuery element object
         */
         // wrJangoer function to scroll(focus) to an element
@@ -240,7 +85,7 @@ var mApp = function() {
         },
 
         /**
-        * 
+        *
         * @param {object} el jQuery element object
         */
         // wrJangoer function to scroll(focus) to an element
@@ -249,45 +94,9 @@ var mApp = function() {
         },
 
         /**
-        * 
-        * @param {object} el jQuery element object
-        */
-        // wrJangoer function to scroll(focus) to an element
-        initPopovers: function() {
-            initPopovers();
-        },
-
-        /**
-        * 
-        * @param {object} el jQuery element object
-        */
-        // wrJangoer function to scroll(focus) to an element
-        initPopover: function(el) {
-            initPopover(el);
-        },
-
-        /**
-        * 
-        * @param {object} el jQuery element object
-        */
-        // function to init portlet
-        initPortlet: function(el, options) {
-            initPortlet(el, options);
-        },
-
-        /**
-        * 
-        * @param {object} el jQuery element object
-        */
-        // function to init portlets
-        initPortlets: function() {
-            initPortlets();
-        },
-
-        /**
         * Blocks element with loading indiciator using http://malsup.com/jquery/block/
         * @param {object} target jQuery element object
-        * @param {object} options 
+        * @param {object} options
         */
         block: function(target, options) {
             var el = $(target);
@@ -361,7 +170,7 @@ var mApp = function() {
                     if (el && el[0]) {
                         mUtil.css(el[0], 'position', '');
                         mUtil.css(el[0], 'zoom', '');
-                    }                    
+                    }
                 }
             };
 
@@ -375,7 +184,7 @@ var mApp = function() {
         },
 
         /**
-        * Un-blocks the blocked element 
+        * Un-blocks the blocked element
         * @param {object} target jQuery element object
         */
         unblock: function(target) {
@@ -387,49 +196,9 @@ var mApp = function() {
         },
 
         /**
-        * Blocks the page body element with loading indicator
-        * @param {object} options 
-        */
-        blockPage: function(options) {
-            return mApp.block('body', options);
-        },
-
-        /**
-        * Un-blocks the blocked page body element
-        */
-        unblockPage: function() {
-            return mApp.unblock('body');
-        },
-
-        /**
-        * Enable loader progress for button and other elements
-        * @param {object} target jQuery element object
-        * @param {object} options
-        */
-        progress: function(target, options) {
-            var skin = (options && options.skin) ? options.skin : 'light';
-            var alignment = (options && options.alignment) ? options.alignment : 'right'; 
-            var size = (options && options.size) ? 'm-spinner--' + options.size : ''; 
-            var classes = 'm-loader ' + 'm-loader--' + skin + ' m-loader--' + alignment + ' m-loader--' + size;
-
-            mApp.unprogress(target);
-            
-            $(target).addClass(classes);
-            $(target).data('progress-classes', classes);
-        },
-
-        /**
-        * Disable loader progress for button and other elements
-        * @param {object} target jQuery element object
-        */
-        unprogress: function(target) {
-            $(target).removeClass($(target).data('progress-classes'));
-        },
-
-        /**
         * Gets state color's hex code by color name
         * @param {string} name Color name
-        * @returns {string}  
+        * @returns {string}
         */
         getColor: function(name) {
             return colors[name];

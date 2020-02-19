@@ -1165,10 +1165,9 @@ class ProductController extends Controller
             $done[$key] = false;
             if ($disk->put($fileName, File::get($file))) {
                 $fullPath    = $adaptor->getRoot();
-                $partialPath = $this->getSubDirectoryInCDN($fullPath);
 
                 $done[$key]     = true;
-                $product->image = $partialPath . $fileName;
+                $product->image = substr($fullPath, 1). $fileName;
                 /**
                  *  Snippet code : resizing the image using the ........ package
                  *

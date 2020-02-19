@@ -175,29 +175,24 @@ mLayout = function() {
 
     //== Sidebar toggle
     var initLeftAsideToggle = function() {
-        if ($('#m_aside_left_minimize_toggle').length === 0 ) {
-            return;
-        }
 
-        asideLeftToggle = new mToggle('m_aside_left_minimize_toggle', {
-            target: 'body',
-            targetState: 'm-brand--minimize m-aside-left--minimize',
-            togglerState: 'm-brand__toggler--active'
-        });
-
-        asideLeftToggle.on('toggle', function(toggle) {
-            if (mUtil.get('main_portlet')) {
-                mainPortlet.updateSticky();
+        $(document).on('click', '#m_aside_left_hide_toggle', function () {
+            if ($('body').hasClass('m-aside-left--hide')) {
+                $(this).removeClass('m-brand__toggler--active');
+                $('body').removeClass('m-aside-left--hide');
+            } else {
+                $(this).addClass('m-brand__toggler--active');
+                $('body').addClass('m-aside-left--hide');
             }
-
-            horMenu.pauseDropdownHover(800);
-            asideMenu.pauseDropdownHover(800);
-
-            //== Remember state in cookie
-            // Cookies.set('sidebar_toggle_state', toggle.getState());
-            // to set default minimized left aside use this cookie value in your
-            // server side code and add "m-brand--minimize m-aside-left--minimize" classes to
-            // the body tag in order to initialize the minimized left aside mode during page loading.
+        });
+        $(document).on('click', '#m_aside_left_offcanvas_toggle', function () {
+            if ($('body').hasClass('m-aside-left--on')) {
+                $(this).addClass('m-brand__toggler--active');
+                $('body').removeClass('m-aside-left--on');
+            } else {
+                $(this).removeClass('m-brand__toggler--active');
+                $('body').addClass('m-aside-left--on');
+            }
         });
     };
 
@@ -386,9 +381,10 @@ mLayout = function() {
 
     //== Scrolltop
     var initScrollTop = function() {
-        var scrollTop = new mScrollTop('m_scroll_top', {
-            offset: 300,
-            speed: 600
+        $(document).on('click', '#m_scroll_top', function () {
+            $([document.documentElement, document.body]).animate({
+                scrollTop: $('body').offset().top
+            }, 300);
         });
     };
 

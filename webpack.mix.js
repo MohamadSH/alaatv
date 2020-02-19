@@ -23,6 +23,7 @@ class Mix {
 
             'public/acm/AlaatvCustomFiles/components/AjaxLogin/style.css',
             'public/acm/AlaatvCustomFiles/components/MegaMenu/style.css',
+            'public/acm/AlaatvCustomFiles/components/Alist/type2/style.css',// 488 KB
             'public/acm/AlaatvCustomFiles/components/loading/loading.css',// 488 KB
 
             'public/acm/AlaatvCustomFiles/css/customStyle.css',
@@ -46,27 +47,29 @@ class Mix {
     static getBaseJs() {
         return [
             'node_modules/intersection-observer/intersection-observer.js',
-            'node_modules/lozad/dist/lozad.js',
+            'node_modules/lozad/dist/lozad.js', // 9 KB
 
-            'public/assets/vendors/base/vendors.bundle.js',
-            'public/assets/demo/demo12/base/scripts.bundle.js',
+            'public/assets/vendors/base/vendors.bundle.js',// 173 KB
+            'public/assets/demo/demo12/base/scripts.bundle.js',// 205 KB
 
             'node_modules/toastr/build/toastr.min.js',
             'node_modules/block-ui/jquery.blockUI.js',
-            'node_modules/persianjs/persian.min.js',
+            'node_modules/persianjs/persian.min.js',// 223 KB
 
             'node_modules/firebase/firebase-app.js',
             'node_modules/firebase/firebase-messaging.js',
-            'public/acm/AlaatvCustomFiles/js/GoogleFirebase.js',
+            'public/acm/AlaatvCustomFiles/js/GoogleFirebase.js',// 290 KB
 
-
-            'public/acm/AlaatvCustomFiles/js/mLayout.js',// quick search (ajax) in header
+            'public/acm/AlaatvCustomFiles/components/Alist/type2/script.js',
+            'public/acm/AlaatvCustomFiles/components/AjaxLogin/script.js',// 297 KB
             'public/acm/AlaatvCustomFiles/components/MegaMenu/script.js',
-            'public/acm/AlaatvCustomFiles/components/AjaxLogin/script.js',
+
+            'public/acm/AlaatvCustomFiles/js/AlaaAdBanner.js',
             'public/acm/AlaatvCustomFiles/js/GlobalJsVar.js',
             'public/acm/AlaatvCustomFiles/js/Cookie.js',
             'public/acm/AlaatvCustomFiles/js/GoogleAnalyticsEnhancedEcommerce.js',
-            'public/acm/AlaatvCustomFiles/js/lazyLoad.js',
+            'public/acm/AlaatvCustomFiles/js/lazyLoad.js',// 302 KB
+            'public/acm/AlaatvCustomFiles/js/QuickSearch.js',
             'public/acm/AlaatvCustomFiles/js/app.js'
         ];
     }
@@ -169,6 +172,30 @@ class Mix {
             'public/js/all.js', 'all');
     }
 
+    mixPageFaq() {
+        this.mixCssAndJs([
+                'public/acm/videojs/skins/alaa-theme/videojs.css',
+                'public/acm/videojs/skins/nuevo/videojs.rtl.css',
+                'public/acm/videojs/plugins/pip/videojs.pip.min.css',
+                'public/acm/videojs/plugins/pip/videojs.pip.rtl.css',
+                'public/acm/videojs/plugins/seek-to-point.css',
+                'public/acm/AlaatvCustomFiles/components/Alist/type1/style.css',
+                'public/acm/AlaatvCustomFiles/css/page/pages/faq.css'
+            ],
+            'public/css/faq.css',
+            [
+                'public/acm/videojs/video.min.js',
+                'public/acm/videojs/plugins/pip/videojs.pip.min.js',
+                'public/acm/videojs/nuevo.min.js',
+                'public/acm/videojs/plugins/videojs.p2p.min.js',
+                'public/acm/videojs/plugins/videojs.hotkeys.min.js',
+                'public/acm/videojs/plugins/seek-to-point.js',
+                'public/acm/videojs/lang/fa.js',
+                'public/acm/AlaatvCustomFiles/js/page/pages/faq.js'
+            ],
+            'public/js/faq.js'
+        );
+    }
     mixPageLive() {
         this.mixCssAndJs([
                 'node_modules/@fullcalendar/core/main.css',
@@ -359,6 +386,7 @@ class Mix {
         );
     }
     mixPages() {
+        this.mixPageFaq();
         this.mixPageLive();
         this.mixPageShop();
         this.mixPageError();
@@ -378,7 +406,6 @@ class Mix {
             'public/css/user-orders.css',
             [
                 'node_modules/persian-date/dist/persian-date.js',
-                'public/acm/AlaatvCustomFiles/components/Alist/type2/script.js',
                 'public/acm/AlaatvCustomFiles/js/page/user/orders.js'
             ],
             'public/js/user-orders.js'
@@ -403,32 +430,16 @@ class Mix {
             'public/js/user-profile.js'
         );
     }
-    mixPageCompleteUserProfile() {
-        this.mixCssAndJs(
-            [
-                'node_modules/animate.css/animate.css',
-                'node_modules/persian-datepicker/dist/css/persian-datepicker.css',
-                'public/acm/AlaatvCustomFiles/css/page/user-profile.css',
-            ],
-            'public/css/user-completeInfo.css',
-            [
-                'node_modules/persian-date/dist/persian-date.js',
-                'node_modules/persian-datepicker/dist/js/persian-datepicker.js',
-                'public/acm/AlaatvCustomFiles/js/page/user-profile.js'
-            ],
-            'public/js/user-completeInfo.js'
-        );
-    }
     mixPageUserDashboard() {
         this.mixCssAndJs([
                 'node_modules/animate.css/animate.css',
-                'public/acm/AlaatvCustomFiles/components/AlaaLoading/style.css',
-                'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/style.css',
-                'public/acm/AlaatvCustomFiles/components/ScrollCarousel/style.css',
                 'public/acm/AlaatvCustomFiles/components/ribbon/style.css',
+                'public/acm/AlaatvCustomFiles/components/AlaaLoading/style.css',
+                'public/acm/AlaatvCustomFiles/components/ScrollCarousel/style.css',
                 'public/acm/AlaatvCustomFiles/components/CustomDropDown/style.css',
-                'public/acm/AlaatvCustomFiles/css/page/pages/content-search/searchResult.css',
+                'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/style.css',
                 'public/acm/AlaatvCustomFiles/components/FormGenerator/style.css',
+                'public/acm/AlaatvCustomFiles/css/page/pages/content-search/searchResult.css',
                 'public/acm/AlaatvCustomFiles/css/page/user/dashboard.css',
             ],
             'public/css/user-dashboard.css',
@@ -443,6 +454,22 @@ class Mix {
                 'public/acm/AlaatvCustomFiles/js/page/user/dashboard.js',
             ],
             'public/js/user-dashboard.js'
+        );
+    }
+    mixPageCompleteUserProfile() {
+        this.mixCssAndJs(
+            [
+                'node_modules/animate.css/animate.css',
+                'node_modules/persian-datepicker/dist/css/persian-datepicker.css',
+                'public/acm/AlaatvCustomFiles/css/page/user-profile.css',
+            ],
+            'public/css/user-completeInfo.css',
+            [
+                'node_modules/persian-date/dist/persian-date.js',
+                'node_modules/persian-datepicker/dist/js/persian-datepicker.js',
+                'public/acm/AlaatvCustomFiles/js/page/user-profile.js'
+            ],
+            'public/js/user-completeInfo.js'
         );
     }
     mixPageUserProfileSalesReport() {
@@ -465,8 +492,8 @@ class Mix {
     mixUser() {
         this.mixPageUserOrders();
         this.mixPageUserProfile();
-        this.mixPageCompleteUserProfile();
         this.mixPageUserDashboard();
+        this.mixPageCompleteUserProfile();
         this.mixPageUserProfileSalesReport();
     }
 
@@ -515,7 +542,6 @@ class Mix {
         this.mixCssAndJs([
                 'public/acm/AlaatvCustomFiles/components/Favorite/style.css',
                 'public/acm/AlaatvCustomFiles/components/Alist/type1/style.css',
-                'public/acm/AlaatvCustomFiles/components/Alist/type2/style.css',
                 'public/acm/AlaatvCustomFiles/css/page/set-show.css'
             ],
             'public/css/set-show.css',
@@ -524,7 +550,6 @@ class Mix {
                 'public/acm/AlaatvCustomFiles/components/Favorite/script.js',
                 'public/acm/AlaatvCustomFiles/components/UrlParameter/UrlParameter.js',
                 'public/acm/AlaatvCustomFiles/components/Alist/type1/script.js',
-                'public/acm/AlaatvCustomFiles/components/Alist/type2/script.js',
                 'public/acm/AlaatvCustomFiles/js/page/set-show.js'
             ],
             'public/js/set-show.js'
@@ -791,6 +816,7 @@ class Mix {
                 'node_modules/select2/dist/js/select2.full.js',
                 'node_modules/icheck/icheck.js',
 
+                'public/acm/AlaatvCustomFiles/components/portlet/portlet.js',
                 'public/acm/AlaatvCustomFiles/components/alaa_old/plugins/datatables/datatables.min.js',
                 'public/acm/AlaatvCustomFiles/components/alaa_old/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js',
                 'public/acm/AlaatvCustomFiles/components/alaa_old/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js',
