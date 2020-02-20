@@ -50,13 +50,12 @@ Route::group(['prefix' => 'v1'], function () {
     Route::get('c/{c}', [ContentController::class, 'show'])->name('api.v1.content.show');
     Route::get('product/{product}', [ProductController::class, 'show'])->name('api.v1.product.show');
     Route::get('set/{set}', [SetController::class, 'show'])->name('api.v1.set.show');
-    Route::get('set', [SetController::class, 'index'])->name('api.v1.set.show');
+    Route::get('set', [SetController::class, 'index'])->name('api.v1.set.index');
     Route::post('getPrice/{product}', [ProductController::class, 'refreshPrice'])->name('api.v1.refreshPrice');
     Route::post('donate', [OrderController::class, 'donateOrder'])->name('api.v1.donate');
     Route::any('fetchContents', [ContentController::class, 'fetchContents'])->name('api.v1.fetch.content');
     Route::get('shop', '\\'. ShopPageController::class)->name('api.v1.shop');
     Route::get('/home', '\\'. IndexPageController::class)->name('api.v1.home');
-
 
     Route::get('satra', [HomeController::class, 'satra']);
 

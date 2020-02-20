@@ -51,10 +51,10 @@ class SetWithoutPagination extends AlaaJsonResourceWithoutPagination
                 return $activeContents->isNotEmpty() ? ContentInSetWithoutPagination::collection($activeContents) : null;
             }),
             'created_at'     => $this->when(isset($this->created_at), function () {
-                return isset($this->created_at) ? $this->created_at : null;
+                return $this->created_at->toDateTimeString();
             }),
             'updated_at'     => $this->when(isset($this->updated_at), function () {
-                return isset($this->updated_at) ? $this->updated_at : null;
+                return $this->updated_at->toDateTimeString();
             }),
             'source'         => $this->when($this->sources->isNotEmpty(), function () {
                 return $this->sources->isNotEmpty() ? Source::collection($this->sources) : null;

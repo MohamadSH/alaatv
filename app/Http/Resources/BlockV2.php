@@ -45,7 +45,9 @@ class BlockV2 extends AlaaJsonResourceWithPagination
             'sets'       => $this->when($this->collectionIsNotEmpty($sets), $this->getSets($sets)),
             'products'   => $this->when($this->collectionIsNotEmpty($products), $this->getProducts($products)),
             'banners'    => $this->when($this->collectionIsNotEmpty($banners), $this->getBanners($banners)),
-            'updated_at' => $this->when(isset($this->updated_at), $this->updated_at),
+            'updated_at' => $this->when(isset($this->updated_at), function () {
+                return $this->updated_at->toDateTimeString();
+            }),
         ];
     }
 
