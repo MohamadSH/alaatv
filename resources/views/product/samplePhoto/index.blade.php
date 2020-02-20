@@ -109,7 +109,7 @@
                             </div>
                             <div class="modal-body">
                                 <div class="row" style="text-align: center;">
-                                    <img alt="عکس محصول @if(isset($photo->title[0])) {{$photo->title}} @endif" style="width: 80%" src="{{ route('image', ['category'=>'4','w'=>'608' , 'h'=>'608' ,  'filename' =>  $photo->file ]) }}"/>
+                                    <img alt="عکس محصول @if(isset($photo->title[0])) {{$photo->title}} @endif" style="width: 80%" src="{{ $photo->url }}"/>
                                 </div>
                             </div>
                             <div class="modal-footer">
@@ -131,7 +131,7 @@
                         @endpermission
                         @permission((config('constants.REMOVE_PRODUCT_SAMPLE_PHOTO_ACCESS')))
                         <a class="btn btn-danger"
-                           onclick="removePhotoShowModal('{{action("Web\ProductphotoController@destroy" , $photo)}}', '{{ route('image', ['category'=>'4','w'=>'60' , 'h'=>'60' ,  'filename' =>  $photo->file ]) }}')"
+                           onclick="removePhotoShowModal('{{action("Web\ProductphotoController@destroy" , $photo)}}', '{{ $photo->url }}')"
                            data-id="{{$photo->id}}">
                             <i class="fa fa-times"></i>
                             حذف
