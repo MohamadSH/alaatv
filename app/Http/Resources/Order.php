@@ -67,7 +67,7 @@ class Order extends AlaaJsonResourceWithPagination
                 return isset($this->user_id) ? new OrderOwner($this->user) : null;
             }),
             'created_at'              => $this->when(isset($this->created_at), function () {
-                return isset($this->created_at) ? $this->created_at : null;
+                return $this->created_at->toDateTimeString();
             }),
             'completed_at'            => $this->when(isset($this->completed_at), function () {
                 return isset($this->completed_at) ? $this->completed_at : null;

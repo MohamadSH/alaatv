@@ -5,6 +5,11 @@ namespace App\Http\Resources;
 use App\Contentset;
 use Illuminate\Http\Request;
 
+/**
+ * Class Set
+ *
+ * @mixin Contentset
+ * */
 class SetInIndex extends AlaaJsonResourceWithPagination
 {
     /**
@@ -36,8 +41,12 @@ class SetInIndex extends AlaaJsonResourceWithPagination
             'contents_count' => $this->activeContents->count(),
             'author'         => $this->when(isset($this->author), $this->getAuthor()),
             'contents'       => null,
-            'created_at'     => $this->when(isset($this->created_at), $this->created_at),
-            'updated_at'     => $this->when(isset($this->updated_at), $this->updated_at),
+            'created_at'     => $this->when(isset($this->created_at), function () {
+                return $this->created_at->toDateTimeString();
+            }),
+            'updated_at'     => $this->when(isset($this->updated_at), function () {
+                return $this->updated_at->toDateTimeString();
+            })
         ];
     }
 
