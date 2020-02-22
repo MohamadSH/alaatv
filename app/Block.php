@@ -133,7 +133,7 @@ class Block extends BaseModel
                 $offerBlock = self::getOfferBlock();
                 $blocks     = self::shop()
                     ->enable()
-                    ->where('id', '<>', 115)
+//                    ->where('id', '<>', 115)
                     ->orderBy('order')
                     ->get()
                     ->loadMissing([
@@ -236,7 +236,7 @@ class Block extends BaseModel
                 $offerBlock = self::getOfferBlock();
                 $blocks     = self::shop()
                     ->enable()
-                    ->where('id', '<>', 113)
+//                    ->where('id', '<>', 113)
                     ->orderBy('order')
                     ->get()
                     ->loadMissing([
