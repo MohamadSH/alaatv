@@ -4,10 +4,14 @@
     <link href="{{ mix('/css/product-show.css') }}" rel="stylesheet" type="text/css"/>
     <style>
         @if(
-            is_null(optional(optional(optional($block)->sets)->first())->getActiveContents2()) ||
-            $block->sets->first()->getActiveContents2()->count() === 0 ||
-            is_null(optional($block)->getActiveContent()) ||
-            optional($block)->getActiveContent()->count() == 0
+            (
+                is_null(optional(optional(optional($block)->sets)->first())->getActiveContents2()) ||
+                $block->sets->first()->getActiveContents2()->count() === 0
+            ) &&
+            (
+                is_null(optional($block)->getActiveContent()) ||
+                $block->getActiveContent()->count() === 0
+            )
         )
             .productInfoNav-sampleVideo {
             display: none !important;
