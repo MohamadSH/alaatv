@@ -42,10 +42,10 @@ class SetInIndex extends AlaaJsonResourceWithPagination
             'author'         => $this->when(isset($this->author), $this->getAuthor()),
             'contents'       => null,
             'created_at'     => $this->when(isset($this->created_at), function () {
-                return $this->created_at->toDateTimeString();
+                return optional($this->created_at)->toDateTimeString();
             }),
             'updated_at'     => $this->when(isset($this->updated_at), function () {
-                return $this->updated_at->toDateTimeString();
+                return optional($this->updated_at)->toDateTimeString();
             })
         ];
     }
