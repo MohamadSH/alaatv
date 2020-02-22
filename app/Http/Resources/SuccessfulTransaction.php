@@ -54,7 +54,7 @@ class SuccessfulTransaction extends AlaaJsonResourceWithPagination
                 return new TransactionStatus($this->transactionstatus);
             }),
             'created_at'         => $this->when(isset($this->created_at), function () {
-                return $this->created_at->toDateTimeString();
+                return optional($this->created_at)->toDateTimeString();
             }),
             'completed_at'       => $this->when(isset($this->completed_at), function () {
                 return $this->completed_at;
