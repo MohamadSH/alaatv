@@ -56,10 +56,10 @@ class User extends AlaaJsonResourceWithPagination
             'profile_completion' => (int)$this->completion(),
             'wallet_balance'     => $this->getTotalWalletBalance(),
             'updated_at'         => $this->when(isset($this->updated_at), function () {
-                return $this->updated_at->toDateTimeString();
+                return optional($this->updated_at)->toDateTimeString();
             }),
             'created_at'         => $this->when(isset($this->created_at), function () {
-                return $this->created_at->toDateTimeString();
+                return optional($this->created_at)->toDateTimeString();
             }),
         ];
     }

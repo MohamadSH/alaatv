@@ -45,7 +45,7 @@ class Block extends JsonResource
             'products'   => optional($products)->isNotEmpty() ? $products : null,
             'banners'    => optional($banners)->isNotEmpty() ? $banners : null,
             'updated_at' => $this->when(isset($this->updated_at), function () {
-                return $this->updated_at->toDateTimeString();
+                return optional($this->updated_at)->toDateTimeString();
             }),
         ];
     }
