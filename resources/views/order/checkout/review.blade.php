@@ -395,7 +395,7 @@
                                         <div class="text-center m--margin-top-10">
 
                                             <div class="pretty p-default p-curve p-pulse">
-                                                <input type="radio" name="radioBankType" value="{{route('redirectToBank', ['paymentMethod'=>'zarinpal', 'device'=>'web'])}}" data-bank-type="zarinpal" checked>
+                                                <input type="radio" name="radioBankType" value="{{route('redirectToBank', ['paymentMethod'=>'zarinpal', 'device'=>'web'])}}" data-bank-type="zarinpal">
                                                 <div class="state p-warning">
                                                     <img src="/acm/extra/payment/gateway/zarinpal-logo.png" class="img-thumbnail bankLogo" alt="bank-logo" width="60">
                                                     <label>
@@ -403,7 +403,6 @@
                                                 </div>
                                             </div>
 
-{{--
                                             <div class="pretty p-default p-curve p-pulse">
                                                 <input type="radio" name="radioBankType" value="{{route('redirectToBank', ['paymentMethod'=>'mellat', 'device'=>'web'])}}" data-bank-type="mellat" checked>
                                                 <div class="state p-warning">
@@ -412,7 +411,6 @@
                                                     </label>
                                                 </div>
                                             </div>
---}}
 
 {{--                                            <div class="pretty p-default p-curve p-pulse">--}}
 {{--                                                <input type="radio" name="radioBankType" value="3" data-bank-type="pasargad">--}}
