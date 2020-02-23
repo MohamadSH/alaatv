@@ -45,7 +45,8 @@ trait TaggableUserTrait
     {
         $tags = [];
         foreach ($userContents as $content) {
-            $tags = array_merge($tags, $content->tags->tags);
+            $contentTags = optional($content->tags)->tags;
+            $tags        = array_merge($tags, isset($contentTags) ? $contentTags : []);
         }
         $tags = array_values(array_unique($tags));
 

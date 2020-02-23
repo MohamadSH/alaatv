@@ -23,7 +23,7 @@ class RulesPageController extends Controller
     {
         $url   = $request->url();
         $title = "آلاء|قوانین";
-        $this->generateSeoMetaTags(new SeoDummyTags($title, $this->setting->site->seo->homepage->metaDescription, $url,
+        $this->generateSeoMetaTags(new SeoDummyTags($title, 'قوانین سایت آلاء', $url,
             $url, route('image', [
                 'category' => '11',
                 'w'        => '100',

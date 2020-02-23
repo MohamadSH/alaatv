@@ -116,8 +116,7 @@ trait FileCommon
         /** @var AlaaSftpAdapter $adaptor */
         if ($disk->put($fileName, File::get($file))) {
             $fullPath    = $disk->getAdapter()->getRoot();
-            $partialPath = $this->getSubDirectoryInCDN($fullPath);
-            $photo       = $partialPath . $fileName;
+            $photo       = substr($fullPath, 1). $fileName;
         }
         return (isset($photo)) ? $photo : null;
     }

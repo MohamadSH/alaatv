@@ -50,7 +50,7 @@ class PendingTransaction extends AlaaJsonResourceWithPagination
                 return new TransactionStatus($this->transactionstatus);
             }),
             'created at'        => $this->when(isset($this->created_at), function () {
-                return $this->created_at;
+                return optional($this->created_at)->toDateTimeString();
             }),
             'completed at'      => $this->when(isset($this->completed_at), $this->completed_at),
         ];

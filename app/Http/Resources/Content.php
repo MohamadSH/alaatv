@@ -59,10 +59,10 @@ class Content extends AlaaJsonResourceWithPagination
             'order'            => $this->order,
             'page_view'        => $this->when(isset($this->page_view), $this->page_view),
             'created_at'       => $this->when(isset($this->created_at), function () {
-                return $this->created_at;
+                return optional($this->created_at)->toDateTimeString();
             }),
             'updated_at'       => $this->when(isset($this->updated_at), function () {
-                return $this->updated_at;
+                return optional($this->updated_at)->toDateTimeString();
             }),
             'url'              => $this->getUrl($this),
             'previous_url'     => $this->when(!is_null($this->previous_content), function () {

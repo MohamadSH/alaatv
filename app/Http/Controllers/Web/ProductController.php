@@ -171,14 +171,14 @@ class ProductController extends Controller
         $shouldBuyProductId           = null;
         $shouldBuyProductName         = '';
         $hasPurchasedEssentialProduct = false;
-        if ($product->id == Product::GODARE_RIYAZI_TAJROBI_SABETI) {
-            $isForcedGift         = true;
-            $shouldBuyProductName = 'راه ابریشم';
-            $shouldBuyProductId   = Product::RAHE_ABRISHAM;
-            if (isset($user)) {
-                $hasPurchasedEssentialProduct = $this->hasPurchasedEssentialProduct($user, $shouldBuyProductId);
-            }
-        }
+//        if ($product->id == Product::GODARE_RIYAZI_TAJROBI_SABETI) {
+//            $isForcedGift         = true;
+//            $shouldBuyProductName = 'راه ابریشم';
+//            $shouldBuyProductId   = Product::RAHE_ABRISHAM;
+//            if (isset($user)) {
+//                $hasPurchasedEssentialProduct = $this->hasPurchasedEssentialProduct($user, $shouldBuyProductId);
+//            }
+//        }
 
         //        if ($product->id == Product::RAHE_ABRISHAM && $this->canSeeRaheAbrishamSpecialPage($user)) {
         if ($product->id == Product::RAHE_ABRISHAM) {
@@ -1165,10 +1165,9 @@ class ProductController extends Controller
             $done[$key] = false;
             if ($disk->put($fileName, File::get($file))) {
                 $fullPath    = $adaptor->getRoot();
-                $partialPath = $this->getSubDirectoryInCDN($fullPath);
 
                 $done[$key]     = true;
-                $product->image = $partialPath . $fileName;
+                $product->image = substr($fullPath, 1). $fileName;
                 /**
                  *  Snippet code : resizing the image using the ........ package
                  *

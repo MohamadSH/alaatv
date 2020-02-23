@@ -70,13 +70,16 @@ class ContentTagCommand extends Command
 
     private function performTaggingTaskForAllContents(): void
     {
-        $contents = Content::all();
-        $bar      = $this->output->createProgressBar($contents->count());
-        foreach ($contents as $content) {
-            $this->performTaggingTaskForAContent($content);
-            $bar->advance();
+        $contents     = Content::all();
+        $contentCount = $contents->count();
+        if ($this->confirm("$contentCount contents found. Do you wish to continue?", true)) {
+            $bar = $this->output->createProgressBar($contentCount);
+            foreach ($contents as $content) {
+                $this->performTaggingTaskForAContent($content);
+                $bar->advance();
+            }
+            $bar->finish();
         }
-        $bar->finish();
-        $this->info("");
+        $this->info("DONE!");
     }
 }

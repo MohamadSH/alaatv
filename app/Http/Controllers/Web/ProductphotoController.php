@@ -8,6 +8,7 @@ use App\Productphoto;
 use App\Traits\FileCommon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 
@@ -22,6 +23,7 @@ class ProductphotoController extends Controller
 
     public function store(Request $request)
     {
+        $productId = $request->get('product_id');
         $photo = new Productphoto();
         $photo->fill($request->all());
         if ($request->get("enable") != 1) {
@@ -38,8 +40,8 @@ class ProductphotoController extends Controller
             $adaptor = $disk->getAdapter();
             if ($disk->put($fileName, File::get($file))) {
                 $fullPath    = $adaptor->getRoot();
-                $partialPath = $this->getSubDirectoryInCDN($fullPath);
-                $photo->file = $partialPath . $fileName;
+//                $partialPath = $this->getSubDirectoryInCDN($fullPath);
+                $photo->file = substr($fullPath, 1). $fileName;
             }
         }
 
@@ -61,6 +63,9 @@ class ProductphotoController extends Controller
 //        }
 
         if ($photo->save()) {
+            Cache::tags([
+                'product_' . $productId . '_samplePhotos'
+            ])->flush();
             session()->put('success', 'درج عکس با موفقیت انجام شد');
         } else {
             session()->put('error', 'خطای پایگاه داده');

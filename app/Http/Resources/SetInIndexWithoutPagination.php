@@ -4,8 +4,12 @@ namespace App\Http\Resources;
 
 use App\Contentset;
 use Illuminate\Http\Request;
-use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
+/**
+ * Class Set
+ *
+ * @mixin Contentset
+ * */
 class SetInIndexWithoutPagination extends AlaaJsonResourceWithoutPagination
 {
     /**
@@ -37,8 +41,12 @@ class SetInIndexWithoutPagination extends AlaaJsonResourceWithoutPagination
             'contents_count' => $this->activeContents->count(),
             'author'         => $this->when(isset($this->author), $this->getAuthor()),
             'contents'       => null,
-            'created_at'     => $this->when(isset($this->created_at), $this->created_at),
-            'updated_at'     => $this->when(isset($this->updated_at), $this->updated_at),
+            'created_at'     => $this->when(isset($this->created_at), function () {
+                return optional($this->created_at)->toDateTimeString();
+            }),
+            'updated_at'     => $this->when(isset($this->updated_at), function () {
+                return optional($this->updated_at)->toDateTimeString();
+            })
         ];
     }
 

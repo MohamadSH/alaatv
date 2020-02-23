@@ -85,10 +85,10 @@
             <td>@if(isset($eventresult->rank)) <span style="font-weight:bold ; color:{{($eventresult->rank<=1000)?'#18e018':'red'}}"> {{$eventresult->rank}} </span> @else
                     <span class = "m-badge m-badge--wide label-sm m-badge--danger">درج نشده </span> @endif
             </td>
-            @permission((config('constants.SHOW_KONKOOT_RESULT_INFO')))
             <td>@if(isset($eventresult->enableReportPublish)) <span style="font-weight:bold ; color:{{($eventresult->enableReportPublish)?'#18e018':'red'}}">{{($eventresult->enableReportPublish)?'بله':'خیر'}}</span> @else
                     <span class = "m-badge m-badge--wide label-sm m-badge--danger">درج نشده </span> @endif
             </td>
+            @permission((config('constants.SHOW_KONKOOT_RESULT_INFO')))
             <td>
                 {!! Form::model($eventresult, ['method' => 'PUT', 'action' => ['Web\EventresultController@update', $eventresult] , 'id' => 'eventResultForm_'.$eventresult->id]) !!}
                 <div class = "input-group">

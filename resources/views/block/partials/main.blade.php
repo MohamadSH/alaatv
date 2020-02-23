@@ -29,6 +29,7 @@
             id="{{ $block->class }}"
         @endif>
         <div class="col">
+        
             @if($block->banners->count() > 0)
                 @include('block.partials.banner')
             @else
@@ -151,8 +152,10 @@
                         </div>
 
                     </div>
+
                 </div>
             @endif
+            
         </div>
     </div>
 @endif

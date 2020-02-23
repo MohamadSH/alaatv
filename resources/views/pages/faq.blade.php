@@ -35,7 +35,7 @@
                            preload="none"
                            height="360"
                            width="640"
-                           poster="{{$item->photo}}">
+                           poster="{{\App\Websitesetting::getFaqPhoto($item)}}">
                         <source src="{{$item->video}}" type='video/mp4' res="HQ" default label="متوسط"/>
                         <p class="vjs-no-js">@lang('content.javascript is disables! we need it to play a video')</p>
                     </video>
@@ -47,7 +47,7 @@
                 <div class="a--list1-content">
                     <h2 class="a--list1-title">{{$item->title}}</h2>
                     <div class="a--list1-info"></div>
-                    <div class="a--list1-desc">{!! $item->body !!}</div>
+                    <div class="a--list1-desc" style="text-align:justify">{!! pureHTML($item->body) !!}</div>
                 </div>
                 <div class="a--list1-action"></div>
             </div>

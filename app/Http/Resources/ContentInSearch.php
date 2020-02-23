@@ -49,7 +49,9 @@ class ContentInSearch extends AlaaJsonResourceWithPagination
             'order'        => $this->order,
             'url'          => new Url($this),
             'set'          => (isset($this->contentset_id)) ? new SetInContentSearch($this->set) : null,
-            'updated_at'   => $this->when(isset($this->updated_at), $this->updated_at),
+            'updated_at'   => $this->when(isset($this->updated_at), function () {
+                return optional($this->updated_at)->toDateTimeString();
+            }),
         ];
     }
 

@@ -41,7 +41,7 @@ class UnpaidTransaction extends AlaaJsonResourceWithPagination
                 return new TransactionStatus($this->transactionstatus);
             }),
             'created_at'        => $this->when(isset($this->created_at), function () {
-                return $this->created_at;
+                return optional($this->created_at)->toDateTimeString();
             }),
             'deadline_at'       => $this->when(isset($this->deadline_at), $this->deadline_at),
         ];
