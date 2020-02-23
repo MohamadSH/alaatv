@@ -387,7 +387,6 @@ class Block extends BaseModel
             return null;
         }
 
-
         return isset(self::$actionLookupTable[$this->type]) ? $this->makeUrl(self::$actionLookupTable[$this->type],
             $this->tags) : null;
     }
