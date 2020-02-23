@@ -27,6 +27,7 @@ class Mix {
             'public/acm/AlaatvCustomFiles/components/loading/loading.css',// 488 KB
 
             'public/acm/AlaatvCustomFiles/css/customStyle.css',
+            'public/acm/AlaatvCustomFiles/css/customStyle/m-alert.css',
             'public/acm/AlaatvCustomFiles/css/customStyle/m-accordion.css',
             'public/acm/AlaatvCustomFiles/css/customStyle/header-menu.css',
             'public/acm/AlaatvCustomFiles/css/customStyle/productPrice.css',
