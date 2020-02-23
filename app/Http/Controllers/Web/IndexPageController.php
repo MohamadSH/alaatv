@@ -57,8 +57,10 @@ class IndexPageController extends Controller
                 ],
             ]);
         }
+
+        $slideBlock = $blocks->first();
         $sections = $blockCollectionFormatter->format($blocks);
         $pageName = "dashboard";
-        return view('pages.dashboard1', compact('pageName', 'sections', 'slides', 'blocks'));
+        return view('pages.dashboard1', compact('pageName', 'sections', 'slides', 'blocks' , 'slideBlock'));
     }
 }
