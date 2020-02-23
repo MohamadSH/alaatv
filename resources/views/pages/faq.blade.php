@@ -35,7 +35,7 @@
                            preload="none"
                            height="360"
                            width="640"
-                           poster="{{$item->photo}}">
+                           poster="{{\App\Websitesetting::getFaqPhoto($item)}}">
                         <source src="{{$item->video}}" type='video/mp4' res="HQ" default label="متوسط"/>
                         <p class="vjs-no-js">@lang('content.javascript is disables! we need it to play a video')</p>
                     </video>

@@ -382,6 +382,11 @@ class Block extends BaseModel
     {
         if (isset($this->customUrl))
             return $this->customUrl;
+
+        if(is_null($this->tags)){
+            return null;
+        }
+
         return isset(self::$actionLookupTable[$this->type]) ? $this->makeUrl(self::$actionLookupTable[$this->type],
             $this->tags) : null;
     }
