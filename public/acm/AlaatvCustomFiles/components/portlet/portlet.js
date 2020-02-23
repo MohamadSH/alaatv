@@ -1,13 +1,15 @@
 var APortlet = function () {
 
     function addEvent() {
-        $(document).on('click', '.m-portlet .m-portlet__head .m-portlet__head-tools [m-portlet-tool="toggle"]', function () {
+        $(document).on('click', '.m-portlet .m-portlet__head .m-portlet__head-tools [m-portlet-tool="toggle"]', function (e) {
             $portlet = $(this).parents('.m-portlet');
             if ($portlet.hasClass('m-portlet--collapsed')) {
                 riseAbove($portlet);
             } else {
                 collapse($portlet);
             }
+            e.stopPropagation();
+            e.preventDefault();
         });
     }
 

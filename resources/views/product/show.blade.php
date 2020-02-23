@@ -663,7 +663,7 @@
 
 
     {{--نمونه فیلم--}}
-        @include('block.partials.block', [
+        @include('block.partials.main', [
             'blockTitle'=>view('product.partials.productInfoNav', ['targetId'=>'sampleVideo' , 'product'=>$product , 'isForcedGift'=>$isForcedGift]),
             'blockUrlDisable'=>true,
             'blockType'=>'productSampleVideo',
@@ -781,7 +781,7 @@
     @endif
 
     {{--  محصولات مرتبط  --}}
-    @include('block.partials.block', [
+    @include('block.partials.main', [
         'blockTitle'=>view('product.partials.productInfoNav', ['targetId'=>'relatedProduct', 'product'=>$product , 'isForcedGift'=>$isForcedGift]),
         'blockUrlDisable'=>true,
         'blockType'=>'product',

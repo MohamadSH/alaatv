@@ -92,6 +92,22 @@
                     </div>
                     <div class="item">
                         <span class="label font-weight-bold">
+                            @if(isset($product->info_attributes['duration']) && !is_null($product->info_attributes['duration']))
+                                مدت زمان:
+                            @elseif(isset($product->info_attributes['numberOfPages']) && !is_null($product->info_attributes['numberOfPages']))
+                                تعداد صفحات جزوه:
+                            @endif
+                        </span>
+                        <span class="value">
+                            @if(isset($product->info_attributes['duration']) && !is_null($product->info_attributes['duration']))
+                                 {{ implode(' ',(array)Arr::get($product->info_attributes , 'duration')) }}
+                            @elseif(isset($product->info_attributes['numberOfPages']) && !is_null($product->info_attributes['numberOfPages']))
+                                 {{ implode(' ',(array)Arr::get($product->info_attributes , 'numberOfPages')) }}
+                            @endif
+                        </span>
+                    </div>
+                    <div class="item">
+                        <span class="label font-weight-bold">
                             دبیر:
                         </span>
                         <span class="value">

@@ -10,7 +10,15 @@
 
 @section('content')
 
-    @include('partials.slideShow1' ,['marginBottom'=>'25', 'positionOfSlideShow'=>'صفحه اصلی'])
+{{--    @include('partials.slideShow1' ,['marginBottom'=>'25', 'positionOfSlideShow'=>'صفحه اصلی'])--}}
+
+    @if($slideBlock->banners->count() > 0)
+        @include('block.partials.main', [
+            'block'=>$slideBlock,
+             'positionOfSlideShow'=>'صفحه اصلی',
+            'marginBottom'=>'25'
+        ])
+    @endif
 
     <div class="m--clearfix"></div>
     <div class="row">
@@ -157,13 +165,15 @@
 {{--                </div>--}}
 {{--            </div>--}}
         @endif
-        @include('block.partials.block', [
-            'blockCustomClass'=>$block->class.' a--content-carousel-1 dasboardLessons',
-            'blockCustomId'=>'sectionId-'.$block->class,
-            'blockType'=>(isset($block->sets) && $block->sets->count()>0)?'set':(isset($block->products) && $block->products->count()>0?'product':'content'),
-            'blockUrlDisable'=>false,
-            'btnLoadMore'=>true
-        ])
+        @if($block->banners->count() === 0)
+            @include('block.partials.main', [
+                'blockCustomClass'=>$block->class.' a--content-carousel-1 dasboardLessons',
+                'blockCustomId'=>'sectionId-'.$block->class,
+                'blockType'=>(isset($block->sets) && $block->sets->count()>0)?'set':(isset($block->products) && $block->products->count()>0?'product':'content'),
+                'blockUrlDisable'=>false,
+                'btnLoadMore'=>true
+            ])
+        @endif
         {{--            @foreach($section["ads"] as $image => $link)--}}
         {{--                @include('partials.bannerAds', ['img'=>$image , 'link'=>$link])--}}
         {{--            @endforeach--}}

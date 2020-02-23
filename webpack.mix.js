@@ -27,6 +27,7 @@ class Mix {
             'public/acm/AlaatvCustomFiles/components/loading/loading.css',// 488 KB
 
             'public/acm/AlaatvCustomFiles/css/customStyle.css',
+            'public/acm/AlaatvCustomFiles/css/customStyle/m-alert.css',
             'public/acm/AlaatvCustomFiles/css/customStyle/m-accordion.css',
             'public/acm/AlaatvCustomFiles/css/customStyle/header-menu.css',
             'public/acm/AlaatvCustomFiles/css/customStyle/productPrice.css',
@@ -499,9 +500,11 @@ class Mix {
 
     mixPageContentShow() {
         this.mixCssAndJs([
+
                 'public/acm/AlaatvCustomFiles/components/ribbon/style.css',
                 'public/acm/AlaatvCustomFiles/components/Favorite/style.css',
                 'public/acm/AlaatvCustomFiles/components/AlaaScroll/style.css',
+                'public/acm/AlaatvCustomFiles/components/Alist/type2/style.css',
                 'public/acm/AlaatvCustomFiles/components/ScrollCarousel/style.css',
                 'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/style.css',
                 'public/acm/AlaatvCustomFiles/components/imageWithCaption/style.css',
@@ -511,20 +514,24 @@ class Mix {
                 'public/acm/videojs/plugins/pip/videojs.pip.min.css',
                 'public/acm/videojs/plugins/pip/videojs.pip.rtl.css',
                 'public/acm/videojs/plugins/seek-to-point.css',
+
                 'public/acm/AlaatvCustomFiles/components/summarizeText/style.css',
                 'public/acm/AlaatvCustomFiles/css/page/content-show.css'
             ],
             'public/css/content-show.css',
             [
                 'node_modules/tooltip/dist/Tooltip.js',
+
                 'public/acm/videojs/video.min.js',
                 'public/acm/videojs/plugins/pip/videojs.pip.min.js',
-                'public/acm/videojs/nuevo.min.js',
                 'public/acm/videojs/plugins/videojs.p2p.min.js',
                 'public/acm/videojs/plugins/videojs.hotkeys.min.js',
                 'public/acm/videojs/plugins/seek-to-point.js',
                 'public/acm/videojs/lang/fa.js',
+                'public/acm/videojs/nuevo.min.js',
+
                 'public/acm/AlaatvCustomFiles/js/UserCart.js',
+                'public/acm/AlaatvCustomFiles/components/AlaaVAST/script.js',
                 'public/acm/AlaatvCustomFiles/components/Favorite/script.js',
                 'public/acm/AlaatvCustomFiles/components/aSticky/aSticky.js',
                 'public/acm/AlaatvCustomFiles/components/summarizeText/js.js',
