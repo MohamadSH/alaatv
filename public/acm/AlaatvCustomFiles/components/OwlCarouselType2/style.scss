@@ -343,7 +343,7 @@
                 padding: 5px 10px;
                 height: 45px;
                 display: flex;
-                align-items: flex-start;
+                align-items: center;
 
                 a {
                     top: 0;
@@ -355,6 +355,9 @@
                     text-overflow: ellipsis;
                     display: -webkit-box;
                     -webkit-box-orient: vertical;
+
+                    line-height: 1.4rem;
+                    font-size: 1.1rem;
                 }
             }
 

@@ -19,7 +19,17 @@
 @endsection
 
 @section('content')
-    @include('partials.slideShow1' ,['marginBottom'=>'25', 'positionOfSlideShow'=>'صفحه فروشگاه'])
+
+{{--    @include('partials.slideShow1' ,['marginBottom'=>'25', 'positionOfSlideShow'=>'صفحه فروشگاه'])--}}
+
+    @if($slideBlock->banners->count() > 0)
+        @include('block.partials.main', [
+            'block'=>$slideBlock,
+             'positionOfSlideShow'=>'صفحه فروشگاه',
+            'marginBottom'=>'25'
+        ])
+    @endif
+
     <div class="m--clearfix"></div>
 
     <div class="row">
@@ -139,7 +149,7 @@
 
     @foreach($blocks as $block)
         @if($block->products->count() > 0)
-            @include('block.partials.block', [
+            @include('block.partials.main', [
                 'blockCustomClass'=>'shopBlock OwlCarouselType2-shopPage',
                 'btnLoadMore'=>true
             ])
