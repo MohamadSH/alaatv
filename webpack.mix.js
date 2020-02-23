@@ -499,6 +499,7 @@ class Mix {
 
     mixPageContentShow() {
         this.mixCssAndJs([
+
                 'public/acm/AlaatvCustomFiles/components/ribbon/style.css',
                 'public/acm/AlaatvCustomFiles/components/Favorite/style.css',
                 'public/acm/AlaatvCustomFiles/components/AlaaScroll/style.css',
@@ -512,20 +513,24 @@ class Mix {
                 'public/acm/videojs/plugins/pip/videojs.pip.min.css',
                 'public/acm/videojs/plugins/pip/videojs.pip.rtl.css',
                 'public/acm/videojs/plugins/seek-to-point.css',
+
                 'public/acm/AlaatvCustomFiles/components/summarizeText/style.css',
                 'public/acm/AlaatvCustomFiles/css/page/content-show.css'
             ],
             'public/css/content-show.css',
             [
                 'node_modules/tooltip/dist/Tooltip.js',
+
                 'public/acm/videojs/video.min.js',
                 'public/acm/videojs/plugins/pip/videojs.pip.min.js',
-                'public/acm/videojs/nuevo.min.js',
                 'public/acm/videojs/plugins/videojs.p2p.min.js',
                 'public/acm/videojs/plugins/videojs.hotkeys.min.js',
                 'public/acm/videojs/plugins/seek-to-point.js',
                 'public/acm/videojs/lang/fa.js',
+                'public/acm/videojs/nuevo.min.js',
+
                 'public/acm/AlaatvCustomFiles/js/UserCart.js',
+                'public/acm/AlaatvCustomFiles/components/AlaaVAST/script.js',
                 'public/acm/AlaatvCustomFiles/components/Favorite/script.js',
                 'public/acm/AlaatvCustomFiles/components/aSticky/aSticky.js',
                 'public/acm/AlaatvCustomFiles/components/summarizeText/js.js',
