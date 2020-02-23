@@ -690,7 +690,7 @@
         {{-- godar block--}}
         <div class="col">
             @foreach($contentBlocks as $block)
-                @include('block.partials.block', [
+                @include('block.partials.main', [
                 'blockCustomClass'=> 'contentBlock',
                 'blockCustomId'=>'sectionId-'.$block->class,
                 'blockType'=>(isset($block->sets) && $block->sets->count()>0)?'set':(isset($block->products) && $block->products->count()>0?'product':'content'),
@@ -744,6 +744,71 @@
             j.src = fp + '?uuid=' + i + '&v=' + v;
             f.parentNode.insertBefore(j, f);
         })(window, document, '35b39d4b-517b-44bc-85c4-44f93242836f');
+
+        var vastData = [
+            {
+            startAfter: 0,
+            canSkipAfter: 5,
+            mediaFiles: [
+                {
+                    id: '',
+                    type: 'video/mp4',
+                    label: 'خوب',
+                    res: '1080p',
+                    width: '1280',
+                    height: '720',
+                    default: true,
+                    src: 'http://localhost/acm/videojs/videos/VAST-4.0-Short-Intro.mp4',
+                }
+                ,
+                {
+                    id: '',
+                    type: 'video/mp4',
+                    label: 'معمولی',
+                    res: '720p',
+                    width: '854',
+                    height: '480',
+                    src: 'http://localhost/acm/videojs/videos/VAST-4.0-Short-Intro-mid-resolution.mp4',
+                },
+                {
+                    id: '',
+                    type: 'video/mp4',
+                    label: 'کم',
+                    res: '240p',
+                    width: '640',
+                    height: '360',
+                    src: 'http://localhost/acm/videojs/videos/VAST-4.0-Short-Intro-low-resolution.mp4',
+                }
+            ],
+            ClickThrough: {
+                attr: {
+                    id: '',
+                },
+                val: 'http://localhost/shop'
+            }
+        },
+            {
+            startAfter: 10,
+            canSkipAfter: 8,
+            mediaFiles: [
+                {
+                    id: '',
+                    type: 'video/mp4',
+                    width: '1280',
+                    height: '720',
+                    src: 'http://localhost/acm/videojs/videos/VAST-4.0-Short-Intro.mp4',
+                }
+            ],
+            ClickThrough: {
+                attr: {
+                    id: '',
+                },
+                val: ''
+            }
+        }
+        ];
+
+        vastData = [];
 
     </script>
     <script src="{{ mix('/js/content-show.js') }}" type="text/javascript"></script>

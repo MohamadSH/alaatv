@@ -199,7 +199,7 @@
                 ( !is_null($userAssetsCollection->where('title', '!=', 'محصولات من')->pluck('sets')->first()) &&  $userAssetsCollection->where('title', '!=', 'محصولات من')->pluck('sets')->first()->count()) > 0)
                     @foreach($userAssetsCollection as $userFavoritesKey=>$block)
                         @if($block->title!=="محصولات من")
-                            @include('block.partials.block', [
+                            @include('block.partials.main', [
                                 'blockCustomClass'=>$block->class.' userFavorites',
                                 'blockCustomId'=>'owlCarouselMyFavoritProducts',
                                 'blockType'=>'product',
@@ -207,7 +207,7 @@
                                 'blockUrlDisable'=>false,
                             ])
 
-                            @include('block.partials.block', [
+                            @include('block.partials.main', [
                                 'blockCustomClass'=>$block->class.' userFavorites',
                                 'blockCustomId'=>'owlCarouselMyFavoritContent',
                                 'blockType'=>'content',
@@ -215,7 +215,7 @@
                                 'blockUrlDisable'=>false,
                             ])
 
-                            @include('block.partials.block', [
+                            @include('block.partials.main', [
                                 'blockCustomClass'=>$block->class.' userFavorites',
                                 'blockCustomId'=>'owlCarouselMyFavoritSet',
                                 'blockType'=>'set',
