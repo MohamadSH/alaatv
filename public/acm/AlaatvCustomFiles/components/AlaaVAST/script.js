@@ -27,6 +27,12 @@ var AlaaVast = function () {
                 },
                 val: ''
             },
+            ClickThrough: {
+                attr: {
+                    id: '',
+                },
+                val: ''
+            },
             trackingEvents: {
                 start: '',
                 firstQuartile: '',
@@ -127,6 +133,19 @@ var AlaaVast = function () {
             playPlayer(player, adPlayer, adIndex);
         });
 
+        adPlayer.on('click', function(event){
+            event.preventDefault();
+
+            if (
+                !$(event.target).closest('.vjs-control-bar').length &&
+                !$(event.target).closest('.vjs-big-play-button').length &&
+                !$(event.arget).closest('.AlaaVastSkipBtn').length &&
+                !$(event.target).closest('.AlaaVastSkipTimer').length &&
+                data[adIndex].ClickThrough.val.length > 0
+            ) {
+                window.location.href = data[adIndex].ClickThrough.val;
+            }
+        });
 
         return adPlayer;
     }

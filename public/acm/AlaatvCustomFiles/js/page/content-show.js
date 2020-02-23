@@ -62,6 +62,9 @@ var SnippetContentShow = function(){
 
             player.pic2pic();
 
+            if (vastData.length > 0) {
+                AlaaVast.init(player, vastData);
+            }
             // AlaaVast.init(player, [{
             //     startAfter: 0,
             //     canSkipAfter: 5,
