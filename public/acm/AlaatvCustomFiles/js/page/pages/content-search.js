@@ -36,6 +36,7 @@ var Alaasearch = function () {
                         getAjaxContent(action, callback);
                     } else {
                         toastr.error('خطای سیستمی رخ داده است.');
+
                         window.location.reload();
                     }
                 }

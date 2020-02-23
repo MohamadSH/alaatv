@@ -86,7 +86,7 @@
 
         {{--نمونه فیلم--}}
         @if(optional(optional(optional(optional($block)->sets)->first())->getActiveContents2())->count() > 0)
-            @include('block.partials.block', [
+            @include('block.partials.main', [
                 'blockTitle'=>view('product.partials.productInfoNav', ['targetId'=>'sampleVideo' , 'product'=>$product , 'isForcedGift'=>$isForcedGift]),
                 'blockUrlDisable'=>true,
                 'blockType'=>'productSampleVideo',
