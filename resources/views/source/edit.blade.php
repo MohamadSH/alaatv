@@ -23,8 +23,6 @@
     <div id="ajax-modal" class="modal fade" tabindex="-1"></div>
     {{--Ajax modal for panel startup --}}
 
-    @include("systemMessage.flash")
-
     <div class="m-portlet m-portlet--mobile m-portlet--body-progress-">
         <div class="m-portlet__head">
             <div class="m-portlet__head-caption">

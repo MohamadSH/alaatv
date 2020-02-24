@@ -20,6 +20,9 @@
             <div class="m-grid__item m-grid__item--fluid m-wrapper">
                 <div class="m-content">
                     @yield('pageBar')
+
+                    @include('systemMessage.flash')
+
                     @yield('content')
                 </div>
             </div>

@@ -30,7 +30,6 @@
     <div class = "row">
         <div class = "col-md-3"></div>
         <div class = "col-md-8">
-            @include("systemMessage.flash")
             {!! Form::open(['files'=>true,'method' => 'POST','action' => 'ArticleController@store', 'class'=>'form-horizontal']) !!}
             @include('article.form')
             {!! Form::close() !!}

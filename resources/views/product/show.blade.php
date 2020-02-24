@@ -95,7 +95,7 @@
 
 @section('content')
 
-    @include('systemMessage.flash')
+    {{dd($allChildrenSets)}}
 
     @if(in_array($product->type['id'] ,[config("constants.PRODUCT_TYPE_SIMPLE")]))
         @include('product.partials.showPage-topSection-simple')

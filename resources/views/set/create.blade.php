@@ -44,7 +44,6 @@
 @endsection
 
 @section('content')
-    @include('systemMessage.flash')
 
     @include('set.form', ['editForm' => false])
 

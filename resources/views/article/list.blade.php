@@ -26,7 +26,6 @@
     </div>
 @endsection
 @section("content")
-    @include("partials.slideShow1")
     <div class = "blog-page blog-content-2">
         <div class = "row">
 

@@ -39,7 +39,6 @@
 @endsection
 
 @section("content")
-    @include("systemMessage.flash")
             <div class = "m-portlet m-portlet--mobile m-portlet--body-progress-">
                 <div class = "m-portlet__head">
                     <div class = "m-portlet__head-caption">

@@ -20,8 +20,6 @@
 
 @section('content')
 
-    @include("systemMessage.flash")
-
     <div class="row">
         <div class="col">
             <!-- BEGIN BLOCK TABLE PORTLET-->

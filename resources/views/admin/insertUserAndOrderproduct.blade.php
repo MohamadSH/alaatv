@@ -20,8 +20,6 @@
     <div id = "ajax-modal" class = "modal fade" tabindex = "-1"></div>
     {{--Ajax modal for panel startup --}}
 
-    @include("systemMessage.flash")
-
     <div class = "row">
         <div class = "col-md-12">
             <!-- BEGIN Portlet PORTLET-->

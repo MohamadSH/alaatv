@@ -25,7 +25,6 @@
 @endsection
 
 @section('content')
-    @include("systemMessage.flash")
     <form method="POST" action="{{route('livedescription.update' , $liveDescription)}}">
         @method('PUT')
         @csrf
