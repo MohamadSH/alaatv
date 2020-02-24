@@ -46,48 +46,142 @@ var AlaaVast = function () {
             },
             startAfter: 0,
             canSkipAfter: 0,
-            mediaFiles: [
-                {
-                    id: '',
-                    type: 'video/mp4',
-                    width: '1280',
-                    height: '720',
-                    src: '',
-                    res: '',
-                    label: '',
-                    default: false
-                }
-            ],
+            mediaFiles: [{}],
             isPlayed: false,
             isSkipButtonShown: false,
             isSkipTimerShown: false
-
+        },
+        defaultMediaFilesItem = {
+            id: '',
+            type: 'video/mp4',
+            width: '1280',
+            height: '720',
+            src: '',
+            res: '',
+            label: '',
+            default: false
         },
         data = [];
 
-    function getXml() {
-        var address = 'http://localhost/acm/videojs/vast42.xml',
-            xmlDoc;
-        var x = new XMLHttpRequest();
-        x.open('GET', address, true);
-        x.onreadystatechange = function () {
-            if (x.readyState === 4 && x.status === 200)
-            {
-                xmlDoc = x.responseXML;
-                console.log(xmlDoc);
+    var XMLService = function () {
+
+        function getXml(address, successCallback, failedCallback) {
+            var x = new XMLHttpRequest();
+            x.open('GET', address, true);
+            x.onreadystatechange = function () {
+                if (x.readyState === 4 && x.status === 200) {
+                    var responseXML = x.responseXML;
+                    if (responseXML) {
+                        successCallback(responseXML);
+                    }
+                } else {
+                    failedCallback();
+                }
+            };
+            x.send(null);
+        }
+
+        function getMediaFiles(xmlDoc) {
+            var node = getNode(xmlDoc, 'MediaFiles');
+            if (node === null) {
+                return [];
             }
+
+            var mediaFiles = node.children,
+                mediaFilesArray = [];
+
+            for (var i = 0; (typeof mediaFiles[i] !== 'undefined'); i++) {
+                if (mediaFiles[i].nodeName === 'MediaFile') {
+                    mediaFilesArray.push(getMediaFile(mediaFiles[i]));
+                }
+            }
+
+            return mediaFilesArray;
+        }
+
+        function getClickThrough(xmlDoc) {
+            var node = getNode(xmlDoc, 'ClickThrough');
+            if (node) {
+                return node.textContent.trim();
+            }
+            return null;
+        }
+
+        function getMediaFile(mediaFile) {
+            var attributes = mediaFile.attributes;
+
+            return $.extend(true, {}, getMediaAttributes(attributes, ['id', 'type', 'width', 'height', 'res', 'label', 'default']), {src: mediaFile.textContent.trim()});
+        }
+
+        function getMediaAttributes(attributes, attributesKey) {
+            var data = {};
+            for (var i = 0; (typeof attributesKey[i] !== 'undefined'); i++) {
+                if (attributes.getNamedItem(attributesKey[i])) {
+                    data[attributesKey[i]] = attributes.getNamedItem(attributesKey[i]).nodeValue;
+                }
+            }
+
+            return data;
+        }
+
+        function getSkipoffset(xmlDoc) {
+            var skipoffset = getNodeAttribute(xmlDoc, 'Linear', 'skipoffset');
+            if (skipoffset !== null) {
+                return convertTime(skipoffset);
+            }
+
+            return convertTime('99:99:99');
+        }
+
+        function getStartoffset(xmlDoc) {
+            var skipoffset = getNodeAttribute(xmlDoc, 'Linear', 'startoffset');
+            if (skipoffset !== null) {
+                return convertTime(skipoffset);
+            }
+
+            return convertTime('00:00:00');
+        }
+
+        function convertTime(string) {
+            var timeArray = string.split(':');
+            return parseInt(timeArray[0]*3600)+parseInt(timeArray[1]*60)+parseInt(timeArray[2]);
+        }
+
+        function getNodeAttribute(xmlDoc, nodeName, attributeName) {
+            var node = getNode(xmlDoc, nodeName);
+            if(node !== null && node.attributes.getNamedItem(attributeName)) {
+                return node.attributes.getNamedItem(attributeName).nodeValue
+            }
+            return null;
+        }
+
+        function getNode(xmlDoc, nodeName) {
+            if(xmlDoc.getElementsByTagName(nodeName).length > 0) {
+                return xmlDoc.getElementsByTagName(nodeName)[0];
+            }
+            return null;
+        }
+
+        function xmlAdapter(xmlDoc) {
+            return {
+                mediaFiles: getMediaFiles(xmlDoc),
+                ClickThrough: {
+                    attr: {
+                        id: '',
+                    },
+                    val: getClickThrough(xmlDoc)
+                },
+                startAfter: getStartoffset(xmlDoc),
+                canSkipAfter: getSkipoffset(xmlDoc)
+            }
+        }
+
+        return {
+            getXml: getXml,
+            xmlAdapter: xmlAdapter,
         };
-        x.send(null);
-        console.log('sending...');
-    }
 
-    function xmlAdapter(xmlDoc) {
-        xmlDoc.getElementsByTagName('AdSystem')[0].innerHTML
-    }
-
-    function feedAdItem() {
-
-    }
+    }();
 
     function initAdPlayer(player, adIndex) {
         var adPlayer = videojs(getAdPlayerId(player, adIndex), {
@@ -242,6 +336,9 @@ var AlaaVast = function () {
 
     function initData(customData) {
         for (var i = 0; (typeof customData[i] !== 'undefined'); i++) {
+            for (var j = 0; (typeof customData[i].mediaFiles[j] !== 'undefined'); j++) {
+                customData[i].mediaFiles[j] = $.extend(true, {}, defaultMediaFilesItem, customData[i].mediaFiles[j]);
+            }
             data.push($.extend(true, {}, defaultAdItemData, customData[i]));
         }
     }
@@ -330,9 +427,28 @@ var AlaaVast = function () {
         });
     }
 
+    function addLoading(player) {
+        $('#'+player.id()).prepend('<div class="playerLoading-'+player.id()+'" style="position: absolute;top: 0;left: 0;width: 100%;height: 100%;background: #808080d4;z-index: 98;cursor: wait;"></div>');
+    }
+
+    function removeLoading(player) {
+        $('.playerLoading-'+player.id()).remove();
+    }
+
+    function initXml(player, address) {
+        player.pause();
+        addLoading(player);
+        XMLService.getXml(address, function (xmlDoc) {
+            init(player, [XMLService.xmlAdapter(xmlDoc)]);
+            removeLoading(player);
+        }, function () {
+            removeLoading(player);
+        });
+    }
 
     return {
         init: init,
+        initXml: initXml,
         adPlayers: []
     }
 }();

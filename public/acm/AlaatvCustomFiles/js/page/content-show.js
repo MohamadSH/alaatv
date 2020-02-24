@@ -65,6 +65,10 @@ var SnippetContentShow = function(){
             if (vastData.length > 0) {
                 AlaaVast.init(player, vastData);
             }
+
+            if (vastXml !== null && vastXml.trim().length > 0) {
+                AlaaVast.initXml(player, vastXml);
+            }
         }
 
     };
