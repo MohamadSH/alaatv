@@ -37,8 +37,6 @@ class IndexPageController extends Controller
             ]), '100', '100', null));
 
 
-        $slides = Slideshow::getMainBanner();
-
         $blocks = Block::getMainBlocks2();
         $slideBlock          = $blocks->first();
         $banners             = $blocks->first()->banners->sortBy('order');
@@ -47,6 +45,7 @@ class IndexPageController extends Controller
         $blocks = $blocks->values();
 
         if (request()->expectsJson()) {
+            $slides = Slideshow::getMainBanner();
             return response()->json([
                 'mainBanner' => $slides->isNotEmpty() ? $slides : null,
                 'block'      => [
@@ -69,6 +68,6 @@ class IndexPageController extends Controller
         $sections = $blockCollectionFormatter->format($blocks);
 
         $pageName = "dashboard";
-        return view('pages.dashboard1', compact('pageName', 'sections', 'slides', 'blocks' , 'slideBlock'));
+        return view('pages.dashboard1', compact('pageName', 'sections', 'blocks' , 'slideBlock'));
     }
 }

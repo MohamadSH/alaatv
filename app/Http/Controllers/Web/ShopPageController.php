@@ -35,9 +35,8 @@ class ShopPageController extends Controller
                 'filename' => $this->setting->site->siteLogo,
             ]), '100', '100', null));
 
-        $slides = Slideshow::getShopBanner();
-
         if (request()->expectsJson()) {
+            $slides         = Slideshow::getShopBanner();
             $blocks         = Block::getShopBlocksForApp();
             $numberOfBlocks = $blocks->count();
             return response()->json([
@@ -58,8 +57,15 @@ class ShopPageController extends Controller
                 ],
             ]);
         }
-        $blocks   = Block::getShopBlocks();
+
+        $blocks = Block::getShopBlocks();
+        $slideBlock          = $blocks[1];
+        $banners             = $blocks[1]->banners->sortBy('order');
+        $slideBlock->banners = $banners->values();
+        $blocks->pull(1);
+        $blocks = $blocks->values();
+
         $pageName = "shop";
-        return view('pages.shop', compact('pageName', 'blocks', 'slides'));
+        return view('pages.shop', compact('pageName', 'blocks', 'slideBlock'));
     }
 }
