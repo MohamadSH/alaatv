@@ -25,9 +25,7 @@
 
 @section("content")
     <div class = "row">
-        <div class = "col-md-12">
-            @include("systemMessage.flash")
-        </div>
+
         <div class = "col-md-12">
             <div class = "portlet box blue">
                 <div class = "portlet-title">

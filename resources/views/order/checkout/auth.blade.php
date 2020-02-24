@@ -9,8 +9,6 @@
 
     @include("partials.checkoutSteps" , ["step"=>0])
 
-    @include('systemMessage.flash')
-
     <div class = "container">
         <div class = "row align-items-center">
             <div class = "col-12 col-sm-9 col-md-6 col-lg-5 mx-auto">

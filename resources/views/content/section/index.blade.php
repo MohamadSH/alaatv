@@ -20,7 +20,6 @@
 @endsection
 
 @section("content")
-    @include("systemMessage.flash")
     <div class="m-portlet m-portlet--tabs productDetailes">
         <div class="m-portlet__head">
             <div class="m-portlet__head-caption">

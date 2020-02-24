@@ -33,8 +33,6 @@
 
     <div class = "row">
         <div class = "col">
-
-            @include("systemMessage.flash")
             <div class = "m-portlet m-portlet--head-sm" m-portlet = "true" id = "m_portlet_tools_3">
                 <div class = "m-portlet__head">
                     <div class = "m-portlet__head-caption">

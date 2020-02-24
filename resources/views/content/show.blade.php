@@ -387,7 +387,7 @@
 
             @include('partials.ads.list', ['id'=>'contentShowPage-rightSide-0'])
 
-            @if(count($recommendedItems) > 0 && $productsHasThisContentThroughBlockCollection->count() === 0 && $content->isFree)
+            @if($hasRecommendedBlock)
                 @include('partials.widgets.ScollCarousel.body', [
                     'title'=> 'موارد مرتبط',
                     'customClass'=> 'RelatedItems',
@@ -810,6 +810,7 @@
 
         vastData = [];
 
+        var vastXml = '{{($hasRecommendedBlock)?route("web.vast.xml"):""}}';
     </script>
     <script src="{{ mix('/js/content-show.js') }}" type="text/javascript"></script>
 @endsection

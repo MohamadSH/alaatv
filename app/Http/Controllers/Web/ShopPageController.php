@@ -37,7 +37,7 @@ class ShopPageController extends Controller
 
         if (request()->expectsJson()) {
             $slides         = Slideshow::getShopBanner();
-            $blocks         = Block::getShopBlocksForApp();
+            $blocks         = Block::getShopBlocksForAppV1();
             $numberOfBlocks = $blocks->count();
             return response()->json([
                 'mainBanner' => $slides->isNotEmpty() ? $slides : null,
@@ -58,11 +58,11 @@ class ShopPageController extends Controller
             ]);
         }
 
-        $blocks = Block::getShopBlocks();
-        $slideBlock          = $blocks[1];
-        $banners             = $blocks[1]->banners->sortBy('order');
+        $blocks = Block::getShopBlocksForWeb();
+        $slideBlock          = $blocks->first();
+        $banners             = $blocks->first()->banners->sortBy('order');
         $slideBlock->banners = $banners->values();
-        $blocks->pull(1);
+        $blocks->pull(0);
         $blocks = $blocks->values();
 
         $pageName = "shop";

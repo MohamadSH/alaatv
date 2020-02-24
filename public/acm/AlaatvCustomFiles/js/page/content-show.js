@@ -65,59 +65,10 @@ var SnippetContentShow = function(){
             if (vastData.length > 0) {
                 AlaaVast.init(player, vastData);
             }
-            // AlaaVast.init(player, [{
-            //     startAfter: 0,
-            //     canSkipAfter: 5,
-            //     mediaFiles: [
-            //         {
-            //             id: '',
-            //             type: 'video/mp4',
-            //             label: 'خوب',
-            //             res: '1080p',
-            //             width: '1280',
-            //             height: '720',
-            //             default: true,
-            //             src: 'http://localhost/acm/videojs/videos/VAST-4.0-Short-Intro.mp4',
-            //         }
-            //         ,
-            //         {
-            //             id: '',
-            //             type: 'video/mp4',
-            //             label: 'معمولی',
-            //             res: '720p',
-            //             width: '854',
-            //             height: '480',
-            //             src: 'http://localhost/acm/videojs/videos/VAST-4.0-Short-Intro-mid-resolution.mp4',
-            //         },
-            //         {
-            //             id: '',
-            //             type: 'video/mp4',
-            //             label: 'کم',
-            //             res: '240p',
-            //             width: '640',
-            //             height: '360',
-            //             src: 'http://localhost/acm/videojs/videos/VAST-4.0-Short-Intro-low-resolution.mp4',
-            //         }
-            //     ],
-            //     videoClicks: {
-            //         clickThrough: ''
-            //     }
-            // },{
-            //     startAfter: 10,
-            //     canSkipAfter: 8,
-            //     mediaFiles: [
-            //         {
-            //             id: '',
-            //             type: 'video/mp4',
-            //             width: '1280',
-            //             height: '720',
-            //             src: 'http://localhost/acm/videojs/videos/VAST-4.0-Short-Intro.mp4',
-            //         }
-            //     ],
-            //     videoClicks: {
-            //         clickThrough: ''
-            //     }
-            // }]);
+
+            if (vastXml !== null && vastXml.trim().length > 0) {
+                AlaaVast.initXml(player, vastXml);
+            }
         }
 
     };

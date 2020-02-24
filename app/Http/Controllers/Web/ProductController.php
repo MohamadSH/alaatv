@@ -964,20 +964,22 @@ class ProductController extends Controller
     }
 
     /**
-     * @param User $user
+     * @param User    $user
+     *
+     * @param Product $product
      *
      * @return bool
      */
-    private function hasUserPurchasedRaheAbrisham(User $user = null): bool
+    private function hasUserPurchasedProduct(Product $product , User $user = null): bool
     {
         if (is_null($user)) {
             return false;
         }
 
-        $key = 'user:hasPurchasedRaheAbrisham:' . $user->cacheKey();
-        return Cache::tags(['user', 'user_' . $user->id, 'user_' . $user->id . '_closedOrders'])
-            ->remember($key, config('constants.CACHE_600'), function () use ($user) {
-                return $user->products()->contains(Product::RAHE_ABRISHAM);
+        $key = 'user:hasPurchasedProduct:' . $user->cacheKey() . '-'.$product->cacheKey();
+        return Cache::tags(['user', 'user_' . $user->id, 'user_' . $user->id . '_closedOrders' , 'product_'.$product->id])
+            ->remember($key, config('constants.CACHE_600'), function () use ($user , $product) {
+                return $user->products()->contains($product->id);
             });
     }
 

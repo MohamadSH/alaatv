@@ -59,6 +59,7 @@ class HomeController extends Controller
             'siteMapXML',
             'search',
             'home',
+            'vastXML',
         ];
         $this->middleware('auth', ['except' => $authException]);
         $this->middleware('role:admin', ['only' => ['debug']]);
@@ -758,6 +759,13 @@ class HomeController extends Controller
 
         return response()->json([
             'message' => 'پیامک با موفقیت ارسال شد',
+        ]);
+    }
+
+    public function vastXML()
+    {
+        return response(file_get_contents('acm/videojs/vast42.xml'), 200, [
+            'Content-Type' => 'application/xml'
         ]);
     }
 }

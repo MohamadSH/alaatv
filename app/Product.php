@@ -1614,17 +1614,26 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
     /**
      * Gets a collection containing all of product children
      *
+     * @param bool $enableChildren
+     *
+     * @param bool $loadSets
+     *
      * @return Collection
      */
-    public function getAllChildren(): Collection
+    public function getAllChildren(bool $enableChildren=false , bool $loadSets=false): Collection
     {
-        $key = 'product:makeChildrenArray:' . $this->cacheKey();
+        $onlyEnable = $enableChildren?'1':'0';
+        $key = 'product:makeChildrenArray:onlyEnable:'. $onlyEnable.':'. $this->cacheKey();
 
         return Cache::tags(['product', 'childProduct', 'product_' . $this->id, 'product_' . $this->id . '_children'])
-            ->remember($key, config('constants.CACHE_600'), function () {
+            ->remember($key, config('constants.CACHE_600'), function () use ($enableChildren , $loadSets) {
                 $children = collect();
                 if ($this->hasChildren()) {
                     $thisChildren = $this->children;
+                    if($loadSets){
+                        $thisChildren->load('sets');
+                    }
+                    $thisChildren = $enableChildren ? $thisChildren->where('enable' , 1) : $thisChildren ;
                     $children     = $children->merge($thisChildren);
                     foreach ($thisChildren as $child) {
                         $children = $children->merge($child->getAllChildren());

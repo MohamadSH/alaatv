@@ -766,7 +766,7 @@
             <li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1">
                 <a target="_blank" href="{{route('web.faq')}}" rel="noreferrer" class="m-menu__link " title="سؤالات متداول">
                     <span class="m-menu__item-here"></span>
-                    <i class="m-menu__link-icon fab ">?</i>
+                    <i class="m-menu__link-icon fab fa fa-question-circle"></i>
                     <span class="m-menu__link-text">سؤالات متداول</span>
                 </a>
             </li>
