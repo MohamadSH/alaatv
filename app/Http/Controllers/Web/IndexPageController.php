@@ -37,7 +37,7 @@ class IndexPageController extends Controller
             ]), '100', '100', null));
 
 
-        $blocks = Block::getMainBlocks2();
+        $blocks = Block::getMainBlocksForAppV1();
         $slideBlock          = $blocks->first();
         $banners             = $blocks->first()->banners->sortBy('order');
         $slideBlock->banners = $banners->values();

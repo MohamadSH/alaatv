@@ -238,11 +238,14 @@ class ContentController extends Controller
         $sources = $content->sources;
 
         $userCanSeeCounter = false;
+
+        $hasRecommendedBlock = count($recommendedItems) > 0 && $productsHasThisContentThroughBlockCollection->count() === 0 && $content->isFree;
+
         $viewResponse      = view('content.show',
             compact('seenCount', 'author', 'content', 'contentsWithSameSet', 'videosWithSameSet',
                 'pamphletsWithSameSet', 'contentSetName', 'tags',
                 'userCanSeeCounter', 'adItems', 'videosWithSameSetL', 'videosWithSameSetR',
-                'productsThatHaveThisContent', 'user_can_see_content', 'message', 'productsHasThisContentThroughBlockCollection', 'contentBlocks', 'isFavored', 'sources', 'recommendedItems'));
+                'productsThatHaveThisContent', 'user_can_see_content', 'message', 'productsHasThisContentThroughBlockCollection', 'contentBlocks', 'isFavored', 'sources', 'recommendedItems' , 'hasRecommendedBlock'));
 
         return httpResponse($apiResponse, $viewResponse);
     }
