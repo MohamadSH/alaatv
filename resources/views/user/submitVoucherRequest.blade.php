@@ -54,7 +54,6 @@
     {{--</div>--}}
     {{--</div>--}}
     {{--</div>--}}
-    @include("systemMessage.flash")
     <div class = "row">
         <div class = "col-md-12">
             <img src = "/img/extra/asiatech_internet_raygan_rsz.jpg" width = "100%">

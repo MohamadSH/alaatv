@@ -22,8 +22,6 @@
 
 @section('content')
 
-    @include("systemMessage.flash")
-
     <div class = "row">
         <div class = "col-md-12">
             <!-- BEGIN Portlet PORTLET-->

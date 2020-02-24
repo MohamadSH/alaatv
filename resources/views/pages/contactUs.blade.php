@@ -20,8 +20,6 @@
 
 @section('content')
 
-    @include('systemMessage.flash')
-
     <div class = "row">
         <div class = "col-xl-6 col-md-6">
             <!--begin::Portlet-->

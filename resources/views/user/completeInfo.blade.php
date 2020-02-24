@@ -25,7 +25,6 @@
     <h1 class = "page-title"> فرم تکمیل اطلاعات
         <small class = "m--font-danger">لطفا در کمال دقت و صحت تکمیل نمایید</small>
     </h1>
-    @include("systemMessage.flash")
     {!! Form::model($user,['files'=>true , 'method'=>'POST' , 'action' => ['UserController@completeInformation',$user] ,'role'=>'form' , 'class'=>'form-horizontal ' ]) !!}
     <div class = "portlet box blue-hoki">
         <div class = "portlet-title" style = "background: #404040 !important">

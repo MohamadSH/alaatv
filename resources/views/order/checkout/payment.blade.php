@@ -11,8 +11,6 @@
 
 @section('content')
 
-    @include('systemMessage.flash')
-
     @include("partials.checkoutSteps" , ["step"=>3])
 
     <div class="row">

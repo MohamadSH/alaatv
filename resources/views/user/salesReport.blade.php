@@ -23,8 +23,6 @@
 
 @section('content')
 
-    @include('systemMessage.flash')
-
     <div class="row">
         <div class="col">
 {{--            <h1>به دلیل کش سرورها، آمار ها حداکثر دارای 3.5 ساعت تاخیر هستند.</h1>--}}

@@ -1,8 +1,6 @@
 @extends('partials.templatePage' , ["pageName"=>"contactUs"])
 
 @section("content")
-    @include("systemMessage.flash")
-
     <button id = "btnFire">ارسال</button>
 @endsection
 

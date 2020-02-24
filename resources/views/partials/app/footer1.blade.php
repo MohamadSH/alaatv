@@ -73,6 +73,11 @@
 
 
                 <li class="m-nav__item">
+                    <a href="{{route('web.faq')}}" class="m-nav__link" data-toggle="m-tooltip" title="سؤالات متداول" data-placement="top">
+                        <i class="m-menu__link-icon fa fa-question-circle"></i>
+                    </a>
+                </li>
+                <li class="m-nav__item">
                     <a href="{{ action("Web\RulesPageController") }}" class="m-nav__link" data-toggle="m-tooltip" title="قوانین سایت آلاء" data-placement="top">
                         <i class="m-menu__link-icon fa fa-gavel"></i>
                     </a>

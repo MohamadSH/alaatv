@@ -21,9 +21,6 @@
 @section('content')
     <div class="row">
         <div class="col">
-
-            @include("systemMessage.flash")
-
             {!! Form::open(['files' => true , 'method' => 'POST' , 'url' => [route('web.setting.faq.update' , $setting)] , 'class'=>'form-horizontal']) !!}
             <div class="m-portlet m-portlet--mobile m-portlet--body-progress-">
                 <div class="m-portlet__head">
