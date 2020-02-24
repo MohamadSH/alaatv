@@ -28,8 +28,6 @@
 
 @section('content')
 
-    @include('systemMessage.flash')
-
     @if(isset($userInfoCompletion))
         <input type="hidden" value="{{$userInfoCompletion}}" id="js-var-userInfo-cmpletion">
     @endif

@@ -25,7 +25,6 @@
 @endsection
 
 @section('content')
-    @include("systemMessage.flash")
     <form method="POST" action="{{route('periodDescription.update' , $periodDescription)}}">
         @method('PUT')
         @csrf

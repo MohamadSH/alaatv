@@ -47,7 +47,6 @@
 @endsection
 
 @section('content')
-    @include("systemMessage.flash")
     <div class = "row" style = "margin-bottom: 10px">
         <div class = "col-md-12">
             <form id = "my-awesome-dropzone" class = "dropzone dropzone-file-area needsclick dz-clickable">

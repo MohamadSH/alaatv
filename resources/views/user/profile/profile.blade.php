@@ -20,8 +20,6 @@
 
 @section('content')
 
-    @include('systemMessage.flash')
-
     <div class = "row">
         <div class = "col">
             {{--            Using this notification for some text at the top of the profile page        --}}

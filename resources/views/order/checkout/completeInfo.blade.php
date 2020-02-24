@@ -12,8 +12,6 @@
 
     @include("partials.checkoutSteps" , ["step"=>1])
 
-    @include('systemMessage.flash')
-
     <div class="row">
         <div class="col-md-12">
             <div class="portlet light bordered ">

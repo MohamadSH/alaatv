@@ -51,8 +51,6 @@
 @endsection
 
 @section('content')
-    @include("systemMessage.flash")
-
     @if(auth()->user()->hasRole('editContentDescription'))
         <div class="m-portlet">
             <div class="m-portlet__head">

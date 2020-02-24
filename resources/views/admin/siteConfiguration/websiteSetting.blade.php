@@ -29,8 +29,6 @@
     <div class = "row">
         <div class = "col">
 
-        @include("systemMessage.flash")
-
         <!-- BEGIN PORTLET -->
             {!! Form::open(['files' => true , 'method' => 'PUT' , 'url' => ['websiteSetting.update', $setting] , 'class'=>'form-horizontal']) !!}
             <div class = "m-portlet m-portlet--tabs">
