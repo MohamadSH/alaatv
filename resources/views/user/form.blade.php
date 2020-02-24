@@ -720,7 +720,6 @@
     </div>
 @else
     @if(isset($formID) && $formID == 1)
-        @include("systemMessage.flash")
         @if(Auth::user()->lockProfile)
             <div class="custom-alerts alert alert-warning fade in margin-top-10">
                 <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>

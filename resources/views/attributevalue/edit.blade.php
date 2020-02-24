@@ -22,8 +22,6 @@
     <div class = "row">
         <div class = "col-md-2"></div>
         <div class = "col-md-8 ">
-            @include("systemMessage.flash")
-
             <div class = "m-portlet m-portlet--mobile m-portlet--body-progress-">
                 <div class = "m-portlet__head">
                     <div class = "m-portlet__head-caption">

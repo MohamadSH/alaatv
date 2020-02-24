@@ -33,8 +33,6 @@
 
 @section('content')
 
-    @include("systemMessage.flash")
-
     @include('set.form', ['editForm' => true])
 
 @endsection

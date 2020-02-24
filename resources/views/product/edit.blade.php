@@ -28,8 +28,6 @@
 
 @section('content')
 
-    @include("systemMessage.flash")
-
     <div class="row">
         <div class="col-md-6">
             <!-- BEGIN SAMPLE FORM PORTLET-->

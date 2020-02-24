@@ -105,7 +105,6 @@
             </div>
         </div>
     </div>
-    @include("systemMessage.flash")
     <div class = "row">
         <div class = "col-md-12">
             <form method = "POST" action = "{{action("Web\ConsultationController@consultantStoreEntekhabReshte")}}">

@@ -52,7 +52,6 @@
                         لیست اسناد فنی@if(isset($user)) {{$user->firstName}} {{$user->lastName}}@endif</div>
                 </div>
                 <div class = "portlet-body" style = "display: block;">
-                    @include("systemMessage.flash")
                     <div class = "table-toolbar">
                         <div class = "row">
                             <div class = "col-md-6">

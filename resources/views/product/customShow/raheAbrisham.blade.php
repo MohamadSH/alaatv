@@ -60,12 +60,6 @@
 
 @section('content')
 
-    <div class="row m--margin-top-25">
-        <div class="col">
-            @include('systemMessage.flash')
-        </div>
-    </div>
-
     @include('product.partials.raheAbrisham.pictureAndMap')
 
     @include('product.partials.raheAbrisham.descriptionBox', [

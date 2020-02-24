@@ -23,7 +23,6 @@
 {{--            </div>--}}
 {{--        </div>--}}
 {{--    </div>--}}
-{{--    @include('systemMessage.flash')--}}
 {{--    @if(!$hadGotGiftBefore &&  !$hasGotGiftBefore)--}}
 {{--    <div class="row">--}}
 {{--        <div class="col-md-4 mx-auto">--}}

@@ -24,7 +24,6 @@
 @endsection
 
 @section("content")
-    @include("systemMessage.flash")
     <div class = "row">
         <div class = "col">
             <div class = "m-portlet m-portlet--mobile m-portlet--body-progress-">

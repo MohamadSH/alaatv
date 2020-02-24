@@ -6,8 +6,6 @@
 
 @section('content')
 
-    @include('systemMessage.flash')
-
 {{--    @include("partials.checkoutSteps" , ["step"=>2])--}}
 
     @if(isset($invoiceInfo['orderproductCount']) && $invoiceInfo['orderproductCount']>0)

@@ -20,8 +20,6 @@
 
 @section('content')
 
-    @include('systemMessage.flash')
-
     <div class="a--list1">
         @foreach($faqs as $key=>$item)
 
