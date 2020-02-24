@@ -131,7 +131,7 @@ class Block extends BaseModel
         $blocks = Cache::tags(['block', 'shop'])
             ->remember('block:getShopBlocks', config('constants.CACHE_600'), function () {
                 $offerBlock = self::getOfferBlock();
-                $blocks     = self::shop()
+                $blocks     = self::appShop()
                     ->enable()
 //                    ->where('id', '<>', 115)
                     ->orderBy('order')
@@ -279,6 +279,26 @@ class Block extends BaseModel
     }
 
     public static function getMainBlocks(): ?BlockCollection
+    {
+        $blocks = Cache::tags(['block', 'home'])
+            ->remember('block:getMainBlocks', config('constants.CACHE_600'), function () {
+                $blocks = self::main()
+                    ->enable()
+                    ->orderBy('order')
+                    ->get()
+                    ->loadMissing([
+                        'notRedirectedContents',
+                        'notRedirectedSets',
+                        'products',
+                        'banners',
+                    ]);
+
+                return $blocks;
+            });
+        return $blocks;
+    }
+
+    public static function getMainBlocks2(): ?BlockCollection
     {
         $blocks = Cache::tags(['block', 'home'])
             ->remember('block:getMainBlocks', config('constants.CACHE_600'), function () {

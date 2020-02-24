@@ -182,7 +182,7 @@
             @endforeach
         ];
         var gtmEecPromotions = [
-            @foreach($slides as $slideKey=>$slide)
+            @foreach($slideBlock->banners as $slideKey=>$slide)
                 {
                     id: '{{ $slide->id }}',
                     name: '{{ $slide->title }}',
