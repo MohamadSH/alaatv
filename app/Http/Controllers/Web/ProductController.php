@@ -139,8 +139,6 @@ class ProductController extends Controller
     {
         /** @var User $user */
         $user                    = $request->user();
-        $purchasedProductIdArray = [];
-        $allChildIsPurchased     = false;
 
         if (isset($product->redirectUrl)) {
             return redirect($product->redirectUrl, Response::HTTP_FOUND, $request->headers->all());
@@ -162,21 +160,20 @@ class ProductController extends Controller
 
         $children = collect();
         $allChildrenSets = collect();
-        $purchasedChildren = [];
+        $purchasedProductIdArray = [];
+        $allChildIsPurchased = false;
         if (is_null($product->grand_id)) {
             $allChildren = $product->getAllChildren(true,true);
             foreach ($allChildren as $child) {
                 $allChildrenSets->push(['id' => $child->id , 'name' => $child->name , 'sets'=>$child->sets->pluck('name' , 'id')->toArray()]);
-                $hasPurchasedChild = $this->hasUserPurchasedProduct($product , $user);
+                $hasPurchasedChild = $this->hasUserPurchasedProduct($child , $user);
                 if($hasPurchasedChild){
-                    $purchasedChildren[] = $child->id ;
+                    $purchasedProductIdArray[] = $child->id ;
                 }
             }
 
             $children    = $product->children()->enable()->get();
         }
-
-        dd($purchasedChildren);
 
         $isFavored = (isset($user)) ? $user->hasFavoredProduct($product) : false;
 
