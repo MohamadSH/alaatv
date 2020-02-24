@@ -180,6 +180,8 @@ class ProductController extends Controller
 //            }
 //        }
 
+        $allChildrenSets = collect();
+        
         //        if ($product->id == Product::RAHE_ABRISHAM && $this->canSeeRaheAbrishamSpecialPage($user)) {
         if ($product->id == Product::RAHE_ABRISHAM) {
             $hasUserPurchasedRaheAbrisham = $this->hasUserPurchasedRaheAbrisham($user);
