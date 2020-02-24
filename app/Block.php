@@ -131,7 +131,7 @@ class Block extends BaseModel
         $blocks = Cache::tags(['block', 'shop'])
             ->remember('block:getShopBlocks', config('constants.CACHE_600'), function () {
                 $offerBlock = self::getOfferBlock();
-                $blocks     = self::shop()
+                $blocks     = self::appShop()
                     ->enable()
 //                    ->where('id', '<>', 115)
                     ->orderBy('order')
