@@ -59,7 +59,7 @@ class ComposerServiceProvider extends ServiceProvider
             'partials.appsidebar',
         ], function ($view) {
             $sections =
-                (new webBlockCollectionFormatter(new webSetCollectionFormatter()))->format(Block::getMainBlocks());
+                (new webBlockCollectionFormatter(new webSetCollectionFormatter()))->format(Block::getMainBlocksForWeb());
 //            $sections = collect();
 //            dd($sections);
             $view->with(compact('sections'));
