@@ -810,6 +810,9 @@
 
         vastData = [];
 
+        var vastXml = 'http://localhost/acm/videojs/vast42.xml';
+        vastXml = '';
+
     </script>
     <script src="{{ mix('/js/content-show.js') }}" type="text/javascript"></script>
 @endsection
