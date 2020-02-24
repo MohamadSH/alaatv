@@ -95,8 +95,6 @@
 
 @section('content')
 
-    {{dd($allChildrenSets)}}
-
     @if(in_array($product->type['id'] ,[config("constants.PRODUCT_TYPE_SIMPLE")]))
         @include('product.partials.showPage-topSection-simple')
     @elseif(in_array($product->type['id'], [config("constants.PRODUCT_TYPE_CONFIGURABLE"), config("constants.PRODUCT_TYPE_SELECTABLE")]))
