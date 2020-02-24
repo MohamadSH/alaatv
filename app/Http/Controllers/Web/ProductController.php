@@ -139,8 +139,6 @@ class ProductController extends Controller
     {
         /** @var User $user */
         $user                    = $request->user();
-        $purchasedProductIdArray = [];
-        $allChildIsPurchased     = false;
 
         if (isset($product->redirectUrl)) {
             return redirect($product->redirectUrl, Response::HTTP_FOUND, $request->headers->all());
@@ -161,8 +159,20 @@ class ProductController extends Controller
         $liveDescriptions = $product->livedescriptions->sortByDesc('created_at');
 
         $children = collect();
+        $allChildrenSets = collect();
+        $purchasedProductIdArray = [];
+        $allChildIsPurchased = false;
         if (is_null($product->grand_id)) {
-            $children = $product->children()->enable()->get();
+            $allChildren = $product->getAllChildren(true,true);
+            foreach ($allChildren as $child) {
+                $allChildrenSets->push(['id' => $child->id , 'name' => $child->name , 'sets'=>$child->sets->pluck('name' , 'id')->toArray()]);
+                $hasPurchasedChild = $this->hasUserPurchasedProduct($child , $user);
+                if($hasPurchasedChild){
+                    $purchasedProductIdArray[] = $child->id ;
+                }
+            }
+
+            $children    = $product->children()->enable()->get();
         }
 
         $isFavored = (isset($user)) ? $user->hasFavoredProduct($product) : false;
@@ -180,21 +190,22 @@ class ProductController extends Controller
 //            }
 //        }
 
-        $allChildrenSets = collect();
-        
-        //        if ($product->id == Product::RAHE_ABRISHAM && $this->canSeeRaheAbrishamSpecialPage($user)) {
+//        if ($product->id == Product::RAHE_ABRISHAM && $this->canSeeRaheAbrishamSpecialPage($user)) {
+
+        $sets                         = $product->sets->sortByDesc('pivot.order');
+        $lastSet                      = $sets->first();
+        $lastSetPamphlets             = $lastSet->getActiveContents2(Content::CONTENT_TYPE_PAMPHLET);
+        $lastSetVideos                = $lastSet->getActiveContents2(Content::CONTENT_TYPE_VIDEO);
+        $hasUserPurchasedRaheAbrisham = $hasUserPurchasedProduct = $this->hasUserPurchasedProduct($product , $user);
+
         if ($product->id == Product::RAHE_ABRISHAM) {
-            $hasUserPurchasedRaheAbrisham = $this->hasUserPurchasedRaheAbrisham($user);
-            $sets                         = $product->sets->sortByDesc('pivot.order');
-            $lastSet                      = $sets->first();
-            $lastSetPamphlets             = $lastSet->getActiveContents2(Content::CONTENT_TYPE_PAMPHLET);
-            $lastSetVideos                = $lastSet->getActiveContents2(Content::CONTENT_TYPE_VIDEO);
             $periodDescription            = $product->descriptionWithPeriod;
             $faqs                         = $product->faqs;
             return view('product.customShow.raheAbrisham', compact('product', 'block', 'liveDescriptions', 'isFavored', 'lastSet', 'lastSetPamphlets', 'lastSetVideos', 'periodDescription', 'sets', 'faqs', 'hasUserPurchasedRaheAbrisham', 'block', 'isForcedGift', 'allChildIsPurchased', 'hasPurchasedEssentialProduct', 'shouldBuyProductId', 'shouldBuyProductName'));
         }
 
-        return view('product.show', compact('product', 'block', 'purchasedProductIdArray', 'allChildIsPurchased', 'liveDescriptions', 'children', 'isFavored', 'isForcedGift', 'shouldBuyProductId', 'shouldBuyProductName', 'hasPurchasedEssentialProduct' , 'allChildrenSets'));
+        return view('product.show', compact('product', 'block', 'purchasedProductIdArray', 'allChildIsPurchased', 'liveDescriptions', 'children', 'isFavored', 'isForcedGift', 'shouldBuyProductId', 'shouldBuyProductName', 'hasPurchasedEssentialProduct' ,
+            'allChildrenSets' , 'sets' , 'lastSet' , 'lastSetPamphlets' , 'lastSetVideos' , 'hasUserPurchasedProduct'));
     }
 
     public function edit(Product $product)
@@ -1206,24 +1217,6 @@ class ProductController extends Controller
                 'bonPlus'  => $bonPlus,
             ]);
         }
-    }
-    
-        /**
-     * @param User $user
-     *
-     * @return bool
-     */
-    private function hasUserPurchasedRaheAbrisham(User $user = null): bool
-    {
-        if (is_null($user)) {
-            return false;
-        }
-
-        $key = 'user:hasPurchasedRaheAbrisham:' . $user->cacheKey();
-        return Cache::tags(['user', 'user_' . $user->id, 'user_' . $user->id . '_closedOrders'])
-            ->remember($key, config('constants.CACHE_600'), function () use ($user) {
-                return $user->products()->contains(Product::RAHE_ABRISHAM);
-            });
     }
 
 }

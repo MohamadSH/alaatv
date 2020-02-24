@@ -44,14 +44,14 @@
                                 <div class="lds-roller loadingSlideshow"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
 
                                 <img class="d-block a--full-width imageSlideOfSlideshow lazy-image"
-                                     data-src="{{ $slide->url }}"
+                                     data-src="{{ $slide->url_for_web }}"
                                      alt="عکس اسلاید @if(isset($slide->title[0])) {{ $slide->title }} @endif "
                                      id="slideshowid-{{ $slide->id }}"
                                      src="https://cdn.alaatv.com/loder.jpg?w=1&h=1"
-                                     data-width="{{preg_replace('/w=/', '', preg_replace('/&/', '', preg_replace('/h=\d*/', '', preg_replace('/^.*\?/', '', $slide->url))))}}"
-                                     width="{{preg_replace('/w=/', '', preg_replace('/&/', '', preg_replace('/h=\d*/', '', preg_replace('/^.*\?/', '', $slide->url))))}}"
-                                     data-height="{{preg_replace('/h=/', '', preg_replace('/&/', '', preg_replace('/w=\d*/', '', preg_replace('/^.*\?/', '', $slide->url))))}}"
-                                     height="{{preg_replace('/h=/', '', preg_replace('/&/', '', preg_replace('/w=\d*/', '', preg_replace('/^.*\?/', '', $slide->url))))}}">
+                                     data-width="{{preg_replace('/w=/', '', preg_replace('/&/', '', preg_replace('/h=\d*/', '', preg_replace('/^.*\?/', '', $slide->url_for_web))))}}"
+                                     width="{{preg_replace('/w=/', '', preg_replace('/&/', '', preg_replace('/h=\d*/', '', preg_replace('/^.*\?/', '', $slide->url_for_web))))}}"
+                                     data-height="{{preg_replace('/h=/', '', preg_replace('/&/', '', preg_replace('/w=\d*/', '', preg_replace('/^.*\?/', '', $slide->url_for_web))))}}"
+                                     height="{{preg_replace('/h=/', '', preg_replace('/&/', '', preg_replace('/w=\d*/', '', preg_replace('/^.*\?/', '', $slide->url_for_web))))}}">
                                 @if(isset($slide->title[0]) && isset($slide->shortDescription[0]))
                                     <div class="carousel-caption d-none d-md-block">
                                         @if(isset($slide->title[0]))

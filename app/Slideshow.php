@@ -53,6 +53,7 @@ use Storage;
  */
 class Slideshow extends BaseModel
 {
+    const HOME_PAGE_ID = 25;
     /**
      * @var array
      */
@@ -122,6 +123,23 @@ class Slideshow extends BaseModel
         $diskAdapter = Storage::disk('alaaCdnSFTP')->getAdapter();
         $imageUrl    = $diskAdapter->getUrl($this->photo);
         return isset($imageUrl) ? $imageUrl . '?w=1280&h=500' : '/acm/image/255x255.png';
+
+//        return route('image', ['category' => 9, 'w' => '1280', 'h' => '500', 'filename' => $this->photo]);
+    }
+
+    public function getUrlForWebAttribute($value): string
+    {
+        /** @var AlaaSftpAdapter $diskAdapter */
+        $diskAdapter = Storage::disk('alaaCdnSFTP')->getAdapter();
+        $imageUrl    = $diskAdapter->getUrl($this->photo);
+
+        if($this->websitepage_id == self::HOME_PAGE_ID){
+            $photoSize = '?w=1280&h=500';
+        }else{
+            $photoSize = '?w=1280&h=300';
+        }
+
+        return isset($imageUrl) ? $imageUrl .$photoSize  : '/acm/image/255x255.png';
 
 //        return route('image', ['category' => 9, 'w' => '1280', 'h' => '500', 'filename' => $this->photo]);
     }
