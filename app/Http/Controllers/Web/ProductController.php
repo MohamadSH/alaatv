@@ -1207,5 +1207,23 @@ class ProductController extends Controller
             ]);
         }
     }
+    
+        /**
+     * @param User $user
+     *
+     * @return bool
+     */
+    private function hasUserPurchasedRaheAbrisham(User $user = null): bool
+    {
+        if (is_null($user)) {
+            return false;
+        }
+
+        $key = 'user:hasPurchasedRaheAbrisham:' . $user->cacheKey();
+        return Cache::tags(['user', 'user_' . $user->id, 'user_' . $user->id . '_closedOrders'])
+            ->remember($key, config('constants.CACHE_600'), function () use ($user) {
+                return $user->products()->contains(Product::RAHE_ABRISHAM);
+            });
+    }
 
 }
