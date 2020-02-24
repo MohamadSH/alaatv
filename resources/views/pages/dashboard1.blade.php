@@ -10,8 +10,6 @@
 
 @section('content')
 
-{{--    @include('partials.slideShow1' ,['marginBottom'=>'25', 'positionOfSlideShow'=>'صفحه اصلی'])--}}
-
     @if($slideBlock->banners->count() > 0)
         @include('block.partials.main', [
             'block'=>$slideBlock,
