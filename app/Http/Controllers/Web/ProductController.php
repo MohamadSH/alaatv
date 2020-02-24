@@ -161,19 +161,8 @@ class ProductController extends Controller
         $liveDescriptions = $product->livedescriptions->sortByDesc('created_at');
 
         $children = collect();
-        $allChildrenSets = collect();
-        $purchasedChildren = [];
         if (is_null($product->grand_id)) {
-            $allChildren = $product->getAllChildren(true,true);
-            foreach ($allChildren as $child) {
-                $allChildrenSets->push(['id' => $child->id , 'name' => $child->name , 'sets'=>$child->sets->pluck('name' , 'id')->toArray()]);
-                $hasPurchasedChild = $this->hasUserPurchasedProduct($product , $user);
-                if($hasPurchasedChild){
-                    $purchasedChildren[] = $child->id ;
-                }
-            }
-
-            $children    = $product->children()->enable()->get();
+            $children = $product->children()->enable()->get();
         }
 
         $isFavored = (isset($user)) ? $user->hasFavoredProduct($product) : false;
@@ -191,22 +180,19 @@ class ProductController extends Controller
 //            }
 //        }
 
-//        if ($product->id == Product::RAHE_ABRISHAM && $this->canSeeRaheAbrishamSpecialPage($user)) {
-
-        $sets                         = $product->sets->sortByDesc('pivot.order');
-        $lastSet                      = $sets->first();
-        $lastSetPamphlets             = $lastSet->getActiveContents2(Content::CONTENT_TYPE_PAMPHLET);
-        $lastSetVideos                = $lastSet->getActiveContents2(Content::CONTENT_TYPE_VIDEO);
-        $hasUserPurchasedRaheAbrisham = $hasUserPurchasedProduct = $this->hasUserPurchasedProduct($product , $user);
-
+        //        if ($product->id == Product::RAHE_ABRISHAM && $this->canSeeRaheAbrishamSpecialPage($user)) {
         if ($product->id == Product::RAHE_ABRISHAM) {
+            $hasUserPurchasedRaheAbrisham = $this->hasUserPurchasedRaheAbrisham($user);
+            $sets                         = $product->sets->sortByDesc('pivot.order');
+            $lastSet                      = $sets->first();
+            $lastSetPamphlets             = $lastSet->getActiveContents2(Content::CONTENT_TYPE_PAMPHLET);
+            $lastSetVideos                = $lastSet->getActiveContents2(Content::CONTENT_TYPE_VIDEO);
             $periodDescription            = $product->descriptionWithPeriod;
             $faqs                         = $product->faqs;
             return view('product.customShow.raheAbrisham', compact('product', 'block', 'liveDescriptions', 'isFavored', 'lastSet', 'lastSetPamphlets', 'lastSetVideos', 'periodDescription', 'sets', 'faqs', 'hasUserPurchasedRaheAbrisham', 'block', 'isForcedGift', 'allChildIsPurchased', 'hasPurchasedEssentialProduct', 'shouldBuyProductId', 'shouldBuyProductName'));
         }
 
-        return view('product.show', compact('product', 'block', 'purchasedProductIdArray', 'allChildIsPurchased', 'liveDescriptions', 'children', 'isFavored', 'isForcedGift', 'shouldBuyProductId', 'shouldBuyProductName', 'hasPurchasedEssentialProduct' ,
-            'allChildrenSets' , 'sets' , 'lastSet' , 'lastSetPamphlets' , 'lastSetVideos' , 'hasUserPurchasedProduct'));
+        return view('product.show', compact('product', 'block', 'purchasedProductIdArray', 'allChildIsPurchased', 'liveDescriptions', 'children', 'isFavored', 'isForcedGift', 'shouldBuyProductId', 'shouldBuyProductName', 'hasPurchasedEssentialProduct'));
     }
 
     public function edit(Product $product)
