@@ -166,7 +166,7 @@ class ProductController extends Controller
         if (is_null($product->grand_id)) {
             $allChildren = $product->getAllChildren(true,true);
             foreach ($allChildren as $child) {
-                $allChildrenSets->put($child->id , $child->sets->pluck('name' , 'id')->toArray());
+                $allChildrenSets->push(['id' => $child->id , 'name' => $child->name , 'sets'=>$child->sets->pluck('name' , 'id')->toArray()]);
                 $hasPurchasedChild = $this->hasUserPurchasedProduct($product , $user);
                 if($hasPurchasedChild){
                     $purchasedChildren[] = $child->id ;
