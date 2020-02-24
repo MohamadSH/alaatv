@@ -282,6 +282,26 @@ class Block extends BaseModel
     {
         $blocks = Cache::tags(['block', 'home'])
             ->remember('block:getMainBlocks', config('constants.CACHE_600'), function () {
+                $blocks = self::main()
+                    ->enable()
+                    ->orderBy('order')
+                    ->get()
+                    ->loadMissing([
+                        'notRedirectedContents',
+                        'notRedirectedSets',
+                        'products',
+                        'banners',
+                    ]);
+
+                return $blocks;
+            });
+        return $blocks;
+    }
+
+    public static function getMainBlocks2(): ?BlockCollection
+    {
+        $blocks = Cache::tags(['block', 'home'])
+            ->remember('block:getMainBlocks', config('constants.CACHE_600'), function () {
                 $blocks = self::appMain()
                     ->enable()
                     ->orderBy('order')

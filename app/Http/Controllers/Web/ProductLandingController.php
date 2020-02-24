@@ -439,7 +439,7 @@ class ProductLandingController extends Controller
             298 => [
                 'name'  => 'همایش عربی',
                 'url'   => action('Web\ProductController@show', 298),
-                'hours' => 5,
+                'hours' => 7,
             ],
             342 => [
                 'name'  => 'همایش ادبیات',

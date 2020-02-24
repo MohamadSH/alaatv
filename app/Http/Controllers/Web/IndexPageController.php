@@ -36,8 +36,16 @@ class IndexPageController extends Controller
                 'filename' => $this->setting->site->siteLogo,
             ]), '100', '100', null));
 
+
         $slides = Slideshow::getMainBanner();
-        $blocks = Block::getMainBlocks();
+
+        $blocks = Block::getMainBlocks2();
+        $slideBlock          = $blocks->first();
+        $banners             = $blocks->first()->banners->sortBy('order');
+        $slideBlock->banners = $banners->values();
+        $blocks->pull(0);
+        $blocks = $blocks->values();
+
         if (request()->expectsJson()) {
             return response()->json([
                 'mainBanner' => $slides->isNotEmpty() ? $slides : null,
@@ -58,8 +66,8 @@ class IndexPageController extends Controller
             ]);
         }
 
-        $slideBlock = $blocks->first();
         $sections = $blockCollectionFormatter->format($blocks);
+
         $pageName = "dashboard";
         return view('pages.dashboard1', compact('pageName', 'sections', 'slides', 'blocks' , 'slideBlock'));
     }
