@@ -194,7 +194,7 @@ class ProductController extends Controller
             return view('product.customShow.raheAbrisham', compact('product', 'block', 'liveDescriptions', 'isFavored', 'lastSet', 'lastSetPamphlets', 'lastSetVideos', 'periodDescription', 'sets', 'faqs', 'hasUserPurchasedRaheAbrisham', 'block', 'isForcedGift', 'allChildIsPurchased', 'hasPurchasedEssentialProduct', 'shouldBuyProductId', 'shouldBuyProductName'));
         }
 
-        return view('product.show', compact('product', 'block', 'purchasedProductIdArray', 'allChildIsPurchased', 'liveDescriptions', 'children', 'isFavored', 'isForcedGift', 'shouldBuyProductId', 'shouldBuyProductName', 'hasPurchasedEssentialProduct'));
+        return view('product.show', compact('product', 'block', 'purchasedProductIdArray', 'allChildIsPurchased', 'liveDescriptions', 'children', 'isFavored', 'isForcedGift', 'shouldBuyProductId', 'shouldBuyProductName', 'hasPurchasedEssentialProduct' , 'allChildrenSets'));
     }
 
     public function edit(Product $product)
