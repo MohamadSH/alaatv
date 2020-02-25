@@ -45,11 +45,13 @@ var initPage = function() {
 
     function loadStickeHeader(carousels) {
         for (var carousel in carousels) {
-            $('.'+carousels[carousel]+' .OwlCarouselType2-shopPage .m-portlet__head').sticky({
-                container: '.'+carousels[carousel]+' .OwlCarouselType2-shopPage > .col > .m-portlet',
-                topSpacing: $('#m_header').height(),
-                zIndex: 98
-            });
+            if (carousels[carousel].trim().length > 0) {
+                $('.' + carousels[carousel] + ' .OwlCarouselType2-shopPage .m-portlet__head').sticky({
+                    container: '.' + carousels[carousel] + ' .OwlCarouselType2-shopPage > .col > .m-portlet',
+                    topSpacing: $('#m_header').height(),
+                    zIndex: 98
+                });
+            }
         }
     }
 
