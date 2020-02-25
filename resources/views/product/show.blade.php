@@ -332,7 +332,7 @@
 
                                         {{--محصول ساده یا قابل پیکربندی و یا قابل انتخاب--}}
                                         @if(in_array($product->type['id'] ,[config("constants.PRODUCT_TYPE_SELECTABLE")]))
-                                            <div class="m-portlet m-portlet--bordered m-portlet--creative m-portlet--bordered-semi">
+                                            <div class="m-portlet m-portlet--bordered m-portlet--creative m-portlet--bordered-semi selectChildOfSelectableProductPortlet">
                                                 <div class="m-portlet__head">
                                                     <div class="m-portlet__head-caption col">
                                                         <div class="m-portlet__head-title">
@@ -422,12 +422,13 @@
                                         @if($product->enable && !$isForcedGift)
 
 
-                                            @if($allChildIsPurchased)
+                                            @if($hasUserPurchasedProduct)
                                                 <div class="alert alert-info" role="alert">
                                                     <strong>شما این محصول را خریده اید</strong>
                                                 </div>
-                                            @else
-                                                <h5 class="m--font-danger">
+                                            @endif
+
+                                            <h3 class="m--font-danger">
                                                 <span id="a_product-price">
                                                     @if($product->priceText['discount'] == 0 )
                                                         {{ $product->priceText['basePriceText'] }}
@@ -438,52 +439,50 @@
                                                         :  {{ $product->priceText['finalPriceText'] }}
                                                     @endif
                                                 </span>
-                                                </h5>
-                                            @endif
+                                            </h3>
 
-
-                                            @if($allChildIsPurchased)
+                                            @if($hasUserPurchasedProduct)
                                                 <a class="btn m-btn m-btn--pill m-btn--air btn-info animated infinite pulse" role="button" href="{{ action("Web\UserController@userProductFiles") }}">
                                                     <i class="fa fa-play-circle"></i>
                                                     مشاهده در صفحه فیلم ها و جزوه های من
                                                 </a>
-                                            @else
-                                                <button class="btn m-btn--air btn-success m-btn--icon m--margin-bottom-5 btnAddToCart gta-track-add-to-card">
-                                                    <span>
-                                                        <i class="fa fa-cart-arrow-down"></i>
-                                                        <i class="fas fa-sync-alt fa-spin m--hide"></i>
-                                                        <span>
-                                                            @if($hasUserPurchasedProduct)
-                                                                خرید مجدد
-                                                            @else
-                                                                افزودن به سبد خرید
-                                                            @endif
-                                                        </span>
-                                                    </span>
-                                                </button>
                                             @endif
+                                            <button class="btn m-btn--air btn-success m-btn--icon m--margin-bottom-5 btnAddToCart gta-track-add-to-card">
+                                                <span>
+                                                    <i class="fa fa-cart-arrow-down"></i>
+                                                    <i class="fas fa-sync-alt fa-spin m--hide"></i>
+                                                    <span>
+                                                        @if($hasUserPurchasedProduct)
+                                                            خرید مجدد
+                                                        @else
+                                                            افزودن به سبد خرید
+                                                        @endif
+                                                    </span>
+                                                </span>
+                                            </button>
+
                                         @else
                                             @if(!$product->enable)
                                                 <button class="btn btn-danger btn-lg m-btn  m-btn m-btn--icon">
-                                                <span>
-                                                    <i class="flaticon-shopping-basket"></i>
-                                                    <span>این محصول غیر فعال است.</span>
-                                                </span>
+                                                    <span>
+                                                        <i class="flaticon-shopping-basket"></i>
+                                                        <span>این محصول غیر فعال است.</span>
+                                                    </span>
                                                 </button>
                                             @elseif($isForcedGift)
                                                 @if($hasPurchasedEssentialProduct)
                                                     <button class="btn btn-danger btn-lg m-btn  m-btn m-btn--icon">
-                                                    <span>
-                                                        <i class="flaticon-arrows"></i>
-                                                        <span>شما محصول راه ابریشم را خریده اید و این محصول به عنوان هدیه به شما تعلق می گیرد</span>
-                                                    </span>
+                                                        <span>
+                                                            <i class="flaticon-arrows"></i>
+                                                            <span>شما محصول راه ابریشم را خریده اید و این محصول به عنوان هدیه به شما تعلق می گیرد</span>
+                                                        </span>
                                                     </button>
                                                 @else
                                                     <a class="btn btn-focus btn-lg m-btn  m-btn m-btn--icon" href="{{ route('product.show' , $shouldBuyProductId ) }}">
-                                                    <span>
-                                                        <i class="flaticon-arrows"></i>
-                                                        <span>این محصول بخشی از {{$shouldBuyProductName}} است برای خرید کلیک کنید </span>
-                                                    </span>
+                                                        <span>
+                                                            <i class="flaticon-arrows"></i>
+                                                            <span>این محصول بخشی از {{$shouldBuyProductName}} است برای خرید کلیک کنید </span>
+                                                        </span>
                                                     </a>
                                                 @endif
                                             @endif
@@ -500,8 +499,7 @@
                                                         <div class="m-widget19__pic m-portlet-fit--top m-portlet-fit--sides a--video-wraper">
 
                                                             @if( $product->introVideo )
-                                                                <input type="hidden" name="introVideo"
-                                                                       value="{{ $product->introVideo }}">
+                                                                <input type="hidden" name="introVideo" value="{{ $product->introVideo }}">
                                                             @endif
 
                                                             <video id="videoPlayer"
@@ -514,13 +512,6 @@
                                                                     @else
                                                                     poster = "https://cdn.alaatv.com/media/204/240p/204054ssnv.jpg"
                                                                     @endif >
-
-                                                                {{--                                                        <source--}}
-                                                                {{--                                                                src="{{$product->introVideo}}"--}}
-                                                                {{--                                                                id="videoPlayerSource"--}}
-                                                                {{--                                                                type = 'video/mp4'/>--}}
-
-                                                                {{--<p class="vjs-no-js">جهت پخش آنلاین فیلم، ابتدا مطمئن شوید که جاوا اسکریپت در مرور گر شما فعال است و از آخرین نسخه ی مرورگر استفاده می کنید.</p>--}}
                                                             </video>
 
                                                             <div class="m-widget19__shadow"></div>
@@ -608,38 +599,28 @@
     {{--دکمه افزودن به سبد خرید--}}
     <div class="addToCartForMobileDeviceWrapper" >
         @if($product->enable && !$isForcedGift)
-            @if($allChildIsPurchased)
-                <a class="btn m-btn m-btn--pill m-btn--air btn-info animated infinite pulse" role="button" href="{{ action("Web\UserController@userProductFiles") }}">
-                    <i class="fa fa-play-circle"></i>
-                    مشاهده در صفحه فیلم ها و جزوه های من
-                </a>
-            @else
-                <button class="btn m-btn--air btn-success m-btn--icon m--margin-bottom-5 btnAddToCart gta-track-add-to-card">
-                    <span>
-                        <i class="fa fa-cart-arrow-down"></i>
-                        <i class="fas fa-sync-alt fa-spin m--hide"></i>
-                        <span>
-                            @if($hasUserPurchasedProduct)
-                                خرید مجدد
-                            @else
-                                افزودن به سبد خرید
-                            @endif
-                        </span>
-                    </span>
-                </button>
-            @endif
 
-            @if($allChildIsPurchased)
-                <span class="alert alert-info" role="alert">
-                    <strong>شما این محصول را خریده اید</strong>
+
+            <button class="btn m-btn--air btn-success m-btn--icon m--margin-bottom-5 btnAddToCart gta-track-add-to-card">
+                <span>
+                    <i class="fa fa-cart-arrow-down"></i>
+                    <i class="fas fa-sync-alt fa-spin m--hide"></i>
+                    <span>
+                        @if($hasUserPurchasedProduct)
+                            خرید مجدد
+                        @else
+                            افزودن به سبد خرید
+                        @endif
+                    </span>
                 </span>
-            @else
-                <div class="m--font-brand a_product-price_mobile-wrapper">
+            </button>
+
+            <div class="m--font-brand a_product-price_mobile-wrapper">
                     <span id="a_product-price_mobile">
                         @include('product.partials.price', ['price'=>$product->price])
                     </span>
-                </div>
-            @endif
+            </div>
+
         @else
             @if(!$product->enable)
                 <button class="btn btn-danger btn-lg m-btn  m-btn m-btn--icon">
@@ -706,7 +687,7 @@
                                     <p class="m-portlet__nav-link m-portlet__nav-link--icon">
 
 
-                                        @if($allChildIsPurchased)
+                                        @if($hasUserPurchasedProduct)
                                             <a class="btn m-btn m-btn--pill m-btn--air btn-info animated infinite pulse" role="button" href="{{ action("Web\UserController@userProductFiles") }}">
                                                 <i class="fa fa-play-circle"></i>
                                                 <span class="d-none d-sm-none d-md-inline-block d-lg-inline-block">
