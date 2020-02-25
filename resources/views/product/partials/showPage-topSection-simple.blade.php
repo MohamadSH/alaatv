@@ -335,7 +335,7 @@
                                                                 @endif
 
                                                                 <div class="price">
-                                                                    @if($allChildIsPurchased)
+                                                                    @if($hasUserPurchasedProduct)
                                                                         <div class="alert alert-info" role="alert">
                                                                             <strong>شما این محصول را خریده اید</strong>
                                                                         </div>
@@ -390,27 +390,25 @@
                                                             {{--دکمه افزودن به سبد خرید--}}
                                                             @if($product->enable && !$isForcedGift)
 
-                                                                @if($allChildIsPurchased)
+                                                                @if($hasUserPurchasedProduct)
                                                                     <a class="btn m-btn m-btn--pill m-btn--air btn-info animated infinite pulse" role="button" href="{{ action("Web\UserController@userProductFiles") }}">
                                                                         <i class="fa fa-play-circle"></i>
                                                                         مشاهده در صفحه فیلم ها و جزوه های من
                                                                     </a>
-                                                                @else
-                                                                    <button class="btn m-btn--air btn-success m-btn--icon m--margin-bottom-5 btnAddToCart gta-track-add-to-card">
-                                                                        <span>
-                                                                            <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 52 52" xml:space="preserve" width="512" height="512" class="">
-                                                                                <g>
-                                                                                    <g>
-                                                                                        <path d="M26,0C11.664,0,0,11.663,0,26s11.664,26,26,26s26-11.663,26-26S40.336,0,26,0z M26,50C12.767,50,2,39.233,2,26   S12.767,2,26,2s24,10.767,24,24S39.233,50,26,50z" data-original="#000000" class="active-path" data-old_color="#000000" style="fill:#FFFFFF"></path>
-                                                                                        <path d="M38.5,25H27V14c0-0.553-0.448-1-1-1s-1,0.447-1,1v11H13.5c-0.552,0-1,0.447-1,1s0.448,1,1,1H25v12c0,0.553,0.448,1,1,1   s1-0.447,1-1V27h11.5c0.552,0,1-0.447,1-1S39.052,25,38.5,25z" data-original="#000000" class="active-path" data-old_color="#000000" style="fill:#FFFFFF"></path>
-                                                                                    </g>
-                                                                                </g>
-                                                                            </svg>
-                                                                            <i class="fas fa-sync-alt fa-spin m--hide"></i>
-                                                                            <span>افزودن به سبد خرید</span>
-                                                                        </span>
-                                                                    </button>
                                                                 @endif
+
+                                                                <button class="btn m-btn--air btn-success m-btn--icon m--margin-bottom-5 btnAddToCart gta-track-add-to-card">
+                                                                    <span>
+                                                                        <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 52 52" xml:space="preserve" width="512" height="512" class="">
+                                                                            <g>
+                                                                                <path d="M26,0C11.664,0,0,11.663,0,26s11.664,26,26,26s26-11.663,26-26S40.336,0,26,0z M26,50C12.767,50,2,39.233,2,26   S12.767,2,26,2s24,10.767,24,24S39.233,50,26,50z" data-original="#000000" class="active-path" data-old_color="#000000" style="fill:#FFFFFF"></path>
+                                                                                <path d="M38.5,25H27V14c0-0.553-0.448-1-1-1s-1,0.447-1,1v11H13.5c-0.552,0-1,0.447-1,1s0.448,1,1,1H25v12c0,0.553,0.448,1,1,1   s1-0.447,1-1V27h11.5c0.552,0,1-0.447,1-1S39.052,25,38.5,25z" data-original="#000000" class="active-path" data-old_color="#000000" style="fill:#FFFFFF"></path>
+                                                                            </g>
+                                                                        </svg>
+                                                                        <i class="fas fa-sync-alt fa-spin m--hide"></i>
+                                                                        <span>افزودن به سبد خرید</span>
+                                                                    </span>
+                                                                </button>
 
                                                             @else
                                                                 @if(!$product->enable)

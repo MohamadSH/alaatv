@@ -32,13 +32,6 @@
 }
 
 /*selectable product: child switch*/
-.parentCheckBox {
-    position: absolute;
-    z-index: 1;
-    right: 9px;
-    top: 6px;
-}
-
 .lg-slide {
     direction: ltr;
 }
@@ -77,10 +70,6 @@
 /*narrow selectable switch panel*/
 .m-nav.m-nav--active-bg .m-nav__item > .m-nav__link {
     padding: 0;
-}
-.parentCheckBox {
-    top: 0px;
-    right: 6px;
 }
 .m-nav .m-nav__item > .m-nav__link .m-nav__link-title > .m-nav__link-wrap .m-nav__link-text {
     padding-left: 2.2rem;
@@ -593,4 +582,19 @@
 }
 .productIntroVideoColumn .videoInformation .videoFilesPublishTime {
     margin-bottom: 0;
+}
+
+
+.selectChildOfSelectableProductPortlet .m-nav__item {
+    position: relative;
+}
+.selectChildOfSelectableProductPortlet .m-nav__item > .m-switch {
+    position: absolute;
+    z-index: 2;
+    right: 7px;
+    top: 3px;
+}
+.selectChildOfSelectableProductPortlet .m-nav__sub li.m-nav__item > a.m-nav__link {
+    padding-right: 45px;
+    z-index: 1;
 }

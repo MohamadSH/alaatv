@@ -103,12 +103,12 @@ class Mix {
         this.mixBase();
         this.mixPages();
         this.mixUser();
-        this.mixLanding();
+        // this.mixLanding();
         this.mixProduct();
         this.mixPageContentShow();
-        this.mixPageSetShow();
+        // this.mixPageSetShow();
         this.mixCheckout();
-        this.mixAdmin();
+        // this.mixAdmin();
         this.mixCopyDirectory();
 
         if (this.appEnv === 'production') {
@@ -335,7 +335,7 @@ class Mix {
                 'public/acm/AlaatvCustomFiles/components/ScrollCarousel/js.js',
                 'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/js.js',
                 'public/acm/AlaatvCustomFiles/components/AnimateScrollTo/js.js',
-                'public/acm/AlaatvCustomFiles/js/page/pages/homePage.js',
+                // 'public/acm/AlaatvCustomFiles/js/page/pages/homePage.js',
             ],
             'public/js/page-homePage.js',
             'page-homePage');
@@ -387,16 +387,16 @@ class Mix {
         );
     }
     mixPages() {
-        this.mixPageFaq();
-        this.mixPageLive();
-        this.mixPageShop();
-        this.mixPageError();
-        this.mixAuthLogin();
-        this.mixPageDonate();
-        this.mixVoucherLogin();
+        // this.mixPageFaq();
+        // this.mixPageLive();
+        // this.mixPageShop();
+        // this.mixPageError();
+        // this.mixAuthLogin();
+        // this.mixPageDonate();
+        // this.mixVoucherLogin();
         this.mixPageHomePage();
-        this.mixPageContactUs();
-        this.mixPageContentSearch();
+        // this.mixPageContactUs();
+        // this.mixPageContentSearch();
     }
 
     mixPageUserOrders() {
