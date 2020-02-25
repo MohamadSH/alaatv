@@ -85,6 +85,7 @@ Route::get('sharifLanding', [SharifSchoolController::class , 'sharifLanding']);
 Route::post('registerForSanatiSharifHighSchool', [SharifSchoolController::class , 'registerForSanatiSharifHighSchool']);
 
 Route::get('sitemap.xml', [HomeController::class , 'siteMapXML']);
+Route::get('vast.xml', [HomeController::class , 'vastXML'])->name('web.vast.xml');
 Route::group(['prefix' => 'sitemap'], function () {
     Route::get('/index.xml', 'Web\SitemapController@index');
     Route::get('product.xml', 'Web\SitemapController@product');

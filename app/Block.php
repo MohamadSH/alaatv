@@ -126,12 +126,12 @@ class Block extends BaseModel
         return self::getDummyBlock(false, '', null, null, null, Slideshow::getMainBanner());
     }
 
-   public static function getShopBlocks(): ?BlockCollection
+   public static function getShopBlocksForWeb(): ?BlockCollection
     {
-        $blocks = Cache::tags(['block', 'shop'])
-            ->remember('block:getShopBlocks', config('constants.CACHE_600'), function () {
-                $offerBlock = self::getOfferBlock();
-                $blocks     = self::appShop()
+        return Cache::tags(['block', 'shop'])
+            ->remember('block:getShopBlocksForWeb', config('constants.CACHE_600'), function () {
+//                $offerBlock = self::getOfferBlock();
+                return self::shopWithSlide()
                     ->enable()
 //                    ->where('id', '<>', 115)
                     ->orderBy('order')
@@ -143,10 +143,8 @@ class Block extends BaseModel
                         'banners',
                     ]);
 
-                return $blocks->prepend($offerBlock);
+//                return $blocks->prepend($offerBlock);
             });
-
-        return $blocks;
     }
 
     /**
@@ -229,12 +227,12 @@ class Block extends BaseModel
      *
      * @return BlockCollection|null
      */
-    public static function getShopBlocksForApp(): ?BlockCollection
+    public static function getShopBlocksForAppV1(): ?BlockCollection
     {
         return Cache::tags(['block', 'shop'])
-            ->remember('block:getShopBlocksForApp', config('constants.CACHE_600'), function () {
+            ->remember('block:getShopBlocksForAppV1', config('constants.CACHE_600'), function () {
                 $offerBlock = self::getOfferBlock();
-                $blocks     = self::shop()
+                $blocks     = self::shopWithoutSlide()
                     ->enable()
 //                    ->where('id', '<>', 113)
                     ->orderBy('order')
@@ -259,9 +257,9 @@ class Block extends BaseModel
     {
         return Cache::tags(['block', 'shop'])
             ->remember('block:getShopBlocksForAppV2', config('constants.CACHE_600'), function () {
-                return self::appShop()
+                return self::shopWithSlide()
                     ->enable()
-                    ->where('id', '<>', 113)
+//                    ->where('id', '<>', 113)
                     ->orderBy('order')
                     ->paginate(5);
             });
@@ -271,19 +269,20 @@ class Block extends BaseModel
     {
         return Cache::tags(['block', 'home'])
             ->remember('block:getMainBlocksForAppV2', config('constants.CACHE_600'), function () {
-                return self::appMain()
+                return self::mainWithSlide()
                     ->enable()
                     ->orderBy('order')
                     ->paginate(10);
             });
     }
 
-    public static function getMainBlocks(): ?BlockCollection
+    public static function getMainBlocksForWeb(): ?BlockCollection
     {
         $blocks = Cache::tags(['block', 'home'])
-            ->remember('block:getMainBlocks', config('constants.CACHE_600'), function () {
-                $blocks = self::main()
+            ->remember('block:getMainBlocksForWeb', config('constants.CACHE_600'), function () {
+                $blocks = self::mainWithoutSlide()
                     ->enable()
+                    ->where('id', '<>', 124)
                     ->orderBy('order')
                     ->get()
                     ->loadMissing([
@@ -298,12 +297,13 @@ class Block extends BaseModel
         return $blocks;
     }
 
-    public static function getMainBlocks2(): ?BlockCollection
+    public static function getMainBlocksForAppV1(): ?BlockCollection
     {
-        $blocks = Cache::tags(['block', 'home'])
-            ->remember('block:getMainBlocks', config('constants.CACHE_600'), function () {
-                $blocks = self::appMain()
+        return Cache::tags(['block', 'home'])
+            ->remember('block:getMainBlocksForAppV1', config('constants.CACHE_600'), function () {
+                return self::mainWithSlide()
                     ->enable()
+                    ->where('id', '<>', 124)
                     ->orderBy('order')
                     ->get()
                     ->loadMissing([
@@ -312,10 +312,7 @@ class Block extends BaseModel
                         'products',
                         'banners',
                     ]);
-
-                return $blocks;
             });
-        return $blocks;
     }
 
     public static function getContentBlocks(): ?BlockCollection
@@ -342,7 +339,7 @@ class Block extends BaseModel
      *
      * @return Builder
      */
-    public function scopeShop($query)
+    public function scopeShopWithoutSlide($query)
     {
         return $query->where('type', 2);
     }
@@ -354,7 +351,7 @@ class Block extends BaseModel
      *
      * @return Builder
      */
-    public function scopeAppShop($query)
+    public function scopeShopWithSlide($query)
     {
         return $query->where('type', 5)->orWhere('type', 2);
     }
@@ -366,7 +363,7 @@ class Block extends BaseModel
      *
      * @return Builder
      */
-    public function scopeMain($query)
+    public function scopeMainWithoutSlide($query)
     {
         return $query->where('type', 1);
     }
@@ -378,7 +375,7 @@ class Block extends BaseModel
      *
      * @return Builder
      */
-    public function scopeAppMain($query)
+    public function scopeMainWithSlide($query)
     {
         return $query->where('type', 4)->orWhere('type', 1);
     }
