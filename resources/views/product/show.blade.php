@@ -95,6 +95,7 @@
 
 @section('content')
 
+
     @if(in_array($product->type['id'] ,[config("constants.PRODUCT_TYPE_SIMPLE")]))
         @include('product.partials.showPage-topSection-simple')
     @elseif(in_array($product->type['id'], [config("constants.PRODUCT_TYPE_CONFIGURABLE"), config("constants.PRODUCT_TYPE_SELECTABLE")]))
@@ -139,7 +140,6 @@
                                             {{--                                            </div>--}}
                                             {{--                                        @endif--}}
                                         </div>
-
                                     </div>
                                     <div class="col">
 
@@ -361,6 +361,7 @@
                                                 </div>
                                             </div>
                                         @elseif(in_array($product->type['id'] ,[config("constants.PRODUCT_TYPE_SIMPLE")]))
+
                                         @elseif(in_array($product->type['id'], [config("constants.PRODUCT_TYPE_CONFIGURABLE")]))
                                             <div class="m-portlet m-portlet--bordered m-portlet--creative m-portlet--bordered-semi">
                                                 <div class="m-portlet__head">
@@ -451,7 +452,13 @@
                                                     <span>
                                                         <i class="fa fa-cart-arrow-down"></i>
                                                         <i class="fas fa-sync-alt fa-spin m--hide"></i>
-                                                        <span>افزودن به سبد خرید</span>
+                                                        <span>
+                                                            @if($hasUserPurchasedProduct)
+                                                                خرید مجدد
+                                                            @else
+                                                                افزودن به سبد خرید
+                                                            @endif
+                                                        </span>
                                                     </span>
                                                 </button>
                                             @endif
@@ -611,7 +618,13 @@
                     <span>
                         <i class="fa fa-cart-arrow-down"></i>
                         <i class="fas fa-sync-alt fa-spin m--hide"></i>
-                        <span>افزودن به سبد خرید</span>
+                        <span>
+                            @if($hasUserPurchasedProduct)
+                                خرید مجدد
+                            @else
+                                افزودن به سبد خرید
+                            @endif
+                        </span>
                     </span>
                 </button>
             @endif
@@ -659,18 +672,17 @@
         @endif
     </div>
 
-
     {{--نمونه فیلم--}}
-        @include('block.partials.main', [
-            'blockTitle'=>view('product.partials.productInfoNav', ['targetId'=>'sampleVideo' , 'product'=>$product , 'isForcedGift'=>$isForcedGift]),
-            'blockUrlDisable'=>true,
-            'blockType'=>'productSampleVideo',
-            'imageDimension'=>'?w=300&h=169',
-            'squareSing'=>false,
-            'blockCustomClass'=>'a--owl-carousel-type-2 productShowBlock sampleVideo a--block-widget-1',
-            'blockCustomId'=>'Block-sampleVideo',
-            'btnLoadMore'=>true
-            ])
+    @include('block.partials.main', [
+        'blockTitle'=>view('product.partials.productInfoNav', ['targetId'=>'sampleVideo' , 'product'=>$product , 'isForcedGift'=>$isForcedGift]),
+        'blockUrlDisable'=>true,
+        'blockType'=>'productSampleVideo',
+        'imageDimension'=>'?w=300&h=169',
+        'squareSing'=>false,
+        'blockCustomClass'=>'a--owl-carousel-type-2 productShowBlock sampleVideo a--block-widget-1',
+        'blockCustomId'=>'Block-sampleVideo',
+        'btnLoadMore'=>true
+        ])
 
     {{--نمونه جزوه--}}
     @include('product.partials.pamphlet')
