@@ -13,7 +13,10 @@ var GlobalJsVar = function () {
     }
 
     function getVar(key) {
-        return $('input[type="hidden"][name="js-var-'+key+'"]').val().trim();
+        if ($('input[type="hidden"][name="js-var-'+key+'"]').length > 0) {
+            return $('input[type="hidden"][name="js-var-'+key+'"]').val().trim();
+        }
+        return null;
     }
 
     function favoriteActionUrl() {

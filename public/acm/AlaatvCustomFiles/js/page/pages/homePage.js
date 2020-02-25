@@ -67,11 +67,13 @@ var initPage = function() {
 
     function loadStickeHeader(sections) {
         for (var section in sections) {
-            $('.'+sections[section]+'.dasboardLessons .m-portlet__head').sticky({
-                container: '.'+sections[section]+'.dasboardLessons > .col > .m-portlet',
-                topSpacing: $('#m_header').height(),
-                zIndex: 98
-            });
+            if (sections[section].trim().length > 0) {
+                $('.'+sections[section]+'.dasboardLessons .m-portlet__head').sticky({
+                    container: '.'+sections[section]+'.dasboardLessons > .col > .m-portlet',
+                    topSpacing: $('#m_header').height(),
+                    zIndex: 98
+                });
+            }
         }
     }
 
