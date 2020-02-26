@@ -165,7 +165,6 @@ class ProductController extends Controller
         $allChildrenSets = collect();
         $defaultProductSet = $product;
         if($product->producttype_id != config('constants.PRODUCT_TYPE_SIMPLE')){
-//            $hasUserPurchasedProduct = $this->hasBoughtAllChildren($product, $user);
             $defaultProductSet = $product->children->first();
             foreach ($product->getAllChildren(true,true) as $child) {
                 $productSets = collect();
@@ -1202,14 +1201,6 @@ class ProductController extends Controller
                 'discount' => $bonDiscount,
                 'bonPlus'  => $bonPlus,
             ]);
-        }
-    }
-
-    private function hasBoughtAllChildren(Product $product, User $user):bool
-    {
-        return true;
-
-        foreach ($product->children as $firstLevelChild) {
         }
     }
 }
