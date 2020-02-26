@@ -37,15 +37,12 @@ trait EmployeeWorkSheetCommon
         $totalUnConfirmedWorkAndShiftDiff = 0;   //In seconds
         foreach ($workTimeSheets as $workTimeSheet) {
             $workTimeDif = $workTimeSheet->obtainWorkAndShiftDiff("IN_SECONDS");
-            if ($workTimeDif < 0) {
+            if ($workTimeDif < 0 || $workTimeSheet->overtime_status_id == config('constants.EMPLOYEE_OVERTIME_STATUS_CONFIRMED')) {
                 $totalConfirmedWorkAndShiftDiff += $workTimeDif;
                 continue;
             }
-            if ($workTimeSheet->overtime_status_id == config('constants.EMPLOYEE_OVERTIME_STATUS_CONFIRMED')) {
-                $totalConfirmedWorkAndShiftDiff += $workTimeDif;
-            } else {
-                $totalUnConfirmedWorkAndShiftDiff += $workTimeDif;
-            }
+
+            $totalUnConfirmedWorkAndShiftDiff += $workTimeDif;
         }
         if ($totalConfirmedWorkAndShiftDiff < 0) {
             return "- " . $this->convertSecToHour(abs($totalConfirmedWorkAndShiftDiff));

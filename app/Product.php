@@ -179,6 +179,7 @@ use Purify;
  * @property mixed         blocks
  * @property mixed         descriptionWithPeriod
  * @property mixed         faqs
+ * @property mixed         priceText
  * @method static Builder|Product whereBlockId($value)
  * @method static Builder|Product whereIntroVideos($value)
  */
