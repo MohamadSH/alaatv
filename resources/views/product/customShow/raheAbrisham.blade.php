@@ -66,7 +66,7 @@
         'title' => 'خرید دوره راه ابریشم',
         'closeIcon' => true,
         'class' => 'RepurchaseRow',
-        'content' => view('product.partials.raheAbrisham.repurchase', compact('product'))
+        'content' => view('product.partials.raheAbrisham.repurchase', compact('product', 'hasUserPurchasedProduct'))
     ])
 
     @include('product.partials.raheAbrisham.descriptionBox', [
