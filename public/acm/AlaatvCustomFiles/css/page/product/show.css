@@ -511,14 +511,8 @@
 .priceAndAddToCartRow {
     padding: 13px 0;
 }
-.priceAndAddToCartRow .btnAddToCart {
-    position: absolute;
-    left: 25px;
-    bottom: 0;
-}
-.priceAndAddToCartRow .btnAddToCart svg {
-    width: 25px;
-    height: 25px;
+.priceAndAddToCartRow .viewYourDashboardMessage {
+    font-size: 1.2rem;
 }
 .priceAndAddToCartRow .priceAndAddToCartCol {
     display: flex;
@@ -532,7 +526,7 @@
     justify-items: center;
     align-items: center;
 }
-.priceAndAddToCartRow .priceAndAddToCartCol .price {
+.priceAndAddToCartRow .priceAndAddToCartCol .price .priceValue {
     font-size: 25px;
     line-height: 25px;
 }
