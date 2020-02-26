@@ -206,7 +206,15 @@
 {{--                    <span>390,000</span>--}}
 {{--                    <span>تومان</span>--}}
 {{--                </div>--}}
-                <button class="btn m-btn--square btn-success btnAddToCart" ><p class="display-6 m--marginless">افزودن به سبد خرید </p></button>
+                <button class="btn m-btn--square btn-success btnAddToCart">
+                    <p class="display-6 m--marginless">
+                        @if($hasUserPurchasedProduct)
+                            خرید مجدد این دوره
+                        @else
+                            افزودن به سبد خرید
+                        @endif
+                    </p>
+                </button>
             </div>
         </div>
     </div>
