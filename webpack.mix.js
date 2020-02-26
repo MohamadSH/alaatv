@@ -335,7 +335,7 @@ class Mix {
                 'public/acm/AlaatvCustomFiles/components/ScrollCarousel/js.js',
                 'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/js.js',
                 'public/acm/AlaatvCustomFiles/components/AnimateScrollTo/js.js',
-                // 'public/acm/AlaatvCustomFiles/js/page/pages/homePage.js',
+                'public/acm/AlaatvCustomFiles/js/page/pages/homePage.js',
             ],
             'public/js/page-homePage.js',
             'page-homePage');
