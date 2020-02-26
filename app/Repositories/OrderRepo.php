@@ -29,7 +29,7 @@ class OrderRepo
         ]);
     }
 
-    public static function orderStatusFilter(Builder $orders, $orderStatusesId)
+    public static function orderStatusFilter( $orders, $orderStatusesId)
     {
         return $orders->whereIn('orderstatus_id', $orderStatusesId);
     }
@@ -51,7 +51,7 @@ class OrderRepo
         return $orders;
     }
 
-    public static function paymentStatusFilter(Builder $orders, $paymentStatusesId)
+    public static function paymentStatusFilter($orders, $paymentStatusesId)
     {
         return $orders->whereIn('paymentstatus_id', $paymentStatusesId);
     }
