@@ -159,7 +159,7 @@ class ProductController extends Controller
         $block = optional($product)->blocks->first();
 
         $purchasedProductIdArray = $this->searchInUserAssetsCollection($product, $user);
-        $hasUserPurchasedRaheAbrisham = $hasUserPurchasedProduct = in_array($product->id, $purchasedProductIdArray);
+        $hasUserPurchasedProduct = in_array($product->id, $purchasedProductIdArray);
 
         $children = collect();
         $allChildrenSets = collect();
@@ -207,7 +207,7 @@ class ProductController extends Controller
             $liveDescriptions = $product->livedescriptions->sortByDesc('created_at');
             $periodDescription            = $product->descriptionWithPeriod;
             $faqs                         = $product->faqs;
-            return view('product.customShow.raheAbrisham', compact('product', 'block', 'liveDescriptions', 'isFavored', 'lastSet', 'lastSetPamphlets', 'lastSetVideos', 'periodDescription', 'sets', 'faqs', 'hasUserPurchasedRaheAbrisham', 'block', 'isForcedGift', 'hasPurchasedEssentialProduct', 'shouldBuyProductId', 'shouldBuyProductName'));
+            return view('product.customShow.raheAbrisham', compact('product', 'block', 'liveDescriptions', 'isFavored', 'lastSet', 'lastSetPamphlets', 'lastSetVideos', 'periodDescription', 'sets', 'faqs', 'hasUserPurchasedProduct', 'block', 'isForcedGift', 'hasPurchasedEssentialProduct', 'shouldBuyProductId', 'shouldBuyProductName'));
         }
 
         return view('product.show', compact('product', 'block', 'purchasedProductIdArray', 'liveDescriptions', 'children', 'isFavored', 'isForcedGift', 'shouldBuyProductId', 'shouldBuyProductName', 'hasPurchasedEssentialProduct' ,
