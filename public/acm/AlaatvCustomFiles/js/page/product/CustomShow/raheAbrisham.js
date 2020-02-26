@@ -1208,9 +1208,7 @@ var EntekhabeFarsang = function () {
     }
 
     function getSectionListFromContent(data) {
-        var dataLength = data.length,
-            sections = [],
-            totalSectionList = getTotalSectionList();
+        var totalSectionList = getTotalSectionList();
 
         checkSections(data.pamphlets, totalSectionList);
         checkSections(data.videos, totalSectionList);
@@ -1237,9 +1235,8 @@ var EntekhabeFarsang = function () {
     }
 
     function checkInTotalSectionList(itemSection, totalSectionList) {
-        var totalSectionListLength = totalSectionList.length;
-        for (var j = 0; j < totalSectionListLength; j++) {
-            if (itemSection.id === totalSectionList[j].id) {
+        for (var j = 0; (typeof totalSectionList[j] !== 'undefined'); j++) {
+            if (itemSection.id.toString() === totalSectionList[j].id.toString()) {
                 totalSectionList[j].enable = true;
             }
         }
@@ -1458,7 +1455,6 @@ var InitAbrishamPage = function () {
         initLiveDescription();
         initEvents();
         imageObserver.observe();
-        console.log(hasUserPurchasedRaheAbrisham);
         if (!hasUserPurchasedRaheAbrisham) {
             $('.helpMessageRow').fadeOut(0);
             $('.RepurchaseRow').fadeIn();
