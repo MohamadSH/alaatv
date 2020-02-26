@@ -85,7 +85,8 @@ a.a--gtm-eec-advertisement-click {
     font-weight: 900;
 }
 
-.modal .modal-content .modal-header .close::before {
+.modal .modal-content .modal-header .close:before,
+.alert .close:before {
     font-family: "Font Awesome 5 Free";
     content: "\f00d";
 }
