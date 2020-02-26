@@ -58,7 +58,7 @@
                         <span class="m-nav__link-badge float-right">
                             @if(!$product->children->where('enable',1)->count()>0 && (array_search($product->id, $purchasedProductIdArray) !== false) || $childIsPurchased)
 
-                                <span class="m-badge m-badge--info m-badge--wide m-badge--rounded" onclick="window.location.href = '{{ action("Web\UserController@userProductFiles") }}'">
+                                <span class="m-badge m-badge--info m-badge--wide m-badge--rounded YouHavePurchasedThisProductMessage">
                                     خریده اید
                                     <i class="fa fa-play-circle"></i>
                                 </span>

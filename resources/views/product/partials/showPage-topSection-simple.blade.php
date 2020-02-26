@@ -391,10 +391,10 @@
                                                             @if($product->enable && !$isForcedGift)
 
                                                                 @if($hasUserPurchasedProduct)
-                                                                    <a class="btn m-btn m-btn--air btn-info animated infinite pulse viewYourDashboardMessage" role="button" href="{{ action("Web\UserController@userProductFiles") }}">
+                                                                    <button class="btn m-btn m-btn--air btn-info animated infinite pulse YouHavePurchasedThisProductMessage">
                                                                         <i class="fa fa-play-circle"></i>
                                                                         مشاهده در صفحه فیلم ها و جزوه های من
-                                                                    </a>
+                                                                    </button>
                                                                 @endif
 
                                                                 <button class="btn m-btn--air btn-success m-btn--icon btnAddToCart gta-track-add-to-card">

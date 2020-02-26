@@ -251,7 +251,22 @@
             quantity: 1
         };
         var parentProductTags = '{{ ($product->tags !== null) ? implode(',',optional($product->tags)->tags) : '-' }}';
-        var allProductsSets = {!! json_encode($allChildrenSets) !!};
+        var allProductsSets = @if($allChildrenSets->count() > 0) {!! json_encode($allChildrenSets) !!} @else [
+            {
+                id: parentProduct.id,
+                name: parentProduct.name,
+                sets: [
+                    @foreach($sets as $set)
+                    {
+                        id: '{{$set->id}}',
+                        name: '{{$set->name}}'
+                    },
+                    @endforeach
+                ]
+            }
+        ]
+        @endif
+            ;
         var lastSetData = {
             set: {
                 id: '{{$lastSet->id}}',
