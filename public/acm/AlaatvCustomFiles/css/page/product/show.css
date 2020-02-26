@@ -511,7 +511,7 @@
 .priceAndAddToCartRow {
     padding: 13px 0;
 }
-.priceAndAddToCartRow .viewYourDashboardMessage {
+.priceAndAddToCartRow .YouHavePurchasedThisProductMessage {
     font-size: 1.2rem;
 }
 .priceAndAddToCartRow .priceAndAddToCartCol {

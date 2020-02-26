@@ -319,10 +319,10 @@
                                     </h3>
 
                                     @if($hasUserPurchasedProduct)
-                                        <a class="btn m-btn m-btn--pill m-btn--air btn-info animated infinite pulse" role="button" href="{{ action("Web\UserController@userProductFiles") }}">
+                                        <button class="btn m-btn m-btn--pill m-btn--air btn-info animated infinite pulse YouHavePurchasedThisProductMessage">
                                             <i class="fa fa-play-circle"></i>
                                             مشاهده در صفحه فیلم ها و جزوه های من
-                                        </a>
+                                        </button>
                                     @endif
                                     <button class="btn m-btn--air btn-success m-btn--icon m--margin-bottom-5 btnAddToCart gta-track-add-to-card">
                                         <span>
@@ -356,10 +356,10 @@
                                             </button>
                                         @else
                                             <a class="btn btn-focus btn-lg m-btn  m-btn m-btn--icon" href="{{ route('product.show' , $shouldBuyProductId ) }}">
-                                                        <span>
-                                                            <i class="flaticon-arrows"></i>
-                                                            <span>این محصول بخشی از {{$shouldBuyProductName}} است برای خرید کلیک کنید </span>
-                                                        </span>
+                                                <span>
+                                                    <i class="flaticon-arrows"></i>
+                                                    <span>این محصول بخشی از {{$shouldBuyProductName}} است برای خرید کلیک کنید </span>
+                                                </span>
                                             </a>
                                         @endif
                                     @endif

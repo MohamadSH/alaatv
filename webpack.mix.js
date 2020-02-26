@@ -723,6 +723,7 @@ class Mix {
             ],
             js: [
                 'node_modules/bootstrap-switch/dist/js/bootstrap-switch.js',
+
                 'node_modules/lightgallery/src/js/lightgallery.js',
                 'node_modules/lightgallery/modules/lg-thumbnail.min.js',
                 'node_modules/lightgallery/modules/lg-autoplay.min.js',

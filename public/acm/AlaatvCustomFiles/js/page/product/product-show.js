@@ -1229,6 +1229,12 @@ var InitProductPagePage = function () {
         });
     }
 
+    function addEvents() {
+        $(document).on('click', '.YouHavePurchasedThisProductMessage', function() {
+            $('.selectSetOfProductTopreview').AnimateScrollTo();
+        });
+    }
+
     function initSampleVideoBlock() {
         $('.sampleVideo').OwlCarouselType2({
             OwlCarousel: {
@@ -1401,6 +1407,7 @@ var InitProductPagePage = function () {
         handleProductInformationMultiColumn();
         initResponsivePage();
         initPreviewSets(data);
+        addEvents();
     }
 
     return {
