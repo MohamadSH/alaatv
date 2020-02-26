@@ -509,10 +509,10 @@ var PreviewSets = function () {
     }
 
     function showSetData(data, sectionId, callback) {
-        initSectionList(data.lastSetData.files);
-        $('#selectSet .select-selected').html((data.lastSetData.set.short_title === null) ? data.lastSetData.set.title : data.lastSetData.set.short_title).attr('data-option-value', data.lastSetData.set.id);
-        setLists(data.lastSetData.files);
-        setBtnMoreLink(data.lastSetData.set.url.web);
+        initSectionList(data.files);
+        $('#selectSet .select-selected').html((data.set.short_title === null) ? data.set.title : data.set.short_title).attr('data-option-value', data.set.id);
+        setLists(data.files);
+        setBtnMoreLink(data.set.url.web);
         checkNoData();
         refreshScrollCarouselSwipIcons();
         showLists();
@@ -524,10 +524,10 @@ var PreviewSets = function () {
         }
 
         if (typeof callback !== 'undefined') {
-            callback(data.lastSetData.set.id);
+            callback(data.set.id);
         }
-        // setStepUpdate(data.lastSetData.set.id);
-        // MapSVG.panToObject(MapSVG.getsetDataFromId(data.lastSetData.set.id).elementId);
+        // setStepUpdate(data..set.id);
+        // MapSVG.panToObject(MapSVG.getsetDataFromId(data..set.id).elementId);
         hideLoading();
     }
 
@@ -921,7 +921,7 @@ var PreviewSets = function () {
 
     function getSetsOfProduct(allProductsSets, productId) {
         for (var i = 0; (typeof allProductsSets[i] !== 'undefined'); i++) {
-            if (allProductsSets[i].id === productId) {
+            if (allProductsSets[i].id.toString() === productId.toString()) {
                 return allProductsSets[i].sets;
             }
         }
@@ -933,34 +933,46 @@ var PreviewSets = function () {
         var sets = getSetsOfProduct(allProductsSets, productId);
         cleanSelectSets();
         feedSelectSets(sets);
-        initSetCustomDropDown();
-    }
 
-    function initSetCustomDropDown() {
-        $('#selectSet').CustomDropDown({
-            onChange: function (item) {
-                showContentOfSetFromServer(item.value);
+        $('.CustomDropDown').CustomDropDown({
+            onChanged: function (item) {
+                var CustomDropDownId = $(item.selectObject).parent('.CustomDropDown').attr('id');
+                if (CustomDropDownId === 'selectProduct') {
+                    showSetsOfProduct(allProductsSets, item.value);
+                    if ($('#selectSet select').val().toString() !== sets[0].id.toString()) {
+                        showContentOfSetFromServer(sets[0].id.toString());
+                    }
+                } else if (CustomDropDownId === 'selectSet') {
+                    showContentOfSetFromServer(item.value);
+                }
                 // { index: 2, totalCount: 5, value: "3", text: "فرسنگ سوم" }
             }
         });
     }
 
     function initCustomDropDown(data) {
+        var allProductsSets, productId;
+        if (data.allProductsSets.length === 0) {
+            data.allProductsSets = [
+                {
+                    id: parentProduct.id,
+                    name: parentProduct.name,
+                    sets: [
+                        {
+                            id: data.lastSetData.set.id,
+                            name: data.lastSetData.set.name
+                        }
+                    ]
+                }
+            ];
+        }
         showSetsOfProduct(data.allProductsSets, data.allProductsSets[0].id);
-
-        $('#selectProduct').CustomDropDown({
-            onChange: function (item) {
-                showContentOfSetFromServer(item.value);
-                showSetsOfProduct(data.allProductsSets, item.value);
-                // { index: 2, totalCount: 5, value: "3", text: "فرسنگ سوم" }
-            }
-        });
     }
 
     return {
         init: function (data) {
             initCustomDropDown(data);
-            showSetData(data);
+            showSetData(data.lastSetData);
             addClickEvents();
         },
         showSetFromServer: function (setId, sectionId) {

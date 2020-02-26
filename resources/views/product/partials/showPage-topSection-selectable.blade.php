@@ -231,7 +231,7 @@
                                             <ul class="m-nav m-nav--active-bg" id="m_nav" role="tablist">
                                                 @if(!empty($children))
                                                     @foreach($children as $p)
-                                                        @include('product.partials.showChildren',['product' => $p , 'color' => 1, 'childIsPurchased' => (array_search($product->id, $purchasedProductIdArray) !== false)])
+                                                        @include('product.partials.showChildren',['product' => $p , 'color' => 1, 'childIsPurchased' => (array_search($p->id, $purchasedProductIdArray) !== false)])
                                                     @endforeach
                                                 @endif
                                             </ul>

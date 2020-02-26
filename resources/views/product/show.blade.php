@@ -2,7 +2,6 @@
 
 @section('page-css')
     <link href="{{ mix('/css/product-show.css') }}" rel="stylesheet" type="text/css"/>
-    <link href="{{ asset('/acm/AlaatvCustomFiles/css/page/product/previewSetsOfProduct.css') }}" rel="stylesheet" type="text/css"/>
     <style>
         @if(
             (
@@ -96,18 +95,6 @@
 
 @section('content')
 
-
-    <?php
-
-    $allChildrenSets = $allChildrenSets->map(function ($object) {
-        foreach ($object['sets'] as $key=>$item) {
-            $object['sets'][$key] = (object)['id' => $key, 'name' => $item];
-        }
-        return $object;
-    });
-
-    ?>
-
     @if(in_array($product->type['id'] ,[config("constants.PRODUCT_TYPE_SIMPLE")]))
         @include('product.partials.showPage-topSection-simple')
     @elseif(in_array($product->type['id'], [config("constants.PRODUCT_TYPE_CONFIGURABLE"), config("constants.PRODUCT_TYPE_SELECTABLE")]))
@@ -115,7 +102,7 @@
     @endif
 
     {{-- پیش نمایش ست ها --}}
-    @include('product.partials.previewSetsOfProduct', ['sets'=> $allChildrenSets->first()['sets'], 'products'=> $allChildrenSets])
+    @include('product.partials.previewSetsOfProduct', ['sets'=> ($allChildrenSets->count() > 0) ? $allChildrenSets->first()['sets'] : $sets, 'products'=> $allChildrenSets])
 
     {{--نمونه فیلم--}}
     @include('block.partials.main', [
@@ -265,13 +252,57 @@
         };
         var parentProductTags = '{{ ($product->tags !== null) ? implode(',',optional($product->tags)->tags) : '-' }}';
         var allProductsSets = {!! json_encode($allChildrenSets) !!};
+        var lastSetData = {
+            set: {
+                id: '{{$lastSet->id}}',
+                name: '{{$lastSet->name}}',
+                url: {
+                    web: '{{$lastSet->show_url}}'
+                }
+            },
+            files: {
+                pamphlets: [
+
+                        @foreach($lastSetPamphlets as $item)
+                    {
+                        name: '{{$item->name}}',
+                        file: {
+                            pamphlet: [
+                                {
+                                    link: '{{$item->file->first()->first()->link}}'
+                                }
+                            ]
+                        },
+                        @if(isset($item->section))
+                        section: {
+                            id: '{{$item->section_id}}',
+                            name: '{{$item->section->name}}'
+                        }
+                        @endif
+                    },
+                    @endforeach
+                ],
+                videos: [
+
+                        @foreach($lastSetVideos as $item)
+                    {
+                        title: '{{$item->name}}',
+                        thumbnail: '{{$item->thumbnail}}',
+                        url: {
+                            web: '{{$item->url}}'
+                        },
+                        @if(isset($item->section))
+                        section: {
+                            id: '{{$item->section_id}}',
+                            name: '{{$item->section->name}}'
+                        }
+                        @endif
+                    },
+                    @endforeach
+                ]
+            }
+        };
     </script>
-    <script>
-        var TotalQuantityAddedToCart = 0;
-        var allSetsOfRaheAbrisham = [ { name: 'فرسنگ هفتم راه ابریشم (ریاضیات جامع تجربی) (ویژۀ 12 بهمن تا 2 اسفند 98) محمد صادق ثابتی', setId: 650 }, { name: 'فرسنگ ششم راه ابریشم (ریاضیات جامع تجربی) (ویژۀ 28 دی تا 11 بهمن 98) محمد صادق ثابتی', setId: 648 }, { name: 'همایش ریاضی تجربی گدار (نظام آموزشی جدید) (99-1398) محمد صادق ثابتی', setId: 747 }, { name: 'فرسنگ پنجم راه ابریشم (ریاضیات جامع تجربی) (ویژۀ 23 آذر تا 27 دی 98) محمد صادق ثابتی', setId: 646 }, { name: 'فرسنگ چهارم راه ابریشم (ریاضیات جامع تجربی) (ویژۀ 2 تا 22 آذر 98) محمد صادق ثابتی', setId: 644 }, { name: 'فرسنگ سوم راه ابریشم (ریاضیات جامع تجربی) (ویژۀ 11 آبان تا 1 آذر 98) محمد صادق ثابتی', setId: 643 }, { name: 'فرسنگ دوم راه ابریشم (ریاضیات جامع تجربی) (ویژۀ 20 مهر تا 10 آبان 98) محمد صادق ثابتی', setId: 642 }, { name: 'فرسنگ اول راه ابریشم (ریاضیات جامع تجربی) (ویژۀ 7 تا 19 مهر 98) محمد صادق ثابتی', setId: 617 }, { name: 'صفر تا صد ریاضی تجربی کنکور (نظام آموزشی جدید) (98-1397) محمد صادق ثابتی', setId: 217 }, { name: 'پیله راه ابریشم (ریاضیات مقدماتی) (نظام آموزشی جدید) (99-1398) محمد صادق ثابتی', setId: 604 }, { name: 'بارانداز راه ابریشم ( پس آزمون)', setId: 665 }, { name: 'پیش آزمون قلمچی راه ابریشم (نظام آموزشی جدید) (99-1398) محمد صادق ثابتی', setId: 717 }, ];
-        var lastSetData = { set: { id: '650', name: 'فرسنگ هفتم راه ابریشم (ریاضیات جامع تجربی) (ویژۀ 12 بهمن تا 2 اسفند 98) محمد صادق ثابتی', url: { web: 'http://localhost/set/650' } }, files: { pamphlets: [ { name: 'تورق فرسنگ هفتم', file: { pamphlet: [ { link: 'http://localhost/d/eyJpdiI6IkFFQ2M3UzduN2pZQlJRMHh3TkhZSUE9PSIsInZhbHVlIjoidER1UDZWaVppT0o5czkxZXJnbjhUZEk1TjlKaUkrOGh4K0VkSXV6UmpFaGlsZE1zczR2dVdSdjRIR3dEQ1wvMGFIQnFGUitiZU9RTXZlcmFheHJpeHBjNVdIS1ZzZVFmRUhqQUtrSE1lRFR0TEsyNGVydElvUmtQUDVGNENGWlwvdndFUnMySGEzazc5blNYeFd4YnloYWxCeVlxdmZxS2l6TzBNZXhFbzRcL3ZVPSIsIm1hYyI6Ijk5NDQ5ZjJmMWYwZGM1YjlmNWVmNTFmZTI3OGQ2ZWI1OGUzN2MwYjMyZjA3NTJiOGQwMGFlMjVlODFkZGI1N2IifQ==' } ] }, section: { id: '2', name: 'تورق سریع' } }, { name: 'دفترچه تست فرسنگ هفتم (لگاریتم)', file: { pamphlet: [ { link: 'http://localhost/d/eyJpdiI6Imk4aHpweGxGRHNNVnJrUGl4WFBCUkE9PSIsInZhbHVlIjoiSVNzVkRNU3J2NjV6SUx1SjN3VG0zczRteks3cGxDd0dTdnpxTm1WXC9TRmd3Y1M0QnFwZFh5enRlSlBlZGlRQnJMZjRKVVhiYitzTlJjK0UxQnpYclJ5dGZFTUtSc1J3QWF5U3RIQ09GeGZmZ083eWhpaFM1a0RpVHNMVkhzZEt5TmNPSWR4Mm5nK2lxa0FvdFwvQXVWeVFma3p1aUJycTV4aWZKT243bmhSZ1U9IiwibWFjIjoiYmI1NGRlMmZiOTBkY2QyMDlhNjNlOWYzOGE3NDllOTgxNWIxYzliNjg0M2E1ZTIxMDkyMjRlOWQ4MzkxMTFkOSJ9' } ] }, section: { id: '3', name: 'حل تست' } }, ], videos: [ { title: 'راهنمای استفاده از فیلم های فرسنگ هفتم', thumbnail: 'https://cdn.alaatv.com/media/thumbnails/650/650000zero.jpg', url: { web: 'http://localhost/c/19287' }, section: { id: '1', name: 'تابلو راهنما' } }, { title: 'فرسنگ هفتم (قسمت اول)، تورق: لگاریتم (قسمت اول)', thumbnail: 'https://cdn.alaatv.com/media/thumbnails/650/650001zone.jpg', url: { web: 'http://localhost/c/19288' }, section: { id: '2', name: 'تورق سریع' } }, { title: 'فرسنگ هفتم (قسمت دوم)، تورق: لگاریتم (قسمت دوم)', thumbnail: 'https://cdn.alaatv.com/media/thumbnails/650/650002ttwo.jpg', url: { web: 'http://localhost/c/19289' }, section: { id: '2', name: 'تورق سریع' } }, { title: 'فرسنگ هفتم (قسمت سوم)، تورق: کاربرد مشتق (بهینه سازی)', thumbnail: 'https://cdn.alaatv.com/media/thumbnails/650/650003thre.jpg', url: { web: 'http://localhost/c/19306' }, section: { id: '2', name: 'تورق سریع' } }, { title: 'فرسنگ هفتم (قسمت چهارم)، حل تست: لگاریتم (تست های 1 تا 16)', thumbnail: 'https://cdn.alaatv.com/media/thumbnails/650/650004four.jpg', url: { web: 'http://localhost/c/19307' }, section: { id: '3', name: 'حل تست' } }, { title: 'فرسنگ هفتم (قسمت پنجم)، حل تست: لگاریتم (تست های 17 تا 31)', thumbnail: 'https://cdn.alaatv.com/media/thumbnails/650/650005five.jpg', url: { web: 'http://localhost/c/19314' }, section: { id: '3', name: 'حل تست' } }, { title: 'فرسنگ هفتم (قسمت ششم)، حل تست: لگاریتم (تست های 32 تا 46)', thumbnail: 'https://cdn.alaatv.com/media/thumbnails/650/650006zsix.jpg', url: { web: 'http://localhost/c/19315' }, section: { id: '3', name: 'حل تست' } }, { title: 'فرسنگ هفتم (قسمت هفتم)، حل تست: لگاریتم (تست های 47 تا 72)', thumbnail: 'https://cdn.alaatv.com/media/thumbnails/650/650007seve.jpg', url: { web: 'http://localhost/c/19333' }, section: { id: '3', name: 'حل تست' } }, { title: 'فرسنگ هفتم (قسمت هشتم)، حل تست: لگاریتم (تست های 73 تا 90)', thumbnail: 'https://cdn.alaatv.com/media/thumbnails/650/650008eigh.jpg', url: { web: 'http://localhost/c/19334' }, section: { id: '3', name: 'حل تست' } }, ] } };
-        var hasUserPurchasedRaheAbrisham = 0; </script>
 
     <script src="{{ mix('/js/product-show.js') }}"></script>
-    <script src="{{ asset('/acm/AlaatvCustomFiles/js/page/product/product-show.js') }}"></script>
 @endsection

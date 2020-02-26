@@ -93,7 +93,7 @@
         <ul class="m-nav__sub collapse show children_{{$product->id}} m--padding-top-5" id="m_nav_sub_{{ $product->id }}" role="tabpanel"
             aria-labelledby="m_nav_link_{{ $product->id }}" data-parent="#m_nav_link_{{ $product->id }}">
             @foreach($product->children->where('enable',1) as $p)
-                @include('product.partials.showChildren',['product' => $p, 'color' => $color + 1, 'childIsPurchased' => (array_search($product->id, $purchasedProductIdArray) !== false)])
+                @include('product.partials.showChildren',['product' => $p, 'color' => $color + 1, 'childIsPurchased' => (array_search($p->id, $purchasedProductIdArray) !== false)])
             @endforeach
         </ul>
     @endif
