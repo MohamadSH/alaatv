@@ -948,20 +948,6 @@ var PreviewSets = function () {
     }
 
     function initCustomDropDown(data) {
-        if (data.allProductsSets.length === 0) {
-            data.allProductsSets = [
-                {
-                    id: parentProduct.id,
-                    name: parentProduct.name,
-                    sets: [
-                        {
-                            id: data.lastSetData.set.id,
-                            name: data.lastSetData.set.name
-                        }
-                    ]
-                }
-            ];
-        }
         showSetsOfProduct(data.allProductsSets, data.allProductsSets[0].id);
     }
 
