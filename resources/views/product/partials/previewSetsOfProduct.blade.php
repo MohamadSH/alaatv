@@ -25,7 +25,7 @@
                     <div class="CustomDropDown" id="selectSet">
                         <select>
                             @foreach($sets as $setItem)
-                                <option value="{{$setItem->id}}" @if($lastSet->id===$setItem->id) selected @endif>{{$setItem->name}}</option>
+                                <option value="{{$setItem['id']}}" @if($lastSet->id===$setItem['id']) selected @endif>{{$setItem['name']}}</option>
                             @endforeach
                         </select>
                     </div>

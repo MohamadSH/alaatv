@@ -42,7 +42,7 @@ abstract class ProductPriceCalculator
      */
     public function __construct(Product $product, User $user = null)
     {
-        $this->rawCost            = $product->obtainPrice();
+        $this->rawCost            = $product->obtainPrice($user);
         $this->discountValue      = $product->getFinalDiscountValue();
         $this->discountPercentage = $product->obtainDiscount();
         $this->discountCashAmount = $product->obtainDiscountAmount();

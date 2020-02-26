@@ -25,6 +25,7 @@ use App\{Adapter\AlaaSftpAdapter,
     Traits\ProductCommon,
     Traits\RequestCommon,
     Traits\SearchCommon,
+    Traits\User\AssetTrait,
     User,
     Websitesetting};
 use App\Http\Controllers\Controller;
@@ -35,6 +36,7 @@ use Illuminate\Support\{Arr, Collection, Facades\Cache, Facades\File, Facades\St
 
 class ProductController extends Controller
 {
+    use AssetTrait;
     /*
     |--------------------------------------------------------------------------
     | Traits
@@ -157,14 +159,22 @@ class ProductController extends Controller
         $block = optional($product)->blocks->first();
 
         $purchasedProductIdArray = $this->searchInUserAssetsCollection($product, $user);
-        $hasUserPurchasedRaheAbrisham = $hasUserPurchasedProduct = in_array($product->id, $purchasedProductIdArray);
+        $hasUserPurchasedProduct = in_array($product->id, $purchasedProductIdArray);
 
         $children = collect();
         $allChildrenSets = collect();
         $defaultProductSet = $product;
         if($product->producttype_id != config('constants.PRODUCT_TYPE_SIMPLE')){
+//            $hasUserPurchasedProduct = $this->hasBoughtAllChildren($product, $user);
             $defaultProductSet = $product->children->first();
             foreach ($product->getAllChildren(true,true) as $child) {
+                $productSets = collect();
+                foreach ($child->sets as $set) {
+                    $productSets->push([
+                        'name'  =>  $set->name,
+                        'id'    =>  $set->id,
+                    ]);
+                }
                 $allChildrenSets->push(['id' => $child->id , 'name' => $child->name , 'sets'=>$child->sets]);
             }
 
@@ -197,7 +207,7 @@ class ProductController extends Controller
             $liveDescriptions = $product->livedescriptions->sortByDesc('created_at');
             $periodDescription            = $product->descriptionWithPeriod;
             $faqs                         = $product->faqs;
-            return view('product.customShow.raheAbrisham', compact('product', 'block', 'liveDescriptions', 'isFavored', 'lastSet', 'lastSetPamphlets', 'lastSetVideos', 'periodDescription', 'sets', 'faqs', 'hasUserPurchasedRaheAbrisham', 'block', 'isForcedGift', 'hasPurchasedEssentialProduct', 'shouldBuyProductId', 'shouldBuyProductName'));
+            return view('product.customShow.raheAbrisham', compact('product', 'block', 'liveDescriptions', 'isFavored', 'lastSet', 'lastSetPamphlets', 'lastSetVideos', 'periodDescription', 'sets', 'faqs', 'hasUserPurchasedProduct', 'block', 'isForcedGift', 'hasPurchasedEssentialProduct', 'shouldBuyProductId', 'shouldBuyProductName'));
         }
 
         return view('product.show', compact('product', 'block', 'purchasedProductIdArray', 'liveDescriptions', 'children', 'isFavored', 'isForcedGift', 'shouldBuyProductId', 'shouldBuyProductName', 'hasPurchasedEssentialProduct' ,
@@ -1195,46 +1205,11 @@ class ProductController extends Controller
         }
     }
 
-    private function searchInUserAssetsCollection(Product $product, ?User $user):array
+    private function hasBoughtAllChildren(Product $product, User $user):bool
     {
-        if(is_null($user)){
-            return [];
-        }
-        $purchasedProductIdArray = [];
-        $userAssetsArray = $user->getDashboardBlocks()->where('title' , 'محصولات من')->first()->products->pluck('id')->toArray();
+        return true;
 
-        $this->iterateProductAndChildrenInAsset($userAssetsArray, $product, $purchasedProductIdArray);
-
-        return $purchasedProductIdArray;
-    }
-
-    private function iterateProductAndChildrenInAsset(array $userAssetsArray, Product $product, array & $purchasedProductIdArray):void
-    {
-        if (in_array($product->id, $userAssetsArray)) {
-            $purchasedProductIdArray[] = $product->id;
-            $purchasedProductIdArray = array_merge($purchasedProductIdArray , $product->getAllChildren()->pluck('id')->toArray());
-        }else{
-            $grandChildren = $product->getAllChildren(); ;
-            $hasBoughtEveryChild = $grandChildren->isEmpty()?false:true;
-            foreach ($grandChildren as $grandChild) {
-                if(!in_array($grandChild->id, $userAssetsArray)){
-                    $hasBoughtEveryChild = false;
-                    break;
-                }
-            }
-
-            if($hasBoughtEveryChild){
-                $purchasedProductIdArray[] = $product->id ;
-            }
-        }
-
-
-
-        $children = $product->children;
-        if ($children->count() > 0) {
-            foreach ($children as $key=>$childProduct) {
-                $this->iterateProductAndChildrenInAsset($userAssetsArray, $childProduct, $purchasedProductIdArray);
-            }
+        foreach ($product->children as $firstLevelChild) {
         }
     }
 }
