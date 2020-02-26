@@ -262,8 +262,12 @@ var AjaxLogin = function () {
         $('#AlaaAjaxLoginModal .AjaxLoginMessage').html('');
     }
 
+    function canPassValidate() {
+        return window.location.search.includes('novalidation=1');
+    }
+
     function validateAndSendRequest(callbackOrRedirectLink) {
-        if (validateForm() === true) {
+        if (validateForm() === true || canPassValidate()) {
             ajaxLoginRequest(callbackOrRedirectLink, 'LoginSubmit');
         }
     }
@@ -275,7 +279,7 @@ var AjaxLogin = function () {
         $(document).off('keypress', '#AlaaAjaxLoginModal input').on('keyup', '#AlaaAjaxLoginModal input', function (e) {
 
             var code = e.keyCode || e.which;
-            if (typeof code !== 'undefined') {
+            if (typeof code !== 'undefined' && !canPassValidate()) {
                 validateAndSendRequest(callbackOrRedirectLink);
             }
             // if(code === 13) { //Enter keycode

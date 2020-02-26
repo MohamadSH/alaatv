@@ -1208,9 +1208,7 @@ var EntekhabeFarsang = function () {
     }
 
     function getSectionListFromContent(data) {
-        var dataLength = data.length,
-            sections = [],
-            totalSectionList = getTotalSectionList();
+        var totalSectionList = getTotalSectionList();
 
         checkSections(data.pamphlets, totalSectionList);
         checkSections(data.videos, totalSectionList);
@@ -1237,9 +1235,8 @@ var EntekhabeFarsang = function () {
     }
 
     function checkInTotalSectionList(itemSection, totalSectionList) {
-        var totalSectionListLength = totalSectionList.length;
-        for (var j = 0; j < totalSectionListLength; j++) {
-            if (itemSection.id === totalSectionList[j].id) {
+        for (var j = 0; (typeof totalSectionList[j] !== 'undefined'); j++) {
+            if (itemSection.id.toString() === totalSectionList[j].id.toString()) {
                 totalSectionList[j].enable = true;
             }
         }
@@ -1351,9 +1348,18 @@ var EntekhabeFarsang = function () {
         }
     }
 
+    function initCustomDropDown() {
+        $('.CustomDropDown').CustomDropDown({
+            onChange: function (data) {
+                showFarsangFromServer(data.value);
+                // { index: 2, totalCount: 5, value: "3", text: "فرسنگ سوم" }
+            }
+        });
+    }
 
     return {
         init: function (data) {
+            initCustomDropDown();
             showFarsangData(data);
             addClickEvents();
             // checkNoData();
@@ -1377,15 +1383,6 @@ var InitAbrishamPage = function () {
 
     function makePageBoxedForLargScreen() {
         $('.m-body .m-content').addClass('boxed');
-    }
-
-    function initCustomDropDown() {
-        $('.CustomDropDown').CustomDropDown({
-            onChange: function (data) {
-                EntekhabeFarsang.showFarsangFromServer(data.value);
-                // { index: 2, totalCount: 5, value: "3", text: "فرسنگ سوم" }
-            }
-        });
     }
 
     function initScrollCarousel() {
@@ -1454,12 +1451,10 @@ var InitAbrishamPage = function () {
         MapSVG.init(allSetsOfRaheAbrisham);
         EntekhabeFarsang.init(lastSetData);
         initRepurchaseRowAndHelpMessageRow();
-        initCustomDropDown();
         initScrollCarousel();
         initLiveDescription();
         initEvents();
         imageObserver.observe();
-        console.log(hasUserPurchasedRaheAbrisham);
         if (!hasUserPurchasedRaheAbrisham) {
             $('.helpMessageRow').fadeOut(0);
             $('.RepurchaseRow').fadeIn();

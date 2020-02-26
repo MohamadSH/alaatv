@@ -2,7 +2,8 @@
 {{ Form::hidden('js-var-userId', optional(Auth::user())->id) }}
 {{ Form::hidden('js-var-loginActionUrl', action('Auth\LoginController@login')) }}
 {{ Form::hidden('js-var-firebaseConfig', json_encode(config('firebaseConfig.FIREBASE_CONFIG'))) }}
-{{ Form::hidden('js-var-AlaaAdBanner', json_encode([
+{{ Form::hidden('js-var-AlaaAdBanner', 'null'
+/*json_encode([
             'image'=> [
                 'srcDeskTop'=> 'https://cdn.alaatv.com/upload/AlaaAdBanner-roozeMadar-DeskTop.jpg',
                 'srcTablet'=> 'https://cdn.alaatv.com/upload/AlaaAdBanner-roozeMadar-Tablet.jpg',
@@ -28,5 +29,6 @@
             'link'=> [
                 'href'=> action("Web\ShopPageController"),
                 'target'=> '_self'
-            ],
-        ])) }}
+            ]
+        ])*/
+        ) }}

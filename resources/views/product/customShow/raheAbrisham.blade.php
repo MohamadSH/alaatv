@@ -66,7 +66,7 @@
         'title' => 'خرید دوره راه ابریشم',
         'closeIcon' => true,
         'class' => 'RepurchaseRow',
-        'content' => view('product.partials.raheAbrisham.repurchase', compact('product'))
+        'content' => view('product.partials.raheAbrisham.repurchase', compact('product', 'hasUserPurchasedProduct'))
     ])
 
     @include('product.partials.raheAbrisham.descriptionBox', [
@@ -76,7 +76,7 @@
         'content' => view('product.partials.raheAbrisham.helpMessage', ['periodDescription'=>$periodDescription]),
     ])
 
-    @if(!$hasUserPurchasedRaheAbrisham)
+    @if(!$hasUserPurchasedProduct)
 
         {{--نمونه فیلم--}}
         @if(optional(optional(optional(optional($block)->sets)->first())->getActiveContents2())->count() > 0)
@@ -141,66 +141,8 @@
     ])
 
 
-    {{--دکمه افزودن به سبد خرید--}}
-    <div class="addToCartForMobileDeviceWrapper" >
-        @if($product->enable && !$isForcedGift)
-            @if($allChildIsPurchased)
-                <a class="btn m-btn m-btn--pill m-btn--air btn-info animated infinite pulse" role="button" href="{{ action("Web\UserController@userProductFiles") }}">
-                    <i class="fa fa-play-circle"></i>
-                    مشاهده در صفحه فیلم ها و جزوه های من
-                </a>
-            @else
-                <button class="btn m-btn--air btn-success m-btn--icon m--margin-bottom-5 btnAddToCart gta-track-add-to-card">
-                    <span>
-                        <i class="fa fa-cart-arrow-down"></i>
-                        <i class="fas fa-sync-alt fa-spin m--hide"></i>
-                        <span>افزودن به سبد خرید</span>
-                    </span>
-                </button>
-            @endif
-
-            @if($allChildIsPurchased)
-                <span class="alert alert-info" role="alert">
-                    <strong>شما این محصول را خریده اید</strong>
-                </span>
-            @else
-                <div class="m--font-brand a_product-price_mobile-wrapper">
-                    <span id="a_product-price_mobile">
-                        @include('product.partials.price', ['price'=>$product->price])
-                    </span>
-                </div>
-            @endif
-        @else
-            @if(!$product->enable)
-                <button class="btn btn-danger btn-lg m-btn  m-btn m-btn--icon">
-                        <span>
-                            <i class="flaticon-shopping-basket"></i>
-                            <span>این محصول غیر فعال است.</span>
-                        </span>
-                </button>
-            @elseif($isForcedGift)
-                @if($hasPurchasedEssentialProduct)
-                    <button class="btn btn-danger btn-lg m-btn  m-btn m-btn--icon">
-                        <span>
-                            <i class="flaticon-arrows"></i>
-                            <span>شما محصول راه ابریشم را خریده اید و این محصول به عنوان هدیه به شما تعلق می گیرد</span>
-                        </span>
-                    </button>
-                @else
-                    <button
-                        @include('partials.gtm-eec.product', ['position'=>0, 'list'=>'صفحه نمایش محصول-دکمه افزودن به سبد محصولات اجباری', 'quantity'=>'1'])
-                        class="btn m-btn--air btn-success m-btn--icon m--margin-bottom-5 a--gtm-eec-product btnAddSingleProductToCart"
-                        data-pid="{{ $shouldBuyProductId }}">
-                        <span>
-                            <i class="fa fa-cart-arrow-down"></i>
-                            <i class="fas fa-sync-alt fa-spin m--hide"></i>
-                            <span>این محصول بخشی از {{$shouldBuyProductName}} است برای خرید کلیک کنید </span>
-                        </span>
-                    </button>
-                @endif
-            @endif
-        @endif
-    </div>
+    {{--دکمه افزودن به سبد خرید موبایل --}}
+    @include('product.partials.btnAddToCartForMobileDevice')
 
 @endsection
 
@@ -275,7 +217,7 @@
                 ]
             }
         };
-        var hasUserPurchasedRaheAbrisham = {{($hasUserPurchasedRaheAbrisham)?1:0}};
+        var hasUserPurchasedRaheAbrisham = {{($hasUserPurchasedProduct)?1:0}};
     </script>
     <script src="{{ mix('/js/product-show-RaheAbrisham.js') }}"></script>
 @endsection

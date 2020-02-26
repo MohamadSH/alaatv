@@ -45,7 +45,7 @@ class SetWithoutPagination extends AlaaJsonResourceWithoutPagination
                 return $this->hasUrl() ? new UrlForSet($this) : null;
             }),
             'author'         => $this->when(isset($this->author), function () {
-                return $this->getAuthor();
+                return isset($this->author)?$this->getAuthor():null;
             }),
             'contents'       => $this->when($activeContents->isNotEmpty(), function () use ($activeContents) {
                 return $activeContents->isNotEmpty() ? ContentInSetWithoutPagination::collection($activeContents) : null;

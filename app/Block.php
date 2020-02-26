@@ -282,6 +282,7 @@ class Block extends BaseModel
             ->remember('block:getMainBlocksForWeb', config('constants.CACHE_600'), function () {
                 $blocks = self::mainWithoutSlide()
                     ->enable()
+                    ->where('id', '<>', 124)
                     ->orderBy('order')
                     ->get()
                     ->loadMissing([
@@ -302,6 +303,7 @@ class Block extends BaseModel
             ->remember('block:getMainBlocksForAppV1', config('constants.CACHE_600'), function () {
                 return self::mainWithSlide()
                     ->enable()
+                    ->where('id', '<>', 124)
                     ->orderBy('order')
                     ->get()
                     ->loadMissing([

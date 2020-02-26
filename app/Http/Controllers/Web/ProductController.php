@@ -25,6 +25,7 @@ use App\{Adapter\AlaaSftpAdapter,
     Traits\ProductCommon,
     Traits\RequestCommon,
     Traits\SearchCommon,
+    Traits\User\AssetTrait,
     User,
     Websitesetting};
 use App\Http\Controllers\Controller;
@@ -35,6 +36,7 @@ use Illuminate\Support\{Arr, Collection, Facades\Cache, Facades\File, Facades\St
 
 class ProductController extends Controller
 {
+    use AssetTrait;
     /*
     |--------------------------------------------------------------------------
     | Traits
@@ -139,8 +141,6 @@ class ProductController extends Controller
     {
         /** @var User $user */
         $user                    = $request->user();
-        $purchasedProductIdArray = [];
-        $allChildIsPurchased     = false;
 
         if (isset($product->redirectUrl)) {
             return redirect($product->redirectUrl, Response::HTTP_FOUND, $request->headers->all());
@@ -158,12 +158,32 @@ class ProductController extends Controller
 
         $block = optional($product)->blocks->first();
 
-        $liveDescriptions = $product->livedescriptions->sortByDesc('created_at');
+        $purchasedProductIdArray = $this->searchInUserAssetsCollection($product, $user);
+        $hasUserPurchasedProduct = in_array($product->id, $purchasedProductIdArray);
 
         $children = collect();
-        if (is_null($product->grand_id)) {
-            $children = $product->children()->enable()->get();
+        $allChildrenSets = collect();
+        $defaultProductSet = $product;
+        if($product->producttype_id != config('constants.PRODUCT_TYPE_SIMPLE')){
+            $defaultProductSet = $product->children->first();
+            foreach ($product->getAllChildren(true,true) as $child) {
+                $productSets = collect();
+                foreach ($child->sets as $set) {
+                    $productSets->push([
+                        'name'  =>  $set->name,
+                        'id'    =>  $set->id,
+                    ]);
+                }
+                $allChildrenSets->push(['id' => $child->id , 'name' => $child->name , 'sets'=>$child->sets]);
+            }
+
+            $children    = $product->children()->enable()->get();
         }
+
+        $sets                         = $defaultProductSet->sets->sortByDesc('pivot.order');
+        $lastSet                      = $sets->first();
+        $lastSetPamphlets             = $lastSet->getActiveContents2(Content::CONTENT_TYPE_PAMPHLET);
+        $lastSetVideos                = $lastSet->getActiveContents2(Content::CONTENT_TYPE_VIDEO);
 
         $isFavored = (isset($user)) ? $user->hasFavoredProduct($product) : false;
 
@@ -171,6 +191,7 @@ class ProductController extends Controller
         $shouldBuyProductId           = null;
         $shouldBuyProductName         = '';
         $hasPurchasedEssentialProduct = false;
+
 //        if ($product->id == Product::GODARE_RIYAZI_TAJROBI_SABETI) {
 //            $isForcedGift         = true;
 //            $shouldBuyProductName = 'راه ابریشم';
@@ -180,21 +201,16 @@ class ProductController extends Controller
 //            }
 //        }
 
-        $allChildrenSets = collect();
-        
-        //        if ($product->id == Product::RAHE_ABRISHAM && $this->canSeeRaheAbrishamSpecialPage($user)) {
+        $liveDescriptions = collect();
         if ($product->id == Product::RAHE_ABRISHAM) {
-            $hasUserPurchasedRaheAbrisham = $this->hasUserPurchasedRaheAbrisham($user);
-            $sets                         = $product->sets->sortByDesc('pivot.order');
-            $lastSet                      = $sets->first();
-            $lastSetPamphlets             = $lastSet->getActiveContents2(Content::CONTENT_TYPE_PAMPHLET);
-            $lastSetVideos                = $lastSet->getActiveContents2(Content::CONTENT_TYPE_VIDEO);
+            $liveDescriptions = $product->livedescriptions->sortByDesc('created_at');
             $periodDescription            = $product->descriptionWithPeriod;
             $faqs                         = $product->faqs;
-            return view('product.customShow.raheAbrisham', compact('product', 'block', 'liveDescriptions', 'isFavored', 'lastSet', 'lastSetPamphlets', 'lastSetVideos', 'periodDescription', 'sets', 'faqs', 'hasUserPurchasedRaheAbrisham', 'block', 'isForcedGift', 'allChildIsPurchased', 'hasPurchasedEssentialProduct', 'shouldBuyProductId', 'shouldBuyProductName'));
+            return view('product.customShow.raheAbrisham', compact('product', 'block', 'liveDescriptions', 'isFavored', 'lastSet', 'lastSetPamphlets', 'lastSetVideos', 'periodDescription', 'sets', 'faqs', 'hasUserPurchasedProduct', 'block', 'isForcedGift', 'hasPurchasedEssentialProduct', 'shouldBuyProductId', 'shouldBuyProductName'));
         }
 
-        return view('product.show', compact('product', 'block', 'purchasedProductIdArray', 'allChildIsPurchased', 'liveDescriptions', 'children', 'isFavored', 'isForcedGift', 'shouldBuyProductId', 'shouldBuyProductName', 'hasPurchasedEssentialProduct' , 'allChildrenSets'));
+        return view('product.show', compact('product', 'block', 'purchasedProductIdArray', 'liveDescriptions', 'children', 'isFavored', 'isForcedGift', 'shouldBuyProductId', 'shouldBuyProductName', 'hasPurchasedEssentialProduct' ,
+            'allChildrenSets' , 'sets' , 'lastSet' , 'lastSetPamphlets' , 'lastSetVideos' , 'hasUserPurchasedProduct' , 'defaultProductSet'));
     }
 
     public function edit(Product $product)
@@ -966,26 +982,6 @@ class ProductController extends Controller
     }
 
     /**
-     * @param User    $user
-     *
-     * @param Product $product
-     *
-     * @return bool
-     */
-    private function hasUserPurchasedProduct(Product $product , User $user = null): bool
-    {
-        if (is_null($user)) {
-            return false;
-        }
-
-        $key = 'user:hasPurchasedProduct:' . $user->cacheKey() . '-'.$product->cacheKey();
-        return Cache::tags(['user', 'user_' . $user->id, 'user_' . $user->id . '_closedOrders' , 'product_'.$product->id])
-            ->remember($key, config('constants.CACHE_600'), function () use ($user , $product) {
-                return $user->products()->contains($product->id);
-            });
-    }
-
-    /**
      * @param User $user
      * @param int  $shouldBuyProductId
      *
@@ -1207,23 +1203,4 @@ class ProductController extends Controller
             ]);
         }
     }
-    
-        /**
-     * @param User $user
-     *
-     * @return bool
-     */
-    private function hasUserPurchasedRaheAbrisham(User $user = null): bool
-    {
-        if (is_null($user)) {
-            return false;
-        }
-
-        $key = 'user:hasPurchasedRaheAbrisham:' . $user->cacheKey();
-        return Cache::tags(['user', 'user_' . $user->id, 'user_' . $user->id . '_closedOrders'])
-            ->remember($key, config('constants.CACHE_600'), function () use ($user) {
-                return $user->products()->contains(Product::RAHE_ABRISHAM);
-            });
-    }
-
 }

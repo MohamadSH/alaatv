@@ -19,7 +19,8 @@ use App\Traits\{APIRequestCommon,
     Product\ProductBonTrait,
     Product\ProductPhotoTrait,
     Product\TaggableProductTrait,
-    ProductCommon};
+    ProductCommon,
+    User\AssetTrait};
 use Carbon\Carbon;
 use Eloquent;
 use Exception;
@@ -179,6 +180,7 @@ use Purify;
  * @property mixed         blocks
  * @property mixed         descriptionWithPeriod
  * @property mixed         faqs
+ * @property mixed         priceText
  * @method static Builder|Product whereBlockId($value)
  * @method static Builder|Product whereIntroVideos($value)
  */
@@ -198,6 +200,7 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
     use ProductAttributeTrait, ProductBonTrait, ProductPhotoTrait;
     use TaggableProductTrait;
     use DateTrait;
+    use AssetTrait;
     /*
     |--------------------------------------------------------------------------
     | Properties
@@ -663,7 +666,13 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
     {
         $key = 'product:obtainCostInfo:' . $this->cacheKey() . '-user:' . (isset($user) ? $user->cacheKey() : '');
 
-        return Cache::tags(['product', 'product_' . $this->id, 'productCost', 'cost'])
+        $cacheTags = ['product', 'product_' . $this->id, 'productCost', 'cost'];
+
+        if(isset($user)){
+            $cacheTags[] = 'user_'.$user->id.'_obtainPrice' ;
+        }
+
+        return Cache::tags($cacheTags)
             ->remember($key, config('constants.CACHE_60'), function () use ($user) {
                 $cost = new AlaaProductPriceCalculator($this, $user);
 
@@ -1517,14 +1526,22 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
     /**
      * Obtains product's price (rawCost)
      *
+     * @param User|null $user
+     *
      * @return int|null
      */
-    public function obtainPrice(): ?int
+    public function obtainPrice(?User $user=null): ?int
     {
         $key = 'product:obtainPrice:' . $this->cacheKey();
 
-        return Cache::tags(['product', 'price', 'product_' . $this->id, 'product_' . $this->id . '_price'])
-            ->remember($key, config('constants.CACHE_10'), function () {
+        $cacheTags = ['product', 'price', 'product_' . $this->id, 'product_' . $this->id . '_price'] ;
+
+        if(isset($user)){
+            $cacheTags[] = 'user_'.$user->id.'_obtainPrice' ;
+        }
+
+        return Cache::tags($cacheTags)
+            ->remember($key, config('constants.CACHE_10'), function () use ($user) {
                 if (!$this->isFree()) {
                     if ($this->isRoot()) {
                         if ($this->producttype_id == config('constants.PRODUCT_TYPE_CONFIGURABLE')) {
@@ -1540,6 +1557,11 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
                         } else if ($this->producttype_id == config('constants.PRODUCT_TYPE_SELECTABLE')) {
                             $allChildren = $this->getAllChildren()
                                 ->where('pivot.isDefault', 1);
+
+                            $excludedChildren = $this->searchInUserAssetsCollection($this, $user);
+                            if(!empty($excludedChildren)){
+                                $allChildren = $allChildren->whereNotIn('pivot.child_id', $excludedChildren);
+                            }
                             if ($allChildren->isNotEmpty()) {
                                 $cost = 0;
                                 foreach ($allChildren as $product) {

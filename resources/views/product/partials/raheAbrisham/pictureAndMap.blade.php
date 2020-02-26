@@ -22,9 +22,9 @@
                                          alt="عکس محصول@if(isset($product->name)) {{$product->name}} @endif"
                                          class="img-fluid productPicture lazy-image m--marginless a--full-width"/>
                                     <button type="button"
-                                            class="btn m-btn--square btn-metal a--full-width m--margin-top-5 @if($hasUserPurchasedRaheAbrisham) btnShowRepurchase @else btnAddToCart @endif">
+                                            class="btn m-btn--square btn-metal a--full-width m--margin-top-5 @if($hasUserPurchasedProduct) btnShowRepurchase @else btnAddToCart @endif">
                                         <p class="display-6 m--marginless">
-                                            @if($hasUserPurchasedRaheAbrisham)
+                                            @if($hasUserPurchasedProduct)
                                                 خرید مجدد این دوره
                                             @else
                                                 افزودن به سبد
