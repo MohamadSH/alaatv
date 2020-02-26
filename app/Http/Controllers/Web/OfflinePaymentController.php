@@ -62,7 +62,7 @@ class OfflinePaymentController extends Controller
             return response(['message' => 'Invalid inputs'], Response::HTTP_BAD_REQUEST);
 
         $assetLink = '
-            <a href="' . route('web.user.asset') . '" class="btn m-btn--pill m-btn--air m-btn m-btn--gradient-from-info m-btn--gradient-to-accent animated infinite heartBeat">
+            <a href="' . route('web.user.asset') . '" class="btn btn-info m-btn--pill m-btn--air m-btn animated infinite heartBeat">
                 دانلودهای من
             </a>';
 
