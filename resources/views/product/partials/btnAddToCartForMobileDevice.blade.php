@@ -7,7 +7,7 @@
                     <i class="fa fa-cart-arrow-down"></i>
                     <i class="fas fa-sync-alt fa-spin m--hide"></i>
                     <span>
-                        @if($hasUserPurchasedProduct)
+                        @if(isset($hasUserPurchasedProduct) && $hasUserPurchasedProduct)
                             خرید مجدد
                         @else
                             افزودن به سبد خرید
