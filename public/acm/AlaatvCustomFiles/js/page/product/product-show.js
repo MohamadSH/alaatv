@@ -1231,7 +1231,11 @@ var InitProductPagePage = function () {
 
     function addEvents() {
         $(document).on('click', '.YouHavePurchasedThisProductMessage', function() {
-            $('.selectSetOfProductTopreview').AnimateScrollTo();
+            if ($('.selectSetOfProductTopreview').length > 0) {
+                $('.selectSetOfProductTopreview').AnimateScrollTo();
+            } else if ($('.previewContentSetOfProduct').length > 0) {
+                $('.previewContentSetOfProduct').AnimateScrollTo();
+            }
         });
     }
 

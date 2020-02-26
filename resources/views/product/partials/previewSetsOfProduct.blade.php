@@ -34,7 +34,7 @@
         </div>
     @endif
 
-    <div class="row">
+    <div class="row previewContentSetOfProduct">
         <div class="col">
             <div class="m-portlet previewSetsOfProduct">
                 <div class="m-portlet__body">
