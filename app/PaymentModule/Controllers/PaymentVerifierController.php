@@ -55,7 +55,7 @@ class PaymentVerifierController extends Controller
             );
             $this->handleOrderSuccessPayment($myOrder);
             $assetLink          = '
-            <a href="' . route('web.user.asset') . '" class="btn m-btn--pill m-btn--air m-btn m-btn--gradient-from-info m-btn--gradient-to-accent animated infinite heartBeat">
+            <a href="' . route('web.user.asset') . '" class="btn btn-info m-btn--pill m-btn--air m-btn animated infinite heartBeat">
                 دانلودهای من
             </a>';
             $responseMessages[] = 'برای دانلود محصولاتی که خریده اید به صفحه روبرو بروید: ' . $assetLink;
@@ -70,7 +70,7 @@ class PaymentVerifierController extends Controller
             $this->handleOrderCanceledTransaction($transaction);
             $transaction->update();
             $myOrdersPage       = '
-            <a href="' . action('Web\UserController@userOrders') . '" class="btn m-btn--pill m-btn--air m-btn m-btn--gradient-from-info m-btn--gradient-to-accent animated infinite heartBeat">
+            <a href="' . action('Web\UserController@userOrders') . '" class="btn btn-info m-btn--pill m-btn--air m-btn animated infinite heartBeat">
                 سفارش های من
             </a>';
             $responseMessages[] =
