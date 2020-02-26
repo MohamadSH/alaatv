@@ -36,14 +36,14 @@
                             روش پرداخت
                             <br>
                             <span class="m-badge m-badge--info m-badge--wide">
-                                                @if($paymentMethod === 'zarinpal')
-                                                    درگاه زرین پال
-
-                                                    درگاه به پرداخت ملت
-
-                                                    کیف پول
-                                                @endif
-                                            </span>
+                                @if($paymentMethod === 'zarinpal')
+                                    درگاه زرین پال
+                                @elseif($paymentMethod === 'mellat')
+                                    درگاه به پرداخت ملت
+                                @elseif($paymentMethod === 'wallet')
+                                    کیف پول
+                                @endif
+                            </span>
 
                             <hr>
 
@@ -52,22 +52,22 @@
                                     کد پیگیری
                                     <br>
                                     <span class="m-badge m-badge--info m-badge--wide" dir="ltr">
-                                                        {{ $result['RefID'] }}
-                                                    </span>
+                                        {{ $result['RefID'] }}
+                                    </span>
                                 @endif
 
                                 @if(isset($result['cardPanMask']))
                                     <hr>
                                     شماره کارت
                                     <span class="m-badge m-badge--info m-badge--wide" dir="ltr">
-                                                        {{ $result['cardPanMask'] }}
-                                                    </span>
+                                        {{ $result['cardPanMask'] }}
+                                    </span>
                                 @endif
                             @endif
                         @else
 
                         @endif
-                                    </span>
+                    </span>
 
                 </div>
                 <div class="col-md-6 text-center">
@@ -82,14 +82,13 @@
 
                     @if(isset($result['messages']))
                         <div class="alert
-                                        @if($status==='successful')
-                                alert-success
-@else
-                                alert-warning
-@endif
-                                alert-dismissible fade show" role="alert">
-                            <button type="button" class="close" data-dismiss="alert"
-                                    aria-label="Close"></button>
+                                    @if($status==='successful')
+                                        alert-success
+                                    @else
+                                        alert-warning
+                                    @endif
+                                    alert-dismissible fade show" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close"></button>
                             @foreach($result['messages'] as $message)
                                 {!!  $message !!}
                                 <br>
