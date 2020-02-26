@@ -4,7 +4,7 @@
         $.fn.CustomDropDown.options = $.extend(true, {}, $.fn.CustomDropDown.defaultOptions, customOptions);
 
         return this.each(function () { //Loop over each element in the set and return them to keep the chain alive.
-            let $this = $(this),
+            var $this = $(this),
                 lastId = $.fn.CustomDropDown.getNewCustomDropDownId();
             if ($.fn.CustomDropDown.checkExistSelectElement($this)) {
                 $this.attr('data-custom-dropdown-id', lastId);

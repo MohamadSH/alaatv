@@ -664,8 +664,6 @@ class Mix {
     mixPageProductShowRaheAbrisham(baseProductShow) {
         this.mixCssAndJs(
             baseProductShow.css.concat([
-                'public/acm/AlaatvCustomFiles/components/CustomDropDown/style.css',
-                'public/acm/AlaatvCustomFiles/components/AlaaLoading/style.css',
                 'public/acm/AlaatvCustomFiles/css/page/product/customShow/raheAbrisham.css',
             ])
             ,
@@ -674,9 +672,6 @@ class Mix {
 
                 'node_modules/hammerjs/hammer.js',
                 'node_modules/@panzoom/panzoom/dist/panzoom.js',
-
-                'public/acm/AlaatvCustomFiles/components/AlaaLoading/script.js',
-                'public/acm/AlaatvCustomFiles/components/CustomDropDown/js.js',
 
                 'public/acm/AlaatvCustomFiles/js/page/product/CustomShow/raheAbrisham.js',
             ]),
@@ -714,11 +709,16 @@ class Mix {
                 'public/acm/videojs/plugins/pip/videojs.pip.min.css',
                 'public/acm/videojs/plugins/pip/videojs.pip.rtl.css',
                 'public/acm/videojs/plugins/seek-to-point.css',
+
+                'public/acm/AlaatvCustomFiles/components/CustomDropDown/style.css',
+                'public/acm/AlaatvCustomFiles/components/AlaaLoading/style.css',
                 'public/acm/AlaatvCustomFiles/components/imageWithCaption/style.css',
                 'public/acm/AlaatvCustomFiles/components/ribbon/style.css',
                 'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/style.css',
                 'public/acm/AlaatvCustomFiles/components/ScrollCarousel/style.css',
                 'public/acm/AlaatvCustomFiles/components/Favorite/style.css',
+
+                'public/acm/AlaatvCustomFiles/css/page/product/previewSetsOfProduct.css',
                 'public/acm/AlaatvCustomFiles/css/page/product/show.css',
             ],
             js: [
@@ -742,6 +742,8 @@ class Mix {
                 'public/acm/videojs/plugins/seek-to-point.js',
                 'public/acm/videojs/lang/fa.js',
 
+                'public/acm/AlaatvCustomFiles/components/AlaaLoading/script.js',
+                'public/acm/AlaatvCustomFiles/components/CustomDropDown/js.js',
                 'public/acm/AlaatvCustomFiles/components/ScrollCarousel/js.js',
                 'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/js.js',
                 'public/acm/AlaatvCustomFiles/components/AnimateScrollTo/js.js',
