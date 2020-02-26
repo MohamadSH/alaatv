@@ -106,20 +106,18 @@
                             class="m-alert m-alert--icon m-alert--icon-solid m-alert--outline alert alert-info alert-dismissible fade show"
                             role="alert">
                             <div class="m-alert__icon">
-                                <i class="flaticon-exclamation-1"></i>
+                                <i class="fa fa-exclamation"></i>
                                 <span></span>
                             </div>
                             <div class="m-alert__text">
                                 <strong>{{ $message }}</strong>
-                            </div>
-                            @if($productsThatHaveThisContent->isNotEmpty())
-                                <div class="m-alert__actions" style="width: 160px;">
+                                @if($productsThatHaveThisContent->isNotEmpty())
                                     <button type="button"
                                             class="btn m-btn--air btn-warning btn-sm m-btn m-btn--pill m-btn--wide scrollToOwlCarouselParentProducts">
                                         مشاهده محصولات
                                     </button>
-                                </div>
-                            @endif
+                                @endif
+                            </div>
                             <div class="m-alert__close">
                                 <button type="button" class="close" data-dismiss="alert" aria-label="Close"></button>
                             </div>
@@ -237,13 +235,12 @@
                                 </div>
                             @elseif(optional($content->template)->name == "pamphlet1" )
                                 <div class="m-portlet__body">
-                                    <div class="m-portlet__body-progress">Loading</div>
                                     <!--begin::m-widget5-->
                                     <div class="m-widget5">
                                         <div class="m-widget5__item">
                                             <div class="m-widget5__content">
                                                 <div class="m-widget5__pic">
-                                                    <img class="m-widget7__img img-fluid lazy-image"
+                                                    <img class="m-widget7__img img-fluid lazy-image" width="50"
                                                          data-src="/assets/app/media/img/files/pdf.svg" alt="pdf">
                                                 </div>
                                                 <div class="m-widget5__section">
@@ -274,6 +271,133 @@
                                     @if(!empty($tags))
                                         @include("partials.search.tagLabel" , ["tags"=>$tags])
                                     @endif
+                                    <div class="m--margin-top-10">
+                                        @if(isset($videosWithSameSet) and $videosWithSameSet->isNotEmpty())
+                                            <nav aria-label="Page navigation" class="table-responsive">
+                                                <ul class="pagination justify-content-center">
+                                                    <li class="page-item">
+                                                        <a class="page-link"
+                                                           href="{{action("Web\ContentController@show" , $videosWithSameSet->first()["content"])}}"
+                                                           aria-label="اولین">
+                                                            <span aria-hidden="true">&laquo;</span>
+                                                            <span class="sr-only">اولین</span>
+                                                        </a>
+                                                    </li>
+                                                    @foreach($videosWithSameSetL->take(-5) as $item)
+
+                                                        <li class="page-item @if($item["content"]->id == $content->id) active @endif">
+                                                            <a class="page-link"
+                                                               href="{{action("Web\ContentController@show" , $item["content"])}}">{{ $item["content"]->order }}</a>
+                                                        </li>
+
+                                                    @endforeach
+                                                    @foreach($videosWithSameSetR->take(6) as $item)
+
+                                                        <li class="page-item @if($item["content"]->id == $content->id) active @endif">
+                                                            <a class="page-link"
+                                                               href="{{action("Web\ContentController@show" , $item["content"])}}">{{ $item["content"]->order }}</a>
+                                                        </li>
+
+                                                    @endforeach
+                                                    <li class="page-item">
+                                                        <a class="page-link"
+                                                           href="{{action("Web\ContentController@show" , $videosWithSameSet->last()["content"])}}"
+                                                           aria-label="آخرین">
+                                                            <span aria-hidden="true">&raquo;</span>
+                                                            <span class="sr-only">آخرین</span>
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </nav>
+                                        @endif
+                                        @if($productsHasThisContentThroughBlockCollection->count() > 0)
+                                            @foreach($productsHasThisContentThroughBlockCollection as $productKey=>$product)
+                                                @if($product->type['type'] === 'simple')
+                                                    <button
+                                                        @include('partials.gtm-eec.product', ['position'=>$productKey, 'list'=>'نمونه فیلم-دکمه افزودن به سبد', 'quantity'=>'1'])
+                                                        class="btn m-btn--air btn-success m-btn--icon m--margin-bottom-5 a--gtm-eec-product btnAddToCart"
+                                                        data-pid="{{ $product->id }}">
+                                                        <span>
+                                                            <i class="fa fa-cart-arrow-down"></i>
+                                                            <i class="fas fa-sync-alt fa-spin m--hide"></i>
+                                                            <span>افزودن {{ $product->name }} به سبد خرید</span>
+                                                        </span>
+                                                    </button>
+                                                @else
+
+                                                    {{--                                            <a href="{{ $product->url }}" class="btn m-btn--pill m-btn--air m-btn m-btn--gradient-from-info m-btn--gradient-to-accent btnViewProductPage">--}}
+                                                    {{--                                                مشاهده--}}
+                                                    {{--                                                {{ $product->name }}--}}
+                                                    {{--                                            </a>--}}
+
+                                                @endif
+                                            @endforeach
+                                        @endif
+
+                                        @if(!$user_can_see_content && $productsThatHaveThisContent->isNotEmpty())
+                                            @foreach($productsThatHaveThisContent as $productKey=>$product)
+                                                @if($product->type['type'] === 'simple')
+                                                    <button
+                                                        @include('partials.gtm-eec.product', ['position'=>$productKey, 'list'=>'محصولاتی که شامل این محتوا هستند-دکمه افزودن به سبد', 'quantity'=>'1'])
+                                                        class="btn m-btn--air btn-success m-btn--icon m--margin-bottom-5 a--gtm-eec-product btnAddToCart"
+                                                        data-pid="{{ $product->id }}">
+                                                        <span>
+                                                            <i class="fa fa-cart-arrow-down"></i>
+                                                            <i class="fas fa-sync-alt fa-spin m--hide"></i>
+                                                            <span>افزودن {{ $product->name }} به سبد خرید</span>
+                                                        </span>
+                                                    </button>
+                                                @else
+
+                                                    {{--                                            <a href="{{ $product->url }}" class="btn m-btn--pill m-btn--air m-btn m-btn--gradient-from-info m-btn--gradient-to-accent btnViewProductPage">--}}
+                                                    {{--                                                مشاهده--}}
+                                                    {{--                                                {{ $product->name }}--}}
+                                                    {{--                                            </a>--}}
+
+                                                @endif
+                                            @endforeach
+                                        @endif
+                                    </div>
+
+
+                                    <div class="row">
+                                        <div class="col downloadLinkColumn">
+                                            <div class="m-portlet m--full-height m-portlet--success m-portlet--head-solid-bg m-portlet--bordered" style="height: 500px;">
+
+                                                @if(!$user_can_see_content)
+                                                    <div class="blockedContent" data-toggle="m-tooltip" data-placement="top" data-original-title="این فایل یک محصول است و با خرید یکی از محصولات آن می توانید استفاده کنید.">
+                                                        @if($productsThatHaveThisContent->isNotEmpty() && (!$user_can_see_content || ($content->isFree && false)) )
+                                                            @foreach($productsThatHaveThisContent as $productKey=>$product)
+                                                                <div class="ParentProductsItem"
+                                                                     data-position="{{ $productKey }}"
+                                                                    @include('partials.gtm-eec.product', ['position'=>$productKey, 'list'=>'محصولاتی که شامل این محتوا هستند']) >
+
+                                                                    <div class="image">
+                                                                        <a href="{{ $product->url }}"
+                                                                           class="a--block-imageWrapper-image a--gtm-eec-product a--gtm-eec-product-click d-block"
+                                                                            @include('partials.gtm-eec.product', ['position'=>$productKey, 'list'=>'محصولاتی که شامل این محتوا هستند'])>
+                                                                            <img src="https://cdn.alaatv.com/loder.jpg?w=1&h=1"
+                                                                                 data-src="{{ $product->photo }}" alt="{{ $product->name }}"
+                                                                                 class="a--block-image lazy-image" width="400" height="400"/>
+                                                                        </a>
+                                                                    </div>
+                                                                    <div class="title">
+                                                                        <a href="{{ $product->url }}"
+                                                                           class="m-link a--owl-carousel-type-2-item-subtitle a--gtm-eec-product-click"
+                                                                            @include('partials.gtm-eec.product', ['position'=>$productKey, 'list'=>'محصولاتی که شامل این محتوا هستند'])>
+                                                                            <span class="m-badge m-badge--danger m-badge--dot"></span>
+                                                                            {{ $product->name }}
+                                                                        </a>
+                                                                    </div>
+                                                                </div>
+                                                            @endforeach
+                                                        @endif
+                                                    </div>
+                                                @endif
+                                            </div>
+                                        </div>
+                                    </div>
+
                                 </div>
                             @elseif(optional($content->template)->name == "article1")
                                 <div class="m-portlet__head">
