@@ -666,7 +666,13 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
     {
         $key = 'product:obtainCostInfo:' . $this->cacheKey() . '-user:' . (isset($user) ? $user->cacheKey() : '');
 
-        return Cache::tags(['product', 'product_' . $this->id, 'productCost', 'cost'])
+        $cacheTags = ['product', 'product_' . $this->id, 'productCost', 'cost'];
+
+        if(isset($user)){
+            $cacheTags[] = 'user_'.$user->id.'_obtainPrice' ;
+        }
+
+        return Cache::tags($cacheTags)
             ->remember($key, config('constants.CACHE_60'), function () use ($user) {
                 $cost = new AlaaProductPriceCalculator($this, $user);
 

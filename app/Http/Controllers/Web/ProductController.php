@@ -175,7 +175,7 @@ class ProductController extends Controller
                         'id'    =>  $set->id,
                     ]);
                 }
-                $allChildrenSets->push(['id' => $child->id , 'name' => $child->name , 'sets'=>$productSets]);
+                $allChildrenSets->push(['id' => $child->id , 'name' => $child->name , 'sets'=>$child->sets]);
             }
 
             $children    = $product->children()->enable()->get();
