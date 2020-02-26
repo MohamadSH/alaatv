@@ -815,9 +815,7 @@ var PreviewSets = function () {
     }
 
     function getSectionListFromContent(data) {
-        var dataLength = data.length,
-            sections = [],
-            totalSectionList = getTotalSectionList();
+        var totalSectionList = getTotalSectionList();
 
         checkSections(data.pamphlets, totalSectionList);
         checkSections(data.videos, totalSectionList);
@@ -844,9 +842,8 @@ var PreviewSets = function () {
     }
 
     function checkInTotalSectionList(itemSection, totalSectionList) {
-        var totalSectionListLength = totalSectionList.length;
-        for (var j = 0; j < totalSectionListLength; j++) {
-            if (itemSection.id === totalSectionList[j].id) {
+        for (var j = 0; (typeof totalSectionList[j] !== 'undefined'); j++) {
+            if (itemSection.id.toString() === totalSectionList[j].id.toString()) {
                 totalSectionList[j].enable = true;
             }
         }
@@ -951,7 +948,6 @@ var PreviewSets = function () {
     }
 
     function initCustomDropDown(data) {
-        var allProductsSets, productId;
         if (data.allProductsSets.length === 0) {
             data.allProductsSets = [
                 {
@@ -971,6 +967,9 @@ var PreviewSets = function () {
 
     return {
         init: function (data) {
+            if (data.allProductsSets === null || data.lastSetData === null) {
+                return;
+            }
             initCustomDropDown(data);
             showSetData(data.lastSetData);
             addClickEvents();
@@ -1425,7 +1424,7 @@ var InitProductPagePage = function () {
 
 $(document).ready(function () {
     InitProductPagePage.init({
-        lastSetData: lastSetData,
-        allProductsSets: allProductsSets
+        lastSetData: (typeof lastSetData !== 'undefined') ? lastSetData : null,
+        allProductsSets: (typeof allProductsSets !== 'undefined') ? allProductsSets : null
     });
 });

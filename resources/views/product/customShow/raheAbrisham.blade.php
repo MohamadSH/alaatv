@@ -76,7 +76,7 @@
         'content' => view('product.partials.raheAbrisham.helpMessage', ['periodDescription'=>$periodDescription]),
     ])
 
-    @if(!$hasUserPurchasedRaheAbrisham)
+    @if(!$hasUserPurchasedProduct)
 
         {{--نمونه فیلم--}}
         @if(optional(optional(optional(optional($block)->sets)->first())->getActiveContents2())->count() > 0)
@@ -217,7 +217,7 @@
                 ]
             }
         };
-        var hasUserPurchasedRaheAbrisham = {{($hasUserPurchasedRaheAbrisham)?1:0}};
+        var hasUserPurchasedRaheAbrisham = {{($hasUserPurchasedProduct)?1:0}};
     </script>
     <script src="{{ mix('/js/product-show-RaheAbrisham.js') }}"></script>
 @endsection
