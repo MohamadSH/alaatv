@@ -36,14 +36,14 @@
                             روش پرداخت
                             <br>
                             <span class="m-badge m-badge--info m-badge--wide">
-                                                @if($paymentMethod === 'zarinpal')
-                                                    درگاه زرین پال
-
-                                                    درگاه به پرداخت ملت
-
-                                                    کیف پول
-                                                @endif
-                                            </span>
+                                @if($paymentMethod === 'zarinpal')
+                                    درگاه زرین پال
+                                @elseif($paymentMethod === 'mellat')
+                                    درگاه به پرداخت ملت
+                                @elseif($paymentMethod === 'wallet')
+                                    کیف پول
+                                @endif
+                            </span>
 
                             <hr>
 
