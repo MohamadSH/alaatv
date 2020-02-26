@@ -11,6 +11,8 @@ namespace App\Traits\User;
 use App\Collection\ProductCollection;
 use App\Content;
 use App\Product;
+use App\User;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 
 trait AssetTrait
@@ -95,5 +97,60 @@ trait AssetTrait
         return $content->allProducts()
             ->pluck('id')
             ->toArray();
+    }
+
+    private function searchInUserAssetsCollection(Product $product, ?User $user):array
+    {
+        $purchasedProductIdArray = [];
+
+        if(is_null($user)){
+            return $purchasedProductIdArray;
+        }
+
+        $key = 'searchInUserAssetsCollection:' . $product->cacheKey().'-'.$user->cacheKey();
+        return Cache::tags(['searchInUserAssets'])
+            ->remember($key, config('constants.CACHE_60'), function () use ($user , $product , $purchasedProductIdArray) {
+
+                $productBlock    = $user->getDashboardBlocks()->where('title' , 'محصولات من')->first() ;
+                if(!isset($productBlock)){
+                    return [] ;
+                }
+
+                $userAssetsArray = $productBlock->products->pluck('id')->toArray();
+
+                $this->iterateProductAndChildrenInAsset($userAssetsArray, $product, $purchasedProductIdArray);
+
+                return $purchasedProductIdArray;
+            });
+    }
+
+    private function iterateProductAndChildrenInAsset(array $userAssetsArray, Product $product, array & $purchasedProductIdArray):void
+    {
+        if (in_array($product->id, $userAssetsArray)) {
+            $purchasedProductIdArray[] = $product->id;
+            $purchasedProductIdArray = array_merge($purchasedProductIdArray , $product->getAllChildren()->pluck('id')->toArray());
+        }else{
+            $grandChildren = $product->getAllChildren(); ;
+            $hasBoughtEveryChild = $grandChildren->isEmpty()?false:true;
+            foreach ($grandChildren as $grandChild) {
+                if(!in_array($grandChild->id, $userAssetsArray)){
+                    $hasBoughtEveryChild = false;
+                    break;
+                }
+            }
+
+            if($hasBoughtEveryChild){
+                $purchasedProductIdArray[] = $product->id ;
+            }
+        }
+
+
+
+        $children = $product->children;
+        if ($children->count() > 0) {
+            foreach ($children as $key=>$childProduct) {
+                $this->iterateProductAndChildrenInAsset($userAssetsArray, $childProduct, $purchasedProductIdArray);
+            }
+        }
     }
 }
