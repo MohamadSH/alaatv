@@ -1351,9 +1351,18 @@ var EntekhabeFarsang = function () {
         }
     }
 
+    function initCustomDropDown() {
+        $('.CustomDropDown').CustomDropDown({
+            onChange: function (data) {
+                showFarsangFromServer(data.value);
+                // { index: 2, totalCount: 5, value: "3", text: "فرسنگ سوم" }
+            }
+        });
+    }
 
     return {
         init: function (data) {
+            initCustomDropDown();
             showFarsangData(data);
             addClickEvents();
             // checkNoData();
@@ -1377,15 +1386,6 @@ var InitAbrishamPage = function () {
 
     function makePageBoxedForLargScreen() {
         $('.m-body .m-content').addClass('boxed');
-    }
-
-    function initCustomDropDown() {
-        $('.CustomDropDown').CustomDropDown({
-            onChange: function (data) {
-                EntekhabeFarsang.showFarsangFromServer(data.value);
-                // { index: 2, totalCount: 5, value: "3", text: "فرسنگ سوم" }
-            }
-        });
     }
 
     function initScrollCarousel() {
@@ -1454,7 +1454,6 @@ var InitAbrishamPage = function () {
         MapSVG.init(allSetsOfRaheAbrisham);
         EntekhabeFarsang.init(lastSetData);
         initRepurchaseRowAndHelpMessageRow();
-        initCustomDropDown();
         initScrollCarousel();
         initLiveDescription();
         initEvents();

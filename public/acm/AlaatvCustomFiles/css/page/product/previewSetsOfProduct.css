@@ -1,0 +1,196 @@
+
+/*entekhabeFarsang*/
+.previewSetsOfProduct {
+    position: relative;
+}
+.previewSetsOfProduct:before {
+    content: ' ';
+    border-right: solid 25px transparent;
+    border-left: solid 25px transparent;
+    border-bottom: solid 25px white;
+    position: absolute;
+    left: 25%;
+    top: -25px;
+}
+.previewSetsOfProduct .m-portlet__body {
+    position: relative;
+    padding-bottom: 10px;
+}
+.previewSetsOfProduct .nav.nav-tabs {
+    width: max-content;
+    margin: auto;
+}
+.previewSetsOfProduct .nav-tabs .nav-item {
+    margin: 0;
+}
+.previewSetsOfProduct .nav-tabs .nav-item .nav-link,
+.previewSetsOfProduct .nav-tabs .nav-link {
+    background-color: white;
+    color: #b6b6b6;
+    border-top: none;
+    border-right: none;
+    border-left: none;
+    border-bottom: solid 3px #b6b6b6;
+    font-size: 2rem;
+    font-weight: bold;
+    padding: 10px 50px;
+}
+.previewSetsOfProduct .nav-tabs .nav-item.show .nav-link,
+.previewSetsOfProduct .nav-tabs .nav-link.active {
+    color: black;
+    border-bottom: solid 3px black;
+}
+.previewSetsOfProduct .m-portlet__body {
+    padding-top: 0 !important;
+}
+.previewSetsOfProduct .m-portlet__body .closeBtn {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+}
+#m_tabs_pamphlet .ScrollCarousel .ScrollCarousel-Items{
+    min-height: 150px;
+    align-items: center;
+}
+.previewSetsOfProduct .tab-content {
+    padding-right: 40px;
+}
+.previewSetsOfProduct .tab-content .showVideoMessage,
+.previewSetsOfProduct .tab-content .showPamphletMessage {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    top: calc( 50% - 20px );
+}
+.previewSetsOfProduct .tab-content .tab-pane {
+    position: relative;
+}
+.previewSetsOfProduct .tab-content .tab-pane .whiteShadow {
+    content: ' ';
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: calc(100% - 10px);
+    width: 60px;
+    background: 0 0;
+    background: linear-gradient(90deg, #fff 20px,rgba(255,255,255,0) 100%);
+}
+.previewSetsOfProduct .tab-content .ScrollCarousel  {
+    min-height: 155px;
+}
+.previewSetsOfProduct .tab-content .ScrollCarousel .ScrollCarousel-tooltip {
+    background:var(--alaa-color-danger);
+    border: solid 2px var(--alaa-color-warning);
+    border-radius: 5px;
+}
+.previewSetsOfProduct .tab-content .ScrollCarousel .ScrollCarousel-tooltip:after {
+    border-top: solid 10px var(--alaa-color-warning);
+}
+.previewSetsOfProduct .tab-content .ScrollCarousel .ScrollCarousel-Items .item a {
+    display: block;
+}
+.previewSetsOfProduct .tab-content .tab-pane .ScrollCarousel-next,
+.previewSetsOfProduct .tab-content .tab-pane .ScrollCarousel-previous {
+    position: absolute;
+    height: calc( 100% - 15px);
+    color: #f66e84;
+    top: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 5;
+    cursor: pointer;
+}
+
+.previewSetsOfProduct .tab-content .tab-pane .ScrollCarousel-next .fa,
+.previewSetsOfProduct .tab-content .tab-pane .ScrollCarousel-previous .fa {
+    font-size: 3rem;
+}
+.previewSetsOfProduct .tab-content .tab-pane .ScrollCarousel-next {
+    left: 0;
+}
+.previewSetsOfProduct .tab-content .tab-pane .ScrollCarousel-previous {
+    right: 0;
+}
+.m-portlet .m-portlet__body .closeBtn {
+    cursor: pointer;
+}
+
+.pamphletItem {
+    display: flex;
+    flex-flow: row;
+    -webkit-box-shadow: 0 0 5px -4px rgba(0,0,0,0.75);
+    -moz-box-shadow: 0 0 5px -4px rgba(0,0,0,0.75);
+    box-shadow: 0 0 5px -4px rgba(0,0,0,0.75);
+    margin-top: 5px;
+    padding: 5px;
+}
+.pamphletItem .pamphletItem-thumbnail {
+    flex-basis: 15%;
+    max-width: 15%;
+    display: flex;
+    align-items: center;
+}
+.pamphletItem .pamphletItem-thumbnail svg {
+    width: 40px;
+    height: 40px;
+}
+.pamphletItem .pamphletItem-name {
+    flex-basis: 85%;
+    max-width: 85%;
+    padding-right: 5px;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+}
+.sectionFilterCol {
+    position: absolute;
+    top: 70px;
+    right: -10px;
+}
+.sectionFilterCol .sectionFilter-item {
+    margin-bottom: 5px;
+    background: rgb(255, 204, 0);
+    color: #020200;
+    padding: 5px;
+    -webkit-box-shadow: 5px 5px 10px -7px rgba(0,0,0,0.75);
+    -moz-box-shadow: 5px 5px 10px -7px rgba(0,0,0,0.75);
+    box-shadow: 5px 5px 10px -7px rgba(0,0,0,0.75);
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.1s;
+}
+.sectionFilterCol .sectionFilter-item.selected {
+    background: #f66e84;
+    color: white;
+    font-weight: bold;
+    -webkit-box-shadow: 5px 5px 10px -5px rgba(0,0,0,0.75);
+    -moz-box-shadow: 5px 5px 10px -5px rgba(0,0,0,0.75);
+    box-shadow: 5px 5px 10px -5px rgba(0,0,0,0.75);
+    transform: scale(1.2, 1);
+    transform-origin: left;
+}
+.sectionFilterCol .sectionFilter-item:hover {
+    -webkit-box-shadow: 5px 5px 10px -5px rgba(0,0,0,0.75);
+    -moz-box-shadow: 5px 5px 10px -5px rgba(0,0,0,0.75);
+    box-shadow: 5px 5px 10px -5px
+    rgba(0,0,0,0.75);
+    transform: scale(1.1, 1);
+    transform-origin: left;
+}
+
+.farsangStepProgressBar {
+    display: flex;
+    flex-flow: row;
+    justify-content: center;
+    margin-top: 10px;
+}
+.farsangStepProgressBar .farsangStepProgressBar-step {
+    padding: 0 10px;
+}
+.farsangStepProgressBar .farsangStepProgressBar-step .fa {
+    font-size: 1.8rem;
+    cursor: pointer;
+}
