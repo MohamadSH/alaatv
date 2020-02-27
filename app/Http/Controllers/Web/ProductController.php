@@ -180,10 +180,15 @@ class ProductController extends Controller
             $children    = $product->children()->enable()->get();
         }
 
+        $lastSet = null;
+        $lastSetPamphlets = collect();
+        $lastSetVideos    = collect();
         $sets                         = $defaultProductSet->sets->sortByDesc('pivot.order');
-        $lastSet                      = $sets->first();
-        $lastSetPamphlets             = $lastSet->getActiveContents2(Content::CONTENT_TYPE_PAMPHLET);
-        $lastSetVideos                = $lastSet->getActiveContents2(Content::CONTENT_TYPE_VIDEO);
+        if($sets->isNotEmpty()){
+            $lastSet                      = $sets->first();
+            $lastSetPamphlets             = $lastSet->getActiveContents2(Content::CONTENT_TYPE_PAMPHLET);
+            $lastSetVideos                = $lastSet->getActiveContents2(Content::CONTENT_TYPE_VIDEO);
+        }
 
         $isFavored = (isset($user)) ? $user->hasFavoredProduct($product) : false;
 
