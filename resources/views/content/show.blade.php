@@ -140,6 +140,12 @@
                                                             @endif
                                                             label="{{ $source->caption }}"/>
                                                 @endforeach
+                                            @elseif($productsThatHaveThisContent->isNotEmpty())
+                                                @foreach($productsThatHaveThisContent as $productKey=>$product)
+                                                    @if($productKey === 0)
+                                                        <source src="{{ $product->introVideo }}" type="video/mp4"/>
+                                                    @endif
+                                                @endforeach
                                             @endif
                                             <p class="vjs-no-js">@lang('content.javascript is disables! we need it to play a video')</p>
                                         </video>
