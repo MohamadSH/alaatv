@@ -184,6 +184,7 @@ var AlaaVast = function () {
     }();
 
     function initAdPlayer(player, adIndex) {
+
         var adPlayer = videojs(getAdPlayerId(player, adIndex), {
             language: 'fa'
         });
@@ -368,7 +369,7 @@ var AlaaVast = function () {
     function addSkipButton(player, adPlayer, adIndex) {
         $('#'+getAdPlayerId(player, adIndex)).prepend('' +
             '<div class="AlaaVastSkipBtn" data-adplayer-id="'+getAdPlayerId(player, adIndex)+'"' +
-            'style="position: absolute;z-index: 9999;background: #00000061;bottom: 20%;right: 0;width: 0;height: 50px;display: flex;align-items: center;justify-content: center;border: solid 2px #ff9000; cursor: pointer;">' +
+            'style="position: absolute;z-index: 9;background: #00000061;bottom: 140px;right: 0;width: 0;max-width: 200px;height: 20%;max-height: 40px;display: flex;align-items: center;justify-content: center;border: solid 2px #ff9000; cursor: pointer;">' +
             'رد کن' +
             '</div>');
         $(document).on('click', '.AlaaVastSkipBtn[data-adplayer-id="'+getAdPlayerId(player, adIndex)+'"]', function () {
@@ -379,19 +380,19 @@ var AlaaVast = function () {
     function addSkipTimer(player, adPlayer, adIndex) {
         $('#'+getAdPlayerId(player, adIndex)).prepend('' +
             '<div class="AlaaVastSkipTimer" data-adplayer-id="'+getAdPlayerId(player, adIndex)+'"' +
-            'style="position: absolute;z-index: 9999;background: #00000061;bottom: 20%;right: 0;width: 0;height: 50px;display: flex;align-items: center;justify-content: center;border: solid 2px #ff9000;">' +
+            'style="position: absolute;z-index: 9;background: #00000061;bottom: 140px;right: 0;width: 0;max-width: 80px;height: 20%;max-height: 40px;display: flex;align-items: center;justify-content: center;border: solid 2px #ff9000;">' +
             '</div>');
     }
 
     function showSkipButton(player, adPlayer, adIndex) {
         addSkipButton(player, adPlayer, adIndex);
-        $('#'+getAdPlayerId(player, adIndex)).find('.AlaaVastSkipBtn').animate({width:'200px'},350);
+        $('#'+getAdPlayerId(player, adIndex)).find('.AlaaVastSkipBtn').animate({width:'25%'},350);
         data[adIndex].isSkipButtonShown = true;
     }
 
     function showSkipTimer(player, adPlayer, adIndex) {
         addSkipTimer(player, adPlayer, adIndex);
-        $('#'+getAdPlayerId(player, adIndex)).find('.AlaaVastSkipTimer').animate({width:'80px'},350);
+        $('#'+getAdPlayerId(player, adIndex)).find('.AlaaVastSkipTimer').animate({width:'15%'},350);
         data[adIndex].isSkipTimerShown = true;
     }
 

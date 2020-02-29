@@ -192,6 +192,7 @@ class Mix {
                 'public/acm/videojs/plugins/videojs.hotkeys.min.js',
                 'public/acm/videojs/plugins/seek-to-point.js',
                 'public/acm/videojs/lang/fa.js',
+                'public/acm/video-js/fix.js',
                 'public/acm/AlaatvCustomFiles/js/page/pages/faq.js'
             ],
             'public/js/faq.js'
@@ -241,6 +242,7 @@ class Mix {
                 'public/acm/videojs/plugins/videojs.hotkeys.min.js',
                 'public/acm/videojs/plugins/seek-to-point.js',
                 'public/acm/videojs/lang/fa.js',
+                'public/acm/video-js/fix.js',
                 'public/acm/AlaatvCustomFiles/js/page/pages/live.js',
             ],
             'public/js/page-live.js');
@@ -521,6 +523,7 @@ class Mix {
             'public/css/content-show.css',
             [
                 'node_modules/tooltip/dist/Tooltip.js',
+                // 'node_modules/iphone-inline-video/dist/iphone-inline-video.js',
 
                 'public/acm/videojs/video.min.js',
                 'public/acm/videojs/plugins/pip/videojs.pip.min.js',
@@ -529,6 +532,7 @@ class Mix {
                 'public/acm/videojs/plugins/seek-to-point.js',
                 'public/acm/videojs/lang/fa.js',
                 'public/acm/videojs/nuevo.min.js',
+                'public/acm/video-js/fix.js',
 
                 'public/acm/AlaatvCustomFiles/js/UserCart.js',
                 'public/acm/AlaatvCustomFiles/components/AlaaVAST/script.js',
@@ -695,6 +699,7 @@ class Mix {
                 'public/acm/videojs/plugins/videojs.hotkeys.min.js',
                 'public/acm/videojs/plugins/seek-to-point.js',
                 'public/acm/videojs/lang/fa.js',
+                'public/acm/video-js/fix.js',
                 'public/acm/AlaatvCustomFiles/js/product-content-embed.js',
             ],
             'public/js/product-content-embed.js'
@@ -742,6 +747,7 @@ class Mix {
                 'public/acm/videojs/plugins/videojs.hotkeys.min.js',
                 'public/acm/videojs/plugins/seek-to-point.js',
                 'public/acm/videojs/lang/fa.js',
+                'public/acm/video-js/fix.js',
 
                 'public/acm/AlaatvCustomFiles/components/AlaaLoading/script.js',
                 'public/acm/AlaatvCustomFiles/components/CustomDropDown/js.js',

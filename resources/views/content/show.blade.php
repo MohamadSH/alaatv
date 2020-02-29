@@ -130,8 +130,14 @@
                                 <div class="m-portlet__body a--nuevo-alaa-theme a--media-parent">
                                     <div class="a--video-wraper">
                                         <video id="video-{{ $content->id }}"
-                                               class="video-js vjs-fluid vjs-default-skin vjs-big-play-centered" controls
-                                               preload="none" height='360' width="640" poster='{{ $content->thumbnail }}'>
+                                               class="video-js vjs-fluid vjs-default-skin vjs-big-play-centered"
+                                               preload="none"
+                                               height="360"
+                                               width="640"
+                                               poster="{{ $content->thumbnail }}"
+                                               controls
+                                               webkit-playsinline="true"
+                                               playsinline="true" >
                                             @if($user_can_see_content)
                                                 @foreach($content->getVideos() as $source)
                                                     <source src="{{ $source->link }}" type='video/mp4' res="{{ $source->res }}"
