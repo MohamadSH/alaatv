@@ -207,7 +207,7 @@ class ProductController extends Controller
             $liveDescriptions = $product->livedescriptions->sortByDesc('created_at');
             $periodDescription            = $product->descriptionWithPeriod;
             $faqs                         = $product->faqs;
-            return view('product.customShow.raheAbrisham', compact('product', 'block', 'liveDescriptions', 'isFavored', 'lastSet', 'lastSetPamphlets', 'lastSetVideos', 'periodDescription', 'sets', 'faqs', 'hasUserPurchasedProduct', 'block', 'isForcedGift', 'hasPurchasedEssentialProduct', 'shouldBuyProductId', 'shouldBuyProductName'));
+            return view('product.customShow.raheAbrisham', compact('product', 'block', 'liveDescriptions', 'isFavored', 'lastSet', 'lastSetPamphlets', 'lastSetVideos', 'periodDescription', 'sets', 'faqs', 'hasUserPurchasedProduct', 'block', 'isForcedGift', 'hasPurchasedEssentialProduct', 'shouldBuyProductId', 'shouldBuyProductName', 'allChildrenSets'));
         }
 
         return view('product.show', compact('product', 'block', 'purchasedProductIdArray', 'liveDescriptions', 'children', 'isFavored', 'isForcedGift', 'shouldBuyProductId', 'shouldBuyProductName', 'hasPurchasedEssentialProduct' ,

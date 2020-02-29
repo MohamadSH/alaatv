@@ -508,7 +508,7 @@ var PreviewSets = function () {
         getSetData(setId, sectionId, showSetData);
     }
 
-    function showSetData(data, sectionId, callback) {
+    function showSetData(data, sectionId) {
         initSectionList(data.files);
         $('#selectSet .select-selected').html((data.set.short_title === null) ? data.set.title : data.set.short_title).attr('data-option-value', data.set.id);
         setLists(data.files);
@@ -523,11 +523,8 @@ var PreviewSets = function () {
             showSection('all');
         }
 
-        if (typeof callback !== 'undefined') {
-            callback(data.set.id);
-        }
-        // setStepUpdate(data..set.id);
-        // MapSVG.panToObject(MapSVG.getsetDataFromId(data..set.id).elementId);
+        this.showPreviewSetDataCallback(data, sectionId);
+
         hideLoading();
     }
 
@@ -951,21 +948,32 @@ var PreviewSets = function () {
         showSetsOfProduct(data.allProductsSets, data.allProductsSets[0].id);
     }
 
+    function showPreviewSetDataCallback() {
+
+    }
+
     return {
         init: function (data) {
             if (data.allProductsSets === null || data.lastSetData === null) {
                 return;
             }
+
+
+
+            window.showPreviewSetDataCallback = function (data, sectionId) {};
+            data.showPreviewSetDataCallback = window.showPreviewSetDataCallback;
+
+
+
             initCustomDropDown(data);
             showSetData(data.lastSetData);
             addClickEvents();
         },
-        showSetFromServer: function (setId, sectionId) {
-            showContentOfSetFromServer(setId, sectionId);
-        },
+        showContentOfSetFromServer: showContentOfSetFromServer,
         showSetData: function (data) {
 
         },
+        showPreviewSetDataCallback: showPreviewSetDataCallback
     };
 
 }();
@@ -1396,7 +1404,9 @@ var InitProductPagePage = function () {
     }
 
     function initPreviewSets(data) {
-        PreviewSets.init(data);
+        var previewSetsObject = new PreviewSets.init(data);
+        previewSetsObject.showPreviewSetDataCallback = function() {};
+        return previewSetsObject;
     }
 
     function init(data) {
@@ -1410,8 +1420,10 @@ var InitProductPagePage = function () {
         initVideoPlayer();
         handleProductInformationMultiColumn();
         initResponsivePage();
-        initPreviewSets(data);
+        var previewSetsObject = initPreviewSets(data);
         addEvents();
+
+        return previewSetsObject;
     }
 
     return {
@@ -1420,8 +1432,10 @@ var InitProductPagePage = function () {
 }();
 
 $(document).ready(function () {
-    InitProductPagePage.init({
+    var previewSetsObject = InitProductPagePage.init({
         lastSetData: (typeof lastSetData !== 'undefined') ? lastSetData : null,
-        allProductsSets: (typeof allProductsSets !== 'undefined') ? allProductsSets : null
+        allProductsSets: (typeof allProductsSets !== 'undefined') ? allProductsSets : null,
     });
+
+    window.previewSetsObject = previewSetsObject;
 });
