@@ -10,6 +10,7 @@ use App\Http\Requests\SaveNewBlockRequest;
 use App\Product;
 use App\Traits\ProductCommon;
 use Exception;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Jenssegers\Agent\Agent;
@@ -177,7 +178,14 @@ class BlockController extends Controller
 
         $this->fillBlockFromRequest($request, $block);
 
-        if ($block->save()) {
+        try{
+            $saveResult = $block->save();
+        }catch (QueryException $e){
+            session()->put('error', $e->getMessage());
+            return redirect()->back();
+        }
+
+        if ($saveResult) {
             $this->attachProducts($block, $productsId);
 
             $this->attachSets($block, $setsId);

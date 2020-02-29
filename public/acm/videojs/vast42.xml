@@ -19,7 +19,7 @@
             <Category authority="https://www.iabtechlab.com/categoryauthority">AD CONTENT description category</Category>
             <Creatives>
                 <Creative id="5480" sequence="1" adId="2447226">
-                    <Linear skipoffset="00:00:10" startoffset="00:00:00">
+                    <Linear skipoffset="00:00:5" startoffset="00:00:00">
                         <TrackingEvents>
                             <Tracking event="start" ><![CDATA[https://example.com/tracking/start]]></Tracking>
                             <Tracking event="progress" offset="00:00:10"><![CDATA[http://example.com/tracking/progress-10]]></Tracking>
@@ -45,13 +45,13 @@
                                 </ClosedCaptionFile>
                             </ClosedCaptionFiles>
                             <MediaFile id="5244" delivery="progressive" type="video/mp4" bitrate="1000" width="854" height="480" minBitrate="700" maxBitrate="1500" scalable="1" maintainAspectRatio="1" codec="H.264" label="معمولی" res="480p">
-                                <![CDATA[https://cdn.alaatv.com/upload/vastVideos/hq/vast_taftan99.mp4]]>
+                                <![CDATA[https://cdn.alaatv.com/upload/vastVideos/hq/vast_alaa.mp4]]>
                             </MediaFile>
                             <MediaFile id="5241" delivery="progressive" type="video/mp4" bitrate="2000" width="1280" height="720" minBitrate="1500" maxBitrate="2500" scalable="1" maintainAspectRatio="1" codec="H.264" label="خوب" res="720p">
-                                <![CDATA[https://cdn.alaatv.com/upload/vastVideos/HD_720p/vast_taftan99.mp4]]>
+                                <![CDATA[https://cdn.alaatv.com/upload/vastVideos/HD_720p/vast_alaa.mp4]]>
                             </MediaFile>
                             <MediaFile id="5246" delivery="progressive" type="video/mp4" bitrate="600" width="640" height="360" minBitrate="500" maxBitrate="700" scalable="1" maintainAspectRatio="1" codec="H.264" label="کم" res="240p">
-                                <![CDATA[https://cdn.alaatv.com/upload/vastVideos/240p/vast_taftan99.mp4]]>
+                                <![CDATA[https://cdn.alaatv.com/upload/vastVideos/240p/vast_alaa.mp4]]>
                             </MediaFile>
                         </MediaFiles>
                         <VideoClicks>

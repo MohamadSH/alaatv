@@ -165,7 +165,6 @@ class ProductController extends Controller
         $allChildrenSets = collect();
         $defaultProductSet = $product;
         if($product->producttype_id != config('constants.PRODUCT_TYPE_SIMPLE')){
-//            $hasUserPurchasedProduct = $this->hasBoughtAllChildren($product, $user);
             $defaultProductSet = $product->children->first();
             foreach ($product->getAllChildren(true,true) as $child) {
                 $productSets = collect();
@@ -181,10 +180,15 @@ class ProductController extends Controller
             $children    = $product->children()->enable()->get();
         }
 
+        $lastSet = null;
+        $lastSetPamphlets = collect();
+        $lastSetVideos    = collect();
         $sets                         = $defaultProductSet->sets->sortByDesc('pivot.order');
-        $lastSet                      = $sets->first();
-        $lastSetPamphlets             = $lastSet->getActiveContents2(Content::CONTENT_TYPE_PAMPHLET);
-        $lastSetVideos                = $lastSet->getActiveContents2(Content::CONTENT_TYPE_VIDEO);
+        if($sets->isNotEmpty()){
+            $lastSet                      = $sets->first();
+            $lastSetPamphlets             = $lastSet->getActiveContents2(Content::CONTENT_TYPE_PAMPHLET);
+            $lastSetVideos                = $lastSet->getActiveContents2(Content::CONTENT_TYPE_VIDEO);
+        }
 
         $isFavored = (isset($user)) ? $user->hasFavoredProduct($product) : false;
 
@@ -1202,14 +1206,6 @@ class ProductController extends Controller
                 'discount' => $bonDiscount,
                 'bonPlus'  => $bonPlus,
             ]);
-        }
-    }
-
-    private function hasBoughtAllChildren(Product $product, User $user):bool
-    {
-        return true;
-
-        foreach ($product->children as $firstLevelChild) {
         }
     }
 }
