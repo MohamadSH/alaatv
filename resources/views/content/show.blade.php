@@ -375,7 +375,6 @@
                                     <div class="row">
                                         <div class="col downloadLinkColumn">
                                             <div class="m-portlet m--full-height m-portlet--success m-portlet--head-solid-bg m-portlet--bordered" style="height: 500px;">
-
                                                 @if(!$user_can_see_content)
                                                     <div class="blockedContent" data-toggle="m-tooltip" data-placement="top" data-original-title="این فایل یک محصول است و با خرید یکی از محصولات آن می توانید استفاده کنید.">
                                                         @if($productsThatHaveThisContent->isNotEmpty() && (!$user_can_see_content || ($content->isFree && false)) )
@@ -784,12 +783,25 @@
                                                 <div class="m-alert m-alert--icon m-alert--outline alert alert-success" role="alert">
                                                     <div class="m-alert__text text-left">
                                                         <strong>
-                                                            <a href="{{ ($user_can_see_content) ? $file->link . '?download=1' : '#' }}" class="m-link">
+                                                            <a
+                                                                @if(Auth::check())
+                                                                href="{{ ($user_can_see_content) ? $file->link . '?download=1' : '#' }}"
+                                                                class="m-link"
+                                                                @else
+                                                                data-href="/"
+                                                                class="m-link LoginBeforeClick"
+                                                                @endif>
                                                                 دانلود فایل {{$file->caption}}
                                                             </a>
                                                         </strong>
                                                     </div>
-                                                    <a href="{{ ($user_can_see_content) ? $file->link . '?download=1' : '#' }}">
+                                                    <a
+                                                        @if(Auth::check())
+                                                        href="{{ ($user_can_see_content) ? $file->link . '?download=1' : '#' }}"
+                                                        @else
+                                                        data-href="/"
+                                                        class="LoginBeforeClick"
+                                                        @endif>
 
                                                         @if(isset($file->res))
                                                             <span class="m-badge m-badge--warning m-badge--wide m-badge--rounded">

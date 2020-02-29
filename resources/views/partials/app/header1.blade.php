@@ -77,8 +77,6 @@
                             <!-- BEGIN: Topbar Toggler -->
                             <a id="m_aside_header_topbar_mobile_toggle1" href="javascript:" class="m-brand__icon m--visible-tablet-and-mobile-inline-block">
                                 <i class="fa fa-user-alt" style="color: white;"></i>
-
-
                             </a>
                             <!-- BEGIN: Topbar Toggler -->
                         @else
