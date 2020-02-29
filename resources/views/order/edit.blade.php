@@ -44,7 +44,7 @@
                     </h5>
                     <button type="button" class="close" data-dismiss="modal"
                             aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
+
                     </button>
                 </div>
                 {!! Form::open(['files'=>true,'method' => 'POST','action' => ['Web\TransactionController@store'], 'class'=>'nobottommargin' ]) !!}
@@ -73,7 +73,7 @@
                     </h5>
                     <button type="button" class="close" data-dismiss="modal"
                             aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
+
                     </button>
                 </div>
                 <div class="modal-body">
@@ -179,7 +179,7 @@
                                             </h5>
                                             <button type="button" class="close" data-dismiss="modal"
                                                     aria-label="Close">
-                                                <span aria-hidden="true">&times;</span>
+
                                             </button>
                                         </div>
                                         <div class="modal-body">
@@ -377,7 +377,7 @@
                                                         آیتم های انتخاب شده</h5>
                                                     <button type="button" class="close" data-dismiss="modal"
                                                             aria-label="Close">
-                                                        <span aria-hidden="true">&times;</span>
+
                                                     </button>
                                                 </div>
                                                 {!! Form::open(['action' => ['Web\OrderController@exchangeOrderproduct' , $order] , 'method'=>'POST' ,'class'=>'form-horizontal form-row-seperated']) !!}
@@ -521,7 +521,7 @@
                                             </h5>
                                             <button type="button" class="close" data-dismiss="modal"
                                                     aria-label="Close">
-                                                <span aria-hidden="true">&times;</span>
+
                                             </button>
                                         </div>
                                         <div class="modal-body">

@@ -237,7 +237,7 @@
                                                 <div class="modal-header">
                                                     <h5 class="modal-title" id="responsive-assignmentModalLabel">افزودن تمرین جدید</h5>
                                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                        <span aria-hidden="true">&times;</span>
+
                                                     </button>
                                                 </div>
                                                 {!! Form::open(['files'=>true,'method' => 'POST','action' => ['Web\AssignmentController@store'], 'class'=>'nobottommargin' , 'id'=>'assignmentForm']) !!}
@@ -343,7 +343,7 @@
                                                 <div class="modal-header">
                                                     <h5 class="modal-title" id="responsive-consultationModalLabel">افزودن مشاوره جدید</h5>
                                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                        <span aria-hidden="true">&times;</span>
+
                                                     </button>
                                                 </div>
                                                 {!! Form::open(['files'=>true,'method' => 'POST','action' => ['Web\ConsultationController@store'], 'class'=>'nobottommargin' , 'id'=>'consultationForm']) !!}
