@@ -523,7 +523,6 @@ class Mix {
             'public/css/content-show.css',
             [
                 'node_modules/tooltip/dist/Tooltip.js',
-                // 'node_modules/iphone-inline-video/dist/iphone-inline-video.js',
 
                 'public/acm/videojs/video.min.js',
                 'public/acm/videojs/plugins/pip/videojs.pip.min.js',
