@@ -225,9 +225,26 @@ var RelatedItems = function() {
         }, 500);
     }
 
+    function sortItems() {
+        var evenNumber = 0,
+            oddNumber = 1;
+
+        $('.RelatedItems .SortItemsList').Sort({order:'shu'});
+        $('.RelatedItems .SortItemsList .SortItemsList-item').each(function () {
+            if ($(this).hasClass('a--block-type-product2')) {
+                $(this).attr('data-sort', evenNumber);
+                evenNumber += 2;
+            } else {
+                $(this).attr('data-sort', oddNumber);
+                oddNumber += 2;
+            }
+        });
+        $('.RelatedItems .SortItemsList').Sort({order:'asc'});
+    }
+
     function init() {
         setRelatedItemsWidth();
-        $('.RelatedItems .SortItemsList').Sort({order:'shu'});
+        sortItems();
     }
 
     return {

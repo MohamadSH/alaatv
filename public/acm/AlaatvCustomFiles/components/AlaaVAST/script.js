@@ -30,6 +30,9 @@ var AlaaVast = function () {
             ClickThrough: {
                 attr: {
                     id: '',
+                    name: '',
+                    creative: '',
+                    position: ''
                 },
                 val: ''
             },
@@ -61,7 +64,10 @@ var AlaaVast = function () {
             label: '',
             default: false
         },
-        data = [];
+        data = [],
+        reponsive = {
+            breakPoint: 600
+        };
 
     var XMLService = function () {
 
@@ -184,6 +190,7 @@ var AlaaVast = function () {
     }();
 
     function initAdPlayer(player, adIndex) {
+
         var adPlayer = videojs(getAdPlayerId(player, adIndex), {
             language: 'fa'
         });
@@ -297,6 +304,8 @@ var AlaaVast = function () {
             }
         });
 
+        showReadMoreButton(player, adPlayer, adIndex);
+
     }
 
     function hasSouce(adIndex) {
@@ -367,8 +376,7 @@ var AlaaVast = function () {
 
     function addSkipButton(player, adPlayer, adIndex) {
         $('#'+getAdPlayerId(player, adIndex)).prepend('' +
-            '<div class="AlaaVastSkipBtn" data-adplayer-id="'+getAdPlayerId(player, adIndex)+'"' +
-            'style="position: absolute;z-index: 9999;background: #00000061;bottom: 20%;right: 0;width: 0;height: 50px;display: flex;align-items: center;justify-content: center;border: solid 2px #ff9000; cursor: pointer;">' +
+            '<div class="AlaaVastBtn AlaaVastSkipBtn" data-adplayer-id="'+getAdPlayerId(player, adIndex)+'">' +
             'رد کن' +
             '</div>');
         $(document).on('click', '.AlaaVastSkipBtn[data-adplayer-id="'+getAdPlayerId(player, adIndex)+'"]', function () {
@@ -376,22 +384,53 @@ var AlaaVast = function () {
         });
     }
 
+    function addReadMoreButton(player, adPlayer, adIndex) {
+        var gtmEEC = '';
+        if (
+            data[adIndex].ClickThrough.attr.id.trim().length > 0 &&
+            data[adIndex].ClickThrough.attr.name.trim().length > 0 &&
+            data[adIndex].ClickThrough.attr.creative.trim().length > 0 &&
+            data[adIndex].ClickThrough.attr.position.trim().length > 0
+        ) {
+            gtmEEC = '   class="a--gtm-eec-advertisement a--gtm-eec-advertisement-click"\n' +
+                '   data-gtm-eec-promotion-id="'+ data[adIndex].ClickThrough.attr.id +'"\n' +
+                '   data-gtm-eec-promotion-name="'+ data[adIndex].ClickThrough.attr.name +'"\n' +
+                '   data-gtm-eec-promotion-creative="'+ data[adIndex].ClickThrough.attr.creative +'"\n' +
+                '   data-gtm-eec-promotion-position="'+ data[adIndex].ClickThrough.attr.position +'"';
+        }
+
+        $('#'+getAdPlayerId(player, adIndex)).prepend('' +
+            '<a href="'+ data[adIndex].ClickThrough.val +'"' + gtmEEC + '>' +
+            '    <div class="AlaaVastBtn AlaaVastReadMoreBtn" data-adplayer-id="'+getAdPlayerId(player, adIndex)+'">' +
+            'اطلاعات بیشتر    ' +
+            '    </div>' +
+            '</a>');
+        // $(document).on('click', '.AlaaVastReadMoreBtn[data-adplayer-id="'+getAdPlayerId(player, adIndex)+'"]', function () {
+        // });
+    }
+
     function addSkipTimer(player, adPlayer, adIndex) {
         $('#'+getAdPlayerId(player, adIndex)).prepend('' +
-            '<div class="AlaaVastSkipTimer" data-adplayer-id="'+getAdPlayerId(player, adIndex)+'"' +
-            'style="position: absolute;z-index: 9999;background: #00000061;bottom: 20%;right: 0;width: 0;height: 50px;display: flex;align-items: center;justify-content: center;border: solid 2px #ff9000;">' +
-            '</div>');
+            '<div class="AlaaVastBtn AlaaVastSkipTimer" data-adplayer-id="'+getAdPlayerId(player, adIndex)+'"></div>');
+    }
+
+    function showReadMoreButton(player, adPlayer, adIndex) {
+        if (data[adIndex].ClickThrough.val.trim().length === 0) {
+            return;
+        }
+        addReadMoreButton(player, adPlayer, adIndex);
+        $('#'+getAdPlayerId(player, adIndex)).find('.AlaaVastReadMoreBtn').animate({width:'35%'},350);
     }
 
     function showSkipButton(player, adPlayer, adIndex) {
         addSkipButton(player, adPlayer, adIndex);
-        $('#'+getAdPlayerId(player, adIndex)).find('.AlaaVastSkipBtn').animate({width:'200px'},350);
+        $('#'+getAdPlayerId(player, adIndex)).find('.AlaaVastSkipBtn').animate({width:'30%'},350);
         data[adIndex].isSkipButtonShown = true;
     }
 
     function showSkipTimer(player, adPlayer, adIndex) {
         addSkipTimer(player, adPlayer, adIndex);
-        $('#'+getAdPlayerId(player, adIndex)).find('.AlaaVastSkipTimer').animate({width:'80px'},350);
+        $('#'+getAdPlayerId(player, adIndex)).find('.AlaaVastSkipTimer').animate({width:'15%'},350);
         data[adIndex].isSkipTimerShown = true;
     }
 
@@ -411,6 +450,8 @@ var AlaaVast = function () {
     function init(player, customData) {
 
         initData(customData);
+
+        addCss();
 
         player.on('play', function() {
             var addToStartindex = getAdToStart(player);
@@ -433,6 +474,50 @@ var AlaaVast = function () {
 
     function removeLoading(player) {
         $('.playerLoading-'+player.id()).remove();
+    }
+
+    function addCss() {
+        $('body').append('' +
+            '<style>' +
+            '.AlaaVastBtn {\n' +
+            '  position: absolute;\n' +
+            '  z-index: 9;\n' +
+            '  border: 2px solid rgb(255, 144, 0);\n' +
+            '  background: rgba(0, 0, 0, 0.38) none repeat scroll 0% 0%;\n' +
+            '  bottom: 140px;\n' +
+            '  right: 0;\n' +
+            '  width: 0;\n' +
+            '  height: 20%;\n' +
+            '  max-height: 40px;\n' +
+            '  display: flex;\n' +
+            '  align-items: center;\n' +
+            '  justify-content: center;\n' +
+            'color: white;' +
+            '}\n' +
+            '.AlaaVastBtn.AlaaVastSkipTimer {\n' +
+            '  max-width: 80px;\n' +
+            '}\n' +
+            '.AlaaVastBtn.AlaaVastSkipBtn {\n' +
+            'max-width: 200px;\n' +
+            'cursor: pointer;\n' +
+            '}' +
+            '.AlaaVastBtn.AlaaVastReadMoreBtn {\n' +
+            '    bottom: 60px;\n' +
+            '    cursor: pointer;\n' +
+            '    left: 0;' +
+            '    right: auto;' +
+            '}' +
+            '@media only screen and (max-width: '+reponsive.breakPoint+'px) {\n' +
+            '    .AlaaVastBtn {\n' +
+            '        bottom: 60px;\n' +
+            '        right: auto;\n' +
+            '        left: 0;\n' +
+            '    }\n' +
+            '    .AlaaVastBtn.AlaaVastReadMoreBtn {\n' +
+            '        bottom: calc( 20% + 60px );\n' +
+            '    }' +
+            '}' +
+            '</style>');
     }
 
     function initXml(player, address) {

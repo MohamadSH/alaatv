@@ -97,7 +97,10 @@
 
     @endif
 
-    @include('product.partials.raheAbrisham.entekhabeFarsang')
+    {{-- پیش نمایش ست ها --}}
+    @include('product.partials.previewSetsOfProduct', ['sets'=> ($allChildrenSets->count() > 0) ? $allChildrenSets->first()['sets'] : $sets, 'products'=> $allChildrenSets, 'title'=> 'اگر الآن می خوای فرسنگ هارو ببینی، پس انتخابش کن'])
+
+{{--    @include('product.partials.raheAbrisham.entekhabeFarsang')--}}
 
     <div class="row justify-content-center">
         <div class="col-md-6">
@@ -140,7 +143,6 @@
         'btnMoreClass' => 'showMoreLiveDescriptions',
     ])
 
-
     {{--دکمه افزودن به سبد خرید موبایل --}}
     @include('product.partials.btnAddToCartForMobileDevice')
 
@@ -167,7 +169,24 @@
             },
             @endforeach
         ];
-        var lastSetData = {
+        var allProductsSets = @if($allChildrenSets->count() > 0) {!! json_encode($allChildrenSets) !!} @else [
+                {
+                    id: parentProduct.id,
+                    name: parentProduct.name,
+                    sets: [
+                            @foreach($sets as $set)
+                        {
+                            id: '{{$set->id}}',
+                            name: '{{$set->name}}'
+                        },
+                        @endforeach
+                    ]
+                }
+            ]
+            @endif
+        ;
+        var lastSetData = @if (isset($lastSet) && isset($lastSetPamphlets) && isset($lastSetVideos))
+        {
             set: {
                 id: '{{$lastSet->id}}',
                 name: '{{$lastSet->name}}',
@@ -216,7 +235,10 @@
                     @endforeach
                 ]
             }
-        };
+        }
+        @else
+        null
+        @endif;
         var hasUserPurchasedRaheAbrisham = {{($hasUserPurchasedProduct)?1:0}};
     </script>
     <script src="{{ mix('/js/product-show-RaheAbrisham.js') }}"></script>
