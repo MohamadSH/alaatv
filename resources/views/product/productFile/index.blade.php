@@ -21,8 +21,8 @@
                         <i class="fa fa-plus-circle"></i>
                         درج فایل با لینک
                     </a>
-    
-    
+
+
                     <!--begin::Modal-->
                     <div class="modal fade" id="createProductFile" tabindex="-1" role="dialog" aria-labelledby="createProductFileModalLabel" aria-hidden="true">
                         <div class="modal-dialog modal-lg" role="document">
@@ -30,7 +30,7 @@
                                 <div class="modal-header">
                                     <h5 class="modal-title" id="createProductFileModalLabel">افزودن فایل جدید</h5>
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
+
                                     </button>
                                 </div>
                                 {!! Form::open(['files'=>true, 'method' => 'POST','action' => 'Web\ProductfileController@store', 'class'=>'nobottommargin']) !!}
@@ -52,8 +52,8 @@
                         </div>
                     </div>
                     <!--end::Modal-->
-                    
-                    
+
+
                 </div>
             </div>
 

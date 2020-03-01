@@ -68,7 +68,7 @@
                                 حذف سفارش محصول <span id="deleteOrderTitle"></span>
                             </h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
+
                             </button>
                         </div>
                         <div class="modal-body">
@@ -264,7 +264,7 @@
                                                 <div class="modal-header">
                                                     <h5 class="modal-title" id="responsive-checkoutModalLabel">آیا مطمئن هستید؟</h5>
                                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                        <span aria-hidden="true">&times;</span>
+
                                                     </button>
                                                 </div>
                                                 <div class="modal-body">
@@ -300,7 +300,7 @@
                                             ارسال پیامک به <span id="smsUserFullName"></span>
                                         </h5>
                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
+
                                         </button>
                                     </div>
                                     <div class="modal-body">
@@ -498,7 +498,7 @@
                                         تکمیل اطلاعات تراکنش
                                     </h5>
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
+
                                     </button>
                                 </div>
                                 {!! Form::open([  'method'=>'POST'  , 'class'=>'completeTransactionInfoForm form-horizontal' ]) !!}
@@ -662,7 +662,7 @@
                                         حذف بن کاربر <span id="deleteUserBonFullName"></span>
                                     </h5>
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
+
                                     </button>
                                 </div>
                                 <div class="modal-body">
