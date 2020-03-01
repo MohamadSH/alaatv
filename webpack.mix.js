@@ -61,6 +61,7 @@ class Mix {
             'node_modules/firebase/firebase-messaging.js',
             'public/acm/AlaatvCustomFiles/js/GoogleFirebase.js',// 290 KB
 
+            'public/acm/AlaatvCustomFiles/components/TimeElapsedSinceLastEvent/script.js',
             'public/acm/AlaatvCustomFiles/components/Alist/type2/script.js',
             'public/acm/AlaatvCustomFiles/components/AjaxLogin/script.js',// 297 KB
             'public/acm/AlaatvCustomFiles/components/MegaMenu/script.js',

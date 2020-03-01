@@ -2,7 +2,7 @@ var AlaaAdBanner = function () {
 
     function addEvents() {
         $(document).on('click', '.AlaadBanner', function () {
-            setUserSeenBanner();
+            TimeElapsedSinceLastEvent.setEventOccurrenceTime('AlaaAdBanner-lastSeenTime');
         });
     }
 
@@ -50,27 +50,13 @@ var AlaaAdBanner = function () {
         return ($('a.AlaadBanner').length > 0);
     }
 
-    function setUserSeenBanner() {
-        localStorage.setItem('AlaaAdBanner-lastSeenTime', Date.now().toString());
-    }
-
-    function getUserLastSeenBannerTime() {
-        return localStorage.getItem('AlaaAdBanner-lastSeenTime');
-    }
-
-    function getTimeElapsedSinceLastVisit() {
-        var userLastSeenBannerTime = getUserLastSeenBannerTime(),
-            diffTime = Date.now() - userLastSeenBannerTime;
-        return diffTime;
-    }
-
     function canShowBanner() {
-        if (typeof getUserLastSeenBannerTime() === 'undefined') {
+        var timeElapsedSinceLastEvent = TimeElapsedSinceLastEvent.get('AlaaAdBanner-lastSeenTime');
+        if (timeElapsedSinceLastEvent === null) {
             return true;
         }
 
-        var diffTime = getTimeElapsedSinceLastVisit(),
-            diffTimeInDay = diffTime/(1000*60*60*24);
+        var diffTimeInDay = timeElapsedSinceLastEvent/(1000*60*60*24);
         return diffTimeInDay > 2;
     }
 
@@ -79,15 +65,11 @@ var AlaaAdBanner = function () {
         addEvents();
     }
 
-    function canBrowserSupportLocalStorage() {
-        return typeof(Storage) !== "undefined";
-    }
-
     function promote(data) {
         if (data === null) {
             return;
         }
-        if (!canBrowserSupportLocalStorage()) {
+        if (!TimeElapsedSinceLastEvent.canBrowserSupportLocalStorage()) {
             showBanner(data);
             return;
         }
