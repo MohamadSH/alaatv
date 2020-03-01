@@ -105,12 +105,21 @@ var AlaaVast = function () {
             return mediaFilesArray;
         }
 
-        function getClickThrough(xmlDoc) {
+        function getClickThroughVal(xmlDoc) {
             var node = getNode(xmlDoc, 'ClickThrough');
             if (node) {
                 return node.textContent.trim();
             }
             return null;
+        }
+
+        function getClickThroughAttr(xmlDoc, attrKey) {
+            var attr = getNodeAttribute(xmlDoc, 'ClickThrough', attrKey);
+            if (attr !== null) {
+                return attr;
+            }
+
+            return '';
         }
 
         function getMediaFile(mediaFile) {
@@ -173,9 +182,12 @@ var AlaaVast = function () {
                 mediaFiles: getMediaFiles(xmlDoc),
                 ClickThrough: {
                     attr: {
-                        id: '',
+                        id: getClickThroughAttr(xmlDoc, 'id'),
+                        name: getClickThroughAttr(xmlDoc, 'name'),
+                        creative: getClickThroughAttr(xmlDoc, 'creative'),
+                        position: getClickThroughAttr(xmlDoc, 'position')
                     },
-                    val: getClickThrough(xmlDoc)
+                    val: getClickThroughVal(xmlDoc)
                 },
                 startAfter: getStartoffset(xmlDoc),
                 canSkipAfter: getSkipoffset(xmlDoc)
@@ -234,19 +246,19 @@ var AlaaVast = function () {
             playPlayer(player, adPlayer, adIndex);
         });
 
-        adPlayer.on('click', function(event){
-            event.preventDefault();
-
-            if (
-                !$(event.target).closest('.vjs-control-bar').length &&
-                !$(event.target).closest('.vjs-big-play-button').length &&
-                !$(event.target).closest('.AlaaVastSkipBtn').length &&
-                !$(event.target).closest('.AlaaVastSkipTimer').length &&
-                data[adIndex].ClickThrough.val.length > 0
-            ) {
-                window.location.href = data[adIndex].ClickThrough.val;
-            }
-        });
+        // adPlayer.on('click', function(event){
+        //     event.preventDefault();
+        //
+        //     if (
+        //         !$(event.target).closest('.vjs-control-bar').length &&
+        //         !$(event.target).closest('.vjs-big-play-button').length &&
+        //         !$(event.target).closest('.AlaaVastSkipBtn').length &&
+        //         !$(event.target).closest('.AlaaVastSkipTimer').length &&
+        //         data[adIndex].ClickThrough.val.length > 0
+        //     ) {
+        //         window.location.href = data[adIndex].ClickThrough.val;
+        //     }
+        // });
 
         disableProgressControlBar(adPlayer);
 
@@ -400,7 +412,7 @@ var AlaaVast = function () {
         }
 
         $('#'+getAdPlayerId(player, adIndex)).prepend('' +
-            '<a href="'+ data[adIndex].ClickThrough.val +'"' + gtmEEC + '>' +
+            '<a href="'+ data[adIndex].ClickThrough.val +'"' + gtmEEC + 'target="_blank">' +
             '    <div class="AlaaVastBtn AlaaVastReadMoreBtn" data-adplayer-id="'+getAdPlayerId(player, adIndex)+'">' +
             'اطلاعات بیشتر    ' +
             '    </div>' +

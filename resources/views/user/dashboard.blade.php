@@ -100,6 +100,7 @@
                                     @include('user.partials.dashboard.productItem', [
                                         'key'=> $productKey,
                                         'name'=> $product->name,
+                                        'pid'=> $product->id,
                                         'src'=> $product->photo,
                                         'sets'=> $product->sets->sortBy('pivot.order'),
                                         'category'=> $product->category,
@@ -119,6 +120,9 @@
                     <div class="m-portlet">
 
                         <div class="m-portlet__body">
+
+                            <div class="titleOfSet"></div>
+
                             <ul class="nav nav-pills nav-fill" role="tablist">
                                 <li class="nav-item">
                                     <a class="nav-link active show" data-toggle="tab" href="#searchResult_video">فیلم ها</a>

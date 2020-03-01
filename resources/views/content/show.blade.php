@@ -779,16 +779,15 @@
                                                 با IDM یا ADM و یا wget دانلود کنید.
                                             </p>
                                         @foreach($content->file->get('video') as $file)
-
                                                 <div class="m-alert m-alert--icon m-alert--outline alert alert-success" role="alert">
                                                     <div class="m-alert__text text-left">
                                                         <strong>
                                                             <a
-                                                                @if(Auth::check())
+                                                                @if(true)
                                                                 href="{{ ($user_can_see_content) ? $file->link . '?download=1' : '#' }}"
                                                                 class="m-link"
                                                                 @else
-                                                                data-href="/"
+                                                                data-href="{{ Request::url() }}"
                                                                 class="m-link LoginBeforeClick"
                                                                 @endif>
                                                                 دانلود فایل {{$file->caption}}
@@ -796,10 +795,10 @@
                                                         </strong>
                                                     </div>
                                                     <a
-                                                        @if(Auth::check())
+                                                        @if(true)
                                                         href="{{ ($user_can_see_content) ? $file->link . '?download=1' : '#' }}"
                                                         @else
-                                                        data-href="/"
+                                                        data-href="{{ Request::url() }}"
                                                         class="LoginBeforeClick"
                                                         @endif>
 

@@ -58,7 +58,7 @@
                             <ClickTracking>
                                 <![CDATA[http://myTrackingURL/clickTracking]]>
                             </ClickTracking>
-                            <ClickThrough id="blog">
+                            <ClickThrough id="" name="" creative="" position="">
                                 <![CDATA[]]>
                             </ClickThrough>
                         </VideoClicks>

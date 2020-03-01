@@ -235,19 +235,23 @@ var AjaxLogin = function () {
                 }
             },
             error: function (data) {
-
-                var errors = data.responseJSON.errors; // An array with all errors.
-                if(typeof errors.nationalCode !== 'undefined'){
-                    changeInputFeedback($passwordObject, errors.nationalCode[0]);
-                }
-                if(typeof errors.mobile !== 'undefined'){
-                    if (data.status === 422) {
-                        changeInputFeedback($usernameObject, errors.mobile[0]);
-                    } else {
-                        showMessage('danger', errors.mobile[0]);
+                try {
+                    var errors = data.responseJSON.errors; // An array with all errors.
+                    if(typeof errors.nationalCode !== 'undefined'){
+                        changeInputFeedback($passwordObject, errors.nationalCode[0]);
                     }
+                    if(typeof errors.mobile !== 'undefined'){
+                        if (data.status === 422) {
+                            changeInputFeedback($usernameObject, errors.mobile[0]);
+                        } else {
+                            showMessage('danger', errors.mobile[0]);
+                        }
+                    }
+                } catch (e) {
+                    showMessage('danger', 'خطایی رخ داده است. مجددا تلاش کنید.');
+                } finally {
+                    hideLoading();
                 }
-                hideLoading();
             }
 
         });
