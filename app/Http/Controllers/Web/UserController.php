@@ -866,7 +866,7 @@ class UserController extends Controller
     public function userProductFiles(Request $request)
     {
         if ($request->user()) {
-            return redirect()->route('web.user.dashboard', [$request->user()]);
+            return redirect()->route('web.user.dashboard', array_merge($request->all() , ['user'=>$request->user()]));
         }
 
         return view('user.dashboard');
