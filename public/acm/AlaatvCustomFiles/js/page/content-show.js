@@ -62,13 +62,7 @@ var SnippetContentShow = function(){
 
             player.pic2pic();
 
-            if (vastData.length > 0) {
-                AlaaVast.init(player, vastData);
-            }
-
-            if (vastXml !== null && vastXml.trim().length > 0) {
-                AlaaVast.initXml(player, vastXml);
-            }
+            initVast(player, vastData, vastXml);
         }
 
     };
@@ -81,6 +75,33 @@ var SnippetContentShow = function(){
             container.scrollTop(scrollTo.offset().top - 400);
         }
     };
+
+    function initVast(player, vastData, vastXml) {
+        var timeElapsedSinceLastEvent = TimeElapsedSinceLastEvent.get('AlaaVAST-lastSeenTime');
+
+        if (canInitVAST(timeElapsedSinceLastEvent)) {
+            var canSetEventOccurrenceTime = false;
+
+            if (vastData.length > 0) {
+                AlaaVast.init(player, vastData);
+                canSetEventOccurrenceTime = true;
+            }
+
+            if (vastXml !== null && vastXml.trim().length > 0) {
+                AlaaVast.initXml(player, vastXml);
+                canSetEventOccurrenceTime = true;
+            }
+
+            if (canSetEventOccurrenceTime) {
+                TimeElapsedSinceLastEvent.setEventOccurrenceTime('AlaaVAST-lastSeenTime');
+            }
+        }
+    }
+
+    function canInitVAST(timeElapsedSinceLastEvent) {
+        var diffTimeInMin = timeElapsedSinceLastEvent/(1000*60);
+        return (timeElapsedSinceLastEvent !== null && diffTimeInMin > 5);
+    }
 
     return {
       init: function (related_videos) {
@@ -225,9 +246,26 @@ var RelatedItems = function() {
         }, 500);
     }
 
+    function sortItems() {
+        var evenNumber = 0,
+            oddNumber = 1;
+
+        $('.RelatedItems .SortItemsList').Sort({order:'shu'});
+        $('.RelatedItems .SortItemsList .SortItemsList-item').each(function () {
+            if ($(this).hasClass('a--block-type-product2')) {
+                $(this).attr('data-sort', evenNumber);
+                evenNumber += 2;
+            } else {
+                $(this).attr('data-sort', oddNumber);
+                oddNumber += 2;
+            }
+        });
+        $('.RelatedItems .SortItemsList').Sort({order:'asc'});
+    }
+
     function init() {
         setRelatedItemsWidth();
-        $('.RelatedItems .SortItemsList').Sort({order:'shu'});
+        sortItems();
     }
 
     return {

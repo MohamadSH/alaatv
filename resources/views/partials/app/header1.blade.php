@@ -77,8 +77,6 @@
                             <!-- BEGIN: Topbar Toggler -->
                             <a id="m_aside_header_topbar_mobile_toggle1" href="javascript:" class="m-brand__icon m--visible-tablet-and-mobile-inline-block">
                                 <i class="fa fa-user-alt" style="color: white;"></i>
-
-
                             </a>
                             <!-- BEGIN: Topbar Toggler -->
                         @else
@@ -719,7 +717,7 @@
                         @if(Auth::check())
 
                                 <li class="m-nav__item">
-                                    <a href="https://alaatv.com/user/orders" class="m-nav__link" data-toggle="m-tooltip" data-placement="top" data-original-title="کیف پول">
+                                    <a href="{{ action("Web\UserController@userOrders") }}" class="m-nav__link" data-toggle="m-tooltip" data-placement="top" data-original-title="کیف پول">
                                         <span class="m-nav__link-icon">
                                             <span class="m-nav__link-icon-wrapper"><i class="fa fa-wallet"></i></span>
                                             @if(Auth::user()->getTotalWalletBalance()>0)

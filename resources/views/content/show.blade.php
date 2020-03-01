@@ -130,8 +130,14 @@
                                 <div class="m-portlet__body a--nuevo-alaa-theme a--media-parent">
                                     <div class="a--video-wraper">
                                         <video id="video-{{ $content->id }}"
-                                               class="video-js vjs-fluid vjs-default-skin vjs-big-play-centered" controls
-                                               preload="none" height='360' width="640" poster='{{ $content->thumbnail }}'>
+                                               class="video-js vjs-fluid vjs-default-skin vjs-big-play-centered"
+                                               preload="none"
+                                               height="360"
+                                               width="640"
+                                               poster="{{ $content->thumbnail }}"
+                                               controls
+                                               webkit-playsinline="true"
+                                               playsinline="true" >
                                             @if($user_can_see_content)
                                                 @foreach($content->getVideos() as $source)
                                                     <source src="{{ $source->link }}" type='video/mp4' res="{{ $source->res }}"
@@ -369,7 +375,6 @@
                                     <div class="row">
                                         <div class="col downloadLinkColumn">
                                             <div class="m-portlet m--full-height m-portlet--success m-portlet--head-solid-bg m-portlet--bordered" style="height: 500px;">
-
                                                 @if(!$user_can_see_content)
                                                     <div class="blockedContent" data-toggle="m-tooltip" data-placement="top" data-original-title="این فایل یک محصول است و با خرید یکی از محصولات آن می توانید استفاده کنید.">
                                                         @if($productsThatHaveThisContent->isNotEmpty() && (!$user_can_see_content || ($content->isFree && false)) )
@@ -774,16 +779,28 @@
                                                 با IDM یا ADM و یا wget دانلود کنید.
                                             </p>
                                         @foreach($content->file->get('video') as $file)
-
                                                 <div class="m-alert m-alert--icon m-alert--outline alert alert-success" role="alert">
                                                     <div class="m-alert__text text-left">
                                                         <strong>
-                                                            <a href="{{ ($user_can_see_content) ? $file->link . '?download=1' : '#' }}" class="m-link">
+                                                            <a
+                                                                @if(true)
+                                                                href="{{ ($user_can_see_content) ? $file->link . '?download=1' : '#' }}"
+                                                                class="m-link"
+                                                                @else
+                                                                data-href="{{ Request::url() }}"
+                                                                class="m-link LoginBeforeClick"
+                                                                @endif>
                                                                 دانلود فایل {{$file->caption}}
                                                             </a>
                                                         </strong>
                                                     </div>
-                                                    <a href="{{ ($user_can_see_content) ? $file->link . '?download=1' : '#' }}">
+                                                    <a
+                                                        @if(true)
+                                                        href="{{ ($user_can_see_content) ? $file->link . '?download=1' : '#' }}"
+                                                        @else
+                                                        data-href="{{ Request::url() }}"
+                                                        class="LoginBeforeClick"
+                                                        @endif>
 
                                                         @if(isset($file->res))
                                                             <span class="m-badge m-badge--warning m-badge--wide m-badge--rounded">

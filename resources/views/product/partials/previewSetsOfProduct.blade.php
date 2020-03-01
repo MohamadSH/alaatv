@@ -3,7 +3,7 @@
     @else
         <div class="alert alert-danger m--padding-30 m--margin-bottom-5 selectSetOfProductTopreview" role="alert">
             <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-6 d-flex align-items-center">
                     @if(isset($products) && $products->count() > 0)
                         انتخاب محصول:
                         <div class="CustomDropDown" id="selectProduct">

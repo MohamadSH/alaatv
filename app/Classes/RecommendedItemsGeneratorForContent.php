@@ -79,22 +79,23 @@ class RecommendedItemsGeneratorForContent
 
     private function prepareRecommendedProducts(array $products): array
     {
-        $recommendedProducts = $this->content->recommended_products;
-        $recommendedProducts = $recommendedProducts->toArray();
-        $recommendedProducts = json_encode($recommendedProducts);
-        $totalProducts       = json_decode($recommendedProducts);
-        shuffle($totalProducts);
+        $productsOfThisContent = $this->content->activeProducts();
+        $productsOfThisContent = $productsOfThisContent->toArray();
+        $productsOfThisContent = json_encode($productsOfThisContent);
+        $totalProducts = json_decode($productsOfThisContent);
+//        shuffle($totalProducts);
         $totalProducts = array_slice($totalProducts, 0, self::NUMBER_OF_RECOMMENDED_PRODUCTS);
 
         $totalProductsCount = count($totalProducts);
         if ($totalProductsCount < self::NUMBER_OF_RECOMMENDED_PRODUCTS) {
-            $productsOfThisContent = $this->content->activeProducts();
-            $productsOfThisContent = $productsOfThisContent->toArray();
-            $productsOfThisContent = json_encode($productsOfThisContent);
-            $productsOfThisContent = json_decode($productsOfThisContent);
-            $productsOfThisContent =
-                array_slice($productsOfThisContent, 0, (self::NUMBER_OF_RECOMMENDED_PRODUCTS - $totalProductsCount));
-            $totalProducts         = array_merge($totalProducts, $productsOfThisContent);
+            $recommendedProducts = $this->content->recommended_products;
+            $recommendedProducts = $recommendedProducts->toArray();
+            $recommendedProducts = json_encode($recommendedProducts);
+            $recommendedProducts = json_decode($recommendedProducts);
+            $recommendedProducts =
+                array_slice($recommendedProducts, 0, (self::NUMBER_OF_RECOMMENDED_PRODUCTS - $totalProductsCount));
+            shuffle($recommendedProducts);
+            $totalProducts         = array_merge($totalProducts, $recommendedProducts);
         }
 
         if (count($totalProducts) == 0) {

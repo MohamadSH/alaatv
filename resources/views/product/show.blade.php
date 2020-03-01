@@ -136,10 +136,8 @@
                             <ul class="m-portlet__nav">
                                 <li class="m-portlet__nav-item">
                                     <p class="m-portlet__nav-link m-portlet__nav-link--icon">
-
-
                                         @if($hasUserPurchasedProduct)
-                                            <a class="btn m-btn m-btn--pill m-btn--air btn-info animated infinite pulse" role="button" href="{{ action("Web\UserController@userProductFiles") }}">
+                                            <a class="btn m-btn m-btn--pill m-btn--air btn-info animated infinite pulse" role="button" href="{{ action("Web\UserController@userProductFiles") }}?p={{$product->id}}">
                                                 <i class="fa fa-play-circle"></i>
                                                 <span class="d-none d-sm-none d-md-inline-block d-lg-inline-block">
                                                     مشاهده در صفحه فیلم ها و جزوه های من
@@ -154,8 +152,6 @@
 {{--                                                </span>--}}
 {{--                                            </button>--}}
                                         @endif
-
-
                                     </p>
                                 </li>
                             </ul>
@@ -267,12 +263,13 @@
         ]
         @endif
             ;
-        var lastSetData = {
+        var lastSetData = @if (isset($lastSet) && isset($lastSetPamphlets) && isset($lastSetVideos))
+        {
             set: {
-                id: '{{$lastSet->id}}',
-                name: '{{$lastSet->name}}',
+                id: '{{optional($lastSet)->id}}',
+                name: '{{optional($lastSet)->name}}',
                 url: {
-                    web: '{{$lastSet->show_url}}'
+                    web: '{{optional($lastSet)->show_url}}'
                 }
             },
             files: {
@@ -316,7 +313,10 @@
                     @endforeach
                 ]
             }
-        };
+        }
+        @else
+            null
+        @endif;
     </script>
 
     <script src="{{ mix('/js/product-show.js') }}"></script>

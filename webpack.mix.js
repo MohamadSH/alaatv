@@ -61,6 +61,7 @@ class Mix {
             'node_modules/firebase/firebase-messaging.js',
             'public/acm/AlaatvCustomFiles/js/GoogleFirebase.js',// 290 KB
 
+            'public/acm/AlaatvCustomFiles/components/TimeElapsedSinceLastEvent/script.js',
             'public/acm/AlaatvCustomFiles/components/Alist/type2/script.js',
             'public/acm/AlaatvCustomFiles/components/AjaxLogin/script.js',// 297 KB
             'public/acm/AlaatvCustomFiles/components/MegaMenu/script.js',
@@ -192,6 +193,7 @@ class Mix {
                 'public/acm/videojs/plugins/videojs.hotkeys.min.js',
                 'public/acm/videojs/plugins/seek-to-point.js',
                 'public/acm/videojs/lang/fa.js',
+                'public/acm/video-js/fix.js',
                 'public/acm/AlaatvCustomFiles/js/page/pages/faq.js'
             ],
             'public/js/faq.js'
@@ -241,6 +243,7 @@ class Mix {
                 'public/acm/videojs/plugins/videojs.hotkeys.min.js',
                 'public/acm/videojs/plugins/seek-to-point.js',
                 'public/acm/videojs/lang/fa.js',
+                'public/acm/video-js/fix.js',
                 'public/acm/AlaatvCustomFiles/js/page/pages/live.js',
             ],
             'public/js/page-live.js');
@@ -452,6 +455,7 @@ class Mix {
                 'public/acm/AlaatvCustomFiles/components/SortElements/script.js',
                 'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/js.js',
                 'public/acm/AlaatvCustomFiles/components/FormGenerator/script.js',
+                'public/acm/AlaatvCustomFiles/components/UrlParameter/UrlParameter.js',
                 'public/acm/AlaatvCustomFiles/js/page/user/dashboard.js',
             ],
             'public/js/user-dashboard.js'
@@ -529,6 +533,7 @@ class Mix {
                 'public/acm/videojs/plugins/seek-to-point.js',
                 'public/acm/videojs/lang/fa.js',
                 'public/acm/videojs/nuevo.min.js',
+                'public/acm/video-js/fix.js',
 
                 'public/acm/AlaatvCustomFiles/js/UserCart.js',
                 'public/acm/AlaatvCustomFiles/components/AlaaVAST/script.js',
@@ -695,6 +700,7 @@ class Mix {
                 'public/acm/videojs/plugins/videojs.hotkeys.min.js',
                 'public/acm/videojs/plugins/seek-to-point.js',
                 'public/acm/videojs/lang/fa.js',
+                'public/acm/video-js/fix.js',
                 'public/acm/AlaatvCustomFiles/js/product-content-embed.js',
             ],
             'public/js/product-content-embed.js'
@@ -742,6 +748,7 @@ class Mix {
                 'public/acm/videojs/plugins/videojs.hotkeys.min.js',
                 'public/acm/videojs/plugins/seek-to-point.js',
                 'public/acm/videojs/lang/fa.js',
+                'public/acm/video-js/fix.js',
 
                 'public/acm/AlaatvCustomFiles/components/AlaaLoading/script.js',
                 'public/acm/AlaatvCustomFiles/components/CustomDropDown/js.js',
