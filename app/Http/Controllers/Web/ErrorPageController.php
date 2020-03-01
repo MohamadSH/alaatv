@@ -7,8 +7,8 @@ use App\Http\Controllers\Controller;
 use App\Traits\MetaCommon;
 use App\Websitesetting;
 use Illuminate\Contracts\View\Factory;
+use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Request;
 use Illuminate\View\View;
 
 class ErrorPageController extends Controller
