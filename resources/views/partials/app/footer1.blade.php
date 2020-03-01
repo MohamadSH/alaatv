@@ -10,9 +10,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">آلاء</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <p class="text-justify">
@@ -30,7 +28,7 @@
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">آلاء</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
+
                 </button>
             </div>
             <div class="modal-body">
@@ -65,13 +63,9 @@
             <li class="m-nav__item" data-toggle="m-tooltip" title="نشان ملی ثبت رسانه های دیجیتال" data-placement="top">
                 <img class="lazy-image" id='jxlzwlaofukznbqejzpesizp' style='cursor:pointer' onclick='window.open("https://logo.samandehi.ir/Verify.aspx?id=146279&p=rfthaodsgvkauiwkjyoepfvl", "Popup","toolbar=no, scrollbars=no, location=no, statusbar=no, menubar=no, resizable=0, width=450, height=630, top=30")' alt='logo-samandehi' src="https://cdn.alaatv.com/loder.jpg?w=1&h=1" data-src='https://cdn.alaatv.com/upload/samandehi.png' width="44" height="46"/>
             </li>
-
-
         </ul>
         <div class="m-stack__item m-stack__item--right m-stack__item--middle m-stack__item--first d-block">
             <ul class="m-footer__nav m-nav m-nav--inline m--pull-right m--margin-top-10 a--full-width text-center">
-
-
                 <li class="m-nav__item">
                     <a href="{{route('web.faq')}}" class="m-nav__link" data-toggle="m-tooltip" title="سؤالات متداول" data-placement="top">
                         <i class="m-menu__link-icon fa fa-question-circle"></i>

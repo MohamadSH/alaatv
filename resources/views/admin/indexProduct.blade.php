@@ -36,7 +36,7 @@
                             <div class="modal-header">
                                 <h5 class="modal-title" id="copyProductModalModalLabel"></h5>
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
+
                                 </button>
                             </div>
                             <div class="modal-body">
@@ -62,7 +62,7 @@
                             <div class="modal-header">
                                 <h5 class="modal-title" id="removeProductModalLabel"></h5>
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
+
                                 </button>
                             </div>
                             <div class="modal-body">
@@ -89,7 +89,7 @@
                             <div class="modal-header">
                                 <h5 class="modal-title" id="responsive-productModalLabel">افزودن محصول جدید</h5>
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
+
                                 </button>
                             </div>
                             {!! Form::open(['files'=>true,'method' => 'POST','action' => ['Web\ProductController@store'], 'class'=>'nobottommargin' , 'id'=>'productForm']) !!}
@@ -114,7 +114,7 @@
                             <div class="modal-header">
                                 <h5 class="modal-title" id="showProductPhotoInModalLabel"></h5>
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
+
                                 </button>
                             </div>
                             <div class="modal-body">
@@ -286,7 +286,7 @@
                                                 <div class="modal-header">
                                                     <h5 class="modal-title" id="copyProductModalModalLabel">افزودن کپن جدید</h5>
                                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                        <span aria-hidden="true">&times;</span>
+
                                                     </button>
                                                 </div>
                                                 {!! Form::open(['method' => 'POST','action' => ['Web\CouponController@store'], 'class'=>'nobottommargin' , 'id'=>'couponForm']) !!}
@@ -396,7 +396,7 @@
                                                 <div class="modal-header">
                                                     <h5 class="modal-title" id="responsive-attributeModalLabel">افزودن صفت جدید</h5>
                                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                        <span aria-hidden="true">&times;</span>
+
                                                     </button>
                                                 </div>
                                                 {!! Form::open(['method' => 'POST','action' => ['Web\AttributeController@store'], 'class'=>'nobottommargin' , 'id'=>'attributeForm']) !!}
@@ -498,7 +498,7 @@
                                                 <div class="modal-header">
                                                     <h5 class="modal-title" id="responsive-attributesetModalLabel">افزودن دسته صفت جدید</h5>
                                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                        <span aria-hidden="true">&times;</span>
+
                                                     </button>
                                                 </div>
                                                 {!! Form::open(['method' => 'POST','action' => ['Web\AttributesetController@store'], 'class'=>'nobottommargin' , 'id'=>'attributesetForm']) !!}

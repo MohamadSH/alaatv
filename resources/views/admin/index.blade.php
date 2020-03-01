@@ -142,7 +142,7 @@
                                                 <div class="modal-header">
                                                     <h5 class="modal-title" id="responsive-userLabel">افزودن کاربر جدید</h5>
                                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                        <span aria-hidden="true">&times;</span>
+
                                                     </button>
                                                 </div>
                                                 {!! Form::open(['files'=>true,'method' => 'POST','action' => ['Web\UserController@store'], 'class'=>'nobottommargin' , 'id'=>'userForm']) !!}
@@ -177,7 +177,7 @@
                                             <span id="smsUserFullName"></span>
                                         </h5>
                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
+
                                         </button>
                                     </div>
                                     <div class="modal-body">
@@ -226,7 +226,7 @@
                                             <span id="deleteUserFullName"></span>
                                         </h5>
                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
+
                                         </button>
                                     </div>
                                     <div class="modal-body">
@@ -251,7 +251,7 @@
                                             <span id="bonUserFullName"></span>
                                         </h5>
                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
+
                                         </button>
                                     </div>
                                     <div class="modal-body">
@@ -380,7 +380,7 @@
                                                         <div class="modal-header">
                                                             <h5 class="modal-title" id="responsive-permissionLabel">افزودن دسترسی جدید</h5>
                                                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                                <span aria-hidden="true">&times;</span>
+
                                                             </button>
                                                         </div>
                                                         {!! Form::open(['method' => 'POST','action' => ['Web\PermissionController@store'], 'class'=>'nobottommargin' , 'id'=>'permissionForm']) !!}
@@ -487,7 +487,7 @@
                                             <div class="modal-header">
                                                 <h5 class="modal-title" id="responsive-roleLabel">افزودن نقش جدید</h5>
                                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                    <span aria-hidden="true">&times;</span>
+
                                                 </button>
                                             </div>
                                             {!! Form::open(['method' => 'POST','action' => 'Web\RoleController@store', 'class'=>'nobottommargin' , 'id'=>'roleForm']) !!}

@@ -267,7 +267,8 @@
         ]
         @endif
             ;
-        var lastSetData = {
+        var lastSetData = @if (isset($lastSet) && isset($lastSetPamphlets) && isset($lastSetVideos))
+        {
             set: {
                 id: '{{$lastSet->id}}',
                 name: '{{$lastSet->name}}',
@@ -316,7 +317,10 @@
                     @endforeach
                 ]
             }
-        };
+        }
+        @else
+            null
+        @endif;
     </script>
 
     <script src="{{ mix('/js/product-show.js') }}"></script>

@@ -30,20 +30,24 @@
 
             .tools {
                 margin-bottom: 10px;
+
+                .GroupFilters-Search {
+
+                }
             }
 
-            .GroupFilters-Search {
+            .GroupFilters-list {
+                padding-bottom: 30px;
 
-            }
+                .GroupFilters-item {
+                    position: relative;
+                    z-index: 1;
+                    transition: background-color 0.5s;
 
-            .GroupFilters-item {
-                position: relative;
-                z-index: 1;
-                transition: background-color 0.5s;
-            }
-
-            .GroupFilters-item:hover {
-                background-color: #f2f3f8;
+                    &:hover {
+                        background-color: #f2f3f8;
+                    }
+                }
             }
 
         }
