@@ -1,6 +1,6 @@
 @if(isset($src) && isset($name) && isset($sets) && isset($key))
 
-    <div class="productItem" data-pc="{{$category}}" data-product-key="{{$key}}" data-sort1="{{$sort1}}" data-sort2="{{$sort2}}">
+    <div class="productItem" data-pc="{{$category}}" data-product-key="{{$key}}" data-sort1="{{$sort1}}" data-sort2="{{$sort2}}" @if(isset($pid)) data-pid="{{$pid}}" @endif >
         <div class="row no-gutters">
             <div class="col-md-2 productItem-imageCol">
                 <div class="productItem-image">
@@ -18,12 +18,13 @@
                     <div class="action">
 
                         @if(count($sets) === 1)
-
                             @if($sets->first()->getActiveContents2(config('constants.CONTENT_TYPE_VIDEO'))->isNotEmpty())
                                 <button type="button"
                                         class="btn btn-warning btn-lg btnViewContentSet btnViewVideo"
                                         data-content-type="video"
                                         data-product-key="{{$key}}"
+                                        data-set-id="{{$sets->first()->id}}"
+                                        data-set-name="{{$sets->first()->small_name}}"
                                         data-content-url="{{ $sets->first()->contentUrl.'&orderBy=order' }}">
                                     فیلم ها
                                 </button>
@@ -33,6 +34,8 @@
                                         class="btn btn-secondary btn-lg btnViewContentSet btnViewPamphlet"
                                         data-content-type="pamphlet"
                                         data-product-key="{{$key}}"
+                                        data-set-id="{{$sets->first()->id}}"
+                                        data-set-name="{{$sets->first()->small_name}}"
                                         data-content-url="{{ $sets->first()->contentUrl.'&orderBy=order' }}">
                                     جزوات
                                 </button>
@@ -43,6 +46,9 @@
                                     @foreach($sets as $setKey=>$set)
                                         <option value="{{ $set->contentUrl.'&orderBy=order' }}"
                                                 data-product-key="{{$key}}"
+                                                @if(isset($pid)) data-product-id="{{$pid}}" @endif
+                                                data-set-id="{{$set->id}}"
+                                                data-set-name="{{$set->small_name}}"
                                                 @if($set->getActiveContents2(config('constants.CONTENT_TYPE_VIDEO'))->isNotEmpty())
                                                     data-has-video="1"
                                                 @else

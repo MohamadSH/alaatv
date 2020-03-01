@@ -319,10 +319,12 @@
                                     </h3>
 
                                     @if($hasUserPurchasedProduct)
-                                        <button class="btn m-btn m-btn--pill m-btn--air btn-info animated infinite pulse YouHavePurchasedThisProductMessage">
-                                            <i class="fa fa-play-circle"></i>
-                                            مشاهده در صفحه فیلم ها و جزوه های من
-                                        </button>
+                                        <a href="{{ action("Web\UserController@userProductFiles") }}?p={{$product->id}}">
+                                            <button class="btn m-btn m-btn--pill m-btn--air btn-info animated infinite pulse YouHavePurchasedThisProductMessage">
+                                                <i class="fa fa-play-circle"></i>
+                                                مشاهده در صفحه فیلم ها و جزوه های من
+                                            </button>
+                                        </a>
                                     @endif
                                     <button class="btn m-btn--air btn-success m-btn--icon m--margin-bottom-5 btnAddToCart gta-track-add-to-card">
                                         <span>

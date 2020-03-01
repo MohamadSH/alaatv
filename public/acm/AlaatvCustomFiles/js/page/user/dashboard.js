@@ -349,15 +349,60 @@ var LoadContentSet = function () {
         }
     }
 
+    function showTitleOfSet(pid, sid) {
+        var titleOfProduct = $('.produtItems .productItem[data-pid="'+pid+'"] .productItem-descriptionCol .productItem-description .title').html(),
+            setName = '';
+        if (typeof sid !== 'undefined' && sid !== null) {
+            setName = $('[data-set-id="'+sid+'"]').attr('data-set-name');
+        } else if ($('.produtItems .productItem[data-pid="'+pid+'"] .productItem-descriptionCol .productItem-description .action .CustomDropDown').length === 1) {
+            setName = $('.produtItems .productItem[data-pid="'+pid+'"] .productItem-descriptionCol .productItem-description .action .CustomDropDown select option').attr('data-set-name').trim();
+        }
+        if (setName !== '') {
+            setName = ' - ' + '<small>'+setName+'</small>';
+        }
+        $('.contentsetOfProductCol .titleOfSet').html(titleOfProduct + setName);
+    }
+
+    function showContentsOfSet(type, url, pid, sid) {
+        showTitleOfSet(pid, sid);
+        changeToModalAndList();
+        showTabPage(type);
+        loadNewData(url);
+    }
+
+    function getUrl(pid) {
+        if ($('.productItem[data-pid="'+pid+'"]').find('.btnViewContentSet').length > 0) {
+            return $('.productItem[data-pid="'+pid+'"]').find('.btnViewContentSet').data('content-url');
+        } else {
+            return $('.productItem[data-pid="'+pid+'"]').find('.CustomDropDown select option').first().val()
+        }
+    }
+
+    function getType(pid) {
+        if ($('.productItem[data-pid="'+pid+'"]').find('.btnViewContentSet').length > 0) {
+            return $('.productItem[data-pid="'+pid+'"]').find('.btnViewContentSet').data('content-type');
+        } else {
+            if ($('.productItem[data-pid="'+pid+'"]').find('.CustomDropDown select option').first().data('has-video').toString() === '1') {
+                return 'video';
+            } else {
+                return 'pamphlet';
+            }
+        }
+    }
+
+    function loadContentsBasedOnProductId(pid, sid) {
+        var url = getUrl(pid),
+            type = getType(pid);
+        showContentsOfSet(type, url, pid, sid)
+    }
+
     function addEvents() {
         $(document).on('click', '.btnViewVideo, .btnViewPamphlet', function () {
             let contentType = $(this).data('content-type'),
-                contentUrl = $(this).data('content-url');
-
-            changeToModalAndList();
-            showTabPage(contentType);
-
-            loadNewData(contentUrl);
+                contentUrl = $(this).data('content-url'),
+                pid =  ($(this).parents('.productItem').length > 0) ? $(this).parents('.productItem').data('pid') : $(this).data('product-id'),
+                sid =  $(this).data('set-id');
+            showContentsOfSet(contentType, contentUrl, pid, sid);
         });
         $(document).on('click', '.btnLoadMore', function () {
             let contentType = $(this).data('content-type');
@@ -368,20 +413,6 @@ var LoadContentSet = function () {
         $( window ).on( "orientationchange", function( event ) {
             changeToModalAndList();
         });
-    }
-
-    function chooseFirstProduct() {
-        if ($('.productsCol .productItem:first-child .action button.btn').length>0) {
-            let contentType = $('.productsCol .productItem:first-child .action button.btn').first().data('content-type'),
-                contentUrl = $('.productsCol .productItem:first-child .action button.btn').first().data('content-url');
-            showTabPage(contentType);
-            loadNewData(contentUrl);
-        } else if ($('.productsCol .CustomParentOptions:nth-child(2) .btnViewContentSet').length>0) {
-            let contentType = $('.productsCol .CustomParentOptions:nth-child(2) .btnViewContentSet').first().data('content-type'),
-                contentUrl = $('.productsCol .CustomParentOptions:nth-child(2) .btnViewContentSet').first().data('content-url');
-            showTabPage(contentType);
-            loadNewData(contentUrl);
-        }
     }
 
     function showSelectedProduct(url) {
@@ -422,9 +453,16 @@ var LoadContentSet = function () {
                 $('#smallScreenModal .modal-body').html($('.contentsetOfProductCol').html());
                 $('.contentsetOfProductCol').html('');
             } else {
-                chooseFirstProduct();
+                var pid = $('.productsCol .productItem:first-child').attr('data-pid'),
+                    sid = null;
+                if (UrlParameter.getParam('p') !== null) {
+                    pid = UrlParameter.getParam('p');
+                    sid = UrlParameter.getParam('s');
+
+                }
+                loadContentsBasedOnProductId(pid, sid);
             }
-        },
+        }
     };
 }();
 
@@ -603,13 +641,17 @@ var InitPage = function() {
 
                 var label = optionObject.innerHTML,
                     value = optionObject.getAttribute('value'),
+                    setId = optionObject.getAttribute('data-set-id'),
+                    productId = optionObject.getAttribute('data-product-id'),
                     productKey = optionObject.getAttribute('data-product-key'),
                     hasVideo = optionObject.getAttribute('data-has-video'),
                     hasPamphlet = optionObject.getAttribute('data-has-pamphlet'),
                     btnVideo =
                         '    <button type="button"\n' +
                         '            class="btn btn-warning btnViewContentSet btnViewVideo"\n' +
+                        '            data-set-id="' + setId + '"\n' +
                         '            data-product-key="' + productKey + '"\n' +
+                        '            data-product-id="' + productId + '"\n' +
                         '            data-content-type="video"\n' +
                         '            data-content-url="' + value + '">\n' +
                         '        فیلم ها\n' +
@@ -617,6 +659,8 @@ var InitPage = function() {
                     btnPamphlet =
                         '    <button type="button"\n' +
                         '            class="btn btn-secondary btnViewContentSet btnViewPamphlet"\n' +
+                        '            data-set-id="' + setId + '"\n' +
+                        '            data-product-id="' + productId + '"\n' +
                         '            data-product-key="' + productKey + '"\n' +
                         '            data-content-type="pamphlet"\n' +
                         '            data-content-url="' + value + '">\n' +
