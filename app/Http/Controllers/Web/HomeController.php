@@ -71,7 +71,7 @@ class HomeController extends Controller
 
     public function debug(Request $request, User $user = null)
     {
-        //
+        abort(Response::HTTP_SERVICE_UNAVAILABLE);
     }
 
     public function search(Request $request)
