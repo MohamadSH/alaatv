@@ -164,7 +164,7 @@ class ProductController extends Controller
         $children = collect();
         $allChildrenSets = collect();
         $defaultProductSet = $product;
-        if($product->isGrandProduct()){
+        if(!$product->isSimple()){
             $allChildrenSets    = $this->makeAllChildrenSetCollection($product);
             $children           = $product->active_children;
             $defaultProductSet  = $children->first();
