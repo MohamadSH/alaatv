@@ -253,7 +253,7 @@ trait ProductCommon
      */
     protected function makeIntroVideoFileStdClass(string $videoDisk, string $videoUrl, string $videoPath, string $videoExtension = null, $size = null, string $caption = null, string $res = null): array
     {
-        $hqVideo = [
+        return [
             'uuid'     => Str::uuid()->toString(),
             'disk'     => $videoDisk,
             'url'      => $videoUrl,
@@ -264,7 +264,6 @@ trait ProductCommon
             'type'     => 'video',
             'ext'      => $videoExtension,
         ];
-        return $hqVideo;
     }
 
     /**
@@ -280,7 +279,7 @@ trait ProductCommon
      */
     protected function makeVideoFileThumbnailStdClass(string $thumbnailDisk, string $thumbnailUrl, string $thumbnailPath, string $thumbnailExtension = null, $size = null, $caption = null, string $res = null): array
     {
-        $thumbnail = [
+        return [
             'uuid'     => Str::uuid()->toString(),
             'disk'     => $thumbnailDisk,
             'url'      => $thumbnailUrl,
@@ -291,7 +290,6 @@ trait ProductCommon
             'type'     => 'thumbnail',
             'ext'      => $thumbnailExtension,
         ];
-        return $thumbnail;
     }
 
     /**
@@ -301,10 +299,30 @@ trait ProductCommon
      */
     protected function mekeIntroVideosArray(array $hqVideo): array
     {
-        $video = [
+        return [
             $hqVideo,
         ];
-        return $video;
     }
 
+    /**
+     * @param Product $product
+     *
+     * @return Collection
+     */
+    private function makeAllChildrenSetCollection(Product $product): Collection
+    {
+        $allChildrenSets = collect();
+        foreach ($product->getAllChildren(true, true) as $child) {
+            $productSets = collect();
+            foreach ($child->sets as $set) {
+                $productSets->push([
+                    'name' => $set->name,
+                    'id'   => $set->id,
+                ]);
+            }
+            $allChildrenSets->push(['id' => $child->id, 'name' => $child->name, 'sets' => $child->sets]);
+        }
+
+        return $allChildrenSets ;
+    }
 }
