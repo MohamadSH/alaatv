@@ -181,6 +181,7 @@ use Purify;
  * @property mixed         descriptionWithPeriod
  * @property mixed         faqs
  * @property mixed         priceText
+ * @property mixed         active_children
  * @method static Builder|Product whereBlockId($value)
  * @method static Builder|Product whereIntroVideos($value)
  */
@@ -398,6 +399,11 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
         ]);
     }
 
+    public function isGrandProduct()
+    {
+        return $this->producttype_id != config('constants.PRODUCT_TYPE_SIMPLE') ;
+    }
+
     /**
      * Create a new Eloquent Collection instance.
      *
@@ -451,7 +457,7 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
      */
     public function scopeEnable($query)
     {
-        return $query->where('enable', '=', 1);
+        return $query->where('enable', 1);
     }
 
     /**
@@ -483,12 +489,6 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
         return $query->whereNull('grand_id');
     }
 
-    /*
-    |--------------------------------------------------------------------------
-    | Accessor
-    |--------------------------------------------------------------------------
-    */
-
     public function scopeIsChild($query)
     {
         return $query->whereNotNull('grand_id');
@@ -516,6 +516,23 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
                     ->orWhereNull('validUntil');
             });
     }
+
+    /**
+     * Scope a query to only include product without redirect url.
+     *
+     * @param Builder $query
+     *
+     * @return Builder
+     */
+    public function scopeMain($query)
+    {
+        return $query->whereNull('redirectUrl');
+    }
+    /*
+    |--------------------------------------------------------------------------
+    | Accessor
+    |--------------------------------------------------------------------------
+    */
 
     /**
      * Makes product's title
@@ -1022,18 +1039,6 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
         return $files;
     }
 
-    /**
-     * Scope a query to only include product without redirect url.
-     *
-     * @param Builder $query
-     *
-     * @return Builder
-     */
-    public function scopeMain($query)
-    {
-        return $query->whereNull('redirectUrl');
-    }
-
     /**Determines whether this product is available for purchase or not
      *
      * @return bool
@@ -1167,12 +1172,6 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
     {
         return $this->belongsToMany(Product::class, 'complimentaryproduct_product', 'product_id', 'complimentary_id');
     }
-
-    /*
-    |--------------------------------------------------------------------------
-    | Static methods
-    |--------------------------------------------------------------------------
-    */
 
     /**
      * Checks whether the product is in stock or not .
@@ -1401,7 +1400,6 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
         // TODO: Implement getAddItems() method.
         throw new Exception('product Advertisable should be impediment');
     }
-
 
     /**
      * @return Collection
@@ -1820,6 +1818,11 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
                     ->get();
                 return $sets;
             });
+    }
+
+    public function getActiveChildrenAttribute()
+    {
+        return $this->children->filterEnable();
     }
 
     /**

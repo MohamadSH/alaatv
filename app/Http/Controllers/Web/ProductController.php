@@ -164,20 +164,10 @@ class ProductController extends Controller
         $children = collect();
         $allChildrenSets = collect();
         $defaultProductSet = $product;
-        if($product->producttype_id != config('constants.PRODUCT_TYPE_SIMPLE')){
-            $defaultProductSet = $product->children->first();
-            foreach ($product->getAllChildren(true,true) as $child) {
-                $productSets = collect();
-                foreach ($child->sets as $set) {
-                    $productSets->push([
-                        'name'  =>  $set->name,
-                        'id'    =>  $set->id,
-                    ]);
-                }
-                $allChildrenSets->push(['id' => $child->id , 'name' => $child->name , 'sets'=>$child->sets]);
-            }
-
-            $children    = $product->children()->enable()->get();
+        if($product->isGrandProduct()){
+            $allChildrenSets    = $this->makeAllChildrenSetCollection($product);
+            $children           = $product->active_children;
+            $defaultProductSet  = $children->first();
         }
 
         $lastSet = null;
@@ -196,21 +186,11 @@ class ProductController extends Controller
         $shouldBuyProductId           = null;
         $shouldBuyProductName         = '';
         $hasPurchasedEssentialProduct = false;
-
-//        if ($product->id == Product::GODARE_RIYAZI_TAJROBI_SABETI) {
-//            $isForcedGift         = true;
-//            $shouldBuyProductName = 'راه ابریشم';
-//            $shouldBuyProductId   = Product::RAHE_ABRISHAM;
-//            if (isset($user)) {
-//                $hasPurchasedEssentialProduct = $this->hasPurchasedEssentialProduct($user, $shouldBuyProductId);
-//            }
-//        }
-
         $liveDescriptions = collect();
         if ($product->id == Product::RAHE_ABRISHAM) {
-            $liveDescriptions = $product->livedescriptions->sortByDesc('created_at');
-            $periodDescription            = $product->descriptionWithPeriod;
-            $faqs                         = $product->faqs;
+            $liveDescriptions     = $product->livedescriptions->sortByDesc('created_at');
+            $periodDescription    = $product->descriptionWithPeriod;
+            $faqs                 = $product->faqs;
             return view('product.customShow.raheAbrisham', compact('product', 'block', 'liveDescriptions', 'isFavored', 'lastSet', 'lastSetPamphlets', 'lastSetVideos', 'periodDescription', 'sets', 'faqs', 'hasUserPurchasedProduct', 'block', 'isForcedGift', 'hasPurchasedEssentialProduct', 'shouldBuyProductId', 'shouldBuyProductName', 'allChildrenSets'));
         }
 
