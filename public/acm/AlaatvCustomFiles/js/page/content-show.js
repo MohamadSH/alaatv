@@ -62,13 +62,7 @@ var SnippetContentShow = function(){
 
             player.pic2pic();
 
-            if (vastData.length > 0) {
-                AlaaVast.init(player, vastData);
-            }
-
-            if (vastXml !== null && vastXml.trim().length > 0) {
-                AlaaVast.initXml(player, vastXml);
-            }
+            initVast(player, vastData, vastXml);
         }
 
     };
@@ -81,6 +75,33 @@ var SnippetContentShow = function(){
             container.scrollTop(scrollTo.offset().top - 400);
         }
     };
+
+    function initVast(player, vastData, vastXml) {
+        var timeElapsedSinceLastEvent = TimeElapsedSinceLastEvent.get('AlaaVAST-lastSeenTime');
+
+        if (canInitVAST(timeElapsedSinceLastEvent)) {
+            var canSetEventOccurrenceTime = false;
+
+            if (vastData.length > 0) {
+                AlaaVast.init(player, vastData);
+                canSetEventOccurrenceTime = true;
+            }
+
+            if (vastXml !== null && vastXml.trim().length > 0) {
+                AlaaVast.initXml(player, vastXml);
+                canSetEventOccurrenceTime = true;
+            }
+
+            if (canSetEventOccurrenceTime) {
+                TimeElapsedSinceLastEvent.setEventOccurrenceTime('AlaaVAST-lastSeenTime');
+            }
+        }
+    }
+
+    function canInitVAST(timeElapsedSinceLastEvent) {
+        var diffTimeInMin = timeElapsedSinceLastEvent/(1000*60);
+        return (timeElapsedSinceLastEvent !== null && diffTimeInMin > 5);
+    }
 
     return {
       init: function (related_videos) {
