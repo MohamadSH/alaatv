@@ -86,4 +86,16 @@ class ProductCollection extends Collection
             $item->sorting                = $sorting;
         }
     }
+
+//    public function filterActive()
+//    {
+//        return $this->filterEnable()->filterValid();
+//    }
+
+    public function filterEnable()
+    {
+        return $this->where('enable' , 1);
+
+    }
+
 }
