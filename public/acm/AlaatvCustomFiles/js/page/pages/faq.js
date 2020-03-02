@@ -62,6 +62,8 @@ var InitPage = function () {
                 pauseAllPlayers(data.target.id)
             });
 
+            VideoJsHealthCheck.handle(player);
+
             players.push(player);
         }
     }

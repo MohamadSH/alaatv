@@ -83,7 +83,8 @@ class Mix {
         //     .scripts(Mix.getBaseJs().concat(jsArray), jsName).version();
 
         this.mix
-            .scripts(jsArray, jsName)
+            // .scripts(jsArray, jsName)
+            .babel(jsArray, jsName.replace('.js', '.es5.js'))
             .styles(cssArray, cssName);
 
         if (this.mix.inProduction()) {
@@ -186,7 +187,7 @@ class Mix {
             ],
             'public/css/faq.css',
             [
-                'public/acm/videojs/video.min.js',
+                'node_modules/video.js/dist/video.js',
                 'public/acm/videojs/plugins/pip/videojs.pip.min.js',
                 'public/acm/videojs/nuevo.min.js',
                 'public/acm/videojs/plugins/videojs.p2p.min.js',
@@ -194,6 +195,7 @@ class Mix {
                 'public/acm/videojs/plugins/seek-to-point.js',
                 'public/acm/videojs/lang/fa.js',
                 'public/acm/video-js/fix.js',
+                'public/acm/AlaatvCustomFiles/js/VideoJsHealthCheck.js',
                 'public/acm/AlaatvCustomFiles/js/page/pages/faq.js'
             ],
             'public/js/faq.js'
@@ -235,8 +237,7 @@ class Mix {
                 'node_modules/tooltip/dist/Tooltip.js',
 
 
-
-                'public/acm/videojs/video.min.js',
+                'node_modules/video.js/dist/video.js',
                 'public/acm/videojs/plugins/pip/videojs.pip.min.js',
                 'public/acm/videojs/nuevo.min.js',
                 'public/acm/videojs/plugins/videojs.p2p.min.js',
@@ -244,6 +245,8 @@ class Mix {
                 'public/acm/videojs/plugins/seek-to-point.js',
                 'public/acm/videojs/lang/fa.js',
                 'public/acm/video-js/fix.js',
+
+                'public/acm/AlaatvCustomFiles/js/VideoJsHealthCheck.js',
                 'public/acm/AlaatvCustomFiles/js/page/pages/live.js',
             ],
             'public/js/page-live.js');
@@ -526,7 +529,7 @@ class Mix {
             [
                 'node_modules/tooltip/dist/Tooltip.js',
 
-                'public/acm/videojs/video.min.js',
+                'node_modules/video.js/dist/video.js',
                 'public/acm/videojs/plugins/pip/videojs.pip.min.js',
                 'public/acm/videojs/plugins/videojs.p2p.min.js',
                 'public/acm/videojs/plugins/videojs.hotkeys.min.js',
@@ -534,6 +537,8 @@ class Mix {
                 'public/acm/videojs/lang/fa.js',
                 'public/acm/videojs/nuevo.min.js',
                 'public/acm/video-js/fix.js',
+
+                'public/acm/AlaatvCustomFiles/js/VideoJsHealthCheck.js',
 
                 'public/acm/AlaatvCustomFiles/js/UserCart.js',
                 'public/acm/AlaatvCustomFiles/components/AlaaVAST/script.js',
@@ -693,7 +698,7 @@ class Mix {
             ],
             'public/css/product-content-embed.css',
             [
-                'public/acm/videojs/video.min.js',
+                'node_modules/video.js/dist/video.js',
                 'public/acm/videojs/plugins/pip/videojs.pip.min.js',
                 'public/acm/videojs/nuevo.min.js',
                 'public/acm/videojs/plugins/videojs.p2p.min.js',
@@ -701,6 +706,7 @@ class Mix {
                 'public/acm/videojs/plugins/seek-to-point.js',
                 'public/acm/videojs/lang/fa.js',
                 'public/acm/video-js/fix.js',
+                'public/acm/AlaatvCustomFiles/js/VideoJsHealthCheck.js',
                 'public/acm/AlaatvCustomFiles/js/product-content-embed.js',
             ],
             'public/js/product-content-embed.js'
@@ -741,7 +747,7 @@ class Mix {
 
                 'public/assets/demo/demo12/custom/components/base/bootstrap-notify.js',
 
-                'public/acm/videojs/video.min.js',
+                'node_modules/video.js/dist/video.js',
                 'public/acm/videojs/plugins/pip/videojs.pip.min.js',
                 'public/acm/videojs/nuevo.min.js',
                 'public/acm/videojs/plugins/videojs.p2p.min.js',
@@ -749,6 +755,7 @@ class Mix {
                 'public/acm/videojs/plugins/seek-to-point.js',
                 'public/acm/videojs/lang/fa.js',
                 'public/acm/video-js/fix.js',
+                'public/acm/AlaatvCustomFiles/js/VideoJsHealthCheck.js',
 
                 'public/acm/AlaatvCustomFiles/components/AlaaLoading/script.js',
                 'public/acm/AlaatvCustomFiles/components/CustomDropDown/js.js',
