@@ -42,7 +42,6 @@
     @include('partials.ads.list', ['id'=>'setShow-TopOfList-mobileShow'])
 
     <div class="row">
-
         <div class="col-lg-2 a--desktop-show rightSideAdBanner">
             @include('partials.ads.list', ['id'=>'setShow-TopOfList-desktopShow'])
         </div>
@@ -146,6 +145,7 @@
         </div>
         <div class="col-lg-2 a--desktop-show"></div>
     </div>
+
 @endsection
 
 @section('page-js')
@@ -183,4 +183,5 @@
             ];
     </script>
     <script src="{{ mix('/js/set-show.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('/acm/AlaatvCustomFiles/js/page/set-show.js') }}" type="text/javascript"></script>
 @endsection
