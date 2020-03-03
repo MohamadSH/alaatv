@@ -135,14 +135,14 @@ class WebpacMix {
 
         this.compileScss();
         this.mixBase();
-        // this.mixPages();
-        // this.mixUser();
-        // this.mixLanding();
-        // this.mixProduct();
+        this.mixPages();
+        this.mixUser();
+        this.mixLanding();
+        this.mixProduct();
         this.mixPageContentShow();
-        // this.mixPageSetShow();
-        // this.mixCheckout();
-        // this.mixAdmin();
+        this.mixPageSetShow();
+        this.mixCheckout();
+        this.mixAdmin();
         this.mixCopyDirectory();
 
         if (this.appEnv === 'production') {
