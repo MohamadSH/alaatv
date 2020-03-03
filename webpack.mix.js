@@ -1,11 +1,15 @@
-class Mix {
+class WebpacMix {
 
     constructor() {
         require('dotenv').config();
         this.appEnv = process.env.APP_ENV;
         this.outputCssFile = [];
         this.mix = require('laravel-mix');
-        this.purify = require("purify-css");
+        this.purify = require('purify-css');
+        this.path = require('path');
+        this.rootPath = Mix.paths.root.bind(Mix.paths);
+        require('laravel-mix-polyfill');
+        require('laravel-mix-purgecss');
     }
 
     static getBaseCss() {
@@ -79,13 +83,41 @@ class Mix {
     mixCssAndJs(cssArray, cssName, jsArray, jsName) {
         //scripts - babel
 
-        // mix.styles(Mix.getBaseCss().concat(cssArray), cssName)
-        //     .scripts(Mix.getBaseJs().concat(jsArray), jsName).version();
+        // this.mix
+        //     .scripts(jsArray, jsName)
+        //     .styles(cssArray, cssName);
 
         this.mix
-            // .scripts(jsArray, jsName)
-            .babel(jsArray, jsName.replace('.js', '.es5.js'))
-            .styles(cssArray, cssName);
+            .babel(jsArray, jsName)
+            .styles(cssArray, cssName)
+            .purgeCss({
+                content: [
+                    this.rootPath('app/**/*.php'),
+                    this.rootPath('resources/views/**/*.php'),
+                    this.rootPath('public/acm/AlaatvCustomFiles/components/**/*.js'),
+                    this.rootPath('public/acm/AlaatvCustomFiles/js/**/*.js')
+                ],
+                // defaultExtractor: content => content.match(/[A-Za-z0-9-_:/]+/g) || [],
+                // whitelistPatterns: [/-active$/, /-enter$/, /-leave-to$/]
+            });
+            // .polyfill({
+            //     enabled: true,
+            //     useBuiltIns: 'usage', // entry - usage
+            //     // targets: "> 0.25%, not dead"
+            //     //
+            //     //     {
+            //     //     "firefox": "50",
+            //     //     "chrome": "58",
+            //     //     "ie": "11",
+            //     //     "opera": "54",
+            //     //     "safari": "12",
+            //     //     "edge": "18",
+            //     //     "ios": "10",
+            //     //     "android": "67",
+            //     //     "node": "8.10",
+            //     //     // "electron": "58",
+            //     // }
+            // });
 
         if (this.mix.inProduction()) {
             this.mix.version();
@@ -103,14 +135,14 @@ class Mix {
 
         this.compileScss();
         this.mixBase();
-        this.mixPages();
-        this.mixUser();
-        this.mixLanding();
-        this.mixProduct();
+        // this.mixPages();
+        // this.mixUser();
+        // this.mixLanding();
+        // this.mixProduct();
         this.mixPageContentShow();
-        this.mixPageSetShow();
-        this.mixCheckout();
-        this.mixAdmin();
+        // this.mixPageSetShow();
+        // this.mixCheckout();
+        // this.mixAdmin();
         this.mixCopyDirectory();
 
         if (this.appEnv === 'production') {
@@ -169,9 +201,9 @@ class Mix {
 
     mixBase() {
         this.mixCssAndJs(
-            Mix.getBaseCss(),
+            WebpacMix.getBaseCss(),
             'public/css/all.css',
-            Mix.getBaseJs(),
+            WebpacMix.getBaseJs(),
             'public/js/all.js', 'all');
     }
 
@@ -432,6 +464,7 @@ class Mix {
                 'node_modules/bootstrap-fileinput/js/fileinput.js',
                 'node_modules/persian-date/dist/persian-date.js',
                 'node_modules/persian-datepicker/dist/js/persian-datepicker.js',
+
                 'public/acm/AlaatvCustomFiles/js/page/user/profile.js'
             ],
             'public/js/user-profile.js'
@@ -454,7 +487,6 @@ class Mix {
                 'public/acm/AlaatvCustomFiles/components/CustomDropDown/js.js',
                 'public/acm/AlaatvCustomFiles/components/ScrollCarousel/js.js',
                 'public/acm/AlaatvCustomFiles/components/AlaaLoading/script.js',
-                'public/acm/AlaatvCustomFiles/components/AlaaLoading/script.js',
                 'public/acm/AlaatvCustomFiles/components/SortElements/script.js',
                 'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/js.js',
                 'public/acm/AlaatvCustomFiles/components/FormGenerator/script.js',
@@ -475,7 +507,6 @@ class Mix {
             [
                 'node_modules/persian-date/dist/persian-date.js',
                 'node_modules/persian-datepicker/dist/js/persian-datepicker.js',
-                'public/acm/AlaatvCustomFiles/js/page/user-profile.js'
             ],
             'public/js/user-completeInfo.js'
         );
@@ -611,7 +642,7 @@ class Mix {
             'public/css/page-landing8.css',
             [
                 // 'node_modules/flipclock/dist/flipclock.js',
-                // 'public/acm/AlaatvCustomFiles/js/page/product/landing/8.js',
+                'public/acm/AlaatvCustomFiles/js/page/product/landing/8.js',
             ],
             'public/js/page-landing8.js'
         );
@@ -958,5 +989,5 @@ class Mix {
     }
 }
 
-let mixAsset = new Mix();
+let mixAsset = new WebpacMix();
 mixAsset.mixAll();
