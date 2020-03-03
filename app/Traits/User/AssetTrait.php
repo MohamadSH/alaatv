@@ -43,7 +43,7 @@ trait AssetTrait
     /**
      * @return array
      */
-    private function getUserProductsId(): array
+    public function getUserProductsId(): array
     {
         return $this->products()
             ->pluck('id')
@@ -99,7 +99,26 @@ trait AssetTrait
             ->toArray();
     }
 
-    private function searchInUserAssetsCollection(Product $product, ?User $user):array
+    private function searchProductInUserAssetsCollection(Product $product, ?User $user):bool
+    {
+        if(is_null($user)){
+            return false;
+        }
+
+        $key = 'searchProductInUserAssetsCollection:' . $product->cacheKey().'-'.$user->cacheKey();
+        return Cache::tags(['searchInUserAssets'])
+            ->remember($key, config('constants.CACHE_60'), function () use ($user , $product) {
+
+                $userAssetsArray    = $user->getUserProductsId() ;
+                if(empty($userAssetsArray)){
+                    return false ;
+                }
+
+                return in_array($product->id, $userAssetsArray);
+            });
+    }
+
+    private function searchProductTreeInUserAssetsCollection(Product $product, ?User $user):array
     {
         $purchasedProductIdArray = [];
 
@@ -107,16 +126,14 @@ trait AssetTrait
             return $purchasedProductIdArray;
         }
 
-        $key = 'searchInUserAssetsCollection:' . $product->cacheKey().'-'.$user->cacheKey();
+        $key = 'searchProductTreeInUserAssetsCollection:' . $product->cacheKey().'-'.$user->cacheKey();
         return Cache::tags(['searchInUserAssets'])
             ->remember($key, config('constants.CACHE_60'), function () use ($user , $product , $purchasedProductIdArray) {
 
-                $productBlock    = $user->getDashboardBlocks()->where('title' , 'محصولات من')->first() ;
-                if(!isset($productBlock)){
-                    return [] ;
+                $userAssetsArray    = $user->getUserProductsId() ;
+                if(empty($userAssetsArray)){
+                    return $userAssetsArray ;
                 }
-
-                $userAssetsArray = $productBlock->products->pluck('id')->toArray();
 
                 $this->iterateProductAndChildrenInAsset($userAssetsArray, $product, $purchasedProductIdArray);
 

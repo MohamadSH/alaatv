@@ -139,15 +139,16 @@ class ProductController extends Controller
 
     public function show(Request $request, Product $product)
     {
+        $defaultProducts = $request->get('dp');
         /** @var User $user */
-        $user                    = $request->user();
+        $user            = $request->user();
 
         if (isset($product->redirectUrl)) {
             return redirect($product->redirectUrl, Response::HTTP_FOUND, $request->headers->all());
         }
 
         if ($product->grandParent != null) {
-            return redirect($product->grandParent->url, Response::HTTP_MOVED_PERMANENTLY, $request->headers->all());
+            return redirect($product->grandParent->url.'?dp[]='.$product->id, Response::HTTP_MOVED_PERMANENTLY, $request->headers->all());
         }
 
         $this->generateSeoMetaTags($product);
@@ -158,7 +159,7 @@ class ProductController extends Controller
 
         $block = optional($product)->blocks->first();
 
-        $purchasedProductIdArray = $this->searchInUserAssetsCollection($product, $user);
+        $purchasedProductIdArray = $this->searchProductTreeInUserAssetsCollection($product, $user);
         $hasUserPurchasedProduct = in_array($product->id, $purchasedProductIdArray);
 
         $children = collect();
@@ -195,7 +196,7 @@ class ProductController extends Controller
         }
 
         return view('product.show', compact('product', 'block', 'purchasedProductIdArray', 'liveDescriptions', 'children', 'isFavored', 'isForcedGift', 'shouldBuyProductId', 'shouldBuyProductName', 'hasPurchasedEssentialProduct' ,
-            'allChildrenSets' , 'sets' , 'lastSet' , 'lastSetPamphlets' , 'lastSetVideos' , 'hasUserPurchasedProduct' , 'defaultProductSet'));
+            'allChildrenSets' , 'sets' , 'lastSet' , 'lastSetPamphlets' , 'lastSetVideos' , 'hasUserPurchasedProduct' , 'defaultProductSet' , 'defaultProducts'));
     }
 
     public function edit(Product $product)
