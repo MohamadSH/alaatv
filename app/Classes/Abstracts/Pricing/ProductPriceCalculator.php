@@ -263,7 +263,7 @@ abstract class ProductPriceCalculator
     {
         $allChildren = $product->getAllChildren()->where('pivot.isDefault', 1);
 
-        $excludedChildren = $this->searchInUserAssetsCollection($product, $user);
+        $excludedChildren = $this->searchProductTreeInUserAssetsCollection($product, $user);
         if (!empty($excludedChildren)) {
             $allChildren = $allChildren->whereNotIn('pivot.child_id', $excludedChildren);
         }

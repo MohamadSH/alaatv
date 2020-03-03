@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Web;
 
 use App\Adapter\AlaaSftpAdapter;
 use App\Classes\Search\ContentsetSearch;
+use App\Collection\ContentCollection;
 use App\Content;
 use App\Contentset;
 use App\Http\Controllers\Controller;
@@ -16,6 +17,7 @@ use App\Traits\FileCommon;
 use App\Traits\MetaCommon;
 use App\Traits\ProductCommon;
 use App\Traits\RequestCommon;
+use App\Traits\User\AssetTrait;
 use App\User;
 use App\Websitesetting;
 use Illuminate\Contracts\View\Factory;
@@ -42,6 +44,7 @@ class SetController extends Controller
     use RequestCommon;
     use MetaCommon;
     use FileCommon;
+    use AssetTrait;
 
     /*
     |--------------------------------------------------------------------------
@@ -173,6 +176,7 @@ class SetController extends Controller
             return response()->json($contentSet);
         }
 
+        /** @var ContentCollection $contents */
         $contents = $contentSet->getActiveContents2();
         if ($order === 'desc') {
             $contents = $contents->sortByDesc('order');
@@ -199,6 +203,19 @@ class SetController extends Controller
         }
 
         $jsonLdArray = $this->getJsonLdArray($videos, $pamphlets, $articles);
+
+        if($pamphlets->isEmpty()){
+            $pamphlets = $contentSet->getProducts()  ;
+            if($pamphlets->isNotEmpty()){
+                $pamphlets->map(function ($product) use ($user){
+                    $purchasedProductIdArray = $this->searchProductInUserAssetsCollection($product, $user);
+                    if(!$purchasedProductIdArray) {
+                        $product['shouldPurchase'] = 1;
+                    }
+                    return $product;
+                });
+            }
+        }
 
         $this->generateSeoMetaTags($contentSet);
 
