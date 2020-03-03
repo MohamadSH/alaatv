@@ -266,10 +266,10 @@
         var lastSetData = @if (isset($lastSet) && isset($lastSetPamphlets) && isset($lastSetVideos))
         {
             set: {
-                id: '{{$lastSet->id}}',
-                name: '{{$lastSet->name}}',
+                id: '{{optional($lastSet)->id}}',
+                name: '{{optional($lastSet)->name}}',
                 url: {
-                    web: '{{$lastSet->show_url}}'
+                    web: '{{optional($lastSet)->show_url}}'
                 }
             },
             files: {

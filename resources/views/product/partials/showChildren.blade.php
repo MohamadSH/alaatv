@@ -7,14 +7,16 @@
                        type="checkbox"
                        class="hasParent_{{ $product->pivot->parent_id }} @if(count($product->children->where('enable',1))>0) hasChildren @endif product"
 
-                       @if(
-                            isset($product->pivot->isDefault) &&
-                            $product->pivot->isDefault &&
-                            ((array_search($product->id, $purchasedProductIdArray) === false) && !$childIsPurchased)
-                       )
+                       @if(isset($defaultProducts))
+                           @if(in_array($product->id,$defaultProducts))
+                            checked="checked"
+                           @endif
+                       @elseif(isset($product->pivot->isDefault) &&
+                                $product->pivot->isDefault &&
+                                (!in_array($product->id, $purchasedProductIdArray) && !$childIsPurchased)
+                              )
                        checked="checked"
                        @endif
-
                     @include('partials.gtm-eec.product', ['position'=>'0', 'list'=>'صفحه نمایش محصول-محصولات فرزند', 'quantity'=>'1'])>
                 <span></span>
             </label>
@@ -27,11 +29,14 @@
                        value="{{ $product->id }}"
                        type="checkbox"
                        class="hasParent_{{ $product->pivot->parent_id }} @if(count($product->children->where('enable',1))>0) hasChildren @endif product"
-                       @if(
-                            isset($product->pivot->isDefault) &&
-                            $product->pivot->isDefault &&
-                            ((array_search($product->id, $purchasedProductIdArray) === false) && !$childIsPurchased)
-                       )
+                       @if(isset($defaultProducts))
+                       @if(in_array($product->id,$defaultProducts))
+                       checked="checked"
+                       @endif
+                       @elseif(isset($product->pivot->isDefault) &&
+                                $product->pivot->isDefault &&
+                                (!in_array($product->id, $purchasedProductIdArray) && !$childIsPurchased)
+                              )
                        checked="checked"
                        @endif
                     @include('partials.gtm-eec.product', ['position'=>'0', 'list'=>'صفحه نمایش محصول-محصولات فرزند', 'quantity'=>'1'])>

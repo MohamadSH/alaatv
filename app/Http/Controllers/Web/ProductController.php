@@ -139,15 +139,16 @@ class ProductController extends Controller
 
     public function show(Request $request, Product $product)
     {
+        $defaultProducts = $request->get('dp');
         /** @var User $user */
-        $user                    = $request->user();
+        $user            = $request->user();
 
         if (isset($product->redirectUrl)) {
             return redirect($product->redirectUrl, Response::HTTP_FOUND, $request->headers->all());
         }
 
         if ($product->grandParent != null) {
-            return redirect($product->grandParent->url, Response::HTTP_MOVED_PERMANENTLY, $request->headers->all());
+            return redirect($product->grandParent->url.'?dp[]='.$product->id, Response::HTTP_MOVED_PERMANENTLY, $request->headers->all());
         }
 
         $this->generateSeoMetaTags($product);
@@ -158,26 +159,16 @@ class ProductController extends Controller
 
         $block = optional($product)->blocks->first();
 
-        $purchasedProductIdArray = $this->searchInUserAssetsCollection($product, $user);
+        $purchasedProductIdArray = $this->searchProductTreeInUserAssetsCollection($product, $user);
         $hasUserPurchasedProduct = in_array($product->id, $purchasedProductIdArray);
 
         $children = collect();
         $allChildrenSets = collect();
         $defaultProductSet = $product;
-        if($product->producttype_id != config('constants.PRODUCT_TYPE_SIMPLE')){
-            $defaultProductSet = $product->children->first();
-            foreach ($product->getAllChildren(true,true) as $child) {
-                $productSets = collect();
-                foreach ($child->sets as $set) {
-                    $productSets->push([
-                        'name'  =>  $set->name,
-                        'id'    =>  $set->id,
-                    ]);
-                }
-                $allChildrenSets->push(['id' => $child->id , 'name' => $child->name , 'sets'=>$child->sets]);
-            }
-
-            $children    = $product->children()->enable()->get();
+        if(!$product->isSimple()){
+            $allChildrenSets    = $this->makeAllChildrenSetCollection($product);
+            $children           = $product->active_children;
+            $defaultProductSet  = $children->first();
         }
 
         $lastSet = null;
@@ -196,26 +187,16 @@ class ProductController extends Controller
         $shouldBuyProductId           = null;
         $shouldBuyProductName         = '';
         $hasPurchasedEssentialProduct = false;
-
-//        if ($product->id == Product::GODARE_RIYAZI_TAJROBI_SABETI) {
-//            $isForcedGift         = true;
-//            $shouldBuyProductName = 'راه ابریشم';
-//            $shouldBuyProductId   = Product::RAHE_ABRISHAM;
-//            if (isset($user)) {
-//                $hasPurchasedEssentialProduct = $this->hasPurchasedEssentialProduct($user, $shouldBuyProductId);
-//            }
-//        }
-
         $liveDescriptions = collect();
         if ($product->id == Product::RAHE_ABRISHAM) {
-            $liveDescriptions = $product->livedescriptions->sortByDesc('created_at');
-            $periodDescription            = $product->descriptionWithPeriod;
-            $faqs                         = $product->faqs;
+            $liveDescriptions     = $product->livedescriptions->sortByDesc('created_at');
+            $periodDescription    = $product->descriptionWithPeriod;
+            $faqs                 = $product->faqs;
             return view('product.customShow.raheAbrisham', compact('product', 'block', 'liveDescriptions', 'isFavored', 'lastSet', 'lastSetPamphlets', 'lastSetVideos', 'periodDescription', 'sets', 'faqs', 'hasUserPurchasedProduct', 'block', 'isForcedGift', 'hasPurchasedEssentialProduct', 'shouldBuyProductId', 'shouldBuyProductName', 'allChildrenSets'));
         }
 
         return view('product.show', compact('product', 'block', 'purchasedProductIdArray', 'liveDescriptions', 'children', 'isFavored', 'isForcedGift', 'shouldBuyProductId', 'shouldBuyProductName', 'hasPurchasedEssentialProduct' ,
-            'allChildrenSets' , 'sets' , 'lastSet' , 'lastSetPamphlets' , 'lastSetVideos' , 'hasUserPurchasedProduct' , 'defaultProductSet'));
+            'allChildrenSets' , 'sets' , 'lastSet' , 'lastSetPamphlets' , 'lastSetVideos' , 'hasUserPurchasedProduct' , 'defaultProductSet' , 'defaultProducts'));
     }
 
     public function edit(Product $product)

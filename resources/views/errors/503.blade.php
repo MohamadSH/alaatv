@@ -6,7 +6,7 @@
         <title>بروز رسانی</title>
         <meta name="description" content="سایت در حال بروز رسانی است.">
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no">
-        <link href="{{ asset('/acm/webFonts/IRANSans/css/fontiran.css') }}" rel="stylesheet" type="text/css"/>
+        <link href="/acm/webFonts/IRANSans/css/fontiran.css" rel="stylesheet" type="text/css"/>
         <style>
             html, body {
                 height: 100%;
@@ -44,12 +44,12 @@
         </style>
     </head>
     <!-- end::Head -->
-    
+
     <!-- begin::Body -->
     <body>
         <!-- begin:: Page -->
         <div class="img">
-            <img src="{{ asset('/acm/extra/wesite-under-Construction.png') }}" alt="wesite-under-Construction" >
+            <img src="/acm/extra/wesite-under-Construction.png" alt="wesite-under-Construction" >
         </div>
         <div class="message">
             <div>

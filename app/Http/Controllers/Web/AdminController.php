@@ -81,6 +81,7 @@ class AdminController extends Controller
         $this->middleware('permission:' . config('constants.LIST_EVENTRESULT_ACCESS'), ['only' => 'adminRegistrationList']);
         $this->middleware('role:admin', [
             'only' => [
+                'adminBot',
                 'adminLottery',
                 'registerUserAndGiveOrderproduct',
                 'specialAddUser',

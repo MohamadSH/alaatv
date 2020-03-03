@@ -181,6 +181,7 @@ use Purify;
  * @property mixed         descriptionWithPeriod
  * @property mixed         faqs
  * @property mixed         priceText
+ * @property mixed         active_children
  * @method static Builder|Product whereBlockId($value)
  * @method static Builder|Product whereIntroVideos($value)
  */
@@ -451,7 +452,7 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
      */
     public function scopeEnable($query)
     {
-        return $query->where('enable', '=', 1);
+        return $query->where('enable', 1);
     }
 
     /**
@@ -483,12 +484,6 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
         return $query->whereNull('grand_id');
     }
 
-    /*
-    |--------------------------------------------------------------------------
-    | Accessor
-    |--------------------------------------------------------------------------
-    */
-
     public function scopeIsChild($query)
     {
         return $query->whereNotNull('grand_id');
@@ -516,6 +511,23 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
                     ->orWhereNull('validUntil');
             });
     }
+
+    /**
+     * Scope a query to only include product without redirect url.
+     *
+     * @param Builder $query
+     *
+     * @return Builder
+     */
+    public function scopeMain($query)
+    {
+        return $query->whereNull('redirectUrl');
+    }
+    /*
+    |--------------------------------------------------------------------------
+    | Accessor
+    |--------------------------------------------------------------------------
+    */
 
     /**
      * Makes product's title
@@ -1022,58 +1034,6 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
         return $files;
     }
 
-    /**
-     * Scope a query to only include product without redirect url.
-     *
-     * @param Builder $query
-     *
-     * @return Builder
-     */
-    public function scopeMain($query)
-    {
-        return $query->whereNull('redirectUrl');
-    }
-
-    /**Determines whether this product is available for purchase or not
-     *
-     * @return bool
-     */
-    public function isEnableToPurchase(): bool
-    {
-        $key = 'product:isEnableToPurchase:' . $this->cacheKey();
-
-        return Cache::tags(['product', 'product_' . $this->id])
-            ->remember($key, config('constants.CACHE_600'), function () {
-
-                //ToDo : should be removed in future
-                if (in_array($this->id, [
-                    self::CUSTOM_DONATE_PRODUCT,
-                    self::DONATE_PRODUCT_5_HEZAR,
-                ])) {
-                    return true;
-                }
-                $grandParent = $this->grandParent;
-                if (isset($grandParent)) {
-                    if (!$grandParent->enable) {
-                        return false;
-                    }
-                }
-
-                if ($this->hasParents()) {
-                    if (!$this->parents()
-                        ->first()->enable) {
-                        return false;
-                    }
-                }
-
-                if (!$this->enable) {
-                    return false;
-                }
-
-                return true;
-            });
-    }
-
     /** Determines whether this product has parent or not
      *
      * @param int $depth
@@ -1167,12 +1127,6 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
     {
         return $this->belongsToMany(Product::class, 'complimentaryproduct_product', 'product_id', 'complimentary_id');
     }
-
-    /*
-    |--------------------------------------------------------------------------
-    | Static methods
-    |--------------------------------------------------------------------------
-    */
 
     /**
      * Checks whether the product is in stock or not .
@@ -1320,6 +1274,46 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
         return false;
     }
 
+    /**Determines whether this product is available for purchase or not
+     *
+     * @return bool
+     */
+    public function isEnableToPurchase(): bool
+    {
+        $key = 'product:isEnableToPurchase:' . $this->cacheKey();
+
+        return Cache::tags(['product', 'product_' . $this->id])
+            ->remember($key, config('constants.CACHE_600'), function () {
+
+                //ToDo : should be removed in future
+                if (in_array($this->id, [
+                    self::CUSTOM_DONATE_PRODUCT,
+                    self::DONATE_PRODUCT_5_HEZAR,
+                ])) {
+                    return true;
+                }
+                $grandParent = $this->grandParent;
+                if (isset($grandParent)) {
+                    if (!$grandParent->enable) {
+                        return false;
+                    }
+                }
+
+                if ($this->hasParents()) {
+                    if (!$this->parents()
+                        ->first()->enable) {
+                        return false;
+                    }
+                }
+
+                if (!$this->enable) {
+                    return false;
+                }
+
+                return true;
+            });
+    }
+
     /**
      * Checks whether the product is valid or not .
      *
@@ -1336,6 +1330,21 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
         }
 
         return false;
+    }
+
+    public function isSimple():bool
+    {
+        return $this->producttype_id == config('constants.PRODUCT_TYPE_SIMPLE');
+    }
+
+    public function isConfigurable():bool
+    {
+        return $this->producttype_id == config('constants.PRODUCT_TYPE_CONFIGURABLE');
+    }
+
+    public function isSelectable():bool
+    {
+        return $this->producttype_id == config('constants.PRODUCT_TYPE_SELECTABLE');
     }
 
     /**
@@ -1401,7 +1410,6 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
         // TODO: Implement getAddItems() method.
         throw new Exception('product Advertisable should be impediment');
     }
-
 
     /**
      * @return Collection
@@ -1520,102 +1528,6 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
         }
 
         return $filesArray;
-    }
-
-
-    /**
-     * Obtains product's price (rawCost)
-     *
-     * @param User|null $user
-     *
-     * @return int|null
-     */
-    public function obtainPrice(?User $user=null): ?int
-    {
-        $key = 'product:obtainPrice:' . $this->cacheKey();
-
-        $cacheTags = ['product', 'price', 'product_' . $this->id, 'product_' . $this->id . '_price'] ;
-
-        if(isset($user)){
-            $cacheTags[] = 'user_'.$user->id.'_obtainPrice' ;
-        }
-
-        return Cache::tags($cacheTags)
-            ->remember($key, config('constants.CACHE_10'), function () use ($user) {
-                if (!$this->isFree()) {
-                    if ($this->isRoot()) {
-                        if ($this->producttype_id == config('constants.PRODUCT_TYPE_CONFIGURABLE')) {
-                            /** @var Collection $enableChildren */
-                            $enableChildren = $this->children->where('enable',
-                                1); // It is not query efficient to use scopeEnable
-                            if ($enableChildren->count() == 1) {
-                                $cost = $enableChildren->first()
-                                    ->obtainPrice();
-                            } else {
-                                $cost = $this->basePrice;
-                            }
-                        } else if ($this->producttype_id == config('constants.PRODUCT_TYPE_SELECTABLE')) {
-                            $allChildren = $this->getAllChildren()
-                                ->where('pivot.isDefault', 1);
-
-                            $excludedChildren = $this->searchInUserAssetsCollection($this, $user);
-                            if(!empty($excludedChildren)){
-                                $allChildren = $allChildren->whereNotIn('pivot.child_id', $excludedChildren);
-                            }
-                            if ($allChildren->isNotEmpty()) {
-                                $cost = 0;
-                                foreach ($allChildren as $product) {
-                                    /** @var Product $product */
-                                    $cost += $product->obtainPrice();
-                                }
-                            } else {
-                                if ($this->basePrice != 0) {
-                                    $cost = $this->basePrice;
-                                } else {
-                                    $cost = null;
-                                }
-                            }
-
-                        } else {
-                            $cost = $this->basePrice;
-                        }
-
-                    } else {
-                        $grandParent            = $this->grandParent;
-                        $grandParentProductType = $grandParent->producttype_id;
-                        if ($grandParentProductType == config('constants.PRODUCT_TYPE_CONFIGURABLE')) {
-                            if ($this->basePrice != 0) {
-                                $cost = $this->basePrice;
-                            } else {
-                                $cost = $grandParent->basePrice;
-                            }
-
-                            //ToDo :Commented for the sake of reducing queries . This snippet gives a second approach for calculating children's cost of a configurable product
-                            /*$attributevalues = $this->attributevalues->where("attributetype_id", config("constants.ATTRIBUTE_TYPE_MAIN"));
-                            foreach ($attributevalues as $attributevalue) {
-                                if (isset($attributevalue->pivot->extraCost))
-                                    $cost += $attributevalue->pivot->extraCost;
-                            }*/
-                        } else if ($grandParentProductType == config('constants.PRODUCT_TYPE_SELECTABLE')) {
-                            if ($this->basePrice == 0) {
-                                $children = $this->children;
-                                $cost     = 0;
-                                foreach ($children as $child) {
-                                    $cost = $child->basePrice;
-                                }
-                            } else {
-                                $cost = $this->basePrice;
-                            }
-                        } else {
-                            $cost = 0;
-                        }
-                    }
-                } else {
-                    $cost = 0;
-                }
-
-                return $cost;
-            });
     }
 
     /**
@@ -1820,6 +1732,11 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
                     ->get();
                 return $sets;
             });
+    }
+
+    public function getActiveChildrenAttribute()
+    {
+        return $this->children->filterEnable();
     }
 
     /**

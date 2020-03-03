@@ -174,9 +174,10 @@
                             id : '{{optional($pamphlet->section)->id}}',
                             name : '{{optional($pamphlet->section)->name}}',
                         },
-                        order: '{{$pamphlet->order}}',
-                        link: '{{ $pamphlet->file->first()->first()->link }}',
+                        order:'{{$pamphlet->order}}',
+                        link: '{{(isset($pamphlet->file))?$pamphlet->file->first()->first()->link:$pamphlet->url}}',
                         name: '{{$pamphlet->name}}',
+                        shouldPurchase: '{{$pamphlet->shouldPurchase ?? 0}}'
                     },
                 @endforeach
             ];

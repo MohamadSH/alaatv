@@ -32,9 +32,9 @@
                         <td class="col-md-8 text-center"> {{$child->basePrice}} </td>
                         @permission((config('constants.EDIT_CONFIGURE_PRODUCT_ACCESS')))
                         @if($child->enable)
-                            <td class="col-md-2 text-center">{!! Form::submit('غیر فعال کردن' , ['class' => 'btn red']) !!} </td>
+                            <td class="col-md-2 text-center">{!! Form::submit('غیر فعال کردن' , ['class' => 'btn btn-danger']) !!} </td>
                         @else
-                            <td class="col-md-2 text-center">{!! Form::submit('فعال کردن' , ['class' => 'btn green-meadow']) !!} </td>
+                            <td class="col-md-2 text-center">{!! Form::submit('فعال کردن' , ['class' => 'btn btn-success']) !!} </td>
                         @endif
                         <td class="col-md-2 text-center">
                             <a class="btn btn-info" href="{{action("Web\ProductController@edit" , $child)}}">اصلاح</a>
