@@ -105,6 +105,47 @@
         </div>
 {{--        @endpermission--}}
 
+        <div class="col-md-6 ">
+            <div class="m-portlet m-portlet--mobile">
+                <div class="m-portlet__head">
+                    <div class="m-portlet__head-caption">
+                        <div class="m-portlet__head-title">
+                            <h3 class="m-portlet__head-text">
+                                اتریبیوت های
+                                <a href="{{route('product.show' , $product)}}">{{$product->name}}</a>
+                            </h3>
+                        </div>
+                    </div>
+                </div>
+                <div class="m-portlet__body">
+                    <table class="table table-bordered table-hover">
+                        <thead>
+                        <tr>
+                            <th class="text-center">آیدی</th>
+                            <th class="text-center">نام</th>
+                            <th class="text-center">اتریبیوت (آیدی - نام)</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        @if($attributevalues->isEmpty())
+                            <tr style="text-align: center;">
+                                <td colspan="3">ندارد</td>
+                            </tr>
+                        @else
+                            @foreach($attributevalues as $attributevalue)
+                                <tr>
+                                    <td>{{ $attributevalue->id }}</td>
+                                    <td>{{ $attributevalue->name }}</td>
+                                    <td>{{$attributevalue->attribute->id}} - {{$attributevalue->attribute->name}}</td>
+                                </tr>
+                            @endforeach
+                        @endif
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
         @if($product->hasChildren())
         <div class="col-md-6 ">
         @permission((config('constants.LIST_CONFIGURE_PRODUCT_ACCESS')))
