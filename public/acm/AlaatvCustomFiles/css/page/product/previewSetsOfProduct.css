@@ -193,8 +193,16 @@
     cursor: pointer;
 }
 
-.selectSetOfProductTopreview .selectProductArrow {
+.selectSetOfProductToPreview .selectProductArrow {
     position: absolute;
     left: -5px;
     bottom: 20px;
+}
+.selectSetOfProductToPreview .selectProductToPreviewSets {
+    display: flex;
+    flex-flow: row;
+    flex-wrap: wrap;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
 }

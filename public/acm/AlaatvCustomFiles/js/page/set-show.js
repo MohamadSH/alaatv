@@ -48,7 +48,7 @@ var loadItems = function () {
             title: data.name,
             info: '',
             desc: '',
-            action: '<i class="fa fa-cloud-download-alt"></i>',
+            action: ('<a href="'+data.link+'">' + ((parseInt(data.shouldPurchase) === 0) ? '<i class="fa fa-cloud-download-alt"></i>' : '<i class="fa fa-shopping-cart"></i>') + '</a>'),
         });
     }
 

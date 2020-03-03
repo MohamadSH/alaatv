@@ -89,17 +89,20 @@ class WebpacMix {
 
         this.mix
             .babel(jsArray, jsName)
-            .styles(cssArray, cssName)
-            .purgeCss({
-                content: [
-                    this.rootPath('app/**/*.php'),
-                    this.rootPath('resources/views/**/*.php'),
-                    this.rootPath('public/acm/AlaatvCustomFiles/components/**/*.js'),
-                    this.rootPath('public/acm/AlaatvCustomFiles/js/**/*.js')
-                ],
-                // defaultExtractor: content => content.match(/[A-Za-z0-9-_:/]+/g) || [],
-                // whitelistPatterns: [/-active$/, /-enter$/, /-leave-to$/]
-            });
+            .styles(cssArray, cssName);
+
+        if (this.appEnv === 'production') {
+            this.mix
+                .purgeCss({
+                    content: [
+                        this.rootPath('app/**/*.php'),
+                        this.rootPath('resources/views/**/*.php'),
+                        this.rootPath('public/acm/AlaatvCustomFiles/components/**/*.js'),
+                        this.rootPath('public/acm/AlaatvCustomFiles/js/**/*.js')
+                    ],
+                    // defaultExtractor: content => content.match(/[A-Za-z0-9-_:/]+/g) || [],
+                    // whitelistPatterns: [/-active$/, /-enter$/, /-leave-to$/]
+                })
             // .polyfill({
             //     enabled: true,
             //     useBuiltIns: 'usage', // entry - usage
@@ -118,9 +121,7 @@ class WebpacMix {
             //     //     // "electron": "58",
             //     // }
             // });
-
-        if (this.mix.inProduction()) {
-            this.mix.version();
+            .version();
         }
 
         this.outputCssFile.push({
@@ -135,20 +136,19 @@ class WebpacMix {
 
         this.compileScss();
         this.mixBase();
-        // this.mixPages();
-        // this.mixUser();
-        // this.mixLanding();
-        // this.mixProduct();
+        this.mixPages();
+        this.mixUser();
+        this.mixLanding();
+        this.mixProduct();
         this.mixPageContentShow();
-        // this.mixPageSetShow();
-        // this.mixCheckout();
-        // this.mixAdmin();
+        this.mixPageSetShow();
+        this.mixCheckout();
+        this.mixAdmin();
         this.mixCopyDirectory();
 
         if (this.appEnv === 'production') {
             this.mix.then(() => {
                 this.purifyCss();
-
                 console.log('' +
                     '              ##       ##              ##             ##       ############## ##          ##          ####           ####      ##          ##\n' +
                     '             ####      ##             ####           ####            ##        ##        ##         ##    ##       ##    ##    ###        ###\n' +
