@@ -318,7 +318,7 @@
                                         </span>
                                     </h3>
 
-                                    @if($hasUserPurchasedProduct)
+                                    @if($hasUserPurchasedProduct && empty($children))
                                         <a href="{{ action("Web\UserController@userProductFiles") }}?p={{$product->id}}">
                                             <button class="btn m-btn m-btn--pill m-btn--air btn-info animated infinite pulse YouHavePurchasedThisProductMessage">
                                                 <i class="fa fa-play-circle"></i>

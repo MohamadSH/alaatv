@@ -1,12 +1,14 @@
 @if(isset($sets) && isset($products))
     @if($products->count() === 0 && $sets->count() === 1)
     @else
-        <div class="alert alert-danger m--padding-30 m--margin-bottom-5 selectSetOfProductTopreview" role="alert">
+        <div class="alert alert-danger m--padding-30 m--margin-bottom-5 selectSetOfProductToPreview" role="alert">
             <div class="row">
-                <div class="col-md-6 d-flex align-items-center">
+                <div class="col-md-6 selectProductToPreviewSets">
                     @if(isset($products) && $products->count() > 0)
-                        انتخاب محصول:
-                        <div class="CustomDropDown" id="selectProduct">
+                        <div class="a--full-width">
+                            انتخاب محصول:
+                        </div>
+                        <div class="CustomDropDown a--full-width" id="selectProduct">
                             <select>
                                 @foreach($products as $productItem)
                                     <option value="{{$productItem['id']}}" @if($productItem['id']===$product->id) selected @endif>{{ $productItem['name'] }}</option>
@@ -21,7 +23,9 @@
                     @endif
                 </div>
                 <div class="col-md-6">
-                    انتخاب دوره:
+                    <div>
+                        انتخاب دوره:
+                    </div>
                     <div class="CustomDropDown" id="selectSet">
                         <select>
                             @foreach($sets as $setItem)
