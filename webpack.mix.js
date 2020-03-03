@@ -139,10 +139,10 @@ class WebpacMix {
         // this.mixPages();
         // this.mixUser();
         // this.mixLanding();
-        // this.mixProduct();
+        this.mixProduct();
         // this.mixPageContentShow();
-        this.mixPageSetShow();
-        // this.mixCheckout();
+        // this.mixPageSetShow();
+        this.mixCheckout();
         // this.mixAdmin();
         this.mixCopyDirectory();
 
@@ -598,7 +598,7 @@ class WebpacMix {
                 'public/acm/AlaatvCustomFiles/components/Favorite/script.js',
                 'public/acm/AlaatvCustomFiles/components/UrlParameter/UrlParameter.js',
                 'public/acm/AlaatvCustomFiles/components/Alist/type1/script.js',
-                // 'public/acm/AlaatvCustomFiles/js/page/set-show.js'
+                'public/acm/AlaatvCustomFiles/js/page/set-show.js'
             ],
             'public/js/set-show.js'
         );
