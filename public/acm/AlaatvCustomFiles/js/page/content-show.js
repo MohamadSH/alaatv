@@ -62,6 +62,8 @@ var SnippetContentShow = function(){
 
             player.pic2pic();
 
+            VideoJsHealthCheck.handle(player);
+
             initVast(player, vastData, vastXml);
         }
 

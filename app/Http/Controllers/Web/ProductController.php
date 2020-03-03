@@ -139,15 +139,16 @@ class ProductController extends Controller
 
     public function show(Request $request, Product $product)
     {
+        $defaultProducts = $request->get('dp');
         /** @var User $user */
-        $user                    = $request->user();
+        $user            = $request->user();
 
         if (isset($product->redirectUrl)) {
             return redirect($product->redirectUrl, Response::HTTP_FOUND, $request->headers->all());
         }
 
         if ($product->grandParent != null) {
-            return redirect($product->grandParent->url, Response::HTTP_MOVED_PERMANENTLY, $request->headers->all());
+            return redirect($product->grandParent->url.'?dp[]='.$product->id, Response::HTTP_MOVED_PERMANENTLY, $request->headers->all());
         }
 
         $this->generateSeoMetaTags($product);
@@ -158,7 +159,7 @@ class ProductController extends Controller
 
         $block = optional($product)->blocks->first();
 
-        $purchasedProductIdArray = $this->searchInUserAssetsCollection($product, $user);
+        $purchasedProductIdArray = $this->searchProductTreeInUserAssetsCollection($product, $user);
         $hasUserPurchasedProduct = in_array($product->id, $purchasedProductIdArray);
 
         $children = collect();
@@ -195,7 +196,7 @@ class ProductController extends Controller
         }
 
         return view('product.show', compact('product', 'block', 'purchasedProductIdArray', 'liveDescriptions', 'children', 'isFavored', 'isForcedGift', 'shouldBuyProductId', 'shouldBuyProductName', 'hasPurchasedEssentialProduct' ,
-            'allChildrenSets' , 'sets' , 'lastSet' , 'lastSetPamphlets' , 'lastSetVideos' , 'hasUserPurchasedProduct' , 'defaultProductSet'));
+            'allChildrenSets' , 'sets' , 'lastSet' , 'lastSetPamphlets' , 'lastSetVideos' , 'hasUserPurchasedProduct' , 'defaultProductSet' , 'defaultProducts'));
     }
 
     public function edit(Product $product)
@@ -266,12 +267,13 @@ class ProductController extends Controller
 
         $descriptionsWithPeriod = $product->descriptionWithPeriod;
         $faqs                   = $product->faqs;
+        $attributevalues        = $product->attributevalues;
 
         return view('product.edit',
             compact('product', 'amountLimit', 'defaultAmountLimit', 'enableStatus', 'defaultEnableStatus',
                 'attributesets', 'bons', 'productFiles', 'blocks', 'allBlocks', 'sets',
                 'productFileTypes', 'defaultProductFileOrders', 'products', 'producttype', 'productPhotos',
-                'defaultProductPhotoOrder', 'tags', 'sampleContents', 'recommenderContents', 'recommenderSets', 'liveDescriptions', 'descriptionsWithPeriod', 'faqs'));
+                'defaultProductPhotoOrder', 'tags', 'sampleContents', 'recommenderContents', 'recommenderSets', 'liveDescriptions', 'descriptionsWithPeriod', 'faqs' , 'attributevalues'));
     }
 
     public function update(EditProductRequest $request, Product $product)
@@ -965,22 +967,6 @@ class ProductController extends Controller
             optional(optional(optional(optional($block->sets)->first())->contents)->pluck('id'))->toArray();
         return array_unique(array_merge(!is_null($blockContents) ? $blockContents : [], !is_null($blockFirstSetContents) ? $blockFirstSetContents : []), SORT_REGULAR);
     }
-
-    /**
-     * @param User $user
-     * @param int  $shouldBuyProductId
-     *
-     * @return bool
-     */
-    private function hasPurchasedEssentialProduct(User $user, int $shouldBuyProductId): bool
-    {
-        $key = 'user:hasPurchasedEssentialProduct:' . $user->cacheKey();
-        return Cache::tags(['user_' . $user->id . '_closedOrders'])
-            ->remember($key, config('constants.CACHE_600'), function () use ($user, $shouldBuyProductId) {
-                return $user->products()->contains($shouldBuyProductId);
-            });
-}
-
 
     /**
      * @param array   $inputData

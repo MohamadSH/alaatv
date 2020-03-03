@@ -1331,24 +1331,7 @@ var InitProductPagePage = function () {
 
             player.pic2pic();
 
-            // player.on('mode',function(event,mode) {
-            //     var width = '100%';
-            //     if(mode=='large') {
-            //         // $('.productDetailesColumns .column1').addClass('order-2');
-            //         // $('.productDetailesColumns .column2').addClass('order-3');
-            //         $('.productDetailesColumns .column3').addClass('order-first');
-            //         $('.productDetailesColumns .column3').removeClass('col-lg-4');
-            //         $('.productDetailesColumns .column3').addClass('col-lg-12');
-            //         $('.productDetailesColumns .column3 .videoPlayerPortlet').css({'width':'60%'});
-            //     } else {
-            //         // $('.productDetailesColumns .column1').removeClass('order-2');
-            //         // $('.productDetailesColumns .column2').removeClass('order-3');
-            //         $('.productDetailesColumns .column3').removeClass('order-first');
-            //         $('.productDetailesColumns .column3').removeClass('col-lg-12');
-            //         $('.productDetailesColumns .column3').addClass('col-lg-4');
-            //         $('.productDetailesColumns .column3 .videoPlayerPortlet').css({'width':'100%'});
-            //     }
-            // });
+            VideoJsHealthCheck.handle(player);
         }
         $(document).on('click', '.btnShowVideoLink', function () {
 

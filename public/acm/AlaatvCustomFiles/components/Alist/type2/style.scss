@@ -14,6 +14,8 @@
         .a--list2-content {
             width: calc(100% - 100px);
             padding: 0 5px 0 50px;
+            display: flex;
+            align-items: center;
 
             .a--list2-title {
                 position: relative;
@@ -21,6 +23,8 @@
                 max-width: 100%;
             }
             .a--list2-title a {
+                position: relative;
+                z-index: 1;
                 color: inherit;
                 text-decoration: none;
             }

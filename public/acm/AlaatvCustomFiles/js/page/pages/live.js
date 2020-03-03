@@ -186,6 +186,8 @@ if ($('#video-0').length > 0) {
     });
 
     player.pic2pic();
+
+    VideoJsHealthCheck.handle(player);
 }
 
 $(document).on('click', '#btnPlayLive', function () {
