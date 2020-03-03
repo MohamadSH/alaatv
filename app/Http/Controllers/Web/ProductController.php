@@ -968,22 +968,6 @@ class ProductController extends Controller
     }
 
     /**
-     * @param User $user
-     * @param int  $shouldBuyProductId
-     *
-     * @return bool
-     */
-    private function hasPurchasedEssentialProduct(User $user, int $shouldBuyProductId): bool
-    {
-        $key = 'user:hasPurchasedEssentialProduct:' . $user->cacheKey();
-        return Cache::tags(['user_' . $user->id . '_closedOrders'])
-            ->remember($key, config('constants.CACHE_600'), function () use ($user, $shouldBuyProductId) {
-                return $user->products()->contains($shouldBuyProductId);
-            });
-}
-
-
-    /**
      * @param array   $inputData
      * @param Product $product
      *
