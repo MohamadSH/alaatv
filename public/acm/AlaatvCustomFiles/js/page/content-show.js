@@ -10,6 +10,7 @@ var SnippetContentShow = function(){
             player = videojs('video-' + contentId, {
                 language: 'fa'
             });
+
             player.nuevo({
                 // logotitle:"آموزش مجازی آلاء",
                 // logo:"https://sanatisharif.ir/image/11/135/67/logo-150x22_20180430222256.png",
@@ -54,17 +55,71 @@ var SnippetContentShow = function(){
 
             });
 
-            player.hotkeys({
-                enableVolumeScroll: false,
-                volumeStep: 0.1,
-                seekStep: 5
-            });
+            // player.hotkeys({
+            //     enableVolumeScroll: false,
+            //     volumeStep: 0.1,
+            //     seekStep: 5
+            // });
+            //
+            // player.pic2pic();
 
-            player.pic2pic();
+            window.vjsp = player;
 
-            VideoJsHealthCheck.handle(player);
+            // VideoJsHealthCheck.handle(player);
 
-            initVast(player, vastData, vastXml);
+            // player.vroll([
+            //     {
+            //         src: "http://a.alaatv.com/acm/videojs/videos/facadesAreStateful.mp4",
+            //         type:"video/mp4",
+            //         href: "http://a.alaatv.com/c/19527",
+            //         offset:"10",
+            //         skip:"5",
+            //         id:"6"
+            //     }, {
+            //         src: "http://a.alaatv.com/acm/videojs/videos/facadesAreStateful.mp4",
+            //         type:"video/mp4",
+            //         href: "http://a.alaatv.com/c/19527",
+            //         offset:"10",
+            //         skip:"8",
+            //         id:"9"
+            //     }, {
+            //         src: "http://a.alaatv.com/acm/videojs/videos/facadesAreStateful.mp4",
+            //         type:"video/mp4",
+            //         href: "http://a.alaatv.com/c/19527",
+            //         offset:"50%",
+            //         id:"10"
+            //     }
+            // ]);
+
+            player.vroll([{
+                src: "https://devnuevo.com/media/video/midroll1.mp4",
+                type: "video/mp4",
+                href: "//www.nuevodevel.com/nuevo/order",
+                offset: "10",
+                skip: "5",
+                id: "6"
+            }, {
+                src: "https://devnuevo.com/media/video/midroll2.mp4",
+                type: "video/mp4",
+                href: "//www.veojam.com",
+                offset: "10",
+                skip: "3",
+                id: "9"
+            }, {
+                src: "https://devnuevo.com/media/video/midroll3.mp4",
+                type: "video/mp4",
+                href: "//www.nuevodevel.com/nuevo/order",
+                offset: "50%",
+                id: "10"
+            }
+            ]);
+
+            // player.on('vroll', function(event, data) {
+            //     var midroll_id = data.id;
+            //     var action = data.action;
+            // });
+
+            // initVast(player, vastData, vastXml);
         }
 
     };

@@ -83,26 +83,26 @@ class WebpacMix {
     mixCssAndJs(cssArray, cssName, jsArray, jsName) {
         //scripts - babel
 
-        // this.mix
-        //     .scripts(jsArray, jsName)
-        //     .styles(cssArray, cssName);
-
         this.mix
-            .babel(jsArray, jsName)
+            .scripts(jsArray, jsName)
             .styles(cssArray, cssName);
 
-        if (this.appEnv === 'production') {
+        // this.mix
+        //     .babel(jsArray, jsName)
+        //     .styles(cssArray, cssName);
+
+        if (this.appEnv === 'production' || true) {
             this.mix
-                .purgeCss({
-                    content: [
-                        this.rootPath('app/**/*.php'),
-                        this.rootPath('resources/views/**/*.php'),
-                        this.rootPath('public/acm/AlaatvCustomFiles/components/**/*.js'),
-                        this.rootPath('public/acm/AlaatvCustomFiles/js/**/*.js')
-                    ],
-                    // defaultExtractor: content => content.match(/[A-Za-z0-9-_:/]+/g) || [],
-                    // whitelistPatterns: [/-active$/, /-enter$/, /-leave-to$/]
-                })
+                // .purgeCss({
+                //     content: [
+                //         this.rootPath('app/**/*.php'),
+                //         this.rootPath('resources/views/**/*.php'),
+                //         this.rootPath('public/acm/AlaatvCustomFiles/components/**/*.js'),
+                //         this.rootPath('public/acm/AlaatvCustomFiles/js/**/*.js')
+                //     ],
+                //     // defaultExtractor: content => content.match(/[A-Za-z0-9-_:/]+/g) || [],
+                //     // whitelistPatterns: [/-active$/, /-enter$/, /-leave-to$/]
+                // })
             // .polyfill({
             //     enabled: true,
             //     useBuiltIns: 'usage', // entry - usage
@@ -136,14 +136,14 @@ class WebpacMix {
 
         this.compileScss();
         this.mixBase();
-        this.mixPages();
-        this.mixUser();
-        this.mixLanding();
+        // this.mixPages();
+        // this.mixUser();
+        // this.mixLanding();
         this.mixProduct();
         this.mixPageContentShow();
-        this.mixPageSetShow();
-        this.mixCheckout();
-        this.mixAdmin();
+        // this.mixPageSetShow();
+        // this.mixCheckout();
+        // this.mixAdmin();
         this.mixCopyDirectory();
 
         if (this.appEnv === 'production') {
@@ -547,8 +547,10 @@ class WebpacMix {
                 'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/style.css',
                 'public/acm/AlaatvCustomFiles/components/imageWithCaption/style.css',
 
-                'public/acm/videojs/skins/alaa-theme/videojs.css',
-                'public/acm/videojs/skins/nuevo/videojs.rtl.css',
+                // 'node_modules/video.js/dist/video-js.css',
+                // 'public/acm/videojs/skins/alaa-theme/videojs5.css',
+                // 'public/acm/videojs/skins/alaa-theme/videojs.css',
+                // 'public/acm/videojs/skins/nuevo/videojs.rtl.css',
                 'public/acm/videojs/plugins/pip/videojs.pip.min.css',
                 'public/acm/videojs/plugins/pip/videojs.pip.rtl.css',
                 'public/acm/videojs/plugins/seek-to-point.css',
@@ -561,13 +563,15 @@ class WebpacMix {
                 'node_modules/tooltip/dist/Tooltip.js',
 
                 'node_modules/video.js/dist/video.js',
+                // 'public/acm/video-js/video.js',
                 'public/acm/videojs/plugins/pip/videojs.pip.min.js',
                 'public/acm/videojs/plugins/videojs.p2p.min.js',
                 'public/acm/videojs/plugins/videojs.hotkeys.min.js',
                 'public/acm/videojs/plugins/seek-to-point.js',
                 'public/acm/videojs/lang/fa.js',
-                'public/acm/videojs/nuevo.min.js',
-                'public/acm/video-js/fix.js',
+                // 'public/acm/videojs/nuevo.min.js',
+                // 'public/acm/videojs/nuevo5.min.js',
+                // 'public/acm/video-js/fix.js',
 
                 'public/acm/AlaatvCustomFiles/js/VideoJsHealthCheck.js',
 
@@ -580,7 +584,7 @@ class WebpacMix {
                 'public/acm/AlaatvCustomFiles/components/AnimateScrollTo/js.js',
                 'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/js.js',
                 'public/acm/AlaatvCustomFiles/components/SortElements/script.js',
-                'public/acm/AlaatvCustomFiles/js/page/content-show.js'
+                // 'public/acm/AlaatvCustomFiles/js/page/content-show.js'
             ],
             'public/js/content-show.js'
         );
