@@ -387,20 +387,21 @@
 }
 
 .vjs-context-menu {
-    background: #282828;
+    background: #ff9000;
     display: inline-block;
     color: #ccc;
     padding: 0 10px;
     height: 40px;
     line-height: 40px;
-    border: 1px solid #666;
+    border: 1px solid #ff7800;
     position: absolute;
     white-space: nowrap;
-    z-Index: 99
+    z-Index: 99;
+    border-radius: 4px;
 }
 
 .vjs-context-menu a {
-    color: #ccc;
+    color: white;
     text-decoration: none;
     height: 40px;
     display: block
@@ -413,10 +414,9 @@
 
 .vjs-context-menu img {
     vertical-align: middle;
-    max-height: 18px;
-    padding-right: 5px;
+    max-height: 30px;
+    padding-left: 5px;
     display: inline-block;
-    border-right: solid 1px #999
 }
 
 .vjs-context-menu span {
@@ -1997,7 +1997,7 @@ body.vjs-full-window {
 }
 
 .vjs-back-res {
-    width: 40%;
+    width: 50%;
     height: 100%;
     background: rgba(48, 48, 48, .95);
     position: absolute;
@@ -2230,7 +2230,7 @@ body.vjs-full-window {
     color: #fff !important;
     text-shadow: 1px 1px 1px #000;
     margin: 0 !important;
-    text-align: left !important;
+    text-align: right !important;
     padding: 0 !important;
     font-family: IRANSans, Arial, sans-serif;
 }
@@ -2244,7 +2244,9 @@ body.vjs-full-window {
     -webkit-border-radius: .5em;
     -moz-border-radius: .5em;
     color: #121212;
-    box-sizing: border-box
+    box-sizing: border-box;
+    text-align: left;
+    direction: ltr;
 }
 
 .vjs-sharing-container input[type=text]:focus {
@@ -2732,7 +2734,8 @@ video::-webkit-media-text-track-display {
     top: 0
 }
 
-.vjs-seeking .vjs-loading-spinner, .vjs-waiting {
+.vjs-seeking .vjs-loading-spinner,
+.vjs-waiting .vjs-loading-spinner {
     display: block
 }
 

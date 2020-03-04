@@ -561,13 +561,28 @@ vjs_hasClass = function (e, t) {
                     })
                 }
 
-                "" == p.contextText ? (p.contextText = "Powewred by Nuevodevel 5.0", p.contextUrl = "https://www.nuevodevel.com/nuevo", Y = '<img src="data:image/gif;base64,R0lGODlhJwASAOZrAPr6+vb29vT09PX19ff39/Ly8ra2tv///+Hh4ebm5tPT09TU1Nzc3Nra2tnZ2dvb2+3t7cHBwX5+fmdnZzc3N0NDQzo6Oq+vr/z8/PDw8GRkZNLS0v39/ZmZmcXFxe7u7srKysjIyPPz83h4eP7+/vj4+Lu7u9/f39HR0XFxcfQAAMQAAHp6euvr6+np6dDQ0GxsbPwAAK0AAHl5eX9/f+fn5/gAAPkAAOIAAIEAALKysjY2Nry8vPHx8Z2dnejo6G5ubvsAAPUAAKIAAPn5+Xt7e7W1tYyMjGtra/oAANYAAGUAAOTk5P0AAOAAAIwAADQAAL0AAD0AAMPDw7GxsW9vb3JycpycnPv7+5qamuXl5U5OTvb396qqqrS0tLe3txQUFJ6enpGRkWVlZaGhoaampkhISJubm42NjXx8fE9PT////wAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACH5BAHoA2sALAAAAAAnABIAAAf/gAABAoSFhoQDh4WJhAEEAZAEBQZrlWsHmJmam5ydnQiWCQoLDKWmpwwNDg2oracPEJgRlhITlre3FBUWuL29FxgZGmsbHAEdvpYeHyCVICHJvSIEI2skmCUm0ScHKJWYKZYqK8kCJSxrHAcYmC3JLgcv3wcwljExKjK95jPpBxsgriWg0atGvHn1KsWwcSMGjhy3zKFTp2MHD3U9fOD6cfDSASD2bIgMImSIJQFEivgzUulID0websGT5xFJyCRClCyJWKKfOpaVWDA5wGGDpaE0MSVc0ySIkydQcPFbiYvbAReVFHRUailIFCm+JFLFNaXEgQFUHGw9UCXarRIDWKyMxXWlwAEsANZmcVsJAgktW+biksAOkzePBTIQ4DJgQInHkPMe6FKJAwYvbhdg4PClMpbPoEODJlCjC5hKYcSM4UumjJlKZ9AcmU279hE0adTw3c3bVyAAOw==" />', Y += "<span>" + p.contextText + "</span>", Y = '<a class="ctxt" target="' + p.target + '" href="' + p.contextUrl + '">' + Y + "</a>", Q()) : "" != p.contextIcon && ((K = d("img")).src = p.contextIcon, K.onload = function () {
-                    "naturalHeight" in this ? this.naturalHeight + this.naturalWidth > 0 && (Y = '<img src="' + p.contextIcon + '" />', Y += "<span>" + p.contextText + "</span>", "" != p.contextUrl && (Y = '<a class="ctxt" target="' + p.target + '" href="' + p.contextUrl + '">' + Y + "</a>"), Q()) : this.width + this.height > 0 && (Y = '<img src="' + p.contextIcon + '" />', Y += "<span>" + p.contextText + "</span>", "" != p.contextUrl && (Y = '<a class="ctxt" target="' + p.target + '" href="' + p.contextUrl + '">' + Y + "</a>"), Q()), r(f, ".ctxt").onclick = function (e) {
-                        p.waslink = !0
-                    }
-                }, K.onerror = function () {
-                    Y = "<span>" + p.contextText + "</span>", "" != p.contextUrl && (Y = '<a class="ctxt" target="' + p.target + '" href="' + p.contextUrl + '">' + Y + "</a>"), Q()
-                })
+                "" == p.contextText ? (
+                    p.contextText = "آموزش مجازی آلاء",
+                        p.contextUrl = "https://alaatv.com/",
+                        Y = '<img src=" data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABoAAAAjCAYAAACKPxqrAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA3FpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMTQ4IDc5LjE2NDAzNiwgMjAxOS8wOC8xMy0wMTowNjo1NyAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDpmY2I4MTZkNC0zODViLTA0NDUtYTA2NS1mNTMzMzMwOTNjOGYiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6RDRDNDI5M0E1RTFEMTFFQTg3QjlFQjRBOEJEREIwNDkiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6RDRDNDI5Mzk1RTFEMTFFQTg3QjlFQjRBOEJEREIwNDkiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIChXaW5kb3dzKSI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOmZjYjgxNmQ0LTM4NWItMDQ0NS1hMDY1LWY1MzMzMzA5M2M4ZiIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDpmY2I4MTZkNC0zODViLTA0NDUtYTA2NS1mNTMzMzMwOTNjOGYiLz4gPC9y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" />',
+                        Y += "<span>" + p.contextText + "</span>",
+                        Y = '<a class="ctxt" target="' + p.target + '" href="' + p.contextUrl + '">' + Y + "</a>",
+                        Q()
+                ) : "" != p.contextIcon && (
+                    (K = d("img")).src = p.contextIcon,
+                        K.onload = function () {
+                            "naturalHeight" in this ? this.naturalHeight + this.naturalWidth > 0 && (Y = '<img src="' + p.contextIcon + '" />', Y += "<span>" + p.contextText + "</span>", "" != p.contextUrl && (Y = '<a class="ctxt" target="' + p.target + '" href="' + p.contextUrl + '">' + Y + "</a>"), Q()) : this.width + this.height > 0 && (Y = '<img src="' + p.contextIcon + '" />', Y += "<span>" + p.contextText + "</span>", "" != p.contextUrl && (Y = '<a class="ctxt" target="' + p.target + '" href="' + p.contextUrl + '">' + Y + "</a>"), Q()), r(f, ".ctxt").onclick = function (e) {
+                                p.waslink = !0
+                            }
+                        },
+                        K.onerror = function () {
+                            Y = "<span>" + p.contextText + "</span>",
+                            "" != p.contextUrl && (
+                                Y = '<a class="ctxt" target="' + p.target + '" href="' + p.contextUrl + '">' + Y + "</a>"
+                            ),
+                                Q()
+                        }
+                )
             }
             if (p.logo) {
                 var K;
@@ -626,7 +641,8 @@ vjs_hasClass = function (e, t) {
             }
 
             function ne(e) {
-                if ("ontouchstart" in document.documentElement) switch (e) {
+                if ("ontouchstart" in document.documentElement)
+                    switch (e) {
                     case"click":
                         e = "touchend";
                         break;
@@ -934,7 +950,7 @@ vjs_hasClass = function (e, t) {
                             var ue = p.infoSize;
                             parseInt(p.infoSize) > 15 && parseInt(p.infoSize) < 24 && (ue = 18);
                             var ve = "color:#fff;font-size:" + ue + "px;";
-                            p.infoBold && (ve += "font-weight:bold;"), "" != p.infoFont ? ve += "font-family:" + p.infoFont : ve += "font-family:sans-serif", ce.style = ve, "" != p.infoIcon && (he = '<img src="' + p.infoIcon + '"/>', "" != p.infoIconURL && (he = '<a target="' + p.target + '" href=' + p.infoIconURL + ">" + he + "</a>", inner = '<a style="' + ve + '" href="' + de + '" target="' + p.target + '">' + inner + "</a>", le = !0), "right" != p.infoAlign ? inner = he + inner : inner += he), 1 != le && (inner = '<a style="' + ve + '" href="' + de + '" target="' + p.target + '">' + inner + "</a>"), ce.innerHTML = inner, oe ? oe.parentNode.replaceChild(ce, oe) : x.appendChild(ce), "right" == p.infoAlign && (ce.style.textAlign = "right");
+                            p.infoBold && (ve += "font-weight:bold;"), "" != p.infoFont ? ve += "font-family:" + p.infoFont : ve += "", ce.style = ve, "" != p.infoIcon && (he = '<img src="' + p.infoIcon + '"/>', "" != p.infoIconURL && (he = '<a target="' + p.target + '" href=' + p.infoIconURL + ">" + he + "</a>", inner = '<a style="' + ve + '" href="' + de + '" target="' + p.target + '">' + inner + "</a>", le = !0), "right" != p.infoAlign ? inner = he + inner : inner += he), 1 != le && (inner = '<a style="' + ve + '" href="' + de + '" target="' + p.target + '">' + inner + "</a>"), ce.innerHTML = inner, oe ? oe.parentNode.replaceChild(ce, oe) : x.appendChild(ce), "right" == p.infoAlign && (ce.style.textAlign = "right");
                             var he = "";
                             ce.onclick = function () {
                                 i.open(de, p.target), p.waslink = !0

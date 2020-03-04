@@ -20,11 +20,13 @@ videojs.addLanguage("fa",{
      "Chapters": "فصل",
      "You aborted the media playback": "شما پخش را متوقف کردید.",
      "A network error caused the media download to fail part-way.": "مشکل در دریافت ویدئو ...",
-     "The media could not be loaded, either because the server or network failed or because the format is not supported.": "فرمت پشتیبانی نمیشود یا خطایی روی داده است.",
-     "The media playback was aborted due to a corruption problem or because the media used features your browser did not support.": "مشکل در دریافت ویدئو ...",
+     "The media could not be loaded, either because the server or network failed or because the format is not supported.": "مشکلی در پخش روی داده است. ارتباط اینترنتی خود را بررسی کنید.",
+     "The media playback was aborted due to a corruption problem or because the media used features your browser did not support.": "به دلیل پشتیبانی نکردن مرورگر شما پخش با مشکل مواجه شده است.",
     "No compatible source was found for this media.": "هیچ ورودی ای برای این رسانه شناسایی نشد.",
 
     "Speed": "سرعت",
+    "Settings": "تنظیمات",
+    "Mirror view": "نمای معکوس",
     "Zoom": "بزرگ نمایی",
     "ZOOM": "بزرگ نمایی",
     "Related": "مرتبط",
@@ -35,5 +37,6 @@ videojs.addLanguage("fa",{
     "Replay": "پخش مجدد",
     "Link": "آدرس صفحه",
     "Embed": "کد ویدیو",
-    "Social": "شبکه های اجتماعی"
+    "Social": "شبکه های اجتماعی",
+    "Quality": "تغییر کیفیت"
 });

@@ -2,7 +2,11 @@
 
 @section('page-css')
     <link href="{{ mix('/css/content-show.css') }}" rel="stylesheet">
-    <link href="{{ asset('/acm/videojs/skins/alaa-theme/videojs5.css') }}" rel="stylesheet">
+    <style>
+        .video-js .vjs-big-play-button {
+            pointer-events: all;
+        }
+    </style>
 @endsection
 
 @section('page-head')
@@ -139,28 +143,21 @@
                                                controls
                                                webkit-playsinline="true"
                                                playsinline="true" >
-
-
-                                            <source src="/acm/videojs/videos/HD_720p.mp4" type='video/mp4' res="720" label="کیفیت عالی"/>
-                                            <source src="/acm/videojs/videos/hq.mp4" type='video/mp4' res="480" label="کیفیت بالا"/>
-                                            <source src="/acm/videojs/videos/240p.mp4" type='video/mp4' res="240" default label="کیفیت متوسط"/>
-
-
-{{--                                            @if($user_can_see_content)--}}
-{{--                                                @foreach($content->getVideos() as $source)--}}
-{{--                                                    <source src="{{ $source->link }}" type='video/mp4' res="{{ $source->res }}"--}}
-{{--                                                            @if(strcmp( $source->res,"240p") == 0)--}}
-{{--                                                            default--}}
-{{--                                                            @endif--}}
-{{--                                                            label="{{ $source->caption }}"/>--}}
-{{--                                                @endforeach--}}
-{{--                                            @elseif($productsThatHaveThisContent->isNotEmpty())--}}
-{{--                                                @foreach($productsThatHaveThisContent as $productKey=>$product)--}}
-{{--                                                    @if($productKey === 0)--}}
-{{--                                                        <source src="{{ $product->introVideo }}" type="video/mp4"/>--}}
-{{--                                                    @endif--}}
-{{--                                                @endforeach--}}
-{{--                                            @endif--}}
+                                            @if($user_can_see_content)
+                                                @foreach($content->getVideos() as $source)
+                                                    <source src="{{ $source->link }}" type='video/mp4' res="{{ $source->res }}"
+                                                            @if(strcmp( $source->res,"240p") == 0)
+                                                            default
+                                                            @endif
+                                                            label="{{ $source->caption }}"/>
+                                                @endforeach
+                                            @elseif($productsThatHaveThisContent->isNotEmpty())
+                                                @foreach($productsThatHaveThisContent as $productKey=>$product)
+                                                    @if($productKey === 0)
+                                                        <source src="{{ $product->introVideo }}" type="video/mp4"/>
+                                                    @endif
+                                                @endforeach
+                                            @endif
                                             <p class="vjs-no-js">@lang('content.javascript is disables! we need it to play a video')</p>
                                         </video>
                                     </div>
@@ -968,10 +965,5 @@
         var vastXml = '{{($hasRecommendedBlock)?route("web.vast.xml"):""}}';
     </script>
     <script src="{{ mix('/js/content-show.js') }}" type="text/javascript"></script>
-{{--    <script src="{{ asset('/acm/videojs/nuevo.min.js') }}" type="text/javascript"></script>--}}
-{{--    <script src="{{ asset('/acm/videojs/nuevo5.min.js') }}" type="text/javascript"></script>--}}
-    <script src="{{ asset('/acm/videojs/nuevo5.totla.js') }}" type="text/javascript"></script>
-    <script src="{{ asset('/acm/video-js/fix.js') }}" type="text/javascript"></script>
-    <script src="{{ asset('/acm/AlaatvCustomFiles/js/page/content-show.js') }}" type="text/javascript"></script>
 @endsection
 
