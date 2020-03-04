@@ -603,6 +603,7 @@ class ContentController extends Controller
     private function fillContentFromRequest(array $inputData, Content $content): void
     {
         $validSinceDateTime = Arr::get($inputData, 'validSinceDate');
+        $createdAt          = Arr::get($inputData , 'created_at');
         $enabled            = Arr::has($inputData, 'enable');
         $isFree             = Arr::has($inputData, 'isFree');
         $tagString          = Arr::get($inputData, 'tags');
@@ -615,6 +616,10 @@ class ContentController extends Controller
             $content->validSince = Carbon::now('Asia/Tehran');
         } else {
             $content->validSince = Carbon::parse($validSinceDateTime)->format('Y-m-d H:i:s');
+        }
+
+        if(isset($createdAt)){
+            $content->created_at = $createdAt;
         }
 
         $content->enable = $enabled ? 1 : 0;
