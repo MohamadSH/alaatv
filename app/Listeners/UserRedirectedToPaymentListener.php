@@ -34,8 +34,8 @@ class UserRedirectedToPaymentListener
             'user_' . $user->id . '_totalBonNumber',
             'user_' . $user->id . '_validBons',
             'user_' . $user->id . '_hasBon',
-            'searchInUserAssets',
             'user_'.$user->id.'_obtainPrice',
+            'userAsset_'.$user->id,
         ])->flush();
 
         if (isset($event->order)) {

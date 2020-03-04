@@ -23,7 +23,7 @@ class CanAccessEmployeeTimeSheet
         $user = $request->user();
 
         if (!$user->can(config('constants.EDIT_EMPLOPYEE_WORK_SHEET'))) {
-            if ($request->ip() != '79.127.123.246') {
+            if ($request->ip() != config('constants.ALAA_IP')) {
                 return response()->json([
                     'error' => 'This request is forbidden from you IP',
                 ], Response::HTTP_FORBIDDEN);
