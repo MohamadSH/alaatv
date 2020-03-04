@@ -22,7 +22,8 @@ var SnippetContentShow = function(){
                 shareUrl: contentUrl,
                 shareEmbed: '<iframe src="' + contentEmbedUrl + '" width="640" height="360" frameborder="0" allowfullscreen></iframe>',
 
-
+                buttonRewind: true,
+                buttonForward: true,
 
                 videoInfo: true,
                 // infoSize: 18,

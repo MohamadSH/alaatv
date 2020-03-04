@@ -24,6 +24,8 @@ videojs.addLanguage("fa",{
      "The media playback was aborted due to a corruption problem or because the media used features your browser did not support.": "به دلیل پشتیبانی نکردن مرورگر شما پخش با مشکل مواجه شده است.",
     "No compatible source was found for this media.": "هیچ ورودی ای برای این رسانه شناسایی نشد.",
 
+    "Forward": "جلو",
+    "Rewind": "عقب",
     "Speed": "سرعت",
     "Settings": "تنظیمات",
     "Mirror view": "نمای معکوس",

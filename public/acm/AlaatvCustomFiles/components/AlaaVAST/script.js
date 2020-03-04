@@ -214,6 +214,8 @@ var AlaaVast = function () {
             // logoposition:"RT", // logo position (LT - top left, RT - top right)
             logourl:'//alaatv.com',
 
+            buttonRewind: false,
+            buttonForward: false,
             // shareTitle: contentDisplayName,
             // shareUrl: contentUrl,
             // shareEmbed: '<iframe src="' + contentEmbedUrl + '" width="640" height="360" frameborder="0" allowfullscreen></iframe>',
