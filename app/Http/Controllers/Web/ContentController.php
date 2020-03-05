@@ -516,20 +516,31 @@ class ContentController extends Controller
         $serverUrl        = config('constants.DOWNLOAD_SERVER_PROTOCOL') . config('constants.CDN_SERVER_NAME');
         $mediaPartialPath = config('constants.DOWNLOAD_SERVER_MEDIA_PARTIAL_PATH');
 
-        $fileUrl = [
-            '720p' => [
-                'url'         => $serverUrl . $mediaPartialPath . $contentsetId . '/HD_720p/' . $fileName,
-                'partialPath' => $mediaPartialPath . $contentsetId . '/HD_720p/' . $fileName,
-            ],
-            '480p' => [
-                'url'         => $serverUrl . $mediaPartialPath . $contentsetId . '/hq/' . $fileName,
-                'partialPath' => $mediaPartialPath . $contentsetId . '/hq/' . $fileName,
-            ],
-            '240p' => [
-                'url'         => $serverUrl . $mediaPartialPath . $contentsetId . '/240p/' . $fileName,
-                'partialPath' => $mediaPartialPath . $contentsetId . '/240p/' . $fileName,
-            ],
-        ];
+        $fileUrl = [];
+
+        $HDPartialPath = $mediaPartialPath . $contentsetId . '/HD_720p/' . $fileName ;
+        if(file_exists('/alaa_media/cdn'.$HDPartialPath)){
+            $fileUrl['720p'] =  [
+                'url'         => $serverUrl . $HDPartialPath,
+                'partialPath' => $HDPartialPath,
+            ];
+        }
+
+        $hqPartialPath = $mediaPartialPath . $contentsetId . '/hq/' . $fileName;
+        if(file_exists('/alaa_media/cdn'.$hqPartialPath)){
+            $fileUrl['480p'] =  [
+                'url'         => $serverUrl . $hqPartialPath,
+                'partialPath' => $hqPartialPath,
+            ];
+        }
+
+        $_240pPartialPath = $mediaPartialPath . $contentsetId . '/240p/' . $fileName;
+        if(file_exists($_240pPartialPath)){
+            $fileUrl['240p'] =  [
+                'url'         => $serverUrl . $_240pPartialPath,
+                'partialPath' => $_240pPartialPath,
+            ];
+        }
 
         return $this->makeFilesArray($fileUrl, config('constants.DISK_FREE_CONTENT'));
     }
@@ -543,20 +554,31 @@ class ContentController extends Controller
      */
     private function makePaidVideoFiles(string $fileName, int $productId): array
     {
-        $fileUrl = [
-            '720p' => [
-                'partialPath' => '/paid/' . $productId . '/video/HD_720p/' . $fileName,
+        $fileUrl = [] ;
+
+        $HDPartialPath = $productId . '/video/HD_720p/' . $fileName ;
+        if(file_exists('/paid/private/' . $HDPartialPath)){
+            $fileUrl['720p'] =  [
+                'partialPath' => '/paid/' . $HDPartialPath ,
                 'url'         => null,
-            ],
-            '480p' => [
-                'partialPath' => '/paid/' . $productId . '/video/hq/' . $fileName,
+            ];
+        }
+
+        $hqPartialPath = $productId . '/video/hq/' . $fileName;
+        if(file_exists('/paid/private/' . $hqPartialPath)){
+            $fileUrl['480p'] =   [
+                'partialPath' => '/paid/' . $hqPartialPath,
                 'url'         => null,
-            ],
-            '240p' => [
-                'partialPath' => '/paid/' . $productId . '/video/240p/' . $fileName,
+            ];
+        }
+
+        $_240pPartialPath = $productId . '/video/240p/' . $fileName;
+        if(file_exists('/paid/private/' . $_240pPartialPath)){
+            $fileUrl['240p'] =  [
+                'partialPath' => '/paid/' . $_240pPartialPath,
                 'url'         => null,
-            ],
-        ];
+            ];
+        }
 
         return $this->makeFilesArray($fileUrl, config('constants.DISK_PRODUCT_CONTENT'));
     }
