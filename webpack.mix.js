@@ -91,7 +91,7 @@ class WebpacMix {
             .babel(jsArray, jsName)
             .styles(cssArray, cssName);
 
-        if (this.appEnv === 'production') {
+        if (this.appEnv === 'production' || true) {
             this.mix
                 /*.purgeCss({
                     content: [
@@ -136,14 +136,16 @@ class WebpacMix {
 
         this.compileScss();
         this.mixBase();
-        this.mixPages();
+
         this.mixUser();
+        this.mixPages();
+        this.mixAdmin();
         this.mixLanding();
         this.mixProduct();
-        this.mixPageContentShow();
-        this.mixPageSetShow();
         this.mixCheckout();
-        this.mixAdmin();
+        this.mixPageSetShow();
+        this.mixPageContentShow();
+
         this.mixCopyDirectory();
 
         if (this.appEnv === 'production') {
@@ -209,8 +211,7 @@ class WebpacMix {
 
     mixPageFaq() {
         this.mixCssAndJs([
-                'public/acm/videojs/skins/alaa-theme/videojs.css',
-                'public/acm/videojs/skins/nuevo/videojs.rtl.css',
+                'public/acm/videojs/skins/alaa-theme/videojs5.css',
                 'public/acm/videojs/plugins/pip/videojs.pip.min.css',
                 'public/acm/videojs/plugins/pip/videojs.pip.rtl.css',
                 'public/acm/videojs/plugins/seek-to-point.css',
@@ -221,7 +222,7 @@ class WebpacMix {
             [
                 'node_modules/video.js/dist/video.js',
                 'public/acm/videojs/plugins/pip/videojs.pip.min.js',
-                'public/acm/videojs/nuevo.min.js',
+                'public/acm/videojs/nuevo5.totla.js',
                 'public/acm/videojs/plugins/videojs.p2p.min.js',
                 'public/acm/videojs/plugins/videojs.hotkeys.min.js',
                 'public/acm/videojs/plugins/seek-to-point.js',
@@ -245,8 +246,7 @@ class WebpacMix {
                 // 'node_modules/@fullcalendar/timeline/main.css',
                 // 'node_modules/@fullcalendar/resource-timeline/main.css',
 
-                'public/acm/videojs/skins/alaa-theme/videojs.css',
-                'public/acm/videojs/skins/nuevo/videojs.rtl.css',
+                'public/acm/videojs/skins/alaa-theme/videojs5.css',
                 'public/acm/videojs/plugins/pip/videojs.pip.min.css',
                 'public/acm/videojs/plugins/pip/videojs.pip.rtl.css',
                 'public/acm/videojs/plugins/seek-to-point.css',
@@ -271,7 +271,7 @@ class WebpacMix {
 
                 'node_modules/video.js/dist/video.js',
                 'public/acm/videojs/plugins/pip/videojs.pip.min.js',
-                'public/acm/videojs/nuevo.min.js',
+                'public/acm/videojs/nuevo5.totla.js',
                 'public/acm/videojs/plugins/videojs.p2p.min.js',
                 'public/acm/videojs/plugins/videojs.hotkeys.min.js',
                 'public/acm/videojs/plugins/seek-to-point.js',
@@ -392,6 +392,30 @@ class WebpacMix {
             'public/js/contactUs.js'
         );
     }
+    mixPageVideoEmbed() {
+        this.mixCssAndJs([
+                'public/acm/videojs/skins/alaa-theme/videojs5.css',
+                'public/acm/videojs/plugins/pip/videojs.pip.min.css',
+                'public/acm/videojs/plugins/pip/videojs.pip.rtl.css',
+                'public/acm/videojs/plugins/seek-to-point.css',
+                'public/acm/AlaatvCustomFiles/css/page/product/content-embed.css',
+            ],
+            'public/css/product-content-embed.css',
+            [
+                'node_modules/video.js/dist/video.js',
+                'public/acm/videojs/plugins/pip/videojs.pip.min.js',
+                'public/acm/videojs/nuevo5.totla.js',
+                'public/acm/videojs/plugins/videojs.p2p.min.js',
+                'public/acm/videojs/plugins/videojs.hotkeys.min.js',
+                'public/acm/videojs/plugins/seek-to-point.js',
+                'public/acm/videojs/lang/fa.js',
+                'public/acm/video-js/fix.js',
+                'public/acm/AlaatvCustomFiles/js/VideoJsHealthCheck.js',
+                'public/acm/AlaatvCustomFiles/js/product-content-embed.js',
+            ],
+            'public/js/product-content-embed.js'
+        );
+    }
     mixPageContentSearch() {
         this.mixCssAndJs([
                 'node_modules/pretty-checkbox/dist/pretty-checkbox.css',
@@ -434,6 +458,7 @@ class WebpacMix {
         this.mixVoucherLogin();
         this.mixPageHomePage();
         this.mixPageContactUs();
+        this.mixPageVideoEmbed();
         this.mixPageContentSearch();
     }
 
@@ -547,8 +572,7 @@ class WebpacMix {
                 'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/style.css',
                 'public/acm/AlaatvCustomFiles/components/imageWithCaption/style.css',
 
-                'public/acm/videojs/skins/alaa-theme/videojs.css',
-                'public/acm/videojs/skins/nuevo/videojs.rtl.css',
+                'public/acm/videojs/skins/alaa-theme/videojs5.css',
                 'public/acm/videojs/plugins/pip/videojs.pip.min.css',
                 'public/acm/videojs/plugins/pip/videojs.pip.rtl.css',
                 'public/acm/videojs/plugins/seek-to-point.css',
@@ -566,8 +590,7 @@ class WebpacMix {
                 'public/acm/videojs/plugins/videojs.hotkeys.min.js',
                 'public/acm/videojs/plugins/seek-to-point.js',
                 'public/acm/videojs/lang/fa.js',
-                'public/acm/videojs/nuevo.min.js',
-                'public/acm/video-js/fix.js',
+                'public/acm/videojs/nuevo5.totla.js',
 
                 'public/acm/AlaatvCustomFiles/js/VideoJsHealthCheck.js',
 
@@ -719,36 +742,12 @@ class WebpacMix {
             'public/js/product-show-RaheAbrisham.js'
         );
     }
-    mixPageProductContentEmbed() {
-        this.mixCssAndJs([
-                'public/acm/videojs/skins/alaa-theme/videojs.css',
-                'public/acm/videojs/plugins/pip/videojs.pip.min.css',
-                'public/acm/videojs/plugins/pip/videojs.pip.rtl.css',
-                'public/acm/videojs/plugins/seek-to-point.css',
-                'public/acm/AlaatvCustomFiles/css/page/product/content-embed.css',
-            ],
-            'public/css/product-content-embed.css',
-            [
-                'node_modules/video.js/dist/video.js',
-                'public/acm/videojs/plugins/pip/videojs.pip.min.js',
-                'public/acm/videojs/nuevo.min.js',
-                'public/acm/videojs/plugins/videojs.p2p.min.js',
-                'public/acm/videojs/plugins/videojs.hotkeys.min.js',
-                'public/acm/videojs/plugins/seek-to-point.js',
-                'public/acm/videojs/lang/fa.js',
-                'public/acm/video-js/fix.js',
-                'public/acm/AlaatvCustomFiles/js/VideoJsHealthCheck.js',
-                'public/acm/AlaatvCustomFiles/js/product-content-embed.js',
-            ],
-            'public/js/product-content-embed.js'
-        );
-    }
     mixProduct() {
         var baseProductShow = {
             css: [
                 'node_modules/bootstrap-switch/dist/css/bootstrap3/bootstrap-switch.css',
                 'node_modules/lightgallery/src/css/lightgallery.css',
-                'public/acm/videojs/skins/alaa-theme/videojs.css',
+                'public/acm/videojs/skins/alaa-theme/videojs5.css',
                 'public/acm/videojs/plugins/pip/videojs.pip.min.css',
                 'public/acm/videojs/plugins/pip/videojs.pip.rtl.css',
                 'public/acm/videojs/plugins/seek-to-point.css',
@@ -780,7 +779,7 @@ class WebpacMix {
 
                 'node_modules/video.js/dist/video.js',
                 'public/acm/videojs/plugins/pip/videojs.pip.min.js',
-                'public/acm/videojs/nuevo.min.js',
+                'public/acm/videojs/nuevo5.totla.js',
                 'public/acm/videojs/plugins/videojs.p2p.min.js',
                 'public/acm/videojs/plugins/videojs.hotkeys.min.js',
                 'public/acm/videojs/plugins/seek-to-point.js',
@@ -803,7 +802,6 @@ class WebpacMix {
         };
         this.mixPageProductShow(baseProductShow);
         this.mixPageProductShowRaheAbrisham(baseProductShow);
-        this.mixPageProductContentEmbed();
     }
 
     mixPageCheckoutReview() {
