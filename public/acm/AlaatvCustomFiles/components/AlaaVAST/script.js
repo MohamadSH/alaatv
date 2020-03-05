@@ -206,6 +206,7 @@ var AlaaVast = function () {
         var adPlayer = videojs(getAdPlayerId(player, adIndex), {
             language: 'fa'
         });
+
         adPlayer.nuevo({
             // logotitle:"آموزش مجازی آلاء",
             // logo:"https://sanatisharif.ir/image/11/135/67/logo-150x22_20180430222256.png",
@@ -213,6 +214,8 @@ var AlaaVast = function () {
             // logoposition:"RT", // logo position (LT - top left, RT - top right)
             logourl:'//alaatv.com',
 
+            buttonRewind: false,
+            buttonForward: false,
             // shareTitle: contentDisplayName,
             // shareUrl: contentUrl,
             // shareEmbed: '<iframe src="' + contentEmbedUrl + '" width="640" height="360" frameborder="0" allowfullscreen></iframe>',
@@ -221,15 +224,15 @@ var AlaaVast = function () {
             // infoSize: 18,
             // infoIcon: "https://sanatisharif.ir/image/11/150/150/favicon_32_20180819090313.png",
 
-            closeallow:false,
-            mute:true,
-            rateMenu:true,
-            resume:true, // (false) enable/disable resume option to start video playback from last time position it was left
-            // theaterButton: true,
-            timetooltip: true,
-            mousedisplay: true,
+            // closeallow:false,
+            // mute:true,
+            // rateMenu:true,
+            // resume:true, // (false) enable/disable resume option to start video playback from last time position it was left
+            // // theaterButton: true,
+            // timetooltip: true,
+            // mousedisplay: true,
             // endAction: 'related', // (undefined) If defined (share/related) either sharing panel or related panel will display when video ends.
-            container: "inline",
+            // container: "inline",
 
 
             // limit: 20,
@@ -465,12 +468,18 @@ var AlaaVast = function () {
 
         addCss();
 
-        player.on('play', function() {
-            var addToStartindex = getAdToStart(player);
-            if (addToStartindex !== null) {
-                showAdPlayer(player, addToStartindex);
-            }
-        });
+
+        var addToStartindex = getAdToStart(player);
+        if (addToStartindex !== null) {
+            showAdPlayer(player, addToStartindex);
+        }
+
+        // player.on('play', function() {
+        //     var addToStartindex = getAdToStart(player);
+        //     if (addToStartindex !== null) {
+        //         showAdPlayer(player, addToStartindex);
+        //     }
+        // });
 
         player.on('timeupdate', function() {
             var addToStartindex = getAdToStart(player);

@@ -2,6 +2,11 @@
 
 @section('page-css')
     <link href="{{ mix('/css/content-show.css') }}" rel="stylesheet">
+    <style>
+        .video-js .vjs-big-play-button {
+            pointer-events: all;
+        }
+    </style>
 @endsection
 
 @section('page-head')
