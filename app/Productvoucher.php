@@ -43,6 +43,8 @@ use Illuminate\Database\Eloquent\Builder;
  * @method static Builder|BaseModel withCacheCooldownSeconds($seconds)
  * @property-read mixed        $cache_cooldown_seconds
  * @property ProductCollection products
+ * @property User              user
+ * @property mixed             used_at
  */
 class Productvoucher extends BaseModel
 {
@@ -75,17 +77,21 @@ class Productvoucher extends BaseModel
 
     public function product()
     {
-        return $this->belongsTo('App\Product');
+        return $this->belongsTo(Product::Class);
+    }
+
+    public function user(){
+        return $this->belongsTo(User::Class);
     }
 
     public function isValid()
     {
-        return $this->isEnable() && !$this->hasExpired();
+        return $this->isEnable() && !$this->isExpired();
     }
 
     public function isEnable()
     {
-        return $this->enable;
+        return $this->enable?true:false;
     }
 
     public function hasBeenUsed()
@@ -102,7 +108,7 @@ class Productvoucher extends BaseModel
         ]);
     }
 
-    private function hasExpired()
+    public function isExpired()
     {
         return $this->expirationdatetime < Carbon::now('Asia/Tehran');
     }
