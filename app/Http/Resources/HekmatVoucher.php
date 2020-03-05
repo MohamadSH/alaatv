@@ -29,14 +29,14 @@ class HekmatVoucher extends JsonResource
             'enable'                => $this->isEnable(),
             'isExpired'             => $this->isExpired(),
             'used_at'               =>  $this->used_at,
-            'user'                  => $this->where(isset($this->user_id) , function ($q){
+            'user'                  => $this->when(!is_null($this->user_id) , function (){
                 if(isset($this->user_id)){
                     return new HekmatVoucherUser($this->user) ;
                 }
 
                 return null;
             }),
-            'products'              => $this->where(isset($this->user_id) , function ($q){
+            'products'              => $this->when(!is_null($this->getOriginal('products')) , function (){
                 if(isset($this->products)){
                     return HekmatVoucherProduct::collection($this->products) ;
                 }
