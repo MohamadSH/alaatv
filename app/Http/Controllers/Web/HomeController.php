@@ -4,11 +4,14 @@ namespace App\Http\Controllers\Web;
 
 use App\{Classes\Repository\ContentRepositoryInterface,
     Classes\Repository\ProductRepository as ProductRepository,
+    Coupon,
     Http\Requests\ContactUsFormRequest,
     Http\Requests\Request,
     Notifications\sendLink,
     Product,
     Productfile,
+    Productvoucher,
+    Repositories\ProductvoucherRepo,
     Traits\APIRequestCommon,
     Traits\CharacterCommon,
     Traits\Helper,
@@ -71,6 +74,25 @@ class HomeController extends Controller
 
     public function debug(Request $request, User $user = null)
     {
+
+        for ($i=1 ; $i<=500 ; $i++ ){
+
+            do {
+                $code = 'h-' . random_int(10000, 99999);
+                $foundVoucher = ProductvoucherRepo::findVoucherByCode($code);
+            } while (isset($foundVoucher));
+
+            $voucher = Productvoucher::create([
+                'contractor_id' => Productvoucher::CONTRANCTOR_HEKMAT,
+                'products'      =>  '[]',
+                'code'          =>  $code,
+                'expirationdatetime'    =>  '' ,
+                'description'           => 'تولید شده توسط بات برای طرح حکمت',
+            ]);
+        }
+
+        return response()->json(['message'=>'done']);
+
         abort(Response::HTTP_SERVICE_UNAVAILABLE);
     }
 

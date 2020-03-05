@@ -3,42 +3,44 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Productvoucher;
+use App\Repositories\ProductvoucherRepo;
+use App\Http\Resources\HekmatVoucher as VerifyVoucherResource;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 class VoucherController extends Controller
 {
-    public function verify(Request $request, Productvoucher $voucher)
+    public function verify(Request $request)
     {
-        if ($voucher->isVaild()) {
-            return response()->json([
-                'date' => [
-                    'result' => true,
-                ],
-            ]);
+        $voucher = ProductvoucherRepo::findVoucherByCode($request->get('code'));
+        if(!isset($voucher)){
+            return response()->json( [
+                'error' => 'Resource not found'
+            ] , Response::HTTP_NOT_FOUND);
         }
-
-        return response()->json([
-            'data' => [
-                'result' => false,
-            ],
-        ]);
+        return new VerifyVoucherResource($voucher);
     }
 
-    public function disable(Request $request, Productvoucher $voucher)
+    public function disable(Request $request)
     {
-        if ($voucher->disable()) {
+        $voucher = ProductvoucherRepo::findVoucherByCode($request->get('code'));
+        if(!isset($voucher)){
+            return response()->json( [
+                'error' => 'Resource not found'
+            ] , Response::HTTP_NOT_FOUND);
+        }
+        if (ProductvoucherRepo::disableVoucher($voucher)){
             return response()->json([
                 'date' => [
-                    'message' => 'Voucher disabled successfully',
+                    'message' => 'ووچر با موفقیت غیر فعال شد',
                 ],
             ]);
         }
 
         return response()->json([
             'error' => [
-                'message' => 'Please try again later',
+                'message' => 'Server error',
             ],
-        ]);
+        ] , Response::HTTP_INTERNAL_SERVER_ERROR);
     }
 }
