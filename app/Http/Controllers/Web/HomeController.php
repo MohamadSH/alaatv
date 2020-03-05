@@ -764,7 +764,7 @@ class HomeController extends Controller
 
     public function vastXML()
     {
-        return response(file_get_contents('acm/videojs/vast42.xml'), 200, [
+        return response(file_get_contents('acm/videojs/vast.xml'), 200, [
             'Content-Type' => 'application/xml'
         ]);
     }
