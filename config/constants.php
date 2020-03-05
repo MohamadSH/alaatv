@@ -217,6 +217,8 @@ return [
     'EDIT_SITE_FAQ_ACCESS'             => 'editSiteFaq',
     'SHOW_USER_CITY'                   => 'showUserCity',
     'SHOW_KONKOOT_RESULT_INFO'         => 'showKonkoorResultInfo',
+    'VERIFY_HEKMAT_VOUCHER'            => 'verifyVoucher',
+    'DISABLE_HEKMAT_VOUCHER'           => 'disableVoucher',
 
     //Technician
     'SET_TECH_CODE'                    => 'insertTechCode',

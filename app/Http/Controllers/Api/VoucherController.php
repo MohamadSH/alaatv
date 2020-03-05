@@ -10,6 +10,12 @@ use Illuminate\Http\Response;
 
 class VoucherController extends Controller
 {
+    public function __construct()
+    {
+        $authException = $this->getAuthExceptionArray();
+        $this->callMiddlewares($authException);
+    }
+
     public function verify(Request $request)
     {
         $voucher = ProductvoucherRepo::findVoucherByCode($request->get('code'));
@@ -42,5 +48,25 @@ class VoucherController extends Controller
                 'message' => 'Server error',
             ],
         ] , Response::HTTP_INTERNAL_SERVER_ERROR);
+    }
+
+    /**
+     * @param Agent $agent
+     *
+     * @return array
+     */
+    private function getAuthExceptionArray(): array
+    {
+        return [];
+    }
+
+    /**
+     * @param $authException
+     */
+    private function callMiddlewares(array $authException): void
+    {
+        $this->middleware('auth', ['except' => $authException]);
+        $this->middleware('permission:' . config('constants.VERIFY_HEKMAT_VOUCHER'), ['only' => ['verify',],]);
+        $this->middleware('permission:' . config('constants.DISABLE_HEKMAT_VOUCHER'), ['only' => ['disable',],]);
     }
 }
