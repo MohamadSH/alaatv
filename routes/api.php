@@ -131,7 +131,7 @@ Route::group(['prefix' => 'v2'], function () {
         });
 
         Route::any('getPaymentRedirectEncryptedLink', '\\' . GetPaymentRedirectEncryptedLink::class)->name('api.v2.payment.getEncryptedLink');
-        Route::post('voucher/{voucher}/verify', [VoucherController::class, 'verify'])->name('api.v2.verify.voucher');
-        Route::delete('voucher/{voucher}/disable', [VoucherController::class, 'disable'])->name('api.v2.disable.voucher');
+        Route::post('voucher/verify', [VoucherController::class, 'verify'])->name('api.v2.verify.voucher');
+        Route::post('voucher/disable', [VoucherController::class, 'disable'])->name('api.v2.disable.voucher');
     });
 });
