@@ -25,17 +25,7 @@ trait AssetTrait
      *
      * @return bool
      */
-    public function hasContent(Content $content)
-    {
-        return $this->IsThereACommonProduct($content);
-    }
-
-    /**
-     * @param Content $content
-     *
-     * @return bool
-     */
-    private function IsThereACommonProduct(Content $content): bool
+    public function hasContent(Content $content):bool
     {
         return count(array_intersect($this->getUserProductsId(), $this->getContentProductsId($content))) > 0;
     }

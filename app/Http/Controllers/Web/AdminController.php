@@ -81,6 +81,7 @@ class AdminController extends Controller
         $this->middleware('permission:' . config('constants.LIST_EVENTRESULT_ACCESS'), ['only' => 'adminRegistrationList']);
         $this->middleware('role:admin', [
             'only' => [
+                'pinfo',
                 'adminBot',
                 'adminLottery',
                 'registerUserAndGiveOrderproduct',
@@ -1109,6 +1110,10 @@ class AdminController extends Controller
         return response()->json([
             'message' => 'User logged out successfully',
         ]);
+    }
+
+    public function pinfo(){
+        phpinfo();
     }
 }
 
