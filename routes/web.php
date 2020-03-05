@@ -308,6 +308,8 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('upload', [HomeController::class, 'bigUpload'])->name('web.bigUpload');
 
     Route::post('smsLink', [HomeController::class, 'smsLink'])->name('web.sms.link');
+
+    Route::get('pinfo', [AdminController::class, 'pinfo'])->name('web.php.info');
 });
 
 Route::get('asset', [UserController::class, 'userProductFiles'])->name('web.user.asset');

@@ -10,6 +10,7 @@ var SnippetContentShow = function(){
             player = videojs('video-' + contentId, {
                 language: 'fa'
             });
+
             player.nuevo({
                 // logotitle:"آموزش مجازی آلاء",
                 // logo:"https://sanatisharif.ir/image/11/135/67/logo-150x22_20180430222256.png",
@@ -21,7 +22,8 @@ var SnippetContentShow = function(){
                 shareUrl: contentUrl,
                 shareEmbed: '<iframe src="' + contentEmbedUrl + '" width="640" height="360" frameborder="0" allowfullscreen></iframe>',
 
-
+                buttonRewind: true,
+                buttonForward: true,
 
                 videoInfo: true,
                 // infoSize: 18,
@@ -55,9 +57,10 @@ var SnippetContentShow = function(){
             });
 
             player.hotkeys({
-                enableVolumeScroll: false,
                 volumeStep: 0.1,
-                seekStep: 5
+                seekStep: 5,
+                enableVolumeScroll: true,
+                alwaysCaptureHotkeys: true
             });
 
             player.pic2pic();
