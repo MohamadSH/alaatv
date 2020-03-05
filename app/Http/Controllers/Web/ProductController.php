@@ -267,12 +267,13 @@ class ProductController extends Controller
 
         $descriptionsWithPeriod = $product->descriptionWithPeriod;
         $faqs                   = $product->faqs;
+        $attributevalues        = $product->attributevalues;
 
         return view('product.edit',
             compact('product', 'amountLimit', 'defaultAmountLimit', 'enableStatus', 'defaultEnableStatus',
                 'attributesets', 'bons', 'productFiles', 'blocks', 'allBlocks', 'sets',
                 'productFileTypes', 'defaultProductFileOrders', 'products', 'producttype', 'productPhotos',
-                'defaultProductPhotoOrder', 'tags', 'sampleContents', 'recommenderContents', 'recommenderSets', 'liveDescriptions', 'descriptionsWithPeriod', 'faqs'));
+                'defaultProductPhotoOrder', 'tags', 'sampleContents', 'recommenderContents', 'recommenderSets', 'liveDescriptions', 'descriptionsWithPeriod', 'faqs' , 'attributevalues'));
     }
 
     public function update(EditProductRequest $request, Product $product)
@@ -966,22 +967,6 @@ class ProductController extends Controller
             optional(optional(optional(optional($block->sets)->first())->contents)->pluck('id'))->toArray();
         return array_unique(array_merge(!is_null($blockContents) ? $blockContents : [], !is_null($blockFirstSetContents) ? $blockFirstSetContents : []), SORT_REGULAR);
     }
-
-    /**
-     * @param User $user
-     * @param int  $shouldBuyProductId
-     *
-     * @return bool
-     */
-    private function hasPurchasedEssentialProduct(User $user, int $shouldBuyProductId): bool
-    {
-        $key = 'user:hasPurchasedEssentialProduct:' . $user->cacheKey();
-        return Cache::tags(['user_' . $user->id . '_closedOrders'])
-            ->remember($key, config('constants.CACHE_600'), function () use ($user, $shouldBuyProductId) {
-                return $user->products()->contains($shouldBuyProductId);
-            });
-}
-
 
     /**
      * @param array   $inputData

@@ -964,6 +964,28 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
         return $this->hasMany(Faq::Class);
     }
 
+    public function children()
+    {
+        return $this->belongsToMany(Product::class, 'childproduct_parentproduct', 'parent_id', 'child_id')
+            ->withPivot('isDefault', 'control_id', 'description',
+                'parent_id')
+            ->with('children');
+    }
+
+    /**
+     * The products that belong to the set.
+     */
+    public function sets()
+    {
+        return $this->belongsToMany(Contentset::class)
+            ->using(ProductSet::class)
+            ->as('productSet')
+            ->withPivot([
+                'order',
+            ])
+            ->withTimestamps()
+            ->orderBy('order');
+    }
 
     /*
     |--------------------------------------------------------------------------
@@ -1739,21 +1761,6 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
         return $this->children->filterEnable();
     }
 
-    /**
-     * The products that belong to the set.
-     */
-    public function sets()
-    {
-        return $this->belongsToMany(Contentset::class)
-            ->using(ProductSet::class)
-            ->as('productSet')
-            ->withPivot([
-                'order',
-            ])
-            ->withTimestamps()
-            ->orderBy('order');
-    }
-
     public function getEnableAttribute($value)
     {
         //ToDo
@@ -1880,14 +1887,6 @@ class Product extends BaseModel implements Advertisable, Taggable, SeoInterface,
                     ->get();
             });
 
-    }
-
-    public function children()
-    {
-        return $this->belongsToMany(Product::class, 'childproduct_parentproduct', 'parent_id', 'child_id')
-            ->withPivot('isDefault', 'control_id', 'description',
-                'parent_id')
-            ->with('children');
     }
 
     public function getIntroVideoAttribute()

@@ -93,35 +93,35 @@ class WebpacMix {
 
         if (this.appEnv === 'production' || true) {
             this.mix
-                // .purgeCss({
-                //     content: [
-                //         this.rootPath('app/**/*.php'),
-                //         this.rootPath('resources/views/**/*.php'),
-                //         this.rootPath('public/acm/AlaatvCustomFiles/components/**/*.js'),
-                //         this.rootPath('public/acm/AlaatvCustomFiles/js/**/*.js')
-                //     ],
-                //     // defaultExtractor: content => content.match(/[A-Za-z0-9-_:/]+/g) || [],
-                //     // whitelistPatterns: [/-active$/, /-enter$/, /-leave-to$/]
-                // })
-            // .polyfill({
-            //     enabled: true,
-            //     useBuiltIns: 'usage', // entry - usage
-            //     // targets: "> 0.25%, not dead"
-            //     //
-            //     //     {
-            //     //     "firefox": "50",
-            //     //     "chrome": "58",
-            //     //     "ie": "11",
-            //     //     "opera": "54",
-            //     //     "safari": "12",
-            //     //     "edge": "18",
-            //     //     "ios": "10",
-            //     //     "android": "67",
-            //     //     "node": "8.10",
-            //     //     // "electron": "58",
-            //     // }
-            // });
-            .version();
+                /*.purgeCss({
+                    content: [
+                        this.rootPath('app/!**!/!*.php'),
+                        this.rootPath('resources/views/!**!/!*.php'),
+                        this.rootPath('public/acm/AlaatvCustomFiles/components/!**!/!*.js'),
+                        this.rootPath('public/acm/AlaatvCustomFiles/js/!**!/!*.js')
+                    ],
+                    // defaultExtractor: content => content.match(/[A-Za-z0-9-_:/]+/g) || [],
+                    // whitelistPatterns: [/-active$/, /-enter$/, /-leave-to$/]
+                })*/
+                // .polyfill({
+                //     enabled: true,
+                //     useBuiltIns: 'usage', // entry - usage
+                //     // targets: "> 0.25%, not dead"
+                //     //
+                //     //     {
+                //     //     "firefox": "50",
+                //     //     "chrome": "58",
+                //     //     "ie": "11",
+                //     //     "opera": "54",
+                //     //     "safari": "12",
+                //     //     "edge": "18",
+                //     //     "ios": "10",
+                //     //     "android": "67",
+                //     //     "node": "8.10",
+                //     //     // "electron": "58",
+                //     // }
+                // });
+                .version();
         }
 
         this.outputCssFile.push({

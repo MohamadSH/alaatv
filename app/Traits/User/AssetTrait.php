@@ -46,8 +46,8 @@ trait AssetTrait
     public function getUserProductsId(): array
     {
         return $this->products()
-            ->pluck('id')
-            ->toArray();
+                   ->pluck('id')
+                   ->toArray();
     }
 
     /**
@@ -55,36 +55,40 @@ trait AssetTrait
      */
     public function products(): ProductCollection
     {
-        $result = DB::table('products')
-            ->join('orderproducts', function ($join) {
-                $join->on('products.id', '=', 'orderproducts.product_id')
-                    ->whereNull('orderproducts.deleted_at');
-            })
-            ->join('orders', function ($join) {
-                $join->on('orders.id', '=', 'orderproducts.order_id')
-                    ->whereIn('orders.orderstatus_id', [
-                        config("constants.ORDER_STATUS_CLOSED"),
-                        config("constants.ORDER_STATUS_POSTED"),
-                        config("constants.ORDER_STATUS_READY_TO_POST"),
+        $key = 'userProducts:'.$this->cacheKey() ;
+        return Cache::tags(['userAsset' , 'userAsset_'.$this->id])
+            ->remember($key, config('constants.CACHE_60'), function () {
+                $result = DB::table('products')
+                    ->join('orderproducts', function ($join) {
+                        $join->on('products.id', '=', 'orderproducts.product_id')
+                            ->whereNull('orderproducts.deleted_at');
+                    })
+                    ->join('orders', function ($join) {
+                        $join->on('orders.id', '=', 'orderproducts.order_id')
+                            ->whereIn('orders.orderstatus_id', [
+                                config("constants.ORDER_STATUS_CLOSED"),
+                                config("constants.ORDER_STATUS_POSTED"),
+                                config("constants.ORDER_STATUS_READY_TO_POST"),
+                            ])
+                            ->whereIn('orders.paymentstatus_id', [
+                                config("constants.PAYMENT_STATUS_PAID"),
+                                config("constants.PAYMENT_STATUS_VERIFIED_INDEBTED"),
+                                config("constants.PAYMENT_STATUS_ORGANIZATIONAL_PAID"),
+                            ])
+                            ->whereNull('orders.deleted_at');
+                    })
+                    ->join('users', 'users.id', '=', 'orders.user_id')
+                    ->select([
+                        'products.*', 'orders.completed_at',
                     ])
-                    ->whereIn('orders.paymentstatus_id', [
-                        config("constants.PAYMENT_STATUS_PAID"),
-                        config("constants.PAYMENT_STATUS_VERIFIED_INDEBTED"),
-                        config("constants.PAYMENT_STATUS_ORGANIZATIONAL_PAID"),
-                    ])
-                    ->whereNull('orders.deleted_at');
-            })
-            ->join('users', 'users.id', '=', 'orders.user_id')
-            ->select([
-                'products.*', 'orders.completed_at',
-            ])
-            ->where('users.id', '=', $this->getKey())
-            ->whereNotIn('products.id', [Product::DONATE_PRODUCT_5_HEZAR, Product::CUSTOM_DONATE_PRODUCT, Product::ASIATECH_PRODUCT])
-            ->whereNull('products.deleted_at')
-            ->distinct()
-            ->get();
+                    ->where('users.id', '=', $this->getKey())
+                    ->whereNotIn('products.id', [Product::DONATE_PRODUCT_5_HEZAR, Product::CUSTOM_DONATE_PRODUCT, Product::ASIATECH_PRODUCT])
+                    ->whereNull('products.deleted_at')
+                    ->distinct()
+                    ->get();
 
-        return Product::hydrate($result->toArray());
+                return Product::hydrate($result->toArray());
+            });
     }
 
     /**
@@ -106,7 +110,7 @@ trait AssetTrait
         }
 
         $key = 'searchProductInUserAssetsCollection:' . $product->cacheKey().'-'.$user->cacheKey();
-        return Cache::tags(['searchInUserAssets'])
+        return Cache::tags(['searchInUserAsset' , 'searchInUserAsset_'.$user->id , 'userAsset' , 'userAsset_'.$user->id])
             ->remember($key, config('constants.CACHE_60'), function () use ($user , $product) {
 
                 $userAssetsArray    = $user->getUserProductsId() ;
@@ -127,7 +131,7 @@ trait AssetTrait
         }
 
         $key = 'searchProductTreeInUserAssetsCollection:' . $product->cacheKey().'-'.$user->cacheKey();
-        return Cache::tags(['searchInUserAssets'])
+        return Cache::tags(['searchInUserAsset' , 'searchInUserAsset_'.$user->id , 'userAsset' , 'userAsset_'.$user->id])
             ->remember($key, config('constants.CACHE_60'), function () use ($user , $product , $purchasedProductIdArray) {
 
                 $userAssetsArray    = $user->getUserProductsId() ;
