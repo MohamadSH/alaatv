@@ -2,7 +2,6 @@
 
 namespace App\Http\Resources;
 
-use App\Productvoucher;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
@@ -21,7 +20,7 @@ class HekmatVoucherUser extends JsonResource
      */
     public function toArray($request)
     {
-        if (!($this->resource instanceof User)) {
+        if (!($this->resource instanceof \App\User)) {
             return [];
         }
 
