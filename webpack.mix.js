@@ -621,6 +621,7 @@ class WebpacMix {
                 'public/acm/AlaatvCustomFiles/components/Favorite/script.js',
                 'public/acm/AlaatvCustomFiles/components/UrlParameter/UrlParameter.js',
                 'public/acm/AlaatvCustomFiles/components/Alist/type1/script.js',
+                'public/acm/AlaatvCustomFiles/components/Alist/lazyLoadList.js',
                 'public/acm/AlaatvCustomFiles/js/page/set-show.js'
             ],
             'public/js/set-show.js'
