@@ -191,6 +191,11 @@
                                                                 ریاضی
                                                             </a>
                                                         </div>
+                                                        <div class="subCategoryItem">
+                                                            <a class="m-link" href="{{ urldecode(route('content.index', 'tags[]=نظام_آموزشی_جدید&tags[]=دوازدهم&tags[]=کنکور&tags[]=رشته_انسانی&tags[]=علوم_و_فنون_ادبی')) }}" >
+                                                                علوم و فنون ادبی
+                                                            </a>
+                                                        </div>
                                                     </div>
                                                     <div class="col-md-4">
                                                         <div class="subCategoryItem subCategoryItem-title">
@@ -286,6 +291,16 @@
                                                         </div>
                                                     </div>
                                                     <div class="col-md-4">
+                                                        <div class="subCategoryItem subCategoryItem-title d-none">
+                                                            <a class="m-link" href="{{ urldecode(route('content.index', 'tags[]=نظام_آموزشی_جدید&tags[]=یازدهم&tags[]=رشته_انسانی')) }}" >
+                                                                دروس اختصاصی انسانی
+                                                            </a>
+                                                        </div>
+                                                        <div class="subCategoryItem d-none">
+                                                            <a class="m-link" href="{{ urldecode(route('content.index', 'tags[]=نظام_آموزشی_جدید&tags[]=یازدهم&tags[]=رشته_انسانی&tags[]=علوم_و_فنون_ادبی')) }}" >
+                                                                علوم و فنون ادبی
+                                                            </a>
+                                                        </div>
                                                     </div>
                                                     <div class="col-md-4">
                                                         <div class="subCategoryItem subCategoryItem-title">
@@ -379,6 +394,11 @@
                                                         <div class="subCategoryItem">
                                                             <a class="m-link" href="{{ urldecode(route('content.index', 'tags[]=نظام_آموزشی_جدید&tags[]=دهم&tags[]=رشته_انسانی&tags[]=ریاضی_و_آمار')) }}" >
                                                                 ریاضی و آمار
+                                                            </a>
+                                                        </div>
+                                                        <div class="subCategoryItem">
+                                                            <a class="m-link" href="{{ urldecode(route('content.index', 'tags[]=نظام_آموزشی_جدید&tags[]=دهم&tags[]=رشته_انسانی&tags[]=علوم_و_فنون_ادبی')) }}" >
+                                                                علوم و فنون ادبی
                                                             </a>
                                                         </div>
                                                     </div>
