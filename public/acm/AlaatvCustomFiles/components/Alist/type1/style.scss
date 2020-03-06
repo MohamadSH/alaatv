@@ -84,5 +84,13 @@
             width: auto;
             height: auto;
         }
+
+
+        &.noAction {
+            .a--list1-content {
+                padding: 0 5px 0 5px;
+            }
+        }
     }
+
 }

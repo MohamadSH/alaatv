@@ -116,6 +116,38 @@ var SnippetContentShow = function(){
     };
 }();
 
+var loadItems = function () {
+
+    function getItem(data) {
+        return Alist1.getItem({
+            class: data.class,
+            attr: 'id="' + data.id + '"',
+            link: data.link,
+            img: '<img class="a--full-width lazy-image" width="170" height="96" src="https://cdn.alaatv.com/loder.jpg?w=1&h=1" data-src="'+data.photo+'" alt="'+data.title+'">',
+            title: data.title,
+            info: data.desc,
+            desc: '',
+            action: false,
+            tooltip: true,
+        });
+    }
+
+    function init(videosWithSameSet) {
+        new AlaaListLazyLoad().init({
+            items: videosWithSameSet,
+            listSelector: '.videosWithSameSetList',
+            perLoad: 5,
+            lazyLoadFunction: LazyLoad.loadElementByQuerySelector,
+            loadCallback: function () { imageObserver.observe(); $('[data-toggle="m-tooltip"]').tooltip();},
+            renderItem: getItem
+        });
+    }
+
+    return {
+        init: init,
+    };
+}();
+
 var RelatedItems = function() {
 
     var alpha = 530/942;
@@ -450,8 +482,9 @@ var InitPage = function() {
         });
     }
 
-    function init() {
+    function init(videosWithSameSet) {
         RelatedItems.init();
+        loadItems.init(videosWithSameSet);
         SnippetContentShow.init(related_videos);
         SameHeight.init();
         initOwlCarouselType2();
@@ -465,5 +498,5 @@ var InitPage = function() {
 }();
 
 jQuery(document).ready( function() {
-    InitPage.init();
+    InitPage.init(videosWithSameSet);
 });
