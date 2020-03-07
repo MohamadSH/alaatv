@@ -213,9 +213,7 @@
                                                             <h5 class="modal-title" id="exampleModalLabel">
                                                                 جزییات سفارش
                                                             </h5>
-                                                            <button type="button" class="close" data-dismiss="modal"
-                                                                    aria-label="Close">
-                                                            </button>
+                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
                                                         </div>
                                                         <div class="modal-body">
 
@@ -598,9 +596,7 @@
                     <h5 class="modal-title" id="exampleModalLabel">
                         انتقال به درگاه بانکی
                     </h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-
-                    </button>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
                 </div>
 
                 {!! Form::open(['method' => 'POST','route' => ['redirectToBank', 'paymentMethod'=>'zarinpal', 'device'=>'web'], 'id'=>'onlinePaymentModalForm']) !!}

@@ -74,9 +74,7 @@ var AppGlobalInit = function() {
             '    <div class="modal-content">\n' +
             '      <div class="modal-header">\n' +
             '        <h5 class="modal-title">'+title+'</h5>\n' +
-            '        <button type="button" class="close" data-dismiss="modal" aria-label="Close">\n' +
-            '          <span aria-hidden="true">&times;</span>\n' +
-            '        </button>\n' +
+            '        <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>\n' +
             '      </div>\n' +
             '      <div class="modal-body">\n' +
             '         \n' + content +

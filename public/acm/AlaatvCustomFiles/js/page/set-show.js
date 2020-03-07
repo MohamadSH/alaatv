@@ -1,7 +1,5 @@
 var loadItems = function () {
 
-    var perLoad = 5;
-
     function getVideoItem(data) {
         var badge = '<span class="m-badge m-badge--warning m-badge--wide">ویژه شما</span>';
         if (data.isFree === 1) {
@@ -24,8 +22,7 @@ var loadItems = function () {
         });
     }
 
-    function getPamphletsItem(data) {
-
+    function getPamphletItem(data) {
         return Alist2.getItem({
             class: 'set_pamphlet_item',
             attr: 'data-section-id="' + data.section.id + '" data-section-name="' + data.section.name + '" data-item-order="' + data.order + '"',
@@ -52,103 +49,49 @@ var loadItems = function () {
         });
     }
 
-    function loadMoreItem(items, type, loadAll) {
-        for (var i = 0; ((loadAll || i < perLoad) && (typeof items[0] !== 'undefined')); i++) {
-            if (type === 'video') {
-                loadNewVideo(items[0]);
-            } else if (type === 'pamphlet') {
-                loadNewPamphlets(items[0]);
-            }
-            items.splice(0, 1);
-        }
-    }
-
-    function loadNewVideo(data) {
-        var itemHtmlData = getVideoItem(data);
-        appendNewVideoItem(itemHtmlData);
-    }
-
-    function loadNewPamphlets(data) {
-        var itemHtmlData = getPamphletsItem(data);
-        appendNewPamphletItem(itemHtmlData);
-    }
-
-    function appendNewVideoItem(item) {
-        $('.setVideo').append(item);
-    }
-
-    function appendNewPamphletItem(item) {
-        $('.setPamphlet').append(item);
-    }
-
-    function addSensorItem(type) {
-        var itemSensor = '<div class="itemSensor">\n' +
-            '<div style="width: 30px; display: inline-block;" class="m-loader m-loader--primary m-loader--lg"></div>\n' +
-            '</div>';
-        if (type === 'video') {
-            appendNewVideoItem(itemSensor);
-        } else if (type === 'pamphlet') {
-            appendNewPamphletItem(itemSensor);
-        }
-    }
-
-    function removeSensorItem(type) {
-        if (type === 'video') {
-            $('.setVideo .itemSensor').remove();
-        } else if (type === 'pamphlet') {
-            $('.setPamphlet .itemSensor').remove();
-        }
-    }
-
-    function lazyLoadSensorItemVideo(videos) {
-        LazyLoad.loadElementByQuerySelector('.setVideo .itemSensor', function () {
-            removeSensorItem('video');
-            loadMoreItem(videos, 'video', false);
-            imageObserver.observe();
-            if ((typeof videos[0] !== 'undefined')) {
-                addSensorItem('video');
-                lazyLoadSensorItemVideo(videos);
-            }
-        });
-    }
-
-    function lazyLoadSensorItemPamphlet(pamphlets) {
-        LazyLoad.loadElementByQuerySelector('.setPamphlet .itemSensor', function () {
-            removeSensorItem('pamphlet');
-            loadMoreItem(pamphlets, 'pamphlet', false);
-            imageObserver.observe();
-            if ((typeof pamphlets[0] !== 'undefined')) {
-                addSensorItem('pamphlet');
-                lazyLoadSensorItemPamphlet(pamphlets);
-            }
-        });
-    }
-
     function init(videos, pamphlets) {
-        addSensorItem('video');
-        addSensorItem('pamphlet');
-        lazyLoadSensorItemVideo(videos);
-        lazyLoadSensorItemPamphlet(pamphlets);
+        new AlaaListLazyLoad().init({
+            items: videos,
+            listSelector: '.setVideo',
+            perLoad: 5,
+            lazyLoadFunction: LazyLoad.loadElementByQuerySelector,
+            loadCallback: function () { imageObserver.observe(); },
+            renderItem: getVideoItem
+        });
+        new AlaaListLazyLoad().init({
+            items: pamphlets,
+            listSelector: '.setPamphlet',
+            perLoad: 5,
+            lazyLoadFunction: LazyLoad.loadElementByQuerySelector,
+            loadCallback: function () { imageObserver.observe(); },
+            renderItem: getPamphletItem
+        });
     }
 
     function showAll(videos, pamphlets) {
-        if ((typeof videos[0] !== 'undefined')) {
-            removeSensorItem('video');
-            loadMoreItem(videos, 'video', true);
-            imageObserver.observe();
-        }
-        if ((typeof pamphlets[0] !== 'undefined')) {
-            removeSensorItem('pamphlet');
-            loadMoreItem(pamphlets, 'pamphlet', true);
-            imageObserver.observe();
-        }
+
+        new AlaaListLazyLoad().showAll({
+            items: videos,
+            listSelector: '.setVideo',
+            perLoad: 5,
+            lazyLoadFunction: LazyLoad.loadElementByQuerySelector,
+            loadCallback: function () { imageObserver.observe(); },
+            renderItem: getVideoItem
+        });
+        new AlaaListLazyLoad().showAll({
+            items: pamphlets,
+            listSelector: '.setPamphlet',
+            perLoad: 5,
+            lazyLoadFunction: LazyLoad.loadElementByQuerySelector,
+            loadCallback: function () { imageObserver.observe(); },
+            renderItem: getPamphletItem
+        });
     }
 
     return {
         init: init,
         showAll: showAll,
     };
-
 }();
 
 var SwitchShowType = function() {
@@ -317,7 +260,7 @@ var SwitchShowType = function() {
 
 }();
 
-var InitPage = function() {
+var TabPageView = function() {
 
     function showTabPage(dataState) {
         $('.setVideoPamphletTabs .nav .nav-item .nav-link').removeClass('active');
@@ -326,15 +269,30 @@ var InitPage = function() {
         $(tabId).addClass('active');
     }
 
-    function showTabpageOnInitPage() {
+    function getTabPageDataStatus(videos, pamphlets) {
+        if (videos.length > 0) {
+            return 'video';
+        } else {
+            return 'pamphlet';
+        }
+    }
 
+    function init(videos, pamphlets) {
         var dataState = UrlParameter.getHash();
         if (dataState !== '') {
             showTabPage(dataState);
         } else {
-            showTabPage('video');
+            showTabPage(getTabPageDataStatus(videos, pamphlets));
         }
     }
+
+    return {
+        init: init
+    }
+}();
+
+var InitPage = function() {
+
 
     function addEvents() {
         $(document).on('click', '.setVideoPamphletTabs .nav-item .nav-link', function () {
@@ -352,7 +310,7 @@ var InitPage = function() {
     }
 
     function init(videos, pamphlets) {
-        showTabpageOnInitPage();
+        TabPageView.init(videos, pamphlets);
         loadItems.init(videos, pamphlets);
         addEvents();
         initSticky();

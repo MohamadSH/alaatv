@@ -72,9 +72,7 @@
                                                 {!! Form::open(['files'=>true,'method' => 'POST','action' => ['Web\BlockController@store'], 'class'=>'nobottommargin' , 'id'=>'blockForm']) !!}
                                                 <div class="modal-header">
                                                     <h5 class="modal-title" id="responsive-blockModalLabel">افزودن بلاک جدید</h5>
-                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-
-                                                    </button>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
                                                 </div>
                                                 <div class="modal-body">
                                                     <div class="row">
@@ -102,9 +100,7 @@
                             <div class="modal-content">
                                 <div class="modal-header">
                                     <h5 class="modal-title" id="copyBlockModalModalLabel"></h5>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-
-                                    </button>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body">
                                     <h4 class="modal-title">آیا برای کپی مطمئن هستید؟</h4>
@@ -126,9 +122,7 @@
                             <div class="modal-content">
                                 <div class="modal-header">
                                     <h5 class="modal-title" id="removeBlockModalLabel"></h5>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-
-                                    </button>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body">
                                     <h4 class="modal-title">
@@ -152,9 +146,7 @@
                             <div class="modal-content">
                                 <div class="modal-header">
                                     <h5 class="modal-title" id="showBlockPhotoInModalLabel"></h5>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-
-                                    </button>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body">
                                     <img src="" alt="" class="a--full-width">

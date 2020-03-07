@@ -183,5 +183,4 @@
             ];
     </script>
     <script src="{{ mix('/js/set-show.js') }}" type="text/javascript"></script>
-    <script src="{{ asset('/acm/AlaatvCustomFiles/js/page/set-show.js') }}" type="text/javascript"></script>
 @endsection

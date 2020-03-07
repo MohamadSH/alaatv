@@ -29,9 +29,7 @@
                             <div class="modal-content">
                                 <div class="modal-header">
                                     <h5 class="modal-title" id="createProductFileModalLabel">افزودن فایل جدید</h5>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-
-                                    </button>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
                                 </div>
                                 {!! Form::open(['files'=>true, 'method' => 'POST','action' => 'Web\ProductfileController@store', 'class'=>'nobottommargin']) !!}
                                 @foreach($defaultProductFileOrders as $defaultProductFileOrder)

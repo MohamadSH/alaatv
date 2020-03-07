@@ -141,9 +141,7 @@
                                             <div class="modal-content">
                                                 <div class="modal-header">
                                                     <h5 class="modal-title" id="responsive-userLabel">افزودن کاربر جدید</h5>
-                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-
-                                                    </button>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
                                                 </div>
                                                 {!! Form::open(['files'=>true,'method' => 'POST','action' => ['Web\UserController@store'], 'class'=>'nobottommargin' , 'id'=>'userForm']) !!}
                                                 <div class="modal-body">
@@ -176,9 +174,7 @@
                                         <h5 class="modal-title" id="smsModalLabel">ارسال پیامک به
                                             <span id="smsUserFullName"></span>
                                         </h5>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-
-                                        </button>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
                                     </div>
                                     <div class="modal-body">
                                         {!! Form::open(['method' => 'POST', 'action' => 'Web\HomeController@sendSMS' , 'class'=>'nobottommargin' , 'id'=>'sendSmsForm']) !!}
@@ -225,9 +221,7 @@
                                         <h5 class="modal-title" id="deleteUserConfirmationModalLabel">حذف کاربر
                                             <span id="deleteUserFullName"></span>
                                         </h5>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-
-                                        </button>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
                                     </div>
                                     <div class="modal-body">
                                         <p> آیا مطمئن هستید؟</p>
@@ -250,9 +244,7 @@
                                         <h5 class="modal-title" id="addBonModalLabel">تخصیص بن به کابر
                                             <span id="bonUserFullName"></span>
                                         </h5>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-
-                                        </button>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
                                     </div>
                                     <div class="modal-body">
                                         {!! Form::open(['method' => 'POST', 'action' => 'Web\UserbonController@store' , 'class'=>'nobottommargin' , 'id'=>'userAttachBonForm']) !!}
@@ -379,9 +371,7 @@
                                                     <div class="modal-content">
                                                         <div class="modal-header">
                                                             <h5 class="modal-title" id="responsive-permissionLabel">افزودن دسترسی جدید</h5>
-                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-
-                                                            </button>
+                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
                                                         </div>
                                                         {!! Form::open(['method' => 'POST','action' => ['Web\PermissionController@store'], 'class'=>'nobottommargin' , 'id'=>'permissionForm']) !!}
                                                         <div class="modal-body">
@@ -486,9 +476,7 @@
                                         <div class="modal-content">
                                             <div class="modal-header">
                                                 <h5 class="modal-title" id="responsive-roleLabel">افزودن نقش جدید</h5>
-                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-
-                                                </button>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
                                             </div>
                                             {!! Form::open(['method' => 'POST','action' => 'Web\RoleController@store', 'class'=>'nobottommargin' , 'id'=>'roleForm']) !!}
                                             <div class="modal-body">

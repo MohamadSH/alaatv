@@ -147,6 +147,14 @@
                                                         </span>
                                                     </a>
                                                 </li>
+                                                <li class="m-menu__item " aria-haspopup="true">
+                                                    <a class="m-menu__link" href="{{ urldecode(route('content.index', 'tags[]=نظام_آموزشی_جدید&tags[]=دوازدهم&tags[]=کنکور&tags[]=رشته_انسانی&tags[]=علوم_و_فنون_ادبی')) }}">
+                                                        <i class="m-menu__link-icon fa fa-book-open"><span></span></i>
+                                                        <span class="m-menu__link-text">
+                                                            علوم و فنون ادبی
+                                                        </span>
+                                                    </a>
+                                                </li>
                                             </ul>
                                         </div>
                                     </li>
@@ -275,6 +283,37 @@
                                                         <i class="m-menu__link-icon fa fa-book-open"><span></span></i>
                                                         <span class="m-menu__link-text">
                                                             حسابان
+                                                        </span>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </li>
+                                    <li class="m-menu__item m-menu__item--submenu d-none" aria-haspopup="true"
+                                        m-menu-submenu-toggle="hover">
+                                        <a href="javascript:" class="m-menu__link m-menu__toggle">
+                                            <i class="m-menu__link-icon fa fa-book"><span></span></i>
+                                            <span class="m-menu__link-text">
+                                                دروس اختصاصی انسانی
+                                            </span>
+                                            <i class="m-menu__ver-arrow fa fa-angle-left"></i>
+                                        </a>
+                                        <div class="m-menu__submenu " m-hidden-height="240">
+                                            <span class="m-menu__arrow"></span>
+                                            <ul class="m-menu__subnav">
+                                                <li class="m-menu__item " aria-haspopup="true">
+                                                    <a href="{{ urldecode(route('content.index', 'tags[]=نظام_آموزشی_جدید&tags[]=یازدهم&tags[]=رشته_ریاضی&tags[]=رشته_تجربی&tags[]=شیمی')) }}" class="m-menu__link ">
+                                                        <i class="m-menu__link-icon fa fa-book-open"><span></span></i>
+                                                        <span class="m-menu__link-text">
+                                                            شیمی
+                                                        </span>
+                                                    </a>
+                                                </li>
+                                                <li class="m-menu__item " aria-haspopup="true">
+                                                    <a class="m-menu__link" href="{{ urldecode(route('content.index', 'tags[]=نظام_آموزشی_جدید&tags[]=یازدهم&tags[]=رشته_انسانی&tags[]=علوم_و_فنون_ادبی')) }}">
+                                                        <i class="m-menu__link-icon fa fa-book-open"><span></span></i>
+                                                        <span class="m-menu__link-text">
+                                                            علوم و فنون ادبی
                                                         </span>
                                                     </a>
                                                 </li>
@@ -415,6 +454,14 @@
                                                         <i class="m-menu__link-icon fa fa-book-open"><span></span></i>
                                                         <span class="m-menu__link-text">
                                                             ریاضی و آمار
+                                                        </span>
+                                                    </a>
+                                                </li>
+                                                <li class="m-menu__item " aria-haspopup="true">
+                                                    <a class="m-menu__link" href="{{ urldecode(route('content.index', 'tags[]=نظام_آموزشی_جدید&tags[]=دهم&tags[]=رشته_انسانی&tags[]=علوم_و_فنون_ادبی')) }}">
+                                                        <i class="m-menu__link-icon fa fa-book-open"><span></span></i>
+                                                        <span class="m-menu__link-text">
+                                                            علوم و فنون ادبی
                                                         </span>
                                                     </a>
                                                 </li>

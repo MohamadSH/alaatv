@@ -71,9 +71,7 @@ var LazyLoad = function () {
 
     return {
 
-        loadElementByQuerySelector: function(querySelector, callback) {
-            return loadElementByQuerySelector(querySelector, callback);
-        },
+        loadElementByQuerySelector: loadElementByQuerySelector,
 
         image: function () {
             return loadElementByQuerySelector('.lazy-image:not(.lazy-done)', function(element) {

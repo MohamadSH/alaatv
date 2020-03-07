@@ -2,11 +2,6 @@
 
 @section('page-css')
     <link href="{{ mix('/css/content-show.css') }}" rel="stylesheet">
-    <style>
-        .video-js .vjs-big-play-button {
-            pointer-events: all;
-        }
-    </style>
 @endsection
 
 @section('page-head')
@@ -466,45 +461,43 @@
                                 <div id="playListScroller"
                                      class="m-scrollable11 AlaaScroll"
                                      data-scrollable="true"
-                                     {{--                             data-height="{{ min($videosWithSameSet->count(),(optional($content->template)->name == "video1" ?  11 : 4)) * 103 }}"--}}
                                      data-height="360"
                                      data-scrollbar-shown="true">
-                                    <div class="m-portlet__body-progress">Loading</div>
 
                                     <!--begin::m-widget5-->
-                                    <div class="a-widget5">
-                                        @foreach($videosWithSameSet as $item)
-                                            <div class="a-widget5__item" id="playlistItem_{{ $item["content"]->id }}">
-                                                <div
-                                                    class="a-widget5__content {{ $item["content"]->id == $content->id ? 'm--bg-info' : '' }}">
-                                                    <div class="a-widget5__pic">
-                                                        <a class="m-link a--full-width"
-                                                           href="{{action("Web\ContentController@show" , $item["content"])}}">
-                                                            <img class="m-widget7__img a--full-width lazy-image"
-                                                                 width="170" height="96"
-                                                                 src="https://cdn.alaatv.com/loder.jpg?w=1&h=1"
-                                                                 data-src="{{ isset($item["thumbnail"]) ? $item["thumbnail"]."?w=210&h=118":'' }}"
-                                                                 alt="{{ $item["content"]->name }}">
-                                                        </a>
-                                                    </div>
-                                                    <div class="a-widget5__section">
-                                                        <h4 class="a-widget5__title">
-                                                            <a class="m-link"
-                                                               href="{{action("Web\ContentController@show" , $item["content"])}}"
-                                                               data-toggle="m-tooltip" title="{{ $item["content"]->display_name }}" data-placement="top" >
-                                                                {!! str_limit($item["content"]->display_name, 45, ' ...') !!}
-                                                            </a>
-                                                        </h4>
-                                                        <div class="a-widget5__info">
-                                                            <div class="content-description">
-                                                                {!! str_limit(clearHtml($item["content"]->description), 100, ' ...') !!}
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="clearfix"></div>
-                                                </div>
-                                            </div>
-                                        @endforeach
+                                    <div class="a--list1 videosWithSameSetList a-widget5">
+{{--                                        @foreach($videosWithSameSet as $item)--}}
+{{--                                            <div class="a-widget5__item" id="playlistItem_{{ $item["content"]->id }}">--}}
+{{--                                                <div--}}
+{{--                                                    class="a-widget5__content {{ $item["content"]->id == $content->id ? 'm--bg-info' : '' }}">--}}
+{{--                                                    <div class="a-widget5__pic">--}}
+{{--                                                        <a class="m-link a--full-width"--}}
+{{--                                                           href="{{action("Web\ContentController@show" , $item["content"])}}">--}}
+{{--                                                            <img class="m-widget7__img a--full-width lazy-image"--}}
+{{--                                                                 width="170" height="96"--}}
+{{--                                                                 src="https://cdn.alaatv.com/loder.jpg?w=1&h=1"--}}
+{{--                                                                 data-src="{{ isset($item["thumbnail"]) ? $item["thumbnail"]."?w=210&h=118":'' }}"--}}
+{{--                                                                 alt="{{ $item["content"]->name }}">--}}
+{{--                                                        </a>--}}
+{{--                                                    </div>--}}
+{{--                                                    <div class="a-widget5__section">--}}
+{{--                                                        <h4 class="a-widget5__title">--}}
+{{--                                                            <a class="m-link"--}}
+{{--                                                               href="{{action("Web\ContentController@show" , $item["content"])}}"--}}
+{{--                                                               data-toggle="m-tooltip" title="{{ $item["content"]->display_name }}" data-placement="top" >--}}
+{{--                                                                {!! str_limit($item["content"]->display_name, 45, ' ...') !!}--}}
+{{--                                                            </a>--}}
+{{--                                                        </h4>--}}
+{{--                                                        <div class="a-widget5__info">--}}
+{{--                                                            <div class="content-description">--}}
+{{--                                                                {!! str_limit(clearHtml($item["content"]->description), 100, ' ...') !!}--}}
+{{--                                                            </div>--}}
+{{--                                                        </div>--}}
+{{--                                                    </div>--}}
+{{--                                                    <div class="clearfix"></div>--}}
+{{--                                                </div>--}}
+{{--                                            </div>--}}
+{{--                                        @endforeach--}}
                                     </div>
                                     <!--end::m-widget5-->
 
@@ -961,6 +954,19 @@
         ];
 
         vastData = [];
+        var videosWithSameSet = [
+                @foreach($videosWithSameSet as $key => $item)
+                {
+                    id: 'playlistItem_{{ $item["content"]->id }}',
+                    class: '{{ $item["content"]->id == $content->id ? 'm--bg-info' : '' }}',
+                    link: '{{action("Web\ContentController@show" , $item["content"])}}',
+                    photo: '{{ isset($item["thumbnail"]) ? $item["thumbnail"]."?w=210&h=118":'' }}',
+                    title: '{!! str_limit($item["content"]->display_name, 45, ' ...') !!}',
+                    desc: '{!! str_limit(clearHtml($item["content"]->description), 100, ' ...') !!}',
+                },
+                @endforeach
+            ];
+
 
         var vastXml = '{{($hasRecommendedBlock)?route("web.vast.xml"):""}}';
     </script>

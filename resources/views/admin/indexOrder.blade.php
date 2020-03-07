@@ -67,9 +67,7 @@
                             <h5 class="modal-title" id="deleteOrderConfirmationModalLabel">
                                 حذف سفارش محصول <span id="deleteOrderTitle"></span>
                             </h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-
-                            </button>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
                             <p> آیا مطمئن هستید؟ </p>
@@ -263,9 +261,7 @@
                                             <div class="modal-content">
                                                 <div class="modal-header">
                                                     <h5 class="modal-title" id="responsive-checkoutModalLabel">آیا مطمئن هستید؟</h5>
-                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-
-                                                    </button>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
                                                 </div>
                                                 <div class="modal-body">
                                                     <div class="row">
@@ -299,9 +295,7 @@
                                         <h5 class="modal-title" id="sendSmsModalLabel">
                                             ارسال پیامک به <span id="smsUserFullName"></span>
                                         </h5>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-
-                                        </button>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
                                     </div>
                                     <div class="modal-body">
                                         {!! Form::open(['method' => 'POST', 'action' => 'Web\HomeController@sendSMS' , 'class'=>'nobottommargin' , 'id'=>'sendSmsForm']) !!}
@@ -497,9 +491,7 @@
                                     <h5 class="modal-title" id="completeTransactionInfoLabel">
                                         تکمیل اطلاعات تراکنش
                                     </h5>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-
-                                    </button>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
                                 </div>
                                 {!! Form::open([  'method'=>'POST'  , 'class'=>'completeTransactionInfoForm form-horizontal' ]) !!}
                                 {!! Form::hidden('transaction_id' , null , ['id'=>'completeTransactionInfoForm_transactionId']) !!}
@@ -661,9 +653,7 @@
                                     <h5 class="modal-title" id="completeTransactionInfoLabel">
                                         حذف بن کاربر <span id="deleteUserBonFullName"></span>
                                     </h5>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-
-                                    </button>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body">
                                     <p> آیا مطمئن هستید؟ </p>
