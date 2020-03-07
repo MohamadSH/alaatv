@@ -567,6 +567,7 @@ class WebpacMix {
                 'public/acm/AlaatvCustomFiles/components/ribbon/style.css',
                 'public/acm/AlaatvCustomFiles/components/Favorite/style.css',
                 'public/acm/AlaatvCustomFiles/components/AlaaScroll/style.css',
+                'public/acm/AlaatvCustomFiles/components/Alist/type1/style.css',
                 'public/acm/AlaatvCustomFiles/components/Alist/type2/style.css',
                 'public/acm/AlaatvCustomFiles/components/ScrollCarousel/style.css',
                 'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/style.css',
@@ -603,6 +604,8 @@ class WebpacMix {
                 'public/acm/AlaatvCustomFiles/components/AnimateScrollTo/js.js',
                 'public/acm/AlaatvCustomFiles/components/OwlCarouselType2/js.js',
                 'public/acm/AlaatvCustomFiles/components/SortElements/script.js',
+                'public/acm/AlaatvCustomFiles/components/Alist/type1/script.js',
+                'public/acm/AlaatvCustomFiles/components/Alist/lazyLoadList.js',
                 'public/acm/AlaatvCustomFiles/js/page/content-show.js'
             ],
             'public/js/content-show.js'
@@ -621,6 +624,7 @@ class WebpacMix {
                 'public/acm/AlaatvCustomFiles/components/Favorite/script.js',
                 'public/acm/AlaatvCustomFiles/components/UrlParameter/UrlParameter.js',
                 'public/acm/AlaatvCustomFiles/components/Alist/type1/script.js',
+                'public/acm/AlaatvCustomFiles/components/Alist/lazyLoadList.js',
                 'public/acm/AlaatvCustomFiles/js/page/set-show.js'
             ],
             'public/js/set-show.js'

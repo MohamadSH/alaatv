@@ -1,6 +1,9 @@
-.alert.m-alert--icon .m-alert__text,
-.alert.m-alert--icon .m-alert__close {
+.alert.m-alert--icon.m-alert--outline .m-alert__close,
+.alert.m-alert--icon.m-alert--outline .m-alert__text {
     background: white;
+}
+.alert.m-alert--icon .m-alert__icon {
+    padding: 1.45rem .5rem 1.45rem .5rem;
 }
 .alert .close {
     font-family: "Font Awesome 5 Free";

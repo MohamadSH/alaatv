@@ -138,9 +138,7 @@
                                     <h5 class="modal-title" id="addBonModalLabel">
                                         محاسبه هزینه پیام
                                     </h5>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-
-                                    </button>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body">
                                     <br>
