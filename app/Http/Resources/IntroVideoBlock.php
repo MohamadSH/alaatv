@@ -39,6 +39,7 @@ class IntroVideoBlock extends JsonResource
         }
         $products = $this->products;
         $banners  = $this->banners;
+
         return [
             'id'         => $this->id,
             'title'      => $this->when(isset($this->title), $this->title),
