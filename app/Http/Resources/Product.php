@@ -45,7 +45,7 @@ class Product extends AlaaJsonResourceWithPagination
             'description'   => $this->getDescription(),
             'price'         => $this->getPrice(),
             'tags'          => $this->when(isset($this->tags), $this->getTags()),
-            'intro_video'   => new IntroVideoOfProduct($this),
+            'intro'   => new IntroVideoOfProduct($this),
             'url'           => $this->getUrl(),
             'photo'         => $this->when(isset($this->photo), $this->photo),
             'sample_photos' => $this->when($this->hasSamplePhoto(), $this->getSamplePhoto()), //It is not a relationship

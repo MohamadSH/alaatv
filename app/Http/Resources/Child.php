@@ -46,7 +46,7 @@ class Child extends AlaaJsonResourceWithoutPagination
             'redirect_url' => $this->when(isset($this->redirectUrl), $this->redirectUrl),
             'title'        => $this->when(isset($this->name), $this->name),
             'price'        => $this->getPrice(),
-            'intro_video'  => new IntroVideoOfProduct($this),
+            'intro'  => new IntroVideoOfProduct($this),
             'url'          => $this->getUrl(),
             'photo'        => $this->when(isset($this->photo), $this->photo),
             'gift'         => $this->when($this->gift->isNotEmpty(), $this->getGift()), //It is not a relationship
