@@ -540,27 +540,42 @@ var PreviewSets = function () {
     }
 
     function checkNoData() {
-        checkNoVideo();
-        checkNoPamphlet();
+        var noVideo = checkNoVideo(),
+            noPamphlet = checkNoPamphlet();
+
+        if (noVideo && !noPamphlet) {
+            $('.previewSetsOfProduct .m_tabs_pamphlet').trigger('click')
+        } else if (!noVideo && noPamphlet) {
+            $('.previewSetsOfProduct .m_tabs_video').trigger('click')
+        }
+
     }
 
     function checkNoVideo() {
         if (getVideoListHtml().trim().length === 0 && getVideoListHtml().trim() !== noDataMessage('فیلمی وجود ندارد.')) {
+            $('.previewSetsOfProduct .m_tabs_video').html('بدون فیلم');
             setVideoMessage(noDataMessage('فیلمی وجود ندارد.'));
             getBtnMoreVideo().fadeOut();
+            return true;
         } else {
+            $('.previewSetsOfProduct .m_tabs_video').html('فیلم ها');
             setVideoMessage('');
             getBtnMoreVideo().fadeIn();
+            return false;
         }
     }
 
     function checkNoPamphlet() {
         if (getPamphletList().trim().length === 0 && getPamphletList().trim() !== noDataMessage('جزوه ای وجود ندارد.')) {
+            $('.previewSetsOfProduct .m_tabs_pamphlet').html('بدون جزوه');
             setPamphletMessage(noDataMessage('جزوه ای وجود ندارد.'));
             getBtnMorePamphlet().fadeOut();
+            return true;
         } else {
+            $('.previewSetsOfProduct .m_tabs_pamphlet').html('جزوات');
             setPamphletMessage('');
             getBtnMorePamphlet().fadeIn();
+            return false;
         }
     }
 
