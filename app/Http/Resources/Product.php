@@ -45,13 +45,13 @@ class Product extends AlaaJsonResourceWithPagination
             'description'   => $this->getDescription(),
             'price'         => $this->getPrice(),
             'tags'          => $this->when(isset($this->tags), $this->getTags()),
-            'intro_video'   => $this->when(isset($this->introVideo), $this->introVideo),
+            'intro_video'   => new IntroVideoOfProduct($this),
             'url'           => $this->getUrl(),
             'photo'         => $this->when(isset($this->photo), $this->photo),
             'sample_photos' => $this->when($this->hasSamplePhoto(), $this->getSamplePhoto()), //It is not a relationship
             'gift'          => $this->when($this->gift->isNotEmpty(), $this->getGift()), //It is not a relationship
             'sets'          => $this->when($this->sets->isNotEmpty(), $this->getSet()),
-            'blocks'        => IntroVideoBlock::collection(optional($this)->blocks),
+            'blocks'        => SampleVideoBlock::collection(optional($this)->blocks),
             'attributes'    => $this->getAttributes(),
             'children'      => $this->when($this->children->isNotEmpty(), $this->getChildren()),
             'page_view'     => $this->when(isset($this->page_view), $this->page_view),
