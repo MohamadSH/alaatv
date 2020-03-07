@@ -3,14 +3,13 @@
 namespace App\Http\Resources;
 
 use Illuminate\Http\Request;
-use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
  * Class Block
  *
  * @mixin \App\Block
  * */
-class IntroVideoBlock extends JsonResource
+class IntroVideoBlock extends AlaaJsonResourceWithPagination
 {
     function __construct(\App\Block $model)
     {
