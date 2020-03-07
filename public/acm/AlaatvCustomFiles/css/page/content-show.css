@@ -1,36 +1,9 @@
-.a-widget5 .a-widget5__item {
-    border-bottom: .07rem dashed #ebedf2;
+.videosWithSameSetList.a--list1 .a--list1-item {
+    border-bottom: .07rem dashed #919191;
 }
-.a-widget5 .a-widget5__item:last-child {
+.videosWithSameSetList.a--list1 .a--list1-item:last-child {
     border: none;
-}
-.a-widget5 .a-widget5__item .a-widget5__content:last-child {
-    padding: 10px;
-}
-.a-widget5 .a-widget5__item .a-widget5__content .a-widget5__pic {
-    width: 210px;
-    float: right;
-}
-.a-widget5 .a-widget5__item .a-widget5__content .a-widget5__section {
-    padding-right: 1.43rem;
-    padding-top: .3rem;
-    float: right;
-    width: calc( 100% - 210px);
-}
-.a-widget5 .a-widget5__item .a-widget5__content .a-widget5__section .a-widget5__title {
-    font-size: 16px;
-}
-.content-description p{
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
-
-.a-widget5 .a-widget5__item .a-widget5__content .a-widget5__pic {
-    width: 170px;
-}
-.a-widget5 .a-widget5__item .a-widget5__content .a-widget5__section {
-    width: calc( 100% - 170px);
+    margin-bottom: 10px;
 }
 
 .a--nuevo-alaa-theme.a--media-parent {

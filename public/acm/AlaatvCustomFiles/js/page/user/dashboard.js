@@ -109,12 +109,6 @@ var LoadContentSet = function () {
         }
 
         showLoading();
-        //
-        // // fix position of block in modal
-        // $('#'+modalId+' .modal-body .blockElement').css({
-        //     'top': 'calc( 50% - 17px)',
-        //     'left': 'calc( 50% - 81px)'
-        // });
 
         lockLoadNextPage = true;
 
@@ -126,18 +120,13 @@ var LoadContentSet = function () {
             success: function (data) {
                 lockLoadNextPage = false;
                 if (data.error) {
-                    // let message = 'خطای سیستمی رخ داده است.';
-                    // $('#'+modalId+' .modal-body .m-widget6 .m-widget6__body').html(message);
                 } else {
-                    // contentType: video-pamphlet
                     callback(data.result);
                 }
                 hideLoading();
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 lockLoadNextPage = false;
-                // let message = 'خطای سیستمی رخ داده است.';
-                // $('#'+modalId+' .modal-body .m-widget6 .m-widget6__body').html(message);
                 hideLoading();
             }
         });
@@ -593,7 +582,7 @@ var InitPage = function() {
         return (userId.trim().length > 0);
     }
 
-    function checkUserInfoIsComplete() {
+    function isUserInfoComplete() {
         return (parseInt($('#js-var-userInfo-cmpletion').val())>=60);
     }
 
@@ -820,7 +809,7 @@ var InitPage = function() {
     }
 
     function initLoginState() {
-        if (checkUserInfoIsComplete()) {
+        if (isUserInfoComplete()) {
             initCompleteInfoState();
         } else {
             initIncompleteInfoState();
@@ -846,7 +835,6 @@ var InitPage = function() {
     };
 
 }();
-
 
 $(document).ready(function () {
     InitPage.init();

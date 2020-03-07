@@ -26,12 +26,13 @@
         }
         .a--list1-content {
             width: 75%;
-            padding: 0 5px 0 70px;
+            padding: 0 5px 0 75px;
 
             .a--list1-title {
                 position: relative;
                 width: max-content;
                 max-width: 100%;
+                text-align: justify;
             }
             .a--list1-title a {
                 position: relative;
@@ -60,6 +61,7 @@
             }
             .a--list1-desc {
                 font-size: 1.2rem;
+                text-align: justify;
             }
 
             @media (max-width: 800px) {
@@ -70,6 +72,7 @@
             @media (max-width: 550px) {
                 & {
                     width: 100%;
+                    padding: 0 5px 0 5px;
                 }
             }
 
@@ -81,5 +84,13 @@
             width: auto;
             height: auto;
         }
+
+
+        &.noAction {
+            .a--list1-content {
+                padding: 0 5px 0 5px;
+            }
+        }
     }
+
 }

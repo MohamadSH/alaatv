@@ -994,6 +994,10 @@ var contentSearchFilterData = {
             name: "زبان و ادبیات فارسی"
         },
         {
+            value: "علوم_و_فنون_ادبی",
+            name: "علوم و فنون ادبی"
+        },
+        {
             value: "عربی",
             name: "عربی"
         },
@@ -1080,6 +1084,10 @@ var contentSearchFilterData = {
             name: "زبان و ادبیات فارسی"
         },
         {
+            value: "علوم_و_فنون_ادبی",
+            name: "علوم و فنون ادبی"
+        },
+        {
             value: "شیمی",
             name: "شیمی"
         },
@@ -1146,6 +1154,10 @@ var contentSearchFilterData = {
             name: "زبان و ادبیات فارسی"
         },
         {
+            value: "علوم_و_فنون_ادبی",
+            name: "علوم و فنون ادبی"
+        },
+        {
             value: "زیست_شناسی",
             name: "زیست شناسی"
         },
@@ -1202,6 +1214,10 @@ var contentSearchFilterData = {
         {
             value: "زبان_و_ادبیات_فارسی",
             name: "زبان و ادبیات فارسی"
+        },
+        {
+            value: "علوم_و_فنون_ادبی",
+            name: "علوم و فنون ادبی"
         },
         {
             value: "عربی",

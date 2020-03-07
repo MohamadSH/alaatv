@@ -917,6 +917,7 @@ var FilterOptions = function () {
     function createFieldsOfGroupOptions(data) {
         var dataLength = data.length,
             optionsHtml = '';
+        console.log('data', data);
         for (var i = 0; i < dataLength; i++) {
             optionsHtml += getFilterOption({
                 name: (typeof data[i].name !== 'undefined') ? data[i].name.split('_').join(' ') : data[i].value.split('_').join(' '),

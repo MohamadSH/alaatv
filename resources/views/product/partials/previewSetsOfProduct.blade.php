@@ -6,7 +6,7 @@
         ($products->count() > 0)
     )
 )
-    @if($products->count() === 0 && $sets->count() > 0)
+    @if($products->count() === 0 && $sets->count() === 1)
     @else
         <div class="alert alert-danger m--padding-30 m--margin-bottom-5 selectSetOfProductToPreview" role="alert">
             <div class="row">

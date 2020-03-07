@@ -318,6 +318,5 @@
             null
         @endif;
     </script>
-
     <script src="{{ mix('/js/product-show.js') }}"></script>
 @endsection

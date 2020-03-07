@@ -160,9 +160,7 @@
                                     <h5 class="modal-title" id="deleteEmployeetimesheetConfirmationModalLabel">
                                         حذف ساعت کاری
                                     </h5>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-
-                                    </button>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body">
                                     <p> آیا مطمئن هستید؟</p>

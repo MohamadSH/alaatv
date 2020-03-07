@@ -3227,3 +3227,6 @@ video::-webkit-media-text-track-display {
     border: none;
     visibility: hidden
 }
+.video-js .vjs-big-play-button {
+    pointer-events: all;
+}

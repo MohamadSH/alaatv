@@ -42,10 +42,7 @@
                     <h5 class="modal-title" id="orderproductExchangeModalLabel">
                         افزودن تراکنش جدید
                     </h5>
-                    <button type="button" class="close" data-dismiss="modal"
-                            aria-label="Close">
-
-                    </button>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
                 </div>
                 {!! Form::open(['files'=>true,'method' => 'POST','action' => ['Web\TransactionController@store'], 'class'=>'nobottommargin' ]) !!}
                 <div class="modal-body">
@@ -71,10 +68,7 @@
                         حذف تراکنش
                         <span id="deleteTransactionFullName"></span>
                     </h5>
-                    <button type="button" class="close" data-dismiss="modal"
-                            aria-label="Close">
-
-                    </button>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <p> آیا مطمئن هستید؟</p>
@@ -144,8 +138,7 @@
 
                             @if (Session::has('userBonError'))
                                 <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                                    <button type="button" class="close" data-dismiss="alert"
-                                            aria-label="Close"></button>
+                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"></button>
                                     {{ Session::pull('userBonError') }}
                                 </div>
                             @endif
@@ -177,10 +170,7 @@
                                             <h5 class="modal-title" id="orderproductExchangeModalLabel">
                                                 حذف محصول سفارش
                                             </h5>
-                                            <button type="button" class="close" data-dismiss="modal"
-                                                    aria-label="Close">
-
-                                            </button>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
                                         </div>
                                         <div class="modal-body">
                                             <input type="hidden" name="orderProductIdForRemove" value="">
@@ -375,10 +365,7 @@
                                                 <div class="modal-header">
                                                     <h5 class="modal-title" id="orderproductExchangeModalLabel">تعویض
                                                         آیتم های انتخاب شده</h5>
-                                                    <button type="button" class="close" data-dismiss="modal"
-                                                            aria-label="Close">
-
-                                                    </button>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
                                                 </div>
                                                 {!! Form::open(['action' => ['Web\OrderController@exchangeOrderproduct' , $order] , 'method'=>'POST' ,'class'=>'form-horizontal form-row-seperated']) !!}
                                                 <div class="modal-body">
@@ -519,10 +506,7 @@
                                             <h5 class="modal-title">
                                                 بازگردانی محصول سفارش
                                             </h5>
-                                            <button type="button" class="close" data-dismiss="modal"
-                                                    aria-label="Close">
-
-                                            </button>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
                                         </div>
                                         <div class="modal-body">
                                             <input type="hidden" name="orderProductIdForRecycle" value="">
