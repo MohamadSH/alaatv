@@ -27,7 +27,7 @@ class HekmatVoucher extends JsonResource
 
         return [
             'enable'                => $this->isEnable(),
-            'isExpired'             => $this->isExpired(),
+            'is_expired'             => $this->isExpired(),
             'used_at'               =>  $this->used_at,
             'user'                  => $this->when(!is_null($this->user_id) , function (){
                 if(isset($this->user_id)){
