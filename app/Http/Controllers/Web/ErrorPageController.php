@@ -33,7 +33,7 @@ class ErrorPageController extends Controller
     {
         $url   = $request->url();
         $title = "آلاء|یافت نشد";
-        $this->generateSeoMetaTags(new SeoDummyTags($title, 'صفحه یافت نشد', $url,
+        $this->generateSeoMetaTags(new SeoDummyTags($title, 'یافت نشد', $url,
             $url, route('image', [
                 'category' => '11',
                 'w'        => '100',
@@ -53,8 +53,8 @@ class ErrorPageController extends Controller
     public function error403(Request $request)
     {
         $url   = $request->url();
-        $title = "آلاء|قوانین";
-        $this->generateSeoMetaTags(new SeoDummyTags($title, 'قوانین سایت آلاء', $url,
+        $title = "آلاء|دسترسی غیر مجار";
+        $this->generateSeoMetaTags(new SeoDummyTags($title, 'دسترسی غیر مجاز', $url,
             $url, route('image', [
                 'category' => '11',
                 'w'        => '100',
