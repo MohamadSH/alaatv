@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
  *
  * @mixin \App\Block
  * */
-class IntroVideoBlock extends AlaaJsonResourceWithPagination
+class SampleVideoBlock extends AlaaJsonResourceWithPagination
 {
     function __construct(\App\Block $model)
     {
