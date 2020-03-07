@@ -16,14 +16,12 @@ class IntroVideoOfProduct extends JsonResource
     {
         $resource = $this->resource;
         return [
-            'intro' =>  [
                 'video' => $this->when(isset($resource->intro_video) , function () use ($resource){
                     return $resource->intro_video??null;
                 }),
                 'photo' => $this->when(isset($resource->intro_video_thumbnail) , function () use ($resource){
                     return $resource->intro_video_thumbnail??null;
                 }),
-            ]
         ];
     }
 }
