@@ -15,6 +15,7 @@ use App\{Bon,
     Orderproduct,
     Product,
     Productvoucher,
+    Repositories\ProductvoucherRepo,
     Traits\APIRequestCommon,
     Traits\CharacterCommon,
     Traits\Helper,
@@ -2123,5 +2124,26 @@ class BotsController extends Controller
         return response()->json([
             'message' => $orders->count() . ' orders were processed',
         ]);
+    }
+
+    public function hekmatVoucher()
+    {
+        for ($i=1 ; $i<=500 ; $i++ ){
+
+            do {
+                $code = 'h-' . random_int(10000, 99999);
+                $foundVoucher = ProductvoucherRepo::findVoucherByCode($code);
+            } while (isset($foundVoucher));
+
+            $voucher = Productvoucher::create([
+                'contractor_id' => Productvoucher::CONTRANCTOR_HEKMAT,
+                'products'      =>  '[]',
+                'code'          =>  $code,
+                'expirationdatetime'    =>  '' ,
+                'description'           => 'تولید شده توسط بات برای طرح حکمت',
+            ]);
+        }
+
+        return response()->json(['message'=>'done']);
     }
 }
