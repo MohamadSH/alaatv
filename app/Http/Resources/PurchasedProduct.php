@@ -31,12 +31,6 @@ class PurchasedProduct extends AlaaJsonResourceWithPagination
         if (!($this->resource instanceof \App\Product)) {
             return [];
         }
-        if (isset($this->redirectUrl)) {
-            return [
-                'id'           => $this->id,
-                'redirect_url' => $this->redirectUrl,
-            ];
-        }
 
         $this->loadMissing('sets', 'children', 'producttype');
 

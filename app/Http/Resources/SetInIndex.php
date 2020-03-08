@@ -24,12 +24,6 @@ class SetInIndex extends AlaaJsonResourceWithPagination
         if (!($this->resource instanceof Contentset)) {
             return [];
         }
-        if (isset($this->redirectUrl)) {
-            return [
-                'id'           => $this->id,
-                'redirect_url' => $this->redirectUrl,
-            ];
-        }
 
         return [
             'id'             => $this->id,

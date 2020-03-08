@@ -32,13 +32,6 @@ class ProductInBlock extends AlaaJsonResourceWithPagination
             return [];
         }
 
-        if (isset($this->redirectUrl)) {
-            return [
-                'id'           => $this->id,
-                'redirect_url' => $this->redirectUrl,
-            ];
-        }
-
         return [
             'id'           => $this->id,
             'redirect_url' => $this->when(isset($this->redirectUrl), $this->redirectUrl),
