@@ -67,11 +67,11 @@ class Content extends AlaaJsonResourceWithPagination
                 return $this->getSetInContent();
             }),
             'related_products' => $this->getRelatedProducts(),
-//            'recommended_products' => $this->when($this->recommended_products->isNotEmpty(), $this->getRecommendedProducts()),
+            'can_see_content' =>  $this->when(isset($this->canSeeContent) , isset($this->canSeeContent)?$this->canSeeContent:null),
+            'recommended_products' => null,
             'source'           => $this->when($this->sources->isNotEmpty(), function () {
                 return $this->sources->isNotEmpty() ? Source::collection($this->sources) : null;
             }),
-            'can_see_content' =>  $this->when(isset($this->canSeeContent) , isset($this->canSeeContent)?$this->canSeeContent:null),
         ];
     }
 
