@@ -45,7 +45,7 @@ class ContentInSearch extends AlaaJsonResourceWithPagination
             'body'         => $this->getShortDescription(),
             'duration'     => $this->when(isset($this->duration), $this->duration),
             'photo'        => $this->when(isset($this->thumbnail), $this->thumbnail),
-            'isFree'       => $this->isFree,
+            'is_free'       => $this->isFree,
             'order'        => $this->order,
             'url'          => new Url($this),
             'set'          => (isset($this->contentset_id)) ? new SetInContentSearch($this->set) : null,

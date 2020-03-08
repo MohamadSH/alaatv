@@ -45,7 +45,7 @@ class ContentInSetWithFileWithoutPagination extends AlaaJsonResourceWithoutPagin
             'file'         => $this->when($this->hasFile(), $this->getContentFile()),
             'duration'     => $this->when(isset($this->duration), $this->duration),
             'photo'        => $this->when(isset($this->thumbnail), $this->thumbnail),
-            'isFree'       => $this->isFree,
+            'is_free'       => $this->isFree,
             'order'        => $this->order,
             'updated_at'       => $this->when(isset($this->updated_at), function () {
                 return optional($this->updated_at)->toDateTimeString();
