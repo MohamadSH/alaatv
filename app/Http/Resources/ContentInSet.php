@@ -44,7 +44,7 @@ class ContentInSet extends AlaaJsonResourceWithPagination
             'title'        => $this->when(isset($this->name), $this->name),
             'duration'     => $this->when(isset($this->duration), $this->duration),
             'photo'        => $this->when(isset($this->thumbnail), $this->thumbnail),
-            'isFree'       => $this->isFree,
+            'is_free'       => $this->isFree,
             'updated_at'       => $this->when(isset($this->updated_at), function () {
                 return optional($this->updated_at)->toDateTimeString();
             }),

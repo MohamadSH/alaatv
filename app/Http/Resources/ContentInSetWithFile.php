@@ -40,7 +40,7 @@ class ContentInSetWithFile extends AlaaJsonResourceWithPagination
             'file'         => $this->when($this->hasFile(), $this->getContentFile()),
             'duration'     => $this->when(isset($this->duration), $this->duration),
             'photo'        => $this->when(isset($this->thumbnail), $this->thumbnail),
-            'isFree'       => $this->isFree,
+            'is_free'       => $this->isFree,
             'order'        => $this->order,
             'url'          => new Url($this),
         ];

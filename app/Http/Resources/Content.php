@@ -44,7 +44,7 @@ class Content extends AlaaJsonResourceWithPagination
             'file'             => $this->when($this->hasFile(), $this->getContentFile()),
             'duration'         => $this->when(isset($this->duration), $this->duration),
             'photo'            => $this->when(isset($this->thumbnail), $this->thumbnail),
-            'isFree'           => $this->isFree,
+            'is_free'           => $this->isFree,
             'order'            => $this->order,
             'page_view'        => $this->when(isset($this->page_view), $this->page_view),
             'created_at'       => $this->when(isset($this->created_at), function () {
@@ -71,7 +71,7 @@ class Content extends AlaaJsonResourceWithPagination
             'source'           => $this->when($this->sources->isNotEmpty(), function () {
                 return $this->sources->isNotEmpty() ? Source::collection($this->sources) : null;
             }),
-            'canSeeContent' =>  $this->when(isset($this->canSeeContent) , isset($this->canSeeContent)?$this->canSeeContent:null),
+            'can_see_content' =>  $this->when(isset($this->canSeeContent) , isset($this->canSeeContent)?$this->canSeeContent:null),
         ];
     }
 
