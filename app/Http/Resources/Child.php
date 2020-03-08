@@ -32,13 +32,6 @@ class Child extends AlaaJsonResourceWithoutPagination
             return [];
         }
 
-        if (isset($this->redirectUrl)) {
-            return [
-                'id'           => $this->id,
-                'redirect_url' => $this->redirectUrl,
-            ];
-        }
-
         $this->loadMissing('children');
 
         return [
@@ -46,10 +39,10 @@ class Child extends AlaaJsonResourceWithoutPagination
             'redirect_url' => $this->when(isset($this->redirectUrl), $this->redirectUrl),
             'title'        => $this->when(isset($this->name), $this->name),
             'price'        => $this->getPrice(),
-            'intro'  => new IntroVideoOfProduct($this),
+            'intro'        => $this->when(isset($resource->intro_video) , isset($this->intro_video)?new IntroVideoOfProduct($this):null),
             'url'          => $this->getUrl(),
             'photo'        => $this->when(isset($this->photo), $this->photo),
-            'gift'         => $this->when($this->gift->isNotEmpty(), $this->getGift()), //It is not a relationship
+//            'gift'         => $this->when($this->gift->isNotEmpty(), $this->getGift()), //It is not a relationship
             'attributes'   => $this->getAttributes(),
             'children'     => $this->when($this->children->isNotEmpty(), $this->getChildren()),
         ];

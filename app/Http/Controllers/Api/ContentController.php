@@ -66,27 +66,24 @@ class ContentController extends Controller
      */
     public function showV2(Request $request, Content $content)
     {
+        $user = $request->user('api');
         if (!is_null($content->redirectUrl)) {
             return redirect(convertRedirectUrlToApiVersion($content->redirectUrl, '2'),
                 Response::HTTP_FOUND, $request->headers->all());
         }
 
         if (!$content->isActive()) {
-            $message = '';
-            $code    = Response::HTTP_LOCKED;
-            return response()->json([
-                'message' => $message,
-            ], $code);
+            return response()->json(Response::HTTP_LOCKED);
         }
 
-        if ($this->userCanSeeContent($request, $content, 'api')) {
-            return (new ContentResource($content));
+        $content->canSeeContent = 0; //can't see content
+        if(!isset($user)) {
+            $content->canSeeContent = 2; //it's not determine whether can see content or not
+        }elseif($this->userCanSeeContent($request, $content, 'api')){
+            $content->canSeeContent = 1; //can see content
         }
 
-        $productsThatHaveThisContent = $content->activeProducts();
-
-        return $this->getUserCanNotSeeContentJsonResponse($content, $productsThatHaveThisContent, function ($msg) {
-        });
+        return (new ContentResource($content));
     }
 
     public function fetchContents(Request $request)

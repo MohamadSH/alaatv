@@ -27,13 +27,6 @@ class Product extends AlaaJsonResourceWithPagination
             return [];
         }
 
-        if (isset($this->redirectUrl)) {
-            return [
-                'id'           => $this->id,
-                'redirect_url' => $this->redirectUrl,
-            ];
-        }
-
         $this->loadMissing('sets', 'children', 'producttype');
 
         return [
@@ -45,11 +38,11 @@ class Product extends AlaaJsonResourceWithPagination
             'description'   => $this->getDescription(),
             'price'         => $this->getPrice(),
             'tags'          => $this->when(isset($this->tags), $this->getTags()),
-            'intro'   => new IntroVideoOfProduct($this),
+            'intro'         => $this->when(isset($resource->intro_video) , isset($this->intro_video)?new IntroVideoOfProduct($this):null),
             'url'           => $this->getUrl(),
             'photo'         => $this->when(isset($this->photo), $this->photo),
             'sample_photos' => $this->when($this->hasSamplePhoto(), $this->getSamplePhoto()), //It is not a relationship
-            'gift'          => $this->when($this->gift->isNotEmpty(), $this->getGift()), //It is not a relationship
+//            'gift'          => $this->when($this->gift->isNotEmpty(), $this->getGift()), //It is not a relationship
             'sets'          => $this->when($this->sets->isNotEmpty(), $this->getSet()),
             'blocks'        => SampleVideoBlock::collection(optional($this)->blocks),
             'attributes'    => $this->getAttributes(),

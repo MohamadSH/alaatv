@@ -4,6 +4,7 @@ namespace App\Http\Resources;
 
 use App\Traits\Content\Resource;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 /**
  * Class Content
@@ -26,20 +27,8 @@ class Content extends AlaaJsonResourceWithPagination
         if (!($this->resource instanceof \App\Content)) {
             return [];
         }
-        if (isset($this->redirectUrl)) {
-            return [
-                'id'           => $this->id,
-                'redirect_url' => $this->redirectUrl,
-            ];
-        }
 
         $this->loadMissing('contenttype', 'section', 'user', 'set');
-
-        if ($this->contenttype_id == config('constants.CONTENT_TYPE_ARTICLE')) {
-            $body = $this->context;
-        } else {
-            $body = $this->description;
-        }
 
         return [
             'id'               => $this->id,
@@ -48,7 +37,7 @@ class Content extends AlaaJsonResourceWithPagination
                 return $this->getType();
             }),
             'title'            => $this->when(isset($this->name), $this->name),
-            'body'             => $body,
+            'body'             => $this->getContentBody(),
             'tags'             => $this->when(isset($this->tags), function () {
                 return $this->getTag();
             }),
@@ -77,11 +66,12 @@ class Content extends AlaaJsonResourceWithPagination
             'set'              => $this->when(isset($this->contentset_id), function () {
                 return $this->getSetInContent();
             }),
-            'related_products' => $this->when($this->related_products->isNotEmpty(), $this->getRelatedProducts()),
+            'related_products' => $this->getRelatedProducts(),
 //            'recommended_products' => $this->when($this->recommended_products->isNotEmpty(), $this->getRecommendedProducts()),
             'source'           => $this->when($this->sources->isNotEmpty(), function () {
                 return $this->sources->isNotEmpty() ? Source::collection($this->sources) : null;
             }),
+            'canSeeContent' =>  $this->when(isset($this->canSeeContent) , isset($this->canSeeContent)?$this->canSeeContent:null),
         ];
     }
 
@@ -114,7 +104,12 @@ class Content extends AlaaJsonResourceWithPagination
 
     private function getRelatedProducts()
     {
-        return $this->related_products->isNotEmpty() ? $this->related_products : null;
+        if(!$this->isFree){
+            $relatedProduct = new ProductInBlockWithoutPagination(optional($this->activeProducts())->first());
+        }else{
+            $relatedProduct = optional($this->related_products)->first();
+        }
+        return $relatedProduct;
     }
 
     /**
@@ -123,5 +118,18 @@ class Content extends AlaaJsonResourceWithPagination
     private function getRecommendedProducts()
     {
         return $this->recommended_products->isNotEmpty() ? $this->recommended_products : null;
+    }
+
+    /**
+     * @return string|null
+     */
+    private function getContentBody()
+    {
+        if ($this->isArticle()) {
+            $body = $this->context;
+        } else {
+            $body = $this->description;
+        }
+        return $body;
     }
 }

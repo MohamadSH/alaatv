@@ -24,6 +24,9 @@ class Invoice extends AlaaJsonResourceWithPagination
             'items'               => $this->when(isset($items), count($items) > 0 ? InvoiceItem::collection($items) : null),
             'count'               => $this->when(Arr::has($array, 'orderproductCount'), Arr::has($array, 'orderproductCount') ? Arr::get($array, 'orderproductCount') : 0),
             'price'               => $this->when(Arr::has($array, 'price'), Arr::has($array, 'price') ? new Price(Arr::get($array, 'price')) : null),
+            'pay_by_wallet'       => $this->when(Arr::has($array, 'price') && Arr::has($array['price'], 'payableByWallet'),function () use ($array){
+                return (Arr::has($array, 'price') && Arr::has($array['price'] , 'payableByWallet'))?Arr::get($array['price'], 'payableByWallet'):null ;
+            }),
             'coupon'              => $this->when(Arr::has($array, 'coupon'), Arr::has($array, 'coupon') ? new Coupon(Arr::get($array, 'coupon')) : null),
             'order_has_donate'    => $this->when(Arr::has($array, 'orderHasDonate'), Arr::get($array, 'orderHasDonate')),
             'redirect_to_gateway' => $this->when(Arr::has($array, 'redirectToGateway'), Arr::has($array, 'redirectToGateway') ? Arr::get($array, 'redirectToGateway') : null),

@@ -458,6 +458,8 @@
                     </div>
                 </div>
                 @include('product.partials.tagsInput' )
+                <hr>
+                @include('product.partials.tagsInput' , ['value'=>(isset($sampleContents))?$sampleContents:null ,'id' => 'sampleContents' , 'name' => 'sampleContents' , 'label' => 'کانتنت های معرفی کننده محصول'] )
 
 
                 <div class="form-actions">
