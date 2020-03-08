@@ -40,7 +40,7 @@ class PurchasedProduct extends AlaaJsonResourceWithPagination
             'type'         => $this->when(isset($this->producttype_id), $this->getType()),
             'category'     => $this->when(isset($this->category), $this->category),
             'title'        => $this->when(isset($this->name), $this->name),
-            'isFree'       => $this->isFree,
+            'is_free'       => $this->isFree,
             'url'          => $this->getUrl(),
             'photo'        => $this->when(isset($this->photo), $this->photo),
             'attributes'   => $this->getAttributes(),
