@@ -101,9 +101,6 @@
         @include('product.partials.showPage-topSection-selectable')
     @endif
 
-    {{-- پیش نمایش ست ها --}}
-    @include('product.partials.previewSetsOfProduct', ['sets'=> ($allChildrenSets->count() > 0) ? $allChildrenSets->first()['sets'] : $sets, 'products'=> $allChildrenSets])
-
     {{--نمونه فیلم--}}
     @include('block.partials.main', [
         'blockTitle'=>view('product.partials.productInfoNav', ['targetId'=>'sampleVideo' , 'product'=>$product , 'isForcedGift'=>$isForcedGift]),
@@ -217,6 +214,9 @@
             </div>
         </div>
     @endif
+
+    {{-- پیش نمایش ست ها --}}
+    @include('product.partials.previewSetsOfProduct', ['sets'=> ($allChildrenSets->count() > 0) ? $allChildrenSets->first()['sets'] : $sets, 'products'=> $allChildrenSets])
 
     {{--  محصولات مرتبط  --}}
     @include('block.partials.main', [
