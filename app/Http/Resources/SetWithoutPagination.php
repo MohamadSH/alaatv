@@ -24,12 +24,6 @@ class SetWithoutPagination extends AlaaJsonResourceWithoutPagination
         if (!($this->resource instanceof Contentset)) {
             return [];
         }
-        if (isset($this->redirectUrl)) {
-            return [
-                'id'           => $this->id,
-                'redirect_url' => $this->redirectUrl,
-            ];
-        }
 
         $activeContents = $this->getActiveContents2();
 

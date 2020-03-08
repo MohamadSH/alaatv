@@ -207,6 +207,10 @@ class ContentController extends Controller
             if (request()->expectsJson()) {
                 return redirect()->to($content->api_url['v1']);
             }
+
+            if($productsThatHaveThisContent->isNotEmpty()){
+                return redirect(route('product.show' , $productsThatHaveThisContent->first()->id), Response::HTTP_FOUND, $request->headers->all());
+            }
         }
         $this->generateSeoMetaTags($content);
         $adItems = $content->getAddItems();
