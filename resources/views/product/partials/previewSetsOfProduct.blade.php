@@ -57,10 +57,10 @@
                     <div class="sectionFilterCol"></div>
                     <ul class="nav nav-tabs" role="tablist">
                         <li class="nav-item">
-                            <a class="nav-link active" data-toggle="tab" href="#m_tabs_video">فیلم ها</a>
+                            <a class="nav-link m_tabs_video active" data-toggle="tab" href="#m_tabs_video">فیلم ها</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" data-toggle="tab" href="#m_tabs_pamphlet">جزوات</a>
+                            <a class="nav-link m_tabs_pamphlet" data-toggle="tab" href="#m_tabs_pamphlet">جزوات</a>
                         </li>
                     </ul>
                     <div class="tab-content">
