@@ -228,7 +228,7 @@
                                                         <div class="a--MegaMenu-categorySubItems-background-title">دوازدهم و کنکور</div>
                                                         <div class="a--MegaMenu-categorySubItems-background-image">
                                                             <svg xmlns="http://www.w3.org/2000/svg"
-                                                                 version="1.1" id="Capa_1" x="0px" y="0px"
+                                                                 version="1.1" x="0px" y="0px"
                                                                  viewBox="0 0 455.431 455.431"
                                                                  xml:space="preserve" width="100" height="100">
                                                                 <g>
@@ -333,7 +333,7 @@
                                                         <div class="a--MegaMenu-categorySubItems-background-title">یازدهم</div>
                                                         <div class="a--MegaMenu-categorySubItems-background-image">
                                                             <svg xmlns="http://www.w3.org/2000/svg"
-                                                                 version="1.1" id="Capa_1" x="0px" y="0px"
+                                                                 version="1.1" x="0px" y="0px"
                                                                  viewBox="0 0 455.431 455.431"
                                                                  xml:space="preserve" width="100" height="100">
                                                                 <g>
@@ -433,7 +433,7 @@
                                                         <div class="a--MegaMenu-categorySubItems-background-title">دهم</div>
                                                         <div class="a--MegaMenu-categorySubItems-background-image">
                                                             <svg xmlns="http://www.w3.org/2000/svg"
-                                                                 version="1.1" id="Capa_1" x="0px" y="0px"
+                                                                 version="1.1" x="0px" y="0px"
                                                                  viewBox="0 0 455.431 455.431"
                                                                  xml:space="preserve" width="100" height="100">
                                                                 <g>
@@ -552,7 +552,7 @@
                                                         </div>
                                                         <div class="a--MegaMenu-categorySubItems-background-image">
                                                             <svg xmlns="http://www.w3.org/2000/svg" version="1.1"
-                                                                 id="Capa_1" x="0px" y="0px"
+                                                                 x="0px" y="0px"
                                                                  viewBox="0 0 455.431 455.431" xml:space="preserve"
                                                                  width="100" height="100" class="">
                                                                 <g>
