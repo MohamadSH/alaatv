@@ -860,18 +860,18 @@
     <script type="text/javascript" defer>
         var related_videos = [
             @if(!is_null(min(13,$videosWithSameSet->count())))
-            @foreach($videosWithSameSet->random( min(13,$videosWithSameSet->count())) as $item)
-            @if($item["content"]->id != $content->id)
-            {!!
-                json_encode([
-                    'thumb' => (isset($item["thumbnail"]))?$item["thumbnail"]:"",
-                    'url' => action("Web\ContentController@show" , $item["content"]),
-                    'title' => ($item["content"]->display_name),
-                    'duration' => '20:00'
-                ])
-            !!},
-            @endif
-            @endforeach
+                @foreach($videosWithSameSet->random( min(13,$videosWithSameSet->count())) as $item)
+                    @if($item["content"]->id != $content->id)
+                        {!!
+                            json_encode([
+                                'thumb' => (isset($item["thumbnail"]))?$item["thumbnail"]:"",
+                                'url' => action("Web\ContentController@show" , $item["content"]),
+                                'title' => ($item["content"]->display_name),
+                                'duration' => '20:00'
+                            ])
+                        !!},
+                    @endif
+                @endforeach
             @endif
         ];
 
@@ -954,16 +954,21 @@
         ];
 
         vastData = [];
+
         var videosWithSameSet = [
                 @foreach($videosWithSameSet as $key => $item)
-                {
-                    id: 'playlistItem_{{ $item["content"]->id }}',
-                    class: '{{ $item["content"]->id == $content->id ? 'm--bg-info' : '' }}',
-                    link: '{{action("Web\ContentController@show" , $item["content"])}}',
-                    photo: '{{ isset($item["thumbnail"]) ? $item["thumbnail"]."?w=210&h=118":'' }}',
-                    title: '{!! str_limit($item["content"]->display_name, 45, ' ...') !!}',
-                    desc: '{!! str_limit(clearHtml($item["content"]->description), 100, ' ...') !!}',
-                },
+
+                    {!!
+                        json_encode([
+                            'id' => 'playlistItem_'.$item["content"]->id,
+                            'class' => $item["content"]->id == $content->id ? 'm--bg-info' : '',
+                            'link' => action("Web\ContentController@show" , $item["content"]),
+                            'photo' => isset($item["thumbnail"]) ? $item["thumbnail"]."?w=210&h=118":'',
+                            'title' => str_limit($item["content"]->display_name, 45, ' ...'),
+                            'desc' => str_limit(clearHtml($item["content"]->description), 100, ' ...'),
+                        ])
+                    !!},
+
                 @endforeach
             ];
 
