@@ -82,6 +82,9 @@ class ContentController extends Controller
         }elseif($this->userCanSeeContent($request, $content, 'api')){
             $content->canSeeContent = 1; //can see content
         }
+        if( $content->isFree ) {
+             $content->canSeeContent = 1; //can see content
+        }
 
         return (new ContentResource($content));
     }
