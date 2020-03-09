@@ -993,7 +993,8 @@ class ProductController extends Controller
 
         $sampleContentsArray      = convertTagStringToArray($sampleContentString);
         $introBlock               = $product->blocks->first();
-        $introBlockContentsArray  = optional(optional($introBlock->sets)->first())->getActiveContents2()->pluck('id')->toArray();
+        $introBlockContents       = optional(optional(optional($introBlock)->sets)->first())->getActiveContents2();
+        $introBlockContentsArray  = (isset($introBlockContents))?$introBlockContents->pluck('id')->toArray():[];
         $product->sample_contents = array_unique(array_merge($sampleContentsArray , $introBlockContentsArray));
 
 

@@ -74,39 +74,6 @@ class HomeController extends Controller
 
     public function debug(Request $request, User $user = null)
     {
-//        $bucket = Product::SAMPLE_CONTENTS_BUCKET;
-//        $products = Product::whereHas('blocks' , function ($q){
-//            $q->whereHas('sets');
-//            })->get() ;
-//        foreach ($products as $product) {
-//            $sampleContents      = (optional($product->sample_contents)->tags)??[];
-//            $introBlock          = $product->blocks->first();
-//            $introducerContents  = optional(optional($introBlock->sets)->first())->getActiveContents2()->pluck('id')->toArray();
-//
-//            $product->sample_contents = array_unique(array_merge($sampleContents , $introducerContents));
-//            if(!$product->update()){
-//                echo 'Failed: product:'.$product->id;
-//                echo '<br>';
-//            }
-
-//            $itemTagsArray = [];
-//            foreach ($introducerContents as $id) {
-//                $itemTagsArray[] = 'Content-' . $id;
-//            }
-//
-//            $params = [
-//                'tags' => json_encode($itemTagsArray, JSON_UNESCAPED_UNICODE),
-//            ];
-//
-//            $response = $this->sendRequest(config('constants.TAG_API_URL') . "id/$bucket/" . $product->id, 'PUT', $params);
-//            if($response['statusCode'] != Response::HTTP_OK){
-//                echo 'Failed: product:'.$product->id;
-//                echo '<br>';
-//            }
-//        }
-//
-//        dd('DONE');
-
         abort(Response::HTTP_SERVICE_UNAVAILABLE);
     }
 
