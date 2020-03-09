@@ -197,6 +197,7 @@ class ContentController extends Controller
         $user_can_see_content        = $this->userCanSeeContent($request, $content, 'web');
         $message                     = null;
         $productsThatHaveThisContent = $content->activeProducts() ?: new ProductCollection();
+
         if (!$user_can_see_content) {
 
             $jsonResponse = $this->getUserCanNotSeeContentJsonResponse($content, $productsThatHaveThisContent,
@@ -212,6 +213,7 @@ class ContentController extends Controller
                 return redirect(route('product.show' , $productsThatHaveThisContent->first()->id), Response::HTTP_FOUND, $request->headers->all());
             }
         }
+
         $this->generateSeoMetaTags($content);
         $adItems = $content->getAddItems();
         $tags    = $content->retrievingTags();
@@ -267,7 +269,8 @@ class ContentController extends Controller
         $isFree        = $request->has('isFree');
         $content       = new Content();
 
-        $files = $this->makeContentFilesArray($contentTypeId, $contentsetId, $fileName, $isFree);
+        $qualities = ['720p' , '480p' , '240p'];
+        $files = $this->makeContentFilesArray($contentTypeId, $contentsetId, $fileName, $isFree,$qualities);
 
         if ($contentTypeId != Content::CONTENT_TYPE_PAMPHLET) {
             $thumbnailFileName = pathinfo(parse_url($fileName)['path'], PATHINFO_FILENAME) . '.jpg';
@@ -346,12 +349,13 @@ class ContentController extends Controller
 
         $fileName =
             basename(optional(optional($content->file_for_admin[$content->contenttype->name])->first())->fileName);
+
         if (isset($fileName[0])) {
-            $files             = $this->makeContentFilesArray($contentTypeId, $contentsetId, $fileName, $isFree);
+            $files             = $this->makeContentFilesArray($contentTypeId, $contentsetId, $fileName, $isFree , $request->get('quality',[]));
             $thumbnailFileName = pathinfo(parse_url($fileName)['path'], PATHINFO_FILENAME) . '.jpg';
         }
 
-        if ($content->contenttype_id != Content::CONTENT_TYPE_PAMPHLET) {
+        if (!$content->isPamphlet()) {
             if ($request->hasFile('thumbnail') && isset($content->contentset_id)) {
                 $thumbnailFile = $this->getRequestFile($request->all(), 'thumbnail');
                 if (!isset($thumbnailFileName)) {
@@ -435,7 +439,11 @@ class ContentController extends Controller
                 basename(optional(optional($content->file_for_admin[$content->contenttype->name])->first())->fileName);
         }
 
-        $files = $this->makeContentFilesArray($contentTypeId, $contentsetId, $newFileFullName, $content->isFree);
+        $qualities = [];
+        foreach ($content->getVideos() as $video) {
+            $qualities[] = $video->res;
+        }
+        $files = $this->makeContentFilesArray($contentTypeId, $contentsetId, $newFileFullName, $content->isFree,$qualities);
 
         if ($content->contenttype_id != Content::CONTENT_TYPE_PAMPHLET) {
             $thumbnailFileName = pathinfo(parse_url($newFileFullName)['path'], PATHINFO_FILENAME) . '.jpg';
@@ -449,6 +457,7 @@ class ContentController extends Controller
         if (!empty($files)) {
             $this->makeFilesCollection($content, $files);
         }
+
         Cache::tags([
             'content_' . $content->id,
             'set_' . $newContetnsetId,
@@ -507,15 +516,13 @@ class ContentController extends Controller
     */
 
     /**
-     * @param int    $contenttypeId
-     * @param int    $isFree
      * @param string $fileName
      * @param int    $contentsetId
-     * @param int    $productId
+     * @param array  $quality
      *
      * @return array
      */
-    private function makeFreeVideoFiles(string $fileName, int $contentsetId): array
+    private function makeFreeVideoFiles(string $fileName, int $contentsetId , array $quality = []): array
     {
         $serverUrl        = config('constants.DOWNLOAD_SERVER_PROTOCOL') . config('constants.CDN_SERVER_NAME');
         $mediaPartialPath = config('constants.DOWNLOAD_SERVER_MEDIA_PARTIAL_PATH');
@@ -523,28 +530,28 @@ class ContentController extends Controller
         $fileUrl = [];
 
         $HDPartialPath = $mediaPartialPath . $contentsetId . '/HD_720p/' . $fileName ;
-//        if(file_exists('/alaa_media/cdn'.$HDPartialPath)){
+        if(array_has($quality,'720p')){
             $fileUrl['720p'] =  [
                 'url'         => $serverUrl . $HDPartialPath,
                 'partialPath' => $HDPartialPath,
             ];
-//        }
+        }
 
         $hqPartialPath = $mediaPartialPath . $contentsetId . '/hq/' . $fileName;
-//        if(file_exists('/alaa_media/cdn'.$hqPartialPath)){
+        if(array_has($quality , '480p' )){
             $fileUrl['480p'] =  [
                 'url'         => $serverUrl . $hqPartialPath,
                 'partialPath' => $hqPartialPath,
             ];
-//        }
+        }
 
         $_240pPartialPath = $mediaPartialPath . $contentsetId . '/240p/' . $fileName;
-//        if(file_exists($_240pPartialPath)){
+        if(array_has($quality , '240p')){
             $fileUrl['240p'] =  [
                 'url'         => $serverUrl . $_240pPartialPath,
                 'partialPath' => $_240pPartialPath,
             ];
-//        }
+        }
 
         return $this->makeFilesArray($fileUrl, config('constants.DISK_FREE_CONTENT'));
     }
@@ -552,37 +559,37 @@ class ContentController extends Controller
     /**
      * @param string $fileName
      * @param int    $productId
-     * @param int    $contentsetId
+     * @param array  $quality
      *
      * @return array
      */
-    private function makePaidVideoFiles(string $fileName, int $productId): array
+    private function makePaidVideoFiles(string $fileName, int $productId , array $quality): array
     {
         $fileUrl = [] ;
 
         $HDPartialPath = $productId . '/video/HD_720p/' . $fileName ;
-//        if(file_exists('/paid/private/' . $HDPartialPath)){
+        if(array_has($quality , '720p')){
             $fileUrl['720p'] =  [
                 'partialPath' => '/paid/' . $HDPartialPath ,
                 'url'         => null,
             ];
-//        }
+        }
 
         $hqPartialPath = $productId . '/video/hq/' . $fileName;
-//        if(file_exists('/paid/private/' . $hqPartialPath)){
+        if(array_has($quality , '480p')){
             $fileUrl['480p'] =   [
                 'partialPath' => '/paid/' . $hqPartialPath,
                 'url'         => null,
             ];
-//        }
+        }
 
         $_240pPartialPath = $productId . '/video/240p/' . $fileName;
-//        if(file_exists('/paid/private/' . $_240pPartialPath)){
+        if(array_has($quality , '240p')){
             $fileUrl['240p'] =  [
                 'partialPath' => '/paid/' . $_240pPartialPath,
                 'url'         => null,
             ];
-//        }
+        }
 
         return $this->makeFilesArray($fileUrl, config('constants.DISK_PRODUCT_CONTENT'));
     }
@@ -722,27 +729,25 @@ class ContentController extends Controller
         $content->file = $fileCollection;
     }
 
-    private function makeContentFilesArray(int $contentTypeId, ?int $contentSetId, ?string $fileName, int $isFree): ?array
+    private function makeContentFilesArray(int $contentTypeId, ?int $contentSetId, ?string $fileName, int $isFree , array $quality): ?array
     {
         if (!$isFree) {
             $productId = optional(Contentset::find($contentSetId)->products->first())->id;
             if (is_null($productId)) {
                 return null;
             }
+
+            if ($contentTypeId == config('constants.CONTENT_TYPE_VIDEO')) {
+                    return $this->makePaidVideoFiles($fileName, $productId , $quality);
+            } else if ($contentTypeId == config('constants.CONTENT_TYPE_PAMPHLET')) {
+                    return $this->makePaidPamphletFiles($fileName, $productId);
+            }
         }
 
         if ($contentTypeId == config('constants.CONTENT_TYPE_VIDEO')) {
-            if ($isFree) {
-                return $this->makeFreeVideoFiles($fileName, $contentSetId);
-            } else {
-                return $this->makePaidVideoFiles($fileName, $productId);
-            }
+                return $this->makeFreeVideoFiles($fileName, $contentSetId , $quality);
         } else if ($contentTypeId == config('constants.CONTENT_TYPE_PAMPHLET')) {
-            if ($isFree) {
                 return $this->makeFreePamphletFiles($fileName);
-            } else {
-                return $this->makePaidPamphletFiles($fileName, $productId);
-            }
         }
 
         return [];
