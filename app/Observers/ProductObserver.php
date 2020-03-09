@@ -129,7 +129,7 @@ class ProductObserver
         Cache::tags([
             'product_' . $product->id,
             'product_search',
-            'relatedProduct_search',
+            'relatedProduct',
             'productCollection',
             'shop',
             'home',
