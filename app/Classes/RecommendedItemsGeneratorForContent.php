@@ -7,6 +7,7 @@ namespace App\Classes;
 use App\Content;
 use App\Traits\APIRequestCommon;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
 use stdClass;
 
 class RecommendedItemsGeneratorForContent
@@ -111,17 +112,34 @@ class RecommendedItemsGeneratorForContent
 
     private function prepareRecommendedSets(array $sets): array
     {
-        array_walk($sets, function (&$val) {
+        $sameContentKey = null;
+        array_walk($sets, function (&$val , $key) use  (&$sameContentKey) {
             $val->item_type = self::ITEM_TYPE_SET;
+            if(isset($val->id) && $val->id == $this->content->contentset_id){
+                $sameContentKey = $key ;
+            }
         });
+        if(isset($sameContentKey)) {
+            unset($sets[$sameContentKey]);
+            $sets = array_values($sets);
+        }
+
         return array_slice($sets, 0, 1);
     }
 
     private function prepareRecommendedVideos(array $videos): array
     {
-        array_walk($videos, function (&$val) {
+        $sameContentKey = null;
+        array_walk($videos, function (&$val , $key) use  (&$sameContentKey) {
             $val->item_type = self::ITEM_TYPE_CONTENT;
+            if(isset($val->id) && $val->id == $this->content->id){
+                $sameContentKey = $key ;
+            }
         });
+        if(isset($sameContentKey)) {
+            unset($videos[$sameContentKey]);
+            $videos = array_values($videos);
+        }
 
         return array_slice($videos, 0, 2);
     }
