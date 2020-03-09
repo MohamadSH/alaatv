@@ -196,7 +196,7 @@
 }
 
 @media (max-width: 767.98px) {
-    .a--userCartList {
+    .m-content {
         margin-bottom: 100px;
     }
     .a--userCartList .a--userCartList-items {
@@ -218,7 +218,7 @@
         display: none;
     }
 
-    .CheckoutReviewTotalPriceWarper {
+    .loginFormBeforeBuy {
         display: none;
     }
 
