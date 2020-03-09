@@ -137,14 +137,14 @@ class WebpacMix {
         this.compileScss();
         this.mixBase();
 
-        // this.mixUser();
-        // this.mixPages();
-        // this.mixAdmin();
-        // this.mixLanding();
+        this.mixUser();
+        this.mixPages();
+        this.mixAdmin();
+        this.mixLanding();
         this.mixProduct();
-        // this.mixCheckout();
-        // this.mixPageSetShow();
-        // this.mixPageContentShow();
+        this.mixCheckout();
+        this.mixPageSetShow();
+        this.mixPageContentShow();
 
         this.mixCopyDirectory();
 
@@ -591,7 +591,7 @@ class WebpacMix {
                 'public/acm/videojs/plugins/videojs.hotkeys.min.js',
                 'public/acm/videojs/plugins/seek-to-point.js',
                 'public/acm/videojs/lang/fa.js',
-                'public/acm/videojs/nuevo5.totla.js',
+                'public/acm/videojs/nuevo5.playList.js',
 
                 'public/acm/AlaatvCustomFiles/js/VideoJsHealthCheck.js',
 

@@ -2,7 +2,6 @@
 
 @section('page-css')
     <link href="{{ mix('/css/checkout-review.css') }}" rel="stylesheet" type="text/css"/>
-    <link href="{{ asset('/acm/AlaatvCustomFiles/css/page/checkout-review.css') }}" rel="stylesheet" type="text/css"/>
 @endsection
 
 @section('content')
@@ -629,5 +628,4 @@
         ];
     </script>
     <script src="{{ mix('/js/checkout-review.js') }}"></script>
-    <script src="{{ asset('/acm/AlaatvCustomFiles/js/page/checkout/review.js') }}"></script>
 @endsection
