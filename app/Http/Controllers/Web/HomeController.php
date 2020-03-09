@@ -151,36 +151,9 @@ class HomeController extends Controller
                 ->action('Web\ContentController@show', $content)
                 ->setStatusCode(Response::HTTP_FOUND);
         }
-        $finalLink = $this->getSecureUrl($url, $request);
+        $finalLink = getSecureUrl($url, $download = $request->get('download', null));
 
         return redirect($finalLink);
-    }
-
-    /**
-     * @param         $url
-     *
-     * @param Request $request
-     *
-     * @return string
-     */
-    private function getSecureUrl($url, Request $request): string
-    {
-        $download = $request->get('download', null);
-
-        $unixTime = Carbon::today()
-            ->addDays(2)->timestamp;
-        $userIP   = request()->ip();
-        //TODO: fix diffrent Ip
-        $ipArray    = explode('.', $userIP);
-        $ipArray[3] = 0;
-        $userIP     = implode('.', $ipArray);
-
-        $linkHash  = $this->generateSecurePathHash($unixTime, $userIP, 'TakhteKhak', $url);
-        $finalLink = $url . '?md5=' . $linkHash . '&expires=' . $unixTime;
-        if (isset($download)) {
-            $finalLink .= '&download=1';
-        }
-        return $finalLink;
     }
 
     public function download(Request $request, ErrorPageController $errorPageController)

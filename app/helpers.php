@@ -125,3 +125,43 @@ if (!function_exists('pureHTML')) {
         return Purify::clean($text, ['HTML.Allowed' => 'div,b,a[href]']);
     }
 }
+
+if (!function_exists('generateSecurePathHash')) {
+    function generateSecurePathHash($expires, $client_IP, $secret, $url)
+    {
+        $str = $expires . $url . $client_IP . " " . $secret;
+        $str = base64_encode(md5($str, true));
+
+        $str = str_replace("+", "-", $str);
+        $str = str_replace("/", "_", $str);
+        $str = str_replace("=", "", $str);
+
+        return $str;
+    }
+}
+
+if (!function_exists('getSecureUrl')) {
+    /**
+     * @param             $url
+     *
+     * @param string|null $download
+     *
+     * @return string
+     */
+    function getSecureUrl($url, ?int $download): string
+    {
+        $unixTime = Carbon::today()->addDays(2)->timestamp;
+        $userIP   = request()->ip();
+        //TODO: fix diffrent Ip
+        $ipArray    = explode('.', $userIP);
+        $ipArray[3] = 0;
+        $userIP     = implode('.', $ipArray);
+
+        $linkHash  = generateSecurePathHash($unixTime, $userIP, 'TakhteKhak', $url);
+        $finalLink = $url . '?md5=' . $linkHash . '&expires=' . $unixTime;
+        if (isset($download) && $download) {
+            $finalLink .= '&download=1';
+        }
+        return $finalLink;
+    }
+}

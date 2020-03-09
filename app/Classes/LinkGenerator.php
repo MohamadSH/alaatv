@@ -22,15 +22,15 @@ use League\Flysystem\FileNotFoundException;
 class LinkGenerator
 {
     protected const DOWNLOAD_CONTROLLER_NAME = "Web\\HomeController@newDownload";
-    
+
     protected $uuid;
-    
+
     protected $disk;
-    
+
     protected $url;
-    
+
     protected $fileName;
-    
+
     /**
      * LinkGenerator constructor.
      *
@@ -43,7 +43,7 @@ class LinkGenerator
             ->setUrl($file->url)
             ->setFileName($file->fileName);
     }
-    
+
     /**
      * @param  mixed  $fileName
      *
@@ -52,10 +52,10 @@ class LinkGenerator
     public function setFileName($fileName)
     {
         $this->fileName = $fileName;
-        
+
         return $this;
     }
-    
+
     /**
      * @param  mixed  $url
      *
@@ -64,10 +64,10 @@ class LinkGenerator
     public function setUrl($url)
     {
         $this->url = $url;
-        
+
         return $this;
     }
-    
+
     /**
      * @param  mixed  $uuid
      *
@@ -76,10 +76,10 @@ class LinkGenerator
     public function setUuid($uuid)
     {
         $this->uuid = $uuid;
-        
+
         return $this;
     }
-    
+
     /**
      * @param  mixed  $disk
      *
@@ -88,10 +88,10 @@ class LinkGenerator
     public function setDisk($disk)
     {
         $this->disk = $disk;
-        
+
         return $this;
     }
-    
+
     /**
      * LinkGenerator constructor.
      *
@@ -120,11 +120,11 @@ class LinkGenerator
         $input->uuid     = $uuid;
         $input->url      = $url;
         $input->fileName = $fileName;
-        
+
         //        dd($input);
         return new LinkGenerator($input);
     }
-    
+
     /**
      * @param $uuid
      *
@@ -140,10 +140,10 @@ class LinkGenerator
                 return $file->disks->first()->name;
             }
         }
-        
+
         return null;
     }
-    
+
     /**
      * @param  array|null  $paid
      *
@@ -156,27 +156,49 @@ class LinkGenerator
             return $this->url;
         }
         if (isset($this->disk, $this->fileName)) {
-            
-            //            dd("here");
+
             $diskAdapter = Storage::disk($this->disk)
                 ->getAdapter();
-            //            dd($diskAdapter);
             $url = $this->fetchUrl($diskAdapter, $this->fileName);
             if (isset($paid)) {
                 $data = encrypt([
                     'url'  => $url,
                     'data' => $paid,
                 ]);
-                
+
                 return action(self::DOWNLOAD_CONTROLLER_NAME, $data);
             }
-        
+
             return $url;
         }
-    
+
         throw new \Exception("DiskName and FileName should be set \n File uuid=".$this->uuid);
     }
-    
+
+    /**
+     * @param int $isFree
+     *
+     * @return array|null|string
+     * @throws \Exception
+     */
+    public function getLinksForApp(int $isFree)
+    {
+        if (isset($this->url)) {
+            return $this->url;
+        }
+        if (isset($this->disk, $this->fileName)) {
+
+            $diskAdapter = Storage::disk($this->disk)->getAdapter();
+            $url = $this->fetchUrl($diskAdapter, $this->fileName);
+            if (!$isFree) {
+                $url = getSecureUrl($url , 0);
+            }
+            return $url;
+        }
+
+        throw new \Exception("DiskName and FileName should be set \n File uuid=".$this->uuid);
+    }
+
     private function fetchUrl(AlaaSftpAdapter $diskAdapter, $fileName)
     {
         try {
@@ -189,11 +211,11 @@ class LinkGenerator
                 'file'     => $exception->getFile(),
                 'fileName' => $fileName,
             ], JSON_UNESCAPED_UNICODE));
-            
+
             return null;
         }
     }
-    
+
     /**
      * @return array
      */
@@ -213,7 +235,7 @@ class LinkGenerator
                 'exception'   => $e,
             ];
         }
-        
+
         return $result;
     }
 }
