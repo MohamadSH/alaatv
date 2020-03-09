@@ -109,18 +109,6 @@ trait Helper
         return $list;
     }
 
-    public function generateSecurePathHash($expires, $client_IP, $secret, $url)
-    {
-        $str = $expires . $url . $client_IP . " " . $secret;
-        $str = base64_encode(md5($str, true));
-
-        $str = str_replace("+", "-", $str);
-        $str = str_replace("/", "_", $str);
-        $str = str_replace("=", "", $str);
-
-        return $str;
-    }
-
     /**
      * Update model without touching it's updated_at
      *

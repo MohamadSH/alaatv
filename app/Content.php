@@ -788,6 +788,39 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
     }
 
     /**
+     * Get the content's files .
+     *
+     * @param $value
+     *
+     * @return Collection
+     */
+    public function getFileForAppAttribute(): ?Collection
+    {
+        $value = $this->getOriginal('file');
+        $key = 'content:FileForApp' . $this->cacheKey();
+
+        return Cache::tags(['content', 'file' , 'fileForApp', 'content_' . $this->id, 'content_' . $this->id . '_file' , 'content_' . $this->id . '_fileForApp'])
+            ->remember($key, config('constants.CACHE_60'), function () use ($value) {
+                $fileCollection = collect(json_decode($value));
+                $fileCollection->transform(function ($item, $key) {
+
+                    $l          = new LinkGenerator($item);
+                    $item->link = $l->getLinksForApp($this->isFree);
+                    unset($item->url);
+                    unset($item->disk);
+                    unset($item->fileName);
+                    if ($item->type === 'pamphlet') {
+                        unset($item->res);
+                    }
+                    return $item;
+                });
+
+
+                return $fileCollection->count() > 0 ? $fileCollection->groupBy('type') : null;
+            });
+    }
+
+    /**
      * Get the content's files for admin.
      *
      * @param $value

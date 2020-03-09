@@ -31,6 +31,26 @@ trait Resource
         ];
     }
 
+    public function getContentExplicitFile()
+    {
+        if ($this->resource instanceof Content) {
+            $file                   = $this->file_for_app;
+            $videoFileCollection    = $file->get('video') ?? collect();
+            $pamphletFileCollection = $file->get('pamphlet') ?? collect();
+            return [
+                'video'    => $this->when(isset($videoFileCollection), function () use ($videoFileCollection) {
+                    return $videoFileCollection->count() > 0 ? VideoFile::collection($videoFileCollection) : null;
+                }),
+                'pamphlet' => $this->when(isset($pamphletFileCollection), function () use ($pamphletFileCollection) {
+                    return $pamphletFileCollection->count() > 0 ? PamphletFile::collection($pamphletFileCollection) : null;
+                }),
+            ];
+        }
+        return [
+
+        ];
+    }
+
     public function hasFile(): bool
     {
         if ($this->resource instanceof Content) {

@@ -41,7 +41,7 @@ class Content extends AlaaJsonResourceWithPagination
             'tags'             => $this->when(isset($this->tags), function () {
                 return $this->getTag();
             }),
-            'file'             => $this->when($this->hasFile(), $this->getContentFile()),
+            'file'             => $this->when($this->hasFile(), $this->getContentExplicitFile()),
             'duration'         => $this->when(isset($this->duration), $this->duration),
             'photo'            => $this->when(isset($this->thumbnail), $this->thumbnail),
             'is_free'           => $this->isFree,

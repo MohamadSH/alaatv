@@ -145,7 +145,7 @@ class Productfile extends BaseModel
         $ipArray[3] = 0;
         $userIP     = implode('.', $ipArray);
 
-        $linkHash     = $this->generateSecurePathHash($unixTime, $userIP, 'TakhteKhak', $cloudFile);
+        $linkHash     = generateSecurePathHash($unixTime, $userIP, 'TakhteKhak', $cloudFile);
         $externalLink = $productFileLink . '?md5=' . $linkHash . '&expires=' . $unixTime;
         return $externalLink;
     }
