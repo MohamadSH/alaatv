@@ -122,7 +122,7 @@
 .vjs-vplaylist {
     width: 250px;
     right: -250px;
-    background: #282828;
+    background: #000000f5;
     position: absolute;
     top: 0;
     padding-bottom: 40px;
@@ -138,7 +138,7 @@
 }
 
 .vjs-vplaylist .vjs-head {
-    background: #000;
+    background: #0000006b;
     border-bottom: solid 1px #484848;
     width: 100%;
     padding: 0 5px 0 10px;
@@ -174,9 +174,18 @@
     height: 100%
 }
 
+/*.vjs-vplaylist .vjs-vlist {*/
+/*    scrollbar-color: #ff9000 #ffe0b8;*/
+/*    scrollbar-width: thin;*/
+/*}*/
+
 .vjs-vplaylist .vjs-vlist::-webkit-scrollbar {
-    width: 10px;
+    width: 0px;
+    height: 0px;
     background: #ccc
+}
+.vjs-vplaylist .vjs-vlist::-webkit-scrollbar-track {
+    background: #ffefdb;
 }
 
 .vjs-vplaylist .vjs-vlist::-webkit-scrollbar-thumb {
@@ -188,7 +197,7 @@
 }
 
 .vjs-vplaylist .vjs-vlist .vjs-item {
-    padding: 8px;
+    padding: 0;
     border-bottom: solid 1px #444;
     cursor: pointer;
     display: table;
@@ -212,8 +221,8 @@
     background-size: contain;
     background-position: 50% 50%;
     background-repeat: no-repeat;
-    border: 1px solid #444;
-    float: left;
+    border: none;
+    float: right;
     margin-right: 10px;
     pointer-events: none
 }
@@ -223,9 +232,11 @@
     color: #ccc;
     margin: 0;
     pointer-events: none;
-    min-height: 30px;
-    max-height: 30px;
-    overflow: hidden
+    min-height: 45px;
+    max-height: 45px;
+    overflow: hidden;
+    text-align: justify;
+    padding: 1px 8px;
 }
 
 .vjs-vplaylist .vjs-vlist .vjs-item span {
@@ -991,7 +1002,7 @@ body.vjs-full-window {
     top: 50%;
     width: 86px;
     cursor: pointer;
-    z-index: 4;
+    z-index: 0;
     display: block;
     opacity: 1;
     visibility: visible;
@@ -1000,7 +1011,8 @@ body.vjs-full-window {
     -moz-transition: all .5s ease;
     -ms-transition: all .5s ease;
     -o-transition: all .5s ease;
-    transition: all .5s ease
+    transition: all .5s ease;
+    pointer-events: all;
 }
 
 .vjs-error .vjs-big-play-button, .vjs-has-started.vjs-ad-playing .vjs-big-play-button {
@@ -2314,7 +2326,7 @@ body.vjs-full-window {
     left: 0;
     background: linear-gradient(0deg, transparent, rgba(0, 0, 0, .7));
     color: #fff;
-    padding: 10px;
+    padding: 10px 45px 10px 10px;
     font-size: 18px;
     overflow: hidden;
     width: 100%;
@@ -3176,7 +3188,9 @@ video::-webkit-media-text-track-display {
     padding: 0;
     overflow-x: auto;
     overflow-y: scroll;
-    box-sizing: border-box
+    box-sizing: border-box;
+    right: 10px;
+    width: 260px;
 }
 
 .ss-scroll {
@@ -3226,7 +3240,4 @@ video::-webkit-media-text-track-display {
     height: 100%;
     border: none;
     visibility: hidden
-}
-.video-js .vjs-big-play-button {
-    pointer-events: all;
 }

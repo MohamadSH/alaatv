@@ -960,8 +960,8 @@
 
                     {!!
                         json_encode([
-                            'id' => 'playlistItem_'.$item["content"]->id,
-                            'class' => $item["content"]->id == $content->id ? 'm--bg-info' : '',
+                            'id' => $item["content"]->id,
+                            'class' => $item["content"]->id == $content->id ? 'current' : '',
                             'link' => action("Web\ContentController@show" , $item["content"]),
                             'photo' => isset($item["thumbnail"]) ? $item["thumbnail"]."?w=210&h=118":'',
                             'title' => str_limit($item["content"]->display_name, 45, ' ...'),
@@ -971,7 +971,6 @@
 
                 @endforeach
             ];
-
 
         var vastXml = '{{($hasRecommendedBlock)?route("web.vast.xml"):""}}';
     </script>

@@ -18,6 +18,7 @@ function AlaaListLazyLoad() {
         if (options.listSelector === null) {
             return false;
         }
+
         $list = $(options.listSelector);
         if ($list.length === 0) {
             return false;
@@ -79,6 +80,7 @@ function AlaaListLazyLoad() {
     }
 
     function init(customOptions) {
+
 
         if (!initData(customOptions)) {
             return;

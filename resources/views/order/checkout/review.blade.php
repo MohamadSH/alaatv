@@ -2,6 +2,7 @@
 
 @section('page-css')
     <link href="{{ mix('/css/checkout-review.css') }}" rel="stylesheet" type="text/css"/>
+    <link href="{{ asset('/acm/AlaatvCustomFiles/css/page/checkout-review.css') }}" rel="stylesheet" type="text/css"/>
 @endsection
 
 @section('content')
@@ -41,17 +42,6 @@
                         <!--begin::Content-->
                         <div class="tab-content">
                             <!--begin::m-widget5-->
-                            <style>
-                                .productAttributes {
-                                    display: flex;
-                                    flex-flow: column;
-                                    flex-wrap: wrap;
-                                    max-height: 150px;
-                                }
-                                .productAttributes .productAttributes-item {
-
-                                }
-                            </style>
                             <div class="m-widget5 a--list3 a--userCartList-items">
                                 @if(isset($invoiceInfo['items']))
                                     @foreach($invoiceInfo['items'] as $key=>$orderProductItem)
@@ -81,7 +71,7 @@
                                                     </div>
                                                     <div class="a--list3-content">
                                                         <a href="{{ $simpleOrderProductItem->product->url }}" target="_blank">
-                                                            <h2 class="a--list3-title">
+                                                            <h2 class="a--list3-title text-truncate" data-toggle="m-tooltip" title="{{ $simpleOrderProductItem->product->name }}" data-placement="top">
                                                                 {{ $simpleOrderProductItem->product->name }}
                                                             </h2>
                                                         </a>
@@ -137,7 +127,7 @@
                                                     </div>
                                                     <div class="a--list3-content">
                                                         <a href="{{ $orderProductItem['grand']->url }}" target="_blank">
-                                                            <h2 class="a--list3-title">
+                                                            <h2 class="a--list3-title text-truncate" data-toggle="m-tooltip" title="{{ $orderProductItem['grand']->name }}" data-placement="top">
                                                                 {{ $orderProductItem['grand']->name }}
                                                             </h2>
                                                         </a>
@@ -550,8 +540,8 @@
 
                     @if(optional(Auth::user())->id === null)
                         <button type="button"
-                                onclick="$('.loginFormBeforeBuy').AnimateScrollTo();"
-                                class="btn btn-lg m-btn--square m-btn btn-info">
+                                data-href="{{ Request::url() }}"
+                                class="btn btn-lg m-btn--square m-btn btn-info LoginBeforeClick">
                             ورود و خرید
                         </button>
                     @else
@@ -639,4 +629,5 @@
         ];
     </script>
     <script src="{{ mix('/js/checkout-review.js') }}"></script>
+    <script src="{{ asset('/acm/AlaatvCustomFiles/js/page/checkout/review.js') }}"></script>
 @endsection

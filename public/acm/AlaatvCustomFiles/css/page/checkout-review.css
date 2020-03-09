@@ -166,6 +166,12 @@
     top: calc((0% - (100% - 1.3em)) - 8%);
 }
 
+.productAttributes {
+    display: flex;
+    flex-flow: column;
+    flex-wrap: wrap;
+}
+
 /*media query*/
 @media (min-width: 767.98px) {
     .btnAddMoreProductToCart-desktop {
@@ -190,6 +196,9 @@
 }
 
 @media (max-width: 767.98px) {
+    .a--userCartList {
+        margin-bottom: 100px;
+    }
     .a--userCartList .a--userCartList-items {
         margin-top: 15px;
     }
@@ -206,6 +215,10 @@
     }
 
     .btnGotoCheckoutPayment-desktop {
+        display: none;
+    }
+
+    .CheckoutReviewTotalPriceWarper {
         display: none;
     }
 

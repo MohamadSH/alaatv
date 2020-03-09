@@ -1,5 +1,10 @@
 .videosWithSameSetList.a--list1 .a--list1-item {
     border-bottom: .07rem dashed #919191;
+    margin: 0;
+    padding: 5px 0;
+}
+.videosWithSameSetList.a--list1 .a--list1-item.current {
+    background-color: #ffd196;
 }
 .videosWithSameSetList.a--list1 .a--list1-item:last-child {
     border: none;
