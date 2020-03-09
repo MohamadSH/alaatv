@@ -1,6 +1,7 @@
 {
   "private": true,
   "scripts": {
+    "vu": "node resources/js/changeWebpackVersion.js",
     "build": "echo NODE_ENV=$NODE_ENV",
     "dev": "npm run development",
     "development": "cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",

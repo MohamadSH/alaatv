@@ -10,7 +10,7 @@ var loadItems = function () {
             class: 'set_video_item',
             attr: 'data-section-id="' + data.section.id + '" data-section-name="' + data.section.name + '" data-item-order="' + data.order + '"',
             link: data.link,
-            img: '<img class="img-fluid a--full-width lazy-image" width="453" height="254"  src="https://cdn.alaatv.com/loder.jpg?w=1&h=1" data-src="' + data.photo + '" alt="' + data.name + '" data-container="body" data-toggle="m-tooltip" data-placement="top" title="دانلود یا تماشا فیلم">',
+            img: '<img class="img-fluid a--full-width lazy-image" width="453" height="254"  src="' + GlobalJsVar.getVar('loadingImageForVideo') + '" data-src="' + data.photo + '" alt="' + data.name + '" data-container="body" data-toggle="m-tooltip" data-placement="top" title="دانلود یا تماشا فیلم">',
             title: data.name,
             info:
                 '            \n' + badge +

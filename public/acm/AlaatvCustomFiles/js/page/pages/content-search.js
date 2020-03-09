@@ -159,7 +159,7 @@ var Alaasearch = function () {
     }
     function setItemAdapter(data) {
         return {
-            widgetPic: (typeof (data.photo) === 'undefined' || data.photo === null) ? 'https://cdn.alaatv.com/loder.jpg?w=253&h=142' : data.photo + '?w=253&h=142',
+            widgetPic: (typeof (data.photo) === 'undefined' || data.photo === null) ? GlobalJsVar.getVar('loadingImageForVideo') : data.photo + '?w=253&h=142',
             widgetTitle: data.title,
             widgetAuthor: {
                 photo : data.author.photo,
@@ -195,7 +195,7 @@ var Alaasearch = function () {
             '            </div>\n' +
             '            \n' +
             '            <div class="a--block-set-author-pic">\n' +
-            '                <img src="https://cdn.alaatv.com/loder.jpg?w=1&h=1" class="lazy-image" data-src="' + setItemData.widgetAuthor.photo + '" alt="' + setItemData.widgetAuthor.full_name + '" width="40" height="40">\n' +
+            '                <img src="' + GlobalJsVar.getVar('loadingImageForVideo') + '" class="lazy-image" data-src="' + setItemData.widgetAuthor.photo + '" alt="' + setItemData.widgetAuthor.full_name + '" width="40" height="40">\n' +
             '            </div>\n' +
             '            \n' +
             '    \n' +
@@ -206,7 +206,7 @@ var Alaasearch = function () {
                 (typeof data.loadingHtml !== 'undefined') ?
                     data.loadingHtml
                     :
-                    '            <img src="https://cdn.alaatv.com/loder.jpg?w=16&h=9" data-src="' + setItemData.widgetPic + '" alt="' + setItemData.widgetTitle + '" class="a--block-image lazy-image" width="453" height="254" />\n'
+                    '            <img src="' + GlobalJsVar.getVar('loadingImageForVideo') + '" data-src="' + setItemData.widgetPic + '" alt="' + setItemData.widgetTitle + '" class="a--block-image lazy-image" width="453" height="254" />\n'
             )
             +
             '        </a>\n' +
@@ -468,7 +468,7 @@ var Alaasearch = function () {
                 widgetLink: contentItemData.widgetLink,
                 widgetPic:
                     '        <a href="' + contentItemData.widgetLink + '" class="d-block">\n' +
-                    '            <img src="https://cdn.alaatv.com/loder.jpg?w=16&h=9" data-src="' + contentItemData.widgetPic + '" alt="' + contentItemData.widgetTitle + '" class="a--full-width lazy-image videoImage" width="253" height="142" />\n' +
+                    '            <img src="' + GlobalJsVar.getVar('loadingImageForVideo') + '" data-src="' + contentItemData.widgetPic + '" alt="' + contentItemData.widgetTitle + '" class="a--full-width lazy-image videoImage" width="253" height="142" />\n' +
                     '        </a>\n',
                 widgetTitle:
                     '<a href="' + contentItemData.widgetLink + '" class="m-link">\n' +
