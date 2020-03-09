@@ -1,10 +1,12 @@
-var SnippetContentShow = function(){
-    var handlePlayerRelatedVideos = function (related_videos) {
-        var contentId = $('#js-var-contentId').val();
-        var contentUrl = $('#js-var-contentUrl').val();
-        var contentEmbedUrl = $('#js-var-contentEmbedUrl').val();
-        var contentDisplayName = $('#js-var-contentDName').val();
-        var player = null;
+var Player = function(){
+
+    var init = function (related_videos, videosWithSameSet) {
+        var contentId = $('#js-var-contentId').val(),
+            contentUrl = $('#js-var-contentUrl').val(),
+            contentEmbedUrl = $('#js-var-contentEmbedUrl').val(),
+            contentDisplayName = $('#js-var-contentDName').val(),
+            player = null;
+
         if ($('#video-' + contentId).length > 0) {
 
             player = videojs('video-' + contentId, {
@@ -54,30 +56,29 @@ var SnippetContentShow = function(){
 
                 // overlay: "//domain.com/overlay.html" //(undefined) - overlay URL to display html on each pause event example: https://www.nuevolab.com/videojs/tryit/overlay
 
+
+                playlistUI: true, // set to disable playlist UI completely
+                playlistShow: true, // set to hide playlist UI on start
+                playlistAutoHide: true, // Disable playlist UI autohide on video play event
+                playlistNavigation: false , // set to show playlist navigation arrows
+                playlistRepeat: false, // set to repeat playlist playback
+
             });
 
             player.hotkeys({
                 volumeStep: 0.1,
                 seekStep: 5,
-                enableVolumeScroll: true,
+                enableVolumeScroll: false,
                 alwaysCaptureHotkeys: true
             });
 
             player.pic2pic();
 
+            window.imageObserver.observe();
+
             VideoJsHealthCheck.handle(player);
 
             initVast(player, vastData, vastXml);
-        }
-
-    };
-
-    var handleVideoPlayListScroll = function () {
-        var contentId = $('#js-var-contentId').val();
-        var container = $("#playListScroller"),
-            scrollTo = $("#playlistItem_" + contentId);
-        if (scrollTo.length > 0) {
-            container.scrollTop(scrollTo.offset().top - 400);
         }
     };
 
@@ -109,10 +110,7 @@ var SnippetContentShow = function(){
     }
 
     return {
-      init: function (related_videos) {
-          handleVideoPlayListScroll();
-          handlePlayerRelatedVideos(related_videos);
-      }
+      init: init
     };
 }();
 
@@ -121,9 +119,9 @@ var loadItems = function () {
     function getItem(data) {
         return Alist1.getItem({
             class: data.class,
-            attr: 'id="' + data.id + '"',
+            attr: 'id="playlistItem_' + data.id + '"',
             link: data.link,
-            img: '<img class="a--full-width lazy-image" width="170" height="96" src="https://cdn.alaatv.com/loder.jpg?w=1&h=1" data-src="'+data.photo+'" alt="'+data.title+'">',
+            img: '<img class="a--full-width lazy-image" width="170" height="96" src="' + GlobalJsVar.getVar('loadingImageForVideo') + '" data-src="'+data.photo+'" alt="'+data.title+'">',
             title: data.title,
             info: data.desc,
             desc: '',
@@ -318,7 +316,9 @@ var SameHeight = function() {
     }
 
     function setContentsList() {
-        $('#playListScroller').css({'height': calcSetContentsList()});
+        if (window.screen.width > 991) {
+            $('#playListScroller').css({'height': calcSetContentsList()});
+        }
     }
 
     function setPamphletMaxHeightList() {
@@ -340,6 +340,15 @@ var SameHeight = function() {
 }();
 
 var InitPage = function() {
+
+    function scrollToCurrentVideoInSetList() {
+        var contentId = $('#js-var-contentId').val();
+        var container = $("#playListScroller"),
+            scrollTo = $("#playlistItem_" + contentId);
+        if (scrollTo.length > 0) {
+            container.scrollTop(scrollTo.offset().top - 400);
+        }
+    }
 
     function initOwlCarouselType2() {
         $('#owlCarouselParentProducts').OwlCarouselType2({
@@ -483,9 +492,10 @@ var InitPage = function() {
     }
 
     function init(videosWithSameSet) {
+        scrollToCurrentVideoInSetList();
         RelatedItems.init();
         loadItems.init(videosWithSameSet);
-        SnippetContentShow.init(related_videos);
+        Player.init(related_videos, videosWithSameSet);
         SameHeight.init();
         initOwlCarouselType2();
         addEvents();

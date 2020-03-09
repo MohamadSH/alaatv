@@ -220,6 +220,14 @@ var AlaaVast = function () {
             // shareUrl: contentUrl,
             // shareEmbed: '<iframe src="' + contentEmbedUrl + '" width="640" height="360" frameborder="0" allowfullscreen></iframe>',
 
+
+            closeallow:false,
+            mute:true,
+            rateMenu:true,
+            resume:true, // (false) enable/disable resume option to start video playback from last time position it was left
+            timetooltip: true,
+            mousedisplay: true,
+
             // videoInfo: true,
             // infoSize: 18,
             // infoIcon: "https://sanatisharif.ir/image/11/150/150/favicon_32_20180819090313.png",

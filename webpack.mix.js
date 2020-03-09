@@ -591,7 +591,7 @@ class WebpacMix {
                 'public/acm/videojs/plugins/videojs.hotkeys.min.js',
                 'public/acm/videojs/plugins/seek-to-point.js',
                 'public/acm/videojs/lang/fa.js',
-                'public/acm/videojs/nuevo5.totla.js',
+                'public/acm/videojs/nuevo5.playList.js',
 
                 'public/acm/AlaatvCustomFiles/js/VideoJsHealthCheck.js',
 

@@ -16,4 +16,10 @@ h2 {
     body, html {
         font-size: 12px;
     }
+    h1 {
+        font-size: 1.4rem;
+    }
+    h2 {
+        font-size: 1.2rem;
+    }
 }
