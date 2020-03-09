@@ -2146,4 +2146,41 @@ class BotsController extends Controller
 
         return response()->json(['message'=>'done']);
     }
+
+    public function fixProductSampleVideo()
+    {
+        $bucket = Product::SAMPLE_CONTENTS_BUCKET;
+//        $products = Product::whereHas('blocks' , function ($q){
+//            $q->whereHas('sets');
+//            })->get() ;
+        $products = Product::whereNotNull('sample_contents' )->get();
+        foreach ($products as $product) {
+            $sampleContents      = (optional($product->sample_contents)->tags)??[];
+            $introBlock          = $product->blocks->first();
+            $introducerContents  = isset($introBlock)?optional(optional($introBlock->sets)->first())->getActiveContents2()->pluck('id')->toArray():[];
+
+            $product->sample_contents = array_unique(array_merge($sampleContents , $introducerContents));
+            if(!$product->update()){
+                echo 'Failed: product:'.$product->id;
+                echo '<br>';
+            }
+
+            $itemTagsArray = [];
+            foreach ($introducerContents as $id) {
+                $itemTagsArray[] = 'Content-' . $id;
+            }
+
+            $params = [
+                'tags' => json_encode($itemTagsArray, JSON_UNESCAPED_UNICODE),
+            ];
+
+            $response = $this->sendRequest(config('constants.TAG_API_URL') . "id/$bucket/" . $product->id, 'PUT', $params);
+            if($response['statusCode'] != Response::HTTP_OK){
+                echo 'Failed: product:'.$product->id;
+                echo '<br>';
+            }
+        }
+
+        dd('DONE');
+    }
 }
