@@ -72,9 +72,48 @@
         {{--@endforeach--}}
         {{--</select>--}}
         {{--{!! Form::select("contenttypes[]", $childContentTypes , null, ['class' => 'form-control', 'id'=>'childContentTypes' , 'placeholder' => 'انتخاب زیر شاخه' ]) !!}--}}
+        @if($content->isVideo())
+        <br>
+        <hr>
+        <label class="mt-checkbox mt-checkbox-outline">
+            <div class="md-checkbox">
+                {!! Form::checkbox( 'quality[720p]', true, null,  ['value' => '1' , 'id' => 'HD_checkbox' , 'class'=>'md-check' , 'checked' ]) !!}
+                <label for="HD_checkbox">
+                    <span></span>
+                    <span class="check"></span>
+                    <span class="box"></span>
+                    درج کیفیت HD
+                    <span></span>
+                </label>
+            </div>
+        </label>&nbsp;
+        <label class="mt-checkbox mt-checkbox-outline">
+            <div class="md-checkbox">
+                {!! Form::checkbox( 'quality[480p]', true, null,  ['value' => '1' , 'id' => 'hq_checkbox' , 'class'=>'md-check' , 'checked' ]) !!}
+                <label for="hq_checkbox">
+                    <span></span>
+                    <span class="check"></span>
+                    <span class="box"></span>
+                    درج کیفیت hq
+                    <span></span>
+                </label>
+            </div>
+        </label>&nbsp;
+        <label class="mt-checkbox mt-checkbox-outline">
+            <div class="md-checkbox">
+                {!! Form::checkbox( 'quality[240p]', true, null,  ['value' => '1' , 'id'   => '240_checkbox' , 'class'=>'md-check' , 'checked' ]) !!}
+                <label for="240_checkbox">
+                    <span></span>
+                    <span class="check"></span>
+                    <span class="box"></span>
+                    درج کیفیت 240p
+                    <span></span>
+                </label>
+            </div>
+        </label>
+        @endif
         <ul class="list-group margin-top-20 text-center">
-            <li class="list-group-item bold" style="font-size: small">فایل های موجود
-            </li>
+            <li class="list-group-item bold" style="font-size: small">فایل های موجود</li>
             @if(isset($content->file_for_admin) and $content->file_for_admin->isNotEmpty())
                 @if(!is_null($content->file_for_admin->get('video')))
                     @foreach($content->file_for_admin->get('video') as $file)
