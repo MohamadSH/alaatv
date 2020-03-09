@@ -72,7 +72,7 @@ class Content extends AlaaJsonResourceWithPagination
             'source'           => $this->when($this->sources->isNotEmpty(), function () {
                 return $this->sources->isNotEmpty() ? Source::collection($this->sources) : null;
             }),
-            
+
         ];
     }
 

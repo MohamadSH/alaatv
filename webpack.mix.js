@@ -137,14 +137,14 @@ class WebpacMix {
         this.compileScss();
         this.mixBase();
 
-        // this.mixUser();
-        // this.mixPages();
-        // this.mixAdmin();
-        // this.mixLanding();
+        this.mixUser();
+        this.mixPages();
+        this.mixAdmin();
+        this.mixLanding();
         this.mixProduct();
-        // this.mixCheckout();
-        // this.mixPageSetShow();
-        // this.mixPageContentShow();
+        this.mixCheckout();
+        this.mixPageSetShow();
+        this.mixPageContentShow();
 
         this.mixCopyDirectory();
 

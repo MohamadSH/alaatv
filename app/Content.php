@@ -1454,7 +1454,7 @@ class Content extends BaseModel implements Advertisable, Taggable, SeoInterface,
         return Cache::tags(['content', 'relatedProduct', 'content_' . $content->id, 'content_' . $content->id . '_relatedProduct'])
             ->remember($key, config('constants.CACHE_600'), function () use ($content, $relatedProductSearch) {
                 $filters  = [
-                    'tags' => ['c-' . $content->id],
+                    'tags' => ['Content-' . $content->id],
                 ];
                 $result   = $relatedProductSearch->get($filters);
                 $products = new ProductCollection();
